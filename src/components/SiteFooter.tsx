@@ -5,7 +5,7 @@ export function SiteFooter() {
     <footer className="footer">
       <div className="container footer-grid">
         <div>
-          <img src="/images/hp-logo.png" alt="HP" className="footer-logo" />
+          <img src="/images/hp-logo-clean.png" alt="HP" className="footer-logo" />
           <p>Des outils simples<br />pour la vraie vie.</p>
           <div className="socials">
             <span aria-label="Facebook à venir">f</span>
@@ -35,7 +35,7 @@ export function SiteFooter() {
           </p>
         </div>
         <div style={{ textAlign: "center" }}>
-          <img src="/images/hp-logo.png" alt="HP" className="footer-logo-mark" />
+          <img src="/images/hp-logo-clean.png" alt="HP" className="footer-logo-mark" />
           <p>HP © 2026<br />Tous droits réservés.</p>
         </div>
       </div>
