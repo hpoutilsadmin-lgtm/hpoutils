@@ -16,21 +16,17 @@ export const Route = createFileRoute("/a-propos")({
 function Page() {
   return (
     <>
-      <div className="subpage-hero hero-split">
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
-          <div>
-            <p className="page-kicker">À propos</p>
-            <h1>Je ne suis pas un expert parfait.</h1>
-            <p className="page-lead">Comprendre. Agir. Transmettre.</p>
-            <p>Je teste, j’apprends, je recommence, puis je partage ce qui fonctionne pour vrai. HP existe pour créer des outils simples, utiles et dignes.</p>
-            <div className="page-actions">
-              <Link className="action-btn" to="/contact">Me contacter</Link>
-              <Link className="outline-btn" to="/">Voir l’écosystème</Link>
-            </div>
+          <p className="page-kicker">À propos</p>
+          <h1>Je ne suis pas un <em>expert parfait</em>.</h1>
+          <p className="lead">Comprendre. Agir. Transmettre. Je teste, j’apprends, je recommence, puis je partage ce qui fonctionne pour vrai. HP existe pour créer des outils simples, utiles et dignes.</p>
+          <div className="lead-actions">
+            <Link className="action-btn" to="/contact">Me contacter</Link>
+            <Link className="outline-btn" to="/">Voir l’écosystème</Link>
           </div>
-          <img className="hero-photo" src="/images/photo-auteur.jpg" alt="Photo du créateur HP" />
         </div>
-      </div>
+      </section>
       <div className="subpage-content">
         <div className="container">
           <div className="cards">
