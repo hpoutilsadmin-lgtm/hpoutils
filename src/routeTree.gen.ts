@@ -11,8 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SansHonteRouteImport } from './routes/sans-honte'
+import { Route as ReflexionsRouteImport } from './routes/reflexions'
 import { Route as PrixRouteImport } from './routes/prix'
 import { Route as OutilsRouteImport } from './routes/outils'
+import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as AteliersRouteImport } from './routes/ateliers'
@@ -30,6 +33,16 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SansHonteRoute = SansHonteRouteImport.update({
+  id: '/sans-honte',
+  path: '/sans-honte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReflexionsRoute = ReflexionsRouteImport.update({
+  id: '/reflexions',
+  path: '/reflexions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrixRoute = PrixRouteImport.update({
   id: '/prix',
   path: '/prix',
@@ -38,6 +51,11 @@ const PrixRoute = PrixRouteImport.update({
 const OutilsRoute = OutilsRouteImport.update({
   id: '/outils',
   path: '/outils',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LivresPdfRoute = LivresPdfRouteImport.update({
+  id: '/livres-pdf',
+  path: '/livres-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -78,8 +96,11 @@ export interface FileRoutesByFullPath {
   '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
+  '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/reflexions': typeof ReflexionsRoute
+  '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
 }
@@ -90,8 +111,11 @@ export interface FileRoutesByTo {
   '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
+  '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/reflexions': typeof ReflexionsRoute
+  '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
 }
@@ -103,8 +127,11 @@ export interface FileRoutesById {
   '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
+  '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/reflexions': typeof ReflexionsRoute
+  '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
 }
@@ -117,8 +144,11 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/comprendre'
     | '/contact'
+    | '/livres-pdf'
     | '/outils'
     | '/prix'
+    | '/reflexions'
+    | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
   fileRoutesByTo: FileRoutesByTo
@@ -129,8 +159,11 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/comprendre'
     | '/contact'
+    | '/livres-pdf'
     | '/outils'
     | '/prix'
+    | '/reflexions'
+    | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
   id:
@@ -141,8 +174,11 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/comprendre'
     | '/contact'
+    | '/livres-pdf'
     | '/outils'
     | '/prix'
+    | '/reflexions'
+    | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
   fileRoutesById: FileRoutesById
@@ -154,8 +190,11 @@ export interface RootRouteChildren {
   AteliersRoute: typeof AteliersRoute
   ComprendreRoute: typeof ComprendreRoute
   ContactRoute: typeof ContactRoute
+  LivresPdfRoute: typeof LivresPdfRoute
   OutilsRoute: typeof OutilsRoute
   PrixRoute: typeof PrixRoute
+  ReflexionsRoute: typeof ReflexionsRoute
+  SansHonteRoute: typeof SansHonteRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransmettreRoute: typeof TransmettreRoute
 }
@@ -176,6 +215,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sans-honte': {
+      id: '/sans-honte'
+      path: '/sans-honte'
+      fullPath: '/sans-honte'
+      preLoaderRoute: typeof SansHonteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reflexions': {
+      id: '/reflexions'
+      path: '/reflexions'
+      fullPath: '/reflexions'
+      preLoaderRoute: typeof ReflexionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/prix': {
       id: '/prix'
       path: '/prix'
@@ -188,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/outils'
       fullPath: '/outils'
       preLoaderRoute: typeof OutilsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/livres-pdf': {
+      id: '/livres-pdf'
+      path: '/livres-pdf'
+      fullPath: '/livres-pdf'
+      preLoaderRoute: typeof LivresPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -242,11 +302,24 @@ const rootRouteChildren: RootRouteChildren = {
   AteliersRoute: AteliersRoute,
   ComprendreRoute: ComprendreRoute,
   ContactRoute: ContactRoute,
+  LivresPdfRoute: LivresPdfRoute,
   OutilsRoute: OutilsRoute,
   PrixRoute: PrixRoute,
+  ReflexionsRoute: ReflexionsRoute,
+  SansHonteRoute: SansHonteRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransmettreRoute: TransmettreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
