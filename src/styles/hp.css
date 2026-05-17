@@ -349,3 +349,7 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .kit-item .library-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(29,20,16,.32) 100%);pointer-events:none}
 .kit-badge{position:absolute;top:10px;left:10px;z-index:2;padding:5px 10px;border-radius:999px;background:rgba(29,20,16,.82);color:#f0c16d;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
 .kit-watermark{position:absolute;bottom:10px;right:10px;z-index:2;padding:4px 9px;border-radius:6px;background:rgba(246,237,221,.88);color:#1d1410;font-size:10.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+
+/* Library cover — variant that shows the full image (no crop) */
+.library-cover.cover-contain{background:#f6eddd;display:flex;align-items:center;justify-content:center;padding:10px}
+.library-cover.cover-contain img{width:100%;height:100%;object-fit:contain}
