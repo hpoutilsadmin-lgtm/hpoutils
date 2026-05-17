@@ -20,11 +20,17 @@ const QUOTES = [
   "Tu n'as rien à prouver pour avoir le droit d'exister.",
 ];
 
-const BOOKS = [
-  { cover: "/images/cover-enfants-3d.png", title: "Kit Sans Honte — Frigo", tag: "PDF" },
-  { cover: "/images/cover-enjeux.jpg", title: "Tenir Debout", tag: "Guide" },
-  { cover: "/images/cover-faim.jpg", title: "Seconde Main", tag: "PDF" },
-  { cover: "/images/cover-enfants.jpg", title: "Entraide", tag: "PDF" },
+const KITS = [
+  { n: "01", cover: "/images/sans-honte/kit-01.jpg", title: "Papiers Sans Honte", sub: "Reprendre le contrôle de ses papiers." },
+  { n: "02", cover: "/images/sans-honte/kit-02.jpg", title: "Me Reconnaître Sans Honte", sub: "Se retrouver quand on s'est perdu·e de vue." },
+  { n: "03", cover: "/images/sans-honte/kit-03.jpg", title: "Frigo Sans Honte", sub: "Manger vrai avec ce qu'on a." },
+  { n: "04", cover: "/images/sans-honte/kit-04.jpg", title: "Tenir Debout Sans Honte", sub: "Quand la journée tient sur un fil." },
+  { n: "05", cover: "/images/sans-honte/kit-05.jpg", title: "Seconde Main Sans Honte", sub: "S'habiller, se meubler, sans se juger." },
+  { n: "06", cover: "/images/sans-honte/kit-06.jpg", title: "Entraide Sans Honte", sub: "Demander, donner, recevoir." },
+  { n: "07", cover: "/images/sans-honte/kit-07.jpg", title: "Fraude Sans Honte", sub: "Se protéger, sans avoir l'air naïf·ve." },
+  { n: "08", cover: "/images/sans-honte/kit-08.jpg", title: "Logement Sans Honte", sub: "Habiter, garder, retrouver un chez-soi." },
+  { n: "09", cover: "/images/sans-honte/kit-09.jpg", title: "Proche Aidant Sans Honte", sub: "Aider sans s'oublier." },
+  { n: "10", cover: "/images/sans-honte/kit-10.jpg", title: "72 heures Sans Honte", sub: "Tenir trois jours quand tout bascule." },
 ];
 
 function Page() {
@@ -44,16 +50,32 @@ function Page() {
 
       <section className="subpage-content">
         <div className="container">
-          <h2 className="section-title">La collection</h2>
+          <h2 className="section-title">10 kits — La collection complète</h2>
+          <p style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 32px", color: "#5a4a3f", fontSize: 16 }}>
+            Chaque kit est un PDF imprimable, prêt à coller au frigo, à plier dans un sac, à offrir.
+            Pas téléchargeables ici — on s'écrit pour te les envoyer.
+          </p>
           <div className="library-grid">
-            {BOOKS.map((b) => (
-              <article key={b.title} className="library-item">
-                <div className="library-cover"><img src={b.cover} alt={b.title} loading="lazy" /></div>
-                <div className="library-meta"><span className="dot" />{b.tag}</div>
-                <h3>{b.title}</h3>
-                <a className="lib-link" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Découvrir →</a>
+            {KITS.map((k) => (
+              <article key={k.n} className="library-item kit-item">
+                <div className="library-cover" onContextMenu={(e) => e.preventDefault()}>
+                  <img src={k.cover} alt={`Couverture — ${k.title}`} loading="lazy" draggable={false} />
+                  <span className="kit-badge">N°{k.n}</span>
+                  <span className="kit-watermark">Aperçu • HP</span>
+                </div>
+                <div className="library-meta"><span className="dot" />Kit PDF imprimable</div>
+                <h3>{k.title}</h3>
+                <p>{k.sub}</p>
+                <a className="lib-link" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Le recevoir →</a>
               </article>
             ))}
+          </div>
+          <div className="cta-band" style={{ marginTop: 48 }}>
+            <div>
+              <h3>Le pack complet — les 10 kits</h3>
+              <p>Toute la collection Sans Honte, en un seul envoi. On t'écrit pour la suite.</p>
+            </div>
+            <a className="action-btn" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Demander le pack</a>
           </div>
         </div>
       </section>
