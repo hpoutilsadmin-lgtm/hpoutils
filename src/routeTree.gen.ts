@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransmettreRouteImport } from './routes/transmettre'
+import { Route as PrixRouteImport } from './routes/prix'
 import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
@@ -21,6 +22,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TransmettreRoute = TransmettreRouteImport.update({
   id: '/transmettre',
   path: '/transmettre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrixRoute = PrixRouteImport.update({
+  id: '/prix',
+  path: '/prix',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OutilsRoute = OutilsRouteImport.update({
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/outils': typeof OutilsRoute
+  '/prix': typeof PrixRoute
   '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/outils': typeof OutilsRoute
+  '/prix': typeof PrixRoute
   '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/outils': typeof OutilsRoute
+  '/prix': typeof PrixRoute
   '/transmettre': typeof TransmettreRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/comprendre'
     | '/contact'
     | '/outils'
+    | '/prix'
     | '/transmettre'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/comprendre'
     | '/contact'
     | '/outils'
+    | '/prix'
     | '/transmettre'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/comprendre'
     | '/contact'
     | '/outils'
+    | '/prix'
     | '/transmettre'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   ComprendreRoute: typeof ComprendreRoute
   ContactRoute: typeof ContactRoute
   OutilsRoute: typeof OutilsRoute
+  PrixRoute: typeof PrixRoute
   TransmettreRoute: typeof TransmettreRoute
 }
 
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/transmettre'
       fullPath: '/transmettre'
       preLoaderRoute: typeof TransmettreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prix': {
+      id: '/prix'
+      path: '/prix'
+      fullPath: '/prix'
+      preLoaderRoute: typeof PrixRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/outils': {
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComprendreRoute: ComprendreRoute,
   ContactRoute: ContactRoute,
   OutilsRoute: OutilsRoute,
+  PrixRoute: PrixRoute,
   TransmettreRoute: TransmettreRoute,
 }
 export const routeTree = rootRouteImport
