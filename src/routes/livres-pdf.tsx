@@ -17,9 +17,9 @@ const ITEMS = [
   { cover: "/images/cover-enjeux.jpg", title: "Les enjeux de l'humanité", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "Livre" },
   { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "Livre" },
   { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "Livre" },
-  { cover: "/images/cover-enfants-3d.png", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "PDF" },
-  { cover: "/images/cover-enjeux.jpg", title: "Tenir Debout", desc: "Quand la journée tient sur un fil — un guide court.", tag: "Guide" },
-  { cover: "/images/cover-faim.jpg", title: "Collection Sans Honte", desc: "Frigo, Tenir Debout, Seconde Main, Entraide — la collection complète.", tag: "Collection" },
+  { cover: "/images/sans-honte/kit-03.jpg", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "PDF" },
+  { cover: "/images/sans-honte/kit-04.jpg", title: "Tenir Debout Sans Honte", desc: "Quand la journée tient sur un fil — un kit court.", tag: "PDF" },
+  { cover: "/images/sans-honte/kit-01.jpg", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection" },
 ];
 
 function Page() {
