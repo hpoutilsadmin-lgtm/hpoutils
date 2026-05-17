@@ -14,6 +14,7 @@ import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as AlbumRouteImport } from './routes/album'
+import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TransmettreRoute = TransmettreRouteImport.update({
@@ -41,6 +42,11 @@ const AlbumRoute = AlbumRouteImport.update({
   path: '/album',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,6 +55,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
@@ -76,16 +85,25 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/a-propos'
     | '/album'
     | '/ateliers'
     | '/comprendre'
     | '/outils'
     | '/transmettre'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/album' | '/ateliers' | '/comprendre' | '/outils' | '/transmettre'
+  to:
+    | '/'
+    | '/a-propos'
+    | '/album'
+    | '/ateliers'
+    | '/comprendre'
+    | '/outils'
+    | '/transmettre'
   id:
     | '__root__'
     | '/'
+    | '/a-propos'
     | '/album'
     | '/ateliers'
     | '/comprendre'
@@ -95,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AProposRoute: typeof AProposRoute
   AlbumRoute: typeof AlbumRoute
   AteliersRoute: typeof AteliersRoute
   ComprendreRoute: typeof ComprendreRoute
@@ -139,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlbumRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -151,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AProposRoute: AProposRoute,
   AlbumRoute: AlbumRoute,
   AteliersRoute: AteliersRoute,
   ComprendreRoute: ComprendreRoute,
