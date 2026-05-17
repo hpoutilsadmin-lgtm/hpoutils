@@ -38,9 +38,11 @@ function Page() {
       <section className="subpage-content">
         <div className="container">
           <div className="library-grid">
-            {ITEMS.map((b) => (
+            {ITEMS.map((b) => {
+              const contain = b.cover.endsWith("collection-cover.png");
+              return (
               <article key={b.title} className="library-item">
-                <div className="library-cover">
+                <div className={`library-cover${contain ? " cover-contain" : ""}`}>
                   <img src={b.cover} alt={`Couverture ${b.title}`} loading="lazy" />
                 </div>
                 <div className="library-meta"><span className="dot" />{b.tag}</div>
@@ -48,7 +50,7 @@ function Page() {
                 <p>{b.desc}</p>
                 <a className="lib-link" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Découvrir →</a>
               </article>
-            ))}
+            );})}
           </div>
         </div>
       </section>
