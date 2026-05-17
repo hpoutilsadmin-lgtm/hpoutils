@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 
 const NAV = [
   { to: "/", label: "Accueil" },
-  { to: "/album", label: "Album" },
-  { to: "/comprendre", label: "Comprendre" },
   { to: "/outils", label: "Outils" },
-  { to: "/transmettre", label: "Transmettre" },
+  { to: "/livres-pdf", label: "Livres & PDF" },
+  { to: "/sans-honte", label: "Sans Honte" },
+  { to: "/reflexions", label: "Réflexions" },
   { to: "/ateliers", label: "Ateliers" },
   { to: "/a-propos", label: "À propos" },
 ] as const;
@@ -40,9 +40,6 @@ export function SiteHeader() {
               {l.label}
             </Link>
           ))}
-          <Link to="/contact" className="contact-top" activeProps={{ className: "contact-top active" }}>
-            Me contacter
-          </Link>
         </nav>
       </div>
     </header>

@@ -18,12 +18,12 @@ export function SiteFooter() {
           <h4>Liens rapides</h4>
           <p>
             <Link to="/">Accueil</Link><br />
-            <Link to="/album">Album</Link><br />
-            <Link to="/comprendre">Comprendre</Link><br />
             <Link to="/outils">Outils</Link><br />
-            <Link to="/transmettre">Transmettre</Link><br />
+            <Link to="/livres-pdf">Livres & PDF</Link><br />
+            <Link to="/sans-honte">Sans Honte</Link><br />
+            <Link to="/reflexions">Réflexions</Link><br />
             <Link to="/ateliers">Ateliers</Link><br />
-            <Link to="/contact">Contact</Link>
+            <Link to="/a-propos">À propos</Link>
           </p>
         </div>
         <div>
