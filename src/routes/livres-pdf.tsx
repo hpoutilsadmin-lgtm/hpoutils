@@ -1,0 +1,57 @@
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/livres-pdf")({
+  head: () => ({
+    meta: [
+      { title: "Livres & PDF — Bibliothèque HP" },
+      { name: "description", content: "Livres, PDF, guides et collections HP — à lire, télécharger et garder près de soi." },
+      { property: "og:title", content: "Livres & PDF — HP" },
+      { property: "og:description", content: "La bibliothèque HP : livres, PDF, guides et collections." },
+      { property: "og:image", content: "/images/cover-enjeux.jpg" },
+    ],
+  }),
+  component: Page,
+});
+
+const ITEMS = [
+  { cover: "/images/cover-enjeux.jpg", title: "Les enjeux de l'humanité", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "Livre" },
+  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "Livre" },
+  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "Livre" },
+  { cover: "/images/cover-enfants-3d.png", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "PDF" },
+  { cover: "/images/cover-enjeux.jpg", title: "Tenir Debout", desc: "Quand la journée tient sur un fil — un guide court.", tag: "Guide" },
+  { cover: "/images/cover-faim.jpg", title: "Collection Sans Honte", desc: "Frigo, Tenir Debout, Seconde Main, Entraide — la collection complète.", tag: "Collection" },
+];
+
+function Page() {
+  return (
+    <>
+      <section className="editorial-hero">
+        <div className="container">
+          <span className="editorial-kicker">Bibliothèque HP</span>
+          <h1>Livres &amp; <em>PDF</em>.</h1>
+          <p className="lead">
+            Des formats qui se gardent, se prêtent, se relisent. Pour avoir
+            quelque chose de solide à la main quand le reste va trop vite.
+          </p>
+        </div>
+      </section>
+      <section className="subpage-content">
+        <div className="container">
+          <div className="library-grid">
+            {ITEMS.map((b) => (
+              <article key={b.title} className="library-item">
+                <div className="library-cover">
+                  <img src={b.cover} alt={`Couverture ${b.title}`} loading="lazy" />
+                </div>
+                <div className="library-meta"><span className="dot" />{b.tag}</div>
+                <h3>{b.title}</h3>
+                <p>{b.desc}</p>
+                <a className="lib-link" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Découvrir →</a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
