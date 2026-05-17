@@ -19,7 +19,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="container header-inner">
         <Link className="logo" to="/" aria-label="Accueil HP">
-          HP<small>—</small>
+          <img src="/images/hp-logo.png" alt="HP — Des outils simples pour la vraie vie" />
         </Link>
         <button
           className="nav-toggle"
