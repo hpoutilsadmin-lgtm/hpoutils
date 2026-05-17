@@ -353,3 +353,9 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 /* Library cover — variant that shows the full image (no crop) */
 .library-cover.cover-contain{background:#f6eddd;display:flex;align-items:center;justify-content:center;padding:10px}
 .library-cover.cover-contain img{width:100%;height:100%;object-fit:contain}
+
+/* Hero with custom banner image */
+.editorial-hero.hero-banner-image{background-size:cover;background-position:center;background-repeat:no-repeat}
+.editorial-hero.hero-banner-image:before{opacity:0;display:none}
+.editorial-hero.hero-banner-image:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,9,18,.88) 0%,rgba(4,9,18,.55) 45%,rgba(4,9,18,.15) 75%,rgba(4,9,18,.45) 100%);pointer-events:none}
+.editorial-hero.hero-banner-image .container{position:relative;z-index:2}
