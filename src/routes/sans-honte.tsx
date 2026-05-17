@@ -36,11 +36,11 @@ const KITS = [
 function Page() {
   return (
     <>
-      <section className="manifesto">
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="kicker">Collection</span>
           <h1>Sans <em>Honte</em>.</h1>
-          <p className="intro">
+          <p className="lead">
             Sans Honte, c'est une collection pour parler de ce qu'on cache, ce
             qu'on porte, ce qu'on n'ose pas nommer — sans jugement, sans
             performance, sans petite morale propre.
