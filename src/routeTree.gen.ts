@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
+import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TransmettreRoute = TransmettreRouteImport.update({
@@ -29,6 +30,11 @@ const ComprendreRoute = ComprendreRouteImport.update({
   path: '/comprendre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AteliersRoute = AteliersRouteImport.update({
+  id: '/ateliers',
+  path: '/ateliers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
   '/outils': typeof OutilsRoute
   '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
   '/outils': typeof OutilsRoute
   '/transmettre': typeof TransmettreRoute
@@ -50,20 +58,28 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ateliers': typeof AteliersRoute
   '/comprendre': typeof ComprendreRoute
   '/outils': typeof OutilsRoute
   '/transmettre': typeof TransmettreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/comprendre' | '/outils' | '/transmettre'
+  fullPaths: '/' | '/ateliers' | '/comprendre' | '/outils' | '/transmettre'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/comprendre' | '/outils' | '/transmettre'
-  id: '__root__' | '/' | '/comprendre' | '/outils' | '/transmettre'
+  to: '/' | '/ateliers' | '/comprendre' | '/outils' | '/transmettre'
+  id:
+    | '__root__'
+    | '/'
+    | '/ateliers'
+    | '/comprendre'
+    | '/outils'
+    | '/transmettre'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AteliersRoute: typeof AteliersRoute
   ComprendreRoute: typeof ComprendreRoute
   OutilsRoute: typeof OutilsRoute
   TransmettreRoute: typeof TransmettreRoute
@@ -92,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComprendreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ateliers': {
+      id: '/ateliers'
+      path: '/ateliers'
+      fullPath: '/ateliers'
+      preLoaderRoute: typeof AteliersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +127,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AteliersRoute: AteliersRoute,
   ComprendreRoute: ComprendreRoute,
   OutilsRoute: OutilsRoute,
   TransmettreRoute: TransmettreRoute,
