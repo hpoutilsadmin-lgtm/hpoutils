@@ -13,7 +13,7 @@ export const Route = createFileRoute("/prix")({
 });
 
 const ROWS: Array<{ cat: string; offre: string; prix: string; href: string; label: string }> = [
-  { cat: "Livre", offre: "Les enjeux de l’humanité", prix: "25 $", href: "https://tally.so/r/A7AYGW", label: "Commander" },
+  { cat: "Livre", offre: "Les enjeux de l’humanité (PDF)", prix: "25 $", href: "/achat/enjeux-humanite", label: "Acheter le PDF" },
   { cat: "Outils", offre: "Fiches et outils pratiques", prix: "5 $ à 20 $", href: "https://tally.so/r/A7AYGW", label: "Demander" },
   { cat: "Sans Honte", offre: "1 kit broché", prix: "20 $", href: "https://tally.so/r/A7AYGW", label: "Commander" },
   { cat: "Sans Honte", offre: "Pack 4 kits plastifiés et clippés", prix: "60 $", href: "https://tally.so/r/A7AYGW", label: "Commander" },
@@ -40,12 +40,20 @@ function Page() {
                 <tr><th>Catégorie</th><th>Offre</th><th>Prix</th><th>Action</th></tr>
               </thead>
               <tbody>
-                {ROWS.map((r) => (
+                {ROWS.map((r) => {
+                  const internal = r.href.startsWith("/");
+                  return (
                   <tr key={`${r.cat}-${r.offre}`}>
                     <td>{r.cat}</td><td>{r.offre}</td><td>{r.prix}</td>
-                    <td><a href={r.href} target="_blank" rel="noopener noreferrer">{r.label}</a></td>
+                    <td>
+                      {internal ? (
+                        <a href={r.href}>{r.label}</a>
+                      ) : (
+                        <a href={r.href} target="_blank" rel="noopener noreferrer">{r.label}</a>
+                      )}
+                    </td>
                   </tr>
-                ))}
+                );})}
               </tbody>
             </table>
           </div>
