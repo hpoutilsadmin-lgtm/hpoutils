@@ -9,8 +9,62 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TransmettreRouteImport } from './routes/transmettre'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PrixRouteImport } from './routes/prix'
+import { Route as OutilsRouteImport } from './routes/outils'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ComprendreRouteImport } from './routes/comprendre'
+import { Route as AteliersRouteImport } from './routes/ateliers'
+import { Route as AlbumRouteImport } from './routes/album'
+import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TransmettreRoute = TransmettreRouteImport.update({
+  id: '/transmettre',
+  path: '/transmettre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrixRoute = PrixRouteImport.update({
+  id: '/prix',
+  path: '/prix',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OutilsRoute = OutilsRouteImport.update({
+  id: '/outils',
+  path: '/outils',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComprendreRoute = ComprendreRouteImport.update({
+  id: '/comprendre',
+  path: '/comprendre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AteliersRoute = AteliersRouteImport.update({
+  id: '/ateliers',
+  path: '/ateliers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlbumRoute = AlbumRouteImport.update({
+  id: '/album',
+  path: '/album',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +73,158 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/album': typeof AlbumRoute
+  '/ateliers': typeof AteliersRoute
+  '/comprendre': typeof ComprendreRoute
+  '/contact': typeof ContactRoute
+  '/outils': typeof OutilsRoute
+  '/prix': typeof PrixRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/album': typeof AlbumRoute
+  '/ateliers': typeof AteliersRoute
+  '/comprendre': typeof ComprendreRoute
+  '/contact': typeof ContactRoute
+  '/outils': typeof OutilsRoute
+  '/prix': typeof PrixRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/album': typeof AlbumRoute
+  '/ateliers': typeof AteliersRoute
+  '/comprendre': typeof ComprendreRoute
+  '/contact': typeof ContactRoute
+  '/outils': typeof OutilsRoute
+  '/prix': typeof PrixRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/transmettre': typeof TransmettreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/a-propos'
+    | '/album'
+    | '/ateliers'
+    | '/comprendre'
+    | '/contact'
+    | '/outils'
+    | '/prix'
+    | '/sitemap.xml'
+    | '/transmettre'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/a-propos'
+    | '/album'
+    | '/ateliers'
+    | '/comprendre'
+    | '/contact'
+    | '/outils'
+    | '/prix'
+    | '/sitemap.xml'
+    | '/transmettre'
+  id:
+    | '__root__'
+    | '/'
+    | '/a-propos'
+    | '/album'
+    | '/ateliers'
+    | '/comprendre'
+    | '/contact'
+    | '/outils'
+    | '/prix'
+    | '/sitemap.xml'
+    | '/transmettre'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AProposRoute: typeof AProposRoute
+  AlbumRoute: typeof AlbumRoute
+  AteliersRoute: typeof AteliersRoute
+  ComprendreRoute: typeof ComprendreRoute
+  ContactRoute: typeof ContactRoute
+  OutilsRoute: typeof OutilsRoute
+  PrixRoute: typeof PrixRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TransmettreRoute: typeof TransmettreRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/transmettre': {
+      id: '/transmettre'
+      path: '/transmettre'
+      fullPath: '/transmettre'
+      preLoaderRoute: typeof TransmettreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prix': {
+      id: '/prix'
+      path: '/prix'
+      fullPath: '/prix'
+      preLoaderRoute: typeof PrixRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/outils': {
+      id: '/outils'
+      path: '/outils'
+      fullPath: '/outils'
+      preLoaderRoute: typeof OutilsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comprendre': {
+      id: '/comprendre'
+      path: '/comprendre'
+      fullPath: '/comprendre'
+      preLoaderRoute: typeof ComprendreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ateliers': {
+      id: '/ateliers'
+      path: '/ateliers'
+      fullPath: '/ateliers'
+      preLoaderRoute: typeof AteliersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/album': {
+      id: '/album'
+      path: '/album'
+      fullPath: '/album'
+      preLoaderRoute: typeof AlbumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +237,16 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AProposRoute: AProposRoute,
+  AlbumRoute: AlbumRoute,
+  AteliersRoute: AteliersRoute,
+  ComprendreRoute: ComprendreRoute,
+  ContactRoute: ContactRoute,
+  OutilsRoute: OutilsRoute,
+  PrixRoute: PrixRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TransmettreRoute: TransmettreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

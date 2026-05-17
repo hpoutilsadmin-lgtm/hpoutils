@@ -1,0 +1,44 @@
+import { Link } from "@tanstack/react-router";
+
+export function SiteFooter() {
+  return (
+    <footer className="footer">
+      <div className="container footer-grid">
+        <div>
+          <h3>HP</h3>
+          <p>Des outils simples<br />pour la vraie vie.</p>
+          <div className="socials">
+            <span aria-label="Facebook à venir">f</span>
+            <span aria-label="Instagram à venir">◎</span>
+            <a href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer" aria-label="YouTube">▶</a>
+            <span aria-label="TikTok à venir">♪</span>
+          </div>
+        </div>
+        <div>
+          <h4>Liens rapides</h4>
+          <p>
+            <Link to="/">Accueil</Link><br />
+            <Link to="/album">Album</Link><br />
+            <Link to="/comprendre">Comprendre</Link><br />
+            <Link to="/outils">Outils</Link><br />
+            <Link to="/transmettre">Transmettre</Link><br />
+            <Link to="/ateliers">Ateliers</Link><br />
+            <Link to="/contact">Contact</Link>
+          </p>
+        </div>
+        <div>
+          <h4>Me contacter</h4>
+          <p>
+            <a href="mailto:HPOUTILS.ADMIN@gmail.com">HPOUTILS.ADMIN@gmail.com</a><br />
+            <a href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Formulaire atelier</a><br />
+            Réponse rapide et humaine.
+          </p>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div className="tree">♧</div>
+          <p>HP © 2026<br />Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
