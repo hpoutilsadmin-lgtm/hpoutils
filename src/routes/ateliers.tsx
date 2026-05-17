@@ -15,7 +15,7 @@ export const Route = createFileRoute("/ateliers")({
 function Page() {
   return (
     <>
-      <section className="editorial-hero">
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">Ateliers</span>
           <h1>Des ateliers pour mettre les outils en <em>mouvement</em>.</h1>

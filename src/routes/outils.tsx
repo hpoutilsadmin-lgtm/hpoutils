@@ -65,7 +65,7 @@ const SECTIONS: { title: string; intro: string; items: Tool[] }[] = [
 function Page() {
   return (
     <>
-      <section className="editorial-hero">
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">Outils HP</span>
           <h1>Le <em>cœur</em> du projet.</h1>
