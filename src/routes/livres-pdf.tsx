@@ -48,7 +48,11 @@ function Page() {
                 <div className="library-meta"><span className="dot" />{b.tag}</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
-                <a className="lib-link" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Découvrir →</a>
+                {b.title === "Les enjeux de l'humanité" ? (
+                  <a className="lib-link" href="/achat/enjeux-humanite">Acheter le PDF — 25 $ →</a>
+                ) : (
+                  <a className="lib-link" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Découvrir →</a>
+                )}
               </article>
             );})}
           </div>
