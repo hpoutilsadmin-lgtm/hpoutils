@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransmettreRouteImport } from './routes/transmettre'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrixRouteImport } from './routes/prix'
 import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -22,6 +23,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TransmettreRoute = TransmettreRouteImport.update({
   id: '/transmettre',
   path: '/transmettre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrixRoute = PrixRouteImport.update({
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/outils'
     | '/prix'
+    | '/sitemap.xml'
     | '/transmettre'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/outils'
     | '/prix'
+    | '/sitemap.xml'
     | '/transmettre'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/outils'
     | '/prix'
+    | '/sitemap.xml'
     | '/transmettre'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   OutilsRoute: typeof OutilsRoute
   PrixRoute: typeof PrixRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransmettreRoute: typeof TransmettreRoute
 }
 
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/transmettre'
       fullPath: '/transmettre'
       preLoaderRoute: typeof TransmettreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/prix': {
@@ -224,8 +244,19 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   OutilsRoute: OutilsRoute,
   PrixRoute: PrixRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransmettreRoute: TransmettreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
