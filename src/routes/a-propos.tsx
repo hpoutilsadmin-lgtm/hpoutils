@@ -17,25 +17,26 @@ function Page() {
   return (
     <>
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
-        <div className="container">
-          <p className="page-kicker">À propos</p>
-          <h1>Je ne suis pas un <em>expert parfait</em>.</h1>
-          <p className="lead">Comprendre. Agir. Transmettre. Je teste, j’apprends, je recommence, puis je partage ce qui fonctionne pour vrai. HP existe pour créer des outils simples, utiles et dignes.</p>
-          <div className="lead-actions">
-            <Link className="action-btn" to="/contact">Me contacter</Link>
-            <Link className="outline-btn" to="/">Voir l’écosystème</Link>
+        <div className="container" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 40, alignItems: "center" }}>
+          <div>
+            <p className="page-kicker">À propos</p>
+            <h1>Je ne suis pas un <em>expert parfait</em>.</h1>
+            <p className="lead">Comprendre. Agir. Transmettre. Je teste, j’apprends, je recommence, puis je partage ce qui fonctionne pour vrai. HP existe pour créer des outils simples, utiles et dignes.</p>
+            <div className="lead-actions">
+              <Link className="action-btn" to="/contact">Me contacter</Link>
+              <Link className="outline-btn" to="/">Voir l’écosystème</Link>
+            </div>
           </div>
+          <img
+            src="/images/photo-hp.jpg"
+            alt="Portrait de HP"
+            className="hero-portrait"
+            style={{ width: 240, height: 240, borderRadius: "50%", objectFit: "cover", border: "4px solid rgba(246,237,221,.92)", boxShadow: "0 20px 50px rgba(0,0,0,.55)" }}
+          />
         </div>
       </section>
       <div className="subpage-content">
         <div className="container">
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
-            <img
-              src="/images/photo-hp.jpg"
-              alt="Portrait de HP"
-              style={{ width: 200, height: 200, borderRadius: "50%", objectFit: "cover", border: "4px solid #f6eddd", boxShadow: "0 14px 40px rgba(0,0,0,.25)" }}
-            />
-          </div>
           <div className="cards">
             <article className="info-card"><span className="mini-note">Vision</span><h3>Comprendre</h3><p>Voir le monde avec lucidité et bienveillance pour faire des choix alignés.</p></article>
             <article className="info-card"><span className="mini-note">Action</span><h3>Agir</h3><p>Passer à l’action avec des outils concrets, adaptés à la vraie vie.</p></article>
