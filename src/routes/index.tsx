@@ -24,7 +24,7 @@ const COLLECTIONS = [
 function Index() {
   return (
     <>
-      <section className="editorial-hero">
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">HP — média &amp; outils</span>
           <h1>Des outils pour la <em>vraie vie</em>.</h1>
