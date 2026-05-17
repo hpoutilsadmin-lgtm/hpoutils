@@ -282,14 +282,20 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .pillar-card p{margin:0;color:#4f4039;font-size:15.5px;line-height:1.55;flex:1}
 .pillar-card .pillar-cta{align-self:flex-start;color:#be5c23;font-weight:900;text-transform:uppercase;font-size:12.5px;letter-spacing:.08em;border-bottom:2px solid #be5c23;padding-bottom:2px}
 
-.collections-strip{padding:56px 0 72px;background:#1d1410;color:#f6eddd}
-.collections-strip h2{margin:0 0 8px;font-family:Georgia,serif;font-size:clamp(28px,4vw,42px);color:#fff}
-.collections-strip .strip-intro{margin:0 0 32px;color:rgba(246,237,221,.7);max-width:540px;font-size:16px}
-.collections-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.collection-chip{display:flex;flex-direction:column;justify-content:space-between;min-height:160px;padding:22px;border:1px solid rgba(246,237,221,.18);border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,0));transition:background .2s ease,border-color .2s ease}
-.collection-chip:hover{background:linear-gradient(135deg,rgba(232,117,26,.18),rgba(255,255,255,.02));border-color:rgba(232,117,26,.6)}
-.collection-chip strong{font-family:Georgia,serif;font-size:22px;color:#fff;font-weight:500}
-.collection-chip span{color:rgba(246,237,221,.55);font-size:12px;text-transform:uppercase;letter-spacing:.14em;font-weight:900}
+.collections-strip{position:relative;padding:96px 0 112px;background:#f6eddd;color:#2a1a12;background-image:radial-gradient(rgba(70,30,20,.06) 1px,transparent 1px),radial-gradient(rgba(70,30,20,.04) 1px,transparent 1px);background-size:22px 22px,11px 11px;background-position:0 0,11px 11px}
+.collections-strip::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(180,60,40,.35),transparent)}
+.collections-strip .container{max-width:1100px}
+.collections-strip h2{margin:0 0 12px;font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(32px,4.4vw,52px);line-height:1.05;letter-spacing:-.01em;color:#2a1a12}
+.collections-strip h2 em{font-style:italic;color:#b04a2f}
+.collections-strip .strip-intro{margin:0 0 48px;color:rgba(42,26,18,.7);max-width:540px;font-size:17px;line-height:1.55;font-style:italic}
+.collections-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.collection-chip{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:190px;padding:26px 24px 24px;border:1px solid rgba(42,26,18,.14);border-radius:4px;background:#fbf5e8;color:#2a1a12;text-decoration:none;transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease}
+.collection-chip::after{content:"→";position:absolute;right:22px;bottom:20px;font-size:20px;color:rgba(42,26,18,.35);transition:transform .25s ease,color .25s ease}
+.collection-chip:hover{transform:translateY(-3px);background:#fff;border-color:#b04a2f;box-shadow:0 18px 40px -22px rgba(80,30,15,.35)}
+.collection-chip:hover::after{transform:translate(4px,0);color:#b04a2f}
+.collection-chip:hover strong{color:#b04a2f}
+.collection-chip strong{font-family:Georgia,"Times New Roman",serif;font-size:24px;font-weight:500;color:#2a1a12;line-height:1.2;transition:color .2s ease;padding-right:28px}
+.collection-chip span{color:#b04a2f;font-size:11px;text-transform:uppercase;letter-spacing:.22em;font-weight:700}
 
 /* Tool category sections */
 .tool-section{padding:56px 0;border-bottom:1px solid rgba(128,105,67,.16)}
