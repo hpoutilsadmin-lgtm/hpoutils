@@ -29,6 +29,13 @@ function Page() {
       </section>
       <div className="subpage-content">
         <div className="container">
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
+            <img
+              src="/images/photo-hp.jpg"
+              alt="Portrait de HP"
+              style={{ width: 200, height: 200, borderRadius: "50%", objectFit: "cover", border: "4px solid #f6eddd", boxShadow: "0 14px 40px rgba(0,0,0,.25)" }}
+            />
+          </div>
           <div className="cards">
             <article className="info-card"><span className="mini-note">Vision</span><h3>Comprendre</h3><p>Voir le monde avec lucidité et bienveillance pour faire des choix alignés.</p></article>
             <article className="info-card"><span className="mini-note">Action</span><h3>Agir</h3><p>Passer à l’action avec des outils concrets, adaptés à la vraie vie.</p></article>
