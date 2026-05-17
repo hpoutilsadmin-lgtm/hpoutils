@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TransmettreRoute = TransmettreRouteImport.update({
+  id: '/transmettre',
+  path: '/transmettre',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OutilsRoute = OutilsRouteImport.update({
   id: '/outils',
   path: '/outils',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/comprendre': typeof ComprendreRoute
   '/outils': typeof OutilsRoute
+  '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/comprendre': typeof ComprendreRoute
   '/outils': typeof OutilsRoute
+  '/transmettre': typeof TransmettreRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/comprendre': typeof ComprendreRoute
   '/outils': typeof OutilsRoute
+  '/transmettre': typeof TransmettreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/comprendre' | '/outils'
+  fullPaths: '/' | '/comprendre' | '/outils' | '/transmettre'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/comprendre' | '/outils'
-  id: '__root__' | '/' | '/comprendre' | '/outils'
+  to: '/' | '/comprendre' | '/outils' | '/transmettre'
+  id: '__root__' | '/' | '/comprendre' | '/outils' | '/transmettre'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ComprendreRoute: typeof ComprendreRoute
   OutilsRoute: typeof OutilsRoute
+  TransmettreRoute: typeof TransmettreRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/transmettre': {
+      id: '/transmettre'
+      path: '/transmettre'
+      fullPath: '/transmettre'
+      preLoaderRoute: typeof TransmettreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/outils': {
       id: '/outils'
       path: '/outils'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ComprendreRoute: ComprendreRoute,
   OutilsRoute: OutilsRoute,
+  TransmettreRoute: TransmettreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
