@@ -6,7 +6,7 @@ const PDF_BUCKET = "pdfs";
 const PDF_OBJECT_PATH = "enjeux-humanite.pdf";
 const SIGNED_URL_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 jours
 
-let _admin: ReturnType<typeof createClient> | null = null;
+let _admin: any = null;
 function getAdmin() {
   if (!_admin) {
     _admin = createClient(
