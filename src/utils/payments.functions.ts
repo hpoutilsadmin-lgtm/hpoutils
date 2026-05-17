@@ -40,7 +40,11 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
       mode: "payment",
       ui_mode: "embedded_page",
       return_url: data.returnUrl,
-      automatic_tax: { enabled: true },
+      // automatic_tax requires a head office address on the Stripe account.
+      // The Lovable-managed sandbox account does not have one configured,
+      // which causes checkout sessions to fail. Disabled for now; the 25 $ CAD
+      // is treated as tax-inclusive until Stripe Tax is properly set up.
+      automatic_tax: { enabled: false },
       billing_address_collection: "required",
       metadata: { priceId: data.priceId },
     });
