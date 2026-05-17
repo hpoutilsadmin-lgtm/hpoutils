@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
+import { getProduct } from "@/lib/products-catalog";
 
 const PDF_BUCKET = "pdfs";
-const PDF_OBJECT_PATH = "enjeux-humanite.pdf";
 const SIGNED_URL_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 jours
 
 let _admin: any = null;
@@ -25,6 +25,7 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
   }) => {
     if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
     if (!data.returnUrl.startsWith("http")) throw new Error("Invalid returnUrl");
+    if (!getProduct(data.priceId)) throw new Error("Unknown product");
     return data;
   })
   .handler(async ({ data }) => {
@@ -75,6 +76,9 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
     const productId =
       typeof price?.product === "string" ? price.product : (price?.product as any)?.id ?? "unknown";
 
+    const product = getProduct(priceId);
+    const pdfPath = product?.pdfPath ?? null;
+
     const admin = getAdmin();
 
     // Upsert order (idempotent)
@@ -89,7 +93,7 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
         amount_total: session.amount_total ?? 0,
         currency: session.currency ?? "cad",
         status: "paid",
-        pdf_path: PDF_OBJECT_PATH,
+        pdf_path: pdfPath,
         environment: data.environment,
       },
       { onConflict: "stripe_session_id" },
@@ -99,11 +103,21 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       throw new Error("Database error");
     }
 
-    // Vérifier que le PDF existe dans le bucket
+    if (!product) {
+      return {
+        status: "paid" as const,
+        email,
+        downloadUrl: null as string | null,
+        message:
+          "Votre paiement est confirmé. Le fichier sera disponible sous peu — nous vous contacterons.",
+      };
+    }
+
+    // Générer le lien signé
     const { data: signed, error: signErr } = await admin.storage
       .from(PDF_BUCKET)
-      .createSignedUrl(PDF_OBJECT_PATH, SIGNED_URL_TTL_SECONDS, {
-        download: "Les-enjeux-de-l-humanite.pdf",
+      .createSignedUrl(product.pdfPath, SIGNED_URL_TTL_SECONDS, {
+        download: product.downloadFileName,
       });
 
     if (signErr || !signed) {
@@ -123,4 +137,56 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       downloadUrl: signed.signedUrl,
       message: null as string | null,
     };
+  });
+
+// Récupération de commandes par courriel (page /recuperer-achat).
+// Retourne la liste des achats payés et un lien signé frais pour chacun.
+export const recoverOrdersByEmail = createServerFn({ method: "POST" })
+  .inputValidator((data: { email: string; environment: StripeEnv }) => {
+    const email = data.email?.trim().toLowerCase();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      throw new Error("Courriel invalide");
+    }
+    if (email.length > 254) throw new Error("Courriel invalide");
+    return { email, environment: data.environment };
+  })
+  .handler(async ({ data }) => {
+    const admin = getAdmin();
+    const { data: orders, error } = await admin
+      .from("orders")
+      .select("id, price_id, pdf_path, created_at, status")
+      .ilike("customer_email", data.email)
+      .eq("status", "paid")
+      .eq("environment", data.environment)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("recover lookup error", error);
+      throw new Error("Erreur lors de la recherche");
+    }
+
+    const items: Array<{
+      orderId: string;
+      title: string;
+      downloadUrl: string | null;
+      purchasedAt: string;
+    }> = [];
+
+    for (const o of orders ?? []) {
+      const product = getProduct(o.price_id);
+      if (!product || !o.pdf_path) continue;
+      const { data: signed } = await admin.storage
+        .from(PDF_BUCKET)
+        .createSignedUrl(product.pdfPath, SIGNED_URL_TTL_SECONDS, {
+          download: product.downloadFileName,
+        });
+      items.push({
+        orderId: o.id as string,
+        title: product.title,
+        downloadUrl: signed?.signedUrl ?? null,
+        purchasedAt: o.created_at as string,
+      });
+    }
+
+    return { items };
   });

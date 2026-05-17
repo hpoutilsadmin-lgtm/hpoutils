@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
+import { type StripeEnv, verifyWebhook, createStripeClient } from "@/lib/stripe.server";
+import { getProduct } from "@/lib/products-catalog";
 
 let _supabase: any = null;
 function getSupabase() {
@@ -13,20 +14,27 @@ function getSupabase() {
   return _supabase;
 }
 
-async function handleCheckoutCompleted(session: any, env: StripeEnv) {
+async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
+  // L'événement checkout.session.completed n'inclut PAS line_items par défaut.
+  // On récupère la session étendue pour obtenir le prix et le produit.
+  const stripe = createStripeClient(env);
+  const session = await stripe.checkout.sessions.retrieve(rawSession.id, {
+    expand: ["line_items", "line_items.data.price"],
+  });
+
   const email =
-    session.customer_details?.email || session.customer_email || "";
-  const lineItems = session.line_items?.data ?? [];
-  const first = lineItems[0];
+    session.customer_details?.email || (session.customer_email as string | null) || "";
+  const first = session.line_items?.data?.[0];
   const priceId =
     first?.price?.lookup_key ||
-    first?.price?.metadata?.lovable_external_id ||
+    (first?.price?.metadata?.lovable_external_id as string | undefined) ||
     first?.price?.id ||
     "unknown";
   const productId =
     typeof first?.price?.product === "string"
       ? first.price.product
-      : first?.price?.product?.id || "unknown";
+      : (first?.price?.product as any)?.id || "unknown";
+  const product = getProduct(priceId);
 
   await getSupabase().from("orders").upsert(
     {
@@ -39,7 +47,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
       amount_total: session.amount_total ?? 0,
       currency: session.currency ?? "cad",
       status: "paid",
-      pdf_path: "enjeux-humanite.pdf",
+      pdf_path: product?.pdfPath ?? null,
       environment: env,
     },
     { onConflict: "stripe_session_id" },

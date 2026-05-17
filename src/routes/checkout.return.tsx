@@ -114,6 +114,10 @@ function Page() {
             <p style={{ marginTop: 32, fontSize: 14, opacity: 0.7 }}>
               Le lien de téléchargement reste valide 7 jours. Conservez-le précieusement.
             </p>
+            <p style={{ marginTop: 16, fontSize: 14 }}>
+              Vous avez perdu votre lien plus tard ?{" "}
+              <Link to="/recuperer-achat">Récupérez-le ici</Link>.
+            </p>
           </>
         )}
       </div>

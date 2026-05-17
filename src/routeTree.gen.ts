@@ -13,6 +13,7 @@ import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SansHonteRouteImport } from './routes/sans-honte'
 import { Route as ReflexionsRouteImport } from './routes/reflexions'
+import { Route as RecupererAchatRouteImport } from './routes/recuperer-achat'
 import { Route as PrixRouteImport } from './routes/prix'
 import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
@@ -44,6 +45,11 @@ const SansHonteRoute = SansHonteRouteImport.update({
 const ReflexionsRoute = ReflexionsRouteImport.update({
   id: '/reflexions',
   path: '/reflexions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecupererAchatRoute = RecupererAchatRouteImport.update({
+  id: '/recuperer-achat',
+  path: '/recuperer-achat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrixRoute = PrixRouteImport.update({
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRoute
   '/prix': typeof PrixRoute
+  '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
     | '/livres-pdf'
     | '/outils'
     | '/prix'
+    | '/recuperer-achat'
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/livres-pdf'
     | '/outils'
     | '/prix'
+    | '/recuperer-achat'
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/livres-pdf'
     | '/outils'
     | '/prix'
+    | '/recuperer-achat'
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
@@ -230,6 +242,7 @@ export interface RootRouteChildren {
   LivresPdfRoute: typeof LivresPdfRoute
   OutilsRoute: typeof OutilsRoute
   PrixRoute: typeof PrixRoute
+  RecupererAchatRoute: typeof RecupererAchatRoute
   ReflexionsRoute: typeof ReflexionsRoute
   SansHonteRoute: typeof SansHonteRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -267,6 +280,13 @@ declare module '@tanstack/react-router' {
       path: '/reflexions'
       fullPath: '/reflexions'
       preLoaderRoute: typeof ReflexionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperer-achat': {
+      id: '/recuperer-achat'
+      path: '/recuperer-achat'
+      fullPath: '/recuperer-achat'
+      preLoaderRoute: typeof RecupererAchatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/prix': {
@@ -366,6 +386,7 @@ const rootRouteChildren: RootRouteChildren = {
   LivresPdfRoute: LivresPdfRoute,
   OutilsRoute: OutilsRoute,
   PrixRoute: PrixRoute,
+  RecupererAchatRoute: RecupererAchatRoute,
   ReflexionsRoute: ReflexionsRoute,
   SansHonteRoute: SansHonteRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
