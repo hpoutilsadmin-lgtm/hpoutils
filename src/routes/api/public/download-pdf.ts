@@ -63,7 +63,7 @@ export const Route = createFileRoute("/api/public/download-pdf")({
         }
 
         const filename = product.downloadFileName || "document.pdf";
-        return new Response(outBytes, {
+        return new Response(new Blob([outBytes as BlobPart], { type: "application/pdf" }), {
           status: 200,
           headers: {
             "Content-Type": "application/pdf",
