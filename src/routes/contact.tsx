@@ -99,6 +99,38 @@ function Page() {
         </div>
       </section>
 
+      <section className="three-pillars">
+        <div className="container">
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "0 0 28px", color: "#2a1a12" }}>FAQ — Moyens de paiement</h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Quelles cartes sont acceptées ?</h3>
+              <p>Visa, Mastercard et American Express, traitées de façon sécurisée par Stripe.</p>
+            </article>
+            <article className="pillar-card">
+              <h3>Apple Pay et Google Pay ?</h3>
+              <p>Oui, les deux portefeuilles sont acceptés au moment du paiement. Les cartes Interac Débit ajoutées à Apple Pay ou Google Pay fonctionnent également.</p>
+            </article>
+            <article className="pillar-card">
+              <h3>Comptant ?</h3>
+              <p>Accepté pour les achats en personne lors d'ateliers, d'événements ou de rencontres.</p>
+            </article>
+            <article className="pillar-card">
+              <h3>Chèques ?</h3>
+              <p>Acceptés uniquement pour les organismes (écoles, centres communautaires, OBNL). Libellés à l'ordre indiqué sur la facture.</p>
+            </article>
+            <article className="pillar-card">
+              <h3>Le paiement est-il sécurisé ?</h3>
+              <p>Oui. Toutes les transactions en ligne passent par Stripe, certifié PCI-DSS. Aucune donnée bancaire n'est stockée sur le site.</p>
+            </article>
+            <article className="pillar-card">
+              <h3>Reçu ou facture ?</h3>
+              <p>Un reçu est envoyé automatiquement par courriel après chaque paiement. Une facture détaillée est disponible sur demande pour les organismes.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section className="collections-strip" style={{ textAlign: "center" }}>
         <div className="container" style={{ maxWidth: 760 }}>
           <h2>Une question, une idée, un <em>projet</em> ?</h2>
