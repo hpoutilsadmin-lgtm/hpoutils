@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UniversRouteImport } from './routes/univers'
 import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SansHonteRouteImport } from './routes/sans-honte'
@@ -19,6 +20,7 @@ import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
+import { Route as CollaborerRouteImport } from './routes/collaborer'
 import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as AlbumRouteImport } from './routes/album'
 import { Route as AProposRouteImport } from './routes/a-propos'
@@ -28,6 +30,11 @@ import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
+const UniversRoute = UniversRouteImport.update({
+  id: '/univers',
+  path: '/univers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TransmettreRoute = TransmettreRouteImport.update({
   id: '/transmettre',
   path: '/transmettre',
@@ -78,6 +85,11 @@ const ComprendreRoute = ComprendreRouteImport.update({
   path: '/comprendre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CollaborerRoute = CollaborerRouteImport.update({
+  id: '/collaborer',
+  path: '/collaborer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AteliersRoute = AteliersRouteImport.update({
   id: '/ateliers',
   path: '/ateliers',
@@ -125,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
+  '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -135,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
+  '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
@@ -145,6 +159,7 @@ export interface FileRoutesByTo {
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
+  '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -155,6 +170,7 @@ export interface FileRoutesByTo {
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
+  '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
@@ -166,6 +182,7 @@ export interface FileRoutesById {
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
+  '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -176,6 +193,7 @@ export interface FileRoutesById {
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
+  '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
@@ -188,6 +206,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/album'
     | '/ateliers'
+    | '/collaborer'
     | '/comprendre'
     | '/contact'
     | '/livres-pdf'
@@ -198,6 +217,7 @@ export interface FileRouteTypes {
     | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
+    | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
     | '/api/public/download-pdf'
@@ -208,6 +228,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/album'
     | '/ateliers'
+    | '/collaborer'
     | '/comprendre'
     | '/contact'
     | '/livres-pdf'
@@ -218,6 +239,7 @@ export interface FileRouteTypes {
     | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
+    | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
     | '/api/public/download-pdf'
@@ -228,6 +250,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/album'
     | '/ateliers'
+    | '/collaborer'
     | '/comprendre'
     | '/contact'
     | '/livres-pdf'
@@ -238,6 +261,7 @@ export interface FileRouteTypes {
     | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
+    | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
     | '/api/public/download-pdf'
@@ -249,6 +273,7 @@ export interface RootRouteChildren {
   AProposRoute: typeof AProposRoute
   AlbumRoute: typeof AlbumRoute
   AteliersRoute: typeof AteliersRoute
+  CollaborerRoute: typeof CollaborerRoute
   ComprendreRoute: typeof ComprendreRoute
   ContactRoute: typeof ContactRoute
   LivresPdfRoute: typeof LivresPdfRoute
@@ -259,6 +284,7 @@ export interface RootRouteChildren {
   SansHonteRoute: typeof SansHonteRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransmettreRoute: typeof TransmettreRoute
+  UniversRoute: typeof UniversRoute
   AchatSlugRoute: typeof AchatSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   ApiPublicDownloadPdfRoute: typeof ApiPublicDownloadPdfRoute
@@ -267,6 +293,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/univers': {
+      id: '/univers'
+      path: '/univers'
+      fullPath: '/univers'
+      preLoaderRoute: typeof UniversRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/transmettre': {
       id: '/transmettre'
       path: '/transmettre'
@@ -337,6 +370,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComprendreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/collaborer': {
+      id: '/collaborer'
+      path: '/collaborer'
+      fullPath: '/collaborer'
+      preLoaderRoute: typeof CollaborerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ateliers': {
       id: '/ateliers'
       path: '/ateliers'
@@ -401,6 +441,7 @@ const rootRouteChildren: RootRouteChildren = {
   AProposRoute: AProposRoute,
   AlbumRoute: AlbumRoute,
   AteliersRoute: AteliersRoute,
+  CollaborerRoute: CollaborerRoute,
   ComprendreRoute: ComprendreRoute,
   ContactRoute: ContactRoute,
   LivresPdfRoute: LivresPdfRoute,
@@ -411,6 +452,7 @@ const rootRouteChildren: RootRouteChildren = {
   SansHonteRoute: SansHonteRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransmettreRoute: TransmettreRoute,
+  UniversRoute: UniversRoute,
   AchatSlugRoute: AchatSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   ApiPublicDownloadPdfRoute: ApiPublicDownloadPdfRoute,
