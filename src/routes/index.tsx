@@ -33,39 +33,12 @@ function Index() {
         </div>
       </section>
 
-      {/* 3 PILIERS HP */}
+      {/* PILIER 01 — COMPRENDRE */}
       <section className="three-pillars">
         <div className="container">
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#2a1a12" }}>Les 3 piliers de HP</h2>
-          <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Comprendre. Agir. Transmettre.</p>
-          <div className="pillar-grid">
-            <article className="pillar-card">
-              <span className="pillar-num">01</span>
-              <h3>Comprendre</h3>
-              <p>Nommer ce qui change dans le monde — IA, société, ressources — sans jargon ni panique, pour choisir en lucidité.</p>
-              <Link to="/comprendre" className="pillar-cta">Comprendre →</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">02</span>
-              <h3>Agir</h3>
-              <p>Des outils simples et concrets pour reprendre du pouvoir sur son quotidien, sans honte et sans surenchère.</p>
-              <Link to="/sans-honte" className="pillar-cta">Agir →</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">03</span>
-              <h3>Transmettre</h3>
-              <p>Partager ce qui aide vraiment — aux jeunes, aux familles, aux milieux — pour faire grandir l'autonomie autour de soi.</p>
-              <Link to="/transmettre" className="pillar-cta">Transmettre →</Link>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* CONTENUS */}
-      <section className="three-pillars">
-        <div className="container">
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#2a1a12" }}>Contenus</h2>
-          <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Lire, comprendre, réfléchir, transmettre.</p>
+          <span className="editorial-kicker">Pilier 01</span>
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "8px 0 8px", color: "#2a1a12" }}>Comprendre</h2>
+          <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Nommer ce qui change — IA, société, ressources — sans jargon ni panique.</p>
           <div className="pillar-grid">
             <article className="pillar-card">
               <span className="pillar-num">01</span>
@@ -86,14 +59,18 @@ function Index() {
               <Link to="/livres-pdf" className="pillar-cta">Voir le livre →</Link>
             </article>
           </div>
+          <div className="lead-actions" style={{ marginTop: 28 }}>
+            <Link to="/comprendre" className="btn-primary">Explorer Comprendre</Link>
+          </div>
         </div>
       </section>
 
-      {/* 3. OUTILS SANS HONTE */}
+      {/* PILIER 02 — AGIR */}
       <section className="collections-strip">
         <div className="container">
-          <h2>Outils <em>Sans Honte</em></h2>
-          <p className="strip-intro">Des repères concrets pour reprendre du contrôle sans se sentir moins.</p>
+          <span className="editorial-kicker">Pilier 02</span>
+          <h2><em>Agir</em></h2>
+          <p className="strip-intro">Des outils Sans Honte pour reprendre du contrôle sur son quotidien, sans se sentir moins.</p>
           <div className="pillar-grid">
             <article className="pillar-card">
               <span className="pillar-num">01</span>
@@ -121,7 +98,39 @@ function Index() {
         </div>
       </section>
 
-      {/* 4. UNIVERS ALTERNATIF */}
+      {/* PILIER 03 — TRANSMETTRE */}
+      <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Pilier 03</span>
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "8px 0 8px", color: "#2a1a12" }}>Transmettre</h2>
+          <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Adapter les outils HP à votre milieu — école, organisme, famille, équipe.</p>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <span className="pillar-num">01</span>
+              <h3>Atelier cuisine</h3>
+              <p>Cuisiner simple, comprendre les bases, utiliser ce qu'on a.</p>
+              <Link to="/collaborer" className="pillar-cta">Demander un atelier →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">02</span>
+              <h3>Atelier IA / esprit critique</h3>
+              <p>Comprendre les outils, les risques, les bons réflexes et les dérives.</p>
+              <Link to="/collaborer" className="pillar-cta">Demander une activité →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">03</span>
+              <h3>Atelier BD HP</h3>
+              <p>Créer une page BD personnalisée à partir d'un personnage, d'une émotion, d'un thème et d'un décor.</p>
+              <Link to="/collaborer" className="pillar-cta">Proposer une activité →</Link>
+            </article>
+          </div>
+          <div className="lead-actions" style={{ marginTop: 28 }}>
+            <Link to="/transmettre" className="btn-primary">Explorer Transmettre</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* UNIVERS ALTERNATIF (bonus) */}
       <section className="three-pillars" style={{ background: "#0b1422", color: "#f5ead4" }}>
         <div className="container">
           <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#f5ead4" }}>Univers alternatif</h2>
@@ -149,35 +158,7 @@ function Index() {
         </div>
       </section>
 
-      {/* 5. ATELIERS & COLLABORATIONS */}
-      <section className="three-pillars">
-        <div className="container">
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#2a1a12" }}>Ateliers et collaborations</h2>
-          <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Adapter les outils HP à votre milieu.</p>
-          <div className="pillar-grid">
-            <article className="pillar-card">
-              <span className="pillar-num">01</span>
-              <h3>Atelier cuisine</h3>
-              <p>Cuisiner simple, comprendre les bases, utiliser ce qu'on a.</p>
-              <Link to="/collaborer" className="pillar-cta">Demander un atelier →</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">02</span>
-              <h3>Atelier IA / esprit critique</h3>
-              <p>Comprendre les outils, les risques, les bons réflexes et les dérives.</p>
-              <Link to="/collaborer" className="pillar-cta">Demander une activité →</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">03</span>
-              <h3>Atelier BD HP</h3>
-              <p>Créer une page BD personnalisée à partir d'un personnage, d'une émotion, d'un thème et d'un décor.</p>
-              <Link to="/collaborer" className="pillar-cta">Proposer une activité →</Link>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. CONTACT / INFOLETTRE */}
+      {/* CONTACT / INFOLETTRE */}
       <section className="collections-strip" style={{ textAlign: "center" }}>
         <div className="container" style={{ maxWidth: 760 }}>
           <h2>Rester <em>proche</em> du projet</h2>
