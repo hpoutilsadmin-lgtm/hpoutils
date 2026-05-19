@@ -25,6 +25,7 @@ import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
+import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const TransmettreRoute = TransmettreRouteImport.update({
@@ -107,6 +108,11 @@ const AchatSlugRoute = AchatSlugRouteImport.update({
   path: '/achat/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDownloadPdfRoute = ApiPublicDownloadPdfRouteImport.update({
+  id: '/api/public/download-pdf',
+  path: '/api/public/download-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/transmettre': typeof TransmettreRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/transmettre': typeof TransmettreRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/transmettre': typeof TransmettreRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/transmettre'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/transmettre'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
@@ -229,6 +240,7 @@ export interface FileRouteTypes {
     | '/transmettre'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -249,6 +261,7 @@ export interface RootRouteChildren {
   TransmettreRoute: typeof TransmettreRoute
   AchatSlugRoute: typeof AchatSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
+  ApiPublicDownloadPdfRoute: typeof ApiPublicDownloadPdfRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -366,6 +379,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AchatSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/download-pdf': {
+      id: '/api/public/download-pdf'
+      path: '/api/public/download-pdf'
+      fullPath: '/api/public/download-pdf'
+      preLoaderRoute: typeof ApiPublicDownloadPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -393,6 +413,7 @@ const rootRouteChildren: RootRouteChildren = {
   TransmettreRoute: TransmettreRoute,
   AchatSlugRoute: AchatSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
+  ApiPublicDownloadPdfRoute: ApiPublicDownloadPdfRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
