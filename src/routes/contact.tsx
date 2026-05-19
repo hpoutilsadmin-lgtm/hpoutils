@@ -42,7 +42,7 @@ function Page() {
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>Paiements acceptés</h3>
-              <p>Cartes Visa, Mastercard, American Express et Apple Pay / Google Pay via Stripe (paiement sécurisé). Comptant accepté pour tous, chèques acceptés uniquement pour les organismes.</p>
+              <p>Comptant, cartes Visa, Mastercard, American Express et Apple Pay / Google Pay via Stripe (paiement sécurisé). Les chèques sont admissibles seulement pour les organismes.</p>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
@@ -89,7 +89,7 @@ function Page() {
             </article>
             <article className="pillar-card">
               <h3>Quels moyens de paiement ?</h3>
-              <p>Paiement en ligne par carte (Visa, Mastercard, Amex) et portefeuilles Apple Pay / Google Pay via Stripe. Comptant accepté pour tous, chèques acceptés uniquement pour les organismes.</p>
+              <p>Comptant, cartes Visa, Mastercard, American Express et Apple Pay / Google Pay via Stripe (paiement sécurisé). Les chèques sont admissibles seulement pour les organismes.</p>
             </article>
             <article className="pillar-card">
               <h3>Ateliers pour organismes ?</h3>
