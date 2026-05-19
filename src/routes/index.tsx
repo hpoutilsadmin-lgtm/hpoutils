@@ -13,14 +13,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const COLLECTIONS = [
-  { label: "Sans Honte", tag: "Collection", to: "/sans-honte" },
-  { label: "Outil ou piège", tag: "Réflexions", to: "/reflexions" },
-  { label: "Humain imparfait", tag: "Réflexions", to: "/reflexions" },
-  { label: "IA & vraie vie", tag: "Réflexions", to: "/reflexions" },
-  { label: "Livres et PDF HP", tag: "Bibliothèque", to: "/livres-pdf" },
-];
-
 function Index() {
   return (
     <>
@@ -29,53 +21,147 @@ function Index() {
           <span className="editorial-kicker">HP — média &amp; outils</span>
           <h1>Des outils pour la <em>vraie vie</em>.</h1>
           <p className="lead">
-            HP crée des contenus, livres, PDF et réflexions pour mieux comprendre
-            ce qu'on vit — sans se faire avaler par la performance, la honte ou
-            les fausses solutions.
+            Comprendre. Agir. Transmettre. Des contenus, des outils simples et des
+            univers créatifs pour mieux vivre, mieux réfléchir et reprendre du
+            contrôle sans honte.
           </p>
           <div className="lead-actions">
-            <Link to="/outils" className="btn-primary">Explorer les outils</Link>
-            <Link to="/sans-honte" className="btn-ghost">Découvrir Sans Honte</Link>
+            <Link to="/livres-pdf" className="btn-primary">Explorer les contenus</Link>
+            <Link to="/sans-honte" className="btn-ghost">Voir les outils Sans Honte</Link>
+            <Link to="/univers" className="btn-ghost">Découvrir l'univers HP</Link>
           </div>
         </div>
       </section>
 
+      {/* 2. CONTENUS */}
       <section className="three-pillars">
         <div className="container">
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#2a1a12" }}>Contenus</h2>
+          <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Lire, comprendre, réfléchir, transmettre.</p>
           <div className="pillar-grid">
             <article className="pillar-card">
               <span className="pillar-num">01</span>
-              <h3>Lire &amp; télécharger</h3>
-              <p>Livres, PDF, guides et ressources concrètes à garder près de soi.</p>
-              <Link to="/livres-pdf" className="pillar-cta">Voir les livres et PDF</Link>
+              <h3>Les enjeux de l'humanité</h3>
+              <p>Comprendre le monde qui change, l'IA, les dérives possibles et les choix humains à faire.</p>
+              <Link to="/livres-pdf" className="pillar-cta">Voir le livre →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
-              <h3>Regarder &amp; réfléchir</h3>
-              <p>Capsules, textes courts et réflexions sur l'IA, l'humain imparfait, la honte, les pièges modernes et les outils qu'on utilise.</p>
-              <Link to="/reflexions" className="pillar-cta">Lire les réflexions</Link>
+              <h3>La faim justifie les moyens</h3>
+              <p>Cuisiner avec peu, gaspiller moins et reprendre du pouvoir sur son frigo sans honte.</p>
+              <Link to="/livres-pdf" className="pillar-cta">Découvrir le guide →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
-              <h3>Utiliser &amp; créer</h3>
-              <p>Des outils simples pour mettre des mots, faire le tri et avancer sans se perdre dans la perfection.</p>
-              <Link to="/outils" className="pillar-cta">Explorer les outils</Link>
+              <h3>Les enfants cuisinent pour faire plaisir</h3>
+              <p>Un livre coloré, simple et motivant pour aider les jeunes à cuisiner, essayer, rater et recommencer.</p>
+              <Link to="/livres-pdf" className="pillar-cta">Voir le livre →</Link>
             </article>
           </div>
         </div>
       </section>
 
+      {/* 3. OUTILS SANS HONTE */}
       <section className="collections-strip">
         <div className="container">
-          <h2>Collections en vedette</h2>
-          <p className="strip-intro">Des univers à explorer, selon ce qui te parle aujourd'hui.</p>
-          <div className="collections-grid">
-            {COLLECTIONS.map((c) => (
-              <Link key={c.label} to={c.to} className="collection-chip">
-                <span>{c.tag}</span>
-                <strong>{c.label}</strong>
-              </Link>
-            ))}
+          <h2>Outils <em>Sans Honte</em></h2>
+          <p className="strip-intro">Des repères concrets pour reprendre du contrôle sans se sentir moins.</p>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <span className="pillar-num">01</span>
+              <h3>Frigo Sans Honte</h3>
+              <p>Reprendre le contrôle du frigo, cuisiner avec ce qu'on a et gaspiller moins.</p>
+              <Link to="/sans-honte" className="pillar-cta">Voir l'outil →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">02</span>
+              <h3>Me reconnaître Sans Honte</h3>
+              <p>Adapter sa journée à son cerveau, sans diagnostic sauvage et sans se juger.</p>
+              <Link to="/sans-honte" className="pillar-cta">Voir le kit →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">03</span>
+              <h3>Fraude Sans Honte</h3>
+              <p>Reconnaître les pièges, ralentir avant de cliquer et protéger ses proches.</p>
+              <Link to="/sans-honte" className="pillar-cta">Voir le kit →</Link>
+            </article>
+          </div>
+          <p style={{ marginTop: 32, fontStyle: "italic", color: "rgba(42,26,18,.65)", fontSize: 15 }}>
+            Les autres kits de la collection sont en déploiement.{" "}
+            <Link to="/sans-honte" style={{ color: "#b04a2f", fontWeight: 700 }}>Voir toute la collection →</Link>
+          </p>
+        </div>
+      </section>
+
+      {/* 4. UNIVERS ALTERNATIF */}
+      <section className="three-pillars" style={{ background: "#0b1422", color: "#f5ead4" }}>
+        <div className="container">
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#f5ead4" }}>Univers alternatif</h2>
+          <p style={{ margin: "0 0 36px", color: "rgba(245,234,212,.75)", fontStyle: "italic", fontSize: 17 }}>Une autre façon de dire la même chose.</p>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <span className="pillar-num">01</span>
+              <h3>PH — Déséquilibré</h3>
+              <p>Chroniques de l'ordinaire. Une BD muette, absurde et humaine.</p>
+              <Link to="/univers" className="pillar-cta">Découvrir PH →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">02</span>
+              <h3>Famille atypique</h3>
+              <p>Un univers shōnen québécois sur la famille, les blessures, la force et la différence.</p>
+              <Link to="/univers" className="pillar-cta">Voir l'aperçu →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">03</span>
+              <h3>Humain imparfait</h3>
+              <p>Album DIY, sensible et brut autour de l'imperfection, de la lucidité et du besoin de rester humain.</p>
+              <Link to="/univers" className="pillar-cta">Écouter l'album →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. ATELIERS & COLLABORATIONS */}
+      <section className="three-pillars">
+        <div className="container">
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#2a1a12" }}>Ateliers et collaborations</h2>
+          <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Adapter les outils HP à votre milieu.</p>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <span className="pillar-num">01</span>
+              <h3>Atelier cuisine</h3>
+              <p>Cuisiner simple, comprendre les bases, utiliser ce qu'on a.</p>
+              <Link to="/collaborer" className="pillar-cta">Demander un atelier →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">02</span>
+              <h3>Atelier IA / esprit critique</h3>
+              <p>Comprendre les outils, les risques, les bons réflexes et les dérives.</p>
+              <Link to="/collaborer" className="pillar-cta">Demander une activité →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">03</span>
+              <h3>Atelier BD HP</h3>
+              <p>Créer une page BD personnalisée à partir d'un personnage, d'une émotion, d'un thème et d'un décor.</p>
+              <Link to="/collaborer" className="pillar-cta">Proposer une activité →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. CONTACT / INFOLETTRE */}
+      <section className="collections-strip" style={{ textAlign: "center" }}>
+        <div className="container" style={{ maxWidth: 760 }}>
+          <h2>Rester <em>proche</em> du projet</h2>
+          <p className="strip-intro" style={{ margin: "0 auto 36px" }}>
+            Recevoir les nouveaux outils, les contenus utiles, les dates d'ateliers et les prochaines sorties HP.
+          </p>
+          <div className="lead-actions" style={{ justifyContent: "center" }}>
+            <Link to="/contact" className="btn-primary">Me contacter</Link>
+            <a href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ color: "#2a1a12", borderColor: "rgba(176,74,47,.5)" }}>Recevoir les nouvelles HP</a>
+          </div>
+          <p style={{ marginTop: 28, fontSize: 15, color: "rgba(42,26,18,.7)" }}>
+            <a href="mailto:hpoutils.admin@gmail.com" style={{ color: "#b04a2f", fontWeight: 700 }}>hpoutils.admin@gmail.com</a>
           </div>
         </div>
       </section>
