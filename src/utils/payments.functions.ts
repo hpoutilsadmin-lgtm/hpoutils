@@ -4,8 +4,6 @@ import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 import { getProduct } from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
 
-const PDF_BUCKET = "pdfs";
-
 function buildDownloadUrl(priceId: string, email: string): string {
   const token = signDownloadToken({ priceId, email });
   return `/api/public/download-pdf?token=${encodeURIComponent(token)}`;
