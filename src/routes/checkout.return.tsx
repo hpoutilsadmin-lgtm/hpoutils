@@ -87,7 +87,7 @@ function Page() {
           <>
             <h1>Merci !</h1>
             <p>
-              Votre achat de <em>Les enjeux de l'humanité</em> est confirmé.
+              Votre achat est confirmé.
               {state.email && <> Un reçu a été envoyé à <strong>{state.email}</strong>.</>}
             </p>
             {state.downloadUrl ? (

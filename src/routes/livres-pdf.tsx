@@ -13,13 +13,20 @@ export const Route = createFileRoute("/livres-pdf")({
   component: Page,
 });
 
-const ITEMS = [
-  { cover: "/images/cover-enjeux.jpg", title: "Les enjeux de l'humanité", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "Livre" },
-  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "Livre" },
-  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "Livre" },
-  { cover: "/images/sans-honte/kit-03.jpg", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "PDF" },
-  { cover: "/images/sans-honte/kit-04.jpg", title: "Tenir Debout Sans Honte", desc: "Quand la journée tient sur un fil — un kit court.", tag: "PDF" },
-  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection" },
+const ITEMS: Array<{
+  cover: string;
+  title: string;
+  desc: string;
+  tag: string;
+  slug: string;
+  price: string;
+}> = [
+  { cover: "/images/cover-enjeux.jpg", title: "Les enjeux de l'humanité", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "PDF", slug: "enjeux-humanite", price: "10 $" },
+  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
+  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "15 $" },
+  { cover: "/images/sans-honte/kit-03.jpg", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "PDF", slug: "sans-honte-frigo", price: "10 $" },
+  { cover: "/images/sans-honte/kit-04.jpg", title: "Tenir Debout Sans Honte", desc: "Quand la journée tient sur un fil — un kit court.", tag: "PDF", slug: "sans-honte-tenir-debout", price: "10 $" },
+  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection", slug: "sans-honte-collection", price: "60 $" },
 ];
 
 function Page() {
@@ -47,11 +54,9 @@ function Page() {
                 <div className="library-meta"><span className="dot" />{b.tag}</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
-                {b.title === "Les enjeux de l'humanité" ? (
-                  <a className="lib-link" href="/achat/enjeux-humanite">Acheter le PDF — 25 $ →</a>
-                ) : (
-                  <a className="lib-link" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Découvrir →</a>
-                )}
+                <a className="lib-link" href={`/achat/${b.slug}`}>
+                  Acheter le PDF — {b.price} →
+                </a>
               </article>
             );})}
           </div>

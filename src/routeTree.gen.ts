@@ -24,7 +24,7 @@ import { Route as AlbumRouteImport } from './routes/album'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
-import { Route as AchatEnjeuxHumaniteRouteImport } from './routes/achat.enjeux-humanite'
+import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const TransmettreRoute = TransmettreRouteImport.update({
@@ -102,9 +102,9 @@ const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   path: '/checkout/return',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AchatEnjeuxHumaniteRoute = AchatEnjeuxHumaniteRouteImport.update({
-  id: '/achat/enjeux-humanite',
-  path: '/achat/enjeux-humanite',
+const AchatSlugRoute = AchatSlugRouteImport.update({
+  id: '/achat/$slug',
+  path: '/achat/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaymentsWebhookRoute =
@@ -129,7 +129,7 @@ export interface FileRoutesByFullPath {
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
-  '/achat/enjeux-humanite': typeof AchatEnjeuxHumaniteRoute
+  '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -148,7 +148,7 @@ export interface FileRoutesByTo {
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
-  '/achat/enjeux-humanite': typeof AchatEnjeuxHumaniteRoute
+  '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -168,7 +168,7 @@ export interface FileRoutesById {
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
-  '/achat/enjeux-humanite': typeof AchatEnjeuxHumaniteRoute
+  '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -189,7 +189,7 @@ export interface FileRouteTypes {
     | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
-    | '/achat/enjeux-humanite'
+    | '/achat/$slug'
     | '/checkout/return'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -208,7 +208,7 @@ export interface FileRouteTypes {
     | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
-    | '/achat/enjeux-humanite'
+    | '/achat/$slug'
     | '/checkout/return'
     | '/api/public/payments/webhook'
   id:
@@ -227,7 +227,7 @@ export interface FileRouteTypes {
     | '/sans-honte'
     | '/sitemap.xml'
     | '/transmettre'
-    | '/achat/enjeux-humanite'
+    | '/achat/$slug'
     | '/checkout/return'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -247,7 +247,7 @@ export interface RootRouteChildren {
   SansHonteRoute: typeof SansHonteRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransmettreRoute: typeof TransmettreRoute
-  AchatEnjeuxHumaniteRoute: typeof AchatEnjeuxHumaniteRoute
+  AchatSlugRoute: typeof AchatSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -359,11 +359,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutReturnRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/achat/enjeux-humanite': {
-      id: '/achat/enjeux-humanite'
-      path: '/achat/enjeux-humanite'
-      fullPath: '/achat/enjeux-humanite'
-      preLoaderRoute: typeof AchatEnjeuxHumaniteRouteImport
+    '/achat/$slug': {
+      id: '/achat/$slug'
+      path: '/achat/$slug'
+      fullPath: '/achat/$slug'
+      preLoaderRoute: typeof AchatSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/payments/webhook': {
@@ -391,7 +391,7 @@ const rootRouteChildren: RootRouteChildren = {
   SansHonteRoute: SansHonteRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransmettreRoute: TransmettreRoute,
-  AchatEnjeuxHumaniteRoute: AchatEnjeuxHumaniteRoute,
+  AchatSlugRoute: AchatSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
