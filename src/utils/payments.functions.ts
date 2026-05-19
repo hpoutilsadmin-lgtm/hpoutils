@@ -2,9 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 import { getProduct } from "@/lib/products-catalog";
+import { signDownloadToken } from "@/lib/download-token.server";
 
 const PDF_BUCKET = "pdfs";
-const SIGNED_URL_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 jours
+
+function buildDownloadUrl(priceId: string, email: string): string {
+  const token = signDownloadToken({ priceId, email });
+  return `/api/public/download-pdf?token=${encodeURIComponent(token)}`;
+}
 
 let _admin: any = null;
 function getAdmin() {
@@ -117,28 +122,10 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       };
     }
 
-    // Générer le lien signé
-    const { data: signed, error: signErr } = await admin.storage
-      .from(PDF_BUCKET)
-      .createSignedUrl(product.pdfPath, SIGNED_URL_TTL_SECONDS, {
-        download: product.downloadFileName,
-      });
-
-    if (signErr || !signed) {
-      console.error("signed url error", signErr);
-      return {
-        status: "paid" as const,
-        email,
-        downloadUrl: null as string | null,
-        message:
-          "Votre paiement est confirmé. Le PDF sera disponible sous peu — Hélène vous l'enverra par courriel.",
-      };
-    }
-
     return {
       status: "paid" as const,
       email,
-      downloadUrl: signed.signedUrl,
+      downloadUrl: buildDownloadUrl(priceId, email),
       message: null as string | null,
     };
   });
@@ -179,15 +166,10 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     for (const o of orders ?? []) {
       const product = getProduct(o.price_id);
       if (!product || !o.pdf_path) continue;
-      const { data: signed } = await admin.storage
-        .from(PDF_BUCKET)
-        .createSignedUrl(product.pdfPath, SIGNED_URL_TTL_SECONDS, {
-          download: product.downloadFileName,
-        });
       items.push({
         orderId: o.id as string,
         title: product.title,
-        downloadUrl: signed?.signedUrl ?? null,
+        downloadUrl: buildDownloadUrl(o.price_id, data.email),
         purchasedAt: o.created_at as string,
       });
     }
