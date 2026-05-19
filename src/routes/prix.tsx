@@ -26,13 +26,17 @@ const ROWS: Array<{ cat: string; offre: string; prix: string; href: string; labe
 function Page() {
   return (
     <>
-      <div className="subpage-hero">
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
-          <h1>Prix</h1>
-          <p>Les prix doivent rester identiques sur le site, les visuels promotionnels et les formulaires.</p>
+          <span className="editorial-kicker">Tarifs HP</span>
+          <h1>Des prix <em>clairs</em>, partout pareils.</h1>
+          <p className="lead">
+            Les prix doivent rester identiques sur le site, les visuels
+            promotionnels et les formulaires.
+          </p>
         </div>
-      </div>
-      <div className="subpage-content">
+      </section>
+      <section className="three-pillars">
         <div className="container">
           <div className="table-wrap">
             <table>
@@ -58,7 +62,7 @@ function Page() {
             </table>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 }
