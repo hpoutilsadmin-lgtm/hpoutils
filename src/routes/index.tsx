@@ -33,11 +33,6 @@ function Index() {
         </div>
       </section>
 
-      {/* 2. CONTENUS */}
-      <section className="three-pillars">
-        <div className="container">
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#2a1a12" }}>Contenus</h2>
-
       {/* 3 PILIERS HP */}
       <section className="three-pillars">
         <div className="container">
