@@ -162,7 +162,7 @@ function Index() {
           </div>
           <p style={{ marginTop: 28, fontSize: 15, color: "rgba(42,26,18,.7)" }}>
             <a href="mailto:hpoutils.admin@gmail.com" style={{ color: "#b04a2f", fontWeight: 700 }}>hpoutils.admin@gmail.com</a>
-          </div>
+          </p>
         </div>
       </section>
     </>
