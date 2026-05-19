@@ -33,7 +33,35 @@ function Index() {
         </div>
       </section>
 
-      {/* 2. CONTENUS */}
+      {/* 3 PILIERS HP */}
+      <section className="three-pillars">
+        <div className="container">
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#2a1a12" }}>Les 3 piliers de HP</h2>
+          <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Comprendre. Agir. Transmettre.</p>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <span className="pillar-num">01</span>
+              <h3>Comprendre</h3>
+              <p>Nommer ce qui change dans le monde — IA, société, ressources — sans jargon ni panique, pour choisir en lucidité.</p>
+              <Link to="/comprendre" className="pillar-cta">Comprendre →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">02</span>
+              <h3>Agir</h3>
+              <p>Des outils simples et concrets pour reprendre du pouvoir sur son quotidien, sans honte et sans surenchère.</p>
+              <Link to="/sans-honte" className="pillar-cta">Agir →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">03</span>
+              <h3>Transmettre</h3>
+              <p>Partager ce qui aide vraiment — aux jeunes, aux familles, aux milieux — pour faire grandir l'autonomie autour de soi.</p>
+              <Link to="/transmettre" className="pillar-cta">Transmettre →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTENUS */}
       <section className="three-pillars">
         <div className="container">
           <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#2a1a12" }}>Contenus</h2>
