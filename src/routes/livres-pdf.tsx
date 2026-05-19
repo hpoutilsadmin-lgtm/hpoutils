@@ -39,12 +39,9 @@ function Page() {
         <div className="container">
           <div className="library-grid">
             {ITEMS.map((b) => {
-              const contain =
-                b.cover.endsWith("collection-cover.png") ||
-                b.cover.startsWith("/images/cover-");
               return (
               <article key={b.title} className="library-item">
-                <div className={`library-cover${contain ? " cover-contain" : ""}`}>
+                <div className="library-cover cover-contain">
                   <img src={b.cover} alt={`Couverture ${b.title}`} loading="lazy" />
                 </div>
                 <div className="library-meta"><span className="dot" />{b.tag}</div>
