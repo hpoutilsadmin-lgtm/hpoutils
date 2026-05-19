@@ -21,16 +21,16 @@ const QUOTES = [
 ];
 
 const KITS = [
-  { n: "01", cover: "/images/sans-honte/kit-01.jpg", title: "Papiers Sans Honte", sub: "Reprendre le contrôle de ses papiers." },
-  { n: "02", cover: "/images/sans-honte/kit-02.jpg", title: "Me Reconnaître Sans Honte", sub: "Se retrouver quand on s'est perdu·e de vue." },
-  { n: "03", cover: "/images/sans-honte/kit-03.jpg", title: "Frigo Sans Honte", sub: "Manger vrai avec ce qu'on a." },
-  { n: "04", cover: "/images/sans-honte/kit-04.jpg", title: "Tenir Debout Sans Honte", sub: "Quand la journée tient sur un fil." },
-  { n: "05", cover: "/images/sans-honte/kit-05.jpg", title: "Seconde Main Sans Honte", sub: "S'habiller, se meubler, sans se juger." },
-  { n: "06", cover: "/images/sans-honte/kit-06.jpg", title: "Entraide Sans Honte", sub: "Demander, donner, recevoir." },
-  { n: "07", cover: "/images/sans-honte/kit-07.jpg", title: "Fraude Sans Honte", sub: "Se protéger, sans avoir l'air naïf·ve." },
-  { n: "08", cover: "/images/sans-honte/kit-08.jpg", title: "Logement Sans Honte", sub: "Habiter, garder, retrouver un chez-soi." },
-  { n: "09", cover: "/images/sans-honte/kit-09.jpg", title: "Proche Aidant Sans Honte", sub: "Aider sans s'oublier." },
-  { n: "10", cover: "/images/sans-honte/kit-10.jpg", title: "72 heures Sans Honte", sub: "Tenir trois jours quand tout bascule." },
+  { n: "01", cover: "/images/sans-honte/kit-01.jpg", title: "Papiers Sans Honte", sub: "Reprendre le contrôle de ses papiers.", slug: "sans-honte-papiers" },
+  { n: "02", cover: "/images/sans-honte/kit-02.jpg", title: "Me Reconnaître Sans Honte", sub: "Se retrouver quand on s'est perdu·e de vue.", slug: "sans-honte-me-reconnaitre" },
+  { n: "03", cover: "/images/sans-honte/kit-03.jpg", title: "Frigo Sans Honte", sub: "Manger vrai avec ce qu'on a.", slug: "sans-honte-frigo" },
+  { n: "04", cover: "/images/sans-honte/kit-04.jpg", title: "Tenir Debout Sans Honte", sub: "Quand la journée tient sur un fil.", slug: "sans-honte-tenir-debout" },
+  { n: "05", cover: "/images/sans-honte/kit-05.jpg", title: "Seconde Main Sans Honte", sub: "S'habiller, se meubler, sans se juger.", slug: "sans-honte-seconde-main" },
+  { n: "06", cover: "/images/sans-honte/kit-06.jpg", title: "Entraide Sans Honte", sub: "Demander, donner, recevoir.", slug: "sans-honte-entraide" },
+  { n: "07", cover: "/images/sans-honte/kit-07.jpg", title: "Fraude Sans Honte", sub: "Se protéger, sans avoir l'air naïf·ve.", slug: "sans-honte-fraude" },
+  { n: "08", cover: "/images/sans-honte/kit-08.jpg", title: "Logement Sans Honte", sub: "Habiter, garder, retrouver un chez-soi.", slug: "sans-honte-logement" },
+  { n: "09", cover: "/images/sans-honte/kit-09.jpg", title: "Proche Aidant Sans Honte", sub: "Aider sans s'oublier.", slug: "sans-honte-proche-aidant" },
+  { n: "10", cover: "/images/sans-honte/kit-10.jpg", title: "72 heures Sans Honte", sub: "Tenir trois jours quand tout bascule.", slug: "sans-honte-72-heures" },
 ];
 
 function Page() {
@@ -52,8 +52,7 @@ function Page() {
         <div className="container">
           <h2 className="section-title">10 kits — La collection complète</h2>
           <p style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 32px", color: "#5a4a3f", fontSize: 16 }}>
-            Chaque kit est un PDF imprimable, prêt à coller au frigo, à plier dans un sac, à offrir.
-            Pas téléchargeables ici — on s'écrit pour te les envoyer.
+            Chaque kit est un PDF imprimable — 10 $ par kit, téléchargement immédiat après paiement.
           </p>
           <div className="library-grid">
             {KITS.map((k) => (
@@ -66,16 +65,16 @@ function Page() {
                 <div className="library-meta"><span className="dot" />Kit PDF imprimable</div>
                 <h3>{k.title}</h3>
                 <p>{k.sub}</p>
-                <a className="lib-link" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Le recevoir →</a>
+                <Link className="lib-link" to="/achat/$slug" params={{ slug: k.slug }}>Acheter (10 $) →</Link>
               </article>
             ))}
           </div>
           <div className="cta-band" style={{ marginTop: 48 }}>
             <div>
-              <h3>Le pack complet — les 10 kits</h3>
-              <p>Toute la collection Sans Honte, en un seul envoi. On t'écrit pour la suite.</p>
+              <h3>La collection complète — les 10 kits</h3>
+              <p>Toute la collection Sans Honte en un seul PDF — 60 $ au lieu de 100 $. Téléchargement immédiat.</p>
             </div>
-            <a className="action-btn" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Demander le pack</a>
+            <Link className="action-btn" to="/achat/$slug" params={{ slug: "sans-honte-collection" }}>Acheter la collection (60 $)</Link>
           </div>
         </div>
       </section>
@@ -119,7 +118,7 @@ function Page() {
               <h3>Rester en lien avec Sans Honte</h3>
               <p>Recevoir les nouveaux kits, les phrases et les textes — sans spam.</p>
             </div>
-            <a className="action-btn" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">S'inscrire</a>
+            <Link className="action-btn" to="/contact">Nous écrire</Link>
           </div>
         </div>
       </section>
