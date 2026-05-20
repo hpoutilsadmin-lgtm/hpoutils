@@ -13,17 +13,19 @@ export const Route = createFileRoute("/livres-pdf")({
   component: Page,
 });
 
+type Kind = "PDF" | "Guide" | "Livre" | "Collection" | "Outil";
+
 const ITEMS: Array<{
   cover: string;
   title: string;
   desc: string;
-  tag: string;
+  tag: Kind;
   slug: string;
   price: string;
 }> = [
   { cover: "/images/cover-enjeux.jpg", title: "Les enjeux de l'humanité", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "PDF", slug: "enjeux-humanite", price: "10 $" },
-  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
-  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "15 $" },
+  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "Guide", slug: "faim-justifie-les-moyens", price: "10 $" },
+  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "Livre", slug: "enfants-cuisinent", price: "15 $" },
   { cover: "/images/sans-honte/kit-01.jpg", title: "Kit Sans Honte — Papiers", desc: "24 fiches pour reprendre le contrôle de ses papiers.", tag: "PDF", slug: "sans-honte-papiers", price: "10 $" },
   { cover: "/images/sans-honte/kit-02.jpg", title: "Kit Sans Honte — Me Reconnaître", desc: "Adapter sa journée à son cerveau, sans se juger.", tag: "PDF", slug: "sans-honte-me-reconnaitre", price: "10 $" },
   { cover: "/images/sans-honte/kit-03.jpg", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "PDF", slug: "sans-honte-frigo", price: "10 $" },
@@ -36,6 +38,17 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/kit-10.jpg", title: "Kit Sans Honte — 72 Heures", desc: "Se préparer aux 72 premières heures d'une urgence.", tag: "PDF", slug: "sans-honte-72-heures", price: "10 $" },
   { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection", slug: "sans-honte-collection", price: "60 $" },
 ];
+
+function buyLabel(tag: Kind, price: string): string {
+  switch (tag) {
+    case "Livre": return `Découvrir le livre — ${price}`;
+    case "Guide": return `Acheter le guide — ${price}`;
+    case "Outil": return `Acheter l'outil — ${price}`;
+    case "Collection": return `Acheter la collection — ${price}`;
+    case "PDF":
+    default: return `Acheter le PDF — ${price}`;
+  }
+}
 
 function Page() {
   return (
@@ -63,7 +76,7 @@ function Page() {
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
                 <a className="lib-link" href={`/achat/${b.slug}`}>
-                  Acheter le PDF — {b.price} →
+                  {buyLabel(b.tag, b.price)} →
                 </a>
               </article>
             );})}

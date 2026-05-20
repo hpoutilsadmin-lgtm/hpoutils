@@ -18,11 +18,12 @@ function Page() {
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">Univers alternatif</span>
-          <h1>Une façon différente de parler du <em>réel</em>.</h1>
+          <h1>Des mondes, personnages et collections qui regardent la vraie vie <em>de côté</em>.</h1>
           <p className="lead">
-            Ici, HP passe par la BD, la musique, les personnages et l'humour pour
-            dire ce que les outils pratiques disent autrement : on peut être mêlé,
-            fatigué, imparfait, drôle, lucide, et continuer à avancer.
+            Univers alternatif rassemble les projets créatifs qui prolongent HP
+            autrement : PH, Famille atypique, Humain imparfait et d'autres mondes
+            imparfaits, drôles, sensibles ou un peu décalés. Ce n'est pas une
+            distraction du projet HP. C'est une autre façon de parler de ce qu'on vit.
           </p>
           <div className="lead-actions">
             <a className="btn-primary" href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer">Écouter l'album</a>
@@ -33,24 +34,29 @@ function Page() {
 
       <section className="three-pillars">
         <div className="container">
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "0 0 28px", color: "#2a1a12" }}>BD</h2>
           <div className="pillar-grid">
             <article className="pillar-card">
               <span className="pillar-num">01</span>
               <h3>PH — Déséquilibré</h3>
               <p>Chroniques de l'ordinaire. Une BD muette, absurde et humaine, qui regarde la vie de travers pour mieux la comprendre.</p>
-              <span className="pillar-cta">En développement</span>
+              <span className="pillar-cta">Découvrir — bientôt</span>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>Famille atypique</h3>
               <p>Un univers shōnen québécois sur la famille, les blessures, la force, l'entraînement et la différence.</p>
-              <span className="pillar-cta">Aperçu à venir</span>
+              <span className="pillar-cta">Découvrir — bientôt</span>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
-              <h3>Personnages et récits</h3>
-              <p>Des univers en développement pour raconter la vraie vie autrement — sans posture, sans héros parfaits.</p>
+              <h3>Humain imparfait</h3>
+              <p>Album DIY, sensible et brut autour de l'imperfection, de la lucidité et du besoin de rester humain.</p>
+              <a className="pillar-cta" href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer">Écouter →</a>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">04</span>
+              <h3>Autres projets créatifs</h3>
+              <p>Personnages, récits et collections en écriture — d'autres mondes imparfaits à venir.</p>
               <span className="pillar-cta">En écriture</span>
             </article>
           </div>
@@ -59,8 +65,8 @@ function Page() {
 
       <section className="collections-strip">
         <div className="container">
-          <h2>Musique — <em>Humain imparfait</em></h2>
-          <p className="strip-intro">Album DIY, sensible et brut autour de l'imperfection, de la lucidité et du besoin de rester humain.</p>
+          <h2>Écouter <em>Humain imparfait</em></h2>
+          <p className="strip-intro">L'album à écouter sur YouTube — ou via la page album dédiée.</p>
           <div className="lead-actions">
             <a className="btn-primary" href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer">Écouter sur YouTube</a>
             <Link to="/album" className="btn-ghost" style={{ color: "#2a1a12", borderColor: "rgba(176,74,47,.5)" }}>Voir la page album</Link>
