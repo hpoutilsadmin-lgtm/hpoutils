@@ -16,7 +16,7 @@ type Tool = { title: string; desc: string; tag: string; cta?: string; href?: str
 
 const SECTIONS: { title: string; intro: string; items: Tool[] }[] = [
   {
-    title: "PDF téléchargeables",
+    title: "À lire et télécharger",
     intro: "Des documents prêts à imprimer, à coller au frigo ou à garder dans son téléphone.",
     items: [
       { title: "Pages à arracher", desc: "Une page, une idée. À sortir du PDF quand tu en as besoin.", tag: "PDF" },
@@ -25,7 +25,7 @@ const SECTIONS: { title: string; intro: string; items: Tool[] }[] = [
     ],
   },
   {
-    title: "Exercices guidés",
+    title: "Pour faire le tri",
     intro: "Pour mettre des mots, faire le tri, sortir du brouillard.",
     items: [
       { title: "Le tri du jour", desc: "10 minutes pour séparer ce qui est à toi de ce qui ne l'est pas.", tag: "Exercice" },
@@ -34,7 +34,7 @@ const SECTIONS: { title: string; intro: string; items: Tool[] }[] = [
     ],
   },
   {
-    title: "Guides pratiques",
+    title: "Guides pour la vraie vie",
     intro: "Des pas-à-pas humains, pas des recettes magiques.",
     items: [
       { title: "Cuisiner avec ce qu'on a", desc: "Méthode simple pour éviter le gaspillage et nourrir vrai.", tag: "Guide" },
@@ -43,7 +43,7 @@ const SECTIONS: { title: string; intro: string; items: Tool[] }[] = [
     ],
   },
   {
-    title: "Questionnaires / formulaires",
+    title: "Questionnaires et formulaires",
     intro: "Pour se situer, sans note ni jugement.",
     items: [
       { title: "Où j'en suis cette semaine ?", desc: "12 questions courtes pour faire le point.", tag: "Formulaire", href: "https://tally.so/r/A7AYGW" },
@@ -52,7 +52,7 @@ const SECTIONS: { title: string; intro: string; items: Tool[] }[] = [
     ],
   },
   {
-    title: "Mini-outils de réflexion",
+    title: "Petits outils à garder près de soi",
     intro: "Des petits formats qui tiennent dans la poche.",
     items: [
       { title: "3 phrases pour aujourd'hui", desc: "Choisir ce qu'on porte, et ce qu'on laisse tomber.", tag: "Mini-outil" },

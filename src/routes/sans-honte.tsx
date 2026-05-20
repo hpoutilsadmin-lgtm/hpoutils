@@ -50,6 +50,18 @@ function Page() {
 
       <section className="subpage-content">
         <div className="container">
+          <div style={{ maxWidth: 760, margin: "0 auto 48px", textAlign: "center" }}>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: "#3a2a20" }}>
+              Sans Honte, c'est pour ce qu'on cache, ce qu'on ravale, ce qu'on porte
+              sans toujours savoir le nommer. Une collection pour comprendre la honte
+              sans se juger, sans se réparer de force, sans devenir une meilleure
+              version bien propre de soi-même.
+            </p>
+            <p style={{ fontSize: 16, lineHeight: 1.7, color: "rgba(58,42,32,.75)", fontStyle: "italic", marginTop: 16 }}>
+              Ce n'est pas une promesse de transformation magique. C'est une façon de
+              reprendre de la place, doucement.
+            </p>
+          </div>
           <h2 className="section-title">10 kits — La collection complète</h2>
           <p style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 32px", color: "#5a4a3f", fontSize: 16 }}>
             Chaque kit est un PDF imprimable — 10 $ par kit, téléchargement immédiat après paiement.

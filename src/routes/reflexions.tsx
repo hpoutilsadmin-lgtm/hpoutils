@@ -53,7 +53,7 @@ function Page() {
                 <span className="reflex-cat">{p.cat}</span>
                 <h3>{p.title}</h3>
                 <p>{p.desc}</p>
-                <span className="read">Lire →</span>
+                <span className="read" style={{ opacity: 0.55 }}>Bientôt disponible</span>
               </article>
             ))}
           </div>
