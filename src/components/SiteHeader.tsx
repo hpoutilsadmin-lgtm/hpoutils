@@ -3,12 +3,13 @@ import { useState, useEffect } from "react";
 
 const NAV = [
   { to: "/", label: "Accueil" },
-  { to: "/livres-pdf", label: "Contenus" },
-  { to: "/sans-honte", label: "Outils" },
-  { to: "/univers", label: "Univers" },
-  { to: "/collaborer", label: "Collaborer" },
+  { to: "/outils", label: "Outils" },
+  { to: "/livres-pdf", label: "Livres & PDF" },
+  { to: "/sans-honte", label: "Sans Honte" },
+  { to: "/reflexions", label: "Réflexions" },
+  { to: "/univers", label: "Univers alternatif" },
+  { to: "/ateliers", label: "Ateliers" },
   { to: "/a-propos", label: "À propos" },
-  { to: "/contact", label: "Contact" },
 ] as const;
 
 export function SiteHeader() {
