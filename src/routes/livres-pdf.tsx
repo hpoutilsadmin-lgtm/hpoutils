@@ -13,7 +13,7 @@ export const Route = createFileRoute("/livres-pdf")({
   component: Page,
 });
 
-type Kind = "PDF" | "Guide" | "Livre" | "Collection" | "Outil";
+type Kind = "PDF" | "Kit PDF" | "Collection PDF";
 
 const ITEMS: Array<{
   cover: string;
@@ -24,27 +24,25 @@ const ITEMS: Array<{
   price: string;
 }> = [
   { cover: "/images/cover-enjeux.jpg", title: "Les enjeux de l'humanité", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "PDF", slug: "enjeux-humanite", price: "10 $" },
-  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "Guide", slug: "faim-justifie-les-moyens", price: "10 $" },
-  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "Livre", slug: "enfants-cuisinent", price: "15 $" },
-  { cover: "/images/sans-honte/kit-01.jpg", title: "Kit Sans Honte — Papiers", desc: "24 fiches pour reprendre le contrôle de ses papiers.", tag: "PDF", slug: "sans-honte-papiers", price: "10 $" },
-  { cover: "/images/sans-honte/kit-02.jpg", title: "Kit Sans Honte — Me Reconnaître", desc: "Adapter sa journée à son cerveau, sans se juger.", tag: "PDF", slug: "sans-honte-me-reconnaitre", price: "10 $" },
-  { cover: "/images/sans-honte/kit-03.jpg", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "PDF", slug: "sans-honte-frigo", price: "10 $" },
-  { cover: "/images/sans-honte/kit-04.jpg", title: "Tenir Debout Sans Honte", desc: "Quand la journée tient sur un fil — un kit court.", tag: "PDF", slug: "sans-honte-tenir-debout", price: "10 $" },
-  { cover: "/images/sans-honte/kit-05.jpg", title: "Kit Sans Honte — Seconde Main", desc: "S'équiper et consommer autrement, simplement.", tag: "PDF", slug: "sans-honte-seconde-main", price: "10 $" },
-  { cover: "/images/sans-honte/kit-06.jpg", title: "Kit Sans Honte — Entraide", desc: "Donner et recevoir de l'aide, sans honte.", tag: "PDF", slug: "sans-honte-entraide", price: "10 $" },
-  { cover: "/images/sans-honte/kit-07.jpg", title: "Kit Sans Honte — Fraude", desc: "Reconnaître, réagir, se protéger.", tag: "PDF", slug: "sans-honte-fraude", price: "10 $" },
-  { cover: "/images/sans-honte/kit-08.jpg", title: "Kit Sans Honte — Logement", desc: "Repères concrets autour du logement.", tag: "PDF", slug: "sans-honte-logement", price: "10 $" },
-  { cover: "/images/sans-honte/kit-09.jpg", title: "Kit Sans Honte — Proche Aidant", desc: "Tenir le rôle de proche aidant sans s'épuiser.", tag: "PDF", slug: "sans-honte-proche-aidant", price: "10 $" },
-  { cover: "/images/sans-honte/kit-10.jpg", title: "Kit Sans Honte — 72 Heures", desc: "Se préparer aux 72 premières heures d'une urgence.", tag: "PDF", slug: "sans-honte-72-heures", price: "10 $" },
-  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection", slug: "sans-honte-collection", price: "60 $" },
+  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
+  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "15 $" },
+  { cover: "/images/sans-honte/kit-01.jpg", title: "Kit Sans Honte — Papiers", desc: "24 fiches pour reprendre le contrôle de ses papiers.", tag: "Kit PDF", slug: "sans-honte-papiers", price: "10 $" },
+  { cover: "/images/sans-honte/kit-02.jpg", title: "Kit Sans Honte — Me Reconnaître", desc: "Adapter sa journée à son cerveau, sans se juger.", tag: "Kit PDF", slug: "sans-honte-me-reconnaitre", price: "10 $" },
+  { cover: "/images/sans-honte/kit-03.jpg", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "Kit PDF", slug: "sans-honte-frigo", price: "10 $" },
+  { cover: "/images/sans-honte/kit-04.jpg", title: "Tenir Debout Sans Honte", desc: "Quand la journée tient sur un fil — un kit court.", tag: "Kit PDF", slug: "sans-honte-tenir-debout", price: "10 $" },
+  { cover: "/images/sans-honte/kit-05.jpg", title: "Kit Sans Honte — Seconde Main", desc: "S'équiper et consommer autrement, simplement.", tag: "Kit PDF", slug: "sans-honte-seconde-main", price: "10 $" },
+  { cover: "/images/sans-honte/kit-06.jpg", title: "Kit Sans Honte — Entraide", desc: "Donner et recevoir de l'aide, sans honte.", tag: "Kit PDF", slug: "sans-honte-entraide", price: "10 $" },
+  { cover: "/images/sans-honte/kit-07.jpg", title: "Kit Sans Honte — Fraude", desc: "Reconnaître, réagir, se protéger.", tag: "Kit PDF", slug: "sans-honte-fraude", price: "10 $" },
+  { cover: "/images/sans-honte/kit-08.jpg", title: "Kit Sans Honte — Logement", desc: "Repères concrets autour du logement.", tag: "Kit PDF", slug: "sans-honte-logement", price: "10 $" },
+  { cover: "/images/sans-honte/kit-09.jpg", title: "Kit Sans Honte — Proche Aidant", desc: "Tenir le rôle de proche aidant sans s'épuiser.", tag: "Kit PDF", slug: "sans-honte-proche-aidant", price: "10 $" },
+  { cover: "/images/sans-honte/kit-10.jpg", title: "Kit Sans Honte — 72 Heures", desc: "Se préparer aux 72 premières heures d'une urgence.", tag: "Kit PDF", slug: "sans-honte-72-heures", price: "10 $" },
+  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection PDF", slug: "sans-honte-collection", price: "60 $" },
 ];
 
 function buyLabel(tag: Kind, price: string): string {
   switch (tag) {
-    case "Livre": return `Découvrir le livre — ${price}`;
-    case "Guide": return `Acheter le guide — ${price}`;
-    case "Outil": return `Acheter l'outil — ${price}`;
-    case "Collection": return `Acheter la collection — ${price}`;
+    case "Kit PDF": return `Acheter le kit PDF — ${price}`;
+    case "Collection PDF": return `Acheter la collection PDF — ${price}`;
     case "PDF":
     default: return `Acheter le PDF — ${price}`;
   }
