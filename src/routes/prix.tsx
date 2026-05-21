@@ -14,10 +14,10 @@ export const Route = createFileRoute("/prix")({
 
 const ROWS: Array<{ cat: string; offre: string; prix: string; href: string; label: string }> = [
   { cat: "Livre", offre: "Les enjeux de l’humanité (PDF)", prix: "10 $", href: "/achat/enjeux-humanite", label: "Acheter le PDF" },
-  { cat: "Guide", offre: "La faim justifie les moyens (PDF)", prix: "10 $", href: "/achat/faim-justifie-les-moyens", label: "Acheter le guide" },
-  { cat: "Livre", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "15 $", href: "/achat/enfants-cuisinent", label: "Découvrir le livre" },
+  { cat: "Guide", offre: "La faim justifie les moyens (PDF)", prix: "10 $", href: "/achat/faim-justifie-les-moyens", label: "Acheter le PDF" },
+  { cat: "Livre", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "15 $", href: "/achat/enfants-cuisinent", label: "Acheter le PDF" },
   { cat: "Sans Honte", offre: "1 kit PDF (Frigo, Papiers, Fraude…)", prix: "10 $", href: "/sans-honte", label: "Voir les kits" },
-  { cat: "Sans Honte", offre: "Collection complète — 10 kits PDF", prix: "60 $", href: "/achat/sans-honte-collection", label: "Acheter la collection" },
+  { cat: "Sans Honte", offre: "Collection complète — 10 kits PDF", prix: "60 $", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
   { cat: "Outils", offre: "Fiches et outils pratiques", prix: "5 $ à 20 $", href: "https://tally.so/r/A7AYGW", label: "Demander" },
   { cat: "Sans Honte", offre: "1 kit broché", prix: "20 $", href: "https://tally.so/r/A7AYGW", label: "Commander" },
   { cat: "Sans Honte", offre: "Pack 4 kits plastifiés et clippés", prix: "60 $", href: "https://tally.so/r/A7AYGW", label: "Commander" },
