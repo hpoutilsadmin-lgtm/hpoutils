@@ -101,7 +101,7 @@ function Index() {
               <span className="pillar-num">03</span>
               <h3>Les enfants cuisinent pour faire plaisir</h3>
               <p>Un livre coloré pour aider les jeunes à cuisiner, essayer, rater et recommencer.</p>
-              <Link to="/livres-pdf" className="pillar-cta">Découvrir le livre →</Link>
+              <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
           </div>
           <div className="lead-actions" style={{ marginTop: 28 }}>

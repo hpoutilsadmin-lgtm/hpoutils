@@ -27,7 +27,7 @@ function Page() {
           </p>
           <div className="lead-actions">
             <a className="btn-primary" href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer">Écouter l'album</a>
-            <Link to="/contact" className="btn-ghost">Proposer une collaboration</Link>
+            <Link to="/contact" className="btn-ghost">Me parler d'un projet</Link>
           </div>
         </div>
       </section>

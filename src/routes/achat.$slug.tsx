@@ -44,6 +44,12 @@ export const Route = createFileRoute("/achat/$slug")({
 
 function Page() {
   const { product } = Route.useLoaderData();
+  const formatLabel =
+    product.slug === "sans-honte-collection"
+      ? "Collection PDF"
+      : product.slug.startsWith("sans-honte-")
+      ? "Kit PDF"
+      : "Version PDF";
   return (
     <>
       <PaymentTestModeBanner />
@@ -51,7 +57,7 @@ function Page() {
         <div className="container" style={{ maxWidth: 920 }}>
           <h1>{product.title}</h1>
           <p>
-            Version PDF — {product.priceLabel}. {product.blurb}
+            {formatLabel} — {product.priceLabel}. {product.blurb}
           </p>
         </div>
       </section>

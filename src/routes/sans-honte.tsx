@@ -74,19 +74,19 @@ function Page() {
                   <span className="kit-badge">N°{k.n}</span>
                   <span className="kit-watermark">Aperçu • HP</span>
                 </div>
-                <div className="library-meta"><span className="dot" />Kit PDF imprimable</div>
+                <div className="library-meta"><span className="dot" />Kit PDF — 10 $ CAD</div>
                 <h3>{k.title}</h3>
                 <p>{k.sub}</p>
-                <Link className="lib-link" to="/achat/$slug" params={{ slug: k.slug }}>Acheter (10 $) →</Link>
+                <Link className="lib-link" to="/achat/$slug" params={{ slug: k.slug }}>Acheter le kit PDF — 10 $ →</Link>
               </article>
             ))}
           </div>
           <div className="cta-band" style={{ marginTop: 48 }}>
             <div>
               <h3>La collection complète — les 10 kits</h3>
-              <p>Toute la collection Sans Honte en un seul PDF — 60 $ au lieu de 100 $. Téléchargement immédiat.</p>
+              <p>Toute la collection Sans Honte en un seul PDF — Collection PDF — 60 $ CAD au lieu de 100 $. Téléchargement immédiat.</p>
             </div>
-            <Link className="action-btn" to="/achat/$slug" params={{ slug: "sans-honte-collection" }}>Acheter la collection (60 $)</Link>
+            <Link className="action-btn" to="/achat/$slug" params={{ slug: "sans-honte-collection" }}>Acheter la collection PDF — 60 $</Link>
           </div>
         </div>
       </section>
@@ -130,7 +130,7 @@ function Page() {
               <h3>Rester en lien avec Sans Honte</h3>
               <p>Recevoir les nouveaux kits, les phrases et les textes — sans spam.</p>
             </div>
-            <Link className="action-btn" to="/contact">Nous écrire</Link>
+            <a className="action-btn" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Recevoir les nouvelles Sans Honte</a>
           </div>
         </div>
       </section>
