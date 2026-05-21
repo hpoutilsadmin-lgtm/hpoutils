@@ -18,12 +18,13 @@ export function SiteFooter() {
           <h4>Liens rapides</h4>
           <p>
             <Link to="/">Accueil</Link><br />
-            <Link to="/livres-pdf">Contenus</Link><br />
-            <Link to="/sans-honte">Outils Sans Honte</Link><br />
+            <Link to="/outils">Outils</Link><br />
+            <Link to="/livres-pdf">Livres &amp; PDF</Link><br />
+            <Link to="/sans-honte">Sans Honte</Link><br />
+            <Link to="/reflexions">Réflexions</Link><br />
             <Link to="/univers">Univers alternatif</Link><br />
-            <Link to="/collaborer">Collaborer</Link><br />
+            <Link to="/ateliers">Ateliers</Link><br />
             <Link to="/a-propos">À propos</Link><br />
-            <Link to="/contact">Contact</Link><br />
             <Link to="/recuperer-achat">Récupérer un achat</Link>
           </p>
         </div>
@@ -31,6 +32,7 @@ export function SiteFooter() {
           <h4>Me contacter</h4>
           <p>
             <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a><br />
+            <Link to="/contact">Formulaire de contact</Link><br />
             <a href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Formulaire atelier</a><br />
             Réponse rapide et humaine.
           </p>
