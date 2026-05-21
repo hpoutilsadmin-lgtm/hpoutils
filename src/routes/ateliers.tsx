@@ -16,7 +16,7 @@ const ATELIERS = [
   { title: "Atelier cuisine", desc: "Cuisiner simple, comprendre les bases, utiliser ce qu'on a — sans recettes parfaites ni jugement." },
   { title: "Atelier IA / esprit critique", desc: "Comprendre les outils, les risques, les bons réflexes et les dérives, sans panique." },
   { title: "Atelier BD HP", desc: "Créer une page BD personnalisée à partir d'un personnage, d'une émotion, d'un thème et d'un décor." },
-  { title: "Activité sur mesure", desc: "Adapter un atelier à votre milieu — école, organisme, équipe, famille élargie." },
+  { title: "Activité sur mesure", desc: "Adapter un atelier à votre milieu — école, organisme, groupe, famille élargie ou milieu communautaire." },
 ];
 
 function Page() {
