@@ -34,18 +34,10 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     formatLabel: "Version PDF",
     shortDescription:
       "Une ressource PDF pour voir clair sur ce qui se joue dans le monde, sans paniquer ni minimiser.",
-    includes: [
-      "Textes courts et pistes de réflexion",
-      "Repères pour comprendre les grands enjeux",
-      "Phrases à garder près de soi",
-      "Pages à imprimer ou utiliser à l'écran",
-    ],
-    audience: [
-      "comprendre ce qui se passe sans s'effondrer",
-      "mettre des mots sur une époque qui va vite",
-      "réfléchir sans se juger",
-      "avancer sans chercher une solution parfaite",
-    ],
+    backCover:
+      "L'intelligence artificielle transforme déjà notre façon de penser, d'apprendre, de travailler, de créer et de décider. Mais derrière la fascination technologique, une question demeure : qu'est-ce qu'on veut préserver de profondément humain ?\n\nCe PDF propose une réflexion accessible sur les grands enjeux de l'IA : la place du jugement, la pensée critique, la créativité, la responsabilité, les biais, la dépendance aux outils et le risque de laisser la machine décider à notre place.\n\nCe n'est pas un document pour avoir peur de l'IA. C'est un outil pour mieux la comprendre, l'utiliser avec plus de conscience et se rappeler que la technologie devrait rester au service de l'humain — pas l'inverse.",
+    audienceSentence:
+      "Ce PDF s'adresse aux personnes qui veulent comprendre les impacts de l'intelligence artificielle, réfléchir à son utilisation dans la vraie vie et développer un regard plus critique sans tomber dans la peur ou l'aveuglement.",
   },
   faim_justifie_pdf_10: {
     priceId: "faim_justifie_pdf_10",
@@ -60,18 +52,10 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     formatLabel: "Version PDF",
     shortDescription:
       "Une ressource PDF pour manger mieux avec moins, sans se faire la morale.",
-    includes: [
-      "Idées simples pour cuisiner avec ce qu'on a",
-      "Repères pour limiter le gaspillage",
-      "Petits exercices et listes pratiques",
-      "Pages à imprimer ou utiliser à l'écran",
-    ],
-    audience: [
-      "manger vrai avec un petit budget",
-      "sortir de la culpabilité autour de la bouffe",
-      "reprendre du plaisir à cuisiner",
-      "avancer sans recettes parfaites",
-    ],
+    backCover:
+      "Cuisiner, ce n'est pas seulement suivre une recette. C'est apprendre à se débrouiller, à faire des choix, à comprendre ce qu'on mange et à reprendre un peu de pouvoir sur son quotidien.\n\nLa faim justifie les moyens propose une approche simple, concrète et humaine autour de l'alimentation. On y parle de cuisine accessible, d'organisation, de budget, de créativité, de débrouillardise et du plaisir de faire avec ce qu'on a.\n\nCe PDF n'est pas là pour donner des leçons parfaites. Il est là pour aider à cuisiner plus simplement, penser autrement ce qu'on met dans son assiette et retrouver un peu de liberté dans la cuisine.",
+    audienceSentence:
+      "Ce PDF s'adresse aux personnes qui veulent cuisiner de façon plus simple, mieux s'organiser, faire avec ce qu'elles ont et retrouver du plaisir dans une alimentation accessible et réaliste.",
   },
   enfants_cuisinent_pdf_15: {
     priceId: "enfants_cuisinent_pdf_15",
@@ -86,18 +70,10 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     formatLabel: "Version PDF",
     shortDescription:
       "Une ressource PDF pour cuisiner avec les enfants et transmettre le plaisir, pas la performance.",
-    includes: [
-      "Idées de recettes simples pour les jeunes",
-      "Pistes pour faire ensemble, sans pression",
-      "Petits exercices et défis cuisine",
-      "Pages à imprimer ou utiliser à l'écran",
-    ],
-    audience: [
-      "cuisiner avec leurs enfants sans crise",
-      "transmettre le plaisir plutôt que la performance",
-      "laisser les jeunes essayer, rater, recommencer",
-      "garder la cuisine vivante à la maison",
-    ],
+    backCover:
+      "Quand les enfants cuisinent, ils ne font pas seulement une recette. Ils apprennent à essayer, à rater, à recommencer, à goûter, à offrir et à être fiers de ce qu'ils créent.\n\nLes enfants cuisinent pour faire plaisir est un PDF pensé pour rendre la cuisine accessible, joyeuse et valorisante pour les enfants. Il invite à participer, à découvrir les aliments, à développer l'autonomie et à partager un moment simple autour de quelque chose de concret.\n\nCe n'est pas un outil pour faire des petits chefs parfaits. C'est une invitation à cuisiner ensemble, à créer des souvenirs et à permettre aux enfants de faire plaisir avec leurs mains, leurs idées et leur cœur.",
+    audienceSentence:
+      "Ce PDF s'adresse aux familles, parents, enfants, écoles ou organismes qui veulent utiliser la cuisine comme un moment de plaisir, d'apprentissage, d'autonomie et de partage.",
   },
   sans_honte_frigo_pdf_10: {
     priceId: "sans_honte_frigo_pdf_10",
