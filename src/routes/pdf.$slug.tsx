@@ -50,7 +50,7 @@ function resolveFormat(p: DigitalProduct): "Version PDF" | "Kit PDF" | "Collecti
   return "Version PDF";
 }
 
-const DEFAULT_INCLUDES_KIT = [
+const DEFAULT_INCLUDES_KIT: string[] = [
   "Courts textes de réflexion",
   "Exercices simples",
   "Phrases fortes à garder près de soi",
@@ -58,7 +58,7 @@ const DEFAULT_INCLUDES_KIT = [
   "Pages à imprimer ou utiliser à l'écran",
 ];
 
-const DEFAULT_AUDIENCE = [
+const DEFAULT_AUDIENCE: string[] = [
   "comprendre ce qu'elles vivent",
   "mettre des mots sur une situation",
   "réfléchir sans se juger",
