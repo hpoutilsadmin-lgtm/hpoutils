@@ -24,7 +24,8 @@ const ITEMS: Array<{
   price: string;
 }> = [
   { cover: "/images/cover-enjeux.jpg", title: "Enjeux de l'humanité à l'ère de l'IA", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "PDF", slug: "enjeux-humanite", price: "15 $" },
-  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
+  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Mieux manger avec peu : repères simples, recettes accessibles et réflexes anti-gaspillage.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
+  { cover: "/images/cover-horizon-quebec.jpg", title: "Horizon Québec", desc: "Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble quand le monde change trop vite.", tag: "PDF", slug: "horizon-quebec", price: "10 $" },
   { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "20 $" },
   { cover: "/images/sans-honte/kit-01.jpg", title: "Kit Sans Honte — Papiers", desc: "24 fiches pour reprendre le contrôle de ses papiers.", tag: "Kit PDF", slug: "sans-honte-papiers", price: "10 $" },
   { cover: "/images/sans-honte/kit-02.jpg", title: "Kit Sans Honte — Me Reconnaître", desc: "Adapter sa journée à son cerveau, sans se juger.", tag: "Kit PDF", slug: "sans-honte-me-reconnaitre", price: "10 $" },
