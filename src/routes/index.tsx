@@ -66,13 +66,13 @@ function Index() {
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>La faim justifie les moyens</h3>
-              <p>Cuisiner avec peu, gaspiller moins, sans se faire la morale. — 10 $ CAD</p>
+              <p>Mieux manger avec peu : bases simples, recettes accessibles et réflexes anti-gaspillage. — 10 $ CAD</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
-              <h3>Les enfants cuisinent pour faire plaisir</h3>
-              <p>Un livre coloré pour aider les jeunes à cuisiner, essayer, rater et recommencer. — 20 $ CAD</p>
+              <h3>Horizon Québec</h3>
+              <p>Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. — 10 $ CAD</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
           </div>

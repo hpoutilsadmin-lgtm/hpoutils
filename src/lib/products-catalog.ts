@@ -47,15 +47,33 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "La-faim-justifie-les-moyens.pdf",
     priceLabel: "10 $ CAD",
     blurb:
-      "Manger mieux avec moins, sans se faire la morale. Téléchargement immédiat après paiement.",
+      "Mieux manger avec peu, ça s'apprend. Téléchargement immédiat après paiement.",
     cover: "/images/cover-faim.jpg",
     formatLabel: "Version PDF",
     shortDescription:
-      "Une ressource PDF pour manger mieux avec moins, sans se faire la morale.",
+      "Un guide pratique pour mieux manger avec peu, sans se compliquer la vie.",
     backCover:
-      "Cuisiner, ce n'est pas seulement suivre une recette. C'est apprendre à se débrouiller, à faire des choix, à comprendre ce qu'on mange et à reprendre un peu de pouvoir sur son quotidien.\n\nLa faim justifie les moyens propose une approche simple, concrète et humaine autour de l'alimentation. On y parle de cuisine accessible, d'organisation, de budget, de créativité, de débrouillardise et du plaisir de faire avec ce qu'on a.\n\nCe PDF n'est pas là pour donner des leçons parfaites. Il est là pour aider à cuisiner plus simplement, penser autrement ce qu'on met dans son assiette et retrouver un peu de liberté dans la cuisine.",
+      "Mieux manger avec peu, ça s'apprend.\n\nPas à coups de recettes parfaites ni de morale. Avec des bases simples, des repères utiles et des réflexes qui servent dans la vraie vie.\n\nLa faim justifie les moyens est un guide pratique pour les familles, les personnes seules, les jeunes adultes, les organismes et tous ceux qui veulent cuisiner avec peu sans se compliquer la vie. On y trouve des recettes accessibles, des astuces anti-gaspillage, des réflexes de conservation, des idées pour étirer un panier et des façons concrètes de transformer le dépannage en plus d'autonomie.\n\nUn outil simple, digne et utile. Pour moins jeter, moins stresser, et reprendre un peu de contrôle.",
     audienceSentence:
-      "Ce PDF s'adresse aux personnes qui veulent cuisiner de façon plus simple, mieux s'organiser, faire avec ce qu'elles ont et retrouver du plaisir dans une alimentation accessible et réaliste.",
+      "Ce PDF s'adresse aux personnes qui veulent mieux manger avec peu, cuisiner plus simplement, économiser sans se compliquer la vie et transformer le dépannage en plus d'autonomie.",
+  },
+  horizon_quebec_pdf_10: {
+    priceId: "horizon_quebec_pdf_10",
+    slug: "horizon-quebec",
+    title: "Horizon Québec",
+    pdfPath: "horizon-quebec.pdf",
+    downloadFileName: "Horizon-Quebec.pdf",
+    priceLabel: "10 $ CAD",
+    blurb:
+      "Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. Téléchargement immédiat après paiement.",
+    cover: "/images/cover-horizon-quebec.jpg",
+    formatLabel: "Version PDF",
+    shortDescription:
+      "Une nouvelle HP sur l'amitié, la langue, le Québec, les conversations de bar et ce qu'on essaie encore de tenir ensemble quand le monde change trop vite.",
+    backCover:
+      "Horizon Québec se déroule dans un café-bar de Montréal, un soir de pluie, autour d'une table où les discussions dérivent entre amitié, langue, époque, fatigue collective et peur de perdre quelque chose sans savoir exactement quoi.\n\nOn y croise des personnages qui parlent trop, rient parfois trop fort, s'obstinent, se contredisent et cherchent encore une manière d'habiter le Québec sans le réduire à un slogan, une nostalgie ou une guerre de mots.\n\nC'est une nouvelle sur ce qui reste quand le monde change : les lieux qu'on aime, les conversations qui nous tiennent, les silences qui disent trop, et cette envie fragile de continuer à exister ensemble.\n\nPas une grande théorie.\nUne soirée.\nUne table.\nUn bout de Québec qui respire encore.",
+    audienceSentence:
+      "Ce PDF s'adresse aux personnes qui veulent lire une nouvelle sensible, actuelle et humaine sur le Québec, la langue, l'amitié, l'identité et les conversations qui restent longtemps après la dernière page.",
   },
   enfants_cuisinent_pdf_15: {
     priceId: "enfants_cuisinent_pdf_15",
