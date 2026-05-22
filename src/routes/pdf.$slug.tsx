@@ -74,21 +74,41 @@ function buyLabel(fmt: "Version PDF" | "Kit PDF" | "Collection PDF"): string {
 function Page() {
   const { product } = Route.useLoaderData();
   const fmt = resolveFormat(product);
-  const includes = product.includes ?? DEFAULT_INCLUDES_KIT;
-  const audience = product.audience ?? DEFAULT_AUDIENCE;
   const shortDescription =
     product.shortDescription ??
     (fmt === "Kit PDF"
       ? "Un kit PDF pour explorer une facette de la honte, mettre des mots sur ce qui reste souvent caché et reprendre un peu de place sans se juger."
       : product.blurb);
 
+  // 4e de couverture — texte éditorial
+  const backCover =
+    product.backCover ??
+    product.shortDescription ??
+    product.blurb;
+
+  // Phrase « Pour qui ? »
+  const audienceSentence =
+    product.audienceSentence ??
+    (product.audience && product.audience.length > 0
+      ? `Ce ${fmt.toLowerCase()} s'adresse aux personnes qui veulent ${joinFr(product.audience)}.`
+      : fmt === "Kit PDF"
+      ? "Ce kit PDF s'adresse aux personnes qui veulent explorer la honte, nommer ce qu'elles portent en silence et reprendre un peu de place sans se réparer de force."
+      : fmt === "Collection PDF"
+      ? "Cette collection PDF s'adresse aux personnes qui veulent explorer la honte sous plusieurs angles, mettre des mots sur ce qu'elles portent et garder une bibliothèque d'outils près d'elles."
+      : "Ce PDF s'adresse aux personnes qui veulent comprendre ce qu'elles vivent, mettre des mots sur une situation, réfléchir sans se juger et avancer sans chercher une solution parfaite.");
+
   return (
     <>
-      <section className="subpage-hero">
-        <div className="container" style={{ maxWidth: 960 }}>
+      <section
+        className="editorial-hero hero-banner-image"
+        style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}
+      >
+        <div className="container">
           <span className="editorial-kicker">Aperçu — {fmt}</span>
           <h1>{product.title}</h1>
-          <p className="lead">{shortDescription}</p>
+          <p className="lead">
+            {fmt} — {product.priceLabel}. {shortDescription}
+          </p>
         </div>
       </section>
 
@@ -128,25 +148,18 @@ function Page() {
 
           <div>
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
-              {fmt === "Collection PDF" ? "Ce que la collection contient" : "Ce que ce PDF contient"}
+              4e de couverture
             </h2>
-            <ul style={{ paddingLeft: 20, marginBottom: 32, lineHeight: 1.8, color: "#3a2a20" }}>
-              {includes.map((it: string) => (
-                <li key={it}>{it}</li>
-              ))}
-            </ul>
+            <p style={{ marginBottom: 32, lineHeight: 1.8, color: "#3a2a20", whiteSpace: "pre-line" }}>
+              {backCover}
+            </p>
 
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
               Pour qui ?
             </h2>
-            <p style={{ marginBottom: 8, color: "#3a2a20" }}>
-              Ce {fmt.toLowerCase()} s'adresse aux personnes qui veulent :
+            <p style={{ marginBottom: 32, lineHeight: 1.8, color: "#3a2a20" }}>
+              {audienceSentence}
             </p>
-            <ul style={{ paddingLeft: 20, marginBottom: 32, lineHeight: 1.8, color: "#3a2a20" }}>
-              {audience.map((it: string) => (
-                <li key={it}>{it}</li>
-              ))}
-            </ul>
 
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
               Format
@@ -175,4 +188,10 @@ function Page() {
       </section>
     </>
   );
+}
+
+function joinFr(items: string[]): string {
+  if (items.length === 0) return "";
+  if (items.length === 1) return items[0];
+  return items.slice(0, -1).join(", ") + " et " + items[items.length - 1];
 }

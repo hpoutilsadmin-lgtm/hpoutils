@@ -16,6 +16,8 @@ export interface DigitalProduct {
   shortDescription?: string;
   includes?: string[];      // « Ce PDF contient »
   audience?: string[];      // « Pour qui ? »
+  backCover?: string;       // Texte éditorial « 4e de couverture »
+  audienceSentence?: string; // Phrase « Ce PDF s'adresse aux personnes qui veulent... »
 }
 
 export const PRODUCTS: Record<string, DigitalProduct> = {
