@@ -105,6 +105,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-Frigo.pdf",
     priceLabel: "10 $ CAD",
     blurb: "Repères concrets pour manger sans se juger.",
+    cover: "/images/sans-honte/kit-03.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_tenir_debout_pdf_10: {
     priceId: "sans_honte_tenir_debout_pdf_10",
@@ -114,6 +116,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Tenir-Debout-Sans-Honte.pdf",
     priceLabel: "10 $ CAD",
     blurb: "Quand la journée tient sur un fil — un kit court.",
+    cover: "/images/sans-honte/kit-04.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_papiers_pdf_10: {
     priceId: "sans_honte_papiers_pdf_10",
@@ -123,6 +127,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-Papiers.pdf",
     priceLabel: "10 $ CAD",
     blurb: "24 fiches pour reprendre le contrôle de ses papiers.",
+    cover: "/images/sans-honte/kit-01.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_me_reconnaitre_pdf_10: {
     priceId: "sans_honte_me_reconnaitre_pdf_10",
@@ -132,6 +138,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-Me-Reconnaitre.pdf",
     priceLabel: "10 $ CAD",
     blurb: "Adapter sa journée à son cerveau, sans se juger.",
+    cover: "/images/sans-honte/kit-02.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_seconde_main_pdf_10: {
     priceId: "sans_honte_seconde_main_pdf_10",
@@ -141,6 +149,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-Seconde-Main.pdf",
     priceLabel: "10 $ CAD",
     blurb: "S'équiper et consommer autrement, simplement.",
+    cover: "/images/sans-honte/kit-05.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_entraide_pdf_10: {
     priceId: "sans_honte_entraide_pdf_10",
@@ -150,6 +160,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-Entraide.pdf",
     priceLabel: "10 $ CAD",
     blurb: "Donner et recevoir de l'aide, sans honte.",
+    cover: "/images/sans-honte/kit-06.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_fraude_pdf_10: {
     priceId: "sans_honte_fraude_pdf_10",
@@ -159,6 +171,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-Fraude.pdf",
     priceLabel: "10 $ CAD",
     blurb: "Reconnaître, réagir, se protéger.",
+    cover: "/images/sans-honte/kit-07.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_logement_pdf_10: {
     priceId: "sans_honte_logement_pdf_10",
@@ -168,6 +182,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-Logement.pdf",
     priceLabel: "10 $ CAD",
     blurb: "Repères concrets autour du logement.",
+    cover: "/images/sans-honte/kit-08.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_proche_aidant_pdf_10: {
     priceId: "sans_honte_proche_aidant_pdf_10",
@@ -177,6 +193,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-Proche-Aidant.pdf",
     priceLabel: "10 $ CAD",
     blurb: "Tenir le rôle de proche aidant sans s'épuiser.",
+    cover: "/images/sans-honte/kit-09.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_72_heures_pdf_10: {
     priceId: "sans_honte_72_heures_pdf_10",
@@ -186,6 +204,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Kit-Sans-Honte-72-Heures.pdf",
     priceLabel: "10 $ CAD",
     blurb: "Se préparer aux 72 premières heures d'une urgence.",
+    cover: "/images/sans-honte/kit-10.jpg",
+    formatLabel: "Kit PDF",
   },
   sans_honte_collection_pdf_60: {
     priceId: "sans_honte_collection_pdf_60",
@@ -196,6 +216,22 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "60 $ CAD",
     blurb:
       "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète en un seul téléchargement.",
+    cover: "/images/sans-honte/collection-cover.png",
+    formatLabel: "Collection PDF",
+    shortDescription:
+      "La collection complète regroupe les 10 kits Sans Honte en format PDF.",
+    includes: [
+      "Les 10 kits Sans Honte en PDF",
+      "Textes courts et exercices de réflexion",
+      "Phrases fortes à garder près de soi",
+      "Outils à imprimer ou utiliser à l'écran",
+    ],
+    audience: [
+      "explorer différentes facettes de la honte",
+      "mettre des mots sur ce qu'on porte en silence",
+      "reprendre un peu de place, doucement",
+      "garder une bibliothèque d'outils près de soi",
+    ],
   },
 };
 
