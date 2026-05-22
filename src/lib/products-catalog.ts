@@ -10,6 +10,12 @@ export interface DigitalProduct {
   slug: string;             // segment d'URL pour /achat/$slug
   priceLabel: string;       // ex. « 10 $ CAD »
   blurb: string;            // courte description sur la page d'achat
+  // Champs descriptifs facultatifs (page d'aperçu /pdf/$slug)
+  cover?: string;           // chemin image de couverture
+  formatLabel?: "Version PDF" | "Kit PDF" | "Collection PDF";
+  shortDescription?: string;
+  includes?: string[];      // « Ce PDF contient »
+  audience?: string[];      // « Pour qui ? »
 }
 
 export const PRODUCTS: Record<string, DigitalProduct> = {
@@ -22,6 +28,22 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "10 $ CAD",
     blurb:
       "Voir clair sur ce qui se joue, sans paniquer ni minimiser. Téléchargement immédiat après paiement.",
+    cover: "/images/cover-enjeux.jpg",
+    formatLabel: "Version PDF",
+    shortDescription:
+      "Une ressource PDF pour voir clair sur ce qui se joue dans le monde, sans paniquer ni minimiser.",
+    includes: [
+      "Textes courts et pistes de réflexion",
+      "Repères pour comprendre les grands enjeux",
+      "Phrases à garder près de soi",
+      "Pages à imprimer ou utiliser à l'écran",
+    ],
+    audience: [
+      "comprendre ce qui se passe sans s'effondrer",
+      "mettre des mots sur une époque qui va vite",
+      "réfléchir sans se juger",
+      "avancer sans chercher une solution parfaite",
+    ],
   },
   faim_justifie_pdf_10: {
     priceId: "faim_justifie_pdf_10",
@@ -32,6 +54,22 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "10 $ CAD",
     blurb:
       "Manger mieux avec moins, sans se faire la morale. Téléchargement immédiat après paiement.",
+    cover: "/images/cover-faim.jpg",
+    formatLabel: "Version PDF",
+    shortDescription:
+      "Une ressource PDF pour manger mieux avec moins, sans se faire la morale.",
+    includes: [
+      "Idées simples pour cuisiner avec ce qu'on a",
+      "Repères pour limiter le gaspillage",
+      "Petits exercices et listes pratiques",
+      "Pages à imprimer ou utiliser à l'écran",
+    ],
+    audience: [
+      "manger vrai avec un petit budget",
+      "sortir de la culpabilité autour de la bouffe",
+      "reprendre du plaisir à cuisiner",
+      "avancer sans recettes parfaites",
+    ],
   },
   enfants_cuisinent_pdf_15: {
     priceId: "enfants_cuisinent_pdf_15",
@@ -42,6 +80,22 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "15 $ CAD",
     blurb:
       "Un projet doux pour transmettre le plaisir, pas la performance. Téléchargement immédiat après paiement.",
+    cover: "/images/cover-enfants.jpg",
+    formatLabel: "Version PDF",
+    shortDescription:
+      "Une ressource PDF pour cuisiner avec les enfants et transmettre le plaisir, pas la performance.",
+    includes: [
+      "Idées de recettes simples pour les jeunes",
+      "Pistes pour faire ensemble, sans pression",
+      "Petits exercices et défis cuisine",
+      "Pages à imprimer ou utiliser à l'écran",
+    ],
+    audience: [
+      "cuisiner avec leurs enfants sans crise",
+      "transmettre le plaisir plutôt que la performance",
+      "laisser les jeunes essayer, rater, recommencer",
+      "garder la cuisine vivante à la maison",
+    ],
   },
   sans_honte_frigo_pdf_10: {
     priceId: "sans_honte_frigo_pdf_10",
