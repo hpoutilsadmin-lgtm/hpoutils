@@ -14,7 +14,7 @@ interface PdfCoverProps {
  * Cadre uniforme et vertical pour toutes les couvertures de PDF/livres du site.
  * Ratio 2/3, fond beige clair, image jamais étirée ni déformée.
  */
-export function PdfCover({ src, alt, fit = "contain", className, style }: PdfCoverProps) {
+export function PdfCover({ src, alt, fit = "cover", className, style }: PdfCoverProps) {
   const wrapperClass = `library-cover${fit === "contain" ? " cover-contain" : ""}${className ? ` ${className}` : ""}`;
   return (
     <div className={wrapperClass} style={style}>
