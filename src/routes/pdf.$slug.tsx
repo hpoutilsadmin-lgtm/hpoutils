@@ -1,5 +1,6 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { getProductBySlug, type DigitalProduct } from "@/lib/products-catalog";
+import { PdfCover } from "@/components/PdfCover";
 
 export const Route = createFileRoute("/pdf/$slug")({
   loader: ({ params }) => {
@@ -110,9 +111,11 @@ function Page() {
         >
           <div>
             {product.cover && (
-              <div className="library-cover cover-contain" style={{ marginBottom: 16 }}>
-                <img src={product.cover} alt={`Couverture ${product.title}`} loading="lazy" />
-              </div>
+              <PdfCover
+                src={product.cover}
+                alt={`Couverture ${product.title}`}
+                style={{ marginBottom: 16 }}
+              />
             )}
             <div className="library-meta" style={{ marginBottom: 8 }}>
               <span className="dot" />
