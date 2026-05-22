@@ -50,21 +50,6 @@ function resolveFormat(p: DigitalProduct): "Version PDF" | "Kit PDF" | "Collecti
   return "Version PDF";
 }
 
-const DEFAULT_INCLUDES_KIT: string[] = [
-  "Courts textes de réflexion",
-  "Exercices simples",
-  "Phrases fortes à garder près de soi",
-  "Pistes pour écrire, déposer ou nommer",
-  "Pages à imprimer ou utiliser à l'écran",
-];
-
-const DEFAULT_AUDIENCE: string[] = [
-  "comprendre ce qu'elles vivent",
-  "mettre des mots sur une situation",
-  "réfléchir sans se juger",
-  "avancer sans chercher une solution parfaite",
-];
-
 function buyLabel(fmt: "Version PDF" | "Kit PDF" | "Collection PDF"): string {
   if (fmt === "Kit PDF") return "Acheter le kit PDF";
   if (fmt === "Collection PDF") return "Acheter la collection PDF";
