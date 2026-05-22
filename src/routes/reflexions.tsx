@@ -1,12 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/reflexions")({
+  beforeLoad: () => {
+    throw redirect({ to: "/livres-pdf" });
+  },
   head: () => ({
     meta: [
-      { title: "Réflexions — Le média HP" },
-      { name: "description", content: "Capsules, textes courts et réflexions sur l'IA, l'humain imparfait, la honte, les pièges modernes et les outils qu'on utilise." },
-      { property: "og:title", content: "Réflexions — HP" },
-      { property: "og:description", content: "Textes courts et capsules pour penser sans se faire avaler." },
+      { title: "Réflexions — HP" },
+      { name: "robots", content: "noindex" },
     ],
   }),
   component: Page,
