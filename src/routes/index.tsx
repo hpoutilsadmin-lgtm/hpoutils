@@ -26,37 +26,9 @@ function Index() {
             performance, la honte ou les fausses solutions.
           </p>
           <div className="lead-actions">
-            <Link to="/outils" className="btn-primary">Explorer les outils</Link>
-            <Link to="/livres-pdf" className="btn-ghost">Voir les livres &amp; PDF</Link>
-            <Link to="/sans-honte" className="btn-ghost">Découvrir Sans Honte</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* TROIS PORTES D'ENTRÉE */}
-      <section className="three-pillars">
-        <div className="container">
-          <span className="editorial-kicker">Par où commencer</span>
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "8px 0 36px", color: "#2a1a12" }}>Trois portes d'entrée</h2>
-          <div className="pillar-grid">
-            <article className="pillar-card">
-              <span className="pillar-num">01</span>
-              <h3>Lire &amp; télécharger</h3>
-              <p>Livres, PDF, guides et ressources concrètes à garder près de soi.</p>
-              <Link to="/livres-pdf" className="pillar-cta">Voir les livres &amp; PDF →</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">02</span>
-              <h3>Regarder &amp; réfléchir</h3>
-              <p>Capsules, textes courts et réflexions sur l'IA, l'humain imparfait, la honte, les pièges modernes et les outils qu'on utilise.</p>
-              <Link to="/reflexions" className="pillar-cta">Lire les réflexions →</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">03</span>
-              <h3>Utiliser &amp; créer</h3>
-              <p>Des outils simples pour mettre des mots, faire le tri et avancer sans se perdre dans la perfection.</p>
-              <Link to="/outils" className="pillar-cta">Explorer les outils →</Link>
-            </article>
+            <Link to="/outils" className="btn-primary">Explorer outils Sans Honte</Link>
+            <Link to="/livres-pdf" className="btn-primary">Voir livres, PDF &amp; réflexions</Link>
+            <Link to="/univers" className="btn-primary">Découvrir Univers alternatif</Link>
           </div>
         </div>
       </section>
@@ -73,7 +45,7 @@ function Index() {
             version bien propre de soi-même.
           </p>
           <div className="lead-actions">
-            <Link to="/sans-honte" className="btn-primary">Découvrir Sans Honte</Link>
+            <Link to="/outils" className="btn-primary">Explorer outils Sans Honte</Link>
           </div>
         </div>
       </section>
@@ -82,42 +54,30 @@ function Index() {
       <section className="three-pillars">
         <div className="container">
           <span className="editorial-kicker">Bibliothèque</span>
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "8px 0 8px", color: "#2a1a12" }}>Livres &amp; PDF</h2>
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "8px 0 8px", color: "#2a1a12" }}>Livres, PDF &amp; réflexions</h2>
           <p style={{ margin: "0 0 36px", color: "rgba(42,26,18,.7)", fontStyle: "italic", fontSize: 17 }}>Des formats qui se gardent, se prêtent, se relisent.</p>
           <div className="pillar-grid">
             <article className="pillar-card">
               <span className="pillar-num">01</span>
-              <h3>Les enjeux de l'humanité</h3>
-              <p>Voir clair sur ce qui se joue, sans paniquer ni minimiser.</p>
+              <h3>Enjeux de l'humanité à l'ère de l'IA</h3>
+              <p>Voir clair sur ce qui se joue, sans paniquer ni minimiser. — 15 $ CAD</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>La faim justifie les moyens</h3>
-              <p>Cuisiner avec peu, gaspiller moins, sans se faire la morale.</p>
+              <p>Cuisiner avec peu, gaspiller moins, sans se faire la morale. — 10 $ CAD</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Les enfants cuisinent pour faire plaisir</h3>
-              <p>Un livre coloré pour aider les jeunes à cuisiner, essayer, rater et recommencer.</p>
+              <p>Un livre coloré pour aider les jeunes à cuisiner, essayer, rater et recommencer. — 20 $ CAD</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
           </div>
           <div className="lead-actions" style={{ marginTop: 28 }}>
-            <Link to="/livres-pdf" className="btn-primary">Voir toute la bibliothèque</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* RÉFLEXIONS */}
-      <section className="collections-strip">
-        <div className="container">
-          <span className="editorial-kicker">Le média HP</span>
-          <h2><em>Réflexions</em></h2>
-          <p className="strip-intro">Textes courts et capsules sur l'IA, la honte, les pièges modernes et les outils qu'on utilise.</p>
-          <div className="lead-actions">
-            <Link to="/reflexions" className="btn-primary">Lire les réflexions</Link>
+            <Link to="/livres-pdf" className="btn-primary">Voir livres, PDF &amp; réflexions</Link>
           </div>
         </div>
       </section>
