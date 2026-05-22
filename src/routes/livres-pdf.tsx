@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/livres-pdf")({
   head: () => ({
@@ -39,13 +39,10 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection PDF", slug: "sans-honte-collection", price: "60 $" },
 ];
 
-function buyLabel(tag: Kind, price: string): string {
-  switch (tag) {
-    case "Kit PDF": return `Acheter le kit PDF — ${price}`;
-    case "Collection PDF": return `Acheter la collection PDF — ${price}`;
-    case "PDF":
-    default: return `Acheter le PDF — ${price}`;
-  }
+function discoverLabel(tag: Kind): string {
+  if (tag === "Kit PDF") return "Découvrir le kit PDF";
+  if (tag === "Collection PDF") return "Découvrir la collection PDF";
+  return "Découvrir le PDF";
 }
 
 function Page() {
@@ -70,12 +67,12 @@ function Page() {
                 <div className="library-cover cover-contain">
                   <img src={b.cover} alt={`Couverture ${b.title}`} loading="lazy" />
                 </div>
-                <div className="library-meta"><span className="dot" />{b.tag}</div>
+                <div className="library-meta"><span className="dot" />{b.tag} — {b.price} CAD</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
-                <a className="lib-link" href={`/achat/${b.slug}`}>
-                  {buyLabel(b.tag, b.price)} →
-                </a>
+                <Link className="lib-link" to="/pdf/$slug" params={{ slug: b.slug }}>
+                  {discoverLabel(b.tag)} →
+                </Link>
               </article>
             );})}
           </div>
