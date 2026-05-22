@@ -77,7 +77,7 @@ function Page() {
                 <div className="library-meta"><span className="dot" />Kit PDF — 10 $ CAD</div>
                 <h3>{k.title}</h3>
                 <p>{k.sub}</p>
-                <Link className="lib-link" to="/achat/$slug" params={{ slug: k.slug }}>Acheter le kit PDF — 10 $ →</Link>
+                <Link className="lib-link" to="/pdf/$slug" params={{ slug: k.slug }}>Découvrir le kit PDF →</Link>
               </article>
             ))}
           </div>
@@ -86,7 +86,7 @@ function Page() {
               <h3>La collection complète — les 10 kits</h3>
               <p>Toute la collection Sans Honte en un seul PDF — Collection PDF — 60 $ CAD au lieu de 100 $. Téléchargement immédiat.</p>
             </div>
-            <Link className="action-btn" to="/achat/$slug" params={{ slug: "sans-honte-collection" }}>Acheter la collection PDF — 60 $</Link>
+            <Link className="action-btn" to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF</Link>
           </div>
         </div>
       </section>
