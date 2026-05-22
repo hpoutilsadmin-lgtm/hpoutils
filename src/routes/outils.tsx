@@ -134,17 +134,17 @@ function Page() {
       <section className="tool-section">
         <div className="container">
           <header className="tool-section-head">
-            <h2>Application d'outils HP</h2>
-            <p>Bientôt — pour utiliser certains outils HP directement en ligne.</p>
+            <h2>Les bons réflexes d'HP</h2>
+            <p>Bientôt — une application interactive pour pratiquer des réflexes simples dans la vraie vie.</p>
           </header>
           <div className="tool-grid">
             <article className="tool-card" style={{ opacity: 0.85 }}>
               <span className="tool-tag" style={{ background: "rgba(176,74,47,.12)", color: "#b04a2f" }}>Bientôt disponible</span>
-              <h3>Application d'outils HP</h3>
+              <h3>Les bons réflexes d'HP</h3>
               <p>
-                Une petite application pour utiliser certains outils HP directement
-                en ligne. Elle permettra de réfléchir, remplir, choisir ou explorer
-                des ressources sans devoir tout télécharger.
+                Une application interactive pour pratiquer des réflexes simples
+                dans la vraie vie : cuisine, émotions, ménage, sécurité numérique,
+                santé mentale, communication, dépendance et organisation.
               </p>
               <span style={{ opacity: 0.6, fontWeight: 600 }} aria-disabled>Bientôt disponible</span>
             </article>

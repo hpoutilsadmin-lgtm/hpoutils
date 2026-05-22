@@ -26,6 +26,7 @@ import { Route as AlbumRouteImport } from './routes/album'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PdfSlugRouteImport } from './routes/pdf.$slug'
+import { Route as OutilsBonsReflexesRouteImport } from './routes/outils.bons-reflexes'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
@@ -116,6 +117,11 @@ const PdfSlugRoute = PdfSlugRouteImport.update({
   path: '/pdf/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OutilsBonsReflexesRoute = OutilsBonsReflexesRouteImport.update({
+  id: '/bons-reflexes',
+  path: '/bons-reflexes',
+  getParentRoute: () => OutilsRoute,
+} as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
   path: '/checkout/return',
@@ -147,7 +153,7 @@ export interface FileRoutesByFullPath {
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/livres-pdf': typeof LivresPdfRoute
-  '/outils': typeof OutilsRoute
+  '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -170,7 +177,7 @@ export interface FileRoutesByTo {
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/livres-pdf': typeof LivresPdfRoute
-  '/outils': typeof OutilsRoute
+  '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -194,7 +202,7 @@ export interface FileRoutesById {
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
   '/livres-pdf': typeof LivresPdfRoute
-  '/outils': typeof OutilsRoute
+  '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/outils/bons-reflexes'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/outils/bons-reflexes'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/outils/bons-reflexes'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
@@ -289,7 +301,7 @@ export interface RootRouteChildren {
   ComprendreRoute: typeof ComprendreRoute
   ContactRoute: typeof ContactRoute
   LivresPdfRoute: typeof LivresPdfRoute
-  OutilsRoute: typeof OutilsRoute
+  OutilsRoute: typeof OutilsRouteWithChildren
   PrixRoute: typeof PrixRoute
   RecupererAchatRoute: typeof RecupererAchatRoute
   ReflexionsRoute: typeof ReflexionsRoute
@@ -425,6 +437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PdfSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/outils/bons-reflexes': {
+      id: '/outils/bons-reflexes'
+      path: '/bons-reflexes'
+      fullPath: '/outils/bons-reflexes'
+      preLoaderRoute: typeof OutilsBonsReflexesRouteImport
+      parentRoute: typeof OutilsRoute
+    }
     '/checkout/return': {
       id: '/checkout/return'
       path: '/checkout/return'
@@ -456,6 +475,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface OutilsRouteChildren {
+  OutilsBonsReflexesRoute: typeof OutilsBonsReflexesRoute
+}
+
+const OutilsRouteChildren: OutilsRouteChildren = {
+  OutilsBonsReflexesRoute: OutilsBonsReflexesRoute,
+}
+
+const OutilsRouteWithChildren =
+  OutilsRoute._addFileChildren(OutilsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
@@ -465,7 +495,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComprendreRoute: ComprendreRoute,
   ContactRoute: ContactRoute,
   LivresPdfRoute: LivresPdfRoute,
-  OutilsRoute: OutilsRoute,
+  OutilsRoute: OutilsRouteWithChildren,
   PrixRoute: PrixRoute,
   RecupererAchatRoute: RecupererAchatRoute,
   ReflexionsRoute: ReflexionsRoute,
