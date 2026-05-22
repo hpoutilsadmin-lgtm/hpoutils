@@ -75,11 +75,11 @@ function Page() {
   const audienceSentence =
     product.audienceSentence ??
     (product.audience && product.audience.length > 0
-      ? `Ce ${fmt.toLowerCase()} s'adresse aux personnes qui veulent ${joinFr(product.audience)}.`
+      ? `Ce PDF s'adresse aux personnes qui veulent ${joinFr(product.audience)}.`
       : fmt === "Kit PDF"
-      ? "Ce kit PDF s'adresse aux personnes qui veulent explorer la honte, nommer ce qu'elles portent en silence et reprendre un peu de place sans se réparer de force."
+      ? "Ce PDF s'adresse aux personnes qui veulent explorer la honte, nommer ce qu'elles portent en silence et reprendre un peu de place sans se réparer de force."
       : fmt === "Collection PDF"
-      ? "Cette collection PDF s'adresse aux personnes qui veulent explorer la honte sous plusieurs angles, mettre des mots sur ce qu'elles portent et garder une bibliothèque d'outils près d'elles."
+      ? "Ce PDF s'adresse aux personnes qui veulent explorer la honte sous plusieurs angles, mettre des mots sur ce qu'elles portent et garder une bibliothèque d'outils près d'elles."
       : "Ce PDF s'adresse aux personnes qui veulent comprendre ce qu'elles vivent, mettre des mots sur une situation, réfléchir sans se juger et avancer sans chercher une solution parfaite.");
 
   return (
