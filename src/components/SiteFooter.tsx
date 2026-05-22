@@ -19,9 +19,7 @@ export function SiteFooter() {
           <p>
             <Link to="/">Accueil</Link><br />
             <Link to="/outils">Outils</Link><br />
-            <Link to="/livres-pdf">Livres &amp; PDF</Link><br />
-            <Link to="/sans-honte">Sans Honte</Link><br />
-            <Link to="/reflexions">Réflexions</Link><br />
+            <Link to="/livres-pdf">Livres, PDF &amp; réflexions</Link><br />
             <Link to="/univers">Univers alternatif</Link><br />
             <Link to="/ateliers">Ateliers</Link><br />
             <Link to="/a-propos">À propos</Link><br />
