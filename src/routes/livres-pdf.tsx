@@ -40,13 +40,6 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection PDF", slug: "sans-honte-collection", price: "60 $" },
 ];
 
-const REFLEXIONS: Array<{ cat: string; title: string; desc: string }> = [
-  { cat: "IA", title: "L'IA n'est pas ton ami — elle n'est pas ton ennemi non plus", desc: "Sortir du débat binaire pour regarder ce qu'elle fait vraiment dans nos vies." },
-  { cat: "Humain imparfait", title: "Le droit d'être un brouillon", desc: "On ne vit pas en version finale. Personne." },
-  { cat: "Sans Honte", title: "Ce qu'on cache prend toute la place", desc: "Petit texte sur ce que la honte fait au corps et au temps." },
-  { cat: "Vie moderne", title: "La productivité comme religion", desc: "Quand faire est devenu plus important qu'être." },
-];
-
 function discoverLabel(tag: Kind): string {
   if (tag === "Kit PDF") return "Découvrir le kit PDF";
   if (tag === "Collection PDF") return "Découvrir la collection PDF";
@@ -84,26 +77,6 @@ function Page() {
                 </Link>
               </article>
             );})}
-          </div>
-        </div>
-      </section>
-
-      {/* RÉFLEXIONS — intégrées à la page */}
-      <section className="subpage-content" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <header className="tool-section-head" style={{ marginBottom: 24 }}>
-            <h2>Réflexions</h2>
-            <p>Textes courts et capsules sur l'IA, la honte, les pièges modernes et les outils qu'on utilise.</p>
-          </header>
-          <div className="reflex-grid">
-            {REFLEXIONS.map((p) => (
-              <article key={p.title} className="reflex-card">
-                <span className="reflex-cat">{p.cat}</span>
-                <h3>{p.title}</h3>
-                <p>{p.desc}</p>
-                <span className="read" style={{ opacity: 0.55 }}>Bientôt disponible</span>
-              </article>
-            ))}
           </div>
         </div>
       </section>
