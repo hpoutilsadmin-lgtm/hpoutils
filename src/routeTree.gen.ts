@@ -25,6 +25,7 @@ import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as AlbumRouteImport } from './routes/album'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PdfSlugRouteImport } from './routes/pdf.$slug'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
@@ -110,6 +111,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PdfSlugRoute = PdfSlugRouteImport.update({
+  id: '/pdf/$slug',
+  path: '/pdf/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
   path: '/checkout/return',
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/univers': typeof UniversRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -220,6 +229,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
   id:
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/achat/$slug'
     | '/checkout/return'
+    | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -287,6 +299,7 @@ export interface RootRouteChildren {
   UniversRoute: typeof UniversRoute
   AchatSlugRoute: typeof AchatSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
+  PdfSlugRoute: typeof PdfSlugRoute
   ApiPublicDownloadPdfRoute: typeof ApiPublicDownloadPdfRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pdf/$slug': {
+      id: '/pdf/$slug'
+      path: '/pdf/$slug'
+      fullPath: '/pdf/$slug'
+      preLoaderRoute: typeof PdfSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout/return': {
       id: '/checkout/return'
       path: '/checkout/return'
@@ -455,9 +475,20 @@ const rootRouteChildren: RootRouteChildren = {
   UniversRoute: UniversRoute,
   AchatSlugRoute: AchatSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
+  PdfSlugRoute: PdfSlugRoute,
   ApiPublicDownloadPdfRoute: ApiPublicDownloadPdfRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
