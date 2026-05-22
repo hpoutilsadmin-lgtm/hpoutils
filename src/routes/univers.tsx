@@ -55,11 +55,10 @@ function Page() {
             </article>
             <article className="pillar-card">
               <span className="pillar-num">04</span>
-              <h3>Application d'outils HP</h3>
+              <h3>Les bons réflexes d'HP</h3>
               <p>
-                Une petite application pour utiliser certains outils HP directement
-                en ligne. Elle permettra de réfléchir, remplir, choisir ou explorer
-                des ressources sans devoir tout télécharger.
+                Un outil interactif et éducatif pour explorer les bons réflexes
+                du quotidien avec une approche simple, humaine et accessible.
               </p>
               <span className="pillar-cta" aria-disabled style={{ opacity: 0.6 }}>Bientôt disponible</span>
             </article>
