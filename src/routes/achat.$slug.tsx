@@ -53,11 +53,15 @@ function Page() {
   return (
     <>
       <PaymentTestModeBanner />
-      <section className="subpage-hero">
-        <div className="container" style={{ maxWidth: 920 }}>
+      <section
+        className="editorial-hero hero-banner-image"
+        style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}
+      >
+        <div className="container">
+          <span className="editorial-kicker">Finaliser l'achat — {formatLabel}</span>
           <h1>{product.title}</h1>
-          <p>
-            {formatLabel} — {product.priceLabel}. {product.blurb}
+          <p className="lead">
+            {formatLabel} — {product.priceLabel}. PDF téléchargeable immédiatement après paiement.
           </p>
         </div>
       </section>
