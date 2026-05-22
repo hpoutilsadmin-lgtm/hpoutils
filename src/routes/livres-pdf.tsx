@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { PdfCover } from "@/components/PdfCover";
 
 export const Route = createFileRoute("/livres-pdf")({
   head: () => ({
@@ -66,9 +67,7 @@ function Page() {
             {ITEMS.map((b) => {
               return (
               <article key={b.title} className="library-item">
-                <div className="library-cover cover-contain">
-                  <img src={b.cover} alt={`Couverture ${b.title}`} loading="lazy" />
-                </div>
+                <PdfCover src={b.cover} alt={`Couverture ${b.title}`} />
                 <div className="library-meta"><span className="dot" />{b.tag} — {b.price} CAD</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
