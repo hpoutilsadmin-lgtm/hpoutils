@@ -55,9 +55,19 @@ function Page() {
             </article>
             <article className="pillar-card">
               <span className="pillar-num">04</span>
+              <h3>Application d'outils HP</h3>
+              <p>
+                Une petite application pour utiliser certains outils HP directement
+                en ligne. Elle permettra de réfléchir, remplir, choisir ou explorer
+                des ressources sans devoir tout télécharger.
+              </p>
+              <span className="pillar-cta" aria-disabled style={{ opacity: 0.6 }}>Bientôt disponible</span>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">05</span>
               <h3>Autres projets créatifs</h3>
               <p>Personnages, récits et collections en écriture — d'autres mondes imparfaits à venir.</p>
-              <span className="pillar-cta">En écriture</span>
+              <span className="pillar-cta" style={{ opacity: 0.6 }}>Bientôt disponible</span>
             </article>
           </div>
         </div>
