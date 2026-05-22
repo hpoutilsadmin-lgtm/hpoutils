@@ -68,14 +68,40 @@ function Page() {
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">Outils HP</span>
-          <h1>Le <em>cœur</em> du projet.</h1>
+          <h1>Outils <em>HP</em>.</h1>
           <p className="lead">
-            Des outils numériques simples pour mettre des mots sur ce qu'on vit,
-            faire le tri, et avancer sans se perdre dans la perfection.
+            Des outils simples pour mettre des mots, faire le tri et avancer sans
+            se perdre dans la perfection.
           </p>
-          <div className="lead-actions">
-            <Link to="/livres-pdf" className="btn-primary">Voir les livres &amp; PDF</Link>
-            <Link to="/sans-honte" className="btn-ghost">Collection Sans Honte</Link>
+        </div>
+      </section>
+
+      {/* OUTILS SANS HONTE — mis en avant */}
+      <section className="tool-section">
+        <div className="container">
+          <header className="tool-section-head">
+            <h2>Outils Sans Honte</h2>
+            <p>La collection Sans Honte en format PDF — pour mettre des mots sur ce qu'on porte et reprendre un peu de place sans se juger.</p>
+          </header>
+          <div className="tool-grid">
+            <article className="tool-card">
+              <span className="tool-tag">Collection PDF — 60 $ CAD</span>
+              <h3>Collection Sans Honte — 10 kits</h3>
+              <p>
+                Les 10 kits Sans Honte en un seul PDF — Papiers, Frigo, Tenir Debout,
+                Seconde Main, Entraide et plus. Téléchargement immédiat après paiement.
+              </p>
+              <Link to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF →</Link>
+            </article>
+            <article className="tool-card">
+              <span className="tool-tag">Kit PDF — 10 $ CAD</span>
+              <h3>Kit Sans Honte (au choix)</h3>
+              <p>
+                Un kit PDF pour explorer la honte, mettre des mots sur ce qu'on porte
+                et reprendre un peu de place sans se juger.
+              </p>
+              <Link to="/livres-pdf">Voir les kits PDF →</Link>
+            </article>
           </div>
         </div>
       </section>
