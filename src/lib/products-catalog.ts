@@ -22,10 +22,10 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   enjeux_humanite_pdf_10: {
     priceId: "enjeux_humanite_pdf_10",
     slug: "enjeux-humanite",
-    title: "Les enjeux de l'humanité",
+    title: "Enjeux de l'humanité à l'ère de l'IA",
     pdfPath: "enjeux-humanite.pdf",
-    downloadFileName: "Les-enjeux-de-l-humanite.pdf",
-    priceLabel: "10 $ CAD",
+    downloadFileName: "Enjeux-de-l-humanite-a-l-ere-de-l-IA.pdf",
+    priceLabel: "15 $ CAD",
     blurb:
       "Voir clair sur ce qui se joue, sans paniquer ni minimiser. Téléchargement immédiat après paiement.",
     cover: "/images/cover-enjeux.jpg",
@@ -77,7 +77,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Les enfants cuisinent pour faire plaisir",
     pdfPath: "enfants-cuisinent.pdf",
     downloadFileName: "Les-enfants-cuisinent.pdf",
-    priceLabel: "15 $ CAD",
+    priceLabel: "20 $ CAD",
     blurb:
       "Un projet doux pour transmettre le plaisir, pas la performance. Téléchargement immédiat après paiement.",
     cover: "/images/cover-enfants.jpg",

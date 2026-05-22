@@ -3,10 +3,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/livres-pdf")({
   head: () => ({
     meta: [
-      { title: "Livres & PDF — Bibliothèque HP" },
-      { name: "description", content: "Livres, PDF, guides et collections HP — à lire, télécharger et garder près de soi." },
-      { property: "og:title", content: "Livres & PDF — HP" },
-      { property: "og:description", content: "La bibliothèque HP : livres, PDF, guides et collections." },
+      { title: "Livres, PDF & réflexions — HP" },
+      { name: "description", content: "Livres, PDF, kits, collections et réflexions HP — à lire, télécharger et garder près de soi." },
+      { property: "og:title", content: "Livres, PDF & réflexions — HP" },
+      { property: "og:description", content: "La bibliothèque HP : PDF, kits, collections et réflexions." },
       { property: "og:image", content: "/images/cover-enjeux.jpg" },
     ],
   }),
@@ -23,9 +23,9 @@ const ITEMS: Array<{
   slug: string;
   price: string;
 }> = [
-  { cover: "/images/cover-enjeux.jpg", title: "Les enjeux de l'humanité", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "PDF", slug: "enjeux-humanite", price: "10 $" },
+  { cover: "/images/cover-enjeux.jpg", title: "Enjeux de l'humanité à l'ère de l'IA", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "PDF", slug: "enjeux-humanite", price: "15 $" },
   { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Manger mieux avec moins, sans se faire la morale.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
-  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "15 $" },
+  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "20 $" },
   { cover: "/images/sans-honte/kit-01.jpg", title: "Kit Sans Honte — Papiers", desc: "24 fiches pour reprendre le contrôle de ses papiers.", tag: "Kit PDF", slug: "sans-honte-papiers", price: "10 $" },
   { cover: "/images/sans-honte/kit-02.jpg", title: "Kit Sans Honte — Me Reconnaître", desc: "Adapter sa journée à son cerveau, sans se juger.", tag: "Kit PDF", slug: "sans-honte-me-reconnaitre", price: "10 $" },
   { cover: "/images/sans-honte/kit-03.jpg", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "Kit PDF", slug: "sans-honte-frigo", price: "10 $" },
@@ -37,6 +37,13 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/kit-09.jpg", title: "Kit Sans Honte — Proche Aidant", desc: "Tenir le rôle de proche aidant sans s'épuiser.", tag: "Kit PDF", slug: "sans-honte-proche-aidant", price: "10 $" },
   { cover: "/images/sans-honte/kit-10.jpg", title: "Kit Sans Honte — 72 Heures", desc: "Se préparer aux 72 premières heures d'une urgence.", tag: "Kit PDF", slug: "sans-honte-72-heures", price: "10 $" },
   { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection PDF", slug: "sans-honte-collection", price: "60 $" },
+];
+
+const REFLEXIONS: Array<{ cat: string; title: string; desc: string }> = [
+  { cat: "IA", title: "L'IA n'est pas ton ami — elle n'est pas ton ennemi non plus", desc: "Sortir du débat binaire pour regarder ce qu'elle fait vraiment dans nos vies." },
+  { cat: "Humain imparfait", title: "Le droit d'être un brouillon", desc: "On ne vit pas en version finale. Personne." },
+  { cat: "Sans Honte", title: "Ce qu'on cache prend toute la place", desc: "Petit texte sur ce que la honte fait au corps et au temps." },
+  { cat: "Vie moderne", title: "La productivité comme religion", desc: "Quand faire est devenu plus important qu'être." },
 ];
 
 function discoverLabel(tag: Kind): string {
@@ -51,10 +58,11 @@ function Page() {
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">Bibliothèque HP</span>
-          <h1>Livres &amp; <em>PDF</em>.</h1>
+          <h1>Livres, PDF &amp; <em>réflexions</em>.</h1>
           <p className="lead">
-            Des formats qui se gardent, se prêtent, se relisent. Pour avoir
-            quelque chose de solide à la main quand le reste va trop vite.
+            PDF, kits, collections et réflexions à lire. Des formats qui se gardent,
+            se prêtent, se relisent — pour avoir quelque chose de solide à la main
+            quand le reste va trop vite.
           </p>
         </div>
       </section>
@@ -75,6 +83,26 @@ function Page() {
                 </Link>
               </article>
             );})}
+          </div>
+        </div>
+      </section>
+
+      {/* RÉFLEXIONS — intégrées à la page */}
+      <section className="subpage-content" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <header className="tool-section-head" style={{ marginBottom: 24 }}>
+            <h2>Réflexions</h2>
+            <p>Textes courts et capsules sur l'IA, la honte, les pièges modernes et les outils qu'on utilise.</p>
+          </header>
+          <div className="reflex-grid">
+            {REFLEXIONS.map((p) => (
+              <article key={p.title} className="reflex-card">
+                <span className="reflex-cat">{p.cat}</span>
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+                <span className="read" style={{ opacity: 0.55 }}>Bientôt disponible</span>
+              </article>
+            ))}
           </div>
         </div>
       </section>
