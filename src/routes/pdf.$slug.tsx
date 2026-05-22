@@ -131,7 +131,7 @@ function Page() {
               {fmt === "Collection PDF" ? "Ce que la collection contient" : "Ce que ce PDF contient"}
             </h2>
             <ul style={{ paddingLeft: 20, marginBottom: 32, lineHeight: 1.8, color: "#3a2a20" }}>
-              {includes.map((it) => (
+              {includes.map((it: string) => (
                 <li key={it}>{it}</li>
               ))}
             </ul>
@@ -143,7 +143,7 @@ function Page() {
               Ce {fmt.toLowerCase()} s'adresse aux personnes qui veulent :
             </p>
             <ul style={{ paddingLeft: 20, marginBottom: 32, lineHeight: 1.8, color: "#3a2a20" }}>
-              {audience.map((it) => (
+              {audience.map((it: string) => (
                 <li key={it}>{it}</li>
               ))}
             </ul>
