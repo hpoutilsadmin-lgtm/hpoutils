@@ -1,0 +1,31 @@
+# HP — Outils, livres et réflexions
+
+> Plateforme québécoise de Hugues Poliquin : outils gratuits, livres et PDF téléchargeables, et réflexions sur les enjeux humains, sociaux et alimentaires.
+
+## Pages
+
+- [Accueil](/): Présentation du projet HP et de ses différentes sections.
+- [À propos](/a-propos): Qui est derrière HP et pourquoi ce projet existe.
+- [Livres, PDF et réflexions](/livres-pdf): Catalogue complet des livres et PDF téléchargeables.
+- [Outils](/outils): Outils pratiques en ligne, gratuits ou téléchargeables.
+- [Bons réflexes](/outils/bons-reflexes): Application web d'aide à la décision quotidienne.
+- [Sans Honte](/sans-honte): Collection de PDF d'entraide sur les situations de vie difficiles.
+- [Réflexions](/reflexions): Textes et essais sur les enjeux humains et sociaux.
+- [Ateliers](/ateliers): Information sur les ateliers proposés.
+- [Comprendre](/comprendre): Pages explicatives autour de la démarche HP.
+- [Transmettre](/transmettre): Ressources pour partager et transmettre.
+- [Univers alternatif](/univers): Section bientôt disponible.
+- [Album](/album): Galerie de visuels du projet.
+- [Collaborer](/collaborer): Modalités pour collaborer avec HP.
+- [Prix](/prix): Tarifs des PDF et produits numériques.
+- [Contact](/contact): Comment joindre HP.
+
+## Exemples de PDF
+
+- [Aperçu : Enjeux d'humanité](/pdf/enjeux-humanite): Réflexion sur les grands enjeux contemporains.
+- [Aperçu : Horizon Québec](/pdf/horizon-quebec): Regard sur le Québec d'aujourd'hui et de demain.
+- [Collection Sans Honte](/pdf/sans-honte-collection): Aperçu de la collection complète Sans Honte.
+
+## Optional
+
+- [Récupérer un achat](/recuperer-achat): Page pour récupérer un lien de téléchargement après achat.
