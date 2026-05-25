@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 import { getProduct } from "@/lib/products-catalog";
@@ -23,11 +24,9 @@ function getAdmin() {
 export const createPdfCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((data: {
     priceId: string;
-    returnUrl: string;
     environment: StripeEnv;
   }) => {
     if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
-    if (!data.returnUrl.startsWith("http")) throw new Error("Invalid returnUrl");
     if (!getProduct(data.priceId)) throw new Error("Unknown product");
     return data;
   })
@@ -38,11 +37,23 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
     if (!prices.data.length) throw new Error("Price not found");
     const stripePrice = prices.data[0];
 
+    // Construct return_url server-side from the request origin so it cannot
+    // be redirected to an attacker-controlled domain.
+    const origin = getRequestHeader("origin") || getRequestHeader("referer");
+    if (!origin) throw new Error("Missing origin");
+    let baseOrigin: string;
+    try {
+      baseOrigin = new URL(origin).origin;
+    } catch {
+      throw new Error("Invalid origin");
+    }
+    const returnUrl = `${baseOrigin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
+
     const session = await stripe.checkout.sessions.create({
       line_items: [{ price: stripePrice.id, quantity: 1 }],
       mode: "payment",
       ui_mode: "embedded_page",
-      return_url: data.returnUrl,
+      return_url: returnUrl,
       // automatic_tax requires a head office address on the Stripe account.
       // The Lovable-managed sandbox account does not have one configured,
       // which causes checkout sessions to fail. Disabled for now; the 25 $ CAD
