@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as UniversRouteImport } from './routes/univers'
 import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -37,6 +38,11 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UniversRoute = UniversRouteImport.update({
   id: '/univers',
   path: '/univers',
@@ -194,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -223,6 +230,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/transmettre'
     | '/univers'
+    | '/unsubscribe'
     | '/achat/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
@@ -313,6 +323,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/transmettre'
     | '/univers'
+    | '/unsubscribe'
     | '/achat/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
@@ -342,6 +353,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/transmettre'
     | '/univers'
+    | '/unsubscribe'
     | '/achat/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
@@ -372,6 +384,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransmettreRoute: typeof TransmettreRoute
   UniversRoute: typeof UniversRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   AchatSlugRoute: typeof AchatSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
@@ -386,6 +399,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/univers': {
       id: '/univers'
       path: '/univers'
@@ -606,6 +626,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransmettreRoute: TransmettreRoute,
   UniversRoute: UniversRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   AchatSlugRoute: AchatSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
