@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 import { getProduct } from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
+import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
 
 function buildDownloadUrl(priceId: string, email: string): string {
   const token = signDownloadToken({ priceId, email });
@@ -152,6 +153,41 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     const admin = getAdmin();
+
+    // Rate-limit: 5 attempts/hour per email or per IP.
+    const ip =
+      getRequestHeader("cf-connecting-ip") ||
+      getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ||
+      null;
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count: emailCount } = await admin
+      .from("recovery_attempts")
+      .select("id", { count: "exact", head: true })
+      .eq("email", data.email)
+      .gte("created_at", oneHourAgo);
+    const { count: ipCount } = ip
+      ? await admin
+          .from("recovery_attempts")
+          .select("id", { count: "exact", head: true })
+          .eq("ip", ip)
+          .gte("created_at", oneHourAgo)
+      : { count: 0 };
+    if ((emailCount ?? 0) >= 5 || (ipCount ?? 0) >= 5) {
+      // Neutral response — don't reveal rate-limit state.
+      return { ok: true as const };
+    }
+    await admin.from("recovery_attempts").insert({ email: data.email, ip });
+
+    // Determine site origin for absolute download links in the email.
+    const origin =
+      getRequestHeader("origin") || getRequestHeader("referer") || "";
+    let siteOrigin = "";
+    try {
+      if (origin) siteOrigin = new URL(origin).origin;
+    } catch {
+      siteOrigin = "";
+    }
+
     const { data: orders, error } = await admin
       .from("orders")
       .select("id, price_id, pdf_path, created_at, status")
@@ -162,7 +198,8 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
 
     if (error) {
       console.error("recover lookup error", error);
-      throw new Error("Erreur lors de la recherche");
+      // Stay neutral on errors.
+      return { ok: true as const };
     }
 
     const items: Array<{
@@ -183,5 +220,17 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
       });
     }
 
-    return { items };
+    // Only send an email if we actually found purchases. The page always
+    // shows the same neutral message regardless, so an attacker can't
+    // distinguish hits from misses by the response.
+    if (items.length > 0) {
+      await enqueueTransactionalEmail({
+        templateName: "purchase-recovery",
+        recipientEmail: data.email,
+        idempotencyKey: `recover-${data.email}-${Date.now()}`,
+        templateData: { items, siteOrigin },
+      });
+    }
+
+    return { ok: true as const };
   });
