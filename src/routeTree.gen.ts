@@ -30,6 +30,7 @@ import { Route as OutilsBonsReflexesRouteImport } from './routes/outils.bons-ref
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const UniversRoute = UniversRouteImport.update({
@@ -137,6 +138,12 @@ const ApiPublicDownloadPdfRoute = ApiPublicDownloadPdfRouteImport.update({
   path: '/api/public/download-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -167,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -191,6 +199,7 @@ export interface FileRoutesByTo {
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -216,6 +225,7 @@ export interface FileRoutesById {
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
+    | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
+    | '/lovable/email/queue/process'
   id:
     | '__root__'
     | '/'
@@ -290,6 +302,7 @@ export interface FileRouteTypes {
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/payments/webhook'
+    | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -314,6 +327,7 @@ export interface RootRouteChildren {
   PdfSlugRoute: typeof PdfSlugRoute
   ApiPublicDownloadPdfRoute: typeof ApiPublicDownloadPdfRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -465,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicDownloadPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -508,6 +529,7 @@ const rootRouteChildren: RootRouteChildren = {
   PdfSlugRoute: PdfSlugRoute,
   ApiPublicDownloadPdfRoute: ApiPublicDownloadPdfRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
