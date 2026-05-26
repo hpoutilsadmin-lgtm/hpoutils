@@ -11,6 +11,23 @@ function buildDownloadUrl(priceId: string, email: string): string {
   return `/api/public/download-pdf?token=${encodeURIComponent(token)}`;
 }
 
+// Trusted site origin from server-side env. Never derived from request
+// headers (Origin/Referer can be forged by clients).
+function getTrustedSiteOrigin(): string {
+  const raw = process.env.SITE_URL;
+  if (!raw) throw new Error("SITE_URL is not configured");
+  let parsed: URL;
+  try {
+    parsed = new URL(raw);
+  } catch {
+    throw new Error("SITE_URL is invalid");
+  }
+  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+    throw new Error("SITE_URL must be http(s)");
+  }
+  return parsed.origin;
+}
+
 let _admin: any = null;
 function getAdmin() {
   if (!_admin) {
@@ -38,17 +55,10 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
     if (!prices.data.length) throw new Error("Price not found");
     const stripePrice = prices.data[0];
 
-    // Construct return_url server-side from the request origin so it cannot
-    // be redirected to an attacker-controlled domain.
-    const origin = getRequestHeader("origin") || getRequestHeader("referer");
-    if (!origin) throw new Error("Missing origin");
-    let baseOrigin: string;
-    try {
-      baseOrigin = new URL(origin).origin;
-    } catch {
-      throw new Error("Invalid origin");
-    }
-    const returnUrl = `${baseOrigin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
+    // Build return_url from a trusted server-side SITE_URL secret so it
+    // cannot be redirected to an attacker-controlled domain via a forged
+    // Origin/Referer header.
+    const returnUrl = `${getTrustedSiteOrigin()}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
 
     const session = await stripe.checkout.sessions.create({
       line_items: [{ price: stripePrice.id, quantity: 1 }],
@@ -178,15 +188,8 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     }
     await admin.from("recovery_attempts").insert({ email: data.email, ip });
 
-    // Determine site origin for absolute download links in the email.
-    const origin =
-      getRequestHeader("origin") || getRequestHeader("referer") || "";
-    let siteOrigin = "";
-    try {
-      if (origin) siteOrigin = new URL(origin).origin;
-    } catch {
-      siteOrigin = "";
-    }
+    // Trusted site origin for absolute download links in the recovery email.
+    const siteOrigin = getTrustedSiteOrigin();
 
     const { data: orders, error } = await admin
       .from("orders")
