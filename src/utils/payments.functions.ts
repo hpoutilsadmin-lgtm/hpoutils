@@ -147,6 +147,24 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       };
     }
 
+    // Send the signed download link by email (never expose it in the HTTP
+    // response body or page DOM). Idempotency key is per-session so retries
+    // of /checkout/return don't enqueue duplicates.
+    if (email && pdfPath) {
+      const siteOrigin = getTrustedSiteOrigin();
+      const downloadUrl = `${siteOrigin}${buildDownloadUrl(priceId, email)}`;
+      await enqueueTransactionalEmail({
+        templateName: "purchase-delivery",
+        recipientEmail: email,
+        idempotencyKey: `delivery-${session.id}`,
+        templateData: {
+          title: product.title,
+          downloadUrl,
+          siteOrigin,
+        },
+      });
+    }
+
     return {
       status: "paid" as const,
       email,
