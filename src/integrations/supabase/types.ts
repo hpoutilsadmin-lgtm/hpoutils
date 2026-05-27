@@ -112,6 +112,7 @@ export type Database = {
           pdf_path: string | null
           price_id: string
           product_id: string
+          refunded_at: string | null
           status: string
           stripe_payment_intent_id: string | null
           stripe_session_id: string
@@ -127,6 +128,7 @@ export type Database = {
           pdf_path?: string | null
           price_id: string
           product_id: string
+          refunded_at?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           stripe_session_id: string
@@ -142,6 +144,7 @@ export type Database = {
           pdf_path?: string | null
           price_id?: string
           product_id?: string
+          refunded_at?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           stripe_session_id?: string

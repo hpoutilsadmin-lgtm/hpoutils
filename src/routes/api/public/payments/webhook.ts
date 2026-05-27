@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, verifyWebhook, createStripeClient } from "@/lib/stripe.server";
 import { getProduct } from "@/lib/products-catalog";
+import { signDownloadToken } from "@/lib/download-token.server";
+import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
 
 let _supabase: any = null;
 function getSupabase() {
@@ -12,6 +14,12 @@ function getSupabase() {
     );
   }
   return _supabase;
+}
+
+function getTrustedSiteOrigin(): string {
+  const raw = process.env.SITE_URL;
+  if (!raw) throw new Error("SITE_URL is not configured");
+  return new URL(raw).origin;
 }
 
 async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
@@ -52,6 +60,41 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
     },
     { onConflict: "stripe_session_id" },
   );
+
+  // Envoi automatique du courriel de livraison avec un lien signé frais.
+  // Idempotent grâce à idempotency_key = session.id : si Stripe rejoue
+  // l'événement, le worker email n'enverra pas un doublon.
+  if (product && email) {
+    const token = signDownloadToken({ priceId, email });
+    const downloadUrl = `/api/public/download-pdf?token=${encodeURIComponent(token)}`;
+    await enqueueTransactionalEmail({
+      templateName: "purchase-delivery",
+      recipientEmail: email,
+      idempotencyKey: `delivery-${session.id}`,
+      templateData: {
+        title: product.title,
+        downloadUrl,
+        siteOrigin: getTrustedSiteOrigin(),
+      },
+    });
+  }
+}
+
+// charge.refunded / charge.refund.updated : marque la commande comme
+// remboursée. /api/public/download-pdf vérifie ce statut et bloque le
+// téléchargement quand status='refunded'.
+async function handleChargeRefunded(charge: any, env: StripeEnv) {
+  const paymentIntentId =
+    typeof charge.payment_intent === "string" ? charge.payment_intent : null;
+  if (!paymentIntentId) return;
+  await getSupabase()
+    .from("orders")
+    .update({
+      status: "refunded",
+      refunded_at: new Date().toISOString(),
+    })
+    .eq("stripe_payment_intent_id", paymentIntentId)
+    .eq("environment", env);
 }
 
 async function handleWebhook(req: Request, env: StripeEnv) {
@@ -61,6 +104,10 @@ async function handleWebhook(req: Request, env: StripeEnv) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
       await handleCheckoutCompleted(event.data.object, env);
+      break;
+    case "charge.refunded":
+    case "charge.refund.updated":
+      await handleChargeRefunded(event.data.object, env);
       break;
     default:
       console.log("Unhandled event:", event.type);

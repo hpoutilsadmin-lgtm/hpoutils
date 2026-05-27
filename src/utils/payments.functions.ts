@@ -65,11 +65,10 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
       mode: "payment",
       ui_mode: "embedded_page",
       return_url: returnUrl,
-      // automatic_tax requires a head office address on the Stripe account.
-      // The Lovable-managed sandbox account does not have one configured,
-      // which causes checkout sessions to fail. Disabled for now; the 25 $ CAD
-      // is treated as tax-inclusive until Stripe Tax is properly set up.
-      automatic_tax: { enabled: false },
+      // Stripe Tax calcule TPS/TVQ à partir de l'adresse de facturation.
+      // Tous les produits doivent avoir un tax_code (txcd_10000000 — biens
+      // numériques) — voir scripts/setup-tax-codes.functions.ts.
+      automatic_tax: { enabled: true },
       billing_address_collection: "required",
       metadata: { priceId: data.priceId },
     });
@@ -136,7 +135,6 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       return {
         status: "paid" as const,
         email,
-        downloadUrl: null as string | null,
         message:
           "Votre paiement est confirmé. Le fichier sera disponible sous peu — nous vous contacterons.",
       };
@@ -145,7 +143,6 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
     return {
       status: "paid" as const,
       email,
-      downloadUrl: buildDownloadUrl(priceId, email),
       message: null as string | null,
     };
   });
