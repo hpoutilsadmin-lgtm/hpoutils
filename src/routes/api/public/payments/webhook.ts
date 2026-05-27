@@ -17,9 +17,17 @@ function getSupabase() {
 }
 
 function getTrustedSiteOrigin(): string {
-  const raw = process.env.SITE_URL;
-  if (!raw) throw new Error("SITE_URL is not configured");
-  return new URL(raw).origin;
+  const raw = process.env.SITE_URL?.trim();
+  if (!raw) return "https://hp-outils.com";
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+      return parsed.origin;
+    }
+  } catch {
+    console.warn("SITE_URL is invalid; using fallback site origin");
+  }
+  return "https://hp-outils.com";
 }
 
 async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
