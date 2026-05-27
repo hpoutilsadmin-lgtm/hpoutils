@@ -218,10 +218,12 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     // Trusted site origin for absolute download links in the recovery email.
     const siteOrigin = getTrustedSiteOrigin();
 
+    // Escape LIKE metacharacters to prevent wildcard matching via user input.
+    const escapedEmail = data.email.replace(/([\\%_])/g, "\\$1");
     const { data: orders, error } = await admin
       .from("orders")
       .select("id, price_id, pdf_path, created_at, status")
-      .ilike("customer_email", data.email)
+      .ilike("customer_email", escapedEmail)
       .eq("status", "paid")
       .eq("environment", data.environment)
       .order("created_at", { ascending: false });
