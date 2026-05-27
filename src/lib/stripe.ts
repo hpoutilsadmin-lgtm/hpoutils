@@ -3,7 +3,9 @@ import { loadStripe, type Stripe } from "@stripe/stripe-js";
 type StripeEnv = "sandbox" | "live";
 
 const clientToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN as string | undefined;
-const environment: StripeEnv = clientToken?.startsWith("pk_test_") ? "sandbox" : "live";
+// Default to sandbox when the token is missing or non-live — avoids hitting
+// STRIPE_LIVE_API_KEY by accident before go-live is complete.
+const environment: StripeEnv = clientToken?.startsWith("pk_live_") ? "live" : "sandbox";
 
 let stripePromise: Promise<Stripe | null> | null = null;
 
