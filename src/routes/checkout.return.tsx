@@ -21,7 +21,7 @@ type State =
   | { kind: "loading" }
   | { kind: "missing" }
   | { kind: "pending" }
-  | { kind: "paid"; email: string; downloadUrl: string | null; message: string | null }
+  | { kind: "paid"; email: string; message: string | null }
   | { kind: "error"; message: string };
 
 function Page() {
@@ -46,7 +46,6 @@ function Page() {
           setState({
             kind: "paid",
             email: result.email,
-            downloadUrl: result.downloadUrl,
             message: result.message,
           });
       } catch (e: any) {
@@ -90,26 +89,15 @@ function Page() {
               Votre achat est confirmé.
               {state.email && <> Un reçu a été envoyé à <strong>{state.email}</strong>.</>}
             </p>
-            {state.downloadUrl ? (
-              <p style={{ marginTop: 32 }}>
-                <a
-                  href={state.downloadUrl}
-                  className="lib-link"
-                  style={{
-                    display: "inline-block",
-                    padding: "14px 28px",
-                    background: "#b04a2f",
-                    color: "#fff",
-                    borderRadius: 4,
-                    textDecoration: "none",
-                    fontWeight: 600,
-                  }}
-                >
-                  Télécharger le PDF →
-                </a>
-              </p>
-            ) : (
+            {state.message ? (
               <p style={{ marginTop: 24, color: "#b04a2f" }}>{state.message}</p>
+            ) : (
+              <p style={{ marginTop: 32, fontSize: 16 }}>
+                Un courriel contenant votre lien de téléchargement vient
+                d'être envoyé à <strong>{state.email}</strong>. Vérifiez
+                votre boîte de réception (et le dossier «&nbsp;Indésirables&nbsp;»)
+                dans les prochaines minutes.
+              </p>
             )}
             <p style={{ marginTop: 32, fontSize: 14, opacity: 0.7 }}>
               Le lien de téléchargement reste valide 7 jours. Conservez-le précieusement.
