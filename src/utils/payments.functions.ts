@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
-import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
+import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "@/lib/stripe.server";
 import { getProduct } from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
@@ -52,31 +52,35 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data }) => {
-    const stripe = createStripeClient(data.environment);
+    try {
+      const stripe = createStripeClient(data.environment);
 
-    const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
-    if (!prices.data.length) throw new Error("Price not found");
-    const stripePrice = prices.data[0];
+      const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
+      if (!prices.data.length) throw new Error("Price not found");
+      const stripePrice = prices.data[0];
 
-    // Build return_url from a trusted server-side SITE_URL secret so it
-    // cannot be redirected to an attacker-controlled domain via a forged
-    // Origin/Referer header.
-    const returnUrl = `${getTrustedSiteOrigin()}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
+      // Build return_url from a trusted server-side SITE_URL secret so it
+      // cannot be redirected to an attacker-controlled domain via a forged
+      // Origin/Referer header.
+      const returnUrl = `${getTrustedSiteOrigin()}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
 
-    const session = await stripe.checkout.sessions.create({
-      line_items: [{ price: stripePrice.id, quantity: 1 }],
-      mode: "payment",
-      ui_mode: "embedded_page",
-      return_url: returnUrl,
-      // Stripe Tax calcule TPS/TVQ à partir de l'adresse de facturation.
-      // Tous les produits doivent avoir un tax_code (txcd_10000000 — biens
-      // numériques) — voir scripts/setup-tax-codes.functions.ts.
-      automatic_tax: { enabled: true },
-      billing_address_collection: "required",
-      metadata: { priceId: data.priceId },
-    });
+      const session = await stripe.checkout.sessions.create({
+        line_items: [{ price: stripePrice.id, quantity: 1 }],
+        mode: "payment",
+        ui_mode: "embedded_page",
+        return_url: returnUrl,
+        // Stripe Tax calcule TPS/TVQ à partir de l'adresse de facturation.
+        // Tous les produits doivent avoir un tax_code (txcd_10000000 — biens
+        // numériques) — voir scripts/setup-tax-codes.functions.ts.
+        automatic_tax: { enabled: true },
+        billing_address_collection: "required",
+        metadata: { priceId: data.priceId },
+      });
 
-    return session.client_secret;
+      return { clientSecret: session.client_secret ?? "" };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
   });
 
 export const fulfillPdfOrder = createServerFn({ method: "POST" })
