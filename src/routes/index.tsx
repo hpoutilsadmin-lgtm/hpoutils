@@ -60,19 +60,19 @@ function Index() {
             <article className="pillar-card">
               <span className="pillar-num">01</span>
               <h3>Enjeux de l'humanité à l'ère de l'IA</h3>
-              <p>Voir clair sur ce qui se joue, sans paniquer ni minimiser. — 15 $ CAD</p>
+              <p>Voir clair sur ce qui se joue, sans paniquer ni minimiser. — 15 $ CAD taxes incluses</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>La faim justifie les moyens</h3>
-              <p>Mieux manger avec peu : bases simples, recettes accessibles et réflexes anti-gaspillage. — 10 $ CAD</p>
+              <p>Mieux manger avec peu : bases simples, recettes accessibles et réflexes anti-gaspillage. — 10 $ CAD taxes incluses</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Horizon Québec</h3>
-              <p>Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. — 10 $ CAD</p>
+              <p>Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. — 10 $ CAD taxes incluses</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
           </div>
