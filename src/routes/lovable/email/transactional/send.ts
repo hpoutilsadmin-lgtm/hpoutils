@@ -3,6 +3,16 @@ import { render } from '@react-email/components'
 import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 import { TEMPLATES } from '@/lib/email-templates/registry'
+import { Buffer } from 'node:buffer'
+
+function timingSafeEqualStr(a: string, b: string): boolean {
+  const ab = Buffer.from(a)
+  const bb = Buffer.from(b)
+  if (ab.length !== bb.length) return false
+  let diff = 0
+  for (let i = 0; i < ab.length; i++) diff |= ab[i] ^ bb[i]
+  return diff === 0
+}
 
 // Configuration baked in at scaffold time
 const SITE_NAME = "hpoutils"
@@ -35,8 +45,9 @@ export const Route = createFileRoute("/lovable/email/transactional/send")({
       POST: async ({ request }) => {
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
         const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+        const lovableApiKey = process.env.LOVABLE_API_KEY
 
-        if (!supabaseUrl || !supabaseServiceKey) {
+        if (!supabaseUrl || !supabaseServiceKey || !lovableApiKey) {
           console.error('Missing required environment variables')
           return Response.json(
             { error: 'Server configuration error' },
@@ -44,20 +55,18 @@ export const Route = createFileRoute("/lovable/email/transactional/send")({
           )
         }
 
-        // Verify the caller has a valid Supabase auth token.
-        // In TanStack, there is no Supabase gateway — we validate the JWT ourselves.
+        // Internal-only endpoint: require LOVABLE_API_KEY bearer token, consistent
+        // with the other /lovable/email/* routes. Prevents the endpoint from
+        // being used as an open email relay by any authenticated Supabase user.
         const authHeader = request.headers.get('Authorization')
         if (!authHeader?.startsWith('Bearer ')) {
           return Response.json({ error: 'Unauthorized' }, { status: 401 })
         }
-
-        const token = authHeader.slice('Bearer '.length).trim()
-        const supabase = createClient(supabaseUrl, supabaseServiceKey)
-        const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-
-        if (authError || !user) {
+        const provided = authHeader.slice('Bearer '.length).trim()
+        if (!timingSafeEqualStr(provided, lovableApiKey)) {
           return Response.json({ error: 'Unauthorized' }, { status: 401 })
         }
+        const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
         // Parse request body
         let templateName: string
