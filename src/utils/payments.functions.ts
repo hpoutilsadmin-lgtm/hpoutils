@@ -89,7 +89,12 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data }) => {
-    const stripe = createStripeClient(data.environment);
+    // Le préfixe de l'ID de session est la source de vérité : `cs_test_*` =
+    // sandbox, sinon live. Cela évite les erreurs "No such checkout.session"
+    // quand la page de retour s'ouvre sur le site publié (live) alors que la
+    // session a été créée en sandbox (preview).
+    const env: StripeEnv = data.sessionId.startsWith("cs_test_") ? "sandbox" : "live";
+    const stripe = createStripeClient(env);
     const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
       expand: ["line_items", "line_items.data.price"],
     });
@@ -129,7 +134,7 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
         currency: session.currency ?? "cad",
         status: "paid",
         pdf_path: pdfPath,
-        environment: data.environment,
+        environment: env,
       },
       { onConflict: "stripe_session_id" },
     );
