@@ -9,14 +9,15 @@ interface Props {
 
 export function PdfCheckout({ priceId }: Props) {
   const fetchClientSecret = async (): Promise<string> => {
-    const secret = await createPdfCheckoutSession({
+    const result = await createPdfCheckoutSession({
       data: {
         priceId,
         environment: getStripeEnvironment(),
       },
     });
-    if (!secret) throw new Error("Impossible de créer la session de paiement");
-    return secret;
+    if ("error" in result) throw new Error(result.error);
+    if (!result.clientSecret) throw new Error("Impossible de créer la session de paiement");
+    return result.clientSecret;
   };
 
   return (
