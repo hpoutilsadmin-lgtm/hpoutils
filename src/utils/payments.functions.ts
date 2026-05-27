@@ -11,21 +11,24 @@ function buildDownloadUrl(priceId: string, email: string): string {
   return `/api/public/download-pdf?token=${encodeURIComponent(token)}`;
 }
 
+const FALLBACK_SITE_ORIGIN = "https://hp-outils.com";
+
 // Trusted site origin from server-side env. Never derived from request
-// headers (Origin/Referer can be forged by clients).
+// headers (Origin/Referer can be forged by clients). If the runtime secret is
+// malformed in preview, fall back to the canonical app URL instead of crashing
+// checkout.
 function getTrustedSiteOrigin(): string {
-  const raw = process.env.SITE_URL;
-  if (!raw) throw new Error("SITE_URL is not configured");
-  let parsed: URL;
+  const raw = process.env.SITE_URL?.trim();
+  if (!raw) return FALLBACK_SITE_ORIGIN;
   try {
-    parsed = new URL(raw);
+    const parsed = new URL(raw);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+      return parsed.origin;
+    }
   } catch {
-    throw new Error("SITE_URL is invalid");
+    console.warn("SITE_URL is invalid; using fallback site origin");
   }
-  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
-    throw new Error("SITE_URL must be http(s)");
-  }
-  return parsed.origin;
+  return FALLBACK_SITE_ORIGIN;
 }
 
 let _admin: any = null;
