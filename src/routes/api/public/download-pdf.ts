@@ -26,6 +26,22 @@ export const Route = createFileRoute("/api/public/download-pdf")({
           process.env.SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!,
         );
+
+        // Refuse si la commande associée a été remboursée.
+        // (On accepte le token tant qu'aucune commande remboursée
+        // n'existe pour ce couple courriel + priceId.)
+        const { data: refundedOrder } = await admin
+          .from("orders")
+          .select("id")
+          .ilike("customer_email", payload.email)
+          .eq("price_id", payload.priceId)
+          .eq("status", "refunded")
+          .limit(1)
+          .maybeSingle();
+        if (refundedOrder) {
+          return new Response("Lien révoqué (remboursement)", { status: 410 });
+        }
+
         const { data: file, error } = await admin.storage
           .from(PDF_BUCKET)
           .download(product.pdfPath);
