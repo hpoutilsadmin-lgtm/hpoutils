@@ -39,6 +39,11 @@ export function createStripeClient(env: StripeEnv): Stripe {
   });
 }
 
+export function getStripeErrorMessage(error: unknown): string {
+  if (error instanceof Error && error.message) return error.message;
+  return "Impossible de créer la session de paiement";
+}
+
 export async function verifyWebhook(
   req: Request,
   env: StripeEnv,
