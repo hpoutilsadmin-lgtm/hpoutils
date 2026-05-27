@@ -30,10 +30,12 @@ export const Route = createFileRoute("/api/public/download-pdf")({
         // Refuse si la commande associée a été remboursée.
         // (On accepte le token tant qu'aucune commande remboursée
         // n'existe pour ce couple courriel + priceId.)
+        // Escape LIKE metacharacters to prevent wildcard matching via user input.
+        const escapedEmail = payload.email.replace(/([\\%_])/g, "\\$1");
         const { data: refundedOrder } = await admin
           .from("orders")
           .select("id")
-          .ilike("customer_email", payload.email)
+          .ilike("customer_email", escapedEmail)
           .eq("price_id", payload.priceId)
           .eq("status", "refunded")
           .limit(1)
