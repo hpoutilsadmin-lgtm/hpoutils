@@ -4,7 +4,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "HP — Des outils pour la vraie vie" },
-      { name: "description", content: "HP crée des contenus, livres, PDF et réflexions pour mieux comprendre ce qu'on vit — sans se faire avaler par la performance, la honte ou les fausses solutions." },
+      { name: "description", content: "HP crée des outils concrets, livres et PDF pour la santé mentale, le soutien émotionnel et la réflexion personnelle. Des ressources francophones accessibles pour la vraie vie." },
       { property: "og:title", content: "HP — Des outils pour la vraie vie" },
       { property: "og:description", content: "Médias, livres, PDF et réflexions pour la vraie vie." },
       { property: "og:image", content: "/images/cover-faim.jpg" },
@@ -21,9 +21,10 @@ function Index() {
           <span className="editorial-kicker">HP — outils &amp; livres pour la vraie vie</span>
           <h1>Des outils pour la <em>vraie vie</em>.</h1>
           <p className="lead">
-            HP crée des livres, PDF, réflexions, outils numériques et univers
-            créatifs pour comprendre ce qu'on vit — sans se faire avaler par la
-            performance, la honte ou les fausses solutions.
+            HP crée des outils concrets — livres, PDF, réflexions et ressources —
+            pour mieux comprendre ce qu'on vit au quotidien. Sans performance, sans
+            honte, sans fausse solution. Des ressources accessibles pour soi, ses proches
+            ou un contexte d'accompagnement.
           </p>
           <div className="lead-actions">
             <Link to="/outils" className="btn-primary">Explorer outils Sans Honte</Link>
@@ -39,10 +40,10 @@ function Index() {
           <span className="editorial-kicker">Collection</span>
           <h2>Collection <em>Sans Honte</em></h2>
           <p className="strip-intro">
-            Sans Honte, c'est pour ce qu'on cache, ce qu'on ravale, ce qu'on porte
-            sans toujours savoir le nommer. Une collection pour comprendre la honte
-            sans se juger, sans se réparer de force, sans devenir une meilleure
-            version bien propre de soi-même.
+            Des outils pour mettre des mots sur la honte, le stress, l'isolement
+            ou certaines blessures qu'on garde souvent pour soi. Une approche
+            simple, humaine et accessible — à utiliser seul, avec un proche ou
+            dans un contexte d'intervention.
           </p>
           <div className="lead-actions">
             <Link to="/outils" className="btn-primary">Explorer outils Sans Honte</Link>

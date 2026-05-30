@@ -4,9 +4,9 @@ export const Route = createFileRoute("/sans-honte")({
   head: () => ({
     meta: [
       { title: "Sans Honte — Collection HP" },
-      { name: "description", content: "Une collection pour parler de ce qu'on cache, ce qu'on porte, ce qu'on n'ose pas nommer — sans jugement, sans performance." },
+      { name: "description", content: "Des outils PDF pour mettre des mots sur la honte, le stress, l'isolement et les émotions difficiles. Soutien émotionnel simple et accessible à utiliser seul, avec un proche ou en contexte d'intervention." },
       { property: "og:title", content: "Sans Honte — HP" },
-      { property: "og:description", content: "Une collection pour ce qu'on cache, ce qu'on porte, ce qu'on n'ose pas nommer." },
+      { property: "og:description", content: "Des outils PDF concrets pour mettre des mots sur la honte, le stress et les émotions difficiles." },
       { property: "og:image", content: "/images/cover-enfants-3d.png" },
     ],
   }),
@@ -41,9 +41,8 @@ function Page() {
           <span className="kicker">Collection</span>
           <h1>Sans <em>Honte</em>.</h1>
           <p className="lead">
-            Sans Honte, c'est une collection pour parler de ce qu'on cache, ce
-            qu'on porte, ce qu'on n'ose pas nommer — sans jugement, sans
-            performance, sans petite morale propre.
+            Des outils pour mettre des mots sur la honte, le stress, l'isolement
+            ou certaines blessures qu'on garde souvent pour soi.
           </p>
         </div>
       </section>
@@ -52,14 +51,12 @@ function Page() {
         <div className="container">
           <div style={{ maxWidth: 760, margin: "0 auto 48px", textAlign: "center" }}>
             <p style={{ fontSize: 18, lineHeight: 1.7, color: "#3a2a20" }}>
-              Sans Honte, c'est pour ce qu'on cache, ce qu'on ravale, ce qu'on porte
-              sans toujours savoir le nommer. Une collection pour comprendre la honte
-              sans se juger, sans se réparer de force, sans devenir une meilleure
-              version bien propre de soi-même.
+              Créée pour aider à mieux comprendre ce qu'on vit sans se juger ni
+              devoir bien paraître, cette collection propose une approche simple,
+              humaine et accessible.
             </p>
             <p style={{ fontSize: 16, lineHeight: 1.7, color: "rgba(58,42,32,.75)", fontStyle: "italic", marginTop: 16 }}>
-              Ce n'est pas une promesse de transformation magique. C'est une façon de
-              reprendre de la place, doucement.
+              À utiliser seul, avec un proche ou dans un contexte d'intervention.
             </p>
           </div>
           <h2 className="section-title">10 kits — La collection complète</h2>

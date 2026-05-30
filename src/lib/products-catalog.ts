@@ -69,11 +69,11 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     cover: "/images/cover-horizon-quebec.jpg",
     formatLabel: "Version PDF",
     shortDescription:
-      "Une nouvelle HP sur l'amitié, la langue, le Québec, les conversations de bar et ce qu'on essaie encore de tenir ensemble quand le monde change trop vite.",
+      "Une nouvelle humaine et actuelle sur ce qui reste quand le monde change : les lieux qu'on aime, les conversations qui nous tiennent et cette envie fragile de continuer à exister ensemble.",
     backCover:
-      "Horizon Québec se déroule dans un café-bar de Montréal, un soir de pluie, autour d'une table où les discussions dérivent entre amitié, langue, époque, fatigue collective et peur de perdre quelque chose sans savoir exactement quoi.\n\nOn y croise des personnages qui parlent trop, rient parfois trop fort, s'obstinent, se contredisent et cherchent encore une manière d'habiter le Québec sans le réduire à un slogan, une nostalgie ou une guerre de mots.\n\nC'est une nouvelle sur ce qui reste quand le monde change : les lieux qu'on aime, les conversations qui nous tiennent, les silences qui disent trop, et cette envie fragile de continuer à exister ensemble.\n\nPas une grande théorie.\nUne soirée.\nUne table.\nUn bout de Québec qui respire encore.",
+      "Horizon Québec se déroule dans un café-bar de Montréal, un soir de pluie, autour d'une table où les discussions dérivent entre amitié, langue, fatigue collective et peur de perdre quelque chose sans toujours savoir quoi.\n\nOn y croise des personnages qui parlent trop, rient parfois trop fort, s'obstinent, se contredisent et cherchent encore une façon d'habiter le Québec sans le réduire à un slogan, une nostalgie ou une guerre de mots.\n\nC'est une nouvelle humaine et actuelle sur ce qui reste quand le monde change : les lieux qu'on aime, les conversations qui nous tiennent, les silences qui parlent trop, et cette envie fragile de continuer à exister ensemble.\n\nPas une grande théorie.\nUne soirée.\nUne table.\nUn bout de Québec qui respire encore.",
     audienceSentence:
-      "Ce PDF s'adresse aux personnes qui veulent lire une nouvelle sensible, actuelle et humaine sur le Québec, la langue, l'amitié, l'identité et les conversations qui restent longtemps après la dernière page.",
+      "Cette nouvelle s'adresse aux personnes qui aiment les récits sensibles, humains et ancrés dans le Québec actuel — autour de la langue, de l'identité, de l'amitié et des conversations qui restent longtemps après la dernière page.",
   },
   enfants_cuisinent_pdf_20: {
     priceId: "enfants_cuisinent_pdf_20",
