@@ -4,7 +4,7 @@ export const Route = createFileRoute("/a-propos")({
   head: () => ({
     meta: [
       { title: "À propos — HP" },
-      { name: "description", content: "HP existe pour créer des outils simples, utiles et dignes. Comprendre. Agir. Transmettre." },
+      { name: "description", content: "HP crée des outils concrets et des ressources francophones pour la santé mentale, le soutien émotionnel et l'accompagnement au quotidien. Comprendre. Agir. Transmettre." },
       { property: "og:title", content: "À propos — HP" },
       { property: "og:description", content: "Un écosystème d’outils pour la vraie vie." },
       { property: "og:image", content: "/images/photo-auteur.jpg" },
