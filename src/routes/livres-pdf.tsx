@@ -5,7 +5,7 @@ export const Route = createFileRoute("/livres-pdf")({
   head: () => ({
     meta: [
       { title: "Livres, PDF & réflexions — HP" },
-      { name: "description", content: "Livres, PDF, kits, collections et réflexions HP — à lire, télécharger et garder près de soi." },
+      { name: "description", content: "Livres, PDF, kits et collections HP. Des ressources francophones concrètes pour la réflexion personnelle, le soutien émotionnel et l'accompagnement au quotidien." },
       { property: "og:title", content: "Livres, PDF & réflexions — HP" },
       { property: "og:description", content: "La bibliothèque HP : PDF, kits, collections et réflexions." },
       { property: "og:image", content: "/images/cover-enjeux.jpg" },
@@ -55,9 +55,9 @@ function Page() {
           <span className="editorial-kicker">Bibliothèque HP</span>
           <h1>Livres, PDF &amp; <em>réflexions</em>.</h1>
           <p className="lead">
-            PDF, kits, collections et réflexions à lire. Des formats qui se gardent,
-            se prêtent, se relisent — pour avoir quelque chose de solide à la main
-            quand le reste va trop vite.
+            Livres, PDF, kits et collections pour comprendre ce qu'on vit.
+            Des formats concrets et accessibles — à garder près de soi,
+            à partager ou à utiliser en accompagnement.
           </p>
         </div>
       </section>

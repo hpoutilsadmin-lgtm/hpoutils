@@ -4,7 +4,7 @@ export const Route = createFileRoute("/outils")({
   head: () => ({
     meta: [
       { title: "Outils — Le cœur du projet HP" },
-      { name: "description", content: "Outils HP : collection Sans Honte en PDF et application interactive Les bons réflexes d'HP (bientôt disponible)." },
+      { name: "description", content: "Outils PDF concrets pour la santé mentale, le soutien émotionnel et l'accompagnement quotidien. Collection Sans Honte et ressources accessibles pour soi, ses proches ou un contexte d'intervention." },
       { property: "og:title", content: "Outils — HP" },
       { property: "og:description", content: "Des outils numériques simples pour mettre des mots, faire le tri et avancer." },
     ],
@@ -31,7 +31,7 @@ function Page() {
         <div className="container">
           <header className="tool-section-head">
             <h2>Outils Sans Honte</h2>
-            <p>La collection Sans Honte en format PDF — pour mettre des mots sur ce qu'on porte et reprendre un peu de place sans se juger.</p>
+            <p>Des outils PDF pour mettre des mots sur la honte, le stress, l'isolement ou certaines émotions difficiles. Une approche simple et accessible — à utiliser seul, avec un proche ou dans un contexte d'intervention.</p>
           </header>
           <div className="tool-grid">
             <article className="tool-card">
