@@ -60,7 +60,7 @@ export const template = {
   previewData: {
     title: 'Guide PDF — exemple',
     downloadUrl: '/api/public/download-pdf?token=example',
-    siteOrigin: 'https://hp-outils.com',
+    siteOrigin: 'https://www.hp-outils.com',
   },
 } satisfies TemplateEntry
 

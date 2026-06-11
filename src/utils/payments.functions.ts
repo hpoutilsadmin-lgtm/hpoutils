@@ -11,7 +11,7 @@ function buildDownloadUrl(priceId: string, email: string): string {
   return `/api/public/download-pdf?token=${encodeURIComponent(token)}`;
 }
 
-const FALLBACK_SITE_ORIGIN = "https://hp-outils.com";
+const FALLBACK_SITE_ORIGIN = "https://www.hp-outils.com";
 
 // Trusted site origin from server-side env. Never derived from request
 // headers (Origin/Referer can be forged by clients). If the runtime secret is
