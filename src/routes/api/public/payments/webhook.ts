@@ -18,7 +18,7 @@ function getSupabase() {
 
 function getTrustedSiteOrigin(): string {
   const raw = process.env.SITE_URL?.trim();
-  if (!raw) return "https://hp-outils.com";
+  if (!raw) return "https://www.hp-outils.com";
   try {
     const parsed = new URL(raw);
     if (parsed.protocol === "https:" || parsed.protocol === "http:") {
@@ -27,7 +27,7 @@ function getTrustedSiteOrigin(): string {
   } catch {
     console.warn("SITE_URL is invalid; using fallback site origin");
   }
-  return "https://hp-outils.com";
+  return "https://www.hp-outils.com";
 }
 
 async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {

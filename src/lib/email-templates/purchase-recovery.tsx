@@ -68,7 +68,7 @@ export const template = {
   subject: `Vos liens de téléchargement ${SITE_NAME}`,
   displayName: 'Récupération d\'achat',
   previewData: {
-    siteOrigin: 'https://hp-outils.com',
+    siteOrigin: 'https://www.hp-outils.com',
     items: [
       {
         title: 'Guide PDF — exemple',

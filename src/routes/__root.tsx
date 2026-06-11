@@ -92,6 +92,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: hpCss },
     ],
+    scripts: [
+      {
+        src: "https://static.cloudflareinsights.com/beacon.min.js",
+        defer: true,
+        "data-cf-beacon": '{"token": "208bfc7b189846a98c30479f932e5762"}',
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,

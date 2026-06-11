@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { PRODUCTS } from "@/lib/products-catalog";
 
-const BASE_URL = "https://hpoutils.lovable.app";
+const BASE_URL = "https://www.hp-outils.com";
 const STATIC_PATHS = [
   "/",
   "/outils",
