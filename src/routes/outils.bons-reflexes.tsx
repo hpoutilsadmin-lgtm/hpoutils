@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
 
 export const Route = createFileRoute("/outils/bons-reflexes")({
   head: () => ({
@@ -19,10 +18,6 @@ export const Route = createFileRoute("/outils/bons-reflexes")({
 });
 
 function Page() {
-  useEffect(() => {
-    window.location.replace("/apps/bons-reflexes/index.html");
-  }, []);
-
   return (
     <section className="subpage-content hp-reflexes-app">
       <div className="container" style={{ maxWidth: 1100, padding: "32px 16px 64px" }}>
@@ -56,11 +51,34 @@ function Page() {
         <header style={{ marginBottom: 24 }}>
           <h1 style={{ marginBottom: 8 }}>Les bons réflexes d'HP</h1>
           <p className="lead" style={{ marginBottom: 16 }}>
-            Redirection vers le jeu en cours.
+            Un jeu simple pour réfléchir aux choix du quotidien, sans pression et
+            sans jugement.
+          </p>
+          <p style={{ marginBottom: 0 }}>
+            Les bons réflexes d'HP propose de petites situations inspirées de la
+            vraie vie : cuisine, maison, entraide, émotions, sécurité,
+            débrouillardise. Disponible en français, anglais et espagnol.
           </p>
         </header>
 
-        <a href="/apps/bons-reflexes/index.html" className="btn-primary">Lancer le jeu</a>
+        <div style={{ display: "flex", justifyContent: "center", margin: "16px 0 8px" }}>
+          <a
+            href="/apps/bons-reflexes/index.html"
+            className="btn-primary"
+            style={{
+              display: "inline-block",
+              background: "#b04a2f",
+              color: "#fff",
+              padding: "14px 28px",
+              borderRadius: 999,
+              fontWeight: 700,
+              textDecoration: "none",
+              boxShadow: "0 8px 20px rgba(176,74,47,.25)",
+            }}
+          >
+            Lancer le jeu →
+          </a>
+        </div>
 
         <p style={{ marginTop: 24, fontSize: 12, color: "rgba(58,42,32,.6)", lineHeight: 1.6, textAlign: "center" }}>
           © HP 2026. Tous droits réservés. Outil éducatif informatif. Ne remplace

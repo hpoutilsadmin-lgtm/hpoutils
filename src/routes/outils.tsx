@@ -1,11 +1,6 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/outils")({
-  beforeLoad: ({ location }) => {
-    if (location.pathname === "/outils/bons-reflexes") {
-      throw redirect({ href: "/apps/bons-reflexes/index.html" });
-    }
-  },
   head: () => ({
     meta: [
       { title: "Outils — Le cœur du projet HP" },
@@ -76,7 +71,7 @@ function Page() {
                 cuisine, maison, entraide, émotions, sécurité et débrouillardise.
                 Gratuit, simple et sans pression.
               </p>
-              <a href="/apps/bons-reflexes/index.html">Jouer maintenant →</a>
+              <Link to="/outils/bons-reflexes">Jouer maintenant →</Link>
             </article>
           </div>
         </div>
