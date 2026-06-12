@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/outils/bons-reflexes")({
   head: () => ({
@@ -18,6 +19,10 @@ export const Route = createFileRoute("/outils/bons-reflexes")({
 });
 
 function Page() {
+  useEffect(() => {
+    window.location.replace("/apps/bons-reflexes/index.html");
+  }, []);
+
   return (
     <section className="subpage-content hp-reflexes-app">
       <div className="container" style={{ maxWidth: 1100, padding: "32px 16px 64px" }}>
@@ -51,39 +56,11 @@ function Page() {
         <header style={{ marginBottom: 24 }}>
           <h1 style={{ marginBottom: 8 }}>Les bons réflexes d'HP</h1>
           <p className="lead" style={{ marginBottom: 16 }}>
-            Un jeu simple pour réfléchir aux choix du quotidien, sans pression et
-            sans jugement.
-          </p>
-          <p style={{ marginBottom: 0 }}>
-            Les bons réflexes d'HP propose de petites situations inspirées de la
-            vraie vie. Le but n'est pas d'être parfait, mais de réfléchir,
-            choisir, apprendre et parfois sourire un peu. Cuisine, maison,
-            entraide, émotions, sécurité, débrouillardise : chaque question
-            invite à développer des réflexes utiles au quotidien.
+            Redirection vers le jeu en cours.
           </p>
         </header>
 
-        <div style={{
-          borderRadius: 22,
-          overflow: "hidden",
-          border: "1px solid rgba(231,216,174,.8)",
-          boxShadow: "0 10px 26px rgba(0,0,0,.07)",
-          background: "#f6f1e7",
-        }}>
-          <iframe
-            src="/apps/bons-reflexes/index.html"
-            title="Les bons réflexes d'HP — jeu interactif"
-            style={{
-              display: "block",
-              width: "100%",
-              height: "min(1400px, 90vh)",
-              minHeight: 900,
-              border: "0",
-              background: "transparent",
-            }}
-            loading="lazy"
-          />
-        </div>
+        <a href="/apps/bons-reflexes/index.html" className="btn-primary">Lancer le jeu</a>
 
         <p style={{ marginTop: 24, fontSize: 12, color: "rgba(58,42,32,.6)", lineHeight: 1.6, textAlign: "center" }}>
           © HP 2026. Tous droits réservés. Outil éducatif informatif. Ne remplace

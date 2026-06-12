@@ -71,7 +71,7 @@ function Page() {
                 cuisine, maison, entraide, émotions, sécurité et débrouillardise.
                 Gratuit, simple et sans pression.
               </p>
-              <Link to="/outils/bons-reflexes">Jouer maintenant →</Link>
+              <a href="/apps/bons-reflexes/index.html">Jouer maintenant →</a>
             </article>
           </div>
         </div>
