@@ -22,7 +22,7 @@
   </div>
   <div class="container">
     <div class="site-hero-image-frame">
-      <img class="site-hero-image" id="siteHeroImage" src="hp_bons_reflexes_hero_fr.png" alt="HP — Les bons réflexes d’HP — Des outils simples pour la vraie vie" onerror="this.style.display='none';var p=this.parentNode;p.style.cssText+=';display:flex;align-items:center;justify-content:center;min-height:200px;background:linear-gradient(135deg,#0b1422,#1a2d44);';var d=document.createElement('div');d.style.cssText='color:#f5ead4;font-family:Georgia,serif;font-size:clamp(1.4rem,3.5vw,1.9rem);font-weight:700;text-align:center;padding:0 20px;text-wrap:balance;';d.textContent=this.alt;p.appendChild(d);">
+      <img class="site-hero-image" id="siteHeroImage" src="hp_bons_reflexes_hero_fr.png" alt="HP — Les bons réflexes d’HP — Des outils simples pour la vraie vie" onerror="if(this.dataset.heroFallback)return;this.dataset.heroFallback='1';this.style.display='none';var p=this.parentNode;if(!p.querySelector('.hero-fallback')){p.style.cssText+=';display:flex;align-items:center;justify-content:center;min-height:200px;background:linear-gradient(135deg,#0b1422,#1a2d44);';var d=document.createElement('div');d.className='hero-fallback';d.style.cssText='color:#f5ead4;font-family:Georgia,serif;font-size:clamp(1.4rem,3.5vw,1.9rem);font-weight:700;text-align:center;padding:0 20px;text-wrap:balance;';d.textContent=this.alt;p.appendChild(d);}">
     </div>
     <section class="hero" aria-labelledby="mainTitle">
       <div class="hero-eyebrow" id="heroEyebrow">HP — OUTILS & LIVRES POUR LA VRAIE VIE</div>
