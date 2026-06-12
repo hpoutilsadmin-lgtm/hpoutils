@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/outils")({
   head: () => ({
@@ -13,6 +14,12 @@ export const Route = createFileRoute("/outils")({
 });
 
 function Page() {
+  useEffect(() => {
+    if (window.location.pathname === "/outils/bons-reflexes") {
+      window.location.replace("/apps/bons-reflexes/index.html");
+    }
+  }, []);
+
   return (
     <>
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
