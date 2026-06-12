@@ -1,7 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/outils")({
+  beforeLoad: ({ location }) => {
+    if (location.pathname === "/outils/bons-reflexes") {
+      throw redirect({ href: "/apps/bons-reflexes/index.html" });
+    }
+  },
   head: () => ({
     meta: [
       { title: "Outils — Le cœur du projet HP" },
@@ -14,12 +18,6 @@ export const Route = createFileRoute("/outils")({
 });
 
 function Page() {
-  useEffect(() => {
-    if (window.location.pathname === "/outils/bons-reflexes") {
-      window.location.replace("/apps/bons-reflexes/index.html");
-    }
-  }, []);
-
   return (
     <>
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
