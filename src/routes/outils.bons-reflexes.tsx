@@ -3,9 +3,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/outils/bons-reflexes")({
   head: () => ({
     meta: [
-      { title: "Les bons réflexes d'HP — Brouillon" },
-      { name: "robots", content: "noindex, nofollow" },
-      { name: "description", content: "Brouillon non public de l'application interactive Les bons réflexes d'HP." },
+      { title: "Les bons réflexes d'HP | Outil interactif gratuit" },
+      { name: "description", content: "Un jeu interactif gratuit pour réfléchir aux situations du quotidien : cuisine, maison, entraide, émotions, sécurité et débrouillardise." },
+      { property: "og:title", content: "Les bons réflexes d'HP | Outil interactif gratuit" },
+      { property: "og:description", content: "Un jeu interactif gratuit pour réfléchir aux situations du quotidien : cuisine, maison, entraide, émotions, sécurité et débrouillardise." },
+      { property: "og:url", content: "https://www.hp-outils.com/outils/bons-reflexes" },
+      { property: "og:type", content: "website" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.hp-outils.com/outils/bons-reflexes" },
     ],
   }),
   component: Page,
@@ -34,13 +40,28 @@ function Page() {
             letterSpacing: ".04em",
             textTransform: "uppercase",
           }}>
-            Brouillon — non public — Version 6.3
+            Nouveauté HP
           </span>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             <Link to="/outils" className="btn-ghost">← Retour aux outils</Link>
             <Link to="/livres-pdf" className="btn-ghost">Voir les PDF HP</Link>
           </div>
         </div>
+
+        <header style={{ marginBottom: 24 }}>
+          <h1 style={{ marginBottom: 8 }}>Les bons réflexes d'HP</h1>
+          <p className="lead" style={{ marginBottom: 16 }}>
+            Un jeu simple pour réfléchir aux choix du quotidien, sans pression et
+            sans jugement.
+          </p>
+          <p style={{ marginBottom: 0 }}>
+            Les bons réflexes d'HP propose de petites situations inspirées de la
+            vraie vie. Le but n'est pas d'être parfait, mais de réfléchir,
+            choisir, apprendre et parfois sourire un peu. Cuisine, maison,
+            entraide, émotions, sécurité, débrouillardise : chaque question
+            invite à développer des réflexes utiles au quotidien.
+          </p>
+        </header>
 
         <div style={{
           borderRadius: 22,
@@ -51,7 +72,7 @@ function Page() {
         }}>
           <iframe
             src="/apps/bons-reflexes/index.html"
-            title="Les bons réflexes d'HP — Version 6.3"
+            title="Les bons réflexes d'HP — jeu interactif"
             style={{
               display: "block",
               width: "100%",

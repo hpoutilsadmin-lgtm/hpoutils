@@ -60,18 +60,18 @@ function Page() {
         <div className="container">
           <header className="tool-section-head">
             <h2>Les bons réflexes d'HP</h2>
-            <p>Bientôt — une application interactive pour pratiquer des réflexes simples dans la vraie vie.</p>
+            <p>Un petit jeu interactif pour réfléchir à des situations de la vraie vie. Gratuit, sans inscription.</p>
           </header>
           <div className="tool-grid">
-            <article className="tool-card" style={{ opacity: 0.85 }}>
-              <span className="tool-tag" style={{ background: "rgba(176,74,47,.12)", color: "#b04a2f" }}>Bientôt disponible</span>
+            <article className="tool-card">
+              <span className="tool-tag" style={{ background: "rgba(176,74,47,.12)", color: "#b04a2f" }}>Nouveauté HP</span>
               <h3>Les bons réflexes d'HP</h3>
               <p>
-                Une application interactive pour pratiquer des réflexes simples
-                dans la vraie vie : cuisine, émotions, ménage, sécurité numérique,
-                santé mentale, communication, dépendance et organisation.
+                Un petit jeu interactif pour tester ses réflexes du quotidien :
+                cuisine, maison, entraide, émotions, sécurité et débrouillardise.
+                Gratuit, simple et sans pression.
               </p>
-              <span style={{ opacity: 0.6, fontWeight: 600 }} aria-disabled>Bientôt disponible</span>
+              <Link to="/outils/bons-reflexes">Jouer maintenant →</Link>
             </article>
           </div>
         </div>
