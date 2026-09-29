@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/outils")({
-  head: () => ({
-    meta: [
-      { title: "Outils — Le cœur du projet HP" },
-      { name: "description", content: "Outils PDF concrets pour la santé mentale, le soutien émotionnel et l'accompagnement quotidien. Collection Sans Honte et ressources accessibles pour soi, ses proches ou un contexte d'intervention." },
-      { property: "og:title", content: "Outils — HP" },
-      { property: "og:description", content: "Des outils numériques simples pour mettre des mots, faire le tri et avancer." },
-    ],
+  head: () => createSeoHead({
+    title: "Outils concrets pour la vraie vie | HP — Québec",
+    description: "Collection Sans Honte, kits PDF et jeu interactif gratuit : des outils concrets pour les situations de la vraie vie.",
+    path: "/outils",
   }),
   component: Page,
 });
@@ -31,11 +29,11 @@ function Page() {
         <div className="container">
           <header className="tool-section-head">
             <h2>Outils Sans Honte</h2>
-            <p>Des outils PDF pour mettre des mots sur la honte, le stress, l'isolement ou certaines émotions difficiles. Une approche simple et accessible — à utiliser seul, avec un proche ou dans un contexte d'intervention.</p>
+            <p>Dix kits PDF pour les papiers, les repas, le logement, l'entraide, la fraude et d'autres situations concrètes.</p>
           </header>
           <div className="tool-grid">
             <article className="tool-card">
-              <span className="tool-tag">Collection PDF — 60 $ CAD taxes incluses</span>
+              <span className="tool-tag">Collection PDF — 60 $ CAD, aucune taxe ajoutée</span>
               <h3>Collection Sans Honte — 10 kits</h3>
               <p>
                 Les 10 kits Sans Honte en un seul PDF — Papiers, Frigo, Tenir Debout,
@@ -44,7 +42,7 @@ function Page() {
               <Link to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF →</Link>
             </article>
             <article className="tool-card">
-              <span className="tool-tag">Kit PDF — 10 $ CAD taxes incluses</span>
+              <span className="tool-tag">Kit PDF — 10 $ CAD, aucune taxe ajoutée</span>
               <h3>Kit Sans Honte (au choix)</h3>
               <p>
                 Un kit PDF pour explorer la honte, mettre des mots sur ce qu'on porte

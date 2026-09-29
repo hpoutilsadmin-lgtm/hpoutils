@@ -1,15 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PdfCover } from "@/components/PdfCover";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/livres-pdf")({
-  head: () => ({
-    meta: [
-      { title: "Livres, PDF & réflexions — HP" },
-      { name: "description", content: "Livres, PDF, kits et collections HP. Des ressources francophones concrètes pour la réflexion personnelle, le soutien émotionnel et l'accompagnement au quotidien." },
-      { property: "og:title", content: "Livres, PDF & réflexions — HP" },
-      { property: "og:description", content: "La bibliothèque HP : PDF, kits, collections et réflexions." },
-      { property: "og:image", content: "/images/cover-enjeux.jpg" },
-    ],
+  head: () => createSeoHead({
+    title: "PDF à télécharger : kits, guides et livres | HP — Québec",
+    description: "15 PDF à télécharger : collection Sans Honte, cuisine, organisation, famille. Petits prix, aucune taxe ajoutée.",
+    path: "/livres-pdf",
+    imagePath: "/images/sans-honte/collection-cover.png",
   }),
   component: Page,
 });
@@ -55,9 +53,8 @@ function Page() {
           <span className="editorial-kicker">Bibliothèque HP</span>
           <h1>Livres, PDF &amp; <em>réflexions</em>.</h1>
           <p className="lead">
-            Livres, PDF, kits et collections pour comprendre ce qu'on vit.
-            Des formats concrets et accessibles — à garder près de soi,
-            à partager ou à utiliser en accompagnement.
+             Des PDF, kits et livres concrets à télécharger pour la cuisine,
+             l'organisation, la famille et les situations de la vraie vie.
           </p>
         </div>
       </section>
@@ -68,7 +65,7 @@ function Page() {
               return (
               <article key={b.title} className="library-item">
                 <PdfCover src={b.cover} alt={`Couverture ${b.title}`} />
-                <div className="library-meta"><span className="dot" />{b.tag} — {b.price} CAD taxes incluses</div>
+                <div className="library-meta"><span className="dot" />{b.tag} — {b.price} CAD, aucune taxe ajoutée</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
                 <Link className="lib-link" to="/pdf/$slug" params={{ slug: b.slug }}>

@@ -1,14 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "HP — Des outils pour la vraie vie" },
-      { name: "description", content: "HP crée des outils concrets, livres et PDF pour la santé mentale, le soutien émotionnel et la réflexion personnelle. Des ressources francophones accessibles pour la vraie vie." },
-      { property: "og:title", content: "HP — Des outils pour la vraie vie" },
-      { property: "og:description", content: "Médias, livres, PDF et réflexions pour la vraie vie." },
-      { property: "og:image", content: "/images/cover-faim.jpg" },
-    ],
+  head: () => createSeoHead({
+    title: "HP — Kits PDF et outils concrets pour la vraie vie | Québec",
+    description: "Kits PDF Sans Honte, guides pratiques et ateliers à Terrebonne et dans Lanaudière. 10 $ le kit, aucune taxe ajoutée. Créé au Québec.",
+    path: "/",
+    imagePath: "/images/sans-honte/collection-cover.png",
   }),
   component: Index,
 });
@@ -18,16 +17,14 @@ function Index() {
     <>
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
-          <span className="editorial-kicker">HP — outils &amp; livres pour la vraie vie</span>
-          <h1>Des outils pour la <em>vraie vie</em>.</h1>
+          <span className="editorial-kicker">HP — créé au Québec</span>
+          <h1>Des outils concrets pour la <em>vraie vie</em>.</h1>
           <p className="lead">
-            HP crée des outils concrets — livres, PDF, réflexions et ressources —
-            pour mieux comprendre ce qu'on vit au quotidien. Sans performance, sans
-            honte, sans fausse solution. Des ressources accessibles pour soi, ses proches
-            ou un contexte d'accompagnement.
+            Des PDF et des kits à télécharger, des livres, et des ateliers sur mesure —
+            créés au Québec.
           </p>
           <div className="lead-actions">
-            <Link to="/outils" className="btn-primary">Explorer outils Sans Honte</Link>
+            <Link to="/sans-honte" className="btn-primary">Découvrir les kits Sans Honte</Link>
             <Link to="/livres-pdf" className="btn-primary">Voir livres, PDF &amp; réflexions</Link>
             <Link to="/univers" className="btn-primary">Découvrir Univers alternatif</Link>
           </div>
@@ -40,13 +37,11 @@ function Index() {
           <span className="editorial-kicker">Collection</span>
           <h2>Collection <em>Sans Honte</em></h2>
           <p className="strip-intro">
-            Des outils pour mettre des mots sur la honte, le stress, l'isolement
-            ou certaines blessures qu'on garde souvent pour soi. Une approche
-            simple, humaine et accessible — à utiliser seul, avec un proche ou
-            dans un contexte d'intervention.
+             Dix kits PDF pratiques sur les papiers, le frigo, le logement,
+             l'entraide, la fraude et d'autres situations de la vraie vie.
           </p>
           <div className="lead-actions">
-            <Link to="/outils" className="btn-primary">Explorer outils Sans Honte</Link>
+             <Link to="/sans-honte" className="btn-primary">Voir les 10 kits Sans Honte</Link>
           </div>
         </div>
       </section>
@@ -61,19 +56,19 @@ function Index() {
             <article className="pillar-card">
               <span className="pillar-num">01</span>
               <h3>Enjeux de l'humanité à l'ère de l'IA</h3>
-              <p>Voir clair sur ce qui se joue, sans paniquer ni minimiser. — 15 $ CAD taxes incluses</p>
+              <p>Voir clair sur ce qui se joue, sans paniquer ni minimiser. — 15 $ CAD, aucune taxe ajoutée</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>La faim justifie les moyens</h3>
-              <p>Mieux manger avec peu : bases simples, recettes accessibles et réflexes anti-gaspillage. — 10 $ CAD taxes incluses</p>
+              <p>Mieux manger avec peu : bases simples, recettes accessibles et réflexes anti-gaspillage. — 10 $ CAD, aucune taxe ajoutée</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Horizon Québec</h3>
-              <p>Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. — 10 $ CAD taxes incluses</p>
+              <p>Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. — 10 $ CAD, aucune taxe ajoutée</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
             </article>
           </div>
@@ -141,13 +136,7 @@ function Index() {
           <p className="strip-intro" style={{ margin: "0 auto 36px" }}>
             Recevoir les nouveaux outils, les contenus utiles, les dates d'ateliers et les prochaines sorties HP.
           </p>
-          <div className="lead-actions" style={{ justifyContent: "center" }}>
-            <Link to="/contact" className="btn-primary">Me contacter</Link>
-            <a href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ color: "#2a1a12", borderColor: "rgba(176,74,47,.5)" }}>Recevoir les nouvelles HP</a>
-          </div>
-          <p style={{ marginTop: 28, fontSize: 15, color: "rgba(42,26,18,.7)" }}>
-            <a href="mailto:hpoutils.admin@gmail.com" style={{ color: "#b04a2f", fontWeight: 700 }}>hpoutils.admin@gmail.com</a>
-          </p>
+          <NewsletterSignup />
         </div>
       </section>
     </>

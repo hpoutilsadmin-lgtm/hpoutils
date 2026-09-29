@@ -27,7 +27,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Enjeux de l'humanité à l'ère de l'IA",
     pdfPath: "enjeux-humanite.pdf",
     downloadFileName: "Enjeux-de-l-humanite-a-l-ere-de-l-IA.pdf",
-    priceLabel: "15 $ CAD taxes incluses",
+    priceLabel: "15 $ CAD aucune taxe ajoutée",
     blurb:
       "Voir clair sur ce qui se joue, sans paniquer ni minimiser. Téléchargement immédiat après paiement.",
     cover: "/images/cover-enjeux.jpg",
@@ -45,7 +45,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "La faim justifie les moyens",
     pdfPath: "faim-justifie-les-moyens.pdf",
     downloadFileName: "La-faim-justifie-les-moyens.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb:
       "Mieux manger avec peu, ça s'apprend. Téléchargement immédiat après paiement.",
     cover: "/images/cover-faim.jpg",
@@ -63,7 +63,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Horizon Québec",
     pdfPath: "horizon-quebec.pdf",
     downloadFileName: "Horizon-Quebec.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb:
       "Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. Téléchargement immédiat après paiement.",
     cover: "/images/cover-horizon-quebec.jpg",
@@ -81,7 +81,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Les enfants cuisinent pour faire plaisir",
     pdfPath: "enfants-cuisinent.pdf",
     downloadFileName: "Les-enfants-cuisinent.pdf",
-    priceLabel: "20 $ CAD taxes incluses",
+    priceLabel: "20 $ CAD aucune taxe ajoutée",
     blurb:
       "Un projet doux pour transmettre le plaisir, pas la performance. Téléchargement immédiat après paiement.",
     cover: "/images/cover-enfants.jpg",
@@ -99,10 +99,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — Frigo",
     pdfPath: "sans-honte-frigo.pdf",
     downloadFileName: "Kit-Sans-Honte-Frigo.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "Repères concrets pour manger sans se juger.",
     cover: "/images/sans-honte/kit-03.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui veulent simplifier les repas et composer avec ce qu'elles ont déjà. Il propose des repères concrets pour organiser le frigo, réduire le gaspillage et manger sans viser la perfection.",
   },
   sans_honte_tenir_debout_pdf_10: {
     priceId: "sans_honte_tenir_debout_pdf_10",
@@ -110,10 +112,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Tenir Debout Sans Honte",
     pdfPath: "sans-honte-tenir-debout.pdf",
     downloadFileName: "Tenir-Debout-Sans-Honte.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "Quand la journée tient sur un fil — un kit court.",
     cover: "/images/sans-honte/kit-04.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui traversent des journées où les tâches ordinaires semblent trop lourdes. Il aide à choisir l'essentiel, avancer par petites étapes et garder des repères simples quand tout tient sur un fil.",
   },
   sans_honte_papiers_pdf_10: {
     priceId: "sans_honte_papiers_pdf_10",
@@ -121,10 +125,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — Papiers",
     pdfPath: "sans-honte-papiers.pdf",
     downloadFileName: "Kit-Sans-Honte-Papiers.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "24 fiches pour reprendre le contrôle de ses papiers.",
     cover: "/images/sans-honte/kit-01.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui se sentent dépassées par le courrier, les factures ou les démarches administratives. Ses 24 fiches aident à trier, classer et reprendre le contrôle des papiers sans tout régler en une seule journée.",
   },
   sans_honte_me_reconnaitre_pdf_10: {
     priceId: "sans_honte_me_reconnaitre_pdf_10",
@@ -132,10 +138,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — Me Reconnaître",
     pdfPath: "sans-honte-me-reconnaitre.pdf",
     downloadFileName: "Kit-Sans-Honte-Me-Reconnaitre.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "Adapter sa journée à son cerveau, sans se juger.",
     cover: "/images/sans-honte/kit-02.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui veulent mieux reconnaître leur façon de fonctionner au quotidien. Il propose des outils pour adapter la journée à son énergie, ses besoins et son rythme, sans se comparer.",
   },
   sans_honte_seconde_main_pdf_10: {
     priceId: "sans_honte_seconde_main_pdf_10",
@@ -143,10 +151,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — Seconde Main",
     pdfPath: "sans-honte-seconde-main.pdf",
     downloadFileName: "Kit-Sans-Honte-Seconde-Main.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "S'équiper et consommer autrement, simplement.",
     cover: "/images/sans-honte/kit-05.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui veulent s'habiller, se meubler ou s'équiper en seconde main, par choix ou par nécessité. Il rassemble des repères pour acheter, vendre, donner et récupérer simplement, sans jugement.",
   },
   sans_honte_entraide_pdf_10: {
     priceId: "sans_honte_entraide_pdf_10",
@@ -154,10 +164,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — Entraide",
     pdfPath: "sans-honte-entraide.pdf",
     downloadFileName: "Kit-Sans-Honte-Entraide.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "Donner et recevoir de l'aide, sans honte.",
     cover: "/images/sans-honte/kit-06.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui hésitent à demander de l'aide ou ne savent pas toujours comment en offrir. Il propose des façons concrètes de formuler un besoin, poser ses limites et créer une entraide respectueuse.",
   },
   sans_honte_fraude_pdf_10: {
     priceId: "sans_honte_fraude_pdf_10",
@@ -165,10 +177,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — Fraude",
     pdfPath: "sans-honte-fraude.pdf",
     downloadFileName: "Kit-Sans-Honte-Fraude.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "Reconnaître, réagir, se protéger.",
     cover: "/images/sans-honte/kit-07.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui veulent reconnaître les arnaques courantes et savoir quoi faire devant un message suspect. Il donne des réflexes clairs pour vérifier, réagir et protéger ses renseignements sans avoir honte d'avoir douté.",
   },
   sans_honte_logement_pdf_10: {
     priceId: "sans_honte_logement_pdf_10",
@@ -176,10 +190,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — Logement",
     pdfPath: "sans-honte-logement.pdf",
     downloadFileName: "Kit-Sans-Honte-Logement.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "Repères concrets autour du logement.",
     cover: "/images/sans-honte/kit-08.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui cherchent à garder, retrouver ou mieux organiser un chez-soi. Il réunit des repères concrets pour préparer ses démarches, comprendre une situation et savoir vers qui se tourner.",
   },
   sans_honte_proche_aidant_pdf_10: {
     priceId: "sans_honte_proche_aidant_pdf_10",
@@ -187,10 +203,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — Proche Aidant",
     pdfPath: "sans-honte-proche-aidant.pdf",
     downloadFileName: "Kit-Sans-Honte-Proche-Aidant.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "Tenir le rôle de proche aidant sans s'épuiser.",
     cover: "/images/sans-honte/kit-09.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes qui soutiennent régulièrement un proche et qui portent beaucoup de responsabilités. Il aide à nommer ce qui pèse, organiser l'aide et préserver une place pour ses propres besoins.",
   },
   sans_honte_72_heures_pdf_10: {
     priceId: "sans_honte_72_heures_pdf_10",
@@ -198,10 +216,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Kit Sans Honte — 72 Heures",
     pdfPath: "sans-honte-72-heures.pdf",
     downloadFileName: "Kit-Sans-Honte-72-Heures.pdf",
-    priceLabel: "10 $ CAD taxes incluses",
+    priceLabel: "10 $ CAD aucune taxe ajoutée",
     blurb: "Se préparer aux 72 premières heures d'une urgence.",
     cover: "/images/sans-honte/kit-10.jpg",
     formatLabel: "Kit PDF",
+    audienceSentence:
+      "Ce kit s'adresse aux personnes et aux familles qui veulent se préparer aux 72 premières heures d'une urgence. Il fournit une méthode simple pour vérifier les besoins essentiels, rassembler le matériel et établir un plan réaliste.",
   },
   sans_honte_collection_pdf_60: {
     priceId: "sans_honte_collection_pdf_60",
@@ -209,7 +229,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Collection Sans Honte — 10 kits",
     pdfPath: "sans-honte-collection.pdf",
     downloadFileName: "Collection-Sans-Honte.pdf",
-    priceLabel: "60 $ CAD taxes incluses",
+    priceLabel: "60 $ CAD aucune taxe ajoutée",
     blurb:
       "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète en un seul téléchargement.",
     cover: "/images/sans-honte/collection-cover.png",

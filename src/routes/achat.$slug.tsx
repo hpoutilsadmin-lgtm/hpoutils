@@ -2,6 +2,7 @@ import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { PdfCheckout } from "@/components/PdfCheckout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { getProductBySlug } from "@/lib/products-catalog";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/achat/$slug")({
   loader: ({ params }) => {
@@ -9,18 +10,16 @@ export const Route = createFileRoute("/achat/$slug")({
     if (!product) throw notFound();
     return { product };
   },
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: loaderData ? `Acheter — ${loaderData.product.title} (PDF)` : "Acheter" },
-      {
-        name: "description",
-        content: loaderData
-          ? `Achetez la version PDF de ${loaderData.product.title}. Téléchargement immédiat après paiement sécurisé.`
-          : "",
-      },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const product = loaderData?.product;
+    return createSeoHead({
+      title: product ? `Acheter — ${product.title} (PDF)` : "Acheter un PDF — HP",
+      description: product ? `Achetez ${product.title} en PDF. ${product.priceLabel}. Téléchargement après paiement sécurisé.` : "Achetez un PDF HP.",
+      path: product ? `/achat/${product.slug}` : "/livres-pdf",
+      type: "product",
+      noindex: true,
+    });
+  },
   notFoundComponent: () => (
     <section className="subpage-content">
       <div className="container" style={{ maxWidth: 720, textAlign: "center", padding: "64px 24px" }}>
@@ -69,6 +68,7 @@ function Page() {
         <div className="container" style={{ maxWidth: 920 }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32 }}>
             <PdfCheckout priceId={product.priceId} />
+            <p className="purchase-note">PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé</p>
           </div>
         </div>
       </section>

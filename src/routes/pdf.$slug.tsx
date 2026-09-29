@@ -1,6 +1,7 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { getProductBySlug, type DigitalProduct } from "@/lib/products-catalog";
 import { PdfCover } from "@/components/PdfCover";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/pdf/$slug")({
   loader: ({ params }) => {
@@ -8,21 +9,19 @@ export const Route = createFileRoute("/pdf/$slug")({
     if (!product) throw notFound();
     return { product };
   },
-  head: ({ loaderData }) => ({
-    meta: [
-      {
-        title: loaderData
-          ? `${loaderData.product.title} — Aperçu PDF`
-          : "Aperçu PDF",
-      },
-      {
-        name: "description",
-        content: loaderData
-          ? `Aperçu de ${loaderData.product.title} — ${loaderData.product.priceLabel}. PDF téléchargeable après paiement.`
-          : "",
-      },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const product = loaderData?.product;
+    if (!product) return createSeoHead({ title: "Aperçu PDF — HP", description: "Découvrez les PDF et kits HP.", path: "/livres-pdf" });
+    const price = product.priceLabel.replace(" CAD aucune taxe ajoutée", "");
+    const description = `${product.backCover ?? product.shortDescription ?? product.blurb} ${price} CAD, aucune taxe ajoutée. Téléchargement immédiat.`;
+    return createSeoHead({
+      title: `${product.title} — PDF à télécharger | HP`,
+      description,
+      path: `/pdf/${product.slug}`,
+      imagePath: product.cover,
+      type: "product",
+    });
+  },
   notFoundComponent: () => (
     <section className="subpage-content">
       <div className="container" style={{ maxWidth: 720, textAlign: "center", padding: "64px 24px" }}>
@@ -122,7 +121,7 @@ function Page() {
               {fmt} — {product.priceLabel}
             </div>
             <p style={{ fontSize: 14, color: "rgba(58,42,32,.7)", fontStyle: "italic", marginBottom: 16 }}>
-              PDF téléchargeable immédiatement après paiement.
+              PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé
             </p>
             <Link
               to="/achat/$slug"
@@ -132,6 +131,15 @@ function Page() {
             >
               {buyLabel(fmt)} — {product.priceLabel}
             </Link>
+            {fmt === "Kit PDF" && (
+              <Link
+                to="/pdf/$slug"
+                params={{ slug: "sans-honte-collection" }}
+                className="collection-offer"
+              >
+                Les 10 kits Sans Honte pour 60 $ au lieu de 100 $ — Voir la collection →
+              </Link>
+            )}
           </div>
 
           <div>
