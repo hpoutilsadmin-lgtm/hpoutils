@@ -101,6 +101,57 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_signup_attempts: {
+        Row: {
+          created_at: string
+          email_hash: string
+          id: string
+          ip_hash: string | null
+        }
+        Insert: {
+          created_at?: string
+          email_hash: string
+          id?: string
+          ip_hash?: string | null
+        }
+        Update: {
+          created_at?: string
+          email_hash?: string
+          id?: string
+          ip_hash?: string | null
+        }
+        Relationships: []
+      }
+      newsletter_signups: {
+        Row: {
+          consent_text: string
+          consented_at: string
+          created_at: string
+          email: string
+          id: string
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          consent_text: string
+          consented_at?: string
+          created_at?: string
+          email: string
+          id?: string
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          consent_text?: string
+          consented_at?: string
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           amount_total: number
