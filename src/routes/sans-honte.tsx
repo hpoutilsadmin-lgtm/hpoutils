@@ -61,7 +61,7 @@ function Page() {
           </div>
           <h2 className="section-title">10 kits — La collection complète</h2>
           <p style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 32px", color: "#5a4a3f", fontSize: 16 }}>
-            Chaque kit est un PDF imprimable — 10 $ CAD taxes incluses par kit, téléchargement immédiat après paiement.
+            Chaque kit est un PDF imprimable — 10 $ CAD aucune taxe ajoutée par kit, téléchargement immédiat après paiement.
           </p>
           <div className="library-grid">
             {KITS.map((k) => (
@@ -71,7 +71,7 @@ function Page() {
                   <span className="kit-badge">N°{k.n}</span>
                   <span className="kit-watermark">Aperçu • HP</span>
                 </div>
-                <div className="library-meta"><span className="dot" />Kit PDF — 10 $ CAD taxes incluses</div>
+                <div className="library-meta"><span className="dot" />Kit PDF — 10 $ CAD aucune taxe ajoutée</div>
                 <h3>{k.title}</h3>
                 <p>{k.sub}</p>
                 <Link className="lib-link" to="/pdf/$slug" params={{ slug: k.slug }}>Découvrir le kit PDF →</Link>
@@ -81,7 +81,7 @@ function Page() {
           <div className="cta-band" style={{ marginTop: 48 }}>
             <div>
               <h3>La collection complète — les 10 kits</h3>
-              <p>Toute la collection Sans Honte en un seul PDF — Collection PDF — 60 $ CAD taxes incluses au lieu de 100 $. Téléchargement immédiat.</p>
+              <p>Toute la collection Sans Honte en un seul PDF — Collection PDF — 60 $ CAD aucune taxe ajoutée au lieu de 100 $. Téléchargement immédiat.</p>
             </div>
             <Link className="action-btn" to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF</Link>
           </div>

@@ -68,7 +68,7 @@ function Page() {
               return (
               <article key={b.title} className="library-item">
                 <PdfCover src={b.cover} alt={`Couverture ${b.title}`} />
-                <div className="library-meta"><span className="dot" />{b.tag} — {b.price} CAD taxes incluses</div>
+                <div className="library-meta"><span className="dot" />{b.tag} — {b.price} CAD aucune taxe ajoutée</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
                 <Link className="lib-link" to="/pdf/$slug" params={{ slug: b.slug }}>

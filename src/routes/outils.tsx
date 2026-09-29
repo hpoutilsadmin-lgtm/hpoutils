@@ -35,7 +35,7 @@ function Page() {
           </header>
           <div className="tool-grid">
             <article className="tool-card">
-              <span className="tool-tag">Collection PDF — 60 $ CAD taxes incluses</span>
+              <span className="tool-tag">Collection PDF — 60 $ CAD aucune taxe ajoutée</span>
               <h3>Collection Sans Honte — 10 kits</h3>
               <p>
                 Les 10 kits Sans Honte en un seul PDF — Papiers, Frigo, Tenir Debout,
@@ -44,7 +44,7 @@ function Page() {
               <Link to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF →</Link>
             </article>
             <article className="tool-card">
-              <span className="tool-tag">Kit PDF — 10 $ CAD taxes incluses</span>
+              <span className="tool-tag">Kit PDF — 10 $ CAD aucune taxe ajoutée</span>
               <h3>Kit Sans Honte (au choix)</h3>
               <p>
                 Un kit PDF pour explorer la honte, mettre des mots sur ce qu'on porte
