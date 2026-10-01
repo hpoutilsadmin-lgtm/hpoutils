@@ -1,22 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/ateliers")({
-  head: () => ({
-    meta: [
-      { title: "Ateliers HP — prolonger les outils sur le terrain" },
-      { name: "description", content: "Les ateliers HP prolongent les outils dans les groupes, les organismes et les milieux qui veulent réfléchir autrement." },
-      { property: "og:title", content: "Ateliers — HP" },
-      { property: "og:description", content: "Ateliers cuisine, IA / esprit critique, BD HP et activités sur mesure." },
-    ],
+  head: () => createSeoHead({
+    title: "Ateliers sur mesure pour organismes et écoles | HP — Lanaudière",
+    description: "Ateliers cuisine, survie alimentaire et hygiène à Terrebonne et dans Lanaudière. Devis sur mesure : hpoutils.admin@gmail.com.",
+    path: "/ateliers",
   }),
   component: Page,
 });
 
 const ATELIERS = [
-  { title: "Atelier cuisine", desc: "Cuisiner simple, comprendre les bases, utiliser ce qu'on a — sans recettes parfaites ni jugement." },
-  { title: "Atelier IA / esprit critique", desc: "Comprendre les outils, les risques, les bons réflexes et les dérives, sans panique." },
-  { title: "Atelier BD HP", desc: "Créer une page BD personnalisée à partir d'un personnage, d'une émotion, d'un thème et d'un décor." },
-  { title: "Activité sur mesure", desc: "Adapter un atelier à votre milieu — école, organisme, groupe, famille élargie ou milieu communautaire." },
+  { title: "Les enfants cuisinent", duration: "90 min", price: "Dès 250 $", desc: "Un atelier pratique pour cuisiner ensemble, essayer, apprendre et gagner en autonomie." },
+  { title: "Hygiène & salubrité", duration: "60 à 90 min", price: "Dès 225 $", desc: "Une sensibilisation concrète aux bons gestes d'hygiène et de salubrité dans la vie quotidienne." },
+  { title: "Survie alimentaire", duration: "90 min", price: "Dès 250 $", desc: "Des repères pour planifier, conserver et cuisiner avec les ressources disponibles quand le quotidien se complique." },
+  { title: "Marché du travail — De la cuisine à…", duration: "60 à 90 min", price: "Dès 225 $", desc: "Relier les gestes appris en cuisine aux compétences utiles dans les études, le travail et la vie de groupe." },
+  { title: "Fais ton smoothie", duration: "60 min", price: "Dès 200 $ + ingrédients", desc: "Une activité participative pour découvrir, mesurer, préparer et goûter un smoothie ensemble." },
 ];
 
 function Page() {
@@ -27,13 +26,12 @@ function Page() {
           <span className="editorial-kicker">Ateliers HP</span>
           <h1>Des ateliers pour mettre les outils en <em>mouvement</em>.</h1>
           <p className="lead">
-            Les ateliers HP prolongent les outils dans les groupes, les organismes
-            et les milieux qui veulent réfléchir autrement. Ils ne sont pas le
-            centre du projet : ils sont une façon de faire vivre les ressources sur
-            le terrain.
+            Cinq ateliers pratiques pour les organismes, les écoles et les groupes
+            de Terrebonne, de Lanaudière et des environs. Chaque proposition peut
+            être adaptée à votre milieu.
           </p>
           <div className="lead-actions">
-            <a className="btn-primary" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Demander un atelier</a>
+            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">Demander un atelier</a>
             <Link to="/outils" className="btn-ghost">Voir les outils</Link>
           </div>
         </div>
@@ -46,12 +44,13 @@ function Page() {
               <article key={a.title} className="pillar-card">
                 <span className="pillar-num">{String(i + 1).padStart(2, "0")}</span>
                 <h3>{a.title}</h3>
+                <p className="workshop-meta">{a.duration} · {a.price}</p>
                 <p>{a.desc}</p>
               </article>
             ))}
           </div>
           <div className="lead-actions" style={{ marginTop: 32, justifyContent: "center" }}>
-            <a className="btn-primary" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Demander un atelier</a>
+            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a>
           </div>
         </div>
       </section>
