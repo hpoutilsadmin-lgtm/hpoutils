@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/univers")({
-  head: () => ({
-    meta: [
-      { title: "Univers alternatif — HP" },
-      { name: "description", content: "BD, musique, personnages et récits HP — une autre façon de parler du réel : imparfait, lucide, humain." },
-      { property: "og:title", content: "Univers alternatif — HP" },
-      { property: "og:description", content: "BD, musique, personnages et récits HP." },
-    ],
+  head: () => createSeoHead({
+    title: "Univers alternatif — HP",
+    description: "BD, musique, personnages et récits HP — une autre façon de parler du réel : imparfait, lucide et humain.",
+    path: "/univers",
   }),
   component: Page,
 });

@@ -7,7 +7,6 @@ export const Route = createFileRoute("/")({
     title: "HP — Kits PDF et outils concrets pour la vraie vie | Québec",
     description: "Kits PDF Sans Honte, guides pratiques et ateliers à Terrebonne et dans Lanaudière. 10 $ le kit, aucune taxe ajoutée. Créé au Québec.",
     path: "/",
-    imagePath: "/images/sans-honte/collection-cover.png",
   }),
   component: Index,
 });

@@ -1,14 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/transmettre")({
-  head: () => ({
-    meta: [
-      { title: "Transmettre — Les enfants cuisinent pour faire plaisir — HP" },
-      { name: "description", content: "Ressources et ateliers pour aider enfants, familles, écoles et organismes à apprendre en cuisinant et en partageant." },
-      { property: "og:title", content: "Transmettre — HP" },
-      { property: "og:description", content: "Des ateliers pour grandir ensemble." },
-      { property: "og:image", content: "/images/cover-enfants-3d.png" },
-    ],
+  head: () => createSeoHead({
+    title: "Transmettre — Les enfants cuisinent pour faire plaisir — HP",
+    description: "Ressources et ateliers pour aider enfants, familles, écoles et organismes à apprendre en cuisinant et en partageant.",
+    path: "/transmettre",
   }),
   component: Page,
 });

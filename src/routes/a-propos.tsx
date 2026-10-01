@@ -1,14 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/a-propos")({
-  head: () => ({
-    meta: [
-      { title: "À propos — HP" },
-      { name: "description", content: "HP crée au Québec des PDF, des kits, des livres et des ateliers sur mesure : des outils concrets pour la vraie vie." },
-      { property: "og:title", content: "À propos — HP" },
-      { property: "og:description", content: "HP crée au Québec des PDF, des kits, des livres et des ateliers sur mesure : des outils concrets pour la vraie vie." },
-      { property: "og:image", content: "/images/photo-auteur.jpg" },
-    ],
+  head: () => createSeoHead({
+    title: "À propos de HP — Des outils créés au Québec",
+    description: "HP crée au Québec des PDF, des kits, des livres et des ateliers sur mesure : des outils concrets pour la vraie vie.",
+    path: "/a-propos",
   }),
   component: Page,
 });

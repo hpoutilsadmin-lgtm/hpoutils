@@ -1,14 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/comprendre")({
-  head: () => ({
-    meta: [
-      { title: "Comprendre — Les enjeux de l’humanité — HP" },
-      { name: "description", content: "Une réflexion claire sur les grandes transformations : IA, ressources, société, éducation, gouvernance." },
-      { property: "og:title", content: "Comprendre — HP" },
-      { property: "og:description", content: "Pour agir avec lucidité et espérance." },
-      { property: "og:image", content: "/images/cover-enjeux.jpg" },
-    ],
+  head: () => createSeoHead({
+    title: "Comprendre — Les enjeux de l'humanité — HP",
+    description: "Une réflexion claire sur les grandes transformations : IA, ressources, société, éducation et gouvernance.",
+    path: "/comprendre",
   }),
   component: Page,
 });

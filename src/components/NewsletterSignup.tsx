@@ -41,7 +41,7 @@ export function NewsletterSignup() {
           aria-describedby="newsletter-consent newsletter-error"
         />
         <Button type="submit" disabled={status === "loading"} className="btn-primary">
-          {status === "loading" ? "Inscription…" : "Recevoir l'extrait gratuit"}
+          {status === "loading" ? "Inscription…" : "M'inscrire aux nouveautés"}
         </Button>
       </div>
       <p id="newsletter-consent" className="newsletter-consent">
