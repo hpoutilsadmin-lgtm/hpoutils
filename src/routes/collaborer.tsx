@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/collaborer")({
-  head: () => ({
-    meta: [
-      { title: "Collaborer — Ateliers et partenariats HP" },
-      { name: "description", content: "Ateliers HP pour écoles, bibliothèques, organismes et familles. Cuisine, IA / esprit critique, BD personnalisée." },
-      { property: "og:title", content: "Collaborer — HP" },
-      { property: "og:description", content: "Adapter les outils HP à votre milieu." },
-    ],
+  head: () => createSeoHead({
+    title: "Collaborer avec HP — Ateliers sur mesure au Québec",
+    description: "Collaborations et ateliers pratiques pour écoles, bibliothèques et organismes à Terrebonne, dans Lanaudière et les environs.",
+    path: "/collaborer",
   }),
   component: Page,
 });
@@ -25,7 +23,7 @@ function Page() {
             simple et humain.
           </p>
           <div className="lead-actions">
-            <a className="btn-primary" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Demander une activité</a>
+             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Demande%20de%20collaboration%20HP">Demander une activité</a>
             <Link to="/contact" className="btn-ghost">M'écrire directement</Link>
           </div>
         </div>
@@ -36,21 +34,21 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <span className="pillar-num">01</span>
-              <h3>Atelier cuisine</h3>
-              <p>Cuisiner simple, comprendre les bases, utiliser ce qu'on a — sans gaspiller, sans honte.</p>
-              <a className="pillar-cta" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Demander un atelier →</a>
+              <h3>Les enfants cuisinent</h3>
+              <p>90 min · Dès 250 $ — cuisiner ensemble, apprendre et gagner en autonomie.</p>
+              <Link className="pillar-cta" to="/ateliers">Voir les ateliers →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
-              <h3>Atelier IA / esprit critique</h3>
-              <p>Comprendre les outils, les risques, les bons réflexes et les dérives — pour tous les âges.</p>
-              <a className="pillar-cta" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Demander une activité →</a>
+              <h3>Hygiène & salubrité</h3>
+              <p>60 à 90 min · Dès 225 $ — sensibilisation aux bons gestes du quotidien.</p>
+              <Link className="pillar-cta" to="/ateliers">Voir les ateliers →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
-              <h3>Atelier BD HP</h3>
-              <p>Créer une page BD personnalisée à partir d'un personnage, d'une émotion, d'un thème et d'un décor.</p>
-              <a className="pillar-cta" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Proposer une activité →</a>
+              <h3>Ateliers sur mesure</h3>
+              <p>Survie alimentaire, marché du travail et smoothie — adaptés à votre groupe.</p>
+              <Link className="pillar-cta" to="/ateliers">Découvrir les cinq ateliers →</Link>
             </article>
           </div>
         </div>

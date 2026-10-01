@@ -7,7 +7,6 @@ export const Route = createFileRoute("/livres-pdf")({
     title: "PDF à télécharger : kits, guides et livres | HP — Québec",
     description: "15 PDF à télécharger : collection Sans Honte, cuisine, organisation, famille. Petits prix, aucune taxe ajoutée.",
     path: "/livres-pdf",
-    imagePath: "/images/sans-honte/collection-cover.png",
   }),
   component: Page,
 });

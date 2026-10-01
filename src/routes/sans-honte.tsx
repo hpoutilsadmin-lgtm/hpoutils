@@ -6,7 +6,6 @@ export const Route = createFileRoute("/sans-honte")({
     title: "Collection Sans Honte : 10 kits PDF | HP — Québec",
     description: "10 kits PDF concrets : papiers, frigo, logement, entraide… 10 $ le kit, 60 $ la collection. Aucune taxe ajoutée.",
     path: "/sans-honte",
-    imagePath: "/images/sans-honte/collection-cover.png",
   }),
   component: Page,
 });

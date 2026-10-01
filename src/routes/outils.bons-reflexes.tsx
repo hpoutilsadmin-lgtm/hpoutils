@@ -1,18 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/outils/bons-reflexes")({
-  head: () => ({
-    meta: [
-      { title: "Les bons réflexes d'HP | Outil interactif gratuit" },
-      { name: "description", content: "Un jeu interactif gratuit pour réfléchir aux situations du quotidien : cuisine, maison, entraide, émotions, sécurité et débrouillardise." },
-      { property: "og:title", content: "Les bons réflexes d'HP | Outil interactif gratuit" },
-      { property: "og:description", content: "Un jeu interactif gratuit pour réfléchir aux situations du quotidien : cuisine, maison, entraide, émotions, sécurité et débrouillardise." },
-      { property: "og:url", content: "https://www.hp-outils.com/outils/bons-reflexes" },
-      { property: "og:type", content: "website" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://www.hp-outils.com/outils/bons-reflexes" },
-    ],
+  head: () => createSeoHead({
+    title: "Les bons réflexes d'HP | Outil interactif gratuit",
+    description: "Un jeu interactif gratuit pour réfléchir aux situations du quotidien : cuisine, maison, entraide, émotions, sécurité et débrouillardise.",
+    path: "/outils/bons-reflexes",
   }),
   component: Page,
 });

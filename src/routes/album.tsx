@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/album")({
-  head: () => ({
-    meta: [
-      { title: "Album Humain imparfait — HP" },
-      { name: "description", content: "Humain imparfait — l’univers musical HP. Écoute officielle sur YouTube." },
-      { property: "og:title", content: "Album — HP" },
-      { property: "og:description", content: "Humain imparfait — l’univers musical HP." },
-    ],
+  head: () => createSeoHead({
+    title: "Album Humain imparfait — HP",
+    description: "Humain imparfait — l'univers musical HP. Écoute officielle sur YouTube.",
+    path: "/album",
   }),
   component: Page,
 });

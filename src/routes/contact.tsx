@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — HP" },
-      { name: "description", content: "Une réponse simple, humaine et concrète. Écrivez à HPOUTILS.ADMIN@gmail.com." },
-      { property: "og:title", content: "Contact — HP" },
-      { property: "og:description", content: "Écrivons ensemble la suite." },
-    ],
+  head: () => createSeoHead({
+    title: "Contact — HP",
+    description: "Une question sur un PDF, un kit ou un atelier HP? Écrivez à hpoutils.admin@gmail.com.",
+    path: "/contact",
   }),
   component: Page,
 });
@@ -73,7 +71,7 @@ function Page() {
               <span className="pillar-num">03</span>
               <h3>Réserver un atelier</h3>
               <p>Ateliers concrets pour tous les âges et milieux.</p>
-              <Link to="/collaborer" className="pillar-cta">Voir les ateliers →</Link>
+              <Link to="/ateliers" className="pillar-cta">Voir les ateliers →</Link>
             </article>
           </div>
         </div>

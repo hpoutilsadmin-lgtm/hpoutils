@@ -13,18 +13,19 @@ export const Route = createFileRoute("/prix")({
 });
 
 const ROWS: Array<{ cat: string; offre: string; prix: string; href: string; label: string }> = [
-  { cat: "PDF", offre: "Enjeux de l’humanité à l’ère de l’IA (PDF)", prix: "15 $ CAD aucune taxe ajoutée", href: "/achat/enjeux-humanite", label: "Acheter le PDF" },
-  { cat: "Guide", offre: "La faim justifie les moyens (PDF)", prix: "10 $ CAD aucune taxe ajoutée", href: "/achat/faim-justifie-les-moyens", label: "Acheter le PDF" },
-  { cat: "PDF", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "20 $ CAD aucune taxe ajoutée", href: "/achat/enfants-cuisinent", label: "Acheter le PDF" },
-  { cat: "Sans Honte", offre: "1 kit PDF (Frigo, Papiers, Fraude…)", prix: "10 $ CAD aucune taxe ajoutée", href: "/sans-honte", label: "Voir les kits" },
-  { cat: "Sans Honte", offre: "Collection complète — 10 kits PDF", prix: "60 $ CAD aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
+  { cat: "PDF", offre: "Enjeux de l’humanité à l’ère de l’IA (PDF)", prix: "15 $ CAD, aucune taxe ajoutée", href: "/achat/enjeux-humanite", label: "Acheter le PDF" },
+  { cat: "Guide", offre: "La faim justifie les moyens (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/faim-justifie-les-moyens", label: "Acheter le PDF" },
+  { cat: "PDF", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "20 $ CAD, aucune taxe ajoutée", href: "/achat/enfants-cuisinent", label: "Acheter le PDF" },
+  { cat: "Sans Honte", offre: "1 kit PDF (Frigo, Papiers, Fraude…)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les kits" },
+  { cat: "Sans Honte", offre: "Collection complète — 10 kits PDF", prix: "60 $ CAD, aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
   { cat: "Outils", offre: "Fiches et outils pratiques", prix: "5 $ à 20 $", href: "https://tally.so/r/A7AYGW", label: "Demander" },
   { cat: "Sans Honte", offre: "1 kit broché", prix: "20 $", href: "https://tally.so/r/A7AYGW", label: "Commander" },
   { cat: "Sans Honte", offre: "Pack 4 kits plastifiés et clippés", prix: "60 $", href: "https://tally.so/r/A7AYGW", label: "Commander" },
-  { cat: "Atelier", offre: "Livre et fiches", prix: "Gratuit / don 5 $", href: "https://tally.so/r/Pd8YeV", label: "Participer" },
-  { cat: "Atelier", offre: "Réflexion IA", prix: "10 $", href: "https://tally.so/r/Pd8YeV", label: "Réserver" },
-  { cat: "Atelier", offre: "IA / cuisine / jeunesse", prix: "120 $ à 180 $", href: "https://tally.so/r/Pd8YeV", label: "Demander" },
-  { cat: "Atelier", offre: "Manger mieux avec moins", prix: "150 $ à 250 $", href: "https://tally.so/r/Pd8YeV", label: "Demander" },
+  { cat: "Atelier", offre: "Les enfants cuisinent — 90 min", prix: "Dès 250 $", href: "/ateliers", label: "Voir l'atelier" },
+  { cat: "Atelier", offre: "Hygiène & salubrité (sensibilisation) — 60 à 90 min", prix: "Dès 225 $", href: "/ateliers", label: "Voir l'atelier" },
+  { cat: "Atelier", offre: "Survie alimentaire — 90 min", prix: "Dès 250 $", href: "/ateliers", label: "Voir l'atelier" },
+  { cat: "Atelier", offre: "Marché du travail — De la cuisine à… — 60 à 90 min", prix: "Dès 225 $", href: "/ateliers", label: "Voir l'atelier" },
+  { cat: "Atelier", offre: "Fais ton smoothie — 60 min", prix: "Dès 200 $ + ingrédients", href: "/ateliers", label: "Voir l'atelier" },
 ];
 
 function Page() {

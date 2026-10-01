@@ -18,7 +18,6 @@ export const Route = createFileRoute("/pdf/$slug")({
       title: `${product.title} — PDF à télécharger | HP`,
       description,
       path: `/pdf/${product.slug}`,
-      imagePath: product.cover,
       type: "product",
     });
   },

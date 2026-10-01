@@ -85,8 +85,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "HP — Des outils simples pour la vraie vie" },
       { name: "twitter:description", content: "HP — Comprendre. Agir. Transmettre. Livres, outils pratiques et ateliers pour la vraie vie." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b30b3757-d9a5-455e-ad67-0c47d32e115a/id-preview-20e2b778--0c4e8bf5-becf-4696-b1ea-366941c98459.lovable.app-1779790601190.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b30b3757-d9a5-455e-ad67-0c47d32e115a/id-preview-20e2b778--0c4e8bf5-becf-4696-b1ea-366941c98459.lovable.app-1779790601190.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -108,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <HeadContent />
       </head>
