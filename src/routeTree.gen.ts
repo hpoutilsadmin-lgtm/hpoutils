@@ -9,108 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AProposRouteImport } from './routes/a-propos'
-import { Route as AlbumRouteImport } from './routes/album'
-import { Route as AteliersRouteImport } from './routes/ateliers'
-import { Route as CollaborerRouteImport } from './routes/collaborer'
-import { Route as ComprendreRouteImport } from './routes/comprendre'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
-import { Route as OutilsRouteImport } from './routes/outils'
-import { Route as PrixRouteImport } from './routes/prix'
-import { Route as RecupererAchatRouteImport } from './routes/recuperer-achat'
-import { Route as ReflexionsRouteImport } from './routes/reflexions'
-import { Route as SansHonteRouteImport } from './routes/sans-honte'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as TransmettreRouteImport } from './routes/transmettre'
-import { Route as UniversRouteImport } from './routes/univers'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
-import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
-import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
-import { Route as OutilsBonsReflexesRouteImport } from './routes/outils.bons-reflexes'
+import { Route as UniversRouteImport } from './routes/univers'
+import { Route as TransmettreRouteImport } from './routes/transmettre'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SansHonteRouteImport } from './routes/sans-honte'
+import { Route as ReflexionsRouteImport } from './routes/reflexions'
+import { Route as RecupererAchatRouteImport } from './routes/recuperer-achat'
+import { Route as PrixRouteImport } from './routes/prix'
+import { Route as OutilsRouteImport } from './routes/outils'
+import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ComprendreRouteImport } from './routes/comprendre'
+import { Route as CollaborerRouteImport } from './routes/collaborer'
+import { Route as AteliersRouteImport } from './routes/ateliers'
+import { Route as AlbumRouteImport } from './routes/album'
+import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as PdfSlugRouteImport } from './routes/pdf.$slug'
-import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
+import { Route as OutilsBonsReflexesRouteImport } from './routes/outils.bons-reflexes'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
+import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
-import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
-import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
-import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AProposRoute = AProposRouteImport.update({
-  id: '/a-propos',
-  path: '/a-propos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AlbumRoute = AlbumRouteImport.update({
-  id: '/album',
-  path: '/album',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AteliersRoute = AteliersRouteImport.update({
-  id: '/ateliers',
-  path: '/ateliers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CollaborerRoute = CollaborerRouteImport.update({
-  id: '/collaborer',
-  path: '/collaborer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ComprendreRoute = ComprendreRouteImport.update({
-  id: '/comprendre',
-  path: '/comprendre',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LivresPdfRoute = LivresPdfRouteImport.update({
-  id: '/livres-pdf',
-  path: '/livres-pdf',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OutilsRoute = OutilsRouteImport.update({
-  id: '/outils',
-  path: '/outils',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrixRoute = PrixRouteImport.update({
-  id: '/prix',
-  path: '/prix',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecupererAchatRoute = RecupererAchatRouteImport.update({
-  id: '/recuperer-achat',
-  path: '/recuperer-achat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReflexionsRoute = ReflexionsRouteImport.update({
-  id: '/reflexions',
-  path: '/reflexions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SansHonteRoute = SansHonteRouteImport.update({
-  id: '/sans-honte',
-  path: '/sans-honte',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TransmettreRoute = TransmettreRouteImport.update({
-  id: '/transmettre',
-  path: '/transmettre',
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UniversRoute = UniversRouteImport.update({
@@ -118,24 +48,84 @@ const UniversRoute = UniversRouteImport.update({
   path: '/univers',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UnsubscribeRoute = UnsubscribeRouteImport.update({
-  id: '/unsubscribe',
-  path: '/unsubscribe',
+const TransmettreRoute = TransmettreRouteImport.update({
+  id: '/transmettre',
+  path: '/transmettre',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AchatSlugRoute = AchatSlugRouteImport.update({
-  id: '/achat/$slug',
-  path: '/achat/$slug',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
-  id: '/checkout/return',
-  path: '/checkout/return',
+const SansHonteRoute = SansHonteRouteImport.update({
+  id: '/sans-honte',
+  path: '/sans-honte',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
+const ReflexionsRoute = ReflexionsRouteImport.update({
+  id: '/reflexions',
+  path: '/reflexions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecupererAchatRoute = RecupererAchatRouteImport.update({
+  id: '/recuperer-achat',
+  path: '/recuperer-achat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrixRoute = PrixRouteImport.update({
+  id: '/prix',
+  path: '/prix',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OutilsRoute = OutilsRouteImport.update({
+  id: '/outils',
+  path: '/outils',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LivresPdfRoute = LivresPdfRouteImport.update({
+  id: '/livres-pdf',
+  path: '/livres-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComprendreRoute = ComprendreRouteImport.update({
+  id: '/comprendre',
+  path: '/comprendre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollaborerRoute = CollaborerRouteImport.update({
+  id: '/collaborer',
+  path: '/collaborer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AteliersRoute = AteliersRouteImport.update({
+  id: '/ateliers',
+  path: '/ateliers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlbumRoute = AlbumRouteImport.update({
+  id: '/album',
+  path: '/album',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PdfSlugRoute = PdfSlugRouteImport.update({
+  id: '/pdf/$slug',
+  path: '/pdf/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OutilsBonsReflexesRoute = OutilsBonsReflexesRouteImport.update({
@@ -143,14 +133,19 @@ const OutilsBonsReflexesRoute = OutilsBonsReflexesRouteImport.update({
   path: '/bons-reflexes',
   getParentRoute: () => OutilsRoute,
 } as any)
-const PdfSlugRoute = PdfSlugRouteImport.update({
-  id: '/pdf/$slug',
-  path: '/pdf/$slug',
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicDownloadPdfRoute = ApiPublicDownloadPdfRouteImport.update({
-  id: '/api/public/download-pdf',
-  path: '/api/public/download-pdf',
+const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
+  id: '/checkout/return',
+  path: '/checkout/return',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AchatSlugRoute = AchatSlugRouteImport.update({
+  id: '/achat/$slug',
+  path: '/achat/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
@@ -158,16 +153,15 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicPaymentsWebhookRoute =
-  ApiPublicPaymentsWebhookRouteImport.update({
-    id: '/api/public/payments/webhook',
-    path: '/api/public/payments/webhook',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const LovableEmailQueueProcessRoute =
-  LovableEmailQueueProcessRouteImport.update({
-    id: '/lovable/email/queue/process',
-    path: '/lovable/email/queue/process',
+const ApiPublicDownloadPdfRoute = ApiPublicDownloadPdfRouteImport.update({
+  id: '/api/public/download-pdf',
+  path: '/api/public/download-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailTransactionalPreviewRoute =
@@ -176,10 +170,16 @@ const LovableEmailTransactionalPreviewRoute =
     path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LovableEmailTransactionalSendRoute =
-  LovableEmailTransactionalSendRouteImport.update({
-    id: '/lovable/email/transactional/send',
-    path: '/lovable/email/transactional/send',
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -399,109 +399,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/a-propos': {
-      id: '/a-propos'
-      path: '/a-propos'
-      fullPath: '/a-propos'
-      preLoaderRoute: typeof AProposRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/album': {
-      id: '/album'
-      path: '/album'
-      fullPath: '/album'
-      preLoaderRoute: typeof AlbumRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ateliers': {
-      id: '/ateliers'
-      path: '/ateliers'
-      fullPath: '/ateliers'
-      preLoaderRoute: typeof AteliersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/collaborer': {
-      id: '/collaborer'
-      path: '/collaborer'
-      fullPath: '/collaborer'
-      preLoaderRoute: typeof CollaborerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/comprendre': {
-      id: '/comprendre'
-      path: '/comprendre'
-      fullPath: '/comprendre'
-      preLoaderRoute: typeof ComprendreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/livres-pdf': {
-      id: '/livres-pdf'
-      path: '/livres-pdf'
-      fullPath: '/livres-pdf'
-      preLoaderRoute: typeof LivresPdfRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/outils': {
-      id: '/outils'
-      path: '/outils'
-      fullPath: '/outils'
-      preLoaderRoute: typeof OutilsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/prix': {
-      id: '/prix'
-      path: '/prix'
-      fullPath: '/prix'
-      preLoaderRoute: typeof PrixRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recuperer-achat': {
-      id: '/recuperer-achat'
-      path: '/recuperer-achat'
-      fullPath: '/recuperer-achat'
-      preLoaderRoute: typeof RecupererAchatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reflexions': {
-      id: '/reflexions'
-      path: '/reflexions'
-      fullPath: '/reflexions'
-      preLoaderRoute: typeof ReflexionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sans-honte': {
-      id: '/sans-honte'
-      path: '/sans-honte'
-      fullPath: '/sans-honte'
-      preLoaderRoute: typeof SansHonteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/transmettre': {
-      id: '/transmettre'
-      path: '/transmettre'
-      fullPath: '/transmettre'
-      preLoaderRoute: typeof TransmettreRouteImport
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/univers': {
@@ -511,32 +413,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UniversRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/unsubscribe': {
-      id: '/unsubscribe'
-      path: '/unsubscribe'
-      fullPath: '/unsubscribe'
-      preLoaderRoute: typeof UnsubscribeRouteImport
+    '/transmettre': {
+      id: '/transmettre'
+      path: '/transmettre'
+      fullPath: '/transmettre'
+      preLoaderRoute: typeof TransmettreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/achat/$slug': {
-      id: '/achat/$slug'
-      path: '/achat/$slug'
-      fullPath: '/achat/$slug'
-      preLoaderRoute: typeof AchatSlugRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/checkout/return': {
-      id: '/checkout/return'
-      path: '/checkout/return'
-      fullPath: '/checkout/return'
-      preLoaderRoute: typeof CheckoutReturnRouteImport
+    '/sans-honte': {
+      id: '/sans-honte'
+      path: '/sans-honte'
+      fullPath: '/sans-honte'
+      preLoaderRoute: typeof SansHonteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+    '/reflexions': {
+      id: '/reflexions'
+      path: '/reflexions'
+      fullPath: '/reflexions'
+      preLoaderRoute: typeof ReflexionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperer-achat': {
+      id: '/recuperer-achat'
+      path: '/recuperer-achat'
+      fullPath: '/recuperer-achat'
+      preLoaderRoute: typeof RecupererAchatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prix': {
+      id: '/prix'
+      path: '/prix'
+      fullPath: '/prix'
+      preLoaderRoute: typeof PrixRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/outils': {
+      id: '/outils'
+      path: '/outils'
+      fullPath: '/outils'
+      preLoaderRoute: typeof OutilsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/livres-pdf': {
+      id: '/livres-pdf'
+      path: '/livres-pdf'
+      fullPath: '/livres-pdf'
+      preLoaderRoute: typeof LivresPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comprendre': {
+      id: '/comprendre'
+      path: '/comprendre'
+      fullPath: '/comprendre'
+      preLoaderRoute: typeof ComprendreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collaborer': {
+      id: '/collaborer'
+      path: '/collaborer'
+      fullPath: '/collaborer'
+      preLoaderRoute: typeof CollaborerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ateliers': {
+      id: '/ateliers'
+      path: '/ateliers'
+      fullPath: '/ateliers'
+      preLoaderRoute: typeof AteliersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/album': {
+      id: '/album'
+      path: '/album'
+      fullPath: '/album'
+      preLoaderRoute: typeof AlbumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pdf/$slug': {
+      id: '/pdf/$slug'
+      path: '/pdf/$slug'
+      fullPath: '/pdf/$slug'
+      preLoaderRoute: typeof PdfSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/outils/bons-reflexes': {
@@ -546,18 +532,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OutilsBonsReflexesRouteImport
       parentRoute: typeof OutilsRoute
     }
-    '/pdf/$slug': {
-      id: '/pdf/$slug'
-      path: '/pdf/$slug'
-      fullPath: '/pdf/$slug'
-      preLoaderRoute: typeof PdfSlugRouteImport
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/download-pdf': {
-      id: '/api/public/download-pdf'
-      path: '/api/public/download-pdf'
-      fullPath: '/api/public/download-pdf'
-      preLoaderRoute: typeof ApiPublicDownloadPdfRouteImport
+    '/checkout/return': {
+      id: '/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof CheckoutReturnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/achat/$slug': {
+      id: '/achat/$slug'
+      path: '/achat/$slug'
+      fullPath: '/achat/$slug'
+      preLoaderRoute: typeof AchatSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/suppression': {
@@ -567,18 +560,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/payments/webhook': {
-      id: '/api/public/payments/webhook'
-      path: '/api/public/payments/webhook'
-      fullPath: '/api/public/payments/webhook'
-      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+    '/api/public/download-pdf': {
+      id: '/api/public/download-pdf'
+      path: '/api/public/download-pdf'
+      fullPath: '/api/public/download-pdf'
+      preLoaderRoute: typeof ApiPublicDownloadPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/queue/process': {
-      id: '/lovable/email/queue/process'
-      path: '/lovable/email/queue/process'
-      fullPath: '/lovable/email/queue/process'
-      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/transactional/preview': {
@@ -588,11 +581,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/send': {
-      id: '/lovable/email/transactional/send'
-      path: '/lovable/email/transactional/send'
-      fullPath: '/lovable/email/transactional/send'
-      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
