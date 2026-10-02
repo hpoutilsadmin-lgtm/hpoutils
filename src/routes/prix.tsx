@@ -1,13 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/prix")({
-  head: () => ({
-    meta: [
-      { title: "Prix — HP" },
-      { name: "description", content: "Tarifs officiels des livres, outils, kits et ateliers HP." },
-      { property: "og:title", content: "Prix — HP" },
-      { property: "og:description", content: "Tarifs officiels HP." },
-    ],
+  head: () => createSeoHead({
+    title: "Prix des PDF, kits et ateliers — HP Québec",
+    description: "Tarifs des PDF, des kits Sans Honte et des ateliers HP au Québec, présentés clairement au même endroit.",
+    path: "/prix",
   }),
   component: Page,
 });

@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/unsubscribe")({
   validateSearch: (search: Record<string, unknown>) => ({
     token: typeof search.token === "string" ? search.token : "",
   }),
-  head: () => ({
-    meta: [
-      { title: "Désabonnement — HP Outils" },
-      { name: "robots", content: "noindex" },
-    ],
+  head: () => createSeoHead({
+    title: "Désabonnement — HP Outils",
+    description: "Gérez votre désabonnement aux courriels HP.",
+    path: "/unsubscribe",
+    noindex: true,
   }),
   component: Page,
 });
