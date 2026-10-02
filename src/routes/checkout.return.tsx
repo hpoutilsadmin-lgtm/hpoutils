@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { fulfillPdfOrder } from "@/utils/payments.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
     session_id: typeof search.session_id === "string" ? search.session_id : undefined,
   }),
-  head: () => ({
-    meta: [
-      { title: "Merci pour votre achat — HP" },
-      { name: "robots", content: "noindex" },
-    ],
+  head: () => createSeoHead({
+    title: "Merci pour votre achat — HP",
+    description: "Confirmation de votre achat numérique HP.",
+    path: "/checkout/return",
+    noindex: true,
   }),
   component: Page,
 });

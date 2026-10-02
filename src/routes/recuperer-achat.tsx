@@ -4,18 +4,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { recoverOrdersByEmail } from "@/utils/payments.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/recuperer-achat")({
-  head: () => ({
-    meta: [
-      { title: "Récupérer mon achat — HP" },
-      {
-        name: "description",
-        content:
-          "Récupérez le lien de téléchargement de vos achats numériques en saisissant votre courriel.",
-      },
-      { name: "robots", content: "noindex" },
-    ],
+  head: () => createSeoHead({
+    title: "Récupérer mon achat — HP",
+    description: "Recevez par courriel un nouveau lien pour vos achats numériques HP.",
+    path: "/recuperer-achat",
+    noindex: true,
   }),
   component: Page,
 });
