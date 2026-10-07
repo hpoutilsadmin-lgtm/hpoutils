@@ -12,8 +12,7 @@ export const Route = createFileRoute("/pdf/$slug")({
   head: ({ loaderData }) => {
     const product = loaderData?.product;
     if (!product) return createSeoHead({ title: "Aperçu PDF — HP", description: "Découvrez les PDF et kits HP.", path: "/livres-pdf" });
-    const price = product.priceLabel.replace(" CAD aucune taxe ajoutée", "");
-    const description = `${product.backCover ?? product.shortDescription ?? product.blurb} ${price} CAD, aucune taxe ajoutée. Téléchargement immédiat.`;
+    const description = `${product.backCover ?? product.shortDescription ?? product.blurb} ${product.priceLabel}. Téléchargement immédiat.`;
     return createSeoHead({
       title: `${product.title} — PDF à télécharger | HP`,
       description,
@@ -136,7 +135,7 @@ function Page() {
                 params={{ slug: "sans-honte-collection" }}
                 className="collection-offer"
               >
-                Les 10 kits Sans Honte pour 60 $ au lieu de 100 $ — Voir la collection →
+                Les 10 kits Sans Honte pour 40 $ CAD au lieu de 50 $ CAD — Voir la collection →
               </Link>
             )}
           </div>
