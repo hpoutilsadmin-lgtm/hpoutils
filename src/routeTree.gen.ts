@@ -16,6 +16,7 @@ import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as CollaborerRouteImport } from './routes/collaborer'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as JeuxRouteImport } from './routes/jeux'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
 import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as PrixRouteImport } from './routes/prix'
@@ -71,6 +72,11 @@ const ComprendreRoute = ComprendreRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JeuxRoute = JeuxRouteImport.update({
+  id: '/jeux',
+  path: '/jeux',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LivresPdfRoute = LivresPdfRouteImport.update({
@@ -191,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
+  '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
@@ -221,6 +228,7 @@ export interface FileRoutesByTo {
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
+  '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
@@ -252,6 +260,7 @@ export interface FileRoutesById {
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/contact': typeof ContactRoute
+  '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
     | '/collaborer'
     | '/comprendre'
     | '/contact'
+    | '/jeux'
     | '/livres-pdf'
     | '/outils'
     | '/prix'
@@ -314,6 +324,7 @@ export interface FileRouteTypes {
     | '/collaborer'
     | '/comprendre'
     | '/contact'
+    | '/jeux'
     | '/livres-pdf'
     | '/outils'
     | '/prix'
@@ -344,6 +355,7 @@ export interface FileRouteTypes {
     | '/collaborer'
     | '/comprendre'
     | '/contact'
+    | '/jeux'
     | '/livres-pdf'
     | '/outils'
     | '/prix'
@@ -375,6 +387,7 @@ export interface RootRouteChildren {
   CollaborerRoute: typeof CollaborerRoute
   ComprendreRoute: typeof ComprendreRoute
   ContactRoute: typeof ContactRoute
+  JeuxRoute: typeof JeuxRoute
   LivresPdfRoute: typeof LivresPdfRoute
   OutilsRoute: typeof OutilsRouteWithChildren
   PrixRoute: typeof PrixRoute
@@ -446,6 +459,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jeux': {
+      id: '/jeux'
+      path: '/jeux'
+      fullPath: '/jeux'
+      preLoaderRoute: typeof JeuxRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/livres-pdf': {
@@ -617,6 +637,7 @@ const rootRouteChildren: RootRouteChildren = {
   CollaborerRoute: CollaborerRoute,
   ComprendreRoute: ComprendreRoute,
   ContactRoute: ContactRoute,
+  JeuxRoute: JeuxRoute,
   LivresPdfRoute: LivresPdfRoute,
   OutilsRoute: OutilsRouteWithChildren,
   PrixRoute: PrixRoute,

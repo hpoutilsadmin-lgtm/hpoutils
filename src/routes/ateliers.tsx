@@ -4,18 +4,23 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/ateliers")({
   head: () => createSeoHead({
     title: "Ateliers sur mesure pour organismes et écoles | HP — Lanaudière",
-    description: "Ateliers cuisine, survie alimentaire et hygiène à Terrebonne et dans Lanaudière. Devis sur mesure : hpoutils.admin@gmail.com.",
+    description: "Ateliers de groupe et offre Édition des Fêtes à Terrebonne et dans Lanaudière. Prix fermes en $ CAD, aucune taxe ajoutée.",
     path: "/ateliers",
   }),
   component: Page,
 });
 
 const ATELIERS = [
-  { title: "Les enfants cuisinent", duration: "90 min", price: "Dès 250 $", desc: "Un atelier pratique pour cuisiner ensemble, essayer, apprendre et gagner en autonomie." },
-  { title: "Hygiène & salubrité", duration: "60 à 90 min", price: "Dès 225 $", desc: "Une sensibilisation concrète aux bons gestes d'hygiène et de salubrité dans la vie quotidienne." },
-  { title: "Survie alimentaire", duration: "90 min", price: "Dès 250 $", desc: "Des repères pour planifier, conserver et cuisiner avec les ressources disponibles quand le quotidien se complique." },
-  { title: "Marché du travail — De la cuisine à…", duration: "60 à 90 min", price: "Dès 225 $", desc: "Relier les gestes appris en cuisine aux compétences utiles dans les études, le travail et la vie de groupe." },
-  { title: "Fais ton smoothie", duration: "60 min", price: "Dès 200 $ + ingrédients", desc: "Une activité participative pour découvrir, mesurer, préparer et goûter un smoothie ensemble." },
+  { title: "L'IA sans jargon", price: "120 $ CAD · forfait groupe", desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie." },
+  { title: "Cuisine pratique", price: "120 $ CAD · forfait groupe", desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien." },
+  { title: "Atelier jeunesse", price: "120 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant." },
+  { title: "Manger mieux avec moins", price: "150 $ CAD · forfait groupe", desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles." },
+];
+
+const FETES = [
+  { title: "Pain maison à domicile", duration: "3 h · 6 à 8 personnes", price: "350 $ CAD · forfait groupe", desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes." },
+  { title: "L'IA sans jargon", duration: "2 h", price: "275 $ CAD · forfait organisme", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
+  { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "300 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant." },
 ];
 
 function Page() {
@@ -26,7 +31,7 @@ function Page() {
           <span className="editorial-kicker">Ateliers HP</span>
           <h1>Des ateliers pour mettre les outils en <em>mouvement</em>.</h1>
           <p className="lead">
-            Cinq ateliers pratiques pour les organismes, les écoles et les groupes
+             Quatre ateliers pratiques pour les organismes, les écoles et les groupes
             de Terrebonne, de Lanaudière et des environs. Chaque proposition peut
             être adaptée à votre milieu.
           </p>
@@ -44,13 +49,34 @@ function Page() {
               <article key={a.title} className="pillar-card">
                 <span className="pillar-num">{String(i + 1).padStart(2, "0")}</span>
                 <h3>{a.title}</h3>
-                <p className="workshop-meta">{a.duration} · {a.price}</p>
+                 <p className="workshop-meta">{a.price}</p>
                 <p>{a.desc}</p>
               </article>
             ))}
           </div>
           <div className="lead-actions" style={{ marginTop: 32, justifyContent: "center" }}>
             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="collections-strip" id="edition-des-fetes">
+        <div className="container">
+          <span className="editorial-kicker">Du 1er octobre au 23 décembre</span>
+          <h2>Ateliers &amp; conférence — <em>Édition des Fêtes</em></h2>
+          <p className="strip-intro">Trois propositions saisonnières à vivre en groupe, à domicile ou dans votre organisme. Tous les prix sont en $ CAD, aucune taxe ajoutée.</p>
+          <div className="pillar-grid">
+            {FETES.map((offer, i) => (
+              <article key={offer.title} className="pillar-card">
+                <span className="pillar-num">{String(i + 1).padStart(2, "0")}</span>
+                <h3>{offer.title}</h3>
+                <p className="workshop-meta">{offer.duration}<br />{offer.price}</p>
+                <p>{offer.desc}</p>
+              </article>
+            ))}
+          </div>
+          <div className="lead-actions" style={{ marginTop: 32 }}>
+            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Édition%20des%20Fêtes%20HP">Réserver une date</a>
           </div>
         </div>
       </section>

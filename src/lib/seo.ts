@@ -18,7 +18,7 @@ export function createSeoHead({
   noindex = false,
 }: SeoInput) {
   const url = new URL(path, SITE_URL).toString();
-  const image = imagePath ? new URL(imagePath, SITE_URL).toString() : undefined;
+  const image = new URL(imagePath ?? "/images/share-hp.jpg", SITE_URL).toString();
   return {
     meta: [
       { title },
@@ -27,15 +27,11 @@ export function createSeoHead({
       { property: "og:description", content: description },
       { property: "og:type", content: type },
       { property: "og:url", content: url },
-      { name: "twitter:card", content: image ? "summary_large_image" : "summary" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: title },
       { name: "twitter:description", content: description },
-      ...(image
-        ? [
-            { property: "og:image", content: image },
-            { name: "twitter:image", content: image },
-          ]
-        : []),
+      { property: "og:image", content: image },
+      { name: "twitter:image", content: image },
       ...(noindex ? [{ name: "robots", content: "noindex" }] : []),
     ],
     links: [{ rel: "canonical", href: url }],

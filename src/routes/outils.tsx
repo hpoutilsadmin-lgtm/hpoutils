@@ -33,7 +33,7 @@ function Page() {
           </header>
           <div className="tool-grid">
             <article className="tool-card">
-              <span className="tool-tag">Collection PDF — 60 $ CAD, aucune taxe ajoutée</span>
+              <span className="tool-tag">Collection PDF — 40 $ CAD au lieu de 50 $ CAD, aucune taxe ajoutée</span>
               <h3>Collection Sans Honte — 10 kits</h3>
               <p>
                 Les 10 kits Sans Honte en un seul PDF — Papiers, Frigo, Tenir Debout,
@@ -42,13 +42,19 @@ function Page() {
               <Link to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF →</Link>
             </article>
             <article className="tool-card">
-              <span className="tool-tag">Kit PDF — 10 $ CAD, aucune taxe ajoutée</span>
+              <span className="tool-tag">Kit PDF — 5 $ CAD, aucune taxe ajoutée</span>
               <h3>Kit Sans Honte (au choix)</h3>
               <p>
                 Un kit PDF pour explorer la honte, mettre des mots sur ce qu'on porte
                 et reprendre un peu de place sans se juger.
               </p>
               <Link to="/livres-pdf">Voir les kits PDF →</Link>
+            </article>
+            <article className="tool-card">
+              <span className="tool-tag">Bundle — 40 $ CAD, aucune taxe ajoutée</span>
+              <h3>Tous les outils pratiques</h3>
+              <p>Un seul ensemble pour réunir les fiches et outils pratiques HP.</p>
+              <a href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Demander le bundle →</a>
             </article>
           </div>
         </div>

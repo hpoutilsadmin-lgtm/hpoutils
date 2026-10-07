@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/sans-honte")({
   head: () => createSeoHead({
     title: "Collection Sans Honte : 10 kits PDF | HP — Québec",
-    description: "10 kits PDF concrets : papiers, frigo, logement, entraide… 10 $ le kit, 60 $ la collection. Aucune taxe ajoutée.",
+    description: "10 kits PDF concrets : papiers, frigo, logement, entraide… 5 $ CAD le kit, 40 $ CAD la collection. Aucune taxe ajoutée.",
     path: "/sans-honte",
   }),
   component: Page,
@@ -58,7 +58,7 @@ function Page() {
           </div>
           <h2 className="section-title">10 kits — La collection complète</h2>
           <p style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 32px", color: "#5a4a3f", fontSize: 16 }}>
-              Chaque kit est un PDF imprimable — 10 $ CAD, aucune taxe ajoutée, téléchargement immédiat après paiement.
+              Chaque kit est un PDF imprimable — 5 $ CAD, aucune taxe ajoutée, téléchargement immédiat après paiement.
           </p>
           <div className="library-grid">
             {KITS.map((k) => (
@@ -68,7 +68,7 @@ function Page() {
                   <span className="kit-badge">N°{k.n}</span>
                   <span className="kit-watermark">Aperçu • HP</span>
                 </div>
-                <div className="library-meta"><span className="dot" />Kit PDF — 10 $ CAD, aucune taxe ajoutée</div>
+                <div className="library-meta"><span className="dot" />Kit PDF — 5 $ CAD, aucune taxe ajoutée</div>
                 <h3>{k.title}</h3>
                 <p>{k.sub}</p>
                 <Link className="lib-link" to="/pdf/$slug" params={{ slug: k.slug }}>Découvrir le kit PDF →</Link>
@@ -78,7 +78,7 @@ function Page() {
           <div className="cta-band" style={{ marginTop: 48 }}>
             <div>
               <h3>La collection complète — les 10 kits</h3>
-               <p>Toute la collection Sans Honte en un seul PDF — 60 $ CAD au lieu de 100 $, aucune taxe ajoutée. Téléchargement immédiat.</p>
+               <p>Toute la collection Sans Honte en un seul PDF — 40 $ CAD au lieu de 50 $ CAD, aucune taxe ajoutée. Téléchargement immédiat.</p>
             </div>
             <Link className="action-btn" to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF</Link>
           </div>
