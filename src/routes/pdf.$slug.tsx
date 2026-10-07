@@ -33,7 +33,7 @@ export const Route = createFileRoute("/pdf/$slug")({
     <section className="subpage-content">
       <div className="container" style={{ maxWidth: 720, textAlign: "center", padding: "64px 24px" }}>
         <h1>Erreur</h1>
-        <p>{error.message}</p>
+        <p>{error instanceof Error ? error.message : "Une erreur inattendue est survenue."}</p>
         <Link to="/livres-pdf">Retour à la bibliothèque</Link>
       </div>
     </section>
