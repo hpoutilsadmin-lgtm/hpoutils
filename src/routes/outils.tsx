@@ -50,6 +50,12 @@ function Page() {
               </p>
               <Link to="/livres-pdf">Voir les kits PDF →</Link>
             </article>
+            <article className="tool-card">
+              <span className="tool-tag">Bundle — 40 $ CAD, aucune taxe ajoutée</span>
+              <h3>Tous les outils pratiques</h3>
+              <p>Un seul ensemble pour réunir les fiches et outils pratiques HP.</p>
+              <a href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Demander le bundle →</a>
+            </article>
           </div>
         </div>
       </section>

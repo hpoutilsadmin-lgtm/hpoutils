@@ -5,7 +5,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/")({
   head: () => createSeoHead({
     title: "HP — Kits PDF et outils concrets pour la vraie vie | Québec",
-    description: "Kits PDF Sans Honte, guides pratiques et ateliers à Terrebonne et dans Lanaudière. 10 $ le kit, aucune taxe ajoutée. Créé au Québec.",
+    description: "Kits PDF Sans Honte, livres pratiques et ateliers à Terrebonne et dans Lanaudière. 5 $ CAD le kit, aucune taxe ajoutée. Créé au Québec.",
     path: "/",
   }),
   component: Index,
@@ -26,6 +26,17 @@ function Index() {
             <Link to="/sans-honte" className="btn-primary">Découvrir les kits Sans Honte</Link>
             <Link to="/livres-pdf" className="btn-primary">Voir livres, PDF &amp; réflexions</Link>
             <Link to="/univers" className="btn-primary">Découvrir Univers alternatif</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="collections-strip">
+        <div className="container">
+          <span className="editorial-kicker">Du 1er octobre au 23 décembre</span>
+          <h2>Ateliers &amp; conférence — <em>Édition des Fêtes</em></h2>
+          <p className="strip-intro">Pain maison à domicile, IA sans jargon et conférence La faim justifie les moyens.</p>
+          <div className="lead-actions">
+            <Link to="/ateliers" hash="edition-des-fetes" className="btn-primary">Découvrir l'Édition des Fêtes</Link>
           </div>
         </div>
       </section>
@@ -66,6 +77,12 @@ function Index() {
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
+              <h3>Les enfants cuisinent pour faire plaisir</h3>
+              <p>Un projet doux pour transmettre le plaisir, pas la performance. — 20 $ CAD, aucune taxe ajoutée</p>
+              <Link to="/pdf/$slug" params={{ slug: "enfants-cuisinent" }} className="pillar-cta">Voir le PDF →</Link>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">04</span>
               <h3>Horizon Québec</h3>
               <p>Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. — 10 $ CAD, aucune taxe ajoutée</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir le PDF →</Link>
