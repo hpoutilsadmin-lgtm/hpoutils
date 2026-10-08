@@ -6,6 +6,7 @@ const BASE_URL = "https://www.hp-outils.com";
 const STATIC_PATHS = [
   "/",
   "/outils",
+  "/jeux",
   "/livres-pdf",
   "/sans-honte",
   "/reflexions",
