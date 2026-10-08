@@ -19,7 +19,7 @@ const STORIES = [
 function JeuxPage() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/apps/bons-reflexes/hp_bons_reflexes_hero_fr.png)" }}>
+      <section className="editorial-hero hero-banner-image jeux-hero">
         <div className="container">
           <span className="editorial-kicker">Jeux HP</span>
           <h1>Jouer, choisir, <em>essayer autrement</em>.</h1>

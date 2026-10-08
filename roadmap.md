@@ -6,7 +6,7 @@
 - [x] Remplacer les ateliers génériques
 - [ ] Finaliser et tester l'inscription courriel
 - [x] Recentrer les textes thérapeutiques
-- [ ] Retirer le badge Lovable (bloqué par le forfait ou les droits si nécessaire)
+- [ ] Retirer le badge Lovable (bloqué : rôle éditeur et forfait Pro requis)
 - [ ] Vérifier le rendu et les parcours
 - [x] Ajouter les prix fermes et l'Édition des Fêtes
 - [x] Corriger les prix Sans Honte et créer les nouveaux produits de paiement
