@@ -4,10 +4,10 @@
 - [x] Appliquer les métadonnées et canoniques
 - [x] Mettre Sans Honte en avant et enrichir les fiches
 - [x] Remplacer les ateliers génériques
-- [ ] Finaliser et tester l'inscription courriel
+- [x] Finaliser et tester l'inscription courriel
 - [x] Recentrer les textes thérapeutiques
-- [ ] Retirer le badge Lovable (bloqué par le forfait ou les droits si nécessaire)
-- [ ] Vérifier le rendu et les parcours
+- [ ] Retirer le badge Lovable (bloqué : rôle éditeur et forfait Pro requis)
+- [x] Vérifier le rendu et les parcours
 - [x] Ajouter les prix fermes et l'Édition des Fêtes
 - [x] Corriger les prix Sans Honte et créer les nouveaux produits de paiement
 - [x] Ajouter le livre jeunesse à l'accueil et le bundle d'outils
