@@ -18,6 +18,7 @@ import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as JeuxRouteImport } from './routes/jeux'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
+import { Route as MerciRouteImport } from './routes/merci'
 import { Route as OutilsRouteImport } from './routes/outils'
 import { Route as PrixRouteImport } from './routes/prix'
 import { Route as RecupererAchatRouteImport } from './routes/recuperer-achat'
@@ -82,6 +83,11 @@ const JeuxRoute = JeuxRouteImport.update({
 const LivresPdfRoute = LivresPdfRouteImport.update({
   id: '/livres-pdf',
   path: '/livres-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MerciRoute = MerciRouteImport.update({
+  id: '/merci',
+  path: '/merci',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OutilsRoute = OutilsRouteImport.update({
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
+  '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
+  '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
+  '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/jeux'
     | '/livres-pdf'
+    | '/merci'
     | '/outils'
     | '/prix'
     | '/recuperer-achat'
@@ -326,6 +336,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/jeux'
     | '/livres-pdf'
+    | '/merci'
     | '/outils'
     | '/prix'
     | '/recuperer-achat'
@@ -357,6 +368,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/jeux'
     | '/livres-pdf'
+    | '/merci'
     | '/outils'
     | '/prix'
     | '/recuperer-achat'
@@ -389,6 +401,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   JeuxRoute: typeof JeuxRoute
   LivresPdfRoute: typeof LivresPdfRoute
+  MerciRoute: typeof MerciRoute
   OutilsRoute: typeof OutilsRouteWithChildren
   PrixRoute: typeof PrixRoute
   RecupererAchatRoute: typeof RecupererAchatRoute
@@ -473,6 +486,13 @@ declare module '@tanstack/react-router' {
       path: '/livres-pdf'
       fullPath: '/livres-pdf'
       preLoaderRoute: typeof LivresPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/merci': {
+      id: '/merci'
+      path: '/merci'
+      fullPath: '/merci'
+      preLoaderRoute: typeof MerciRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/outils': {
@@ -639,6 +659,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   JeuxRoute: JeuxRoute,
   LivresPdfRoute: LivresPdfRoute,
+  MerciRoute: MerciRoute,
   OutilsRoute: OutilsRouteWithChildren,
   PrixRoute: PrixRoute,
   RecupererAchatRoute: RecupererAchatRoute,

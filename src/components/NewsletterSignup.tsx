@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { subscribeToHpNews } from "@/utils/newsletter.functions";
 
 export function NewsletterSignup() {
   const subscribe = useServerFn(subscribeToHpNews);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
 
@@ -15,6 +17,7 @@ export function NewsletterSignup() {
       await subscribe({ data: { email } });
       setStatus("done");
       setEmail("");
+      navigate({ to: "/merci" });
     } catch {
       setStatus("error");
     }
