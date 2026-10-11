@@ -5,10 +5,12 @@ import { z } from "zod";
 
 const signupSchema = z.object({
   email: z.string().trim().toLowerCase().email().max(254),
+  consent: z.literal(true),
+  source: z.string().max(80).regex(/^[a-z0-9-]+$/).default("homepage"),
 });
 
 const CONSENT_TEXT =
-  "En t'inscrivant, tu acceptes de recevoir les nouveautés HP. Désinscription en un clic.";
+  "J'accepte de recevoir les outils et nouveautés HP par courriel";
 
 function hash(value: string): string {
   return createHash("sha256").update(value).digest("hex");
@@ -60,7 +62,7 @@ export const subscribeToHpNews = createServerFn({ method: "POST" })
       const { error } = await supabaseAdmin.from("newsletter_signups").upsert(
         {
           email: data.email,
-          source: "homepage",
+          source: data.source,
           consent_text: CONSENT_TEXT,
           consented_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),

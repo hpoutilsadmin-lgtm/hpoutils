@@ -15,6 +15,7 @@ import { Route as AlbumRouteImport } from './routes/album'
 import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as CollaborerRouteImport } from './routes/collaborer'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
+import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as JeuxRouteImport } from './routes/jeux'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
@@ -68,6 +69,11 @@ const CollaborerRoute = CollaborerRouteImport.update({
 const ComprendreRoute = ComprendreRouteImport.update({
   id: '/comprendre',
   path: '/comprendre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
+  id: '/confidentialite',
+  path: '/confidentialite',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -202,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/ateliers': typeof AteliersRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/ateliers': typeof AteliersRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -267,6 +275,7 @@ export interface FileRoutesById {
   '/ateliers': typeof AteliersRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -301,6 +310,7 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/collaborer'
     | '/comprendre'
+    | '/confidentialite'
     | '/contact'
     | '/jeux'
     | '/livres-pdf'
@@ -333,6 +343,7 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/collaborer'
     | '/comprendre'
+    | '/confidentialite'
     | '/contact'
     | '/jeux'
     | '/livres-pdf'
@@ -365,6 +376,7 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/collaborer'
     | '/comprendre'
+    | '/confidentialite'
     | '/contact'
     | '/jeux'
     | '/livres-pdf'
@@ -398,6 +410,7 @@ export interface RootRouteChildren {
   AteliersRoute: typeof AteliersRoute
   CollaborerRoute: typeof CollaborerRoute
   ComprendreRoute: typeof ComprendreRoute
+  ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
   JeuxRoute: typeof JeuxRoute
   LivresPdfRoute: typeof LivresPdfRoute
@@ -465,6 +478,13 @@ declare module '@tanstack/react-router' {
       path: '/comprendre'
       fullPath: '/comprendre'
       preLoaderRoute: typeof ComprendreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confidentialite': {
+      id: '/confidentialite'
+      path: '/confidentialite'
+      fullPath: '/confidentialite'
+      preLoaderRoute: typeof ConfidentialiteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -656,6 +676,7 @@ const rootRouteChildren: RootRouteChildren = {
   AteliersRoute: AteliersRoute,
   CollaborerRoute: CollaborerRoute,
   ComprendreRoute: ComprendreRoute,
+  ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
   JeuxRoute: JeuxRoute,
   LivresPdfRoute: LivresPdfRoute,

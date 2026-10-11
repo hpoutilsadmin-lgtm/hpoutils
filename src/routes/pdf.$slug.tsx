@@ -118,6 +118,7 @@ function Page() {
               <span className="dot" />
               {fmt} — {product.priceLabel}
             </div>
+            {product.precaution && <p className="product-precaution">{product.precaution}</p>}
             <p style={{ fontSize: 14, color: "rgba(58,42,32,.7)", fontStyle: "italic", marginBottom: 16 }}>
               PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé
             </p>

@@ -51,6 +51,7 @@ function Page() {
                 <h3>{a.title}</h3>
                  <p className="workshop-meta">{a.price}</p>
                 <p>{a.desc}</p>
+                <p>Inclut les fiches recette et astuces. Aucune taxe ajoutée.</p>
               </article>
             ))}
           </div>

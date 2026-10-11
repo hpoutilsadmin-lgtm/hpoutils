@@ -62,6 +62,7 @@ function Page() {
           <p className="lead">
             {formatLabel} — {product.priceLabel}. PDF téléchargeable immédiatement après paiement.
           </p>
+          {product.precaution && <p className="product-precaution">{product.precaution}</p>}
         </div>
       </section>
       <section className="subpage-content">

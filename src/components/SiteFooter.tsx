@@ -23,7 +23,8 @@ export function SiteFooter() {
             <Link to="/univers">Univers alternatif</Link><br />
             <Link to="/ateliers">Ateliers</Link><br />
             <Link to="/a-propos">À propos</Link><br />
-            <Link to="/recuperer-achat">Récupérer un achat</Link>
+            <Link to="/recuperer-achat">Récupérer un achat</Link><br />
+            <Link to="/confidentialite">Confidentialité</Link>
           </p>
         </div>
         <div>
