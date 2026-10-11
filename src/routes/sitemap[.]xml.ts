@@ -7,6 +7,7 @@ const STATIC_PATHS = [
   "/",
   "/outils",
   "/jeux",
+  "/confidentialite",
   "/livres-pdf",
   "/sans-honte",
   "/reflexions",

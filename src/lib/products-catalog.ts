@@ -18,9 +18,47 @@ export interface DigitalProduct {
   audience?: string[];      // « Pour qui ? »
   backCover?: string;       // Texte éditorial « 4e de couverture »
   audienceSentence?: string; // Phrase « Ce PDF s'adresse aux personnes qui veulent... »
+  precaution?: string;
 }
 
 export const PRODUCTS: Record<string, DigitalProduct> = {
+  sans_honte_testament_pdf_5: {
+    priceId: "sans_honte_testament_pdf_5", slug: "sans-honte-testament",
+    title: "Testament Sans Honte — L'olographe sans erreur",
+    pdfPath: "sans-honte-testament.pdf", downloadFileName: "Testament_Sans_Honte.pdf",
+    priceLabel: "5 $ CAD, aucune taxe ajoutée", formatLabel: "Kit PDF",
+    blurb: "Préparer un testament olographe au Québec, pas à pas.",
+    audienceSentence: "Ce kit s'adresse aux personnes qui veulent préparer un testament olographe au Québec et organiser leurs volontés.",
+    precaution: "Ce kit vous guide pas à pas pour préparer un testament olographe conforme aux règles du Québec. C'est de l'information générale, pas un avis juridique. L'idéal : faire valider votre testament par un notaire — surtout s'il y a des enfants mineurs, un conjoint, une entreprise ou des biens hors Québec.",
+  },
+  sans_honte_papiers_parents_pdf_5: {
+    priceId: "sans_honte_papiers_parents_pdf_5", slug: "sans-honte-papiers-parents",
+    title: "Papiers de mes parents Sans Honte", pdfPath: "sans-honte-papiers-parents.pdf",
+    downloadFileName: "Papiers_de_mes_parents_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    formatLabel: "Kit PDF", blurb: "Organiser les papiers de ses parents, sans honte.",
+    audienceSentence: "Ce kit s'adresse aux personnes qui accompagnent leurs parents dans l'organisation de leurs papiers.",
+  },
+  sans_honte_chalet_pdf_5: {
+    priceId: "sans_honte_chalet_pdf_5", slug: "sans-honte-chalet",
+    title: "Chalet Sans Honte — Les règles qui sauvent les Noëls", pdfPath: "sans-honte-chalet.pdf",
+    downloadFileName: "Chalet_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    formatLabel: "Kit PDF", blurb: "Des règles claires pour partager le chalet.",
+    audienceSentence: "Ce kit s'adresse aux familles et aux proches qui partagent un chalet et veulent clarifier leurs règles ensemble.",
+  },
+  sans_honte_annee_quebecoise_pdf_5: {
+    priceId: "sans_honte_annee_quebecoise_pdf_5", slug: "sans-honte-annee-quebecoise",
+    title: "L'année québécoise Sans Honte", pdfPath: "sans-honte-annee-quebecoise.pdf",
+    downloadFileName: "Annee_quebecoise_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    formatLabel: "Kit PDF", blurb: "Des repères pour l'année québécoise.",
+    audienceSentence: "Ce kit s'adresse aux personnes qui veulent organiser leur année avec des repères adaptés au Québec.",
+  },
+  sans_honte_heritage_numerique_pdf_5: {
+    priceId: "sans_honte_heritage_numerique_pdf_5", slug: "sans-honte-heritage-numerique",
+    title: "Héritage numérique Sans Honte", pdfPath: "sans-honte-heritage-numerique.pdf",
+    downloadFileName: "Heritage_numerique_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    formatLabel: "Kit PDF", blurb: "Préparer la transmission de son héritage numérique.",
+    audienceSentence: "Ce kit s'adresse aux personnes qui veulent préparer la transmission de leurs comptes et de leurs documents numériques.",
+  },
   enjeux_humanite_pdf_15: {
     priceId: "enjeux_humanite_pdf_15",
     slug: "enjeux-humanite",

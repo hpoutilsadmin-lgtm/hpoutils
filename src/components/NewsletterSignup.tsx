@@ -1,20 +1,22 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { subscribeToHpNews } from "@/utils/newsletter.functions";
 
-export function NewsletterSignup() {
+export function NewsletterSignup({ source = "homepage" }: { source?: string }) {
+  const id = useId();
   const subscribe = useServerFn(subscribeToHpNews);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("loading");
     try {
-      await subscribe({ data: { email } });
+      await subscribe({ data: { email, consent, source } });
       setStatus("done");
       setEmail("");
       navigate({ to: "/merci" });
@@ -29,10 +31,10 @@ export function NewsletterSignup() {
 
   return (
     <form className="newsletter-form" onSubmit={submit}>
-      <label htmlFor="newsletter-email" className="sr-only">Adresse courriel</label>
+      <label htmlFor={`${id}-email`} className="sr-only">Adresse courriel</label>
       <div className="newsletter-fields">
         <input
-          id="newsletter-email"
+          id={`${id}-email`}
           name="email"
           type="email"
           autoComplete="email"
@@ -41,17 +43,19 @@ export function NewsletterSignup() {
           placeholder="ton@courriel.com"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          aria-describedby="newsletter-consent newsletter-error"
+          aria-describedby={`${id}-consent ${id}-error`}
         />
-        <Button type="submit" disabled={status === "loading"} className="btn-primary">
+        <Button type="submit" disabled={status === "loading" || !consent} className="btn-primary">
           {status === "loading" ? "Inscription…" : "M'inscrire aux nouveautés"}
         </Button>
       </div>
-      <p id="newsletter-consent" className="newsletter-consent">
-        En t'inscrivant, tu acceptes de recevoir les nouveautés HP. Désinscription en un clic.
-      </p>
+      <label id={`${id}-consent`} className="newsletter-consent consent-choice">
+        <input type="checkbox" required checked={consent} onChange={(event) => setConsent(event.target.checked)} />
+        <span>J'accepte de recevoir les outils et nouveautés HP par courriel</span>
+      </label>
+      <p className="newsletter-consent">Désinscription en un clic. <a href="/confidentialite">Confidentialité</a></p>
       {status === "error" && (
-        <p id="newsletter-error" className="newsletter-error" role="alert">
+        <p id={`${id}-error`} className="newsletter-error" role="alert">
           L'inscription n'a pas fonctionné. Réessaie dans un moment.
         </p>
       )}
