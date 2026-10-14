@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<!-- Devine l'humeur — v1.1 (programme « Recommandations engagement », vague 2, 13 oct. 2026)
+     Nouveautés v1.1 : compteur de série 🔥 dans le HUD + 6 badges (persistance locale) -->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>Devine l'humeur</title>
+<style>
+  :root{
+    --bg-a:#ffe9d8; --bg-b:#fadcef; --bg-c:#dcd3f8;
+    --card:rgba(255,255,255,.76);
+    --ink:#3b2a22; --muted:#7d675c;
+    --btn:#ffffff; --btn-hov:#fff3ea;
+    --accent1:#ff9a6b; --accent2:#f470b0;
+    --good:#2f7d3b; --good-bg:#e0f3e2;
+    --bad:#a63d34; --bad-bg:#f9e3df;
+    --dot:rgba(120,80,60,.20); --ring:rgba(150,90,60,.14);
+    --halo:rgba(255,255,255,.70);
+    --shadow:0 12px 32px rgba(130,75,45,.16);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg-a:#312236; --bg-b:#252135; --bg-c:#1c2336;
+      --card:rgba(46,38,56,.72);
+      --ink:#f7ece3; --muted:#c2ada1;
+      --btn:#4b4058; --btn-hov:#574a66;
+      --accent1:#ff9a6b; --accent2:#f470b0;
+      --good:#93d89b; --good-bg:#2c4a30;
+      --bad:#ec9c90; --bad-bg:#4c2c29;
+      --dot:rgba(255,255,255,.14); --ring:rgba(255,255,255,.12);
+      --halo:rgba(255,170,130,.22);
+      --shadow:0 12px 32px rgba(0,0,0,.45);
+    }
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN","Hiragino Sans","Rounded Mplus 1c","Arial Rounded MT Bold",system-ui,-apple-system,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(160deg,var(--bg-a) 0%,var(--bg-b) 45%,var(--bg-c) 100%);
+    background-attachment:fixed;
+    min-height:100dvh;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .app{max-width:480px;margin:0 auto;padding:20px 16px 44px;}
+  .screen{display:none;}
+  .screen.active{display:block;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .hidden{display:none !important;}
+  .card{
+    background:var(--card);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border:1px solid var(--ring);
+    border-radius:28px;
+    padding:24px 20px;
+    box-shadow:var(--shadow);
+    text-align:center;
+  }
+  h1{font-size:2.05rem;line-height:1.15;margin:.35rem 0 .4rem;letter-spacing:-.01em;}
+  h2{font-size:1.7rem;margin:.4rem 0 .6rem;}
+  p{margin:.5rem 0;}
+  .tagline{color:var(--muted);font-size:1.05rem;line-height:1.5;}
+  .rules{display:flex;gap:8px;justify-content:center;margin:14px 0 18px;flex-wrap:wrap;}
+  .rule{
+    background:var(--btn);border:1px solid var(--ring);border-radius:999px;
+    padding:8px 14px;font-weight:700;font-size:.92rem;box-shadow:var(--shadow);
+  }
+  .rule b{color:var(--accent2);}
+  .best-line{font-weight:800;font-size:1.05rem;margin-top:14px;}
+  .hint{color:var(--muted);font-size:.92rem;}
+  .local-note{color:var(--muted);font-size:.78rem;margin-top:10px;opacity:.85;}
+
+  /* ---------- boutons ---------- */
+  button{font-family:inherit;touch-action:manipulation;user-select:none;-webkit-user-select:none;}
+  .btn-primary{
+    width:100%;border:none;cursor:pointer;color:#fff;font-weight:800;font-size:1.18rem;
+    padding:16px 24px;border-radius:20px;
+    background:linear-gradient(135deg,var(--accent1),var(--accent2));
+    box-shadow:0 8px 22px rgba(230,110,140,.35);
+    transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  }
+  .btn-primary:hover{filter:brightness(1.04);transform:translateY(-1px);}
+  .btn-primary:active{transform:scale(.97);}
+  .btn-ghost{
+    width:100%;margin-top:10px;border:2px solid var(--ring);cursor:pointer;background:transparent;
+    color:var(--muted);font-weight:700;font-size:1rem;padding:12px;border-radius:18px;
+    transition:background .12s ease;
+  }
+  .btn-ghost:hover{background:var(--btn-hov);}
+  button:focus-visible{outline:3px solid var(--accent1);outline-offset:2px;}
+
+  /* ---------- visage ---------- */
+  .face-stage{position:relative;width:min(74vw,300px);margin:8px auto;user-select:none;-webkit-user-select:none;}
+  .face-stage.demo{width:min(58vw,220px);margin:0 auto 2px;}
+  .halo{
+    position:absolute;inset:6% 10%;border-radius:50%;pointer-events:none;
+    background:radial-gradient(closest-side,var(--halo),rgba(255,255,255,0));
+    animation:halo 5s ease-in-out infinite;
+  }
+  @keyframes halo{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
+  .face-svg{position:relative;animation:breathe 3.9s ease-in-out infinite;}
+  @keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.018);}}
+  .face-svg svg{display:block;width:100%;height:auto;}
+
+  /* micro-animations du visage */
+  .eyes{transform-box:fill-box;transform-origin:center;}
+  .eyes.blink{animation:blink 3.1s infinite;}
+  @keyframes blink{0%,90%,100%{transform:scaleY(1);}93%,96.5%{transform:scaleY(.08);}}
+  .face-shake.tremble{animation:tremble .38s linear infinite;}
+  @keyframes tremble{0%,100%{transform:translateX(0);}25%{transform:translateX(-1.6px);}50%{transform:translateX(1.6px);}75%{transform:translateX(-1px);}}
+  .face-shake.celebrate{animation:bounce .5s ease-in-out 2;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}35%{transform:translateY(-16px);}62%{transform:translateY(0);}82%{transform:translateY(-7px);}}
+  .tear-fall{animation:tearFall 2.6s ease-in infinite;}
+  @keyframes tearFall{
+    0%{transform:translateY(-4px);opacity:0;}
+    12%{opacity:1;}
+    72%{opacity:1;}
+    100%{transform:translateY(28px);opacity:0;}
+  }
+  .sweat{animation:sweat .9s ease-in-out infinite;transform-box:fill-box;transform-origin:bottom center;}
+  @keyframes sweat{0%,100%{transform:rotate(-10deg);}50%{transform:rotate(10deg);}}
+  .twinkle{animation:twinkle 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+  @keyframes twinkle{0%,100%{transform:scale(.78);opacity:.65;}50%{transform:scale(1.15);opacity:1;}}
+  .cel-blush{opacity:0;transition:opacity .3s;}
+  .sparkles{opacity:0;transition:opacity .25s;pointer-events:none;}
+  .face-stage.celebrating .sparkles{opacity:1;}
+  .face-stage.celebrating .cel-blush{opacity:1;}
+  .star{transform-box:fill-box;transform-origin:center;animation:pop .85s ease-in-out infinite;animation-play-state:paused;}
+  .face-stage.celebrating .star{animation-play-state:running;}
+  .star.s2{animation-delay:.15s;}.star.s3{animation-delay:.32s;}.star.s4{animation-delay:.48s;}
+  @keyframes pop{0%,100%{transform:scale(.55) rotate(-8deg);opacity:.7;}50%{transform:scale(1.15) rotate(18deg);opacity:1;}}
+
+  /* ---------- jeu ---------- */
+  .hud{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:4px;}
+  .pill{
+    background:var(--card);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border:1px solid var(--ring);border-radius:999px;padding:8px 14px;
+    font-weight:800;font-size:.95rem;box-shadow:var(--shadow);
+  }
+  .pill.combo{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;border:none;}
+  /* v1.1 — compteur de série : même dégradé que le combo, pulse doucement à 5+ */
+  .pill.streak{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;border:none;}
+  .pill.streak.hot{animation:streakPulse 1.6s ease-in-out infinite;}
+  @keyframes streakPulse{
+    0%,100%{transform:scale(1);box-shadow:var(--shadow);}
+    50%{transform:scale(1.09);box-shadow:0 0 0 6px var(--ring);}
+  }
+  .pill.restart{
+    -webkit-appearance:none;appearance:none;cursor:pointer;color:var(--ink);font-family:inherit;
+    min-height:44px;display:inline-flex;align-items:center;justify-content:center;
+  }
+  .pill.restart:hover{background:var(--btn-hov);}
+  .pill.restart:active{transform:scale(.96);}
+  /* 390 px et moins : les 3 pills tiennent sur une ligne ; le bouton son descend
+     un peu sur l'écran de jeu pour ne pas chevaucher « ↺ Recommencer » */
+  @media (max-width:420px){
+    .hud{gap:6px;}
+    .pill{padding:6px 9px;font-size:.85rem;}
+  }
+  @media (max-width:420px){
+    body:has(#scr-game.active) .sound-btn{top:70px;}
+  }
+  .dots{display:flex;gap:7px;justify-content:center;margin:10px 0 2px;}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--dot);}
+  .dot.done{background:var(--accent1);}
+  .dot.now{background:var(--accent2);box-shadow:0 0 0 3px var(--ring);}
+  .play-card{margin-top:10px;position:relative;}
+  .prompt{font-size:1.3rem;font-weight:800;margin:.2rem 0 1rem;}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .opt{
+    position:relative;border:2px solid transparent;cursor:pointer;
+    background:var(--btn);color:var(--ink);font-weight:800;font-size:1.12rem;
+    min-height:70px;border-radius:20px;padding:12px 8px;box-shadow:var(--shadow);
+    transition:transform .12s ease, background .12s ease, opacity .2s ease, border-color .2s ease;
+  }
+  .opt:hover:not(:disabled){background:var(--btn-hov);transform:translateY(-2px);}
+  .opt:active:not(:disabled){transform:scale(.96);}
+  .opt:disabled{cursor:default;}
+  .opt .key{
+    position:absolute;top:7px;left:10px;font-size:.72rem;font-weight:700;color:var(--muted);
+    border:1.5px solid var(--ring);border-radius:7px;padding:1px 6px;line-height:1.3;
+  }
+  .opt.right{background:var(--good-bg);border-color:var(--good);color:var(--good);}
+  .opt.right .key{color:var(--good);border-color:var(--good);}
+  .opt.wrongpick{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);animation:shake .4s;}
+  .opt.wrongpick .key{color:var(--bad);border-color:var(--bad);}
+  .opt.dim{opacity:.45;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}50%{transform:translateX(6px);}75%{transform:translateX(-3px);}}
+
+  .feedback{padding:6px 2px 2px;animation:fadeIn .25s ease;}
+  .fb-title{font-size:1.4rem;font-weight:800;margin:0 0 .3rem;}
+  .fb-title.good{color:var(--good);}
+  .fb-title.bad{color:var(--bad);}
+  .fb-sub{color:var(--muted);font-size:1.02rem;line-height:1.5;margin:0 0 .9rem;}
+  .fb-sub b{color:var(--ink);}
+
+  .tier-banner{
+    position:absolute;top:-8px;left:50%;z-index:3;white-space:nowrap;
+    transform:translate(-50%,-100%) scale(.9);opacity:0;pointer-events:none;
+    background:var(--ink);color:var(--bg-a);font-weight:800;font-size:.92rem;
+    padding:10px 16px;border-radius:999px;box-shadow:var(--shadow);
+  }
+  .tier-banner.show{animation:banner 2.6s ease forwards;}
+  @keyframes banner{
+    0%{opacity:0;transform:translate(-50%,-100%) scale(.9);}
+    12%{opacity:1;transform:translate(-50%,-100%) scale(1);}
+    82%{opacity:1;transform:translate(-50%,-100%) scale(1);}
+    100%{opacity:0;transform:translate(-50%,-130%) scale(.95);}
+  }
+  .float-score{
+    position:absolute;top:4%;left:50%;z-index:3;pointer-events:none;opacity:0;
+    transform:translateX(-50%);font-weight:800;font-size:1.5rem;color:var(--good);
+    text-shadow:0 2px 8px rgba(255,255,255,.6);
+  }
+  .float-score.go{animation:floatUp 1.2s ease-out;}
+  @keyframes floatUp{
+    0%{opacity:0;transform:translate(-50%,12px);}
+    20%{opacity:1;}
+    100%{opacity:0;transform:translate(-50%,-36px);}
+  }
+
+  /* ---------- fin de partie ---------- */
+  .record{
+    display:inline-block;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;
+    font-weight:800;padding:8px 18px;border-radius:999px;margin:.2rem 0 .8rem;
+    box-shadow:0 8px 22px rgba(230,110,140,.35);animation:bounce .5s ease-in-out 2;
+  }
+  .final-score{margin:6px 0 12px;line-height:1;}
+  .final-score span:first-child{font-size:3.2rem;font-weight:800;display:block;}
+  .final-score .pts{color:var(--muted);font-weight:700;font-size:1.05rem;}
+  .stats{display:flex;gap:12px;justify-content:center;margin:2px 0 18px;}
+  .stats div{background:var(--btn);border:1px solid var(--ring);border-radius:18px;padding:12px 18px;box-shadow:var(--shadow);}
+  .stats b{display:block;font-size:1.35rem;}
+  .stats span{color:var(--muted);font-size:.85rem;font-weight:700;}
+
+  /* ---------- v1.1 : badges ---------- */
+  .badges-block{margin:18px 0 2px;}
+  .badges-title{font-size:1.06rem;margin:0 0 10px;}
+  .badge-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .badge{
+    background:none;border:none;cursor:pointer;font-family:inherit;
+    display:flex;flex-direction:column;align-items:center;gap:5px;padding:2px;
+    transition:transform .12s ease;
+  }
+  .badge:active{transform:scale(.93);}
+  .badge .coin{
+    width:58px;height:58px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:1.75rem;
+    background:linear-gradient(135deg,var(--accent1),var(--accent2));
+    border:2px solid rgba(255,255,255,.55);box-shadow:var(--shadow);
+  }
+  .badge.gold .coin{border-color:#ffc94d;box-shadow:0 0 0 2px #ffc94d,var(--shadow);}
+  .badge.locked .coin{background:var(--btn);border-color:var(--ring);filter:grayscale(1);opacity:.6;}
+  .badge .badge-name{font-size:.68rem;font-weight:700;color:var(--ink);max-width:66px;line-height:1.25;}
+  .badge.locked .badge-name{color:var(--muted);}
+  .badge-tip{font-size:.93rem;color:var(--muted);margin:10px 0 0;min-height:1.4em;line-height:1.45;}
+  .badge-tip b{color:var(--ink);}
+  /* bannière de déblocage : non bloquante, 2,6 s, visible sur tous les écrans */
+  .badge-banner{
+    position:fixed;top:12px;left:50%;z-index:60;pointer-events:none;opacity:0;
+    transform:translate(-50%,-100%) scale(.9);max-width:92vw;text-align:center;
+    background:var(--ink);color:var(--bg-a);font-weight:800;font-size:.95rem;
+    padding:12px 18px;border-radius:999px;box-shadow:var(--shadow);
+  }
+  .badge-banner.show{animation:badgeBanner 2.6s ease forwards;}
+  @keyframes badgeBanner{
+    0%{opacity:0;transform:translate(-50%,-100%) scale(.9);}
+    12%{opacity:1;transform:translate(-50%,0) scale(1);}
+    82%{opacity:1;transform:translate(-50%,0) scale(1);}
+    100%{opacity:0;transform:translate(-50%,-40%) scale(.95);}
+  }
+  /* badges gagnés sur l'écran de fin */
+  .end-badges{margin:2px 0 18px;}
+  .end-badges-title{font-weight:800;margin:.2rem 0 .7rem;}
+  .end-badges .coin{animation:bounce .5s ease-in-out 2;}
+  .end-badges .badge{cursor:default;}
+  .version{font-size:.72rem;opacity:.7;}
+  .fb-soft{color:var(--muted);}
+
+  /* ---------- son ---------- */
+  .sound-btn{
+    position:fixed;top:12px;right:12px;z-index:10;width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--ring);background:var(--card);cursor:pointer;color:var(--muted);
+    display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  }
+  .sound-btn svg{width:22px;height:22px;display:block;}
+  .sound-btn .off{display:none;}
+  .sound-btn.muted .on{display:none;}
+  .sound-btn.muted .off{display:block;}
+
+  /* ---------- dialogue de confirmation ---------- */
+  .dlg-overlay{
+    position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+    padding:20px;background:rgba(40,22,14,.42);animation:fadeIn .2s ease;
+  }
+  .dlg{
+    width:100%;max-width:340px;background:var(--card);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    border:1px solid var(--ring);border-radius:24px;box-shadow:var(--shadow);
+    padding:24px 20px 20px;text-align:center;
+  }
+  .dlg h3{margin:0 0 .4rem;font-size:1.25rem;}
+  .dlg p{color:var(--muted);margin:0 0 1.1rem;font-size:1rem;}
+  .dlg-btns{display:flex;gap:10px;}
+  .dlg-btn{
+    flex:1;border:1px solid var(--ring);background:var(--btn);color:var(--ink);
+    font-weight:800;font-size:1.02rem;padding:13px 8px;border-radius:16px;cursor:pointer;
+    box-shadow:var(--shadow);min-height:48px;
+    transition:background .12s ease,transform .12s ease;
+  }
+  .dlg-btn:hover{background:var(--btn-hov);}
+  .dlg-btn:active{transform:scale(.96);}
+
+  @media (max-width:360px){
+    h1{font-size:1.7rem;}
+    .opt{font-size:1rem;min-height:64px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important;}
+    .face-svg,.eyes.blink,.tear-fall,.sweat,.twinkle,.halo{animation:none !important;}
+  }
+</style>
+</head>
+<body>
+<noscript><p style="text-align:center;padding:2rem;">Ce jeu a besoin de JavaScript pour fonctionner.</p></noscript>
+
+<button id="btnSound" class="sound-btn" aria-label="Activer ou couper le son" title="Son">
+  <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none"/>
+    <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
+    <path d="M18.5 5.5a9.2 9.2 0 0 1 0 13"/>
+  </svg>
+  <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none"/>
+    <path d="M16 9l6 6M22 9l-6 6"/>
+  </svg>
+</button>
+
+<div class="badge-banner" id="badgeBanner" aria-hidden="true"></div>
+
+<div class="app">
+  <!-- ===== Accueil ===== -->
+  <section id="scr-start" class="screen active" aria-labelledby="titreJeu">
+    <div class="card">
+      <div class="face-stage demo" id="demoStage">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="face-svg" id="demoSvg"></div>
+      </div>
+      <h1 id="titreJeu">Devine l&rsquo;humeur</h1>
+      <p class="tagline">Un visage apparaît&hellip;<br>&Agrave; toi de deviner ce qu&rsquo;il ressent&nbsp;!</p>
+      <div class="rules">
+        <div class="rule"><b>10</b> manches</div>
+        <div class="rule"><b>13</b> humeurs</div>
+        <div class="rule"><b>52</b> visages</div>
+        <div class="rule">combos <b>&times;5</b></div>
+      </div>
+      <button id="btnPlay" class="btn-primary" type="button">Jouer</button>
+      <div class="badges-block">
+        <h3 class="badges-title">Mes badges</h3>
+        <div class="badge-row" id="badgeRow"></div>
+        <p class="badge-tip hidden" id="badgeTip"></p>
+      </div>
+      <p id="bestLine" class="best-line"></p>
+      <p class="hint">Astuce&nbsp;: regarde les sourcils, les yeux et la bouche.</p>
+      <p class="local-note">Ton meilleur score et tes badges sont gardés sur cet appareil.<br><span class="version">v1.1</span></p>
+    </div>
+  </section>
+
+  <!-- ===== Jeu ===== -->
+  <section id="scr-game" class="screen" aria-label="Partie en cours">
+    <div class="hud">
+      <div class="pill" id="hudRound">Manche 1/10</div>
+      <div class="pill">Score&nbsp;: <span id="hudScore">0</span></div>
+      <button id="btnRestart" class="pill restart" type="button" aria-label="Recommencer la partie" title="Recommencer (R)">&#x21ba; Recommencer</button>
+      <div class="pill combo hidden" id="hudCombo">Combo &times;2</div>
+      <div class="pill streak hidden" id="hudStreak" aria-live="polite" title="Série de bonnes réponses en cours">&#x1f525; 2</div>
+    </div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+
+    <div class="face-stage" id="faceStage">
+      <div class="halo" aria-hidden="true"></div>
+      <div class="face-svg" id="faceSvg"></div>
+      <div class="tier-banner" id="tierBanner"></div>
+      <div class="float-score" id="floatScore" aria-hidden="true"></div>
+    </div>
+
+    <div class="card play-card">
+      <p class="prompt" id="prompt">Quelle humeur vois-tu&nbsp;?</p>
+      <div class="options" id="options"></div>
+      <div class="feedback hidden" id="feedback" role="alert" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===== Fin de partie ===== -->
+  <section id="scr-end" class="screen" aria-label="Partie termin&eacute;e">
+    <div class="card">
+      <div class="face-stage demo" id="endStage">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="face-svg" id="endSvg"></div>
+      </div>
+      <h2>Partie termin&eacute;e&nbsp;!</h2>
+      <div id="recordBadge" class="record hidden">&starf; Nouveau record&nbsp;!</div>
+      <div class="final-score"><span id="finalScore">0</span><span class="pts">points</span></div>
+      <div class="stats">
+        <div><b id="statGood">0/10</b><span>bonnes r&eacute;ponses</span></div>
+        <div><b id="statCombo">&times;1</b><span>meilleur combo</span></div>
+      </div>
+      <div class="end-badges hidden" id="endBadges">
+        <p class="end-badges-title">Badges de cette partie :</p>
+        <div class="badge-row" id="endBadgeRow"></div>
+      </div>
+      <button id="btnReplay" class="btn-primary" type="button">Rejouer</button>
+      <button id="btnHome" class="btn-ghost" type="button">Accueil</button>
+    </div>
+  </section>
+</div>
+
+<!-- ===== Confirmation : recommencer ===== -->
+<div id="dlgRestart" class="dlg-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+  <div class="dlg">
+    <h3 id="dlgTitle">Recommencer la partie&nbsp;?</h3>
+    <p>Ton score sera perdu.</p>
+    <div class="dlg-btns">
+      <button id="btnRestartYes" class="dlg-btn" type="button">Oui</button>
+      <button id="btnRestartNo" class="dlg-btn" type="button">Non</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ================= constante & donn&eacute;es ================= */
+var $ = function(id){ return document.getElementById(id); };
+var LINE = '#4b2e1d';
+
+var SHAPE_GEO = {
+  round:  { d:'<circle cx="110" cy="118" r="62"/>', sx:1,    sy:1,    hairDy:0,   ears:[[50,118],[170,118]] },
+  oval:   { d:'<ellipse cx="110" cy="118" rx="56" ry="70"/>', sx:.9,  sy:1.13,  hairDy:-10, ears:[[56,118],[164,118]] },
+  square: { d:'<rect x="52" y="58" width="116" height="118" rx="30"/>', sx:.94, sy:.95, hairDy:2, ears:[[54,116],[166,116]] },
+  tall:   { d:'<rect x="58" y="44" width="104" height="148" rx="52"/>', sx:.85, sy:1.2, hairDy:-14, ears:[[58,118],[162,118]] }
+};
+
+/* 12 humeurs principales (12 x 4 variantes = 48 visages) + neutre (13e : r&eacute;ponse des premi&egrave;res manches et leurre ensuite) */
+var MOODS12 = ['joie','tristesse','colère','surprise','peur','dégoût','mépris','honte','fierté','ennui','confusion','admiration'];
+var MOODS = MOODS12.concat(['neutre']);
+
+/* paires volontairement confusantes pour les leurres des manches 8 à 10 */
+var PAIRS = {
+  'joie':'fierté', 'fierté':'joie',
+  'tristesse':'honte', 'honte':'tristesse',
+  'colère':'mépris', 'mépris':'colère',
+  'neutre':'ennui', 'ennui':'neutre',
+  'surprise':'admiration', 'admiration':'surprise',
+  'peur':'confusion', 'confusion':'peur'
+};
+
+/* 4 variantes de visage fixes : peau, forme, coiffure, âge suggéré.
+   Les cosmétiques ne changent jamais la lecture de l'expression. */
+var VARIANTS = [
+  { skin:'#ffdfc2', shape:'round',  hair:'long',   hc:'#43291a', age:false }, // jeune, peau claire, cheveux longs
+  { skin:'#df9c63', shape:'square', hair:'tuft',   hc:'#26211f', age:false }, // adulte, visage carré, cheveux courts
+  { skin:'#8a5330', shape:'tall',   hair:'curls',  hc:'#26211f', age:false }, // adulte, visage allongé, peau foncée, cheveux frisés
+  { skin:'#f6c394', shape:'oval',   hair:'fringe', hc:'#b9b3ad', age:true  }  // personne âgée : cheveux blancs + pattes d'oie
+];
+
+var EXPLAIN = {
+  'joie':      "Les yeux fermés en arcs et le grand sourire ouvert : c'était la <b>joie</b>.",
+  'tristesse': "Les sourcils relevés vers le centre, les yeux tombants et la petite larme : c'était la <b>tristesse</b>.",
+  'colère':    "Les sourcils froncés en V, les yeux plissés et la bouche serrée : c'était la <b>colère</b>.",
+  'surprise':  "Les yeux grands et ronds, les sourcils très hauts et la bouche en O : c'était la <b>surprise</b>.",
+  'peur':      "Les yeux écarquillés avec de toutes petites pupilles, les sourcils relevés tout près l'un de l'autre, la bouche ouverte en ovale et la goutte de sueur : c'était la <b>peur</b>.",
+  'dégoût':    "Le nez plissé avec ses petites rides et la lèvre relevée d'un côté : c'était le <b>dégoût</b>.",
+  'neutre':    "Les sourcils plats, les yeux normaux et la bouche en ligne droite : c'était l'humeur <b>neutre</b>.",
+  'mépris':    "Le coin de la bouche relevé d'un seul côté, un œil plissé et le sourcil levé du même côté : c'était le <b>mépris</b>.",
+  'honte':     "Le regard baissé vers le sol, les joues rougies et la petite bouche pincée : c'était la <b>honte</b>.",
+  'fierté':    "Les yeux mi-clos sereins, le sourire confiant et le menton un peu relevé : c'était la <b>fierté</b>.",
+  'ennui':     "Les paupières lourdes mi-closes et la bouche presque fermée : c'était l'<b>ennui</b>.",
+  'confusion': "Un sourcil levé, l'autre froncé, et la bouche de travers : c'était la <b>confusion</b>.",
+  'admiration':"Les yeux grands ouverts tout brillants, avec leurs petites étincelles, et la bouche en léger sourire ouvert : c'était l'<b>admiration</b>."
+};
+
+var GOOD_MSGS = ["Bravo\u00A0!", "Excellent\u00A0!", "Bien vu\u00A0!", "Joli coup d'œil\u00A0!", "Parfait\u00A0!", "Tu as de l'œil\u00A0!", "Super\u00A0!"];
+var WRONG_MSGS = ["Raté… mais c'était subtil\u00A0!", "Pas tout à fait.", "Oups, pas cette fois.", "Ce n'était pas facile.", "Hmm, pas tout à fait ça."];
+/* v1.1 — messages de série (titres du feedback quand la série est à 3+) */
+var STREAK_MSGS = ["Ça roule\u00A0! \uD83D\uDD25", "Tu lis dans les pensées\u00A0!", "En feu\u00A0! \uD83D\uDD25", "Rien ne t'arrête\u00A0!"];
+
+/* ================= son (Web Audio, aucun r&eacute;seau) ================= */
+var Sfx = {
+  enabled: true, ctx: null,
+  ensure: function(){
+    if(!this.ctx){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return false;
+      try{ this.ctx = new AC(); }catch(e){ return false; }
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+    return true;
+  },
+  tone: function(f, when, dur, vol){
+    var c = this.ctx, t = c.currentTime + when;
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t + dur + 0.05);
+  },
+  notes: function(seq, vol){
+    if(!this.enabled || !this.ensure()) return;
+    var self = this;
+    seq.forEach(function(n){ self.tone(n[0], n[1], n[2] || 0.28, vol || 0.07); });
+  },
+  ok:    function(){ this.notes([[523.25,0],[659.25,0.09],[783.99,0.18]]); },
+  ko:    function(){ this.notes([[330,0,0.22],[262,0.15,0.32]], 0.055); },
+  click: function(){ this.notes([[600,0,0.07]], 0.045); },
+  win:   function(){ this.notes([[523.25,0],[587.33,0.12],[659.25,0.24],[783.99,0.36],[1046.5,0.5,0.55]]); },
+  end:   function(){ this.notes([[392,0],[523.25,0.14],[587.33,0.28]], 0.06); }
+};
+document.addEventListener('pointerdown', function(){ Sfx.ensure(); }, { once:true });
+
+/* ================= constructeur de visage SVG ================= */
+/* Cheveux derri&egrave;re le visage */
+function hairBack(hair, hc, shape){
+  if(hair === 'long'){
+    return '<ellipse cx="110" cy="50" rx="54" ry="42" fill="'+hc+'"/>' +
+           '<rect x="30" y="70" width="32" height="132" rx="16" fill="'+hc+'"/>' +
+           '<rect x="158" y="70" width="32" height="132" rx="16" fill="'+hc+'"/>';
+  }
+  if(hair === 'curls'){
+    var L = (shape === 'tall') ? 46 : 36, R = (shape === 'tall') ? 174 : 184;
+    return '<circle cx="'+L+'" cy="96" r="15" fill="'+hc+'"/>' +
+           '<circle cx="'+L+'" cy="122" r="15" fill="'+hc+'"/>' +
+           '<circle cx="'+R+'" cy="96" r="15" fill="'+hc+'"/>' +
+           '<circle cx="'+R+'" cy="122" r="15" fill="'+hc+'"/>';
+  }
+  return '';
+}
+/* Cheveux devant le visage */
+function hairFront(hair, hc, shape){
+  if(hair === 'cap'){
+    return '<path d="M50 92 C48 36 78 15 110 15 C142 15 172 36 170 92 C158 64 142 56 124 62 C114 52 100 50 90 60 C74 54 58 64 50 92 Z" fill="'+hc+'"/>';
+  }
+  if(hair === 'tuft'){
+    return '<circle cx="76" cy="32" r="13" fill="'+hc+'"/>' +
+           '<circle cx="110" cy="22" r="15" fill="'+hc+'"/>' +
+           '<circle cx="144" cy="32" r="13" fill="'+hc+'"/>' +
+           '<path d="M54 78 C56 34 84 16 110 16 C136 16 164 34 166 78 C150 54 130 50 110 56 C90 50 70 54 54 78 Z" fill="'+hc+'"/>';
+  }
+  if(hair === 'fringe'){
+    return '<path d="M50 70 C48 30 78 12 110 12 C142 12 172 30 170 70 L162 70 L156 56 L148 70 L140 56 L132 70 L124 56 L116 70 L108 56 L100 70 L92 56 L84 70 L78 57 L70 70 L64 59 L56 70 Z" fill="'+hc+'"/>';
+  }
+  if(hair === 'long'){
+    return '<path d="M58 84 C64 42 90 26 110 26 C130 26 156 42 162 84 C150 64 132 56 110 60 C88 56 70 64 58 84 Z" fill="'+hc+'"/>' +
+           '<path d="M52 82 C46 116 46 160 56 196 L66 196 C60 160 60 118 66 86 Z" fill="'+hc+'"/>' +
+           '<path d="M168 82 C174 116 174 160 164 196 L154 196 C160 160 160 118 154 86 Z" fill="'+hc+'"/>';
+  }
+  /* curls : devant */
+  return '<circle cx="62" cy="44" r="14" fill="'+hc+'"/>' +
+         '<circle cx="92" cy="30" r="15" fill="'+hc+'"/>' +
+         '<circle cx="124" cy="30" r="15" fill="'+hc+'"/>' +
+         '<circle cx="154" cy="44" r="14" fill="'+hc+'"/>';
+}
+
+/* La frange cacherait les sourcils hauts de la surprise : coiffure de secours, m&ecirc;me couleur */
+function hairFor(v, mood){
+  if(mood === 'surprise' && v.hair === 'fringe') return 'cap';
+  return v.hair;
+}
+
+/* sourcils : chaque émotion a sa propre géométrie, exagérée et lisible */
+function browsSVG(m){
+  function B(d, w){ return '<path d="'+d+'" stroke="'+LINE+'" stroke-width="'+(w||6)+'" fill="none" stroke-linecap="round"/>'; }
+  switch(m){
+    case 'joie':      return B('M68 86 Q84 77 100 86 M120 86 Q136 77 152 86', 5.5);
+    case 'tristesse': return B('M68 98 L100 78 M120 78 L152 98');
+    case 'colère':    return B('M64 70 L102 98 M118 98 L156 70', 7) + B('M104 88 L103 98 M116 88 L117 98', 4);
+    case 'surprise':  return B('M64 70 Q84 58 104 70 M116 70 Q136 58 156 70');
+    case 'peur':      return B('M68 88 Q85 71 102 77 M118 77 Q135 71 152 88', 5.5);
+    case 'dégoût':    return B('M68 90 L100 97 M120 97 L152 90');
+    case 'neutre':    return B('M68 88 L100 88 M120 88 L152 88', 5.5);
+    case 'mépris':    return B('M68 88 L100 88') + B('M120 80 Q136 72 152 80');
+    case 'honte':     return B('M70 92 L98 84 M122 84 L150 92', 5.5);
+    case 'fierté':    return B('M68 82 Q84 74 100 82 M120 82 Q136 74 152 82', 5.5);
+    case 'ennui':     return B('M68 96 L100 96 M120 96 L152 96', 5);
+    case 'confusion': return B('M68 78 Q84 68 100 78') + B('M152 86 L120 96');
+    case 'admiration':return B('M66 76 Q84 64 102 76 M118 76 Q136 64 154 76', 5.5);
+  }
+  return B('M68 88 L100 88 M120 88 L152 88', 5.5);
+}
+
+/* yeux : chaque émotion a sa propre forme d'yeux et de regard */
+function eyesSVG(m){
+  function W(cx, cy, rx, ry){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="#fff"/>'; }
+  function C(cx, cy, r){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#fff"/>'; }
+  function P(cx, cy, r){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+LINE+'"/>'; }
+  function G(cx, cy, r){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+(r||2)+'" fill="#fff"/>'; }
+  function LID(d, w){ return '<path d="'+d+'" stroke="'+LINE+'" stroke-width="'+w+'" fill="none" stroke-linecap="round"/>'; }
+  switch(m){
+    case 'joie': /* yeux rieurs fermés en arcs */
+      return LID('M70 110 Q84 94 98 110 M122 110 Q136 94 150 110', 5);
+    case 'tristesse': /* yeux tombants, paupières hautes qui s'affaissent vers l'extérieur */
+      return W(84,106,11,13) + W(136,106,11,13) +
+             P(84,112,4.6) + P(136,112,4.6) +
+             LID('M70 103 Q84 95 98 101 M122 101 Q136 95 150 103', 4.5);
+    case 'colère': /* yeux plissés, paupière supérieure froncée */
+      return W(84,106,12,9) + W(136,106,12,9) +
+             P(84,107,4.5) + P(136,107,4.5) +
+             LID('M68 99 L100 109 M120 109 L152 99', 6.5);
+    case 'surprise': /* grands yeux ronds */
+      return C(84,106,17) + C(136,106,17) +
+             P(84,106,6.5) + P(136,106,6.5) + G(82,104) + G(134,104);
+    case 'peur': /* yeux écarquillés, toutes petites pupilles */
+      return C(84,106,18) + C(136,106,18) +
+             P(84,106,3) + P(136,106,3) + G(83,105,1.5) + G(135,105,1.5);
+    case 'dégoût': /* yeux plissés, pupilles en bas */
+      return W(84,108,12,6.5) + W(136,108,12,6.5) +
+             P(84,110.5,5.5) + P(136,110.5,5.5) +
+             LID('M70 102 L98 100 M122 100 L150 102', 5.5) +
+             '<path d="M74 119 Q84 123 94 119 M126 119 Q136 123 146 119" stroke="'+LINE+'" stroke-width="3" fill="none" stroke-linecap="round" opacity=".4"/>';
+    case 'neutre': /* yeux normaux */
+      return W(84,106,13,15) + W(136,106,13,15) +
+             P(84,108,6) + P(136,108,6) + G(82,106) + G(134,106);
+    case 'mépris': /* œil normal à gauche, œil plissé à droite */
+      return W(84,106,13,15) + P(84,108,6) + G(82,106) +
+             W(136,107,12,6) + P(136,109,4.5) +
+             LID('M122 100 L150 103', 6.5);
+    case 'honte': /* regard baissé : paupières abaissées, pupilles en bas */
+      return W(84,108,12,11) + W(136,108,12,11) +
+             P(84,114,4.5) + P(136,114,4.5) +
+             LID('M70 101 Q84 107 98 101 M122 101 Q136 107 150 101', 5);
+    case 'fierté': /* yeux mi-clos sereins */
+      return LID('M70 112 Q84 119 98 112 M122 112 Q136 119 150 112', 5);
+    case 'ennui': /* paupières lourdes, cernes sous les yeux */
+      return W(84,106,12,8) + W(136,106,12,8) +
+             P(84,110,4) + P(136,110,4) +
+             LID('M69 103 Q84 99 99 103 M121 103 Q136 99 151 103', 6.5) +
+             '<path d="M74 121 Q84 125 94 121 M126 121 Q136 125 146 121" stroke="'+LINE+'" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".45"/>';
+    case 'confusion': /* yeux légèrement plissés */
+      return W(84,106,12,9.5) + W(136,106,12,9.5) +
+             P(84,109,5) + P(136,109.5,5) +
+             LID('M70 101 Q84 98 98 101 M122 101 Q136 98 150 101', 5);
+    case 'admiration': /* grands yeux brillants, doubles reflets */
+      return C(84,106,17) + C(136,106,17) +
+             P(84,105,7) + P(136,105,7) +
+             G(81,102,2.6) + G(99,104,1.5) + G(133,102,2.6) + G(151,104,1.5);
+  }
+  return '';
+}
+
+/* nez */
+function noseSVG(m){
+  var std = '<path d="M108 122 q6 10 -3 15" fill="none" stroke="'+LINE+'" stroke-width="4" stroke-linecap="round"/>';
+  if(m === 'dégoût'){
+    return std +
+      '<path d="M98 117 l-8 5 M97 125 l-9 3 M122 117 l8 5 M123 125 l9 3" stroke="'+LINE+'" stroke-width="3" stroke-linecap="round" fill="none"/>' +
+      '<ellipse cx="105" cy="139" rx="4.5" ry="2.8" fill="'+LINE+'" opacity=".45"/>';
+  }
+  return std;
+}
+
+/* bouche : chaque émotion a sa propre forme */
+function mouthSVG(m){
+  switch(m){
+    case 'joie': /* grande bouche souriante ouverte */
+      return '<path d="M78 144 C98 152 122 152 142 144 C142 172 78 172 78 144 Z" fill="#8a2e24"/>' +
+             '<path d="M95 163 Q110 157 125 163 Q123 171 110 171 Q97 171 95 163 Z" fill="#f08d93"/>';
+    case 'tristesse': /* U inversé */
+      return '<path d="M82 168 Q110 146 138 168" fill="none" stroke="'+LINE+'" stroke-width="5" stroke-linecap="round"/>';
+    case 'colère': /* bouche serrée, ligne droite */
+      return '<path d="M88 164 L88 160 L132 160 L132 164" fill="none" stroke="'+LINE+'" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>';
+    case 'surprise': /* bouche en O */
+      return '<ellipse cx="110" cy="162" rx="10" ry="13" fill="#5e2b1e"/>';
+    case 'peur': /* ovale tendu vertical */
+      return '<ellipse cx="110" cy="162" rx="6.5" ry="14" fill="#5e2b1e"/>' +
+             '<path d="M102 146 L102 140 M118 146 L118 140" stroke="'+LINE+'" stroke-width="3" stroke-linecap="round"/>';
+    case 'dégoût': /* lèvre supérieure relevée d'un côté */
+      return '<path d="M84 157 L106 155 L124 147 L138 155 L130 165 Q112 169 92 165 Z" fill="#5e2b1e" opacity=".30"/>' +
+             '<path d="M84 157 L106 155 L124 147 L138 155" fill="none" stroke="'+LINE+'" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>' +
+             '<path d="M92 165 Q112 169 130 165" fill="none" stroke="'+LINE+'" stroke-width="4" stroke-linecap="round"/>';
+    case 'neutre': /* ligne droite horizontale */
+      return '<path d="M90 160 L130 160" fill="none" stroke="'+LINE+'" stroke-width="4.5" stroke-linecap="round"/>';
+    case 'mépris': /* sourire asymétrique : un seul coin relevé */
+      return '<path d="M84 158 C100 160 118 160 136 146" fill="none" stroke="'+LINE+'" stroke-width="5" stroke-linecap="round"/>' +
+             '<path d="M136 146 C138 150 137 154 135 156" fill="none" stroke="'+LINE+'" stroke-width="4" stroke-linecap="round"/>' +
+             '<path d="M143 148 Q147 156 143 164" fill="none" stroke="'+LINE+'" stroke-width="3.5" stroke-linecap="round" opacity=".55"/>';
+    case 'honte': /* petite bouche pincée vers le bas */
+      return '<path d="M99 164 Q110 157 121 164" fill="none" stroke="'+LINE+'" stroke-width="5" stroke-linecap="round"/>';
+    case 'fierté': /* sourire confiant fermé */
+      return '<path d="M80 152 Q110 168 140 152" fill="none" stroke="'+LINE+'" stroke-width="6" stroke-linecap="round"/>' +
+             '<path d="M80 152 l-7 -3 M140 152 l7 -3" stroke="'+LINE+'" stroke-width="4" stroke-linecap="round"/>';
+    case 'ennui': /* bouche droite, petit jour au centre */
+      return '<path d="M92 160 L106 160 M114 160 L128 160" fill="none" stroke="'+LINE+'" stroke-width="5" stroke-linecap="round"/>';
+    case 'confusion': /* bouche de travers */
+      return '<path d="M84 156 C100 156 110 160 134 171" fill="none" stroke="'+LINE+'" stroke-width="5" stroke-linecap="round"/>';
+    case 'admiration': /* léger O souriant */
+      return '<ellipse cx="110" cy="162" rx="9" ry="6.5" fill="#8a2e24"/>' +
+             '<path d="M95 157 Q110 164 125 157" fill="none" stroke="'+LINE+'" stroke-width="4.5" stroke-linecap="round"/>';
+  }
+  return '';
+}
+
+/* ===== détails expressifs ===== */
+function tearPath(f){ return '<path d="M0 -12 C-5 -4 -7 0 -7 4 a7 7 0 0 0 14 0 C7 0 5 -4 0 -12 Z" fill="'+f+'"/>'; }
+function blushCheeks(){
+  return '<ellipse cx="62" cy="140" rx="9" ry="6" fill="#ff9aae" opacity=".9"/>' +
+         '<ellipse cx="158" cy="140" rx="9" ry="6" fill="#ff9aae" opacity=".9"/>';
+}
+function blushHonte(){
+  return '<ellipse cx="60" cy="146" rx="11" ry="7" fill="#ff8ea0" opacity=".85"/>' +
+         '<ellipse cx="160" cy="146" rx="11" ry="7" fill="#ff8ea0" opacity=".85"/>';
+}
+function star4(s){
+  var a = (s * 0.16).toFixed(2);
+  return 'M0 '+(-s)+' C'+a+' '+(-a)+' '+a+' '+(-a)+' '+s+' 0 ' +
+         'C'+a+' '+a+' '+a+' '+a+' 0 '+s+' ' +
+         'C'+(-a)+' '+a+' '+(-a)+' '+a+' '+(-s)+' 0 ' +
+         'C'+(-a)+' '+(-a)+' '+(-a)+' '+(-a)+' 0 '+(-s)+' Z';
+}
+/* marques d'âge (variante âgée uniquement) : pattes d'oie, jamais près de la bouche */
+function ageMarksSVG(){
+  return '<g stroke="#bd8f62" stroke-width="3" stroke-linecap="round" fill="none" opacity=".8">' +
+    '<path d="M67 100 l-9 -4 M67 108 l-10 0 M67 116 l-9 4 M153 100 l9 -4 M153 108 l10 0 M153 116 l9 4"/>' +
+  '</g>';
+}
+
+function extrasSVG(m){
+  var s = '';
+  if(m === 'joie'){
+    s += '<path d="M70 119 Q84 112 98 119 M122 119 Q136 112 150 119" stroke="'+LINE+'" stroke-width="3.5" fill="none" stroke-linecap="round"/>';
+    s += blushCheeks();
+  }
+  if(m === 'tristesse'){
+    s += '<g transform="translate(152 124)"><g class="tear-fall">' + tearPath('#7cc4e8') + '</g></g>';
+  }
+  if(m === 'colère'){
+    s += '<g transform="translate(110 72)" stroke="#d0483e" stroke-width="4.5" fill="none" stroke-linecap="round">' +
+         '<rect x="-6" y="-12" width="12" height="24" rx="6"/><rect x="-12" y="-6" width="24" height="12" rx="6"/></g>';
+  }
+  if(m === 'peur'){
+    s += '<g transform="translate(158 82)"><g class="sweat"><path d="M0 -10 C-4 -4 -6 -1 -6 3 a6 6 0 0 0 12 0 C6 -1 4 -4 0 -10 Z" fill="#7cc4e8"/></g></g>';
+  }
+  if(m === 'honte'){ s += blushHonte(); }
+  if(m === 'admiration'){
+    s += twinklesSVG();
+  }
+  if(m === 'fierté'){
+    s += '<path d="M98 177 Q110 182 122 177" stroke="'+LINE+'" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".55"/>';
+  }
+  s += '<g class="cel-blush">' + blushCheeks() + '</g>';
+  return s;
+}
+
+/* étincelles de l'admiration : le <g> porte l'ancrage, la classe CSS animée
+   ne doit pas avoir d'attribut transform (la CSS remplacerait le translate) */
+function twinklesSVG(){
+  function sp(x, y, s){
+    return '<g transform="translate('+x+' '+y+')"><path class="twinkle" d="'+star4(s)+'" fill="#ffd34d"/></g>';
+  }
+  return sp(64,82,10) + sp(156,82,10) + sp(45,112,6.5) + sp(175,112,6.5);
+}
+
+function sparklesSVG(){
+  var star = 'M0 -11 C1.2 -4 4 -1.2 11 0 C4 1.2 1.2 4 0 11 C-1.2 4 -4 1.2 -11 0 C-4 -1.2 -1.2 -4 0 -11 Z';
+  return '<g class="sparkles" aria-hidden="true">' +
+    '<g transform="translate(30 50)"><path class="star s1" d="'+star+'" fill="#ffc94d"/></g>' +
+    '<g transform="translate(190 44)"><path class="star s2" d="'+star+'" fill="#ff9ad5"/></g>' +
+    '<g transform="translate(24 150)"><path class="star s3" d="'+star+'" fill="#8fd0ff"/></g>' +
+    '<g transform="translate(196 148)"><path class="star s4" d="'+star+'" fill="#ffc94d"/></g>' +
+    '</g>';
+}
+
+/* menton relevé pour la fierté : tout le groupe d'expression monte légèrement */
+function faceSVG(mood, v){
+  var g = SHAPE_GEO[v.shape];
+  var hair = hairFor(v, mood);
+  var face = g.d.replace('/>', ' fill="'+v.skin+'" stroke="'+LINE+'" stroke-opacity=".15" stroke-width="3"/>');
+  var ears = g.ears.map(function(e){
+    return '<circle cx="'+e[0]+'" cy="'+e[1]+'" r="8" fill="'+v.skin+'" stroke="'+LINE+'" stroke-opacity=".15" stroke-width="3"/>';
+  }).join('');
+  var shake = (mood === 'peur') ? 'tremble' : '';
+  var eyesCls = (mood === 'joie' || mood === 'fierté') ? 'eyes' : 'eyes blink';
+  var groupT = 'translate(110 118) scale('+g.sx+' '+g.sy+') translate(-110 -118)' + (mood === 'fierté' ? ' translate(0 -7)' : '');
+  return '<svg viewBox="0 0 220 220" role="img" aria-label="Visage à l\'expression mystère">' +
+    '<g class="face-shake '+shake+'">' +
+      '<g transform="translate(0 '+g.hairDy+')">' + hairBack(hair, v.hc, v.shape) + '</g>' +
+      ears + face +
+      '<g transform="translate(0 '+g.hairDy+')">' + hairFront(hair, v.hc, v.shape) + '</g>' +
+      '<g transform="'+groupT+'">' +
+        (v.age ? ageMarksSVG() : '') +
+        browsSVG(mood) +
+        '<g class="'+eyesCls+'">' + eyesSVG(mood) + '</g>' +
+        noseSVG(mood) +
+        mouthSVG(mood) +
+        extrasSVG(mood) +
+      '</g>' +
+      sparklesSVG() +
+    '</g></svg>';
+}
+
+/* ================= partie ================= */
+var BEST_KEY = 'devine-humeur-best';
+var best = 0;
+try{ best = Math.max(0, parseInt(localStorage.getItem(BEST_KEY) || '0', 10) || 0); }catch(e){ best = 0; }
+function saveBest(){ try{ localStorage.setItem(BEST_KEY, String(best)); }catch(e){} }
+
+/* ================= v1.1 : badges ================= */
+/* 6 badges 100 % originaux. Persistance locale uniquement, jamais de serveur.
+   Note : la v1.0 n'a pas de niveaux de difficulté — les manches 8-10 (12 humeurs,
+   leurres confusants) sont la section « experte », d'où la condition de L'œil du lynx. */
+var BADGE_KEY = 'devine-humeur-badges-v1';
+var BADGES = [
+  { emoji:'\uD83D\uDC23', name:'Première lueur',      desc:'une série de 3 bonnes réponses',            gold:false },
+  { emoji:'\uD83D\uDD25', name:'Sur une lancée',       desc:'une série de 5 bonnes réponses',            gold:false },
+  { emoji:'\u26A1',       name:'En feu',               desc:'une série de 8 bonnes réponses',            gold:false },
+  { emoji:'\uD83D\uDC41\uFE0F', name:"L'œil du lynx",   desc:'bonnes réponses aux manches 8, 9 et 10',    gold:false },
+  { emoji:'\uD83D\uDC8E', name:'Sans faute',           desc:'une partie complète sans erreur (10/10)',   gold:true  },
+  { emoji:'\uD83D\uDC51', name:'Légende des humeurs',  desc:'débloquer les 5 autres badges',              gold:true  }
+];
+var badges = [false,false,false,false,false,false];
+try{
+  var raw = localStorage.getItem(BADGE_KEY);
+  if(raw){
+    var arr = JSON.parse(raw);
+    if(arr && arr.length){
+      for(var bi = 0; bi < BADGES.length; bi++){ badges[bi] = !!arr[bi]; }
+    }
+  }
+}catch(e){ badges = [false,false,false,false,false,false]; }
+function saveBadges(){ try{ localStorage.setItem(BADGE_KEY, JSON.stringify(badges)); }catch(e){} }
+
+/* badges gagnés pendant LA partie en cours (écran de fin) */
+var sessionBadges = [];
+
+/* file de bannières : un badge à la fois, 2,6 s chacun, non bloquant */
+var badgeQueue = [];
+var badgeBannerBusy = false;
+function processBadgeQueue(){
+  if(badgeBannerBusy || badgeQueue.length === 0) return;
+  badgeBannerBusy = true;
+  var idx = badgeQueue.shift();
+  var b = $('badgeBanner');
+  b.textContent = '\uD83C\uDFC5 Badge débloqué : ' + BADGES[idx].name + ' !';
+  b.classList.remove('show');
+  void b.offsetWidth;
+  b.classList.add('show');
+  Sfx.win();
+  setTimeout(function(){ badgeBannerBusy = false; processBadgeQueue(); }, 2700);
+}
+function unlockBadge(idx){
+  if(badges[idx]) return false;
+  badges[idx] = true;
+  saveBadges();
+  if(sessionBadges.indexOf(idx) === -1) sessionBadges.push(idx);
+  badgeQueue.push(idx);
+  processBadgeQueue();
+  /* Légende des humeurs : les 5 autres débloqués */
+  if(idx !== 5 && badges[0] && badges[1] && badges[2] && badges[3] && badges[4] && !badges[5]){
+    badges[5] = true;
+    saveBadges();
+    if(sessionBadges.indexOf(5) === -1) sessionBadges.push(5);
+    badgeQueue.push(5);
+    processBadgeQueue();
+  }
+  renderBadgesHome();
+  return true;
+}
+
+function badgeCoinHTML(idx){
+  var b = BADGES[idx], locked = !badges[idx];
+  return '<span class="badge' + (locked ? ' locked' : '') + (b.gold ? ' gold' : '') + '">' +
+    '<span class="coin">' + (locked ? '\uD83D\uDD12' : b.emoji) + '</span>' +
+    '<span class="badge-name">' + b.name + '</span></span>';
+}
+/* vitrine sur l'accueil : tapote un badge → infobulle nom + condition */
+function renderBadgesHome(){
+  var row = $('badgeRow');
+  if(!row) return;
+  row.innerHTML = '';
+  BADGES.forEach(function(b, i){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'badge' + (badges[i] ? '' : ' locked') + (b.gold ? ' gold' : '');
+    btn.setAttribute('aria-label', b.name + ' — ' + (badges[i] ? 'débloqué' : 'verrouillé : ' + b.desc));
+    btn.innerHTML = '<span class="coin">' + (badges[i] ? b.emoji : '🔒') + '</span>' +
+                    '<span class="badge-name">' + b.name + '</span>';
+    btn.addEventListener('click', function(){
+      Sfx.click();
+      var tip = $('badgeTip');
+      if(!tip.classList.contains('hidden') && tip.getAttribute('data-i') === String(i)){
+        tip.classList.add('hidden');
+      } else {
+        tip.innerHTML = '<b>' + b.name + '</b> — ' + b.desc + (badges[i] ? ' <b>(débloqué !)</b>' : '');
+        tip.setAttribute('data-i', String(i));
+        tip.classList.remove('hidden');
+      }
+    });
+    row.appendChild(btn);
+  });
+}
+/* badges de la partie sur l'écran de fin */
+function renderEndBadges(){
+  var box = $('endBadges'), row = $('endBadgeRow');
+  if(!box || !row) return;
+  if(sessionBadges.length === 0){ box.classList.add('hidden'); row.innerHTML = ''; return; }
+  row.innerHTML = '';
+  sessionBadges.slice().sort().forEach(function(i){
+    var s = document.createElement('span');
+    s.innerHTML = badgeCoinHTML(i);
+    row.appendChild(s.firstChild);
+  });
+  box.classList.remove('hidden');
+}
+
+var state = {
+  round: 1, score: 0, combo: 0, bestCombo: 0, good: 0, hardGood: 0,
+  answer: '', options: [], locked: false, lastMood: '', lastVariant: -1, advToken: 0
+};
+
+function label(m){ return m.charAt(0).toUpperCase() + m.slice(1); }
+/* réponses possibles par manche : 1-3 émotions de base (avec neutre), 4-7 +4, 8-10 les 12 */
+function answersPool(round){
+  if(round <= 3) return ['joie','tristesse','colère','surprise','peur','neutre'];
+  if(round <= 7) return ['joie','tristesse','colère','surprise','peur','dégoût','mépris','honte','fierté'];
+  return MOODS12.slice();
+}
+/* leurres : pareil, sauf que neutre reste utilisable comme leurre après la manche 3 */
+function lurePool(round){
+  if(round <= 3) return answersPool(round);
+  var p = answersPool(round).slice();
+  if(p.indexOf('neutre') === -1) p.push('neutre');
+  return p;
+}
+function shuffle(a){
+  for(var i = a.length - 1; i > 0; i--){
+    var j = (Math.random() * (i + 1)) | 0;
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function pickMood(round){
+  var p = answersPool(round), m = p[(Math.random() * p.length) | 0], guard = 0;
+  while(m === state.lastMood && guard++ < 6){ m = p[(Math.random() * p.length) | 0]; }
+  return m;
+}
+function pickOptions(ans, round){
+  var rest = shuffle(lurePool(round).filter(function(m){ return m !== ans; }));
+  var dec = [];
+  var sub = PAIRS[ans];
+  if(round >= 8 && sub && rest.indexOf(sub) !== -1){ dec.push(sub); }
+  for(var i = 0; i < rest.length && dec.length < 3; i++){
+    if(dec.indexOf(rest[i]) === -1) dec.push(rest[i]);
+  }
+  return shuffle([ans].concat(dec));
+}
+function randomVariant(){
+  var v = (Math.random() * VARIANTS.length) | 0, guard = 0;
+  while(v === state.lastVariant && guard++ < 6){ v = (Math.random() * VARIANTS.length) | 0; }
+  state.lastVariant = v;
+  return VARIANTS[v];
+}
+
+function show(id){
+  var screens = document.querySelectorAll('.screen');
+  for(var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+  $(id).classList.add('active');
+  try{ window.scrollTo(0, 0); }catch(e){}
+}
+
+function renderCombo(){
+  var c = $('hudCombo');
+  if(state.combo >= 2){
+    c.textContent = 'Combo ×' + Math.min(state.combo, 5);
+    c.classList.remove('hidden');
+  } else {
+    c.classList.add('hidden');
+  }
+  renderStreak();
+}
+/* v1.1 — compteur de série : réutilise la logique combo (state.combo).
+   Pastille visible à 2+, pulse doux à 5+. */
+function renderStreak(){
+  var s = $('hudStreak');
+  if(!s) return;
+  if(state.combo >= 2){
+    s.textContent = '🔥 ' + state.combo;
+    s.classList.remove('hidden');
+    s.classList.toggle('hot', state.combo >= 5);
+    s.setAttribute('aria-label', 'Série de ' + state.combo + ' bonnes réponses');
+  } else {
+    s.classList.add('hidden');
+    s.classList.remove('hot');
+  }
+}
+function renderDots(){
+  var html = '';
+  for(var i = 1; i <= 10; i++){
+    var cls = 'dot';
+    if(i < state.round) cls += ' done';
+    else if(i === state.round) cls += ' now';
+    html += '<span class="'+cls+'"></span>';
+  }
+  $('dots').innerHTML = html;
+}
+function showTierBanner(round){
+  var b = $('tierBanner');
+  b.textContent = (round === 4)
+    ? 'Nouvelles venues : le dégoût, le mépris, la honte et la fierté !'
+    : "L'ennui, la confusion et l'admiration entrent en jeu — les choix deviennent subtils !";
+  b.classList.remove('show');
+  void b.offsetWidth;
+  b.classList.add('show');
+}
+function floatScore(txt){
+  var f = $('floatScore');
+  f.textContent = txt;
+  f.classList.remove('go');
+  void f.offsetWidth;
+  f.classList.add('go');
+}
+
+function renderRound(){
+  state.locked = false;
+  var mood = pickMood(state.round);
+  state.answer = mood;
+  state.lastMood = mood;
+  state.options = pickOptions(mood, state.round);
+
+  $('faceSvg').innerHTML = faceSVG(mood, randomVariant(mood));
+  $('faceStage').classList.remove('celebrating');
+
+  $('hudRound').textContent = 'Manche ' + state.round + '/10';
+  $('hudScore').textContent = state.score;
+  renderCombo();
+  renderDots();
+
+  var box = $('options');
+  box.classList.remove('hidden');
+  box.innerHTML = '';
+  state.options.forEach(function(m, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'opt';
+    b.setAttribute('aria-label', 'Répondre : ' + label(m));
+    var k = document.createElement('span'); k.className = 'key'; k.textContent = i + 1;
+    var t = document.createElement('span'); t.textContent = label(m);
+    b.appendChild(k); b.appendChild(t);
+    b.addEventListener('click', function(){ onAnswer(i); });
+    box.appendChild(b);
+  });
+
+  $('feedback').classList.add('hidden');
+  $('feedback').innerHTML = '';
+  if(state.round === 4 || state.round === 8) showTierBanner(state.round);
+}
+
+function onAnswer(i){
+  if(state.locked) return;
+  state.locked = true;
+  var picked = state.options[i];
+  var ok = (picked === state.answer);
+  var btns = $('options').children;
+  for(var j = 0; j < btns.length; j++){
+    btns[j].disabled = true;
+    var m = state.options[j];
+    if(m === state.answer) btns[j].classList.add('right');
+    else if(j === i) btns[j].classList.add('wrongpick');
+    else btns[j].classList.add('dim');
+  }
+  if(ok) onCorrect(); else onWrong();
+}
+
+function onCorrect(){
+  state.combo++;
+  state.bestCombo = Math.max(state.bestCombo, state.combo);
+  state.good++;
+  if(state.round >= 8) state.hardGood++;
+  var mult = Math.min(state.combo, 5);
+  var pts = 100 * mult;
+  state.score += pts;
+  Sfx.ok();
+
+  /* v1.1 — badges de série */
+  if(state.combo === 3) unlockBadge(0);       /* Première lueur */
+  else if(state.combo === 5) unlockBadge(1);  /* Sur une lancée */
+  else if(state.combo === 8) unlockBadge(2);  /* En feu */
+
+  var g = document.querySelector('#faceSvg .face-shake');
+  if(g){ g.classList.remove('tremble'); g.classList.add('celebrate'); }
+  $('faceStage').classList.add('celebrating');
+  floatScore('+' + pts);
+
+  $('hudScore').textContent = state.score;
+  renderCombo();
+
+  var msg = (state.combo >= 3)
+    ? STREAK_MSGS[(Math.random() * STREAK_MSGS.length) | 0]
+    : GOOD_MSGS[(Math.random() * GOOD_MSGS.length) | 0];
+  var sub = '+' + pts + ' points' + (mult >= 2 ? ' · combo ×' + mult : '') +
+            (state.combo >= 3 ? ' · <b>Série de ' + state.combo + ' !</b> 🔥' : '');
+  $('options').classList.add('hidden');
+  var fb = $('feedback');
+  fb.classList.remove('hidden');
+  fb.innerHTML = '<div class="fb-title good">✓ ' + msg + '</div>' +
+                 '<div class="fb-sub">' + sub + '</div>';
+
+  var tk = state.advToken;
+  setTimeout(function(){ if(tk === state.advToken) nextRound(); }, 2000);
+}
+
+function onWrong(){
+  var broken = state.combo;   /* v1.1 : pour le message doux de série cassée */
+  state.combo = 0;
+  renderCombo();
+  Sfx.ko();
+
+  var msg = WRONG_MSGS[(Math.random() * WRONG_MSGS.length) | 0];
+  $('options').classList.add('hidden');
+  var fb = $('feedback');
+  fb.classList.remove('hidden');
+  fb.innerHTML = '<div class="fb-title bad">✗ ' + msg + '</div>' +
+                 '<div class="fb-sub">' + EXPLAIN[state.answer] +
+                 (broken >= 2 ? '<br><span class="fb-soft">Ta série de ' + broken + ' s\'arrête ici — on recommence ? 💛</span>' : '') +
+                 '</div>' +
+                 '<button id="btnNext" class="btn-primary" type="button">Continuer →</button>';
+  $('btnNext').addEventListener('click', function(){ Sfx.click(); nextRound(); });
+}
+
+function nextRound(){
+  state.advToken++;
+  state.round++;
+  if(state.round <= 10) renderRound(); else endGame();
+}
+
+function endGame(){
+  state.advToken++;
+  var isRecord = state.score > best;
+  if(isRecord){ best = state.score; saveBest(); }
+  /* v1.1 — badges de fin de partie */
+  if(state.hardGood === 3) unlockBadge(3);  /* L'œil du lynx : manches 8, 9 et 10 réussies */
+  if(state.good === 10) unlockBadge(4);      /* Sans faute : 10/10 */
+  renderEndBadges();
+  $('recordBadge').classList.toggle('hidden', !(isRecord && state.score > 0));
+  $('finalScore').textContent = state.score;
+  $('statGood').textContent = state.good + '/10';
+  $('statCombo').textContent = '×' + (state.bestCombo || 1);
+  $('endSvg').innerHTML = faceSVG('joie', VARIANTS[2]);
+  $('endStage').classList.add('celebrating');
+  updateBestLine();
+  show('scr-end');
+  if(isRecord && state.score > 0) Sfx.win(); else Sfx.end();
+}
+
+/* ================= accueil / navigation ================= */
+function updateBestLine(){
+  $('bestLine').textContent = (best > 0)
+    ? 'Meilleur score : ' + best
+    : 'Pas encore de record — à toi de jouer !';
+}
+
+var demoTimer = null, demoIdx = 0;
+var DEMO_MOODS = MOODS.slice();
+function renderDemo(){
+  $('demoSvg').innerHTML = faceSVG(DEMO_MOODS[demoIdx % DEMO_MOODS.length], VARIANTS[demoIdx % VARIANTS.length]);
+}
+function startDemo(){
+  stopDemo();
+  demoIdx = 0;
+  renderDemo();
+  demoTimer = setInterval(function(){
+    demoIdx++;
+    renderDemo();
+  }, 2400);
+}
+function stopDemo(){ if(demoTimer){ clearInterval(demoTimer); demoTimer = null; } }
+
+function startGame(){
+  state.advToken++;
+  stopDemo();
+  state.round = 1; state.score = 0; state.combo = 0;
+  state.bestCombo = 0; state.good = 0; state.hardGood = 0;
+  state.locked = false; state.lastMood = ''; state.lastVariant = -1;
+  sessionBadges = [];
+  var eb = $('endBadges'); if(eb) eb.classList.add('hidden');
+  show('scr-game');
+  renderRound();
+}
+function goHome(){
+  state.advToken++;
+  updateBestLine();
+  renderBadgesHome();
+  show('scr-start');
+  startDemo();
+}
+
+$('btnPlay').addEventListener('click', function(){ Sfx.click(); startGame(); });
+$('btnReplay').addEventListener('click', function(){ Sfx.click(); startGame(); });
+$('btnHome').addEventListener('click', function(){ Sfx.click(); goHome(); });
+
+var soundBtn = $('btnSound');
+soundBtn.addEventListener('click', function(){
+  Sfx.enabled = !Sfx.enabled;
+  soundBtn.classList.toggle('muted', !Sfx.enabled);
+  soundBtn.setAttribute('aria-label', Sfx.enabled ? 'Couper le son' : 'Activer le son');
+  if(Sfx.enabled) Sfx.click();
+});
+
+/* ---------- confirmation : recommencer ---------- */
+var restartDlg = $('dlgRestart');
+function restartDlgOpen(){ return !restartDlg.classList.contains('hidden'); }
+function openRestartConfirm(){
+  if(!$('scr-game').classList.contains('active') || restartDlgOpen()) return;
+  restartDlg.classList.remove('hidden');
+  $('btnRestartNo').focus();
+}
+function closeRestartConfirm(){ restartDlg.classList.add('hidden'); }
+$('btnRestart').addEventListener('click', function(){ Sfx.click(); openRestartConfirm(); });
+$('btnRestartYes').addEventListener('click', function(){ Sfx.click(); closeRestartConfirm(); startGame(); });
+$('btnRestartNo').addEventListener('click', function(){ Sfx.click(); closeRestartConfirm(); });
+restartDlg.addEventListener('click', function(e){
+  if(e.target === restartDlg) closeRestartConfirm();
+});
+
+document.addEventListener('keydown', function(e){
+  if($('scr-start').classList.contains('active')){
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); startGame(); }
+  } else if($('scr-end').classList.contains('active')){
+    if(e.key === 'Enter'){ startGame(); }
+  } else if($('scr-game').classList.contains('active')){
+    if(e.key === 'Escape' && restartDlgOpen()){ closeRestartConfirm(); }
+    else if(restartDlgOpen()){ /* le dialogue capture les touches, le focus est sur « Non » */ }
+    else if(e.key === 'r' || e.key === 'R'){ Sfx.click(); openRestartConfirm(); }
+    else if(!state.locked && e.key >= '1' && e.key <= '4'){ onAnswer(parseInt(e.key, 10) - 1); }
+    else if(state.locked && e.key === 'Enter'){
+      var b = $('btnNext');
+      if(b) b.click();
+    }
+  }
+});
+
+updateBestLine();
+renderBadgesHome();
+startDemo();
+})();
+</script>
+</body>
+</html>
