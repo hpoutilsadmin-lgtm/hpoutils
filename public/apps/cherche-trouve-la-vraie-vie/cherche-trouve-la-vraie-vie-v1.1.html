@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<!-- v1.1 — Mode Sprint + indices -->
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<title>Cherche &amp; Trouve — La vraie vie</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#FFF6E5;color:#16213A;touch-action:manipulation;}
+#app{max-width:560px;margin:0 auto;padding:16px 16px 48px;min-height:100vh;}
+.ecran{display:none;}
+.ecran.actif{display:block;animation:apparition .25s ease;}
+@keyframes apparition{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1{font-size:2rem;text-align:center;line-height:1.15;margin:12px 0;}
+h1 .accent{color:#D90429;}
+.tagline{text-align:center;font-size:1.25rem;font-weight:700;margin:4px 0 12px;}
+.pitch{text-align:center;font-size:1.05rem;margin-bottom:28px;line-height:1.5;}
+.logo{font-size:4rem;text-align:center;}
+h2{font-size:1.5rem;margin:18px 0 10px;}
+h3{font-size:1.15rem;margin:18px 0 8px;}
+h3 small{font-weight:400;color:#5A6B8C;}
+.btn-big{display:block;width:100%;min-height:72px;font-size:1.35rem;font-weight:800;border:3px solid #16213A;border-radius:18px;margin:14px 0;cursor:pointer;font-family:inherit;}
+.btn-go{background:#FFC300;color:#16213A;}
+.btn-go:active{transform:scale(.97);}
+.btn-second{background:#fff;color:#16213A;}
+.btn-lien{background:none;border:none;color:#2A6FDB;font-size:1rem;text-decoration:underline;cursor:pointer;padding:10px;font-family:inherit;}
+.erreur{color:#D90429;font-weight:700;text-align:center;}
+.grille{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.choix{border:3px solid #16213A;border-radius:14px;background:#fff;padding:14px 8px;font-size:1.05rem;font-weight:700;cursor:pointer;text-align:center;font-family:inherit;color:#16213A;}
+.choix .e{font-size:1.8rem;display:block;margin-bottom:4px;}
+.choix.sel{background:#16213A;color:#fff;}
+.rangee{display:flex;gap:10px;}
+.rangee .choix{flex:1;}
+.diff-desc{text-align:center;color:#5A6B8C;font-size:.95rem;min-height:1.4em;margin-top:6px;}
+#noms-joueurs{margin-top:10px;display:grid;gap:8px;}
+#noms-joueurs input{font-size:1.1rem;padding:12px;border:3px solid #16213A;border-radius:12px;width:100%;font-family:inherit;}
+.regles{list-style:none;padding:0;margin:0 0 8px;}
+.regles li{background:#fff;border:2px solid #16213A;border-radius:12px;padding:12px;margin-bottom:10px;font-size:1.02rem;line-height:1.45;}
+.regles.securite li{border-color:#D90429;background:#FFF0F0;}
+.alerte-route{background:#D90429;color:#fff;font-weight:700;border-radius:12px;padding:12px;margin:12px 0;font-size:1.02rem;line-height:1.4;}
+.hud-ligne{display:flex;gap:8px;margin-bottom:8px;}
+.chip{background:#16213A;color:#fff;border-radius:999px;padding:8px 14px;font-weight:800;font-size:.95rem;}
+.chip.joueur{background:#2A9D48;}
+.scores{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.score-chip{background:#fff;border:2px solid #16213A;border-radius:999px;padding:6px 12px;font-weight:700;font-size:.9rem;}
+.score-chip.moi{background:#FFC300;}
+.carte{background:#fff;border:4px solid #16213A;border-radius:22px;padding:20px 16px;text-align:center;margin-bottom:16px;box-shadow:0 6px 0 #16213A;}
+.carte.finale{border-color:#D90429;box-shadow:0 6px 0 #D90429;}
+.carte-cat{display:inline-block;background:#EAF0FF;border-radius:999px;padding:6px 14px;font-weight:800;margin-bottom:10px;}
+.carte.finale .carte-cat{background:#FFE0E0;}
+.carte-titre{font-size:1.1rem;font-weight:800;letter-spacing:2px;color:#5A6B8C;}
+.carte.finale .carte-titre{color:#D90429;}
+.carte-texte{font-size:1.65rem;font-weight:800;line-height:1.3;margin:10px 0 14px;min-height:3.4em;display:flex;align-items:center;justify-content:center;}
+.chrono{display:inline-block;background:#FFC300;border:3px solid #16213A;border-radius:18px;font-size:3.2rem;font-weight:900;padding:4px 26px;font-variant-numeric:tabular-nums;min-width:170px;}
+.chrono.danger{background:#D90429;color:#fff;animation:pulse .5s infinite alternate;}
+@keyframes pulse{from{transform:scale(1);}to{transform:scale(1.08);}}
+.btn-bingo{display:block;width:100%;min-height:100px;font-size:2.1rem;font-weight:900;background:#2A9D48;color:#fff;border:4px solid #16213A;border-radius:22px;box-shadow:0 6px 0 #16213A;cursor:pointer;margin:6px 0 4px;font-family:inherit;}
+.btn-bingo:active{transform:translateY(4px);box-shadow:none;}
+.sous-boutons{display:flex;justify-content:space-between;}
+.confirm-msg{font-weight:800;align-self:center;padding:0 6px;}
+.overlay{position:fixed;inset:0;background:rgba(10,14,30,.82);display:none;align-items:center;justify-content:center;z-index:50;padding:24px;}
+.overlay.show{display:flex;}
+.overlay-msg{background:#fff;border:4px solid #16213A;border-radius:22px;padding:28px;font-size:1.9rem;font-weight:900;text-align:center;line-height:1.4;animation:pop .25s ease;max-width:440px;}
+@keyframes pop{from{transform:scale(.8);}to{transform:scale(1);}}
+.podium-ligne{display:flex;align-items:center;gap:12px;background:#fff;border:3px solid #16213A;border-radius:14px;padding:12px 16px;margin-bottom:10px;font-size:1.25rem;font-weight:800;}
+.podium-ligne.premier{background:#FFC300;}
+.podium-medaille{font-size:2rem;}
+.podium-score{margin-left:auto;font-variant-numeric:tabular-nums;}
+.fin-note{text-align:center;color:#5A6B8C;margin:8px 0 4px;}
+.version-badge{display:inline-block;background:#EAF0FF;border-radius:999px;padding:4px 14px;font-size:.9rem;font-weight:700;color:#5A6B8C;}
+/* ===== v1.1 — Mode Sprint ⚡ ===== */
+body.sprint .carte{border-color:#E8590C;box-shadow:0 6px 0 #E8590C;}
+body.sprint .btn-bingo{background:#E8590C;}
+body.sprint .btn-go{background:#FF922B;}
+.carte-bonus{border-color:#FAB005 !important;box-shadow:0 6px 0 #B8860B !important;}
+.carte-bonus .carte-cat{background:#FFF3BF;}
+.chrono-global{display:inline-block;background:#E8590C;color:#fff;border:3px solid #16213A;border-radius:18px;font-size:2.4rem;font-weight:900;padding:4px 22px;font-variant-numeric:tabular-nums;min-width:150px;text-align:center;}
+#chrono-sprint[hidden]{display:none;}
+.chrono-global.danger{background:#D90429;animation:pulse .5s infinite alternate;}
+.chip-combo{background:#E8590C;display:none;}
+.chip-combo.visible{display:inline-block;animation:pop .3s ease;}
+body.sprint #ligne-chrono{display:none;}
+#btn-indice{display:none;width:100%;min-height:56px;font-size:1.15rem;font-weight:800;border:3px solid #16213A;border-radius:14px;background:#FFF3BF;color:#16213A;cursor:pointer;margin-bottom:12px;font-family:inherit;}
+body.sprint #btn-indice{display:block;}
+#btn-indice:disabled{opacity:.4;cursor:default;}
+#zone-indice{display:none;background:#FFF3BF;border:2px dashed #16213A;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:1.05rem;line-height:1.4;}
+#zone-indice.show{display:block;}
+.pastille-indice{font-size:1.2rem;margin-left:8px;}
+.stat-ligne{display:flex;align-items:center;gap:12px;background:#FFF3BF;border:3px solid #16213A;border-radius:14px;padding:10px 16px;margin-bottom:10px;font-size:1.15rem;font-weight:800;}
+.stat-ligne .stat-val{margin-left:auto;font-variant-numeric:tabular-nums;}
+.record-banner{background:#FFC300;border:4px solid #16213A;border-radius:18px;padding:16px;text-align:center;font-size:1.5rem;font-weight:900;margin-bottom:16px;animation:pop .3s ease;}
+.mode-desc{font-weight:400;font-size:.85rem;display:block;margin-top:4px;color:inherit;}
+.choix.sel .mode-desc{color:#fff;}
+</style>
+</head>
+<body>
+<div id="app">
+
+<section id="ecran-accueil" class="ecran actif">
+  <div class="logo">🔎</div>
+  <h1>CHERCHE &amp; TROUVE<br/><span class="accent">LA VRAIE VIE</span></h1>
+  <p class="tagline">Regarde mieux. Trouve plus vite.</p>
+  <p class="pitch">Le jeu qui se joue <strong>autour de toi</strong>, pas à l'écran.<br/>3 manches • 15 défis • 1 chrono par défi.<br/>Trouve avant la fin… et tape <strong>BINGO! 🎯</strong></p>
+  <p style="text-align:center"><span class="version-badge">v1.1 — nouveau mode Sprint ⚡</span></p>
+  <button class="btn-big btn-go" onclick="allerConfig()">▶ JOUER</button>
+</section>
+
+<section id="ecran-config" class="ecran">
+  <h2>⚙️ Nouvelle partie</h2>
+  <h3>Où jouez-vous ?</h3>
+  <div id="choix-lieu" class="grille"></div>
+  <div id="alerte-route" class="alerte-route" hidden>🚗 En route : passager seulement, <strong>JAMAIS</strong> en conduisant !</div>
+  <h3>Joueurs <small>— à tour de rôle, sur ce téléphone</small></h3>
+  <div id="choix-joueurs" class="rangee"></div>
+  <div id="noms-joueurs"></div>
+  <h3>Difficulté</h3>
+  <div id="choix-diff" class="rangee"></div>
+  <div id="diff-desc" class="diff-desc"></div>
+  <h3>Mode de jeu</h3>
+  <div id="choix-mode" class="rangee"></div>
+  <p id="record-sprint" class="fin-note" hidden></p>
+  <button class="btn-big btn-go" onclick="allerRegles()">VOIR LES RÈGLES →</button>
+  <p id="erreur-config" class="erreur" hidden>👆 Choisis d'abord un lieu pour commencer !</p>
+</section>
+
+<section id="ecran-regles" class="ecran">
+  <h2>📋 Règles du jeu</h2>
+  <ul class="regles">
+    <li>🎯 <strong>3 manches de 5 défis.</strong> À chaque carte, un défi s'affiche : regarde <strong>autour de toi</strong> et trouve-le avant la fin du chrono !</li>
+    <li>👆 Quand tu as trouvé, tape le gros bouton <strong>BINGO! 🎯</strong> — et le groupe valide.</li>
+    <li>⏱️ Plus il reste de temps, <strong>plus tu marques de points</strong>. Le défi final compte <strong>double</strong>.</li>
+    <li>👥 On joue <strong>à tour de rôle</strong> : chaque carte = un joueur différent.</li>
+    <li>🤝 Pas de triche : on joue franc jeu, c'est plus drôle.</li>
+    <li>⚡ <strong>Mode Sprint</strong> : 3 minutes pour enchaîner un max de défis. Chaque BINGO! vaut 100 points + 25 par combo — enchaîne les BINGO! sans passer pour faire grimper le 🔥. Une carte sur cinq est une carte bonus ×2.</li>
+    <li>💡 <strong>Indices</strong> : 3 par partie Sprint. Un indice t'aide, mais divise par deux les points de la carte. À utiliser quand tu bloques pour vrai.</li>
+    <li>⏸️ <strong>Pause auto</strong> : si ton téléphone se verrouille ou que tu changes d'appli, la partie se met en pause toute seule. Touche pour reprendre.</li>
+  </ul>
+  <h2>🛡️ Sécurité d'abord</h2>
+  <ul class="regles securite">
+    <li>🚗 En route : passager seulement, <strong>JAMAIS</strong> en conduisant !</li>
+    <li>🏪 Au magasin et en ville : on ne déplace <strong>rien</strong>, on ne touche pas la marchandise sans permission, on reste <strong>poli</strong> avec tout le monde.</li>
+    <li>👀 Les enfants restent <strong>à portée de voix</strong> d'un adulte.</li>
+    <li>🌳 Dehors : on respecte la nature et les lieux.</li>
+  </ul>
+  <button class="btn-big btn-go" onclick="demarrerPartie()">C'EST PARTI ! 🔎</button>
+  <div style="text-align:center"><button class="btn-lien" onclick="montrer('ecran-config')">← Retour aux réglages</button></div>
+</section>
+
+<section id="ecran-jeu" class="ecran">
+  <div class="hud">
+    <div class="hud-ligne">
+      <span id="hud-manche" class="chip"></span>
+      <span id="hud-carte" class="chip"></span>
+      <span id="hud-joueur" class="chip joueur"></span>
+      <span id="hud-combo" class="chip chip-combo"></span>
+    </div>
+    <div id="hud-scores" class="scores"></div>
+    <div style="text-align:center;margin-bottom:8px"><span id="chrono-sprint" class="chrono-global" hidden></span></div>
+  </div>
+  <div id="bandeau-route" class="alerte-route" hidden>🚗 En route : passager seulement, <strong>JAMAIS</strong> en conduisant !</div>
+  <div id="carte-defi" class="carte">
+    <div id="carte-cat" class="carte-cat"></div>
+    <div id="carte-titre" class="carte-titre">🔎 CHERCHE</div>
+    <div id="carte-texte" class="carte-texte"></div>
+    <div id="ligne-chrono"><span id="chrono" class="chrono">--</span></div>
+  </div>
+  <div id="zone-indice"></div>
+  <button id="btn-indice" onclick="utiliserIndice()">💡 Indice (<span id="nb-indices">3</span>)</button>
+  <button id="btn-bingo" class="btn-bingo" onclick="bingo()">BINGO! 🎯</button>
+  <div class="sous-boutons" id="sous-boutons">
+    <button class="btn-lien" onclick="passer()">Passer ⏭️ (0 pt)</button>
+    <button class="btn-lien" onclick="demanderRecommencer()">🔁 Recommencer</button>
+    <button class="btn-lien" onclick="abandonner()">✕ Abandonner</button>
+  </div>
+</section>
+
+<section id="ecran-fin" class="ecran">
+  <h2 id="titre-fin">🏆 Partie terminée !</h2>
+  <div id="record-banner" class="record-banner" hidden></div>
+  <div id="podium"></div>
+  <div id="stats-sprint"></div>
+  <p class="fin-note">Chaque partie pioche de nouveaux défis.<br/>Les défis déjà joués ne reviennent pas tout de suite. 🔄</p>
+  <button id="btn-rejouer" class="btn-big btn-go" onclick="rejouer()">🔁 REJOUER</button>
+  <button class="btn-big btn-second" onclick="montrer('ecran-config')">⚙️ CHANGER LES RÉGLAGES</button>
+</section>
+
+</div>
+<div id="overlay" class="overlay"><div id="overlay-msg" class="overlay-msg"></div></div>
+<script>
+// Banque de défis — CHERCHE & TROUVE : LA VRAIE VIE
+const DEFIS = [
+  {t:"Une chose jaune",c:"Maison",d:1,s:15,l:["maison"]},
+  {t:"Quelque chose de rond",c:"Maison",d:1,s:15,l:["maison"]},
+  {t:"Un objet plus petit que ta main",c:"Maison",d:1,s:15,l:["maison"]},
+  {t:"Quelque chose de doux au toucher",c:"Maison",d:1,s:20,l:["maison"]},
+  {t:"Un livre ou un magazine",c:"Maison",d:1,s:15,l:["maison"]},
+  {t:"Quelque chose qui sent bon",c:"Maison",d:1,s:20,l:["maison"]},
+  {t:"Une paire de bas",c:"Maison",d:1,s:15,l:["maison"]},
+  {t:"Un objet de couleur rouge",c:"Maison",d:1,s:15,l:["maison"]},
+  {t:"Quelque chose en bois",c:"Maison",d:1,s:20,l:["maison"]},
+  {t:"Une cuillère",c:"Maison",d:1,s:15,l:["maison"]},
+  {t:"Quelque chose de froid",c:"Maison",d:1,s:20,l:["maison"]},
+  {t:"Un coussin",c:"Maison",d:1,s:15,l:["maison"]},
+  {t:"Quelque chose qui n'est pas à sa place",c:"Maison",d:2,s:30,l:["maison"]},
+  {t:"Un objet qui fait du bruit quand on le secoue",c:"Maison",d:2,s:25,l:["maison"]},
+  {t:"Quelque chose qui vient d'un autre pays",c:"Maison",d:2,s:35,l:["maison"]},
+  {t:"Le plus vieux objet de la pièce",c:"Maison",d:2,s:30,l:["maison"]},
+  {t:"Quelque chose qui a besoin de piles",c:"Maison",d:2,s:25,l:["maison"]},
+  {t:"Un objet avec un bouton dessus",c:"Maison",d:2,s:25,l:["maison"]},
+  {t:"Quelque chose qu'on utilise seulement l'hiver",c:"Maison",d:2,s:30,l:["maison"]},
+  {t:"Un objet qui reflète ton visage",c:"Maison",d:2,s:25,l:["maison"]},
+  {t:"Quelque chose qui pèse plus de 5 kilos (devine, ne soulève pas!)",c:"Maison",d:2,s:30,l:["maison"]},
+  {t:"Un objet qui ne sert plus à rien",c:"Maison",d:2,s:30,l:["maison"]},
+  {t:"Quelque chose avec une fermeture éclair",c:"Maison",d:2,s:25,l:["maison"]},
+  {t:"L'objet le plus lourd que tu peux soulever d'une main",c:"Maison",d:2,s:30,l:["maison"]},
+  {t:"Quelque chose qui a déjà été réparé",c:"Maison",d:3,s:45,l:["maison"],i:"💡 Cherche les cicatrices : ruban adhésif, colle, couture croche."},
+  {t:"Un objet dont personne ne connaît l'utilité",c:"Maison",d:3,s:60,l:["maison"],i:"💡 Le tiroir fourre-tout : c'est là que les mystères habitent."},
+  {t:"Quelque chose qui appartenait à une autre génération",c:"Maison",d:3,s:45,l:["maison"],i:"💡 Demande aux plus vieux : eux autres savent à quoi ça servait."},
+  {t:"Un objet avec une date d'expiration",c:"Maison",d:3,s:40,l:["maison"]},
+  {t:"Quelque chose qui fait de la musique (pas un téléphone!)",c:"Maison",d:3,s:45,l:["maison"]},
+  {t:"L'objet le plus inutile de la maison (défends ton choix!)",c:"Maison",d:3,s:60,l:["maison"]},
+  {t:"Quelque chose de la nature qui est entré dans la maison",c:"Maison",d:3,s:40,l:["maison"]},
+  {t:"Un objet que tu n'avais jamais remarqué avant aujourd'hui",c:"Maison",d:3,s:60,l:["maison"],i:"💡 Lève les yeux : le dessus des portes pis des armoires."},
+  {t:"Une feuille d'arbre",c:"Dehors",d:1,s:15,l:["dehors","parc"]},
+  {t:"Quelque chose de vert",c:"Dehors",d:1,s:15,l:["dehors","parc"]},
+  {t:"Un caillou",c:"Dehors",d:1,s:15,l:["dehors","parc"]},
+  {t:"Quelque chose qui vole (oiseau, insecte, avion…)",c:"Dehors",d:1,s:20,l:["dehors","parc"]},
+  {t:"Une brindille",c:"Dehors",d:1,s:15,l:["dehors","parc"]},
+  {t:"Quelque chose de rugueux",c:"Dehors",d:1,s:20,l:["dehors","parc"]},
+  {t:"Une fleur ou une plante",c:"Dehors",d:1,s:20,l:["dehors","parc"]},
+  {t:"De l'eau (flaque, goutte, arrosoir…)",c:"Dehors",d:1,s:15,l:["dehors","parc"]},
+  {t:"Quelque chose de brun",c:"Dehors",d:1,s:15,l:["dehors","parc"]},
+  {t:"Une ombre",c:"Dehors",d:1,s:15,l:["dehors","parc"]},
+  {t:"Quelque chose qui brille au soleil",c:"Dehors",d:1,s:20,l:["dehors","parc"]},
+  {t:"Un nuage en forme d'animal",c:"Dehors",d:1,s:20,l:["dehors","parc"]},
+  {t:"Quelque chose qui n'est pas à sa place dehors",c:"Dehors",d:2,s:30,l:["dehors","parc"]},
+  {t:"Une trace d'animal (empreinte, nid, trou…)",c:"Dehors",d:2,s:30,l:["dehors","parc"]},
+  {t:"Quelque chose que le vent peut emporter",c:"Dehors",d:2,s:25,l:["dehors","parc"]},
+  {t:"Un objet fabriqué par l'humain perdu dehors",c:"Dehors",d:2,s:30,l:["dehors","parc"]},
+  {t:"Quelque chose de vivant qui ne bouge pas",c:"Dehors",d:2,s:30,l:["dehors","parc"]},
+  {t:"Deux choses de la même couleur côte à côte",c:"Dehors",d:2,s:25,l:["dehors","parc"]},
+  {t:"Quelque chose qui fait de l'ombre à autre chose",c:"Dehors",d:2,s:30,l:["dehors","parc"]},
+  {t:"Un endroit où un insecte pourrait habiter",c:"Dehors",d:2,s:30,l:["dehors","parc"]},
+  {t:"Quelque chose de plus grand qu'une voiture",c:"Dehors",d:2,s:35,l:["dehors","parc"]},
+  {t:"Une chose naturelle en forme de cœur ou d'étoile",c:"Dehors",d:2,s:35,l:["dehors","parc"]},
+  {t:"Quelque chose qui a poussé tout seul",c:"Dehors",d:2,s:25,l:["dehors","parc"]},
+  {t:"Un son de la nature (nomme-le!)",c:"Dehors",d:2,s:25,l:["dehors","parc"]},
+  {t:"Quelque chose qui a au moins 50 ans",c:"Dehors",d:3,s:60,l:["dehors","parc"],i:"💡 La pierre pis le vieux bois racontent les décennies."},
+  {t:"Un objet qui ne devrait pas être dehors",c:"Dehors",d:3,s:45,l:["dehors","parc"],i:"💡 Regarde par terre, loin des sentiers : les objets perdus restent là."},
+  {t:"Quelque chose que tu peux voir mais pas toucher",c:"Dehors",d:3,s:40,l:["dehors","parc"]},
+  {t:"Une preuve que quelqu'un est passé par ici",c:"Dehors",d:3,s:45,l:["dehors","parc"],i:"💡 Papiers, traces de pas : les passants laissent des signatures."},
+  {t:"Quelque chose de parfaitement symétrique dans la nature",c:"Dehors",d:3,s:60,l:["dehors","parc"]},
+  {t:"Le plus vieil arbre que tu vois (devine son âge!)",c:"Dehors",d:3,s:45,l:["dehors","parc"]},
+  {t:"Quelque chose qui change avec les saisons",c:"Dehors",d:3,s:40,l:["dehors","parc"]},
+  {t:"Un endroit parfait pour cacher un trésor",c:"Dehors",d:3,s:45,l:["dehors","parc"],i:"💡 Un trésor se cache où personne ne regarde deux fois."},
+  {t:"Une balançoire",c:"Parc",d:1,s:15,l:["parc","dehors"]},
+  {t:"Un banc",c:"Parc",d:1,s:15,l:["parc","dehors"]},
+  {t:"Quelque chose en métal",c:"Parc",d:1,s:15,l:["parc","dehors"]},
+  {t:"Un carré de sable",c:"Parc",d:1,s:15,l:["parc","dehors"]},
+  {t:"Quelque chose de bleu",c:"Parc",d:1,s:15,l:["parc","dehors"]},
+  {t:"Une poubelle",c:"Parc",d:1,s:15,l:["parc","dehors"]},
+  {t:"Quelque chose sur lequel on peut grimper",c:"Parc",d:1,s:20,l:["parc","dehors"]},
+  {t:"Un panneau ou une affiche",c:"Parc",d:1,s:20,l:["parc","dehors"]},
+  {t:"Quelque chose qui tourne",c:"Parc",d:1,s:20,l:["parc","dehors"]},
+  {t:"De l'herbe",c:"Parc",d:1,s:15,l:["parc","dehors"]},
+  {t:"Un oiseau",c:"Parc",d:1,s:20,l:["parc","dehors"]},
+  {t:"Quelque chose d'orange",c:"Parc",d:1,s:15,l:["parc","dehors"]},
+  {t:"L'objet le plus haut du parc",c:"Parc",d:2,s:30,l:["parc","dehors"]},
+  {t:"Quelque chose qui fait du bruit quand on l'utilise",c:"Parc",d:2,s:25,l:["parc","dehors"]},
+  {t:"Un endroit où s'asseoir à l'ombre",c:"Parc",d:2,s:25,l:["parc","dehors"]},
+  {t:"Quelque chose qui bouge sans moteur",c:"Parc",d:2,s:30,l:["parc","dehors"]},
+  {t:"Une chose que les chiens adorent",c:"Parc",d:2,s:30,l:["parc","dehors"]},
+  {t:"Le chemin le plus court vers la sortie (montre-le!)",c:"Parc",d:2,s:35,l:["parc","dehors"]},
+  {t:"Quelque chose d'artificiel parmi le naturel",c:"Parc",d:2,s:25,l:["parc","dehors"]},
+  {t:"Un jeu qu'on peut jouer sans équipement",c:"Parc",d:2,s:30,l:["parc","dehors"]},
+  {t:"Quelque chose qui a été dessiné ou tagué",c:"Parc",d:2,s:30,l:["parc","dehors"]},
+  {t:"Un abri contre la pluie",c:"Parc",d:2,s:30,l:["parc","dehors"]},
+  {t:"Quelque chose qui sent l'été",c:"Parc",d:2,s:25,l:["parc","dehors"]},
+  {t:"Deux oiseaux différents",c:"Parc",d:2,s:35,l:["parc","dehors"]},
+  {t:"Le meilleur point de vue du parc",c:"Parc",d:3,s:45,l:["parc","dehors"]},
+  {t:"Quelque chose qui n'existait pas il y a 10 ans",c:"Parc",d:3,s:60,l:["parc","dehors"]},
+  {t:"Un endroit où personne ne va jamais",c:"Parc",d:3,s:45,l:["parc","dehors"],i:"💡 Derrière les buissons, au bout des sentiers : les coins oubliés."},
+  {t:"La chose la plus bruyante du parc",c:"Parc",d:3,s:40,l:["parc","dehors"]},
+  {t:"Quelque chose qui aide la nature en ville (nichoir, jardin…)",c:"Parc",d:3,s:45,l:["parc","dehors"],i:"💡 Regarde en haut des arbres pis au pied des clôtures."},
+  {t:"Un raccourci que seuls les habitués connaissent",c:"Parc",d:3,s:60,l:["parc","dehors"],i:"💡 Les raccourcis laissent des traces d'herbe piétinée."},
+  {t:"Quelque chose qui raconte l'histoire du quartier",c:"Parc",d:3,s:60,l:["parc","dehors"]},
+  {t:"L'endroit le plus frais du parc (touche pour vérifier!)",c:"Parc",d:3,s:40,l:["parc","dehors"],i:"💡 Sous les gros arbres, près de l'eau : la fraîcheur a ses adresses."},
+  {t:"Une rampe",c:"Skatepark",d:1,s:15,l:["skatepark"]},
+  {t:"Quelque chose avec des roues",c:"Skatepark",d:1,s:15,l:["skatepark"]},
+  {t:"Un casque",c:"Skatepark",d:1,s:20,l:["skatepark"]},
+  {t:"Quelque chose en béton",c:"Skatepark",d:1,s:15,l:["skatepark"]},
+  {t:"Une courbe (quarter, bowl…)",c:"Skatepark",d:1,s:20,l:["skatepark"]},
+  {t:"Quelque chose de gris",c:"Skatepark",d:1,s:15,l:["skatepark"]},
+  {t:"Une barre de grind (rail)",c:"Skatepark",d:1,s:20,l:["skatepark"]},
+  {t:"Quelqu'un qui porte des protections",c:"Skatepark",d:1,s:20,l:["skatepark"]},
+  {t:"Le sol le plus lisse",c:"Skatepark",d:1,s:15,l:["skatepark"]},
+  {t:"Quelque chose qui fait du bruit quand on roule dessus",c:"Skatepark",d:1,s:20,l:["skatepark"]},
+  {t:"Une bouteille d'eau",c:"Skatepark",d:1,s:15,l:["skatepark"]},
+  {t:"Quelque chose de noir",c:"Skatepark",d:1,s:15,l:["skatepark"]},
+  {t:"La rampe la plus haute",c:"Skatepark",d:2,s:30,l:["skatepark"]},
+  {t:"Une figure que tu sais nommer (ollie, kickflip…)",c:"Skatepark",d:2,s:30,l:["skatepark"]},
+  {t:"Quelque chose d'usé par les planches",c:"Skatepark",d:2,s:25,l:["skatepark"]},
+  {t:"Le meilleur endroit pour regarder sans gêner",c:"Skatepark",d:2,s:25,l:["skatepark"]},
+  {t:"Une trace de roue au sol",c:"Skatepark",d:2,s:25,l:["skatepark"]},
+  {t:"Quelque chose qui protège (casque, pad, gant…)",c:"Skatepark",d:2,s:25,l:["skatepark"]},
+  {t:"Le module le plus difficile",c:"Skatepark",d:2,s:30,l:["skatepark"]},
+  {t:"Quelqu'un qui débute (encourage-le!)",c:"Skatepark",d:2,s:30,l:["skatepark"]},
+  {t:"Une planche d'une couleur vive",c:"Skatepark",d:2,s:25,l:["skatepark"]},
+  {t:"Quelque chose qui a été réparé",c:"Skatepark",d:2,s:30,l:["skatepark"]},
+  {t:"Le coin le plus à l'ombre",c:"Skatepark",d:2,s:25,l:["skatepark"]},
+  {t:"Un autocollant (sticker)",c:"Skatepark",d:2,s:25,l:["skatepark"]},
+  {t:"La ligne (run) la plus impressionnante à imaginer (décris-la!)",c:"Skatepark",d:3,s:45,l:["skatepark"]},
+  {t:"Quelque chose qui n'a rien à faire dans un skatepark",c:"Skatepark",d:3,s:45,l:["skatepark"]},
+  {t:"Le meilleur angle pour filmer une figure",c:"Skatepark",d:3,s:40,l:["skatepark"]},
+  {t:"Une marque d'usure qui raconte une chute",c:"Skatepark",d:3,s:45,l:["skatepark"],i:"💡 Les éraflures fraîches racontent les chutes d'hier."},
+  {t:"Quelque chose qui rend ce skatepark unique",c:"Skatepark",d:3,s:60,l:["skatepark"],i:"💡 Graffitis, réparations maison, détails bizarres : c'est l'âme du spot."},
+  {t:"L'endroit le plus dangereux (et pourquoi)",c:"Skatepark",d:3,s:45,l:["skatepark"],i:"💡 Là où ça descend vite pis que ça tourne sec."},
+  {t:"Un objet perdu par un skateur",c:"Skatepark",d:3,s:40,l:["skatepark"],i:"💡 Coins des modules, rebords : les petites affaires tombent là."},
+  {t:"La figure la plus difficile que tu as déjà vue ici (décris-la!)",c:"Skatepark",d:3,s:60,l:["skatepark"]},
+  {t:"Un feu de circulation",c:"Ville",d:1,s:15,l:["ville","enroute"]},
+  {t:"Quelque chose de rouge",c:"Ville",d:1,s:15,l:["ville","enroute"]},
+  {t:"Une vitrine de magasin",c:"Ville",d:1,s:15,l:["ville"]},
+  {t:"Un trottoir",c:"Ville",d:1,s:15,l:["ville"]},
+  {t:"Quelque chose d'écrit en grosses lettres",c:"Ville",d:1,s:20,l:["ville","enroute"]},
+  {t:"Une voiture stationnée",c:"Ville",d:1,s:15,l:["ville"]},
+  {t:"Un lampadaire",c:"Ville",d:1,s:15,l:["ville"]},
+  {t:"Quelque chose qui bouge tout seul (enseigne, drapeau…)",c:"Ville",d:1,s:20,l:["ville","enroute"]},
+  {t:"Une porte d'entrée",c:"Ville",d:1,s:15,l:["ville"]},
+  {t:"Quelque chose de jaune",c:"Ville",d:1,s:15,l:["ville","enroute"]},
+  {t:"Un escalier",c:"Ville",d:1,s:15,l:["ville"]},
+  {t:"Une affiche ou un poster",c:"Ville",d:1,s:20,l:["ville"]},
+  {t:"Le bâtiment le plus haut que tu vois",c:"Ville",d:2,s:30,l:["ville","enroute"]},
+  {t:"Quelque chose qui indique une direction",c:"Ville",d:2,s:25,l:["ville"]},
+  {t:"Un commerce local (pas une chaîne!)",c:"Ville",d:2,s:30,l:["ville"]},
+  {t:"Quelque chose de gratuit en ville",c:"Ville",d:2,s:30,l:["ville"]},
+  {t:"Une œuvre d'art public (murale, sculpture…)",c:"Ville",d:2,s:30,l:["ville","enroute"]},
+  {t:"Quelque chose qui fait du bruit en continu",c:"Ville",d:2,s:25,l:["ville"]},
+  {t:"L'endroit le plus passant",c:"Ville",d:2,s:30,l:["ville"]},
+  {t:"Quelque chose qui sent bon en ville",c:"Ville",d:2,s:25,l:["ville"]},
+  {t:"Une horloge visible dehors",c:"Ville",d:2,s:30,l:["ville"]},
+  {t:"Quelque chose d'ancien parmi le moderne",c:"Ville",d:2,s:35,l:["ville"]},
+  {t:"Un numéro de porte ou d'adresse",c:"Ville",d:2,s:25,l:["ville"]},
+  {t:"Quelque chose qui roule sans moteur",c:"Ville",d:2,s:30,l:["ville"]},
+  {t:"Le meilleur endroit pour observer la ville",c:"Ville",d:3,s:45,l:["ville","enroute"]},
+  {t:"Quelque chose qui n'existait pas quand tes parents étaient jeunes",c:"Ville",d:3,s:60,l:["ville"]},
+  {t:"Un détail architectural que personne ne remarque",c:"Ville",d:3,s:60,l:["ville"],i:"💡 Lève les yeux au deuxième étage : les détails sont en haut."},
+  {t:"Quelque chose qui aide les gens en ville (banc, fontaine, abribus…)",c:"Ville",d:3,s:40,l:["ville"]},
+  {t:"L'endroit le plus silencieux à proximité",c:"Ville",d:3,s:45,l:["ville"],i:"💡 Derrière les gros bâtiments, loin des artères : le silence se cache."},
+  {t:"Une preuve que la ville ne dort jamais (ou presque)",c:"Ville",d:3,s:45,l:["ville"],i:"💡 Lumières allumées, camions de nuit, néons : la ville veille."},
+  {t:"Quelque chose qui vient d'ailleurs dans le monde",c:"Ville",d:3,s:45,l:["ville"]},
+  {t:"Un raccourci que les touristes ne connaissent pas",c:"Ville",d:3,s:60,l:["ville"],i:"💡 Les ruelles pis les passages entre les bâtisses."},
+  {t:"Un emballage rouge",c:"Magasin",d:1,s:15,l:["magasin"]},
+  {t:"Un panier ou un chariot",c:"Magasin",d:1,s:15,l:["magasin"]},
+  {t:"Une boîte de conserve",c:"Magasin",d:1,s:15,l:["magasin"]},
+  {t:"Une caisse enregistreuse",c:"Magasin",d:1,s:15,l:["magasin"]},
+  {t:"Un sac de glace",c:"Magasin",d:1,s:20,l:["magasin"]},
+  {t:"Un prix qui se termine par ,99",c:"Magasin",d:1,s:20,l:["magasin"]},
+  {t:"Un citron",c:"Magasin",d:1,s:15,l:["magasin"]},
+  {t:"Une affiche « spécial » ou « rabais »",c:"Magasin",d:1,s:20,l:["magasin"]},
+  {t:"Quelque chose de mou",c:"Magasin",d:1,s:20,l:["magasin"]},
+  {t:"Un employé qui sourit",c:"Magasin",d:1,s:20,l:["magasin"]},
+  {t:"Quelque chose en forme de boîte",c:"Magasin",d:1,s:15,l:["magasin"]},
+  {t:"Le plus gros fruit ou légume",c:"Magasin",d:1,s:20,l:["magasin"]},
+  {t:"L'article le plus cher que tu vois",c:"Magasin",d:2,s:30,l:["magasin"]},
+  {t:"Quelque chose fait au Québec",c:"Magasin",d:2,s:30,l:["magasin"]},
+  {t:"Un produit avec un animal sur l'emballage",c:"Magasin",d:2,s:25,l:["magasin"]},
+  {t:"Quelque chose qu'on achète seulement l'hiver",c:"Magasin",d:2,s:30,l:["magasin"]},
+  {t:"Le rayon le plus coloré",c:"Magasin",d:2,s:25,l:["magasin"]},
+  {t:"Un produit avec un nom rigolo",c:"Magasin",d:2,s:30,l:["magasin"]},
+  {t:"Quelque chose qui se mange cru",c:"Magasin",d:2,s:25,l:["magasin"]},
+  {t:"L'allée la plus longue",c:"Magasin",d:2,s:30,l:["magasin"]},
+  {t:"Un produit en édition limitée",c:"Magasin",d:2,s:30,l:["magasin"]},
+  {t:"Quelque chose qui vient d'un autre continent",c:"Magasin",d:2,s:35,l:["magasin"]},
+  {t:"Le plus petit article en vente",c:"Magasin",d:2,s:30,l:["magasin"]},
+  {t:"Quelque chose qui brille dans son emballage",c:"Magasin",d:2,s:25,l:["magasin"]},
+  {t:"Le meilleur rapport qualité-prix (défends ton choix!)",c:"Magasin",d:3,s:60,l:["magasin"],i:"💡 Compare le prix au kilo : les gros formats gagnent souvent."},
+  {t:"Un produit que personne n'achète jamais (à ton avis!)",c:"Magasin",d:3,s:45,l:["magasin"]},
+  {t:"Quelque chose qui n'existait pas il y a 5 ans",c:"Magasin",d:3,s:60,l:["magasin"]},
+  {t:"L'erreur d'étiquette la plus probable (sans toucher!)",c:"Magasin",d:3,s:45,l:["magasin"],i:"💡 Les tablettes du bas pis les bouts d'allée : c'est là que ça se trompe."},
+  {t:"Un produit parfait pour un cadeau surprise",c:"Magasin",d:3,s:45,l:["magasin"],i:"💡 Pense à qui reçoit : qu'est-ce qui ferait sourire ton monde?"},
+  {t:"Quelque chose qui se vend moins cher en ligne (à ton avis!)",c:"Magasin",d:3,s:60,l:["magasin"]},
+  {t:"L'article le plus inutile du magasin (défends ton choix!)",c:"Magasin",d:3,s:45,l:["magasin"]},
+  {t:"Un emballage qui ment sur le contenu (format trompeur!)",c:"Magasin",d:3,s:60,l:["magasin"],i:"💡 Les boîtes trop grosses pour ce qu'elles contiennent."},
+  {t:"Quelqu'un qui porte du bleu",c:"Famille",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne avec les cheveux les plus longs",c:"Famille",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui sourit",c:"Famille",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Deux personnes de la même taille (à peu près!)",c:"Famille",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui porte des lunettes",c:"Famille",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La plus petite main du groupe",c:"Famille",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui a un lacet défait",c:"Famille",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un avec un chapeau, une tuque ou une casquette",c:"Famille",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui porte quelque chose de rayé",c:"Famille",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne qui a le plus de poches",c:"Famille",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui fait semblant de ne pas jouer (mais qui joue!)",c:"Famille",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne la plus concentrée",c:"Famille",d:2,s:25,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Deux personnes qui se ressemblent",c:"Famille",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui a un talent caché (fais-le deviner!)",c:"Famille",d:2,s:35,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne qui connaît le mieux le quartier",c:"Famille",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui peut siffler une chanson",c:"Famille",d:2,s:25,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne la plus rapide pour trouver (vérifie les scores!)",c:"Famille",d:2,s:25,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui porte quelque chose de fait main",c:"Famille",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne qui rit le plus facilement",c:"Famille",d:2,s:25,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui peut nommer 5 capitales",c:"Famille",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne qui te connaît le mieux (prouve-le!)",c:"Famille",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui raconte une anecdote que personne ne connaît",c:"Famille",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne avec la meilleure mémoire (teste-la : 5 objets à retenir!)",c:"Famille",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui ose faire une grimace en public",c:"Famille",d:3,s:40,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La personne qui a voyagé le plus loin",c:"Famille",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui peut imiter un animal",c:"Famille",d:3,s:40,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Un compliment sincère pour chaque joueur (un par personne!)",c:"Famille",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelqu'un qui connaît un fait surprenant sur ce lieu",c:"Famille",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose de violet ou mauve",c:"Observation",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose de plus grand que toi",c:"Observation",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui bouge",c:"Observation",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trois choses de la même couleur",c:"Observation",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose de transparent",c:"Observation",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La chose la plus proche de toi",c:"Observation",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose de carré",c:"Observation",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Une ligne droite",c:"Observation",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui flotte ou pourrait flotter",c:"Observation",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Deux choses identiques",c:"Observation",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui n'était pas là il y a une minute",c:"Observation",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Le plus petit détail que tu peux voir",c:"Observation",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui va disparaître bientôt",c:"Observation",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Un reflet",c:"Observation",d:2,s:25,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose d'asymétrique",c:"Observation",d:2,s:25,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La source de lumière la plus proche",c:"Observation",d:2,s:25,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui se répète en motif",c:"Observation",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Un objet méconnaissable vu sous un drôle d'angle",c:"Observation",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui semble petit mais est grand (ou l'inverse!)",c:"Observation",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La chose la plus éloignée que tu peux voir",c:"Observation",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose que tout le monde voit mais personne ne remarque",c:"Observation",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Pancartes, poignées, planchers : on les voit sans les voir."},
+  {t:"Un détail qui prouve l'heure qu'il est",c:"Observation",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Les ombres, les lumières allumées, les files : l'heure se devine."},
+  {t:"Quelque chose qui a changé depuis hier",c:"Observation",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La preuve d'un événement passé (trace, marque, usure…)",c:"Observation",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose d'invisible dont tu vois l'effet (vent, chaleur…)",c:"Observation",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Rideaux qui bougent, poussière qui danse : l'invisible laisse des traces."},
+  {t:"Un mensonge visuel (reflet, trompe-l'œil, pub retouchée…)",c:"Observation",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui n'aurait jamais dû se trouver là",c:"Observation",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Le détail le plus caché à moins de 3 mètres de toi",c:"Observation",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Accroupis-toi : à hauteur de genoux, tout est différent."},
+  {t:"Compte 5 choses bleues autour de toi",c:"Réflexion",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Nomme 3 animaux qui pourraient vivre ici",c:"Réflexion",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve quelque chose dont le nom commence par B",c:"Réflexion",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Compte le nombre de portes que tu vois",c:"Réflexion",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve quelque chose dont le nom a 3 lettres",c:"Réflexion",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve un objet dont le nom rime avec « chat »",c:"Réflexion",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Compte 10 pas jusqu'à l'objet le plus intéressant",c:"Réflexion",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Nomme 3 métiers des gens autour de toi",c:"Réflexion",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve quelque chose qui pèse plus qu'un éléphant",c:"Réflexion",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Épelle à l'envers le nom de ce lieu",c:"Réflexion",d:1,s:15,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Invente un slogan publicitaire pour l'objet le plus laid ici",c:"Réflexion",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Si tu étais détective, quel serait ton premier indice ici?",c:"Réflexion",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve 3 utilisations détournées d'un objet banal",c:"Réflexion",d:2,s:35,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelle est la chose la plus chère ici? (justifie!)",c:"Réflexion",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Imagine ce lieu dans 100 ans (décris-le en 3 phrases!)",c:"Réflexion",d:2,s:35,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Classe 5 objets du plus utile au plus inutile",c:"Réflexion",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Devine le prix de l'objet le plus proche (le groupe valide!)",c:"Réflexion",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quel objet emporterais-tu sur une île déserte? (un seul!)",c:"Réflexion",d:2,s:25,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Choisis un objet et invente son histoire en 30 secondes",c:"Réflexion",d:2,s:35,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Compte le nombre de couleurs différentes autour de toi",c:"Réflexion",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Devinette : plus il y en a, moins on voit. Trouve la réponse!",c:"Réflexion",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Devinette : je suis au milieu de ton visage et tu ne me vois jamais. Qui suis-je?",c:"Réflexion",d:3,s:40,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Mémorise 7 objets en 20 secondes, puis cite-les les yeux fermés",c:"Réflexion",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve 3 différences depuis ta dernière visite ici",c:"Réflexion",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Invente une règle absurde que tout le monde suit pendant 2 minutes",c:"Réflexion",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Devinette : qu'est-ce qui monte sans jamais descendre?",c:"Réflexion",d:3,s:40,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Convaincs le groupe que l'objet le plus banal ici est un trésor (30 secondes!)",c:"Réflexion",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve le point commun entre 3 objets sans rapport",c:"Réflexion",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Touche quelque chose de tiède",c:"Mouvement",d:1,s:15,l:["maison","dehors","parc","skatepark"]},
+  {t:"Fais 5 sauts sur place",c:"Mouvement",d:1,s:15,l:["maison","dehors","parc","skatepark"]},
+  {t:"Touche le sol avec tes deux mains",c:"Mouvement",d:1,s:15,l:["maison","dehors","parc","skatepark"]},
+  {t:"Tourne 3 fois sur toi-même",c:"Mouvement",d:1,s:15,l:["maison","dehors","parc","skatepark"]},
+  {t:"Touche quelque chose au-dessus de ta tête",c:"Mouvement",d:1,s:15,l:["maison","dehors","parc","skatepark"]},
+  {t:"Fais 10 pas en arrière (sans trébucher!)",c:"Mouvement",d:1,s:20,l:["maison","dehors","parc","skatepark"]},
+  {t:"Touche quelque chose de lisse",c:"Mouvement",d:1,s:15,l:["maison","dehors","parc","skatepark"]},
+  {t:"Lève les bras et touche le ciel (presque!)",c:"Mouvement",d:1,s:15,l:["maison","dehors","parc","skatepark"]},
+  {t:"Marche comme un robot jusqu'au mur ou à l'arbre le plus proche",c:"Mouvement",d:1,s:20,l:["maison","dehors","parc","skatepark"]},
+  {t:"Touche 3 textures différentes",c:"Mouvement",d:1,s:20,l:["maison","dehors","parc","skatepark"]},
+  {t:"Fais le tour de l'objet le plus proche en marchant à reculons",c:"Mouvement",d:2,s:30,l:["maison","dehors","parc","skatepark"]},
+  {t:"Tiens en équilibre sur un pied pendant 10 secondes",c:"Mouvement",d:2,s:25,l:["maison","dehors","parc","skatepark"]},
+  {t:"Traverse la zone sans faire de bruit",c:"Mouvement",d:2,s:30,l:["maison","dehors","parc","skatepark"]},
+  {t:"Fais 5 pompes ou 10 accroupissements",c:"Mouvement",d:2,s:30,l:["maison","dehors","parc","skatepark"]},
+  {t:"Imite la démarche d'un pingouin jusqu'au prochain défi",c:"Mouvement",d:2,s:30,l:["maison","dehors","parc","skatepark"]},
+  {t:"Touche quelque chose avec ton coude",c:"Mouvement",d:2,s:25,l:["maison","dehors","parc","skatepark"]},
+  {t:"Fais une roulade (seulement si c'est sécuritaire!)",c:"Mouvement",d:2,s:30,l:["maison","dehors","parc","skatepark"]},
+  {t:"Marche en suivant une ligne au sol",c:"Mouvement",d:2,s:25,l:["maison","dehors","parc","skatepark"]},
+  {t:"Congèle! Reste immobile comme une statue pendant 10 secondes",c:"Mouvement",d:2,s:25,l:["maison","dehors","parc","skatepark"]},
+  {t:"Fais semblant de nager jusqu'à un point désigné",c:"Mouvement",d:2,s:30,l:["maison","dehors","parc","skatepark"]},
+  {t:"Le sol, c'est de la lave! Traverse en ne touchant que 3 objets",c:"Mouvement",d:3,s:45,l:["maison","dehors","parc","skatepark"]},
+  {t:"Porte un objet en équilibre sur ta tête sur 10 pas",c:"Mouvement",d:3,s:45,l:["maison","dehors","parc","skatepark"]},
+  {t:"Touche 5 objets le plus vite possible (dans l'ordre que tu veux!)",c:"Mouvement",d:3,s:60,l:["maison","dehors","parc","skatepark"]},
+  {t:"Imite pendant 20 secondes un animal choisi par le groupe",c:"Mouvement",d:3,s:40,l:["maison","dehors","parc","skatepark"]},
+  {t:"Fais 20 sauts étoile (jumping jacks!)",c:"Mouvement",d:3,s:45,l:["maison","dehors","parc","skatepark"]},
+  {t:"Danse 15 secondes sur une musique imaginaire",c:"Mouvement",d:3,s:40,l:["maison","dehors","parc","skatepark"]},
+  {t:"Fais 20 mètres à cloche-pied",c:"Mouvement",d:3,s:45,l:["maison","dehors","parc","skatepark"]},
+  {t:"Tiens la position de la chaise contre un mur pendant 20 secondes",c:"Mouvement",d:3,s:45,l:["maison","dehors","parc","skatepark"]},
+  {t:"Quelque chose qui ne devrait pas être ici",c:"Insolite",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Un objet avec une drôle de tête (paréidolie!)",c:"Insolite",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui ressemble à un animal",c:"Insolite",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"La chose la plus bizarre à moins de 5 mètres",c:"Insolite",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Un objet d'une couleur impossible dans la nature (rose fluo…)",c:"Insolite",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui a l'air de venir du futur",c:"Insolite",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"L'objet le plus drôle autour de toi",c:"Insolite",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui ressemble à un ovni",c:"Insolite",d:1,s:20,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Une coïncidence étrange (deux choses identiques au même endroit…)",c:"Insolite",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui semble cassé mais fonctionne",c:"Insolite",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Un message caché (graffiti, étiquette, inscription…)",c:"Insolite",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui a deux usages en même temps",c:"Insolite",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"L'objet le plus mystérieux (invente son secret!)",c:"Insolite",d:2,s:35,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose de trop petit ou trop grand pour sa fonction",c:"Insolite",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Une preuve que des extraterrestres sont passés par ici (sois créatif!)",c:"Insolite",d:2,s:35,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui fait peur à première vue mais est inoffensif",c:"Insolite",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Un objet qui semble venir d'une autre époque",c:"Insolite",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui te fait dire « hein?! »",c:"Insolite",d:2,s:30,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve 3 indices d'un « crime » imaginaire et raconte ce qui s'est passé",c:"Insolite",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Le détail le plus étrange que tu vois en ce moment",c:"Insolite",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Le secret le mieux gardé de ce lieu (à ton avis!)",c:"Insolite",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Quelque chose qui défie la logique (et explique pourquoi c'est quand même logique!)",c:"Insolite",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Invente une légende urbaine à propos de ce lieu (raconte-la avec conviction!)",c:"Insolite",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"L'objet le plus « québécois » ici (défends ton choix!)",c:"Insolite",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Sirop d'érable, tuque, poutine : le Québec a ses classiques."},
+  {t:"Quelque chose qui serait précieux dans 200 ans",c:"Insolite",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Ce qui est banal aujourd'hui sera rare demain : pense vieux objets."},
+  {t:"Le meilleur endroit pour cacher un message secret",c:"Insolite",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Sous, derrière, dedans : les messages aiment les doublures."},
+  {t:"Quelque chose qui prouve que le hasard fait bien les choses",c:"Insolite",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Les coïncidences parfaites : deux choses qui vont trop bien ensemble."},
+  {t:"L'objet qui mériterait son propre musée",c:"Insolite",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"]},
+  {t:"Trouve 3 choses rouges différentes",c:"Défi difficile",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Pense petit, moyen, gros : le rouge se cache aux trois tailles."},
+  {t:"Trouve 3 objets qui n'ont rien à faire ensemble",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Prends un objet, traverse la pièce, pis trouve son opposé."},
+  {t:"Trouve 5 textures différentes à toucher",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Tes doigts savent déjà : lisse, rugueux, mou, dur, poilu."},
+  {t:"Trouve 3 choses qui font du bruit (fais-les sonner!)",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Secoue, tapote, froisse : le bruit est dans les coins oubliés."},
+  {t:"Trouve 4 objets de 4 couleurs différentes, du plus petit au plus grand",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Commence par le plus petit : une miette colorée compte!"},
+  {t:"Trouve quelque chose pour chaque sens : vue, ouïe, toucher, odorat",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 L'odorat est le plus dur : ouvre un tiroir ou sens l'air."},
+  {t:"Trouve 3 objets ronds de 3 tailles différentes",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Petit comme une bague, moyen comme une assiette, gros comme…"},
+  {t:"Trouve 5 objets et invente une histoire qui les relie tous",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Ramasse cinq objets au hasard : l'histoire viendra toute seule."},
+  {t:"Trouve 3 choses vivantes (ou qui l'ont été)",c:"Défi difficile",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Le bois, le cuir, le coton : tout ça a déjà été vivant."},
+  {t:"Trouve un objet pour chaque lettre du mot « JEU »",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Le U est le plus tough : pense ustensile ou uniforme."},
+  {t:"Trouve 3 choses qui bougent sans être vivantes",c:"Défi difficile",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Le vent, l'eau pis les machines : ça bouge tout seul."},
+  {t:"Trouve 2 objets identiques ET un intrus qui leur ressemble",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Les paires se cachent : bas, souliers, maniques… pis l'intrus."},
+  {t:"Trouve la chose la plus ancienne, la plus moderne et la plus étrange",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 L'ancien est souvent dans un tiroir qu'on ouvre jamais."},
+  {t:"Trouve 3 objets qui racontent une histoire ensemble",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Choisis trois objets pis demande-toi : qu'est-ce qui s'est passé icitte?"},
+  {t:"Trouve quelque chose de chaud, quelque chose de froid, quelque chose de tiède",c:"Défi difficile",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Le tiède est le plus dur : pense à ce qui vient d'être touché."},
+  {t:"Trouve 4 objets dont les noms commencent par 4 lettres différentes",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Prends quatre coins de la pièce : un objet par coin."},
+  {t:"Trouve 3 choses que tu n'avais jamais remarquées avant",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Regarde en haut : plafonds pis dessus d'armoires cachent des trésors."},
+  {t:"Trouve l'objet le plus lourd, le plus léger et le plus fragile",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Le plus léger flotte presque : plume, reçu, cheveu…"},
+  {t:"Trouve 3 preuves que des humains sont passés par ici",c:"Défi difficile",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Miettes, traces de pas, objets déplacés : on laisse des traces."},
+  {t:"Trouve quelque chose de naturel, quelque chose de fabriqué, quelque chose de mystérieux",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Le mystérieux, c'est l'objet dont personne sait d'où il vient."},
+  {t:"Trouve 5 objets sans t'éloigner de plus de 3 pas",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Tourne sur toi-même : compte ce qui est à portée de bras."},
+  {t:"Trouve 3 choses de 3 décennies différentes (à ton avis!)",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Le vieux a des coins ronds pis des couleurs passées."},
+  {t:"Trouve un objet qui représente chaque joueur du groupe",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Pense aux goûts de chacun : un objet par personnalité."},
+  {t:"Trouve 3 odeurs différentes (décris-les!)",c:"Défi difficile",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Cuisine, salle de bain, dehors : chaque pièce a son odeur."},
+  {t:"Trouve la meilleure cachette à moins de 10 mètres",c:"Défi difficile",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Les meilleures cachettes sont à hauteur de genoux, pas d'yeux."},
+  {t:"Trouve 3 objets qui pourraient servir d'instruments de musique",c:"Défi difficile",d:3,s:45,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 La cuisine est un orchestre : chaudrons, cuillères pis couvercles."},
+  {t:"Trouve quelque chose qui vole, quelque chose qui rampe, quelque chose qui nage (ou leurs traces!)",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Les traces comptent : toiles d'araignée, plumes, flaques."},
+  {t:"LE DÉFI ULTIME : 7 objets, 7 couleurs différentes, en 60 secondes",c:"Défi difficile",d:3,s:60,l:["maison","dehors","parc","skatepark","ville","magasin","enroute"],i:"💡 Ne réfléchis pas, ramasse : une couleur par objet, vite!"},
+];
+
+</script>
+<script>
+// CHERCHE & TROUVE — LA VRAIE VIE : logique de jeu
+"use strict";
+
+var LIEUX = {
+  maison:   { nom: "À la maison",  emoji: "🏠" },
+  dehors:   { nom: "Dehors",       emoji: "🌳" },
+  parc:     { nom: "Au parc",      emoji: "🛝" },
+  skatepark:{ nom: "Au skatepark", emoji: "🛹" },
+  ville:    { nom: "En ville",     emoji: "🏙️" },
+  magasin:  { nom: "Au magasin",   emoji: "🛒" },
+  enroute:  { nom: "En route",     emoji: "🚗" }
+};
+
+var CAT_EMOJI = {
+  "Maison": "🏠", "Dehors": "🌳", "Parc": "🛝", "Skatepark": "🛹",
+  "Ville": "🏙️", "Magasin": "🛒", "Famille": "👨‍👩‍👧", "Observation": "👀",
+  "Réflexion": "🧠", "Mouvement": "🏃", "Insolite": "😂", "Défi difficile": "🔥"
+};
+var DIFFS = {
+  1: { nom: "Facile",   desc: "Défis simples, chrono généreux. Parfait pour les petits." },
+  2: { nom: "Moyen",    desc: "Un bon mélange d'observation et de réflexion." },
+  3: { nom: "Difficile",desc: "Défis corsés, chrono serré. Pour les vrais détectives." }
+};
+
+var CARTES_PAR_PARTIE = 15; // 14 régulières + 1 défi final
+var CLEF_USED = "ctv_used_v1";
+
+/* ===== v1.1 — Mode Sprint ⚡ ===== */
+var CLEF_SPRINT_BEST = "ctv_sprint_best_v1";
+var SPRINT_DUREE_MS = 180000; // 3 minutes
+var SPRINT_CARTES = 30;       // assez pour tenir 3 minutes
+var INDICES_GENERIQUES = {
+  "Maison": "👀 Fouille les places où on range les affaires qu'on utilise pu souvent.",
+  "Dehors": "👀 Lève les yeux, puis regarde à tes pieds : c'est rarement à hauteur des yeux.",
+  "Parc": "👀 Pense aux coins où les enfants laissent des traces.",
+  "Skatepark": "👀 Regarde sous les modules, pas juste dessus.",
+  "Ville": "👀 Ça se cache souvent dans les vitrines pis sur les murs.",
+  "Magasin": "👀 Fais le tour d'une allée que tu visites jamais.",
+  "Famille": "👀 Demande-toi ce que chaque personne ferait différemment.",
+  "Observation": "👀 Change de hauteur : accroupis-toi, puis regarde en haut.",
+  "Réflexion": "🧠 Dis ta réponse à voix haute : des fois, l'entendre aide à la voir.",
+  "Mouvement": "🏃 Fais trois pas dans une direction au hasard, pis regarde autour.",
+  "Insolite": "🤪 Cherche ce qui n'a pas d'affaire là.",
+  "Défi difficile": "🔥 Coupe le défi en deux : fais la première moitié, le reste va suivre."
+};
+var MODES = {
+  classique: { emoji: "🏖️", nom: "Classique", desc: "15 défis, 1 chrono par défi. Le jeu que tu connais." },
+  sprint:    { emoji: "⚡", nom: "Sprint",    desc: "3 minutes chrono. Enchaîne un max de défis, 3 indices par partie." }
+};
+
+var state = {
+  lieu: null, difficulte: 2, nbJoueurs: 2, mode: "classique",
+  joueurs: [], cartes: [], index: 0,
+  timerId: null, finChrono: 0, verrou: false,
+  sprint: null, sprintTimerId: null, finSprint: 0,
+  enPause: false, restePause: 0
+};
+
+function $(id) { return document.getElementById(id); }
+
+function montrer(id) {
+  var ecrans = document.querySelectorAll(".ecran");
+  for (var i = 0; i < ecrans.length; i++) ecrans[i].classList.remove("actif");
+  $(id).classList.add("actif");
+  window.scrollTo(0, 0);
+}
+
+/* ---------- Écran configuration ---------- */
+
+function construireConfig() {
+  var cl = $("choix-lieu");
+  cl.innerHTML = "";
+  Object.keys(LIEUX).forEach(function (code) {
+    var b = document.createElement("button");
+    b.className = "choix" + (state.lieu === code ? " sel" : "");
+    b.innerHTML = '<span class="e">' + LIEUX[code].emoji + "</span>" + LIEUX[code].nom;
+    b.onclick = function () {
+      state.lieu = code;
+      $("erreur-config").hidden = true;
+      $("alerte-route").hidden = (code !== "enroute");
+      construireConfig();
+    };
+    cl.appendChild(b);
+  });
+
+  var cj = $("choix-joueurs");
+  cj.innerHTML = "";
+  for (var n = 1; n <= 4; n++) {
+    (function (nb) {
+      var b = document.createElement("button");
+      b.className = "choix" + (state.nbJoueurs === nb ? " sel" : "");
+      b.textContent = nb;
+      b.onclick = function () { state.nbJoueurs = nb; construireConfig(); };
+      cj.appendChild(b);
+    })(n);
+  }
+
+  var zn = $("noms-joueurs");
+  var anciens = [];
+  zn.querySelectorAll("input").forEach(function (inp) { anciens.push(inp.value); });
+  zn.innerHTML = "";
+  for (var j = 0; j < state.nbJoueurs; j++) {
+    var inp = document.createElement("input");
+    inp.type = "text";
+    inp.maxLength = 16;
+    inp.placeholder = "Nom du joueur " + (j + 1);
+    inp.value = anciens[j] || "";
+    inp.setAttribute("aria-label", "Nom du joueur " + (j + 1));
+    zn.appendChild(inp);
+  }
+
+  var cd = $("choix-diff");
+  cd.innerHTML = "";
+  [1, 2, 3].forEach(function (d) {
+    var b = document.createElement("button");
+    b.className = "choix" + (state.difficulte === d ? " sel" : "");
+    b.textContent = DIFFS[d].nom;
+    b.onclick = function () { state.difficulte = d; construireConfig(); };
+    cd.appendChild(b);
+  });
+  $("diff-desc").textContent = DIFFS[state.difficulte].desc;
+
+  var cm = $("choix-mode");
+  cm.innerHTML = "";
+  ["classique", "sprint"].forEach(function (m) {
+    var b = document.createElement("button");
+    b.className = "choix" + (state.mode === m ? " sel" : "");
+    b.innerHTML = '<span class="e">' + MODES[m].emoji + "</span>" + MODES[m].nom +
+      '<span class="mode-desc">' + MODES[m].desc + "</span>";
+    b.onclick = function () { state.mode = m; construireConfig(); };
+    cm.appendChild(b);
+  });
+  var rec = lireRecordSprint();
+  var zr = $("record-sprint");
+  if (state.mode === "sprint" && rec !== null) {
+    zr.hidden = false;
+    zr.textContent = "🏅 Ton record Sprint : " + rec + " pts";
+  } else {
+    zr.hidden = true;
+  }
+}
+
+function lireRecordSprint() {
+  try {
+    var v = localStorage.getItem(CLEF_SPRINT_BEST);
+    return v === null ? null : parseInt(v, 10);
+  } catch (e) { return null; }
+}
+
+function sauverRecordSprint(pts) {
+  try { localStorage.setItem(CLEF_SPRINT_BEST, String(pts)); } catch (e) {}
+}
+
+function lireNoms() {
+  var noms = [];
+  document.querySelectorAll("#noms-joueurs input").forEach(function (inp, i) {
+    var v = inp.value.trim();
+    noms.push(v || ("Joueur " + (i + 1)));
+  });
+  return noms;
+}
+
+function allerConfig() { construireConfig(); montrer("ecran-config"); }
+
+function allerRegles() {
+  if (!state.lieu) { $("erreur-config").hidden = false; return; }
+  montrer("ecran-regles");
+}
+
+/* ---------- Tirage (avec anti-répétition) ---------- */
+
+function melanger(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr;
+}
+
+function lireUsed() {
+  try {
+    var v = JSON.parse(localStorage.getItem(CLEF_USED) || "[]");
+    return Array.isArray(v) ? v : [];
+  } catch (e) { return []; }
+}
+
+function ecrireUsed(ids) {
+  try { localStorage.setItem(CLEF_USED, JSON.stringify(ids)); } catch (e) {}
+}
+
+function tirerCartes() {
+  var avecId = DEFIS.map(function (d, i) {
+    return { t: d.t, c: d.c, d: d.d, s: d.s, l: d.l, id: i };
+  });
+  var solo = state.nbJoueurs === 1;
+  var pool = avecId.filter(function (d) {
+    return d.c !== "Défi difficile" && d.l.indexOf(state.lieu) !== -1 &&
+           d.d === state.difficulte && (!solo || d.c !== "Famille");
+  });
+  var used = lireUsed();
+  var dispo = pool.filter(function (d) { return used.indexOf(d.id) === -1; });
+  if (dispo.length < CARTES_PAR_PARTIE - 1) { used = []; dispo = pool.slice(); } // recharge propre
+  melanger(dispo);
+  var cartes = dispo.slice(0, CARTES_PAR_PARTIE - 1);
+
+  var finals = avecId.filter(function (d) {
+    return d.c === "Défi difficile" && d.l.indexOf(state.lieu) !== -1 && used.indexOf(d.id) === -1;
+  });
+  if (finals.length === 0) {
+    finals = avecId.filter(function (d) {
+      return d.c === "Défi difficile" && d.l.indexOf(state.lieu) !== -1;
+    });
+  }
+  melanger(finals);
+  var finale = finals[0];
+  finale.finale = true;
+  cartes.push(finale);
+
+  var nouveaux = used.concat(cartes.map(function (c) { return c.id; }));
+  ecrireUsed(nouveaux);
+  return cartes;
+}
+
+/* ---------- v1.1 — Mode Sprint ⚡ ---------- */
+
+function tirerCartesSprint() {
+  var avecId = DEFIS.map(function (d, i) {
+    return { t: d.t, c: d.c, d: d.d, s: d.s, l: d.l, i: d.i, id: i };
+  });
+  var solo = state.nbJoueurs === 1;
+  var pool = avecId.filter(function (d) {
+    return d.c !== "Défi difficile" && d.l.indexOf(state.lieu) !== -1 &&
+           d.d === state.difficulte && (!solo || d.c !== "Famille");
+  });
+  var used = lireUsed();
+  var dispo = pool.filter(function (d) { return used.indexOf(d.id) === -1; });
+  if (dispo.length < SPRINT_CARTES) { used = []; dispo = pool.slice(); } // recharge propre
+  melanger(dispo);
+  var cartes = dispo.slice(0, SPRINT_CARTES);
+  cartes.forEach(function (c, k) { if ((k + 1) % 5 === 0) c.bonus = true; }); // 1 carte bonus x2 sur 5
+  var nouveaux = used.concat(cartes.map(function (c) { return c.id; }));
+  ecrireUsed(nouveaux);
+  return cartes;
+}
+
+function demarrerPartieSprint() {
+  var noms = lireNoms();
+  state.joueurs = noms.map(function (n) { return { nom: n, score: 0 }; });
+  state.index = 0;
+  state.sprint = {
+    cartes: tirerCartesSprint(), index: 0,
+    combo: 0, bestCombo: 0, defisReussis: 0,
+    indices: 3, indicesUtilises: 0, indiceCarte: false,
+    termine: false
+  };
+  $("bandeau-route").hidden = (state.lieu !== "enroute");
+  document.body.classList.add("sprint");
+  montrer("ecran-jeu");
+  demarrerChronoSprint(SPRINT_DUREE_MS);
+  afficherCarteSprint();
+}
+
+function afficherCarteSprint() {
+  state.verrou = false;
+  var S = state.sprint;
+  S.indiceCarte = false;
+  var carte = S.cartes[S.index];
+
+  $("hud-manche").style.display = "none";
+  $("chrono-sprint").hidden = false;
+  $("hud-carte").textContent = carte.bonus ? "⚡ BONUS ×2" : ("Carte " + (S.index + 1));
+  $("hud-joueur").textContent = "▶ " + joueurActif().nom;
+  majChipCombo();
+
+  var zs = $("hud-scores");
+  zs.innerHTML = "";
+  state.joueurs.forEach(function (j) {
+    var s = document.createElement("span");
+    s.className = "score-chip" + (j === joueurActif() ? " moi" : "");
+    s.textContent = j.nom + " : " + j.score;
+    zs.appendChild(s);
+  });
+
+  var elCarte = $("carte-defi");
+  elCarte.classList.remove("finale");
+  elCarte.classList.toggle("carte-bonus", !!carte.bonus);
+  $("carte-cat").innerHTML = escapeHtml((CAT_EMOJI[carte.c] || "🔎") + " " + carte.c);
+  document.querySelector("#ecran-jeu .carte-titre").textContent =
+    carte.bonus ? "⚡ CARTE BONUS ×2" : "🔎 CHERCHE";
+  $("carte-texte").textContent = carte.t;
+
+  $("zone-indice").classList.remove("show");
+  $("zone-indice").textContent = "";
+  majBoutonIndice();
+  tickSprint();
+}
+
+function majChipCombo() {
+  var S = state.sprint;
+  var chip = $("hud-combo");
+  if (S && S.combo >= 2) {
+    chip.textContent = "🔥 x" + S.combo;
+    chip.classList.remove("visible");
+    void chip.offsetWidth; // relance l'animation pop
+    chip.classList.add("visible");
+  } else {
+    chip.classList.remove("visible");
+  }
+}
+
+function majBoutonIndice() {
+  var S = state.sprint;
+  var b = $("btn-indice");
+  $("nb-indices").textContent = S ? S.indices : 3;
+  b.disabled = !S || S.indices <= 0 || S.indiceCarte;
+}
+
+function utiliserIndice() {
+  if (state.mode !== "sprint" || !state.sprint || state.sprint.indiceCarte) return;
+  var S = state.sprint;
+  if (S.indices <= 0 || state.verrou) return;
+  S.indices--;
+  S.indiceCarte = true;
+  S.indicesUtilises++;
+  var carte = S.cartes[S.index];
+  var txt = carte.i || INDICES_GENERIQUES[carte.c] || "👀 Regarde encore : la réponse est sous tes yeux.";
+  var z = $("zone-indice");
+  z.textContent = txt;
+  z.classList.add("show");
+  $("carte-cat").innerHTML = escapeHtml((CAT_EMOJI[carte.c] || "🔎") + " " + carte.c) +
+    '<span class="pastille-indice">💡</span>';
+  majBoutonIndice();
+}
+
+function demarrerChronoSprint(ms) {
+  arreterChronoSprint();
+  state.finSprint = Date.now() + ms;
+  state.sprintTimerId = setInterval(tickSprint, 200);
+  tickSprint();
+}
+
+function arreterChronoSprint() {
+  if (state.sprintTimerId) { clearInterval(state.sprintTimerId); state.sprintTimerId = null; }
+}
+
+function formaterMmSs(ms) {
+  var s = Math.ceil(Math.max(0, ms) / 1000);
+  return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2);
+}
+
+function tickSprint() {
+  var S = state.sprint;
+  if (!S || S.termine) return;
+  var resteMs = state.finSprint - Date.now();
+  var el = $("chrono-sprint");
+  el.textContent = "⏱️ " + formaterMmSs(resteMs);
+  el.classList.toggle("danger", resteMs <= 30000 && resteMs > 0);
+  if (resteMs <= 0) { arreterChronoSprint(); finSprint(); }
+}
+
+function bingoSprint() {
+  if (state.verrou) return;
+  var S = state.sprint;
+  if (!S || S.termine) return;
+  state.verrou = true;
+  S.combo++;
+  if (S.combo > S.bestCombo) S.bestCombo = S.combo;
+  var carte = S.cartes[S.index];
+  var pts = 100 + Math.min(150, 25 * (S.combo - 1)); // 100 / 125 / … / 250 (plafond)
+  if (carte.bonus) pts *= 2;
+  if (S.indiceCarte) pts = Math.floor(pts / 2); // coût de l'indice : points divisés par deux
+  var j = joueurActif();
+  j.score += pts;
+  S.defisReussis++;
+  majChipCombo();
+  var msg = "BINGO! 🎯<br/>+" + pts + " points" +
+    (S.combo >= 2 ? "<br/>🔥 combo x" + S.combo : "") +
+    (carte.bonus ? "<br/>⚡ carte bonus ×2" : "") +
+    "<br/><small>" + escapeHtml(j.nom) + "</small>";
+  overlay(msg, 1100, carteSuivanteSprint);
+}
+
+function passerSprint() {
+  if (state.verrou) return;
+  var S = state.sprint;
+  if (!S || S.termine) return;
+  state.verrou = true;
+  S.combo = 0; // Passer tue le combo
+  majChipCombo();
+  overlay("Carte passée ⏭️<br/>Combo remis à 0", 900, carteSuivanteSprint);
+}
+
+function carteSuivanteSprint() {
+  var S = state.sprint;
+  if (!S) return;
+  if (S.termine) { finPartieSprint(); return; }
+  S.index++;
+  state.index++; // rotation des joueurs à tour de rôle (joueurActif)
+  if (S.index >= S.cartes.length) {
+    S.cartes = S.cartes.concat(tirerCartesSprint()); // recharge sans casser le chrono
+  }
+  afficherCarteSprint();
+}
+
+function finSprint() {
+  var S = state.sprint;
+  if (!S || S.termine) return;
+  S.termine = true;
+  arreterChronoSprint();
+  overlay("⏱️ C'est fini !<br/>⚡", 1400, finPartieSprint);
+}
+
+function scoreTotalSprint() {
+  return state.joueurs.reduce(function (tot, j) { return tot + j.score; }, 0);
+}
+
+function finPartieSprint() {
+  arreterChronoSprint();
+  var S = state.sprint;
+  var total = scoreTotalSprint();
+  var ordre = state.joueurs.slice().sort(function (a, b) { return b.score - a.score; });
+  var medailles = ["🥇", "🥈", "🥉", "4️⃣"];
+  $("titre-fin").textContent = "⚡ Sprint terminé !";
+  var pod = $("podium");
+  pod.innerHTML = "";
+  ordre.forEach(function (j, i) {
+    var div = document.createElement("div");
+    div.className = "podium-ligne" + (i === 0 ? " premier" : "");
+    div.innerHTML = '<span class="podium-medaille">' + (medailles[i] || "🏅") + "</span>" +
+      "<span>" + escapeHtml(j.nom) + "</span>" +
+      '<span class="podium-score">' + j.score + " pts</span>";
+    pod.appendChild(div);
+  });
+  var stats = $("stats-sprint");
+  stats.innerHTML =
+    statLigne("🎯 Défis réussis", S.defisReussis) +
+    statLigne("🔥 Meilleur combo", "x" + S.bestCombo) +
+    statLigne("💡 Indices utilisés", S.indicesUtilises + "/3") +
+    statLigne("⭐ Score total", total + " pts");
+  var rec = lireRecordSprint();
+  var banner = $("record-banner");
+  if (rec === null || total > rec) {
+    sauverRecordSprint(total);
+    banner.hidden = false;
+    banner.textContent = "🏅 Nouveau record ! " + total + " pts";
+  } else {
+    banner.hidden = false;
+    banner.textContent = "🏅 Record à battre : " + rec + " pts";
+  }
+  $("btn-rejouer").textContent = "🔁 REJOUER (Sprint)";
+  montrer("ecran-fin");
+}
+
+function statLigne(emoji_nom, val) {
+  return '<div class="stat-ligne"><span>' + emoji_nom + '</span>' +
+    '<span class="stat-val">' + val + "</span></div>";
+}
+
+function rejouerSprint() {
+  state.joueurs.forEach(function (j) { j.score = 0; });
+  state.index = 0;
+  state.sprint = {
+    cartes: tirerCartesSprint(), index: 0,
+    combo: 0, bestCombo: 0, defisReussis: 0,
+    indices: 3, indicesUtilises: 0, indiceCarte: false,
+    termine: false
+  };
+  montrer("ecran-jeu");
+  demarrerChronoSprint(SPRINT_DUREE_MS);
+  afficherCarteSprint();
+}
+
+/* ---------- Déroulement ---------- */
+
+function demarrerPartie() {
+  document.body.classList.remove("sprint");
+  if (state.mode === "sprint") { demarrerPartieSprint(); return; }
+  // --- mode classique (v1.0, inchangé) ---
+  var noms = lireNoms();
+  state.joueurs = noms.map(function (n) { return { nom: n, score: 0 }; });
+  state.cartes = tirerCartes();
+  state.index = 0;
+  $("bandeau-route").hidden = (state.lieu !== "enroute");
+  $("hud-manche").style.display = "";
+  $("chrono-sprint").hidden = true;
+  $("hud-combo").classList.remove("visible");
+  montrer("ecran-jeu");
+  afficherCarte();
+}
+
+function joueurActif() {
+  return state.joueurs[state.index % state.joueurs.length];
+}
+
+function afficherCarte() {
+  state.verrou = false;
+  var carte = state.cartes[state.index];
+  var manche = Math.floor(state.index / 5) + 1;
+  var num = (state.index % 5) + 1;
+
+  $("hud-manche").textContent = "Manche " + manche + "/3";
+  $("hud-carte").textContent = carte.finale ? "🔥 DÉFI FINAL" : ("Carte " + num + "/5");
+  $("hud-joueur").textContent = "▶ " + joueurActif().nom;
+
+  var zs = $("hud-scores");
+  zs.innerHTML = "";
+  state.joueurs.forEach(function (j) {
+    var s = document.createElement("span");
+    s.className = "score-chip" + (j === joueurActif() ? " moi" : "");
+    s.textContent = j.nom + " : " + j.score;
+    zs.appendChild(s);
+  });
+
+  var elCarte = $("carte-defi");
+  elCarte.classList.toggle("finale", !!carte.finale);
+  $("carte-cat").textContent = (CAT_EMOJI[carte.c] || "🔎") + " " + carte.c;
+  document.querySelector("#ecran-jeu .carte-titre").textContent = carte.finale ? "🔥 DÉFI FINAL" : "🔎 CHERCHE";
+  $("carte-texte").textContent = carte.t;
+
+  demarrerChrono(carte.s);
+}
+
+function demarrerChrono(secondes) {
+  arreterChrono();
+  state.finChrono = Date.now() + secondes * 1000;
+  state.timerId = setInterval(tick, 200);
+  tick();
+}
+
+function arreterChrono() {
+  if (state.timerId) { clearInterval(state.timerId); state.timerId = null; }
+}
+
+function tick() {
+  var reste = Math.max(0, state.finChrono - Date.now()) / 1000;
+  var el = $("chrono");
+  el.textContent = Math.ceil(reste) + " s";
+  el.classList.toggle("danger", reste <= 5.5 && reste > 0);
+  if (reste <= 0) { arreterChrono(); tempsEcoule(); }
+}
+
+function overlay(msg, ms, cb) {
+  $("overlay-msg").innerHTML = msg;
+  $("overlay").classList.add("show");
+  setTimeout(function () {
+    $("overlay").classList.remove("show");
+    if (cb) cb();
+  }, ms);
+}
+
+function bingo() {
+  if (state.mode === "sprint") { bingoSprint(); return; }
+  if (state.verrou) return;
+  state.verrou = true;
+  arreterChrono();
+  var reste = Math.max(0, state.finChrono - Date.now()) / 1000;
+  var carte = state.cartes[state.index];
+  var pts = Math.ceil(reste) * 10 * (carte.finale ? 2 : 1);
+  var j = joueurActif();
+  j.score += pts;
+  overlay("BINGO! 🎯<br/>+" + pts + " points<br/><small>" + j.nom + "</small>", 1400, carteSuivante);
+}
+
+function tempsEcoule() {
+  if (state.verrou) return;
+  state.verrou = true;
+  overlay("⏱️ Temps écoulé !<br/>0 point", 1400, carteSuivante);
+}
+
+function passer() {
+  if (state.mode === "sprint") { passerSprint(); return; }
+  if (state.verrou) return;
+  state.verrou = true;
+  arreterChrono();
+  overlay("Carte passée ⏭️<br/>0 point", 1000, carteSuivante);
+}
+
+function carteSuivante() {
+  state.index++;
+  if (state.index >= CARTES_PAR_PARTIE) { finPartie(); return; }
+  if (state.index % 5 === 0) {
+    var manche = Math.floor(state.index / 5) + 1;
+    overlay("Manche " + manche + " !<br/>🔎", 1500, afficherCarte);
+  } else {
+    afficherCarte();
+  }
+}
+
+function abandonner() {
+  arreterChrono();
+  arreterChronoSprint();
+  document.body.classList.remove("sprint");
+  montrer("ecran-config");
+}
+
+function demanderRecommencer() {
+  var zone = $("sous-boutons");
+  zone.dataset.html = zone.innerHTML;
+  zone.innerHTML =
+    '<span class="confirm-msg">Recommencer ?</span>' +
+    '<button class="btn-lien" onclick="recommencerPartie()">✅ Oui, recommencer</button>' +
+    '<button class="btn-lien" onclick="annulerRecommencer()">✖ Annuler</button>';
+}
+
+function annulerRecommencer() {
+  var zone = $("sous-boutons");
+  zone.innerHTML = zone.dataset.html;
+}
+
+function recommencerPartie() {
+  annulerRecommencer();
+  rejouer();
+}
+
+/* ---------- Fin de partie ---------- */
+
+function finPartie() {
+  arreterChrono();
+  var ordre = state.joueurs.slice().sort(function (a, b) { return b.score - a.score; });
+  var medailles = ["🥇", "🥈", "🥉", "4️⃣"];
+  $("titre-fin").textContent = "🏆 Partie terminée !";
+  $("record-banner").hidden = true;
+  $("stats-sprint").innerHTML = "";
+  $("btn-rejouer").textContent = "🔁 REJOUER";
+  var pod = $("podium");
+  pod.innerHTML = "";
+  ordre.forEach(function (j, i) {
+    var div = document.createElement("div");
+    div.className = "podium-ligne" + (i === 0 ? " premier" : "");
+    div.innerHTML = '<span class="podium-medaille">' + (medailles[i] || "🏅") + "</span>" +
+      "<span>" + escapeHtml(j.nom) + "</span>" +
+      '<span class="podium-score">' + j.score + " pts</span>";
+    pod.appendChild(div);
+  });
+  montrer("ecran-fin");
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function rejouer() {
+  if (state.mode === "sprint") { rejouerSprint(); return; }
+  state.joueurs.forEach(function (j) { j.score = 0; });
+  state.cartes = tirerCartes();
+  state.index = 0;
+  montrer("ecran-jeu");
+  afficherCarte();
+}
+
+/* ---------- v1.1 — Pause auto (les deux modes) ---------- */
+function mettreEnPause() {
+  if (state.enPause) return;
+  if (!$("ecran-jeu").classList.contains("actif")) return;
+  if (state.mode === "sprint") {
+    if (!state.sprintTimerId || !state.sprint || state.sprint.termine) return;
+    arreterChronoSprint();
+    state.restePause = state.finSprint - Date.now();
+  } else {
+    if (!state.timerId) return;
+    arreterChrono();
+    state.restePause = state.finChrono - Date.now();
+  }
+  state.enPause = true;
+  $("overlay-msg").innerHTML = "⏸️ En pause<br/><small>Touche pour reprendre</small>";
+  $("overlay").classList.add("show");
+}
+
+$("overlay").addEventListener("click", function () {
+  if (!state.enPause) return;
+  state.enPause = false;
+  $("overlay").classList.remove("show");
+  var ms = Math.max(0, state.restePause);
+  if (state.mode === "sprint") {
+    state.finSprint = Date.now() + ms;
+    state.sprintTimerId = setInterval(tickSprint, 200);
+    tickSprint();
+  } else {
+    state.finChrono = Date.now() + ms;
+    state.timerId = setInterval(tick, 200);
+    tick();
+  }
+});
+
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden) mettreEnPause();
+});
+window.addEventListener("pagehide", mettreEnPause);
+
+// init
+construireConfig();
+
+</script>
+</body>
+</html>
