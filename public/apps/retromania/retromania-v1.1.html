@@ -1,0 +1,2046 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Retromania — devine le prix d'époque d'objets des années 1930 à aujourd'hui, en dollars canadiens. Le plus proche sans dépasser gagne la manche!">
+<link rel="icon" href="data:,">
+<title>Retromania — devine le prix d'époque | Jeu québécois HP</title>
+<meta property="og:title" content="Retromania — devine le prix d'époque | Jeu québécois HP">
+<meta property="og:description" content="Devine le prix d'époque d'objets des années 1930 à aujourd'hui, en dollars canadiens. Le plus proche sans dépasser gagne la manche!">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CA">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Retromania","description":"Jeu québécois : devine le prix d'époque d'objets des années 1930 à aujourd'hui, en dollars canadiens. Le plus proche sans dépasser gagne la manche.","inLanguage":"fr","genre":"Jeu de quiz","author":{"@type":"Organization","name":"HP"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3EFE6;
+  --surface:#FFFFFF;
+  --surface-2:#FAF7F0;
+  --ink:#211D18;
+  --ink-soft:#6B6357;
+  --line:#211D18;
+  --track:#DCD4C3;
+  --red:#E33429;
+  --red-deep:#A52017;
+  --gold:#C8901A;
+  --gold-soft:#F7E8C4;
+  --teal:#0E7C74;
+  --teal-soft:#D7EFEA;
+  --red-soft:#FBDCD8;
+  --hard:4px 4px 0 rgba(33,29,24,.88);
+  --hard-sm:3px 3px 0 rgba(33,29,24,.88);
+  --focus:#0E7C74;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14161A;
+    --surface:#1F2228;
+    --surface-2:#191C21;
+    --ink:#F1ECE1;
+    --ink-soft:#A9A296;
+    --line:#F1ECE1;
+    --track:#3A3E46;
+    --red:#FF5A4E;
+    --red-deep:#FF8A80;
+    --gold:#E4A93C;
+    --gold-soft:#3A2E17;
+    --teal:#3FC1B6;
+    --teal-soft:#14302D;
+    --red-soft:#3A211D;
+    --hard:4px 4px 0 rgba(0,0,0,.55);
+    --hard-sm:3px 3px 0 rgba(0,0,0,.55);
+    --focus:#3FC1B6;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.stage{width:100%;max-width:620px;padding:14px 14px 44px;display:flex;flex-direction:column;gap:14px}
+.screen{display:flex;flex-direction:column;gap:14px}
+[hidden]{display:none!important}
+
+/* ---------- barre d'outils (pas de titre: la coquille l'affiche déjà) ---------- */
+.toolbar{display:flex;justify-content:flex-end;gap:10px}
+.icon-btn{
+  width:46px;height:46px;border-radius:13px;
+  border:2px solid var(--line);background:var(--surface);color:var(--ink);
+  box-shadow:var(--hard-sm);
+  display:grid;place-items:center;cursor:pointer;
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.icon-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(33,29,24,.4)}
+.icon-btn svg{width:22px;height:22px}
+
+/* ---------- cartes ---------- */
+.card{
+  background:var(--surface);
+  border:2px solid var(--line);
+  border-radius:18px;
+  box-shadow:6px 6px 0 rgba(33,29,24,.85);
+  padding:22px;
+}
+@media (prefers-color-scheme: dark){
+  .card{box-shadow:6px 6px 0 rgba(0,0,0,.55)}
+}
+
+/* ---------- accueil ---------- */
+.attract-kicker{
+  font-family:'Bricolage Grotesque',system-ui,sans-serif;
+  font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--red);
+}
+.attract h1{
+  font-family:'Bricolage Grotesque',system-ui,sans-serif;
+  font-weight:800;font-size:clamp(40px,9vw,58px);line-height:1;
+  margin:6px 0 10px;
+}
+.pitch{font-size:16.5px;line-height:1.5;margin:0 0 6px;color:var(--ink)}
+.pitch strong{color:var(--red-deep)}
+.meta-line{font-size:13.5px;color:var(--ink-soft);margin:0 0 18px}
+.section-label{font-weight:700;font-size:15px;margin:14px 0 8px}
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mode-card.encans-card{grid-column:1/-1}
+.mode-card{
+  border:2px solid var(--line);border-radius:14px;background:var(--surface-2);color:var(--ink);
+  box-shadow:var(--hard-sm);padding:14px;cursor:pointer;text-align:left;
+  font-family:inherit;transition:transform .08s ease, box-shadow .08s ease;
+}
+.mode-card .t{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;display:block;margin-bottom:4px}
+.mode-card .d{font-size:13.5px;color:var(--ink-soft);line-height:1.4}
+.mode-card.selected{background:var(--ink);color:var(--bg)}
+.mode-card.selected .d{color:inherit;opacity:.8}
+.mode-card:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(33,29,24,.4)}
+.stepper-row{display:flex;align-items:center;gap:14px;margin:6px 0}
+.stepper{display:flex;align-items:center;gap:12px}
+.stepper .icon-btn{width:42px;height:42px;font-size:22px;font-weight:800}
+.stepper .count{font-family:'Bricolage Grotesque';font-size:26px;font-weight:800;min-width:28px;text-align:center}
+.name-fields{display:grid;gap:10px;margin-top:6px}
+.name-row{display:flex;align-items:center;gap:10px}
+.name-row .num{
+  width:34px;height:34px;border-radius:50%;border:2px solid var(--line);
+  background:var(--gold-soft);color:var(--gold);font-weight:800;
+  display:grid;place-items:center;flex:none;
+  font-family:'Bricolage Grotesque';
+}
+.name-input{
+  flex:1;padding:11px 13px;font-size:16px;font-family:inherit;
+  border:2px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--ink);
+}
+.name-input:focus{outline:3px solid var(--focus);outline-offset:1px}
+.records{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.record{
+  border:2px solid var(--line);border-radius:12px;background:var(--surface-2);
+  padding:10px 8px;text-align:center;font-size:12.5px;color:var(--ink-soft);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.record svg{width:20px;height:20px;color:var(--gold)}
+.record b{font-family:'Bricolage Grotesque';font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums}
+.rules{border:2px solid var(--line);border-radius:12px;background:var(--surface-2);padding:4px 14px;margin-bottom:4px}
+.rules summary{font-weight:700;cursor:pointer;padding:10px 0;font-size:15px}
+.rules li{font-size:14.5px;line-height:1.55;margin-bottom:6px;color:var(--ink-soft)}
+.rules ul{padding-left:20px;margin:8px 0 14px}
+.disclaimer{
+  display:flex;gap:10px;align-items:center;justify-content:center;
+  font-size:13.5px;font-weight:700;color:var(--ink);
+  border:2px dashed var(--gold);border-radius:12px;padding:11px 12px;
+  background:var(--gold-soft);margin:6px 0 0;text-align:center;
+}
+.disclaimer svg{width:20px;height:20px;flex:none;color:var(--gold)}
+.disclaimer.small{font-size:12.5px;padding:9px 10px}
+
+/* ---------- boutons ---------- */
+.btn{
+  font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;font-size:17px;
+  border:2px solid var(--line);border-radius:14px;color:var(--ink);
+  background:var(--surface);box-shadow:var(--hard);padding:14px 22px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .08s ease, box-shadow .08s ease;
+  width:100%;
+}
+.btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 rgba(33,29,24,.4)}
+.btn.primary{background:var(--red);color:#fff;border-color:var(--line)}
+.btn.big{font-size:20px;padding:16px}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn.ghost{background:transparent;box-shadow:none}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+kbd{
+  font-family:inherit;font-size:12px;border:1.5px solid rgba(255,255,255,.7);
+  border-radius:6px;padding:2px 7px;font-weight:700;
+}
+
+/* ---------- partie : barre de manche ---------- */
+.roundbar{display:flex;flex-direction:column;gap:8px}
+.round-meta{display:flex;justify-content:space-between;align-items:baseline;font-weight:700}
+#roundLabel{font-family:'Bricolage Grotesque';font-size:17px}
+#turnLabel{font-size:15px;color:var(--teal)}
+.progress{display:flex;gap:5px}
+.progress i{flex:1;height:9px;border-radius:5px;background:var(--track)}
+.progress i.done{background:var(--red)}
+.player-chips{display:flex;flex-wrap:wrap;gap:8px}
+.player-chip{
+  border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:700;
+  background:var(--surface);display:inline-flex;align-items:center;gap:7px;
+}
+.player-chip .wins{
+  min-width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);
+  display:grid;place-items:center;font-size:12.5px;font-family:'Bricolage Grotesque';
+}
+.player-chip.current{outline:3px solid var(--red);outline-offset:1px}
+
+/* ---------- billet ---------- */
+.ticket{position:relative;overflow:hidden;text-align:center}
+.ticket::before,.ticket::after{
+  content:"";position:absolute;top:50%;width:30px;height:30px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--line);transform:translateY(-50%);
+}
+.ticket::before{left:-17px}
+.ticket::after{right:-17px}
+.ticket-head{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;
+  border:2px solid var(--line);
+}
+.chip svg{width:16px;height:16px}
+.chip.decade{background:var(--red);color:#fff}
+.chip.cat{background:var(--surface-2)}
+.chip.qc{background:#0B4F8A;color:#fff;border-color:#0B4F8A}
+.chip.lot{background:var(--gold-soft);border-color:var(--gold)}
+@media (prefers-color-scheme: dark){.chip.qc{background:#4D8FD1;border-color:#4D8FD1}}
+
+/* ---------- mode Encans : minuteur + salle des ventes (v1.1) ---------- */
+.encans-timer{background:var(--surface);border:3px solid var(--line);border-radius:14px;box-shadow:var(--hard-sm);padding:10px 14px}
+.encans-timer .et-head{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px}
+.encans-timer .et-secs{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:24px;font-variant-numeric:tabular-nums}
+.encans-timer .et-bar{height:12px;background:var(--track);border:2px solid var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
+.encans-timer .et-fill{height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),#E4A93C);transition:width .18s linear}
+.encans-timer.low .et-fill{background:linear-gradient(90deg,#E4632A,var(--red))}
+.encans-timer.low .et-secs{color:var(--red-deep)}
+.encans-timer.crit .et-secs{animation:etpulse .9s ease-in-out infinite}
+@keyframes etpulse{50%{transform:scale(1.18)}}
+@media (prefers-reduced-motion: reduce){.encans-timer.crit .et-secs{animation:none}}
+.ticket.encans{border-color:var(--gold);box-shadow:4px 4px 0 rgba(200,144,26,.55)}
+
+/* ---------- filtre 100 % d'ici (v1.1) ---------- */
+.qc-toggle{display:flex;align-items:center;gap:10px;justify-content:center;margin:14px 0 4px;padding:12px 14px;border:3px solid var(--line);border-radius:14px;background:var(--surface-2);box-shadow:var(--hard-sm);font-weight:700;font-size:14.5px;cursor:pointer}
+.qc-toggle input{width:22px;height:22px;accent-color:#0B4F8A;flex:none}
+
+/* ---------- n° de version visible (v1.1) ---------- */
+.version-tag{text-align:center;font-size:12.5px;color:var(--ink-soft);margin:6px 0 0;letter-spacing:.4px}
+.ticket h2{
+  font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;
+  font-size:clamp(24px,6.4vw,32px);line-height:1.2;margin:0 0 6px;
+}
+.ticket-context{font-size:16.5px;font-weight:700;margin:0;color:var(--ink)}
+.ticket-context .year{color:var(--red);font-family:'Bricolage Grotesque';font-size:19px}
+.decade-line{font-size:14px;color:var(--ink-soft);font-style:italic;margin:8px 0 0}
+
+/* ---------- mise ---------- */
+.bid-label{display:block;text-align:center;font-weight:700;font-size:15px;color:var(--ink-soft);margin-top:2px}
+.bid-display{
+  border:2px solid var(--line);border-radius:16px;background:var(--surface-2);
+  padding:18px 12px;text-align:center;
+  box-shadow:inset 3px 3px 0 rgba(33,29,24,.08);
+  display:flex;align-items:baseline;justify-content:center;gap:4px;
+}
+.bid-display .amount{
+  font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;
+  font-size:clamp(34px,9vw,46px);font-variant-numeric:tabular-nums;
+}
+.caret{display:inline-block;width:4px;height:38px;background:var(--red);border-radius:2px;animation:blink 1.1s steps(2,start) infinite;align-self:center}
+@keyframes blink{to{visibility:hidden}}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.key{
+  min-height:58px;border-radius:14px;border:2px solid var(--line);background:var(--surface);
+  box-shadow:var(--hard-sm);color:var(--ink);
+  font-family:'Bricolage Grotesque';font-size:24px;font-weight:700;cursor:pointer;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;
+  transition:transform .06s ease, box-shadow .06s ease;
+}
+.key:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(33,29,24,.4)}
+.key.fn{background:var(--surface-2);font-size:19px}
+.key.back svg{width:24px;height:24px}
+
+/* ---------- révélation ---------- */
+.reveal-block{text-align:center;margin-top:14px}
+.actual-price{
+  display:block;
+  font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;
+  font-size:clamp(38px,10vw,54px);font-variant-numeric:tabular-nums;color:var(--red);
+  margin:2px 0 4px;
+}
+.reveal-cap{font-size:13px;font-weight:700;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.bar-wrap{margin:16px 0 6px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.bar-row .who{font-size:13px;font-weight:700;width:86px;flex:none;text-align:right;color:var(--ink-soft)}
+.bar{flex:1;height:20px;border:2px solid var(--line);border-radius:10px;position:relative;background:var(--surface-2);overflow:hidden}
+.bar .fill{position:absolute;inset:0;width:0%;border-radius:7px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.bar .fill.actual{background:var(--gold)}
+.bar .fill.under{background:var(--teal)}
+.bar .fill.over{background:var(--red)}
+.bar-row .val{font-size:13.5px;font-weight:700;width:118px;flex:none;font-variant-numeric:tabular-nums;text-align:left}
+.verdict{margin-top:14px;text-align:center}
+.verdict-title{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(26px,7vw,34px);margin:0 0 6px}
+.verdict-title.win{color:var(--teal)}
+.verdict-title.over{color:var(--red)}
+.verdict-title.perfect{color:var(--gold)}
+.verdict-detail{font-size:15.5px;color:var(--ink-soft);margin:0 0 10px;line-height:1.5}
+.verdict-points{
+  display:inline-block;font-family:'Bricolage Grotesque';font-weight:800;font-size:22px;
+  border:2px solid var(--line);border-radius:999px;padding:8px 22px;background:var(--gold-soft);
+}
+
+/* ---------- mises familiales ---------- */
+.bid-list{list-style:none;margin:14px 0 6px;padding:0;display:flex;flex-direction:column;gap:8px}
+.bid-row{
+  display:flex;align-items:center;gap:10px;
+  border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface-2);
+}
+.bid-row .rank{
+  width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;
+  font-family:'Bricolage Grotesque';font-weight:800;font-size:15px;background:var(--track);
+}
+.bid-row.winner{background:var(--gold-soft)}
+.bid-row.winner .rank{background:var(--gold);color:#fff}
+.bid-row .who{font-weight:700;font-size:15px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bid-row .guess{font-weight:700;font-variant-numeric:tabular-nums;font-size:14.5px}
+.bid-row .tag{font-size:12px;font-weight:700;color:var(--ink-soft);white-space:nowrap}
+.bid-row .tag.under{color:var(--teal)}
+.bid-row .tag.over{color:var(--red)}
+.bid-row .star{width:22px;height:22px;color:var(--gold);flex:none}
+.family-total{font-size:14px;color:var(--ink-soft);text-align:center;margin:6px 0 0;font-variant-numeric:tabular-nums}
+
+/* ---------- fin de partie ---------- */
+.final-score{text-align:center;margin:8px 0 4px}
+.final-score .n{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(56px,14vw,84px);font-variant-numeric:tabular-nums;line-height:1}
+.final-score .of{font-family:'Bricolage Grotesque';font-size:22px;color:var(--ink-soft)}
+.end-title{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(28px,7vw,36px);text-align:center;margin:0}
+.end-msg{text-align:center;font-size:16px;line-height:1.55;margin:10px 0 0}
+.end-msg strong{color:var(--red-deep)}
+.solo-stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.solo-stats .stat{
+  border:2px solid var(--line);border-radius:12px;background:var(--surface-2);
+  padding:8px 14px;font-size:13.5px;color:var(--ink-soft);text-align:center;
+}
+.solo-stats .stat b{display:block;font-family:'Bricolage Grotesque';font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
+.champion-card{
+  text-align:center;border:2px solid var(--line);border-radius:16px;background:var(--gold-soft);
+  padding:18px;margin-top:14px;
+}
+.champion-card svg{width:44px;height:44px;color:var(--gold)}
+.champion-card .who{font-family:'Bricolage Grotesque';font-weight:800;font-size:30px;margin:6px 0 2px}
+.champion-card .how{color:var(--ink-soft);font-size:15px;margin:0}
+.standings{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.standing-row{display:flex;align-items:center;gap:12px;border:2px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--surface-2)}
+.standing-row .rank{font-family:'Bricolage Grotesque';font-weight:800;font-size:19px;width:30px;flex:none;text-align:center}
+.standing-row.first .rank{color:var(--gold)}
+.standing-row .who{font-weight:700;flex:1}
+.standing-row .w{font-size:13.5px;color:var(--ink-soft)}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:var(--bg);font-weight:700;font-size:15px;
+  padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;z-index:50;max-width:92vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:60}
+
+/* ---------- Justin Prix, l'animateur (personnage original) ---------- */
+.presenter-card{display:flex;gap:14px;align-items:center;border:2px solid var(--line);border-radius:16px;
+  background:var(--surface-2);padding:14px;margin:14px 0;box-shadow:var(--hard-sm)}
+.presenter-avatar{flex:none;width:84px;height:84px;border-radius:50%;border:3px solid var(--line);
+  background:radial-gradient(circle at 35% 30%,var(--gold-soft),var(--gold));display:grid;place-items:center;overflow:hidden}
+.presenter-avatar svg{width:74%;height:74%}
+.presenter-avatar.small{width:56px;height:56px}
+.host-strip{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:14px;
+  background:var(--gold-soft);padding:10px 14px;box-shadow:var(--hard-sm)}
+.host-strip p{margin:0;font-size:15px;font-weight:700;line-height:1.4}
+.host-strip .host-name{display:block;font-size:12px;color:var(--ink-soft);letter-spacing:.05em;text-transform:uppercase}
+.presenter-name{display:block;font-size:12px;color:var(--ink-soft);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.presenter-bubble p{margin:0;font-size:15.5px;line-height:1.5}
+.phase-chip{font-family:'Bricolage Grotesque';font-weight:800;font-size:13px;color:var(--gold-deep,var(--gold));
+  border:2px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--gold-soft);white-space:nowrap}
+/* ---------- panneau plateau télé ---------- */
+.tv-panel{border:3px solid var(--line);border-radius:16px;background:var(--ink);color:var(--bg);
+  box-shadow:var(--hard);overflow:hidden}
+.tv-head{text-align:center;font-family:'Bricolage Grotesque';font-weight:800;letter-spacing:.14em;
+  font-size:13px;color:var(--gold);padding:8px;border-bottom:2px solid rgba(255,255,255,.25)}
+.tv-panel .player-chips{padding:12px;justify-content:center}
+.tv-panel .player-chip{background:var(--surface);color:var(--ink)}
+.tv-panel .player-chip.leader{outline:3px solid var(--gold);outline-offset:1px}
+.score-chip{font-family:'Bricolage Grotesque';font-weight:800;font-size:14px;color:var(--ink);
+  border:2px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--teal-soft);white-space:nowrap}
+/* ---------- compte à rebours ---------- */
+.countdown-overlay{position:fixed;inset:0;z-index:70;display:grid;place-content:center;gap:10px;
+  background:rgba(20,18,14,.92);text-align:center;cursor:pointer}
+.countdown-overlay[hidden]{display:none}
+.cd-cap{color:var(--gold,#C8901A);font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(22px,6vw,34px);margin:0}
+.cd-num{color:#fff;font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(90px,26vw,170px);line-height:1;
+  font-variant-numeric:tabular-nums}
+.cd-num.pop{animation:cdpop .65s ease}
+@keyframes cdpop{0%{transform:scale(1.6);opacity:0}60%{transform:scale(1);opacity:1}100%{transform:scale(.94)}}
+.cd-skip{color:#F1ECE1;opacity:.7;font-size:13px;margin:0}
+/* ---------- relevé de notes (solo) ---------- */
+.round-scorecard{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.round-scorecard li{display:flex;align-items:center;gap:10px;font-size:13.5px;border:1.5px solid var(--line);
+  border-radius:10px;padding:7px 12px;background:var(--surface-2)}
+.round-scorecard .n{font-family:'Bricolage Grotesque';font-weight:800;width:24px;flex:none;color:var(--ink-soft)}
+.round-scorecard .it{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.round-scorecard .pt{font-family:'Bricolage Grotesque';font-weight:800;font-variant-numeric:tabular-nums}
+.round-scorecard li.zero .pt{color:var(--red)}
+.round-scorecard li.top .pt{color:var(--gold)}
+
+.flash{animation:flash .5s ease}
+@keyframes flash{0%{transform:scale(.96);opacity:.4}100%{transform:scale(1);opacity:1}}
+
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+@media (max-width:420px){
+  .card{padding:18px}
+  .records{grid-template-columns:repeat(3,1fr);gap:8px}
+  .record{font-size:11px;padding:8px 4px}
+  .mode-row{grid-template-columns:1fr}
+  .stage{padding:10px 10px 36px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="toolbar" role="toolbar" aria-label="Commandes">
+    <button id="soundBtn" class="icon-btn" aria-label="Couper le son" aria-pressed="true">
+      <svg id="soundOnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>
+      <svg id="soundOffIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor" stroke="none"/><path d="M16 9l6 6M22 9l-6 6"/></svg>
+    </button>
+    <button id="quitBtn" class="icon-btn" aria-label="Abandonner la partie et retourner à l'accueil" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <button id="homeBtn" class="icon-btn" aria-label="Retour à l'accueil" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10.5V20h4.5v-5.5h4V20h4.5v-9.5"/></svg>
+    </button>
+  </div>
+
+  <!-- ============ ACCUEIL ============ -->
+  <section id="screenHome" class="screen" aria-label="Accueil">
+    <div class="card">
+      <div class="attract-kicker">Le jeu des prix d'époque</div>
+      <h1>Retromania</h1>
+      <p class="pitch">De la baguette de <strong>1932</strong> à la trottinette électrique d'aujourd'hui :
+        <strong>devine le prix en dollars canadiens</strong>. Le plus proche
+        <em>sans dépasser</em> gagne la manche!</p>
+      <p class="meta-line" id="metaLine">280 objets · 10 manches par partie · des années 1930 à aujourd'hui</p>
+
+      <div class="presenter-card">
+        <div class="presenter-avatar" aria-hidden="true"></div>
+        <div class="presenter-bubble">
+          <span class="presenter-name">Justin Prix · votre animateur</span>
+          <p id="hostHomeLine">Bonsoir tout l'monde! Moi c'est Justin Prix, et ce soir on remonte le temps : 10 objets, 10 prix d'époque à deviner. Que le plus futé gagne!</p>
+        </div>
+      </div>
+
+      <div class="section-label">Choisis ton mode :</div>
+      <div class="mode-row" role="radiogroup" aria-label="Mode de jeu">
+        <button type="button" class="mode-card selected" data-mode="solo" role="radio" aria-checked="true">
+          <span class="t">Solo</span>
+          <span class="d">10 objets, 100 points par manche. 600 pts et plus : tu gagnes la partie!</span>
+        </button>
+        <button type="button" class="mode-card" data-mode="family" role="radio" aria-checked="false">
+          <span class="t">Famille</span>
+          <span class="d">De 2 à 4 joueurs se passent l'appareil. Le plus proche sans dépasser gagne la manche.</span>
+        </button>
+        <button type="button" class="mode-card encans-card" data-mode="encans" role="radio" aria-checked="false">
+          <span class="t">Encans 🔨</span>
+          <span class="d">20 secondes par objet. À zéro, ta mise se verrouille toute seule — adjugé!</span>
+        </button>
+      </div>
+
+      <div id="familySetup" hidden>
+        <div class="section-label">Nombre de joueurs :</div>
+        <div class="stepper-row">
+          <div class="stepper">
+            <button type="button" id="pMinus" class="icon-btn" aria-label="Moins de joueurs">−</button>
+            <span class="count" id="pCount" aria-live="polite">2</span>
+            <button type="button" id="pPlus" class="icon-btn" aria-label="Plus de joueurs">+</button>
+          </div>
+        </div>
+        <div class="name-fields" id="nameFields"></div>
+      </div>
+
+      <label class="qc-toggle"><input type="checkbox" id="qcOnly"> ⚜ Soirée 100&nbsp;% d'ici — que des objets du Québec</label>
+
+      <div class="records" aria-label="Records">
+        <div class="record">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8.5 13.5L6 21l6-2.7L18 21l-2.5-7.5"/></svg>
+          Meilleur score (solo)
+          <b id="recBest">0</b>
+        </div>
+        <div class="record">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c3.8 4.7 6.5 8 6.5 11.7a6.5 6.5 0 11-13 0c0-2.3 1-4.3 2.6-5.9.3 1.6 1.1 2.7 2.3 3.4.1-3.2-.5-6.6-1.2-9.2z"/></svg>
+          Série de victoires
+          <b id="recStreak">0</b>
+        </div>
+        <div class="record">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l2.6 5.2L9 11l3 5 3-5 3.4 2.2L21 8l-1.6 9.5H4.6L3 8z"/></svg>
+          Champion en titre
+          <b id="recChampName">—</b>
+        </div>
+      </div>
+
+      <button type="button" id="playBtn" class="btn primary big">Jouer</button>
+
+      <div class="section-label">Règles du jeu :</div>
+      <details class="rules">
+        <summary>Comment ça marche?</summary>
+        <ul>
+          <li><strong>Devine le prix</strong> de chaque objet, tel qu'il se vendait à l'époque indiquée, en dollars canadiens.</li>
+          <li><strong>Le plus proche sans dépasser</strong> gagne la manche. Si tu dépasses, c'est zéro point!</li>
+          <li><strong>L'émission en 3 temps :</strong> manches 1 à 3 = <em>Les Qualifications</em>, 4 à 7 = <em>La Demi-finale</em>, 8 à 10 = <em>La Grande Finale</em>. Ton animateur <strong>Justin Prix</strong> mène le show!</li>
+          <li><strong>Solo :</strong> 10 objets, jusqu'à 100 points par manche. 600 points ou plus et tu gagnes la partie — ta série de victoires continue.</li>
+          <li><strong>Famille :</strong> de 2 à 4 joueurs se passent l'appareil. Celui qui remporte le plus de manches sur 10 est champion! <strong>La 10<sup>e</sup> manche est une super manche : elle compte double!</strong></li>
+          <li>🔨 <strong>Encans :</strong> 20 secondes par objet, le chrono ne pardonne pas. À zéro, ta mise en cours se verrouille toute seule. Le plus proche sans dépasser remporte le lot. Pour les cœurs bien accrochés — le mode Solo reste sans chrono.</li>
+          <li>⚜ <strong>Soirée 100 % d'ici :</strong> coche la case et ne joue que des objets du Québec — catalogue de vente par correspondance, casse-croûte, cabane à sucre et compagnie.</li>
+          <li><strong>Anti-répétition :</strong> un objet déjà vu ne revient pas dans la même session.</li>
+          <li><strong>Clavier :</strong> chiffres pour la mise, ⌫ pour effacer, Entrée pour valider.</li>
+        </ul>
+      </details>
+
+      <p class="disclaimer" role="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+        Prix d'époque reconstitués à des fins de jeu.
+      </p>
+      <p class="version-tag">Retromania v1.1 — mode Encans 🔨 · 42 objets 100 % d'ici ⚜</p>
+    </div>
+  </section>
+
+  <!-- ============ PARTIE ============ -->
+  <section id="screenGame" class="screen" aria-label="Manche en cours" hidden>
+    <div class="roundbar">
+      <div class="round-meta">
+        <span id="roundLabel">Manche 1 / 10</span>
+        <span id="phaseChip" class="phase-chip">Les Qualifications</span>
+        <span id="soloScoreChip" class="score-chip" hidden>Total : 0 pts</span>
+        <span id="turnLabel" hidden></span>
+      </div>
+      <div class="progress" id="roundProgress" aria-hidden="true"></div>
+    </div>
+    <div class="encans-timer" id="encansTimer" hidden>
+      <div class="et-head"><span>🔨 Encans — fais vite!</span><span class="et-secs" id="encansSecs">20</span></div>
+      <div class="et-bar" aria-hidden="true"><div class="et-fill" id="encansFill"></div></div>
+    </div>
+    <div id="hostStrip" class="host-strip" hidden>
+      <div class="presenter-avatar small" aria-hidden="true"></div>
+      <p><span class="host-name">Justin Prix</span><span id="hostLine"></span></p>
+    </div>
+    <div id="tvPanel" class="tv-panel" hidden>
+      <div class="tv-head">★ Tableau des scores ★</div>
+      <div id="playerChips" class="player-chips"></div>
+    </div>
+
+    <div class="ticket card" id="ticketCard">
+      <div class="ticket-head">
+        <span class="chip decade" id="itemDecade">Années 1960</span>
+        <span class="chip cat"><span id="itemCatIcon" aria-hidden="true"></span><span id="itemCatLabel">Techno</span></span>
+        <span class="chip qc" id="qcChip" hidden>⚜ 100 % d'ici</span>
+        <span class="chip lot" id="lotBadge" hidden>🔨 Lot n° 1</span>
+      </div>
+      <h2 id="itemName">—</h2>
+      <p class="ticket-context">En <span class="year" id="itemYear">1965</span>, au Canada…</p>
+      <p class="decade-line" id="itemDecadeLine">—</p>
+    </div>
+
+    <label class="bid-label" id="bidLabel" for="bidDisplay">Ta mise :</label>
+    <div class="bid-display" id="bidDisplay" role="status" aria-label="Mise actuelle">
+      <span class="amount" id="bidAmount">0,00&nbsp;$</span><span class="caret" aria-hidden="true"></span>
+    </div>
+
+    <div class="keypad" role="group" aria-label="Pavé numérique">
+      <button type="button" class="key" data-k="1">1</button>
+      <button type="button" class="key" data-k="2">2</button>
+      <button type="button" class="key" data-k="3">3</button>
+      <button type="button" class="key" data-k="4">4</button>
+      <button type="button" class="key" data-k="5">5</button>
+      <button type="button" class="key" data-k="6">6</button>
+      <button type="button" class="key" data-k="7">7</button>
+      <button type="button" class="key" data-k="8">8</button>
+      <button type="button" class="key" data-k="9">9</button>
+      <button type="button" class="key fn" data-k="clear" aria-label="Effacer la mise">C</button>
+      <button type="button" class="key" data-k="0">0</button>
+      <button type="button" class="key fn back" data-k="back" aria-label="Effacer un chiffre">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l-6 7 6 7"/><path d="M15 5h6a1.5 1.5 0 011.5 1.5V17A1.5 1.5 0 0121 18.5H15"/></svg>
+      </button>
+    </div>
+
+    <button type="button" id="validateBtn" class="btn primary big" disabled>Valider <kbd>Entrée</kbd></button>
+    <p class="disclaimer small" role="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+      Prix d'époque reconstitués à des fins de jeu.
+    </p>
+  </section>
+
+  <!-- ============ RÉVÉLATION ============ -->
+  <section id="screenReveal" class="screen" aria-label="Révélation du prix" hidden>
+    <div class="ticket card">
+      <div class="ticket-head">
+        <span class="chip decade" id="itemDecadeR">—</span>
+        <span class="chip cat"><span id="itemCatIconR" aria-hidden="true"></span><span id="itemCatLabelR">—</span></span>
+        <span class="chip qc" id="qcChipR" hidden>⚜ 100 % d'ici</span>
+      </div>
+      <h2 id="itemNameR">—</h2>
+      <div id="hostRevealStrip" class="host-strip" hidden>
+        <div class="presenter-avatar small" aria-hidden="true"></div>
+        <p><span class="host-name">Justin Prix</span><span id="hostRevealLine"></span></p>
+      </div>
+      <div class="reveal-block">
+        <span class="reveal-cap">Prix d'époque</span>
+        <span class="actual-price" id="actualPrice" aria-live="polite">0,00&nbsp;$</span>
+        <p class="decade-line" id="priceSrc" hidden></p>
+      </div>
+      <div class="bar-wrap" id="barWrap" aria-hidden="true"></div>
+      <div class="verdict" id="soloVerdict">
+        <p class="verdict-title" id="verdictTitle"></p>
+        <p class="verdict-detail" id="verdictDetail"></p>
+        <span class="verdict-points" id="verdictPoints"></span>
+      </div>
+      <div class="verdict" id="familyVerdict" hidden>
+        <ol class="bid-list" id="bidList"></ol>
+        <p class="verdict-title win" id="roundWinnerTitle"></p>
+        <p class="family-total" id="familyTotal"></p>
+      </div>
+    </div>
+    <button type="button" id="nextBtn" class="btn primary big">Manche suivante <kbd>Entrée</kbd></button>
+    <p class="disclaimer small" role="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+      Prix d'époque reconstitués à des fins de jeu.
+    </p>
+  </section>
+
+  <!-- ============ FIN DE PARTIE ============ -->
+  <section id="screenEnd" class="screen" aria-label="Résultats" hidden>
+    <div class="card" id="soloEnd">
+      <p class="end-title" id="soloEndTitle">Partie terminée!</p>
+      <div class="host-strip" id="hostEndSolo">
+        <div class="presenter-avatar small" aria-hidden="true"></div>
+        <p><span class="host-name">Justin Prix</span><span id="hostEndSoloLine"></span></p>
+      </div>
+      <div class="final-score">
+        <span class="n" id="finalScore">0</span><span class="of"> / 1000</span>
+      </div>
+      <p class="end-msg" id="soloEndMsg"></p>
+      <ol class="round-scorecard" id="roundScorecard" aria-label="Relevé de notes"></ol>
+      <div class="solo-stats">
+        <div class="stat">Prix justes<b id="statExact">0</b></div>
+        <div class="stat">Dépassements<b id="statOver">0</b></div>
+        <div class="stat">Meilleure manche<b id="statBest">0</b></div>
+        <div class="stat" id="statLotsWrap" hidden>Lots remportés<b id="statLots">0 / 10</b></div>
+      </div>
+      <div class="records">
+        <div class="record">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8.5 13.5L6 21l6-2.7L18 21l-2.5-7.5"/></svg>
+          Meilleur score<span id="endBestLabel"></span><b id="endBest">0</b>
+        </div>
+        <div class="record">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c3.8 4.7 6.5 8 6.5 11.7a6.5 6.5 0 11-13 0c0-2.3 1-4.3 2.6-5.9.3 1.6 1.1 2.7 2.3 3.4.1-3.2-.5-6.6-1.2-9.2z"/></svg>
+          Série<b id="endStreak">0</b>
+        </div>
+        <div class="record">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l2.6 5.2L9 11l3 5 3-5 3.4 2.2L21 8l-1.6 9.5H4.6L3 8z"/></svg>
+          Série record<b id="endStreakBest">0</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="familyEnd" hidden>
+      <p class="end-title">Résultats</p>
+      <div class="host-strip" id="hostEndFam">
+        <div class="presenter-avatar small" aria-hidden="true"></div>
+        <p><span class="host-name">Justin Prix</span><span id="hostEndFamLine"></span></p>
+      </div>
+      <div class="champion-card">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 8l2.6 5.2L9 11l3 5 3-5 3.4 2.2L21 8l-1.6 9.5H4.6L3 8z"/></svg>
+        <div class="who" id="champName">—</div>
+        <p class="how" id="champHow">—</p>
+      </div>
+      <ol class="standings" id="standings"></ol>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" id="replayBtn" class="btn primary">Rejouer</button>
+      <button type="button" id="homeBtn2" class="btn ghost">Accueil</button>
+    </div>
+    <p class="disclaimer" role="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+      Prix d'époque reconstitués à des fins de jeu.
+    </p>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<!-- ============ COMPTE À REBOURS (suspense avant la révélation) ============ -->
+<div id="countdownOverlay" class="countdown-overlay" hidden>
+  <p class="cd-cap" id="cdCap">Le prix d'époque est…</p>
+  <div class="cd-num" id="cdNum" aria-live="assertive">5</div>
+  <p class="cd-skip">Touchez pour révéler tout de suite</p>
+</div>
+<script>
+/* ==========================================================================
+   RETROMANIA — Jeu de devinettes de prix d'époque (1930 → aujourd'hui)
+   Prix en cents de dollar canadien. RECONSTITUÉS À DES FINS DE JEU.
+   ========================================================================== */
+"use strict";
+
+/* ---------- ambiance par décennie ---------- */
+const DECADES = {
+  1930: "La Grande Dépression — chaque centime compte.",
+  1940: "La guerre, puis la reconstruction.",
+  1950: "L'âge d'or de la banlieue.",
+  1960: "La Révolution tranquille.",
+  1970: "Le pétrole, le disco et les magnétoscopes.",
+  1980: "Les néons, les cassettes et les premiers ordinateurs.",
+  1990: "Le web naissant, la cassette qui s'éteint.",
+  2000: "Le iPod, l'écran plat et le GPS.",
+  2010: "Le streaming, les applis et les objets connectés.",
+  2020: "L'inflation, les VE et l'IA."
+};
+
+/* ---------- catégories ---------- */
+const CATS = {
+  al: { label: "Alimentation", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8h13l-1.2 11.3a1.5 1.5 0 01-1.5 1.2H8.2a1.5 1.5 0 01-1.5-1.2L5.5 8z"/><path d="M8.8 8V6.5a3.2 3.2 0 016.4 0V8"/></svg>' },
+  t:  { label: "Transport", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l1.8-5.2A1.5 1.5 0 017.2 6.8h9.6a1.5 1.5 0 011.4 1L20 13"/><rect x="3.5" y="12.5" width="17" height="5" rx="1.5"/><circle cx="8" cy="18" r="1.6"/><circle cx="16" cy="18" r="1.6"/></svg>' },
+  g:  { label: "Techno", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="17" height="11.5" rx="2"/><path d="M12 7V3.5M8.5 3.5L12 7l3.5-3.5M9 21l1-2.5M15 21l-1-2.5"/></svg>' },
+  m:  { label: "Maison", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10.5V20h4.5v-5.5h4V20h4.5v-9.5"/></svg>' },
+  l:  { label: "Loisirs", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="9" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.3" fill="currentColor" stroke="none"/></svg>' },
+  v:  { label: "Mode", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3.5 7l2 4.2L8 10.2V20h8v-9.8l2.5 1L20.5 7 15 4a3 3 0 01-6 0z"/></svg>' },
+  s:  { label: "Services", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5h16v3a2.5 2.5 0 000 5v3H4v-3a2.5 2.5 0 000-5v-3z"/><path d="M14.5 7.5v11" stroke-dasharray="2.5 2.5"/></svg>' }
+};
+
+/* ---------- Justin Prix, l'animateur (personnage 100 % original) ---------- */
+const HOST_SVG = `<svg viewBox="0 0 100 100" role="img" aria-label="Justin Prix, l'animateur">`
+  + `<circle cx="50" cy="50" r="48" fill="#F7E8C4"/>`
+  + `<path d="M20 100 Q22 80 50 80 Q78 80 80 100 Z" fill="#0E7C74"/>`
+  + `<circle cx="50" cy="44" r="24" fill="#F2C89B"/>`
+  + `<path d="M27 42 Q28 20 50 19 Q72 20 73 42 Q66 30 58 33 Q50 22 42 33 Q34 30 27 42 Z" fill="#4A3423"/>`
+  + `<circle cx="42" cy="46" r="2.8" fill="#211D18"/><circle cx="58" cy="46" r="2.8" fill="#211D18"/>`
+  + `<path d="M42 56 Q50 63 58 56" stroke="#211D18" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
+  + `<path d="M50 76 L40 71 L40 81 Z M50 76 L60 71 L60 81 Z" fill="#E33429"/>`
+  + `<circle cx="50" cy="76" r="3.4" fill="#A52017"/>`
+  + `<rect x="72" y="54" width="5" height="22" rx="2.5" fill="#211D18"/>`
+  + `<circle cx="74.5" cy="47" r="8.5" fill="#211D18"/>`
+  + `<path d="M70 43 a8.5 8.5 0 0 1 9 0" stroke="#F1ECE1" stroke-width="1.6" fill="none"/>`
+  + `</svg>`;
+
+/* structure de l'émission : manches 1-3 / 4-7 / 8-10 */
+const PHASES = [
+  { key: "qualif", title: "Les Qualifications", line: "Bienvenue sur le plateau! On se réchauffe avec trois objets — que le plus futé gagne!" },
+  { key: "demi",   title: "La Demi-finale",      line: "Ça se corse, mesdames et messieurs! Le rythme s'accélère… et les prix aussi!" },
+  { key: "finale", title: "La Grande Finale",   line: "Tout se joue maintenant! Le public retient son souffle… et moi aussi!" }
+];
+function phaseForRound(round) { return round < 3 ? PHASES[0] : round < 7 ? PHASES[1] : PHASES[2]; }
+
+/* répliques de l'animateur (ton québécois, 100 % original) */
+const HOST = {
+  validate: [
+    "C'est noté! On verrouille les mises!",
+    "Mise enregistrée! Plus de recul possible!",
+    "On verrouille! Que le meilleur gagne!"
+  ],
+  exact: [
+    "LE PRIX JUSTE! Au centime près! Mais quel talent!",
+    "Incroyable! Le prix juste, pile-poil! Chapeau!"
+  ],
+  great: ["Dans le mille! Quelle précision!", "Tout près! Le public applaudit!"],
+  good: ["Pas pire pantoute! Ça se défend!", "Belle mise! On sent l'expérience!"],
+  ok: ["Ça passe… de justesse! Sans dépasser, c'est ça l'important!", "Loin du compte, mais sans dépasser! La prudence paie!"],
+  far: ["Ouille! On était loin, là! Mais on ne lâche pas!", "Aïe aïe aïe! Le prix d'époque nous joue des tours!"],
+  over: ["Oh non! ÇA DÉPASSE! Zéro point! Le public est déçu!", "Trop haut! On dépasse, on perd tout! Quelle tristesse!"],
+  familyWin: n => n + " s'empare de la manche! Tonnerre d'applaudissements!",
+  familyAllOver: "Incroyable! Tout le monde a dépassé! Personne ne marque!",
+  superManche: "Et maintenant… la SUPER MANCHE! Elle compte DOUBLE! Que le meilleur gagne!",
+  soloWin: ["Quelle performance! Le juste prix n'a plus de secrets pour toi!", "Victoire! Tu devrais passer à la télé… ah, mais t'y es déjà!"],
+  soloLose: ["Pas cette fois! On reprend ça, et on vise le juste prix!", "Le marché d'époque t'a eu… mais la revanche sonne déjà!"],
+  /* --- répliques Encans (v1.1) --- */
+  encansIntro: "Bienvenue à la grande vente! 20 secondes par lot — une fois, deux fois… adjugé!",
+  encansOnce: "Une fois!…",
+  encansTwice: "Deux fois!… Plus que 5 secondes, on se décide!",
+  encansTimeout: "Adjugé d'office! Le temps, c'est de l'argent, mesdames et messieurs!",
+  encansNoBid: "Pas de mise! Le lot passe au suivant… quel dommage!",
+  encansSold: "Adjugé! On passe au lot suivant!",
+  encansEndWin: "Vente terminée! Quel encanteur en herbe — le marteau te salue!",
+  encansEndLose: "La vente est finie… la prochaine fois, on mise plus vite, promis?",
+  /* --- soirée 100 % d'ici (v1.1) --- */
+  qcNight: "Ce soir, c'est 100 % d'ici! Catalogue, casse-croûte, cabane à sucre… que des souvenirs de chez nous!"
+};
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function hostSay(text) {
+  $("hostLine").textContent = text;
+  const strip = $("hostStrip");
+  strip.hidden = false;
+  strip.classList.remove("flash"); void strip.offsetWidth; strip.classList.add("flash");
+}
+function hostRevealSay(text) {
+  $("hostRevealLine").textContent = text;
+  $("hostRevealStrip").hidden = false;
+}
+
+/* ---------- catalogue : [nom, année, prix en cents, catégorie, (référence prix)] ----------
+   PRIX D'ÉPOQUE RECONSTITUÉS À DES FINS DE JEU. */
+const ITEMS = [
+  /* --- années 1930 --- */
+  ["Le pain blanc (1½ lb)", 1932, 5, "al"],
+  ["La douzaine d'œufs", 1933, 18, "al"],
+  ["Le litre de lait", 1934, 10, "al"],
+  ["Le bœuf haché (1 lb)", 1932, 12, "al"],
+  ["Le café moulu (1 lb)", 1935, 25, "al"],
+  ["Le billet de cinéma", 1936, 25, "s"],
+  ["Le journal du jour", 1931, 2, "s"],
+  ["Le timbre-poste", 1939, 3, "s"],
+  ["L'essence (le gallon)", 1933, 15, "t"],
+  ["Le paquet de cigarettes (20)", 1934, 15, "al"],
+  ["La radio à 5 lampes", 1935, 5495, "g"],
+  ["Le pneu d'auto", 1937, 895, "t"],
+  ["Les souliers d'homme en cuir", 1936, 495, "v"],
+  ["La chemise de travail", 1935, 125, "v"],
+  ["Le pantalon de flanelle", 1938, 350, "v"],
+  ["Le réfrigérateur électrique (8 pi³)", 1939, 18900, "m"],
+  ["La laveuse électrique à tordeur", 1937, 7995, "m"],
+  ["La voiture économique neuve (Ford)", 1932, 54000, "t"],
+  ["Le loyer mensuel (logement ouvrier, 2 pièces)", 1934, 2200, "s"],
+  ["Le livre relié", 1938, 200, "l"],
+  ["Le traîneau d'enfant", 1933, 195, "l"],
+  ["La bicyclette neuve (homme)", 1936, 3750, "t"],
+  ["L'appareil photo Kodak Brownie", 1935, 695, "g"],
+  ["Le disque 78 tours", 1934, 75, "l"],
+  ["Le phonographe avec 6 disques", 1931, 4995, "g"],
+  ["Le cirage de chaussures (service)", 1937, 10, "s"],
+  ["La coupe de cheveux (homme)", 1935, 25, "s"],
+  ["La guitare à 6 cordes", 1938, 495, "l"],
+  /* --- années 1940 --- */
+  ["Le pain blanc", 1942, 7, "al"],
+  ["La douzaine d'œufs", 1944, 33, "al"],
+  ["Le litre de lait", 1943, 11, "al"],
+  ["Le beurre (1 lb)", 1945, 45, "al"],
+  ["Le thé (1 lb)", 1943, 55, "al"],
+  ["Le sucre (10 lb)", 1944, 85, "al"],
+  ["Le billet de cinéma", 1946, 35, "s"],
+  ["L'essence (le gallon)", 1947, 22, "t"],
+  ["Le journal du jour", 1948, 3, "s"],
+  ["La voiture économique neuve (Plymouth)", 1949, 165000, "t"],
+  ["La radio portative", 1948, 2995, "g"],
+  ["La machine à coudre électrique", 1947, 8995, "m"],
+  ["Le réfrigérateur (10 pi³)", 1949, 27900, "m"],
+  ["Le projecteur de cinéma maison 8 mm", 1949, 8995, "g"],
+  ["La bicyclette CCM neuve", 1946, 4995, "t"],
+  ["L'appareil photo 35 mm (Kodak)", 1947, 3995, "g"],
+  ["Le disque 45 tours", 1949, 79, "l"],
+  ["Les souliers d'enfant en cuir", 1946, 395, "v"],
+  ["Le jean (pantalon de denim)", 1948, 395, "v"],
+  ["La coupe de cheveux (homme)", 1947, 50, "s"],
+  ["Le loyer mensuel (appartement 4½)", 1949, 5500, "s"],
+  ["La traîne sauvage", 1942, 295, "l"],
+  ["Le jeu Monopoly", 1946, 295, "l"],
+  ["L'harmonica", 1945, 150, "l"],
+  ["Le service de 6 tasses à café", 1948, 195, "m"],
+  ["La montre bracelet (homme)", 1947, 1995, "v"],
+  ["Le manteau d'hiver (enfant)", 1941, 695, "v"],
+  ["Les bas de nylon (paire)", 1947, 115, "v"],
+  /* --- années 1950 --- */
+  ["Le pain blanc", 1952, 14, "al"],
+  ["Le litre de lait", 1955, 21, "al"],
+  ["La douzaine d'œufs", 1954, 48, "al"],
+  ["La bouteille de Coca-Cola (192 ml)", 1955, 8, "al"],
+  ["Le hamburger au casse-croûte", 1957, 35, "al"],
+  ["Le billet de cinéma", 1956, 50, "s"],
+  ["L'essence (le gallon)", 1955, 33, "t"],
+  ["Le téléviseur 21 pouces (noir et blanc)", 1956, 24995, "g"],
+  ["Le réfrigérateur (12 pi³)", 1958, 32900, "m"],
+  ["La laveuse automatique", 1957, 28995, "m"],
+  ["La sécheuse électrique", 1959, 22995, "m"],
+  ["L'aspirateur électrique", 1954, 5995, "m"],
+  ["La voiture compacte neuve (Pontiac)", 1958, 249500, "t"],
+  ["La bicyclette CCM 3 vitesses", 1955, 6995, "t"],
+  ["Le jean (Levi's)", 1957, 495, "v"],
+  ["Le disque 33 tours (LP)", 1958, 498, "l"],
+  ["Le tourne-disque portable", 1959, 4995, "g"],
+  ["La caméra 8 mm (ciné maison)", 1956, 11995, "g"],
+  ["L'appareil photo Polaroid (instantané)", 1959, 7995, "g"],
+  ["La poupée Barbie", 1959, 300, "l"],
+  ["Le train électrique", 1957, 2995, "l"],
+  ["Le gaufrier électrique", 1955, 1495, "m"],
+  ["Le loyer mensuel (4½ en banlieue)", 1959, 8500, "s"],
+  ["La coupe de cheveux (homme)", 1956, 100, "s"],
+  ["La cravate en soie", 1953, 295, "v"],
+  ["La radio transistor de poche", 1959, 2995, "g"],
+  ["Les patins à glace (paire)", 1958, 1295, "l"],
+  ["La balançoire pour enfants", 1954, 2495, "l"],
+  /* --- années 1960 --- */
+  ["Le pain blanc", 1963, 21, "al"],
+  ["Le litre de lait", 1965, 26, "al"],
+  ["La douzaine d'œufs", 1964, 55, "al"],
+  ["Le bifteck (1 lb)", 1966, 109, "al"],
+  ["Le billet de cinéma", 1967, 100, "s"],
+  ["Le téléviseur couleur 21 pouces", 1968, 49995, "g"],
+  ["Le téléviseur portatif 12 pouces (N/B)", 1965, 13995, "g"],
+  ["La radio transistor", 1964, 1295, "g"],
+  ["La console stéréo (meuble)", 1967, 22995, "g"],
+  ["La voiture compacte neuve (Coccinelle)", 1965, 189500, "t"],
+  ["L'essence (le gallon)", 1968, 39, "t"],
+  ["La bicyclette 10 vitesses", 1969, 8995, "t"],
+  ["Le jean", 1966, 595, "v"],
+  ["Le disque 45 tours", 1964, 109, "l"],
+  ["Le billet de concert (vedette pop)", 1965, 450, "s"],
+  ["L'appareil photo Polaroid Swinger", 1965, 1995, "g"],
+  ["La machine à écrire portable", 1962, 6995, "g"],
+  ["La tondeuse à gazon motorisée", 1963, 9995, "m"],
+  ["Le barbecue au charbon", 1961, 2995, "m"],
+  ["Le jeu Twister", 1966, 495, "l"],
+  ["Les patins à roulettes (paire)", 1968, 995, "l"],
+  ["Le four à micro-ondes", 1969, 54900, "m"],
+  ["Le loyer mensuel (4½)", 1969, 11000, "s"],
+  ["La coupe de cheveux (homme)", 1965, 200, "s"],
+  ["Le costume complet d'homme", 1967, 7995, "v"],
+  ["La mini-jupe", 1966, 1295, "v"],
+  ["La caméra Super 8", 1969, 14995, "g"],
+  ["Le casse-tête (1000 morceaux)", 1968, 495, "l"],
+  /* --- années 1970 --- */
+  ["Le pain blanc", 1973, 34, "al"],
+  ["Le litre de lait", 1975, 42, "al"],
+  ["La douzaine d'œufs", 1974, 78, "al"],
+  ["Le bifteck (1 lb)", 1977, 249, "al"],
+  ["Le billet de cinéma", 1978, 300, "s"],
+  ["L'essence (le litre)", 1979, 25, "t"],
+  ["La voiture compacte neuve (Honda Civic)", 1976, 349500, "t"],
+  ["Le téléviseur couleur 25 pouces", 1975, 59995, "g"],
+  ["Le magnétoscope VHS", 1978, 109500, "g"],
+  ["Le radio-réveil", 1976, 2995, "g"],
+  ["La calculatrice de poche", 1976, 2495, "g"],
+  ["La machine à écrire électrique", 1975, 19995, "g"],
+  ["La console Atari 2600", 1979, 24995, "l"],
+  ["La bicyclette 10 vitesses", 1974, 12995, "t"],
+  ["Le jean (Levi's)", 1976, 1495, "v"],
+  ["Les chaussures de sport (espadrilles)", 1979, 3495, "v"],
+  ["Le disque vinyle (album)", 1977, 798, "l"],
+  ["La planche à roulettes", 1975, 2495, "l"],
+  ["Le magnétophone à cassette", 1973, 3995, "g"],
+  ["Le four à micro-ondes", 1979, 44900, "m"],
+  ["Le réfrigérateur (16 pi³)", 1978, 49900, "m"],
+  ["Le loyer mensuel (4½)", 1979, 21000, "s"],
+  ["La coupe de cheveux (homme)", 1977, 500, "s"],
+  ["Le service à fondue électrique", 1976, 2495, "m"],
+  ["La montre à affichage numérique", 1977, 2995, "v"],
+  ["La figurine G.I. Joe", 1975, 595, "l"],
+  ["Le sac de croustilles (gros format)", 1976, 89, "al"],
+  ["Le yogourt (175 g)", 1974, 25, "al"],
+  /* --- années 1980 --- */
+  ["Le pain blanc", 1983, 79, "al"],
+  ["Le lait (2 L)", 1985, 189, "al"],
+  ["La douzaine d'œufs", 1984, 119, "al"],
+  ["Le billet de cinéma", 1986, 450, "s"],
+  ["L'essence (le litre)", 1985, 48, "t"],
+  ["La voiture sous-compacte neuve", 1986, 799500, "t"],
+  ["L'ordinateur personnel (Commodore 64)", 1983, 59500, "g"],
+  ["Le magnétoscope VHS", 1985, 49995, "g"],
+  ["Le baladeur cassette (Walkman)", 1984, 9995, "g"],
+  ["La console Nintendo (NES) avec jeux", 1987, 17999, "l"],
+  ["Le téléviseur couleur 26 pouces", 1984, 54900, "g"],
+  ["Le lecteur de disques compacts", 1986, 34995, "g"],
+  ["Le caméscope VHS", 1988, 149900, "g"],
+  ["La montre Casio à affichage numérique", 1982, 2495, "v"],
+  ["Le cube Rubik", 1982, 995, "l"],
+  ["Le jean", 1985, 2995, "v"],
+  ["Les chaussures de basketball", 1985, 6495, "v"],
+  ["Les patins à roues alignées (Rollerblade)", 1988, 19995, "l"],
+  ["Le vélo de montagne 18 vitesses", 1989, 44995, "t"],
+  ["Le four à micro-ondes", 1985, 34995, "m"],
+  ["Le téléphone sans fil", 1988, 12995, "g"],
+  ["Le loyer mensuel (4½)", 1989, 39000, "s"],
+  ["La coupe de cheveux (homme)", 1986, 1200, "s"],
+  ["La location d'un film au club vidéo", 1987, 349, "s"],
+  ["La cassette audio vierge (60 min)", 1983, 249, "g"],
+  ["Le radio-cassette stéréo (boombox)", 1986, 17995, "g"],
+  ["Le jean « stonewash »", 1987, 4495, "v"],
+  ["Le téléphone cellulaire portable (le « brick »)", 1984, 399500, "g"],
+  /* --- années 1990 --- */
+  ["Le pain blanc", 1993, 129, "al"],
+  ["Le lait (2 L)", 1995, 219, "al"],
+  ["La douzaine d'œufs", 1994, 139, "al"],
+  ["Le café moulu (1 kg)", 1996, 799, "al"],
+  ["Le billet de cinéma", 1997, 700, "s"],
+  ["L'essence (le litre)", 1995, 56, "t"],
+  ["La voiture sous-compacte neuve", 1997, 1199500, "t"],
+  ["L'ordinateur PC (486) complet", 1994, 179900, "g"],
+  ["L'imprimante à jet d'encre", 1996, 34995, "g"],
+  ["La console Super Nintendo", 1991, 24999, "l"],
+  ["La console PlayStation (Sony)", 1995, 34900, "l"],
+  ["Le téléviseur 27 pouces stéréo", 1994, 59900, "g"],
+  ["Le lecteur DVD", 1998, 49995, "g"],
+  ["Le caméscope 8 mm compact", 1995, 89900, "g"],
+  ["Le téléphone cellulaire", 1996, 29900, "g"],
+  ["Le lecteur CD portable (Discman)", 1992, 19995, "g"],
+  ["La montre Swatch", 1992, 4995, "v"],
+  ["Le jean", 1995, 3995, "v"],
+  ["Les chaussures de course", 1997, 8995, "v"],
+  ["Le Tamagotchi", 1997, 1999, "l"],
+  ["Le Furby", 1998, 3499, "l"],
+  ["Le vélo de montagne", 1993, 54995, "t"],
+  ["Les patins à roues alignées", 1994, 19995, "l"],
+  ["Le four à micro-ondes", 1995, 22995, "m"],
+  ["Le loyer mensuel (4½)", 1999, 52000, "s"],
+  ["La coupe de cheveux (homme)", 1996, 1800, "s"],
+  ["La location d'un film au club vidéo", 1998, 399, "s"],
+  ["Le disque compact (album)", 1994, 1699, "l"],
+  /* --- années 2000 --- */
+  ["Le pain blanc", 2003, 159, "al"],
+  ["Le lait (2 L)", 2005, 269, "al"],
+  ["La douzaine d'œufs", 2004, 179, "al"],
+  ["Le billet de cinéma", 2007, 950, "s"],
+  ["L'essence (le litre)", 2008, 125, "t"],
+  ["La voiture sous-compacte neuve (Yaris)", 2007, 1399500, "t"],
+  ["L'ordinateur portable", 2008, 89900, "g"],
+  ["Le baladeur iPod (20 Go)", 2004, 39900, "g"],
+  ["Le téléviseur plasma 42 pouces", 2006, 299900, "g"],
+  ["La console PlayStation 2", 2000, 44999, "l"],
+  ["La console Nintendo Wii", 2006, 27999, "l"],
+  ["La console Xbox 360", 2005, 39999, "l"],
+  ["La caméra numérique (3 mégapixels)", 2003, 49900, "g"],
+  ["Le cellulaire à clapet (avec forfait)", 2004, 14900, "g"],
+  ["Le GPS pour l'auto", 2007, 39999, "g"],
+  ["Le jean", 2005, 4995, "v"],
+  ["Les chaussures de course", 2008, 10995, "v"],
+  ["L'iPod Shuffle (1 Go)", 2005, 12900, "g"],
+  ["Le BlackBerry", 2006, 44900, "g"],
+  ["L'iPhone 3G (avec contrat 3 ans)", 2008, 19900, "g"],
+  ["Le four à micro-ondes", 2005, 14995, "m"],
+  ["La laveuse à chargement frontal", 2008, 89900, "m"],
+  ["Le loyer mensuel (4½)", 2009, 69000, "s"],
+  ["La coupe de cheveux (homme)", 2007, 2400, "s"],
+  ["Le DVD (film, neuf)", 2006, 2499, "l"],
+  ["Le téléviseur HD 32 pouces", 2008, 69900, "g"],
+  ["Le routeur Wi-Fi sans fil", 2005, 8995, "g"],
+  ["La carte mémoire SD (1 Go)", 2006, 4999, "g"],
+  /* --- années 2010 --- */
+  ["Le pain blanc", 2013, 199, "al"],
+  ["Le lait (2 L)", 2015, 349, "al"],
+  ["La douzaine d'œufs", 2014, 269, "al"],
+  ["Le latté au café", 2016, 395, "al"],
+  ["Le billet de cinéma", 2017, 1200, "s"],
+  ["L'essence (le litre)", 2015, 105, "t"],
+  ["La voiture sous-compacte neuve", 2016, 1699500, "t"],
+  ["La tablette iPad (1re génération)", 2010, 54900, "g"],
+  ["L'iPhone 4 (débloqué)", 2010, 65900, "g"],
+  ["La console PlayStation 4", 2013, 39999, "l"],
+  ["La console Nintendo Switch", 2017, 37999, "l"],
+  ["Le téléviseur 4K de 55 pouces", 2017, 109900, "g"],
+  ["La clé de diffusion (type Chromecast)", 2014, 3999, "g"],
+  ["L'enceinte intelligente (Echo)", 2017, 12999, "g"],
+  ["La montre connectée (Fitbit)", 2015, 12999, "g"],
+  ["L'aspirateur robot (Roomba)", 2016, 44900, "m"],
+  ["Le drone avec caméra", 2015, 64900, "g"],
+  ["Le jean", 2015, 5995, "v"],
+  ["Les chaussures de course", 2018, 14995, "v"],
+  ["Le casque de réalité virtuelle (Oculus Rift)", 2016, 89900, "g"],
+  ["Le loyer mensuel (4½)", 2019, 89000, "s"],
+  ["La coupe de cheveux (homme)", 2017, 3000, "s"],
+  ["L'abonnement Netflix (mensuel)", 2015, 799, "s"],
+  ["La bouteille de vin rouge (entrée de gamme)", 2014, 1095, "al"],
+  ["La caméra GoPro", 2016, 39999, "g"],
+  ["L'imprimante 3D (entrée de gamme)", 2017, 34900, "g"],
+  ["La console Nintendo 3DS", 2011, 24999, "l"],
+  ["Le fidget spinner", 2017, 799, "l"],
+  /* --- années 2020 --- */
+  ["Le pain blanc", 2023, 279, "al"],
+  ["Le lait (2 L)", 2024, 499, "al"],
+  ["La douzaine d'œufs", 2023, 399, "al"],
+  ["Le billet de cinéma", 2025, 1350, "s"],
+  ["L'essence (le litre)", 2024, 165, "t"],
+  ["La voiture compacte neuve (Corolla)", 2024, 2699500, "t"],
+  ["L'iPhone 14 (128 Go)", 2022, 109900, "g"],
+  ["La console PlayStation 5", 2020, 62999, "l"],
+  ["Le téléviseur OLED de 55 pouces", 2024, 179900, "g"],
+  ["Le casque VR (Meta Quest 3)", 2023, 68900, "g"],
+  ["La montre intelligente (Apple Watch SE)", 2024, 32900, "g"],
+  ["L'aspirateur robot", 2023, 54900, "m"],
+  ["La trottinette électrique", 2022, 64900, "t"],
+  ["Le vélo électrique", 2023, 199900, "t"],
+  ["Le jean", 2024, 6995, "v"],
+  ["Les chaussures de course", 2025, 15995, "v"],
+  ["Le loyer mensuel (4½)", 2025, 125000, "s"],
+  ["La coupe de cheveux (homme)", 2025, 4000, "s"],
+  ["L'abonnement Netflix (mensuel)", 2024, 1649, "s"],
+  ["L'abonnement Spotify (mensuel)", 2024, 1099, "s", "Spotify Premium Individuel (Canada) — 2024 : 10,99 $/mois"],
+  ["Le Big Mac", 2024, 749, "al", "Indice Big Mac (Canada) — janv. 2024 : 7,49 $"],
+  ["La friteuse à air (5,7 L)", 2023, 14999, "m"],
+  ["La cafetière à dosettes", 2022, 18900, "m"],
+  ["La manette de jeu (PS5 DualSense)", 2023, 9499, "l"],
+  ["La batterie externe (20 000 mAh)", 2024, 3999, "g"],
+  ["Le casque antibruit", 2024, 42900, "g"],
+  ["Le sac à dos d'école", 2023, 4999, "v"],
+  ["Le bâton de hockey", 2021, 8999, "l"],
+  /* --- 100 % d'ici : objets d'avant, de chez nous (v1.1) --- */
+  /* PRIX D'ÉPOQUE RECONSTITUÉS À DES FINS DE JEU. Noms génériques : aucune marque citée. */
+  ["Le sac de farine du magasin général (10 lb)", 1936, 45, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La boîte de biscuits de la biscuiterie du quartier", 1934, 15, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La paire de bas tricotés (manufacture de la région)", 1938, 35, "v", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le complet pour homme (grand magasin de Montréal)", 1947, 2995, "v", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La robe d'été (catalogue de vente par correspondance)", 1946, 895, "v", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le manteau d'hiver pour enfant (catalogue de vente par correspondance)", 1948, 1295, "v", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La caisse de liqueur (embouteilleur du coin)", 1945, 60, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La radio de salon (achetée au grand magasin)", 1949, 3995, "g", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le poulet rôti (spécial du supermarché)", 1959, 89, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La livre de bœuf haché (spécial de la semaine)", 1955, 39, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le billet de hockey (estrades, aréna de Montréal)", 1958, 150, "s", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La poupée de Noël (catalogue de vente par correspondance)", 1958, 495, "l", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le train électrique miniature", 1957, 2995, "l", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le 45 tours (vedette yé-yé d'ici)", 1965, 109, "l", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La tuque du Carnaval d'hiver", 1966, 250, "v", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le billet d'autobus (transport en commun de Montréal)", 1969, 30, "t", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le tourne-disque (catalogue de vente par correspondance)", 1962, 4995, "g", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le passeport de l'exposition universelle de 1967", 1967, 1000, "s", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La poutine (casse-croûte du village)", 1968, 75, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le sac de croustilles (gros format, croustillerie d'ici)", 1978, 99, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La ceinture fléchée tissée", 1975, 495, "v", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le journal du matin (édition de Montréal)", 1974, 15, "s", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La tire d'érable en boîte (cabane à sucre)", 1972, 75, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le chandail de hockey (réplique, enfant)", 1979, 1995, "v", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le billet de hockey (grande année, aréna de Montréal)", 1976, 600, "s", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La frite sauce (casse-croûte)", 1984, 225, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le 2 L de liqueur (spécial du supermarché)", 1986, 129, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le hockey sur table (magasin de jouets)", 1983, 4995, "l", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le billet de baseball (stade olympique)", 1985, 800, "s", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le sirop d'érable (conserve de la cabane)", 1988, 495, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le pâté chinois (ingrédients pour 4, spécial du supermarché)", 1994, 650, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La tourtière du temps des Fêtes (boulangerie du quartier)", 1996, 895, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le billet de traversier (rive à rive)", 1995, 250, "t", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le CD d'un groupe d'ici (disquaire du centre-ville)", 1997, 1899, "l", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le smoked meat (deli de la rue principale)", 2006, 895, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le billet du festival d'été (passe générale)", 2008, 4500, "s", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le grand café (casse-croûte du coin)", 2007, 150, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La poutine (cantine, fromage en grains d'ici)", 2015, 850, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La passe du festival d'été", 2016, 9500, "s", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le sac de café (brûlerie de quartier)", 2018, 1495, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["La tourtière (boucherie du coin, temps des Fêtes)", 2023, 1895, "al", "Reconstitution — prix d'époque à des fins de jeu", "qc"],
+  ["Le billet de hockey (estrades, amphithéâtre de Montréal)", 2024, 8500, "s", "Reconstitution — prix d'époque à des fins de jeu", "qc"]
+];
+
+/* objet "100 % d'ici" ? (6e champ = drapeau "qc") */
+const isQc = idx => ITEMS[idx][5] === "qc";
+
+/* ==========================================================================
+   MOTEUR DE JEU
+   ========================================================================== */
+const ROUNDS = 10;
+const WIN_SCORE = 600; // victoire solo = 600 pts ou plus sur 1000
+
+/* ---------- stockage local (scores & séries) ---------- */
+const mem = {};
+const store = {
+  get(k, d) {
+    if (k in mem) return mem[k];
+    try {
+      const v = localStorage.getItem("retromania." + k);
+      return v == null ? d : JSON.parse(v);
+    } catch (e) { return d; }
+  },
+  set(k, v) {
+    mem[k] = v;
+    try { localStorage.setItem("retromania." + k, JSON.stringify(v)); } catch (e) { /* session seulement */ }
+  }
+};
+
+/* ---------- anti-répétition de session ---------- */
+const seen = new Set();
+
+/* ---------- formatage fr-CA ---------- */
+const moneyFmt = new Intl.NumberFormat("fr-CA", { style: "currency", currency: "CAD" });
+function money(cents) { return moneyFmt.format(cents / 100); }
+
+/* ---------- sons (WebAudio, basique) ---------- */
+const sfx = {
+  ctx: null, on: true,
+  ensure() {
+    if (!this.ctx && this.on) {
+      try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { this.ctx = null; }
+    }
+    if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+  },
+  tone(freq, dur, type, when, vol) {
+    if (!this.on) return;
+    this.ensure();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime + (when || 0);
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(vol || 0.12, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g); g.connect(this.ctx.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  },
+  tick() { this.tone(720, 0.05, "square", 0, 0.05); },
+  hammer() { // deux coups de marteau graves et courts (100 % original)
+    this.tone(170, 0.09, "square", 0, 0.14);
+    this.tone(120, 0.12, "square", 0.12, 0.14);
+  },
+  validate() { this.tone(660, 0.12, "sine"); this.tone(880, 0.18, "sine", 0.09); },
+  bad() { this.tone(196, 0.22, "sawtooth", 0, 0.08); this.tone(147, 0.3, "sawtooth", 0.14, 0.08); },
+  perfect() { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.16, "triangle", i * 0.09, 0.12)); },
+  win() { [523, 659, 784, 1047, 1319].forEach((f, i) => this.tone(f, 0.22, "triangle", i * 0.12, 0.12)); },
+  /* jingles de l'émission (originaux) */
+  fanfare() {
+    [523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.2, "triangle", i * 0.13, 0.14));
+    this.tone(1319, 0.45, "triangle", 0.55, 0.14);
+  },
+  drumroll() {
+    for (let i = 0; i < 14; i++) this.tone(110 + Math.random() * 50, 0.06, "square", i * 0.11, 0.05);
+    this.tone(170, 0.3, "square", 1.62, 0.07);
+  },
+  sting() {
+    this.tone(98, 0.5, "sawtooth", 0, 0.09);
+    this.tone(392, 0.4, "triangle", 0.05, 0.12);
+    this.tone(523, 0.55, "triangle", 0.12, 0.12);
+  }
+};
+window.addEventListener("pointerdown", () => sfx.ensure(), { once: true });
+window.addEventListener("keydown", () => sfx.ensure(), { once: true });
+
+/* ---------- confettis ---------- */
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function confettiBurst(n) {
+  if (reducedMotion) return;
+  n = n || 90;
+  const cv = document.createElement("canvas");
+  cv.className = "confetti-canvas";
+  cv.width = window.innerWidth; cv.height = window.innerHeight;
+  document.body.appendChild(cv);
+  const ctx = cv.getContext("2d");
+  const colors = ["#E33429", "#C8901A", "#0E7C74", "#F1ECE1", "#211D18"];
+  const parts = [];
+  for (let i = 0; i < n; i++) {
+    parts.push({
+      x: Math.random() * cv.width,
+      y: -20 - Math.random() * cv.height * 0.25,
+      w: 6 + Math.random() * 7, h: 8 + Math.random() * 8,
+      vy: 2 + Math.random() * 3.5, vx: -1.5 + Math.random() * 3,
+      r: Math.random() * Math.PI, vr: -0.1 + Math.random() * 0.2,
+      c: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
+  let frames = 0;
+  function step() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    if (++frames < 170) requestAnimationFrame(step);
+    else cv.remove();
+  }
+  requestAnimationFrame(step);
+}
+
+/* ---------- utilitaires DOM ---------- */
+const $ = id => document.getElementById(id);
+const screens = ["screenHome", "screenGame", "screenReveal", "screenEnd"];
+function show(name) {
+  screens.forEach(s => $(s).hidden = s !== name);
+  $("quitBtn").hidden = !(name === "screenGame" || name === "screenReveal");
+  $("homeBtn").hidden = name !== "screenEnd";
+  window.scrollTo(0, 0);
+}
+let toastTimer = null;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+/* ==========================================================================
+   ÉTAT DE PARTIE
+   ========================================================================== */
+const game = {
+  mode: "solo",            // "solo" | "family"
+  players: [],             // noms (famille)
+  wins: [],                // manches gagnées par joueur (famille)
+  deck: [],                // indices ITEMS (10)
+  round: 0,                // 0..9
+  bidOrder: [],            // ordre de mise des joueurs (famille)
+  bidIdx: 0,               // joueur en cours (famille)
+  bids: [],                // [{player, guess}] de la manche (famille)
+  cents: 0,                // mise en cours
+  results: [],           // [{itemIdx, guess, actual, points, verdict}] (solo + traces)
+  qcOnly: false,         // filtre "Soirée 100 % d'ici" (v1.1)
+  encansJust: null       // "sold" | "timeout" | "nobid" (v1.1)
+};
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* paquet de 10 objets : jamais vu dans cette session, catégories variées */
+function buildDeck() {
+  let pool = ITEMS.map((_, i) => i).filter(i => !seen.has(i));
+  if (game.qcOnly) {
+    // Soirée 100 % d'ici : que des objets du Québec (v1.1)
+    pool = pool.filter(isQc);
+    if (pool.length < ROUNDS) {
+      pool = ITEMS.map((_, i) => i).filter(i => !seen.has(i));
+      toast("Pas assez d'objets d'ici en réserve — on mélange tout le catalogue!");
+    }
+  }
+  if (pool.length < ROUNDS) {
+    seen.clear();
+    pool = ITEMS.map((_, i) => i);
+    if (game.qcOnly) pool = pool.filter(isQc); // 42 objets : ça n'arrivera pas
+    toast("On a fait le tour! Tous les objets reviennent en jeu.");
+  }
+  shuffle(pool);
+  // évite deux manches de suite dans la même catégorie
+  const deck = [];
+  for (const idx of pool) {
+    if (deck.length >= ROUNDS) break;
+    if (deck.length && ITEMS[deck[deck.length - 1]][3] === ITEMS[idx][3]) {
+      let pos = deck.length;
+      while (pos > 0 && ITEMS[deck[pos - 1]][3] === ITEMS[idx][3]) pos--;
+      deck.splice(pos, 0, idx);
+    } else deck.push(idx);
+  }
+  deck.forEach(i => seen.add(i));
+  return deck;
+}
+
+function decadeLabel(year) {
+  const d = Math.floor(year / 10) * 10;
+  return "Années " + d;
+}
+
+/* ==========================================================================
+   ACCUEIL
+   ========================================================================== */
+let mode = "solo";
+let playerCount = 2;
+const savedNames = ["", "", "", ""];
+const DEFAULT_NAMES = ["Joueuse 1", "Joueur 2", "Joueuse 3", "Joueur 4"];
+
+function renderNameFields() {
+  const wrap = $("nameFields");
+  wrap.innerHTML = "";
+  for (let i = 0; i < playerCount; i++) {
+    const row = document.createElement("div");
+    row.className = "name-row";
+    const num = document.createElement("span");
+    num.className = "num"; num.textContent = i + 1;
+    const input = document.createElement("input");
+    input.className = "name-input";
+    input.type = "text"; input.maxLength = 18;
+    input.placeholder = DEFAULT_NAMES[i];
+    input.value = savedNames[i];
+    input.setAttribute("aria-label", "Nom du joueur " + (i + 1));
+    input.addEventListener("input", () => { savedNames[i] = input.value.trim(); });
+    input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); startGame(); } });
+    row.appendChild(num); row.appendChild(input);
+    wrap.appendChild(row);
+  }
+}
+
+document.querySelectorAll(".mode-card").forEach(btn => {
+  btn.addEventListener("click", () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll(".mode-card").forEach(b => {
+      const sel = b === btn;
+      b.classList.toggle("selected", sel);
+      b.setAttribute("aria-checked", sel);
+    });
+    $("familySetup").hidden = mode !== "family";
+    if (mode === "family") renderNameFields();
+    sfx.tick();
+  });
+});
+$("pMinus").addEventListener("click", () => { if (playerCount > 2) { playerCount--; $("pCount").textContent = playerCount; renderNameFields(); sfx.tick(); } });
+$("pPlus").addEventListener("click", () => { if (playerCount < 4) { playerCount++; $("pCount").textContent = playerCount; renderNameFields(); sfx.tick(); } });
+
+function refreshRecords() {
+  $("recBest").textContent = store.get("soloBest", 0);
+  $("recStreak").textContent = store.get("streak", 0);
+  const champ = store.get("champion", null);
+  $("recChampName").textContent = champ ? champ.name : "—";
+}
+
+/* ==========================================================================
+   DÉROULEMENT
+   ========================================================================== */
+function startGame() {
+  game.mode = mode;
+  game.qcOnly = $("qcOnly").checked;
+  game.encansJust = null;
+  game.deck = buildDeck();
+  game.round = 0;
+  game.results = [];
+  game.cents = 0;
+  if (mode === "family") {
+    game.players = [];
+    for (let i = 0; i < playerCount; i++) {
+      game.players.push(savedNames[i] || DEFAULT_NAMES[i]);
+    }
+    game.wins = game.players.map(() => 0);
+  } else {
+    game.players = [];
+    game.wins = [];
+  }
+  // barre de progression
+  const prog = $("roundProgress");
+  prog.innerHTML = "";
+  for (let i = 0; i < ROUNDS; i++) prog.appendChild(document.createElement("i"));
+  renderRound();
+  show("screenGame");
+  toast(mode === "encans" ? "🔨 Les encans! 20 secondes par lot — adjugé!"
+    : mode === "solo" ? "10 objets — devine le prix d'époque!" : "Passez l'appareil au premier joueur!");
+}
+
+function renderRound() {
+  stopEncansTimer();
+  const idx = game.deck[game.round];
+  const [name, year, cents, cat] = ITEMS[idx];
+  const dec = decadeLabel(year);
+  const encansMode = game.mode === "encans";
+
+  $("roundLabel").textContent = (encansMode ? "Lot " : "Manche ") + (game.round + 1) + " / " + ROUNDS;
+  const ph = phaseForRound(game.round);
+  $("phaseChip").textContent = ph.title;
+  [...$("roundProgress").children].forEach((el, i) => el.classList.toggle("done", i < game.round));
+  const famMode = game.mode === "family";
+  $("soloScoreChip").hidden = famMode;
+  if (!famMode) {
+    $("soloScoreChip").textContent = "Total : " + game.results.reduce((s, r) => s + r.points, 0) + " pts";
+  }
+  /* annonce de phase par l'animateur (manches 1, 4, 8) + super manche */
+  if (game.round === 0) {
+    if (game.qcOnly) hostSay(HOST.qcNight);
+    else if (encansMode) hostSay(HOST.encansIntro);
+    else hostSay(ph.line);
+    sfx.fanfare();
+  } else if (game.round === 3 || game.round === 7) {
+    hostSay(ph.line);
+    sfx.fanfare();
+  } else if (famMode && game.round === ROUNDS - 1) {
+    hostSay(HOST.superManche);
+    sfx.fanfare();
+  } else {
+    $("hostStrip").hidden = true;
+  }
+  $("itemDecade").textContent = dec;
+  $("itemCatIcon").innerHTML = CATS[cat].svg;
+  $("itemCatLabel").textContent = CATS[cat].label;
+  $("itemName").textContent = name;
+  $("qcChip").hidden = !isQc(idx);
+  $("lotBadge").hidden = !encansMode;
+  if (encansMode) $("lotBadge").textContent = "🔨 Lot n° " + (game.round + 1);
+  $("ticketCard").classList.toggle("encans", encansMode);
+  $("itemYear").textContent = year;
+  $("itemDecadeLine").textContent = "« " + DECADES[Math.floor(year / 10) * 10] + " »";
+  const ticket = $("ticketCard");
+  ticket.classList.remove("flash"); void ticket.offsetWidth; ticket.classList.add("flash");
+
+  const fam = game.mode === "family";
+  $("turnLabel").hidden = !fam;
+  $("tvPanel").hidden = !fam;
+  if (fam) {
+    // ordre de mise rotatif (équité : le premier misant change à chaque manche)
+    const n = game.players.length;
+    game.bidOrder = Array.from({ length: n }, (_, k) => (game.round + k) % n);
+    game.bidIdx = 0;
+    game.bids = [];
+    renderBidder();
+  } else {
+    $("bidLabel").textContent = encansMode ? "Ton enchère :" : "Ta mise :";
+    $("validateBtn").innerHTML = encansMode ? 'Adjugé! 🔨 <kbd>Entrée</kbd>' : 'Valider <kbd>Entrée</kbd>';
+  }
+  game.cents = 0;
+  game.encansJust = null;
+  renderBid();
+  if (encansMode) startEncansTimer();
+}
+
+function renderBidder() {
+  const pIdx = game.bidOrder[game.bidIdx];
+  $("turnLabel").textContent = "À toi, " + game.players[pIdx] + "!";
+  $("bidLabel").textContent = "Mise de " + game.players[pIdx] + " :";
+  const chips = $("playerChips");
+  chips.innerHTML = "";
+  const maxWins = Math.max(0, ...game.wins);
+  game.bidOrder.forEach((idx, order) => {
+    const c = document.createElement("span");
+    c.className = "player-chip" + (order === game.bidIdx ? " current" : "")
+      + (maxWins > 0 && game.wins[idx] === maxWins ? " leader" : "");
+    const label = document.createElement("span");
+    label.textContent = game.players[idx];
+    const wins = document.createElement("span");
+    wins.className = "wins"; wins.textContent = game.wins[idx];
+    wins.title = "manches gagnées";
+    c.appendChild(label); c.appendChild(wins);
+    chips.appendChild(c);
+  });
+}
+
+/* ---------- saisie de la mise ---------- */
+const MAX_CENTS = 999999999; // 9 999 999,99 $
+function renderBid() {
+  $("bidAmount").textContent = money(game.cents);
+  $("validateBtn").disabled = game.cents <= 0;
+}
+function pressDigit(d) {
+  const next = game.cents * 10 + d;
+  if (next > MAX_CENTS) { toast("Mise maximale : " + money(MAX_CENTS)); return; }
+  game.cents = next;
+  renderBid();
+  sfx.tick();
+}
+function pressBack() { game.cents = Math.floor(game.cents / 10); renderBid(); sfx.tick(); }
+function pressClear() { game.cents = 0; renderBid(); sfx.tick(); }
+
+document.querySelectorAll(".key").forEach(k => {
+  k.addEventListener("click", () => {
+    const v = k.dataset.k;
+    if (v === "back") pressBack();
+    else if (v === "clear") pressClear();
+    else pressDigit(parseInt(v, 10));
+  });
+});
+
+document.addEventListener("keydown", e => {
+  const ae = document.activeElement;
+  const tag = ae ? ae.tagName : "";
+  // Champs de saisie : comportement natif total (les noms gèrent déjà Entrée).
+  if (/^(INPUT|TEXTAREA|SELECT|A)$/.test(tag)) return;
+  // Sur un bouton/résumé, ne bloquer que les touches d'activation natives.
+  if ((tag === "BUTTON" || tag === "SUMMARY") && (e.key === "Enter" || e.key === " ")) return;
+  if (counting) { // pendant le suspense : Entrée = révéler tout de suite
+    if (e.key === "Enter" && !$("countdownOverlay").hidden) { e.preventDefault(); $("countdownOverlay").click(); }
+    return;
+  }
+  if (!$("screenGame").hidden) {
+    if (e.key >= "0" && e.key <= "9") { e.preventDefault(); pressDigit(parseInt(e.key, 10)); }
+    else if (e.key === "Backspace") { e.preventDefault(); pressBack(); }
+    else if (e.key === "Escape" || e.key.toLowerCase() === "c") { e.preventDefault(); pressClear(); }
+    else if (e.key === "Enter") { e.preventDefault(); if (!$("validateBtn").disabled) validateBid(); }
+  } else if (!$("screenReveal").hidden) {
+    if (e.key === "Enter") { e.preventDefault(); nextRound(); }
+  } else if (!$("screenHome").hidden) {
+    if (e.key === "Enter") { e.preventDefault(); startGame(); }
+  } else if (!$("screenEnd").hidden) {
+    if (e.key === "Enter") { e.preventDefault(); startGame(); }
+  }
+});
+
+$("validateBtn").addEventListener("click", validateBid);
+
+/* ---------- compte à rebours (suspense) ---------- */
+let cdTimer = null, counting = false;
+function runCountdown(done) {
+  if (counting) return;
+  counting = true;
+  const ov = $("countdownOverlay"), num = $("cdNum");
+  $("cdCap").textContent = game.mode === "encans" ? "Adjugé pour…" : "Le prix d'époque est…";
+  ov.hidden = false;
+  sfx.drumroll();
+  let n = 5, live = true;
+  function finish() {
+    if (!live) return;
+    live = false;
+    counting = false;
+    clearTimeout(cdTimer);
+    ov.hidden = true;
+    ov.onclick = null;
+    done();
+  }
+  ov.onclick = finish; // toucher = révéler tout de suite
+  (function step() {
+    if (!live) return;
+    if (n <= 0) { sfx.sting(); finish(); return; }
+    num.textContent = n;
+    num.classList.remove("pop"); void num.offsetWidth; num.classList.add("pop");
+    n--;
+    cdTimer = setTimeout(step, 650);
+  })();
+}
+
+/* ==========================================================================
+   MODE ENCANS — chrono de 20 s par lot (v1.1)
+   ========================================================================== */
+const ENCANS_SECS = 20;
+let encTimer = null, encT0 = 0, encPaused = 0, encHideT0 = 0;
+let encFlags = null; // {once, twice, lastTick}
+
+function stopEncansTimer() {
+  if (encTimer) { clearInterval(encTimer); encTimer = null; }
+  $("encansTimer").hidden = true;
+  encHideT0 = 0;
+}
+
+/* gel du chrono quand l'onglet se cache (on ne punit pas une notification) */
+document.addEventListener("visibilitychange", () => {
+  if (!encTimer) return;
+  if (document.hidden) { encHideT0 = performance.now(); }
+  else if (encHideT0) { encPaused += performance.now() - encHideT0; encHideT0 = 0; }
+});
+
+function startEncansTimer() {
+  stopEncansTimer();
+  const box = $("encansTimer");
+  box.hidden = false;
+  box.classList.remove("low", "crit");
+  $("encansSecs").textContent = ENCANS_SECS;
+  $("encansFill").style.width = "100%";
+  encT0 = performance.now();
+  encPaused = 0; encHideT0 = 0;
+  encFlags = { once: false, twice: false, lastTick: ENCANS_SECS };
+  encTimer = setInterval(() => {
+    if (document.hidden) return; // gelé, repris à visibilitychange
+    const remain = ENCANS_SECS - (performance.now() - encT0 - encPaused) / 1000;
+    const secs = Math.max(0, Math.ceil(remain));
+    $("encansSecs").textContent = secs;
+    $("encansFill").style.width = Math.max(0, (remain / ENCANS_SECS) * 100) + "%";
+    box.classList.toggle("low", remain <= 10);
+    box.classList.toggle("crit", remain <= 5);
+    if (remain <= 10 && !encFlags.once) {
+      encFlags.once = true;
+      hostSay(HOST.encansOnce);
+      sfx.tick();
+    }
+    if (remain <= 5 && !encFlags.twice) {
+      encFlags.twice = true;
+      hostSay(HOST.encansTwice);
+    }
+    if (remain <= 5 && secs < encFlags.lastTick) {
+      encFlags.lastTick = secs;
+      sfx.tick();
+    }
+    if (remain <= 0) encansAutoLock();
+  }, 200);
+}
+
+/* à zéro : la mise en cours se verrouille toute seule — adjugé! */
+function encansAutoLock() {
+  if (counting) return;
+  stopEncansTimer();
+  const idx = game.deck[game.round];
+  const actual = ITEMS[idx][2];
+  if (game.cents > 0) {
+    game.encansJust = "timeout";
+    const guess = game.cents; // fige la mise au moment du zéro
+    sfx.hammer();
+    runCountdown(() => revealSolo(idx, guess, actual));
+  } else {
+    game.encansJust = "nobid";
+    sfx.hammer();
+    revealSolo(idx, 0, actual);
+  }
+}
+
+function validateBid() {
+  if (counting) return;
+  if (game.cents <= 0) {
+    /* branche encans explicite : la mise vide ne passe jamais par validateBid —
+       le "pas de mise" est géré par encansAutoLock() à zéro. */
+    if (game.mode === "encans") return;
+    return;
+  }
+  sfx.validate();
+  const idx = game.deck[game.round];
+  const actual = ITEMS[idx][2];
+  if (game.mode === "solo" || game.mode === "encans") {
+    const guess = game.cents;
+    if (game.mode === "encans") {
+      stopEncansTimer();
+      sfx.hammer();
+      game.encansJust = "sold";
+    }
+    runCountdown(() => revealSolo(idx, guess, actual));
+  } else {
+    game.bids.push({ player: game.bidOrder[game.bidIdx], guess: game.cents });
+    game.bidIdx++;
+    if (game.bidIdx < game.bidOrder.length) {
+      game.cents = 0;
+      renderBid();
+      renderBidder();
+      hostSay(pick(HOST.validate) + " Passe l'appareil!");
+    } else {
+      runCountdown(() => revealFamily(idx, actual));
+    }
+  }
+}
+
+/* ==========================================================================
+   RÉVÉLATION
+   ========================================================================== */
+function countUp(el, target, dur) {
+  if (reducedMotion || target <= 0) { el.textContent = money(target); return; }
+  dur = dur || 900;
+  const t0 = performance.now();
+  function step(t) {
+    const p = Math.min(1, (t - t0) / dur);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = money(Math.round(target * eased));
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function gapBars(container, rows) {
+  // rows: [{label, value, kind}] kind = "actual"|"under"|"over"
+  container.innerHTML = "";
+  const max = Math.max(1, ...rows.map(r => r.value));
+  rows.forEach(r => {
+    const row = document.createElement("div");
+    row.className = "bar-row";
+    const who = document.createElement("span"); who.className = "who"; who.textContent = r.label;
+    const bar = document.createElement("div"); bar.className = "bar";
+    const fill = document.createElement("div"); fill.className = "fill " + r.kind;
+    bar.appendChild(fill);
+    const val = document.createElement("span"); val.className = "val"; val.textContent = money(r.value);
+    row.appendChild(who); row.appendChild(bar); row.appendChild(val);
+    container.appendChild(row);
+    requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.width = Math.max(2, (r.value / max) * 100) + "%"; }));
+  });
+}
+
+function fillRevealHeader(idx) {
+  const [name, year, , cat] = ITEMS[idx];
+  $("itemDecadeR").textContent = decadeLabel(year);
+  $("itemCatIconR").innerHTML = CATS[cat].svg;
+  $("itemCatLabelR").textContent = CATS[cat].label;
+  $("itemNameR").textContent = name;
+  $("qcChipR").hidden = !isQc(idx);
+  const src = ITEMS[idx][4];
+  $("priceSrc").hidden = !src;
+  if (src) $("priceSrc").textContent = "Référence : " + src;
+}
+
+/* ---------- solo ---------- */
+function revealSolo(idx, guess, actual) {
+  fillRevealHeader(idx);
+  $("soloVerdict").hidden = false;
+  $("familyVerdict").hidden = true;
+  $("nextBtn").innerHTML = game.round === ROUNDS - 1 ? 'Voir les résultats <kbd>Entrée</kbd>' : 'Manche suivante <kbd>Entrée</kbd>';
+
+  const title = $("verdictTitle"), detail = $("verdictDetail"), pts = $("verdictPoints");
+  title.className = "verdict-title";
+  const encansMode = game.mode === "encans";
+  const adjuge = encansMode ? "Adjugé! " : ""; // saveur salle des ventes (v1.1)
+  let points = 0, verdict = "";
+  if (encansMode && game.encansJust === "nobid") {
+    /* chrono tombé à zéro sans mise : le lot passe, +0 pt, réplique claire */
+    verdict = "nobid";
+    title.textContent = "Pas de mise! Le lot passe!";
+    hostRevealSay(HOST.encansNoBid);
+    detail.textContent = "Le temps a filé… le prix d'époque était de " + money(actual) + ".";
+    pts.textContent = "+0 pt";
+    gapBars($("barWrap"), [{ label: "Prix réel", value: actual, kind: "actual" }]);
+  } else if (guess > actual) {
+    verdict = "over";
+    title.classList.add("over");
+    title.textContent = "Tu as DÉPASSÉ!";
+    hostRevealSay(pick(HOST.over));
+    detail.innerHTML = "Le prix d'époque était de <strong>" + money(actual) + "</strong>. " +
+      "Ta mise de " + money(guess) + " dépasse de " + money(guess - actual) + ".";
+    pts.textContent = "+0 pt";
+    gapBars($("barWrap"), [
+      { label: "Ta mise", value: guess, kind: "over" },
+      { label: "Prix réel", value: actual, kind: "actual" }
+    ]);
+    sfx.bad();
+  } else if (guess === actual) {
+    verdict = "exact";
+    points = 100;
+    title.classList.add("perfect");
+    title.textContent = adjuge + "Le prix juste!";
+    hostRevealSay(pick(HOST.exact));
+    detail.textContent = "Au centime près! Chapeau, c'est de l'audace de précision.";
+    pts.textContent = "+100 pts";
+    gapBars($("barWrap"), [{ label: "Prix réel", value: actual, kind: "actual" }]);
+    sfx.perfect();
+    confettiBurst(70);
+  } else {
+    points = Math.round(100 * guess / actual);
+    verdict = "under";
+    title.classList.add("win");
+    title.textContent = adjuge + (points >= 80 ? "Dans le mille!" : points >= 50 ? "Tout près!" : points >= 25 ? "Ça se défend!" : "Sans dépasser… de loin!");
+    hostRevealSay(pick(HOST[points >= 80 ? "great" : points >= 50 ? "good" : points >= 25 ? "ok" : "far"]));
+    detail.innerHTML = "Ta mise de <strong>" + money(guess) + "</strong>, à " + money(actual - guess) + " du prix réel de " + money(actual) + ".";
+    pts.textContent = "+" + points + " pt" + (points > 1 ? "s" : "");
+    gapBars($("barWrap"), [
+      { label: "Ta mise", value: guess, kind: "under" },
+      { label: "Prix réel", value: actual, kind: "actual" }
+    ]);
+  }
+  if (encansMode && game.encansJust === "timeout") {
+    hostRevealSay(HOST.encansTimeout); // remplace la réplique générique de la branche
+  }
+  game.encansJust = null;
+  game.results.push({ itemIdx: idx, guess, actual, points, verdict });
+  countUp($("actualPrice"), actual);
+  show("screenReveal");
+}
+
+/* ---------- famille ---------- */
+function revealFamily(idx, actual) {
+  fillRevealHeader(idx);
+  $("soloVerdict").hidden = true;
+  $("familyVerdict").hidden = false;
+  $("nextBtn").innerHTML = game.round === ROUNDS - 1 ? 'Voir les résultats <kbd>Entrée</kbd>' : 'Manche suivante <kbd>Entrée</kbd>';
+
+  // classement : sous le prix d'abord (du plus proche au plus loin), puis dépassements
+  const entries = game.bids.map(b => ({
+    name: game.players[b.player],
+    pIdx: b.player,
+    guess: b.guess,
+    over: b.guess > actual
+  }));
+  entries.sort((a, b) => {
+    if (a.over !== b.over) return a.over ? 1 : -1;
+    return a.over ? a.guess - b.guess : b.guess - a.guess;
+  });
+
+  const legal = entries.filter(e => !e.over);
+  const winner = legal.length ? legal[0] : null;
+  const mult = game.round === ROUNDS - 1 ? 2 : 1; // la super manche (10e) compte double
+  if (winner) game.wins[winner.pIdx] += mult;
+
+  const list = $("bidList");
+  list.innerHTML = "";
+  entries.forEach((e, i) => {
+    const li = document.createElement("li");
+    li.className = "bid-row" + (winner === e ? " winner" : "");
+    const rank = document.createElement("span");
+    rank.className = "rank"; rank.textContent = i + 1;
+    const who = document.createElement("span");
+    who.className = "who"; who.textContent = e.name;
+    const guess = document.createElement("span");
+    guess.className = "guess"; guess.textContent = money(e.guess);
+    const tag = document.createElement("span");
+    tag.className = "tag " + (e.over ? "over" : "under");
+    tag.textContent = e.over ? "dépasse de " + money(e.guess - actual) : "à " + money(actual - e.guess) + " près";
+    li.appendChild(rank); li.appendChild(who); li.appendChild(guess); li.appendChild(tag);
+    if (winner === e) {
+      const star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      star.setAttribute("viewBox", "0 0 24 24");
+      star.setAttribute("class", "star");
+      star.innerHTML = '<path fill="currentColor" d="M12 2.5l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 17.4l-5.9 3.3 1.3-6.6L2.5 9.5l6.6-.8L12 2.5z"/>';
+      li.appendChild(star);
+    }
+    list.appendChild(li);
+  });
+
+  const wt = $("roundWinnerTitle");
+  wt.className = "verdict-title win";
+  if (winner) {
+    wt.textContent = mult > 1
+      ? "Super manche! " + winner.name + " marque double!"
+      : winner.name + " remporte la manche!";
+    hostRevealSay(mult > 1
+      ? "SUPER MANCHE! " + winner.name + " empoche " + mult + " manches d'un coup! Quel retournement!"
+      : HOST.familyWin(winner.name));
+    sfx.validate();
+  } else {
+    wt.className = "verdict-title over";
+    wt.textContent = "Tout le monde a dépassé!";
+    hostRevealSay(HOST.familyAllOver);
+    sfx.bad();
+  }
+  $("familyTotal").textContent = game.players.map((n, i) => n + " : " + game.wins[i] + (game.wins[i] > 1 ? " manches" : " manche")).join(" — ");
+
+  gapBars($("barWrap"), [
+    { label: "Prix réel", value: actual, kind: "actual" }
+  ].concat(entries.map(e => ({
+    label: e.name.length > 10 ? e.name.slice(0, 10) + "…" : e.name,
+    value: e.guess,
+    kind: e.over ? "over" : "under"
+  }))));
+
+  countUp($("actualPrice"), actual);
+  show("screenReveal");
+}
+
+$("nextBtn").addEventListener("click", nextRound);
+function nextRound() {
+  stopEncansTimer();
+  if (game.round + 1 >= ROUNDS) { endGame(); return; }
+  game.round++;
+  renderRound();
+  show("screenGame");
+}
+
+/* ==========================================================================
+   FIN DE PARTIE
+   ========================================================================== */
+function endGame() {
+  const encansMode = game.mode === "encans";
+  const soloish = game.mode === "solo" || encansMode; // encans = solo contre la montre
+  if (soloish) {
+    $("soloEnd").hidden = false;
+    $("familyEnd").hidden = true;
+    const total = game.results.reduce((s, r) => s + r.points, 0);
+    $("finalScore").textContent = total;
+    $("hostEndSoloLine").textContent = encansMode
+      ? pick(total >= WIN_SCORE ? HOST.encansEndWin : HOST.encansEndLose)
+      : pick(total >= WIN_SCORE ? HOST.soloWin : HOST.soloLose);
+    /* relevé de notes façon plateau télé */
+    const sc = $("roundScorecard");
+    sc.innerHTML = "";
+    game.results.forEach((r, i) => {
+      const li = document.createElement("li");
+      if (r.points === 0) li.className = "zero";
+      else if (r.points === 100) li.className = "top";
+      const n = document.createElement("span"); n.className = "n"; n.textContent = i + 1;
+      const it = document.createElement("span"); it.className = "it"; it.textContent = ITEMS[r.itemIdx][0];
+      const pt = document.createElement("span"); pt.className = "pt"; pt.textContent = "+" + r.points + " pts";
+      li.appendChild(n); li.appendChild(it); li.appendChild(pt);
+      sc.appendChild(li);
+    });
+    const exact = game.results.filter(r => r.verdict === "exact").length;
+    const over = game.results.filter(r => r.verdict === "over").length;
+    const best = game.results.reduce((m, r) => Math.max(m, r.points), 0);
+    $("statExact").textContent = exact + " / 10";
+    $("statOver").textContent = over + " / 10";
+    $("statBest").textContent = best + " pts";
+    $("statLotsWrap").hidden = !encansMode;
+    if (encansMode) {
+      const lots = game.results.filter(r => r.points > 0).length;
+      $("statLots").textContent = lots + " / " + ROUNDS;
+    }
+
+    // records (séparés encans / solo — v1.1)
+    const bestKey = encansMode ? "encansBest" : "soloBest";
+    const streakKey = encansMode ? "encansStreak" : "streak";
+    const streakBestKey = encansMode ? "encansStreakBest" : "streakBest";
+    const bestPrev = store.get(bestKey, 0);
+    const newBest = total > bestPrev;
+    if (newBest) store.set(bestKey, total);
+    let streak = store.get(streakKey, 0);
+    let streakBest = store.get(streakBestKey, 0);
+    let msg;
+    if (total >= WIN_SCORE) {
+      streak++;
+      streakBest = Math.max(streakBest, streak);
+      store.set(streakKey, streak);
+      store.set(streakBestKey, streakBest);
+      $("soloEndTitle").textContent = encansMode ? "Vente terminée!" : "Partie gagnée!";
+      if (total === 1000) msg = "<strong>PERFECTION!</strong> 1000 points sur 1000 — tu devrais passer à la télé!";
+      else if (total >= 800) msg = "<strong>Incroyable!</strong> Le juste prix n'a plus de secrets pour toi.";
+      else msg = "<strong>Gagné!</strong> Ta série de victoires continue. Objectif suivant : " + WIN_SCORE + " pts… encore!";
+      confettiBurst(140);
+      sfx.win();
+    } else {
+      store.set(streakKey, 0);
+      $("soloEndTitle").textContent = encansMode ? "La vente est finie…" : "Partie terminée";
+      if (total >= 400) msg = "Pas loin! Avec " + WIN_SCORE + " points ou plus, tu gagnais — la série repart à zéro.";
+      else if (total >= 200) msg = "Le marché d'époque te joue encore des tours. La série repart à zéro — retente ta chance!";
+      else msg = "Ouch! Révise tes centimes et reviens-y : la série repart à zéro.";
+    }
+    if (newBest && total > 0) msg += "<br>Et en plus : <strong>nouveau record personnel!</strong>";
+    $("soloEndMsg").innerHTML = msg;
+    $("endBest").textContent = store.get(bestKey, 0);
+    $("endBestLabel").textContent = encansMode ? " (encans)" : "";
+    $("endStreak").textContent = store.get(streakKey, 0);
+    $("endStreakBest").textContent = store.get(streakBestKey, 0);
+  } else {
+    $("soloEnd").hidden = true;
+    $("familyEnd").hidden = false;
+    const max = Math.max(...game.wins);
+    const champs = game.players.filter((_, i) => game.wins[i] === max);
+    $("hostEndFamLine").textContent = champs.length === 1
+      ? "Et le champion est… " + champs[0] + "! Tonnerre d'applaudissements!"
+      : "Match nul! Quel suspense jusqu'au bout, mesdames et messieurs!";
+    const order = game.players.map((n, i) => ({ n, w: game.wins[i] })).sort((a, b) => b.w - a.w);
+    if (champs.length === 1) {
+      $("champName").textContent = champs[0];
+      $("champHow").textContent = (champs[0].endsWith("e") ? "Championne" : "Champion") + " avec " + max + (max > 1 ? " manches" : " manche") + " sur " + ROUNDS + "!";
+      store.set("champion", { name: champs[0], wins: max, when: Date.now() });
+      sfx.win();
+    } else {
+      $("champName").textContent = champs.join(" et ");
+      $("champHow").textContent = "Match nul! " + champs.length + " ex æquo à " + max + (max > 1 ? " manches" : " manche") + " gagnée" + (max > 1 ? "s" : "") + " sur " + ROUNDS + ".";
+    }
+    const ul = $("standings");
+    ul.innerHTML = "";
+    order.forEach((p, i) => {
+      const li = document.createElement("li");
+      li.className = "standing-row" + (p.w === max && max >= 0 ? " first" : "");
+      const rank = document.createElement("span"); rank.className = "rank"; rank.textContent = i + 1;
+      const who = document.createElement("span"); who.className = "who"; who.textContent = p.n;
+      const w = document.createElement("span"); w.className = "w"; w.textContent = p.w + (p.w > 1 ? " manches" : " manche");
+      li.appendChild(rank); li.appendChild(who); li.appendChild(w);
+      ul.appendChild(li);
+    });
+    confettiBurst(140);
+  }
+  refreshRecords();
+  show("screenEnd");
+}
+
+/* ==========================================================================
+   NAVIGATION GLOBALE
+   ========================================================================== */
+function abortGame() {
+  stopEncansTimer();
+  game.results = [];
+  game.cents = 0;
+  game.encansJust = null;
+  refreshRecords();
+  show("screenHome");
+  toast("Partie abandonnée — ça ne compte pas!");
+}
+$("quitBtn").addEventListener("click", abortGame);
+$("homeBtn").addEventListener("click", () => { refreshRecords(); show("screenHome"); });
+$("homeBtn2").addEventListener("click", () => { refreshRecords(); show("screenHome"); });
+$("replayBtn").addEventListener("click", startGame);
+$("playBtn").addEventListener("click", startGame);
+
+/* son on/off */
+$("soundBtn").addEventListener("click", () => {
+  sfx.on = !sfx.on;
+  $("soundOnIcon").hidden = !sfx.on;
+  $("soundOffIcon").hidden = sfx.on;
+  $("soundBtn").setAttribute("aria-label", sfx.on ? "Couper le son" : "Activer le son");
+  $("soundBtn").setAttribute("aria-pressed", sfx.on);
+  if (sfx.on) sfx.tick();
+  toast(sfx.on ? "Son activé" : "Son coupé");
+});
+
+/* init */
+document.querySelectorAll(".presenter-avatar").forEach(el => { el.innerHTML = HOST_SVG; });
+$("metaLine").textContent = ITEMS.length + " objets · 10 manches par partie · des années 1930 à aujourd'hui";
+renderNameFields();
+refreshRecords();
+show("screenHome");
+</script>
+</body>
+</html>
