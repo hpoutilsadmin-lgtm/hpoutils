@@ -1,0 +1,1447 @@
+<!doctype html>
+<!-- Sirop Clicker v1.1 « Saisons légendaires » — enrichit le prestige existant (collection de Feuilles d'or).
+     Les formules économiques (coûts, revenus, taux, seuils, multiplicateurs) sont INTACTES. -->
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Sirop Clicker — le jeu du Temps des sucres</title>
+<style>
+  /* ============ PALETTE ============ */
+  :root{
+    color-scheme: light dark;
+    --bg:#f6ebda; --bg2:#efdfc4;
+    --card:#fffaf0; --card2:#fbf1de; --line:#e6d2ab;
+    --ink:#3f240d; --ink-soft:#7a5a38; --ink-faint:#a0845f;
+    --amber:#c9762a; --amber-d:#9c5a1a; --gold:#e8a83e; --gold-lt:#f6cf7d;
+    --syrup:#7a3f0e; --syrup-d:#552a07;
+    --btn:#c9762a; --btn-d:#a05e1f; --btn-ink:#fff8ec;
+    --good:#3e7d32; --bad:#a83a1c;
+    --sky1:#ffd9a3; --sky2:#ffcf8f; --sky3:#f9e9cf;
+    --hill:#ead6b2; --pine:#5f7f68; --snow:#ffffff; --snow-sh:#e8f1f4;
+    --leaf1:#b03a1c; --leaf2:#d3531f; --leaf3:#ee7f2c; --leaf4:#f6ab45; --leaf5:#c9432a;
+    --steel:#9aa7b5; --steel-d:#6f7b88;
+    --shadow:0 12px 32px rgba(122,63,14,.14);
+    --radius:18px;
+    --font:"Avenir Next","Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#150c06; --bg2:#1d1108;
+      --card:#25150e; --card2:#2c1911; --line:#4b2d17;
+      --ink:#f5e3c6; --ink-soft:#d9b98c; --ink-faint:#9c7c58;
+      --amber:#d98a35; --amber-d:#b26a22; --gold:#e8a83e; --gold-lt:#f6cf7d;
+      --syrup:#e8a83e; --syrup-d:#c9772a;
+      --btn:#d98a35; --btn-d:#b26a22; --btn-ink:#261104;
+      --good:#7fbf6f; --bad:#e07a55;
+      --sky1:#170d1c; --sky2:#3a1c0e; --sky3:#964d15;
+      --hill:#3a2412; --pine:#23352a; --snow:#dfe9ee; --snow-sh:#b9cdd6;
+      --leaf1:#8e2c15; --leaf2:#b2431a; --leaf3:#d26a24; --leaf4:#e0943a; --leaf5:#a93722;
+      --steel:#7c8b9c; --steel-d:#525e6c;
+      --shadow:0 12px 32px rgba(0,0,0,.45);
+    }
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; font-family:var(--font); color:var(--ink);
+    background:
+      radial-gradient(1200px 500px at 15% -10%, var(--gold-lt) 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    min-height:100vh;
+  }
+  @media (prefers-color-scheme: dark){
+    body{background:
+      radial-gradient(1200px 500px at 80% -10%, rgba(150,77,21,.35) 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg) 0%, #0f0804 100%);}
+  }
+
+  /* ============ HUD ============ */
+  .hud{position:sticky;top:0;z-index:60;background:color-mix(in srgb, var(--card) 88%, transparent);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);}
+  .hud-inner{max-width:1180px;margin:0 auto;padding:.55rem .9rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:.5rem;white-space:nowrap}
+  .brand-leaf{width:30px;height:34px;fill:var(--leaf2);filter:drop-shadow(0 2px 2px rgba(122,63,14,.3))}
+  .brand-name{font-weight:900;font-size:1.15rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+  .brand-name em{font-style:normal;color:var(--amber)}
+  .stats{display:flex;gap:.45rem;flex:1 1 auto;flex-wrap:wrap;align-items:stretch}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:.3rem .7rem;
+    display:flex;flex-direction:column;align-items:center;min-width:96px;justify-content:center}
+  .stat .num{font-weight:900;font-size:1.05rem;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1.1}
+  .stat .lbl{font-size:.66rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em}
+  .stat.hero{border-color:var(--amber);background:linear-gradient(180deg,var(--card2),color-mix(in srgb,var(--gold-lt) 28%,var(--card2)))}
+  .stat.hero .num{font-size:1.3rem;color:var(--syrup)}
+  @media (prefers-color-scheme: dark){.stat.hero .num{color:var(--gold-lt)}}
+  .icon-btn{background:var(--card2);border:1px solid var(--line);border-radius:12px;color:var(--ink-soft);
+    width:40px;height:40px;display:grid;place-items:center;cursor:pointer}
+  .icon-btn:hover{border-color:var(--amber);color:var(--amber)}
+  .icon-btn svg{width:20px;height:20px;fill:currentColor}
+
+  /* ============ LAYOUT ============ */
+  .layout{max-width:1180px;margin:0 auto;padding:1rem .9rem 2rem;display:grid;
+    grid-template-columns:minmax(0,1fr) 360px;gap:1rem;align-items:start}
+  @media (max-width:940px){.layout{grid-template-columns:1fr}}
+  .play{display:flex;flex-direction:column;gap:1rem;min-width:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+  /* ============ SCÈNE ============ */
+  .scene{position:relative;aspect-ratio:800/500;border-radius:var(--radius);overflow:hidden;
+    border:1px solid var(--line);box-shadow:var(--shadow);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+  .scene-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .tree-hit{position:absolute;left:15%;top:5%;width:44%;height:78%;background:transparent;border:0;
+    cursor:pointer;border-radius:40%;-webkit-tap-highlight-color:transparent;padding:0}
+  .tree-hit:focus-visible{outline:3px solid var(--gold);outline-offset:-6px;border-radius:20px}
+  .drops,.floaters{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .drops{z-index:3}.floaters{z-index:4}
+  .snow{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
+  .tree-hit{z-index:2}
+
+  .drop{position:absolute;width:15px;height:21px;transform:translate(-50%,-90%)}
+  .floater{position:absolute;transform:translate(-50%,-50%);font-weight:900;font-size:1.25rem;
+    color:var(--syrup);text-shadow:0 1px 0 #fff,0 2px 6px rgba(122,63,14,.35);white-space:nowrap;pointer-events:none}
+  @media (prefers-color-scheme: dark){.floater{color:var(--gold-lt);text-shadow:0 1px 0 #000,0 2px 8px rgba(0,0,0,.5)}}
+  .floater.big{font-size:1.7rem}
+
+  .scene-foot{position:absolute;left:0;right:0;bottom:0;z-index:6;display:flex;justify-content:space-between;
+    align-items:flex-end;gap:.5rem;padding:.6rem .8rem;pointer-events:none}
+  .perclick{background:rgba(255,250,240,.85);border:1px solid var(--line);border-radius:999px;
+    padding:.28rem .8rem;font-weight:800;font-size:.85rem;color:var(--syrup);white-space:nowrap;
+    font-variant-numeric:tabular-nums;box-shadow:0 2px 8px rgba(122,63,14,.15)}
+  @media (prefers-color-scheme: dark){.perclick{background:rgba(24,13,7,.8);color:var(--gold-lt)}}
+  .hint{font-size:.85rem;font-weight:700;color:#fff;background:rgba(63,36,13,.55);
+    padding:.3rem .8rem;border-radius:999px;backdrop-filter:blur(4px);text-align:right;flex:1 1 auto}
+  @media (max-width:560px){
+    .hint{font-size:.76rem;padding:.25rem .65rem}
+    .perclick{font-size:.76rem;padding:.25rem .65rem}
+    .tire-banner{font-size:.78rem;padding:.32rem .8rem}
+  }
+  .tire-banner{position:absolute;top:.7rem;left:50%;transform:translateX(-50%);z-index:6;
+    background:linear-gradient(180deg,#e8842e,#c25a14);color:#fff;font-weight:800;font-size:.9rem;
+    padding:.4rem 1rem;border-radius:999px;display:flex;align-items:center;gap:.5rem;
+    box-shadow:0 4px 14px rgba(194,90,20,.5);white-space:nowrap}
+  .tire-banner[hidden]{display:none !important}
+  .tire-banner svg{width:18px;height:18px;fill:#ffe9b8}
+
+  /* SVG animations */
+  #treeG{transform-box:fill-box;transform-origin:50% 100%}
+  #treeG.shake{animation:treeshake .26s ease-out}
+  @keyframes treeshake{
+    0%{transform:scale(1) rotate(0)}
+    30%{transform:scale(1.018) rotate(-1.3deg)}
+    55%{transform:scale(.997) rotate(1deg)}
+    80%{transform:scale(1.004) rotate(-.35deg)}
+    100%{transform:none}
+  }
+  .cloud{animation:cloudrift 34s ease-in-out infinite alternate}
+  .cloud.c2{animation-duration:46s;animation-delay:-12s}
+  @keyframes cloudrift{from{transform:translateX(var(--sx,-45px))}to{transform:translateX(var(--ex,55px))}}
+  .smoke{opacity:0;transform-box:fill-box;transform-origin:center;fill:#cfd8dd}
+  @media (prefers-color-scheme: dark){.smoke{fill:#8d99a4}}
+  #cabin:not(.is-hidden) .smoke{animation:smokeup 3.8s ease-in-out infinite}
+  @keyframes smokeup{
+    0%{transform:translateY(0) scale(.6);opacity:0}
+    25%{opacity:.6}
+    100%{transform:translateY(-52px) translateX(12px) scale(1.7);opacity:0}
+  }
+  .sparkle{animation:sparkle 3s ease-in-out infinite}
+  @keyframes sparkle{0%,100%{opacity:.15}50%{opacity:.8}}
+  .spileDrip{transform-box:fill-box;transform-origin:center;opacity:0}
+  #sceneSvg.flowing .spileDrip{animation:spiledrip 1.8s ease-in infinite}
+  @keyframes spiledrip{0%{transform:translateY(0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(30px);opacity:0}}
+  #cabin{transition:opacity .6s ease}
+  #cabin.is-hidden{opacity:0;pointer-events:none}
+  #cabin.pop{animation:cabinpop .7s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes cabinpop{0%{transform:scale(.6);opacity:0;transform-origin:50% 100%;transform-box:fill-box}100%{transform:scale(1);opacity:1}}
+  .win-glow{animation:winglow 4s ease-in-out infinite}
+  @keyframes winglow{0%,100%{opacity:.28}50%{opacity:.5}}
+  .drop-template{width:15px;height:21px}
+
+  /* ============ BOUTIQUE ============ */
+  .shop{padding:1rem;display:flex;flex-direction:column;gap:.7rem;position:sticky;top:74px;max-height:calc(100vh - 90px);overflow:auto}
+  @media (max-width:940px){.shop{position:static;max-height:none}}
+  .shop h2{margin:.1rem 0 0;font-size:1.2rem;letter-spacing:.01em}
+  .shop-sub{margin:0;color:var(--ink-soft);font-size:.88rem}
+  .items{display:flex;flex-direction:column;gap:.6rem}
+  .item{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:.65rem .75rem;
+    display:flex;flex-direction:column;gap:.3rem}
+  .item-top{display:flex;gap:.6rem;align-items:center}
+  .item-icon{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;
+    background:linear-gradient(180deg,var(--gold-lt),var(--gold));box-shadow:inset 0 -2px 4px rgba(122,63,14,.25)}
+  .item-icon svg{width:24px;height:24px;stroke:#5b2d08;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .item-top h3{margin:0;font-size:.98rem}
+  .owned{margin:0;font-size:.78rem;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+  .owned b{color:var(--ink)}
+  .effect{margin:0;font-size:.85rem;font-weight:800;color:var(--good)}
+  .flavor{margin:0;font-size:.8rem;color:var(--ink-soft);font-style:italic}
+  .buy{margin-top:.3rem;border:0;border-radius:12px;padding:.6rem .8rem;cursor:pointer;
+    font-family:var(--font);font-weight:900;font-size:.95rem;color:var(--btn-ink);
+    background:linear-gradient(180deg,var(--btn),var(--btn-d));
+    box-shadow:0 3px 0 color-mix(in srgb, var(--btn-d) 70%, #000),0 6px 14px rgba(122,63,14,.25);
+    transition:transform .08s ease, box-shadow .08s ease, filter .15s}
+  .buy:hover:not(:disabled){filter:brightness(1.07)}
+  .buy:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 color-mix(in srgb, var(--btn-d) 70%, #000)}
+  .buy:disabled{cursor:not-allowed;filter:grayscale(.65) brightness(.94);opacity:.72;box-shadow:none}
+  .buy .cost-num{font-variant-numeric:tabular-nums}
+  .buy.ready-flash{animation:buyflash 1.2s ease-in-out infinite}
+  @keyframes buyflash{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+  .buy.shake-no{animation:shakeno .3s ease}
+  @keyframes shakeno{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  /* ============ PRESTIGE ============ */
+  .prestige{padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.55rem;
+    background:linear-gradient(180deg,var(--card),color-mix(in srgb,var(--gold-lt) 16%,var(--card)))}
+  .prestige h2{margin:0;font-size:1.15rem}
+  .prestige p{margin:0;font-size:.88rem;color:var(--ink-soft)}
+  .prestige p b{color:var(--ink)}
+  .progress{height:12px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);overflow:hidden}
+  .progress .bar{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--amber));
+    transition:width .4s ease}
+  .prestige-meta{font-size:.82rem;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+  .seasons-line{font-size:.85rem;font-weight:700;color:var(--ink)}
+  .seasons-line .bonus{color:var(--amber-d);font-variant-numeric:tabular-nums}
+  @media (prefers-color-scheme: dark){.seasons-line .bonus{color:var(--gold-lt)}}
+  #prestigeBtn{align-self:flex-start}
+  #prestigeBtn.armed, #hardReset.armed{background:linear-gradient(180deg,#d05a2a,#a83f16);box-shadow:0 3px 0 #7e2f10,0 6px 14px rgba(168,63,22,.3)}
+
+  /* ============ v1.1 SAISONS LÉGENDAIRES ============ */
+  .prestige .prestige-sub{font-style:italic;color:var(--ink-faint);font-size:.84rem}
+  .seasons-collection{margin-top:.1rem}
+  .prestige .collection-title{margin:0 0 .35rem;font-size:.78rem;font-weight:800;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+  .collection-row{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;min-height:34px}
+  .gold-leaf{width:26px;height:31px;filter:drop-shadow(0 1px 2px rgba(122,63,14,.35))}
+  .gold-leaf-use{fill:var(--gold);stroke:#9c5a1a;stroke-width:1}
+  .leaf-next{width:26px;height:31px;opacity:.5}
+  .next-leaf-use{fill:none;stroke:var(--ink-faint);stroke-width:1.6}
+  .leaf-more{font-size:.8rem;font-weight:800;color:var(--ink-faint)}
+  .season-modal-leaf{width:66px;height:78px;margin:0 auto .5rem;display:block;filter:drop-shadow(0 3px 6px rgba(122,63,14,.4))}
+  .season-ribbon{fill:var(--gold);stroke:var(--amber-d);stroke-width:1.5}
+  .season-ribbon-more{font-size:13px;font-weight:800;fill:var(--amber-d)}
+
+  /* ============ TOASTS / MODAL / FOOTER ============ */
+  #toasts{position:fixed;top:76px;left:50%;transform:translateX(-50%);z-index:90;display:flex;
+    flex-direction:column;gap:.4rem;align-items:center;pointer-events:none;width:min(92vw,480px)}
+  .toast{background:var(--card);border:1px solid var(--amber);color:var(--ink);border-radius:14px;
+    padding:.55rem 1rem;font-size:.88rem;font-weight:700;box-shadow:var(--shadow);
+    animation:toastin .3s ease-out;text-align:center;max-width:100%}
+  .toast.out{animation:toastout .35s ease-in forwards}
+  @keyframes toastin{from{transform:translateY(-14px);opacity:0}}
+  @keyframes toastout{to{transform:translateY(-10px);opacity:0}}
+
+  .modal-back{position:fixed;inset:0;z-index:100;background:rgba(30,16,6,.55);display:grid;place-items:center;
+    padding:1rem;backdrop-filter:blur(3px)}
+  .modal-back[hidden]{display:none}
+  .modal{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
+    padding:1.6rem;max-width:420px;text-align:center;animation:modalin .35s cubic-bezier(.2,1.3,.4,1)}
+  @keyframes modalin{from{transform:scale(.85) translateY(16px);opacity:0}}
+  .modal h2{margin:0 0 .5rem;font-size:1.3rem}
+  .modal p{margin:0 0 1.1rem;color:var(--ink-soft);font-size:.95rem}
+  .modal p b{color:var(--amber-d);font-size:1.1rem}
+  @media (prefers-color-scheme: dark){.modal p b{color:var(--gold-lt)}}
+
+  footer{max-width:1180px;margin:0 auto;padding:0 .9rem 2rem;display:flex;justify-content:space-between;
+    align-items:center;gap:1rem;flex-wrap:wrap;color:var(--ink-faint);font-size:.78rem}
+  #hardReset{white-space:nowrap}
+
+  @media (prefers-reduced-motion: reduce){
+    .cloud,.smoke,.sparkle,.spileDrip,.win-glow,#treeG.shake,#cabin.pop,.buy.ready-flash{animation:none !important}
+    #cabin{transition:none}
+    .progress .bar{transition:none}
+  }
+</style>
+</head>
+<body>
+<header class="hud">
+  <div class="hud-inner">
+    <div class="brand">
+      <svg class="brand-leaf" viewBox="-14 -17 28 34" aria-hidden="true"><use href="#mapleLeaf"/></svg>
+      <span class="brand-name">Sirop <em>Clicker</em></span>
+    </div>
+    <div class="stats" role="status" aria-live="polite" aria-label="Compteurs du jeu">
+      <div class="stat hero"><span class="num" id="statDrops">0</span><span class="lbl">gouttes</span></div>
+      <div class="stat"><span class="num" id="statSps">0</span><span class="lbl">gouttes/s</span></div>
+      <div class="stat"><span class="num" id="statTotal">0</span><span class="lbl">amassées au total</span></div>
+      <div class="stat season"><span class="num" id="statSeasons">0</span><span class="lbl" id="statSeasonsLbl">saisons · ×1</span></div>
+    </div>
+    <button class="icon-btn" id="muteBtn" aria-label="Activer ou couper le son" title="Son on/off">
+      <svg viewBox="0 0 24 24" id="soundOn" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+      <svg viewBox="0 0 24 24" id="soundOff" aria-hidden="true" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.5-2.5-1.4-1.4-2.5 2.5-2.5-2.5-1.4 1.4L13.8 12l-2.5 2.5 1.4 1.4 2.5-2.5 2.5 2.5 1.4-1.4z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="play" aria-label="Jeu">
+    <div class="scene" id="scene">
+      <svg class="scene-svg" id="sceneSvg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--sky1)"/><stop offset=".55" stop-color="var(--sky2)"/><stop offset="1" stop-color="var(--sky3)"/>
+          </linearGradient>
+          <radialGradient id="sunGlow" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#ffd98a" stop-opacity=".95"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="trunkG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#6b4226"/><stop offset=".5" stop-color="#8a5a33"/><stop offset="1" stop-color="#5e3a20"/>
+          </linearGradient>
+          <path id="mapleLeaf" d="M0,-12 L3,-6 L8,-7.5 L6,-2 L11,-2 L7.5,2 L12,5 L6.5,6.5 L8,12 L3.5,8.5 L3,13.5 L1.5,8.5 L-3.5,11.5 L-2,6.5 L-7.5,8 L-4.5,3.5 L-10,3.5 L-5,0.5 L-7,-4.5 L-2,-3.5 Z"/>
+          <g id="pine">
+            <path d="M0,-96 L-26,-44 L-14,-44 L-34,-10 L-12,-10 L-10,0 L10,0 L12,-10 L34,-10 L14,-44 L26,-44 Z" fill="var(--pine)"/>
+            <rect x="-5" y="-4" width="10" height="12" fill="#5e3a20"/>
+          </g>
+        </defs>
+
+        <rect width="800" height="500" fill="url(#sky)"/>
+        <circle cx="648" cy="112" r="96" fill="url(#sunGlow)"/>
+        <circle cx="648" cy="112" r="32" fill="#ffdf9e"/>
+        <g class="cloud c1" style="--sx:-50px;--ex:46px">
+          <ellipse cx="170" cy="86" rx="58" ry="19" fill="#fff" opacity=".65"/>
+          <ellipse cx="220" cy="76" rx="44" ry="16" fill="#fff" opacity=".65"/>
+        </g>
+        <g class="cloud c2" style="--sx:40px;--ex:-50px">
+          <ellipse cx="520" cy="150" rx="50" ry="16" fill="#fff" opacity=".5"/>
+          <ellipse cx="560" cy="142" rx="36" ry="13" fill="#fff" opacity=".5"/>
+        </g>
+
+        <use href="#pine" transform="translate(36,390) scale(.62)"/>
+        <use href="#pine" transform="translate(112,392) scale(.85)"/>
+        <use href="#pine" transform="translate(540,390) scale(.7)"/>
+        <use href="#pine" transform="translate(610,392) scale(.55)"/>
+        <use href="#pine" transform="translate(760,392) scale(.8)"/>
+        <use href="#pine" transform="translate(486,394) scale(.5)"/>
+
+        <ellipse cx="150" cy="452" rx="270" ry="118" fill="var(--hill)" opacity=".75"/>
+        <ellipse cx="700" cy="460" rx="300" ry="124" fill="var(--hill)" opacity=".75"/>
+        <use href="#pine" transform="translate(196,400) scale(1.05)"/>
+        <use href="#pine" transform="translate(70,404) scale(1.2)"/>
+        <use href="#pine" transform="translate(736,404) scale(1.1)"/>
+
+        <path d="M0,388 C120,374 220,392 340,384 C470,375 590,394 800,382 L800,500 L0,500 Z" fill="var(--snow)"/>
+        <path d="M0,436 C160,422 320,440 520,428 C640,422 740,434 800,428 L800,500 L0,500 Z" fill="var(--snow-sh)" opacity=".75"/>
+
+        <!-- La cabane à sucre (apparaît au palier 1) -->
+        <g id="cabin" class="is-hidden">
+          <ellipse cx="665" cy="394" rx="100" ry="10" fill="#000" opacity=".08"/>
+          <rect x="700" y="284" width="16" height="30" fill="#5b3a22"/>
+          <rect x="696" y="280" width="24" height="7" rx="2" fill="#4a2f1c"/>
+          <circle class="smoke" style="animation-delay:0s" cx="707" cy="272" r="7"/>
+          <circle class="smoke" style="animation-delay:1.25s" cx="707" cy="272" r="9"/>
+          <circle class="smoke" style="animation-delay:2.5s" cx="707" cy="272" r="11"/>
+          <path d="M568,336 L666,280 L764,336 Z" fill="#4e3421"/>
+          <path d="M568,336 L666,280 L764,336 L744,336 C706,328 622,328 588,336 Z" fill="var(--snow)"/>
+          <rect x="590" y="334" width="152" height="60" rx="5" fill="#7c5233"/>
+          <path d="M590,348 h152 M590,361 h152 M590,374 h152 M590,387 h152" stroke="#5e3f24" stroke-width="2"/>
+          <rect x="598" y="348" width="150" height="3" fill="#000" opacity=".08"/>
+          <rect class="win-glow" x="602" y="348" width="42" height="32" rx="5" fill="#ffbe5e"/>
+          <rect x="606" y="352" width="34" height="24" rx="3" fill="#ffc46a"/>
+          <path d="M623,352 v24 M606,364 h34" stroke="#7c5233" stroke-width="2"/>
+          <rect x="646" y="352" width="32" height="42" rx="5" fill="#3c2412"/>
+          <circle cx="672" cy="373" r="2.6" fill="#e8a83e"/>
+          <g id="shedTier2" style="display:none">
+            <rect x="748" y="352" width="46" height="42" rx="4" fill="#6a4527"/>
+            <path d="M744,356 L771,344 L798,356 L798,360 L744,360 Z" fill="var(--snow)"/>
+            <rect x="760" y="366" width="22" height="28" rx="3" fill="#3c2412"/>
+          </g>
+          <g id="lightsTier3" style="display:none">
+            <path d="M592,338 Q667,354 742,338" stroke="#3c2412" stroke-width="2.5" fill="none"/>
+            <circle cx="608" cy="342" r="3.4" fill="#ff5d5d"/><circle cx="628" cy="345" r="3.4" fill="#ffd166"/>
+            <circle cx="648" cy="347" r="3.4" fill="#7bdff2"/><circle cx="668" cy="347" r="3.4" fill="#ff5d5d"/>
+            <circle cx="688" cy="345" r="3.4" fill="#ffd166"/><circle cx="708" cy="343" r="3.4" fill="#7bdff2"/>
+            <circle cx="728" cy="340" r="3.4" fill="#ff5d5d"/>
+          </g>
+          <g id="seasonRibbons" aria-hidden="true"></g>
+        </g>
+
+        <!-- L'érable cliquable -->
+        <g id="treeG">
+          <ellipse cx="320" cy="404" rx="64" ry="9" fill="#000" opacity=".08"/>
+          <path d="M312,332 C280,322 250,314 226,298" stroke="#6b4226" stroke-width="11" fill="none" stroke-linecap="round"/>
+          <path d="M318,310 C350,300 378,292 400,278" stroke="#6b4226" stroke-width="11" fill="none" stroke-linecap="round"/>
+          <path d="M308,300 C280,288 262,276 252,260" stroke="#6b4226" stroke-width="8" fill="none" stroke-linecap="round"/>
+          <path d="M316,288 C344,276 362,264 372,248" stroke="#6b4226" stroke-width="8" fill="none" stroke-linecap="round"/>
+          <path d="M304,400 C307,362 303,334 292,310 C286,296 278,286 270,280 L283,268 C295,276 305,288 313,304 C323,326 329,362 333,400 Z" fill="url(#trunkG)"/>
+          <path d="M314,392 C315,368 313,348 308,332" stroke="#4a2c15" stroke-width="3" fill="none" opacity=".6"/>
+          <circle cx="200" cy="205" r="64" fill="var(--leaf1)"/><circle cx="270" cy="165" r="74" fill="var(--leaf1)"/>
+          <circle cx="345" cy="200" r="66" fill="var(--leaf1)"/><circle cx="250" cy="120" r="56" fill="var(--leaf1)"/>
+          <circle cx="335" cy="125" r="54" fill="var(--leaf1)"/>
+          <circle cx="215" cy="215" r="52" fill="var(--leaf2)"/><circle cx="295" cy="175" r="62" fill="var(--leaf2)"/>
+          <circle cx="360" cy="215" r="50" fill="var(--leaf2)"/><circle cx="265" cy="135" r="44" fill="var(--leaf2)"/>
+          <circle cx="345" cy="140" r="46" fill="var(--leaf2)"/>
+          <g>
+            <use href="#mapleLeaf" transform="translate(180,190) rotate(-20) scale(1.25)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(205,228) rotate(35) scale(.95)" fill="var(--leaf4)"/>
+            <use href="#mapleLeaf" transform="translate(236,248) rotate(-45) scale(1.15)" fill="var(--leaf5)"/>
+            <use href="#mapleLeaf" transform="translate(268,254) rotate(15) scale(1.05)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(302,248) rotate(-30) scale(1.25)" fill="var(--leaf4)"/>
+            <use href="#mapleLeaf" transform="translate(336,242) rotate(50) scale(.95)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(366,226) rotate(-15) scale(1.15)" fill="var(--leaf5)"/>
+            <use href="#mapleLeaf" transform="translate(392,202) rotate(25) scale(1.05)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(196,160) rotate(40) scale(1.05)" fill="var(--leaf4)"/>
+            <use href="#mapleLeaf" transform="translate(172,224) rotate(-35) scale(1.05)" fill="var(--leaf5)"/>
+            <use href="#mapleLeaf" transform="translate(148,204) rotate(10) scale(.95)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(254,200) rotate(-50) scale(1.25)" fill="var(--leaf4)"/>
+            <use href="#mapleLeaf" transform="translate(290,212) rotate(20) scale(1.05)" fill="var(--leaf5)"/>
+            <use href="#mapleLeaf" transform="translate(326,200) rotate(-25) scale(1.15)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(360,184) rotate(45) scale(.95)" fill="var(--leaf4)"/>
+            <use href="#mapleLeaf" transform="translate(230,168) rotate(15) scale(1.15)" fill="var(--leaf5)"/>
+            <use href="#mapleLeaf" transform="translate(264,148) rotate(-35) scale(1.05)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(300,148) rotate(30) scale(1.25)" fill="var(--leaf4)"/>
+            <use href="#mapleLeaf" transform="translate(336,158) rotate(-20) scale(1.05)" fill="var(--leaf5)"/>
+            <use href="#mapleLeaf" transform="translate(250,108) rotate(-50) scale(1.05)" fill="var(--leaf4)"/>
+            <use href="#mapleLeaf" transform="translate(290,108) rotate(20) scale(1.15)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(330,112) rotate(-30) scale(.95)" fill="var(--leaf5)"/>
+            <use href="#mapleLeaf" transform="translate(216,128) rotate(40) scale(1.05)" fill="var(--leaf3)"/>
+            <use href="#mapleLeaf" transform="translate(366,150) rotate(15) scale(1.05)" fill="var(--leaf4)"/>
+            <use href="#mapleLeaf" transform="translate(300,84) rotate(-40) scale(.95)" fill="var(--leaf4)"/>
+          </g>
+          <!-- chalumeau + goutte qui dégoutte quand ça coule -->
+          <rect x="318" y="340" width="17" height="7" rx="3.5" transform="rotate(20 326 344)" fill="#2e1a0c"/>
+          <g class="spileDrip"><path d="M0,0 C-4,8 -6.5,11 -6.5,14.5 a6.5,6.5 0 0 0 13,0 C6.5,11 4,8 0,0 Z" transform="translate(341,352)" fill="#b06a1b"/></g>
+        </g>
+
+        <!-- La chaudière -->
+        <g id="bucket">
+          <ellipse cx="384" cy="412" rx="30" ry="5" fill="#000" opacity=".08"/>
+          <path d="M358,376 h52 l-7,34 h-38 Z" fill="var(--steel)"/>
+          <path d="M358,376 h52 l-2.2,11 h-47.6 Z" fill="var(--steel-d)" opacity=".55"/>
+          <rect x="367" y="382" width="6" height="22" rx="3" fill="#fff" opacity=".3"/>
+          <path d="M360,376 C366,354 402,354 408,376" stroke="#8d99a8" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="384" cy="376" rx="26" ry="6" fill="var(--steel-d)"/>
+          <ellipse cx="384" cy="375.4" rx="21" ry="4" fill="#2b1a10"/>
+        </g>
+
+        <g fill="#fff">
+          <circle class="sparkle" style="animation-delay:-.4s" cx="120" cy="452" r="2.6"/>
+          <circle class="sparkle" style="animation-delay:-1.2s" cx="252" cy="470" r="3"/>
+          <circle class="sparkle" style="animation-delay:-2s" cx="470" cy="458" r="2.4"/>
+          <circle class="sparkle" style="animation-delay:-.9s" cx="598" cy="472" r="3"/>
+          <circle class="sparkle" style="animation-delay:-2.6s" cx="700" cy="452" r="2.6"/>
+          <circle class="sparkle" style="animation-delay:-1.7s" cx="40" cy="478" r="2.6"/>
+        </g>
+      </svg>
+
+      <button class="tree-hit" id="treeHit" aria-label="Cliquer sur l'érable pour faire couler le sirop"></button>
+      <div class="drops" id="drops"></div>
+      <div class="floaters" id="floaters"></div>
+      <canvas class="snow" id="snow" aria-hidden="true"></canvas>
+
+      <div class="tire-banner" id="tireBanner" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4-4 6-4 11a4 4 0 0 0 8 0c0-2-1-3.5-2-5-.3 1.2-1 2-2 2.5C12.5 7 13 4 12 2zM12 22a7 7 0 0 1-7-7c0-4.5 3.5-7 5-9.5C10.5 3 11 2 12 2s1.5 1 2 3.5C15.5 8 19 10.5 19 15a7 7 0 0 1-7 7z"/></svg>
+        <span id="tireText">Tire active</span>
+      </div>
+
+      <div class="scene-foot">
+        <span class="perclick" id="perClick">+1 par clic</span>
+        <span class="hint" id="hint">Clique sur l'érable, le sirop va couler !</span>
+      </div>
+    </div>
+
+    <section class="card prestige" id="prestigeCard" aria-label="Prestige">
+      <h2>Nouvelle saison des sucres</h2>
+      <p class="prestige-sub">Chaque saison complétée = une Feuille d'or unique + 10&nbsp;% de production pour toujours.</p>
+      <p>Quand tu as amassé <b id="prestigeThresholdTxt">60 000 gouttes</b> <b>pendant la saison en cours</b>,
+      tu peux repartir à zéro : production réinitialisée, mais <b>+10&nbsp;% de production permanente</b> par saison complétée.
+      Et le défi monte à chaque saison : le seuil est <b>×4</b> d'une saison à l'autre. Ça, c'est du sirop qui rapporte !</p>
+      <div class="progress" role="progressbar" aria-label="Progression vers la nouvelle saison" aria-valuemin="0" aria-valuemax="60000" aria-valuenow="0" id="prestigeProg">
+        <div class="bar" id="prestigeBar"></div>
+      </div>
+      <p class="prestige-meta"><span id="prestigeMeta">Saison 1 — 0 / 60 000 gouttes</span></p>
+      <p class="prestige-meta">Seuil de la saison <b id="prestigeNextSeason">2</b> : <b id="prestigeNextTh">240 000</b> gouttes</p>
+      <p class="seasons-line">Saisons complétées : <span id="seasonsCount">0</span> · Bonus actuel : <span class="bonus" id="seasonsBonus">×1</span></p>
+      <div class="seasons-collection">
+        <p class="collection-title">Mes saisons — Feuilles d'or</p>
+        <div class="collection-row" id="leavesRow" aria-label="Feuilles d'or gagnées"></div>
+      </div>
+      <button class="buy" id="prestigeBtn" disabled>Entamer une nouvelle saison</button>
+    </section>
+  </section>
+
+  <aside class="card shop" id="shop" aria-label="Boutique">
+    <h2>La boutique du Temps des sucres</h2>
+    <p class="shop-sub">Investis tes gouttes : chaque achat fait couler le sirop plus vite.</p>
+    <div class="items">
+      <article class="item" id="item-chaudiere">
+        <div class="item-top">
+          <span class="item-icon"><svg viewBox="0 0 24 24"><path d="M6 10h12l-1.8 9H7.8z"/><path d="M6.5 10c1-4.5 10.5-4.5 11 0"/><path d="M6 10h12"/></svg></span>
+          <div><h3>Chaudière</h3><p class="owned">En inventaire : <b id="own-chaudiere">0</b></p></div>
+        </div>
+        <p class="effect" id="fx-chaudiere">+1 goutte par clic</p>
+        <p class="flavor">Une chaudière de plus, pis le sirop déborde !</p>
+        <button class="buy" id="buy-chaudiere"><span class="cost-num" id="cost-chaudiere">25</span> gouttes</button>
+      </article>
+      <article class="item" id="item-tubulure">
+        <div class="item-top">
+          <span class="item-icon"><svg viewBox="0 0 24 24"><path d="M3 9q4.5-5 9 0t9 0"/><path d="M3 15q4.5-5 9 0t9 0"/><path d="M12 18v2.5"/></svg></span>
+          <div><h3>Tubulure</h3><p class="owned">En inventaire : <b id="own-tubulure">0</b></p></div>
+        </div>
+        <p class="effect" id="fx-tubulure">+1 goutte / seconde, automatique</p>
+        <p class="flavor">Le réseau qui coule tout seul, même la nuit.</p>
+        <button class="buy" id="buy-tubulure"><span class="cost-num" id="cost-tubulure">80</span> gouttes</button>
+      </article>
+      <article class="item" id="item-evaporateur">
+        <div class="item-top">
+          <span class="item-icon"><svg viewBox="0 0 24 24"><path d="M4 13h16l-2 7H6z"/><path d="M9 13c-1.5-2.5 1.5-3.5 0-6"/><path d="M14 13c-1.5-2.5 1.5-3.5 0-6"/></svg></span>
+          <div><h3>Évaporateur</h3><p class="owned">En inventaire : <b id="own-evaporateur">0</b></p></div>
+        </div>
+        <p class="effect" id="fx-evaporateur">+6 gouttes / seconde, automatique</p>
+        <p class="flavor">Ça bouille à fond, la vapeur monte !</p>
+        <button class="buy" id="buy-evaporateur"><span class="cost-num" id="cost-evaporateur">500</span> gouttes</button>
+      </article>
+      <article class="item" id="item-cabane">
+        <div class="item-top">
+          <span class="item-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-7 9 7"/><path d="M5 11v9h14v-9"/><path d="M10 20v-5h4v5"/><path d="M7.5 11.5c1.5 1.5 4 1.5 5.5 0s4-1.5 5.5 0"/></svg></span>
+          <div><h3>Cabane à sucre</h3><p class="owned">Palier : <b id="own-cabane">0 / 3</b></p></div>
+        </div>
+        <p class="effect" id="fx-cabane">Toute la production ×2</p>
+        <p class="flavor">Le cœur du rang — tout le monde y passe.</p>
+        <button class="buy" id="buy-cabane"><span class="cost-num" id="cost-cabane">2 000</span> gouttes</button>
+      </article>
+      <article class="item" id="item-cousins">
+        <div class="item-top">
+          <span class="item-icon"><svg viewBox="0 0 24 24"><circle cx="7" cy="9" r="2.6"/><circle cx="17" cy="9" r="2.6"/><circle cx="12" cy="7" r="2.6"/><path d="M3.5 19c0-3 1.8-4.5 3.5-4.5S10.5 16 10.5 19M13.5 19c0-3 1.8-4.5 3.5-4.5s3.5 1.5 3.5 4.5M8.5 19c0-3.5 1.7-5 3.5-5s3.5 1.5 3.5 5"/></svg></span>
+          <div><h3>Équipe de cousins</h3><p class="owned">En inventaire : <b id="own-cousins">0</b></p></div>
+        </div>
+        <p class="effect" id="fx-cousins">+25 gouttes / seconde, automatique</p>
+        <p class="flavor">Ils travaillent fort, promis. En échange de tire.</p>
+        <button class="buy" id="buy-cousins"><span class="cost-num" id="cost-cousins">5 000</span> gouttes</button>
+      </article>
+      <article class="item" id="item-tire">
+        <div class="item-top">
+          <span class="item-icon"><svg viewBox="0 0 24 24"><path d="M6 21L15 6"/><circle cx="15.5" cy="7.5" r="3.2"/><path d="M13.8 6.6c.8-1 2.6-.6 2.8.8"/></svg></span>
+          <div><h3>Tire d'érable</h3><p class="owned">État : <b id="own-tire">Prête</b></p></div>
+        </div>
+        <p class="effect" id="fx-tire">Clics ×4 pendant 30 secondes</p>
+        <p class="flavor">Sur la neige, c'est encore meilleur. Recharge : 5 min.</p>
+        <button class="buy" id="buy-tire"><span class="cost-num" id="cost-tire">2 000</span> gouttes</button>
+      </article>
+    </div>
+  </aside>
+</main>
+
+<div id="toasts" aria-live="polite"></div>
+
+<div class="modal-back" id="modalBack" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">Bienvenue au Temps des sucres !</h2>
+    <p id="offlineText">Pendant ton absence, tes tubulures ont coulé : <b>+0 gouttes !</b></p>
+    <button class="buy" id="modalBtn">Faire couler le sirop !</button>
+  </div>
+</div>
+
+<footer>
+  <span>Sauvegarde automatique sur cet appareil · Aucun classement en ligne · Fonctionne entièrement hors-ligne · Sirop Clicker v1.1</span>
+  <button class="buy" id="hardReset">Tout recommencer à zéro</button>
+</footer>
+
+<script id="game-logic">
+/* =========================================================================
+   SIROP CLICKER v1.1 « Saisons légendaires » — logique de jeu pure (aucune dépendance DOM).
+   Enrichissement cosmétique + collection du prestige.
+   INTERDICTION RESPECTÉE : les formules économiques officielles ci-dessous
+   (cabinMult, seasonMult, prestigeThreshold, unitSps, prodPerSec, clickValue,
+   cost, buy, tireActive/tireReady, offline, seuils, multiplicateurs) sont
+   INTACTES — byte pour byte identiques à la v1.0 (vérifié par script Node).
+   ========================================================================= */
+var SiropStore = (function () {
+  "use strict";
+  try {
+    if (typeof localStorage !== "undefined" && localStorage) {
+      return {
+        get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+        set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+        del: function (k) { try { localStorage.removeItem(k); } catch (e) {} }
+      };
+    }
+  } catch (e) { /* mode mémoire ci-dessous */ }
+  var mem = {};
+  return {
+    get: function (k) { return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; },
+    set: function (k, v) { mem[k] = String(v); },
+    del: function (k) { delete mem[k]; }
+  };
+})();
+
+var Sirop = (function () {
+  "use strict";
+  var SAVE_KEY = "sirop-clicker-v1.1"; /* v1.1 : clé dédiée ; migration douce depuis la v1.0 au chargement */
+  var SAVE_KEY_V10 = "sirop-clicker-v1";
+  var PRESTIGE_BASE = 60000;      /* seuil saison 1 ; ×4 à chaque saison suivante */
+  var TIRE_COST = 2000;
+  var TIRE_DURATION = 30000;      /* 30 secondes */
+  var TIRE_COOLDOWN = 300000;     /* 5 minutes */
+  var OFFLINE_CAP_SEC = 7200;     /* 2 heures */
+  var CABANE_COSTS = [2000, 12000, 72000]; /* ×6 d'un palier au suivant */
+
+  /* ---- v1.1 « Saisons légendaires » : Feuilles d'or (collection, cosmétique) ---- */
+  var GOLDEN_LEAF_NAMES = [
+    "Première coulée", "Tire su'l top", "La bouilleuse", "Rang des érables",
+    "Sucre d'antan", "Cabane légendaire", "Printemps rouge", "L'or du rang",
+    "Maître-sucrier", "La Grande Coulée"
+  ];
+  var ROMAN_CYCLES = ["II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
+  /* Nom de la Feuille d'or gagnée en complétant la saison n (1-based, cycle de 10). */
+  function goldenLeafName(n) {
+    n = Math.floor(n);
+    if (!(n >= 1)) return "";
+    var base = GOLDEN_LEAF_NAMES[(n - 1) % 10];
+    var cycle = Math.floor((n - 1) / 10);
+    if (cycle > 0) base += " " + (ROMAN_CYCLES[cycle - 1] || String(cycle + 1));
+    return base;
+  }
+
+  function newState() {
+    return {
+      drops: 0,
+      totalAllTime: 0,
+      seasonDrops: 0,    /* gouttes amassées pendant la saison en cours (prestige) */
+      clicks: 0,
+      chaudiere: 0,
+      tubulure: 0,
+      evaporateur: 0,
+      cabaneTier: 0,      /* 0 à 3 → multiplicateur 1 à 4 */
+      cousins: 0,
+      tireUntil: 0,       /* timestamp ms : effet actif avant */
+      tireCooldownUntil: 0,/* timestamp ms : rachetable après */
+      seasons: 0,
+      savedAt: 0,
+      muted: false,
+      milestones: {},
+      goldenLeaves: [] /* v1.1 : noms des Feuilles d'or gagnées (collection, cosmétique) */
+    };
+  }
+
+  /* ---- formules officielles ---- */
+  function cabinMult(s) { return 1 + s.cabaneTier; }
+  function seasonMult(s) { return 1 + 0.10 * s.seasons; }
+  function prestigeThreshold(s) { return PRESTIGE_BASE * Math.pow(4, s.seasons); }
+  function unitSps(s) { return s.tubulure * 1 + s.evaporateur * 6 + s.cousins * 25; }
+  function prodPerSec(s) { return unitSps(s) * cabinMult(s) * seasonMult(s); }
+  function tireActive(s, now) { return now < s.tireUntil; }
+  function tireReady(s, now) { return now >= s.tireCooldownUntil; }
+  function clickValue(s, now) {
+    return (1 + s.chaudiere) * cabinMult(s) * seasonMult(s) * (tireActive(s, now) ? 4 : 1);
+  }
+
+  function cost(item, s) {
+    switch (item) {
+      case "chaudiere":   return Math.floor(25 * Math.pow(2.0, s.chaudiere));
+      case "tubulure":    return Math.floor(80 * Math.pow(1.9, s.tubulure));
+      case "evaporateur": return Math.floor(500 * Math.pow(1.95, s.evaporateur));
+      case "cousins":     return Math.floor(5000 * Math.pow(2.0, s.cousins));
+      case "cabane":
+        return s.cabaneTier < CABANE_COSTS.length ? CABANE_COSTS[s.cabaneTier] : null;
+      case "tire": return TIRE_COST;
+      default: return null;
+    }
+  }
+
+  function buyable(item, s, now) {
+    var c = cost(item, s);
+    if (c === null) return false;
+    if (item === "tire" && !tireReady(s, now)) return false;
+    return s.drops >= c;
+  }
+
+  /* Retourne {ok:true} ou {ok:false, reason:"max"|"cooldown"|"poor"} */
+  function buy(s, item, now) {
+    now = (typeof now === "number") ? now : Date.now();
+    var c = cost(item, s);
+    if (c === null) return { ok: false, reason: "max" };
+    if (item === "tire" && !tireReady(s, now)) return { ok: false, reason: "cooldown" };
+    if (s.drops < c) return { ok: false, reason: "poor" };
+    s.drops -= c;
+    switch (item) {
+      case "chaudiere":   s.chaudiere++; break;
+      case "tubulure":    s.tubulure++; break;
+      case "evaporateur": s.evaporateur++; break;
+      case "cousins":     s.cousins++; break;
+      case "cabane":      s.cabaneTier++; break;
+      case "tire":
+        s.tireUntil = now + TIRE_DURATION;
+        s.tireCooldownUntil = now + TIRE_COOLDOWN;
+        break;
+    }
+    return { ok: true };
+  }
+
+  /* Prestige : débloqué quand les gouttes amassées PENDANT LA SAISON EN COURS
+     atteignent le seuil croissant (60 000 × 4^saisons). Réinitialise la partie,
+     garde l'historique (tous temps), les saisons complétées et leurs bonus.
+     v1.1 : ajoute la Feuille d'or de la saison complétée à la collection
+     (cosmétique — ne change aucune formule économique). */
+  function prestige(s) {
+    if (s.seasonDrops < prestigeThreshold(s)) return { ok: false, reason: "locked" };
+    var keepTotal = s.totalAllTime;
+    var keepSeasons = s.seasons + 1;
+    var keepMilestones = s.milestones;
+    var keepMuted = s.muted;
+    var keepLeaves = (s.goldenLeaves && s.goldenLeaves.slice) ? s.goldenLeaves.slice() : [];
+    var leaf = goldenLeafName(keepSeasons);
+    keepLeaves.push(leaf);
+    var fresh = newState();
+    for (var k in fresh) s[k] = fresh[k];
+    s.totalAllTime = keepTotal;
+    s.seasons = keepSeasons;
+    s.milestones = keepMilestones;
+    s.muted = keepMuted;
+    s.goldenLeaves = keepLeaves;
+    return { ok: true, seasons: s.seasons, bonus: seasonMult(s), nextThreshold: prestigeThreshold(s), leaf: leaf };
+  }
+
+  /* Gains hors-ligne : gouttes/s × temps écoulé, plafonné à 2 h. */
+  function offline(s, now) {
+    now = (typeof now === "number") ? now : Date.now();
+    if (!s.savedAt) return { elapsed: 0, billed: 0, gains: 0 };
+    var elapsed = Math.max(0, (now - s.savedAt) / 1000);
+    var billed = Math.min(elapsed, OFFLINE_CAP_SEC);
+    var gains = prodPerSec(s) * billed;
+    return { elapsed: elapsed, billed: billed, gains: gains };
+  }
+
+  function save(s, now) {
+    s.savedAt = (typeof now === "number") ? now : Date.now();
+    try { SiropStore.set(SAVE_KEY, JSON.stringify(s)); } catch (e) {}
+    return s.savedAt;
+  }
+
+  /* Valide et normalise un état JSON (v1.0 ou v1.1) ; null si inexploitable.
+     P1 : JSON valide mais champs numériques mal typés (p. ex. drops:"plein")
+     → même chemin qu'un JSON invalide : aucune sauvegarde exploitable. */
+  function parseState(raw) {
+    try {
+      var parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return null;
+      var numFields = ["drops", "totalAllTime", "seasonDrops", "clicks",
+        "chaudiere", "tubulure", "evaporateur", "cabaneTier", "cousins",
+        "tireUntil", "tireCooldownUntil", "seasons", "savedAt"];
+      for (var i = 0; i < numFields.length; i++) {
+        var v = parsed[numFields[i]];
+        if (v !== undefined && (typeof v !== "number" || !isFinite(v))) return null;
+      }
+      var s = newState();
+      for (var k in parsed) {
+        if (Object.prototype.hasOwnProperty.call(s, k)) s[k] = parsed[k];
+      }
+      if (typeof parsed.milestones !== "object" || parsed.milestones === null) s.milestones = {};
+      if (!Array.isArray(s.goldenLeaves)) s.goldenLeaves = [];
+      return s;
+    } catch (e) { return null; }
+  }
+
+  function load() {
+    var s = parseState(SiropStore.get(SAVE_KEY));
+    if (s) return s;
+    /* v1.1 : migration douce depuis la sauvegarde v1.0 (un seul import,
+       resauvegardé en v1.1 ; la sauvegarde v1.0 est conservée telle quelle). */
+    var old = parseState(SiropStore.get(SAVE_KEY_V10));
+    if (old) {
+      if (!old.goldenLeaves.length) {
+        for (var i = 1; i <= old.seasons; i++) old.goldenLeaves.push(goldenLeafName(i));
+      }
+      try { SiropStore.set(SAVE_KEY, JSON.stringify(old)); } catch (e) {}
+      return old;
+    }
+    return null;
+  }
+
+  function clearSave() {
+    try { SiropStore.del(SAVE_KEY); } catch (e) {}
+    try { SiropStore.del(SAVE_KEY_V10); } catch (e) {}
+  }
+
+  /* ---- formatage français ---- */
+  function fmtFull(n) {
+    try { return Math.floor(n).toLocaleString("fr-CA"); }
+    catch (e) { return String(Math.floor(n)); }
+  }
+  function fmtShort(n) {
+    if (n < 10000) return fmtFull(n);
+    var units = [[1e12, "B"], [1e9, "Md"], [1e6, "M"], [1e3, "k"]];
+    for (var i = 0; i < units.length; i++) {
+      if (n >= units[i][0]) {
+        var v = n / units[i][0];
+        var txt = v >= 100 ? String(Math.round(v))
+          : v.toFixed(1).replace(".", ",").replace(",0", "");
+        return txt + " " + units[i][1];
+      }
+    }
+    return fmtFull(n);
+  }
+  function fmtMult(m) {
+    return "×" + m.toFixed(2).replace(".", ",").replace(",00", "");
+  }
+  function fmtClock(sec) {
+    sec = Math.max(0, Math.ceil(sec));
+    var m = Math.floor(sec / 60), r = sec % 60;
+    return m + ":" + (r < 10 ? "0" : "") + r;
+  }
+
+  return {
+    SAVE_KEY: SAVE_KEY,
+    PRESTIGE_BASE: PRESTIGE_BASE,
+    prestigeThreshold: prestigeThreshold,
+    TIRE_COST: TIRE_COST,
+    TIRE_DURATION: TIRE_DURATION,
+    TIRE_COOLDOWN: TIRE_COOLDOWN,
+    OFFLINE_CAP_SEC: OFFLINE_CAP_SEC,
+    GOLDEN_LEAF_NAMES: GOLDEN_LEAF_NAMES,
+    goldenLeafName: goldenLeafName,
+    newState: newState,
+    cabinMult: cabinMult,
+    seasonMult: seasonMult,
+    unitSps: unitSps,
+    prodPerSec: prodPerSec,
+    tireActive: tireActive,
+    tireReady: tireReady,
+    clickValue: clickValue,
+    cost: cost,
+    buyable: buyable,
+    buy: buy,
+    prestige: prestige,
+    offline: offline,
+    save: save,
+    load: load,
+    clearSave: clearSave,
+    fmtFull: fmtFull,
+    fmtShort: fmtShort,
+    fmtMult: fmtMult,
+    fmtClock: fmtClock
+  };
+})();
+</script>
+
+<script id="game-ui">
+/* =========================================================================
+   SIROP CLICKER — interface : boucle de jeu, animations, sons, rendu.
+   Toute la logique métier vit dans Sirop (script précédent).
+   ========================================================================= */
+(function () {
+  "use strict";
+
+  var $ = function (id) { return document.getElementById(id); };
+  var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------------- état ---------------- */
+  var state = Sirop.load();
+  var hadSave = !!state;
+  if (!state) state = Sirop.newState();
+  var goldenUntil = 0; /* v1.1 : les gouttes de la scène deviennent dorées pendant 3 s après un prestige */
+
+  /* ---------------- sons (Web Audio, 100 % local) ---------------- */
+  var Sfx = (function () {
+    var ctx = null, on = !state.muted;
+    function ac() {
+      if (!ctx) {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        try { ctx = new AC(); } catch (e) { return null; }
+      }
+      if (ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} }
+      return ctx;
+    }
+    function tone(freq, dur, type, vol, slideTo, delay) {
+      if (!on) return;
+      var c = ac(); if (!c) return;
+      delay = delay || 0;
+      try {
+        var o = c.createOscillator(), g = c.createGain();
+        var t = c.currentTime + delay;
+        o.type = type || "sine";
+        o.frequency.setValueAtTime(freq, t);
+        if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(vol || 0.07, t + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g); g.connect(c.destination);
+        o.start(t); o.stop(t + dur + 0.05);
+      } catch (e) {}
+    }
+    return {
+      unlock: function () { ac(); },
+      click: function () { var f = 560 + Math.random() * 280; tone(f, 0.09, "sine", 0.045, f * 0.55); },
+      buy: function () { tone(660, 0.1, "triangle", 0.055); tone(880, 0.13, "triangle", 0.055, null, 0.09); },
+      deny: function () { tone(220, 0.12, "square", 0.028, 175); },
+      tire: function () { tone(523, 0.1, "triangle", 0.06); tone(659, 0.1, "triangle", 0.06, null, 0.09); tone(784, 0.15, "triangle", 0.06, null, 0.18); },
+      prestige: function () { var n = [523, 659, 784, 1046, 1318]; for (var i = 0; i < n.length; i++) tone(n[i], 0.17, "triangle", 0.06, null, i * 0.11); },
+      isOn: function () { return on; },
+      setOn: function (v) { on = v; state.muted = !v; }
+    };
+  })();
+  document.addEventListener("pointerdown", function unlock() {
+    Sfx.unlock(); document.removeEventListener("pointerdown", unlock);
+  }, { passive: true });
+
+  /* ---------------- toasts ---------------- */
+  function toast(msg, ms) {
+    var box = $("toasts");
+    var el = document.createElement("div");
+    el.className = "toast"; el.textContent = msg;
+    box.appendChild(el);
+    while (box.childNodes.length > 3) box.firstChild.remove();
+    setTimeout(function () {
+      el.classList.add("out");
+      setTimeout(function () { el.remove(); }, 380);
+    }, ms || 3800);
+  }
+
+  /* ---------------- jalons ---------------- */
+  var MILESTONES = [
+    [100, "100 gouttes ! Ça coule, ça coule !"],
+    [1000, "1 000 gouttes ! Le Temps des sucres est lancé !"],
+    [10000, "10 000 gouttes ! La production s'emballe !"],
+    [100000, "100 000 gouttes ! Le roi du rang !"],
+    [1000000, "Un million de gouttes ! Légende de l'érable !"]
+  ];
+  function checkMilestones() {
+    for (var i = 0; i < MILESTONES.length; i++) {
+      var th = MILESTONES[i][0];
+      if (state.totalAllTime >= th && !state.milestones[th]) {
+        state.milestones[th] = 1;
+        toast(MILESTONES[i][1]);
+      }
+    }
+  }
+
+  /* ---------------- gouttes & flottants ---------------- */
+  var DROP_SVG = '<svg viewBox="0 0 20 28" width="100%" height="100%" aria-hidden="true">' +
+    '<path d="M10 0 C6 8 3.2 13.5 3.2 18.5 a6.8 6.8 0 0 0 13.6 0 C16.8 13.5 14 8 10 0 Z" fill="#b06a1b"/>' +
+    '<path d="M10 2.4 C7.5 8 5.6 12.6 5.6 17 a4.4 4.4 0 0 0 8.8 0 C14.4 12.6 12.5 8 10 2.4 Z" fill="#e8a83e"/>' +
+    '<circle cx="8" cy="17.5" r="1.7" fill="#fff" opacity=".85"/></svg>';
+  /* v1.1 : variante dorée de la goutte (cérémonie post-prestige), dérivée de la base par simple recoloriage */
+  var DROP_SVG_GOLD = DROP_SVG.split("#b06a1b").join("#c98f1b").split("#e8a83e").join("#f6cf7d");
+
+  function sceneRect() { return $("scene").getBoundingClientRect(); }
+  function bucketPx() {
+    var r = sceneRect();
+    return { x: (384 / 800) * r.width, y: (376 / 500) * r.height };
+  }
+
+  function splash(x, y) {
+    if (REDUCED) return;
+    var el = document.createElement("div");
+    el.style.cssText = "position:absolute;left:" + x + "px;top:" + y + "px;width:10px;height:10px;border-radius:50%;background:#e8a83e;transform:translate(-50%,-50%)";
+    $("drops").appendChild(el);
+    el.animate([
+      { transform: "translate(-50%,-50%) scale(.4)", opacity: 0.9 },
+      { transform: "translate(-50%,-50%) scale(1.8)", opacity: 0 }
+    ], { duration: 300, easing: "ease-out" }).onfinish = function () { el.remove(); };
+  }
+
+  function spawnDrop(sx, sy, big, golden) {
+    var layer = $("drops");
+    if (layer.childNodes.length > 46) return;
+    var b = bucketPx();
+    var el = document.createElement("div");
+    el.className = "drop";
+    el.innerHTML = golden ? DROP_SVG_GOLD : DROP_SVG;
+    el.style.left = sx + "px"; el.style.top = sy + "px";
+    if (big) { el.style.width = "20px"; el.style.height = "28px"; }
+    layer.appendChild(el);
+    var dx = b.x - sx, dy = Math.max(20, b.y - sy);
+    var dur = 520 + dy * 0.9;
+    var anim = el.animate([
+      { transform: "translate(-50%,-90%) translate(0px,0px)", opacity: 1, offset: 0 },
+      { transform: "translate(-50%,-90%) translate(" + (dx * 0.3) + "px," + (dy * 0.5) + "px)", opacity: 1, offset: 0.55 },
+      { transform: "translate(-50%,-90%) translate(" + dx + "px," + dy + "px)", opacity: 1, offset: 0.9 },
+      { transform: "translate(-50%,-90%) translate(" + (dx + 3) + "px," + (dy + 2) + "px) scale(1.5,.6)", opacity: 0, offset: 1 }
+    ], { duration: dur, easing: "cubic-bezier(.35,.55,.65,1)" });
+    anim.onfinish = function () { el.remove(); splash(b.x, b.y); };
+  }
+
+  function spawnFloater(x, y, text, big) {
+    var f = $("floaters");
+    if (f.childNodes.length > 42) f.firstChild.remove();
+    var el = document.createElement("div");
+    el.className = "floater" + (big ? " big" : "");
+    el.textContent = text;
+    el.style.left = x + "px"; el.style.top = y + "px";
+    f.appendChild(el);
+    el.animate([
+      { transform: "translate(-50%,-50%) scale(.8)", opacity: 1 },
+      { transform: "translate(-50%,-150%) scale(1.05)", opacity: 0 }
+    ], { duration: 950, easing: "ease-out" }).onfinish = function () { el.remove(); };
+  }
+
+  function canopyDropPx(big, forceGolden) {
+    var r = sceneRect();
+    var vx = 170 + Math.random() * 190, vy = 90 + Math.random() * 145;
+    var golden = !!forceGolden || (!REDUCED && Date.now() < goldenUntil);
+    spawnDrop((vx / 800) * r.width, (vy / 500) * r.height, big, golden);
+  }
+
+  function burstDrops(n) {
+    for (var i = 0; i < n; i++) {
+      (function (d) { setTimeout(function () { canopyDropPx(false); }, d); })(i * 70);
+    }
+  }
+
+  /* Petite pluie de feuilles d'érable (prestige) */
+  var LEAF_SVG = '<svg viewBox="-14 -17 28 34" width="100%" height="100%"><use href="#mapleLeaf" fill="#d3531f"/></svg>';
+  function leafShower() {
+    if (REDUCED) return;
+    var layer = $("floaters"), r = sceneRect();
+    for (var i = 0; i < 26; i++) {
+      (function () {
+        var el = document.createElement("div");
+        var sz = 14 + Math.random() * 16;
+        el.style.cssText = "position:absolute;width:" + sz + "px;height:" + sz + "px;left:" +
+          (Math.random() * r.width) + "px;top:-30px;pointer-events:none";
+        el.innerHTML = LEAF_SVG;
+        layer.appendChild(el);
+        var drift = (Math.random() - 0.5) * 160;
+        el.animate([
+          { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+          { transform: "translate(" + drift + "px," + (r.height + 60) + "px) rotate(" + (360 + Math.random() * 360) + "deg)", opacity: 0.9 }
+        ], { duration: 2200 + Math.random() * 1600, easing: "cubic-bezier(.3,.4,.6,1)" }).onfinish = function () { el.remove(); };
+      })();
+    }
+  }
+
+  /* ---------------- neige ---------------- */
+  var snow = (function () {
+    var cv = $("snow"), cx = cv.getContext("2d"), flakes = [], raf = 0, last = 0;
+    function resize() {
+      var r = sceneRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+      cv.width = Math.max(1, Math.round(r.width * dpr));
+      cv.height = Math.max(1, Math.round(r.height * dpr));
+      cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.min(140, Math.round(r.width / 9));
+      flakes = [];
+      for (var i = 0; i < n; i++) flakes.push(newFlake(r, true));
+      if (REDUCED) drawStatic(r);
+    }
+    function newFlake(r, anywhere) {
+      return {
+        x: Math.random() * r.width,
+        y: anywhere ? Math.random() * r.height : -8,
+        r: 0.8 + Math.random() * 2.4,
+        v: 18 + Math.random() * 44,
+        ph: Math.random() * Math.PI * 2,
+        sw: 8 + Math.random() * 22
+      };
+    }
+    function drawStatic(r) {
+      for (var i = 0; i < flakes.length; i++) {
+        var f = flakes[i];
+        cx.globalAlpha = 0.45;
+        cx.fillStyle = "#fff";
+        cx.beginPath(); cx.arc(f.x, f.y, f.r, 0, 7); cx.fill();
+      }
+      cx.globalAlpha = 1;
+    }
+    function frame(t) {
+      var r = sceneRect();
+      var dt = Math.min(0.05, (t - last) / 1000 || 0.016);
+      last = t;
+      cx.clearRect(0, 0, r.width, r.height);
+      cx.fillStyle = "#fff";
+      for (var i = 0; i < flakes.length; i++) {
+        var f = flakes[i];
+        f.y += f.v * dt;
+        f.ph += dt;
+        var x = f.x + Math.sin(f.ph) * f.sw * 0.25;
+        if (f.y > r.height + 8) { flakes[i] = newFlake(r, false); continue; }
+        cx.globalAlpha = 0.28 + (f.r / 3.2) * 0.4;
+        cx.beginPath(); cx.arc(x, f.y, f.r, 0, 7); cx.fill();
+      }
+      cx.globalAlpha = 1;
+      raf = requestAnimationFrame(frame);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    if (!REDUCED && !document.hidden) raf = requestAnimationFrame(frame);
+    document.addEventListener("visibilitychange", function () {
+      if (REDUCED) return;
+      if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
+      else if (!raf) { last = 0; raf = requestAnimationFrame(frame); }
+    });
+  })();
+
+  /* ---------------- format ---------------- */
+  function fmtRate(r) {
+    if (r >= 10000) return Sirop.fmtShort(r);
+    try { return r.toLocaleString("fr-CA", { maximumFractionDigits: 1 }); }
+    catch (e) { return String(Math.round(r * 10) / 10); }
+  }
+
+  /* ---------------- rendu ---------------- */
+  var ITEMS = ["chaudiere", "tubulure", "evaporateur", "cabane", "cousins", "tire"];
+  var prevAfford = {};
+  var flashTimers = {};
+
+  function setBuyBtn(item, html, disabled) {
+    var b = $("buy-" + item);
+    if (b.innerHTML !== html) b.innerHTML = html;
+    b.disabled = disabled;
+  }
+
+  function markAffordable(item, ok) {
+    if (ok && !prevAfford[item] && hadSave !== null) {
+      var b = $("buy-" + item);
+      b.classList.add("ready-flash");
+      if (flashTimers[item]) clearTimeout(flashTimers[item]);
+      flashTimers[item] = setTimeout(function () { b.classList.remove("ready-flash"); }, 4200);
+    }
+    prevAfford[item] = ok;
+  }
+
+  function renderShop(now) {
+    for (var i = 0; i < ITEMS.length; i++) {
+      var item = ITEMS[i];
+      var buyable = Sirop.buyable(item, state, now);
+      markAffordable(item, buyable);
+      switch (item) {
+        case "chaudiere": case "tubulure": case "evaporateur": case "cousins":
+          $("own-" + item).textContent = state[item];
+          setBuyBtn(item, '<span class="cost-num">' + Sirop.fmtFull(Sirop.cost(item, state)) + "</span> gouttes", !buyable);
+          break;
+        case "cabane": {
+          var maxed = state.cabaneTier >= 3;
+          $("own-cabane").textContent = state.cabaneTier + " / 3";
+          $("fx-cabane").textContent = maxed
+            ? "Maximum atteint — ta cabane est légendaire !"
+            : "Prochain palier : TOUTE la production ×" + (state.cabaneTier + 2);
+          setBuyBtn("cabane",
+            maxed ? "MAX — légendaire !" : '<span class="cost-num">' + Sirop.fmtFull(Sirop.cost("cabane", state)) + "</span> gouttes",
+            !buyable);
+          break;
+        }
+        case "tire": {
+          var tb = $("buy-tire");
+          if (Sirop.tireActive(state, now)) {
+            $("own-tire").textContent = "Active !";
+            setBuyBtn("tire", "Tire active : " + Sirop.fmtClock((state.tireUntil - now) / 1000), true);
+          } else if (!Sirop.tireReady(state, now)) {
+            $("own-tire").textContent = "Recharge…";
+            setBuyBtn("tire", "Recharge : " + Sirop.fmtClock((state.tireCooldownUntil - now) / 1000), true);
+          } else {
+            $("own-tire").textContent = "Prête";
+            setBuyBtn("tire", '<span class="cost-num">' + Sirop.fmtFull(Sirop.TIRE_COST) + "</span> gouttes", !buyable);
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  function updateCabin(prevTier) {
+    var tier = state.cabaneTier;
+    var cab = $("cabin");
+    if (tier >= 1) cab.classList.remove("is-hidden"); else cab.classList.add("is-hidden");
+    $("shedTier2").style.display = tier >= 2 ? "" : "none";
+    $("lightsTier3").style.display = tier >= 3 ? "" : "none";
+    if (typeof prevTier === "number" && tier > prevTier) {
+      cab.classList.remove("pop");
+      void cab.getBoundingClientRect();
+      cab.classList.add("pop");
+    }
+  }
+
+  /* ---------------- v1.1 « Saisons légendaires » ---------------- */
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  var lastLeavesRendered = -1, lastRibbonsRendered = -1;
+
+  /* Rangée « Mes saisons » : les Feuilles d'or gagnées (dorées), la prochaine (contour grisé). */
+  function renderLeaves() {
+    if (state.seasons === lastLeavesRendered) return;
+    lastLeavesRendered = state.seasons;
+    var row = $("leavesRow");
+    var leaves = state.goldenLeaves || [];
+    var MAX_SHOW = 12, html = "";
+    for (var i = 0; i < leaves.length && i < MAX_SHOW; i++) {
+      html += '<svg class="gold-leaf" viewBox="-14 -17 28 34" role="img" aria-label="Feuille d\'or : ' +
+        escapeHtml(leaves[i]) + '"><title>' + escapeHtml(leaves[i]) +
+        '</title><use href="#mapleLeaf" class="gold-leaf-use"/></svg>';
+    }
+    if (leaves.length > MAX_SHOW) {
+      html += '<span class="leaf-more">+' + (leaves.length - MAX_SHOW) + '</span>';
+    }
+    html += '<svg class="leaf-next" viewBox="-14 -17 28 34" aria-hidden="true"><title>Prochaine saison : ' +
+      escapeHtml(Sirop.goldenLeafName(leaves.length + 1)) +
+      '</title><use href="#mapleLeaf" class="next-leaf-use"/></svg>';
+    row.innerHTML = html;
+  }
+
+  /* Rubans dorés sur la cabane à sucre : un par saison complétée (max 5, puis +N). */
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function renderSeasonRibbons() {
+    if (state.seasons === lastRibbonsRendered) return;
+    lastRibbonsRendered = state.seasons;
+    var g = $("seasonRibbons");
+    while (g.firstChild) g.removeChild(g.firstChild);
+    var n = state.seasons, shown = Math.min(5, n);
+    for (var i = 0; i < shown; i++) {
+      var r = document.createElementNS(SVGNS, "rect");
+      r.setAttribute("x", 690 + i * 14);
+      r.setAttribute("y", 338);
+      r.setAttribute("width", 10);
+      r.setAttribute("height", 16);
+      r.setAttribute("rx", 3);
+      r.setAttribute("class", "season-ribbon");
+      g.appendChild(r);
+    }
+    if (n > 5) {
+      var t = document.createElementNS(SVGNS, "text");
+      t.setAttribute("x", 690 + 5 * 14 + 2);
+      t.setAttribute("y", 352);
+      t.setAttribute("class", "season-ribbon-more");
+      t.textContent = "+" + (n - 5);
+      g.appendChild(t);
+    }
+  }
+
+  /* Cérémonie de fin de saison : modale (remplace le toast unique), réutilise .modal-back. */
+  function showSeasonModal(completed, dropsGot, leafName, bonus, nextTh) {
+    $("modalTitle").textContent = "Saison " + completed + " terminée !";
+    $("offlineText").innerHTML =
+      '<svg class="season-modal-leaf" viewBox="-14 -17 28 34" aria-hidden="true"><use href="#mapleLeaf" class="gold-leaf-use"/></svg>' +
+      Sirop.fmtFull(dropsGot) + " gouttes au compteur — pas pire pantoute !<br>" +
+      "Tu reçois la Feuille d'or <b>«&nbsp;" + escapeHtml(leafName) + "&nbsp;»</b>.<br>" +
+      "Ton bonus permanent passe à <b>" + Sirop.fmtMult(bonus) + "</b>.<br>" +
+      "Prochain défi : " + Sirop.fmtFull(nextTh) + " gouttes.<br>" +
+      "Enweille, la saison " + (completed + 1) + " t'attend !";
+    $("modalBtn").textContent = "Entamer la saison " + (completed + 1);
+    $("modalBack").hidden = false;
+  }
+
+  function render(now) {
+    var sps = Sirop.prodPerSec(state);
+    $("statDrops").textContent = Sirop.fmtShort(state.drops);
+    $("statSps").textContent = fmtRate(sps);
+    $("statTotal").textContent = Sirop.fmtShort(state.totalAllTime);
+    /* v1.1 : le compteur de saisons devient un badge de la saison en cours */
+    $("statSeasons").textContent = "🍁 " + (state.seasons + 1);
+    $("statSeasonsLbl").textContent = "saison en cours · " + Sirop.fmtMult(Sirop.seasonMult(state));
+    $("perClick").textContent = "+" + fmtRate(Sirop.clickValue(state, now)) + " par clic";
+
+    var hint = $("hint");
+    if (state.clicks === 0) { hint.style.display = ""; hint.textContent = "Clique sur l'érable, le sirop va couler !"; }
+    else if (state.chaudiere + state.tubulure === 0) { hint.style.display = ""; hint.textContent = "Jette un œil à la boutique →"; }
+    else { hint.style.display = "none"; }
+
+    $("sceneSvg").classList.toggle("flowing", sps > 0);
+
+    var active = Sirop.tireActive(state, now);
+    $("tireBanner").hidden = !active;
+    if (active) $("tireText").textContent = "Tire d'érable : clics ×4 — " + Sirop.fmtClock((state.tireUntil - now) / 1000);
+
+    /* prestige */
+    var th = Sirop.prestigeThreshold(state);
+    var pct = Math.min(100, (state.seasonDrops / th) * 100);
+    $("prestigeBar").style.width = pct + "%";
+    $("prestigeProg").setAttribute("aria-valuenow", Math.floor(state.seasonDrops));
+    $("prestigeProg").setAttribute("aria-valuemax", th);
+    $("prestigeMeta").textContent = "Saison " + (state.seasons + 1) + " — " +
+      Sirop.fmtFull(Math.min(state.seasonDrops, th)) + " / " + Sirop.fmtFull(th) + " gouttes";
+    $("prestigeThresholdTxt").textContent = Sirop.fmtFull(th) + " gouttes";
+    $("prestigeNextSeason").textContent = state.seasons + 2;
+    $("prestigeNextTh").textContent = Sirop.fmtFull(th * 4);
+    $("seasonsCount").textContent = state.seasons;
+    $("seasonsBonus").textContent = Sirop.fmtMult(Sirop.seasonMult(state));
+    var unlockedPrestige = state.seasonDrops >= th;
+    $("prestigeBtn").disabled = !unlockedPrestige;
+    if (!prestigeArmed) $("prestigeBtn").textContent = "Entamer une nouvelle saison";
+
+    /* v1.1 : Saisons légendaires */
+    renderLeaves();
+    renderSeasonRibbons();
+
+    renderShop(now);
+    updateCabin(undefined);
+  }
+
+  /* ---------------- clic sur l'érable ---------------- */
+  $("treeHit").addEventListener("click", function (e) {
+    var now = Date.now();
+    var v = Sirop.clickValue(state, now);
+    state.drops += v;
+    state.totalAllTime += v;
+    state.seasonDrops += v;
+    state.clicks++;
+    var r = sceneRect();
+    var x = r.width * 0.36, y = r.height * 0.45;
+    if (e.clientX || e.clientY) { x = e.clientX - r.left; y = e.clientY - r.top; }
+    var boosted = Sirop.tireActive(state, now);
+    spawnFloater(x, y - 12, "+" + Sirop.fmtShort(v), boosted);
+    canopyDropPx(boosted);
+    var g = $("treeG");
+    g.classList.remove("shake");
+    void g.getBoundingClientRect();
+    g.classList.add("shake");
+    Sfx.click();
+    checkMilestones();
+    render(now);
+  });
+
+  /* ---------------- achats ---------------- */
+  function onBuy(item) {
+    return function () {
+      var now = Date.now();
+      var prevTier = state.cabaneTier;
+      var res = Sirop.buy(state, item, now);
+      if (res.ok) {
+        Sfx.buy();
+        Sirop.save(state);
+        if (item === "cabane") {
+          updateCabin(prevTier);
+          burstDrops(8);
+          toast("Ta cabane grandit ! Toute la production ×" + (1 + state.cabaneTier) + " !");
+        } else if (item === "tire") {
+          Sfx.tire();
+          toast("La tire booste tes clics ×4 pendant 30 s !");
+        }
+        render(now);
+      } else {
+        var b = $("buy-" + item);
+        b.classList.remove("shake-no");
+        void b.offsetWidth;
+        b.classList.add("shake-no");
+        Sfx.deny();
+      }
+    };
+  }
+  for (var bi = 0; bi < ITEMS.length; bi++) {
+    $("buy-" + ITEMS[bi]).addEventListener("click", onBuy(ITEMS[bi]));
+  }
+
+  /* ---------------- prestige (double confirmation) ---------------- */
+  var prestigeArmed = false, prestigeTimer = 0;
+  function disarmPrestige() {
+    prestigeArmed = false;
+    $("prestigeBtn").classList.remove("armed");
+    $("prestigeBtn").textContent = "Entamer une nouvelle saison";
+    if (prestigeTimer) { clearTimeout(prestigeTimer); prestigeTimer = 0; }
+  }
+  $("prestigeBtn").addEventListener("click", function () {
+    if (state.seasonDrops < Sirop.prestigeThreshold(state)) return;
+    if (!prestigeArmed) {
+      prestigeArmed = true;
+      var b = $("prestigeBtn");
+      b.classList.add("armed");
+      b.textContent = "Es-tu sûr ? Tout repart à zéro — clique encore pour confirmer !";
+      prestigeTimer = setTimeout(disarmPrestige, 7000);
+      return;
+    }
+    var seasonDropsGot = state.seasonDrops; /* v1.1 : récap chiffré avant réinitialisation */
+    var res = Sirop.prestige(state);
+    disarmPrestige();
+    if (res.ok) {
+      prevAfford = {};
+      updateCabin(0);
+      Sirop.save(state);
+      Sfx.prestige();
+      leafShower();
+      goldenUntil = Date.now() + 3000; /* v1.1 : gouttes dorées pendant 3 s */
+      burstDrops(10);
+      showSeasonModal(res.seasons, seasonDropsGot, res.leaf, res.bonus, res.nextThreshold);
+      render(Date.now());
+    }
+  });
+
+  /* ---------------- remise à zéro totale ---------------- */
+  var resetArmed = false, resetTimer = 0;
+  $("hardReset").addEventListener("click", function () {
+    var btn = $("hardReset");
+    if (!resetArmed) {
+      resetArmed = true;
+      btn.classList.add("armed");
+      btn.textContent = "Vraiment tout effacer ? Clique encore !";
+      resetTimer = setTimeout(function () {
+        resetArmed = false; btn.classList.remove("armed"); btn.textContent = "Tout recommencer à zéro";
+      }, 6000);
+      return;
+    }
+    clearTimeout(resetTimer);
+    resetArmed = false; btn.classList.remove("armed"); btn.textContent = "Tout recommencer à zéro";
+    state = Sirop.newState();
+    prevAfford = {};
+    Sirop.save(state);
+    updateCabin(0);
+    toast("Nouveau départ ! L'érable t'attend.");
+    render(Date.now());
+  });
+
+  /* ---------------- son ---------------- */
+  function updateMuteIcon() {
+    $("soundOn").style.display = Sfx.isOn() ? "" : "none";
+    $("soundOff").style.display = Sfx.isOn() ? "none" : "";
+    $("muteBtn").setAttribute("aria-label", Sfx.isOn() ? "Couper le son" : "Activer le son");
+  }
+  $("muteBtn").addEventListener("click", function () {
+    Sfx.setOn(!Sfx.isOn());
+    Sirop.save(state);
+    updateMuteIcon();
+  });
+
+  /* ---------------- retour après absence ---------------- */
+  if (hadSave && state.savedAt) {
+    var off = Sirop.offline(state, Date.now());
+    if (off.gains > 0) {
+      state.drops += off.gains;
+      state.totalAllTime += off.gains;
+      state.seasonDrops += off.gains;
+      if (off.elapsed >= 120 && Math.floor(off.gains) >= 1) {
+        var capped = off.elapsed > Sirop.OFFLINE_CAP_SEC;
+        $("offlineText").innerHTML = "Pendant ton absence, tes tubulures ont coulé : <b>+" +
+          Sirop.fmtFull(Math.floor(off.gains)) + " gouttes !</b>" +
+          (capped ? " <span style='font-size:.8rem'>(plafonné à 2 h d'absence)</span>" : "");
+        $("modalTitle").textContent = "Bienvenue au Temps des sucres !";
+        $("modalBtn").textContent = "Faire couler le sirop !";
+        $("modalBack").hidden = false;
+        checkMilestones();
+      }
+    }
+  }
+  $("modalBtn").addEventListener("click", function () { $("modalBack").hidden = true; });
+  $("modalBack").addEventListener("click", function (e) {
+    if (e.target === $("modalBack")) $("modalBack").hidden = true;
+  });
+
+  /* ---------------- boucle de jeu ---------------- */
+  var lastTick = Date.now();
+  setInterval(function () {
+    var now = Date.now();
+    var dt = Math.min(5, Math.max(0, (now - lastTick) / 1000));
+    lastTick = now;
+    var sps = Sirop.prodPerSec(state);
+    if (sps > 0) {
+      var g = sps * dt;
+      state.drops += g;
+      state.totalAllTime += g;
+      state.seasonDrops += g;
+      checkMilestones();
+    }
+    render(now);
+  }, 100);
+
+  /* gouttes d'ambiance quand ça coule */
+  setInterval(function () {
+    if (document.hidden) return;
+    var sps = Sirop.prodPerSec(state);
+    if (sps <= 0) return;
+    var p = Math.min(sps, 18) / 18 * 0.5;
+    if (Math.random() < p) canopyDropPx(false);
+  }, 500);
+
+  /* sauvegarde : toutes les 10 s + fermeture + onglet caché + achats/prestige (déjà) */
+  setInterval(function () { Sirop.save(state); }, 10000);
+  window.addEventListener("beforeunload", function () { Sirop.save(state); });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) Sirop.save(state);
+  });
+
+  /* ---------------- init ---------------- */
+  updateMuteIcon();
+  updateCabin(0);
+  Sirop.save(state);
+  render(Date.now());
+})();
+</script>
+</body>
+</html>
