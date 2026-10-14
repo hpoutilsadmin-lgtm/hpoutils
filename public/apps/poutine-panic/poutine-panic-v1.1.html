@@ -1,0 +1,1364 @@
+<!doctype html>
+<!-- POUTINE PANIC v1.1 — Casse-croûte Ti-Guy — nouveautés : Série chaude 🔥, Mur des chefs 🏆 (local, sur cet appareil), Client mystère 🕵️ -->
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Poutine Panic</title>
+<style>
+/* ============ POUTINE PANIC — Casse-croûte Ti-Guy ============ */
+:root{
+  color-scheme: light dark;
+  --red:#c9341f; --red-deep:#8e1f12; --mustard:#f0a202; --mustard-soft:#f7c948;
+  --cream:#fff9ef; --paper:#fffdf7; --ink:#3a2313; --ink-soft:#6b4a2e;
+  --wood-1:#8a5a2b; --wood-2:#74471e;
+  --page-bg: radial-gradient(1200px 600px at 50% -80px, #ffe9c4 0%, #f6dcaa 45%, #e9c68f 100%);
+  --hud-bg:#2b1708; --hud-ink:#ffe9c4;
+  --strip-bg: linear-gradient(180deg,#a62a17,#7c1d0f);
+  --steel: linear-gradient(180deg,#f2f0ea,#d9d4c7);
+  --card-shadow: 0 6px 18px rgba(80,40,10,.18);
+  --green:#3f9632; --green-soft:#d8efcf;
+  --focus:#0b6bcb;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --cream:#241a10; --paper:#2b1f14; --ink:#f6e8d4; --ink-soft:#d3b48f;
+    --page-bg: radial-gradient(1200px 600px at 50% -80px, #3a2412 0%, #241710 60%, #170f0a 100%);
+    --hud-bg:#0f0905; --hud-ink:#ffd98f;
+    --strip-bg: linear-gradient(180deg,#5f170c,#40100a);
+    --steel: linear-gradient(180deg,#3a3129,#241d16);
+    --card-shadow: 0 6px 18px rgba(0,0,0,.5);
+    --green-soft:#274d22;
+  }
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Trebuchet MS","Segoe UI",system-ui,-apple-system,Verdana,sans-serif;
+  background:var(--page-bg);
+  color:var(--ink);
+  min-height:100vh;
+  user-select:none; -webkit-user-select:none;
+}
+button{font-family:inherit; cursor:pointer;}
+#app{
+  max-width:960px; margin:0 auto; padding:8px 10px 20px;
+  display:flex; flex-direction:column; gap:8px; min-height:100vh;
+  position:relative;
+}
+
+/* ---------- HUD ---------- */
+#hud{
+  display:flex; align-items:center; gap:10px;
+  background:var(--hud-bg); color:var(--hud-ink);
+  border-radius:14px; padding:8px 12px;
+  box-shadow:var(--card-shadow);
+  border:2px solid rgba(240,162,2,.45);
+}
+.hud-item{display:flex; align-items:center; gap:8px; font-weight:900; font-size:clamp(18px,4.5vw,26px);
+  font-variant-numeric:tabular-nums; letter-spacing:.5px; white-space:nowrap;}
+.hud-item svg{width:30px;height:30px;flex:none;}
+#moneyWrap{color:var(--mustard-soft); transition:transform .15s;}
+#moneyWrap.bump{animation:bump .4s ease;}
+@keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.25) rotate(-4deg)}100%{transform:scale(1)}}
+#timeWrap.low{color:#ff7a5c; animation:timerPulse 1s infinite;}
+@keyframes timerPulse{50%{transform:scale(1.06)}}
+#recordLine{font-size:12px; opacity:.75; font-weight:700;}
+@media (max-width:600px){
+  #recordLine{display:none;}
+  #hud{gap:8px; padding:7px 10px;}
+  .hud-item{font-size:19px; gap:5px;}
+  .hud-item svg{width:24px; height:24px;}
+  .icon-btn{width:34px; height:34px;}
+  .icon-btn svg{width:19px; height:19px;}
+}
+.hud-spacer{flex:1;}
+#rushBadge{
+  background:linear-gradient(180deg,#ff5a1f,#c2230c); color:#fff; font-weight:900;
+  font-size:clamp(12px,3vw,16px); padding:4px 12px; border-radius:999px;
+  letter-spacing:1px; animation:rushFlash .6s infinite alternate;
+  box-shadow:0 0 14px rgba(255,90,31,.7);
+}
+@keyframes rushFlash{from{transform:scale(1)}to{transform:scale(1.1)}}
+.icon-btn{
+  background:#3a2412; color:#ffe9c4; border:2px solid rgba(240,162,2,.5);
+  width:40px;height:40px;border-radius:12px; display:grid; place-items:center;
+}
+.icon-btn svg{width:22px;height:22px;}
+.icon-btn:active{transform:scale(.92);}
+.icon-btn:focus-visible, .ing-btn:focus-visible, .big-btn:focus-visible, #trashBtn:focus-visible{
+  outline:3px solid var(--focus); outline-offset:2px;
+}
+
+/* ---------- Speech bubble ---------- */
+#speechWrap{display:flex; justify-content:center;}
+#speech{
+  display:flex; align-items:center; gap:10px; background:var(--paper);
+  border:2px solid var(--mustard); border-radius:999px; padding:6px 18px 6px 8px;
+  max-width:100%; box-shadow:var(--card-shadow); min-height:46px;
+}
+#speech .cap{width:36px;height:36px;flex:none;}
+#speechText{font-weight:700; font-size:clamp(13px,3.4vw,16px); color:var(--ink);}
+#speechText em{color:var(--red); font-style:normal; font-weight:900;}
+
+/* ---------- Customers ---------- */
+#customersWrap{
+  background:var(--strip-bg); border-radius:16px; padding:10px;
+  border:3px solid var(--wood-2); box-shadow:var(--card-shadow);
+}
+#slots{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; min-height:230px;}
+@media (max-width:640px){ #slots{grid-template-columns:repeat(2,1fr);} }
+.slot{position:relative; min-height:225px;}
+.slot.empty{
+  border:2px dashed rgba(255,255,255,.28); border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  color:rgba(255,255,255,.45); font-weight:700; font-size:13px; text-align:center; padding:8px;
+}
+.customer{
+  background:rgba(0,0,0,.22); border-radius:12px; padding:8px 6px 10px;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  border:2px solid transparent; cursor:pointer; position:relative;
+  transition:transform .12s, border-color .12s, box-shadow .12s;
+}
+.customer:active{transform:scale(.96);}
+.customer.leaving-angry{animation:walkOff 1.1s ease-in forwards; pointer-events:none;}
+.customer.leaving-happy{animation:walkOffL .8s ease-in forwards; pointer-events:none;}
+.customer.entering{animation:slideIn .45s ease-out;}
+@keyframes slideIn{from{transform:translateX(60px); opacity:0}}
+@keyframes walkOff{to{transform:translateX(130%) rotate(10deg); opacity:0}}
+@keyframes walkOffL{to{transform:translateX(-130%) rotate(-8deg); opacity:0}}
+.customer.shaking{animation:shake .35s;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+.ticket{
+  background:var(--paper); color:var(--ink); border-radius:4px; padding:6px 8px 8px;
+  width:100%; max-width:172px; transform:rotate(-1.2deg);
+  border-top:3px solid var(--red);
+  box-shadow:0 3px 8px rgba(0,0,0,.25); position:relative;
+  transition:box-shadow .15s, transform .15s;
+}
+.customer:nth-child(even) .ticket{transform:rotate(1.1deg);}
+.ticket-name{
+  font-weight:900; font-size:clamp(12px,3vw,15px); color:var(--red-deep);
+  display:flex; justify-content:space-between; align-items:center; gap:4px;
+}
+@media (prefers-color-scheme: dark){.ticket-name{color:#ff8a6e;}}
+.ticket-price{background:var(--mustard); color:#3a2007; font-size:11px; font-weight:900;
+  padding:1px 7px; border-radius:999px; flex:none;}
+.ticket-steps{list-style:none; margin:5px 0 0; padding:0; font-size:clamp(10px,2.6vw,12px); font-weight:600;}
+.ticket-steps li{display:flex; align-items:center; gap:5px; line-height:1.5;}
+.ticket-steps .n{
+  background:var(--red); color:#fff; width:15px; height:15px; border-radius:50%;
+  font-size:10px; font-weight:900; display:grid; place-items:center; flex:none;
+}
+.ticket-steps svg{width:15px;height:15px;flex:none;}
+.ticket.possible{
+  box-shadow:0 0 0 3px var(--green), 0 3px 8px rgba(0,0,0,.25);
+  transform:rotate(-1.2deg) scale(1.04);
+}
+.customer:nth-child(even) .ticket.possible{transform:rotate(1.1deg) scale(1.04);}
+.cname{font-weight:900; color:#ffd98f; font-size:13px; text-shadow:0 1px 2px rgba(0,0,0,.5);}
+.cface{width:64px; height:64px; filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));}
+.patience{width:100%; max-width:172px; height:12px; background:rgba(0,0,0,.45);
+  border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.25);}
+.patience-fill{height:100%; width:100%; border-radius:999px; background:var(--green);
+  transition:width .12s linear, background-color .3s;}
+.patience-fill.warn{background:var(--mustard);}
+.patience-fill.low{background:#ff4a2e; animation:patiencePulse .5s infinite alternate;}
+@keyframes patiencePulse{to{filter:brightness(1.5)}}
+
+/* ---------- Counter / plate ---------- */
+#counterWrap{
+  border-radius:16px; padding:10px 12px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 2px, transparent 2px 64px),
+    linear-gradient(180deg,var(--wood-1),var(--wood-2));
+  border:3px solid #4e2d0e; box-shadow:var(--card-shadow);
+}
+.counter-inner{display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;}
+#plateArea{display:flex; flex-direction:column; align-items:center; gap:2px;}
+#plateStack{font-size:13px; font-weight:700; color:#ffe9c4; min-height:20px; text-shadow:0 1px 2px rgba(0,0,0,.6); text-align:center;}
+#plateSVG{width:min(320px,68vw); height:auto; display:block; overflow:visible;}
+.steam path{fill:none; stroke:#ffffff; stroke-width:5; stroke-linecap:round; opacity:0;
+  transform-box:fill-box; transform-origin:center;}
+.steam.on path{animation:steamRise 2.6s ease-in-out infinite;}
+.steam.on path:nth-child(2){animation-delay:.85s;}
+.steam.on path:nth-child(3){animation-delay:1.7s;}
+@keyframes steamRise{
+  0%{transform:translateY(10px); opacity:0}
+  30%{opacity:.55}
+  100%{transform:translateY(-30px); opacity:0}
+}
+#trashBtn{
+  background:var(--steel); border:3px solid #5a4a38; border-radius:14px;
+  padding:10px 14px; display:flex; flex-direction:column; align-items:center; gap:4px;
+  font-weight:900; color:var(--ink); font-size:14px; box-shadow:0 4px 10px rgba(0,0,0,.3);
+}
+#trashBtn:active{transform:scale(.94);}
+#trashBtn svg{width:52px; height:52px;}
+#trashBtn.lid-bounce .lid{animation:lidB .55s ease;}
+@keyframes lidB{0%,100%{transform:rotate(0)}30%{transform:rotate(-24deg)}60%{transform:rotate(6deg)}}
+#trashBtn .lid{transform-box:fill-box; transform-origin:20% 80%;}
+
+/* ---------- Ingredients ---------- */
+#ingredientsWrap h2.sr-only, .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+#ingredients{
+  display:grid; grid-template-columns:repeat(9,1fr); gap:8px;
+  background:var(--steel); border-radius:16px; padding:10px;
+  border:3px solid #5a4a38; box-shadow:var(--card-shadow);
+}
+@media (max-width:760px){ #ingredients{grid-template-columns:repeat(3,1fr);} }
+.ing-btn{
+  background:var(--paper); border:2px solid #b9a68e; border-radius:12px;
+  padding:8px 4px 6px; display:flex; flex-direction:column; align-items:center; gap:4px;
+  position:relative; transition:transform .08s, border-color .12s, box-shadow .12s;
+  color:var(--ink);
+}
+.ing-btn svg{width:44px; height:44px;}
+.ing-btn .ing-name{font-size:clamp(10px,2.8vw,12.5px); font-weight:800; line-height:1.15; text-align:center;}
+.ing-btn:active{transform:scale(.9); border-color:var(--red);}
+.ing-btn .key{
+  position:absolute; top:4px; left:6px; font-size:10px; font-weight:900; color:var(--ink-soft);
+  background:rgba(128,90,50,.15); border-radius:6px; padding:0 5px; line-height:1.6;
+}
+@media (hover:none){ .ing-btn .key{display:none;} }
+.ing-btn.added-flash{animation:addedFlash .35s;}
+@keyframes addedFlash{0%{border-color:var(--green); box-shadow:0 0 0 4px var(--green-soft)}100%{}}
+
+/* ---------- FX layer ---------- */
+#fx{position:fixed; inset:0; pointer-events:none; z-index:40; overflow:hidden;}
+.coin{
+  position:absolute; width:26px; height:26px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #ffe08a, #f0a202 60%, #b56e00);
+  border:2px solid #8a5200; display:grid; place-items:center;
+  font-weight:900; font-size:14px; color:#6b3c00;
+  box-shadow:0 2px 5px rgba(0,0,0,.4);
+}
+.float-tip{
+  position:absolute; font-weight:900; font-size:20px; color:#2c7d22;
+  text-shadow:0 2px 4px rgba(255,255,255,.7), 0 1px 2px rgba(0,0,0,.3);
+  animation:floatUp 1.4s ease-out forwards; white-space:nowrap;
+}
+.float-tip.bad{color:#d42a1e;}
+@keyframes floatUp{
+  0%{transform:translateY(0) scale(.8); opacity:0}
+  15%{opacity:1; transform:translateY(-6px) scale(1.15)}
+  100%{transform:translateY(-70px) scale(1); opacity:0}
+}
+.poutine-pop{
+  position:absolute; display:grid; place-items:center;
+  font-weight:900; color:var(--red); font-size:15px;
+  animation:floatUp 1.2s ease-out forwards;
+}
+
+/* ---------- Overlays ---------- */
+.overlay{
+  position:fixed; inset:0; z-index:60; display:flex;
+  background:rgba(20,10,4,.62); backdrop-filter:blur(3px); padding:14px;
+  overflow-y:auto; overscroll-behavior:contain;
+}
+.overlay[hidden]{display:none;}
+.card{
+  margin:auto;
+  background:var(--paper); color:var(--ink); border-radius:20px; padding:22px 24px;
+  max-width:560px; width:100%;
+  border:4px solid var(--mustard); box-shadow:0 20px 60px rgba(0,0,0,.4);
+  text-align:center;
+}
+.card h1{margin:0 0 6px; font-size:clamp(24px,7vw,38px); font-weight:900; color:var(--red);}
+.card h1 .alt{color:var(--mustard); text-shadow:0 2px 0 #7a4a00;}
+.card p{margin:8px 0; font-size:clamp(13px,3.6vw,16px); line-height:1.5;}
+.tagline{font-weight:800; color:var(--ink-soft);}
+.tuto-steps{display:flex; flex-direction:column; gap:10px; margin:16px 0; text-align:left;}
+.tuto-step{
+  display:flex; gap:12px; align-items:center; background:rgba(240,162,2,.12);
+  border:2px solid rgba(240,162,2,.4); border-radius:14px; padding:10px 12px;
+}
+.tuto-step .step-n{
+  background:var(--red); color:#fff; font-weight:900; width:34px; height:34px; border-radius:50%;
+  display:grid; place-items:center; font-size:18px; flex:none;
+}
+.tuto-step p{margin:0; font-size:clamp(12.5px,3.4vw,15px);}
+.tuto-step b{color:var(--red-deep);}
+@media (prefers-color-scheme: dark){.tuto-step b{color:#ff8a6e;}}
+.recipe-legend{display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:10px 0; text-align:left;}
+@media (max-width:520px){.recipe-legend{grid-template-columns:1fr;}}
+.recipe-card{
+  border:2px dashed #b9a68e; border-radius:8px; padding:4px 8px; font-size:12px; line-height:1.4;
+}
+.recipe-card b{color:var(--red-deep); font-size:13px; margin-right:6px;}
+@media (prefers-color-scheme: dark){.recipe-card b{color:#ff8a6e;}}
+.recipe-card .price-tag{float:right; background:var(--mustard); color:#3a2007;
+  font-weight:900; border-radius:8px; padding:0 7px; font-size:11.5px;}
+.recipe-card .steps{color:var(--ink-soft); font-weight:600; font-size:11.5px;}
+.card{padding:16px 20px 26px;}
+.tuto-steps{gap:8px; margin:10px 0;}
+.tuto-step{padding:7px 10px;}
+.tuto-step .step-n{width:30px; height:30px; font-size:16px;}
+.kbd-hint{margin-top:8px;}
+.big-btn{padding:12px 36px; margin-top:6px;}
+.big-btn{
+  background:linear-gradient(180deg,#e0442a,#b3270f); color:#fff; border:none;
+  font-size:clamp(17px,5vw,22px); font-weight:900; letter-spacing:.5px;
+  padding:14px 38px; border-radius:999px; margin-top:10px;
+  box-shadow:0 6px 0 #7c1d0f, 0 10px 18px rgba(0,0,0,.3);
+  transition:transform .1s;
+}
+.big-btn:active{transform:translateY(4px); box-shadow:0 2px 0 #7c1d0f;}
+.big-btn.secondary{
+  background:linear-gradient(180deg,#f0ead9,#d8cba9); color:#4e3f28;
+  box-shadow:0 6px 0 #9c8c72, 0 10px 18px rgba(0,0,0,.25);
+}
+.big-btn.secondary:active{transform:translateY(4px); box-shadow:0 2px 0 #9c8c72;}
+@media (prefers-color-scheme: dark){
+  .big-btn.secondary{
+    background:linear-gradient(180deg,#5a4a38,#3a2e22); color:#f6e8d4;
+    box-shadow:0 6px 0 #1f1509, 0 10px 18px rgba(0,0,0,.45);
+  }
+  .big-btn.secondary:active{transform:translateY(4px); box-shadow:0 2px 0 #1f1509;}
+}
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0;}
+.stat{background:rgba(240,162,2,.12); border:2px solid rgba(240,162,2,.4); border-radius:14px; padding:10px;}
+.stat .v{font-size:clamp(20px,6vw,30px); font-weight:900; color:var(--red-deep);}
+@media (prefers-color-scheme: dark){.stat .v{color:#ff8a6e;}}
+.stat .l{font-size:12.5px; font-weight:700; color:var(--ink-soft);}
+#bestLine{font-weight:900; font-size:17px; color:#8a5200; margin-top:6px;}
+@media (prefers-color-scheme: dark){#bestLine{color:var(--mustard-soft);}}
+#newRecord{
+  display:inline-block; background:linear-gradient(180deg,#ffcf3f,#f0a202); color:#4a2a00;
+  font-weight:900; padding:6px 18px; border-radius:999px; margin-top:8px;
+  animation:rushFlash .5s infinite alternate; font-size:16px;
+}
+.quip{font-style:italic; color:var(--ink-soft); font-size:14px;}
+.kbd-hint{font-size:12px; color:var(--ink-soft); margin-top:12px;}
+@media (hover:none){.kbd-hint{display:none;}}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+  .steam.on path{animation:none; opacity:.4;}
+}
+
+/* ---------- v1.1 : Série chaude / Mur des chefs / Client mystère ---------- */
+#comboWrap{color:#cdbb9a; opacity:.6;}
+#comboWrap.hot{color:var(--mustard); opacity:1; animation:comboPulse 1s infinite;}
+#comboWrap.blazing{color:#ff6a3d; opacity:1; animation:comboPulse .55s infinite;}
+@keyframes comboPulse{50%{transform:scale(1.12)}}
+#comboWrap.bump{animation:bump .4s ease;}
+#comboWrap.break-blink{animation:comboBreak .8s ease;}
+@keyframes comboBreak{0%,100%{opacity:.6}25%,75%{opacity:.12}}
+@media (max-width:600px){ #comboWrap{font-size:17px;} }
+
+/* Texte flottant COMBO ×N */
+.float-tip.combo-float{font-size:32px; animation:floatUp 1.6s ease-out forwards; letter-spacing:1px;}
+.float-tip.tier1{color:#f0a202; text-shadow:0 2px 0 #7a4a00, 0 2px 4px rgba(0,0,0,.4);}
+.float-tip.tier2{color:#e06400; text-shadow:0 2px 0 #7a3400, 0 2px 4px rgba(0,0,0,.4);}
+.float-tip.tier3{color:#c9341f; font-size:38px; text-shadow:0 2px 0 #7c1d0f, 0 2px 6px rgba(0,0,0,.45);}
+
+/* Ticket du client mystère */
+.ticket-mystery{border:2px solid var(--mustard); animation:mysteryShimmer 1.5s infinite alternate;}
+@keyframes mysteryShimmer{from{box-shadow:0 0 6px rgba(240,162,2,.45)}to{box-shadow:0 0 18px rgba(240,162,2,.95)}}
+
+/* Mur des chefs (écran de démarrage) */
+#wallOfChefs{margin:14px 0 4px; text-align:left;}
+#wallOfChefs h3{margin:0 0 8px; font-size:clamp(15px,4vw,19px); color:var(--red-deep); text-align:center;}
+@media (prefers-color-scheme: dark){#wallOfChefs h3{color:#ff8a6e;}}
+.local-tag{font-size:11px; font-weight:700; color:var(--ink-soft); background:rgba(240,162,2,.15);
+  border:1px solid rgba(240,162,2,.5); border-radius:999px; padding:1px 9px; vertical-align:middle; white-space:nowrap;}
+.wall-row{display:flex; gap:8px; align-items:center; padding:6px 10px; border-radius:10px;
+  background:rgba(240,162,2,.1); border:1px solid rgba(240,162,2,.3); margin-bottom:6px;
+  font-weight:700; font-size:clamp(12.5px,3.4vw,15px);}
+.wall-row .rank{background:var(--red); color:#fff; width:26px; height:26px; border-radius:50%;
+  display:grid; place-items:center; font-weight:900; flex:none; font-size:14px;}
+.wall-row.first .rank{background:linear-gradient(180deg,#ffcf3f,#f0a202); color:#4a2a00;}
+.wall-row .date{margin-left:auto; font-size:12px; color:var(--ink-soft); font-weight:700; white-space:nowrap;}
+.wall-empty{font-size:13.5px; color:var(--ink-soft); text-align:center; font-weight:600; padding:6px 0;}
+.ver-tag{margin-top:12px; font-size:11.5px; color:var(--ink-soft); font-weight:600;}
+
+/* Écran de fin : bandeau + mur + confettis */
+#wallBanner{
+  display:inline-block; background:linear-gradient(180deg,#ffcf3f,#f0a202); color:#4a2a00;
+  font-weight:900; padding:8px 20px; border-radius:999px; margin:8px 0 4px;
+  animation:rushFlash .5s infinite alternate; font-size:clamp(15px,4.4vw,19px);
+}
+#wallBanner[hidden]{display:none;}
+#newRecord[hidden]{display:none;}
+#wallEndList{margin:10px 0 4px; text-align:left;}
+.stat.wide{grid-column:1 / -1;}
+#endScreen .card{position:relative; overflow:hidden;}
+.confetti{position:absolute; top:-16px; width:9px; height:14px; border-radius:2px; z-index:5;
+  animation:confettiFall 2.4s ease-in forwards; pointer-events:none;}
+@keyframes confettiFall{to{transform:translateY(460px) rotate(720deg); opacity:0;}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="hud" role="banner">
+    <div class="hud-item" id="timeWrap" aria-label="Temps restant">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="12" fill="#fff9ef" stroke="#f0a202" stroke-width="3"/><path d="M16 11v6l4 3" stroke="#8e1f12" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M13 4h6" stroke="#f0a202" stroke-width="3" stroke-linecap="round"/></svg>
+      <span id="time">2:00</span>
+    </div>
+    <div class="hud-item" id="comboWrap" aria-label="Série chaude en cours">
+      <span id="combo">🔥 ×0</span>
+    </div>
+    <div class="hud-item" id="moneyWrap" aria-label="Caisse">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="11" rx="9" ry="5" fill="#ffe08a" stroke="#8a5200" stroke-width="2"/><ellipse cx="16" cy="16" rx="9" ry="5" fill="#f0a202" stroke="#8a5200" stroke-width="2"/><ellipse cx="16" cy="21" rx="9" ry="5" fill="#ffe08a" stroke="#8a5200" stroke-width="2"/><rect x="7" y="16" width="18" height="9" fill="#f0a202" stroke="#8a5200" stroke-width="2"/></svg>
+      <span id="money">0&nbsp;$</span>
+    </div>
+    <span id="recordLine">Record&nbsp;: 0&nbsp;$</span>
+    <div class="hud-spacer"></div>
+    <div id="rushBadge" hidden aria-hidden="true">LE RUSH&nbsp;!</div>
+    <button class="icon-btn" id="helpBtn" aria-label="Revoir le mode d'emploi" title="Mode d'emploi">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="12" y="17" text-anchor="middle" font-size="14" font-weight="900" fill="currentColor">?</text></svg>
+    </button>
+    <button class="icon-btn" id="restartBtn" aria-label="Recommencer le service" title="Recommencer le service">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><text x="12" y="18" text-anchor="middle" font-size="16" font-weight="900" fill="currentColor">↻</text></svg>
+    </button>
+    <button class="icon-btn" id="muteBtn" aria-label="Couper le son" title="Son">
+      <svg id="soundOnIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8a5 5 0 010 8M18.5 5.5a9 9 0 010 13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <svg id="soundOffIcon" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </header>
+
+  <div id="speechWrap">
+    <div id="speech" aria-live="polite">
+      <svg class="cap" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="30" rx="13" ry="4" fill="#d9d4c7" stroke="#8a7a64" stroke-width="2"/><path d="M8 26c-2-8 3-14 7-13 1-4 9-4 10 0 4-1 9 5 7 13z" fill="#ffffff" stroke="#8a7a64" stroke-width="2"/><circle cx="15" cy="24" r="1.2" fill="#8a7a64"/><circle cx="20" cy="22" r="1.2" fill="#8a7a64"/><circle cx="25" cy="24" r="1.2" fill="#8a7a64"/></svg>
+      <span id="speechText">Bienvenue au Casse-croûte Ti-Guy&nbsp;!</span>
+    </div>
+  </div>
+
+  <section id="customersWrap" aria-label="Clients en attente">
+    <div id="slots"></div>
+  </section>
+
+  <section id="counterWrap" aria-label="Plan de travail">
+    <div class="counter-inner">
+      <div id="plateArea">
+        <div id="plateStack">Clique les ingrédients dans l'ordre du ticket&nbsp;!</div>
+        <svg id="plateSVG" viewBox="0 0 300 230" role="img" aria-label="Assiette de poutine en construction">
+          <ellipse cx="150" cy="205" rx="120" ry="14" fill="rgba(0,0,0,.28)"/>
+          <ellipse cx="150" cy="178" rx="118" ry="34" fill="#f4efe4" stroke="#c9bfa8" stroke-width="3"/>
+          <ellipse cx="150" cy="172" rx="96" ry="25" fill="#faf6ec" stroke="#ddd2ba" stroke-width="2"/>
+          <g id="steam" class="steam">
+            <path d="M110 118 c-10 -12 10 -20 0 -32 c-10 -12 10 -20 0 -32"/>
+            <path d="M150 112 c-10 -12 10 -20 0 -32 c-10 -12 10 -20 0 -32"/>
+            <path d="M190 118 c-10 -12 10 -20 0 -32 c-10 -12 10 -20 0 -32"/>
+          </g>
+          <g id="plateContent"></g>
+        </svg>
+      </div>
+      <button id="trashBtn" aria-label="Jeter la poutine à la poubelle">
+        <svg viewBox="0 0 60 60" aria-hidden="true">
+          <g class="lid">
+            <rect x="8" y="8" width="44" height="8" rx="3" fill="#8a7a64" stroke="#4e4234" stroke-width="2.5"/>
+            <rect x="24" y="3" width="12" height="7" rx="3" fill="#8a7a64" stroke="#4e4234" stroke-width="2.5"/>
+          </g>
+          <path d="M14 18h32l-4 34a4 4 0 01-4 4H22a4 4 0 01-4-4z" fill="#a89a84" stroke="#4e4234" stroke-width="2.5"/>
+          <path d="M24 24v24M30 24v24M36 24v24" stroke="#4e4234" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Poubelle</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="ingredientsWrap" aria-label="Ingrédients">
+    <h2 class="sr-only">Ingrédients</h2>
+    <div id="ingredients"></div>
+  </section>
+</div>
+
+<div id="fx"></div>
+
+<div id="tutorial" class="overlay" role="dialog" aria-modal="true" aria-labelledby="tutoTitle">
+  <div class="card">
+    <h1 id="tutoTitle">Poutine <span class="alt">Panic</span></h1>
+    <p class="tagline">Casse-croûte Ti-Guy — un service de 2 minutes pour devenir une légende de la poutine.</p>
+    <div class="tuto-steps">
+      <div class="tuto-step"><span class="step-n">1</span><p><b>Lis le ticket du client</b> : la recette et l'ordre des ingrédients sont écrits dessus.</p></div>
+      <div class="tuto-step"><span class="step-n">2</span><p><b>Clique les ingrédients DANS L'ORDRE</b> sur le plan de travail. La poutine s'assemble couche par couche.</p></div>
+      <div class="tuto-step"><span class="step-n">3</span><p><b>Clique le bon client pour servir</b>. Mauvais ordre, mauvais ingrédient ou mauvais client : à la poubelle&nbsp;!</p></div>
+      <div class="tuto-step"><span class="step-n">4</span><p><b>Le client mystère</b> 🕵️ : parfois, un client cache sa commande (ticket ❓). Suis ses indices, un ingrédient à la fois&nbsp;!</p></div>
+    </div>
+    <div class="recipe-legend" id="recipeLegend"></div>
+    <div id="wallOfChefs">
+      <h3>🏆 Mur des chefs <span class="local-tag">sur cet appareil</span></h3>
+      <div id="wallList"></div>
+    </div>
+    <p class="quip">«&nbsp;Vite, la patience des clients fond comme du fromage en grains&nbsp;!&nbsp;» — Ti-Guy</p>
+    <button class="big-btn" id="startBtn">C'est parti&nbsp;!</button>
+    <button class="big-btn secondary" id="restartConfirmBtn" hidden>Tout recommencer</button>
+    <p class="kbd-hint">Astuce clavier : touches 1 à 9 pour les ingrédients, T pour la poubelle.</p>
+    <p class="ver-tag">Poutine Panic <b>v1.1</b> — nouveautés : série chaude 🔥, mur des chefs 🏆 (local), client mystère 🕵️</p>
+  </div>
+</div>
+
+<div id="endScreen" class="overlay" role="dialog" aria-modal="true" aria-labelledby="endTitle" hidden>
+  <div class="card">
+    <h1 id="endTitle">Service terminé&nbsp;!</h1>
+    <p class="tagline" id="endQuip"></p>
+    <div class="stats">
+      <div class="stat"><div class="v" id="statMoney">0&nbsp;$</div><div class="l">Encaissé</div></div>
+      <div class="stat"><div class="v" id="statServed">0</div><div class="l">Poutines servies</div></div>
+      <div class="stat"><div class="v" id="statLost">0</div><div class="l">Clients perdus</div></div>
+      <div class="stat"><div class="v" id="statTrash">0</div><div class="l">À la poubelle</div></div>
+      <div class="stat wide"><div class="v" id="statCombo">×0</div><div class="l">Meilleure série de la partie</div></div>
+    </div>
+    <div id="newRecord" hidden>NOUVEAU RECORD&nbsp;!</div>
+    <div id="wallBanner" hidden>🏆 Nouveau au Mur des chefs — rang #<span id="wallRank">5</span>&nbsp;!</div>
+    <div id="wallEndList"></div>
+    <p id="bestLine"></p>
+    <button class="big-btn" id="replayBtn">Rejouer</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+function $(s){ return document.querySelector(s); }
+/* ================= DONNÉES ================= */
+const INGREDIENTS = {
+  "frites":        { name:"Frites" },
+  "fromage-grains":{ name:"Fromage en grains" },
+  "sauce-brune":   { name:"Sauce brune" },
+  poulet:          { name:"Poulet" },
+  "pois-verts":    { name:"Pois verts" },
+  "sauce-bolo":    { name:"Sauce bolognaise" },
+  "fromage-rape":  { name:"Fromage râpé" },
+  "smoke-meat":    { name:"Smoke meat" },
+  moutarde:        { name:"Moutarde" }
+};
+const ING_ORDER = Object.keys(INGREDIENTS);
+const RECIPES = {
+  classique:     { name:"Classique",     price:8,  ings:["frites","fromage-grains","sauce-brune"] },
+  galvaude:      { name:"Galvaude",      price:12, ings:["frites","poulet","pois-verts","sauce-brune"] },
+  italienne:     { name:"Italienne",     price:11, ings:["frites","sauce-bolo","fromage-rape"] },
+  "extra-fromage":{ name:"Extra fromage",price:10, ings:["frites","fromage-grains","fromage-grains","sauce-brune"] },
+  "smoke-meat":  { name:"Smoke meat",    price:13, ings:["frites","smoke-meat","moutarde","sauce-brune"] }
+};
+const RECIPE_KEYS = Object.keys(RECIPES);
+const NAMES = ["Ginette","Réal","Diane","Gaston","Manon","Jean-Guy","Sylvie","Ti-Paul","Claudette","Robert","Lise","Marcel","Yvette","Fernand","Céline","Ti-Guy jr","Aline","Normand"];
+const QUIPS = {
+  welcome:["Bienvenue au Casse-croûte Ti-Guy !","Une poutine, une ! Servie chaude et vite !","Attache ta tuque, le service commence !"],
+  arrive:["Une poutine, une !","Oh, un client affamé !","Bienvenue, bienvenue !","Ça roule, ça roule !"],
+  step:{
+    "frites":["Hop, des belles frites dorées !","Les frites, la base de la base !"],
+    "fromage-grains":["Le fromage qui fait squick-squick !","Des grains bien frais, comme y faut !"],
+    "sauce-brune":["La sauce brune, mon petit péché !","Une bonne pelletée de sauce !"],
+    "poulet":["Le poulet, bien tendre !","Poulet rôti, miam !"],
+    "pois-verts":["Des petits pois pour la santé !","Les pois verts, pour faire semblant !"],
+    "sauce-bolo":["La bolognaise, ça sent bon !","Sauce bolo, style italien-québécois !"],
+    "fromage-rape":["Une pluie de fromage râpé !","Gratte, gratte, le fromage !"],
+    "smoke-meat":["Le smoke meat de chez Schwartz… euh, de chez Ti-Guy !","Smoke meat bien marbré !"],
+    "moutarde":["Un zigzag de moutarde !","La moutarde qui réveille !"]
+  },
+  serve:["Merci, c'était sua coche !","C'tait écoeurant, merci !","Mon chum, tu sauves ma journée !","Ben là, c'est la meilleure !","Tiens, garde la monnaie !"],
+  serveChef:["Bon appétit !","Reviens nous voir !","Servi avec amour !"],
+  angry:["Ben voyons donc !","Ça n'a pas de bon sens !","Moé, je reviens plus icitte !","J'ai attendu pour rien !"],
+  trash:["Oups, à la poubelle !","Ça arrive aux meilleurs ! Poubelle !","Mauvaise passe… à la poubelle !"],
+  wrongClient:["Ben non, c'est pas à lui !","Ouille, mauvais client ! Poubelle !"],
+  incomplete:["Elle est pas finie, la belle !","Finis-la d'abord !"],
+  empty:["Clique d'abord les ingrédients !","L'assiette est vide, chef !"],
+  rush:["LE RUSH ! Tout le monde veut sa poutine !","Attachez vos tuques, ça débarque !"],
+  done:["C'est fini ! Quel service !","La cuisine est fermée, bravo chef !"]
+};
+/* ===== v1.1 — Série chaude : quips de Ti-Guy aux paliers ===== */
+const COMBO_QUIPS={
+  3:"Ça roule, chef, ça roule !",
+  5:"En feu ! Les frites suivent pu !",
+  8:"LÉGENDE ! Ti-Guy te regarde avec respect."
+};
+const COMBO_BREAK_QUIP="Ouch… la série est tombée. On repart !";
+/* ===== v1.1 — Client mystère : indices dédiés par ingrédient (toujours trouvables, dans l'ordre) ===== */
+const MYSTERY_ARRIVE=[
+  "Chut… j'ai une commande secrète.",
+  "Devine ce que je veux, chef."
+];
+const MYSTERY_HINTS={
+  "frites":"Commence par des frites bien dorées, chef.",
+  "fromage-grains":"Mets-y du fromage en grains, celui qui fait squick-squick.",
+  "sauce-brune":"Finis avec une bonne sauce brune, bien cochon.",
+  "poulet":"Du poulet tendre, pour que ça tienne au corps.",
+  "pois-verts":"Quelques petits pois verts, pour la couleur.",
+  "sauce-bolo":"De la sauce bolognaise, bien relevée.",
+  "fromage-rape":"Une belle pluie de fromage râpé par-dessus.",
+  "smoke-meat":"Du smoke meat bien marbré, le vrai.",
+  "moutarde":"Un petit zigzag de moutarde, pour le punch."
+};
+const MYSTERY_SOLVED=["Incroyable ! Tu lis dans mes pensées !","Tu m'as eu ! C'est exactement ça !"];
+const MYSTERY_FAIL="Le mystère reste entier… la prochaine fois !";
+/* ===== v1.1 — CONTINU (calendrier éditorial) : objet prévu, vide pour l'instant ===== */
+const EVENT=null; /* ex. {recetteVedette:"italienne", multiplicateur:2, message:"Semaine de la poutine italienne"} */
+const SHADES={shades:true};
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function rnd(min,max){ return min + Math.random()*(max-min); }
+
+/* ================= SVG DESSINÉES MAIN ================= */
+/* Icônes d'ingrédients (petites, réutilisées partout) */
+const ICONS = {
+  "frites":'<svg viewBox="0 0 48 48"><g stroke="#b8721a" stroke-width="2"><rect x="12" y="14" width="7" height="24" rx="3.5" fill="#f5a83b" transform="rotate(-8 15 26)"/><rect x="21" y="10" width="7" height="26" rx="3.5" fill="#ffbe55" transform="rotate(4 24 23)"/><rect x="30" y="15" width="7" height="24" rx="3.5" fill="#f5a83b" transform="rotate(10 33 27)"/></g></svg>',
+  "fromage-grains":'<svg viewBox="0 0 48 48"><g fill="#fdf6e6" stroke="#d3bd8f" stroke-width="2"><ellipse cx="16" cy="24" rx="8" ry="7"/><ellipse cx="29" cy="18" rx="7" ry="6"/><ellipse cx="28" cy="31" rx="8" ry="7"/></g></svg>',
+  "sauce-brune":'<svg viewBox="0 0 48 48"><ellipse cx="24" cy="36" rx="13" ry="5" fill="#6e3f1c" opacity=".25"/><path d="M24 6c7 10 11 16 11 23a11 11 0 01-22 0c0-7 4-13 11-23z" fill="#6e3f1c" stroke="#4a280e" stroke-width="2"/><ellipse cx="20" cy="27" rx="3" ry="4.5" fill="#a06a35" opacity=".8"/></svg>',
+  "poulet":'<svg viewBox="0 0 48 48"><rect x="27" y="28" width="12" height="5" rx="2.5" fill="#e8dcc8" stroke="#a68d64" stroke-width="2" transform="rotate(20 33 30)"/><circle cx="30" cy="34" r="4.5" fill="#fff" stroke="#a68d64" stroke-width="2"/><ellipse cx="19" cy="21" rx="12" ry="10" fill="#d9a05b" stroke="#9c6a2e" stroke-width="2" transform="rotate(-15 19 21)"/><path d="M12 16c3-3 8-4 12-2" stroke="#b07c40" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>',
+  "pois-verts":'<svg viewBox="0 0 48 48"><g fill="#5cb85c" stroke="#3d8b3d" stroke-width="2"><circle cx="17" cy="19" r="8"/><circle cx="31" cy="17" r="7"/><circle cx="24" cy="31" r="8"/></g><circle cx="15" cy="17" r="2" fill="#bfe8bf"/><circle cx="22" cy="29" r="2" fill="#bfe8bf"/></svg>',
+  "sauce-bolo":'<svg viewBox="0 0 48 48"><ellipse cx="24" cy="36" rx="13" ry="5" fill="#93351f" opacity=".25"/><path d="M24 6c7 10 11 16 11 23a11 11 0 01-22 0c0-7 4-13 11-23z" fill="#93351f" stroke="#5b2011" stroke-width="2"/><circle cx="20" cy="28" r="2" fill="#5b2011"/><circle cx="27" cy="31" r="1.6" fill="#5b2011"/><circle cx="25" cy="24" r="1.4" fill="#c96a4a"/></svg>',
+  "fromage-rape":'<svg viewBox="0 0 48 48"><g stroke="#e0a82e" stroke-width="4" stroke-linecap="round"><path d="M8 16l16-4M10 26l18-2M8 36l16 2M28 12l12 4M28 34l12-2"/></g><g stroke="#ffd75e" stroke-width="2" stroke-linecap="round"><path d="M8 16l16-4M10 26l18-2M8 36l16 2M28 12l12 4M28 34l12-2"/></g></svg>',
+  "smoke-meat":'<svg viewBox="0 0 48 48"><g stroke="#7e2c20" stroke-width="2"><rect x="8" y="12" width="17" height="12" rx="4" fill="#b94a38" transform="rotate(-8 16 18)"/><rect x="24" y="22" width="17" height="12" rx="4" fill="#a03a2a" transform="rotate(6 32 28)"/></g><path d="M12 16l8 2M28 26l8 2" stroke="#e89a86" stroke-width="2" stroke-linecap="round"/></svg>',
+  "moutarde":'<svg viewBox="0 0 48 48"><path d="M6 30l6-8 6 8 6-8 6 8 6-8" stroke="#ffcf3f" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 30l6-8 6 8 6-8 6 8 6-8" stroke="#e8a200" stroke-width="1.6" fill="none"/></svg>'
+};
+const INGREG = /[^a-z-]/g;
+
+/* Couches de la poutine sur l'assiette (SVG générées à chaque clic) */
+function layerSVG(ing){
+  let s = "";
+  if(ing==="frites"){
+    for(let i=0;i<14;i++){
+      const x=rnd(62,210), y=rnd(128,158), a=rnd(-28,28);
+      s += '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+rnd(42,54).toFixed(1)+'" height="11" rx="5.5" fill="'+pick(["#f5a83b","#ffbe55","#ee9c2e"])+'" stroke="#b8721a" stroke-width="1.6" transform="rotate('+a.toFixed(0)+' '+x.toFixed(1)+' '+y.toFixed(1)+')"/>';
+    }
+  } else if(ing==="fromage-grains"){
+    for(let i=0;i<10;i++){
+      const x=rnd(74,224), y=rnd(118,150);
+      s += '<ellipse cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" rx="'+rnd(10,14).toFixed(1)+'" ry="'+rnd(8,11).toFixed(1)+'" fill="#fdf6e6" stroke="#d3bd8f" stroke-width="1.8" transform="rotate('+rnd(-20,20).toFixed(0)+' '+x.toFixed(1)+' '+y.toFixed(1)+')"/>';
+    }
+  } else if(ing==="sauce-brune"){
+    for(let i=0;i<3;i++){
+      const y=rnd(116,150); let d="M66 "+y.toFixed(1);
+      for(let x=66;x<=234;x+=18){ d += " q9 -"+rnd(6,12).toFixed(1)+" 18 0"; }
+      s += '<path d="'+d+'" stroke="#6e3f1c" stroke-width="'+rnd(7,10).toFixed(1)+'" fill="none" stroke-linecap="round" opacity=".92"/>';
+    }
+    for(let i=0;i<6;i++){ s += '<circle cx="'+rnd(80,220).toFixed(1)+'" cy="'+rnd(120,148).toFixed(1)+'" r="'+rnd(3.5,6.5).toFixed(1)+'" fill="#6e3f1c"/>'; }
+  } else if(ing==="poulet"){
+    for(let i=0;i<7;i++){
+      const x=rnd(80,205), y=rnd(118,148);
+      s += '<ellipse cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" rx="'+rnd(14,19).toFixed(1)+'" ry="'+rnd(10,14).toFixed(1)+'" fill="#d9a05b" stroke="#9c6a2e" stroke-width="1.8" transform="rotate('+rnd(-25,25).toFixed(0)+' '+x.toFixed(1)+' '+y.toFixed(1)+')"/>';
+    }
+  } else if(ing==="pois-verts"){
+    for(let i=0;i<16;i++){
+      s += '<circle cx="'+rnd(76,224).toFixed(1)+'" cy="'+rnd(116,150).toFixed(1)+'" r="'+rnd(5,7.5).toFixed(1)+'" fill="#5cb85c" stroke="#3d8b3d" stroke-width="1.4"/>';
+    }
+  } else if(ing==="sauce-bolo"){
+    for(let i=0;i<9;i++){
+      const x=rnd(78,220), y=rnd(118,150);
+      s += '<ellipse cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" rx="'+rnd(12,20).toFixed(1)+'" ry="'+rnd(7,11).toFixed(1)+'" fill="#93351f" stroke="#5b2011" stroke-width="1.6"/>';
+      s += '<circle cx="'+(x+rnd(-8,8)).toFixed(1)+'" cy="'+(y+rnd(-3,3)).toFixed(1)+'" r="'+rnd(1.5,3).toFixed(1)+'" fill="#5b2011"/>';
+    }
+  } else if(ing==="fromage-rape"){
+    for(let i=0;i<22;i++){
+      const x=rnd(76,222), y=rnd(114,152), a=rnd(0,180);
+      s += '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="16" height="3.4" rx="1.7" fill="#ffd75e" stroke="#e0a82e" stroke-width="1" transform="rotate('+a.toFixed(0)+' '+x.toFixed(1)+' '+y.toFixed(1)+')"/>';
+    }
+  } else if(ing==="smoke-meat"){
+    for(let i=0;i<7;i++){
+      const x=rnd(80,200), y=rnd(118,146), a=rnd(-18,18);
+      s += '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+rnd(30,40).toFixed(1)+'" height="'+rnd(15,20).toFixed(1)+'" rx="6" fill="'+pick(["#b94a38","#a03a2a"])+'" stroke="#7e2c20" stroke-width="1.8" transform="rotate('+a.toFixed(0)+' '+x.toFixed(1)+' '+y.toFixed(1)+')"/>';
+    }
+  } else if(ing==="moutarde"){
+    let d="M76 130"; let up=true;
+    for(let x=76;x<=226;x+=16){ d += " L"+(x+16)+" "+(up?114:136); up=!up; }
+    s += '<path d="'+d+'" stroke="#ffcf3f" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+    for(let i=0;i<4;i++){ s += '<circle cx="'+rnd(90,215).toFixed(1)+'" cy="'+rnd(120,140).toFixed(1)+'" r="'+rnd(4,6).toFixed(1)+'" fill="#ffcf3f"/>'; }
+  }
+  return s.replace(/"/g,"\"");
+}
+
+/* Visages de clients — génération procédurale */
+const SKINS=["#ffd9b3","#f1c27d","#e0ac69","#c68642","#8d5524","#ffdbac"];
+const HAIRS=["#2b2b2b","#5b3a29","#b5651d","#e8c547","#8e8e8e","#7a2e2e","#3e5c76","#d6336c"];
+function makeFace(){
+  return {
+    skin: pick(SKINS),
+    hair: pick(HAIRS),
+    style: pick(["court","long","casquette","toque","chauve","chignon","afro"]),
+    extra: pick(["rien","lunettes","barbe","moustache","rien","lunettes"])
+  };
+}
+function faceSVG(face, mood, opts){
+  const s=face.skin, h=face.hair;
+  const shades=!!(opts&&opts.shades); /* v1.1 : client mystère — lunettes de soleil */
+  let out='<svg viewBox="0 0 64 64" class="cface" aria-hidden="true">';
+  out+='<circle cx="32" cy="34" r="22" fill="'+s+'" stroke="rgba(0,0,0,.25)" stroke-width="1.5"/>';
+  /* cheveux */
+  if(face.style==="court"){ out+='<path d="M10 32c-1-12 9-22 22-22s23 10 22 22c-4-6-9-9-13-7-2-4-16-4-18 0-4-2-9 1-13 7z" fill="'+h+'"/>'; }
+  else if(face.style==="long"){ out+='<path d="M10 34c-2-14 8-26 22-26s24 12 22 26l-3 16c-3-4-5-9-6-14-4 3-20 3-24 0-1 5-3 10-6 14z" fill="'+h+'"/>'; }
+  else if(face.style==="casquette"){ out+='<path d="M10 30c0-10 9-18 22-18s22 8 22 18z" fill="#c9341f"/><rect x="8" y="28" width="48" height="5" rx="2.5" fill="#8e1f12"/><circle cx="32" cy="11" r="3" fill="#8e1f12"/>'; }
+  else if(face.style==="toque"){ out+='<path d="M11 30c0-9 9-16 21-16s21 7 21 16z" fill="#2e6f4e"/><rect x="10" y="27" width="44" height="7" rx="3.5" fill="#3fa268"/><circle cx="32" cy="12" r="4" fill="#fff"/>'; }
+  else if(face.style==="chauve"){ out+='<ellipse cx="32" cy="24" rx="12" ry="6" fill="rgba(255,255,255,.18)"/>'; }
+  else if(face.style==="chignon"){ out+='<path d="M10 32c-1-12 9-22 22-22s23 10 22 22c-4-6-20-8-26-4-5 1-13 1-18 4z" fill="'+h+'"/><circle cx="32" cy="8" r="6" fill="'+h+'"/>'; }
+  else if(face.style==="afro"){ out+='<circle cx="32" cy="26" r="24" fill="'+h+'"/><circle cx="32" cy="36" r="19" fill="'+s+'" stroke="rgba(0,0,0,.25)" stroke-width="1.5"/>'; }
+  
+  /* yeux + sourcils */
+  const angry = mood==="angry", worry = mood==="impatient", happy = mood==="happy";
+  const eyeY = 34 + (face.style==="casquette"||face.style==="toque" ? 2 : 0);
+  if(face.extra==="lunettes"){
+    out+='<g stroke="#222" stroke-width="2.5" fill="rgba(255,255,255,.12)"><rect x="14" y="'+(eyeY-7)+'" width="15" height="13" rx="4"/><rect x="35" y="'+(eyeY-7)+'" width="15" height="13" rx="4"/><path d="M29 '+(eyeY-2)+'h6M14 '+(eyeY-2)+'L11 '+eyeY+'M50 '+(eyeY-2)+'l3 '+eyeY+'"/></g>';
+  }
+  if(shades){
+    out+='<g fill="#1c1c1c" stroke="#000" stroke-width="1.5"><rect x="12" y="'+(eyeY-8)+'" width="17" height="12" rx="5"/><rect x="35" y="'+(eyeY-8)+'" width="17" height="12" rx="5"/><path d="M29 '+(eyeY-3)+'h6" fill="none" stroke-width="2.5"/></g>';
+  } else {
+    out+='<circle cx="21.5" cy="'+eyeY+'" r="2.6" fill="#222"/><circle cx="42.5" cy="'+eyeY+'" r="2.6" fill="#222"/>';
+  }
+  if(angry){ out+='<path d="M14 '+(eyeY-10)+'l13 6M50 '+(eyeY-10)+'l-13 6" stroke="#222" stroke-width="3.4" stroke-linecap="round"/>'; }
+  else if(worry){ out+='<path d="M15 '+(eyeY-8)+'l12-4M49 '+(eyeY-8)+'l-12-4" stroke="#555" stroke-width="2.6" stroke-linecap="round"/>'; }
+  else { out+='<path d="M15 '+(eyeY-8)+'l12-1M49 '+(eyeY-8)+'l-12-1" stroke="#555" stroke-width="2.2" stroke-linecap="round"/>'; }
+  /* extras */
+  if(face.extra==="barbe"){ out+='<path d="M12 40c3 12 12 18 20 18s17-6 20-18c-4 5-20 7-20 7s-16-2-20-7z" fill="'+h+'" opacity=".95"/>'; }
+  else if(face.extra==="moustache"){ out+='<path d="M22 47c3-3 6-3 10 0c4-3 7-3 10 0c-3 4-7 5-10 3c-3 2-7 1-10-3z" fill="'+h+'"/>'; }
+  /* bouche */
+  if(happy){ out+='<path d="M21 45q11 12 22 0" stroke="#7a2e1a" stroke-width="3.4" fill="none" stroke-linecap="round"/>'; }
+  else if(angry){ out+='<path d="M22 52q10-7 20 0" stroke="#7a2e1a" stroke-width="3.4" fill="none" stroke-linecap="round"/><ellipse cx="32" cy="49" rx="4" ry="5" fill="#5c1e10"/>'; }
+  else if(worry){ out+='<path d="M23 51q9-4 18 0" stroke="#7a2e1a" stroke-width="3" fill="none" stroke-linecap="round"/>'; }
+  else { out+='<path d="M22 47q10 7 20 0" stroke="#7a2e1a" stroke-width="3" fill="none" stroke-linecap="round"/>'; }
+  out+='</svg>';
+  return out;
+}
+
+/* ================= AUDIO (synthèse Web Audio, aucun fichier) ================= */
+let AC=null;
+function ac(){
+  if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ AC=null; } }
+  if(AC && AC.state==="suspended"){ AC.resume(); }
+  return AC;
+}
+function beep(freq,dur,type,vol,when){
+  const c=ac(); if(!c || (state&&state.muted)) return;
+  const t=c.currentTime+(when||0);
+  const o=c.createOscillator(), g=c.createGain();
+  o.type=type||"sine"; o.frequency.setValueAtTime(freq,t);
+  g.gain.setValueAtTime(vol||.18,t);
+  g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(t); o.stop(t+dur+.02);
+}
+function sfxPop(){ beep(rnd(520,680),.09,"triangle",.22); }
+function sfxWrong(){ beep(160,.22,"sawtooth",.2); beep(110,.3,"sawtooth",.2,.1); }
+function sfxTrash(){ beep(90,.25,"square",.16); beep(70,.35,"triangle",.2,.12); }
+function sfxChaching(){ beep(880,.12,"square",.12); beep(1320,.2,"square",.12,.1); beep(740,.1,"triangle",.15,.02); }
+function sfxTick(){ beep(1050,.06,"square",.1); }
+function sfxRush(){ beep(330,.18,"sawtooth",.18); beep(415,.18,"sawtooth",.18,.16); beep(555,.3,"sawtooth",.2,.32); }
+function sfxAngry(){ const c=ac(); if(!c||state.muted) return; [200,170,150].forEach((f,i)=>beep(f,.16,"sawtooth",.16,i*.15)); }
+function sfxWin(){ [523,659,784,1046].forEach((f,i)=>beep(f,.22,"triangle",.2,i*.13)); }
+
+/* ================= LÉGENDE DES RECETTES (tutoriel) ================= */
+function recipeStepsHTML(key){
+  const ings=RECIPES[key].ings;
+  const parts=[]; let i=0;
+  while(i<ings.length){
+    let count=1;
+    while(i+count<ings.length && ings[i+count]===ings[i]) count++;
+    parts.push(INGREDIENTS[ings[i]].name+(count>1?" ×"+count:""));
+    i+=count;
+  }
+  return parts.join(" › ");
+}
+function buildLegend(){
+  $("#recipeLegend").innerHTML = RECIPE_KEYS.map(k=>
+    '<div class="recipe-card"><span class="price-tag">'+RECIPES[k].price+'&nbsp;$</span><b>'+RECIPES[k].name+'</b><span class="steps">'+recipeStepsHTML(k)+'</span></div>'
+  ).join("");
+}
+
+/* ================= ÉTAT DU JEU ================= */
+const SLOTS=4, SERVICE_TIME=120, RUSH_AT=30, BEST_KEY="poutine-panic-best", WALL_KEY="PP_SCORES_V1";
+const WALL_MONTHS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+let state, custSeq=0;
+/* ===== v1.1 — Mur des chefs : top-5 100 % LOCAL (localStorage, sur cet appareil) ===== */
+let wallOK=true, wall=[];
+function saveWall(){
+  try{ if(window.localStorage) localStorage.setItem(WALL_KEY,JSON.stringify(wall)); }
+  catch(e){ wallOK=false; }
+}
+function loadWall(){
+  wall=[];
+  try{
+    if(!window.localStorage) throw 0;
+    const raw=localStorage.getItem(WALL_KEY);
+    if(raw){
+      const arr=JSON.parse(raw);
+      if(Array.isArray(arr)) wall=arr.filter(e=>e&&typeof e.score==="number").slice(0,5);
+    }else{
+      /* migration unique de l'ancien record : il n'est pas perdu */
+      const old=parseInt(localStorage.getItem(BEST_KEY),10)||0;
+      if(old>0){ wall=[{score:old,served:0,combo:0,date:Date.now(),legacy:true}]; saveWall(); }
+    }
+  }catch(e){ wallOK=false; wall=[]; }
+  return wall;
+}
+loadWall();
+let best=wall.length?wall[0].score:0;
+function fmtWallDate(ts){
+  const d=new Date(ts||Date.now());
+  return d.getDate()+" "+WALL_MONTHS[d.getMonth()];
+}
+function wallRowHTML(e,i){
+  const detail = e.legacy
+    ? "record d'avant la v1.1"
+    : e.served+" servie"+(e.served>1?"s":"")+", série ×"+e.combo;
+  return '<div class="wall-row'+(i===0?" first":"")+'"><span class="rank">'+(i+1)+
+    '</span><span>'+e.score+"&nbsp;$ — "+detail+'</span><span class="date">'+fmtWallDate(e.date)+"</span></div>";
+}
+function renderWallInto(el){
+  if(!el) return;
+  if(!wallOK){
+    el.innerHTML='<div class="wall-empty">Scores non sauvegardés dans ce mode de navigation.</div>';
+    return;
+  }
+  el.innerHTML = wall.length
+    ? wall.map(wallRowHTML).join("")
+    : '<div class="wall-empty">Aucun chef au mur pour l\'instant. Sois le premier !</div>';
+}
+function renderWall(){ renderWallInto($("#wallList")); }
+/* ===== v1.1 — Série chaude ===== */
+function comboTier(n){ return n>=8?3 : n>=5?2 : n>=3?1 : 0; }
+function tipMultiplier(n){ return n>=8?2.5 : n>=5?2 : n>=3?1.5 : 1; }
+function updateComboHUD(bump){
+  const w=$("#comboWrap"); if(!w) return;
+  $("#combo").textContent="🔥 ×"+state.combo;
+  w.classList.toggle("hot", state.combo>=3&&state.combo<8);
+  w.classList.toggle("blazing", state.combo>=8);
+  if(bump){ w.classList.remove("bump"); void w.offsetWidth; w.classList.add("bump"); }
+}
+function breakCombo(){
+  if(!state||state.combo<=0) return;
+  const wasHot=state.combo>=3;
+  state.combo=0;
+  updateComboHUD(false);
+  const w=$("#comboWrap");
+  if(w){ w.classList.remove("break-blink"); void w.offsetWidth; w.classList.add("break-blink"); }
+  if(wasHot) speak('"'+COMBO_BREAK_QUIP+'"',true);
+}
+function newState(){
+  return { running:false, paused:false, over:false, timeLeft:SERVICE_TIME,
+    money:0, customers:[], plate:[], rush:false,
+    served:0, lost:0, trashed:0, tips:0,
+    combo:0, bestCombo:0, /* v1.1 : série chaude */
+    mysterySpawned:false, mysteryAt:rnd(32,88), /* v1.1 : client mystère (fenêtre 25-75 % du chrono, jamais au rush) */
+    nextSpawnAt:0, pendingSecondSpawnAt:0, muted:false, lastTickSec:-1, pausedAt:0 };
+}
+function fmtTime(s){ s=Math.max(0,Math.ceil(s)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+function speak(html,chef){
+  $("#speechText").innerHTML=html;
+  $("#speech .cap").style.opacity = chef===false ? ".45" : "1";
+}
+function floatTip(x,y,text,cls){
+  const d=document.createElement("div");
+  d.className="float-tip"+(cls?" "+cls:"");
+  d.textContent=text;
+  d.style.left=x+"px"; d.style.top=y+"px"; d.style.transform="translate(-50%,-50%)";
+  $("#fx").appendChild(d);
+  setTimeout(()=>d.remove(),1450);
+}
+function flyCoins(fromX,fromY,count,done){
+  const t=$("#moneyWrap").getBoundingClientRect();
+  const tx=t.left+t.width/2, ty=t.top+t.height/2;
+  let finished=0;
+  for(let i=0;i<count;i++){
+    const c=document.createElement("div");
+    c.className="coin"; c.textContent="$";
+    $("#fx").appendChild(c);
+    const sx=fromX+rnd(-30,30), sy=fromY+rnd(-20,20);
+    const ax=(sx+tx)/2+rnd(-40,40), ay=Math.min(sy,ty)-rnd(70,130);
+    const dur=rnd(450,650), t0=performance.now()+i*70;
+    (function step(now){
+      if(now<t0){ requestAnimationFrame(step); return; }
+      const r=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-r,2);
+      const x=(1-e)*(1-e)*sx+2*(1-e)*e*ax+e*e*tx;
+      const y=(1-e)*(1-e)*sy+2*(1-e)*e*ay+e*e*ty;
+      c.style.left=(x-13)+"px"; c.style.top=(y-13)+"px";
+      c.style.transform="scale("+(0.7+0.5*(1-r)).toFixed(2)+") rotate("+(r*360).toFixed(0)+"deg)";
+      if(r<1){ requestAnimationFrame(step); }
+      else{ c.remove(); finished++; if(finished===count&&done) done(); }
+    })(performance.now());
+  }
+}
+function sameSeq(a,b){ return a.length===b.length && a.every((v,i)=>v===b[i]); }
+function isPrefix(seq){
+  return RECIPE_KEYS.some(k=>{
+    const r=RECIPES[k].ings;
+    return r.length>=seq.length && seq.every((v,i)=>v===r[i]);
+  });
+}
+function completedRecipe(seq){ return RECIPE_KEYS.find(k=>sameSeq(RECIPES[k].ings,seq))||null; }
+function updateRecordLine(){ $("#recordLine").innerHTML="Record&nbsp;: "+best+"&nbsp;$"; }
+
+/* ================= ASSIETTE ================= */
+function renderPlate(){
+  $("#plateContent").innerHTML=state.plate.map(layerSVG).join("");
+  $("#steam").classList.toggle("on", state.plate.length>0);
+  $("#plateStack").innerHTML = state.plate.length
+    ? state.plate.map(k=>INGREDIENTS[k].name.split(" ")[0]).join(" + ")
+    : "Clique les ingrédients dans l'ordre du ticket&nbsp;!";
+}
+function addIngredient(key){
+  if(!state||!state.running||state.paused||state.over) return;
+  const seq=state.plate.concat([key]);
+  if(!isPrefix(seq)){
+    sfxWrong();
+    trashPlate(pick(QUIPS.trash)+' <em>Mauvais ingrédient\u202f!</em>');
+    return;
+  }
+  state.plate=seq;
+  renderPlate(); updateTicketGlow();
+  sfxPop();
+  speak(pick(QUIPS.step[key]),true);
+  mysteryHintAfterAdd(); /* v1.1 : le client mystère guide, un indice à la fois */
+  const btn=$('.ing-btn[data-ing="'+key+'"]');
+  if(btn){ btn.classList.remove("added-flash"); void btn.offsetWidth; btn.classList.add("added-flash"); }
+}
+/* v1.1 — Client mystère : s'il est là et que l'assiette suit sa recette cachée,
+   il donne l'indice du PROCHAIN ingrédient (chaque ingrédient a son indice dédié). */
+function mysteryHintAfterAdd(){
+  if(!state) return;
+  const mc=state.customers.find(c=>c.mystery&&!c.leaving);
+  if(!mc) return;
+  const r=RECIPES[mc.recipe].ings, seq=state.plate;
+  if(seq.length===0) return;
+  const onTrack=r.length>=seq.length && seq.every((v,i)=>v===r[i]);
+  if(!onTrack) return;
+  if(seq.length<r.length){ speak('"'+MYSTERY_HINTS[r[seq.length]]+'"',true); }
+  else{ speak('"C\'est elle, ma poutine secrète ! Sers-moi vite, chef !"',true); }
+}
+function trashPlate(msg){
+  if(!state||!state.running||state.paused||state.over) return;
+  if(state.plate.length===0){ speak("L'assiette est déjà vide\u202f!",true); return; }
+  $("#steam").classList.remove("on");
+  state.trashed++;
+  sfxTrash();
+  const content=$("#plateContent");
+  const pr=content.getBoundingClientRect(), tr=$("#trashBtn").getBoundingClientRect();
+  const dx=(tr.left+tr.width/2)-(pr.left+pr.width/2);
+  const dy=(tr.top+tr.height/2)-(pr.top+pr.height/2);
+  content.style.transition="transform .55s cubic-bezier(.55,-.2,.8,.55), opacity .55s";
+  content.style.transform="translate("+dx+"px,"+dy+"px) rotate(200deg) scale(.35)";
+  content.style.opacity="0";
+  const tb=$("#trashBtn");
+  tb.classList.remove("lid-bounce"); void tb.offsetWidth; tb.classList.add("lid-bounce");
+  speak(msg||pick(QUIPS.trash),true);
+  breakCombo(); /* v1.1 : la poubelle casse la série (message encourageant si série ≥ 3) */
+  setTimeout(()=>{
+    if(!state) return;
+    state.plate=[];
+    content.style.transition="none"; content.style.transform=""; content.style.opacity="";
+    renderPlate(); updateTicketGlow();
+  },600);
+}
+
+/* ================= CLIENTS ================= */
+function emptySlotEl(){
+  const d=document.createElement("div");
+  d.className="slot empty";
+  d.innerHTML="<span>Un client<br>s'en vient…</span>";
+  return d;
+}
+function ticketStepsHTML(recipe){
+  const ings=RECIPES[recipe].ings;
+  const out=[]; let i=0;
+  while(i<ings.length){
+    const k=ings[i]; let count=1;
+    while(i+count<ings.length && ings[i+count]===k) count++;
+    const dbl=count>1 ? " ×"+count : "";
+    out.push('<li><span class="n">'+(i+1)+'</span>'+ICONS[k].replace(/<svg /,"<svg width=15 height=15 ")+'<span>'+INGREDIENTS[k].name+dbl+'</span></li>');
+    i+=count;
+  }
+  return '<ol class="ticket-steps">'+out.join("")+'</ol>';
+}
+function spawnCustomer(opts){
+  const recipe=pick(RECIPE_KEYS);
+  const maxPatience = state.rush ? rnd(22,30) : rnd(38,52);
+  const mystery=!!(opts&&opts.mystery);
+  const face=makeFace();
+  if(mystery) face.extra="rien"; /* les lunettes de soleil sont dessinées par faceSVG */
+  const cust={
+    id:++custSeq, recipe:recipe, name:pick(NAMES),
+    face:face, patience:maxPatience, maxPatience:maxPatience,
+    mood:"ok", leaving:false, mystery:mystery, el:null, fillEl:null, faceEl:null
+  };
+  state.customers.push(cust);
+  renderCustomers();
+  if(mystery){
+    const r=RECIPES[recipe].ings;
+    speak('"'+pick(MYSTERY_ARRIVE)+'" — '+cust.name+' a une <em>commande secrète</em> ! Devine sa poutine, un ingrédient à la fois… '+MYSTERY_HINTS[r[0]],true);
+  }else{
+    let msg='"'+pick(QUIPS.arrive)+'" — '+cust.name+' veut une <em>'+RECIPES[recipe].name+'</em> !';
+    /* v1.1 : si le mystère est en cours et l'assiette est vide, rappeler son premier indice */
+    const mc=state.customers.find(c=>c.mystery&&!c.leaving);
+    if(mc && state.plate.length===0){
+      msg+=' <em>Indice mystère : '+MYSTERY_HINTS[RECIPES[mc.recipe].ings[0]]+'</em>';
+    }
+    speak(msg,true);
+  }
+  return cust;
+}
+/* v1.1 — Client mystère : réutilise spawnCustomer avec le flag mystery */
+function spawnMysteryCustomer(){
+  state.mysterySpawned=true;
+  return spawnCustomer({mystery:true});
+}
+function moodFor(c){
+  const f=c.patience/c.maxPatience;
+  return f<=0.28?"angry":(f<=0.55?"impatient":"ok");
+}
+function renderCustomers(){
+  const slots=$("#slots");
+  slots.innerHTML="";
+  state.customers.forEach(c=>{
+    const d=document.createElement("div");
+    d.className="slot";
+    /* v1.1 : ticket mystère (recette + prix cachés, contour doré) vs ticket normal */
+    const ticketHTML = c.mystery
+      ? '<div class="ticket ticket-mystery"><div class="ticket-name"><span>❓ Commande mystère</span><span class="ticket-price">? $</span></div>'+
+        '<ol class="ticket-steps"><li><span class="n">?</span><span class="mhint-text">…</span></li></ol></div>'
+      : '<div class="ticket"><div class="ticket-name"><span>'+RECIPES[c.recipe].name+'</span><span class="ticket-price">'+RECIPES[c.recipe].price+'&nbsp;$</span></div>'+
+        ticketStepsHTML(c.recipe)+'</div>';
+    const ariaServe = c.mystery
+      ? "Servir "+c.name+" : commande mystère, devinez la recette"
+      : "Servir "+c.name+" : "+RECIPES[c.recipe].name;
+    d.innerHTML=
+      '<div class="customer entering" data-id="'+c.id+'" role="button" tabindex="0" aria-label="'+ariaServe+'">'+
+        ticketHTML+
+        '<div class="cname">'+c.name+(c.mystery?" 🕵️":"")+'</div>'+
+        '<div class="cfacewrap">'+faceSVG(c.face,"ok",c.mystery?SHADES:null)+'</div>'+
+        '<div class="patience"><div class="patience-fill"></div></div>'+
+      '</div>';
+    const cust=d.querySelector(".customer");
+    cust.addEventListener("click",()=>serveCustomer(c.id));
+    cust.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); serveCustomer(c.id);} });
+    c.el=cust;
+    c.fillEl=cust.querySelector(".patience-fill");
+    c.faceEl=cust.querySelector(".cfacewrap");
+    slots.appendChild(d);
+    setTimeout(()=>{ if(c.el) c.el.classList.remove("entering"); },500);
+  });
+  for(let i=state.customers.length;i<SLOTS;i++) slots.appendChild(emptySlotEl());
+  updateTicketGlow();
+}
+function updateTicketGlow(){
+  if(!state) return;
+  const seq=state.plate;
+  state.customers.forEach(c=>{
+    if(!c.el) return;
+    const ticket=c.el.querySelector(".ticket");
+    const r=RECIPES[c.recipe].ings;
+    const match = seq.length>0 && r.length>=seq.length && seq.every((v,i)=>v===r[i]);
+    ticket.classList.toggle("possible", !!match);
+    /* v1.1 : l'indice courant du client mystère vit sur son ticket (toujours visible) */
+    if(c.mystery && !c.leaving){
+      const hintEl=ticket.querySelector(".mhint-text");
+      if(hintEl){
+        const onTrack=seq.length===0||match;
+        if(match&&seq.length===r.length){ hintEl.textContent="C'est elle ! Clique-moi pour servir !"; }
+        else if(onTrack){ hintEl.textContent="Indice : "+MYSTERY_HINTS[r[seq.length]]; }
+        else{ hintEl.textContent="Indice : "+MYSTERY_HINTS[r[0]]+" (recommence via la poubelle)"; }
+      }
+    }
+  });
+}
+
+/* ================= SERVICE ================= */
+function shakeCustomer(c){
+  if(c.el){ c.el.classList.remove("shaking"); void c.el.offsetWidth; c.el.classList.add("shaking"); }
+}
+function removeCustomer(c){
+  state.customers=state.customers.filter(x=>x.id!==c.id);
+}
+function serveCustomer(id){
+  if(!state||!state.running||state.paused||state.over) return;
+  const c=state.customers.find(x=>x.id===id);
+  if(!c||c.leaving) return;
+  if(state.plate.length===0){ speak(pick(QUIPS.empty),true); shakeCustomer(c); return; }
+  const made=completedRecipe(state.plate);
+  if(!made || made!==c.recipe){
+    if(!made){ speak(pick(QUIPS.incomplete),true); shakeCustomer(c); return; }
+    /* poutine complète mais mauvais client → poubelle */
+    sfxWrong();
+    trashPlate(c.mystery ? '"'+MYSTERY_FAIL+'"' : pick(QUIPS.wrongClient));
+    shakeCustomer(c);
+    return;
+  }
+  /* Service réussi ! */
+  c.leaving=true;
+  state.served++;
+  state.combo++;
+  if(state.combo>state.bestCombo) state.bestCombo=state.combo;
+  const tier=comboTier(state.combo);
+  const mult=tipMultiplier(state.combo);
+  let price=RECIPES[c.recipe].price;
+  const fraction=c.patience/c.maxPatience;
+  const tip=Math.max(0,Math.round(price*0.5*fraction*mult));
+  state.tips+=tip;
+  state.plate=[];
+  sfxChaching();
+  if(tier>0) beep([0,1174,1396,1661][tier],.14,"triangle",.16,.18); /* ding montant par palier */
+  const isMystery=!!c.mystery;
+  if(isMystery) price=Math.round(price*1.5); /* récompense mystère : prix ×1,5 */
+  c.faceEl.innerHTML=faceSVG(c.face,"happy",c.mystery?SHADES:null);
+  const r=c.el.getBoundingClientRect();
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  flyCoins(cx,cy,6,()=>{
+    state.money+=price+tip;
+    $("#money").innerHTML=state.money+"&nbsp;$";
+    const mw=$("#moneyWrap");
+    mw.classList.remove("bump"); void mw.offsetWidth; mw.classList.add("bump");
+  });
+  updateComboHUD(true);
+  if(isMystery){
+    floatTip(cx,cy-34,"MYSTÈRE RÉSOLU ! C'était une "+RECIPES[c.recipe].name+" — +"+price+" $");
+  }else{
+    floatTip(cx,cy-10,"+"+price+" $"+(tip>0?"  +"+tip+" $ de pourboire":""));
+  }
+  if(tier>0) floatTip(cx,cy-64,"COMBO ×"+state.combo+" !","combo-float tier"+tier);
+  const tierQuip=COMBO_QUIPS[state.combo];
+  if(isMystery){ speak('"'+pick(MYSTERY_SOLVED)+'" — '+c.name+' !',false); }
+  else if(tierQuip){ speak('"'+tierQuip+'"',true); }
+  else{ speak('"'+pick(QUIPS.serve)+'" — '+c.name+'. <em>'+pick(QUIPS.serveChef)+'</em>',false); }
+  c.el.classList.add("leaving-happy");
+  const slot=c.el.closest(".slot");
+  setTimeout(()=>{
+    removeCustomer(c);
+    if(state.running||state.paused) renderCustomers();
+  },820);
+  renderPlate(); updateTicketGlow();
+}
+function angryLeave(c){
+  if(c.leaving) return;
+  c.leaving=true;
+  state.lost++;
+  sfxAngry();
+  c.faceEl.innerHTML=faceSVG(c.face,"angry",c.mystery?SHADES:null);
+  const r=c.el.getBoundingClientRect();
+  floatTip(r.left+r.width/2,r.top,"Ben voyons\u202f!","bad");
+  if(c.mystery){ speak('"'+MYSTERY_FAIL+'"',true); } /* pas de pénalité spéciale : bonus manqué */
+  else{ speak('"'+pick(QUIPS.angry)+'" — '+c.name+' s\'en va fâché\u202f!',false); }
+  breakCombo(); /* v1.1 : un client perdu casse la série */
+  c.el.classList.add("leaving-angry");
+  setTimeout(()=>{
+    removeCustomer(c);
+    if(state.running||state.paused) renderCustomers();
+  },1150);
+}
+
+/* ================= BOUCLE DE JEU ================= */
+let ticker=null;
+function gameTick(){
+  if(!state.running||state.paused||state.over) return;
+  const DT=0.1;
+  state.timeLeft-=DT;
+  /* Rush de fin : uniquement les 30 dernières secondes.
+     L'indicateur est explicitement masqué tant qu'il reste plus de 30 s. */
+  const rushBadge=$("#rushBadge");
+  if(state.timeLeft<=RUSH_AT){
+    if(!state.rush){
+      state.rush=true;
+      sfxRush();
+      speak("<em>"+pick(QUIPS.rush)+"</em>",true);
+    }
+    rushBadge.hidden=false;
+    rushBadge.setAttribute("aria-hidden","false");
+  }else{
+    rushBadge.hidden=true;
+    rushBadge.setAttribute("aria-hidden","true");
+  }
+  /* tic-tac des 10 dernières secondes */
+  const sec=Math.ceil(state.timeLeft);
+  if(sec<=10 && sec>0 && sec!==state.lastTickSec){ state.lastTickSec=sec; sfxTick(); }
+  $("#time").textContent=fmtTime(state.timeLeft);
+  $("#timeWrap").classList.toggle("low", state.timeLeft<=10.5);
+  /* apparition des clients */
+  const now=performance.now();
+  if(state.pendingSecondSpawnAt && now>=state.pendingSecondSpawnAt){
+    state.pendingSecondSpawnAt=0;
+    if(state.timeLeft>2 && state.customers.length<SLOTS) spawnCustomer();
+  }
+  const gap = state.rush ? rnd(3.2,5) : rnd(5.5,8.5);
+  if(state.timeLeft>2 && state.customers.length<SLOTS && now>=state.nextSpawnAt){
+    spawnCustomer();
+    state.nextSpawnAt=now+gap*1000;
+  }
+  /* v1.1 — Client mystère : 1 par service, entre 25 % et 75 % du chrono,
+     jamais pendant le rush. S'il n'y a pas de place libre, on attend le prochain slot. */
+  if(!state.mysterySpawned && state.timeLeft<=state.mysteryAt && state.timeLeft>RUSH_AT &&
+     state.customers.length<SLOTS){
+    spawnMysteryCustomer();
+  }
+  /* patience */
+  const snapshot=state.customers.slice();
+  snapshot.forEach(c=>{
+    if(c.leaving) return;
+    c.patience-=DT;
+    const f=Math.max(0,c.patience/c.maxPatience);
+    if(c.fillEl){
+      c.fillEl.style.width=(f*100).toFixed(1)+"%";
+      c.fillEl.classList.toggle("warn", f<=0.55&&f>0.28);
+      c.fillEl.classList.toggle("low", f<=0.28);
+    }
+    const m=moodFor(c);
+    if(m!==c.mood){ c.mood=m; if(c.faceEl) c.faceEl.innerHTML=faceSVG(c.face,m,c.mystery?SHADES:null); }
+    if(c.patience<=0) angryLeave(c);
+  });
+  if(state.timeLeft<=0) endService();
+}
+function endService(){
+  state.running=false; state.over=true;
+  clearInterval(ticker); ticker=null;
+  speak(pick(QUIPS.done),true);
+  /* v1.1 — Mur des chefs : le score entre-t-il dans le top-5 local ? */
+  let wallRank=0;
+  if(state.money>0 && wallOK){
+    const entry={score:state.money,served:state.served,combo:state.bestCombo,date:Date.now(),legacy:false};
+    wall.push(entry);
+    wall.sort((a,b)=>b.score-a.score);
+    wallRank=wall.indexOf(entry)+1; /* rang calculé avant troncature */
+    wall=wall.slice(0,5);
+    saveWall();
+    best=wall.length?wall[0].score:0;
+    updateRecordLine();
+  }
+  const isRecord = wallRank===1;
+  $("#statMoney").innerHTML=state.money+"&nbsp;$";
+  $("#statServed").textContent=state.served;
+  $("#statLost").textContent=state.lost;
+  $("#statTrash").textContent=state.trashed;
+  $("#statCombo").textContent="×"+state.bestCombo;
+  $("#newRecord").hidden=!isRecord;
+  const inWall=wallRank>=1&&wallRank<=5;
+  $("#wallBanner").hidden=!inWall;
+  if(inWall){ $("#wallRank").textContent=wallRank; throwConfetti(); }
+  renderWallInto($("#wallEndList"));
+  renderWall();
+  $("#bestLine").innerHTML="Record&nbsp;: "+best+"&nbsp;$"+(state.tips>0?' <span style="opacity:.7">(dont '+state.tips+'&nbsp;$ de pourboires)</span>':"");
+  $("#endQuip").textContent = state.money>=90 ? "Ti-Guy te donne les clés du casse-croûte !" :
+    state.money>=50 ? "Solide service, chef ! Les clients reviennent dimanche !" :
+    state.money>=20 ? "Pas pire pantoute pour un début !" :
+    "Le casse-croûte a connu mieux… on retente ?";
+  if(isRecord) sfxWin();
+  setTimeout(()=>{ $("#endScreen").hidden=false; },600);
+}
+
+/* v1.1 — confettis CSS simples pour l'entrée au Mur des chefs */
+function throwConfetti(){
+  const card=$("#endScreen .card"); if(!card) return;
+  const colors=["#f0a202","#c9341f","#3f9632","#0b6bcb","#d6336c","#ffcf3f"];
+  for(let i=0;i<28;i++){
+    const p=document.createElement("div");
+    p.className="confetti";
+    p.style.left=rnd(4,96)+"%";
+    p.style.background=pick(colors);
+    p.style.animationDelay=rnd(0,.6).toFixed(2)+"s";
+    card.appendChild(p);
+    setTimeout(()=>p.remove(),3400);
+  }
+}
+
+/* ================= DÉMARRAGE / PAUSE ================= */
+function startService(resuming){
+  ac();
+  if(!resuming){
+    state=newState();
+    custSeq=0;
+    $("#slots").innerHTML="";
+    $("#money").innerHTML="0&nbsp;$";
+    $("#time").textContent=fmtTime(SERVICE_TIME);
+    $("#timeWrap").classList.remove("low");
+    $("#rushBadge").hidden=true;
+    $("#rushBadge").setAttribute("aria-hidden","true");
+    updateRecordLine();
+    updateComboHUD(false); /* v1.1 : compteur de série remis à zéro */
+    $("#wallBanner").hidden=true;
+    renderWall();
+    renderPlate();
+    state.running=true;
+    speak(pick(QUIPS.welcome),true);
+    spawnCustomer();
+    /* 2e client à +1,2 s : rendez-vous temporel gelable à la pause (cf. gameTick) */
+    state.pendingSecondSpawnAt=performance.now()+1200;
+    state.nextSpawnAt=performance.now()+rnd(5000,8000);
+    clearInterval(ticker);
+    ticker=setInterval(gameTick,100);
+  }else{
+    state.paused=false;
+    /* Reprise exacte : les rendez-vous d'arrivée sont décalés de la durée
+       de la pause, puis le ticker du jeu repart. */
+    if(state.running&&!state.over){
+      const shift=performance.now()-state.pausedAt;
+      state.nextSpawnAt+=shift;
+      if(state.pendingSecondSpawnAt) state.pendingSecondSpawnAt+=shift;
+      clearInterval(ticker);
+      ticker=setInterval(gameTick,100);
+    }
+  }
+  $("#tutorial").hidden=true;
+  $("#startBtn").textContent="Reprendre le service";
+}
+function pauseGame(){
+  if(!state||!state.running||state.paused||state.over) return;
+  state.paused=true;
+  state.pausedAt=performance.now();
+  /* Arrêt net du ticker : chrono, patience et arrivées sont gelés. */
+  if(ticker){ clearInterval(ticker); ticker=null; }
+  $("#startBtn").textContent="Reprendre le service";
+  $("#restartConfirmBtn").hidden=true;
+  $("#tutorial").hidden=false;
+}
+function restartService(){
+  $("#endScreen").hidden=true;
+  startService(false);
+}
+
+/* ================= ENTRÉES ================= */
+function buildIngredients(){
+  const wrap=$("#ingredients");
+  wrap.innerHTML="";
+  ING_ORDER.forEach((key,i)=>{
+    const b=document.createElement("button");
+    b.className="ing-btn"; b.dataset.ing=key;
+    b.setAttribute("aria-label",INGREDIENTS[key].name);
+    b.innerHTML='<span class="key">'+(i+1)+'</span>'+ICONS[key]+'<span class="ing-name">'+INGREDIENTS[key].name+'</span>';
+    b.addEventListener("click",()=>addIngredient(key));
+    wrap.appendChild(b);
+  });
+}
+function bindInputs(){
+  $("#startBtn").addEventListener("click",()=>startService(!!state&&state.paused));
+  $("#replayBtn").addEventListener("click",restartService);
+  $("#trashBtn").addEventListener("click",()=>trashPlate());
+  $("#helpBtn").addEventListener("click",pauseGame);
+  $("#restartBtn").addEventListener("click",()=>{
+    if(!state||!state.running||state.paused||state.over) return;
+    pauseGame();
+    /* L'overlay de pause s'ouvre : « Tout recommencer » confirme (anti-fausse-manip sur cell). */
+    $("#restartConfirmBtn").hidden=false;
+  });
+  $("#restartConfirmBtn").addEventListener("click",()=>{
+    if(!state) return;
+    $("#restartConfirmBtn").hidden=true;
+    startService(false);
+  });
+  $("#muteBtn").addEventListener("click",()=>{
+    if(!state) return;
+    state.muted=!state.muted;
+    $("#soundOnIcon").style.display=state.muted?"none":"";
+    $("#soundOffIcon").style.display=state.muted?"":"none";
+    $("#muteBtn").setAttribute("aria-label",state.muted?"Activer le son":"Couper le son");
+  });
+  document.addEventListener("keydown",e=>{
+    if(!state) return;
+    if(e.key>="1"&&e.key<="9"){
+      const key=ING_ORDER[parseInt(e.key,10)-1];
+      if(key) addIngredient(key);
+    }else if(e.key==="t"||e.key==="T"){ trashPlate(); }
+  });
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden) pauseGame(); });
+}
+
+/* ================= INIT ================= */
+state=newState();
+buildIngredients();
+buildLegend();
+bindInputs();
+updateRecordLine();
+updateComboHUD(false);
+renderWall();
+renderPlate();
+renderCustomers();
+})();
+</script>
+</body>
+</html>
