@@ -1,0 +1,1224 @@
+<!doctype html>
+<!-- La Spirale ASMR — v1.1 (13 oct. 2026) : rituel respiration (durées + compteur + fin de séance) + capture partageable. 100 % procédural, aucun appel réseau. -->
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="description" content="La Spirale ASMR — un tourbillon de sable hypnotique à personnaliser : couleurs, effets et sons doux génératifs. Une expérience solo, rien qu'à vous." />
+<link rel="icon" href="data:," />
+<title>La Spirale ASMR</title>
+<style>
+  :root{
+    --ink:#f6f0e4;
+    --muted:#b3a8bf;
+    --accent:#e9c37b;
+    --card:rgba(15,16,29,.62);
+    --stroke:rgba(255,255,255,.09);
+    --shadow:0 18px 50px rgba(0,0,0,.5);
+    --night:#060913;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--night);color:var(--ink);
+    font-family:system-ui,-apple-system,"SF Pro Rounded","SF Pro Text","Segoe UI",sans-serif;
+    overflow:hidden;touch-action:manipulation;
+    opacity:0;transition:opacity 1.8s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  body.ready{opacity:1}
+  ::selection{background:rgba(233,195,123,.35)}
+  button,input{font-family:inherit}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  #spiral{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  .vignette{
+    position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 44%, transparent 42%, rgba(3,5,11,.28) 72%, rgba(2,4,9,.62) 100%);
+  }
+
+  /* ---------- Barre du haut ---------- */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:30;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 20px;pointer-events:none;
+  }
+  .topbar>*{pointer-events:auto}
+  .brand{font-weight:700;font-size:17px;letter-spacing:.02em;text-shadow:0 2px 14px rgba(0,0,0,.65)}
+  .topbar .actions{display:flex;gap:8px}
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(10,12,22,.5);border:1px solid var(--stroke);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    color:var(--ink);border-radius:999px;padding:9px 15px;
+    font-size:13.5px;font-weight:600;cursor:pointer;
+    transition:background .25s,transform .15s;
+  }
+  .pill:hover{background:rgba(255,255,255,.09)}
+  .pill:active{transform:scale(.97)}
+  .pill svg{width:16px;height:16px;flex:none}
+  .pill .hidden{display:none}
+
+  /* ---------- Panneau de personnalisation ---------- */
+  .panel{
+    position:fixed;z-index:30;left:50%;bottom:14px;
+    transform:translateX(-50%);
+    width:min(1180px,calc(100% - 24px));
+    display:grid;gap:10px;
+    grid-template-columns:repeat(auto-fit,minmax(248px,1fr));
+    max-height:48vh;overflow-y:auto;padding:2px;
+    transition:transform .55s ease,opacity .55s ease;
+    scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent;
+  }
+  body.panel-hidden .panel{transform:translate(-50%,calc(100% + 34px));opacity:0;pointer-events:none}
+  .card{
+    background:var(--card);border:1px solid var(--stroke);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-radius:18px;padding:14px 16px 15px;box-shadow:var(--shadow);
+  }
+  .card h2{font-size:13.5px;font-weight:700;margin:0 0 10px;color:var(--accent);letter-spacing:.02em}
+  .hint{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.5}
+
+  .swatches{display:flex;gap:10px;flex-wrap:wrap}
+  .swatch{
+    width:34px;height:34px;border-radius:50%;cursor:pointer;
+    border:2px solid transparent;
+    box-shadow:inset 0 0 0 2px rgba(0,0,0,.22),0 2px 8px rgba(0,0,0,.35);
+    transition:transform .2s,border-color .2s;
+  }
+  .swatch:hover{transform:scale(1.14)}
+  .swatch.active{border-color:var(--ink)}
+  .palette-name{font-size:12.5px;color:var(--muted);margin:7px 0 2px;font-weight:600}
+
+  .slider-row{display:grid;gap:1px;margin:7px 0}
+  .slider-row .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:500}
+  .slider-row .val{color:var(--muted);font-size:12px;font-weight:600}
+
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:100%;height:22px;background:transparent;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track{
+    height:6px;border-radius:3px;
+    background:linear-gradient(90deg,var(--accent) var(--p,50%),rgba(255,255,255,.14) var(--p,50%));
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:#f7f1e5;margin-top:-6px;box-shadow:0 2px 10px rgba(0,0,0,.5);
+  }
+  input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:rgba(255,255,255,.14)}
+  input[type=range]::-moz-range-progress{height:6px;border-radius:3px;background:var(--accent)}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;background:#f7f1e5}
+  input[type=range].hue::-webkit-slider-runnable-track{
+    background:linear-gradient(90deg,#f66,#fc6,#6f6,#6cc,#66c,#c6c,#f66);
+  }
+  input[type=range].hue::-moz-range-track{
+    background:linear-gradient(90deg,#f66,#fc6,#6f6,#6cc,#66c,#c6c,#f66);
+  }
+
+  .switch-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;font-size:13px;font-weight:500}
+  .switch{position:relative;display:inline-block;width:46px;height:25px;flex:none}
+  .switch input{opacity:0;width:0;height:0;position:absolute}
+  .track{position:absolute;inset:0;background:rgba(255,255,255,.15);border-radius:999px;transition:.25s;cursor:pointer}
+  .thumb{position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#efe8d8;transition:.25s;box-shadow:0 1px 6px rgba(0,0,0,.45)}
+  .switch input:checked + .track{background:var(--accent)}
+  .switch input:checked + .track .thumb{left:24px;background:#2a2118}
+  .switch input:focus-visible + .track{outline:2px solid var(--accent);outline-offset:2px}
+
+  .sound-row{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:center;margin:9px 0}
+  .sound-name{font-size:13px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline}
+  .sound-name .val{color:var(--muted);font-size:12px}
+
+  .surprise{
+    width:100%;padding:14px;border:0;border-radius:14px;cursor:pointer;
+    font-size:15px;font-weight:700;color:#241c10;
+    background:linear-gradient(135deg,#f6dcaa,#e9b968);
+    box-shadow:0 8px 26px rgba(233,183,104,.28);
+    transition:transform .15s,box-shadow .25s;
+  }
+  .surprise:hover{box-shadow:0 10px 34px rgba(233,183,104,.42)}
+  .surprise:active{transform:scale(.98)}
+
+  .reset{
+    width:100%;padding:12px;border:1px solid var(--stroke);border-radius:14px;cursor:pointer;
+    font-size:14px;font-weight:600;color:var(--ink);
+    background:transparent;margin-top:10px;
+    transition:background .25s,transform .15s;
+  }
+  .reset:hover{background:rgba(255,255,255,.06)}
+  .reset:active{transform:scale(.98)}
+
+  /* ---------- Respiration ---------- */
+  .breath-hint{
+    position:fixed;top:10%;left:50%;transform:translateX(-50%);
+    z-index:20;text-align:center;pointer-events:none;
+  }
+  #breathWord{
+    display:block;font-size:clamp(44px,9vw,88px);font-weight:600;letter-spacing:.05em;
+    color:var(--ink);opacity:.94;text-shadow:0 0 46px rgba(255,255,255,.22);
+    transition:opacity .24s ease;
+  }
+  #breathWord.swap{opacity:0}
+  .breath-hint small{color:var(--muted);font-size:13px;font-weight:500}
+  .breath-count{display:block;color:var(--muted);font-size:13px;font-weight:600;margin-top:5px;letter-spacing:.03em}
+
+  /* ---------- Pastilles de durée (rituel respiration, v1.1) ---------- */
+  .durations{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+  .durations[hidden]{display:none} /* le display:flex ci-dessus écrase le hidden natif */
+  .dur{
+    flex:1 1 auto;padding:8px 6px;border-radius:999px;cursor:pointer;
+    border:1px solid var(--stroke);background:rgba(10,12,22,.5);
+    color:var(--ink);font-size:12.5px;font-weight:600;text-align:center;min-width:52px;
+    transition:background .25s,transform .15s,border-color .25s,color .25s;
+  }
+  .dur:hover{background:rgba(255,255,255,.07)}
+  .dur:active{transform:scale(.96)}
+  .dur.active{border-color:var(--accent);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+
+  /* ---------- Fin de rituel (v1.1) ---------- */
+  .session-end{
+    position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:24px;
+    background:rgba(4,6,12,.66);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    opacity:0;transition:opacity .9s ease;
+  }
+  .session-end.show{opacity:1}
+  .session-end[hidden]{display:none} /* le display:grid ci-dessus écrase le hidden natif */
+  .session-card{
+    width:100%;max-width:360px;text-align:center;
+    background:var(--card);border:1px solid var(--stroke);border-radius:22px;
+    padding:30px 28px 28px;box-shadow:var(--shadow);
+  }
+  .session-card .kicker{color:var(--accent);font-size:13px;font-weight:600;margin:0 0 10px}
+  .session-card h2{font-size:26px;margin:0 0 12px;font-weight:700}
+  .session-msg{font-size:18px;font-weight:600;margin:0 0 8px;line-height:1.5}
+  .session-sub{color:var(--muted);font-size:13.5px;margin:0 0 22px;line-height:1.55}
+  .session-btns{display:grid;gap:10px}
+  .session-btns .reset{margin-top:0}
+
+  .ver{color:var(--accent);font-weight:700;white-space:nowrap}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;top:74px;left:50%;transform:translate(-50%,-8px);z-index:40;
+    background:rgba(14,15,27,.85);border:1px solid var(--stroke);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    color:var(--ink);font-size:13.5px;font-weight:600;
+    padding:10px 22px;border-radius:999px;opacity:0;white-space:nowrap;
+    transition:opacity .35s,transform .35s;pointer-events:none;
+    max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- Bouton flottant (mobile) ---------- */
+  .fab{
+    display:none;position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:31;
+    align-items:center;gap:8px;padding:12px 30px;border-radius:999px;cursor:pointer;
+    font-size:14.5px;font-weight:700;color:#241c10;border:0;
+    background:linear-gradient(135deg,#f6dcaa,#e9b968);
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+  }
+  .fab:active{transform:translateX(-50%) scale(.97)}
+
+  /* ---------- Écran d'accueil ---------- */
+  .intro{
+    position:fixed;inset:0;z-index:50;display:grid;place-items:center;
+    background:#05070e;transition:opacity 1.4s ease;padding:24px;
+  }
+  .intro.gone{opacity:0;pointer-events:none}
+  .intro-inner{max-width:580px;text-align:center}
+  .kicker{color:var(--accent);font-size:13px;font-weight:600;margin:0 0 12px}
+  .intro h1{font-size:clamp(34px,6.5vw,56px);margin:0 0 14px;font-weight:700;letter-spacing:.01em;text-shadow:0 4px 30px rgba(0,0,0,.5)}
+  .lede{font-size:16.5px;line-height:1.62;margin:0 0 28px;opacity:.93}
+  .start{
+    font-size:17px;font-weight:700;color:#241c10;border:0;cursor:pointer;
+    background:linear-gradient(135deg,#f6dcaa,#e9b968);
+    border-radius:999px;padding:16px 58px;
+    box-shadow:0 10px 36px rgba(233,183,104,.35);
+    transition:transform .16s,box-shadow .25s;
+  }
+  .start:hover{box-shadow:0 14px 44px rgba(233,183,104,.5);transform:translateY(-1px)}
+  .start:active{transform:scale(.98)}
+  .micro{margin:24px auto 0;font-size:12.5px;color:var(--muted);line-height:1.55;max-width:420px}
+
+  @media (max-width:860px){
+    .fab{display:flex}
+    .btn-panel{display:none}
+    .panel{bottom:78px;grid-template-columns:1fr;max-height:44vh}
+  }
+  @media (max-width:520px){
+    .topbar{padding:12px}
+    .brand{font-size:15px}
+    .pill{padding:9px 11px}
+    .pill .lbl{display:none}
+    .pill svg{width:17px;height:17px}
+    .toast{top:64px}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <canvas id="spiral" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div id="breathHint" class="breath-hint" aria-hidden="true" hidden>
+    <span id="breathWord">Inspirez</span>
+    <small>suivez le rythme de la spirale</small>
+    <span id="breathCount" class="breath-count"></span>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">La Spirale ASMR</div>
+    <nav class="actions" aria-label="Contrôles rapides">
+      <button id="btnPause" class="pill" aria-label="Mettre en pause">
+        <svg id="iconPause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4.2" height="16" rx="1.6"/><rect x="13.8" y="4" width="4.2" height="16" rx="1.6"/></svg>
+        <svg id="iconPlay" class="hidden" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg>
+        <span class="lbl" id="lblPause">Pause</span>
+      </button>
+      <button id="btnFull" class="pill" aria-label="Plein écran">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg>
+        <span class="lbl">Plein écran</span>
+      </button>
+      <button id="btnShare" class="pill" aria-label="Partager votre création">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3A1.5 1.5 0 0 1 21.5 9.5V18A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18V9.5A1.5 1.5 0 0 1 4 8z"/><circle cx="12" cy="13.4" r="3.4"/></svg>
+        <span class="lbl">Partager</span>
+      </button>
+      <button id="btnPanel" class="pill btn-panel" aria-label="Afficher ou masquer le panneau de personnalisation" aria-pressed="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h8M16 7h4M4 17h4M12 17h8"/><circle cx="14" cy="7" r="2.3"/><circle cx="10" cy="17" r="2.3"/></svg>
+        <span class="lbl">Contrôles</span>
+      </button>
+    </nav>
+  </header>
+
+  <section id="panel" class="panel" aria-label="Personnalisation de la spirale">
+    <div class="card">
+      <h2>Couleurs</h2>
+      <div id="swatches" class="swatches" role="group" aria-label="Palettes nommées"></div>
+      <p id="paletteName" class="palette-name">Aurore boréale</p>
+      <label class="slider-row" for="hue">
+        <span class="lab">Teinte libre <b class="val" id="val-hue"></b></span>
+        <input id="hue" class="hue" type="range" min="0" max="360" value="160" aria-label="Teinte libre" />
+      </label>
+    </div>
+
+    <div class="card">
+      <h2>Effets</h2>
+      <label class="slider-row" for="speed">
+        <span class="lab">Vitesse de rotation <b class="val" id="val-speed">24</b></span>
+        <input id="speed" type="range" min="0" max="100" value="24" aria-label="Vitesse de rotation" />
+      </label>
+      <label class="slider-row" for="density">
+        <span class="lab">Densité du sable <b class="val" id="val-density">65</b></span>
+        <input id="density" type="range" min="0" max="100" value="65" aria-label="Densité du sable" />
+      </label>
+      <label class="slider-row" for="trails">
+        <span class="lab">Longueur des traînées <b class="val" id="val-trails">62</b></span>
+        <input id="trails" type="range" min="0" max="100" value="62" aria-label="Longueur des traînées" />
+      </label>
+      <div class="switch-row">
+        <span id="breathLabel">Respiration guidée</span>
+        <label class="switch">
+          <input id="breath" type="checkbox" aria-labelledby="breathLabel"  />
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+      </div>
+      <div id="durRow" class="durations" hidden role="group" aria-label="Durée de la séance de respiration">
+        <button class="dur" data-min="1">1 min</button>
+        <button class="dur" data-min="3">3 min</button>
+        <button class="dur" data-min="5">5 min</button>
+        <button class="dur" data-min="10">10 min</button>
+        <button class="dur active" data-min="0" aria-label="Durée illimitée">∞</button>
+      </div>
+      <p class="hint">La spirale pulse doucement : inspirez 4 secondes, expirez 6 secondes. Choisissez une durée pour une vraie séance.</p>
+    </div>
+
+    <div class="card">
+      <h2>Sons doux</h2>
+      <div class="sound-row">
+        <label class="switch">
+          <input id="sndSand" type="checkbox" checked aria-label="Activer le son Sable doux"  />
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+        <div>
+          <div class="sound-name">Sable doux <b class="val" id="val-sand">35</b></div>
+          <input id="lvlSand" type="range" min="0" max="100" value="35" aria-label="Volume du sable" />
+        </div>
+      </div>
+      <div class="sound-row">
+        <label class="switch">
+          <input id="sndWind" type="checkbox" checked aria-label="Activer le son Vent léger"  />
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+        <div>
+          <div class="sound-name">Vent léger <b class="val" id="val-wind">40</b></div>
+          <input id="lvlWind" type="range" min="0" max="100" value="40" aria-label="Volume du vent" />
+        </div>
+      </div>
+      <div class="sound-row">
+        <label class="switch">
+          <input id="sndChime" type="checkbox" checked aria-label="Activer le son Carillon lointain"  />
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+        <div>
+          <div class="sound-name">Carillon lointain <b class="val" id="val-chime">30</b></div>
+          <input id="lvlChime" type="range" min="0" max="100" value="30" aria-label="Volume du carillon" />
+        </div>
+      </div>
+      <div class="sound-row">
+        <label class="switch">
+          <input id="sndHour" type="checkbox" checked aria-label="Activer le son Sablier, déclenché au toucher"  />
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+        <div>
+          <div class="sound-name">Sablier <b class="val" id="val-hour">45</b></div>
+          <input id="lvlHour" type="range" min="0" max="100" value="45" aria-label="Volume du sablier" />
+        </div>
+      </div>
+      <p class="hint">Chaque son est généré en direct — combinez-les à votre goût. Le sablier, lui, coule quand vos doigts touchent la spirale.</p>
+    </div>
+
+    <div class="card">
+      <h2>Ambiance</h2>
+      <button id="btnSurprise" class="surprise">Mélange surprise</button>
+      <button id="btnReset" class="reset">Réinitialiser</button>
+      <p class="hint">Une palette, des effets et des sons doux choisis au hasard. Petit secret : le mode respiration avec le carillon, c’est magique.</p>
+    </div>
+  </section>
+
+  <button id="fab" class="fab" aria-label="Masquer le panneau de personnalisation">Fermer</button>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="sessionEnd" class="session-end" hidden role="dialog" aria-modal="true" aria-labelledby="sessionEndTitle">
+    <div class="session-card">
+      <p class="kicker">Rituel terminé</p>
+      <h2 id="sessionEndTitle">Séance terminée</h2>
+      <p id="sessionEndMsg" class="session-msg">Respirations complètes. Bravo.</p>
+      <p class="session-sub">Reprenez votre souffle à votre rythme. La spirale reste là, quand vous voulez.</p>
+      <div class="session-btns">
+        <button id="btnAgain" class="surprise">Nouvelle séance</button>
+        <button id="btnCloseSession" class="reset">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="intro" class="intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <div class="intro-inner">
+      <p class="kicker">Une expérience sonore et visuelle</p>
+      <h1 id="introTitle">La Spirale ASMR</h1>
+      <p class="lede">Laissez-vous hypnotiser par un tourbillon de sable. Choisissez les couleurs, réglez les effets, ajoutez les sons doux un à un… et respirez.</p>
+      <button id="btnStart" class="start">Commencer</button>
+      <p class="micro">Une expérience solo, rien qu’à vous. Les sons démarrent uniquement lorsque vous appuyez sur «&nbsp;Commencer&nbsp;». <span class="ver">v1.1</span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var reducedMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ================= Palettes ================= */
+var PALETTES=[
+  {name:"Désert d’or",    stops:[[255,246,220],[244,213,138],[228,175,88],[118,72,30]], bg:[10,8,5]},
+  {name:"Aurore boréale", stops:[[232,255,246],[128,242,205],[66,168,236],[34,52,130]], bg:[4,10,14]},
+  {name:"Nuit profonde",  stops:[[245,245,255],[186,196,252],[112,128,226],[40,50,128]], bg:[5,6,14]},
+  {name:"Érable d’automne",stops:[[255,244,214],[255,188,108],[228,108,58],[108,44,46]], bg:[12,6,6]},
+  {name:"Brume de lavande",stops:[[248,240,255],[216,182,246],[162,132,232],[82,72,152]], bg:[9,6,14]}
+];
+var STOP_POS=[0,0.42,0.72,1];
+var curStops,tgtStops,curBg,tgtBg;
+function cloneStops(s){return s.map(function(c){return [c[0],c[1],c[2]];});}
+curStops=cloneStops(PALETTES[1].stops); tgtStops=cloneStops(PALETTES[1].stops);
+curBg=PALETTES[1].bg.slice(); tgtBg=PALETTES[1].bg.slice();
+
+function hsl2rgb(h,s,l){
+  h=((h%360)+360)%360/360; s=Math.max(0,Math.min(1,s)); l=Math.max(0,Math.min(1,l));
+  var r,g,b;
+  if(s===0){r=g=b=l;}
+  else{
+    var q=l<0.5?l*(1+s):l+s-l*s, p=2*l-q;
+    var f=function(t){if(t<0)t+=1;if(t>1)t-=1;
+      if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;};
+    r=f(h+1/3);g=f(h);b=f(h-1/3);
+  }
+  return [Math.round(r*255),Math.round(g*255),Math.round(b*255)];
+}
+
+var LUT=new Array(64);
+function buildLUT(){
+  for(var i=0;i<64;i++){
+    var t=i/63, s=0;
+    while(s<2&&t>STOP_POS[s+1])s++;
+    var p0=STOP_POS[s],p1=STOP_POS[s+1],f=(t-p0)/(p1-p0);
+    var A=curStops[s],B=curStops[s+1];
+    LUT[i]=[A[0]+(B[0]-A[0])*f,A[1]+(B[1]-A[1])*f,A[2]+(B[2]-A[2])*f];
+  }
+}
+
+/* ================= Canvas / spirale ================= */
+var canvas=$("spiral"),ctx=canvas.getContext("2d");
+var W=0,H=0,cx=0,cy=0,maxR=0;
+var parts=[];
+var needsRedraw=false;
+var simTime=0,spin=0,paused=false;
+var speed=0.48,density=0.65,trails=0.62; /* speed en 0–2 (curseur/50) : le défaut 0,48 donne ~103 s/tour ; le maximum 2 donne ~36 s/tour (rescalée encore plus doucement, correctif iPhone) */
+var breathOn=false,breathT=0,breathPhase=0,breathScale=1,breathWord="";
+var perfScale=1,frameDtAcc=0,frameCount=0;
+
+function resize(){
+  var dpr=Math.min(1.75,window.devicePixelRatio||1);
+  W=window.innerWidth;H=window.innerHeight;
+  canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  cx=W/2;cy=W<=860?H*0.36:H*0.42;maxR=Math.min(W,H)*0.46;
+  rebuildParticles();
+  needsRedraw=true;
+}
+function newParticle(scatter){
+  return{
+    t:scatter?Math.random():0,
+    arm:(Math.random()*5)|0,
+    seed:Math.random(),seed2:Math.random(),
+    size:0.9+Math.random()*1.9,
+    bright:0.5+Math.random()*0.5,
+    rate:0.7+Math.random()*0.6
+  };
+}
+function rebuildParticles(){
+  var n=Math.max(520,Math.min(2800,Math.floor(W*H/1100)));
+  parts=[];
+  for(var i=0;i<n;i++)parts.push(newParticle(true));
+}
+function easeInOut(t){return t*t*(3-2*t);}
+
+function drawParticle(p,R){
+  var r=Math.pow(p.t,0.75)*R;
+  var a=p.arm*(Math.PI*2/5)+p.t*Math.PI*2*2.6+spin
+    +0.045*Math.sin(simTime*0.9+p.seed*6.2832+p.t*6.0);
+  var rr=r*(1+0.02*Math.sin(simTime*1.3+p.seed2*6.2832));
+  var x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;
+  var c=LUT[(p.t*63)|0];
+  var fadeIn=Math.min(1,p.t/0.06);
+  var al=(0.22+0.5*p.bright)*(1-0.3*p.t)*fadeIn;
+  if(al<=0.004)return;
+  ctx.fillStyle="rgba("+(c[0]|0)+","+(c[1]|0)+","+(c[2]|0)+","+al.toFixed(3)+")";
+  ctx.beginPath();
+  ctx.arc(x,y,p.size*(0.7+0.7*p.t),0,6.2832);
+  ctx.fill();
+}
+
+var breathWordEl=$("breathWord"),breathHint=$("breathHint");
+function frame(now){
+  requestAnimationFrame(frame);
+  var dt=(now-last)/1000;last=now;
+  if(dt>0.1)dt=0.1;
+  if(paused){
+    /* Gardé en pause : on ne redessine qu'une fois après un redimensionnement,
+       pour ne pas laisser le canvas vide. */
+    if(!needsRedraw)return;
+    needsRedraw=false;dt=0;
+  }
+
+  frameDtAcc+=dt;frameCount++;
+  if(frameCount>=90){
+    var avg=frameDtAcc/frameCount;frameDtAcc=0;frameCount=0;
+    if(avg>0.028)perfScale=Math.max(0.35,perfScale-0.18);
+    else if(avg<0.016&&perfScale<1)perfScale=Math.min(1,perfScale+0.1);
+  }
+  simTime+=dt;
+
+  if(breathOn){
+    breathT+=dt;
+    var ct=breathT%10,ph,word;
+    if(ct<4){ph=easeInOut(ct/4);word="Inspirez";}
+    else{ph=1-easeInOut((ct-4)/6);word="Expirez";}
+    breathPhase=ph;
+    if(word!==breathWord){
+      breathWord=word;
+      breathWordEl.classList.add("swap");
+      (function(w){setTimeout(function(){breathWordEl.textContent=w;breathWordEl.classList.remove("swap");},240);})(word);
+    }
+    /* v1.1 — minuteur de séance : décompte uniquement quand la respiration
+       est active (en pause, dt=0 donc le minuteur est gelé, comme le cycle). */
+    if(sessionLen!==Infinity){
+      sessionLeft-=dt;
+      if(sessionLeft<=0){endSession();}
+    }
+    updateBreathCount();
+  }else{
+    breathPhase+=(0-breathPhase)*Math.min(1,dt*1.5);
+  }
+  var targetScale=reducedMotion?1:1+0.07*breathPhase;
+  breathScale+=(targetScale-breathScale)*Math.min(1,dt*4);
+
+  /* Vitesse rescalée encore plus doucement — le curseur reste linéaire (speed=curseur/50) :
+       curseur 0   → ~251 s/tour  (à peine vivant, presque figé)
+       curseur 24  → ~103 s/tour  (défaut : un mouvement à peine perceptible)
+       curseur 100 → ~36 s/tour   (maximum : doux, ne donne jamais le tournis)
+     Densité et traînées sont indépendantes de la vitesse : inchangées.
+     Le débit du sable suit la rotation (flowRate ≈ 0,35 × spinRate) pour garder
+     le même mouvement relatif des grains le long des bras — divisé par deux
+     lui aussi après le retour iPhone (« trop rapide »). */
+  var spinRate=(0.025+0.075*speed)*(breathOn?1-0.15*(1-breathPhase):1)*(reducedMotion?0.5:1);
+  spin+=dt*spinRate;
+  var flowRate=0.0088+0.026*speed;
+
+  var lam=1-Math.exp(-dt*1.4),s,c;
+  for(s=0;s<4;s++)for(c=0;c<3;c++)curStops[s][c]+=(tgtStops[s][c]-curStops[s][c])*lam;
+  for(c=0;c<3;c++)curBg[c]+=(tgtBg[c]-curBg[c])*lam;
+  buildLUT();
+
+  ctx.globalCompositeOperation="source-over";
+  ctx.globalAlpha=0.36-0.315*trails;
+  ctx.fillStyle="rgb("+(curBg[0]|0)+","+(curBg[1]|0)+","+(curBg[2]|0)+")";
+  ctx.fillRect(0,0,W,H);
+  ctx.globalAlpha=1;
+  ctx.globalCompositeOperation="lighter";
+
+  var R=maxR*breathScale;
+  var gr=R*0.6,c0=LUT[2];
+  var g=ctx.createRadialGradient(cx,cy,0,cx,cy,gr);
+  g.addColorStop(0,"rgba("+(c0[0]|0)+","+(c0[1]|0)+","+(c0[2]|0)+","+(0.10+0.06*breathPhase).toFixed(3)+")");
+  g.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=g;
+  ctx.fillRect(cx-gr,cy-gr,gr*2,gr*2);
+
+  var active=Math.floor(parts.length*(0.15+0.85*density)*perfScale);
+  for(var i=0;i<active;i++){
+    var p=parts[i];
+    p.t+=dt*flowRate*p.rate;
+    if(p.t>=1){p.t-=1;p.seed=Math.random();p.seed2=Math.random();}
+    drawParticle(p,R);
+  }
+
+  if(breathOn){
+    var c1=LUT[12];
+    ctx.strokeStyle="rgba("+(c1[0]|0)+","+(c1[1]|0)+","+(c1[2]|0)+","+(0.08+0.12*breathPhase).toFixed(3)+")";
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.arc(cx,cy,R*(0.14+0.3*breathPhase),0,6.2832);
+    ctx.stroke();
+  }
+
+  /* Halos tactiles : chaque doigt posé fait briller le sable sous lui —
+     la preuve visuelle que le toucher est bien enregistré, même son coupé. */
+  for(var fxId in touchFx){
+    var fx=touchFx[fxId];
+    fx.a+=dt*(touchIds[fxId]?3.2:-1.3);
+    if(fx.a>1)fx.a=1;
+    if(fx.a<=0){delete touchFx[fxId];continue;}
+    var tc=LUT[8],fr=52+30*fx.a;
+    var fg=ctx.createRadialGradient(fx.x,fx.y,0,fx.x,fx.y,fr);
+    fg.addColorStop(0,"rgba(255,255,255,"+(0.15*fx.a).toFixed(3)+")");
+    fg.addColorStop(0.55,"rgba("+(tc[0]|0)+","+(tc[1]|0)+","+(tc[2]|0)+","+(0.13*fx.a).toFixed(3)+")");
+    fg.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=fg;
+    ctx.fillRect(fx.x-fr,fx.y-fr,fr*2,fr*2);
+  }
+}
+
+/* ================= Sons génératifs (Web Audio) ================= */
+var AC=window.AudioContext||window.webkitAudioContext;
+var ac=null,master=null,started=false,audioOK=false;
+var nextChimeAt=0;
+var L={
+  sand: {enabled:true, level:0.35, gain:null, gate:null, max:0.50},
+  wind: {enabled:true, level:0.40, gain:null, gate:null, max:0.70},
+  chime:{enabled:true, level:0.30, gain:null, max:1.0},
+  hour: {enabled:true, level:0.45, gain:null, gate:null, max:0.55}
+};
+/* Noeuds du sablier tactile : enveloppe suivant le toucher + texture du grain */
+var HG={env:null,tex:null};
+
+function whiteNoiseBuf(sec){
+  var sr=ac.sampleRate,b=ac.createBuffer(1,Math.floor(sr*sec),sr),d=b.getChannelData(0);
+  for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  return b;
+}
+function makeIR(sec,decay){
+  var sr=ac.sampleRate,len=Math.floor(sr*sec),b=ac.createBuffer(2,len,sr);
+  for(var ch=0;ch<2;ch++){
+    var d=b.getChannelData(ch);
+    for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay);
+  }
+  return b;
+}
+
+function audioStart(){
+  if(started){if(ac&&ac.state==="suspended")ac.resume();return true;}
+  if(!AC){toast("Le son n’est pas disponible sur cet appareil.");return false;}
+  try{
+    ac=new AC();
+    master=ac.createGain();master.gain.value=0.9;
+    var comp=ac.createDynamicsCompressor();
+    comp.threshold.value=-20;comp.ratio.value=3;comp.attack.value=0.01;comp.release.value=0.4;
+    master.connect(comp);comp.connect(ac.destination);
+    var noise=whiteNoiseBuf(2);
+
+    /* Sable : bruit filtré qui crépite doucement */
+    var sSrc=ac.createBufferSource();sSrc.buffer=noise;sSrc.loop=true;
+    var sBp=ac.createBiquadFilter();sBp.type="bandpass";sBp.frequency.value=1200;sBp.Q.value=0.8;
+    var sGain=ac.createGain();sGain.gain.value=0;
+    sSrc.connect(sBp);sBp.connect(sGain);sGain.connect(master);
+    var sLfo=ac.createOscillator();sLfo.type="sine";sLfo.frequency.value=0.11;
+    var sLfoG=ac.createGain();sLfoG.gain.value=0.09;
+    var sGate=ac.createGain();sGate.gain.value=0;
+    sLfo.connect(sLfoG);sLfoG.connect(sGate);sGate.connect(sGain.gain);
+    sSrc.start();sLfo.start();
+    L.sand.gain=sGain;L.sand.gate=sGate;
+
+    /* Vent : souffle lent, filtre qui respire */
+    var wSrc=ac.createBufferSource();wSrc.buffer=noise;wSrc.loop=true;wSrc.playbackRate.value=0.55;
+    var wLp=ac.createBiquadFilter();wLp.type="lowpass";wLp.frequency.value=430;wLp.Q.value=0.5;
+    var wGain=ac.createGain();wGain.gain.value=0;
+    wSrc.connect(wLp);wLp.connect(wGain);wGain.connect(master);
+    var wLfoF=ac.createOscillator();wLfoF.type="sine";wLfoF.frequency.value=0.063;
+    var wLfoFG=ac.createGain();wLfoFG.gain.value=210;
+    wLfoF.connect(wLfoFG);wLfoFG.connect(wLp.frequency);
+    var wLfoA=ac.createOscillator();wLfoA.type="sine";wLfoA.frequency.value=0.047;
+    var wLfoAG=ac.createGain();wLfoAG.gain.value=0.2;
+    var wGate=ac.createGain();wGate.gain.value=0;
+    wLfoA.connect(wLfoAG);wLfoAG.connect(wGate);wGate.connect(wGain.gain);
+    wSrc.start();wLfoF.start();wLfoA.start();
+    L.wind.gain=wGain;L.wind.gate=wGate;
+
+    /* Sablier : sable fin qui coule uniquement tant qu'on touche la spirale */
+    var hSrc=ac.createBufferSource();hSrc.buffer=noise;hSrc.loop=true;hSrc.playbackRate.value=1.4;
+    var hHp=ac.createBiquadFilter();hHp.type="highpass";hHp.frequency.value=1700;
+    var hBp=ac.createBiquadFilter();hBp.type="bandpass";hBp.frequency.value=3600;hBp.Q.value=1.0;
+    var hEnv=ac.createGain();hEnv.gain.value=0;    /* enveloppe suivant le toucher */
+    var hAmp=ac.createGain();hAmp.gain.value=0;    /* niveau réglable dans le panneau */
+    hSrc.connect(hHp);hHp.connect(hBp);hBp.connect(hEnv);hEnv.connect(hAmp);hAmp.connect(master);
+    var hLfo=ac.createOscillator();hLfo.type="sine";hLfo.frequency.value=0.9;
+    var hLfoG=ac.createGain();hLfoG.gain.value=1100;   /* le « filet » de sable varie */
+    hLfo.connect(hLfoG);hLfoG.connect(hBp.frequency);
+    var hTex=ac.createOscillator();hTex.type="triangle";hTex.frequency.value=6.4;  /* grain du sable */
+    var hTexG=ac.createGain();hTexG.gain.value=0.26;
+    var hTexGate=ac.createGain();hTexGate.gain.value=0;  /* texture liée au toucher */
+    hTex.connect(hTexG);hTexG.connect(hTexGate);hTexGate.connect(hEnv.gain);
+    hSrc.start();hLfo.start();hTex.start();
+    L.hour.gain=hAmp;
+    HG.env=hEnv;HG.tex=hTexGate;
+
+    /* Carillon : notes pentatoniques éparses, réverbération synthétisée */
+    var cGain=ac.createGain();cGain.gain.value=0;
+    var dry=ac.createGain();dry.gain.value=0.35;
+    var conv=ac.createConvolver();conv.buffer=makeIR(1.9,2.6);
+    var wet=ac.createGain();wet.gain.value=0.95;
+    cGain.connect(dry);dry.connect(master);
+    cGain.connect(conv);conv.connect(wet);wet.connect(master);
+    L.chime.gain=cGain;
+
+    started=true;audioOK=true;
+    /* iOS peut démarrer le contexte "suspended" même depuis un geste :
+       resume() explicite immédiat, réessayé à chaque toucher par wakeAudio(). */
+    try{var rz=ac.resume();if(rz&&rz.catch)rz.catch(function(){});}catch(e){}
+    applyGains();
+    nextChimeAt=ac.currentTime+2.0;
+    return true;
+  }catch(e){
+    toast("Le son n’a pas pu démarrer.");
+    return false;
+  }
+}
+
+function applyGains(){
+  if(!started)return;
+  var t=ac.currentTime,k,lay;
+  for(k in L){
+    lay=L[k];
+    var on=lay.enabled&&lay.level>0.005;
+    lay.gain.gain.setTargetAtTime(on?lay.level*lay.max:0,t,0.45);
+    if(lay.gate)lay.gate.gain.setTargetAtTime(on?1:0,t,0.6);
+  }
+}
+
+/* Sablier tactile : le sable coule tant qu'un doigt touche la spirale,
+   puis s'estompe en douceur au relâcher. Le son ne peut démarrer qu'après
+   « Commencer » (audioStart crée le contexte, exigeant un geste utilisateur). */
+/* Réveil audio : sur iOS (Safari et webviews embarquées), seul un geste utilisateur
+   autorise l'AudioContext à passer "running". wakeAudio() est appelé de façon
+   synchrone depuis chaque geste tactile ou souris — jamais depuis un minuteur. */
+function wakeAudio(){
+  if(ac&&ac.state!=="running"&&!paused){
+    try{var r=ac.resume();if(r&&r.catch)r.catch(function(){});}catch(e){}
+  }
+}
+var touchIds={},touchCount=0;
+var touchFx={}; /* halos lumineux qui suivent les doigts sur la spirale */
+/* Sablier tactile : l'enveloppe ne s'ouvre qu'une fois l'AudioContext réellement
+   "running". Sur iOS, si resume() n'a pas encore abouti quand le doigt touche
+   la spirale, l'horloge audio est figée ("suspended") et un toucher rapide
+   resterait silencieux : on attend la promesse de resume() avant de commander
+   l'enveloppe. Si le doigt est reparti entre-temps, on n'ouvre rien. */
+function hAttack(){
+  if(!started||!ac||!HG.env||paused)return;
+  var on=L.hour.enabled&&L.hour.level>0.005;
+  var open=function(){
+    if(touchCount===0||paused||ac.state!=="running")return;
+    var t=ac.currentTime;
+    HG.env.gain.cancelScheduledValues(t);
+    HG.env.gain.setTargetAtTime(on?1:0,t,0.035);
+    HG.tex.gain.cancelScheduledValues(t);
+    HG.tex.gain.setTargetAtTime(on?1:0,t,0.05);
+  };
+  if(ac.state==="running"){open();return;}
+  try{
+    var r=ac.resume();
+    if(r&&r.then)r.then(open,function(){});
+    else setTimeout(function(){if(ac.state==="running")open();},80); /* iOS très ancien : resume() sans promesse */
+  }catch(e){}
+}
+function hRelease(){
+  if(!started||!ac||!HG.env)return;
+  var t=ac.currentTime;
+  HG.env.gain.cancelScheduledValues(t);
+  HG.env.gain.setTargetAtTime(0,t,0.30);   /* fondu doux, jamais de coupure */
+  HG.tex.gain.cancelScheduledValues(t);
+  HG.tex.gain.setTargetAtTime(0,t,0.30);
+}
+function touchStartId(id,x,y){
+  if(!introDone)return;
+  wakeAudio(); /* réveil explicite, au cœur même du geste exigé par iOS */
+  var fx=touchFx[id];
+  if(fx){fx.x=x;fx.y=y;}
+  else touchFx[id]={x:x,y:y,a:0};
+  if(!touchIds[id]){touchIds[id]=1;touchCount++;}
+  if(touchCount===1)hAttack();
+}
+function touchEndId(id){
+  if(!touchIds[id])return;
+  delete touchIds[id];touchCount--;
+  if(touchCount===0)hRelease();
+}
+function touchMoveId(id,x,y){
+  var fx=touchFx[id];
+  if(fx&&touchIds[id]){fx.x=x;fx.y=y;}
+}
+function releaseAllTouches(){
+  var id;
+  for(id in touchIds)delete touchIds[id];
+  for(id in touchFx)delete touchFx[id];
+  touchCount=0;
+  hRelease(); /* le sablier ne reste jamais bloqué en position "coule" */
+}
+/* Voie Pointer Events : souris et stylet uniquement. Les pointeurs tactiles
+   sont ignorés ici parce que la voie Touch Events les traite déjà :
+   chaque contact physique n'est compté qu'une seule fois, même là où
+   les deux événements coexistent (iOS, Android). */
+function onPtrDown(e){
+  if(e.pointerType==="touch")return;
+  touchStartId("p"+e.pointerId,e.clientX,e.clientY);
+}
+function onPtrUp(e){
+  if(e.pointerType==="touch")return;
+  touchEndId("p"+e.pointerId);
+}
+function onPtrMove(e){
+  if(e.pointerType==="touch")return;
+  touchMoveId("p"+e.pointerId,e.clientX,e.clientY);
+}
+/* Voie Touch Events : le chemin principal sur mobile. preventDefault en mode
+   non passif bloque les gestes par défaut d'iOS (défilement, zoom, loupe…),
+   en plus de touch-action:none sur le canvas. */
+function onTouchStart(e){
+  e.preventDefault();
+  for(var i=0;i<e.changedTouches.length;i++){
+    var t=e.changedTouches[i];
+    touchStartId("t"+t.identifier,t.clientX,t.clientY);
+  }
+}
+function onTouchMove(e){
+  e.preventDefault(); /* le doigt glisse sur le sable, la page ne bouge pas */
+  for(var i=0;i<e.changedTouches.length;i++){
+    var t=e.changedTouches[i];
+    touchMoveId("t"+t.identifier,t.clientX,t.clientY);
+  }
+}
+function onTouchEnd(e){
+  for(var i=0;i<e.changedTouches.length;i++)touchEndId("t"+e.changedTouches[i].identifier);
+}
+canvas.addEventListener("pointerdown",onPtrDown);
+canvas.addEventListener("pointerleave",onPtrUp);
+window.addEventListener("pointerup",onPtrUp);
+window.addEventListener("pointercancel",onPtrUp);
+window.addEventListener("pointermove",onPtrMove);
+canvas.addEventListener("touchstart",onTouchStart,{passive:false});
+canvas.addEventListener("touchmove",onTouchMove,{passive:false});
+window.addEventListener("touchend",onTouchEnd);
+window.addEventListener("touchcancel",onTouchEnd);
+/* Le réveil audio s'accroche aussi à n'importe quel premier geste, où qu'il
+   ait lieu — y compris sur les réglages du panneau. */
+document.addEventListener("touchstart",wakeAudio,{passive:true,capture:true});
+document.addEventListener("pointerdown",wakeAudio,{passive:true,capture:true});
+/* Si la page passe en arrière-plan pendant un toucher, tout est relâché. */
+document.addEventListener("visibilitychange",function(){
+  if(document.hidden)releaseAllTouches();
+});
+
+/* Une note de carillon vers une destination choisie, à un volume choisi.
+   Sert au carillon d'ambiance (v1.0) comme au signal doux de fin de séance (v1.1). */
+function bellTone(t,dest,vol){
+  var notes=[220,261.63,293.66,329.63,392,440,523.25];
+  var f=notes[(Math.random()*notes.length)|0];
+  var partsBell=[[1,0.6,3.2],[2.76,0.14,2.2],[5.4,0.05,1.4]];
+  for(var i=0;i<partsBell.length;i++){
+    var m=partsBell[i][0],a=partsBell[i][1],dur=partsBell[i][2];
+    var o=ac.createOscillator();o.type="sine";o.frequency.value=f*m;
+    var g=ac.createGain();
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002,vol*a),t+0.025);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g);g.connect(dest);
+    o.start(t);o.stop(t+dur+0.1);
+  }
+}
+function playChime(t){
+  bellTone(t,L.chime.gain,0.24);
+}
+/* v1.1 — signal de fin de séance : la même cloche, mais douce, jouée même si
+   l'utilisateur avait coupé le carillon d'ambiance (chaîne dédiée vers master). */
+function playEndChime(){
+  if(!started||!ac||!master)return;
+  try{
+    if(ac.state!=="running"){var r=ac.resume();if(r&&r.catch)r.catch(function(){});}
+    var g=ac.createGain();g.gain.value=0.5;
+    g.connect(master);
+    bellTone(ac.currentTime+0.05,g,0.14);
+  }catch(e){}
+}
+setInterval(function(){
+  if(!started||!audioOK||paused)return;
+  var c=L.chime;
+  if(!c.enabled||c.level<0.02)return;
+  if(ac.state!=="running")return;
+  var now=ac.currentTime;
+  if(now>=nextChimeAt){
+    nextChimeAt=now+3+Math.random()*5.5;
+    playChime(now+0.05);
+  }
+},500);
+
+/* ================= Interface ================= */
+var toastEl=$("toast"),toastTimer=null;
+function toast(msg){
+  toastEl.textContent=msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){toastEl.classList.remove("show");},2600);
+}
+
+function paintRange(el){
+  var p=(el.value-el.min)/Math.max(1,(el.max-el.min))*100;
+  el.style.setProperty("--p",p+"%");
+}
+function setRange(el,v){
+  el.value=Math.round(v*100);
+  paintRange(el);
+}
+var ranges=document.querySelectorAll('input[type="range"]');
+for(var ri=0;ri<ranges.length;ri++){
+  (function(el){paintRange(el);el.addEventListener("input",function(){paintRange(el);});})(ranges[ri]);
+}
+
+/* Palettes */
+var swatchWrap=$("swatches"),paletteNameEl=$("paletteName"),swatchBtns=[];
+for(var pi=0;pi<PALETTES.length;pi++){
+  (function(idx){
+    var pl=PALETTES[idx];
+    var b=document.createElement("button");
+    b.className="swatch"+(idx===1?" active":"");
+    b.title=pl.name;b.setAttribute("aria-label","Palette "+pl.name);
+    var gs=pl.stops.map(function(s){return "rgb("+s[0]+","+s[1]+","+s[2]+")";}).join(", ");
+    b.style.background="linear-gradient(135deg,"+gs+")";
+    b.addEventListener("click",function(){selectPalette(idx);});
+    swatchWrap.appendChild(b);swatchBtns.push(b);
+  })(pi);
+}
+function selectPalette(idx){
+  var pl=PALETTES[idx];
+  tgtStops=cloneStops(pl.stops);tgtBg=pl.bg.slice();
+  paletteNameEl.textContent=pl.name;
+  for(var i=0;i<swatchBtns.length;i++)swatchBtns[i].classList.toggle("active",i===idx);
+}
+var hueEl=$("hue");
+hueEl.addEventListener("input",function(){
+  var h=+hueEl.value;
+  tgtStops=[hsl2rgb(h,55,0.90),hsl2rgb(h,72,0.64),hsl2rgb(h+14,62,0.42),hsl2rgb(h,48,0.14)];
+  tgtBg=hsl2rgb(h,42,0.035);
+  paletteNameEl.textContent="Personnalisée";
+  for(var i=0;i<swatchBtns.length;i++)swatchBtns[i].classList.remove("active");
+});
+
+/* Effets */
+var speedEl=$("speed"),densityEl=$("density"),trailsEl=$("trails"),breathEl=$("breath");
+speedEl.addEventListener("input",function(){speed=+speedEl.value/50;$("val-speed").textContent=speedEl.value;});
+densityEl.addEventListener("input",function(){density=+densityEl.value/100;$("val-density").textContent=densityEl.value;});
+trailsEl.addEventListener("input",function(){trails=+trailsEl.value/100;$("val-trails").textContent=trailsEl.value;});
+breathEl.addEventListener("change",function(){setBreath(breathEl.checked);});
+
+/* ================= v1.1 — Rituel respiration =================
+   La respiration guidée devient un rituel : durées au choix, compteur de
+   cycles, fin de séance douce (fondu existant + carillon + écran de fin).
+   Le mode ∞ reste le défaut et reproduit exactement la v1.0. */
+var durRow=$("durRow"),durBtns=durRow.querySelectorAll(".dur");
+var breathCountEl=$("breathCount");
+var sessionLen=Infinity,sessionLeft=Infinity,lastCountTxt="";
+function updateBreathCount(){
+  if(!breathOn||!breathCountEl)return;
+  var txt;
+  if(sessionLen===Infinity){
+    txt="respiration "+(Math.floor(breathT/10)+1);
+  }else{
+    var total=Math.round(sessionLen/10);
+    var done=Math.min(total,Math.floor(Math.max(0,sessionLen-sessionLeft)/10)+1);
+    txt="respiration "+done+"/"+total;
+  }
+  if(txt!==lastCountTxt){lastCountTxt=txt;breathCountEl.textContent=txt;}
+}
+function setBreath(on,quiet){
+  breathOn=on;breathEl.checked=on;
+  breathT=0;breathWord="";breathWordEl.textContent="Inspirez";
+  sessionLeft=sessionLen;lastCountTxt="";updateBreathCount();
+  if(on){
+    breathHint.removeAttribute("hidden");durRow.removeAttribute("hidden");
+    if(!quiet)toast("Respiration guidée — inspirez 4 s, expirez 6 s");
+  }else{
+    breathHint.setAttribute("hidden","");durRow.setAttribute("hidden","");
+  }
+}
+for(var di=0;di<durBtns.length;di++){
+  (function(b){
+    b.addEventListener("click",function(){
+      var m=+b.getAttribute("data-min");
+      sessionLen=(m===0)?Infinity:m*60;
+      for(var j=0;j<durBtns.length;j++)durBtns[j].classList.toggle("active",durBtns[j]===b);
+      setBreath(true,true);
+      toast("Séance de "+(m===0?"durée libre":m+" minute"+(m>1?"s":""))+" — suivez le rythme.");
+    });
+  })(durBtns[di]);
+}
+var sessionEndEl=$("sessionEnd"),sessionEndMsg=$("sessionEndMsg");
+function showSessionEnd(total){
+  sessionEndMsg.textContent=total+" respirations complètes. Bravo.";
+  sessionEndEl.removeAttribute("hidden");
+  requestAnimationFrame(function(){requestAnimationFrame(function(){sessionEndEl.classList.add("show");});});
+}
+function hideSessionEnd(){
+  sessionEndEl.classList.remove("show");
+  setTimeout(function(){sessionEndEl.setAttribute("hidden","");},650);
+}
+function endSession(){
+  var total=Math.round(sessionLen/10);
+  setBreath(false,true);
+  sessionLeft=Infinity; /* la séance est finie : on ne re-déclenche pas */
+  toast("Séance terminée — "+total+" respirations complètes. Bravo.");
+  playEndChime();
+  showSessionEnd(total);
+}
+$("btnAgain").addEventListener("click",function(){
+  hideSessionEnd();
+  setBreath(true,true);
+  toast("Nouvelle séance — suivez le rythme.");
+});
+$("btnCloseSession").addEventListener("click",hideSessionEnd);
+
+/* ================= v1.1 — Capture partageable =================
+   Le motif de la spirale seule (canvas #spiral) est composé sur un canvas
+   hors écran avec la signature « La Spirale ASMR », puis partagé :
+   Web Share API (fichier) → téléchargement PNG → presse-papiers. 100 % local. */
+function stampName(){
+  var d=new Date(),p=function(n){return (n<10?"0":"")+n;};
+  return "spirale-asmr-"+d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"-"+p(d.getHours())+p(d.getMinutes())+".png";
+}
+function compositeCapture(cb){
+  try{
+    var c=document.createElement("canvas");
+    c.width=canvas.width||2;c.height=canvas.height||2;
+    var x=c.getContext("2d");
+    x.drawImage(canvas,0,0);
+    var f1=Math.max(20,Math.round(c.width*0.042));
+    var pad=Math.round(c.height*0.05);
+    x.textAlign="center";
+    x.shadowColor="rgba(0,0,0,0.8)";x.shadowBlur=Math.round(f1*0.45);
+    x.font="700 "+f1+"px system-ui,-apple-system,'SF Pro Text','Segoe UI',sans-serif";
+    x.fillStyle="#e9c37b";
+    x.fillText("La Spirale ASMR",c.width/2,c.height-pad-Math.round(f1*1.05));
+    var f2=Math.max(13,Math.round(c.width*0.021));
+    x.font="500 "+f2+"px system-ui,-apple-system,'SF Pro Text','Segoe UI',sans-serif";
+    x.shadowBlur=Math.round(f2*0.45);
+    x.fillStyle="rgba(246,240,228,0.88)";
+    var pal=(typeof paletteNameEl!=="undefined"&&paletteNameEl)?paletteNameEl.textContent:"";
+    x.fillText(pal+" · hp-outils.com",c.width/2,c.height-pad);
+    x.shadowBlur=0;
+    if(c.toBlob)c.toBlob(function(b){cb(b);},"image/png");
+    else cb(null);
+  }catch(e){cb(null);}
+}
+function copyBlob(blob){
+  try{
+    if(navigator.clipboard&&window.ClipboardItem&&navigator.clipboard.write){
+      navigator.clipboard.write([new ClipboardItem({"image/png":blob})]).then(function(){
+        toast("Image copiée dans le presse-papiers.");
+      },function(){toast("Partage impossible pour l'instant.");});
+    }else{toast("Partage impossible pour l'instant.");}
+  }catch(e){toast("Partage impossible pour l'instant.");}
+}
+function fallbackDownload(blob,name){
+  var a=document.createElement("a");
+  if(!("download" in a)){copyBlob(blob);return;}
+  try{
+    var url=URL.createObjectURL(blob);
+    a.href=url;a.download=name;
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){if(a.parentNode)a.parentNode.removeChild(a);URL.revokeObjectURL(url);},4000);
+    toast("Création sauvegardée dans vos téléchargements.");
+  }catch(e){copyBlob(blob);}
+}
+$("btnShare").addEventListener("click",function(){
+  compositeCapture(function(blob){
+    if(!blob){toast("Capture impossible pour l'instant.");return;}
+    var file=new File([blob],stampName(),{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      navigator.share({files:[file],title:"La Spirale ASMR",text:"Ma création — La Spirale ASMR"}).then(function(){
+        toast("Création partagée. Merci !");
+      },function(err){
+        if(err&&err.name==="AbortError")return; /* abandon volontaire : silence */
+        fallbackDownload(blob,file.name);
+      });
+      return;
+    }
+    fallbackDownload(blob,file.name);
+  });
+});
+
+/* Sons */
+function wireSound(key,toggleId,levelId,valId){
+  var sw=$(toggleId),lv=$(levelId),vl=$(valId);
+  sw.addEventListener("change",function(){
+    if(started){L[key].enabled=sw.checked;applyGains();}
+    else L[key].enabled=sw.checked;
+  });
+  lv.addEventListener("input",function(){
+    L[key].level=+lv.value/100;vl.textContent=lv.value;
+    if(started)applyGains();
+  });
+}
+wireSound("sand","sndSand","lvlSand","val-sand");
+wireSound("wind","sndWind","lvlWind","val-wind");
+wireSound("chime","sndChime","lvlChime","val-chime");
+wireSound("hour","sndHour","lvlHour","val-hour");
+
+/* Pause / plein écran */
+var btnPause=$("btnPause"),iconPause=$("iconPause"),iconPlay=$("iconPlay"),lblPause=$("lblPause");
+var introDone=false;
+function togglePause(){
+  paused=!paused;
+  iconPause.classList.toggle("hidden",paused);
+  iconPlay.classList.toggle("hidden",!paused);
+  lblPause.textContent=paused?"Reprendre":"Pause";
+  btnPause.setAttribute("aria-label",paused?"Reprendre":"Mettre en pause");
+  if(started&&ac){
+    if(paused)ac.suspend();
+    else ac.resume();
+  }
+}
+btnPause.addEventListener("click",togglePause);
+window.addEventListener("keydown",function(e){
+  if(e.code!=="Space"||!introDone)return;
+  var tag=(document.activeElement&&document.activeElement.tagName)||"";
+  if(/INPUT|BUTTON|SELECT|TEXTAREA/.test(tag))return;
+  e.preventDefault();togglePause();
+});
+
+$("btnFull").addEventListener("click",function(){
+  try{
+    if(document.fullscreenElement)document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(function(){toast("Plein écran non disponible.");});
+  }catch(e){toast("Plein écran non disponible.");}
+});
+
+/* Panneau */
+var btnPanel=$("btnPanel"),fab=$("fab");
+function togglePanel(){
+  var hidden=document.body.classList.toggle("panel-hidden");
+  btnPanel.setAttribute("aria-pressed",String(!hidden));
+  fab.textContent=hidden?"Personnaliser":"Fermer";
+  fab.setAttribute("aria-label",hidden?"Afficher le panneau de personnalisation":"Masquer le panneau de personnalisation");
+}
+btnPanel.addEventListener("click",togglePanel);
+fab.addEventListener("click",togglePanel);
+
+/* Mélange surprise */
+$("btnSurprise").addEventListener("click",function(){
+  var r=Math.random;
+  if(r()<0.28){
+    var h=(r()*360)|0;
+    hueEl.value=h;paintRange(hueEl);
+    var ev=new Event("input",{bubbles:true});
+    hueEl.dispatchEvent(ev);
+  }else{
+    selectPalette((r()*PALETTES.length)|0);
+  }
+  speed=0.15+r()*0.6;setRange(speedEl,speed/2);$("val-speed").textContent=speedEl.value;
+  density=0.45+r()*0.5;setRange(densityEl,density);$("val-density").textContent=densityEl.value;
+  trails=0.5+r()*0.4;setRange(trailsEl,trails);$("val-trails").textContent=trailsEl.value;
+  setBreath(r()<0.25,true);
+  var rows=[["sand","sndSand","lvlSand","val-sand"],["wind","sndWind","lvlWind","val-wind"],["chime","sndChime","lvlChime","val-chime"],["hour","sndHour","lvlHour","val-hour"]];
+  for(var i=0;i<rows.length;i++){
+    var k=rows[i][0],en=r()<0.72;
+    L[k].enabled=en;$(rows[i][1]).checked=en;
+    var v=en?0.15+r()*0.45:L[k].level;
+    L[k].level=v;$(rows[i][2]).value=Math.round(v*100);paintRange($(rows[i][2]));$(rows[i][3]).textContent=$(rows[i][2]).value;
+  }
+  applyGains();
+  toast("Mélange surprise — "+paletteNameEl.textContent);
+});
+
+/* Réinitialisation */
+$("btnReset").addEventListener("click",function(){
+  selectPalette(1); /* Aurore boréale */
+  /* Teinte libre remise à 160 sans changer la palette active */
+  hueEl.value=160;paintRange(hueEl);
+  /* Curseurs d'effets : 24 / 65 / 62 */
+  speed=24/50;speedEl.value=24;paintRange(speedEl);$("val-speed").textContent="24";
+  density=65/100;densityEl.value=65;paintRange(densityEl);$("val-density").textContent="65";
+  trails=62/100;trailsEl.value=62;paintRange(trailsEl);$("val-trails").textContent="62";
+  /* Respiration coupée */
+  setBreath(false,true);
+  /* Les 4 sons activés à leurs volumes par défaut */
+  var rows=[["sand","sndSand","lvlSand","val-sand",35],["wind","sndWind","lvlWind","val-wind",40],["chime","sndChime","lvlChime","val-chime",30],["hour","sndHour","lvlHour","val-hour",45]];
+  for(var i=0;i<rows.length;i++){
+    var k=rows[i][0],v=rows[i][4];
+    L[k].enabled=true;$(rows[i][1]).checked=true;
+    L[k].level=v/100;$(rows[i][2]).value=v;paintRange($(rows[i][2]));$(rows[i][3]).textContent=String(v);
+  }
+  applyGains();
+  toast("Réglages réinitialisés");
+});
+
+/* Démarrage */
+var intro=$("intro");
+$("btnStart").addEventListener("click",function(){
+  intro.classList.add("gone");
+  introDone=true;
+  audioStart();
+  setTimeout(function(){if(intro.parentNode)intro.parentNode.removeChild(intro);},1700);
+});
+
+/* Boot */
+var last=performance.now();
+window.addEventListener("resize",resize);
+resize();
+requestAnimationFrame(frame);
+function ready(){document.body.classList.add("ready");}
+if(document.readyState==="complete")ready();
+else window.addEventListener("load",ready);
+setTimeout(ready,600);
+})();
+</script>
+</body>
+</html>
