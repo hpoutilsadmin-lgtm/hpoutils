@@ -43,6 +43,12 @@ function JeuxPage() {
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
+              <h3>Mystères du Nord</h3>
+              <p>Sept enquêtes façon Clue dans le Nord : explore les lieux, interroge les suspects, trouve les indices et démasque le coupable.</p>
+              <a className="pillar-cta" href="/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html">Jouer maintenant →</a>
+            </article>
+            <article className="pillar-card">
+              <span className="pillar-num">03</span>
               <h3>À toi l'histoire</h3>
               <p>Des aventures à embranchements où chaque choix ouvre une nouvelle piste.</p>
               <a className="pillar-cta" href="#a-toi-histoire">Découvrir les rayons →</a>
