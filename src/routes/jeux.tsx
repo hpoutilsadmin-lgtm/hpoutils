@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 export const Route = createFileRoute("/jeux")({
   head: () => createSeoHead({
@@ -14,6 +15,19 @@ const STORIES = [
   { audience: "Jeunesse", copy: "Des choix simples, des situations familières et plusieurs chemins pour faire avancer l'histoire." },
   { audience: "Ado", copy: "Des décisions qui comptent, sans morale toute faite, pour explorer ce qui pourrait arriver ensuite." },
   { audience: "Adulte", copy: "Des récits à embranchements ancrés dans les relations, le quotidien et les décisions imparfaites." },
+];
+
+const GAMES = [
+  { title: "Les bons réflexes d'HP", file: "/apps/bons-reflexes/index.html", copy: "Jeu éducatif sur les bons réflexes du quotidien, par âge et par activité." },
+  { title: "Mystères du Nord", file: "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html", copy: "Sept enquêtes façon Clue : explore les lieux, interroge les suspects et démasque le coupable." },
+  { title: "Fait fructifier 100 $ en 30 jours", file: "/apps/100-en-30-jours/100-en-30-jours-v1.1.html", copy: "Jeu de gestion et d'investissement 100 % fictif : 100 $ de départ, 30 jours pour fructifier." },
+  { title: "Caribou Run", file: "/apps/caribou-run/caribou-run-v1.1.html", copy: "Endless runner québécois : saute les bancs de neige et échappe à la déneigeuse !" },
+  { title: "Cherche & Trouve — La vraie vie", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html", copy: "Un cherche-et-trouve dans des scènes de la vraie vie." },
+  { title: "Devine l'humeur", file: "/apps/devine-l-humeur/devine-l-humeur-v1.1.html", copy: "Devine l'émotion cachée derrière chaque situation." },
+  { title: "La Spirale ASMR", file: "/apps/la-spirale-asmr/la-spirale-asmr-v1.1.html", copy: "Tourbillon de sable hypnotique à personnaliser : couleurs, effets et sons doux." },
+  { title: "Poutine Panic", file: "/apps/poutine-panic/poutine-panic-v1.1.html", copy: "Sers des poutines à toute vitesse avant la fin du service !" },
+  { title: "Retromania", file: "/apps/retromania/retromania-v1.1.html", copy: "Devine le prix d'époque d'objets d'hier à aujourd'hui. Le plus proche sans dépasser gagne !" },
+  { title: "Sirop Clicker", file: "/apps/sirop-clicker/sirop-clicker-v1.1.html", copy: "Clique pour produire du sirop d'érable au Temps des sucres." },
 ];
 
 function JeuxPage() {
@@ -57,6 +71,23 @@ function JeuxPage() {
         </div>
       </section>
 
+      <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Gratuits, sans inscription</span>
+          <h2 className="section-title">Tous les jeux</h2>
+          <div className="pillar-grid">
+            {GAMES.map((game, index) => (
+              <article className="pillar-card" key={game.title}>
+                <span className="pillar-num">{String(index + 1).padStart(2, "0")}</span>
+                <h3>{game.title}</h3>
+                <p>{game.copy}</p>
+                <a className="pillar-cta" href={game.file}>Jouer maintenant →</a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="collections-strip" id="a-toi-histoire">
         <div className="container">
           <span className="editorial-kicker">Histoires interactives</span>
@@ -92,6 +123,18 @@ function JeuxPage() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="collections-strip">
+        <div className="container" style={{ maxWidth: 720 }}>
+          <span className="editorial-kicker">Infolettre</span>
+          <h2>Les nouveaux jeux <em>dans ta boîte</em></h2>
+          <p className="strip-intro">
+            Nouveaux jeux, nouveaux tomes « À toi l'histoire », coulisses HP.
+            Un courriel de temps en temps, jamais de spam.
+          </p>
+          <NewsletterSignup source="jeux" />
         </div>
       </section>
 
