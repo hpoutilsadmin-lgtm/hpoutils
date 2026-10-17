@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as AlbumRouteImport } from './routes/album'
 import { Route as AteliersRouteImport } from './routes/ateliers'
+import { Route as BaladoRouteImport } from './routes/balado'
 import { Route as CollaborerRouteImport } from './routes/collaborer'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
@@ -60,6 +61,11 @@ const AlbumRoute = AlbumRouteImport.update({
 const AteliersRoute = AteliersRouteImport.update({
   id: '/ateliers',
   path: '/ateliers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BaladoRoute = BaladoRouteImport.update({
+  id: '/balado',
+  path: '/balado',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CollaborerRoute = CollaborerRouteImport.update({
@@ -212,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
+  '/balado': typeof BaladoRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/confidentialite': typeof ConfidentialiteRoute
@@ -246,6 +253,7 @@ export interface FileRoutesByTo {
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
+  '/balado': typeof BaladoRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/confidentialite': typeof ConfidentialiteRoute
@@ -281,6 +289,7 @@ export interface FileRoutesById {
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
+  '/balado': typeof BaladoRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/confidentialite': typeof ConfidentialiteRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/album'
     | '/ateliers'
+    | '/balado'
     | '/collaborer'
     | '/comprendre'
     | '/confidentialite'
@@ -351,6 +361,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/album'
     | '/ateliers'
+    | '/balado'
     | '/collaborer'
     | '/comprendre'
     | '/confidentialite'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/album'
     | '/ateliers'
+    | '/balado'
     | '/collaborer'
     | '/comprendre'
     | '/confidentialite'
@@ -420,6 +432,7 @@ export interface RootRouteChildren {
   AProposRoute: typeof AProposRoute
   AlbumRoute: typeof AlbumRoute
   AteliersRoute: typeof AteliersRoute
+  BaladoRoute: typeof BaladoRoute
   CollaborerRoute: typeof CollaborerRoute
   ComprendreRoute: typeof ComprendreRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
@@ -477,6 +490,13 @@ declare module '@tanstack/react-router' {
       path: '/ateliers'
       fullPath: '/ateliers'
       preLoaderRoute: typeof AteliersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/balado': {
+      id: '/balado'
+      path: '/balado'
+      fullPath: '/balado'
+      preLoaderRoute: typeof BaladoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/collaborer': {
@@ -694,6 +714,7 @@ const rootRouteChildren: RootRouteChildren = {
   AProposRoute: AProposRoute,
   AlbumRoute: AlbumRoute,
   AteliersRoute: AteliersRoute,
+  BaladoRoute: BaladoRoute,
   CollaborerRoute: CollaborerRoute,
   ComprendreRoute: ComprendreRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
