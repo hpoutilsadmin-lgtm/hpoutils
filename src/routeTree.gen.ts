@@ -18,6 +18,7 @@ import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as JeuxRouteImport } from './routes/jeux'
+import { Route as LesPasseursRouteImport } from './routes/les-passeurs'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
 import { Route as MerciRouteImport } from './routes/merci'
 import { Route as OutilsRouteImport } from './routes/outils'
@@ -84,6 +85,11 @@ const ContactRoute = ContactRouteImport.update({
 const JeuxRoute = JeuxRouteImport.update({
   id: '/jeux',
   path: '/jeux',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LesPasseursRoute = LesPasseursRouteImport.update({
+  id: '/les-passeurs',
+  path: '/les-passeurs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LivresPdfRoute = LivresPdfRouteImport.update({
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
+  '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
@@ -244,6 +251,7 @@ export interface FileRoutesByTo {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
+  '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
@@ -278,6 +286,7 @@ export interface FileRoutesById {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
+  '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
@@ -313,6 +322,7 @@ export interface FileRouteTypes {
     | '/confidentialite'
     | '/contact'
     | '/jeux'
+    | '/les-passeurs'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
@@ -346,6 +356,7 @@ export interface FileRouteTypes {
     | '/confidentialite'
     | '/contact'
     | '/jeux'
+    | '/les-passeurs'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
@@ -379,6 +390,7 @@ export interface FileRouteTypes {
     | '/confidentialite'
     | '/contact'
     | '/jeux'
+    | '/les-passeurs'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
@@ -413,6 +425,7 @@ export interface RootRouteChildren {
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
   JeuxRoute: typeof JeuxRoute
+  LesPasseursRoute: typeof LesPasseursRoute
   LivresPdfRoute: typeof LivresPdfRoute
   MerciRoute: typeof MerciRoute
   OutilsRoute: typeof OutilsRouteWithChildren
@@ -499,6 +512,13 @@ declare module '@tanstack/react-router' {
       path: '/jeux'
       fullPath: '/jeux'
       preLoaderRoute: typeof JeuxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/les-passeurs': {
+      id: '/les-passeurs'
+      path: '/les-passeurs'
+      fullPath: '/les-passeurs'
+      preLoaderRoute: typeof LesPasseursRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/livres-pdf': {
@@ -679,6 +699,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
   JeuxRoute: JeuxRoute,
+  LesPasseursRoute: LesPasseursRoute,
   LivresPdfRoute: LivresPdfRoute,
   MerciRoute: MerciRoute,
   OutilsRoute: OutilsRouteWithChildren,
