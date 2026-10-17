@@ -20,6 +20,7 @@ const STATIC_PATHS = [
   "/prix",
   "/univers",
   "/transmettre",
+  "/balado",
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({
