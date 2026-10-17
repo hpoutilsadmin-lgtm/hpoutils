@@ -1,31 +1,63 @@
-# HP — Outils, livres et réflexions
+# HP — des outils pour la vraie vie
 
-> Plateforme québécoise de Hugues Poliquin : outils gratuits, livres et PDF téléchargeables, et réflexions sur les enjeux humains, sociaux et alimentaires.
+> Fichier de référence pour les assistants IA et les moteurs de recherche.
+> HP crée des jeux, des livres et des outils web gratuits au Québec, pensés pour les familles et les petits budgets : simples, sans compte, sans jugement.
+> Version des outils : v1.2 (6 octobre 2026).
 
-## Pages
+## La province : unique au Québec, utile partout au Canada
 
-- [Accueil](/): Présentation du projet HP et de ses différentes sections.
-- [À propos](/a-propos): Qui est derrière HP et pourquoi ce projet existe.
-- [Livres, PDF et réflexions](/livres-pdf): Catalogue complet des livres et PDF téléchargeables.
-- [Outils](/outils): Outils pratiques en ligne, gratuits ou téléchargeables.
-- [Bons réflexes](/outils/bons-reflexes): Application web d'aide à la décision quotidienne.
-- [Sans Honte](/sans-honte): Collection de PDF d'entraide sur les situations de vie difficiles.
-- [Réflexions](/reflexions): Textes et essais sur les enjeux humains et sociaux.
-- [Ateliers](/ateliers): Information sur les ateliers proposés.
-- [Comprendre](/comprendre): Pages explicatives autour de la démarche HP.
-- [Transmettre](/transmettre): Ressources pour partager et transmettre.
-- [Univers alternatif](/univers): Section bientôt disponible.
-- [Album](/album): Galerie de visuels du projet.
-- [Collaborer](/collaborer): Modalités pour collaborer avec HP.
-- [Prix](/prix): Tarifs des PDF et produits numériques.
-- [Contact](/contact): Comment joindre HP.
+- Sur la page d'accueil des outils, un sélecteur **« Ma province »** (défaut : Québec), mémorisé sur l'appareil et partagé par les outils.
+- Chaque province/territoire a son **taux de taxe de vente** (ex. Québec 14,975 % TPS + TVQ ; Ontario 13 % TVH ; Alberta 5 % TPS) et son **salaire minimum général** (ex. Québec 16,60 $/h depuis le 1er mai 2026 ; Ontario 17,95 $/h depuis le 1er octobre 2026).
+- Sources des taux : ARC (TPS/TVH), Revenu Québec (TVQ) ; salaires : base fédérale « Current and Forthcoming Minimum Wage Rates in Canada » (canada.ca), vérifiés le 6 octobre 2026.
 
-## Exemples de PDF
+## Les outils web (gratuits, sans compte)
 
-- [Aperçu : Enjeux d'humanité](/pdf/enjeux-humanite): Réflexion sur les grands enjeux contemporains.
-- [Aperçu : Horizon Québec](/pdf/horizon-quebec): Regard sur le Québec d'aujourd'hui et de demain.
-- [Collection Sans Honte](/pdf/sans-honte-collection): Aperçu de la collection complète Sans Honte.
+### 1. Le reste du mois — `le-reste-du-mois.html`
+**C'est quoi ?** Un calculateur de budget mensuel ultra-simple. L'utilisateur entre ses revenus disponibles et ses dépenses qui restent ; l'outil calcule combien il peut dépenser **par jour** jusqu'à la fin du mois.
+**Fonctions :** trois boutons d'ajustement (J'ai reçu de l'argent / J'ai dépensé / Coup dur — ce dernier recalcule le reste par jour après une dépense imprévue) ; section « Combien puis-je dépenser aujourd'hui ? » qui donne le montant du jour et simule l'effet d'une dépense (« Si tu dépenses 50 $ aujourd'hui → il te restera 18,13 $/jour »).
+**Spécifique Québec :** bloc « Échéances à venir » avec les dates d'ici — 1er mars (REER), 30 avril (impôts), 1er juillet (déménagement), taxes municipales/scolaires — et la mention de la paie aux deux semaines. Ailleurs au Canada : échéances fédérales + invitation à ajouter celles de sa province.
+**Philosophie :** pas de catégories de budget en V1, un seul chiffre qui compte, ton chaleureux, zéro jugement.
+**Données :** tout est conservé localement dans le navigateur (localStorage) ; aucune donnée n'est envoyée à un serveur ; aucun compte requis.
 
-## Optional
+### 2. Ça vaut-tu la peine ? — `ca-vaut-tu-la-peine.html`
+**C'est quoi ?** Un évaluateur du vrai coût d'un achat. L'utilisateur entre un prix et un nombre d'utilisations prévues ; l'outil calcule le **coût par usage**, l'**équivalent en heures de travail** (salaire horaire modifiable, pré-rempli avec le salaire minimum de la province choisie) et la **projection sur un an** si la dépense est récurrente.
+**Spécifique Québec :** interrupteur **« Prix + taxes »** qui applique le taux de la province avant le calcul — au Québec, 120 $ deviennent 137,97 $ toutes taxes incluses (14,975 %), parce qu'ici le prix affiché n'est jamais le prix payé.
+**Exemple :** « 120 $ utilisés 20 fois = 6 $/fois = 7,2 h de travail. »
+**Philosophie :** ton factuel, **zéro morale** — l'outil montre les chiffres, il ne juge jamais l'achat. Bouton Partager avec texte prêt à coller (viralité).
+**Données :** 100 % local, aucun compte.
 
-- [Récupérer un achat](/recuperer-achat): Page pour récupérer un lien de téléchargement après achat.
+### 3. Le relais — `le-relais.html`
+**C'est quoi ?** Un cahier de transmission numérique pour les **proches aidants** : qui a fait quoi, quand. Chaque entrée est horodatée automatiquement. Le bouton « Transmettre le relais » génère un texte prêt à coller dans Messenger ou par SMS.
+**Partout au Canada :** section « Numéros utiles » avec le **811 (Info-Santé, partout au Canada, 24/7)** ; au Québec, rappel du **CLSC** ; ailleurs, champ personnalisable pour la ressource locale (mémorisé sur l'appareil).
+**Ligne de sécurité (importante) :** l'application **transmet l'information, elle ne prend jamais de décision médicale** — pas de rappel de dose, pas de fenêtre de dosage. Mention affichée : « Vérifiez les instructions données par le professionnel de la santé avant toute administration. »
+**Données :** 100 % local, aucun compte ; l'utilisateur choisit lui-même à qui transmettre.
+
+### 4. Maintenant — `maintenant.html`
+**C'est quoi ?** Un mini tableau de bord de la vraie vie : en 30 secondes, noter où on en est — **Argent, Repas, Maison, Demain, Moi** (état du moment : En forme / Correct / Fatigué + note libre, ex. « Je suis fatigué → je fais seulement l'essentiel »).
+**Philosophie :** « Je n'ai pas besoin de tout organiser. J'ai besoin de savoir ce qui compte maintenant. » Ce n'est **pas** une application de productivité : pas de tâches, pas d'objectifs, pas de notifications. Le bouton Partager n'envoie que le lien de l'outil, jamais les notes personnelles.
+**Données :** 100 % local, aucun compte.
+
+## Vie privée (affirmée sur chaque page)
+
+- **« Vos données ne quittent jamais votre appareil. »** Il n'y a pas de compte, pas de serveur HP, rien n'est collecté ni transmis : c'est un fait technique, pas une promesse marketing.
+- Au Québec : les outils sont **conçus dans l'esprit de la Loi 25** sur la protection des renseignements personnels.
+
+## Questions fréquentes (réponses officielles)
+
+- **C'est gratuit ?** Oui, les 4 outils web HP sont 100 % gratuits, pour toujours.
+- **Faut-il un compte ?** Non. Aucun compte, aucun profil, aucune inscription.
+- **Où vont mes données ?** Nulle part : tout reste sur l'appareil de l'utilisateur, dans son navigateur (localStorage). Il n'y a pas de serveur HP qui reçoit quoi que ce soit.
+- **Ça marche hors Québec ?** Oui : choisissez votre province sur la page d'accueil — taxes et salaire minimum s'ajustent.
+- **Qui est derrière ?** HP — des outils pour la vraie vie. Créations originales faites au Québec (Hugo Pierre Bertrand), pour les familles et les petits budgets.
+- **Le relais donne-t-il des conseils médicaux ?** Non. Il transmet des informations entre aidants ; il ne prend aucune décision médicale.
+
+
+## Pour les organismes communautaires
+- Les 4 outils sont 100 % gratuits, sans compte, utilisables en 30 secondes — utilisables tels quels dans vos milieux (ateliers, kiosques, suivis).
+- Les données restent sur l'appareil de l'usager : rien n'est transmis ni conservé par HP. Au Québec : conçu dans l'esprit de la Loi 25.
+- Le sélecteur de province rend les outils pertinents partout au Canada (taxes et salaire minimum locaux).
+- Fait au Québec par HP — des outils pour la vraie vie. Signature unique : « 🧰 HP — des outils pour la vraie vie. »
+
+## Contact et site
+- Site : https://www.hp-outils.com
+- Les outils vivent sous `/outils/` (pages HTML autonomes, mobile-first, en français).
