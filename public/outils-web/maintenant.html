@@ -1,0 +1,275 @@
+<!-- HP · outils web · v1.2 · 2026-10-06 · Québec + Canada : province, taxes, salaire minimum -->
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maintenant — où est-ce que j'en suis ? | HP, outils pour la vraie vie</title>
+<meta name="description" content="Maintenant : en 30 secondes, savoir où vous en êtes — argent, repas, maison, demain, et vous. Pas une app de productivité : juste ce qui compte, maintenant. Gratuit, sans compte, fait au Québec.">
+<meta property="og:title" content="Maintenant — où est-ce que j'en suis ?">
+<meta property="og:description" content="Je n'ai pas besoin de tout organiser. J'ai besoin de savoir ce qui compte maintenant. Gratuit, sans compte, fait au Québec.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CA">
+<link rel="canonical" href="https://www.hp-outils.com/outils-web/maintenant.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Maintenant",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+  "inLanguage": "fr-CA",
+  "description": "Tableau de bord ultra-simple de la vraie vie : argent, repas, maison, demain et état du moment. Pas une application de productivité. Gratuit, sans compte, données sur votre appareil.",
+  "author": { "@type": "Organization", "name": "HP — des outils pour la vraie vie", "url": "https://www.hp-outils.com" }
+}
+</script>
+<style>
+:root{
+  /* ── Design hp-outils.com : nuit · crème · doré ── */
+  --nuit:#07111b;
+  --creme:#f6eddd;
+  --dore:#d89532;
+  --dore-clair:#f0c16d;
+  --encre:#1d252c;
+  --brique:#af3c2d;
+  --orange:#c85f16;
+  --brun:#806943;
+  --carte:rgba(255,255,255,.86);
+  --bord:#d9c193;
+  --teinte-doree:#faf1dd;
+  --ombre:0 4px 18px rgba(7,17,27,.09);
+  --font-texte:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-titres:Georgia,"Times New Roman",serif;
+  --rayon:16px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{margin:0; background:var(--creme); color:var(--encre);
+  font-family:var(--font-texte); line-height:1.6; font-size:17px;}
+/* ── Header : bandeau nuit ── */
+header.site{position:sticky; top:0; z-index:60; background:var(--nuit);
+  box-shadow:0 2px 14px rgba(0,0,0,.28);}
+header.site .barre{max-width:680px; margin:0 auto; padding:11px 18px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;}
+header.site .lockup{display:flex; align-items:baseline; gap:10px; text-decoration:none;}
+header.site .lockup .hp{font-family:var(--font-titres); font-weight:700; font-size:1.55rem;
+  color:var(--dore); letter-spacing:1px; line-height:1;}
+header.site .lockup .devise{font-size:.8rem; color:rgba(246,237,221,.72); letter-spacing:.3px;}
+header.site .retour{color:var(--dore-clair); text-decoration:none; font-size:.92rem;
+  font-weight:600; white-space:nowrap;}
+header.site .retour:hover{color:#fff;}
+main{max-width:640px; margin:0 auto; padding:0 18px 8px;}
+.hero{text-align:center; margin:0 0 18px; padding-top:28px;}
+h1{font-family:var(--font-titres); font-size:1.9rem; margin:0 0 .3em; line-height:1.25;
+  font-weight:700; color:var(--encre);}
+h2{font-family:var(--font-titres); color:var(--encre);}
+.sous-titre{color:var(--brun); font-size:1.03rem; margin:0 0 1.1em;}
+/* filet : clin d'œil artisanal */
+.ornement{display:flex; align-items:center; gap:10px; margin:18px auto; max-width:230px;}
+.ornement span{flex:1; height:4px; border-top:1px solid var(--bord); border-bottom:1px solid var(--bord);}
+.ornement b{font-size:.65rem; color:var(--brun); font-weight:400;}
+.carte{background:var(--carte); border:1px solid var(--dore); border-radius:var(--rayon);
+  padding:20px; margin:16px 0; box-shadow:var(--ombre);}
+.etiquette{font-size:.8rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--brun); margin-bottom:6px;}
+label{display:block; font-weight:600; margin:14px 0 5px; color:var(--encre);}
+input[type="number"],input[type="text"],select,textarea{width:100%; font-size:1.12rem; padding:12px 14px;
+  border:1.5px solid var(--bord); border-radius:10px; background:#fff; color:var(--encre); font-family:var(--font-texte);}
+input:focus,select:focus,textarea:focus{outline:none; border-color:var(--dore);}
+:focus-visible{outline:3px solid var(--dore); outline-offset:2px;}
+button{font-family:var(--font-texte); font-size:1.05rem; padding:14px; border-radius:8px;
+  border:1.5px solid var(--dore); background:#fff; color:var(--encre); font-weight:700; cursor:pointer; width:100%;}
+button:active{transform:scale(.98);}
+button.principal{background:linear-gradient(135deg,#c88320,#e6a844); color:#fff; border:none;
+  box-shadow:0 3px 10px rgba(7,17,27,.20);}
+button.discret{background:none; border:1px solid var(--bord); font-weight:600; font-size:.95rem; color:var(--brun);}
+.message{min-height:1.4em; color:var(--brun); font-style:italic; margin-top:10px;}
+.faq{margin-top:26px;}
+.faq h2{font-size:1.35rem; margin:0 0 4px;}
+.faq details{background:var(--carte); border:1px solid var(--dore); border-radius:12px;
+  padding:13px 15px; margin:9px 0; box-shadow:var(--ombre);}
+.faq summary{font-weight:700; cursor:pointer; font-family:var(--font-texte); color:var(--encre);}
+/* ── Footer : nuit dégradé ── */
+footer.site{background:linear-gradient(180deg,#0d1b2a,var(--nuit)); color:var(--creme);
+  text-align:center; padding:36px 18px 42px; margin-top:44px;}
+footer.site .signature{font-family:var(--font-titres); font-size:1.05rem; color:var(--dore); margin:0 0 8px;}
+footer.site .lien-canon{margin:0 0 8px;}
+footer.site .lien-canon a{color:var(--dore-clair); text-decoration:none; border-bottom:1px solid var(--dore-clair);}
+footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,.68);}
+.principe{background:var(--nuit); color:#fff; border-radius:var(--rayon); padding:17px 19px;
+  margin:0 0 18px; font-size:1.06rem; text-align:center; box-shadow:var(--ombre);
+  font-family:var(--font-titres); font-style:italic;}
+.principe em{font-style:normal; border-bottom:2px solid var(--dore);}
+.bloc{background:var(--carte); border:1px solid var(--dore); border-radius:var(--rayon);
+  padding:17px 19px; margin:13px 0; box-shadow:var(--ombre);}
+.bloc .tete{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+.bloc .icone{font-size:1.6rem;}
+.bloc h2{font-size:1.12rem; margin:0;}
+.humeurs{display:flex; gap:8px; margin:8px 0;}
+.humeurs button{flex:1; padding:10px 4px; font-size:.92rem; border-radius:10px;
+  border:1.5px solid var(--bord); background:#fff; color:var(--brun); font-weight:600; cursor:pointer;}
+.humeurs button.actif{border-color:var(--nuit); background:var(--nuit); color:#fff; font-weight:800;}
+.date-jour{text-align:center; color:var(--brun); margin-bottom:4px; font-size:1.02rem;}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="barre">
+    <a class="lockup" href="index.html" aria-label="HP — outils pour la vraie vie"><span class="hp">HP</span><span class="devise">des outils pour la vraie vie</span></a>
+    <a class="retour" href="https://www.hp-outils.com">← hp-outils.com</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <h1>Maintenant</h1>
+    <p class="sous-titre">Où est-ce que j'en suis&nbsp;?</p>
+  </section>
+  <div class="ornement" aria-hidden="true"><span></span><b>◆</b><span></span></div>
+
+  <div class="principe">«&nbsp;Je n'ai pas besoin de tout organiser.<br>J'ai besoin de savoir <em>ce qui compte maintenant</em>.&nbsp;»</div>
+
+  <p class="date-jour" id="date-jour"></p>
+
+  <section class="bloc" aria-label="Argent">
+    <div class="tete"><span class="icone">💰</span><h2>Argent</h2></div>
+    <textarea id="f-argent" placeholder="ex. 42 $ disponibles" maxlength="200"></textarea>
+  </section>
+
+  <section class="bloc" aria-label="Repas">
+    <div class="tete"><span class="icone">🍽️</span><h2>Repas</h2></div>
+    <textarea id="f-repas" placeholder="ex. Souper prévu — restes de hier" maxlength="200"></textarea>
+  </section>
+
+  <section class="bloc" aria-label="Maison">
+    <div class="tete"><span class="icone">🏠</span><h2>Maison</h2></div>
+    <textarea id="f-maison" placeholder="ex. 2 choses à faire : lavage, poubelles" maxlength="200"></textarea>
+  </section>
+
+  <section class="bloc" aria-label="Demain">
+    <div class="tete"><span class="icone">📅</span><h2>Demain</h2></div>
+    <textarea id="f-demain" placeholder="ex. Rendez-vous 10 h" maxlength="200"></textarea>
+  </section>
+
+  <section class="bloc" aria-label="Moi">
+    <div class="tete"><span class="icone">🧠</span><h2>Moi</h2></div>
+    <div class="humeurs" role="group" aria-label="Mon état">
+      <button data-humeur="en-forme">💪 En forme</button>
+      <button data-humeur="correct">🙂 Correct</button>
+      <button data-humeur="fatigue">😮‍💨 Fatigué</button>
+    </div>
+    <textarea id="f-moi" placeholder="ex. Je suis fatigué → je fais seulement l'essentiel" maxlength="200"></textarea>
+  </section>
+
+  <section class="carte" aria-label="Partager">
+    <h2 style="font-size:1.2rem;margin-top:0">Quelqu'un vit la même journée&nbsp;?</h2>
+    <p style="color:var(--brun);margin-top:0">Envoie-lui l'outil — pas tes notes, juste l'outil. Tes mots restent à toi.</p>
+    <button id="btn-partager" class="principal">📤 Partager «&nbsp;Maintenant&nbsp;»</button>
+    <p class="message" id="msg-partage"></p>
+  </section>
+
+  <section class="faq" aria-label="Questions fréquentes">
+    <h2>Questions fréquentes</h2>
+    <details>
+      <summary>C'est quoi, «&nbsp;Maintenant&nbsp;»&nbsp;?</summary>
+      <p>Un mini tableau de bord de la vraie vie&nbsp;: en 30 secondes, tu notes où tu en es — argent, repas, maison, demain, et toi. Pas de listes de tâches, pas d'objectifs, pas de notifications. Juste <strong>ce qui compte maintenant</strong>.</p>
+    </details>
+    <details>
+      <summary>C'est une app de productivité&nbsp;?</summary>
+      <p>Non, et c'est le principe. «&nbsp;Maintenant&nbsp;» ne t'organise pas la vie&nbsp;: il te montre où tu en es pour que tu décides, toi, de la suite.</p>
+    </details>
+    <details>
+      <summary>C'est gratuit&nbsp;?</summary>
+      <p>Oui, 100&nbsp;% gratuit. Un outil HP — des outils pour la vraie vie, fait au Québec.</p>
+    </details>
+    <details>
+      <summary>Où vont mes notes&nbsp;?</summary>
+      <p>Nulle part&nbsp;: tout reste sur votre appareil, dans votre navigateur. Le bouton Partager n'envoie que le lien de l'outil — jamais vos mots.</p>
+    </details>
+  </section>
+
+  <div style="text-align:center;margin-top:16px">
+    <button id="btn-reset" class="discret" style="max-width:280px">↺ Tout effacer</button>
+  </div>
+
+</main>
+<footer class="site">
+  <p class="signature">🧰 HP — des outils pour la vraie vie.</p>
+  <p class="lien-canon">👉 <a href="https://www.hp-outils.com/outils-web/maintenant.html">www.hp-outils.com/outils-web/maintenant.html</a></p>
+  <p class="note-pied">100&nbsp;% gratuit · Sans compte · Vos données ne quittent jamais votre appareil · Fait au Québec · v1.2</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var CLE = "hp-maintenant-v1";
+  var $ = function(id){ return document.getElementById(id); };
+  var CHAMPS = ["f-argent","f-repas","f-maison","f-demain","f-moi"];
+
+  function lire(){
+    try {
+      var d = JSON.parse(localStorage.getItem(CLE) || "{}");
+      return (d && typeof d === "object") ? d : {};
+    } catch(e){ return {}; }
+  }
+  function ecrire(d){
+    try { localStorage.setItem(CLE, JSON.stringify(d)); } catch(e){}
+  }
+
+  var donnees = lire();
+
+  $("date-jour").textContent = new Date().toLocaleDateString("fr-CA", {
+    weekday:"long", day:"numeric", month:"long"
+  }).replace(/^./, function(c){ return c.toUpperCase(); });
+
+  CHAMPS.forEach(function(id){
+    if (donnees[id]) $(id).value = donnees[id];
+    $(id).addEventListener("input", function(){
+      donnees[id] = this.value;
+      ecrire(donnees);
+    });
+  });
+
+  var boutons = document.querySelectorAll("[data-humeur]");
+  function majHumeurs(){
+    for (var i=0; i<boutons.length; i++){
+      boutons[i].classList.toggle("actif", boutons[i].getAttribute("data-humeur") === donnees.humeur);
+    }
+  }
+  for (var i=0; i<boutons.length; i++){
+    (function(btn){
+      btn.addEventListener("click", function(){
+        var h = btn.getAttribute("data-humeur");
+        donnees.humeur = (donnees.humeur === h) ? "" : h;
+        ecrire(donnees); majHumeurs();
+      });
+    })(boutons[i]);
+  }
+  majHumeurs();
+
+  $("btn-partager").addEventListener("click", function(){
+    var texte = "« Maintenant » : où est-ce que j'en suis, en 30 secondes — argent, repas, maison, demain, moi. Pas une app de productivité. Gratuit, sans compte, fait au Québec. — HP, des outils pour la vraie vie.";
+    var msg = $("msg-partage");
+    if (navigator.share){
+      navigator.share({title:"Maintenant", text:texte}).then(function(){
+        msg.textContent = "Partagé. 💛";
+      }).catch(function(){});
+    } else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(function(){
+        msg.textContent = "Copié ! Colle-le où tu veux.";
+      }).catch(function(){ msg.textContent = texte; });
+    } else {
+      msg.textContent = texte;
+    }
+  });
+
+  $("btn-reset").addEventListener("click", function(){
+    if (confirm("Tout effacer ?")){
+      donnees = {};
+      try { localStorage.removeItem(CLE); } catch(e){}
+      CHAMPS.forEach(function(id){ $(id).value = ""; });
+      majHumeurs();
+    }
+  });
+})();
+</script>
+</body>
+</html>

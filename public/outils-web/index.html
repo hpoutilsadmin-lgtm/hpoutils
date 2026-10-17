@@ -1,0 +1,274 @@
+<!-- HP · outils web · v1.2 · 2026-10-06 · Québec + Canada : province, taxes, salaire minimum -->
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outils gratuits pour la vraie vie — HP | Le reste du mois, Ça vaut-tu la peine ?, Le relais, Maintenant</title>
+<meta name="description" content="4 outils web gratuits HP pour la vraie vie : Le reste du mois (combien dépenser par jour), Ça vaut-tu la peine ? (le vrai coût d'un achat), Le relais (carnet des proches aidants), Maintenant (où est-ce que j'en suis). Sans compte, vos données restent sur votre appareil. Fait au Québec.">
+<meta property="og:title" content="Outils gratuits pour la vraie vie — HP">
+<meta property="og:description" content="4 outils simples, gratuits, sans compte : budget du mois, vrai coût d'un achat, carnet d'aidant, tableau de bord du moment. Fait au Québec.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CA">
+<link rel="canonical" href="https://www.hp-outils.com/outils">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Outils gratuits HP pour la vraie vie",
+  "inLanguage": "fr-CA",
+  "description": "Quatre outils web gratuits : Le reste du mois, Ça vaut-tu la peine ?, Le relais, Maintenant.",
+  "author": { "@type": "Organization", "name": "HP — des outils pour la vraie vie", "url": "https://www.hp-outils.com" },
+  "hasPart": [
+    { "@type": "SoftwareApplication", "name": "Le reste du mois", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" } },
+    { "@type": "SoftwareApplication", "name": "Ça vaut-tu la peine ?", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" } },
+    { "@type": "SoftwareApplication", "name": "Le relais", "applicationCategory": "HealthApplication", "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" } },
+    { "@type": "SoftwareApplication", "name": "Maintenant", "applicationCategory": "LifestyleApplication", "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" } }
+  ]
+}
+</script>
+<style>
+:root{
+  /* ── Design hp-outils.com : nuit · crème · doré ── */
+  --nuit:#07111b;
+  --creme:#f6eddd;
+  --dore:#d89532;
+  --dore-clair:#f0c16d;
+  --encre:#1d252c;
+  --brique:#af3c2d;
+  --orange:#c85f16;
+  --brun:#806943;
+  --carte:rgba(255,255,255,.86);
+  --bord:#d9c193;
+  --teinte-doree:#faf1dd;
+  --ombre:0 4px 18px rgba(7,17,27,.09);
+  --font-texte:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-titres:Georgia,"Times New Roman",serif;
+  --rayon:16px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{margin:0; background:var(--creme); color:var(--encre);
+  font-family:var(--font-texte); line-height:1.6; font-size:17px;}
+/* ── Header : bandeau nuit ── */
+header.site{position:sticky; top:0; z-index:60; background:var(--nuit);
+  box-shadow:0 2px 14px rgba(0,0,0,.28);}
+header.site .barre{max-width:680px; margin:0 auto; padding:11px 18px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;}
+header.site .lockup{display:flex; align-items:baseline; gap:10px; text-decoration:none;}
+header.site .lockup .hp{font-family:var(--font-titres); font-weight:700; font-size:1.55rem;
+  color:var(--dore); letter-spacing:1px; line-height:1;}
+header.site .lockup .devise{font-size:.8rem; color:rgba(246,237,221,.72); letter-spacing:.3px;}
+header.site .retour{color:var(--dore-clair); text-decoration:none; font-size:.92rem;
+  font-weight:600; white-space:nowrap;}
+header.site .retour:hover{color:#fff;}
+main{max-width:640px; margin:0 auto; padding:0 18px 8px;}
+.hero{text-align:center; margin:0 0 18px; padding-top:28px;}
+h1{font-family:var(--font-titres); font-size:1.9rem; margin:0 0 .3em; line-height:1.25;
+  font-weight:700; color:var(--encre);}
+h2{font-family:var(--font-titres); color:var(--encre);}
+.sous-titre{color:var(--brun); font-size:1.03rem; margin:0 0 1.1em;}
+/* filet : clin d'œil artisanal */
+.ornement{display:flex; align-items:center; gap:10px; margin:18px auto; max-width:230px;}
+.ornement span{flex:1; height:4px; border-top:1px solid var(--bord); border-bottom:1px solid var(--bord);}
+.ornement b{font-size:.65rem; color:var(--brun); font-weight:400;}
+.carte{background:var(--carte); border:1px solid var(--dore); border-radius:var(--rayon);
+  padding:20px; margin:16px 0; box-shadow:var(--ombre);}
+.etiquette{font-size:.8rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--brun); margin-bottom:6px;}
+label{display:block; font-weight:600; margin:14px 0 5px; color:var(--encre);}
+input[type="number"],input[type="text"],select,textarea{width:100%; font-size:1.12rem; padding:12px 14px;
+  border:1.5px solid var(--bord); border-radius:10px; background:#fff; color:var(--encre); font-family:var(--font-texte);}
+input:focus,select:focus,textarea:focus{outline:none; border-color:var(--dore);}
+:focus-visible{outline:3px solid var(--dore); outline-offset:2px;}
+button{font-family:var(--font-texte); font-size:1.05rem; padding:14px; border-radius:8px;
+  border:1.5px solid var(--dore); background:#fff; color:var(--encre); font-weight:700; cursor:pointer; width:100%;}
+button:active{transform:scale(.98);}
+button.principal{background:linear-gradient(135deg,#c88320,#e6a844); color:#fff; border:none;
+  box-shadow:0 3px 10px rgba(7,17,27,.20);}
+button.discret{background:none; border:1px solid var(--bord); font-weight:600; font-size:.95rem; color:var(--brun);}
+.message{min-height:1.4em; color:var(--brun); font-style:italic; margin-top:10px;}
+.faq{margin-top:26px;}
+.faq h2{font-size:1.35rem; margin:0 0 4px;}
+.faq details{background:var(--carte); border:1px solid var(--dore); border-radius:12px;
+  padding:13px 15px; margin:9px 0; box-shadow:var(--ombre);}
+.faq summary{font-weight:700; cursor:pointer; font-family:var(--font-texte); color:var(--encre);}
+/* ── Footer : nuit dégradé ── */
+footer.site{background:linear-gradient(180deg,#0d1b2a,var(--nuit)); color:var(--creme);
+  text-align:center; padding:36px 18px 42px; margin-top:44px;}
+footer.site .signature{font-family:var(--font-titres); font-size:1.05rem; color:var(--dore); margin:0 0 8px;}
+footer.site .lien-canon{margin:0 0 8px;}
+footer.site .lien-canon a{color:var(--dore-clair); text-decoration:none; border-bottom:1px solid var(--dore-clair);}
+footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,.68);}
+.philo{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:16px 0 22px;}
+.philo span{background:var(--carte); border:1px solid var(--dore); border-radius:20px;
+  padding:7px 15px; font-size:.9rem; color:var(--brun);}
+a.outil{display:block; text-decoration:none; color:inherit; background:var(--carte);
+  border:1px solid var(--dore); border-radius:var(--rayon); padding:20px; margin:14px 0;
+  box-shadow:var(--ombre); transition:transform .1s;}
+a.outil:active{transform:scale(.99);}
+a.outil .tete{display:flex; align-items:center; gap:13px;}
+a.outil .icone{font-size:2rem;}
+a.outil h2{margin:0; font-size:1.3rem;}
+a.outil .tag{font-size:.76rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--brun);
+  font-weight:700; font-family:var(--font-texte);}
+a.outil p{margin:9px 0 0; color:var(--brun);}
+a.outil .cta{display:inline-block; margin-top:11px; font-weight:700; color:var(--brun); font-family:var(--font-texte);}
+.organismes ul{margin:10px 0; padding-left:22px;}
+.organismes li{margin:7px 0;}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="barre">
+    <a class="lockup" href="index.html" aria-label="HP — outils pour la vraie vie"><span class="hp">HP</span><span class="devise">des outils pour la vraie vie</span></a>
+    <a class="retour" href="https://www.hp-outils.com">← hp-outils.com</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <h1>Des outils pour la vraie vie</h1>
+    <p class="sous-titre">Pas des applications compliquées.<br>Des petits outils simples, qui s'utilisent en 30 secondes.</p>
+    <div class="philo">
+      <span>✓ 100 % gratuits</span>
+      <span>✓ Sans compte</span>
+      <span>✓ Vos données restent sur votre appareil</span>
+      <span>✓ Fait au Québec</span>
+    </div>
+  </section>
+  <div class="ornement" aria-hidden="true"><span></span><b>◆</b><span></span></div>
+
+  <section class="carte" aria-label="Ma province">
+    <label for="sel-province" style="margin-top:0">📍 Ma province — pour les taxes et le salaire minimum</label>
+    <select id="sel-province"></select>
+    <p class="message" id="msg-province" style="font-style:normal;margin-bottom:0"></p>
+  </section>
+
+  <nav aria-label="Les outils">
+    <a class="outil" href="le-reste-du-mois.html">
+      <div class="tete"><span class="icone">💰</span>
+        <div><div class="tag">Budget</div><h2>Le reste du mois</h2></div>
+      </div>
+      <p>Combien tu peux dépenser <strong>par jour</strong> jusqu'à la fin du mois, sans te mettre dans le trouble. Trois boutons pour la vraie vie : reçu, dépensé, coup dur.</p>
+      <span class="cta">Calculer mon reste →</span>
+    </a>
+
+    <a class="outil" href="ca-vaut-tu-la-peine.html">
+      <div class="tete"><span class="icone">🤔</span>
+        <div><div class="tag">Achat futé</div><h2>Ça vaut-tu la peine ?</h2></div>
+      </div>
+      <p>Le <strong>vrai coût</strong> d'un achat : prix par utilisation, équivalent en heures de travail, projection sur un an. L'outil montre, il ne juge jamais.</p>
+      <span class="cta">Vérifier un achat →</span>
+    </a>
+
+    <a class="outil" href="le-relais.html">
+      <div class="tete"><span class="icone">🤝</span>
+        <div><div class="tag">Proches aidants</div><h2>Le relais</h2></div>
+      </div>
+      <p>Le cahier de transmission : <strong>qui</strong> a fait <strong>quoi</strong>, <strong>quand</strong>. Un texte prêt à envoyer à la famille, par Messenger ou SMS.</p>
+      <span class="cta">Ouvrir le carnet →</span>
+    </a>
+
+    <a class="outil" href="maintenant.html">
+      <div class="tete"><span class="icone">🧭</span>
+        <div><div class="tag">Le moment présent</div><h2>Maintenant</h2></div>
+      </div>
+      <p>Où est-ce que j'en suis&nbsp;? Argent, repas, maison, demain, moi — en 30 secondes. Pas une app de productivité.</p>
+      <span class="cta">Faire le point →</span>
+    </a>
+  </nav>
+
+  <section class="carte organismes" aria-label="Pour les organismes">
+    <h2 style="font-size:1.3rem;margin-top:0">Pour les organismes</h2>
+    <p style="color:var(--brun);margin-top:0">Vous accompagnez des familles, des aînés ou des proches aidants&nbsp;? Ces outils sont pensés pour vos milieux aussi&nbsp;:</p>
+    <ul>
+      <li><strong>100&nbsp;% gratuits</strong>, pour toujours — aucun frais, aucun abonnement.</li>
+      <li><strong>Sans compte</strong>&nbsp;: rien à créer, rien à gérer, même sur un téléphone partagé.</li>
+      <li><strong>Utilisables en 30 secondes</strong>&nbsp;: on entre deux chiffres, on a sa réponse.</li>
+      <li><strong>Données sur l'appareil</strong>&nbsp;: rien n'est envoyé ni conservé ailleurs — au Québec, conçu dans l'esprit de la Loi 25, la confidentialité est bâtie dans l'outil.</li>
+    </ul>
+    <p style="margin-bottom:0">Fait au Québec, par <strong>HP — des outils pour la vraie vie</strong>.</p>
+  </section>
+
+  <section class="faq" aria-label="Questions fréquentes">
+    <h2>Questions fréquentes</h2>
+    <details>
+      <summary>C'est quoi, les outils HP&nbsp;?</summary>
+      <p>Des petits outils web gratuits pour la vraie vie&nbsp;: gérer son budget du mois, évaluer un achat, se passer le relais entre proches aidants, faire le point sur sa journée. Chacun s'utilise en 30 secondes, sans compte.</p>
+    </details>
+    <details>
+      <summary>C'est vraiment gratuit&nbsp;?</summary>
+      <p>Oui — les outils web HP sont 100&nbsp;% gratuits, pour toujours. HP, c'est «&nbsp;des outils pour la vraie vie&nbsp;», fait au Québec.</p>
+    </details>
+    <details>
+      <summary>Où vont mes données&nbsp;?</summary>
+      <p>Nulle part&nbsp;: tout reste sur votre appareil, dans votre navigateur. Il n'y a pas de compte, pas de serveur, personne d'autre ne voit ce que vous entrez. Au Québec&nbsp;: conçu dans l'esprit de la <strong>Loi 25</strong> sur la protection des renseignements personnels.</p>
+    </details>
+    <details>
+      <summary>Qui est HP&nbsp;?</summary>
+      <p>HP — des outils pour la vraie vie&nbsp;: des jeux, des livres et des outils créés au Québec, pensés pour les familles et les petits budgets, sans jugement et sans détour.</p>
+    </details>
+  </section>
+
+</main>
+<footer class="site">
+  <p class="signature">🧰 HP — des outils pour la vraie vie.</p>
+  <p class="lien-canon">👉 <a href="https://www.hp-outils.com/outils">www.hp-outils.com/outils</a></p>
+  <p class="note-pied">100&nbsp;% gratuit · Sans compte · Vos données ne quittent jamais votre appareil · Fait au Québec · v1.2</p>
+</footer>
+<script>
+(function(){
+  "use strict";
+  /* ── HP · province partagée : taxes + salaire minimum (oct. 2026) ──
+     Taux de taxes : ARC (TPS/TVH) et Revenu Québec (TVQ). Salaires minimums :
+     base fédérale « Current and Forthcoming Minimum Wage Rates in Canada »
+     (canada.ca, màj 2026-09-22), recoupés le 6 oct. 2026. */
+  var HP_PROVINCES = {
+    "QC":  { nom:"Québec",                    taxe:0.14975, taxeNom:"TPS + TVQ", salaire:16.60, salaireDepuis:"1er mai 2026" },
+    "ON":  { nom:"Ontario",                   taxe:0.13,    taxeNom:"TVH",       salaire:17.95, salaireDepuis:"1er octobre 2026" },
+    "BC":  { nom:"Colombie-Britannique",      taxe:0.12,    taxeNom:"TPS + TVP", salaire:18.25, salaireDepuis:"1er juin 2026" },
+    "AB":  { nom:"Alberta",                   taxe:0.05,    taxeNom:"TPS",       salaire:15.00, salaireDepuis:"1er octobre 2018" },
+    "MB":  { nom:"Manitoba",                  taxe:0.12,    taxeNom:"TPS + TVD", salaire:16.40, salaireDepuis:"1er octobre 2026" },
+    "SK":  { nom:"Saskatchewan",              taxe:0.11,    taxeNom:"TPS + TVP", salaire:15.70, salaireDepuis:"1er octobre 2026" },
+    "NB":  { nom:"Nouveau-Brunswick",         taxe:0.15,    taxeNom:"TVH",       salaire:15.90, salaireDepuis:"1er avril 2026" },
+    "NS":  { nom:"Nouvelle-Écosse",           taxe:0.14,    taxeNom:"TVH",       salaire:17.00, salaireDepuis:"1er octobre 2026" },
+    "NL":  { nom:"Terre-Neuve-et-Labrador",   taxe:0.15,    taxeNom:"TVH",       salaire:16.35, salaireDepuis:"1er avril 2026" },
+    "PEI": { nom:"Île-du-Prince-Édouard",     taxe:0.15,    taxeNom:"TVH",       salaire:17.30, salaireDepuis:"1er octobre 2026" },
+    "YT":  { nom:"Yukon",                     taxe:0.05,    taxeNom:"TPS",       salaire:18.51, salaireDepuis:"1er avril 2026" },
+    "NT":  { nom:"Territoires du Nord-Ouest", taxe:0.05,    taxeNom:"TPS",       salaire:17.20, salaireDepuis:"1er septembre 2026" },
+    "NU":  { nom:"Nunavut",                   taxe:0.05,    taxeNom:"TPS",       salaire:20.17, salaireDepuis:"1er septembre 2026" }
+  };
+  var HP_CLE_PROVINCE = "hp-province-v1";
+  function hpProvince(){
+    var code = "QC";
+    try { code = localStorage.getItem(HP_CLE_PROVINCE) || "QC"; } catch(e){}
+    if (!HP_PROVINCES[code]) code = "QC";
+    return { code: code, info: HP_PROVINCES[code] };
+  }
+  function hpPct(t){
+    var s = (t*100).toLocaleString("fr-CA",{minimumFractionDigits:3, maximumFractionDigits:3});
+    return s.replace(/,0+$/,"") + " %";
+  }
+  function hpSalaire(s){
+    return s.toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2}) + " $/h";
+  }
+  var sel = document.getElementById("sel-province");
+  Object.keys(HP_PROVINCES).forEach(function(code){
+    var o = document.createElement("option");
+    o.value = code; o.textContent = HP_PROVINCES[code].nom;
+    sel.appendChild(o);
+  });
+  function maj(){
+    var p = hpProvince();
+    sel.value = p.code;
+    document.getElementById("msg-province").textContent =
+      "Ici : taxes " + hpPct(p.info.taxe) + " (" + p.info.taxeNom + ") · salaire minimum " +
+      hpSalaire(p.info.salaire) + " depuis le " + p.info.salaireDepuis + ".";
+  }
+  sel.addEventListener("change", function(){
+    try { localStorage.setItem(HP_CLE_PROVINCE, sel.value); } catch(e){}
+    maj();
+  });
+  maj();
+})();
+</script>
+</body>
+</html>

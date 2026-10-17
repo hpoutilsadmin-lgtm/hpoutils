@@ -1,0 +1,353 @@
+<!-- HP · outils web · v1.2 · 2026-10-06 · Québec + Canada : province, taxes, salaire minimum -->
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ça vaut-tu la peine ? — le vrai coût d'un achat | HP, outils pour la vraie vie</title>
+<meta name="description" content="Ça vaut-tu la peine ? Entrez le prix et combien de fois vous l'utiliserez : l'outil calcule le coût par usage, l'équivalent en heures de travail et la projection sur un an. Gratuit, sans compte, fait au Québec.">
+<meta property="og:title" content="Ça vaut-tu la peine ? — le vrai coût d'un achat">
+<meta property="og:description" content="120 $ utilisés 20 fois = 6 $/fois. L'outil montre les chiffres, il ne juge jamais. Gratuit, sans compte, fait au Québec.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CA">
+<link rel="canonical" href="https://www.hp-outils.com/outils-web/ca-vaut-tu-la-peine.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Ça vaut-tu la peine ?",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+  "inLanguage": "fr-CA",
+  "description": "Calcule le coût par usage d'un achat, son équivalent en heures de travail au salaire minimum de votre province et sa projection annuelle s'il est récurrent. Option prix + taxes selon votre province. Gratuit, sans compte, données sur votre appareil.",
+  "author": { "@type": "Organization", "name": "HP — des outils pour la vraie vie", "url": "https://www.hp-outils.com" }
+}
+</script>
+<style>
+:root{
+  /* ── Design hp-outils.com : nuit · crème · doré ── */
+  --nuit:#07111b;
+  --creme:#f6eddd;
+  --dore:#d89532;
+  --dore-clair:#f0c16d;
+  --encre:#1d252c;
+  --brique:#af3c2d;
+  --orange:#c85f16;
+  --brun:#806943;
+  --carte:rgba(255,255,255,.86);
+  --bord:#d9c193;
+  --teinte-doree:#faf1dd;
+  --ombre:0 4px 18px rgba(7,17,27,.09);
+  --font-texte:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-titres:Georgia,"Times New Roman",serif;
+  --rayon:16px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{margin:0; background:var(--creme); color:var(--encre);
+  font-family:var(--font-texte); line-height:1.6; font-size:17px;}
+/* ── Header : bandeau nuit ── */
+header.site{position:sticky; top:0; z-index:60; background:var(--nuit);
+  box-shadow:0 2px 14px rgba(0,0,0,.28);}
+header.site .barre{max-width:680px; margin:0 auto; padding:11px 18px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;}
+header.site .lockup{display:flex; align-items:baseline; gap:10px; text-decoration:none;}
+header.site .lockup .hp{font-family:var(--font-titres); font-weight:700; font-size:1.55rem;
+  color:var(--dore); letter-spacing:1px; line-height:1;}
+header.site .lockup .devise{font-size:.8rem; color:rgba(246,237,221,.72); letter-spacing:.3px;}
+header.site .retour{color:var(--dore-clair); text-decoration:none; font-size:.92rem;
+  font-weight:600; white-space:nowrap;}
+header.site .retour:hover{color:#fff;}
+main{max-width:640px; margin:0 auto; padding:0 18px 8px;}
+.hero{text-align:center; margin:0 0 18px; padding-top:28px;}
+h1{font-family:var(--font-titres); font-size:1.9rem; margin:0 0 .3em; line-height:1.25;
+  font-weight:700; color:var(--encre);}
+h2{font-family:var(--font-titres); color:var(--encre);}
+.sous-titre{color:var(--brun); font-size:1.03rem; margin:0 0 1.1em;}
+/* filet : clin d'œil artisanal */
+.ornement{display:flex; align-items:center; gap:10px; margin:18px auto; max-width:230px;}
+.ornement span{flex:1; height:4px; border-top:1px solid var(--bord); border-bottom:1px solid var(--bord);}
+.ornement b{font-size:.65rem; color:var(--brun); font-weight:400;}
+.carte{background:var(--carte); border:1px solid var(--dore); border-radius:var(--rayon);
+  padding:20px; margin:16px 0; box-shadow:var(--ombre);}
+.etiquette{font-size:.8rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--brun); margin-bottom:6px;}
+label{display:block; font-weight:600; margin:14px 0 5px; color:var(--encre);}
+input[type="number"],input[type="text"],select,textarea{width:100%; font-size:1.12rem; padding:12px 14px;
+  border:1.5px solid var(--bord); border-radius:10px; background:#fff; color:var(--encre); font-family:var(--font-texte);}
+input:focus,select:focus,textarea:focus{outline:none; border-color:var(--dore);}
+:focus-visible{outline:3px solid var(--dore); outline-offset:2px;}
+button{font-family:var(--font-texte); font-size:1.05rem; padding:14px; border-radius:8px;
+  border:1.5px solid var(--dore); background:#fff; color:var(--encre); font-weight:700; cursor:pointer; width:100%;}
+button:active{transform:scale(.98);}
+button.principal{background:linear-gradient(135deg,#c88320,#e6a844); color:#fff; border:none;
+  box-shadow:0 3px 10px rgba(7,17,27,.20);}
+button.discret{background:none; border:1px solid var(--bord); font-weight:600; font-size:.95rem; color:var(--brun);}
+.message{min-height:1.4em; color:var(--brun); font-style:italic; margin-top:10px;}
+.faq{margin-top:26px;}
+.faq h2{font-size:1.35rem; margin:0 0 4px;}
+.faq details{background:var(--carte); border:1px solid var(--dore); border-radius:12px;
+  padding:13px 15px; margin:9px 0; box-shadow:var(--ombre);}
+.faq summary{font-weight:700; cursor:pointer; font-family:var(--font-texte); color:var(--encre);}
+/* ── Footer : nuit dégradé ── */
+footer.site{background:linear-gradient(180deg,#0d1b2a,var(--nuit)); color:var(--creme);
+  text-align:center; padding:36px 18px 42px; margin-top:44px;}
+footer.site .signature{font-family:var(--font-titres); font-size:1.05rem; color:var(--dore); margin:0 0 8px;}
+footer.site .lien-canon{margin:0 0 8px;}
+footer.site .lien-canon a{color:var(--dore-clair); text-decoration:none; border-bottom:1px solid var(--dore-clair);}
+footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,.68);}
+.resultat{text-align:center; padding:10px 0;}
+.grand{font-size:2.2rem; font-weight:800; color:var(--encre); line-height:1.15;}
+.ligne-resultat{display:flex; justify-content:space-between; gap:8px; padding:8px 0;
+  border-top:1px solid var(--bord); font-size:1.02rem;}
+.ligne-resultat .val{font-weight:800; text-align:right;}
+.note{font-size:.85rem; color:var(--brun);}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="barre">
+    <a class="lockup" href="index.html" aria-label="HP — outils pour la vraie vie"><span class="hp">HP</span><span class="devise">des outils pour la vraie vie</span></a>
+    <a class="retour" href="https://www.hp-outils.com">← hp-outils.com</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <h1>Ça vaut-tu la peine&nbsp;?</h1>
+    <p class="sous-titre">Le prix, c'est une chose. Le <strong>vrai coût</strong>, c'en est une autre.<br>
+    L'outil montre les chiffres. La décision, c'est toi qui la prends.</p>
+  </section>
+  <div class="ornement" aria-hidden="true"><span></span><b>◆</b><span></span></div>
+  <p style="text-align:center;color:var(--brun);font-size:.92rem;margin:0 0 4px">📍 <span id="prov-nom">Québec</span> · <a href="index.html" style="color:var(--brun)">changer de province</a></p>
+
+  <section class="carte" aria-label="Votre achat">
+    <label for="in-nom">C'est quoi, cet achat&nbsp;? <span class="note">(optionnel — pour le partage)</span></label>
+    <input type="text" id="in-nom" placeholder="ex. manteau d'hiver" maxlength="60">
+    <label for="in-prix">Le prix ($)</label>
+    <input type="number" id="in-prix" inputmode="decimal" min="0" step="0.01" placeholder="ex. 120">
+    <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+      <input type="checkbox" id="in-taxes" style="width:22px;height:22px;flex:none;accent-color:#c85f16">
+      <label for="in-taxes" style="margin:0;font-weight:600">Prix + taxes <span class="note" id="note-taxes"></span></label>
+    </div>
+    <label for="in-fois">Combien de fois tu vas l'utiliser&nbsp;?</label>
+    <input type="number" id="in-fois" inputmode="numeric" min="1" step="1" placeholder="ex. 20">
+    <p class="note" style="margin:6px 0 0">Sois honnête avec toi-même&nbsp;: un manteau, c'est 20 hivers&nbsp;? des souliers de course, c'est 100 sorties&nbsp;?</p>
+    <label for="in-salaire">Ton salaire horaire ($) <span class="note" id="note-salaire">— par défaut, le salaire minimum de ta province</span></label>
+    <input type="number" id="in-salaire" inputmode="decimal" min="0" step="0.01">
+    <label for="in-recurrence">C'est une dépense qui revient&nbsp;?</label>
+    <select id="in-recurrence">
+      <option value="0">Non, une seule fois</option>
+      <option value="52">Oui, à peu près chaque semaine</option>
+      <option value="12">Oui, à peu près chaque mois</option>
+      <option value="365">Oui, à peu près chaque jour</option>
+    </select>
+  </section>
+
+  <section class="carte resultat" aria-label="Résultat" id="bloc-resultat" style="display:none">
+    <div class="etiquette" id="etiquette-nom">Résultat</div>
+    <div class="grand" id="aff-cout-fois">—</div>
+    <div class="etiquette" style="margin-top:4px">par utilisation</div>
+    <div style="text-align:left;margin-top:10px">
+      <div class="ligne-resultat" id="ligne-ttc" style="display:none"><span>Prix toutes taxes incluses</span><span class="val" id="aff-ttc">—</span></div>
+      <div class="ligne-resultat"><span>Équivalent en travail</span><span class="val" id="aff-heures">—</span></div>
+      <div class="ligne-resultat" id="ligne-annuel" style="display:none"><span>Sur un an, si ça revient</span><span class="val" id="aff-annuel">—</span></div>
+    </div>
+    <p class="message" id="msg-zero-morale"></p>
+  </section>
+
+  <section class="carte" aria-label="Partager" id="bloc-partage" style="display:none">
+    <h2 style="font-size:1.2rem;margin-top:0">Montre les chiffres à quelqu'un</h2>
+    <p style="color:var(--brun);margin-top:0">Parfois, voir le calcul écrit noir sur blanc, ça aide à trancher.</p>
+    <button id="btn-partager" class="principal">📤 Partager</button>
+    <p class="message" id="msg-partage"></p>
+  </section>
+
+  <section class="faq" aria-label="Questions fréquentes">
+    <h2>Questions fréquentes</h2>
+    <details>
+      <summary>C'est quoi, «&nbsp;Ça vaut-tu la peine&nbsp;»&nbsp;?</summary>
+      <p>Un outil qui calcule le <strong>vrai coût</strong> d'un achat&nbsp;: le prix divisé par le nombre d'utilisations, l'équivalent en heures de travail, et ce que ça représente sur un an si la dépense revient. Zéro morale&nbsp;: l'outil montre, il ne juge jamais.</p>
+    </details>
+    <details>
+      <summary>C'est gratuit&nbsp;?</summary>
+      <p>Oui, 100&nbsp;% gratuit. Un outil HP — des outils pour la vraie vie, fait au Québec.</p>
+    </details>
+    <details>
+      <summary>Le «&nbsp;Prix + taxes&nbsp;», ça calcule quoi&nbsp;?</summary>
+      <p>Au Québec, le prix affiché n'est jamais le prix payé&nbsp;: l'interrupteur ajoute les taxes de vente de ta province (14,975&nbsp;% au Québec — TPS + TVQ) avant de calculer. Ailleurs au Canada, c'est le taux de ta province qui s'applique. Une estimation, pas un avis fiscal.</p>
+    </details>
+    <details>
+      <summary>D'où vient le salaire horaire par défaut&nbsp;?</summary>
+      <p>C'est le taux général du <strong>salaire minimum de ta province</strong> (au Québec&nbsp;: 16,60&nbsp;$/h depuis le 1<sup>er</sup> mai 2026). Tu peux le changer pour ton vrai salaire — et ta province se règle sur la page d'accueil des outils.</p>
+    </details>
+    <details>
+      <summary>Où vont mes données&nbsp;?</summary>
+      <p>Nulle part&nbsp;: tout reste sur votre appareil, dans votre navigateur. Pas de compte, pas de serveur.</p>
+    </details>
+  </section>
+
+  <div style="text-align:center;margin-top:16px">
+    <button id="btn-reset" class="discret" style="max-width:280px">↺ Recommencer</button>
+  </div>
+
+</main>
+<footer class="site">
+  <p class="signature">🧰 HP — des outils pour la vraie vie.</p>
+  <p class="lien-canon">👉 <a href="https://www.hp-outils.com/outils-web/ca-vaut-tu-la-peine.html">www.hp-outils.com/outils-web/ca-vaut-tu-la-peine.html</a></p>
+  <p class="note-pied">100&nbsp;% gratuit · Sans compte · Vos données ne quittent jamais votre appareil · Fait au Québec · v1.2</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  /* ── HP · province partagée : taxes + salaire minimum (oct. 2026) ── */
+  var HP_PROVINCES = {
+    "QC":  { nom:"Québec",                    taxe:0.14975, taxeNom:"TPS + TVQ", salaire:16.60, salaireDepuis:"1er mai 2026" },
+    "ON":  { nom:"Ontario",                   taxe:0.13,    taxeNom:"TVH",       salaire:17.95, salaireDepuis:"1er octobre 2026" },
+    "BC":  { nom:"Colombie-Britannique",      taxe:0.12,    taxeNom:"TPS + TVP", salaire:18.25, salaireDepuis:"1er juin 2026" },
+    "AB":  { nom:"Alberta",                   taxe:0.05,    taxeNom:"TPS",       salaire:15.00, salaireDepuis:"1er octobre 2018" },
+    "MB":  { nom:"Manitoba",                  taxe:0.12,    taxeNom:"TPS + TVD", salaire:16.40, salaireDepuis:"1er octobre 2026" },
+    "SK":  { nom:"Saskatchewan",              taxe:0.11,    taxeNom:"TPS + TVP", salaire:15.70, salaireDepuis:"1er octobre 2026" },
+    "NB":  { nom:"Nouveau-Brunswick",         taxe:0.15,    taxeNom:"TVH",       salaire:15.90, salaireDepuis:"1er avril 2026" },
+    "NS":  { nom:"Nouvelle-Écosse",           taxe:0.14,    taxeNom:"TVH",       salaire:17.00, salaireDepuis:"1er octobre 2026" },
+    "NL":  { nom:"Terre-Neuve-et-Labrador",   taxe:0.15,    taxeNom:"TVH",       salaire:16.35, salaireDepuis:"1er avril 2026" },
+    "PEI": { nom:"Île-du-Prince-Édouard",     taxe:0.15,    taxeNom:"TVH",       salaire:17.30, salaireDepuis:"1er octobre 2026" },
+    "YT":  { nom:"Yukon",                     taxe:0.05,    taxeNom:"TPS",       salaire:18.51, salaireDepuis:"1er avril 2026" },
+    "NT":  { nom:"Territoires du Nord-Ouest", taxe:0.05,    taxeNom:"TPS",       salaire:17.20, salaireDepuis:"1er septembre 2026" },
+    "NU":  { nom:"Nunavut",                   taxe:0.05,    taxeNom:"TPS",       salaire:20.17, salaireDepuis:"1er septembre 2026" }
+  };
+  var HP_CLE_PROVINCE = "hp-province-v1";
+  function hpProvince(){
+    var code = "QC";
+    try { code = localStorage.getItem(HP_CLE_PROVINCE) || "QC"; } catch(e){}
+    if (!HP_PROVINCES[code]) code = "QC";
+    return { code: code, info: HP_PROVINCES[code] };
+  }
+  function hpPct(t){
+    var s = (t*100).toLocaleString("fr-CA",{minimumFractionDigits:3, maximumFractionDigits:3});
+    return s.replace(/,0+$/,"") + " %";
+  }
+  function hpSalaire(s){
+    return s.toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2}) + " $/h";
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  function fmt(n){
+    return n.toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2}) + " $";
+  }
+  function fmtCourt(n){
+    return n.toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
+  function majProvince(){
+    var p = hpProvince();
+    $("prov-nom").textContent = p.info.nom;
+    $("note-taxes").textContent = "(+" + hpPct(p.info.taxe) + " — " + p.info.taxeNom + ")";
+    $("note-salaire").textContent = "— par défaut : salaire minimum " + p.info.nom + " (" + hpSalaire(p.info.salaire) + ", depuis le " + p.info.salaireDepuis + ")";
+  }
+
+  function prixAvecTaxes(){
+    var prixBase = parseFloat($("in-prix").value) || 0;
+    var p = hpProvince();
+    if ($("in-taxes").checked) return prixBase * (1 + p.info.taxe);
+    return prixBase;
+  }
+
+  function calculer(){
+    var prixBase = parseFloat($("in-prix").value) || 0;
+    var prix = prixAvecTaxes();
+    var fois = parseInt($("in-fois").value, 10) || 0;
+    var salaire = parseFloat($("in-salaire").value) || 0;
+    var rec = parseInt($("in-recurrence").value, 10) || 0;
+    var nom = $("in-nom").value.trim();
+    var avecTaxes = $("in-taxes").checked;
+
+    if (!(prixBase > 0) || !(fois >= 1)){
+      $("bloc-resultat").style.display = "none";
+      $("bloc-partage").style.display = "none";
+      return;
+    }
+    $("bloc-resultat").style.display = "";
+    $("bloc-partage").style.display = "";
+
+    var coutFois = prix / fois;
+    $("etiquette-nom").textContent = nom ? "« " + nom + " »" : "Résultat";
+    $("aff-cout-fois").textContent = fmtCourt(coutFois) + " $";
+
+    if (avecTaxes){
+      $("ligne-ttc").style.display = "";
+      $("aff-ttc").textContent = fmt(prix);
+    } else {
+      $("ligne-ttc").style.display = "none";
+    }
+
+    var heures = salaire > 0 ? prix / salaire : 0;
+    $("aff-heures").textContent = salaire > 0
+      ? heures.toLocaleString("fr-CA",{minimumFractionDigits:1, maximumFractionDigits:1}) + " h de travail"
+      : "—";
+
+    if (rec > 0){
+      $("ligne-annuel").style.display = "";
+      $("aff-annuel").textContent = fmt(prix * rec);
+    } else {
+      $("ligne-annuel").style.display = "none";
+    }
+
+    var msgs = [
+      "Voilà les chiffres. À toi de voir ce que ça vaut, pour vrai.",
+      "Pas de bonne ou de mauvaise réponse ici — juste des chiffres clairs.",
+      "Si ça te fait sourire en regardant le résultat, c'est probablement que oui."
+    ];
+    var m = msgs[Math.floor(Math.random()*msgs.length)];
+    if (rec > 0) m = "Sur un an, ça commence à compter. Mais c'est toi qui décides.";
+    $("msg-zero-morale").textContent = m;
+  }
+
+  ["in-prix","in-fois","in-salaire","in-recurrence","in-nom","in-taxes"].forEach(function(id){
+    $(id).addEventListener(id === "in-taxes" ? "change" : "input", calculer);
+  });
+
+  $("btn-partager").addEventListener("click", function(){
+    var prixBase = parseFloat($("in-prix").value) || 0;
+    var prix = prixAvecTaxes();
+    var fois = parseInt($("in-fois").value, 10) || 0;
+    var salaire = parseFloat($("in-salaire").value) || 0;
+    var nom = $("in-nom").value.trim();
+    var avecTaxes = $("in-taxes").checked;
+    var sujet = (nom ? "« " + nom + " »" : "Achat") + " à " + fmtCourt(prixBase) + " $";
+    if (avecTaxes) sujet += " (" + fmtCourt(prix) + " $ toutes taxes incluses)";
+    var texte = sujet + ", utilisé " + fois + " fois = " +
+      fmtCourt(prix/fois) + " $/fois";
+    if (salaire > 0){
+      texte += ", soit " + (prix/salaire).toLocaleString("fr-CA",{minimumFractionDigits:1, maximumFractionDigits:1}) + " h de travail";
+    }
+    texte += ". Calculé avec « Ça vaut-tu la peine ? », un outil HP gratuit.";
+    var msg = $("msg-partage");
+    if (navigator.share){
+      navigator.share({title:"Ça vaut-tu la peine ?", text:texte}).then(function(){
+        msg.textContent = "Partagé. Les chiffres parlent d'eux-mêmes. 💛";
+      }).catch(function(){});
+    } else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(function(){
+        msg.textContent = "Copié ! Colle-le où tu veux.";
+      }).catch(function(){ msg.textContent = texte; });
+    } else {
+      msg.textContent = texte;
+    }
+  });
+
+  $("btn-reset").addEventListener("click", function(){
+    var p = hpProvince();
+    ["in-nom","in-prix","in-fois"].forEach(function(id){ $(id).value = ""; });
+    $("in-salaire").value = p.info.salaire.toFixed(2);
+    $("in-taxes").checked = false;
+    $("in-recurrence").value = "0";
+    calculer();
+  });
+
+  majProvince();
+  $("in-salaire").value = hpProvince().info.salaire.toFixed(2);
+  calculer();
+})();
+</script>
+</body>
+</html>

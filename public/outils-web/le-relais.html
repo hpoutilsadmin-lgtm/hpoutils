@@ -1,0 +1,365 @@
+<!-- HP · outils web · v1.2 · 2026-10-06 · Québec + Canada : province, taxes, salaire minimum -->
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le relais — le cahier de transmission des proches aidants | HP, outils pour la vraie vie</title>
+<meta name="description" content="Le relais : un cahier de transmission simple pour les proches aidants — qui a fait quoi, quand. Notez, transmettez par Messenger ou SMS. Gratuit, sans compte, fait au Québec.">
+<meta property="og:title" content="Le relais — le cahier de transmission des proches aidants">
+<meta property="og:description" content="Qui a fait quoi, quand. Un carnet simple à transmettre à la famille, par Messenger ou SMS. Gratuit, sans compte, fait au Québec.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CA">
+<link rel="canonical" href="https://www.hp-outils.com/outils-web/le-relais.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Le relais",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+  "inLanguage": "fr-CA",
+  "description": "Cahier de transmission pour proches aidants : noter qui a fait quoi et quand, puis transmettre le relais à la famille en un texte copié. L'application transmet l'information, elle ne prend aucune décision médicale.",
+  "author": { "@type": "Organization", "name": "HP — des outils pour la vraie vie", "url": "https://www.hp-outils.com" }
+}
+</script>
+<style>
+:root{
+  /* ── Design hp-outils.com : nuit · crème · doré ── */
+  --nuit:#07111b;
+  --creme:#f6eddd;
+  --dore:#d89532;
+  --dore-clair:#f0c16d;
+  --encre:#1d252c;
+  --brique:#af3c2d;
+  --orange:#c85f16;
+  --brun:#806943;
+  --carte:rgba(255,255,255,.86);
+  --bord:#d9c193;
+  --teinte-doree:#faf1dd;
+  --ombre:0 4px 18px rgba(7,17,27,.09);
+  --font-texte:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-titres:Georgia,"Times New Roman",serif;
+  --rayon:16px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{margin:0; background:var(--creme); color:var(--encre);
+  font-family:var(--font-texte); line-height:1.6; font-size:17px;}
+/* ── Header : bandeau nuit ── */
+header.site{position:sticky; top:0; z-index:60; background:var(--nuit);
+  box-shadow:0 2px 14px rgba(0,0,0,.28);}
+header.site .barre{max-width:680px; margin:0 auto; padding:11px 18px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;}
+header.site .lockup{display:flex; align-items:baseline; gap:10px; text-decoration:none;}
+header.site .lockup .hp{font-family:var(--font-titres); font-weight:700; font-size:1.55rem;
+  color:var(--dore); letter-spacing:1px; line-height:1;}
+header.site .lockup .devise{font-size:.8rem; color:rgba(246,237,221,.72); letter-spacing:.3px;}
+header.site .retour{color:var(--dore-clair); text-decoration:none; font-size:.92rem;
+  font-weight:600; white-space:nowrap;}
+header.site .retour:hover{color:#fff;}
+main{max-width:640px; margin:0 auto; padding:0 18px 8px;}
+.hero{text-align:center; margin:0 0 18px; padding-top:28px;}
+h1{font-family:var(--font-titres); font-size:1.9rem; margin:0 0 .3em; line-height:1.25;
+  font-weight:700; color:var(--encre);}
+h2{font-family:var(--font-titres); color:var(--encre);}
+.sous-titre{color:var(--brun); font-size:1.03rem; margin:0 0 1.1em;}
+/* filet : clin d'œil artisanal */
+.ornement{display:flex; align-items:center; gap:10px; margin:18px auto; max-width:230px;}
+.ornement span{flex:1; height:4px; border-top:1px solid var(--bord); border-bottom:1px solid var(--bord);}
+.ornement b{font-size:.65rem; color:var(--brun); font-weight:400;}
+.carte{background:var(--carte); border:1px solid var(--dore); border-radius:var(--rayon);
+  padding:20px; margin:16px 0; box-shadow:var(--ombre);}
+.etiquette{font-size:.8rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--brun); margin-bottom:6px;}
+label{display:block; font-weight:600; margin:14px 0 5px; color:var(--encre);}
+input[type="number"],input[type="text"],select,textarea{width:100%; font-size:1.12rem; padding:12px 14px;
+  border:1.5px solid var(--bord); border-radius:10px; background:#fff; color:var(--encre); font-family:var(--font-texte);}
+input:focus,select:focus,textarea:focus{outline:none; border-color:var(--dore);}
+:focus-visible{outline:3px solid var(--dore); outline-offset:2px;}
+button{font-family:var(--font-texte); font-size:1.05rem; padding:14px; border-radius:8px;
+  border:1.5px solid var(--dore); background:#fff; color:var(--encre); font-weight:700; cursor:pointer; width:100%;}
+button:active{transform:scale(.98);}
+button.principal{background:linear-gradient(135deg,#c88320,#e6a844); color:#fff; border:none;
+  box-shadow:0 3px 10px rgba(7,17,27,.20);}
+button.discret{background:none; border:1px solid var(--bord); font-weight:600; font-size:.95rem; color:var(--brun);}
+.message{min-height:1.4em; color:var(--brun); font-style:italic; margin-top:10px;}
+.faq{margin-top:26px;}
+.faq h2{font-size:1.35rem; margin:0 0 4px;}
+.faq details{background:var(--carte); border:1px solid var(--dore); border-radius:12px;
+  padding:13px 15px; margin:9px 0; box-shadow:var(--ombre);}
+.faq summary{font-weight:700; cursor:pointer; font-family:var(--font-texte); color:var(--encre);}
+/* ── Footer : nuit dégradé ── */
+footer.site{background:linear-gradient(180deg,#0d1b2a,var(--nuit)); color:var(--creme);
+  text-align:center; padding:36px 18px 42px; margin-top:44px;}
+footer.site .signature{font-family:var(--font-titres); font-size:1.05rem; color:var(--dore); margin:0 0 8px;}
+footer.site .lien-canon{margin:0 0 8px;}
+footer.site .lien-canon a{color:var(--dore-clair); text-decoration:none; border-bottom:1px solid var(--dore-clair);}
+footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,.68);}
+button.vert{background:linear-gradient(135deg,#c88320,#e6a844); border:none; color:#fff;
+  box-shadow:0 3px 10px rgba(7,17,27,.20);}
+button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
+.entree{border-left:4px solid var(--dore); background:var(--carte); border-radius:0 12px 12px 0;
+  padding:11px 13px; margin:10px 0; box-shadow:var(--ombre);}
+.entree .quand{font-weight:800; font-size:1.05rem;}
+.entree .qui{color:var(--brun);}
+.entree .quoi{margin-top:2px;}
+.entree .actions{margin-top:6px; text-align:right;}
+.vide{color:var(--brun); font-style:italic; text-align:center; padding:18px 0;}
+.securite{background:#fff8e8; border:1px solid #e8d9a8; border-radius:10px;
+  padding:13px 15px; margin:16px 0; font-size:.95rem;}
+.securite strong{color:var(--brique);}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="barre">
+    <a class="lockup" href="index.html" aria-label="HP — outils pour la vraie vie"><span class="hp">HP</span><span class="devise">des outils pour la vraie vie</span></a>
+    <a class="retour" href="https://www.hp-outils.com">← hp-outils.com</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <h1>Le relais</h1>
+    <p class="sous-titre">Quand on est plusieurs à aider un proche,<br>
+    l'important c'est de savoir <strong>qui a fait quoi, quand</strong>.<br>
+    Fini les infos perdues entre les textos.</p>
+  </section>
+  <div class="ornement" aria-hidden="true"><span></span><b>◆</b><span></span></div>
+  <p style="text-align:center;color:var(--brun);font-size:.92rem;margin:0 0 4px">📍 <span id="prov-nom">Québec</span> · <a href="index.html" style="color:var(--brun)">changer de province</a></p>
+
+  <section class="carte" aria-label="Ajouter une entrée">
+    <h2 style="font-size:1.2rem;margin-top:0">Noter quelque chose</h2>
+    <label for="in-qui">Qui&nbsp;?</label>
+    <input type="text" id="in-qui" placeholder="ex. Sophie" maxlength="40" autocomplete="off">
+    <label for="in-quoi">Quoi&nbsp;?</label>
+    <input type="text" id="in-quoi" placeholder="ex. Médicament donné — dîner, ½ portion" maxlength="140" autocomplete="off">
+    <p class="message">L'heure se note toute seule, au moment où tu appuies.</p>
+    <button id="btn-ajouter" class="vert">✏️ Noter au carnet</button>
+    <p class="message" id="msg-ajout"></p>
+  </section>
+
+  <section aria-label="Le carnet">
+    <h2 style="font-size:1.25rem">Le carnet <span id="compte" style="font-weight:400;color:var(--brun);font-size:1rem"></span></h2>
+    <div id="liste"></div>
+  </section>
+
+  <section class="carte" aria-label="Numéros utiles">
+    <h2 style="font-size:1.2rem;margin-top:0">📞 Numéros utiles</h2>
+    <ul style="margin:8px 0;padding-left:20px">
+      <li><strong>811</strong> — Info-Santé, partout au Canada, 24&nbsp;h/24 et 7&nbsp;j/7</li>
+      <li id="ligne-ressource-locale"></li>
+    </ul>
+    <label for="in-contact-local">Votre ressource locale <span class="note">(CLSC, pharmacie, voisin…)</span></label>
+    <input type="text" id="in-contact-local" maxlength="80" placeholder="ex. CLSC du quartier — 514 555-0132" autocomplete="off">
+    <p class="message" id="msg-contact"></p>
+  </section>
+
+  <section class="carte" aria-label="Transmettre">
+    <h2 style="font-size:1.2rem;margin-top:0">Passer le relais</h2>
+    <p style="color:var(--brun);margin-top:0">Un texte prêt à coller dans Messenger ou par SMS — pour que tout le monde sache où on en est.</p>
+    <button id="btn-transmettre" class="principal">📤 Transmettre le relais</button>
+    <p class="message" id="msg-transmettre"></p>
+  </section>
+
+  <div class="securite" role="note">
+    <strong>⚠️ Important&nbsp;:</strong> Le relais transmet l'information, il ne prend <strong>aucune décision médicale</strong>.
+    Vérifiez les instructions données par le professionnel de la santé avant toute administration.
+  </div>
+
+  <section class="faq" aria-label="Questions fréquentes">
+    <h2>Questions fréquentes</h2>
+    <details>
+      <summary>C'est quoi, «&nbsp;Le relais&nbsp;»&nbsp;?</summary>
+      <p>Un cahier de transmission numérique pour les proches aidants&nbsp;: <strong>qui</strong> a fait <strong>quoi</strong>, <strong>quand</strong>. Chaque entrée est horodatée, et le bouton «&nbsp;Transmettre&nbsp;» génère un texte prêt à envoyer à la famille.</p>
+    </details>
+    <details>
+      <summary>Est-ce que ça me dit quand donner un médicament&nbsp;?</summary>
+      <p><strong>Non — et c'est voulu.</strong> Le relais transmet ce qui a été fait, il ne décide jamais de ce qu'il faut faire. Pour tout ce qui touche aux médicaments, suivez les instructions du professionnel de la santé.</p>
+    </details>
+    <details>
+      <summary>C'est gratuit&nbsp;?</summary>
+      <p>Oui, 100&nbsp;% gratuit. Un outil HP — des outils pour la vraie vie, fait au Québec.</p>
+    </details>
+    <details>
+      <summary>Où vont nos notes&nbsp;?</summary>
+      <p>Elles restent sur votre appareil, dans votre navigateur. Pas de compte, pas de serveur. Quand vous transmettez, c'est vous qui choisissez à qui envoyer le texte.</p>
+    </details>
+  </section>
+
+  <div style="text-align:center;margin-top:16px">
+    <button id="btn-reset" class="discret" style="max-width:280px">↺ Vider le carnet</button>
+  </div>
+
+</main>
+<footer class="site">
+  <p class="signature">🧰 HP — des outils pour la vraie vie.</p>
+  <p class="lien-canon">👉 <a href="https://www.hp-outils.com/outils-web/le-relais.html">www.hp-outils.com/outils-web/le-relais.html</a></p>
+  <p class="note-pied">100&nbsp;% gratuit · Sans compte · Vos données ne quittent jamais votre appareil · Fait au Québec · v1.2</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  /* ── HP · province partagée : taxes + salaire minimum (oct. 2026) ── */
+  var HP_PROVINCES = {
+    "QC":  { nom:"Québec" },
+    "ON":  { nom:"Ontario" },
+    "BC":  { nom:"Colombie-Britannique" },
+    "AB":  { nom:"Alberta" },
+    "MB":  { nom:"Manitoba" },
+    "SK":  { nom:"Saskatchewan" },
+    "NB":  { nom:"Nouveau-Brunswick" },
+    "NS":  { nom:"Nouvelle-Écosse" },
+    "NL":  { nom:"Terre-Neuve-et-Labrador" },
+    "PEI": { nom:"Île-du-Prince-Édouard" },
+    "YT":  { nom:"Yukon" },
+    "NT":  { nom:"Territoires du Nord-Ouest" },
+    "NU":  { nom:"Nunavut" }
+  };
+  var HP_CLE_PROVINCE = "hp-province-v1";
+  function hpProvince(){
+    var code = "QC";
+    try { code = localStorage.getItem(HP_CLE_PROVINCE) || "QC"; } catch(e){}
+    if (!HP_PROVINCES[code]) code = "QC";
+    return { code: code, info: HP_PROVINCES[code] };
+  }
+
+  var CLE = "hp-le-relais-v1";
+  var CLE_CONTACT = "hp-relais-contact-v1";
+  var $ = function(id){ return document.getElementById(id); };
+
+  function lire(){
+    try {
+      var d = JSON.parse(localStorage.getItem(CLE) || "[]");
+      return Array.isArray(d) ? d : [];
+    } catch(e){ return []; }
+  }
+  function ecrire(liste){
+    try { localStorage.setItem(CLE, JSON.stringify(liste)); } catch(e){}
+  }
+  function fmtHeure(ts){
+    var d = new Date(ts);
+    var h = d.getHours(), m = d.getMinutes();
+    return (h<10?"0":"")+h + " h " + (m<10?"0":"")+m;
+  }
+  function fmtDate(ts){
+    var d = new Date(ts);
+    var ajd = new Date();
+    var hier = new Date(); hier.setDate(ajd.getDate()-1);
+    function memeJour(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+    if (memeJour(d, ajd)) return "aujourd'hui";
+    if (memeJour(d, hier)) return "hier";
+    return d.toLocaleDateString("fr-CA", {day:"numeric", month:"long"});
+  }
+  function echapper(s){
+    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  var entrees = lire();
+
+  function afficher(){
+    var liste = $("liste");
+    $("compte").textContent = entrees.length ? "(" + entrees.length + ")" : "";
+    if (!entrees.length){
+      liste.innerHTML = '<p class="vide">Le carnet est vide. La première note, c\'est la plus importante — vas-y.</p>';
+      return;
+    }
+    var tri = entrees.slice().sort(function(a,b){ return b.ts - a.ts; });
+    var html = "";
+    tri.forEach(function(e, i){
+      var idx = entrees.indexOf(e);
+      html += '<article class="entree">' +
+        '<div class="quand">' + fmtHeure(e.ts) + ' <span style="font-weight:400;font-size:.9rem;color:var(--brun)">· ' + fmtDate(e.ts) + '</span></div>' +
+        '<div class="quoi">' + echapper(e.quoi) + '</div>' +
+        '<div class="qui">— ' + echapper(e.qui) + '</div>' +
+        '<div class="actions"><button class="discret petit" data-suppr="' + idx + '">retirer</button></div>' +
+        '</article>';
+    });
+    liste.innerHTML = html;
+    var boutons = liste.querySelectorAll("[data-suppr]");
+    for (var k=0; k<boutons.length; k++){
+      (function(btn){
+        btn.addEventListener("click", function(){
+          var i = parseInt(btn.getAttribute("data-suppr"), 10);
+          entrees.splice(i, 1);
+          ecrire(entrees); afficher();
+        });
+      })(boutons[k]);
+    }
+  }
+
+  $("btn-ajouter").addEventListener("click", function(){
+    var qui = $("in-qui").value.trim();
+    var quoi = $("in-quoi").value.trim();
+    var msg = $("msg-ajout");
+    if (!qui || !quoi){
+      msg.textContent = "Il manque le qui ou le quoi — les deux comptent.";
+      return;
+    }
+    entrees.push({ qui: qui, quoi: quoi, ts: Date.now() });
+    ecrire(entrees); afficher();
+    $("in-quoi").value = "";
+    $("in-quoi").focus();
+    msg.textContent = "Noté à " + fmtHeure(Date.now()) + ". Merci de tenir le relais. 💛";
+  });
+
+  function texteRelais(){
+    var tri = entrees.slice().sort(function(a,b){ return a.ts - b.ts; });
+    var lignes = ["📋 Le relais — " + new Date().toLocaleDateString("fr-CA",{day:"numeric",month:"long"})];
+    tri.forEach(function(e){
+      lignes.push(fmtHeure(e.ts) + " — " + e.quoi + " (" + e.qui + ")");
+    });
+    lignes.push("");
+    lignes.push("Noté avec « Le relais », un outil HP gratuit.");
+    return lignes.join("\n");
+  }
+
+  $("btn-transmettre").addEventListener("click", function(){
+    var msg = $("msg-transmettre");
+    if (!entrees.length){
+      msg.textContent = "Le carnet est encore vide — note quelque chose d'abord.";
+      return;
+    }
+    var texte = texteRelais();
+    if (navigator.share){
+      navigator.share({title:"Le relais", text:texte}).then(function(){
+        msg.textContent = "Relais transmis. 💛";
+      }).catch(function(){});
+    } else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(function(){
+        msg.textContent = "Copié ! Colle-le dans Messenger ou par SMS.";
+      }).catch(function(){ msg.textContent = texte; });
+    } else {
+      msg.textContent = texte;
+    }
+  });
+
+  $("btn-reset").addEventListener("click", function(){
+    if (entrees.length && confirm("Vider tout le carnet ?")){
+      entrees = []; ecrire(entrees); afficher();
+    }
+  });
+
+  /* ── Province + ressource locale ── */
+  function afficherProvince(){
+    var p = hpProvince();
+    $("prov-nom").textContent = p.info.nom;
+    $("ligne-ressource-locale").innerHTML = (p.code === "QC")
+      ? "Au Québec : ton <strong>CLSC</strong> — note son numéro ci-dessous."
+      : "Dans ta province (" + p.info.nom + ") : centre de santé ou ligne d'aide locale — note-la ci-dessous.";
+  }
+  try {
+    var contactSauve = localStorage.getItem(CLE_CONTACT) || "";
+    if (contactSauve) $("in-contact-local").value = contactSauve;
+  } catch(e){}
+  $("in-contact-local").addEventListener("input", function(){
+    try { localStorage.setItem(CLE_CONTACT, this.value); } catch(e){}
+    $("msg-contact").textContent = this.value.trim() ? "Noté. 💛" : "";
+  });
+
+  afficherProvince();
+  afficher();
+})();
+</script>
+</body>
+</html>

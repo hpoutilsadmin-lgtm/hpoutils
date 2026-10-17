@@ -1,0 +1,503 @@
+<!-- HP · outils web · v1.2 · 2026-10-06 · Québec + Canada : province, taxes, salaire minimum -->
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le reste du mois — combien puis-je dépenser par jour ? | HP, outils pour la vraie vie</title>
+<meta name="description" content="Le reste du mois : entrez vos revenus et vos dépenses, l'outil calcule combien il vous reste par jour jusqu'à la fin du mois. Gratuit, sans compte, vos données restent sur votre appareil. Un outil HP, fait au Québec.">
+<meta property="og:title" content="Le reste du mois — combien puis-je dépenser par jour ?">
+<meta property="og:description" content="Un seul chiffre qui compte : ce qu'il vous reste par jour jusqu'à la fin du mois. Gratuit, sans compte, fait au Québec.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CA">
+<link rel="canonical" href="https://www.hp-outils.com/outils-web/le-reste-du-mois.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Le reste du mois",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+  "inLanguage": "fr-CA",
+  "description": "Calcule combien il vous reste à dépenser par jour jusqu'à la fin du mois, à partir de vos revenus et de vos dépenses. Gratuit, sans compte, données conservées sur votre appareil.",
+  "author": { "@type": "Organization", "name": "HP — des outils pour la vraie vie", "url": "https://www.hp-outils.com" }
+}
+</script>
+<style>
+:root{
+  /* ── Design hp-outils.com : nuit · crème · doré ── */
+  --nuit:#07111b;
+  --creme:#f6eddd;
+  --dore:#d89532;
+  --dore-clair:#f0c16d;
+  --encre:#1d252c;
+  --brique:#af3c2d;
+  --orange:#c85f16;
+  --brun:#806943;
+  --carte:rgba(255,255,255,.86);
+  --bord:#d9c193;
+  --teinte-doree:#faf1dd;
+  --ombre:0 4px 18px rgba(7,17,27,.09);
+  --font-texte:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-titres:Georgia,"Times New Roman",serif;
+  --rayon:16px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{margin:0; background:var(--creme); color:var(--encre);
+  font-family:var(--font-texte); line-height:1.6; font-size:17px;}
+/* ── Header : bandeau nuit ── */
+header.site{position:sticky; top:0; z-index:60; background:var(--nuit);
+  box-shadow:0 2px 14px rgba(0,0,0,.28);}
+header.site .barre{max-width:680px; margin:0 auto; padding:11px 18px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;}
+header.site .lockup{display:flex; align-items:baseline; gap:10px; text-decoration:none;}
+header.site .lockup .hp{font-family:var(--font-titres); font-weight:700; font-size:1.55rem;
+  color:var(--dore); letter-spacing:1px; line-height:1;}
+header.site .lockup .devise{font-size:.8rem; color:rgba(246,237,221,.72); letter-spacing:.3px;}
+header.site .retour{color:var(--dore-clair); text-decoration:none; font-size:.92rem;
+  font-weight:600; white-space:nowrap;}
+header.site .retour:hover{color:#fff;}
+main{max-width:640px; margin:0 auto; padding:0 18px 8px;}
+.hero{text-align:center; margin:0 0 18px; padding-top:28px;}
+h1{font-family:var(--font-titres); font-size:1.9rem; margin:0 0 .3em; line-height:1.25;
+  font-weight:700; color:var(--encre);}
+h2{font-family:var(--font-titres); color:var(--encre);}
+.sous-titre{color:var(--brun); font-size:1.03rem; margin:0 0 1.1em;}
+/* filet : clin d'œil artisanal */
+.ornement{display:flex; align-items:center; gap:10px; margin:18px auto; max-width:230px;}
+.ornement span{flex:1; height:4px; border-top:1px solid var(--bord); border-bottom:1px solid var(--bord);}
+.ornement b{font-size:.65rem; color:var(--brun); font-weight:400;}
+.carte{background:var(--carte); border:1px solid var(--dore); border-radius:var(--rayon);
+  padding:20px; margin:16px 0; box-shadow:var(--ombre);}
+.etiquette{font-size:.8rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--brun); margin-bottom:6px;}
+label{display:block; font-weight:600; margin:14px 0 5px; color:var(--encre);}
+input[type="number"],input[type="text"],select,textarea{width:100%; font-size:1.12rem; padding:12px 14px;
+  border:1.5px solid var(--bord); border-radius:10px; background:#fff; color:var(--encre); font-family:var(--font-texte);}
+input:focus,select:focus,textarea:focus{outline:none; border-color:var(--dore);}
+:focus-visible{outline:3px solid var(--dore); outline-offset:2px;}
+button{font-family:var(--font-texte); font-size:1.05rem; padding:14px; border-radius:8px;
+  border:1.5px solid var(--dore); background:#fff; color:var(--encre); font-weight:700; cursor:pointer; width:100%;}
+button:active{transform:scale(.98);}
+button.principal{background:linear-gradient(135deg,#c88320,#e6a844); color:#fff; border:none;
+  box-shadow:0 3px 10px rgba(7,17,27,.20);}
+button.discret{background:none; border:1px solid var(--bord); font-weight:600; font-size:.95rem; color:var(--brun);}
+.message{min-height:1.4em; color:var(--brun); font-style:italic; margin-top:10px;}
+.faq{margin-top:26px;}
+.faq h2{font-size:1.35rem; margin:0 0 4px;}
+.faq details{background:var(--carte); border:1px solid var(--dore); border-radius:12px;
+  padding:13px 15px; margin:9px 0; box-shadow:var(--ombre);}
+.faq summary{font-weight:700; cursor:pointer; font-family:var(--font-texte); color:var(--encre);}
+/* ── Footer : nuit dégradé ── */
+footer.site{background:linear-gradient(180deg,#0d1b2a,var(--nuit)); color:var(--creme);
+  text-align:center; padding:36px 18px 42px; margin-top:44px;}
+footer.site .signature{font-family:var(--font-titres); font-size:1.05rem; color:var(--dore); margin:0 0 8px;}
+footer.site .lien-canon{margin:0 0 8px;}
+footer.site .lien-canon a{color:var(--dore-clair); text-decoration:none; border-bottom:1px solid var(--dore-clair);}
+footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,.68);}
+.montant{font-size:1.9rem; font-weight:800; letter-spacing:-.5px;}
+.montant.petit{font-size:1.5rem;}
+.reste-negatif{color:var(--brique);}
+.resultat-principal{text-align:center; padding:10px 0;}
+.resultat-principal .par-jour{font-size:2.6rem; font-weight:800; color:var(--orange); line-height:1.1;}
+.resultat-principal .par-jour.negatif{color:var(--brique);}
+.jusquau{color:var(--brun); margin-top:6px;}
+.boutons{display:grid; gap:10px; margin-top:12px;}
+button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff;}
+.panneau-montant{display:none; margin-top:10px; padding:14px; background:var(--teinte-doree);
+  border-radius:10px; border:1px dashed var(--dore);}
+.panneau-montant.ouvert{display:block;}
+.ligne-boutons{display:flex; gap:8px; margin-top:8px;}
+.ligne-boutons button{padding:10px;}
+.note-securite{font-size:.85rem; color:var(--brun); background:var(--teinte-doree);
+  border:1px solid var(--bord); border-radius:10px; padding:10px 12px; margin-top:12px;}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="barre">
+    <a class="lockup" href="index.html" aria-label="HP — outils pour la vraie vie"><span class="hp">HP</span><span class="devise">des outils pour la vraie vie</span></a>
+    <a class="retour" href="https://www.hp-outils.com">← hp-outils.com</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <h1>Le reste du mois</h1>
+    <p class="sous-titre">Pas de budget compliqué. Un seul chiffre qui compte :<br>
+    <strong>combien tu peux dépenser par jour</strong> sans te mettre dans le trouble.</p>
+  </section>
+  <div class="ornement" aria-hidden="true"><span></span><b>◆</b><span></span></div>
+  <p style="text-align:center;color:var(--brun);font-size:.92rem;margin:0 0 4px">📍 <span id="prov-nom">Québec</span> · <a href="index.html" style="color:var(--brun)">changer de province</a></p>
+
+  <section class="carte" aria-label="Vos chiffres du mois">
+    <div class="etiquette">Revenus disponibles</div>
+    <div class="montant" id="aff-revenus">—</div>
+    <label for="in-revenus">Mes revenus ce mois-ci ($)</label>
+    <input type="number" id="in-revenus" inputmode="decimal" min="0" step="0.01" placeholder="ex. 2400">
+
+    <div class="etiquette" style="margin-top:14px">Dépenses qui restent</div>
+    <div class="montant" id="aff-depenses">—</div>
+    <label for="in-depenses">Ce qu'il me reste à payer ce mois-ci ($)</label>
+    <input type="number" id="in-depenses" inputmode="decimal" min="0" step="0.01" placeholder="ex. 1650">
+    <p class="message" id="msg-init">Entre tes deux chiffres, et je fais le reste. Promis, ça prend 30&nbsp;secondes.</p>
+  </section>
+
+  <section class="carte resultat-principal" aria-label="Résultat">
+    <div class="etiquette">Il te reste</div>
+    <div class="montant petit" id="aff-reste">—</div>
+    <div class="par-jour" id="aff-par-jour">—</div>
+    <div class="jusquau" id="aff-jusquau"></div>
+    <p class="message" id="msg-reste"></p>
+  </section>
+
+  <section class="carte" aria-label="Échéances à venir">
+    <h2 style="font-size:1.2rem;margin-top:0">📅 Échéances à venir <span id="prov-echeances" style="font-weight:400;font-size:.95rem;color:var(--brun)"></span></h2>
+    <ul id="liste-echeances" style="margin:8px 0;padding-left:20px"></ul>
+    <p class="note" id="note-echeances" style="margin-bottom:0"></p>
+  </section>
+
+  <section class="carte" aria-label="La vraie vie">
+    <h2 style="font-size:1.2rem;margin-top:0">La vraie vie, ça bouge</h2>
+    <p style="color:var(--brun);margin-top:0">Un chèque qui rentre, une dépense imprévue… ajuste au fur et à mesure.</p>
+    <div class="boutons">
+      <button id="btn-recu">➕ J'ai reçu de l'argent</button>
+      <button id="btn-depense">➖ J'ai dépensé</button>
+      <button id="btn-coupdur" class="coup-dur">💥 Coup dur</button>
+    </div>
+    <div class="panneau-montant" id="panneau">
+      <label for="in-ajust" id="label-ajust">Montant ($)</label>
+      <input type="number" id="in-ajust" inputmode="decimal" min="0" step="0.01" placeholder="ex. 80">
+      <div class="ligne-boutons">
+        <button id="btn-ajust-ok" class="principal">OK</button>
+        <button id="btn-ajust-non" class="discret">Annuler</button>
+      </div>
+    </div>
+    <p class="message" id="msg-ajust"></p>
+  </section>
+
+  <section class="carte" aria-label="Combien aujourd'hui">
+    <h2 style="font-size:1.2rem;margin-top:0">Combien puis-je dépenser aujourd'hui&nbsp;?</h2>
+    <label for="in-reste-jour">Il me reste ($) <span style="font-weight:400;color:var(--brun)">— par défaut, ton reste du mois</span></label>
+    <input type="number" id="in-reste-jour" inputmode="decimal" min="0" step="0.01">
+    <label for="in-jours">Jours restants</label>
+    <input type="number" id="in-jours" inputmode="numeric" min="1" step="1">
+    <label for="in-simu">Si je dépense aujourd'hui ($) <span style="font-weight:400;color:var(--brun)">— pour voir l'effet</span></label>
+    <input type="number" id="in-simu" inputmode="decimal" min="0" step="0.01" placeholder="ex. 50">
+    <div class="resultat-principal">
+      <div class="par-jour" id="aff-auj" style="font-size:2rem">—</div>
+      <div class="jusquau">aujourd'hui</div>
+      <p class="message" id="msg-simu"></p>
+    </div>
+  </section>
+
+  <section class="carte" aria-label="Partager">
+    <h2 style="font-size:1.2rem;margin-top:0">Ça peut aider quelqu'un d'autre</h2>
+    <p style="color:var(--brun);margin-top:0">Un ami qui étire son budget&nbsp;? Envoie-lui ton chiffre — ou juste l'outil.</p>
+    <button id="btn-partager" class="principal">📤 Partager</button>
+    <p class="message" id="msg-partage"></p>
+  </section>
+
+  <section class="faq" aria-label="Questions fréquentes">
+    <h2>Questions fréquentes</h2>
+    <details>
+      <summary>C'est quoi, «&nbsp;Le reste du mois&nbsp;»&nbsp;?</summary>
+      <p>Un outil tout simple : tu entres tes revenus et ce qu'il te reste à payer, et il te dit combien tu peux dépenser <strong>par jour</strong> jusqu'à la fin du mois. Pas de catégories, pas de graphiques compliqués. Un chiffre, et c'est tout.</p>
+    </details>
+    <details>
+      <summary>C'est gratuit&nbsp;?</summary>
+      <p>Oui, 100&nbsp;% gratuit, pour toujours. C'est un outil HP — des outils pour la vraie vie, fait au Québec.</p>
+    </details>
+    <details>
+      <summary>Où vont mes données&nbsp;?</summary>
+      <p>Nulle part&nbsp;: tout reste sur votre appareil, dans votre navigateur. Il n'y a pas de compte, pas de serveur, personne d'autre ne voit vos chiffres.</p>
+    </details>
+    <details>
+      <summary>Ça remplace un budget&nbsp;?</summary>
+      <p>Non — et c'est voulu. C'est un outil de décision pour la vraie vie, pas une comptabilité. Si un jour tu veux des catégories, on les ajoutera&nbsp;si c'est vraiment demandé.</p>
+    </details>
+  </section>
+
+  <div style="text-align:center;margin-top:16px">
+    <button id="btn-reset" class="discret" style="max-width:280px">↺ Recommencer (nouveau mois)</button>
+  </div>
+
+</main>
+<footer class="site">
+  <p class="signature">🧰 HP — des outils pour la vraie vie.</p>
+  <p class="lien-canon">👉 <a href="https://www.hp-outils.com/outils-web/le-reste-du-mois.html">www.hp-outils.com/outils-web/le-reste-du-mois.html</a></p>
+  <p class="note-pied">100&nbsp;% gratuit · Sans compte · Vos données ne quittent jamais votre appareil · Fait au Québec · v1.2</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  /* ── HP · province partagée : taxes + salaire minimum (oct. 2026) ── */
+  var HP_PROVINCES = {
+    "QC":  { nom:"Québec",                    taxe:0.14975, taxeNom:"TPS + TVQ", salaire:16.60, salaireDepuis:"1er mai 2026" },
+    "ON":  { nom:"Ontario",                   taxe:0.13,    taxeNom:"TVH",       salaire:17.95, salaireDepuis:"1er octobre 2026" },
+    "BC":  { nom:"Colombie-Britannique",      taxe:0.12,    taxeNom:"TPS + TVP", salaire:18.25, salaireDepuis:"1er juin 2026" },
+    "AB":  { nom:"Alberta",                   taxe:0.05,    taxeNom:"TPS",       salaire:15.00, salaireDepuis:"1er octobre 2018" },
+    "MB":  { nom:"Manitoba",                  taxe:0.12,    taxeNom:"TPS + TVD", salaire:16.40, salaireDepuis:"1er octobre 2026" },
+    "SK":  { nom:"Saskatchewan",              taxe:0.11,    taxeNom:"TPS + TVP", salaire:15.70, salaireDepuis:"1er octobre 2026" },
+    "NB":  { nom:"Nouveau-Brunswick",         taxe:0.15,    taxeNom:"TVH",       salaire:15.90, salaireDepuis:"1er avril 2026" },
+    "NS":  { nom:"Nouvelle-Écosse",           taxe:0.14,    taxeNom:"TVH",       salaire:17.00, salaireDepuis:"1er octobre 2026" },
+    "NL":  { nom:"Terre-Neuve-et-Labrador",   taxe:0.15,    taxeNom:"TVH",       salaire:16.35, salaireDepuis:"1er avril 2026" },
+    "PEI": { nom:"Île-du-Prince-Édouard",     taxe:0.15,    taxeNom:"TVH",       salaire:17.30, salaireDepuis:"1er octobre 2026" },
+    "YT":  { nom:"Yukon",                     taxe:0.05,    taxeNom:"TPS",       salaire:18.51, salaireDepuis:"1er avril 2026" },
+    "NT":  { nom:"Territoires du Nord-Ouest", taxe:0.05,    taxeNom:"TPS",       salaire:17.20, salaireDepuis:"1er septembre 2026" },
+    "NU":  { nom:"Nunavut",                   taxe:0.05,    taxeNom:"TPS",       salaire:20.17, salaireDepuis:"1er septembre 2026" }
+  };
+  var HP_CLE_PROVINCE = "hp-province-v1";
+  function hpProvince(){
+    var code = "QC";
+    try { code = localStorage.getItem(HP_CLE_PROVINCE) || "QC"; } catch(e){}
+    if (!HP_PROVINCES[code]) code = "QC";
+    return { code: code, info: HP_PROVINCES[code] };
+  }
+
+  /* ── Échéances : les dates d'ici, pas des dates génériques ── */
+  var ECHEANCES_QC = [
+    {m:2, j:1,  t:"Cotisation REER — date limite"},
+    {m:3, j:30, t:"Déclaration de revenus — date limite"},
+    {m:6, j:1,  t:"1er juillet — fin des baux, déménagement"},
+    {fixe:true, t:"Taxes municipales et scolaires — vérifie les dates de ta ville"}
+  ];
+  var ECHEANCES_AUTRES = [
+    {m:2, j:1,  t:"Cotisation REER — date limite"},
+    {m:3, j:30, t:"Déclaration de revenus — date limite (fédéral)"},
+    {fixe:true, t:"Ajoute les échéances de ta province : taxes, permis, déménagement…"}
+  ];
+  function prochaineDate(m, j){
+    var ajd = new Date(); ajd.setHours(0,0,0,0);
+    var d = new Date(ajd.getFullYear(), m, j);
+    if (d < ajd) d = new Date(ajd.getFullYear()+1, m, j);
+    return d;
+  }
+  function afficherEcheances(){
+    var p = hpProvince();
+    $("prov-nom").textContent = p.info.nom;
+    $("prov-echeances").textContent = "· " + p.info.nom;
+    var liste = (p.code === "QC") ? ECHEANCES_QC : ECHEANCES_AUTRES;
+    var html = "";
+    liste.forEach(function(e){
+      if (e.fixe){
+        html += "<li>" + e.t + "</li>";
+      } else {
+        var d = prochaineDate(e.m, e.j);
+        html += "<li><strong>" + d.toLocaleDateString("fr-CA",{day:"numeric",month:"long"}) +
+          "</strong> — " + e.t + "</li>";
+      }
+    });
+    $("liste-echeances").innerHTML = html;
+    $("note-echeances").textContent = (p.code === "QC")
+      ? "💡 Au Québec, beaucoup sont payés aux deux semaines : entre ton total du mois (2 paies, parfois 3)."
+      : "💡 Chaque province a ses dates : ajoute celles qui comptent pour toi dans tes dépenses du mois.";
+  }
+
+  var CLE = "hp-reste-du-mois-v1";
+  var NBSP = " ";
+
+  function fmt(n){
+    return n.toLocaleString("fr-CA", {minimumFractionDigits:2, maximumFractionDigits:2}) + " $";
+  }
+  function moisNom(d){
+    return d.toLocaleDateString("fr-CA", {month:"long"});
+  }
+  function joursRestants(){
+    var ajd = new Date();
+    var fin = new Date(ajd.getFullYear(), ajd.getMonth()+1, 0);
+    var j = fin.getDate() - ajd.getDate() + 1;
+    return j < 1 ? 1 : j;
+  }
+  function finDeMoisTexte(){
+    var ajd = new Date();
+    var fin = new Date(ajd.getFullYear(), ajd.getMonth()+1, 0);
+    return "Jusqu'au " + fin.getDate() + " " + moisNom(fin);
+  }
+
+  function lire(){
+    try {
+      var d = JSON.parse(localStorage.getItem(CLE) || "{}");
+      return { revenus: +d.revenus || 0, depenses: +d.depenses || 0 };
+    } catch(e){ return { revenus: 0, depenses: 0 }; }
+  }
+  function ecrire(d){
+    try { localStorage.setItem(CLE, JSON.stringify(d)); } catch(e){}
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var donnees = lire();
+
+  function recalculer(){
+    var reste = donnees.revenus - donnees.depenses;
+    var jours = joursRestants();
+    var parJour = reste / jours;
+
+    $("aff-revenus").textContent = donnees.revenus ? fmt(donnees.revenus) : "—";
+    $("aff-depenses").textContent = donnees.depenses ? fmt(donnees.depenses) : "—";
+    $("aff-reste").textContent = (donnees.revenus || donnees.depenses) ? fmt(reste) : "—";
+    $("aff-reste").classList.toggle("reste-negatif", reste < 0);
+
+    var elJour = $("aff-par-jour");
+    if (donnees.revenus || donnees.depenses){
+      elJour.textContent = fmt(parJour).replace(" $", "") + " $/jour";
+      elJour.classList.toggle("negatif", parJour < 0);
+    } else {
+      elJour.textContent = "—"; elJour.classList.remove("negatif");
+    }
+    $("aff-jusquau").textContent = finDeMoisTexte() + " → " + jours + " jour" + (jours > 1 ? "s" : "");
+
+    var msg = "";
+    if (!donnees.revenus && !donnees.depenses){
+      msg = "";
+    } else if (reste < 0){
+      msg = "Ouch. C'est serré — mais au moins tu le sais, et c'est déjà ça. On serre les dents ensemble.";
+    } else if (parJour < 10){
+      msg = "Chaque dollar compte, et tu viens de prendre le contrôle. Bravo.";
+    } else {
+      msg = "Voilà ton chiffre. Le reste, c'est la vraie vie.";
+    }
+    $("msg-reste").textContent = msg;
+
+    // Pré-remplir la section "aujourd'hui"
+    if (!$("in-reste-jour").dataset.touche && reste > 0){
+      $("in-reste-jour").value = reste.toFixed(2);
+    }
+    if (!$("in-jours").dataset.touche){
+      $("in-jours").value = jours;
+    }
+    calculerAujourdhui();
+  }
+
+  function calculerAujourdhui(){
+    var r = parseFloat($("in-reste-jour").value);
+    var j = parseInt($("in-jours").value, 10);
+    var s = parseFloat($("in-simu").value);
+    var el = $("aff-auj"), msg = $("msg-simu");
+    if (!(r > 0) || !(j >= 1)){
+      el.textContent = "—"; msg.textContent = ""; return;
+    }
+    var auj = r / j;
+    el.textContent = fmt(auj).replace(" $", "") + " $";
+    if (s > 0){
+      if (j > 1){
+        var apres = (r - s) / (j - 1);
+        if (apres >= 0){
+          msg.textContent = "Si tu dépenses " + fmt(s).replace(" $", "") + " $ aujourd'hui → il te restera " +
+            apres.toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2}) + " $/jour pour les " + (j-1) + " autres jours.";
+        } else {
+          msg.textContent = "Hmm… " + fmt(s).replace(" $", "") + " $, ça dépasse ce qu'il te reste. À toi de voir — l'outil montre, il ne juge pas.";
+        }
+      } else {
+        msg.textContent = "C'est le dernier jour du mois : après aujourd'hui, on recommence à zéro. 🎉";
+      }
+    } else {
+      msg.textContent = "";
+    }
+  }
+
+  ["in-reste-jour","in-jours","in-simu"].forEach(function(id){
+    $(id).addEventListener("input", function(){
+      this.dataset.touche = "1";
+      calculerAujourdhui();
+    });
+  });
+
+  $("in-revenus").addEventListener("input", function(){
+    donnees.revenus = parseFloat(this.value) || 0;
+    ecrire(donnees); recalculer();
+    $("msg-init").textContent = "";
+  });
+  $("in-depenses").addEventListener("input", function(){
+    donnees.depenses = parseFloat(this.value) || 0;
+    ecrire(donnees); recalculer();
+    $("msg-init").textContent = "";
+  });
+
+  // Panneau d'ajustement
+  var modeAjust = null;
+  function ouvrirPanneau(mode, label){
+    modeAjust = mode;
+    $("label-ajust").textContent = label;
+    $("in-ajust").value = "";
+    $("panneau").classList.add("ouvert");
+    $("in-ajust").focus();
+  }
+  $("btn-recu").addEventListener("click", function(){ ouvrirPanneau("recu", "J'ai reçu combien ($) ?"); });
+  $("btn-depense").addEventListener("click", function(){ ouvrirPanneau("depense", "J'ai dépensé combien ($) ?"); });
+  $("btn-coupdur").addEventListener("click", function(){ ouvrirPanneau("coupdur", "Le coup dur, c'était combien ($) ?"); });
+  $("btn-ajust-non").addEventListener("click", function(){
+    $("panneau").classList.remove("ouvert"); modeAjust = null;
+  });
+  $("btn-ajust-ok").addEventListener("click", function(){
+    var m = parseFloat($("in-ajust").value);
+    if (!(m > 0)){ $("msg-ajust").textContent = "Entre un montant, même approximatif."; return; }
+    if (modeAjust === "recu"){
+      donnees.revenus += m;
+      $("msg-ajust").textContent = "Bonne nouvelle notée. 🎉";
+    } else if (modeAjust === "depense"){
+      donnees.depenses += m;
+      $("msg-ajust").textContent = "Noté. Pas de jugement ici.";
+    } else if (modeAjust === "coupdur"){
+      donnees.depenses += m;
+      var jours = joursRestants();
+      var parJour = (donnees.revenus - donnees.depenses) / jours;
+      $("msg-ajust").textContent = "Ouch. Nouveau reste : " +
+        parJour.toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2}) + " $/jour. Respire, c'est recalculé.";
+    }
+    ecrire(donnees); recalculer();
+    $("panneau").classList.remove("ouvert"); modeAjust = null;
+  });
+
+  // Partage
+  $("btn-partager").addEventListener("click", function(){
+    var jours = joursRestants();
+    var reste = donnees.revenus - donnees.depenses;
+    var texte;
+    if (donnees.revenus || donnees.depenses){
+      var fin = new Date(); fin = new Date(fin.getFullYear(), fin.getMonth()+1, 0);
+      texte = "Il me reste " + (reste/jours).toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2}) +
+        " $/jour jusqu'au " + fin.getDate() + " " + moisNom(fin) +
+        " — calculé avec « Le reste du mois », un outil HP gratuit.";
+    } else {
+      texte = "« Le reste du mois » : combien tu peux dépenser par jour sans te mettre dans le trouble. Gratuit, sans compte, fait au Québec. — HP, des outils pour la vraie vie.";
+    }
+    var msg = $("msg-partage");
+    if (navigator.share){
+      navigator.share({title:"Le reste du mois", text:texte}).then(function(){
+        msg.textContent = "Partagé. Merci de faire passer le mot. 💛";
+      }).catch(function(){});
+    } else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(function(){
+        msg.textContent = "Copié ! Colle-le où tu veux.";
+      }).catch(function(){
+        msg.textContent = texte;
+      });
+    } else {
+      msg.textContent = texte;
+    }
+  });
+
+  $("btn-reset").addEventListener("click", function(){
+    if (confirm("Tout effacer et recommencer un nouveau mois ?")){
+      donnees = { revenus: 0, depenses: 0 };
+      try { localStorage.removeItem(CLE); } catch(e){}
+      $("in-revenus").value = ""; $("in-depenses").value = "";
+      $("in-reste-jour").dataset.touche = ""; $("in-jours").dataset.touche = "";
+      $("in-reste-jour").value = ""; $("in-jours").value = ""; $("in-simu").value = "";
+      $("msg-init").textContent = "C'est reparti. Nouveau mois, nouveau chiffre.";
+      $("msg-ajust").textContent = "";
+      recalculer();
+    }
+  });
+
+  // Init
+  if (donnees.revenus) $("in-revenus").value = donnees.revenus;
+  if (donnees.depenses) $("in-depenses").value = donnees.depenses;
+  if (donnees.revenus || donnees.depenses) $("msg-init").textContent = "Te revoilà. Tes chiffres sont toujours là.";
+  afficherEcheances();
+  recalculer();
+})();
+</script>
+</body>
+</html>
