@@ -8,7 +8,6 @@ const NAV = [
   { to: "/livres-pdf", label: "Livres, PDF & réflexions" },
   { to: "/univers", label: "Univers alternatif" },
   { to: "/ateliers", label: "Ateliers" },
-  { to: "/balado", label: "Balado" },
   { to: "/a-propos", label: "À propos" },
 ] as const;
 
