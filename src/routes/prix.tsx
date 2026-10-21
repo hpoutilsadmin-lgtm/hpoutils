@@ -13,9 +13,10 @@ export const Route = createFileRoute("/prix")({
 const ROWS: Array<{ cat: string; offre: string; prix: string; href: string; label: string }> = [
   { cat: "PDF", offre: "Enjeux de l’humanité à l’ère de l’IA (PDF)", prix: "15 $ CAD, aucune taxe ajoutée", href: "/achat/enjeux-humanite", label: "Acheter le PDF" },
   { cat: "Guide", offre: "La faim justifie les moyens (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/faim-justifie-les-moyens", label: "Acheter le PDF" },
+  { cat: "PDF", offre: "Horizon Québec (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/horizon-quebec", label: "Acheter le PDF" },
   { cat: "PDF", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "20 $ CAD, aucune taxe ajoutée", href: "/achat/enfants-cuisinent", label: "Acheter le PDF" },
   { cat: "Sans Honte", offre: "1 kit PDF (Frigo, Papiers, Fraude…)", prix: "5 $ CAD, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les kits" },
-  { cat: "Sans Honte", offre: "Collection complète — 10 kits PDF", prix: "40 $ CAD au lieu de 50 $ CAD, aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
+  { cat: "Sans Honte", offre: "Bundle Sans Honte — Choisis 10 kits parmi 15", prix: "40 $ CAD, aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
   { cat: "Outils", offre: "Fiches et outils pratiques", prix: "5 $ à 20 $", href: "https://tally.so/r/A7AYGW", label: "Demander" },
   { cat: "Atelier", offre: "IA, cuisine ou jeunesse — forfait groupe", prix: "120 $ CAD, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Atelier", offre: "Manger mieux avec moins — forfait groupe", prix: "150 $ CAD, aucune taxe ajoutée", href: "/ateliers", label: "Voir l'atelier" },
