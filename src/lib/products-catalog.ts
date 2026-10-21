@@ -28,6 +28,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     pdfPath: "sans-honte-testament.pdf", downloadFileName: "Testament_Sans_Honte.pdf",
     priceLabel: "5 $ CAD, aucune taxe ajoutée", formatLabel: "Kit PDF",
     blurb: "Préparer un testament olographe au Québec, pas à pas.",
+    cover: "/images/sans-honte/kit-11.jpg",
     audienceSentence: "Ce kit s'adresse aux personnes qui veulent préparer un testament olographe au Québec et organiser leurs volontés.",
     precaution: "Ce kit vous guide pas à pas pour préparer un testament olographe conforme aux règles du Québec. C'est de l'information générale, pas un avis juridique. L'idéal : faire valider votre testament par un notaire — surtout s'il y a des enfants mineurs, un conjoint, une entreprise ou des biens hors Québec.",
   },
@@ -36,6 +37,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Papiers de mes parents Sans Honte", pdfPath: "sans-honte-papiers-parents.pdf",
     downloadFileName: "Papiers_de_mes_parents_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Organiser les papiers de ses parents, sans honte.",
+    cover: "/images/sans-honte/kit-12.jpg",
     audienceSentence: "Ce kit s'adresse aux personnes qui accompagnent leurs parents dans l'organisation de leurs papiers.",
   },
   sans_honte_chalet_pdf_5: {
@@ -43,6 +45,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Chalet Sans Honte — Les règles qui sauvent les Noëls", pdfPath: "sans-honte-chalet.pdf",
     downloadFileName: "Chalet_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Des règles claires pour partager le chalet.",
+    cover: "/images/sans-honte/kit-13.jpg",
     audienceSentence: "Ce kit s'adresse aux familles et aux proches qui partagent un chalet et veulent clarifier leurs règles ensemble.",
   },
   sans_honte_annee_quebecoise_pdf_5: {
@@ -50,6 +53,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "L'année québécoise Sans Honte", pdfPath: "sans-honte-annee-quebecoise.pdf",
     downloadFileName: "Annee_quebecoise_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Des repères pour l'année québécoise.",
+    cover: "/images/sans-honte/kit-14.jpg",
     audienceSentence: "Ce kit s'adresse aux personnes qui veulent organiser leur année avec des repères adaptés au Québec.",
   },
   sans_honte_heritage_numerique_pdf_5: {
@@ -57,6 +61,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     title: "Héritage numérique Sans Honte", pdfPath: "sans-honte-heritage-numerique.pdf",
     downloadFileName: "Heritage_numerique_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Préparer la transmission de son héritage numérique.",
+    cover: "/images/sans-honte/kit-15.jpg",
     audienceSentence: "Ce kit s'adresse aux personnes qui veulent préparer la transmission de leurs comptes et de leurs documents numériques.",
   },
   enjeux_humanite_pdf_15: {
@@ -264,18 +269,18 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   sans_honte_collection_pdf_40: {
     priceId: "sans_honte_collection_pdf_40",
     slug: "sans-honte-collection",
-    title: "Collection Sans Honte — 10 kits",
+    title: "Collection Sans Honte — Choisis 10 kits parmi 15",
     pdfPath: "sans-honte-collection.pdf",
     downloadFileName: "Collection-Sans-Honte.pdf",
     priceLabel: "40 $ CAD, aucune taxe ajoutée",
     blurb:
-      "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète en un seul téléchargement.",
+      "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisis 10 kits parmi les 15, en un seul téléchargement.",
     cover: "/images/sans-honte/collection-cover.png",
     formatLabel: "Collection PDF",
     shortDescription:
-      "La collection complète regroupe les 10 kits Sans Honte en format PDF.",
+      "Le bundle regroupe 10 kits Sans Honte au choix, parmi les 15 de la collection, en format PDF.",
     includes: [
-      "Les 10 kits Sans Honte en PDF",
+      "10 kits Sans Honte au choix (parmi 15), en PDF",
       "Textes courts et exercices de réflexion",
       "Phrases fortes à garder près de soi",
       "Outils à imprimer ou utiliser à l'écran",
