@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Mots de Chez Nous</title>
+    <style>
+      :root{
+        color-scheme: light dark;
+        --papier:#f7efdb;
+        --papier-2:#efe3c6;
+        --carte:#fdf8ea;
+        --encre:#29241b;
+        --encre-douce:#5c5545;
+        --rouge:#b03a26;
+        --rouge-fonce:#8c2b1b;
+        --sapin:#3d6b4f;
+        --bleu:#33566e;
+        --ocre:#b97e1e;
+        --prune:#6e3a5c;
+        --ligne:#29241b;
+        --ombre:#29241b;
+        --sel:#f2c14e;
+        --sel-encre:#29241b;
+        --hachure:rgba(41,36,27,.16);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --papier:#201c15;
+          --papier-2:#282219;
+          --carte:#2c2619;
+          --encre:#f0e6cd;
+          --encre-douce:#c4b996;
+          --rouge:#d0603f;
+          --rouge-fonce:#e07856;
+          --sapin:#5d9473;
+          --bleu:#5d84a3;
+          --ocre:#d29a35;
+          --prune:#a06a92;
+          --ligne:#f0e6cd;
+          --ombre:#000;
+          --sel:#b98a1e;
+          --sel-encre:#fff6da;
+          --hachure:rgba(240,230,205,.14);
+        }
+      }
+      *{ box-sizing:border-box; }
+      html{ -webkit-text-size-adjust:100%; }
+      body{
+        margin:0;
+        background:var(--papier);
+        color:var(--encre);
+        font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        line-height:1.45;
+      }
+      .serif{ font-family:Georgia,"Iowan Old Style","Times New Roman",serif; }
+      button{ font:inherit; cursor:pointer; }
+      .cache{ display:none !important; }
+
+      .page{ max-width:460px; margin:0 auto; padding:14px 14px 34px; }
+
+      /* ---------- Cadre gravé ---------- */
+      .cadre{
+        background:var(--carte);
+        border:3px solid var(--ligne);
+        outline:2px solid var(--ligne);
+        outline-offset:5px;
+        box-shadow:7px 7px 0 var(--ombre);
+        padding:26px 20px 24px;
+        margin-top:12px;
+        position:relative;
+      }
+      .cadre::before{
+        content:"";
+        position:absolute; inset:6px;
+        border:1px solid var(--hachure);
+        pointer-events:none;
+      }
+      .hachures-bas{
+        height:10px; margin-top:16px;
+        background:repeating-linear-gradient(-45deg, var(--hachure) 0 2px, transparent 2px 7px);
+      }
+
+      /* ---------- Accueil ---------- */
+      .mascotte{ display:block; margin:2px auto 6px; width:118px; height:auto; }
+      h1.titre{
+        text-align:center; margin:4px 0 2px;
+        font-size:2.35rem; line-height:1.05; letter-spacing:.5px;
+        text-transform:uppercase;
+      }
+      .sous-titre{ text-align:center; color:var(--encre-douce); margin:0 0 6px; font-size:1.02rem; }
+      .consigne{
+        text-align:center; margin:14px auto 4px; max-width:34ch;
+        font-size:1rem;
+      }
+      .consigne strong{ color:var(--rouge); }
+      .niveaux{ display:grid; gap:12px; margin-top:18px; }
+      .btn-niveau{
+        display:flex; align-items:center; justify-content:space-between; gap:10px;
+        width:100%; text-align:left;
+        background:var(--papier-2); color:var(--encre);
+        border:3px solid var(--ligne);
+        box-shadow:4px 4px 0 var(--ombre);
+        padding:13px 15px;
+        transition:transform .06s ease, box-shadow .06s ease;
+      }
+      .btn-niveau:active{ transform:translate(3px,3px); box-shadow:1px 1px 0 var(--ombre); }
+      .btn-niveau .nom{ font-size:1.28rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+      .btn-niveau .desc{ display:block; font-size:.92rem; color:var(--encre-douce); font-weight:400; text-transform:none; letter-spacing:0; margin-top:2px; }
+      .btn-niveau .record{ text-align:right; font-size:.85rem; color:var(--encre-douce); white-space:nowrap; }
+      .btn-niveau .record b{ display:block; font-size:1.05rem; color:var(--encre); }
+      .signature{ text-align:center; margin-top:20px; font-size:.92rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--encre-douce); }
+      .signature b{ color:var(--rouge); }
+      .banque-note{ text-align:center; margin-top:8px; font-size:.88rem; color:var(--encre-douce); }
+
+      /* ---------- Jeu ---------- */
+      .barre{
+        display:flex; align-items:center; justify-content:space-between; gap:8px;
+        border-bottom:3px solid var(--ligne);
+        padding-bottom:9px; margin-bottom:12px;
+      }
+      .barre .niv{ font-weight:700; text-transform:uppercase; letter-spacing:.6px; font-size:1rem; }
+      .chrono{ font-variant-numeric:tabular-nums; font-weight:700; font-size:1.18rem; }
+      .compte{ font-size:.95rem; color:var(--encre-douce); white-space:nowrap; }
+      .compte b{ color:var(--encre); font-size:1.1rem; }
+
+      .mots{ display:flex; flex-wrap:wrap; gap:7px; margin:0 0 13px; padding:0; list-style:none; }
+      .mots li{
+        border:2px solid var(--ligne);
+        background:var(--carte);
+        padding:4px 10px;
+        font-weight:700; letter-spacing:.6px; font-size:.98rem;
+        box-shadow:2px 2px 0 var(--ombre);
+      }
+      .mots li.trouve{
+        text-decoration:line-through; text-decoration-thickness:3px;
+        opacity:.62; box-shadow:none;
+      }
+
+      .grille-wrap{
+        border:3px solid var(--ligne);
+        background:var(--carte);
+        box-shadow:6px 6px 0 var(--ombre);
+        padding:8px;
+      }
+      .grille{
+        display:grid; gap:2px;
+        touch-action:none;
+        user-select:none; -webkit-user-select:none; -webkit-touch-callout:none;
+      }
+      .cellule{
+        aspect-ratio:1/1;
+        display:flex; align-items:center; justify-content:center;
+        font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+        font-weight:700;
+        background:var(--papier);
+        border:1px solid var(--hachure);
+        border-radius:3px;
+        line-height:1;
+      }
+      .cellule.sel{ background:var(--sel); color:var(--sel-encre); }
+      .cellule.f1{ background:var(--rouge); color:#fdf8ea; border-color:transparent; }
+      .cellule.f2{ background:var(--sapin); color:#fdf8ea; border-color:transparent; }
+      .cellule.f3{ background:var(--bleu); color:#fdf8ea; border-color:transparent; }
+      .cellule.f4{ background:var(--ocre); color:#fdf8ea; border-color:transparent; }
+      .cellule.f5{ background:var(--prune); color:#fdf8ea; border-color:transparent; }
+      @media (prefers-color-scheme: dark){
+        .cellule.f1,.cellule.f2,.cellule.f3,.cellule.f4,.cellule.f5{ color:#171410; }
+      }
+      .cellule.indice{ animation:clignote .45s ease-in-out 3; }
+      @keyframes clignote{
+        0%,100%{ background:var(--papier); }
+        50%{ background:var(--sel); color:var(--sel-encre); }
+      }
+      @media (prefers-reduced-motion: reduce){
+        .cellule.indice{ animation:none; background:var(--sel); color:var(--sel-encre); }
+      }
+
+      .def-boite{
+        margin-top:14px;
+        border:3px solid var(--ligne);
+        background:var(--papier-2);
+        box-shadow:4px 4px 0 var(--ombre);
+        padding:12px 14px;
+        min-height:86px;
+      }
+      .def-boite .def-mot{ font-weight:700; text-transform:uppercase; letter-spacing:.6px; font-size:1.08rem; }
+      .def-boite .def-cat{ font-size:.83rem; color:var(--encre-douce); text-transform:uppercase; letter-spacing:1px; }
+      .def-boite p{ margin:5px 0 0; font-size:1rem; }
+      .def-boite .attente{ color:var(--encre-douce); margin:0; }
+
+      .actions{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+      .btn{
+        flex:1 1 auto; min-height:52px;
+        border:3px solid var(--ligne);
+        background:var(--carte); color:var(--encre);
+        font-weight:700; font-size:1rem;
+        box-shadow:4px 4px 0 var(--ombre);
+        padding:10px 12px;
+      }
+      .btn:active{ transform:translate(3px,3px); box-shadow:1px 1px 0 var(--ombre); }
+      .btn.principal{ background:var(--rouge); border-color:var(--rouge-fonce); color:#fdf8ea; }
+      @media (prefers-color-scheme: dark){ .btn.principal{ color:#171410; } }
+
+      /* ---------- Fin ---------- */
+      .fin-titre{ text-align:center; font-size:2.1rem; margin:2px 0 4px; text-transform:uppercase; }
+      .fin-temps{ text-align:center; font-size:1.15rem; margin:0; }
+      .fin-temps b{ font-size:1.7rem; font-variant-numeric:tabular-nums; }
+      .record-note{ text-align:center; color:var(--rouge); font-weight:700; margin:5px 0 0; font-size:1.05rem; }
+      .fin-defs{ margin:18px 0 4px; padding:0; list-style:none; display:grid; gap:10px; }
+      .fin-defs li{ border-top:2px solid var(--hachure); padding-top:9px; }
+      .fin-defs .fm{ font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+      .fin-defs .fc{ font-size:.8rem; color:var(--encre-douce); text-transform:uppercase; letter-spacing:1px; }
+      .fin-defs p{ margin:3px 0 0; font-size:.97rem; }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+
+      <!-- ============ ACCUEIL ============ -->
+      <section id="ecran-accueil">
+        <div class="cadre">
+          <svg class="mascotte" viewBox="0 0 120 120" role="img" aria-label="Mascotte HP binoclard">
+            <circle cx="60" cy="62" r="40" fill="none" stroke="var(--encre)" stroke-width="4"/>
+            <path d="M28 44 Q40 22 60 24 Q82 22 93 43" fill="none" stroke="var(--encre)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M33 34 l7 6 M44 27 l4 8 M76 27 l-4 8 M87 34 l-7 6" stroke="var(--encre)" stroke-width="2.4" stroke-linecap="round"/>
+            <circle cx="44" cy="60" r="12.5" fill="none" stroke="var(--encre)" stroke-width="4"/>
+            <circle cx="77" cy="60" r="12.5" fill="none" stroke="var(--encre)" stroke-width="4"/>
+            <path d="M56.5 60 h8 M31.5 57 L20 52 M89.5 57 L100 52" stroke="var(--encre)" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="44" cy="61" r="2.6" fill="var(--encre)"/>
+            <circle cx="77" cy="61" r="2.6" fill="var(--encre)"/>
+            <path d="M60 66 q3 6 -1 9" fill="none" stroke="var(--encre)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M45 84 Q60 95 76 84" fill="none" stroke="var(--encre)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M30 92 l6 4 M90 92 l-6 4" stroke="var(--encre)" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+          <h1 class="titre serif">Mots de<br />chez nous</h1>
+          <p class="sous-titre">Le jeu de mots cachés d'ici</p>
+          <div class="hachures-bas"></div>
+          <p class="consigne">Des mots sont cachés dans la grille. <strong>Glisse ton doigt</strong> sur les lettres pour les retrouver — à l'horizontale, à la verticale ou en diagonale. Chaque mot trouvé révèle sa définition&nbsp;!</p>
+          <div class="niveaux" role="group" aria-label="Choisir un niveau">
+            <button class="btn-niveau" data-niveau="facile" type="button">
+              <span><span class="nom serif">Facile</span><span class="desc">Grille 8 × 8 · 6 mots</span></span>
+              <span class="record">Record<b id="record-facile">—</b></span>
+            </button>
+            <button class="btn-niveau" data-niveau="moyen" type="button">
+              <span><span class="nom serif">Moyen</span><span class="desc">Grille 10 × 10 · 8 mots</span></span>
+              <span class="record">Record<b id="record-moyen">—</b></span>
+            </button>
+            <button class="btn-niveau" data-niveau="difficile" type="button">
+              <span><span class="nom serif">Difficile</span><span class="desc">Grille 12 × 12 · 10 mots</span></span>
+              <span class="record">Record<b id="record-difficile">—</b></span>
+            </button>
+          </div>
+          <p class="banque-note" id="banque-note"></p>
+          <p class="signature">Par <b>HP Outils</b></p>
+        </div>
+      </section>
+
+      <!-- ============ JEU ============ -->
+      <section id="ecran-jeu" class="cache">
+        <div class="barre">
+          <span class="niv serif" id="jeu-niveau">Facile</span>
+          <span class="chrono" id="jeu-chrono" aria-label="Temps écoulé">0:00</span>
+          <span class="compte"><b id="jeu-trouves">0</b> / <span id="jeu-total">6</span> mots</span>
+        </div>
+        <ul class="mots" id="jeu-mots"></ul>
+        <div class="grille-wrap">
+          <div class="grille" id="jeu-grille" role="grid" aria-label="Grille de lettres"></div>
+        </div>
+        <div class="def-boite" aria-live="polite">
+          <p class="attente" id="def-attente">Glisse ton doigt sur un mot caché pour le trouver…</p>
+          <div id="def-contenu" class="cache">
+            <span class="def-mot" id="def-mot"></span> <span class="def-cat" id="def-cat"></span>
+            <p id="def-texte"></p>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btn-indice" type="button">Indice</button>
+          <button class="btn" id="btn-recommencer" type="button">Nouvelle partie</button>
+          <button class="btn" id="btn-niveaux" type="button">Niveaux</button>
+        </div>
+      </section>
+
+      <!-- ============ FIN ============ -->
+      <section id="ecran-fin" class="cache">
+        <div class="cadre">
+          <svg class="mascotte" viewBox="0 0 120 120" role="img" aria-label="Mascotte HP binoclard contente">
+            <circle cx="60" cy="62" r="40" fill="none" stroke="var(--encre)" stroke-width="4"/>
+            <path d="M28 44 Q40 22 60 24 Q82 22 93 43" fill="none" stroke="var(--encre)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M33 34 l7 6 M44 27 l4 8 M76 27 l-4 8 M87 34 l-7 6" stroke="var(--encre)" stroke-width="2.4" stroke-linecap="round"/>
+            <circle cx="44" cy="60" r="12.5" fill="none" stroke="var(--encre)" stroke-width="4"/>
+            <circle cx="77" cy="60" r="12.5" fill="none" stroke="var(--encre)" stroke-width="4"/>
+            <path d="M56.5 60 h8 M31.5 57 L20 52 M89.5 57 L100 52" stroke="var(--encre)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M38 61 q6 -6 12 0 M71 61 q6 -6 12 0" fill="none" stroke="var(--encre)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M60 66 q3 6 -1 9" fill="none" stroke="var(--encre)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M43 82 Q60 97 78 82" fill="none" stroke="var(--encre)" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <h2 class="fin-titre serif">Bravo&nbsp;!</h2>
+          <p class="fin-temps">Tous les mots trouvés en <b id="fin-temps">0:00</b></p>
+          <p class="record-note cache" id="fin-record">Nouveau record&nbsp;!</p>
+          <p class="fin-temps" style="font-size:.95rem; margin-top:4px;">Record du niveau : <span id="fin-meilleur">—</span><span id="fin-indices"></span></p>
+          <div class="hachures-bas"></div>
+          <ul class="fin-defs" id="fin-defs"></ul>
+          <div class="actions">
+            <button class="btn principal" id="btn-encore" type="button">Nouvelle partie</button>
+            <button class="btn" id="btn-fin-niveaux" type="button">Changer de niveau</button>
+          </div>
+          <p class="signature">Par <b>HP Outils</b></p>
+        </div>
+      </section>
+
+    </main>
+
+    <script>
+      "use strict";
+      // ---------- Banque de mots (673 mots du dictionnaire HP, définitions incluses) ----------
+      // m = mot affiché (accents), g = forme grille (capitales sans accents), c = catégorie, n = niveau, d = définition
+      var BANQUE = [{"m":"TUQUE","g":"TUQUE","c":"Québécois d'ici","n":2,"d":"Chapeau de laine tricoté, souvent avec un pompon, porté l'hiver."},{"m":"DÉPANNEUR","g":"DEPANNEUR","c":"Québécois d'ici","n":3,"d":"Petit commerce de quartier qui vend de tout, ouvert tard le soir."},{"m":"POUDRERIE","g":"POUDRERIE","c":"Québécois d'ici","n":3,"d":"Neige fine poussée par un vent fort qui réduit la visibilité."},{"m":"MAGASINER","g":"MAGASINER","c":"Québécois d'ici","n":3,"d":"Faire des achats dans les magasins."},{"m":"CÉGEP","g":"CEGEP","c":"Québécois d'ici","n":2,"d":"Collège d'enseignement général et professionnel, étape propre au Québec."},{"m":"CHAR","g":"CHAR","c":"Québécois d'ici","n":1,"d":"Mot familier pour désigner une automobile."},{"m":"FRETTE","g":"FRETTE","c":"Québécois d'ici","n":2,"d":"Mot familier pour dire qu'il fait très froid."},{"m":"BLONDE","g":"BLONDE","c":"Québécois d'ici","n":2,"d":"Au Québec, la petite amie ou la conjointe."},{"m":"CHUM","g":"CHUM","c":"Québécois d'ici","n":1,"d":"Ami proche; peut aussi désigner le petit ami."},{"m":"MITAINE","g":"MITAINE","c":"Québécois d'ici","n":2,"d":"Gant sans doigts séparés, sauf le pouce, porté l'hiver."},{"m":"MARINGOUIN","g":"MARINGOUIN","c":"Québécois d'ici","n":3,"d":"Petit insecte piqueur : le moustique de chez nous."},{"m":"GUIGNOLÉE","g":"GUIGNOLEE","c":"Québécois d'ici","n":3,"d":"Collecte de nourriture et de dons faite avant Noël pour les familles dans le besoin."},{"m":"ÉPLUCHETTE","g":"EPLUCHETTE","c":"Québécois d'ici","n":4,"d":"Fête où l'on épluche ensemble le blé d'Inde en gang, à la saison des récoltes."},{"m":"SLOCHE","g":"SLOCHE","c":"Québécois d'ici","n":2,"d":"Neige fondante et sale qui rend les rues et les trottoirs détrempés."},{"m":"BORDÉE","g":"BORDEE","c":"Québécois d'ici","n":2,"d":"Chute de neige importante qui laisse une bonne épaisseur au sol."},{"m":"CARIBOU","g":"CARIBOU","c":"Québécois d'ici","n":2,"d":"Boisson forte au vin servie aux fêtes d'hiver; c'est aussi un cervidé du Grand Nord."},{"m":"TRAÎNEAU","g":"TRAINEAU","c":"Québécois d'ici","n":2,"d":"Véhicule à patins qui glisse sur la neige, tiré par des chiens ou un cheval."},{"m":"RAQUETTE","g":"RAQUETTE","c":"Québécois d'ici","n":2,"d":"Large semelle ajourée qu'on attache aux bottes pour marcher sur la neige profonde."},{"m":"MOTONEIGE","g":"MOTONEIGE","c":"Québécois d'ici","n":3,"d":"Véhicule motorisé à chenille et à skis pour se déplacer sur la neige."},{"m":"SKIDOO","g":"SKIDOO","c":"Québécois d'ici","n":3,"d":"Nom familier de la motoneige, d'après une marque devenue courante."},{"m":"ÉRABLIÈRE","g":"ERABLIERE","c":"Québécois d'ici","n":4,"d":"Terrain planté d'érables où l'on récolte l'eau d'érable pour en faire du sirop."},{"m":"JASER","g":"JASER","c":"Québécois d'ici","n":1,"d":"Bavarder familièrement, prendre le temps de discuter."},{"m":"BIBITTE","g":"BIBITTE","c":"Québécois d'ici","n":2,"d":"Mot familier pour un insecte ou une petite bestiole."},{"m":"BLEUET","g":"BLEUET","c":"Québécois d'ici","n":2,"d":"Petit fruit bleu sauvage; c'est aussi le surnom des gens du Saguenay–Lac-Saint-Jean."},{"m":"BOGUE","g":"BOGUE","c":"Québécois d'ici","n":2,"d":"Défaut ou problème dans un programme informatique."},{"m":"BOUETTE","g":"BOUETTE","c":"Québécois d'ici","n":2,"d":"Boue épaisse et collante."},{"m":"BRETTER","g":"BRETTER","c":"Québécois d'ici","n":2,"d":"Perdre son temps, remettre les choses à plus tard."},{"m":"BROUE","g":"BROUE","c":"Québécois d'ici","n":1,"d":"Mousse de la bière; être débordé, c'est être « dans la broue »."},{"m":"BRUNANTE","g":"BRUNANTE","c":"Québécois d'ici","n":3,"d":"Moment du jour où la lumière baisse : le crépuscule."},{"m":"CALÈCHE","g":"CALECHE","c":"Québécois d'ici","n":2,"d":"Voiture légère à cheval utilisée pour promener les visiteurs."},{"m":"CAPOTER","g":"CAPOTER","c":"Québécois d'ici","n":2,"d":"Être très enthousiaste, ou perdre ses moyens sous le coup de l'émotion."},{"m":"CARRIOLE","g":"CARRIOLE","c":"Québécois d'ici","n":3,"d":"Ancien traîneau léger tiré par un cheval, utilisé l'hiver."},{"m":"CHIALER","g":"CHIALER","c":"Québécois d'ici","n":2,"d":"Se plaindre, protester en maugréant."},{"m":"CHICANE","g":"CHICANE","c":"Québécois d'ici","n":2,"d":"Dispute, désaccord bruyant entre personnes."},{"m":"COCOTTE","g":"COCOTTE","c":"Québécois d'ici","n":2,"d":"Chez nous, la pomme de pin."},{"m":"CROUSTILLE","g":"CROUSTILLE","c":"Québécois d'ici","n":3,"d":"Mince tranche de pomme de terre frite et croustillante : la chips de chez nous."},{"m":"DÉNEIGEMENT","g":"DENEIGEMENT","c":"Québécois d'ici","n":4,"d":"Enlèvement de la neige des rues et des trottoirs."},{"m":"DÉPOTOIR","g":"DEPOTOIR","c":"Québécois d'ici","n":3,"d":"Lieu où l'on enfouit les déchets."},{"m":"DIVAN","g":"DIVAN","c":"Québécois d'ici","n":1,"d":"Chez nous, le canapé du salon."},{"m":"DRAVEUR","g":"DRAVEUR","c":"Québécois d'ici","n":2,"d":"Ouvrier qui guidait les billes de bois sur les rivières au printemps."},{"m":"EMBARQUER","g":"EMBARQUER","c":"Québécois d'ici","n":3,"d":"Monter à bord d'un véhicule."},{"m":"ENFARGER","g":"ENFARGER","c":"Québécois d'ici","n":3,"d":"Trébucher, se prendre les pieds dans quelque chose."},{"m":"ÉCOEURANT","g":"ECOEURANT","c":"Québécois d'ici","n":3,"d":"Mot qui veut dire dégoûtant, mais qu'on lance aussi, avec le sourire, pour dire que c'est extraordinaire."},{"m":"FOURNAISE","g":"FOURNAISE","c":"Québécois d'ici","n":3,"d":"Appareil de chauffage central d'une maison."},{"m":"FRIGIDAIRE","g":"FRIGIDAIRE","c":"Québécois d'ici","n":3,"d":"Le réfrigérateur, du nom d'une marque devenue le mot courant."},{"m":"GAGNE","g":"GAGNE","c":"Québécois d'ici","n":1,"d":"Groupe, bande de personnes."},{"m":"GARDE-ROBE","g":"GARDEROBE","c":"Québécois d'ici","n":3,"d":"Placard ou penderie où l'on range les vêtements."},{"m":"GRATTE","g":"GRATTE","c":"Québécois d'ici","n":1,"d":"Camion muni d'une lame qui pousse et racle la neige des rues."},{"m":"HOCKEY","g":"HOCKEY","c":"Québécois d'ici","n":2,"d":"Sport d'équipe sur glace joué avec un bâton et une rondelle."},{"m":"ICITTE","g":"ICITTE","c":"Québécois d'ici","n":2,"d":"Façon familière et bien de chez nous de dire « ici »."},{"m":"JASETTE","g":"JASETTE","c":"Québécois d'ici","n":2,"d":"Petite conversation familière entre connaissances."},{"m":"LAVEUSE","g":"LAVEUSE","c":"Québécois d'ici","n":2,"d":"La machine à laver le linge."},{"m":"LOUSSE","g":"LOUSSE","c":"Québécois d'ici","n":1,"d":"Ample, desserré; avoir du lousse, c'est avoir de la marge."},{"m":"MAGANÉ","g":"MAGANE","c":"Québécois d'ici","n":2,"d":"Abîmé, usé, en mauvais état."},{"m":"MARABOUT","g":"MARABOUT","c":"Québécois d'ici","n":3,"d":"Personne de mauvaise humeur, grincheuse."},{"m":"MARMAILLE","g":"MARMAILLE","c":"Québécois d'ici","n":3,"d":"Bande d'enfants nombreux et bruyants."},{"m":"MATANTE","g":"MATANTE","c":"Québécois d'ici","n":3,"d":"Tante, dans le langage familier; aussi une dame d'âge mûr aux manières bien à elle."},{"m":"MINOU","g":"MINOU","c":"Québécois d'ici","n":2,"d":"Mot affectueux pour le chat."},{"m":"MONONCLE","g":"MONONCLE","c":"Québécois d'ici","n":3,"d":"Oncle, dans le langage familier; personnage classique des réunions de famille."},{"m":"MOSUS","g":"MOSUS","c":"Québécois d'ici","n":1,"d":"Juron adouci qu'on lance quand quelque chose nous échappe."},{"m":"MOUILLER","g":"MOUILLER","c":"Québécois d'ici","n":3,"d":"Pleuvoir, dans le langage de chez nous."},{"m":"NIAISEUX","g":"NIAISEUX","c":"Québécois d'ici","n":3,"d":"Niais, qui agit sans trop réfléchir."},{"m":"NIAISER","g":"NIAISER","c":"Québécois d'ici","n":2,"d":"Faire des riens, taquiner ou perdre son temps."},{"m":"NID-DE-POULE","g":"NIDDEPOULE","c":"Québécois d'ici","n":4,"d":"Trou dans la chaussée qui secoue les voitures."},{"m":"OBSTINER","g":"OBSTINER","c":"Québécois d'ici","n":3,"d":"Discuter fermement, défendre son point sans céder."},{"m":"ORDINAIRE","g":"ORDINAIRE","c":"Québécois d'ici","n":3,"d":"Chez nous, quelque chose de médiocre, qui ne vaut pas grand-chose."},{"m":"PACTÉ","g":"PACTE","c":"Québécois d'ici","n":2,"d":"Plein à craquer, bourré de monde."},{"m":"PAGAYER","g":"PAGAYER","c":"Québécois d'ici","n":2,"d":"Propulser un canot à l'aide d'une pagaie."},{"m":"PARCOMÈTRE","g":"PARCOMETRE","c":"Québécois d'ici","n":4,"d":"Appareil qui mesure le temps de stationnement payé."},{"m":"PARENTÉ","g":"PARENTE","c":"Québécois d'ici","n":2,"d":"Ensemble des parents d'une famille."},{"m":"PAROISSE","g":"PAROISSE","c":"Québécois d'ici","n":2,"d":"Petite municipalité rurale traditionnelle du Québec."},{"m":"PARTERRE","g":"PARTERRE","c":"Québécois d'ici","n":3,"d":"Terrain gazonné devant une maison."},{"m":"PARTY","g":"PARTY","c":"Québécois d'ici","n":1,"d":"Fête, réunion joyeuse entre amis ou en famille."},{"m":"PÉPÈRE","g":"PEPERE","c":"Québécois d'ici","n":2,"d":"Grand-père, dans le langage familier et affectueux."},{"m":"MÉMÈRE","g":"MEMERE","c":"Québécois d'ici","n":2,"d":"Grand-mère, dans le langage familier et affectueux."},{"m":"PATENTE","g":"PATENTE","c":"Québécois d'ici","n":2,"d":"Objet quelconque, souvent bricolé ou inventé sur le coin d'une table."},{"m":"PEINTURER","g":"PEINTURER","c":"Québécois d'ici","n":3,"d":"Peindre, dans le langage de chez nous."},{"m":"PERRON","g":"PERRON","c":"Québécois d'ici","n":2,"d":"Petit balcon ou escalier devant l'entrée d'une maison."},{"m":"PESANT","g":"PESANT","c":"Québécois d'ici","n":2,"d":"Lourd, dans le langage courant de chez nous."},{"m":"PIASTRE","g":"PIASTRE","c":"Québécois d'ici","n":2,"d":"Mot familier pour le dollar."},{"m":"PICOSSER","g":"PICOSSER","c":"Québécois d'ici","n":3,"d":"Picorer; aussi taquiner quelqu'un à petits coups répétés."},{"m":"PINOTTE","g":"PINOTTE","c":"Québécois d'ici","n":2,"d":"Arachide, dans le langage de chez nous."},{"m":"PITCHER","g":"PITCHER","c":"Québécois d'ici","n":2,"d":"Lancer, envoyer quelque chose d'un geste vif."},{"m":"PITON","g":"PITON","c":"Québécois d'ici","n":2,"d":"Bouton ou touche sur lequel on appuie."},{"m":"PLACOTER","g":"PLACOTER","c":"Québécois d'ici","n":3,"d":"Bavarder longuement, échanger des nouvelles."},{"m":"PLATE","g":"PLATE","c":"Québécois d'ici","n":1,"d":"Ennuyant, sans intérêt, dans le langage de chez nous."},{"m":"POGNER","g":"POGNER","c":"Québécois d'ici","n":2,"d":"Attraper, saisir; aussi réussir, comme dans « pogner le tour »."},{"m":"SACOCHE","g":"SACOCHE","c":"Québécois d'ici","n":2,"d":"Sac à main, dans le langage de chez nous."},{"m":"TABAGIE","g":"TABAGIE","c":"Québécois d'ici","n":3,"d":"Petit commerce de quartier, ancêtre du dépanneur."},{"m":"TABARNOUCHE","g":"TABARNOUCHE","c":"Québécois d'ici","n":4,"d":"Juron adouci, version douce d'un sacre bien connu."},{"m":"TABLETTE","g":"TABLETTE","c":"Québécois d'ici","n":3,"d":"Chez nous, une planche d'étagère pour ranger."},{"m":"TOUNE","g":"TOUNE","c":"Québécois d'ici","n":1,"d":"Chanson, dans le langage familier."},{"m":"TRAVERSIER","g":"TRAVERSIER","c":"Québécois d'ici","n":3,"d":"Bateau qui transporte passagers et voitures d'une rive à l'autre."},{"m":"TRIPER","g":"TRIPER","c":"Québécois d'ici","n":2,"d":"Avoir beaucoup de plaisir, être emballé par quelque chose."},{"m":"YOGOURT","g":"YOGOURT","c":"Québécois d'ici","n":2,"d":"Produit laitier fermenté à la texture onctueuse, dans l'orthographe d'ici."},{"m":"POUTINE","g":"POUTINE","c":"Cuisine","n":2,"d":"Plat de frites couvertes de fromage en grains et de sauce brune chaude."},{"m":"TOURTIÈRE","g":"TOURTIERE","c":"Cuisine","n":3,"d":"Pâté de viande hachée épicée, tradition des Fêtes au Québec."},{"m":"CIPAILLE","g":"CIPAILLE","c":"Cuisine","n":3,"d":"Plat mijoté de viandes et de pommes de terre en couches de pâte, spécialité du Bas-Saint-Laurent."},{"m":"CRETONS","g":"CRETONS","c":"Cuisine","n":2,"d":"Préparation de porc haché épicé qu'on tartine sur du pain grillé."},{"m":"RAGOÛT","g":"RAGOUT","c":"Cuisine","n":2,"d":"Plat de viande ou de légumes mijotés longuement dans une sauce."},{"m":"FÈVES","g":"FEVES","c":"Cuisine","n":1,"d":"Haricots secs cuits longuement, souvent au lard et à la mélasse."},{"m":"PÂTÉ","g":"PATE","c":"Cuisine","n":1,"d":"Préparation cuite en croûte ou en terrine; le pâté chinois superpose viande, maïs et pommes de terre."},{"m":"TARTE","g":"TARTE","c":"Cuisine","n":1,"d":"Dessert fait d'une croûte garnie, sucrée ou salée."},{"m":"BEIGNE","g":"BEIGNE","c":"Cuisine","n":2,"d":"Pâte frite en forme d'anneau ou de boule, souvent saupoudrée de sucre."},{"m":"GALETTE","g":"GALETTE","c":"Cuisine","n":2,"d":"Biscuit plat et tendre, souvent parfumé à la mélasse."},{"m":"MIJOTÉ","g":"MIJOTE","c":"Cuisine","n":2,"d":"Plat qui cuit lentement à feu doux dans son jus."},{"m":"SOUPE","g":"SOUPE","c":"Cuisine","n":1,"d":"Plat liquide chaud fait d'un bouillon et de légumes, de viandes ou de légumineuses."},{"m":"PAIN","g":"PAIN","c":"Cuisine","n":1,"d":"Aliment fait de farine, d'eau et de levure, cuit au four."},{"m":"BEURRE","g":"BEURRE","c":"Cuisine","n":1,"d":"Matière grasse obtenue en barattant la crème du lait."},{"m":"FROMAGE","g":"FROMAGE","c":"Cuisine","n":2,"d":"Produit laitier obtenu par caillage du lait, frais ou affiné."},{"m":"JAMBON","g":"JAMBON","c":"Cuisine","n":1,"d":"Cuisse de porc salée ou fumée, servie en tranches."},{"m":"SAUCISSE","g":"SAUCISSE","c":"Cuisine","n":2,"d":"Boyau rempli de viande hachée assaisonnée."},{"m":"BOUDIN","g":"BOUDIN","c":"Cuisine","n":2,"d":"Charcuterie de sang de porc épicé, poêlée en rondelles."},{"m":"OMELETTE","g":"OMELETTE","c":"Cuisine","n":2,"d":"Œufs battus cuits à la poêle, nature ou garnis."},{"m":"CRÊPE","g":"CREPE","c":"Cuisine","n":1,"d":"Pâte très fine cuite à la poêle, pliée ou roulée avec une garniture."},{"m":"GAUFRE","g":"GAUFRE","c":"Cuisine","n":2,"d":"Pâte cuite entre deux plaques à motifs, croustillante et moelleuse."},{"m":"MUFFIN","g":"MUFFIN","c":"Cuisine","n":2,"d":"Petit gâteau individuel moelleux cuit dans un moule."},{"m":"CROISSANT","g":"CROISSANT","c":"Cuisine","n":2,"d":"Viennoiserie feuilletée au beurre en forme de croissant de lune."},{"m":"BRIOCHE","g":"BRIOCHE","c":"Cuisine","n":2,"d":"Pâte levée riche en beurre et en œufs, à la mie filante."},{"m":"CONFITURE","g":"CONFITURE","c":"Cuisine","n":3,"d":"Préparation de fruits cuits dans le sucre, tartinée sur le pain."},{"m":"MIEL","g":"MIEL","c":"Cuisine","n":1,"d":"Substance sucrée dorée produite par les abeilles."},{"m":"SIROP","g":"SIROP","c":"Cuisine","n":1,"d":"Liquide sucré épais; celui d'érable vient de la sève bouillie."},{"m":"SUCRE","g":"SUCRE","c":"Cuisine","n":1,"d":"Substance douce tirée de la canne, de la betterave ou de l'érable."},{"m":"POIVRE","g":"POIVRE","c":"Cuisine","n":2,"d":"Épice piquante moulue, compagne fidèle du sel."},{"m":"FARINE","g":"FARINE","c":"Cuisine","n":2,"d":"Poudre obtenue en moulant des grains, base de la pâtisserie."},{"m":"LEVURE","g":"LEVURE","c":"Cuisine","n":2,"d":"Champignon microscopique qui fait lever les pâtes en fermentant."},{"m":"BISCUIT","g":"BISCUIT","c":"Cuisine","n":2,"d":"Petit gâteau sec et croquant."},{"m":"GÂTEAU","g":"GATEAU","c":"Cuisine","n":2,"d":"Pâtisserie moelleuse, souvent garnie et décorée pour les fêtes."},{"m":"CARAMEL","g":"CARAMEL","c":"Cuisine","n":2,"d":"Sucre fondu jusqu'à devenir ambré, au goût riche et grillé."},{"m":"CHOCOLAT","g":"CHOCOLAT","c":"Cuisine","n":2,"d":"Douceur faite de cacao, de sucre et souvent de lait."},{"m":"VANILLE","g":"VANILLE","c":"Cuisine","n":2,"d":"Gousse aromatique qui parfume crèmes et desserts."},{"m":"CITRON","g":"CITRON","c":"Cuisine","n":2,"d":"Agrume jaune au jus acide, utilisé en cuisine et en boisson."},{"m":"POMME","g":"POMME","c":"Cuisine","n":1,"d":"Fruit rond du pommier, croquant et juteux."},{"m":"POIRE","g":"POIRE","c":"Cuisine","n":1,"d":"Fruit tendre et sucré en forme de goutte."},{"m":"FRAISE","g":"FRAISE","c":"Cuisine","n":1,"d":"Petit fruit rouge parfumé, récolté au début de l'été."},{"m":"FRAMBOISE","g":"FRAMBOISE","c":"Cuisine","n":3,"d":"Petit fruit rouge formé de minuscules billes juteuses."},{"m":"CERISE","g":"CERISE","c":"Cuisine","n":2,"d":"Petit fruit rond à noyau, rouge ou noir."},{"m":"PRUNE","g":"PRUNE","c":"Cuisine","n":1,"d":"Fruit rond à noyau, à la peau lisse et colorée."},{"m":"RAISIN","g":"RAISIN","c":"Cuisine","n":2,"d":"Fruit de la vigne, mangé frais ou séché."},{"m":"MELON","g":"MELON","c":"Cuisine","n":1,"d":"Gros fruit rond à chair sucrée et juteuse."},{"m":"PASTÈQUE","g":"PASTEQUE","c":"Cuisine","n":3,"d":"Très gros fruit d'été à chair rouge pleine d'eau, le melon d'eau."},{"m":"ANANAS","g":"ANANAS","c":"Cuisine","n":2,"d":"Fruit tropical à écorce écailleuse et chair jaune parfumée."},{"m":"BANANE","g":"BANANE","c":"Cuisine","n":2,"d":"Fruit allongé à peau jaune, doux et nourrissant."},{"m":"CAROTTE","g":"CAROTTE","c":"Cuisine","n":2,"d":"Racine orange croquante et sucrée."},{"m":"PATATE","g":"PATATE","c":"Cuisine","n":2,"d":"La pomme de terre, dans le langage de chez nous."},{"m":"OIGNON","g":"OIGNON","c":"Cuisine","n":2,"d":"Bulbe à couches au goût fort, base de tant de plats."},{"m":"NAVET","g":"NAVET","c":"Cuisine","n":2,"d":"Racine blanche ou jaune au goût finement piquant."},{"m":"CHOU","g":"CHOU","c":"Cuisine","n":1,"d":"Légume en pomme de feuilles serrées, vert ou rouge."},{"m":"LAITUE","g":"LAITUE","c":"Cuisine","n":2,"d":"Plante aux feuilles vertes tendres, base des salades."},{"m":"ÉPINARD","g":"EPINARD","c":"Cuisine","n":3,"d":"Légume aux feuilles vertes riches en fer."},{"m":"BROCOLI","g":"BROCOLI","c":"Cuisine","n":2,"d":"Légume vert en forme de petit arbre."},{"m":"MAÏS","g":"MAIS","c":"Cuisine","n":1,"d":"Céréale aux grains jaunes mangée en épi ou en grains."},{"m":"HARICOT","g":"HARICOT","c":"Cuisine","n":3,"d":"Légume en gousse longue, vert ou jaune."},{"m":"LENTILLE","g":"LENTILLE","c":"Cuisine","n":3,"d":"Petite légumineuse ronde qui cuit vite, bonne en soupe."},{"m":"RIZ","g":"RIZ","c":"Cuisine","n":1,"d":"Céréale à petits grains blancs, cuite à l'eau."},{"m":"QUINOA","g":"QUINOA","c":"Cuisine","n":4,"d":"Petit grain riche en protéines, originaire des Andes."},{"m":"COUSCOUS","g":"COUSCOUS","c":"Cuisine","n":3,"d":"Plat de semoule fine servi avec légumes et viandes mijotées."},{"m":"VIANDE","g":"VIANDE","c":"Cuisine","n":2,"d":"Chair d'animal préparée comme aliment."},{"m":"POULET","g":"POULET","c":"Cuisine","n":2,"d":"Volaille la plus courante dans nos assiettes."},{"m":"BIFTECK","g":"BIFTECK","c":"Cuisine","n":3,"d":"Tranche de bœuf tendre qu'on grille ou poêle."},{"m":"PORC","g":"PORC","c":"Cuisine","n":1,"d":"Viande de cochon, tendre et savoureuse."},{"m":"VEAU","g":"VEAU","c":"Cuisine","n":1,"d":"Viande du jeune bovin, fine et tendre."},{"m":"AGNEAU","g":"AGNEAU","c":"Cuisine","n":2,"d":"Viande du jeune mouton, au goût délicat."},{"m":"DINDE","g":"DINDE","c":"Cuisine","n":2,"d":"Grosse volaille servie entière aux repas de fête."},{"m":"SAUMON","g":"SAUMON","c":"Cuisine","n":2,"d":"Poisson à chair rosée, pêché dans nos rivières et nos mers."},{"m":"MORUE","g":"MORUE","c":"Cuisine","n":2,"d":"Poisson de mer à chair blanche, pêché dans l'Atlantique."},{"m":"HOMARD","g":"HOMARD","c":"Cuisine","n":2,"d":"Crustacé à grosses pinces, pêché au printemps dans le golfe."},{"m":"CREVETTE","g":"CREVETTE","c":"Cuisine","n":3,"d":"Petit crustacé rosé; celle de Sept-Îles fait la fierté de la Côte-Nord."},{"m":"HUÎTRE","g":"HUITRE","c":"Cuisine","n":3,"d":"Mollusque à coquille rugueuse, mangé cru ou cuit."},{"m":"MOULE","g":"MOULE","c":"Cuisine","n":2,"d":"Mollusque à coquille noire, cuit à la vapeur."},{"m":"PÉTONCLE","g":"PETONCLE","c":"Cuisine","n":4,"d":"Mollusque à la chair blanche délicate logée dans une coquille en éventail."},{"m":"CRABE","g":"CRABE","c":"Cuisine","n":1,"d":"Crustacé à carapace large et à pattes articulées."},{"m":"POISSON","g":"POISSON","c":"Cuisine","n":2,"d":"Animal aquatique à écailles servi comme aliment."},{"m":"PUDDING","g":"PUDDING","c":"Cuisine","n":3,"d":"Dessert de pâte baignant dans un sirop chaud; le pudding chômeur est un classique d'ici."},{"m":"BAGUETTE","g":"BAGUETTE","c":"Cuisine","n":3,"d":"Pain long et mince à croûte dorée et croustillante."},{"m":"ÉRABLE","g":"ERABLE","c":"Nature","n":2,"d":"Arbre dont la sève sucrée donne le sirop; sa feuille est l'emblème du pays."},{"m":"ÉPINETTE","g":"EPINETTE","c":"Nature","n":3,"d":"Conifère aux aiguilles courtes, pilier de la forêt boréale."},{"m":"ORIGNAL","g":"ORIGNAL","c":"Nature","n":3,"d":"Plus gros cervidé d'Amérique du Nord, reconnaissable à son museau pendant et à son panache."},{"m":"CASTOR","g":"CASTOR","c":"Nature","n":2,"d":"Rongeur aquatique bâtisseur de barrages, emblème du Canada."},{"m":"BERNACHE","g":"BERNACHE","c":"Nature","n":3,"d":"Grande oie sauvage qui traverse le ciel en formation en V, au printemps et à l'automne."},{"m":"MOUETTE","g":"MOUETTE","c":"Nature","n":2,"d":"Oiseau de mer blanc et gris qui suit les bateaux et les quais."},{"m":"RIVIÈRE","g":"RIVIERE","c":"Nature","n":2,"d":"Cours d'eau qui se jette dans un fleuve, un lac ou la mer."},{"m":"MONTAGNE","g":"MONTAGNE","c":"Nature","n":3,"d":"Élévation naturelle importante du terrain, au sommet souvent rocheux."},{"m":"FORÊT","g":"FORET","c":"Nature","n":1,"d":"Vaste étendue couverte d'arbres."},{"m":"LOUTRE","g":"LOUTRE","c":"Nature","n":2,"d":"Mammifère aquatique joueur, excellent nageur des rivières."},{"m":"BOULEAU","g":"BOULEAU","c":"Nature","n":2,"d":"Arbre à l'écorce blanche qui se détache en fines lamelles."},{"m":"NEIGE","g":"NEIGE","c":"Nature","n":1,"d":"Eau gelée qui tombe en flocons blancs et couvre le sol l'hiver."},{"m":"PLUIE","g":"PLUIE","c":"Nature","n":1,"d":"Eau qui tombe des nuages en gouttes."},{"m":"VENT","g":"VENT","c":"Nature","n":1,"d":"Air en mouvement, de la brise à la tempête."},{"m":"SOLEIL","g":"SOLEIL","c":"Nature","n":2,"d":"Étoile qui éclaire et réchauffe la Terre."},{"m":"LUNE","g":"LUNE","c":"Nature","n":1,"d":"Satellite naturel de la Terre, visible surtout la nuit."},{"m":"ÉTOILE","g":"ETOILE","c":"Nature","n":2,"d":"Astre lumineux qui brille dans le ciel nocturne."},{"m":"NUAGE","g":"NUAGE","c":"Nature","n":2,"d":"Amas de gouttelettes d'eau suspendu dans le ciel."},{"m":"ORAGE","g":"ORAGE","c":"Nature","n":2,"d":"Perturbation violente avec éclairs, tonnerre et forte pluie."},{"m":"TEMPÊTE","g":"TEMPETE","c":"Nature","n":3,"d":"Vent violent accompagné de pluie, de neige ou de grêle."},{"m":"VERGLAS","g":"VERGLAS","c":"Nature","n":3,"d":"Couche de glace formée par la pluie qui gèle au contact du sol."},{"m":"GIVRE","g":"GIVRE","c":"Nature","n":2,"d":"Fine couche de glace blanche déposée par le brouillard gelé."},{"m":"AVERSE","g":"AVERSE","c":"Nature","n":2,"d":"Pluie brève et soudaine."},{"m":"BRUME","g":"BRUME","c":"Nature","n":2,"d":"Brouillard léger qui réduit la visibilité."},{"m":"BROUILLARD","g":"BROUILLARD","c":"Nature","n":4,"d":"Nuage au ras du sol qui rend la visibilité très faible."},{"m":"ARC-EN-CIEL","g":"ARCENCIEL","c":"Nature","n":4,"d":"Arche de couleurs qui apparaît dans le ciel quand le soleil traverse la pluie."},{"m":"FLEUVE","g":"FLEUVE","c":"Nature","n":2,"d":"Grand cours d'eau qui se jette dans la mer."},{"m":"LAC","g":"LAC","c":"Nature","n":1,"d":"Étendue d'eau douce entourée de terres."},{"m":"ÉTANG","g":"ETANG","c":"Nature","n":2,"d":"Petite étendue d'eau peu profonde."},{"m":"RUISSEAU","g":"RUISSEAU","c":"Nature","n":3,"d":"Petit cours d'eau peu profond."},{"m":"CASCADE","g":"CASCADE","c":"Nature","n":3,"d":"Chute d'eau d'une rivière qui dévale une pente."},{"m":"CHUTE","g":"CHUTE","c":"Nature","n":1,"d":"Endroit où l'eau d'une rivière tombe d'une hauteur."},{"m":"MARAIS","g":"MARAIS","c":"Nature","n":2,"d":"Terrain humide et spongieux, refuge d'oiseaux."},{"m":"PLAGE","g":"PLAGE","c":"Nature","n":2,"d":"Rivage de sable au bord de l'eau."},{"m":"BERGE","g":"BERGE","c":"Nature","n":2,"d":"Bord relevé d'un cours d'eau ou d'un lac."},{"m":"ÎLE","g":"ILE","c":"Nature","n":1,"d":"Étendue de terre entourée d'eau de tous côtés."},{"m":"VALLÉE","g":"VALLEE","c":"Nature","n":2,"d":"Espace allongé entre deux reliefs, souvent traversé par une rivière."},{"m":"COLLINE","g":"COLLINE","c":"Nature","n":2,"d":"Petite élévation de terrain aux pentes douces."},{"m":"FALAISE","g":"FALAISE","c":"Nature","n":3,"d":"Paroi rocheuse presque verticale au bord de l'eau ou en montagne."},{"m":"GROTTE","g":"GROTTE","c":"Nature","n":2,"d":"Cavité naturelle creusée dans la roche."},{"m":"DÉSERT","g":"DESERT","c":"Nature","n":2,"d":"Région très sèche où la pluie est rarissime."},{"m":"PRAIRIE","g":"PRAIRIE","c":"Nature","n":2,"d":"Vaste étendue d'herbes sans arbres."},{"m":"TOUNDRA","g":"TOUNDRA","c":"Nature","n":3,"d":"Plaine du Grand Nord où seuls mousses et lichens poussent."},{"m":"BANQUISE","g":"BANQUISE","c":"Nature","n":3,"d":"Étendue de glace formée par la mer gelée."},{"m":"GLACIER","g":"GLACIER","c":"Nature","n":3,"d":"Masse de glace immense qui glisse très lentement vers le bas."},{"m":"ICEBERG","g":"ICEBERG","c":"Nature","n":3,"d":"Bloc de glace détaché d'un glacier, flottant sur la mer."},{"m":"VOLCAN","g":"VOLCAN","c":"Nature","n":2,"d":"Montagne qui peut projeter lave, cendres et gaz."},{"m":"ROCHER","g":"ROCHER","c":"Nature","n":2,"d":"Grosse masse de pierre dure."},{"m":"CAILLOU","g":"CAILLOU","c":"Nature","n":2,"d":"Petite pierre lisse."},{"m":"SABLE","g":"SABLE","c":"Nature","n":1,"d":"Matière formée de minuscules grains de pierre."},{"m":"TERRE","g":"TERRE","c":"Nature","n":1,"d":"Matière du sol où poussent les plantes; aussi notre planète."},{"m":"FLEUR","g":"FLEUR","c":"Nature","n":1,"d":"Partie colorée et parfumée d'une plante, qui donne les graines."},{"m":"FEUILLE","g":"FEUILLE","c":"Nature","n":2,"d":"Partie plate et verte d'une plante, qui capte la lumière."},{"m":"BRANCHE","g":"BRANCHE","c":"Nature","n":2,"d":"Ramification du tronc d'un arbre qui porte les feuilles."},{"m":"TRONC","g":"TRONC","c":"Nature","n":2,"d":"Tige principale d'un arbre, couverte d'écorce."},{"m":"RACINE","g":"RACINE","c":"Nature","n":2,"d":"Partie souterraine d'une plante qui la nourrit et la fixe."},{"m":"ÉCORCE","g":"ECORCE","c":"Nature","n":3,"d":"Enveloppe extérieure du tronc et des branches."},{"m":"PIN","g":"PIN","c":"Nature","n":1,"d":"Conifère aux longues aiguilles et aux cônes écailleux."},{"m":"SAPIN","g":"SAPIN","c":"Nature","n":1,"d":"Conifère au feuillage dense, arbre de Noël classique."},{"m":"CÈDRE","g":"CEDRE","c":"Nature","n":2,"d":"Conifère au bois aromatique; chez nous, le thuya qui forme les haies."},{"m":"CHÊNE","g":"CHENE","c":"Nature","n":2,"d":"Grand arbre feuillu au bois dur, qui produit les glands."},{"m":"MÉLÈZE","g":"MELEZE","c":"Nature","n":2,"d":"Conifère dont les aiguilles dorent et tombent à l'automne."},{"m":"PEUPLIER","g":"PEUPLIER","c":"Nature","n":3,"d":"Arbre élancé à croissance rapide, aux feuilles frémissantes."},{"m":"SAULE","g":"SAULE","c":"Nature","n":2,"d":"Arbre des rives dont certaines espèces laissent pendre leurs branches."},{"m":"TREMBLE","g":"TREMBLE","c":"Nature","n":2,"d":"Peuplier dont les feuilles tremblent au moindre souffle d'air."},{"m":"FRÊNE","g":"FRENE","c":"Nature","n":2,"d":"Grand arbre au bois souple et résistant."},{"m":"ORME","g":"ORME","c":"Nature","n":2,"d":"Grand arbre d'ombrage autrefois très répandu dans nos villes."},{"m":"HÊTRE","g":"HETRE","c":"Nature","n":2,"d":"Arbre forestier au tronc lisse et au bois clair."},{"m":"MERISIER","g":"MERISIER","c":"Nature","n":4,"d":"Arbre au bois précieux, aussi appelé bouleau jaune."},{"m":"PLAINE","g":"PLAINE","c":"Nature","n":2,"d":"Vaste étendue de terrain plat."},{"m":"SOURCE","g":"SOURCE","c":"Nature","n":2,"d":"Endroit où l'eau souterraine sort naturellement du sol."},{"m":"GLACE","g":"GLACE","c":"Nature","n":1,"d":"Eau devenue solide par le froid."},{"m":"VAGUE","g":"VAGUE","c":"Nature","n":1,"d":"Ondulation de l'eau poussée par le vent."},{"m":"MARÉE","g":"MAREE","c":"Nature","n":2,"d":"Montée et descente régulière du niveau de la mer."},{"m":"COURANT","g":"COURANT","c":"Nature","n":2,"d":"Mouvement de l'eau dans une direction donnée."},{"m":"TOURBILLON","g":"TOURBILLON","c":"Nature","n":4,"d":"Mouvement circulaire rapide de l'eau ou de l'air."},{"m":"ÉCUME","g":"ECUME","c":"Nature","n":2,"d":"Mousse blanche qui se forme sur l'eau agitée."},{"m":"ROSÉE","g":"ROSEE","c":"Nature","n":2,"d":"Fines gouttelettes déposées la nuit sur les plantes."},{"m":"AURORE","g":"AURORE","c":"Nature","n":2,"d":"Lumière de l'aube; les aurores boréales colorent le ciel des nuits du Nord."},{"m":"PRINTEMPS","g":"PRINTEMPS","c":"Nature","n":3,"d":"Saison de la fonte des neiges et du retour des oiseaux, entre l'hiver et l'été."},{"m":"AUTOMNE","g":"AUTOMNE","c":"Nature","n":2,"d":"Saison où les feuilles colorent puis tombent, entre l'été et l'hiver."},{"m":"HIVER","g":"HIVER","c":"Nature","n":1,"d":"Saison froide de la neige et des grands froids."},{"m":"GELÉE","g":"GELEE","c":"Nature","n":2,"d":"Froid qui fait geler l'eau et les plantes pendant la nuit."},{"m":"FLAQUE","g":"FLAQUE","c":"Nature","n":2,"d":"Petite étendue d'eau stagnante après la pluie."},{"m":"AUBE","g":"AUBE","c":"Nature","n":1,"d":"Première lueur du jour, avant le lever du soleil."},{"m":"CRÉPUSCULE","g":"CREPUSCULE","c":"Nature","n":4,"d":"Lumière douce qui suit le coucher du soleil."},{"m":"MONTRÉAL","g":"MONTREAL","c":"Lieux du Québec","n":3,"d":"Plus grande ville du Québec, bâtie sur une île entre le fleuve et le mont Royal."},{"m":"GASPÉSIE","g":"GASPESIE","c":"Lieux du Québec","n":3,"d":"Péninsule de l'est du Québec entourée par le golfe du Saint-Laurent."},{"m":"SAGUENAY","g":"SAGUENAY","c":"Lieux du Québec","n":3,"d":"Rivière et région du Québec célèbre pour son fjord profond."},{"m":"SHERBROOKE","g":"SHERBROOKE","c":"Lieux du Québec","n":3,"d":"Ville principale de l'Estrie, au confluent de deux rivières."},{"m":"GATINEAU","g":"GATINEAU","c":"Lieux du Québec","n":3,"d":"Ville de l'Outaouais située face à Ottawa, de l'autre côté de la rivière."},{"m":"RIMOUSKI","g":"RIMOUSKI","c":"Lieux du Québec","n":3,"d":"Ville du Bas-Saint-Laurent au bord du fleuve, connue pour son institut maritime."},{"m":"CHICOUTIMI","g":"CHICOUTIMI","c":"Lieux du Québec","n":4,"d":"Arrondissement de Saguenay situé au bout du fjord du même nom."},{"m":"CHARLEVOIX","g":"CHARLEVOIX","c":"Lieux du Québec","n":4,"d":"Région de collines et de villages entre le fleuve Saint-Laurent et les Laurentides."},{"m":"LANAUDIÈRE","g":"LANAUDIERE","c":"Lieux du Québec","n":4,"d":"Région au nord de Montréal, entre fleuve et Laurentides."},{"m":"PERCÉ","g":"PERCE","c":"Lieux du Québec","n":2,"d":"Village gaspésien célèbre pour son immense rocher percé d'une arche."},{"m":"ABITIBI","g":"ABITIBI","c":"Lieux du Québec","n":3,"d":"Région du nord-ouest du Québec, pays de mines, de forêts et de milliers de lacs."},{"m":"QUÉBEC","g":"QUEBEC","c":"Lieux du Québec","n":2,"d":"Capitale du Québec, vieille ville fortifiée dominée par le Château Frontenac."},{"m":"LAVAL","g":"LAVAL","c":"Lieux du Québec","n":1,"d":"Ville située sur l'île Jésus, juste au nord de Montréal."},{"m":"LONGUEUIL","g":"LONGUEUIL","c":"Lieux du Québec","n":3,"d":"Ville de la Rive-Sud du Saint-Laurent, face à Montréal."},{"m":"LÉVIS","g":"LEVIS","c":"Lieux du Québec","n":1,"d":"Ville de la rive sud du fleuve, directement face à Québec."},{"m":"GRANBY","g":"GRANBY","c":"Lieux du Québec","n":3,"d":"Ville de la Montérégie célèbre pour son zoo."},{"m":"JOLIETTE","g":"JOLIETTE","c":"Lieux du Québec","n":3,"d":"Ville de Lanaudière traversée par la rivière L'Assomption."},{"m":"TERREBONNE","g":"TERREBONNE","c":"Lieux du Québec","n":3,"d":"Ville de Lanaudière dont le Vieux-Terrebonne longe la rivière des Mille Îles."},{"m":"MASCOUCHE","g":"MASCOUCHE","c":"Lieux du Québec","n":3,"d":"Ville de Lanaudière voisine de Terrebonne, au nord de Montréal."},{"m":"REPENTIGNY","g":"REPENTIGNY","c":"Lieux du Québec","n":4,"d":"Ville de Lanaudière située au confluent de la rivière L'Assomption et du Saint-Laurent."},{"m":"SAINT-JÉRÔME","g":"SAINTJEROME","c":"Lieux du Québec","n":4,"d":"Ville des Laurentides considérée comme la porte d'entrée de la région."},{"m":"VAUDREUIL","g":"VAUDREUIL","c":"Lieux du Québec","n":4,"d":"Ville de la Montérégie située à l'ouest de l'île de Montréal."},{"m":"BROSSARD","g":"BROSSARD","c":"Lieux du Québec","n":3,"d":"Ville de la Rive-Sud reliée à Montréal par le pont Samuel-De Champlain."},{"m":"CHÂTEAUGUAY","g":"CHATEAUGUAY","c":"Lieux du Québec","n":4,"d":"Ville de la Montérégie dont la rivière fut le théâtre d'une bataille en 1813."},{"m":"VAL-D'OR","g":"VALDOR","c":"Lieux du Québec","n":3,"d":"Ville de l'Abitibi née de la ruée vers l'or des années 1930."},{"m":"ROUYN-NORANDA","g":"ROUYNNORANDA","c":"Lieux du Québec","n":4,"d":"Ville de l'Abitibi formée de deux anciennes villes minières jumelles."},{"m":"AMOS","g":"AMOS","c":"Lieux du Québec","n":1,"d":"Ville de l'Abitibi, l'une des plus anciennes de la région."},{"m":"SEPT-ÎLES","g":"SEPTILES","c":"Lieux du Québec","n":3,"d":"Ville portuaire de la Côte-Nord face à un archipel de sept îles."},{"m":"BAIE-COMEAU","g":"BAIECOMEAU","c":"Lieux du Québec","n":3,"d":"Ville industrielle de la Côte-Nord, au bord du Saint-Laurent."},{"m":"MATANE","g":"MATANE","c":"Lieux du Québec","n":2,"d":"Ville gaspésienne réputée pour ses crevettes et son traversier."},{"m":"GASPÉ","g":"GASPE","c":"Lieux du Québec","n":1,"d":"Ville à la pointe de la Gaspésie; Jacques Cartier y a planté une croix en 1534."},{"m":"BONAVENTURE","g":"BONAVENTURE","c":"Lieux du Québec","n":4,"d":"Municipalité gaspésienne de la Baie-des-Chaleurs, au riche héritage acadien."},{"m":"MONT-JOLI","g":"MONTJOLI","c":"Lieux du Québec","n":3,"d":"Ville du Bas-Saint-Laurent connue pour ses murales extérieures."},{"m":"THETFORD","g":"THETFORD","c":"Lieux du Québec","n":3,"d":"Ville des Appalaches née autour des mines d'amiante."},{"m":"ALMA","g":"ALMA","c":"Lieux du Québec","n":1,"d":"Ville du Saguenay–Lac-Saint-Jean surnommée la métropole du lac."},{"m":"ROBERVAL","g":"ROBERVAL","c":"Lieux du Québec","n":3,"d":"Ville du Lac-Saint-Jean célèbre pour sa traversée internationale à la nage."},{"m":"SHAWINIGAN","g":"SHAWINIGAN","c":"Lieux du Québec","n":4,"d":"Ville de la Mauricie bâtie autour des chutes du Saint-Maurice et de l'hydroélectricité."},{"m":"MAGOG","g":"MAGOG","c":"Lieux du Québec","n":2,"d":"Ville de l'Estrie située à la tête du lac Memphrémagog."},{"m":"BROMONT","g":"BROMONT","c":"Lieux du Québec","n":2,"d":"Ville de l'Estrie connue pour sa montagne de ski éclairée le soir."},{"m":"COWANSVILLE","g":"COWANSVILLE","c":"Lieux du Québec","n":4,"d":"Ville de l'Estrie au cœur des Cantons-de-l'Est."},{"m":"OUTAOUAIS","g":"OUTAOUAIS","c":"Lieux du Québec","n":3,"d":"Région de l'ouest du Québec bordée par la rivière des Outaouais."},{"m":"ESTRIE","g":"ESTRIE","c":"Lieux du Québec","n":2,"d":"Région du sud du Québec aux collines et aux villages pittoresques."},{"m":"MAURICIE","g":"MAURICIE","c":"Lieux du Québec","n":3,"d":"Région traversée par la rivière Saint-Maurice, entre Montréal et Québec."},{"m":"LAURENTIDES","g":"LAURENTIDES","c":"Lieux du Québec","n":4,"d":"Région de montagnes et de lacs au nord de Montréal, pays de villégiature."},{"m":"MONTÉRÉGIE","g":"MONTEREGIE","c":"Lieux du Québec","n":4,"d":"Région du sud du Québec parsemée de collines isolées et de vergers."},{"m":"CÔTE-NORD","g":"COTENORD","c":"Lieux du Québec","n":3,"d":"Immense région de la rive nord du golfe du Saint-Laurent."},{"m":"APPALACHES","g":"APPALACHES","c":"Lieux du Québec","n":3,"d":"Chaîne de montagnes ancienne qui traverse le sud du Québec vers la Gaspésie."},{"m":"MADELEINE","g":"MADELEINE","c":"Lieux du Québec","n":3,"d":"Archipel du golfe du Saint-Laurent célèbre pour ses plages et ses falaises rouges : les Îles de la Madeleine."},{"m":"KAHNAWAKE","g":"KAHNAWAKE","c":"Lieux du Québec","n":4,"d":"Communauté mohawk située sur la rive sud du Saint-Laurent, près de Montréal."},{"m":"WENDAKE","g":"WENDAKE","c":"Lieux du Québec","n":4,"d":"Communauté de la Nation huronne-wendat située près de Québec."},{"m":"KUUJJUAQ","g":"KUUJJUAQ","c":"Lieux du Québec","n":4,"d":"Plus grand village inuit du Nunavik, au bord de la rivière Koksoak."},{"m":"CHIBOUGAMAU","g":"CHIBOUGAMAU","c":"Lieux du Québec","n":4,"d":"Ville minière du Nord-du-Québec entourée de forêt boréale."},{"m":"FERMONT","g":"FERMONT","c":"Lieux du Québec","n":3,"d":"Ville minière du Nord québécois construite autour d'un immense bâtiment-écran contre le vent."},{"m":"NATASHQUAN","g":"NATASHQUAN","c":"Lieux du Québec","n":4,"d":"Village de la Côte-Nord, terre natale du chansonnier Gilles Vigneault."},{"m":"BÛCHERON","g":"BUCHERON","c":"Métiers","n":3,"d":"Ouvrier forestier qui coupe les arbres."},{"m":"PÊCHEUR","g":"PECHEUR","c":"Métiers","n":2,"d":"Personne qui capture poissons et fruits de mer pour gagner sa vie."},{"m":"BOULANGER","g":"BOULANGER","c":"Métiers","n":3,"d":"Artisan qui fabrique le pain et les viennoiseries."},{"m":"CUISINIER","g":"CUISINIER","c":"Métiers","n":3,"d":"Personne qui prépare les plats dans un restaurant ou une cuisine collective."},{"m":"FERMIER","g":"FERMIER","c":"Métiers","n":2,"d":"Personne qui exploite une ferme et élève des animaux ou cultive la terre."},{"m":"MENUISIER","g":"MENUISIER","c":"Métiers","n":3,"d":"Artisan qui travaille le bois pour fabriquer meubles et boiseries."},{"m":"PLOMBIER","g":"PLOMBIER","c":"Métiers","n":2,"d":"Ouvrier qui installe et répare tuyaux, robinets et appareils sanitaires."},{"m":"POMPIER","g":"POMPIER","c":"Métiers","n":2,"d":"Personne entraînée à éteindre les incendies et à porter secours."},{"m":"SOUDEUR","g":"SOUDEUR","c":"Métiers","n":2,"d":"Ouvrier qui assemble les pièces de métal par fusion."},{"m":"FACTEUR","g":"FACTEUR","c":"Métiers","n":2,"d":"Personne qui distribue le courrier de porte en porte."},{"m":"ÉLECTRICIEN","g":"ELECTRICIEN","c":"Métiers","n":4,"d":"Ouvrier spécialisé dans l'installation et la réparation des circuits électriques."},{"m":"PÂTISSIER","g":"PATISSIER","c":"Métiers","n":3,"d":"Artisan qui prépare les desserts, gâteaux et pâtisseries."},{"m":"MÉDECIN","g":"MEDECIN","c":"Métiers","n":2,"d":"Professionnel de la santé qui diagnostique et traite les maladies."},{"m":"INFIRMIER","g":"INFIRMIER","c":"Métiers","n":3,"d":"Professionnel qui soigne et accompagne les malades au quotidien."},{"m":"VÉTÉRINAIRE","g":"VETERINAIRE","c":"Métiers","n":4,"d":"Professionnel qui soigne les animaux malades ou blessés."},{"m":"PHARMACIEN","g":"PHARMACIEN","c":"Métiers","n":4,"d":"Professionnel qui dispense les médicaments et conseille les patients."},{"m":"DENTISTE","g":"DENTISTE","c":"Métiers","n":3,"d":"Professionnel qui soigne les dents et les gencives."},{"m":"PROFESSEUR","g":"PROFESSEUR","c":"Métiers","n":3,"d":"Personne qui enseigne une matière aux élèves ou aux étudiants."},{"m":"ENSEIGNANT","g":"ENSEIGNANT","c":"Métiers","n":4,"d":"Personne qui enseigne dans une école."},{"m":"ÉDUCATEUR","g":"EDUCATEUR","c":"Métiers","n":3,"d":"Personne qui accompagne le développement des enfants, souvent en garderie."},{"m":"JOURNALISTE","g":"JOURNALISTE","c":"Métiers","n":4,"d":"Personne qui recherche et raconte l'actualité dans les médias."},{"m":"ÉCRIVAIN","g":"ECRIVAIN","c":"Métiers","n":3,"d":"Personne qui écrit des livres."},{"m":"PEINTRE","g":"PEINTRE","c":"Métiers","n":2,"d":"Personne qui peint, des toiles d'artiste aux murs des maisons."},{"m":"SCULPTEUR","g":"SCULPTEUR","c":"Métiers","n":3,"d":"Artiste qui façonne des œuvres en trois dimensions."},{"m":"MUSICIEN","g":"MUSICIEN","c":"Métiers","n":3,"d":"Personne qui joue d'un instrument de musique professionnellement."},{"m":"CHANTEUR","g":"CHANTEUR","c":"Métiers","n":3,"d":"Personne qui chante devant un public."},{"m":"ACTEUR","g":"ACTEUR","c":"Métiers","n":2,"d":"Personne qui interprète des personnages au théâtre ou au cinéma."},{"m":"DANSEUR","g":"DANSEUR","c":"Métiers","n":2,"d":"Artiste qui s'exprime par la danse."},{"m":"PHOTOGRAPHE","g":"PHOTOGRAPHE","c":"Métiers","n":4,"d":"Personne qui prend des photographies professionnelles."},{"m":"ARCHITECTE","g":"ARCHITECTE","c":"Métiers","n":4,"d":"Professionnel qui conçoit les bâtiments et en dessine les plans."},{"m":"INGÉNIEUR","g":"INGENIEUR","c":"Métiers","n":3,"d":"Professionnel qui conçoit et calcule ouvrages, machines et systèmes."},{"m":"AVOCAT","g":"AVOCAT","c":"Métiers","n":2,"d":"Professionnel du droit qui conseille et défend les personnes."},{"m":"JUGE","g":"JUGE","c":"Métiers","n":1,"d":"Magistrat qui rend les décisions de justice."},{"m":"NOTAIRE","g":"NOTAIRE","c":"Métiers","n":2,"d":"Officier public qui rédige et authentifie les actes importants."},{"m":"COMPTABLE","g":"COMPTABLE","c":"Métiers","n":3,"d":"Professionnel qui tient les comptes et prépare les rapports financiers."},{"m":"CAISSIER","g":"CAISSIER","c":"Métiers","n":3,"d":"Personne qui encaisse les paiements à la caisse."},{"m":"VENDEUR","g":"VENDEUR","c":"Métiers","n":2,"d":"Personne qui vend des biens ou des services."},{"m":"SERVEUR","g":"SERVEUR","c":"Métiers","n":2,"d":"Personne qui sert les clients au restaurant."},{"m":"BOUCHER","g":"BOUCHER","c":"Métiers","n":2,"d":"Artisan qui prépare et vend les viandes."},{"m":"POISSONNIER","g":"POISSONNIER","c":"Métiers","n":4,"d":"Commerçant qui prépare et vend poissons et fruits de mer."},{"m":"FROMAGER","g":"FROMAGER","c":"Métiers","n":3,"d":"Artisan qui fabrique ou affine les fromages."},{"m":"CHOCOLATIER","g":"CHOCOLATIER","c":"Métiers","n":4,"d":"Artisan qui fabrique des chocolats."},{"m":"BRASSEUR","g":"BRASSEUR","c":"Métiers","n":3,"d":"Artisan ou ouvrier qui fabrique la bière."},{"m":"APICULTEUR","g":"APICULTEUR","c":"Métiers","n":4,"d":"Personne qui élève des abeilles pour produire du miel."},{"m":"JARDINIER","g":"JARDINIER","c":"Métiers","n":3,"d":"Personne qui cultive et entretient les jardins."},{"m":"FLEURISTE","g":"FLEURISTE","c":"Métiers","n":3,"d":"Artisan qui compose et vend des arrangements de fleurs."},{"m":"AGRICULTEUR","g":"AGRICULTEUR","c":"Métiers","n":4,"d":"Personne qui cultive la terre ou élève des animaux à grande échelle."},{"m":"ÉLEVEUR","g":"ELEVEUR","c":"Métiers","n":2,"d":"Personne qui élève des animaux de ferme."},{"m":"BERGER","g":"BERGER","c":"Métiers","n":2,"d":"Personne qui garde et guide les troupeaux de moutons."},{"m":"COUTURIER","g":"COUTURIER","c":"Métiers","n":3,"d":"Artisan qui confectionne des vêtements."},{"m":"CORDONNIER","g":"CORDONNIER","c":"Métiers","n":4,"d":"Artisan qui fabrique et répare les chaussures."},{"m":"BIJOUTIER","g":"BIJOUTIER","c":"Métiers","n":3,"d":"Artisan qui fabrique et répare les bijoux."},{"m":"HORLOGER","g":"HORLOGER","c":"Métiers","n":3,"d":"Artisan qui fabrique et répare les montres et les horloges."},{"m":"FORGERON","g":"FORGERON","c":"Métiers","n":3,"d":"Artisan qui façonne le métal chauffé au feu de forge."},{"m":"CHARPENTIER","g":"CHARPENTIER","c":"Métiers","n":4,"d":"Ouvrier qui construit les charpentes en bois."},{"m":"MAÇON","g":"MACON","c":"Métiers","n":2,"d":"Ouvrier qui construit en pierre, en brique ou en béton."},{"m":"VITRIER","g":"VITRIER","c":"Métiers","n":3,"d":"Ouvrier spécialisé dans la pose du verre et des fenêtres."},{"m":"RAMONEUR","g":"RAMONEUR","c":"Métiers","n":3,"d":"Ouvrier qui nettoie l'intérieur des cheminées."},{"m":"DÉNEIGEUR","g":"DENEIGEUR","c":"Métiers","n":3,"d":"Personne qui enlève la neige des toits, des entrées et des stationnements."},{"m":"CAMIONNEUR","g":"CAMIONNEUR","c":"Métiers","n":4,"d":"Conducteur de camion qui transporte des marchandises sur de longues distances."},{"m":"CHAUFFEUR","g":"CHAUFFEUR","c":"Métiers","n":3,"d":"Personne dont le travail est de conduire un véhicule pour transporter gens ou biens."},{"m":"PILOTE","g":"PILOTE","c":"Métiers","n":2,"d":"Personne qui conduit un avion ou guide un navire."},{"m":"MARIN","g":"MARIN","c":"Métiers","n":1,"d":"Personne qui navigue sur les navires."},{"m":"CAPITAINE","g":"CAPITAINE","c":"Métiers","n":3,"d":"Personne qui commande un navire, un avion ou une équipe."},{"m":"MINEUR","g":"MINEUR","c":"Métiers","n":2,"d":"Ouvrier qui extrait les minerais dans une mine."},{"m":"GARAGISTE","g":"GARAGISTE","c":"Métiers","n":3,"d":"Personne qui répare les automobiles."},{"m":"MÉCANICIEN","g":"MECANICIEN","c":"Métiers","n":4,"d":"Ouvrier qui entretient et répare les machines et les moteurs."},{"m":"COIFFEUR","g":"COIFFEUR","c":"Métiers","n":3,"d":"Personne qui coupe et arrange les cheveux."},{"m":"BARBIER","g":"BARBIER","c":"Métiers","n":2,"d":"Artisan qui rase le visage et taille barbes et moustaches."},{"m":"CONCIERGE","g":"CONCIERGE","c":"Métiers","n":3,"d":"Personne chargée de l'entretien et de la propreté d'un bâtiment."},{"m":"GARDIEN","g":"GARDIEN","c":"Métiers","n":2,"d":"Personne qui surveille un lieu ou garde des enfants."},{"m":"POLICIER","g":"POLICIER","c":"Métiers","n":3,"d":"Agent chargé de maintenir l'ordre et de faire respecter la loi."},{"m":"SOLDAT","g":"SOLDAT","c":"Métiers","n":2,"d":"Membre des forces armées."},{"m":"CHERCHEUR","g":"CHERCHEUR","c":"Métiers","n":3,"d":"Personne qui mène des recherches scientifiques."},{"m":"GRAPHISTE","g":"GRAPHISTE","c":"Métiers","n":3,"d":"Professionnel qui conçoit images, logos et mises en page."},{"m":"TRADUCTEUR","g":"TRADUCTEUR","c":"Métiers","n":4,"d":"Personne qui transpose un texte d'une langue dans une autre."},{"m":"ANIMATEUR","g":"ANIMATEUR","c":"Métiers","n":3,"d":"Personne qui anime une émission ou un groupe d'activités."},{"m":"PLONGEUR","g":"PLONGEUR","c":"Métiers","n":3,"d":"Employé de restaurant qui lave la vaisselle; aussi un athlète des tremplins."},{"m":"RENARD","g":"RENARD","c":"Animaux","n":2,"d":"Mammifère sauvage au pelage roux, réputé pour sa ruse."},{"m":"LOUP","g":"LOUP","c":"Animaux","n":1,"d":"Grand carnivore sauvage qui vit et chasse en meute."},{"m":"OURS","g":"OURS","c":"Animaux","n":1,"d":"Grand mammifère plantigrade; l'ours noir peuple nos forêts."},{"m":"CERF","g":"CERF","c":"Animaux","n":1,"d":"Cervidé gracieux; le cerf de Virginie est commun au Québec."},{"m":"BICHE","g":"BICHE","c":"Animaux","n":2,"d":"Femelle du cerf, sans bois, aux grands yeux doux."},{"m":"WAPITI","g":"WAPITI","c":"Animaux","n":3,"d":"Grand cervidé d'Amérique du Nord dont le cri, le brame, porte très loin."},{"m":"CHEVREUIL","g":"CHEVREUIL","c":"Animaux","n":3,"d":"Autre nom du cerf de Virginie, cervidé commun de nos campagnes."},{"m":"LIÈVRE","g":"LIEVRE","c":"Animaux","n":2,"d":"Mammifère aux longues oreilles qui change de couleur selon la saison."},{"m":"LAPIN","g":"LAPIN","c":"Animaux","n":1,"d":"Petit mammifère aux longues oreilles, sauvage ou domestique."},{"m":"ÉCUREUIL","g":"ECUREUIL","c":"Animaux","n":3,"d":"Petit rongeur agile qui grimpe aux arbres et cache des provisions."},{"m":"MARMOTTE","g":"MARMOTTE","c":"Animaux","n":3,"d":"Gros rongeur fouisseur qui hiberne tout l'hiver dans son terrier."},{"m":"RATON","g":"RATON","c":"Animaux","n":2,"d":"Raton laveur : mammifère au masque noir qui lave sa nourriture et visite les bacs."},{"m":"PORC-ÉPIC","g":"PORCEPIC","c":"Animaux","n":3,"d":"Rongeur couvert de piquants défensifs, friand d'écorce."},{"m":"MOUFETTE","g":"MOUFETTE","c":"Animaux","n":3,"d":"Petit mammifère noir à rayures blanches qui projette un liquide nauséabond."},{"m":"LYNX","g":"LYNX","c":"Animaux","n":4,"d":"Félin sauvage aux oreilles surmontées de pinceaux de poils, chasseur de lièvres."},{"m":"COYOTE","g":"COYOTE","c":"Animaux","n":3,"d":"Canidé sauvage plus petit que le loup, de plus en plus présent au Québec."},{"m":"RENNE","g":"RENNE","c":"Animaux","n":2,"d":"Cervidé des régions nordiques, cousin du caribou."},{"m":"BISON","g":"BISON","c":"Animaux","n":2,"d":"Énorme bovidé des plaines, au dos bossu et à la tête massive."},{"m":"SANGLIER","g":"SANGLIER","c":"Animaux","n":3,"d":"Porc sauvage aux défenses saillantes, qui fouille le sol."},{"m":"BELETTE","g":"BELETTE","c":"Animaux","n":3,"d":"Petit carnivore au corps allongé, rapide et discret."},{"m":"VISON","g":"VISON","c":"Animaux","n":2,"d":"Petit carnivore des rives, à la fourrure brune très soyeuse."},{"m":"PÉKAN","g":"PEKAN","c":"Animaux","n":3,"d":"Carnivore forestier d'Amérique du Nord, l'un des rares à chasser le porc-épic."},{"m":"HERMINE","g":"HERMINE","c":"Animaux","n":3,"d":"Petit carnivore dont le pelage devient blanc l'hiver, sauf le bout de la queue."},{"m":"TAUPE","g":"TAUPE","c":"Animaux","n":2,"d":"Petit mammifère fouisseur presque aveugle qui vit sous terre."},{"m":"SOURIS","g":"SOURIS","c":"Animaux","n":2,"d":"Petit rongeur au museau pointu et à la longue queue fine."},{"m":"HAMSTER","g":"HAMSTER","c":"Animaux","n":3,"d":"Petit rongeur domestique qui stocke la nourriture dans ses joues."},{"m":"CHAT","g":"CHAT","c":"Animaux","n":1,"d":"Petit félin domestique, compagnon indépendant et câlin."},{"m":"CHIEN","g":"CHIEN","c":"Animaux","n":1,"d":"Animal domestique fidèle, descendant du loup."},{"m":"CHEVAL","g":"CHEVAL","c":"Animaux","n":2,"d":"Grand mammifère domestique monté ou attelé depuis des millénaires."},{"m":"VACHE","g":"VACHE","c":"Animaux","n":1,"d":"Femelle du bœuf, élevée pour son lait et sa viande."},{"m":"COCHON","g":"COCHON","c":"Animaux","n":2,"d":"Animal de ferme au groin fouisseur, élevé pour sa viande."},{"m":"MOUTON","g":"MOUTON","c":"Animaux","n":2,"d":"Animal de ferme à laine épaisse, élevé en troupeau."},{"m":"CHÈVRE","g":"CHEVRE","c":"Animaux","n":2,"d":"Animal de ferme agile à cornes, au caractère entêté."},{"m":"ÂNE","g":"ANE","c":"Animaux","n":1,"d":"Animal aux longues oreilles, patient et têtu, cousin du cheval."},{"m":"POULE","g":"POULE","c":"Animaux","n":1,"d":"Volaille de basse-cour élevée pour ses œufs."},{"m":"COQ","g":"COQ","c":"Animaux","n":1,"d":"Mâle de la poule, au plumage coloré et au chant matinal."},{"m":"CANARD","g":"CANARD","c":"Animaux","n":2,"d":"Oiseau aquatique au bec plat qui barbote dans les étangs."},{"m":"DINDON","g":"DINDON","c":"Animaux","n":2,"d":"Gros oiseau, sauvage dans nos forêts ou élevé pour les Fêtes."},{"m":"OIE","g":"OIE","c":"Animaux","n":1,"d":"Grand oiseau aquatique au long cou, domestique ou sauvage."},{"m":"CYGNE","g":"CYGNE","c":"Animaux","n":2,"d":"Grand oiseau aquatique au long cou courbé, d'une blancheur éclatante."},{"m":"PIGEON","g":"PIGEON","c":"Animaux","n":2,"d":"Oiseau des villes et des campagnes, au plumage souvent gris bleuté."},{"m":"CORBEAU","g":"CORBEAU","c":"Animaux","n":2,"d":"Grand oiseau noir intelligent, au cri rauque."},{"m":"GEAI","g":"GEAI","c":"Animaux","n":1,"d":"Oiseau forestier; le geai bleu, bruyant et coloré, visite les mangeoires."},{"m":"MERLE","g":"MERLE","c":"Animaux","n":2,"d":"Oiseau chanteur à poitrine rouge brique, messager du printemps."},{"m":"MÉSANGE","g":"MESANGE","c":"Animaux","n":3,"d":"Petit oiseau rond à calotte noire qui fréquente les mangeoires tout l'hiver."},{"m":"PIC","g":"PIC","c":"Animaux","n":1,"d":"Oiseau qui frappe l'écorce de son bec pour trouver les insectes : un pic-bois."},{"m":"HIBOU","g":"HIBOU","c":"Animaux","n":2,"d":"Rapace nocturne aux grands yeux ronds et au vol silencieux."},{"m":"CHOUETTE","g":"CHOUETTE","c":"Animaux","n":3,"d":"Rapace nocturne; la chouette rayée hante nos forêts, celle des neiges visite l'hiver."},{"m":"AIGLE","g":"AIGLE","c":"Animaux","n":2,"d":"Grand rapace aux serres puissantes; l'aigle à tête blanche pêche sur nos lacs."},{"m":"FAUCON","g":"FAUCON","c":"Animaux","n":2,"d":"Rapace chasseur d'une vitesse foudroyante en piqué."},{"m":"ÉPERVIER","g":"EPERVIER","c":"Animaux","n":4,"d":"Petit rapace forestier qui poursuit les oiseaux entre les branches."},{"m":"GOÉLAND","g":"GOELAND","c":"Animaux","n":3,"d":"Grand oiseau de mer blanc au bec jaune, familier des quais et des plages."},{"m":"PÉLICAN","g":"PELICAN","c":"Animaux","n":3,"d":"Grand oiseau aquatique dont le bec porte une poche pour attraper les poissons."},{"m":"CORMORAN","g":"CORMORAN","c":"Animaux","n":3,"d":"Oiseau aquatique noir qui plonge pêcher et sèche ses ailes ouvertes."},{"m":"HÉRON","g":"HERON","c":"Animaux","n":2,"d":"Grand oiseau échassier qui pêche immobile au bord des marais."},{"m":"GRUE","g":"GRUE","c":"Animaux","n":1,"d":"Grand oiseau des marais; la grue du Canada fréquente nos champs au printemps."},{"m":"HUARD","g":"HUARD","c":"Animaux","n":2,"d":"Oiseau plongeur des lacs nordiques, au cri qui ressemble à un rire mélancolique."},{"m":"OUTARDE","g":"OUTARDE","c":"Animaux","n":3,"d":"Nom donné chez nous à la bernache du Canada."},{"m":"PERDRIX","g":"PERDRIX","c":"Animaux","n":3,"d":"Oiseau gibier des champs et des lisières, au vol brusque et bruyant."},{"m":"GÉLINOTTE","g":"GELINOTTE","c":"Animaux","n":4,"d":"Oiseau forestier dont le mâle tambourine de ses ailes sur un tronc."},{"m":"FAISAN","g":"FAISAN","c":"Animaux","n":2,"d":"Oiseau gibier au plumage coloré chez le mâle."},{"m":"COLIBRI","g":"COLIBRI","c":"Animaux","n":3,"d":"Minuscule oiseau aux ailes vibrantes qui se nourrit du nectar des fleurs."},{"m":"TRUITE","g":"TRUITE","c":"Animaux","n":2,"d":"Poisson des eaux froides; la truite mouchetée est l'omble de fontaine de nos ruisseaux."},{"m":"BROCHET","g":"BROCHET","c":"Animaux","n":3,"d":"Poisson carnassier au museau de canard garni de dents."},{"m":"DORÉ","g":"DORE","c":"Animaux","n":1,"d":"Poisson des lacs à chair fine, très prisé des pêcheurs québécois."},{"m":"PERCHAUDE","g":"PERCHAUDE","c":"Animaux","n":4,"d":"Petit poisson rayé des lacs, vif et abondant."},{"m":"ACHIGAN","g":"ACHIGAN","c":"Animaux","n":3,"d":"Poisson sportif des lacs qui se débat vigoureusement au bout de la ligne."},{"m":"MASKINONGÉ","g":"MASKINONGE","c":"Animaux","n":4,"d":"Très grand poisson prédateur, cousin du brochet, trophée des pêcheurs."},{"m":"OMBLE","g":"OMBLE","c":"Animaux","n":3,"d":"Poisson des eaux froides; l'omble de fontaine est notre truite mouchetée."},{"m":"ÉPERLAN","g":"EPERLAN","c":"Animaux","n":3,"d":"Petit poisson argenté qu'on pêche sous la glace ou à la remontée des rivières."},{"m":"ANGUILLE","g":"ANGUILLE","c":"Animaux","n":3,"d":"Poisson allongé comme un serpent, qui migre jusqu'à la mer des Sargasses."},{"m":"ESTURGEON","g":"ESTURGEON","c":"Animaux","n":4,"d":"Énorme poisson primitif du fleuve Saint-Laurent, pêché pour sa chair et ses œufs."},{"m":"BARBOTTE","g":"BARBOTTE","c":"Animaux","n":3,"d":"Petit poisson-chat à moustaches qui fouille les fonds vaseux."},{"m":"CARPE","g":"CARPE","c":"Animaux","n":2,"d":"Gros poisson d'eau douce aux écailles épaisses."},{"m":"GRENOUILLE","g":"GRENOUILLE","c":"Animaux","n":3,"d":"Amphibien sauteur à peau lisse qui chante près de l'eau."},{"m":"TORTUE","g":"TORTUE","c":"Animaux","n":2,"d":"Reptile à carapace; la tortue serpentine est la plus grosse de nos étangs."},{"m":"COULEUVRE","g":"COULEUVRE","c":"Animaux","n":3,"d":"Serpent inoffensif de nos jardins, rapide et rayé de jaune."},{"m":"PAPILLON","g":"PAPILLON","c":"Animaux","n":3,"d":"Insecte aux ailes colorées; le monarque migre jusqu'au Mexique."},{"m":"ABEILLE","g":"ABEILLE","c":"Animaux","n":2,"d":"Insecte qui butine les fleurs et produit le miel dans la ruche."},{"m":"GUÊPE","g":"GUEPE","c":"Animaux","n":2,"d":"Insecte rayé jaune et noir, au dard défensif, visiteur des pique-niques."},{"m":"FOURMI","g":"FOURMI","c":"Animaux","n":2,"d":"Insecte social qui vit en colonies organisées de milliers d'individus."},{"m":"COCCINELLE","g":"COCCINELLE","c":"Animaux","n":4,"d":"Petit coléoptère rond et coloré qui dévore les pucerons."},{"m":"LIBELLULE","g":"LIBELLULE","c":"Animaux","n":4,"d":"Insecte aux grandes ailes transparentes, chasseur de moustiques au-dessus de l'eau."},{"m":"SAUTERELLE","g":"SAUTERELLE","c":"Animaux","n":4,"d":"Insecte sauteur des prairies aux longues pattes arrière."},{"m":"GRILLON","g":"GRILLON","c":"Animaux","n":2,"d":"Insecte noir dont le chant stridulant anime les soirées d'été."},{"m":"ARAIGNÉE","g":"ARAIGNEE","c":"Animaux","n":3,"d":"Animal à huit pattes qui tisse des toiles pour capturer les insectes."},{"m":"CLOPORTE","g":"CLOPORTE","c":"Animaux","n":3,"d":"Petit crustacé terrestre qui se roule en boule pour se protéger."},{"m":"TOIT","g":"TOIT","c":"Maison","n":1,"d":"Partie supérieure d'une maison qui la protège des intempéries."},{"m":"PORTE","g":"PORTE","c":"Maison","n":1,"d":"Panneau mobile qui ferme l'entrée d'une pièce ou d'une maison."},{"m":"FENÊTRE","g":"FENETRE","c":"Maison","n":2,"d":"Ouverture vitrée dans un mur, qui éclaire et aère une pièce."},{"m":"PLANCHER","g":"PLANCHER","c":"Maison","n":3,"d":"Surface horizontale sur laquelle on marche dans une pièce."},{"m":"PLAFOND","g":"PLAFOND","c":"Maison","n":2,"d":"Surface horizontale qui ferme le haut d'une pièce."},{"m":"ESCALIER","g":"ESCALIER","c":"Maison","n":3,"d":"Suite de marches qui relie deux niveaux d'une maison."},{"m":"GRENIER","g":"GRENIER","c":"Maison","n":2,"d":"Espace sous le toit où l'on range les objets peu utilisés."},{"m":"SALON","g":"SALON","c":"Maison","n":1,"d":"Pièce principale où l'on se détend et reçoit les invités."},{"m":"CHAMBRE","g":"CHAMBRE","c":"Maison","n":2,"d":"Pièce où l'on dort, avec un lit."},{"m":"ARMOIRE","g":"ARMOIRE","c":"Maison","n":3,"d":"Grand meuble à portes servant au rangement."},{"m":"TIROIR","g":"TIROIR","c":"Maison","n":2,"d":"Caisse coulissante intégrée à un meuble, pour ranger."},{"m":"ÉTAGÈRE","g":"ETAGERE","c":"Maison","n":3,"d":"Meuble ou planches superposées servant à ranger livres et objets."},{"m":"TABLE","g":"TABLE","c":"Maison","n":1,"d":"Meuble à plateau horizontal posé sur des pieds, pour manger ou travailler."},{"m":"CHAISE","g":"CHAISE","c":"Maison","n":1,"d":"Siège à dossier pour une personne."},{"m":"FAUTEUIL","g":"FAUTEUIL","c":"Maison","n":3,"d":"Siège large et rembourré muni de bras."},{"m":"CANAPÉ","g":"CANAPE","c":"Maison","n":2,"d":"Long siège rembourré où plusieurs personnes s'assoient : le divan."},{"m":"LIT","g":"LIT","c":"Maison","n":1,"d":"Meuble où l'on s'étend pour dormir."},{"m":"MATELAS","g":"MATELAS","c":"Maison","n":2,"d":"Pièce rembourrée sur laquelle on s'étend pour dormir."},{"m":"OREILLER","g":"OREILLER","c":"Maison","n":3,"d":"Coussin allongé qui soutient la tête pendant le sommeil."},{"m":"COUVERTURE","g":"COUVERTURE","c":"Maison","n":4,"d":"Pièce de tissu épaisse dont on se couvre pour avoir chaud."},{"m":"RIDEAU","g":"RIDEAU","c":"Maison","n":2,"d":"Tissu suspendu devant une fenêtre pour tamiser la lumière."},{"m":"TAPIS","g":"TAPIS","c":"Maison","n":1,"d":"Pièce de tissu épais qui couvre une partie du plancher."},{"m":"LAMPE","g":"LAMPE","c":"Maison","n":1,"d":"Appareil qui produit de la lumière artificielle."},{"m":"MIROIR","g":"MIROIR","c":"Maison","n":2,"d":"Surface polie qui reflète les images."},{"m":"HORLOGE","g":"HORLOGE","c":"Maison","n":3,"d":"Appareil qui indique l'heure."},{"m":"TÉLÉVISION","g":"TELEVISION","c":"Maison","n":4,"d":"Appareil qui reçoit et affiche images et sons des émissions."},{"m":"FOUR","g":"FOUR","c":"Maison","n":1,"d":"Appareil de cuisson fermé où l'on rôtit et gratine."},{"m":"POÊLE","g":"POELE","c":"Maison","n":1,"d":"Appareil de chauffage ou de cuisson; le poêle à bois chauffe encore bien des maisons d'ici."},{"m":"SÉCHEUSE","g":"SECHEUSE","c":"Maison","n":3,"d":"Appareil qui sèche le linge à l'air chaud, compagnon de la laveuse."},{"m":"ASPIRATEUR","g":"ASPIRATEUR","c":"Maison","n":4,"d":"Appareil qui aspire la poussière et les saletés des planchers."},{"m":"BALAI","g":"BALAI","c":"Maison","n":1,"d":"Ustensile à long manche garni de brins, pour balayer le sol."},{"m":"MARTEAU","g":"MARTEAU","c":"Maison","n":2,"d":"Outil formé d'une tête d'acier et d'un manche, pour frapper."},{"m":"CLOU","g":"CLOU","c":"Maison","n":1,"d":"Petite tige de métal pointue qu'on enfonce pour fixer."},{"m":"TOURNEVIS","g":"TOURNEVIS","c":"Maison","n":4,"d":"Outil à lame plate ou cruciforme servant à tourner les vis."},{"m":"PINCE","g":"PINCE","c":"Maison","n":1,"d":"Outil à deux branches qui sert à saisir ou à couper."},{"m":"SCIE","g":"SCIE","c":"Maison","n":1,"d":"Outil à lame dentée servant à couper le bois ou le métal."},{"m":"PERCEUSE","g":"PERCEUSE","c":"Maison","n":3,"d":"Outil électrique qui perce des trous avec une mèche rotative."},{"m":"ÉCHELLE","g":"ECHELLE","c":"Maison","n":2,"d":"Montant double relié par des barreaux, pour monter en hauteur."},{"m":"SERVIETTE","g":"SERVIETTE","c":"Maison","n":3,"d":"Linge servant à s'essuyer, à la salle de bain ou à table."},{"m":"BROSSE","g":"BROSSE","c":"Maison","n":2,"d":"Ustensile à poils rigides servant à frotter, coiffer ou nettoyer."},{"m":"DENTIFRICE","g":"DENTIFRICE","c":"Maison","n":4,"d":"Pâte utilisée pour nettoyer les dents."},{"m":"ASSIETTE","g":"ASSIETTE","c":"Maison","n":3,"d":"Pièce de vaisselle plate dans laquelle on sert les aliments."},{"m":"FOURCHETTE","g":"FOURCHETTE","c":"Maison","n":4,"d":"Ustensile de table à dents pointues, pour piquer les aliments."},{"m":"COUTEAU","g":"COUTEAU","c":"Maison","n":2,"d":"Ustensile à lame tranchante muni d'un manche."},{"m":"CUILLÈRE","g":"CUILLERE","c":"Maison","n":3,"d":"Ustensile creusé servant à porter les aliments liquides à la bouche."},{"m":"MARMITE","g":"MARMITE","c":"Maison","n":3,"d":"Grand récipient de cuisson profond muni d'un couvercle."},{"m":"POÊLON","g":"POELON","c":"Maison","n":2,"d":"Petite casserole épaisse à manche, utilisée pour les sauces et les crêpes."},{"m":"CASSEROLE","g":"CASSEROLE","c":"Maison","n":3,"d":"Récipient de cuisson à manche unique, pour bouillir et mijoter."},{"m":"PASSOIRE","g":"PASSOIRE","c":"Maison","n":3,"d":"Ustensile percé de trous pour égoutter les aliments."},{"m":"RÂPE","g":"RAPE","c":"Maison","n":1,"d":"Ustensile percé de dents servant à réduire les aliments en fins morceaux."},{"m":"SOCCER","g":"SOCCER","c":"Sports et loisirs","n":2,"d":"Sport d'équipe où l'on pousse un ballon du pied vers le but adverse."},{"m":"BASEBALL","g":"BASEBALL","c":"Sports et loisirs","n":3,"d":"Sport d'équipe où l'on frappe une balle au bâton et court les buts."},{"m":"FOOTBALL","g":"FOOTBALL","c":"Sports et loisirs","n":3,"d":"Sport d'équipe au ballon ovale, populaire au Québec à l'automne."},{"m":"BASKETBALL","g":"BASKETBALL","c":"Sports et loisirs","n":4,"d":"Sport où l'on lance un ballon dans un anneau surélevé; inventé par le Canadien James Naismith."},{"m":"TENNIS","g":"TENNIS","c":"Sports et loisirs","n":2,"d":"Sport de raquette où deux joueurs se renvoient une balle par-dessus un filet."},{"m":"GOLF","g":"GOLF","c":"Sports et loisirs","n":1,"d":"Sport où l'on pousse une petite balle dans des trous à l'aide de bâtons."},{"m":"SKI","g":"SKI","c":"Sports et loisirs","n":1,"d":"Sport de glisse sur la neige avec de longues planches étroites aux pieds."},{"m":"PATIN","g":"PATIN","c":"Sports et loisirs","n":2,"d":"Chaussure à lame ou à roulettes pour glisser; sport d'hiver bien d'ici."},{"m":"PATINAGE","g":"PATINAGE","c":"Sports et loisirs","n":3,"d":"Art de glisser sur la glace avec des patins."},{"m":"CURLING","g":"CURLING","c":"Sports et loisirs","n":3,"d":"Sport de glace où l'on glisse des pierres de granit vers une cible en balayant devant."},{"m":"QUILLES","g":"QUILLES","c":"Sports et loisirs","n":2,"d":"Jeu où l'on fait tomber des quilles en lançant une boule sur une allée."},{"m":"NATATION","g":"NATATION","c":"Sports et loisirs","n":3,"d":"Sport qui consiste à nager selon différents styles."},{"m":"CANOT","g":"CANOT","c":"Sports et loisirs","n":1,"d":"Embarcation légère propulsée à la pagaie, héritée des peuples autochtones."},{"m":"KAYAK","g":"KAYAK","c":"Sports et loisirs","n":4,"d":"Embarcation fermée dirigée avec une pagaie à deux pales."},{"m":"CANOË","g":"CANOE","c":"Sports et loisirs","n":2,"d":"Embarcation légère et ouverte, propulsée à la pagaie simple."},{"m":"AVIRON","g":"AVIRON","c":"Sports et loisirs","n":2,"d":"Sport de rame en équipage sur des embarcations longues et étroites."},{"m":"VOILE","g":"VOILE","c":"Sports et loisirs","n":1,"d":"Navigation ou sport pratiqué sur un bateau mû par des voiles."},{"m":"PÊCHE","g":"PECHE","c":"Sports et loisirs","n":1,"d":"Activité qui consiste à capturer des poissons, à la ligne ou au filet."},{"m":"ESCALADE","g":"ESCALADE","c":"Sports et loisirs","n":3,"d":"Sport qui consiste à grimper des parois rocheuses ou des murs artificiels."},{"m":"RANDONNÉE","g":"RANDONNEE","c":"Sports et loisirs","n":3,"d":"Longue marche en nature, en forêt ou en montagne."},{"m":"CAMPING","g":"CAMPING","c":"Sports et loisirs","n":2,"d":"Séjour en plein air sous la tente ou en roulotte."},{"m":"CHASSE","g":"CHASSE","c":"Sports et loisirs","n":1,"d":"Poursuite du gibier, activité automnale bien enracinée au Québec."},{"m":"CYCLISME","g":"CYCLISME","c":"Sports et loisirs","n":3,"d":"Sport et loisir pratiqués à bicyclette."},{"m":"COURSE","g":"COURSE","c":"Sports et loisirs","n":1,"d":"Compétition de vitesse à pied, en ski ou en véhicule."},{"m":"MARATHON","g":"MARATHON","c":"Sports et loisirs","n":3,"d":"Course à pied d'environ 42 kilomètres."},{"m":"BOXE","g":"BOXE","c":"Sports et loisirs","n":1,"d":"Sport de combat où deux adversaires s'affrontent à coups de poing gantés."},{"m":"JUDO","g":"JUDO","c":"Sports et loisirs","n":2,"d":"Art martial japonais fondé sur les projections et les prises."},{"m":"KARATÉ","g":"KARATE","c":"Sports et loisirs","n":2,"d":"Art martial d'origine japonaise utilisant mains et pieds."},{"m":"ESCRIME","g":"ESCRIME","c":"Sports et loisirs","n":3,"d":"Sport de combat à l'épée, au fleuret ou au sabre."},{"m":"GYMNASTIQUE","g":"GYMNASTIQUE","c":"Sports et loisirs","n":4,"d":"Sport d'acrobaties et d'enchaînements au sol et aux agrès."},{"m":"DANSE","g":"DANSE","c":"Sports et loisirs","n":1,"d":"Art de bouger en rythme sur la musique."},{"m":"ÉQUITATION","g":"EQUITATION","c":"Sports et loisirs","n":4,"d":"Art et sport de monter à cheval."},{"m":"SURF","g":"SURF","c":"Sports et loisirs","n":1,"d":"Sport qui consiste à glisser debout sur les vagues avec une planche."},{"m":"PING-PONG","g":"PINGPONG","c":"Sports et loisirs","n":3,"d":"Tennis de table, jeu de raquettes rapides sur une table divisée par un filet."},{"m":"BADMINTON","g":"BADMINTON","c":"Sports et loisirs","n":3,"d":"Sport de raquette où l'on se renvoie un volant léger."},{"m":"VOLLEYBALL","g":"VOLLEYBALL","c":"Sports et loisirs","n":4,"d":"Sport d'équipe où le ballon doit franchir un filet sans toucher le sol."},{"m":"RUGBY","g":"RUGBY","c":"Sports et loisirs","n":2,"d":"Sport d'équipe au ballon ovale, fait de courses et de plaquages."},{"m":"LUTTE","g":"LUTTE","c":"Sports et loisirs","n":1,"d":"Sport de combat où l'on cherche à immobiliser l'adversaire."},{"m":"HALTÈRES","g":"HALTERES","c":"Sports et loisirs","n":3,"d":"Poids tenus à une main servant à l'entraînement musculaire."},{"m":"ÉCHECS","g":"ECHECS","c":"Sports et loisirs","n":2,"d":"Jeu de stratégie où deux joueurs déplacent des pièces sur un échiquier."},{"m":"DAMES","g":"DAMES","c":"Sports et loisirs","n":1,"d":"Jeu de pions sur un damier où l'on capture en sautant par-dessus."},{"m":"DOMINO","g":"DOMINO","c":"Sports et loisirs","n":2,"d":"Jeu de pièces rectangulaires marquées de points qu'on assemble en chaîne."},{"m":"PUZZLE","g":"PUZZLE","c":"Sports et loisirs","n":4,"d":"Jeu de pièces découpées à assembler pour reformer une image : un casse-tête."},{"m":"MARELLE","g":"MARELLE","c":"Sports et loisirs","n":2,"d":"Jeu d'enfant où l'on saute à cloche-pied dans des cases tracées au sol."},{"m":"BILLE","g":"BILLE","c":"Sports et loisirs","n":1,"d":"Petite boule de verre ou de terre avec laquelle les enfants jouent."},{"m":"TOUPIE","g":"TOUPIE","c":"Sports et loisirs","n":2,"d":"Jouet conique qu'on fait tourner sur sa pointe."},{"m":"BALLON","g":"BALLON","c":"Sports et loisirs","n":1,"d":"Balle gonflée d'air utilisée dans plusieurs jeux et sports."},{"m":"ÉCOLE","g":"ECOLE","c":"École et savoir","n":1,"d":"Établissement où les enfants reçoivent un enseignement."},{"m":"CLASSE","g":"CLASSE","c":"École et savoir","n":1,"d":"Groupe d'élèves réunis avec un enseignant; aussi la salle où ils travaillent."},{"m":"ÉLÈVE","g":"ELEVE","c":"École et savoir","n":2,"d":"Enfant ou jeune qui fréquente une école."},{"m":"ÉTUDIANT","g":"ETUDIANT","c":"École et savoir","n":3,"d":"Personne qui poursuit des études supérieures."},{"m":"CRAYON","g":"CRAYON","c":"École et savoir","n":2,"d":"Instrument d'écriture fait d'une mine de graphite dans un bâton de bois."},{"m":"STYLO","g":"STYLO","c":"École et savoir","n":2,"d":"Instrument d'écriture à encre, souvent à bille."},{"m":"GOMME","g":"GOMME","c":"École et savoir","n":1,"d":"Petit objet de caoutchouc servant à effacer le crayon."},{"m":"RÈGLE","g":"REGLE","c":"École et savoir","n":1,"d":"Instrument plat et gradué servant à mesurer et à tracer des lignes."},{"m":"CAHIER","g":"CAHIER","c":"École et savoir","n":2,"d":"Assemblage de feuilles de papier reliées, pour écrire."},{"m":"LIVRE","g":"LIVRE","c":"École et savoir","n":1,"d":"Assemblage de pages imprimées reliées ensemble."},{"m":"PAGE","g":"PAGE","c":"École et savoir","n":1,"d":"Chacun des deux côtés d'une feuille d'un livre ou d'un cahier."},{"m":"MOT","g":"MOT","c":"École et savoir","n":1,"d":"Suite de lettres qui forme une unité de langage; c'est ce que tu devines ici."},{"m":"LETTRE","g":"LETTRE","c":"École et savoir","n":2,"d":"Signe de l'alphabet servant à écrire les sons d'une langue."},{"m":"CHIFFRE","g":"CHIFFRE","c":"École et savoir","n":2,"d":"Signe servant à écrire les nombres."},{"m":"NOMBRE","g":"NOMBRE","c":"École et savoir","n":2,"d":"Valeur qui exprime une quantité, écrite en chiffres."},{"m":"CALCUL","g":"CALCUL","c":"École et savoir","n":2,"d":"Opération ou ensemble d'opérations sur des nombres."},{"m":"ADDITION","g":"ADDITION","c":"École et savoir","n":3,"d":"Opération qui consiste à ajouter des nombres pour obtenir une somme."},{"m":"SOUSTRACTION","g":"SOUSTRACTION","c":"École et savoir","n":4,"d":"Opération qui consiste à retirer un nombre d'un autre."},{"m":"DIVISION","g":"DIVISION","c":"École et savoir","n":3,"d":"Opération qui partage un nombre en parties égales."},{"m":"FRACTION","g":"FRACTION","c":"École et savoir","n":3,"d":"Partie d'un tout, écrite avec un numérateur et un dénominateur."},{"m":"GÉOMÉTRIE","g":"GEOMETRIE","c":"École et savoir","n":4,"d":"Branche des mathématiques qui étudie les formes et les figures."},{"m":"HISTOIRE","g":"HISTOIRE","c":"École et savoir","n":3,"d":"Étude des événements du passé; aussi un récit, vrai ou inventé."},{"m":"GÉOGRAPHIE","g":"GEOGRAPHIE","c":"École et savoir","n":4,"d":"Science qui décrit la Terre, ses territoires et ses habitants."},{"m":"SCIENCE","g":"SCIENCE","c":"École et savoir","n":2,"d":"Ensemble des connaissances obtenues par l'observation et l'expérience."},{"m":"BIOLOGIE","g":"BIOLOGIE","c":"École et savoir","n":3,"d":"Science qui étudie les êtres vivants."},{"m":"CHIMIE","g":"CHIMIE","c":"École et savoir","n":2,"d":"Science qui étudie la composition de la matière et ses transformations."},{"m":"PHYSIQUE","g":"PHYSIQUE","c":"École et savoir","n":3,"d":"Science qui étudie la matière, l'énergie et leurs interactions."},{"m":"LECTURE","g":"LECTURE","c":"École et savoir","n":2,"d":"Action de lire un texte."},{"m":"ÉCRITURE","g":"ECRITURE","c":"École et savoir","n":3,"d":"Action d'écrire; façon de tracer les lettres."},{"m":"DICTÉE","g":"DICTEE","c":"École et savoir","n":2,"d":"Exercice où l'on écrit un texte lu à voix haute pour vérifier l'orthographe."},{"m":"DEVOIR","g":"DEVOIR","c":"École et savoir","n":2,"d":"Travail scolaire demandé aux élèves, souvent à faire à la maison."},{"m":"EXAMEN","g":"EXAMEN","c":"École et savoir","n":2,"d":"Épreuve qui vérifie les connaissances d'un élève."},{"m":"QUESTION","g":"QUESTION","c":"École et savoir","n":3,"d":"Phrase par laquelle on demande quelque chose."},{"m":"RÉPONSE","g":"REPONSE","c":"École et savoir","n":2,"d":"Ce que l'on dit ou écrit en retour à une question."},{"m":"LEÇON","g":"LECON","c":"École et savoir","n":1,"d":"Enseignement donné à un élève sur un sujet précis."},{"m":"RÉCRÉATION","g":"RECREATION","c":"École et savoir","n":4,"d":"Pause dans la journée d'école où les élèves jouent dehors."},{"m":"BIBLIOTHÈQUE","g":"BIBLIOTHEQUE","c":"École et savoir","n":4,"d":"Lieu où l'on conserve et prête des livres."},{"m":"DICTIONNAIRE","g":"DICTIONNAIRE","c":"École et savoir","n":4,"d":"Livre ou ouvrage qui donne, par ordre alphabétique, la définition des mots."},{"m":"CARTE","g":"CARTE","c":"École et savoir","n":1,"d":"Représentation dessinée d'un territoire sur une surface plane."},{"m":"TABLEAU","g":"TABLEAU","c":"École et savoir","n":2,"d":"Grande surface plane sur laquelle on écrit en classe; aussi une peinture encadrée."},{"m":"CRAIE","g":"CRAIE","c":"École et savoir","n":1,"d":"Bâtonnet de calcaire blanc servant à écrire sur un tableau."},{"m":"CARTABLE","g":"CARTABLE","c":"École et savoir","n":3,"d":"Classeur à anneaux pour ranger les feuilles et les cahiers."},{"m":"TROUSSE","g":"TROUSSE","c":"École et savoir","n":2,"d":"Petit étui où l'on range crayons, gomme et ciseaux."},{"m":"COMPAS","g":"COMPAS","c":"École et savoir","n":2,"d":"Instrument à deux branches servant à tracer des cercles."},{"m":"LANGUE","g":"LANGUE","c":"École et savoir","n":1,"d":"Système de mots et de règles propre à une communauté : une langue parlée et écrite."},{"m":"POÉSIE","g":"POESIE","c":"École et savoir","n":2,"d":"Art d'écrire en vers ou en prose rythmée pour émouvoir."},{"m":"THÉÂTRE","g":"THEATRE","c":"École et savoir","n":3,"d":"Art de jouer des pièces devant un public; aussi la salle de spectacle."},{"m":"DESSIN","g":"DESSIN","c":"École et savoir","n":2,"d":"Représentation tracée au crayon ou à l'encre sur une surface."},{"m":"MUSIQUE","g":"MUSIQUE","c":"École et savoir","n":2,"d":"Art d'assembler les sons de façon agréable à écouter."},{"m":"PIANO","g":"PIANO","c":"École et savoir","n":1,"d":"Instrument à clavier dont les marteaux frappent des cordes."},{"m":"GUITARE","g":"GUITARE","c":"École et savoir","n":2,"d":"Instrument à six cordes que l'on pince ou gratte."},{"m":"VIOLON","g":"VIOLON","c":"École et savoir","n":2,"d":"Instrument à quatre cordes joué avec un archet."},{"m":"FLÛTE","g":"FLUTE","c":"École et savoir","n":1,"d":"Instrument à vent dans lequel on souffle pour produire des notes."},{"m":"TAMBOUR","g":"TAMBOUR","c":"École et savoir","n":2,"d":"Instrument de percussion formé d'une peau tendue sur un cylindre."},{"m":"TROMPETTE","g":"TROMPETTE","c":"École et savoir","n":3,"d":"Instrument à vent en cuivre à pistons, au son clair et éclatant."},{"m":"ACCORDÉON","g":"ACCORDEON","c":"École et savoir","n":4,"d":"Instrument à soufflet et à touches, vedette des musiques traditionnelles d'ici."},{"m":"AUTO","g":"AUTO","c":"Transports","n":1,"d":"Véhicule automobile individuel à quatre roues."},{"m":"VOITURE","g":"VOITURE","c":"Transports","n":2,"d":"Véhicule à quatre roues servant à transporter des personnes."},{"m":"CAMION","g":"CAMION","c":"Transports","n":2,"d":"Gros véhicule destiné au transport de marchandises."},{"m":"AUTOBUS","g":"AUTOBUS","c":"Transports","n":3,"d":"Grand véhicule de transport collectif de passagers."},{"m":"MÉTRO","g":"METRO","c":"Transports","n":1,"d":"Train urbain électrique, souvent souterrain."},{"m":"TRAIN","g":"TRAIN","c":"Transports","n":1,"d":"Convoi de wagons tiré par une locomotive sur des rails."},{"m":"AVION","g":"AVION","c":"Transports","n":1,"d":"Appareil volant plus lourd que l'air, mû par des moteurs."},{"m":"BATEAU","g":"BATEAU","c":"Transports","n":2,"d":"Construction flottante servant à naviguer sur l'eau."},{"m":"VÉLO","g":"VELO","c":"Transports","n":1,"d":"Cycle à deux roues propulsé par des pédales."},{"m":"MOTO","g":"MOTO","c":"Transports","n":1,"d":"Motocyclette : véhicule à deux roues muni d'un moteur."},{"m":"TROTTINETTE","g":"TROTTINETTE","c":"Transports","n":4,"d":"Planche à petites roues avec un guidon, propulsée au pied."},{"m":"HÉLICOPTÈRE","g":"HELICOPTERE","c":"Transports","n":4,"d":"Appareil volant muni d'un grand rotor qui décolle à la verticale."},{"m":"FUSÉE","g":"FUSEE","c":"Transports","n":1,"d":"Engin propulsé par réaction, utilisé pour aller dans l'espace."},{"m":"MONTGOLFIÈRE","g":"MONTGOLFIERE","c":"Transports","n":4,"d":"Ballon gonflé à l'air chaud qui emporte une nacelle dans le ciel."},{"m":"DIRIGEABLE","g":"DIRIGEABLE","c":"Transports","n":4,"d":"Ballon allongé dirigeable muni de moteurs et d'une nacelle."},{"m":"SOUS-MARIN","g":"SOUSMARIN","c":"Transports","n":3,"d":"Navire capable de naviguer sous l'eau."},{"m":"PÉNICHE","g":"PENICHE","c":"Transports","n":3,"d":"Bateau à fond plat servant au transport sur les rivières et canaux."},{"m":"VOILIER","g":"VOILIER","c":"Transports","n":2,"d":"Bateau mû principalement par ses voiles."},{"m":"YACHT","g":"YACHT","c":"Transports","n":4,"d":"Bateau de plaisance confortable, à voile ou à moteur."},{"m":"PAQUEBOT","g":"PAQUEBOT","c":"Transports","n":3,"d":"Grand navire destiné au transport de passagers sur de longues distances."},{"m":"REMORQUEUR","g":"REMORQUEUR","c":"Transports","n":4,"d":"Bateau puissant qui tire ou pousse les grands navires dans les ports."},{"m":"BRISE-GLACE","g":"BRISEGLACE","c":"Transports","n":4,"d":"Navire à coque renforcée qui brise la glace pour ouvrir les voies navigables."},{"m":"TAXI","g":"TAXI","c":"Transports","n":1,"d":"Voiture avec chauffeur qu'on loue pour un trajet."},{"m":"AMBULANCE","g":"AMBULANCE","c":"Transports","n":3,"d":"Véhicule équipé pour transporter les malades et les blessés."},{"m":"DÉPANNEUSE","g":"DEPANNEUSE","c":"Transports","n":4,"d":"Camion équipé pour remorquer les véhicules en panne."},{"m":"TRACTEUR","g":"TRACTEUR","c":"Transports","n":3,"d":"Véhicule agricole à grosses roues qui tire les instruments de ferme."},{"m":"MOISSONNEUSE","g":"MOISSONNEUSE","c":"Transports","n":4,"d":"Machine agricole qui récolte les céréales, la moissonneuse-batteuse."},{"m":"EXCAVATRICE","g":"EXCAVATRICE","c":"Transports","n":4,"d":"Engin de chantier muni d'un bras articulé et d'un godet pour creuser."},{"m":"TRAMWAY","g":"TRAMWAY","c":"Transports","n":2,"d":"Véhicule de transport urbain circulant sur des rails dans les rues."},{"m":"CHARRETTE","g":"CHARRETTE","c":"Transports","n":3,"d":"Voiture à deux roues tirée à bras ou par un animal, pour les charges."},{"m":"FUNICULAIRE","g":"FUNICULAIRE","c":"Transports","n":4,"d":"Chemin de fer à câble qui monte les fortes pentes."},{"m":"TÉLÉSIÈGE","g":"TELESIEGE","c":"Transports","n":4,"d":"Remontée mécanique qui transporte les skieurs assis sur des sièges suspendus."}];
+
+      // ---------- Configuration des niveaux ----------
+      var NIVEAUX = {
+        facile:    { nom: "Facile",    taille: 8,  nb: 6,  nMin: 1, nMax: 2, lenMin: 3, lenMax: 7,  nbQc: 2,
+                     dirs: [[0,1],[1,0],[1,1],[1,-1]] },
+        moyen:     { nom: "Moyen",     taille: 10, nb: 8,  nMin: 1, nMax: 3, lenMin: 4, lenMax: 9,  nbQc: 3,
+                     dirs: [[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,0]] },
+        difficile: { nom: "Difficile", taille: 12, nb: 10, nMin: 2, nMax: 4, lenMin: 5, lenMax: 12, nbQc: 3,
+                     dirs: [[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,0],[-1,1],[-1,-1]] }
+      };
+      var SAC = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIINNNNNNSSSSSSRRRRRRTTTTTTUUUUUULOLOLODDDMMMPPCCGBVFQHJXYKZW";
+
+      function el(id){ return document.getElementById(id); }
+      function melanger(t){
+        var a = t.slice();
+        for (var i = a.length - 1; i > 0; i--){
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+        }
+        return a;
+      }
+      function formatTemps(sec){
+        var m = Math.floor(sec / 60), s = sec % 60;
+        return m + ":" + (s < 10 ? "0" : "") + s;
+      }
+      function cleRecord(niv){ return "hp-mots-chez-nous-record-" + niv; }
+      function lireRecord(niv){
+        try {
+          var v = window.localStorage.getItem(cleRecord(niv));
+          return v === null ? null : parseInt(v, 10);
+        } catch(e){ return null; }
+      }
+      function ecrireRecord(niv, sec){
+        try { window.localStorage.setItem(cleRecord(niv), String(sec)); } catch(e){}
+      }
+
+      // ---------- Choix des mots d'une partie ----------
+      function choisirMots(cfg){
+        var pool = BANQUE.filter(function(w){
+          return w.n >= cfg.nMin && w.n <= cfg.nMax && w.g.length >= cfg.lenMin && w.g.length <= cfg.lenMax;
+        });
+        var qc = melanger(pool.filter(function(w){ return w.c === "Québécois d'ici"; }));
+        var autres = melanger(pool.filter(function(w){ return w.c !== "Québécois d'ici"; }));
+        var choisis = [], parCat = {};
+        function prendre(w){
+          choisis.push(w);
+          parCat[w.c] = (parCat[w.c] || 0) + 1;
+        }
+        var i;
+        for (i = 0; i < qc.length && choisis.length < cfg.nbQc; i++) prendre(qc[i]);
+        for (i = 0; i < autres.length && choisis.length < cfg.nb; i++){
+          if ((parCat[autres[i].c] || 0) < 2) prendre(autres[i]);
+        }
+        for (i = 0; i < autres.length && choisis.length < cfg.nb; i++){
+          if (choisis.indexOf(autres[i]) === -1) prendre(autres[i]);
+        }
+        for (i = 0; i < qc.length && choisis.length < cfg.nb; i++){
+          if (choisis.indexOf(qc[i]) === -1) prendre(qc[i]);
+        }
+        return melanger(choisis);
+      }
+
+      // ---------- Génération de la grille ----------
+      function genererGrille(taille, mots, dirs){
+        var ordre = mots.slice().sort(function(a,b){ return b.g.length - a.g.length; });
+        for (var tentative = 0; tentative < 80; tentative++){
+          var grille = [], r, c;
+          for (r = 0; r < taille; r++){ grille.push(new Array(taille).fill("")); }
+          var positions = {}, ok = true;
+          for (var k = 0; k < ordre.length; k++){
+            var mot = ordre[k], place = false;
+            for (var essai = 0; essai < 250 && !place; essai++){
+              var d = dirs[Math.floor(Math.random() * dirs.length)];
+              var dr = d[0], dc = d[1], len = mot.g.length;
+              var rMax = dr === 0 ? taille - 1 : (dr > 0 ? taille - len : len - 1);
+              var cMax = dc === 0 ? taille - 1 : (dc > 0 ? taille - len : len - 1);
+              var rMin = dr < 0 ? len - 1 : 0, cMin = dc < 0 ? len - 1 : 0;
+              if (rMax < rMin || cMax < cMin) continue;
+              var r0 = rMin + Math.floor(Math.random() * (rMax - rMin + 1));
+              var c0 = cMin + Math.floor(Math.random() * (cMax - cMin + 1));
+              var bon = true, cellules = [];
+              for (var j = 0; j < len; j++){
+                var rr = r0 + dr * j, cc = c0 + dc * j;
+                if (grille[rr][cc] !== "" && grille[rr][cc] !== mot.g[j]){ bon = false; break; }
+                cellules.push([rr, cc]);
+              }
+              if (bon){
+                for (var j2 = 0; j2 < len; j2++) grille[cellules[j2][0]][cellules[j2][1]] = mot.g[j2];
+                positions[mot.g] = cellules;
+                place = true;
+              }
+            }
+            if (!place){ ok = false; break; }
+          }
+          if (ok){
+            for (r = 0; r < taille; r++)
+              for (c = 0; c < taille; c++)
+                if (grille[r][c] === "") grille[r][c] = SAC[Math.floor(Math.random() * SAC.length)];
+            return { grille: grille, positions: positions };
+          }
+        }
+        return null;
+      }
+
+      // ---------- État de la partie ----------
+      var partie = null;
+      var chronoTimer = null;
+
+      function afficherRecords(){
+        ["facile","moyen","difficile"].forEach(function(niv){
+          var rec = lireRecord(niv);
+          el("record-" + niv).textContent = rec === null ? "—" : formatTemps(rec);
+        });
+      }
+      function montrer(id){
+        ["ecran-accueil","ecran-jeu","ecran-fin"].forEach(function(e){
+          el(e).classList.toggle("cache", e !== id);
+        });
+        window.scrollTo(0, 0);
+      }
+      function lancerChrono(){
+        arreterChrono();
+        partie.debut = Date.now();
+        el("jeu-chrono").textContent = "0:00";
+        chronoTimer = window.setInterval(function(){
+          el("jeu-chrono").textContent = formatTemps(Math.floor((Date.now() - partie.debut) / 1000));
+        }, 500);
+      }
+      function arreterChrono(){
+        if (chronoTimer !== null){ window.clearInterval(chronoTimer); chronoTimer = null; }
+      }
+
+      function demarrer(nivCle){
+        var cfg = NIVEAUX[nivCle];
+        var mots = choisirMots(cfg);
+        var gen = genererGrille(cfg.taille, mots, cfg.dirs);
+        if (!gen) gen = genererGrille(cfg.taille, mots, cfg.dirs);
+        if (!gen) return;
+        partie = {
+          nivCle: nivCle, cfg: cfg, taille: cfg.taille,
+          mots: mots.map(function(w){
+            return { m: w.m, g: w.g, c: w.c, d: w.d, cellules: gen.positions[w.g], trouve: false };
+          }),
+          trouves: 0, indices: 0, debut: Date.now()
+        };
+        // Liste des mots
+        var ul = el("jeu-mots"); ul.innerHTML = "";
+        partie.mots.forEach(function(w){
+          var li = document.createElement("li");
+          li.textContent = w.m;
+          li.id = "mot-" + w.g;
+          ul.appendChild(li);
+        });
+        // Grille
+        var g = el("jeu-grille"); g.innerHTML = "";
+        g.style.gridTemplateColumns = "repeat(" + cfg.taille + ", 1fr)";
+        var taillePolice = cfg.taille <= 8 ? 24 : (cfg.taille <= 10 ? 20 : 17);
+        partie.cellules = [];
+        for (var r = 0; r < cfg.taille; r++){
+          partie.cellules.push([]);
+          for (var c = 0; c < cfg.taille; c++){
+            var div = document.createElement("div");
+            div.className = "cellule";
+            div.textContent = gen.grille[r][c];
+            div.style.fontSize = taillePolice + "px";
+            div.setAttribute("role", "gridcell");
+            div.dataset.r = r; div.dataset.c = c;
+            g.appendChild(div);
+            partie.cellules[r].push(div);
+          }
+        }
+        el("jeu-niveau").textContent = cfg.nom;
+        el("jeu-total").textContent = partie.mots.length;
+        el("jeu-trouves").textContent = "0";
+        el("def-attente").classList.remove("cache");
+        el("def-contenu").classList.add("cache");
+        montrer("ecran-jeu");
+        lancerChrono();
+      }
+
+      // ---------- Sélection au glisser ----------
+      var selection = null; // { r0, c0, cellules: [[r,c],...] }
+
+      function celluleDepuisPoint(x, y){
+        var g = el("jeu-grille");
+        var rect = g.getBoundingClientRect();
+        if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) return null;
+        var c = Math.floor((x - rect.left) / rect.width * partie.taille);
+        var r = Math.floor((y - rect.top) / rect.height * partie.taille);
+        c = Math.max(0, Math.min(partie.taille - 1, c));
+        r = Math.max(0, Math.min(partie.taille - 1, r));
+        return [r, c];
+      }
+      function nettoyerSelection(){
+        if (!selection) return;
+        selection.cellules.forEach(function(cell){
+          partie.cellules[cell[0]][cell[1]].classList.remove("sel");
+        });
+        selection = null;
+      }
+      function majSelection(r1, c1){
+        var r0 = selection.r0, c0 = selection.c0;
+        var dr = r1 - r0, dc = c1 - c0;
+        var sr = dr === 0 ? 0 : (dr > 0 ? 1 : -1);
+        var sc = dc === 0 ? 0 : (dc > 0 ? 1 : -1);
+        var pas;
+        if (sr !== 0 && sc !== 0){
+          if (Math.abs(dr) > Math.abs(dc)){ sc = 0; pas = Math.abs(dr); }
+          else if (Math.abs(dc) > Math.abs(dr)){ sr = 0; pas = Math.abs(dc); }
+          else pas = Math.abs(dr);
+        } else {
+          pas = Math.max(Math.abs(dr), Math.abs(dc));
+        }
+        // Retirer l'ancien surlignage
+        selection.cellules.forEach(function(cell){
+          partie.cellules[cell[0]][cell[1]].classList.remove("sel");
+        });
+        selection.cellules = [];
+        for (var i = 0; i <= pas; i++){
+          var rr = r0 + sr * i, cc = c0 + sc * i;
+          if (rr < 0 || rr >= partie.taille || cc < 0 || cc >= partie.taille) break;
+          selection.cellules.push([rr, cc]);
+          partie.cellules[rr][cc].classList.add("sel");
+        }
+      }
+      function validerSelection(){
+        if (!selection || selection.cellules.length < 3){ nettoyerSelection(); return; }
+        var texte = selection.cellules.map(function(cell){
+          return partie.cellules[cell[0]][cell[1]].textContent;
+        }).join("");
+        var inverse = texte.split("").reverse().join("");
+        var trouve = null;
+        partie.mots.forEach(function(w){
+          if (!w.trouve && (w.g === texte || w.g === inverse)) trouve = w;
+        });
+        var cellulesSel = selection.cellules;
+        nettoyerSelection();
+        if (trouve) motTrouve(trouve, cellulesSel);
+      }
+      function motTrouve(w, cellulesSel){
+        w.trouve = true;
+        partie.trouves++;
+        var classe = "f" + ((partie.trouves - 1) % 5 + 1);
+        (w.cellules || cellulesSel).forEach(function(cell){
+          var div = partie.cellules[cell[0]][cell[1]];
+          div.classList.remove("f1","f2","f3","f4","f5");
+          div.classList.add(classe);
+        });
+        var li = el("mot-" + w.g);
+        if (li) li.classList.add("trouve");
+        el("jeu-trouves").textContent = partie.trouves;
+        el("def-attente").classList.add("cache");
+        el("def-contenu").classList.remove("cache");
+        el("def-mot").textContent = w.m;
+        el("def-cat").textContent = "· " + w.c;
+        el("def-texte").textContent = w.d;
+        if (navigator.vibrate) { try { navigator.vibrate(25); } catch(e){} }
+        if (partie.trouves === partie.mots.length){
+          var sec = Math.floor((Date.now() - partie.debut) / 1000);
+          arreterChrono();
+          window.setTimeout(function(){ afficherFin(sec); }, 1100);
+        }
+      }
+      function afficherFin(sec){
+        var ancien = lireRecord(partie.nivCle);
+        var nouveauRecord = ancien === null || sec < ancien;
+        if (nouveauRecord) ecrireRecord(partie.nivCle, sec);
+        var rec = lireRecord(partie.nivCle);
+        el("fin-temps").textContent = formatTemps(sec);
+        el("fin-meilleur").textContent = rec === null ? formatTemps(sec) : formatTemps(rec);
+        el("fin-record").classList.toggle("cache", !nouveauRecord);
+        el("fin-indices").textContent = partie.indices > 0
+          ? " · " + partie.indices + (partie.indices > 1 ? " indices utilisés" : " indice utilisé")
+          : "";
+        var ul = el("fin-defs"); ul.innerHTML = "";
+        partie.mots.forEach(function(w){
+          var li = document.createElement("li");
+          var fm = document.createElement("span"); fm.className = "fm"; fm.textContent = w.m;
+          var fc = document.createElement("span"); fc.className = "fc"; fc.textContent = " · " + w.c;
+          var p = document.createElement("p"); p.textContent = w.d;
+          li.appendChild(fm); li.appendChild(fc); li.appendChild(p);
+          ul.appendChild(li);
+        });
+        afficherRecords();
+        montrer("ecran-fin");
+      }
+
+      // ---------- Événements grille ----------
+      var grilleEl = el("jeu-grille");
+      grilleEl.addEventListener("pointerdown", function(e){
+        if (!partie) return;
+        var cell = celluleDepuisPoint(e.clientX, e.clientY);
+        if (!cell) return;
+        e.preventDefault();
+        try { grilleEl.setPointerCapture(e.pointerId); } catch(err){}
+        nettoyerSelection();
+        selection = { r0: cell[0], c0: cell[1], cellules: [] };
+        majSelection(cell[0], cell[1]);
+      });
+      grilleEl.addEventListener("pointermove", function(e){
+        if (!selection) return;
+        var cell = celluleDepuisPoint(e.clientX, e.clientY);
+        if (!cell) return;
+        majSelection(cell[0], cell[1]);
+      });
+      grilleEl.addEventListener("pointerup", function(e){
+        if (!selection) return;
+        validerSelection();
+      });
+      grilleEl.addEventListener("pointercancel", function(){ nettoyerSelection(); });
+      grilleEl.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+
+      // ---------- Boutons ----------
+      document.querySelectorAll(".btn-niveau").forEach(function(b){
+        b.addEventListener("click", function(){ demarrer(b.dataset.niveau); });
+      });
+      el("btn-recommencer").addEventListener("click", function(){
+        if (partie) demarrer(partie.nivCle);
+      });
+      el("btn-niveaux").addEventListener("click", function(){
+        arreterChrono(); partie = null; afficherRecords(); montrer("ecran-accueil");
+      });
+      el("btn-encore").addEventListener("click", function(){
+        if (partie) demarrer(partie.nivCle);
+      });
+      el("btn-fin-niveaux").addEventListener("click", function(){
+        partie = null; afficherRecords(); montrer("ecran-accueil");
+      });
+      el("btn-indice").addEventListener("click", function(){
+        if (!partie) return;
+        var restants = partie.mots.filter(function(w){ return !w.trouve; });
+        if (!restants.length) return;
+        var w = restants[Math.floor(Math.random() * restants.length)];
+        partie.indices++;
+        var premiere = w.cellules[0];
+        var div = partie.cellules[premiere[0]][premiere[1]];
+        div.classList.remove("indice");
+        void div.offsetWidth;
+        div.classList.add("indice");
+        window.setTimeout(function(){ div.classList.remove("indice"); }, 1500);
+      });
+
+      // ---------- Démarrage ----------
+      (function(){
+        var nbQc = BANQUE.filter(function(w){ return w.c === "Québécois d'ici"; }).length;
+        el("banque-note").textContent = "Banque de " + BANQUE.length + " mots avec définitions, dont " + nbQc + " québécois d'ici. Aucune connexion requise — tout est dans ton téléphone.";
+        afficherRecords();
+      })();
+    </script>
+  </body>
+</html>
