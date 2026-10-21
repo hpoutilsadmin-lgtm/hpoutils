@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/sans-honte")({
   head: () => createSeoHead({
-    title: "Collection Sans Honte : 10 kits PDF | HP — Québec",
-    description: "10 kits PDF concrets : papiers, frigo, logement, entraide… 5 $ CAD le kit, 40 $ CAD la collection. Aucune taxe ajoutée.",
+    title: "Collection Sans Honte : 15 kits PDF | HP — Québec",
+    description: "15 kits PDF concrets : papiers, frigo, logement, entraide… 5 $ CAD le kit, 40 $ CAD pour 10 kits au choix. Aucune taxe ajoutée.",
     path: "/sans-honte",
   }),
   component: Page,
@@ -28,6 +28,11 @@ const KITS = [
   { n: "08", cover: "/images/sans-honte/kit-08.jpg", title: "Logement Sans Honte", sub: "Habiter, garder, retrouver un chez-soi.", slug: "sans-honte-logement" },
   { n: "09", cover: "/images/sans-honte/kit-09.jpg", title: "Proche Aidant Sans Honte", sub: "Aider sans s'oublier.", slug: "sans-honte-proche-aidant" },
   { n: "10", cover: "/images/sans-honte/kit-10.jpg", title: "72 heures Sans Honte", sub: "Tenir trois jours quand tout bascule.", slug: "sans-honte-72-heures" },
+  { n: "11", cover: "/images/sans-honte/kit-11.jpg", title: "Testament Sans Honte", sub: "Préparer un testament olographe au Québec, pas à pas.", slug: "sans-honte-testament" },
+  { n: "12", cover: "/images/sans-honte/kit-12.jpg", title: "Papiers de mes parents Sans Honte", sub: "Organiser les papiers de ses parents, sans honte.", slug: "sans-honte-papiers-parents" },
+  { n: "13", cover: "/images/sans-honte/kit-13.jpg", title: "Chalet Sans Honte", sub: "Des règles claires pour partager le chalet.", slug: "sans-honte-chalet" },
+  { n: "14", cover: "/images/sans-honte/kit-14.jpg", title: "L'année québécoise Sans Honte", sub: "Des repères pour l'année québécoise.", slug: "sans-honte-annee-quebecoise" },
+  { n: "15", cover: "/images/sans-honte/kit-15.jpg", title: "Héritage numérique Sans Honte", sub: "Préparer la transmission de son héritage numérique.", slug: "sans-honte-heritage-numerique" },
 ];
 
 function Page() {
@@ -38,7 +43,7 @@ function Page() {
           <span className="kicker">Collection</span>
           <h1>Sans <em>Honte</em>.</h1>
           <p className="lead">
-             Dix kits PDF concrets pour faire face aux papiers, au frigo, au logement,
+             Quinze kits PDF concrets pour faire face aux papiers, au frigo, au logement,
              à l'entraide et à d'autres situations de la vraie vie.
           </p>
         </div>
@@ -56,7 +61,7 @@ function Page() {
               À utiliser seul, avec un proche ou dans un contexte d'intervention.
             </p>
           </div>
-          <h2 className="section-title">10 kits — La collection complète</h2>
+          <h2 className="section-title">15 kits — La collection complète</h2>
           <p style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 32px", color: "#5a4a3f", fontSize: 16 }}>
               Chaque kit est un PDF imprimable — 5 $ CAD, aucune taxe ajoutée, téléchargement immédiat après paiement.
           </p>
@@ -77,8 +82,8 @@ function Page() {
           </div>
           <div className="cta-band" style={{ marginTop: 48 }}>
             <div>
-              <h3>La collection complète — les 10 kits</h3>
-               <p>Toute la collection Sans Honte en un seul PDF — 40 $ CAD au lieu de 50 $ CAD, aucune taxe ajoutée. Téléchargement immédiat.</p>
+              <h3>Le bundle — Choisis 10 kits parmi 15</h3>
+               <p>Choisis 10 kits parmi les 15 de la collection Sans Honte — 40 $ CAD, aucune taxe ajoutée. Téléchargement immédiat.</p>
             </div>
             <Link className="action-btn" to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF</Link>
           </div>
