@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/les-passeurs")({
@@ -20,6 +20,10 @@ function Page() {
           <p className="lead">
             HP Outils fabrique des jeux, des livres et des outils pour la vraie vie — pensés pour les familles, les petits budgets et celles et ceux qui veulent apprendre. Beaucoup sont gratuits, et on veut que ça reste comme ça.
           </p>
+          <div className="lead-actions">
+            <Link to="/jeux" className="btn-primary">Voir les produits</Link>
+            <Link to="/contact" className="btn-ghost">Une question ? Écris-moi</Link>
+          </div>
         </div>
       </section>
 
