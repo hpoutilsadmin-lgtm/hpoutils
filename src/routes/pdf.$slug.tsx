@@ -136,7 +136,7 @@ function Page() {
                 params={{ slug: "sans-honte-collection" }}
                 className="collection-offer"
               >
-                Les 10 kits Sans Honte pour 40 $ CAD au lieu de 50 $ CAD — Voir la collection →
+                Choisis 10 kits parmi 15 pour 40 $ CAD — Voir la collection →
               </Link>
             )}
           </div>
