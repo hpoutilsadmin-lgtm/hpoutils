@@ -15,6 +15,7 @@ import { Route as AlbumRouteImport } from './routes/album'
 import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as CollaborerRouteImport } from './routes/collaborer'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
+import { Route as ConditionsDeVenteRouteImport } from './routes/conditions-de-vente'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as JeuxRouteImport } from './routes/jeux'
@@ -70,6 +71,11 @@ const CollaborerRoute = CollaborerRouteImport.update({
 const ComprendreRoute = ComprendreRouteImport.update({
   id: '/comprendre',
   path: '/comprendre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConditionsDeVenteRoute = ConditionsDeVenteRouteImport.update({
+  id: '/conditions-de-vente',
+  path: '/conditions-de-vente',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
@@ -214,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/ateliers': typeof AteliersRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/ateliers': typeof AteliersRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
@@ -283,6 +291,7 @@ export interface FileRoutesById {
   '/ateliers': typeof AteliersRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/jeux': typeof JeuxRoute
@@ -319,6 +328,7 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/collaborer'
     | '/comprendre'
+    | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
     | '/jeux'
@@ -353,6 +363,7 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/collaborer'
     | '/comprendre'
+    | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
     | '/jeux'
@@ -387,6 +398,7 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/collaborer'
     | '/comprendre'
+    | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
     | '/jeux'
@@ -422,6 +434,7 @@ export interface RootRouteChildren {
   AteliersRoute: typeof AteliersRoute
   CollaborerRoute: typeof CollaborerRoute
   ComprendreRoute: typeof ComprendreRoute
+  ConditionsDeVenteRoute: typeof ConditionsDeVenteRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
   JeuxRoute: typeof JeuxRoute
@@ -491,6 +504,13 @@ declare module '@tanstack/react-router' {
       path: '/comprendre'
       fullPath: '/comprendre'
       preLoaderRoute: typeof ComprendreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conditions-de-vente': {
+      id: '/conditions-de-vente'
+      path: '/conditions-de-vente'
+      fullPath: '/conditions-de-vente'
+      preLoaderRoute: typeof ConditionsDeVenteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/confidentialite': {
@@ -696,6 +716,7 @@ const rootRouteChildren: RootRouteChildren = {
   AteliersRoute: AteliersRoute,
   CollaborerRoute: CollaborerRoute,
   ComprendreRoute: ComprendreRoute,
+  ConditionsDeVenteRoute: ConditionsDeVenteRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
   JeuxRoute: JeuxRoute,
