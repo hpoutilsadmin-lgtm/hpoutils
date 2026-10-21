@@ -5,7 +5,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/livres-pdf")({
   head: () => createSeoHead({
     title: "PDF à télécharger : kits, guides et livres | HP — Québec",
-    description: "15 PDF à télécharger : collection Sans Honte, cuisine, organisation, famille. Petits prix, aucune taxe ajoutée.",
+    description: "20 PDF à télécharger : collection Sans Honte, cuisine, organisation, famille. Petits prix, aucune taxe ajoutée.",
     path: "/livres-pdf",
   }),
   component: Page,
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/livres-pdf")({
 type Kind = "PDF" | "Kit PDF" | "Collection PDF";
 
 const ITEMS: Array<{
-  cover: string;
+  cover?: string;
   title: string;
   desc: string;
   tag: Kind;
@@ -35,7 +35,12 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/kit-08.jpg", title: "Kit Sans Honte — Logement", desc: "Repères concrets autour du logement.", tag: "Kit PDF", slug: "sans-honte-logement", price: "5 $" },
   { cover: "/images/sans-honte/kit-09.jpg", title: "Kit Sans Honte — Proche Aidant", desc: "Tenir le rôle de proche aidant sans s'épuiser.", tag: "Kit PDF", slug: "sans-honte-proche-aidant", price: "5 $" },
   { cover: "/images/sans-honte/kit-10.jpg", title: "Kit Sans Honte — 72 Heures", desc: "Se préparer aux 72 premières heures d'une urgence.", tag: "Kit PDF", slug: "sans-honte-72-heures", price: "5 $" },
-  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — 10 kits", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… la collection complète.", tag: "Collection PDF", slug: "sans-honte-collection", price: "40 $" },
+  { cover: "/images/sans-honte/kit-11.jpg", title: "Testament Sans Honte — L'olographe sans erreur", desc: "Préparer un testament olographe au Québec, pas à pas.", tag: "Kit PDF", slug: "sans-honte-testament", price: "5 $" },
+  { cover: "/images/sans-honte/kit-12.jpg", title: "Papiers de mes parents Sans Honte", desc: "Organiser les papiers de ses parents, sans honte.", tag: "Kit PDF", slug: "sans-honte-papiers-parents", price: "5 $" },
+  { cover: "/images/sans-honte/kit-13.jpg", title: "Chalet Sans Honte — Les règles qui sauvent les Noëls", desc: "Des règles claires pour partager le chalet.", tag: "Kit PDF", slug: "sans-honte-chalet", price: "5 $" },
+  { cover: "/images/sans-honte/kit-14.jpg", title: "L'année québécoise Sans Honte", desc: "Des repères pour l'année québécoise.", tag: "Kit PDF", slug: "sans-honte-annee-quebecoise", price: "5 $" },
+  { cover: "/images/sans-honte/kit-15.jpg", title: "Héritage numérique Sans Honte", desc: "Préparer la transmission de son héritage numérique.", tag: "Kit PDF", slug: "sans-honte-heritage-numerique", price: "5 $" },
+  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — Choisis 10 kits parmi 15", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisis 10 kits parmi les 15.", tag: "Collection PDF", slug: "sans-honte-collection", price: "40 $" },
 ];
 
 function discoverLabel(tag: Kind): string {
@@ -63,7 +68,7 @@ function Page() {
             {ITEMS.map((b) => {
               return (
               <article key={b.title} className="library-item">
-                <PdfCover src={b.cover} alt={`Couverture ${b.title}`} />
+                {b.cover && <PdfCover src={b.cover} alt={`Couverture ${b.title}`} />}
                 <div className="library-meta"><span className="dot" />{b.tag} — {b.price} CAD, aucune taxe ajoutée</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
