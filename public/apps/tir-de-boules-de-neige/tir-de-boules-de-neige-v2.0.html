@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Tir de Boules de Neige — HP Outils</title>
+    <style>
+      :root{
+        --paper:#f7f0dc;
+        --paper-2:#efe4c8;
+        --ink:#22303e;
+        --ink-soft:#43536a;
+        --sky:#dcebf2;
+        --accent:#b3392e;
+        --accent-ink:#8c2a21;
+        --gold:#c98f1b;
+        --card:#fffaf0;
+        --line:#22303e;
+        --shadow:0 10px 24px rgba(34,48,62,.18);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --paper:#1d2733;
+          --paper-2:#16202b;
+          --ink:#f0e8d2;
+          --ink-soft:#c3cede;
+          --card:#26313f;
+          --line:#f0e8d2;
+          --shadow:0 10px 24px rgba(0,0,0,.45);
+        }
+      }
+      *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+      html,body{margin:0;padding:0;}
+      body{
+        font-family:ui-rounded,"Trebuchet MS","Segoe UI",system-ui,sans-serif;
+        background:
+          repeating-linear-gradient(0deg, transparent 0 26px, rgba(34,48,62,.045) 26px 27px),
+          var(--paper);
+        color:var(--ink);
+        min-height:100dvh;
+      }
+      .wrap{max-width:430px;margin:0 auto;padding:14px 12px 26px;}
+      header.top{text-align:center;margin:2px 0 10px;}
+      h1{
+        font-family:Georgia,"Times New Roman",serif;
+        font-size:30px;line-height:1.05;margin:0;
+        letter-spacing:.5px;text-transform:uppercase;
+      }
+      h1 .stamp{
+        display:inline-block;border:3px solid var(--ink);border-radius:6px;
+        padding:6px 12px 8px;background:var(--card);
+        box-shadow:3px 3px 0 var(--ink);
+        transform:rotate(-1.2deg);
+      }
+      .tagline{margin:9px 0 0;font-size:15px;color:var(--ink-soft);font-weight:600;}
+      .hud{
+        display:flex;gap:8px;align-items:stretch;margin:10px 0;
+      }
+      .hud .cell{
+        flex:1;background:var(--card);border:2.5px solid var(--line);border-radius:10px;
+        padding:6px 8px;text-align:center;box-shadow:2px 2px 0 var(--line);
+      }
+      .hud .lab{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+      .hud .val{font-size:19px;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums;}
+      .balls-dots{display:flex;gap:4px;justify-content:center;padding-top:3px;min-height:16px;}
+      .balls-dots i{width:13px;height:13px;border-radius:50%;background:#fff;border:2px solid var(--ink);display:block;}
+      .balls-dots i.used{background:transparent;border-style:dashed;opacity:.45;}
+      .icon-btn{
+        align-self:center;width:48px;height:48px;flex:0 0 48px;border-radius:10px;
+        border:2.5px solid var(--line);background:var(--card);box-shadow:2px 2px 0 var(--line);
+        display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+      }
+      .icon-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--line);}
+      .icon-btn svg{width:26px;height:26px;fill:var(--ink);}
+      .icon-btn .slash{display:none;}
+      .icon-btn.muted .slash{display:block;}
+      .icon-btn.muted .waves{display:none;}
+
+      .stage-frame{
+        border:3.5px solid var(--line);border-radius:14px;background:var(--sky);
+        box-shadow:var(--shadow), inset 0 0 0 3px var(--card), inset 0 0 0 6px var(--line);
+        padding:6px;position:relative;
+      }
+      .stage{position:relative;border-radius:8px;overflow:hidden;background:#dcebf2;}
+      canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab;}
+      canvas:active{cursor:grabbing;}
+      .mascot{
+        position:absolute;left:2px;bottom:0;width:74px;height:auto;pointer-events:none;z-index:3;
+        filter:drop-shadow(1px 2px 0 rgba(34,48,62,.25));
+      }
+      .hint{
+        text-align:center;font-weight:800;font-size:15px;margin:10px 4px 0;color:var(--ink);
+      }
+      .hint small{display:block;font-weight:600;color:var(--ink-soft);font-size:12.5px;margin-top:2px;}
+
+      .overlay{
+        position:absolute;inset:0;z-index:5;display:none;
+        align-items:center;justify-content:center;padding:12px;
+        background:rgba(247,240,220,.93);
+        overflow-y:auto;
+      }
+      .overlay.show{display:flex;}
+      .panel{
+        width:100%;max-width:340px;background:var(--card);color:#22303e;
+        border:3px solid #22303e;border-radius:12px;box-shadow:4px 4px 0 #22303e;
+        padding:16px 16px 14px;text-align:center;position:relative;
+        margin:auto;
+      }
+      /* Panneau de départ compact : tout doit tenir dans la scène, même à 390 px */
+      #ovMenu .panel{padding:12px 14px 10px;max-height:100%;overflow-y:auto;}
+      #ovMenu .panel h2{font-size:21px;margin:0 0 4px;}
+      #ovMenu .panel p{font-size:13.5px;margin:4px 0;line-height:1.4;}
+      #ovMenu .btn{min-height:48px;margin-top:8px;font-size:17px;}
+      /* 50 niveaux : la grille défile dans le panneau, aucun bouton n'est tronqué */
+      #ovMenu .levels-grid{gap:6px;margin:9px 0 0;max-height:158px;overflow-y:auto;padding:3px 2px;}
+      #ovMenu .lvl{min-height:40px;font-size:15px;}
+      #menuProgress{font-weight:800;color:var(--accent-ink);}
+      #ovMenu .mini-mascot{width:56px;}
+      #ovMenu .reset-link{margin-top:6px;padding:4px;}
+      .panel::before{
+        content:"";position:absolute;inset:5px;border:1.5px solid rgba(34,48,62,.4);
+        border-radius:8px;pointer-events:none;
+      }
+      .panel h2{
+        font-family:Georgia,"Times New Roman",serif;text-transform:uppercase;
+        font-size:24px;margin:2px 0 6px;letter-spacing:.4px;
+      }
+      .panel p{margin:6px 0;font-size:15px;line-height:1.45;}
+      .panel .big-score{font-size:34px;font-weight:900;margin:4px 0 0;font-variant-numeric:tabular-nums;}
+      .flakes{font-size:30px;letter-spacing:6px;margin:2px 0 4px;color:#7fb2cc;line-height:1;}
+      .flakes .off{color:#d8d2bd;}
+      .btn{
+        display:block;width:100%;min-height:54px;margin-top:10px;
+        font-family:inherit;font-size:18px;font-weight:900;letter-spacing:.02em;
+        border:3px solid #22303e;border-radius:12px;cursor:pointer;
+        background:#fff;color:#22303e;box-shadow:3px 3px 0 #22303e;padding:10px 14px;
+      }
+      .btn:active{transform:translate(3px,3px);box-shadow:0 0 0 #22303e;}
+      .btn.primary{background:var(--accent);color:#fff;border-color:#5f1a13;box-shadow:3px 3px 0 #5f1a13;}
+      .btn.primary:active{box-shadow:0 0 0 #5f1a13;}
+      .btn.gold{background:#e9b83a;border-color:#7a5a08;box-shadow:3px 3px 0 #7a5a08;}
+      .btn.gold:active{box-shadow:0 0 0 #7a5a08;}
+      .btn.small{min-height:46px;font-size:15px;}
+      .levels-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0 2px;}
+      .lvl{
+        min-height:48px;border:2.5px solid #22303e;border-radius:10px;background:#fff;
+        font-family:inherit;font-size:17px;font-weight:900;color:#22303e;cursor:pointer;
+        box-shadow:2px 2px 0 #22303e;padding:4px 0 2px;line-height:1.1;
+      }
+      .lvl:active{transform:translate(2px,2px);box-shadow:0 0 0 #22303e;}
+      .lvl:disabled{opacity:.38;cursor:default;box-shadow:none;transform:none;}
+      .lvl .lf{display:block;font-size:11px;color:#7fb2cc;letter-spacing:1px;}
+      .mini-mascot{width:86px;height:auto;margin:0 auto 2px;display:block;}
+      .reset-link{
+        background:none;border:none;font-family:inherit;font-size:12.5px;font-weight:700;
+        color:#8a6d1f;text-decoration:underline;cursor:pointer;margin-top:12px;padding:6px;
+      }
+      footer.sig{
+        text-align:center;margin-top:16px;font-family:Georgia,serif;font-weight:700;
+        letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--ink-soft);
+      }
+      footer.sig b{color:var(--ink);}
+      .howto{
+        margin-top:12px;background:var(--card);border:2.5px solid var(--line);border-radius:12px;
+        box-shadow:2px 2px 0 var(--line);padding:12px 14px;font-size:14px;line-height:1.5;
+      }
+      .howto h3{margin:0 0 4px;font-size:14px;text-transform:uppercase;letter-spacing:.07em;}
+      .howto ul{margin:4px 0 0;padding-left:18px;}
+      @media (max-width:360px){ h1{font-size:25px;} .panel h2{font-size:21px;} }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="top">
+        <h1><span class="stamp">Tir de boules<br />de neige</span></h1>
+        <p class="tagline">Vise, tire, relâche… et fais tomber les cibles d’hiver&nbsp;!</p>
+      </header>
+
+      <div class="hud" aria-live="polite">
+        <div class="cell">
+          <div class="lab">Niveau</div>
+          <div class="val" id="hudLevel">1 / 50</div>
+        </div>
+        <div class="cell">
+          <div class="lab">Boules</div>
+          <div class="balls-dots" id="hudBalls"></div>
+        </div>
+        <div class="cell">
+          <div class="lab">Points</div>
+          <div class="val" id="hudScore">0</div>
+        </div>
+        <button class="icon-btn" id="muteBtn" type="button" aria-label="Activer ou couper le son">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 9v6h4l5 4V5L7 9H3z"/>
+            <path class="waves" d="M16 8.8a4.4 4.4 0 0 1 0 6.4l-1.4-1.4a2.5 2.5 0 0 0 0-3.6L16 8.8zm2.5-3a8 8 0 0 1 0 12.4l-1.4-1.4a6.1 6.1 0 0 0 0-9.6l1.4-1.4z"/>
+            <path class="slash" d="M16.6 9.6l5 5m0-5l-5 5" stroke="#b3392e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="stage-frame">
+        <div class="stage" id="stage">
+          <canvas id="game" width="780" height="1080" aria-label="Zone de jeu : glisse ton doigt pour viser et relâche pour lancer la boule de neige"></canvas>
+
+          <!-- Mascotte HP binoclard, dessinée en SVG, près du lanceur -->
+          <svg class="mascot" viewBox="0 0 100 118" aria-hidden="true">
+            <ellipse cx="50" cy="112" rx="34" ry="5" fill="rgba(34,48,62,.18)"/>
+            <path d="M22 108c0-16 8-26 14-30h28c6 4 14 14 14 30z" fill="#b3392e" stroke="#22303e" stroke-width="3.5"/>
+            <path d="M30 88l14 10M70 88L56 98" stroke="#7e271e" stroke-width="2.4"/>
+            <path d="M36 78h28" stroke="#22303e" stroke-width="3"/>
+            <circle cx="50" cy="52" r="27" fill="#f3d9b8" stroke="#22303e" stroke-width="3.5"/>
+            <path d="M24 46c2-16 12-24 26-24s24 8 26 24c-8-7-14-9-26-9s-18 2-26 9z" fill="#3f6186" stroke="#22303e" stroke-width="3.5"/>
+            <rect x="22" y="34" width="56" height="7" rx="3.5" fill="#3f6186" stroke="#22303e" stroke-width="3"/>
+            <circle cx="50" cy="22" r="6" fill="#e9b83a" stroke="#22303e" stroke-width="3"/>
+            <circle cx="39" cy="53" r="10.5" fill="rgba(255,255,255,.28)" stroke="#22303e" stroke-width="3.2"/>
+            <circle cx="61" cy="53" r="10.5" fill="rgba(255,255,255,.28)" stroke="#22303e" stroke-width="3.2"/>
+            <path d="M49.5 53h1M29 50l-5-2M71 50l5-2" stroke="#22303e" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="39" cy="54" r="2.4" fill="#22303e"/>
+            <circle cx="61" cy="54" r="2.4" fill="#22303e"/>
+            <path d="M47 60q3 2.4 6 0" stroke="#22303e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <path d="M40 68q10 7 20 0" stroke="#22303e" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <path d="M31 63q-3 1-4 4M69 63q3 1 4 4" stroke="#d98d6a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <path d="M14 96q-8-2-9-10" stroke="#22303e" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M86 92q9-6 7-16" stroke="#22303e" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <circle cx="93" cy="72" r="8" fill="#fff" stroke="#22303e" stroke-width="3"/>
+          </svg>
+
+          <!-- Écran de départ -->
+          <div class="overlay show" id="ovMenu">
+            <div class="panel">
+              <svg class="mini-mascot" viewBox="0 0 100 118" aria-hidden="true">
+                <path d="M22 108c0-16 8-26 14-30h28c6 4 14 14 14 30z" fill="#b3392e" stroke="#22303e" stroke-width="3.5"/>
+                <circle cx="50" cy="52" r="27" fill="#f3d9b8" stroke="#22303e" stroke-width="3.5"/>
+                <path d="M24 46c2-16 12-24 26-24s24 8 26 24c-8-7-14-9-26-9s-18 2-26 9z" fill="#3f6186" stroke="#22303e" stroke-width="3.5"/>
+                <rect x="22" y="34" width="56" height="7" rx="3.5" fill="#3f6186" stroke="#22303e" stroke-width="3"/>
+                <circle cx="50" cy="22" r="6" fill="#e9b83a" stroke="#22303e" stroke-width="3"/>
+                <circle cx="39" cy="53" r="10.5" fill="rgba(255,255,255,.28)" stroke="#22303e" stroke-width="3.2"/>
+                <circle cx="61" cy="53" r="10.5" fill="rgba(255,255,255,.28)" stroke="#22303e" stroke-width="3.2"/>
+                <circle cx="39" cy="54" r="2.4" fill="#22303e"/>
+                <circle cx="61" cy="54" r="2.4" fill="#22303e"/>
+                <path d="M40 68q10 7 20 0" stroke="#22303e" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+                <circle cx="93" cy="72" r="8" fill="#fff" stroke="#22303e" stroke-width="3"/>
+                <path d="M86 92q9-6 7-16" stroke="#22303e" stroke-width="6" fill="none" stroke-linecap="round"/>
+              </svg>
+              <h2>Prêt à lancer&nbsp;?</h2>
+              <p><strong>Glisse ton doigt</strong> vers l’arrière pour viser — la trajectoire en pointillés apparaît — puis <strong>relâche</strong> pour lancer&nbsp;!</p>
+              <p>Touche toutes les cibles avant de manquer de boules. Plus il t’en reste, plus tu gagnes de flocons&nbsp;!</p>
+              <button class="btn primary" id="btnPlay" type="button">Jouer</button>
+              <div class="levels-grid" id="levelsGrid" aria-label="Choisir un niveau"></div>
+              <p id="menuProgress"></p>
+              <p id="menuBest" style="font-weight:800;margin-top:8px;"></p>
+              <button class="reset-link" id="btnReset" type="button">Réinitialiser la progression</button>
+            </div>
+          </div>
+
+          <!-- Niveau réussi -->
+          <div class="overlay" id="ovWin">
+            <div class="panel">
+              <h2 id="winTitle">Niveau réussi&nbsp;!</h2>
+              <div class="flakes" id="winFlakes">❄❄❄</div>
+              <p style="margin-bottom:0;">Ton score</p>
+              <div class="big-score" id="winScore">0</div>
+              <p id="winMsg"></p>
+              <button class="btn primary" id="btnNext" type="button">Niveau suivant</button>
+              <button class="btn" id="btnReplayWin" type="button">Rejouer ce niveau</button>
+              <button class="btn small" id="btnMenuWin" type="button">Choisir un niveau</button>
+            </div>
+          </div>
+
+          <!-- Niveau échoué -->
+          <div class="overlay" id="ovLose">
+            <div class="panel">
+              <h2>Plus de boules&nbsp;!</h2>
+              <p id="loseMsg">Il reste des cibles debout. Ajuste ta visée et réessaie — tu vas l’avoir&nbsp;!</p>
+              <button class="btn primary" id="btnRetry" type="button">Réessayer</button>
+              <button class="btn small" id="btnMenuLose" type="button">Choisir un niveau</button>
+            </div>
+          </div>
+
+          <!-- Fin des 50 niveaux -->
+          <div class="overlay" id="ovEnd">
+            <div class="panel">
+              <h2>Bravo, champion&nbsp;!</h2>
+              <div class="flakes" id="endFlakes">❄</div>
+              <p>Tu as terminé les 50 niveaux&nbsp;!</p>
+              <p style="margin-bottom:0;">Score total de la partie</p>
+              <div class="big-score" id="endScore">0</div>
+              <p id="endBest"></p>
+              <button class="btn gold" id="btnAgain" type="button">Recommencer au niveau 1</button>
+              <button class="btn small" id="btnMenuEnd" type="button">Choisir un niveau</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="hint">Tire vers l’arrière, vise avec les pointillés, relâche&nbsp;!
+        <small>Les cibles bougent dans les derniers niveaux… et le vent se lève&nbsp;!</small>
+      </p>
+
+      <div class="howto">
+        <h3>Les cibles et leurs points</h3>
+        <ul>
+          <li><strong>Cible ronde</strong> — 100 points</li>
+          <li><strong>Cloche dorée</strong> — 150 points</li>
+          <li><strong>Canard de neige</strong> — 200 points</li>
+          <li><strong>Bonhomme de neige</strong> — 250 points</li>
+        </ul>
+      </div>
+
+      <footer class="sig">Une création <b>HP Outils</b> — des outils pour la vraie vie</footer>
+    </div>
+
+    <script>
+    (function(){
+      "use strict";
+      // ---------- Constantes du terrain ----------
+      var W = 390, H = 540;
+      var GROUND = 492;              // haut du banc de neige
+      var LAUNCH = { x: 118, y: 428 };// point de départ des boules
+      var GRAV = 1050;               // gravité px/s²
+      var MAXPULL = 118;             // tir maximal
+      var POWER = 8.6;               // multiplicateur de force
+
+      var canvas = document.getElementById('game');
+      var ctx = canvas.getContext('2d');
+      // Le canvas est déclaré à 2x (780x1080) pour un rendu net ; on dessine en 390x540.
+      ctx.scale(2,2);
+
+      var INK = '#22303e';
+
+      // ---------- Sauvegarde locale ----------
+      var SAVE_KEY = 'tir-boules-de-neige-v1';
+      var save = { unlocked: 1, current: 0, best: {}, flakes: {}, totalBest: 0, muted: false };
+      try {
+        var raw = localStorage.getItem(SAVE_KEY);
+        if (raw) { var p = JSON.parse(raw); if (p && typeof p === 'object') save = Object.assign(save, p); }
+      } catch(e) {}
+      function persist(){
+        try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch(e) {}
+      }
+
+      // ---------- Son (WebAudio, généré en code) ----------
+      var actx = null;
+      function audio(){
+        if (save.muted) return null;
+        try {
+          if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+          if (actx.state === 'suspended') actx.resume();
+          return actx;
+        } catch(e) { return null; }
+      }
+      function tone(freq, dur, type, vol, slideTo, delay){
+        var a = audio(); if (!a) return;
+        var t0 = a.currentTime + (delay || 0);
+        var o = a.createOscillator(), g = a.createGain();
+        o.type = type || 'sine';
+        o.frequency.setValueAtTime(freq, t0);
+        if (slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(30, slideTo), t0 + dur);
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(vol || 0.16, t0 + 0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        o.connect(g); g.connect(a.destination);
+        o.start(t0); o.stop(t0 + dur + 0.05);
+      }
+      function sndLaunch(){ tone(520, 0.18, 'sine', 0.10, 150); }
+      function sndHit(points){
+        tone(300, 0.10, 'square', 0.10, 620);
+        tone(880, 0.16, 'sine', 0.14, 1320, 0.05);
+        if (points >= 200) tone(1320, 0.2, 'sine', 0.12, 1760, 0.12);
+      }
+      function sndThud(){ tone(140, 0.12, 'sine', 0.10, 70); }
+      function sndWin(){ tone(523,0.14,'triangle',0.16); tone(659,0.14,'triangle',0.16,null,0.12); tone(784,0.22,'triangle',0.18,null,0.24); tone(1046,0.3,'triangle',0.14,null,0.36); }
+      function sndLose(){ tone(330,0.2,'triangle',0.14,262); tone(262,0.3,'triangle',0.14,196,0.18); }
+
+      var muteBtn = document.getElementById('muteBtn');
+      function refreshMute(){ muteBtn.classList.toggle('muted', !!save.muted); }
+      muteBtn.addEventListener('click', function(){
+        save.muted = !save.muted; persist(); refreshMute();
+        if (!save.muted) tone(660, 0.1, 'sine', 0.12);
+      });
+      refreshMute();
+
+      // ---------- Niveaux (50) ----------
+      // Types : target(100) bell(150) duck(200) snowman(250)
+      // move: {axis:'x'|'y', range, speed} — mouvement doux
+      // Difficulté progressive : plus de cibles, mouvements plus tôt et plus rapides,
+      // vent plus fréquent et plus fort, boules plus serrées en fin de parcours.
+      function T(x, y, type, stand, move){
+        var t = { x: x, y: y, type: type, stand: stand };
+        if (move) t.move = move;
+        return t;
+      }
+      function MV(axis, range, speed){ return { axis: axis, range: range, speed: speed }; }
+      function L(balls, wind, targets){ return { balls: balls, wind: wind, targets: targets }; }
+      var LEVELS = [
+        L(3, 0,     [ T(268,300,'target','branch'), T(322,404,'snowman','snow') ]),
+        L(4, 0,     [ T(238,190,'bell','branch'), T(330,300,'target','branch'), T(282,420,'duck','snow') ]),
+        L(4, 0,     [ T(216,356,'target','snow'), T(300,244,'duck','branch'), T(344,408,'snowman','snow') ]),
+        L(5, 0,     [ T(226,168,'target','branch'), T(292,286,'bell','branch'), T(344,180,'duck','branch'), T(306,416,'snowman','snow') ]),
+        L(5, 0.6,   [ T(246,300,'duck','branch'), T(326,196,'target','branch'), T(286,414,'bell','snow'), T(350,356,'snowman','snow') ]),
+        L(5, 0,     [ T(252,210,'target','branch',MV('y',26,1.1)), T(322,330,'duck','branch'), T(282,424,'snowman','snow'), T(350,150,'bell','branch') ]),
+        L(6, -0.7,  [ T(232,320,'bell','snow'), T(300,208,'target','branch',MV('x',22,1.0)), T(344,330,'duck','branch'), T(268,428,'snowman','snow') ]),
+        L(6, 0,     [ T(224,176,'duck','branch',MV('y',30,1.3)), T(296,268,'snowman','branch'), T(350,168,'target','branch',MV('y',22,0.9)), T(312,420,'bell','snow'), T(246,398,'target','snow') ]),
+        L(6, 1.0,   [ T(238,250,'target','branch',MV('x',26,1.2)), T(318,150,'bell','branch'), T(344,300,'duck','branch',MV('y',24,1.15)), T(272,420,'snowman','snow'), T(210,356,'duck','snow') ]),
+        L(7, -1.1,  [ T(226,150,'bell','branch',MV('y',24,1.25)), T(292,238,'duck','branch',MV('x',24,1.1)), T(350,140,'target','branch',MV('y',28,1.4)), T(330,356,'snowman','snow'), T(252,424,'snowman','snow'), T(206,300,'target','branch') ]),
+        L(6, 0,     [ T(240,170,'target','branch'), T(318,232,'duck','branch'), T(282,330,'bell','branch'), T(348,410,'snowman','snow'), T(214,404,'target','snow') ]),
+        L(6, 0.8,   [ T(226,286,'bell','branch',MV('y',24,1.2)), T(300,168,'target','branch'), T(344,268,'duck','branch'), T(262,420,'snowman','snow'), T(330,404,'target','snow') ]),
+        L(6, 0,     [ T(210,180,'duck','branch',MV('y',28,1.3)), T(286,140,'bell','branch'), T(348,220,'target','branch'), T(252,318,'snowman','branch'), T(312,424,'snowman','snow') ]),
+        L(7, -0.9,  [ T(238,214,'target','branch',MV('x',24,1.2)), T(322,150,'duck','branch'), T(350,318,'bell','branch'), T(276,352,'snowman','branch'), T(222,420,'target','snow'), T(330,428,'snowman','snow') ]),
+        L(7, 0,     [ T(216,150,'bell','branch',MV('y',26,1.35)), T(292,206,'target','branch'), T(350,140,'duck','branch',MV('y',22,1.1)), T(258,300,'snowman','branch'), T(318,344,'bell','branch'), T(282,422,'snowman','snow') ]),
+        L(7, 1.2,   [ T(232,262,'duck','branch',MV('x',26,1.3)), T(306,164,'target','branch'), T(348,252,'bell','branch',MV('y',26,1.4)), T(214,368,'target','snow'), T(296,414,'snowman','snow'), T(344,398,'duck','snow') ]),
+        L(7, 0,     [ T(206,232,'target','branch',MV('y',30,1.4)), T(272,150,'snowman','branch'), T(336,196,'duck','branch',MV('x',22,1.2)), T(300,300,'bell','branch'), T(238,392,'bell','snow'), T(330,424,'snowman','snow') ]),
+        L(8, -1.3,  [ T(246,140,'duck','branch',MV('y',24,1.45)), T(324,208,'target','branch'), T(212,318,'bell','branch'), T(292,286,'snowman','branch',MV('x',24,1.3)), T(352,360,'target','branch'), T(262,428,'snowman','snow') ]),
+        L(8, 0.6,   [ T(220,168,'bell','branch'), T(296,132,'target','branch',MV('y',28,1.5)), T(350,232,'duck','branch'), T(262,262,'snowman','branch',MV('x',26,1.35)), T(318,352,'bell','branch'), T(232,414,'duck','snow') ]),
+        L(8, -0.8,  [ T(210,140,'target','branch',MV('y',26,1.5)), T(282,186,'duck','branch'), T(346,148,'bell','branch',MV('x',22,1.3)), T(244,292,'snowman','branch'), T(322,282,'target','branch',MV('y',24,1.4)), T(272,392,'bell','snow'), T(338,420,'snowman','snow') ]),
+        L(7, 1.4,   [ T(228,196,'duck','branch',MV('x',28,1.5)), T(310,142,'bell','branch'), T(350,262,'target','branch',MV('y',26,1.5)), T(258,318,'snowman','branch'), T(214,408,'target','snow'), T(322,416,'snowman','snow') ]),
+        L(7, 0,     [ T(214,158,'snowman','branch',MV('y',30,1.55)), T(290,222,'target','branch'), T(344,160,'duck','branch',MV('y',24,1.3)), T(320,318,'bell','branch',MV('x',24,1.45)), T(246,352,'target','branch'), T(288,426,'snowman','snow') ]),
+        L(8, -1.5,  [ T(236,132,'bell','branch'), T(312,180,'duck','branch',MV('x',26,1.5)), T(350,300,'target','branch'), T(206,262,'target','branch',MV('y',28,1.5)), T(276,300,'snowman','branch'), T(232,410,'duck','snow'), T(330,428,'snowman','snow') ]),
+        L(8, 1.0,   [ T(222,214,'duck','branch',MV('y',28,1.6)), T(298,148,'target','branch',MV('x',24,1.4)), T(348,214,'bell','branch'), T(262,286,'snowman','branch'), T(318,340,'duck','branch',MV('y',22,1.5)), T(208,380,'target','snow'), T(292,420,'snowman','snow') ]),
+        L(8, -1.2,  [ T(246,158,'target','branch'), T(326,132,'snowman','branch',MV('y',26,1.6)), T(212,300,'bell','branch',MV('x',24,1.5)), T(288,244,'duck','branch'), T(350,330,'target','branch',MV('y',26,1.55)), T(256,404,'bell','snow'), T(334,414,'snowman','snow') ]),
+        L(8, 0,     [ T(208,176,'bell','branch',MV('x',26,1.6)), T(278,128,'duck','branch'), T(342,186,'target','branch',MV('y',28,1.5)), T(302,272,'snowman','branch',MV('x',22,1.45)), T(238,320,'target','branch'), T(322,392,'duck','snow'), T(252,428,'snowman','snow') ]),
+        L(8, 1.6,   [ T(232,148,'duck','branch',MV('y',30,1.65)), T(314,206,'bell','branch'), T(350,138,'target','branch',MV('x',18,1.5)), T(268,282,'snowman','branch',MV('y',24,1.6)), T(212,344,'target','branch'), T(300,398,'bell','snow'), T(352,424,'snowman','snow') ]),
+        L(8, -1.0,  [ T(218,238,'target','branch',MV('x',28,1.6)), T(296,160,'duck','branch',MV('y',26,1.55)), T(344,268,'snowman','branch'), T(252,330,'bell','branch',MV('y',24,1.5)), T(318,352,'target','branch'), T(226,416,'snowman','snow'), T(338,408,'duck','snow') ]),
+        L(8, 1.3,   [ T(240,180,'snowman','branch',MV('x',26,1.7)), T(318,140,'bell','branch',MV('y',26,1.6)), T(206,300,'duck','branch'), T(284,268,'target','branch',MV('y',28,1.6)), T(350,318,'snowman','branch'), T(262,398,'target','snow'), T(330,430,'snowman','snow') ]),
+        L(9, -1.6,  [ T(208,142,'bell','branch',MV('y',28,1.7)), T(276,196,'duck','branch'), T(342,150,'target','branch',MV('x',24,1.55)), T(240,282,'snowman','branch',MV('y',24,1.65)), T(316,286,'bell','branch'), T(350,368,'duck','branch',MV('y',22,1.5)), T(228,404,'target','snow'), T(312,424,'snowman','snow') ]),
+        L(8, -1.4,  [ T(226,164,'target','branch',MV('x',28,1.7)), T(304,128,'snowman','branch',MV('y',28,1.65)), T(348,224,'duck','branch'), T(262,256,'bell','branch',MV('y',26,1.6)), T(212,330,'snowman','branch'), T(318,344,'target','branch',MV('x',24,1.6)), T(282,420,'snowman','snow') ]),
+        L(8, 1.7,   [ T(214,196,'duck','branch',MV('y',30,1.75)), T(288,150,'bell','branch'), T(344,170,'target','branch',MV('y',26,1.6)), T(300,262,'snowman','branch',MV('x',26,1.7)), T(238,312,'target','branch'), T(330,398,'bell','snow'), T(258,428,'snowman','snow') ]),
+        L(9, 0,     [ T(206,150,'target','branch',MV('y',26,1.7)), T(272,214,'duck','branch',MV('x',26,1.65)), T(338,138,'bell','branch'), T(312,258,'snowman','branch',MV('y',26,1.7)), T(238,296,'bell','branch'), T(352,330,'target','branch',MV('y',24,1.6)), T(272,404,'duck','snow'), T(338,428,'snowman','snow') ]),
+        L(9, -1.7,  [ T(232,138,'snowman','branch',MV('x',28,1.8)), T(310,184,'target','branch',MV('y',28,1.7)), T(350,290,'duck','branch'), T(214,262,'bell','branch',MV('y',26,1.65)), T(282,318,'snowman','branch'), T(330,368,'bell','branch',MV('x',22,1.6)), T(240,414,'target','snow'), T(322,430,'snowman','snow') ]),
+        L(9, 1.5,   [ T(220,172,'duck','branch',MV('y',30,1.8)), T(294,132,'target','branch'), T(348,196,'bell','branch',MV('x',20,1.7)), T(258,252,'snowman','branch',MV('y',24,1.75)), T(322,300,'duck','branch'), T(206,338,'target','branch',MV('x',24,1.65)), T(288,402,'bell','snow'), T(346,424,'snowman','snow') ]),
+        L(9, -1.1,  [ T(208,214,'bell','branch',MV('x',28,1.8)), T(280,146,'duck','branch',MV('y',28,1.75)), T(340,222,'snowman','branch'), T(246,286,'target','branch',MV('y',26,1.7)), T(314,330,'bell','branch',MV('x',24,1.7)), T(352,392,'target','snow'), T(224,398,'duck','snow'), T(292,430,'snowman','snow') ]),
+        L(9, 1.8,   [ T(238,150,'target','branch',MV('y',30,1.85)), T(316,206,'duck','branch',MV('x',26,1.75)), T(350,132,'bell','branch',MV('y',24,1.7)), T(268,272,'snowman','branch'), T(212,308,'bell','branch',MV('y',26,1.75)), T(322,330,'target','branch',MV('x',24,1.7)), T(252,410,'snowman','snow'), T(334,416,'duck','snow') ]),
+        L(9, 0,     [ T(214,138,'snowman','branch',MV('x',28,1.85)), T(288,190,'bell','branch',MV('y',28,1.8)), T(346,158,'duck','branch'), T(300,278,'target','branch',MV('x',26,1.75)), T(232,268,'duck','branch',MV('y',26,1.8)), T(348,322,'snowman','branch'), T(268,398,'target','snow'), T(330,428,'snowman','snow') ]),
+        L(9, -1.8,  [ T(226,186,'duck','branch',MV('y',30,1.9)), T(306,140,'target','branch',MV('x',26,1.8)), T(350,240,'bell','branch',MV('y',26,1.8)), T(256,300,'snowman','branch',MV('x',24,1.75)), T(318,318,'duck','branch'), T(208,352,'target','branch',MV('y',24,1.7)), T(286,410,'bell','snow'), T(344,430,'snowman','snow') ]),
+        L(10, 1.2,  [ T(206,146,'bell','branch',MV('y',28,1.9)), T(270,200,'duck','branch'), T(336,144,'target','branch',MV('x',26,1.85)), T(304,262,'snowman','branch',MV('y',26,1.8)), T(234,272,'bell','branch',MV('x',24,1.8)), T(350,318,'duck','branch',MV('y',24,1.75)), T(262,352,'target','branch'), T(220,416,'snowman','snow'), T(322,424,'snowman','snow') ]),
+        L(9, -1.5,  [ T(218,160,'target','branch',MV('x',30,1.95)), T(292,128,'duck','branch',MV('y',28,1.85)), T(346,200,'snowman','branch'), T(252,248,'bell','branch',MV('y',28,1.85)), T(316,296,'target','branch',MV('x',26,1.8)), T(206,330,'duck','branch',MV('y',24,1.8)), T(282,404,'bell','snow'), T(340,428,'snowman','snow') ]),
+        L(9, 1.9,   [ T(230,142,'bell','branch',MV('y',32,1.95)), T(308,192,'duck','branch',MV('x',28,1.9)), T(350,300,'target','branch',MV('y',26,1.85)), T(264,268,'snowman','branch'), T(212,300,'bell','branch',MV('x',26,1.85)), T(322,352,'duck','branch',MV('y',24,1.8)), T(246,420,'snowman','snow'), T(332,404,'target','snow') ]),
+        L(10, 0,    [ T(208,168,'duck','branch',MV('y',30,1.95)), T(276,132,'snowman','branch',MV('x',28,1.9)), T(340,176,'bell','branch',MV('y',26,1.85)), T(300,246,'target','branch'), T(232,262,'bell','branch',MV('x',26,1.9)), T(348,306,'duck','branch',MV('y',26,1.85)), T(268,330,'snowman','branch',MV('x',22,1.8)), T(224,408,'target','snow'), T(318,428,'snowman','snow') ]),
+        L(10, -1.9, [ T(222,148,'target','branch',MV('x',30,2.0)), T(296,196,'duck','branch',MV('y',28,1.9)), T(348,140,'bell','branch',MV('x',24,1.85)), T(258,282,'snowman','branch',MV('y',28,1.9)), T(320,290,'target','branch'), T(206,318,'duck','branch',MV('y',26,1.85)), T(288,368,'bell','branch',MV('x',24,1.85)), T(240,424,'snowman','snow'), T(334,420,'snowman','snow') ]),
+        L(10, 1.6,  [ T(212,190,'bell','branch',MV('y',32,2.0)), T(284,144,'duck','branch',MV('x',28,1.95)), T(344,206,'target','branch',MV('y',26,1.9)), T(246,268,'snowman','branch',MV('x',26,1.9)), T(314,322,'bell','branch'), T(350,368,'duck','branch',MV('y',24,1.85)), T(222,360,'target','branch',MV('y',22,1.8)), T(278,416,'snowman','snow'), T(338,432,'snowman','snow') ]),
+        L(10, -1.3, [ T(226,134,'duck','branch',MV('x',30,2.05)), T(302,178,'bell','branch',MV('y',30,1.95)), T(344,150,'target','branch',MV('x',22,1.9)), T(262,254,'snowman','branch',MV('y',26,1.95)), T(318,300,'duck','branch',MV('x',24,1.9)), T(208,296,'bell','branch',MV('y',26,1.9)), T(282,356,'target','branch'), T(238,410,'duck','snow'), T(326,428,'snowman','snow') ]),
+        L(10, 2.0,  [ T(216,156,'target','branch',MV('y',32,2.05)), T(288,208,'duck','branch',MV('x',28,1.95)), T(344,160,'snowman','branch',MV('y',28,1.95)), T(252,290,'bell','branch',MV('x',26,1.95)), T(320,330,'target','branch',MV('y',24,1.9)), T(206,344,'duck','branch',MV('y',26,1.9)), T(348,398,'bell','snow'), T(272,424,'snowman','snow'), T(222,428,'target','snow') ]),
+        L(10, -2.0, [ T(232,170,'snowman','branch',MV('x',30,2.1)), T(310,138,'duck','branch',MV('y',30,2.0)), T(350,232,'bell','branch',MV('x',20,1.95)), T(266,246,'target','branch',MV('y',28,2.0)), T(214,282,'duck','branch',MV('x',26,1.95)), T(322,318,'snowman','branch'), T(282,368,'bell','branch',MV('y',24,1.9)), T(240,418,'target','snow'), T(330,430,'snowman','snow') ]),
+        L(10, 1.4,  [ T(206,142,'bell','branch',MV('y',30,2.1)), T(272,192,'duck','branch',MV('x',28,2.0)), T(338,148,'target','branch',MV('y',28,2.0)), T(304,252,'snowman','branch',MV('x',26,1.95)), T(236,258,'bell','branch',MV('y',26,2.0)), T(350,300,'duck','branch',MV('y',26,1.95)), T(268,322,'target','branch',MV('x',24,1.95)), T(292,412,'bell','snow'), T(344,430,'snowman','snow') ]),
+        L(10, -1.7, [ T(214,150,'duck','branch',MV('y',32,2.1)), T(284,132,'bell','branch',MV('x',30,2.05)), T(346,178,'snowman','branch',MV('y',28,2.0)), T(310,248,'duck','branch',MV('x',26,2.0)), T(240,238,'target','branch',MV('y',28,2.05)), T(350,296,'bell','branch',MV('x',20,1.95)), T(268,308,'snowman','branch'), T(300,398,'duck','snow'), T(238,426,'snowman','snow') ])
+      ];
+
+      var POINTS = { target: 100, bell: 150, duck: 200, snowman: 250 };
+      var RADIUS = { target: 21, bell: 17, duck: 22, snowman: 24 };
+
+      // ---------- État du jeu ----------
+      var state = 'menu'; // menu | playing | won | lost | end
+      var levelIdx = 0;
+      var targets = [];
+      var ballsLeft = 0;
+      var levelScore = 0;
+      var runTotal = 0;
+      var ball = null;              // {x,y,vx,vy,active}
+      var aiming = false, aimDX = 0, aimDY = 0;
+      var particles = [];
+      var floaters = [];
+      var windPhase = Math.random() * 10;
+      var snowflakesBg = [];
+      for (var i = 0; i < 42; i++) snowflakesBg.push({ x: Math.random()*W, y: Math.random()*H, r: 1 + Math.random()*2.2, s: 12 + Math.random()*22, drift: Math.random()*Math.PI*2 });
+
+      var hudLevel = document.getElementById('hudLevel');
+      var hudScore = document.getElementById('hudScore');
+      var hudBalls = document.getElementById('hudBalls');
+
+      function refreshHUD(){
+        hudLevel.textContent = (levelIdx + 1) + ' / ' + LEVELS.length;
+        hudScore.textContent = runTotal + levelScore;
+        hudBalls.innerHTML = '';
+        var def = LEVELS[levelIdx];
+        for (var i = 0; i < def.balls; i++){
+          var d = document.createElement('i');
+          if (i >= ballsLeft) d.className = 'used';
+          hudBalls.appendChild(d);
+        }
+      }
+
+      function loadLevel(idx){
+        levelIdx = idx;
+        var def = LEVELS[idx];
+        ballsLeft = def.balls;
+        levelScore = 0;
+        ball = null; aiming = false;
+        particles = []; floaters = [];
+        targets = def.targets.map(function(t, i){
+          return { baseX: t.x, baseY: t.y, x: t.x, y: t.y, type: t.type, stand: t.stand,
+                   move: t.move || null, phase: i * 1.7, hit: false, r: RADIUS[t.type] };
+        });
+        refreshHUD();
+      }
+
+      // ---------- Écrans ----------
+      var ovMenu = document.getElementById('ovMenu'),
+          ovWin = document.getElementById('ovWin'),
+          ovLose = document.getElementById('ovLose'),
+          ovEnd = document.getElementById('ovEnd');
+      function show(el){
+        [ovMenu, ovWin, ovLose, ovEnd].forEach(function(o){ o.classList.toggle('show', o === el); });
+        if (!el) [ovMenu, ovWin, ovLose, ovEnd].forEach(function(o){ o.classList.remove('show'); });
+      }
+      function flakesStr(n){
+        var s = '';
+        for (var i = 0; i < 3; i++) s += '<span class="' + (i < n ? '' : 'off') + '">❄</span>';
+        return s;
+      }
+      function buildMenu(){
+        var grid = document.getElementById('levelsGrid');
+        grid.innerHTML = '';
+        for (var i = 0; i < LEVELS.length; i++){
+          (function(i){
+            var b = document.createElement('button');
+            b.type = 'button'; b.className = 'lvl';
+            var f = save.flakes[i] || 0;
+            var fl = '';
+            for (var k = 0; k < f; k++) fl += '❄';
+            b.innerHTML = (i + 1) + '<span class="lf">' + (fl || '&nbsp;') + '</span>';
+            b.disabled = i >= save.unlocked;
+            b.setAttribute('aria-label', 'Niveau ' + (i + 1) + (b.disabled ? ' (verrouillé)' : ''));
+            b.addEventListener('click', function(){ startRun(i, true); });
+            grid.appendChild(b);
+          })(i);
+        }
+        var best = document.getElementById('menuBest');
+        best.textContent = save.totalBest > 0 ? 'Meilleur score total : ' + save.totalBest + ' points' : '';
+        // Progression totale : niveau atteint, flocons et niveaux terminés
+        var doneCount = 0, flakeTotal = 0;
+        for (var j = 0; j < LEVELS.length; j++){
+          if (save.flakes[j]) { doneCount++; flakeTotal += save.flakes[j]; }
+        }
+        document.getElementById('menuProgress').textContent =
+          'Niveau ' + Math.min(save.unlocked, LEVELS.length) + '/' + LEVELS.length +
+          ' • ' + flakeTotal + '/' + (LEVELS.length * 3) + ' flocons' +
+          ' • ' + doneCount + '/' + LEVELS.length + ' terminés';
+        var cur = Math.min(save.current || 0, LEVELS.length - 1);
+        document.getElementById('btnPlay').textContent =
+          doneCount >= LEVELS.length ? 'Recommencer au niveau 1' :
+          (save.unlocked > 1 || cur > 0) ? 'Continuer — niveau ' + (cur + 1) : 'Jouer';
+      }
+      function goMenu(){ state = 'menu'; buildMenu(); show(ovMenu); refreshHUD(); }
+
+      function startRun(idx, single){
+        runTotal = 0;
+        if (!single) { for (var i = 0; i < idx; i++) runTotal += save.best[i] || 0; }
+        loadLevel(idx);
+        // Sauvegarde du niveau en cours : le bouton Continuer y ramène.
+        save.current = idx;
+        persist();
+        state = 'playing';
+        show(null);
+      }
+
+      function flakesForWin(){
+        if (ballsLeft >= 3) return 3;
+        if (ballsLeft >= 1) return 2;
+        return 1;
+      }
+
+      function winLevel(){
+        state = 'won';
+        var fl = flakesForWin();
+        var prevBest = save.best[levelIdx] || 0;
+        if (levelScore > prevBest) save.best[levelIdx] = levelScore;
+        if (fl > (save.flakes[levelIdx] || 0)) save.flakes[levelIdx] = fl;
+        if (levelIdx + 1 >= save.unlocked && save.unlocked < LEVELS.length) save.unlocked = levelIdx + 2 > LEVELS.length ? LEVELS.length : levelIdx + 1;
+        if (levelIdx + 1 < LEVELS.length && save.unlocked < levelIdx + 2) save.unlocked = levelIdx + 2;
+        runTotal += levelScore;
+        levelScore = 0;
+        var sum = 0; for (var k in save.best) sum += save.best[k];
+        if (sum > save.totalBest) save.totalBest = sum;
+        persist();
+        sndWin();
+        refreshHUD();
+        hudScore.textContent = runTotal;
+        document.getElementById('winFlakes').innerHTML = flakesStr(fl);
+        document.getElementById('winScore').textContent = save.best[levelIdx];
+        document.getElementById('winMsg').textContent =
+          fl === 3 ? 'Quel tir ! Il te restait plein de boules — 3 flocons !' :
+          fl === 2 ? 'Beau travail ! 2 flocons pour ce niveau.' :
+                     'Réussi de justesse — 1 flocon. Tu peux faire mieux !';
+        document.getElementById('winTitle').textContent = 'Niveau ' + (levelIdx + 1) + ' réussi !';
+        document.getElementById('btnNext').textContent =
+          levelIdx + 1 >= LEVELS.length ? 'Voir le résultat final' : 'Niveau suivant';
+        show(ovWin);
+      }
+
+      function loseLevel(){
+        state = 'lost';
+        sndLose();
+        var left = targets.filter(function(t){ return !t.hit; }).length;
+        document.getElementById('loseMsg').textContent =
+          'Il restait ' + left + ' cible' + (left > 1 ? 's' : '') + ' debout. Ajuste ta visée et réessaie — tu vas l’avoir !';
+        show(ovLose);
+      }
+
+      function endGame(){
+        state = 'end';
+        var totalFlakes = 0;
+        for (var k in save.flakes) totalFlakes += save.flakes[k];
+        document.getElementById('endFlakes').textContent = '❄ × ' + totalFlakes + ' / ' + (LEVELS.length * 3);
+        document.getElementById('endScore').textContent = runTotal;
+        document.getElementById('endBest').textContent =
+          'Meilleur score total : ' + save.totalBest + ' points';
+        show(ovEnd);
+      }
+
+      function checkEnd(){
+        if (state !== 'playing') return;
+        if (ball && ball.active) return;
+        if (targets.every(function(t){ return t.hit; })) { winLevel(); return; }
+        if (ballsLeft <= 0) loseLevel();
+      }
+
+      // ---------- Visée et lancer ----------
+      function canvasPos(e){
+        var r = canvas.getBoundingClientRect();
+        return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+      }
+      function pullVector(){
+        var dx = aimDX, dy = aimDY;
+        var len = Math.hypot(dx, dy);
+        if (len > MAXPULL) { dx = dx / len * MAXPULL; dy = dy / len * MAXPULL; }
+        return { x: dx, y: dy, len: Math.min(len, MAXPULL) };
+      }
+      canvas.addEventListener('pointerdown', function(e){
+        if (state !== 'playing' || (ball && ball.active) || ballsLeft <= 0) return;
+        e.preventDefault();
+        try { canvas.setPointerCapture(e.pointerId); } catch(err) {}
+        aiming = true;
+        var p0 = canvasPos(e);
+        aimDX = LAUNCH.x - p0.x;
+        aimDY = LAUNCH.y - p0.y;
+        audio(); // débloque l'audio sur iOS au premier toucher
+      });
+      canvas.addEventListener('pointermove', function(e){
+        if (!aiming) return;
+        var p = canvasPos(e);
+        // Tir à la fronde : on tire à l'opposé de la direction voulue.
+        aimDX = LAUNCH.x - p.x;
+        aimDY = LAUNCH.y - p.y;
+      });
+      function release(){
+        if (!aiming) return;
+        aiming = false;
+        var pv = pullVector();
+        if (pv.len < 14 || ballsLeft <= 0) return;
+        ballsLeft--;
+        ball = { x: LAUNCH.x, y: LAUNCH.y, vx: pv.x * POWER, vy: pv.y * POWER, active: true, spin: 0 };
+        sndLaunch();
+        refreshHUD();
+      }
+      canvas.addEventListener('pointerup', release);
+      canvas.addEventListener('pointercancel', function(){ aiming = false; });
+
+      // ---------- Physique ----------
+      function burst(x, y, n, spread){
+        for (var i = 0; i < n; i++){
+          var a = Math.random() * Math.PI * 2, sp = 40 + Math.random() * (spread || 130);
+          particles.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 40,
+                           life: 0.55 + Math.random() * 0.3, max: 0.85, r: 2 + Math.random() * 3.4 });
+        }
+      }
+      function stepBall(dt){
+        if (!ball || !ball.active) return;
+        var def = LEVELS[levelIdx];
+        var wind = (def.wind || 0) * 130;
+        var steps = 3, h = dt / steps;
+        for (var s = 0; s < steps; s++){
+          ball.vx += wind * h;
+          ball.vy += GRAV * h;
+          ball.x += ball.vx * h;
+          ball.y += ball.vy * h;
+          ball.spin += h * 6;
+          // Collision avec les cibles
+          for (var i = 0; i < targets.length; i++){
+            var t = targets[i];
+            if (t.hit) continue;
+            var d = Math.hypot(ball.x - t.x, ball.y - t.y);
+            if (d < t.r + 10){
+              t.hit = true;
+              levelScore += POINTS[t.type];
+              floaters.push({ x: t.x, y: t.y - t.r - 6, text: '+' + POINTS[t.type], life: 1 });
+              burst(t.x, t.y, 22, 170);
+              sndHit(POINTS[t.type]);
+              ball.active = false;
+              refreshHUD();
+              return;
+            }
+          }
+          // Sol et bordures
+          if (ball.y + 10 >= GROUND){
+            ball.y = GROUND - 10;
+            burst(ball.x, ball.y + 4, 10, 90);
+            sndThud();
+            ball.active = false;
+            return;
+          }
+          if (ball.x < -30 || ball.x > W + 30 || ball.y < -320){
+            ball.active = false;
+            return;
+          }
+        }
+      }
+
+      // ---------- Dessin (style linogravure) ----------
+      function line(x1, y1, x2, y2, w, col){
+        ctx.strokeStyle = col || INK; ctx.lineWidth = w || 2.5;
+        ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      }
+      function circle(x, y, r, fill, strokeW){
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+        if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+        if (strokeW !== 0) { ctx.strokeStyle = INK; ctx.lineWidth = strokeW || 3; ctx.stroke(); }
+      }
+      function hatch(x, y, w, h, gap, col){
+        ctx.save();
+        ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+        ctx.strokeStyle = col || 'rgba(34,48,62,.35)'; ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        for (var i = -h; i < w; i += gap){ ctx.moveTo(x + i, y + h); ctx.lineTo(x + i + h, y); }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawBackground(t){
+        var g = ctx.createLinearGradient(0, 0, 0, GROUND);
+        g.addColorStop(0, '#cfe4ef'); g.addColorStop(0.7, '#e6f0e9'); g.addColorStop(1, '#f2ecd8');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+        // Soleil d'hiver
+        circle(52, 56, 22, '#f6d67c', 3);
+        for (var i = 0; i < 8; i++){
+          var a = i / 8 * Math.PI * 2 + 0.4;
+          line(52 + Math.cos(a) * 28, 56 + Math.sin(a) * 28, 52 + Math.cos(a) * 36, 56 + Math.sin(a) * 36, 2.5);
+        }
+        // Sapins lointains
+        drawFir(330, 300, 64, 'rgba(63,97,134,.35)');
+        drawFir(24, 330, 52, 'rgba(63,97,134,.30)');
+        drawFir(356, 372, 44, 'rgba(63,97,134,.30)');
+        // Neige qui tombe
+        ctx.fillStyle = 'rgba(255,255,255,.85)';
+        snowflakesBg.forEach(function(f){
+          var x = f.x + Math.sin(t * 0.7 + f.drift) * 9;
+          var y = (f.y + t * f.s) % (GROUND + 10);
+          ctx.beginPath(); ctx.arc(x, y, f.r, 0, Math.PI * 2); ctx.fill();
+        });
+        // Banc de neige (sol)
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.moveTo(0, GROUND);
+        ctx.quadraticCurveTo(90, GROUND - 14, 190, GROUND - 4);
+        ctx.quadraticCurveTo(300, GROUND + 6, W, GROUND - 8);
+        ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = INK; ctx.lineWidth = 3.2;
+        ctx.beginPath();
+        ctx.moveTo(0, GROUND);
+        ctx.quadraticCurveTo(90, GROUND - 14, 190, GROUND - 4);
+        ctx.quadraticCurveTo(300, GROUND + 6, W, GROUND - 8);
+        ctx.stroke();
+        hatch(6, GROUND + 18, W - 12, 22, 13, 'rgba(127,178,204,.4)');
+        // Indicateur de vent
+        var wind = LEVELS[levelIdx].wind || 0;
+        if (state === 'playing' && wind !== 0){
+          var dir = wind > 0 ? 1 : -1;
+          var bx = W / 2 - 34, by = 26, bob = Math.sin(t * 3 + windPhase) * 2;
+          ctx.fillStyle = 'rgba(255,250,240,.92)';
+          ctx.strokeStyle = INK; ctx.lineWidth = 2.4;
+          roundRect(bx, by - 14 + bob * 0.2, 68, 26, 8); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = INK; ctx.font = '900 12px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
+          ctx.fillText('VENT', W / 2, by + 2 + bob * 0.2);
+          ctx.beginPath();
+          var ax = W / 2 + dir * (10 + Math.abs(wind) * 8);
+          ctx.moveTo(W / 2 - dir * 12, by - 22 + bob * 0.2 + 26);
+          ctx.stroke();
+          line(W / 2 - dir * 14, by + 8, ax, by + 8, 2.6);
+          line(ax, by + 8, ax - dir * 7, by + 3.5, 2.6);
+          line(ax, by + 8, ax - dir * 7, by + 12.5, 2.6);
+        }
+      }
+      function roundRect(x, y, w, h, r){
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+      function drawFir(x, y, h, col){
+        ctx.fillStyle = col;
+        ctx.beginPath();
+        ctx.moveTo(x, y - h);
+        ctx.lineTo(x - h * 0.32, y - h * 0.35); ctx.lineTo(x - h * 0.1, y - h * 0.35);
+        ctx.lineTo(x - h * 0.4, y); ctx.lineTo(x + h * 0.4, y);
+        ctx.lineTo(x + h * 0.1, y - h * 0.35); ctx.lineTo(x + h * 0.32, y - h * 0.35);
+        ctx.closePath(); ctx.fill();
+      }
+
+      function drawStand(t){
+        var bottom = t.y + t.r - 2;
+        if (t.stand === 'branch'){
+          // Branche qui arrive du bord droit ou du bas
+          ctx.fillStyle = '#6b4a2f';
+          ctx.strokeStyle = INK; ctx.lineWidth = 2.8;
+          ctx.beginPath();
+          if (t.x > W * 0.62){
+            ctx.moveTo(W + 4, bottom + 16);
+            ctx.quadraticCurveTo(t.x + 26, bottom + 12, t.x - t.r - 12, bottom + 2);
+            ctx.lineTo(t.x - t.r - 12, bottom + 12);
+            ctx.quadraticCurveTo(t.x + 26, bottom + 22, W + 4, bottom + 26);
+          } else {
+            ctx.moveTo(t.x - 60, GROUND + 4);
+            ctx.quadraticCurveTo(t.x - 18, bottom + 26, t.x - t.r - 12, bottom + 2);
+            ctx.lineTo(t.x - t.r - 12, bottom + 12);
+            ctx.quadraticCurveTo(t.x - 14, bottom + 34, t.x - 48, GROUND + 6);
+          }
+          ctx.closePath(); ctx.fill(); ctx.stroke();
+          hatch(t.x - t.r - 10, bottom + 2, t.r * 2 + 20, 9, 7, 'rgba(34,48,62,.3)');
+          // Neige sur la branche
+          ctx.fillStyle = '#fff';
+          ctx.beginPath();
+          ctx.ellipse(t.x, bottom + 1, t.r + 8, 5, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.stroke();
+        } else {
+          // Petit banc de neige
+          ctx.fillStyle = '#ffffff';
+          ctx.strokeStyle = INK; ctx.lineWidth = 2.8;
+          ctx.beginPath();
+          ctx.moveTo(t.x - t.r - 16, GROUND + 2);
+          ctx.quadraticCurveTo(t.x - t.r - 10, bottom - 4, t.x, bottom - 2);
+          ctx.quadraticCurveTo(t.x + t.r + 10, bottom - 4, t.x + t.r + 16, GROUND + 2);
+          ctx.closePath(); ctx.fill(); ctx.stroke();
+          hatch(t.x - t.r, bottom + 8, t.r * 2, 12, 9, 'rgba(127,178,204,.45)');
+        }
+      }
+
+      function drawTargetBody(t){
+        var x = t.x, y = t.y;
+        if (t.type === 'target'){
+          circle(x, y, 21, '#fff', 3.4);
+          circle(x, y, 14.5, '#b3392e', 2.4);
+          circle(x, y, 8, '#fff', 2.2);
+          circle(x, y, 3.4, '#22303e', 0);
+          line(x - 21, y + 18, x + 21, y + 18, 3);
+        } else if (t.type === 'bell'){
+          ctx.fillStyle = '#e9b83a'; ctx.strokeStyle = INK; ctx.lineWidth = 3.2;
+          ctx.beginPath();
+          ctx.moveTo(x, y - 18);
+          ctx.quadraticCurveTo(x + 13, y - 16, x + 14, y - 2);
+          ctx.quadraticCurveTo(x + 15, y + 8, x + 18, y + 12);
+          ctx.lineTo(x - 18, y + 12);
+          ctx.quadraticCurveTo(x - 15, y + 8, x - 14, y - 2);
+          ctx.quadraticCurveTo(x - 13, y - 16, x, y - 18);
+          ctx.closePath(); ctx.fill(); ctx.stroke();
+          hatch(x - 12, y - 8, 24, 16, 6, 'rgba(122,90,8,.35)');
+          circle(x, y - 21, 4, '#e9b83a', 2.6);
+          circle(x, y + 16, 4.4, '#b3392e', 2.4);
+          line(x - 18, y + 12, x + 18, y + 12, 2.6);
+        } else if (t.type === 'duck'){
+          // Canard de neige (corps, tête, bec orange)
+          ctx.fillStyle = '#ffffff'; ctx.strokeStyle = INK; ctx.lineWidth = 3.2;
+          ctx.beginPath();
+          ctx.ellipse(x - 2, y + 6, 20, 13, 0, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+          ctx.beginPath(); // queue
+          ctx.moveTo(x - 20, y + 2); ctx.lineTo(x - 30, y - 8); ctx.lineTo(x - 16, y - 6);
+          ctx.closePath(); ctx.fillStyle = '#fff'; ctx.fill(); ctx.stroke();
+          circle(x + 12, y - 10, 10.5, '#ffffff', 3.2);
+          ctx.fillStyle = '#e8862e'; ctx.strokeStyle = INK; ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          ctx.moveTo(x + 20, y - 12); ctx.lineTo(x + 31, y - 8); ctx.lineTo(x + 20, y - 5);
+          ctx.closePath(); ctx.fill(); ctx.stroke();
+          circle(x + 14, y - 12, 1.9, '#22303e', 0);
+          hatch(x - 16, y + 4, 22, 10, 6, 'rgba(127,178,204,.5)');
+          // écharpe
+          line(x + 5, y - 2, x + 17, y - 3, 4, '#b3392e');
+        } else if (t.type === 'snowman'){
+          circle(x, y + 12, 15, '#ffffff', 3.2);
+          circle(x, y - 8, 11.5, '#ffffff', 3.2);
+          hatch(x - 13, y + 10, 26, 14, 6, 'rgba(127,178,204,.45)');
+          circle(x - 4, y - 10, 1.7, '#22303e', 0);
+          circle(x + 4, y - 10, 1.7, '#22303e', 0);
+          ctx.fillStyle = '#e8862e'; ctx.strokeStyle = INK; ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          ctx.moveTo(x, y - 7); ctx.lineTo(x + 11, y - 4.6); ctx.lineTo(x, y - 3.4);
+          ctx.closePath(); ctx.fill(); ctx.stroke();
+          circle(x, y + 7, 1.8, '#22303e', 0);
+          circle(x, y + 14, 1.8, '#22303e', 0);
+          // chapeau
+          ctx.fillStyle = '#22303e';
+          ctx.fillRect(x - 12, y - 19, 24, 3.6);
+          ctx.fillRect(x - 8, y - 30, 16, 11.5);
+          ctx.fillStyle = '#b3392e'; ctx.fillRect(x - 8, y - 22.5, 16, 3.4);
+          // bras branche
+          line(x - 14, y + 8, x - 25, y - 2, 2.8, '#6b4a2f');
+          line(x + 14, y + 8, x + 25, y - 4, 2.8, '#6b4a2f');
+          // écharpe
+          line(x - 9, y - 1, x + 9, y - 1, 4.4, '#3f6186');
+          line(x + 6, y + 1, x + 9, y + 9, 4.4, '#3f6186');
+        }
+      }
+
+      function drawLauncher(t){
+        // Tas de boules de réserve
+        circle(LAUNCH.x - 34, GROUND - 12, 11, '#ffffff', 2.8);
+        circle(LAUNCH.x - 16, GROUND - 10, 9, '#ffffff', 2.8);
+        circle(LAUNCH.x - 26, GROUND - 24, 9, '#ffffff', 2.8);
+        // Socle en bois gravé
+        ctx.fillStyle = '#8a6642'; ctx.strokeStyle = INK; ctx.lineWidth = 3;
+        roundRect(LAUNCH.x - 15, LAUNCH.y + 14, 30, 34, 5); ctx.fill(); ctx.stroke();
+        hatch(LAUNCH.x - 13, LAUNCH.y + 18, 26, 26, 7, 'rgba(34,48,62,.3)');
+        line(LAUNCH.x - 15, LAUNCH.y + 30, LAUNCH.x + 15, LAUNCH.y + 30, 2.2);
+        // Boule prête au départ
+        if (state === 'playing' && ballsLeft > 0 && !(ball && ball.active)){
+          var bx = LAUNCH.x, by = LAUNCH.y;
+          if (aiming){ var pv = pullVector(); bx -= pv.x * 0.55; by -= pv.y * 0.55; }
+          circle(bx, by, 13, '#ffffff', 3.2);
+          hatch(bx - 9, by - 2, 18, 9, 5, 'rgba(127,178,204,.55)');
+          circle(bx - 4, by - 4, 2, 'rgba(127,178,204,.8)', 0);
+        }
+        // Élastique de la fronde quand on vise
+        if (aiming){
+          var pv2 = pullVector();
+          line(LAUNCH.x - 13, LAUNCH.y + 10, LAUNCH.x - pv2.x * 0.55, LAUNCH.y - pv2.y * 0.55, 3, '#b3392e');
+          line(LAUNCH.x + 13, LAUNCH.y + 10, LAUNCH.x - pv2.x * 0.55, LAUNCH.y - pv2.y * 0.55, 3, '#b3392e');
+        }
+      }
+
+      function drawTrajectory(){
+        if (!aiming || state !== 'playing') return;
+        var pv = pullVector();
+        if (pv.len < 14) return;
+        var x = LAUNCH.x, y = LAUNCH.y, vx = pv.x * POWER, vy = pv.y * POWER;
+        var wind = (LEVELS[levelIdx].wind || 0) * 130;
+        var dt = 0.045;
+        ctx.fillStyle = 'rgba(34,48,62,.55)';
+        for (var i = 0; i < 26; i++){
+          vx += wind * dt; vy += GRAV * dt; x += vx * dt; y += vy * dt;
+          if (y > GROUND) break;
+          if (i % 2 === 0){
+            ctx.beginPath(); ctx.arc(x, y, 3.4 - i * 0.06, 0, Math.PI * 2); ctx.fill();
+          }
+        }
+        // Jauge de force
+        var pct = pv.len / MAXPULL;
+        ctx.fillStyle = 'rgba(255,250,240,.92)'; ctx.strokeStyle = INK; ctx.lineWidth = 2.2;
+        roundRect(LAUNCH.x - 34, LAUNCH.y + 58, 68, 10, 5); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = pct > 0.75 ? '#b3392e' : (pct > 0.4 ? '#e9b83a' : '#7fb2cc');
+        roundRect(LAUNCH.x - 32, LAUNCH.y + 60, 64 * pct, 6, 3); ctx.fill();
+      }
+
+      function draw(t, dt){
+        drawBackground(t);
+        targets.forEach(function(tg){
+          if (tg.move){
+            var off = Math.sin(t * tg.move.speed + tg.phase) * tg.move.range;
+            if (tg.move.axis === 'x') tg.x = tg.baseX + off; else tg.y = tg.baseY + off;
+          }
+        });
+        targets.forEach(function(tg){ if (!tg.hit) drawStand(tg); });
+        targets.forEach(function(tg){ if (!tg.hit) drawTargetBody(tg); });
+        drawTrajectory();
+        drawLauncher(t);
+        // Boule en vol
+        if (ball && ball.active){
+          ctx.save();
+          ctx.translate(ball.x, ball.y); ctx.rotate(ball.spin);
+          circle(0, 0, 11, '#ffffff', 3.2);
+          hatch(-8, -3, 16, 7, 5, 'rgba(127,178,204,.55)');
+          ctx.restore();
+          circle(ball.x - 3.5, ball.y - 3.5, 2, 'rgba(127,178,204,.9)', 0);
+        }
+        // Particules de neige
+        particles = particles.filter(function(p){ return p.life > 0; });
+        particles.forEach(function(p){
+          ctx.globalAlpha = Math.max(0, p.life / p.max);
+          circle(p.x, p.y, p.r, '#ffffff', 0);
+          ctx.globalAlpha = 1;
+        });
+        // Textes flottants (+100…)
+        ctx.font = '900 17px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
+        floaters = floaters.filter(function(f){ return f.life > 0; });
+        floaters.forEach(function(f){
+          ctx.globalAlpha = Math.min(1, f.life * 1.6);
+          ctx.fillStyle = '#b3392e';
+          ctx.strokeStyle = '#fffaf0'; ctx.lineWidth = 4;
+          ctx.strokeText(f.text, f.x, f.y);
+          ctx.fillText(f.text, f.x, f.y);
+          ctx.globalAlpha = 1;
+        });
+      }
+
+      // ---------- Boucle ----------
+      var last = performance.now();
+      function frame(now){
+        var dt = Math.min(0.033, (now - last) / 1000);
+        last = now;
+        var t = now / 1000;
+        if (state === 'playing'){
+          var wasActive = ball && ball.active;
+          stepBall(dt);
+          if (wasActive && (!ball || !ball.active)) setTimeout(checkEnd, 260);
+        }
+        particles.forEach(function(p){
+          p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 620 * dt;
+        });
+        floaters.forEach(function(f){ f.life -= dt * 0.9; f.y -= 34 * dt; });
+        draw(t, dt);
+        requestAnimationFrame(frame);
+      }
+
+      // ---------- Boutons ----------
+      document.getElementById('btnPlay').addEventListener('click', function(){
+        // Continuer : on reprend au niveau en cours sauvegardé.
+        var idx = Math.min(save.current || 0, LEVELS.length - 1);
+        if (idx < 0) idx = 0;
+        // Si les 50 niveaux sont terminés, on repart au niveau 1.
+        var allDone = true;
+        for (var i = 0; i < LEVELS.length; i++) if (!save.flakes[i]) { allDone = false; break; }
+        if (allDone) idx = 0;
+        startRun(idx, false);
+        // Le score de la partie repart des meilleurs scores des niveaux précédents.
+        runTotal = 0;
+        for (var i = 0; i < idx; i++) runTotal += save.best[i] || 0;
+        refreshHUD();
+      });
+      document.getElementById('btnNext').addEventListener('click', function(){
+        if (levelIdx + 1 >= LEVELS.length) { endGame(); return; }
+        loadLevel(levelIdx + 1);
+        save.current = levelIdx;
+        persist();
+        state = 'playing'; show(null);
+      });
+      document.getElementById('btnReplayWin').addEventListener('click', function(){
+        runTotal -= save.best[levelIdx] || 0;
+        if (runTotal < 0) runTotal = 0;
+        // On rejoue pour améliorer : le total affiché repart sans ce niveau.
+        loadLevel(levelIdx);
+        state = 'playing'; show(null); refreshHUD();
+      });
+      document.getElementById('btnRetry').addEventListener('click', function(){
+        loadLevel(levelIdx);
+        state = 'playing'; show(null); refreshHUD();
+      });
+      document.getElementById('btnAgain').addEventListener('click', function(){
+        runTotal = 0; loadLevel(0); save.current = 0; persist();
+        state = 'playing'; show(null); refreshHUD();
+      });
+      ['btnMenuWin', 'btnMenuLose', 'btnMenuEnd'].forEach(function(id){
+        document.getElementById(id).addEventListener('click', goMenu);
+      });
+      document.getElementById('btnReset').addEventListener('click', function(){
+        save = { unlocked: 1, current: 0, best: {}, flakes: {}, totalBest: 0, muted: save.muted };
+        persist(); loadLevel(0); goMenu();
+      });
+
+      // ---------- Démarrage ----------
+      loadLevel(0);
+      goMenu();
+      requestAnimationFrame(frame);
+    })();
+    </script>
+  </body>
+</html>
