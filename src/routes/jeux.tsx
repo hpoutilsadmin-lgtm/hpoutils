@@ -28,6 +28,10 @@ const GAMES = [
   { title: "Poutine Panic", file: "/apps/poutine-panic/poutine-panic-v1.1.html", copy: "Sers des poutines à toute vitesse avant la fin du service !" },
   { title: "Retromania", file: "/apps/retromania/retromania-v1.1.html", copy: "Devine le prix d'époque d'objets d'hier à aujourd'hui. Le plus proche sans dépasser gagne !" },
   { title: "Sirop Clicker", file: "/apps/sirop-clicker/sirop-clicker-v1.1.html", copy: "Clique pour produire du sirop d'érable au Temps des sucres." },
+  { title: "Mots de Chez Nous", file: "/apps/mots-de-chez-nous/mots-de-chez-nous-v1.0.html", copy: "Mots cachés : 665 mots d'ici à retrouver, définitions incluses." },
+  { title: "Mémoire des Cantons", file: "/apps/memoire-des-cantons/memoire-des-cantons-v1.0.html", copy: "Le jeu de mémoire aux icônes du Québec." },
+  { title: "Tir de Boules de Neige", file: "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html", copy: "50 niveaux de tir à la boule de neige, sauvegarde incluse." },
+  { title: "Ado odieux, adieu", file: "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html", copy: "Fais des mauvais coups sans te faire pogner… et assume la vraie sentence." },
 ];
 
 function JeuxPage() {
