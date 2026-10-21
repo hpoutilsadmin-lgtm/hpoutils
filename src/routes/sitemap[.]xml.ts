@@ -8,6 +8,7 @@ const STATIC_PATHS = [
   "/outils",
   "/jeux",
   "/confidentialite",
+  "/conditions-de-vente",
   "/livres-pdf",
   "/sans-honte",
   "/reflexions",
@@ -20,6 +21,7 @@ const STATIC_PATHS = [
   "/prix",
   "/univers",
   "/transmettre",
+  "/les-passeurs",
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({
