@@ -1,0 +1,1228 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Ado odieux, adieu</title>
+    <style>
+      :root{
+        --paper:#f6ecd2; --paper2:#efe0ba; --ink:#2b2118; --ink-soft:#5a4a35;
+        --red:#b3392e; --red-soft:#e8b4ac; --green:#3f7a4e; --gold:#c98f2d;
+        --sky:#a8c6a2; --card:#fdf6df; --shadow:rgba(43,33,24,.28);
+        --btn:#2b2118; --btn-txt:#f6ecd2;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --paper:#241c13; --paper2:#2e2417; --ink:#f0e3c2; --ink-soft:#c9b48c;
+          --red:#e06a5c; --red-soft:#5c2f28; --green:#7dbb8d; --gold:#e0aa4a;
+          --sky:#33502f; --card:#2e2417; --shadow:rgba(0,0,0,.5);
+          --btn:#f0e3c2; --btn-txt:#241c13;
+        }
+      }
+      *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+      html,body{margin:0;padding:0;}
+      body{background:var(--paper2);color:var(--ink);font-family:"Trebuchet MS","Segoe UI",Verdana,system-ui,sans-serif;min-height:100vh;}
+      #app{max-width:430px;margin:0 auto;padding:10px 10px 18px;}
+      h1,h2,h3{font-family:Georgia,"Times New Roman",serif;margin:0;}
+      .frame{border:3px solid var(--ink);border-radius:6px;outline:1.5px solid var(--ink);outline-offset:4px;background:repeating-linear-gradient(0deg, transparent 0 26px, rgba(120,95,50,.05) 26px 27px),var(--paper);box-shadow:0 6px 18px var(--shadow);padding:16px 14px;}
+      .hidden{display:none !important;}
+      .title-block{text-align:center;margin:6px 0 4px;}
+      .title-block h1{font-size:2rem;letter-spacing:.5px;line-height:1.05;}
+      .title-block .sub{font-style:italic;color:var(--ink-soft);margin-top:4px;font-size:.95rem;}
+      .rule{border:none;border-top:2.5px solid var(--ink);margin:12px auto;width:72%;position:relative;}
+      .rule::after{content:"✦";position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--paper);padding:0 6px;font-size:.8rem;}
+      .explain{font-size:1rem;line-height:1.45;text-align:center;margin:8px 2px;}
+      .explain b{color:var(--red);}
+      .choose-lab{text-align:center;font-family:Georgia,serif;font-size:1.05rem;margin:12px 0 8px;}
+      .avatars{display:flex;gap:12px;justify-content:center;}
+      .avatar-btn{background:var(--card);border:3px solid var(--ink);border-radius:8px;padding:10px 8px 6px;width:132px;cursor:pointer;color:var(--ink);font-family:inherit;font-size:.95rem;font-weight:bold;box-shadow:3px 3px 0 var(--ink);}
+      .avatar-btn.selected{border-color:var(--red);box-shadow:3px 3px 0 var(--red);background:var(--red-soft);}
+      .avatar-btn svg{display:block;margin:0 auto 4px;}
+      .big-btn{display:block;width:100%;margin:14px 0 0;padding:14px;background:var(--btn);color:var(--btn-txt);border:3px solid var(--ink);border-radius:8px;font-family:Georgia,serif;font-size:1.2rem;letter-spacing:.4px;cursor:pointer;box-shadow:4px 4px 0 rgba(43,33,24,.35);}
+      .big-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(43,33,24,.35);}
+      .big-btn.red{background:var(--red);color:#fff8ea;border-color:var(--ink);}
+      .ghost-btn{display:block;width:100%;margin:10px 0 0;padding:10px;background:transparent;color:var(--ink);border:2px dashed var(--ink-soft);border-radius:8px;font-family:inherit;font-size:.95rem;cursor:pointer;}
+      .best-line{text-align:center;margin-top:12px;color:var(--ink-soft);font-size:.9rem;line-height:1.5;}
+      .sig{text-align:center;margin-top:14px;font-family:Georgia,serif;font-style:italic;color:var(--ink-soft);font-size:.85rem;}
+      .adults-txt{font-size:.98rem;line-height:1.55;}
+      .adults-txt p{margin:0 0 10px;}
+      /* Sélection des tableaux */
+      .level-card{border:3px solid var(--ink);border-radius:8px;background:var(--card);padding:12px;margin:10px 0;box-shadow:3px 3px 0 var(--shadow);display:flex;gap:12px;align-items:center;}
+      .level-card.locked{opacity:.55;}
+      .level-num{font-family:Georgia,serif;font-size:1.6rem;font-weight:bold;border:2.5px solid var(--ink);border-radius:50%;width:46px;height:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center;background:var(--paper);}
+      .level-info{flex:1;min-width:0;}
+      .level-info h3{font-size:1.05rem;}
+      .level-info .lsub{font-size:.82rem;color:var(--ink-soft);line-height:1.35;}
+      .level-stars{color:var(--gold);font-size:1rem;letter-spacing:2px;white-space:nowrap;}
+      .level-play{flex:0 0 auto;padding:10px 12px;border:3px solid var(--ink);border-radius:8px;background:var(--red);color:#fff8ea;font-family:Georgia,serif;font-weight:bold;font-size:.95rem;cursor:pointer;box-shadow:2px 2px 0 var(--shadow);}
+      .level-play:disabled{background:var(--ink-soft);cursor:default;box-shadow:none;}
+      .progress-line{text-align:center;font-weight:bold;margin:6px 0 2px;}
+      /* HUD et objectifs */
+      #hud{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:3px solid var(--ink);border-radius:6px;background:var(--paper);padding:7px 9px;margin-bottom:8px;box-shadow:3px 3px 0 var(--shadow);}
+      .hud-item{font-weight:bold;font-size:.86rem;white-space:nowrap;}
+      .hud-item .lab{font-weight:normal;color:var(--ink-soft);font-size:.72rem;display:block;line-height:1;}
+      #strikes{letter-spacing:2px;font-size:.95rem;}
+      .strike-off{opacity:.22;}
+      #combo.on{color:var(--red);}
+      #gauge-wrap{flex:1 1 100px;min-width:90px;}
+      #gauge-track{height:12px;border:2px solid var(--ink);border-radius:6px;background:var(--card);overflow:hidden;}
+      #gauge-fill{height:100%;width:0%;background:var(--green);transition:width .18s linear, background .3s;}
+      .icon-btn{background:var(--card);border:2.5px solid var(--ink);border-radius:6px;color:var(--ink);width:38px;height:38px;font-size:1.05rem;cursor:pointer;line-height:1;flex:0 0 auto;}
+      #objectives{border:2.5px solid var(--ink);border-radius:6px;background:var(--card);padding:8px 11px;margin-bottom:8px;box-shadow:3px 3px 0 var(--shadow);}
+      #objectives .obj-title{font-family:Georgia,serif;font-weight:bold;font-size:.92rem;margin-bottom:3px;}
+      #objectives ul{margin:0;padding-left:20px;font-size:.88rem;line-height:1.45;}
+      #objectives li.done{color:var(--green);text-decoration:line-through;}
+      #stage{position:relative;}
+      canvas{display:block;width:100%;height:auto;border:3px solid var(--ink);border-radius:6px;background:var(--sky);touch-action:none;box-shadow:4px 4px 0 var(--shadow);}
+      #toast{position:absolute;left:8px;right:8px;bottom:8px;pointer-events:none;background:var(--ink);color:var(--paper);border-radius:6px;padding:8px 10px;font-size:.9rem;line-height:1.3;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;z-index:6;}
+      #toast.show{opacity:.96;transform:translateY(0);}
+      #toast .who{color:var(--gold);font-weight:bold;}
+      #chase-banner{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff8ea;font-family:Georgia,serif;font-weight:bold;padding:6px 14px;border:2.5px solid var(--ink);border-radius:20px;font-size:.95rem;box-shadow:3px 3px 0 var(--shadow);white-space:nowrap;z-index:6;}
+      #actions{display:flex;gap:8px;margin-top:10px;min-height:58px;flex-wrap:wrap;}
+      .act-btn{flex:1 1 28%;border:3px solid var(--ink);border-radius:10px;cursor:pointer;color:#fff8ea;font-family:inherit;font-weight:bold;font-size:.88rem;padding:10px 4px;line-height:1.15;box-shadow:3px 3px 0 var(--shadow);}
+      .act-btn small{display:block;font-weight:normal;font-size:.7rem;opacity:.9;margin-top:2px;}
+      .act-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow);}
+      .act-vol{background:#8a5a1d;} .act-trip{background:#38618c;} .act-fight{background:var(--red);}
+      .act-insult{background:#5d4a8a;} .act-pee{background:#3f7a4e;} .act-new{background:#a3542e;}
+      .act-none{flex:1;text-align:center;color:var(--ink-soft);font-size:.85rem;font-style:italic;border:2px dashed var(--ink-soft);border-radius:10px;padding:12px 6px;}
+      #joystick{position:absolute;width:104px;height:104px;border-radius:50%;pointer-events:none;border:2.5px solid rgba(43,33,24,.5);background:rgba(246,236,210,.25);display:none;z-index:5;}
+      #stick{position:absolute;width:46px;height:46px;border-radius:50%;left:29px;top:29px;border:2.5px solid var(--ink);background:rgba(246,236,210,.75);}
+      .hint{text-align:center;color:var(--ink-soft);font-size:.8rem;margin-top:8px;}
+      /* Sentence */
+      .judge-row{display:flex;gap:12px;align-items:center;margin-bottom:6px;}
+      .judge-row h2{font-size:1.35rem;line-height:1.15;}
+      .judge-row .verdict-sub{color:var(--ink-soft);font-size:.9rem;font-style:italic;}
+      .verdict-sub{color:var(--ink-soft);font-size:.9rem;font-style:italic;}
+      .infraction-card{border:3px solid var(--ink);border-radius:8px;background:var(--card);padding:12px;margin:12px 0;box-shadow:3px 3px 0 var(--shadow);}
+      .infraction-card h3{font-size:1.08rem;color:var(--red);margin-bottom:6px;}
+      .volet{margin:8px 0;font-size:.93rem;line-height:1.4;}
+      .volet .vlab{display:inline-block;font-family:Georgia,serif;font-weight:bold;font-size:.78rem;border:1.5px solid var(--ink);border-radius:4px;padding:1px 6px;margin-bottom:3px;background:var(--paper);}
+      .volet ul{margin:4px 0 0;padding-left:18px;}
+      .volet li{margin:2px 0;}
+      .repair-btn{margin-top:8px;width:100%;padding:11px;border:3px solid var(--ink);border-radius:8px;background:var(--green);color:#fff8ea;font-family:inherit;font-weight:bold;font-size:.95rem;cursor:pointer;box-shadow:3px 3px 0 var(--shadow);}
+      .repair-btn.done{background:var(--ink-soft);cursor:default;box-shadow:none;}
+      .legal-note{font-size:.8rem;color:var(--ink-soft);font-style:italic;text-align:center;border-top:2px dashed var(--ink-soft);padding-top:10px;margin-top:14px;line-height:1.4;}
+      /* Fin de tableau / journée ratée */
+      .recap{font-size:.95rem;line-height:1.5;}
+      .recap li{margin:3px 0;}
+      .stat-grid{display:flex;gap:10px;margin:12px 0;}
+      .stat-box{flex:1;border:3px solid var(--ink);border-radius:8px;background:var(--card);text-align:center;padding:10px 4px;box-shadow:3px 3px 0 var(--shadow);}
+      .stat-box .num{font-family:Georgia,serif;font-size:1.5rem;font-weight:bold;}
+      .stat-box .cap{font-size:.75rem;color:var(--ink-soft);}
+      .cost-line{border:2.5px solid var(--red);border-radius:8px;padding:10px 12px;margin:10px 0;background:var(--red-soft);font-size:.95rem;line-height:1.45;}
+      .alt-line{border:2.5px solid var(--green);border-radius:8px;padding:10px 12px;margin:10px 0;font-size:.95rem;line-height:1.45;background:var(--card);}
+      .adieu-title{text-align:center;font-size:2.1rem;color:var(--red);letter-spacing:2px;}
+      .stars-big{text-align:center;font-size:2.4rem;color:var(--gold);letter-spacing:8px;margin:4px 0;}
+      .stars-big .off{opacity:.25;}
+      @media (max-width:360px){ .title-block h1{font-size:1.7rem;} .avatar-btn{width:118px;} .act-btn{flex-basis:40%;} }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+
+      <!-- ======== ACCUEIL ======== -->
+      <section id="screen-start" class="frame">
+        <div class="title-block">
+          <h1>Ado odieux,<br />adieu&nbsp;!</h1>
+          <p class="sub">Le jeu où les mauvais coups sont permis… jusqu'à ce que le surveillant te voie.</p>
+        </div>
+        <hr class="rule" />
+        <p class="explain">
+          🏃 Six tableaux t'attendent : le parc, la cour d'école, la bibliothèque, le centre commercial, l'autobus et la grande fête de quartier.<br />
+          🎯 Dans chaque tableau, réussis la <b>liste de défis</b> de la journée sans te faire pogner.<br />
+          ⚖️ Attrapé&nbsp;? Tu reçois <b>la vraie sentence</b>, comme dans la vie — adaptée au lieu. Trois arrestations dans une journée… et c'est <b>adieu</b>, on recommence la journée&nbsp;!
+        </p>
+        <p class="choose-lab">Qui est l'ado odieux aujourd'hui&nbsp;?</p>
+        <div class="avatars">
+          <button class="avatar-btn selected" id="pick-boy" type="button" aria-label="Choisir l'ado">
+            <svg width="72" height="86" viewBox="0 0 72 86" aria-hidden="true">
+              <circle cx="36" cy="24" r="15" fill="#f2c894" stroke="#2b2118" stroke-width="3"/>
+              <path d="M21 22 Q36 2 51 22 L51 16 Q36 4 21 16 Z" fill="#b3392e" stroke="#2b2118" stroke-width="3"/>
+              <circle cx="30" cy="24" r="2.4" fill="#2b2118"/><circle cx="42" cy="24" r="2.4" fill="#2b2118"/>
+              <path d="M29 33 Q36 29 43 33" fill="none" stroke="#2b2118" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="M36 39 L36 62" stroke="#2b2118" stroke-width="3"/>
+              <rect x="24" y="40" width="24" height="24" rx="5" fill="#38618c" stroke="#2b2118" stroke-width="3"/>
+              <path d="M25 46 L14 58 M47 46 L58 54" stroke="#2b2118" stroke-width="4" stroke-linecap="round"/>
+              <path d="M30 64 L27 80 M42 64 L46 80" stroke="#2b2118" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            L'ado
+          </button>
+          <button class="avatar-btn" id="pick-girl" type="button" aria-label="Choisir l'ado (fille)">
+            <svg width="72" height="86" viewBox="0 0 72 86" aria-hidden="true">
+              <path d="M50 12 Q62 30 54 46 L46 42 Q52 28 44 16 Z" fill="#5a3a1a" stroke="#2b2118" stroke-width="2.5"/>
+              <circle cx="36" cy="24" r="15" fill="#e8b07e" stroke="#2b2118" stroke-width="3"/>
+              <path d="M21 20 Q36 4 51 20 Q51 10 36 9 Q21 10 21 20Z" fill="#5a3a1a" stroke="#2b2118" stroke-width="2.5"/>
+              <circle cx="30" cy="24" r="2.4" fill="#2b2118"/><circle cx="42" cy="24" r="2.4" fill="#2b2118"/>
+              <path d="M29 32 Q36 36 43 32" fill="none" stroke="#2b2118" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="M24 40 L48 40 L52 64 L20 64 Z" fill="#5d4a8a" stroke="#2b2118" stroke-width="3"/>
+              <path d="M25 46 L14 56 M47 46 L58 52" stroke="#2b2118" stroke-width="4" stroke-linecap="round"/>
+              <path d="M30 64 L28 80 M42 64 L45 80" stroke="#2b2118" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            L'ado… au féminin
+          </button>
+        </div>
+        <button class="big-btn red hidden" id="btn-continue" type="button">▶ Continuer</button>
+        <button class="big-btn" id="btn-play" type="button">🗺️ Voir les tableaux</button>
+        <button class="ghost-btn" id="btn-adults" type="button">Pour les adultes — le but du jeu, en 30 secondes</button>
+        <p class="best-line" id="best-line"></p>
+        <p class="sig">— HP Outils · Des outils pour la vraie vie —</p>
+      </section>
+
+      <!-- ======== SÉLECTION DES TABLEAUX ======== -->
+      <section id="screen-levels" class="frame hidden">
+        <h2 style="text-align:center;">Les tableaux</h2>
+        <p class="progress-line" id="levels-progress"></p>
+        <p style="text-align:center;" class="verdict-sub">Réussis les défis d'un tableau pour débloquer le suivant. Zéro arrestation = 3 étoiles&nbsp;!</p>
+        <div id="levels-list"></div>
+        <button class="big-btn" id="btn-levels-back" type="button">← Retour à l'accueil</button>
+      </section>
+
+      <!-- ======== POUR LES ADULTES ======== -->
+      <section id="screen-adults" class="frame hidden">
+        <h2 style="text-align:center;margin-bottom:12px;">Pour les adultes</h2>
+        <div class="adults-txt">
+          <p><b>Le principe :</b> l'élève incarne un ado qui fait des mauvais coups dans six lieux du quotidien (parc, cour d'école, bibliothèque, centre commercial, autobus, fête de quartier) — mais chaque geste affiche immédiatement ce qu'il fait vivre à l'autre personne, et se faire attraper mène à une sentence inspirée des vraies conséquences pour un adolescent au Québec, adaptée au lieu.</p>
+          <p><b>Le but pédagogique :</b> sensibiliser aux conséquences réelles des gestes (sur soi et sur les autres), développer l'empathie envers les victimes et faire découvrir la notion de <b>réparation</b> : s'excuser, rembourser, aider — des options toujours présentes et valorisées dans le jeu.</p>
+          <p><b>Les sentences</b> sont des catégories réelles (rencontre avec les parents, excuses et réparation, travaux communautaires, mesure extrajudiciaire, probation, dossier jeunesse ; à l'école : retenue, rencontre avec la direction ; à la bibliothèque : expulsion pour la journée, aide au rangement), présentées en version simplifiée, à but éducatif. Aucun montant, aucun article de loi : dans la vraie vie, un juge regarde toute la situation.</p>
+          <p><b>En classe :</b> une journée-objectif dure quelques minutes, le ton est cartoon et sans aucun gros mot écrit. Le jeu se joue <b>sans compte, sans internet et sans aucune donnée partagée</b> — la progression et les scores restent sur l'appareil.</p>
+        </div>
+        <button class="big-btn" id="btn-adults-back" type="button">← Retour</button>
+      </section>
+
+      <!-- ======== JEU ======== -->
+      <section id="screen-game" class="hidden">
+        <div id="hud">
+          <div class="hud-item"><span class="lab" id="hud-level-lab">Tableau</span><span id="hud-level">Le parc</span></div>
+          <div class="hud-item"><span class="lab">Points de trouble</span><span id="hud-points">0</span></div>
+          <div class="hud-item"><span class="lab">Combo discret</span><span id="combo">—</span></div>
+          <div class="hud-item"><span class="lab">Arrestations</span><span id="strikes">●●●</span></div>
+          <div class="hud-item"><span class="lab">Temps</span><span id="hud-time">1:30</span></div>
+          <div id="gauge-wrap">
+            <span class="lab" style="font-size:.72rem;color:var(--ink-soft);">Surveillance</span>
+            <div id="gauge-track"><div id="gauge-fill"></div></div>
+          </div>
+          <button class="icon-btn" id="btn-pause" type="button" aria-label="Pause">⏸</button>
+          <button class="icon-btn" id="btn-mute" type="button" aria-label="Son">🔊</button>
+        </div>
+        <div id="objectives">
+          <div class="obj-title">🎯 Défis de la journée</div>
+          <ul id="obj-list"></ul>
+        </div>
+        <div id="stage">
+          <canvas id="cv" width="400" height="580"></canvas>
+          <div id="chase-banner" class="hidden">🚨 ON TE COURT APRÈS&nbsp;!</div>
+          <div id="toast" role="status"></div>
+          <div id="joystick"><div id="stick"></div></div>
+        </div>
+        <div id="actions"></div>
+        <p class="hint">Glisse ton doigt sur le décor pour te déplacer (ou flèches / WASD au clavier). Approche-toi d'une cible, puis frappe un mauvais coup — sans te faire voir pour faire monter ton combo&nbsp;!</p>
+      </section>
+
+      <!-- ======== SENTENCE ======== -->
+      <section id="screen-sentence" class="frame hidden">
+        <div class="judge-row">
+          <svg width="86" height="96" viewBox="0 0 86 96" aria-hidden="true">
+            <path d="M14 30 Q10 8 30 8 L56 8 Q76 8 72 30 Q78 44 68 50 L62 38 Q64 26 56 24 L30 24 Q22 26 24 38 L18 50 Q8 44 14 30Z" fill="#e8e2d2" stroke="#2b2118" stroke-width="2.5"/>
+            <circle cx="28" cy="34" r="6" fill="#e8e2d2" stroke="#2b2118" stroke-width="2"/><circle cx="58" cy="34" r="6" fill="#e8e2d2" stroke="#2b2118" stroke-width="2"/>
+            <circle cx="43" cy="46" r="19" fill="#f2c894" stroke="#2b2118" stroke-width="3"/>
+            <circle cx="35" cy="45" r="7.5" fill="none" stroke="#2b2118" stroke-width="2.6"/>
+            <circle cx="51" cy="45" r="7.5" fill="none" stroke="#2b2118" stroke-width="2.6"/>
+            <path d="M42.5 45 L43.5 45 M27.5 45 L20 42 M58.5 45 L66 42" stroke="#2b2118" stroke-width="2.4"/>
+            <circle cx="35" cy="45" r="1.8" fill="#2b2118"/><circle cx="51" cy="45" r="1.8" fill="#2b2118"/>
+            <path d="M36 57 Q43 53 50 57" fill="none" stroke="#2b2118" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M43 65 L43 82 M30 82 L56 82" stroke="#2b2118" stroke-width="3"/>
+            <path d="M26 70 L60 70 L64 88 L22 88 Z" fill="#2b2118"/>
+            <rect x="58" y="76" width="20" height="5" rx="2.5" fill="#8a5a1d" stroke="#2b2118" stroke-width="2" transform="rotate(24 68 78)"/>
+          </svg>
+          <div>
+            <h2 id="sentence-title">Attrapé&nbsp;!</h2>
+            <p class="verdict-sub" id="sentence-sub">Le juge HP binoclard lit la sentence — la vraie, comme dans la vie.</p>
+          </div>
+        </div>
+        <div id="sentence-cards"></div>
+        <p class="legal-note">Version simplifiée, à but éducatif — dans la vraie vie, un juge regarde toute la situation.</p>
+        <button class="big-btn" id="btn-sentence-ok" type="button">J'ai compris — on continue</button>
+      </section>
+
+      <!-- ======== TABLEAU RÉUSSI ======== -->
+      <section id="screen-success" class="frame hidden">
+        <h2 style="text-align:center;" id="success-title">Tableau réussi&nbsp;!</h2>
+        <div class="stars-big" id="success-stars">★★★</div>
+        <p style="text-align:center;" class="verdict-sub" id="success-sub"></p>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num" id="success-points">0</div><div class="cap">points de trouble</div></div>
+          <div class="stat-box"><div class="num" id="success-repairs">0</div><div class="cap">réparations faites</div></div>
+          <div class="stat-box"><div class="num" id="success-arrests">0</div><div class="cap">arrestations</div></div>
+        </div>
+        <p class="recap" id="success-note" style="text-align:center;"></p>
+        <button class="big-btn red" id="btn-next-level" type="button">Tableau suivant →</button>
+        <button class="ghost-btn" id="btn-success-levels" type="button">Voir tous les tableaux</button>
+        <button class="ghost-btn" id="btn-success-replay" type="button">Rejouer ce tableau (pour un meilleur score)</button>
+      </section>
+
+      <!-- ======== JOURNÉE RATÉE (ADIEU) ======== -->
+      <section id="screen-fail" class="frame hidden">
+        <h2 class="adieu-title">ADIEU&nbsp;!</h2>
+        <p style="text-align:center;" class="verdict-sub" id="fail-sub">Trois arrestations dans la même journée. Adieu, la journée est finie.</p>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num" id="fail-points">0</div><div class="cap">points de trouble</div></div>
+          <div class="stat-box"><div class="num" id="fail-done">0/3</div><div class="cap">défis réussis</div></div>
+          <div class="stat-box"><div class="num" id="fail-repairs">0</div><div class="cap">réparations</div></div>
+        </div>
+        <h3 style="margin-top:6px;">Tout ce que tes gestes ont causé :</h3>
+        <ul class="recap" id="fail-recap"></ul>
+        <div class="cost-line" id="fail-cost"></div>
+        <div class="alt-line" id="fail-alt"></div>
+        <p class="recap" id="fail-repair-note"></p>
+        <button class="big-btn red" id="btn-retry" type="button">↻ Réessayer la journée</button>
+        <button class="ghost-btn" id="btn-fail-levels" type="button">Voir tous les tableaux</button>
+        <p class="sig">— HP Outils · Des outils pour la vraie vie —</p>
+      </section>
+
+      <!-- ======== PAUSE ======== -->
+      <section id="screen-pause" class="frame hidden">
+        <h2 style="text-align:center;">Pause</h2>
+        <p style="text-align:center;" class="verdict-sub" id="pause-sub">Le surveillant prend un café. Profites-en.</p>
+        <button class="big-btn" id="btn-resume" type="button">▶ Reprendre</button>
+        <button class="ghost-btn" id="btn-restart" type="button">Recommencer la journée</button>
+        <button class="ghost-btn" id="btn-quit" type="button">Quitter vers les tableaux</button>
+      </section>
+
+    </div>
+
+    <script>
+    "use strict";
+    /* ================= LES MAUVAIS COUPS =================
+       Catégories réelles et générales seulement — aucun montant, aucun article de loi, aucune durée précise inventée. */
+    var ACTS = {
+      vol: { label:"Voler un bonbon", short:"Vol", points:10, gravite:2, cls:"act-vol",
+        impact:"Le marchand perd l'argent du bonbon — et c'est souvent lui qui doit le rembourser au magasin.",
+        victime:"Le marchand de l'étalage",
+        effetAutre:"Il perd de l'argent, il se sent floué, et il commence à se méfier de tous les jeunes qui passent.",
+        couts:["Une rencontre avec tes parents et un agent de police","Rembourser ou remettre ce que tu as pris","Des excuses au marchand","Une mesure extrajudiciaire possible : des travaux communautaires","Un dossier jeunesse peut être ouvert et te suivre"],
+        reparer:"Rembourser le bonbon et t'excuser au marchand",
+        alternative:"Tu aurais pu garder tes sous pour t'en acheter un pour vrai — meilleur goût, zéro trouble." },
+      trebucher: { label:"Faire trébucher", short:"Croche-pied", points:15, gravite:3, cls:"act-trip",
+        impact:"Le passant tombe raide : genou éraflé, linge sali… et la honte devant tout le monde.",
+        victime:"La personne qui ne t'avait rien fait",
+        effetAutre:"Elle s'est fait mal en tombant, elle a eu honte devant tout le monde, et elle boite peut-être pendant des jours.",
+        couts:["Tes parents sont informés — et la personne tombée peut porter plainte","Des excuses publiques à la personne","Une mesure extrajudiciaire possible : des travaux communautaires","Si la personne est blessée, ça peut aller jusqu'à une probation","Un dossier jeunesse peut être ouvert et te suivre"],
+        reparer:"Aider la personne à se relever et t'excuser pour vrai",
+        alternative:"Tu aurais pu lui faire un petit signe de tête en passant — même endroit, zéro blessé." },
+      battre: { label:"Se battre / bousculer", short:"Bagarre", points:20, gravite:5, cls:"act-fight",
+        impact:"L'autre ado a des bleus, il a eu peur… et il risque de vouloir se venger demain.",
+        victime:"L'autre ado",
+        effetAutre:"Il a mal, il a eu peur, il se sent humilié — et une chicane comme ça, ça dégénère vite et ça n'arrête plus.",
+        couts:["Une plainte pour voies de fait, c'est sérieux même entre ados","Une mesure extrajudiciaire ou un passage devant le tribunal de la jeunesse","Une probation possible, avec des conditions à respecter","Des travaux communautaires et des excuses encadrées","Un dossier jeunesse qui peut te suivre plus longtemps qu'une chicane"],
+        reparer:"T'excuser devant l'autre et accepter une médiation pour régler ça",
+        alternative:"Tu aurais pu régler ça avec des mots, ou juste partir en riant — la bagarre, elle, ne règle rien." },
+      injurier: { label:"Injurier", short:"Injures", points:10, gravite:2, cls:"act-insult",
+        impact:"La personne encaisse les mots devant tout le monde. Les mots, ça reste pogné dans la tête longtemps.",
+        victime:"La personne injuriée",
+        effetAutre:"Elle s'est sentie humiliée devant tout le monde. Une injure lancée en riant peut continuer de faire mal pendant des semaines.",
+        couts:["Des excuses à la personne, souvent devant un adulte","Une rencontre avec tes parents","Une médiation pour réparer le lien","Si ça se répète, ça devient du harcèlement — et là, c'est une autre catégorie de trouble"],
+        reparer:"T'excuser face à la personne, devant ceux qui ont entendu",
+        alternative:"Tu aurais pu garder la réplique pour toi — être drôle sans écraser quelqu'un, c'est un vrai talent." },
+      pisser: { label:"Pisser sur un arbre", short:"Pipi sauvage", points:10, gravite:1, cls:"act-pee",
+        impact:"Les gens viennent relaxer, pas pour l'odeur. Un lieu public, c'est à tout le monde.",
+        victime:"Tous les gens du coin",
+        effetAutre:"C'est dégoûtant pour les familles à côté, et quelqu'un doit nettoyer derrière toi.",
+        couts:["Une amende possible en vertu d'un règlement municipal","L'agent peut exiger que tu nettoies et contacter tes parents","Si c'est devant du monde, ça peut devenir une accusation d'action indécente — beaucoup plus sérieux qu'une joke","Une mesure extrajudiciaire possible : des travaux communautaires sur place"],
+        reparer:"Aider à entretenir l'endroit (ramasser, nettoyer) avec le sourire",
+        alternative:"Les toilettes sont à deux minutes. Deux minutes, contre tout ce trouble-là… facile à choisir." },
+      avion: { label:"Lancer un avion de papier", short:"Avion de papier", points:10, gravite:1, cls:"act-new",
+        impact:"L'avion pique droit dans la cour : tout le monde lève la tête, la partie en cours est scrap.",
+        victime:"Les élèves qui jouaient tranquilles",
+        effetAutre:"Leur jeu est interrompu, un élève a failli le recevoir dans l'œil, et la cour devient bruyante d'un coup.",
+        couts:["Une retenue possible","Ramasser les papiers dans la cour","Des excuses au groupe dont tu as brisé le jeu","Une rencontre avec la direction si ça se répète"],
+        reparer:"Ramasser l'avion (et les autres papiers) et t'excuser au groupe",
+        alternative:"Tu aurais pu lancer ton avion dans ta cour chez vous — même fun, zéro retenue.", contexte:{1:["Une retenue à l'école","Ramasser les papiers dans la cour","Des excuses au groupe dont tu as brisé le jeu","Tes parents sont avisés si ça se répète"]} },
+      collation: { label:"Voler une collation", short:"Vol de collation", points:10, gravite:2, cls:"act-vol",
+        impact:"L'élève ouvre sa boîte à lunch… vide. C'est SON dîner que tu as pris.",
+        victime:"L'élève qui a perdu sa collation",
+        effetAutre:"Il a faim pour le reste de la journée, il se sent volé par quelqu'un de sa propre école, et la confiance entre élèves en prend un coup.",
+        couts:["Une rencontre avec la direction de l'école et tes parents","Rendre ou remplacer la collation","Des excuses à l'élève","Une retenue possible et des travaux à l'école","Si ça se répète, ça peut devenir une plainte pour vol"],
+        reparer:"Remplacer la collation avec tes sous et t'excuser à l'élève",
+        alternative:"Tu aurais pu demander poliment s'il voulait échanger — les échanges de collations, c'est un classique qui marche." },
+      bousculerFile: { label:"Bousculer dans la file", short:"Bousculade dans la file", points:15, gravite:3, cls:"act-fight",
+        impact:"Toute la file recule d'un coup : un petit tombe, un autre perd son plateau… pardon, son sac.",
+        victime:"Les élèves dans la file",
+        effetAutre:"Un élève plus petit est tombé, tout le monde est frustré, et la file — qui avançait bien — devient une chicane générale.",
+        couts:["Une retenue possible","Une rencontre avec la direction et tes parents","Des excuses publiques aux élèves bousculés","Des travaux à l'école possibles","Si quelqu'un est blessé, ça peut aller plus loin qu'une simple retenue"],
+        reparer:"Aider les élèves à se relever, reprendre ta place au bout de la file et t'excuser",
+        alternative:"Tu aurais pu attendre ton tour comme tout le monde — la file avance pour ceux qui patientent aussi." },
+      crier: { label:"Crier dans le silence", short:"Cri dans la bibliothèque", points:10, gravite:1, cls:"act-insult",
+        impact:"Le cri résonne entre les rayons : une lectrice sursaute, un étudiant perd le fil de son examen… de son livre.",
+        victime:"Les lecteurs autour",
+        effetAutre:"Ils ont sursauté, perdu leur concentration, et l'endroit où ils viennent pour le calme ne l'est plus.",
+        couts:["Une expulsion de la bibliothèque pour la journée","Des excuses à la bibliothécaire et aux lecteurs","Aider au rangement des livres pour réparer le dérangement","Si ça se répète, l'accès à la bibliothèque peut être limité"],
+        reparer:"Aider la bibliothécaire à ranger les retours de livres",
+        alternative:"Tu aurais pu chuchoter ta joke à ton ami dehors — le silence, c'est le trésor de la place." },
+      courir: { label:"Courir entre les rayons", short:"Course dans les rayons", points:15, gravite:2, cls:"act-trip",
+        impact:"Tu déboules au coin d'un rayon : les livres d'une étagère valsent, une dame âgée s'accroche au comptoir.",
+        victime:"Les usagers et le personnel",
+        effetAutre:"Des livres sont tombés et abîmés, une personne âgée a eu peur de tomber, et le personnel doit tout replacer.",
+        couts:["Une expulsion de la bibliothèque pour la journée","Replacer et réparer les livres tombés","Des excuses aux usagers dérangés","Aider au rangement pendant un moment","Si ça se répète, l'accès à la bibliothèque peut être limité"],
+        reparer:"Replacer tous les livres tombés, dans le bon ordre",
+        alternative:"Tu aurais pu aller courir dehors, juste après — les rayons, c'est fait pour marcher lentement." },
+      dechirer: { label:"Déchirer une page", short:"Page déchirée", points:15, gravite:3, cls:"act-new",
+        impact:"La page arrachée, c'est un bout d'histoire qui disparaît pour TOUS les lecteurs après toi.",
+        victime:"La bibliothèque — et tous ses futurs lecteurs",
+        effetAutre:"Le livre est abîmé pour tout le monde : le prochain lecteur tombe sur un trou dans l'histoire, et la bibliothèque doit réparer ou remplacer le livre avec l'argent de tous.",
+        couts:["Rembourser ou remplacer le livre abîmé","Une expulsion de la bibliothèque pour la journée","Des excuses à la bibliothécaire","Aider au rangement et à la réparation des livres","Tes parents sont avisés"],
+        reparer:"Aider à réparer les livres abîmés avec le personnel",
+        alternative:"Tu aurais pu noter le numéro de la page et revenir la relire demain — le livre t'aurait attendu." },
+      boulettes: { label:"Lancer des boulettes de papier", short:"Boulettes de papier", points:10, gravite:2, cls:"act-new",
+        impact:"Ploc. Une boulette dans le cou d'une passagère qui lisait tranquille. Elle n'a rien demandé.",
+        victime:"La passagère visée (et celles autour)",
+        effetAutre:"Elle se sent visée et humiliée devant tout l'autobus, et le plancher se couvre de papiers que le chauffeur devra ramasser.",
+        couts:["Le chauffeur peut te faire descendre à l'arrêt suivant","Ramasser toutes les boulettes dans l'autobus","Des excuses à la passagère","Tes parents peuvent être avisés par la société de transport","Si ça se répète, ton accès au transport peut être compliqué"],
+        reparer:"Ramasser chaque boulette et t'excuser à la passagère",
+        alternative:"Tu aurais pu plier ton papier en avion… et le garder pour la sortie. Là, c'est juste des déchets dans le cou du monde." },
+      refuserPlace: { label:"S'étaler et refuser la place", short:"Place refusée", points:15, gravite:2, cls:"act-new",
+        impact:"Étalé sur deux sièges, casque sur les oreilles : la dame âgée reste debout, accrochée à la barre, à chaque freinage.",
+        victime:"La personne âgée restée debout",
+        effetAutre:"Elle est fatiguée, elle a peur de tomber à chaque arrêt, et tout l'autobus voit la scène — c'est gênant pour elle, et pour toi.",
+        couts:["Le chauffeur peut t'obliger à céder la place ou te faire descendre à l'arrêt suivant","Des excuses à la personne, devant les passagers","Tes parents peuvent être avisés","Céder la place en priorité, c'est une règle du transport en commun — pas une suggestion"],
+        reparer:"Céder ta place tout de suite, avec un sourire et des excuses",
+        alternative:"Tu aurais pu être celui ou celle qui se lève en premier — ce geste-là, tout l'autobus s'en souvient aussi, mais en bien." },
+      musique: { label:"Musique trop fort, sans écouteurs", short:"Musique trop forte", points:10, gravite:1, cls:"act-insult",
+        impact:"Ta musique devient celle de tout l'autobus : le bébé se réveille, les conversations meurent.",
+        victime:"Tous les passagers",
+        effetAutre:"Ils subissent un bruit qu'ils n'ont pas choisi : un bébé réveillé en pleurs, des gens qui n'entendent plus leurs appels, un trajet qui devient long pour tout le monde.",
+        couts:["Le chauffeur peut exiger que tu baisses le son ou éteignes l'appareil","Des excuses aux passagers proches","Si tu refuses, tu peux être descendu à l'arrêt suivant","Tes parents peuvent être avisés si ça se répète"],
+        reparer:"Éteindre la musique et t'excuser aux passagers autour",
+        alternative:"Des écouteurs, ou le son juste pour toi — ta musique reste bonne sans devenir celle de 30 personnes." }
+    };
+    /* Coûts adaptés au lieu pour les gestes communs (volet 2 de la sentence) */
+    var COUTS_LIEU = {
+      1:{ injurier:["Une rencontre avec la direction de l'école et tes parents","Des excuses à l'élève, devant un adulte","Une retenue possible","Une médiation pour réparer le lien"],
+          trebucher:["Une retenue et une rencontre avec la direction","Tes parents sont informés","Des excuses publiques à l'élève tombé","Des travaux à l'école possibles","Si l'élève est blessé, ça peut aller plus loin"] },
+      2:{ injurier:["Une expulsion de la bibliothèque pour la journée","Des excuses à la personne et à la bibliothécaire","Aider au rangement des livres","Si ça se répète, l'accès à la bibliothèque peut être limité"] },
+      3:{ vol:["L'agent de sécurité peut te retenir le temps d'appeler tes parents ou la police","Rembourser ou remettre ce que tu as pris","Des excuses au marchand","Une mesure extrajudiciaire possible : des travaux communautaires","Un dossier jeunesse peut être ouvert et te suivre"] },
+      4:{ injurier:["Le chauffeur peut te faire descendre à l'arrêt suivant","Des excuses à la personne, devant les passagers","Tes parents peuvent être avisés","Si ça se répète, ça devient du harcèlement — une autre catégorie de trouble"],
+          trebucher:["Le chauffeur peut te faire descendre à l'arrêt suivant","Des excuses publiques à la personne tombée","Tes parents peuvent être avisés","Si la personne est blessée dans un véhicule, c'est pris très au sérieux"] }
+    };
+    function coutsPour(type, lvlIdx){
+      var par = COUTS_LIEU[lvlIdx];
+      if(par && par[type]) return par[type];
+      if(ACTS[type].contexte && ACTS[type].contexte[lvlIdx]) return ACTS[type].contexte[lvlIdx];
+      return ACTS[type].couts;
+    }
+
+    /* ================= LES 6 TABLEAUX ================= */
+    var LEVELS = [
+      { name:"Le parc de quartier", guardian:"l'inspecteur", guardianCap:"L'inspecteur", time:90, nWalk:5, nInsp:1,
+        sub:"L'inspecteur patrouille entre les arbres et l'étalage de bonbons.",
+        nearStand:'vol', nearWalker:['trebucher','battre','injurier'], nearProp:'pisser', standLabel:"BONBONS",
+        challenges:[ {type:'act', act:'vol', n:2, label:"Vole 2 bonbons à l'étalage"}, {type:'stealth', act:'trebucher', n:1, label:"Trébuche 1 passant sans être vu"}, {type:'points', n:60, label:"Atteins 60 points de trouble"} ] },
+      { name:"La cour d'école", guardian:"le surveillant de cour", guardianCap:"Le surveillant", time:100, nWalk:6, nInsp:1,
+        sub:"Le surveillant de cour a l'œil partout, entre la file et les boîtes à lunch.",
+        nearStand:'collation', nearWalker:['bousculerFile','trebucher','injurier'], nearProp:'avion', standLabel:"COLLA-TIONS",
+        challenges:[ {type:'act', act:'collation', n:1, label:"Vole 1 collation"}, {type:'act', act:'avion', n:2, label:"Lance 2 avions de papier"}, {type:'points', n:80, label:"Atteins 80 points de trouble"} ] },
+      { name:"La bibliothèque", guardian:"la bibliothécaire", guardianCap:"La bibliothécaire", time:110, nWalk:5, nInsp:1,
+        sub:"Chut… La bibliothécaire entend tout, même entre les rayons.",
+        nearStand:'dechirer', nearWalker:['crier','injurier'], nearProp:'courir', standLabel:"LIVRES",
+        challenges:[ {type:'act', act:'crier', n:1, label:"Crie 1 fois dans le silence"}, {type:'act', act:'courir', n:2, label:"Cours 2 fois entre les rayons"}, {type:'points', n:90, label:"Atteins 90 points de trouble"} ] },
+      { name:"Le centre commercial", guardian:"l'agent de sécurité", guardianCap:"L'agent de sécurité", time:115, nWalk:7, nInsp:1,
+        sub:"L'agent de sécurité surveille les fontaines et l'étalage de bonbons.",
+        nearStand:'vol', nearWalker:['trebucher','battre','injurier'], nearProp:null, standLabel:"BONBONS",
+        challenges:[ {type:'act', act:'vol', n:3, label:"Vole 3 bonbons à l'étalage"}, {type:'stealth', act:'trebucher', n:1, label:"Trébuche 1 passant près des fontaines, sans être vu"}, {type:'points', n:110, label:"Atteins 110 points de trouble"} ] },
+      { name:"L'autobus et son arrêt", guardian:"le chauffeur", guardianCap:"Le chauffeur", time:120, nWalk:6, nInsp:1,
+        sub:"Le chauffeur voit tout dans son miroir. Tout.",
+        nearStand:'refuserPlace', nearWalker:['boulettes','musique','injurier'], nearProp:'musique', standLabel:"SIÈGES",
+        challenges:[ {type:'act', act:'boulettes', n:2, label:"Lance 2 boulettes de papier"}, {type:'act', act:'refuserPlace', n:1, label:"Refuse 1 fois de céder la place"}, {type:'points', n:110, label:"Atteins 110 points de trouble"} ] },
+      { name:"La fête de quartier", guardian:"les deux surveillants", guardianCap:"Les surveillants", time:130, nWalk:8, nInsp:2,
+        sub:"Le grand soir : deux surveillants, une foule, et tous les mauvais coups sont permis.",
+        nearStand:'vol', nearWalker:['trebucher','battre','injurier','boulettes'], nearProp:'pisser', standLabel:"BONBONS",
+        challenges:[ {type:'act', act:'vol', n:2, label:"Vole 2 bonbons à l'étalage"}, {type:'act', act:'battre', n:1, label:"Bouscule 1 ado"}, {type:'stealthAny', n:3, label:"Réussis 3 gestes sans être vu"}, {type:'points', n:150, label:"Atteins 150 points de trouble"} ] }
+    ];
+
+    /* ================= ÉTAT + SAUVEGARDE ================= */
+    var W = 400, H = 580;
+    var cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+    var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    function loadSave(){
+      var d = {unlocked:1, stars:{}, best:{}};
+      try { var s = JSON.parse(localStorage.getItem('adoOdieuxSaveV2')||'null'); if(s && typeof s==='object'){ d.unlocked = Math.max(1, Math.min(6, s.unlocked||1)); d.stars = s.stars||{}; d.best = s.best||{}; } } catch(e){}
+      return d;
+    }
+    var SAVE = loadSave();
+    function persist(){ try { localStorage.setItem('adoOdieuxSaveV2', JSON.stringify(SAVE)); } catch(e){} }
+    function loadOldBest(){ try { return JSON.parse(localStorage.getItem('adoOdieuxBest')||'null'); } catch(e){ return null; } }
+
+    var S = null;
+    function newState(){
+      return { mode:'menu', level:0, points:0, arrests:0, repairs:0, dayTime:90, gauge:0,
+        history:[], pending:[], gravest:null, avatar:'boy', counts:{}, stealth:{}, stealthTotal:0,
+        streak:0, mult:1, pendingWin:false, winDelay:0, over:false };
+    }
+    S = newState();
+    function LV(){ return LEVELS[S.level]; }
+    function multFor(streak){ return streak >= 4 ? 3 : (streak >= 2 ? 2 : 1); }
+
+    var player, inspectors, walkers, floats, particles, trees, benches, stand;
+    var keys = {}, joy = {active:false, id:null, ox:0, oy:0, dx:0, dy:0};
+    var lastTs = 0, raf = null, toastTimer = null;
+
+    /* ================= AUDIO ================= */
+    var AC = null, muted = false;
+    try { muted = localStorage.getItem('adoOdieuxMute') === '1'; } catch(e){}
+    function ac(){ if(!AC){ try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ AC = null; } } if(AC && AC.state === 'suspended'){ AC.resume(); } return AC; }
+    function beep(freq, dur, type, vol, slide){
+      if(muted) return; var a = ac(); if(!a) return;
+      var o = a.createOscillator(), g = a.createGain();
+      o.type = type || 'square'; o.frequency.setValueAtTime(freq, a.currentTime);
+      if(slide){ o.frequency.exponentialRampToValueAtTime(Math.max(30, freq + slide), a.currentTime + dur); }
+      g.gain.setValueAtTime(vol || .06, a.currentTime);
+      g.gain.exponentialRampToValueAtTime(.0001, a.currentTime + dur);
+      o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + dur);
+    }
+    var SFX = {
+      act:function(){ beep(520,.09,'square',.05,240); }, point:function(){ beep(880,.07,'triangle',.05,120); },
+      alarm:function(){ beep(660,.16,'sawtooth',.05,-260); },
+      caught:function(){ beep(196,.4,'sawtooth',.07,-80); beep(147,.5,'square',.05,-40); },
+      repair:function(){ beep(523,.1,'triangle',.06); setTimeout(function(){ beep(784,.16,'triangle',.06); },90); },
+      win:function(){ beep(523,.1,'triangle',.06); setTimeout(function(){ beep(659,.1,'triangle',.06); },110); setTimeout(function(){ beep(784,.22,'triangle',.06); },220); },
+      click:function(){ beep(700,.05,'square',.03); }
+    };
+
+    /* ================= MONDE ================= */
+    var TREES_BY_LEVEL = [
+      [ {x:52,y:78,r:26},{x:120,y:200,r:21},{x:338,y:212,r:24},{x:56,y:330,r:22},{x:196,y:300,r:20},{x:340,y:452,r:25},{x:66,y:492,r:23},{x:196,y:520,r:19} ],
+      [ {x:52,y:88,r:22},{x:340,y:110,r:22},{x:60,y:330,r:20},{x:338,y:330,r:21},{x:196,y:520,r:19} ],
+      [ {x:70,y:120,r:24},{x:200,y:110,r:24},{x:330,y:120,r:24},{x:70,y:330,r:24},{x:330,y:330,r:24},{x:200,y:480,r:24} ],
+      [ {x:200,y:290,r:30} ],
+      [ {x:60,y:120,r:14},{x:340,y:120,r:14},{x:60,y:470,r:14},{x:340,y:470,r:14} ],
+      [ {x:52,y:78,r:26},{x:338,y:212,r:24},{x:56,y:330,r:22},{x:340,y:452,r:25},{x:66,y:492,r:23},{x:196,y:520,r:19} ]
+    ];
+    function buildWorld(){
+      var L = LV();
+      trees = TREES_BY_LEVEL[S.level].map(function(t){ return {x:t.x, y:t.y, r:t.r}; });
+      benches = S.level === 3 ? [ {x:110,y:150}, {x:290,y:440} ] : [ {x:196,y:150}, {x:120,y:420} ];
+      stand = S.level === 4 ? {x:150, y:52, w:100, h:44} : {x:316, y:64, w:74, h:46};
+      if(S.level === 1) stand = {x:30, y:64, w:74, h:46};
+      player = {x:200, y:470, r:13, face:1, walk:0, acting:0, actType:null, actTarget:null, actT:0};
+      inspectors = []; walkers = []; floats = []; particles = [];
+      for(var i=0;i<L.nInsp;i++){
+        inspectors.push({ x: i===0?70:330, y: i===0?120:300, r:13, dir: i===0?0:Math.PI, wp:i*3, state:'patrol', loseT:0,
+          speed: (60 + S.level*5 + i*4) });
+      }
+      var spots = [[90,150],[260,120],[150,250],[300,330],[90,380],[240,430],[320,520],[160,90],[60,240],[280,250]];
+      for(var j=0;j<L.nWalk;j++){
+        var sp = spots[j % spots.length];
+        walkers.push({ x:sp[0], y:sp[1], r:12, tx:sp[0], ty:sp[1], speed: 26 + Math.random()*16 + S.level*1.5,
+          state:'walk', t:0, hue:['#7a4a8a','#38618c','#a3542e','#3f7a4e','#8a5a1d'][j%5], alert:false, alertT:0, down:0 });
+      }
+    }
+    var WAYPOINTS = [[70,90],[330,90],[330,300],[200,330],[70,300],[70,520],[330,520],[200,180]];
+    function dist(a,b){ var dx=a.x-b.x, dy=a.y-b.y; return Math.sqrt(dx*dx+dy*dy); }
+    function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+    function rand(a,b){ return a + Math.random()*(b-a); }
+    function blocked(x,y,r){
+      if(x<r+4||x>W-r-4||y<r+4||y>H-r-4) return true;
+      for(var i=0;i<trees.length;i++){ var t=trees[i]; var dx=x-t.x, dy=y-t.y; if(dx*dx+dy*dy < (r+t.r-4)*(r+t.r-4)) return true; }
+      if(x>stand.x-r && x<stand.x+stand.w+r && y>stand.y-r && y<stand.y+stand.h+r) return true;
+      return false;
+    }
+    function moveEntity(e, dx, dy, dt){
+      var nx = e.x + dx*dt, ny = e.y + dy*dt;
+      if(!blocked(nx, e.y, e.r)){ e.x = nx; }
+      if(!blocked(e.x, ny, e.r)){ e.y = ny; }
+    }
+
+    /* ================= ÉCRANS ================= */
+    var SCREENS = ['screen-start','screen-levels','screen-adults','screen-game','screen-sentence','screen-success','screen-fail','screen-pause'];
+    function show(id){ SCREENS.forEach(function(s){ document.getElementById(s).classList.toggle('hidden', s!==id); }); }
+    function toast(html, ms){
+      var t = document.getElementById('toast');
+      t.innerHTML = html; t.classList.add('show');
+      if(toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ t.classList.remove('show'); }, ms || 3400);
+    }
+    function starsStr(n){ var s=''; for(var i=0;i<3;i++) s += i < n ? '★' : '☆'; return s; }
+    function currentLevelIdx(){
+      for(var i=0;i<6;i++){ if(!SAVE.stars[i]) return i; }
+      return 5;
+    }
+    function showBest(){
+      var el = document.getElementById('best-line');
+      var done = Object.keys(SAVE.stars).length, totStars = 0;
+      Object.keys(SAVE.stars).forEach(function(k){ totStars += SAVE.stars[k]; });
+      var old = loadOldBest();
+      var txt = '';
+      if(done > 0) txt = '🏆 Campagne : ' + done + ' tableau' + (done>1?'x':'') + ' réussi' + (done>1?'s':'') + ' · ' + totStars + ' étoile' + (totStars>1?'s':'') + ' sur 18 — progression gardée sur cet appareil.';
+      else if(old && old.points > 0) txt = '🏆 Ton record du prototype : ' + old.points + ' points de trouble. La campagne t\u2019attend !';
+      else txt = 'Aucun tableau réussi pour l\u2019instant — à toi de jouer (et de ne pas te faire pogner).';
+      el.textContent = txt;
+      var bc = document.getElementById('btn-continue');
+      if(done > 0 || SAVE.unlocked > 1){ bc.classList.remove('hidden'); bc.textContent = '▶ Continuer — tableau ' + (currentLevelIdx()+1) + ' : ' + LEVELS[currentLevelIdx()].name; }
+      else bc.classList.add('hidden');
+    }
+    function renderLevels(){
+      document.getElementById('levels-progress').textContent =
+        'Tableaux débloqués : ' + SAVE.unlocked + ' / 6 · Étoiles : ' + Object.keys(SAVE.stars).reduce(function(a,k){ return a + SAVE.stars[k]; },0) + ' / 18';
+      var wrap = document.getElementById('levels-list'); wrap.innerHTML = '';
+      LEVELS.forEach(function(L, i){
+        var locked = i >= SAVE.unlocked;
+        var card = document.createElement('div'); card.className = 'level-card' + (locked ? ' locked' : '');
+        var best = SAVE.best[i];
+        card.innerHTML =
+          '<div class="level-num">' + (locked ? '🔒' : (i+1)) + '</div>' +
+          '<div class="level-info"><h3>' + L.name + '</h3>' +
+          '<div class="lsub">Surveillant : ' + L.guardian + '. ' + L.sub + '</div>' +
+          '<div class="lsub">' + (SAVE.stars[i] ? 'Meilleur score : ' + (best||0) + ' points' : (locked ? 'Réussis le tableau précédent pour débloquer.' : 'Pas encore réussi — à toi de jouer !')) + '</div></div>' +
+          '<div><div class="level-stars">' + (SAVE.stars[i] ? starsStr(SAVE.stars[i]) : '☆☆☆') + '</div></div>';
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'level-play'; b.textContent = locked ? 'Verrouillé' : 'Jouer';
+        b.disabled = locked;
+        if(!locked){ b.addEventListener('click', function(){ ac(); SFX.click(); startLevel(i); }); }
+        card.appendChild(b);
+        wrap.appendChild(card);
+      });
+    }
+    function showLevels(){ renderLevels(); show('screen-levels'); }
+
+    /* ================= DÉFIS ================= */
+    function challengeProgress(ch){
+      if(ch.type === 'act') return Math.min(ch.n, S.counts[ch.act] || 0);
+      if(ch.type === 'stealth') return Math.min(ch.n, S.stealth[ch.act] || 0);
+      if(ch.type === 'stealthAny') return Math.min(ch.n, S.stealthTotal);
+      if(ch.type === 'points') return Math.min(ch.n, S.points);
+      return 0;
+    }
+    function renderObjectives(){
+      var ul = document.getElementById('obj-list'); ul.innerHTML = '';
+      LV().challenges.forEach(function(ch){
+        var p = challengeProgress(ch), li = document.createElement('li');
+        if(p >= ch.n) li.className = 'done';
+        li.textContent = (p >= ch.n ? '✔ ' : '') + ch.label + ' (' + p + '/' + ch.n + ')';
+        ul.appendChild(li);
+      });
+    }
+    function allChallengesDone(){ return LV().challenges.every(function(ch){ return challengeProgress(ch) >= ch.n; }); }
+
+    /* ================= DÉROULEMENT ================= */
+    function startLevel(idx){
+      var av = S.avatar;
+      S = newState(); S.avatar = av; S.level = idx; S.mode = 'play'; S.dayTime = LV().time;
+      buildWorld(); updateHUD(); renderObjectives(); refreshActions();
+      show('screen-game');
+      document.getElementById('hud-level').textContent = (idx+1) + ' · ' + LV().name;
+      document.getElementById('chase-banner').textContent = '🚨 ' + LV().guardianCap.toUpperCase() + ' TE COURT APRÈS !';
+      toast('Tableau ' + (idx+1) + ' — ' + LV().name + '. ' + LV().sub + ' Réussis les défis avant la fin du temps !', 4200);
+      startLoop();
+    }
+    function levelSuccess(){
+      S.mode = 'success'; stopLoop(); SFX.win();
+      var stars = Math.max(1, 3 - S.arrests);
+      if(!SAVE.stars[S.level] || stars > SAVE.stars[S.level]) SAVE.stars[S.level] = stars;
+      if(!SAVE.best[S.level] || S.points > SAVE.best[S.level]) SAVE.best[S.level] = S.points;
+      if(S.level + 2 > SAVE.unlocked && S.level + 1 < 6) SAVE.unlocked = S.level + 2;
+      persist();
+      document.getElementById('success-title').textContent = S.level === 5 ? '🎉 Campagne terminée !' : 'Tableau ' + (S.level+1) + ' réussi !';
+      var sh = ''; for(var i=0;i<3;i++) sh += '<span class="' + (i < stars ? '' : 'off') + '">★</span>';
+      document.getElementById('success-stars').innerHTML = sh;
+      document.getElementById('success-sub').textContent =
+        S.level === 5 ? 'Tu as traversé les six tableaux. Le roi (ou la reine) des mauvais coups… qui a aussi appris ce qu\u2019ils coûtent.'
+        : (S.arrests === 0 ? 'Sans une seule arrestation — infiltration parfaite. ' + LEVELS[S.level+1].name + ' est débloqué !'
+          : 'Réussi avec ' + S.arrests + ' arrestation' + (S.arrests>1?'s':'') + '. ' + LEVELS[S.level+1].name + ' est débloqué !');
+      document.getElementById('success-points').textContent = S.points;
+      document.getElementById('success-repairs').textContent = S.repairs;
+      document.getElementById('success-arrests').textContent = S.arrests;
+      document.getElementById('success-note').textContent = S.repairs > 0
+        ? 'Et tu as réparé ' + S.repairs + ' fois en chemin. Ça aussi, ça compte — pour les autres, et pour toi.'
+        : 'Astuce étoiles : zéro arrestation = 3 étoiles. Le combo « sans se faire voir » (×2, ×3) gonfle ton score.';
+      var nb = document.getElementById('btn-next-level');
+      nb.textContent = S.level === 5 ? 'Revoir les tableaux 🏆' : 'Tableau suivant → ' + LEVELS[S.level+1].name;
+      show('screen-success');
+    }
+    function levelFail(reason){
+      S.mode = 'fail'; stopLoop(); SFX.caught();
+      document.getElementById('fail-sub').textContent = reason === 'time'
+        ? 'Le temps est écoulé et les défis ne sont pas tous réussis. La journée est finie — adieu, on réessaie !'
+        : 'Trois arrestations dans la même journée. Adieu la liberté, adieu le tableau — on réessaie !';
+      document.getElementById('fail-points').textContent = S.points;
+      var done = LV().challenges.filter(function(ch){ return challengeProgress(ch) >= ch.n; }).length;
+      document.getElementById('fail-done').textContent = done + '/' + LV().challenges.length;
+      document.getElementById('fail-repairs').textContent = S.repairs;
+      var ul = document.getElementById('fail-recap'); ul.innerHTML = '';
+      if(S.history.length === 0){ ul.innerHTML = '<li>Rien du tout — journée sage, zéro trouble !</li>'; }
+      var hCounts = {};
+      S.history.forEach(function(h){ hCounts[h] = (hCounts[h]||0)+1; });
+      Object.keys(hCounts).forEach(function(h){
+        var li = document.createElement('li');
+        li.textContent = ACTS[h].short + (hCounts[h]>1 ? ' × ' + hCounts[h] : '') + ' — ' + ACTS[h].impact;
+        ul.appendChild(li);
+      });
+      var g = S.gravest ? ACTS[S.gravest] : null;
+      document.getElementById('fail-cost').innerHTML = g
+        ? '<b>Ce que ça a coûté pour vrai :</b> pour ton geste le plus grave (' + g.short.toLowerCase() + '), les conséquences possibles incluent : ' + coutsPour(S.gravest, S.level).slice(0,3).join(' · ').toLowerCase() + '…'
+        : '<b>Ce que ça a coûté pour vrai :</b> rien — tu n\u2019as rien fait de mal. Bravo, mais drôle de façon de jouer !';
+      document.getElementById('fail-alt').innerHTML = g
+        ? '<b>Ce que tu aurais pu faire à la place :</b> ' + g.alternative
+        : '<b>La prochaine fois :</b> ose un mauvais coup… puis assume si le surveillant te voit.';
+      document.getElementById('fail-repair-note').innerHTML = S.repairs > 0
+        ? '🌱 Tu as réparé <b>' + S.repairs + ' fois</b> pendant la journée. Réparer, c\u2019est la seule chose qui efface vraiment une partie du trouble — dans le jeu comme dans la vie.'
+        : '🌱 Petit secret : à chaque sentence, le bouton « Réparer » réduit la surveillance… et dans la vraie vie, réparer change vraiment les choses.';
+      show('screen-fail');
+    }
+</script>
+
+<script>
+    "use strict";
+    /* ================= ACTIONS CONTEXTUELLES ================= */
+    var actionsEl = document.getElementById('actions');
+    var nearCache = {key:''};
+    function nearestTargets(){
+      var res = [], L = LV();
+      if(L.nearStand && Math.abs(player.x-(stand.x+stand.w/2)) < 82 && Math.abs(player.y-(stand.y+stand.h)) < 64) res.push({type:L.nearStand});
+      var bestW = null, bd = 48;
+      walkers.forEach(function(w){ if(w.state!=='down'){ var d = dist(player,w); if(d<bd){ bd=d; bestW=w; } } });
+      if(bestW){ L.nearWalker.forEach(function(t){ res.push({type:t, target:bestW}); }); }
+      var bestT = null, bt = 52;
+      trees.forEach(function(t){ var d = dist(player,t); if(d<bt){ bt=d; bestT=t; } });
+      if(bestT && L.nearProp && !bestW) res.push({type:L.nearProp, target:bestT});
+      return res;
+    }
+    function refreshActions(){
+      if(S.mode !== 'play'){ return; }
+      var list = (player.acting>0) ? [] : nearestTargets();
+      var key = S.level + ':' + list.map(function(a){ return a.type; }).join(',');
+      if(key === nearCache.key) return;
+      nearCache.key = key;
+      actionsEl.innerHTML = '';
+      if(!list.length){
+        var d = document.createElement('div'); d.className = 'act-none';
+        d.textContent = 'Approche-toi d\u2019une cible du tableau…';
+        actionsEl.appendChild(d); return;
+      }
+      list.forEach(function(a){
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'act-btn ' + ACTS[a.type].cls;
+        b.innerHTML = ACTS[a.type].label + '<small>+' + ACTS[a.type].points + ' points' + (S.mult>1 ? ' · combo ×' + S.mult : '') + '</small>';
+        b.addEventListener('click', function(){ commitAct(a.type, a.target || null); });
+        actionsEl.appendChild(b);
+      });
+    }
+    function witnessesNear(range){
+      var n = 0;
+      walkers.forEach(function(w){ if(w.state!=='down' && dist(player,w) < range) n++; });
+      return n;
+    }
+    function inspectorSees(e, px, py, range){
+      var dx = px - e.x, dy = py - e.y, d = Math.sqrt(dx*dx+dy*dy);
+      if(d > range) return false;
+      var ang = Math.atan2(dy,dx), diff = Math.atan2(Math.sin(ang-e.dir), Math.cos(ang-e.dir));
+      return Math.abs(diff) < 0.62 + S.level*0.035;
+    }
+    function commitAct(type, target){
+      if(S.mode !== 'play' || player.acting > 0 || S.pendingWin) return;
+      var A = ACTS[type];
+      player.acting = 1.15; player.actT = 0; player.actType = type; player.actTarget = target;
+      /* Vu en plein geste ? (avant tout effet de combo) */
+      var seen = false;
+      inspectors.forEach(function(ins){ if(inspectorSees(ins, player.x, player.y, 150 + S.level*7)) seen = true; });
+      var wn = witnessesNear(125);
+      var chaseWillStart = seen || (S.gauge + 16 + wn*14 >= 100);
+      var stealth = !chaseWillStart;
+      if(stealth){ S.streak++; } else { S.streak = 0; }
+      S.mult = multFor(S.streak);
+      var gained = A.points * (stealth ? S.mult : 1);
+      SFX.act();
+      S.points += gained;
+      S.counts[type] = (S.counts[type]||0) + 1;
+      if(stealth){ S.stealth[type] = (S.stealth[type]||0)+1; S.stealthTotal++; }
+      S.pending.push(type); S.history.push(type);
+      if(!S.gravest || A.gravite > ACTS[S.gravest].gravite) S.gravest = type;
+      floats.push({x:player.x, y:player.y-26, txt:'+' + gained + ' trouble' + (stealth && S.mult>1 ? ' (×' + S.mult + ')' : ''), t:0, col:'#b3392e'});
+      if(type === 'trebucher' && target){ target.state='down'; target.down = 2.6; spawnStars(target.x, target.y-14); }
+      if((type === 'battre' || type === 'bousculerFile') && target){ target.state='angry'; target.t = 2.2; target.tx = target.x + rand(-70,70); target.ty = target.y + rand(-70,70); spawnDust(target.x, target.y); }
+      if((type === 'injurier' || type === 'crier' || type === 'musique') && target){ target.state='angry'; target.t = 1.8; floats.push({x:target.x, y:target.y-26, txt: type==='musique' ? '🎵' : '😖', t:0, col:'#5d4a8a'}); }
+      if(type === 'pisser' && target){ spawnArc(player, target); }
+      if(type === 'vol'){ floats.push({x:stand.x+stand.w/2, y:stand.y-8, txt:'🍬', t:0, col:'#8a5a1d'}); }
+      if(type === 'collation'){ floats.push({x:stand.x+stand.w/2, y:stand.y-8, txt:'🧃', t:0, col:'#8a5a1d'}); }
+      if(type === 'avion'){ particles.push({x:player.x, y:player.y-16, vx:110*player.face, vy:-60, t:0, life:.9, txt:'✈', col:'#fdf6df', size:16, grav:90}); }
+      if(type === 'boulettes' && target){ particles.push({x:player.x, y:player.y-12, vx:(target.x-player.x)*2.2, vy:-40, t:0, life:.5, txt:'•', col:'#f6ecd2', size:17, grav:200}); floats.push({x:target.x, y:target.y-26, txt:'😣', t:0, col:'#a3542e'}); }
+      if(type === 'dechirer'){ spawnDust(stand.x+stand.w/2, stand.y+10); floats.push({x:stand.x+stand.w/2, y:stand.y-8, txt:'📄💥', t:0, col:'#a3542e'}); }
+      if(type === 'courir'){ spawnDust(player.x, player.y+8); }
+      if(type === 'refuserPlace'){ floats.push({x:stand.x+stand.w/2, y:stand.y-8, txt:'😎', t:0, col:'#38618c'}); }
+      S.gauge = clamp(S.gauge + 16 + wn*14 + S.level*1.5, 0, 100);
+      walkers.forEach(function(w){
+        if(w.state!=='down' && w !== target && dist(player,w) < 125){
+          w.alert = true; w.alertT = 4;
+          if(Math.random() < 0.5 + S.level*0.05){ w.state='report'; }
+        }
+      });
+      if(seen){ S.streak = 0; S.mult = 1; startChase(LV().guardianCap + ' t\u2019a VU en plein geste !'); }
+      else if(S.gauge >= 100){ S.streak = 0; S.mult = 1; startChase('Trop de témoins — ' + LV().guardian + ' est alerté !'); }
+      toast('<span class="who">Impact :</span> ' + A.impact, 3600);
+      renderObjectives(); updateHUD(); refreshActions();
+      if(allChallengesDone() && !anyChasing()){ S.pendingWin = true; S.winDelay = 1.1; floats.push({x:player.x, y:player.y-46, txt:'🎯 DÉFIS RÉUSSIS !', t:0, col:'#3f7a4e'}); }
+    }
+    function spawnStars(x,y){ for(var i=0;i<6;i++) particles.push({x:x,y:y,vx:rand(-40,40),vy:rand(-70,-15),t:0,life:.7,txt:'★',col:'#c98f2d',size:13}); }
+    function spawnDust(x,y){ for(var i=0;i<8;i++) particles.push({x:x+rand(-8,8),y:y+rand(-6,6),vx:rand(-30,30),vy:rand(-26,4),t:0,life:.6,txt:'✦',col:'#9a8a70',size:11}); }
+    function spawnArc(p,t){ for(var i=0;i<7;i++) particles.push({x:p.x,y:p.y-4,vx:(t.x-p.x)*1.4 + rand(-8,8),vy:-95+rand(-12,12),t:-i*0.05,life:.55,txt:'·',col:'#7fb2d9',size:15,grav:260}); }
+
+    /* ================= POURSUITE & CAPTURE ================= */
+    function startChase(why){
+      var any = false;
+      inspectors.forEach(function(ins){ if(ins.state !== 'chase'){ ins.state='chase'; ins.loseT=0; any=true; } });
+      if(any){ SFX.alarm(); S.streak = 0; S.mult = 1; document.getElementById('chase-banner').classList.remove('hidden'); toast('🚨 ' + why + ' COURS !', 2600); }
+    }
+    function endChase(escaped){
+      inspectors.forEach(function(ins){ ins.state='patrol'; });
+      document.getElementById('chase-banner').classList.add('hidden');
+      if(escaped){ S.gauge = 45; toast('😮‍💨 Tu l\u2019as semé ! La surveillance redescend… mais on t\u2019a à l\u2019œil.', 3000); }
+    }
+    function anyChasing(){ return inspectors.some(function(i){ return i.state==='chase'; }); }
+    function caught(){
+      S.arrests++; S.streak = 0; S.mult = 1;
+      SFX.caught();
+      document.getElementById('chase-banner').classList.add('hidden');
+      S.mode = 'sentence'; stopLoop();
+      buildSentence();
+      show('screen-sentence');
+    }
+    function buildSentence(){
+      document.getElementById('sentence-title').textContent =
+        S.arrests >= 3 ? 'Attrapé… pour la 3e fois de la journée !' : ('Attrapé ! (arrestation ' + S.arrests + ' sur 3)');
+      document.getElementById('sentence-sub').textContent =
+        'Tableau « ' + LV().name + ' » — voici ce que ' + LV().guardian + ' et le juge HP binoclard ont à te dire : la vraie sentence, comme dans la vie.';
+      var wrap = document.getElementById('sentence-cards'); wrap.innerHTML = '';
+      var list = S.pending.length ? S.pending.slice() : [S.gravest || 'vol'];
+      var counts = {};
+      list.forEach(function(t){ counts[t] = (counts[t]||0)+1; });
+      Object.keys(counts).forEach(function(type){
+        var A = ACTS[type];
+        var card = document.createElement('div'); card.className = 'infraction-card';
+        var couts = coutsPour(type, S.level).map(function(c){ return '<li>' + c + '</li>'; }).join('');
+        card.innerHTML =
+          '<h3>' + A.short + (counts[type]>1 ? ' × ' + counts[type] : '') + '</h3>' +
+          '<div class="volet"><span class="vlab">1 · Ce que ça fait à l\u2019autre</span><br /><b>' + A.victime + ' :</b> ' + A.effetAutre + '</div>' +
+          '<div class="volet"><span class="vlab">2 · Ce que ça te coûte pour vrai — ici</span><ul>' + couts + '</ul></div>';
+        if(A.reparer){
+          var rb = document.createElement('button');
+          rb.type='button'; rb.className='repair-btn';
+          rb.textContent = '🛠️ Réparer : ' + A.reparer;
+          rb.addEventListener('click', function(){
+            if(rb.classList.contains('done')) return;
+            rb.classList.add('done'); rb.textContent = '✔ Réparé. Ça compte — pour l\u2019autre, et pour toi.';
+            S.repairs++; S.gauge = clamp(S.gauge - 25, 0, 100); SFX.repair();
+          });
+          var v3 = document.createElement('div'); v3.className='volet';
+          var lab = document.createElement('span'); lab.className='vlab'; lab.textContent = '3 · Tu peux réparer';
+          v3.appendChild(lab); v3.appendChild(rb); card.appendChild(v3);
+        }
+        wrap.appendChild(card);
+      });
+      document.getElementById('btn-sentence-ok').textContent =
+        S.arrests >= 3 ? 'Voir le verdict de la journée…' : (allChallengesDone() ? 'Voir le résultat du tableau…' : 'J\u2019ai compris — on continue');
+    }
+    /* ================= HUD ================= */
+    function updateHUD(){
+      document.getElementById('hud-points').textContent = S.points;
+      var st = '';
+      for(var i=0;i<3;i++){ st += '<span class="' + (i < S.arrests ? '' : 'strike-off') + '">●</span>'; }
+      document.getElementById('strikes').innerHTML = st;
+      var m = Math.floor(Math.max(0,S.dayTime)/60), s = Math.floor(Math.max(0,S.dayTime)%60);
+      document.getElementById('hud-time').textContent = m + ':' + (s<10?'0':'') + s;
+      var f = document.getElementById('gauge-fill');
+      f.style.width = S.gauge + '%';
+      f.style.background = S.gauge > 75 ? 'var(--red)' : (S.gauge > 45 ? 'var(--gold)' : 'var(--green)');
+      var c = document.getElementById('combo');
+      c.textContent = S.mult > 1 ? '×' + S.mult + ' 🔥' : (S.streak > 0 ? '·' : '—');
+      c.className = S.mult > 1 ? 'on' : '';
+      document.getElementById('btn-mute').textContent = muted ? '🔇' : '🔊';
+    }
+</script>
+
+<script>
+    "use strict";
+    /* ================= BOUCLE DE JEU ================= */
+    function startLoop(){ if(raf) cancelAnimationFrame(raf); lastTs = 0; raf = requestAnimationFrame(loop); }
+    function stopLoop(){ if(raf) cancelAnimationFrame(raf); raf = null; }
+    function loop(ts){
+      if(S.mode !== 'play'){ raf = null; return; }
+      var dt = lastTs ? Math.min(.05, (ts-lastTs)/1000) : .016;
+      lastTs = ts;
+      update(dt); render();
+      raf = requestAnimationFrame(loop);
+    }
+    function update(dt){
+      if(!S.pendingWin && S.history.length && allChallengesDone() && !anyChasing()){ S.pendingWin = true; S.winDelay = 1.0; }
+      if(S.pendingWin){
+        S.winDelay -= dt;
+        if(S.winDelay <= 0){ levelSuccess(); return; }
+      }
+      S.dayTime -= dt;
+      if(S.dayTime <= 0){ if(allChallengesDone()){ levelSuccess(); } else { levelFail('time'); } return; }
+      if(!anyChasing()) S.gauge = clamp(S.gauge - dt*3.2, 0, 100);
+      var mx = 0, my = 0;
+      if(keys.left) mx -= 1; if(keys.right) mx += 1; if(keys.up) my -= 1; if(keys.down) my += 1;
+      if(joy.active){ mx += joy.dx; my += joy.dy; }
+      var len = Math.sqrt(mx*mx+my*my);
+      if(player.acting > 0){
+        player.acting -= dt; player.actT += dt;
+        if(player.acting <= 0){ nearCache.key=''; refreshActions(); }
+      } else if(len > .12){
+        mx/=Math.max(1,len); my/=Math.max(1,len);
+        moveEntity(player, mx*138, my*138, dt);
+        player.face = mx < -0.1 ? -1 : (mx > 0.1 ? 1 : player.face);
+        player.walk += dt*10;
+      }
+      updateHUD();
+      walkers.forEach(function(w){
+        if(w.alert){ w.alertT -= dt; if(w.alertT<=0) w.alert=false; }
+        if(w.state === 'down'){ w.down -= dt; if(w.down<=0){ w.state='walk'; pickTarget(w); } return; }
+        if(w.state === 'angry'){ w.t -= dt; if(w.t<=0){ w.state='walk'; pickTarget(w); } }
+        if(w.state === 'report'){
+          var ins = nearestInspector(w);
+          if(ins && dist(w, ins) < 30){ w.state='walk'; pickTarget(w); startChase('Un témoin a tout raconté à ' + LV().guardian + ' !'); return; }
+          if(ins){ stepToward(w, ins.x, ins.y, w.speed*2.1, dt); return; }
+        }
+        if(dist(w, {x:w.tx, y:w.ty}) < 8 || Math.random() < dt*0.08) pickTarget(w);
+        stepToward(w, w.tx, w.ty, w.speed, dt);
+      });
+      var chaseNow = false;
+      inspectors.forEach(function(ins){
+        if(ins.state === 'chase'){
+          chaseNow = true;
+          stepToward(ins, player.x, player.y, ins.speed*2.15, dt);
+          ins.dir = Math.atan2(player.y-ins.y, player.x-ins.x);
+          if(dist(ins, player) < 24){ caught(); return; }
+          if(inspectorSees(ins, player.x, player.y, 240) || dist(ins,player) < 90){ ins.loseT = 0; }
+          else { ins.loseT += dt; if(ins.loseT > 3.2){ ins.state='patrol'; } }
+        } else {
+          var wp = WAYPOINTS[ins.wp % WAYPOINTS.length];
+          if(dist(ins, {x:wp[0], y:wp[1]}) < 10){ ins.wp++; wp = WAYPOINTS[ins.wp % WAYPOINTS.length]; }
+          var before = {x:ins.x, y:ins.y};
+          stepToward(ins, wp[0], wp[1], ins.speed, dt);
+          if(ins.x!==before.x || ins.y!==before.y) ins.dir = Math.atan2(ins.y-before.y, ins.x-before.x);
+          if(player.acting > 0 && inspectorSees(ins, player.x, player.y, 150 + S.level*7)) startChase(LV().guardianCap + ' t\u2019a VU !');
+        }
+      });
+      if(!chaseNow && !anyChasing()) document.getElementById('chase-banner').classList.add('hidden');
+      if(chaseNow === false && inspectors.every(function(i){ return i.state!=='chase'; }) && S.gauge > 50 && !document.getElementById('chase-banner').classList.contains('hidden')){ endChase(true); }
+      floats = floats.filter(function(f){ f.t += dt; f.y -= dt*26; return f.t < 1.3; });
+      particles = particles.filter(function(p){ p.t += dt; if(p.t<0) return true; p.x += p.vx*dt; p.y += p.vy*dt; if(p.grav) p.vy += p.grav*dt; return p.t < p.life; });
+      refreshActions();
+    }
+    function pickTarget(w){ w.tx = clamp(w.x + rand(-130,130), 24, W-24); w.ty = clamp(w.y + rand(-130,130), 24, H-24); }
+    function stepToward(e, tx, ty, sp, dt){
+      var dx = tx-e.x, dy = ty-e.y, d = Math.sqrt(dx*dx+dy*dy);
+      if(d < 2) return;
+      moveEntity(e, dx/d*sp, dy/d*sp, dt);
+    }
+    function nearestInspector(w){ var b=null, bd=1e9; inspectors.forEach(function(i){ var d=dist(w,i); if(d<bd){bd=d;b=i;} }); return b; }
+
+    /* ================= RENDU PAR TABLEAU ================= */
+    var PALETTES = [
+      {bg:'#a8c6a2', bgDark:'#33502f', path:'#d9c491'},
+      {bg:'#cbb98a', bgDark:'#4a3d28', path:'#b7a678'},
+      {bg:'#c9a06b', bgDark:'#5a4028', path:'#a87f4e'},
+      {bg:'#b9c4c9', bgDark:'#3d4a50', path:'#9fb0b6'},
+      {bg:'#8f9aa0', bgDark:'#39424a', path:'#d9c491'},
+      {bg:'#7fae72', bgDark:'#2c4a2c', path:'#d9c491'}
+    ];
+    function render(){
+      var P = dark ? {bg:PALETTES[S.level].bgDark, path:'#4a3d28', ink:'#f0e3c2', cone:'rgba(224,170,74,.20)', coneEdge:'rgba(224,170,74,.55)'}
+                   : {bg:PALETTES[S.level].bg, path:PALETTES[S.level].path, ink:'#2b2118', cone:'rgba(201,143,45,.20)', coneEdge:'rgba(201,143,45,.6)'};
+      window.__PAL = P;
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = P.bg; ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle = 'rgba(43,33,24,.10)'; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for(var hx=8; hx<W; hx+=26){ for(var hy=10; hy<H; hy+=30){ ctx.moveTo(hx,hy); ctx.lineTo(hx+6,hy-4); } }
+      ctx.stroke();
+      if(S.level === 2){ /* plancher de bois */
+        ctx.strokeStyle = 'rgba(43,33,24,.22)';
+        ctx.beginPath(); for(var y=40; y<H; y+=44){ ctx.moveTo(0,y); ctx.lineTo(W,y); } ctx.stroke();
+      }
+      if(S.level === 3){ /* tuiles du centre commercial */
+        ctx.strokeStyle = 'rgba(43,33,24,.18)';
+        ctx.beginPath(); for(var x=0; x<=W; x+=50){ ctx.moveTo(x,0); ctx.lineTo(x,H); } for(var yy=0; yy<=H; yy+=50){ ctx.moveTo(0,yy); ctx.lineTo(W,yy); } ctx.stroke();
+      }
+      if(S.level === 1){ /* mur de l'école en haut */
+        ctx.fillStyle = dark ? '#5c2f28' : '#b06a4a'; ctx.fillRect(0,0,W,34);
+        ctx.strokeStyle = P.ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0,34); ctx.lineTo(W,34); ctx.stroke();
+        ctx.fillStyle = P.ink; ctx.font = 'bold 12px Georgia,serif'; ctx.textAlign = 'center'; ctx.fillText('É C O L E', 200, 22);
+      }
+      if(S.level === 4){ /* la route en bas */
+        ctx.fillStyle = dark ? '#232a30' : '#6b767c'; ctx.fillRect(0, H-70, W, 70);
+        ctx.strokeStyle = '#f6ecd2'; ctx.lineWidth = 3; ctx.setLineDash([18,14]);
+        ctx.beginPath(); ctx.moveTo(0,H-35); ctx.lineTo(W,H-35); ctx.stroke(); ctx.setLineDash([]);
+      }
+      if(S.level === 5){ /* guirlande de la fête */
+        ctx.strokeStyle = P.ink; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(0,26); ctx.quadraticCurveTo(200,58,400,26); ctx.stroke();
+        for(var gi=0; gi<9; gi++){ var gx = 22 + gi*44, gy = 30 + Math.sin(gi/8*Math.PI)*13;
+          ctx.fillStyle = ['#b3392e','#c98f2d','#38618c','#3f7a4e'][gi%4];
+          ctx.beginPath(); ctx.arc(gx, gy, 5, 0, 7); ctx.fill(); ctx.stroke(); }
+      }
+      /* Sentier / allée centrale */
+      ctx.fillStyle = P.path;
+      ctx.beginPath(); ctx.moveTo(0,262); ctx.bezierCurveTo(120,238, 260,292, W,268); ctx.lineTo(W,302); ctx.bezierCurveTo(260,326, 120,272, 0,296); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = P.ink; ctx.lineWidth = 2; ctx.stroke();
+      drawStand(P);
+      benches.forEach(function(b){ drawBench(b,P); });
+      trees.forEach(function(t){ drawProp(t,P); });
+      walkers.forEach(function(w){ drawPerson(w, w.hue, false, P); if(w.alert) drawBang(w,P); if(w.state==='down') drawStarsSpin(w); });
+      inspectors.forEach(function(ins){ drawCone(ins,P); });
+      inspectors.forEach(function(ins){ drawPerson(ins, '#31456b', true, P); });
+      drawPlayer(P);
+      drawFX();
+    }
+    function drawCone(ins,P){
+      var R = 150 + S.level*7;
+      ctx.beginPath(); ctx.moveTo(ins.x, ins.y);
+      ctx.arc(ins.x, ins.y, R, ins.dir-(0.62+S.level*0.035), ins.dir+(0.62+S.level*0.035)); ctx.closePath();
+      ctx.fillStyle = ins.state==='chase' ? 'rgba(179,57,46,.25)' : P.cone; ctx.fill();
+      ctx.strokeStyle = ins.state==='chase' ? 'rgba(179,57,46,.6)' : P.coneEdge; ctx.lineWidth = 1.5; ctx.stroke();
+    }
+    function drawProp(t,P){
+      if(S.level === 2){ /* rayon de bibliothèque */
+        ctx.fillStyle = '#7a4a26'; ctx.strokeStyle = P.ink; ctx.lineWidth = 2.5;
+        ctx.fillRect(t.x-t.r, t.y-t.r, t.r*2, t.r*2); ctx.strokeRect(t.x-t.r, t.y-t.r, t.r*2, t.r*2);
+        var cols = ['#b3392e','#38618c','#3f7a4e','#c98f2d'];
+        for(var i=0;i<4;i++){ ctx.fillStyle = cols[i%4]; ctx.fillRect(t.x-t.r+4+i*11, t.y-12, 8, 24); }
+        return;
+      }
+      if(S.level === 3){ /* fontaine */
+        ctx.fillStyle = '#7fb2d9'; ctx.strokeStyle = P.ink; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.arc(t.x, t.y, t.r, 0, 7); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.arc(t.x, t.y, t.r*.5, 0, 7); ctx.stroke();
+        ctx.fillStyle = '#dff0fa'; ctx.font = '13px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('~', t.x, t.y-4); ctx.fillText('~', t.x, t.y+12);
+        return;
+      }
+      if(S.level === 4){ /* poteau d'arrêt */
+        ctx.fillStyle = '#38618c'; ctx.strokeStyle = P.ink; ctx.lineWidth = 2;
+        ctx.fillRect(t.x-3, t.y-14, 6, 28); ctx.strokeRect(t.x-3, t.y-14, 6, 28);
+        ctx.fillStyle = '#f6ecd2'; ctx.fillRect(t.x-11, t.y-24, 22, 13); ctx.strokeRect(t.x-11, t.y-24, 22, 13);
+        ctx.fillStyle = P.ink; ctx.font = 'bold 8px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('BUS', t.x, t.y-14.5);
+        return;
+      }
+      /* arbre */
+      ctx.fillStyle = 'rgba(43,33,24,.15)';
+      ctx.beginPath(); ctx.ellipse(t.x, t.y+t.r-2, t.r*.8, 6, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#6d4a26'; ctx.strokeStyle = P.ink; ctx.lineWidth = 2.5;
+      ctx.fillRect(t.x-4, t.y+4, 8, 14); ctx.strokeRect(t.x-4, t.y+4, 8, 14);
+      ctx.fillStyle = dark ? '#3f7040' : '#4e7d46';
+      ctx.beginPath(); ctx.arc(t.x, t.y-8, t.r, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(t.x-t.r*.5, t.y+2, t.r*.55, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(t.x+t.r*.5, t.y+2, t.r*.55, 0, 7); ctx.fill(); ctx.stroke();
+    }
+    function drawBench(b,P){
+      ctx.fillStyle = '#8a5a1d'; ctx.strokeStyle = P.ink; ctx.lineWidth = 2;
+      ctx.fillRect(b.x-24, b.y-6, 48, 7); ctx.strokeRect(b.x-24, b.y-6, 48, 7);
+      ctx.fillRect(b.x-24, b.y+3, 48, 6); ctx.strokeRect(b.x-24, b.y+3, 48, 6);
+      ctx.fillRect(b.x-20, b.y+9, 5, 9); ctx.fillRect(b.x+15, b.y+9, 5, 9);
+    }
+    function drawStand(P){
+      ctx.fillStyle = 'rgba(43,33,24,.15)'; ctx.fillRect(stand.x+3, stand.y+stand.h, stand.w, 6);
+      ctx.fillStyle = S.level === 4 ? '#38618c' : '#a3542e'; ctx.strokeStyle = P.ink; ctx.lineWidth = 2.5;
+      ctx.fillRect(stand.x, stand.y+14, stand.w, stand.h-14); ctx.strokeRect(stand.x, stand.y+14, stand.w, stand.h-14);
+      for(var i=0;i<4;i++){ ctx.fillStyle = i%2 ? '#f6ecd2' : '#b3392e'; ctx.fillRect(stand.x + i*(stand.w/4), stand.y, stand.w/4, 13); }
+      ctx.strokeRect(stand.x, stand.y, stand.w, 13);
+      ctx.font = '13px serif'; ctx.textAlign = 'center';
+      var em = S.level === 1 ? '🧃' : (S.level === 2 ? '📚' : (S.level === 4 ? '💺' : '🍬'));
+      ctx.fillText(em, stand.x+16, stand.y+34); ctx.fillText(em, stand.x+stand.w/2, stand.y+34); ctx.fillText(em, stand.x+stand.w-16, stand.y+34);
+      ctx.fillStyle = P.ink; ctx.font = 'bold 8.5px sans-serif';
+      ctx.fillText(LV().standLabel, stand.x+stand.w/2, stand.y+stand.h-4);
+    }
+    function drawPerson(p, color, isInsp, P){
+      var down = p.state === 'down';
+      ctx.save(); ctx.translate(p.x, p.y);
+      if(down) ctx.rotate(1.35);
+      ctx.fillStyle = 'rgba(43,33,24,.18)';
+      ctx.beginPath(); ctx.ellipse(0, 12, 11, 3.5, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = color; ctx.strokeStyle = P.ink; ctx.lineWidth = 2.2;
+      roundRect(-8, -2, 16, 15, 5); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#f2c894';
+      ctx.beginPath(); ctx.arc(0, -10, 8, 0, 7); ctx.fill(); ctx.stroke();
+      if(isInsp){
+        ctx.fillStyle = '#31456b';
+        ctx.fillRect(-9, -17, 18, 5); ctx.strokeRect(-9, -17, 18, 5);
+        ctx.fillRect(-5.5, -22, 11, 6); ctx.strokeRect(-5.5, -22, 11, 6);
+        if(p.state === 'chase'){ ctx.fillStyle = '#b3392e'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign='center'; ctx.fillText('!', 0, -28); }
+      } else {
+        ctx.fillStyle = 'rgba(43,33,24,.8)';
+        ctx.fillRect(-8, -17, 16, 4);
+      }
+      ctx.restore();
+    }
+    function drawBang(w,P){
+      ctx.fillStyle = '#b3392e'; ctx.font = 'bold 17px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('!', w.x, w.y - 26 - Math.sin(Date.now()/120)*2);
+    }
+    function drawStarsSpin(w){
+      ctx.fillStyle = '#c98f2d'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      for(var i=0;i<3;i++){ var a = Date.now()/300 + i*2.1; ctx.fillText('★', w.x + Math.cos(a)*13, w.y - 16 + Math.sin(a)*3); }
+    }
+    function drawPlayer(P){
+      var p = player;
+      ctx.save(); ctx.translate(p.x, p.y);
+      var bob = (p.acting>0 || (keys.left||keys.right||keys.up||keys.down||joy.active)) ? Math.sin(p.walk)*1.6 : 0;
+      ctx.translate(0, bob*.4);
+      ctx.fillStyle = 'rgba(43,33,24,.2)';
+      ctx.beginPath(); ctx.ellipse(0, 13, 12, 4, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = S.avatar === 'girl' ? '#5d4a8a' : '#38618c';
+      ctx.strokeStyle = P.ink; ctx.lineWidth = 2.4;
+      roundRect(-9, -2, 18, 16, 5); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = S.avatar === 'girl' ? '#e8b07e' : '#f2c894';
+      ctx.beginPath(); ctx.arc(0, -11, 8.5, 0, 7); ctx.fill(); ctx.stroke();
+      if(S.avatar === 'girl'){
+        ctx.fillStyle = '#5a3a1a';
+        ctx.beginPath(); ctx.arc(3, -14, 8.5, Math.PI, 1.85*Math.PI); ctx.fill();
+        ctx.fillRect(7, -14, 4.5, 13); ctx.strokeRect(7, -14, 4.5, 13);
+      } else {
+        ctx.fillStyle = '#b3392e';
+        ctx.beginPath(); ctx.arc(0, -13.5, 8.5, Math.PI, 2*Math.PI); ctx.fill(); ctx.stroke();
+        ctx.fillRect(p.face>0 ? 2 : -10, -13.5, 8, 3.4);
+      }
+      if(p.acting > 0){
+        ctx.font = '15px sans-serif'; ctx.textAlign = 'center';
+        if(p.actType === 'injurier' || p.actType === 'crier'){
+          ctx.fillStyle = dark ? '#2e2417' : '#fdf6df'; ctx.strokeStyle = P.ink;
+          roundRect(-26, -46, 52, 19, 6); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = '#b3392e'; ctx.font = 'bold 12px sans-serif';
+          ctx.fillText(p.actType === 'crier' ? 'AHHH !' : '#@%!', 0, -32);
+        } else if(p.actType === 'trebucher' || p.actType === 'battre' || p.actType === 'bousculerFile'){
+          ctx.fillStyle = '#b3392e'; ctx.fillText('💨', 14 * p.face, -8);
+        } else if(p.actType === 'vol' || p.actType === 'collation'){
+          ctx.fillText(p.actType === 'vol' ? '🍬' : '🧃', 12 * p.face, -14);
+        } else if(p.actType === 'pisser'){
+          ctx.fillStyle = '#7fb2d9'; ctx.font = 'bold 13px sans-serif'; ctx.fillText('~', 12 * p.face, -4);
+        } else if(p.actType === 'avion'){
+          ctx.fillText('✈', 14 * p.face, -16);
+        } else if(p.actType === 'musique'){
+          ctx.fillText('🎵', 12 * p.face, -16);
+        } else if(p.actType === 'dechirer'){
+          ctx.fillText('📄', 12 * p.face, -14);
+        }
+      }
+      ctx.restore();
+    }
+    function drawFX(){
+      ctx.textAlign = 'center';
+      floats.forEach(function(f){
+        ctx.globalAlpha = clamp(1.3 - f.t, 0, 1);
+        ctx.fillStyle = f.col; ctx.font = 'bold 13px sans-serif';
+        ctx.fillText(f.txt, f.x, f.y);
+      });
+      particles.forEach(function(pt){
+        if(pt.t < 0) return;
+        ctx.globalAlpha = clamp(1 - pt.t/pt.life, 0, 1);
+        ctx.fillStyle = pt.col; ctx.font = pt.size + 'px sans-serif';
+        ctx.fillText(pt.txt, pt.x, pt.y);
+      });
+      ctx.globalAlpha = 1;
+    }
+    function roundRect(x,y,w,h,r){
+      ctx.beginPath();
+      ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+      ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+    }
+
+    /* ================= ENTRÉES ================= */
+    var joyEl = document.getElementById('joystick'), stickEl = document.getElementById('stick');
+    function canvasPos(e){
+      var r = cv.getBoundingClientRect();
+      return { x:(e.clientX-r.left) * (W/r.width), y:(e.clientY-r.top) * (H/r.height), rx:e.clientX-r.left, ry:e.clientY-r.top };
+    }
+    cv.addEventListener('pointerdown', function(e){
+      if(S.mode !== 'play') return;
+      ac();
+      var p = canvasPos(e);
+      joy.active = true; joy.id = e.pointerId; joy.ox = p.x; joy.oy = p.y; joy.dx = 0; joy.dy = 0;
+      cv.setPointerCapture(e.pointerId);
+      joyEl.style.display = 'block';
+      joyEl.style.left = (p.rx - 52) + 'px'; joyEl.style.top = (p.ry - 52) + 'px';
+      stickEl.style.left = '29px'; stickEl.style.top = '29px';
+    });
+    cv.addEventListener('pointermove', function(e){
+      if(!joy.active || e.pointerId !== joy.id) return;
+      var p = canvasPos(e);
+      var dx = p.x - joy.ox, dy = p.y - joy.oy;
+      var d = Math.sqrt(dx*dx+dy*dy), max = 34;
+      if(d > max){ dx = dx/d*max; dy = dy/d*max; }
+      joy.dx = dx/max; joy.dy = dy/max;
+      stickEl.style.left = (29 + dx) + 'px'; stickEl.style.top = (29 + dy) + 'px';
+    });
+    function joyEnd(e){ if(e.pointerId !== joy.id) return; joy.active = false; joy.dx = 0; joy.dy = 0; joyEl.style.display = 'none'; }
+    cv.addEventListener('pointerup', joyEnd);
+    cv.addEventListener('pointercancel', joyEnd);
+    document.addEventListener('keydown', function(e){
+      var k = e.key.toLowerCase();
+      if(k==='arrowleft' || k==='a') keys.left = true;
+      if(k==='arrowright' || k==='d') keys.right = true;
+      if(k==='arrowup' || k==='w') keys.up = true;
+      if(k==='arrowdown' || k==='s') keys.down = true;
+      if(['arrowleft','arrowright','arrowup','arrowdown'].indexOf(k) >= 0 || e.key === ' ') e.preventDefault();
+    });
+    document.addEventListener('keyup', function(e){
+      var k = e.key.toLowerCase();
+      if(k==='arrowleft' || k==='a') keys.left = false;
+      if(k==='arrowright' || k==='d') keys.right = false;
+      if(k==='arrowup' || k==='w') keys.up = false;
+      if(k==='arrowdown' || k==='s') keys.down = false;
+    });
+
+    /* ================= BOUTONS ================= */
+    document.getElementById('pick-boy').addEventListener('click', function(){
+      S.avatar = 'boy'; SFX.click();
+      this.classList.add('selected'); document.getElementById('pick-girl').classList.remove('selected');
+    });
+    document.getElementById('pick-girl').addEventListener('click', function(){
+      S.avatar = 'girl'; SFX.click();
+      this.classList.add('selected'); document.getElementById('pick-boy').classList.remove('selected');
+    });
+    document.getElementById('btn-play').addEventListener('click', function(){ ac(); SFX.click(); showLevels(); });
+    document.getElementById('btn-continue').addEventListener('click', function(){ ac(); SFX.click(); startLevel(currentLevelIdx()); });
+    document.getElementById('btn-levels-back').addEventListener('click', function(){ SFX.click(); showBest(); show('screen-start'); });
+    document.getElementById('btn-adults').addEventListener('click', function(){ SFX.click(); show('screen-adults'); });
+    document.getElementById('btn-adults-back').addEventListener('click', function(){ SFX.click(); show('screen-start'); });
+    document.getElementById('btn-pause').addEventListener('click', function(){
+      if(S.mode !== 'play') return;
+      S.mode = 'pause'; stopLoop(); SFX.click();
+      document.getElementById('pause-sub').textContent = LV().guardianCap + ' prend un café. Profites-en.';
+      show('screen-pause');
+    });
+    document.getElementById('btn-resume').addEventListener('click', function(){ S.mode = 'play'; SFX.click(); show('screen-game'); startLoop(); });
+    document.getElementById('btn-restart').addEventListener('click', function(){ SFX.click(); startLevel(S.level); });
+    document.getElementById('btn-quit').addEventListener('click', function(){ SFX.click(); S.mode='menu'; showLevels(); });
+    document.getElementById('btn-mute').addEventListener('click', function(){
+      muted = !muted;
+      try { localStorage.setItem('adoOdieuxMute', muted ? '1' : '0'); } catch(e){}
+      updateHUD(); if(!muted) SFX.click();
+    });
+    document.getElementById('btn-sentence-ok').addEventListener('click', function(){
+      SFX.click();
+      S.pending = [];
+      S.gauge = clamp(S.gauge - 35, 0, 100);
+      if(S.arrests >= 3){ levelFail('arrests'); return; }
+      if(allChallengesDone()){ levelSuccess(); return; }
+      player.x = 200; player.y = 500; player.acting = 0;
+      inspectors.forEach(function(ins){ ins.state = 'patrol'; ins.loseT = 0; });
+      document.getElementById('chase-banner').classList.add('hidden');
+      S.mode = 'play'; updateHUD(); nearCache.key = ''; refreshActions();
+      show('screen-game'); startLoop();
+      toast('De retour. ' + LV().guardianCap + ' surveille — la surveillance est à ' + Math.round(S.gauge) + ' %.', 3200);
+    });
+    document.getElementById('btn-next-level').addEventListener('click', function(){
+      SFX.click();
+      if(S.level >= 5){ showLevels(); } else { startLevel(S.level + 1); }
+    });
+    document.getElementById('btn-success-levels').addEventListener('click', function(){ SFX.click(); showLevels(); });
+    document.getElementById('btn-success-replay').addEventListener('click', function(){ SFX.click(); startLevel(S.level); });
+    document.getElementById('btn-retry').addEventListener('click', function(){ SFX.click(); startLevel(S.level); });
+    document.getElementById('btn-fail-levels').addEventListener('click', function(){ SFX.click(); showLevels(); });
+
+    showBest();
+    show('screen-start');
+</script>
+  </body>
+</html>
