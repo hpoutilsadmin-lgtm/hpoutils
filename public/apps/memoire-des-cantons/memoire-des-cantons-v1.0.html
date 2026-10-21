@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Mémoire des Cantons</title>
+    <style>
+      :root {
+        --paper: #f4ead3;
+        --paper-card: #fbf5e4;
+        --paper-deep: #e9dcbc;
+        --ink: #26201a;
+        --ink-soft: #4a4036;
+        --red: #a83226;
+        --red-deep: #8c2718;
+        --green: #3e6b35;
+        --gold: #d99a26;
+        --brown: #7a4b21;
+        --shadow: rgba(38, 32, 26, 0.28);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #221c15;
+          --paper-card: #2e2619;
+          --paper-deep: #191410;
+          --ink: #f0e5cb;
+          --ink-soft: #c9b995;
+          --red: #d96a4a;
+          --red-deep: #e07b57;
+          --green: #8fbf7a;
+          --gold: #e5ac3c;
+          --brown: #c98d4e;
+          --shadow: rgba(0, 0, 0, 0.55);
+        }
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background:
+          repeating-linear-gradient(0deg, rgba(120, 95, 55, 0.05) 0 2px, transparent 2px 5px),
+          var(--paper);
+        min-height: 100dvh;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .wrap {
+        max-width: 470px;
+        margin: 0 auto;
+        padding: 14px 14px 30px;
+      }
+
+      /* ---------- Cadre gravé ---------- */
+      .frame {
+        position: relative;
+        border: 3px solid var(--ink);
+        border-radius: 6px;
+        background: var(--paper-card);
+        box-shadow: 0 0 0 2px var(--paper-card), 0 0 0 5px var(--ink), 6px 8px 0 var(--shadow);
+        padding: 26px 20px 24px;
+        text-align: center;
+      }
+      .frame::before, .frame::after {
+        content: "✦";
+        position: absolute;
+        font-size: 13px;
+        color: var(--ink);
+        background: var(--paper-card);
+        padding: 0 5px;
+        line-height: 1;
+      }
+      .frame::before { top: -9px; left: 16px; }
+      .frame::after { bottom: -9px; right: 16px; }
+
+      h1.title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 700;
+        font-size: clamp(30px, 8.5vw, 42px);
+        line-height: 1.05;
+        margin: 10px 0 4px;
+        letter-spacing: 0.5px;
+      }
+      .title-rule {
+        width: 120px; height: 4px;
+        margin: 10px auto 12px;
+        background: var(--red);
+        border-radius: 2px;
+        box-shadow: 0 6px 0 -2px var(--ink);
+      }
+      .subtitle {
+        font-size: 16.5px;
+        line-height: 1.45;
+        color: var(--ink-soft);
+        margin: 0 auto 6px;
+        max-width: 320px;
+      }
+      .mascot { width: 118px; height: 118px; margin: 2px auto 0; display: block; }
+      .signature {
+        margin-top: 18px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-style: italic;
+        font-size: 14px;
+        color: var(--ink-soft);
+      }
+      .signature b { font-style: normal; letter-spacing: 1.5px; }
+
+      /* ---------- Boutons ---------- */
+      .btn {
+        display: block;
+        width: 100%;
+        font: inherit;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--ink);
+        background: var(--paper-card);
+        border: 3px solid var(--ink);
+        border-radius: 6px;
+        padding: 13px 14px 11px;
+        margin: 10px 0;
+        cursor: pointer;
+        box-shadow: 3px 4px 0 var(--ink);
+        text-align: center;
+      }
+      .btn:active { transform: translate(2px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+      .btn .btn-sub {
+        display: block;
+        font-weight: 500;
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        margin-top: 3px;
+      }
+      .btn.primary { background: var(--red); color: #fdf6e0; border-color: var(--ink); }
+      .btn.primary .btn-sub { color: #f3d9c8; }
+      .btn.small {
+        width: auto;
+        display: inline-block;
+        font-size: 15px;
+        padding: 9px 14px 8px;
+        margin: 4px 3px;
+      }
+      .icon-btn {
+        font: inherit;
+        background: var(--paper-card);
+        border: 3px solid var(--ink);
+        border-radius: 6px;
+        width: 46px; height: 42px;
+        display: inline-flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        box-shadow: 2px 3px 0 var(--ink);
+        padding: 0;
+        flex: 0 0 auto;
+      }
+      .icon-btn:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+      .icon-btn svg { width: 22px; height: 22px; }
+
+      /* ---------- Écran de jeu ---------- */
+      .hud {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .hud-stats {
+        flex: 1 1 auto;
+        display: flex;
+        gap: 8px;
+      }
+      .stat {
+        flex: 1 1 0;
+        border: 3px solid var(--ink);
+        border-radius: 6px;
+        background: var(--paper-card);
+        box-shadow: 2px 3px 0 var(--ink);
+        padding: 5px 4px 4px;
+        text-align: center;
+        min-width: 0;
+      }
+      .stat .stat-label {
+        font-size: 11px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        font-weight: 700;
+      }
+      .stat .stat-value {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 21px;
+        font-weight: 700;
+        line-height: 1.15;
+        font-variant-numeric: tabular-nums;
+      }
+      .hud-actions { display: flex; gap: 8px; align-items: flex-start; }
+
+      .board {
+        display: grid;
+        gap: 8px;
+        width: 100%;
+      }
+
+      /* ---------- Cartes ---------- */
+      .card {
+        font: inherit;
+        display: block;
+        width: 100%;
+        padding: 0;
+        border: none;
+        background: none;
+        cursor: pointer;
+        aspect-ratio: 1 / 1.08;
+        perspective: 700px;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .card-inner {
+        display: block;
+        position: relative;
+        width: 100%; height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.42s cubic-bezier(0.35, 0.15, 0.3, 1.2);
+      }
+      .card.flipped .card-inner { transform: rotateY(180deg); }
+      .card-face {
+        position: absolute;
+        inset: 0;
+        border: 3px solid var(--ink);
+        border-radius: 9px;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .card-back {
+        background:
+          repeating-linear-gradient(45deg, rgba(38,32,26,0.16) 0 2px, transparent 2px 8px),
+          repeating-linear-gradient(-45deg, rgba(38,32,26,0.16) 0 2px, transparent 2px 8px),
+          var(--paper-deep);
+        box-shadow: inset 0 0 0 3px var(--paper-card), inset 0 0 0 5px var(--ink);
+      }
+      @media (prefers-color-scheme: dark) {
+        .card-back {
+          background:
+            repeating-linear-gradient(45deg, rgba(240,229,203,0.13) 0 2px, transparent 2px 8px),
+            repeating-linear-gradient(-45deg, rgba(240,229,203,0.13) 0 2px, transparent 2px 8px),
+            var(--paper-deep);
+        }
+      }
+      .card-back svg { width: 46%; height: 46%; opacity: 0.85; }
+      .card-front {
+        transform: rotateY(180deg);
+        background: var(--paper-card);
+        padding: 4px 2px 3px;
+        gap: 1px;
+      }
+      .card-front svg { width: 72%; height: 68%; flex: 0 1 auto; }
+      .card-name {
+        font-size: clamp(9px, 2.6vw, 12px);
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        color: var(--ink-soft);
+        line-height: 1.1;
+        text-align: center;
+        padding: 0 2px;
+      }
+      .card.matched { cursor: default; }
+      .card.matched .card-front {
+        background:
+          repeating-linear-gradient(45deg, rgba(62,107,53,0.10) 0 3px, transparent 3px 9px),
+          var(--paper-card);
+        border-color: var(--green);
+      }
+      .card.matched .card-inner { animation: pop 0.35s ease; }
+      @keyframes pop {
+        0% { transform: rotateY(180deg) scale(1); }
+        45% { transform: rotateY(180deg) scale(1.09); }
+        100% { transform: rotateY(180deg) scale(1); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .card-inner { transition: none; }
+        .card.matched .card-inner { animation: none; }
+      }
+
+      /* ---------- Écran de fin ---------- */
+      .end-stats {
+        display: flex;
+        gap: 10px;
+        margin: 16px 0 4px;
+      }
+      .end-stat {
+        flex: 1 1 0;
+        border: 3px solid var(--ink);
+        border-radius: 6px;
+        padding: 10px 4px 8px;
+        background: var(--paper);
+      }
+      .end-stat .stat-label { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; }
+      .end-stat .stat-value { font-family: Georgia, serif; font-size: 27px; font-weight: 700; }
+      .record-note {
+        margin: 12px 0 2px;
+        font-weight: 700;
+        color: var(--red-deep);
+        font-size: 16px;
+        min-height: 20px;
+      }
+      .hidden { display: none !important; }
+      .howto {
+        margin-top: 14px;
+        font-size: 14.5px;
+        color: var(--ink-soft);
+        line-height: 1.45;
+      }
+      .offline-note {
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--ink-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <!-- ======== ÉCRAN DE DÉPART ======== -->
+      <section id="screen-start">
+        <div class="frame">
+          <svg class="mascot" viewBox="0 0 100 100" role="img" aria-label="HP binoclard, la mascotte à lunettes rondes">
+            <!-- tuque -->
+            <path d="M22 34 C22 16 34 8 50 8 C66 8 78 16 78 34 Z" fill="var(--red)" stroke="var(--ink)" stroke-width="3.5" stroke-linejoin="round"/>
+            <path d="M33 13 C31 19 31 26 33 32 M50 9 L50 32 M67 13 C69 19 69 26 67 32" fill="none" stroke="var(--ink)" stroke-width="2" opacity="0.45"/>
+            <circle cx="50" cy="7" r="6" fill="var(--gold)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="17" y="32" width="66" height="10" rx="4" fill="var(--paper-card)" stroke="var(--ink)" stroke-width="3.5"/>
+            <!-- visage -->
+            <circle cx="50" cy="66" r="27" fill="var(--paper-card)" stroke="var(--ink)" stroke-width="3.5"/>
+            <circle cx="24" cy="64" r="4.5" fill="var(--paper-card)" stroke="var(--ink)" stroke-width="3"/>
+            <circle cx="76" cy="64" r="4.5" fill="var(--paper-card)" stroke="var(--ink)" stroke-width="3"/>
+            <!-- lunettes rondes -->
+            <circle cx="39" cy="64" r="10.5" fill="none" stroke="var(--ink)" stroke-width="3.2"/>
+            <circle cx="61" cy="64" r="10.5" fill="none" stroke="var(--ink)" stroke-width="3.2"/>
+            <path d="M49.5 62 L50.5 62 M28.5 62 L24 60 M71.5 62 L76 60" stroke="var(--ink)" stroke-width="3.2" stroke-linecap="round"/>
+            <!-- yeux, nez, sourire -->
+            <circle cx="39" cy="65" r="2.1" fill="var(--ink)"/>
+            <circle cx="61" cy="65" r="2.1" fill="var(--ink)"/>
+            <path d="M50 70 C49 74 48 75 50 77" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M41 81 C45 85 55 85 59 81" fill="none" stroke="var(--ink)" stroke-width="2.8" stroke-linecap="round"/>
+            <path d="M29 76 C31 78 33 78 34 77 M66 77 C67 78 69 78 71 76" stroke="var(--red)" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.7"/>
+          </svg>
+
+          <h1 class="title">Mémoire<br/>des Cantons</h1>
+          <div class="title-rule"></div>
+          <p class="subtitle">Retourne les cartes deux par deux et trouve toutes les paires d'icônes d'ici.</p>
+
+          <div id="size-buttons"></div>
+
+          <p class="howto">Cartes grandes, pensées pour le tactile.<br/>Ton meilleur résultat reste gardé sur ton appareil.</p>
+          <p class="offline-note">Aucune connexion requise pour jouer.</p>
+          <p class="signature">Un jeu <b>HP OUTILS</b> — des outils pour la vraie vie</p>
+        </div>
+      </section>
+
+      <!-- ======== ÉCRAN DE JEU ======== -->
+      <section id="screen-game" class="hidden">
+        <div class="hud">
+          <div class="hud-stats">
+            <div class="stat">
+              <div class="stat-label">Coups</div>
+              <div class="stat-value" id="hud-moves">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Temps</div>
+              <div class="stat-value" id="hud-time">0:00</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Paires</div>
+              <div class="stat-value" id="hud-pairs">0/6</div>
+            </div>
+          </div>
+          <div class="hud-actions">
+            <button class="icon-btn" id="btn-sound" type="button" aria-label="Activer ou couper le son"></button>
+            <button class="icon-btn" id="btn-home" type="button" aria-label="Retour au choix de la taille">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 L12 4 L20 11"/><path d="M6 10 L6 20 L18 20 L18 10"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="board" id="board"></div>
+      </section>
+
+      <!-- ======== ÉCRAN DE FIN ======== -->
+      <section id="screen-end" class="hidden">
+        <div class="frame">
+          <svg class="mascot" viewBox="0 0 100 100" role="img" aria-label="HP binoclard qui sourit, partie terminée">
+            <path d="M22 34 C22 16 34 8 50 8 C66 8 78 16 78 34 Z" fill="var(--green)" stroke="var(--ink)" stroke-width="3.5" stroke-linejoin="round"/>
+            <circle cx="50" cy="7" r="6" fill="var(--gold)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="17" y="32" width="66" height="10" rx="4" fill="var(--paper-card)" stroke="var(--ink)" stroke-width="3.5"/>
+            <circle cx="50" cy="66" r="27" fill="var(--paper-card)" stroke="var(--ink)" stroke-width="3.5"/>
+            <circle cx="24" cy="64" r="4.5" fill="var(--paper-card)" stroke="var(--ink)" stroke-width="3"/>
+            <circle cx="76" cy="64" r="4.5" fill="var(--paper-card)" stroke="var(--ink)" stroke-width="3"/>
+            <circle cx="39" cy="64" r="10.5" fill="none" stroke="var(--ink)" stroke-width="3.2"/>
+            <circle cx="61" cy="64" r="10.5" fill="none" stroke="var(--ink)" stroke-width="3.2"/>
+            <path d="M49.5 62 L50.5 62 M28.5 62 L24 60 M71.5 62 L76 60" stroke="var(--ink)" stroke-width="3.2" stroke-linecap="round"/>
+            <path d="M34 63 C36 60 42 60 44 63 M56 63 C58 60 64 60 66 63" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M50 70 C49 74 48 75 50 77" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M40 80 C44 86 56 86 60 80" fill="none" stroke="var(--ink)" stroke-width="2.8" stroke-linecap="round"/>
+          </svg>
+
+          <h1 class="title" style="font-size:clamp(26px,7.5vw,36px)">Bravo, partie<br/>terminée !</h1>
+          <div class="title-rule"></div>
+          <p class="subtitle" id="end-detail"></p>
+
+          <div class="end-stats">
+            <div class="end-stat">
+              <div class="stat-label">Coups</div>
+              <div class="stat-value" id="end-moves">0</div>
+            </div>
+            <div class="end-stat">
+              <div class="stat-label">Temps</div>
+              <div class="stat-value" id="end-time">0:00</div>
+            </div>
+          </div>
+          <p class="record-note" id="end-record"></p>
+
+          <button class="btn primary" id="btn-replay" type="button">Rejouer</button>
+          <button class="btn" id="btn-change-size" type="button">Changer de taille</button>
+
+          <p class="signature">Un jeu <b>HP OUTILS</b> — des outils pour la vraie vie</p>
+        </div>
+      </section>
+
+    </div>
+
+    <script>
+      "use strict";
+
+      /* ============================================================
+         Icônes du Québec — SVG originaux, style linogravure
+         (contours d'encre épais, petits traits de hachure)
+         ============================================================ */
+      var S = 'stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+      var THIN = 'stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.55"';
+
+      var ICONS = [
+        { id: "tuque", name: "Tuque", svg:
+          '<circle cx="32" cy="9" r="5.5" fill="var(--gold)" ' + S + '/>' +
+          '<path d="M15 33 C15 19 23 13 32 13 C41 13 49 19 49 33 Z" fill="var(--paper-card)" ' + S + '/>' +
+          '<path d="M24 17 L24 31 M32 14 L32 31 M40 17 L40 31" ' + THIN + '/>' +
+          '<rect x="10" y="33" width="44" height="10" rx="4" fill="var(--red)" ' + S + '/>' +
+          '<path d="M18 38 L46 38" stroke="#fdf6e0" stroke-width="2" stroke-dasharray="4 4" fill="none"/>' },
+        { id: "erable", name: "Érable", svg:
+          '<path d="M32 58 L32 48" ' + S + ' fill="none"/>' +
+          '<path d="M32 5 L37 16 L46 11 L43.5 21 L53 19 L46 28 L54 30.5 L44.5 37 L46.5 47 L36.5 42.5 L32 49 L27.5 42.5 L17.5 47 L19.5 37 L10 30.5 L18 28 L11 19 L20.5 21 L18 11 L27 16 Z" fill="var(--red)" ' + S + '/>' +
+          '<path d="M32 14 L32 44 M25 24 L29 30 M39 24 L35 30" ' + THIN + '/>' },
+        { id: "bernache", name: "Bernache", svg:
+          '<path d="M8 45 C8 35 19 29 32 30 C45 31 55 36 55 43 C55 50 44 54 29 54 C17 54 8 51 8 45 Z" fill="var(--paper-card)" ' + S + '/>' +
+          '<path d="M17 41 C23 34 36 33 44 39" fill="none" ' + S + '/>' +
+          '<path d="M45 36 C45 26 47 17 52 12" fill="none" stroke="var(--ink)" stroke-width="6.5" stroke-linecap="round"/>' +
+          '<circle cx="53" cy="11" r="6" fill="var(--ink)"/>' +
+          '<ellipse cx="55.5" cy="13" rx="2.6" ry="1.8" fill="var(--paper-card)"/>' +
+          '<path d="M58 8 L63.5 10.5 L58 14 Z" fill="var(--gold)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>' +
+          '<circle cx="51" cy="10" r="1.3" fill="var(--paper-card)"/>' +
+          '<path d="M12 59 C18 56 24 59 30 59 M36 60 C42 57 48 60 54 60" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round"/>' },
+        { id: "castor", name: "Castor", svg:
+          '<g transform="rotate(24 50 40)"><rect x="42" y="24" width="17" height="30" rx="8" fill="var(--brown)" ' + S + '/></g>' +
+          '<path d="M46 32 L55 47 M52 28 L58 40" ' + THIN + '/>' +
+          '<circle cx="17" cy="20" r="4.5" fill="var(--brown)" ' + S + '/>' +
+          '<circle cx="37" cy="20" r="4.5" fill="var(--brown)" ' + S + '/>' +
+          '<circle cx="27" cy="36" r="17" fill="var(--paper-card)" ' + S + '/>' +
+          '<circle cx="21" cy="32" r="1.9" fill="var(--ink)"/><circle cx="33" cy="32" r="1.9" fill="var(--ink)"/>' +
+          '<ellipse cx="27" cy="39" rx="6.5" ry="4.8" fill="none" ' + S + '/>' +
+          '<circle cx="27" cy="37.5" r="1.7" fill="var(--ink)"/>' +
+          '<rect x="23.5" y="43" width="7" height="6.5" fill="#fffdf4" stroke="var(--ink)" stroke-width="2"/>' +
+          '<path d="M27 43 L27 49.5" stroke="var(--ink)" stroke-width="1.6"/>' +
+          '<ellipse cx="15" cy="52" rx="5" ry="3" fill="var(--brown)" ' + S + '/>' +
+          '<ellipse cx="39" cy="52" rx="5" ry="3" fill="var(--brown)" ' + S + '/>' },
+        { id: "cabane", name: "Cabane à sucre", svg:
+          '<path d="M40 20 C38 16 41 14 40 10 M47 18 C45 14 48 12 47 8" fill="none" stroke="var(--ink-soft)" stroke-width="2.4" stroke-linecap="round"/>' +
+          '<rect x="37" y="19" width="7" height="11" fill="var(--brown)" ' + S + '/>' +
+          '<rect x="15" y="31" width="30" height="21" fill="var(--paper-card)" ' + S + '/>' +
+          '<path d="M9 31 L30 15 L51 31 Z" fill="var(--red)" ' + S + '/>' +
+          '<path d="M16 26 L44 26" ' + THIN + '/>' +
+          '<rect x="26" y="40" width="8" height="12" fill="var(--brown)" ' + S + '/>' +
+          '<circle cx="32.2" cy="46" r="1.2" fill="var(--gold)"/>' +
+          '<rect x="18" y="35" width="6" height="6" fill="var(--gold)" ' + S + '/>' +
+          '<path d="M50 38 L50 50 M46 50 L56 50 L54.5 57 L47.5 57 Z" fill="var(--paper-deep)" ' + S + '/>' +
+          '<path d="M6 57 L58 57" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 6"/>' },
+        { id: "violon", name: "Violon", svg:
+          '<path d="M12 54 L50 16" stroke="var(--brown)" stroke-width="2.2" stroke-linecap="round"/>' +
+          '<path d="M8 50 L46 12" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round" opacity="0.7"/>' +
+          '<path d="M33 15 C27 15 25 20 25 24 C19 26 17 31 17 36 C17 45 24 51 33 51 C42 51 49 45 49 36 C49 31 47 26 41 24 C41 20 39 15 33 15 Z" fill="var(--gold)" ' + S + '/>' +
+          '<path d="M36 17 L47 5" stroke="var(--ink)" stroke-width="4.5" stroke-linecap="round"/>' +
+          '<circle cx="49" cy="4.5" r="3.4" fill="none" ' + S + '/>' +
+          '<path d="M33 18 L33 48" ' + THIN + '/>' +
+          '<path d="M24 33 C26 36 26 39 24 42 M42 33 C40 36 40 39 42 42" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>' },
+        { id: "raquettes", name: "Raquettes", svg:
+          '<g transform="rotate(-13 21 32)"><ellipse cx="21" cy="32" rx="10.5" ry="22" fill="none" ' + S + '/>' +
+          '<path d="M12 20 L30 20 M11 32 L31 32 M12 44 L30 44 M17 12 L17 52 M25 12 L25 52" ' + THIN + '/>' +
+          '<rect x="15" y="28" width="12" height="7" fill="var(--red)" ' + S + '/></g>' +
+          '<g transform="rotate(13 43 32)"><ellipse cx="43" cy="32" rx="10.5" ry="22" fill="none" ' + S + '/>' +
+          '<path d="M34 20 L52 20 M33 32 L53 32 M34 44 L52 44 M39 12 L39 52 M47 12 L47 52" ' + THIN + '/>' +
+          '<rect x="37" y="28" width="12" height="7" fill="var(--red)" ' + S + '/></g>' },
+        { id: "canot", name: "Canot", svg:
+          '<path d="M45 8 L36 26" stroke="var(--brown)" stroke-width="3" stroke-linecap="round"/>' +
+          '<ellipse cx="34.5" cy="30" rx="3.4" ry="6" transform="rotate(24 34.5 30)" fill="var(--brown)" ' + S + '/>' +
+          '<path d="M5 35 C13 48 23 53 32 53 C41 53 51 48 59 35 C51 40 42 42.5 32 42.5 C22 42.5 13 40 5 35 Z" fill="var(--red)" ' + S + '/>' +
+          '<path d="M21 41.5 L23.5 48 M43 41.5 L40.5 48" stroke="#fdf6e0" stroke-width="2.4" fill="none"/>' +
+          '<path d="M12 35.5 C20 39 44 39 52 35.5" fill="none" stroke="var(--ink)" stroke-width="2" opacity="0.5"/>' +
+          '<path d="M10 59 C16 56.5 22 59 28 59 M36 59.5 C42 57 48 59.5 54 59.5" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round"/>' },
+        { id: "feu", name: "Feu de camp", svg:
+          '<path d="M32 5 C38 15 45 22 45 33 C45 43 39 49 32 49 C25 49 19 43 19 33 C19 22 26 15 32 5 Z" fill="var(--gold)" ' + S + '/>' +
+          '<path d="M32 24 C36 29 38.5 32.5 38.5 38 C38.5 43.5 35.5 46.5 32 46.5 C28.5 46.5 25.5 43.5 25.5 38 C25.5 32.5 28 29 32 24 Z" fill="var(--red)" stroke="var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>' +
+          '<path d="M15 55 L49 47 M49 55 L15 47" stroke="var(--brown)" stroke-width="5.5" stroke-linecap="round"/>' +
+          '<path d="M15 55 L49 47 M49 55 L15 47" ' + THIN + '/>' },
+        { id: "mais", name: "Maïs", svg:
+          '<ellipse cx="32" cy="27" rx="11.5" ry="18" fill="var(--gold)" ' + S + '/>' +
+          '<path d="M25 12 L25 42 M32 9.5 L32 44.5 M39 12 L39 42 M21.5 20 L42.5 20 M21 28 L43 28 M21.5 36 L42.5 36" ' + THIN + '/>' +
+          '<path d="M23 40 C14 45 11 53 13 59 C20 57 25 50 26 43 Z" fill="var(--green)" ' + S + '/>' +
+          '<path d="M41 40 C50 45 53 53 51 59 C44 57 39 50 38 43 Z" fill="var(--green)" ' + S + '/>' +
+          '<path d="M28 45 C27 51 28 56 32 60 C36 56 37 51 36 45 Z" fill="var(--green)" ' + S + '/>' },
+        { id: "lune", name: "Lune", svg:
+          '<path d="M43 6 A25 25 0 1 0 43 58 A19.5 19.5 0 1 1 43 6 Z" fill="var(--gold)" ' + S + '/>' +
+          '<path d="M47 12 L48.6 17.4 L54 19 L48.6 20.6 L47 26 L45.4 20.6 L40 19 L45.4 17.4 Z" fill="var(--paper-card)" ' + S + '/>' +
+          '<path d="M52 34 L53 37.4 L56.5 38.5 L53 39.6 L52 43 L51 39.6 L47.5 38.5 L51 37.4 Z" fill="var(--paper-card)" ' + S + '/>' },
+        { id: "flocon", name: "Flocon", svg:
+          '<g fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round">' +
+          '<path d="M32 7 L32 57"/><path d="M32 7 L32 57" transform="rotate(60 32 32)"/><path d="M32 7 L32 57" transform="rotate(120 32 32)"/>' +
+          '<path d="M24 15 L32 21 L40 15 M24 49 L32 43 L40 49"/>' +
+          '<path d="M24 15 L32 21 L40 15 M24 49 L32 43 L40 49" transform="rotate(60 32 32)"/>' +
+          '<path d="M24 15 L32 21 L40 15 M24 49 L32 43 L40 49" transform="rotate(120 32 32)"/>' +
+          '</g><circle cx="32" cy="32" r="3.4" fill="var(--gold)" ' + S + '/>' }
+      ];
+
+      var BACK_MOTIF =
+        '<svg viewBox="0 0 64 64" aria-hidden="true">' +
+        '<path d="M32 6 L40 22 L56 24 L44 35 L48 52 L32 43 L16 52 L20 35 L8 24 L24 22 Z" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>' +
+        '<circle cx="32" cy="31" r="4" fill="var(--red)" stroke="var(--ink)" stroke-width="2.4"/>' +
+        '</svg>';
+
+      var SIZES = [
+        { pairs: 6,  cols: 3, label: "6 paires", level: "Facile — pour commencer" },
+        { pairs: 8,  cols: 4, label: "8 paires", level: "Moyen — le classique" },
+        { pairs: 12, cols: 4, label: "12 paires", level: "Défi — toutes les icônes" }
+      ];
+
+      /* ---------- Records (localStorage, tolère l'absence de stockage) ---------- */
+      var BEST_KEY = "memoire-des-cantons-best-v1";
+      function loadBest() {
+        try {
+          var raw = localStorage.getItem(BEST_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) { return {}; }
+      }
+      function saveBest(best) {
+        try { localStorage.setItem(BEST_KEY, JSON.stringify(best)); } catch (e) { /* on continue sans stockage */ }
+      }
+
+      /* ---------- Sons WebAudio (générés en code, aucun fichier) ---------- */
+      var audioCtx = null;
+      var muted = false;
+      function ensureAudio() {
+        if (!audioCtx) {
+          try {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (AC) audioCtx = new AC();
+          } catch (e) { audioCtx = null; }
+        }
+        if (audioCtx && audioCtx.state === "suspended") { audioCtx.resume(); }
+      }
+      function tone(freq, start, dur, type, vol) {
+        if (!audioCtx || muted) return;
+        var t0 = audioCtx.currentTime + start;
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = type || "sine";
+        osc.frequency.setValueAtTime(freq, t0);
+        gain.gain.setValueAtTime(0.0001, t0);
+        gain.gain.exponentialRampToValueAtTime(vol || 0.12, t0 + 0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(t0); osc.stop(t0 + dur + 0.05);
+      }
+      function sndFlip()  { tone(620, 0, 0.07, "triangle", 0.08); tone(880, 0.03, 0.06, "triangle", 0.06); }
+      function sndMiss()  { tone(210, 0, 0.13, "sine", 0.09); }
+      function sndMatch() { tone(659, 0, 0.11, "sine", 0.11); tone(880, 0.09, 0.16, "sine", 0.11); }
+      function sndWin()   { tone(523, 0, 0.13, "triangle", 0.11); tone(659, 0.12, 0.13, "triangle", 0.11); tone(784, 0.24, 0.13, "triangle", 0.11); tone(1047, 0.36, 0.26, "triangle", 0.12); }
+
+      var SOUND_ON_SVG  = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9 L4 15 L8 15 L13 19 L13 5 L8 9 Z" fill="var(--ink)"/><path d="M16 9 C17.5 10.5 17.5 13.5 16 15 M18.5 6.5 C21.5 9.5 21.5 14.5 18.5 17.5"/></svg>';
+      var SOUND_OFF_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9 L4 15 L8 15 L13 19 L13 5 L8 9 Z" fill="var(--ink)"/><path d="M16 9 L22 15 M22 9 L16 15" stroke="var(--red)"/></svg>';
+      var btnSound = document.getElementById("btn-sound");
+      function refreshSoundBtn() { btnSound.innerHTML = muted ? SOUND_OFF_SVG : SOUND_ON_SVG; }
+      btnSound.addEventListener("click", function () {
+        muted = !muted;
+        refreshSoundBtn();
+        if (!muted) { ensureAudio(); sndFlip(); }
+      });
+      refreshSoundBtn();
+
+      /* ---------- État de la partie ---------- */
+      var state = {
+        pairs: 6, cols: 3,
+        first: null, lock: false,
+        moves: 0, found: 0,
+        startedAt: null, timerId: null, elapsed: 0
+      };
+
+      var el = {
+        start: document.getElementById("screen-start"),
+        game: document.getElementById("screen-game"),
+        end: document.getElementById("screen-end"),
+        board: document.getElementById("board"),
+        moves: document.getElementById("hud-moves"),
+        time: document.getElementById("hud-time"),
+        pairs: document.getElementById("hud-pairs"),
+        sizeButtons: document.getElementById("size-buttons")
+      };
+
+      function fmtTime(sec) {
+        var m = Math.floor(sec / 60);
+        var s = Math.floor(sec % 60);
+        return m + ":" + (s < 10 ? "0" : "") + s;
+      }
+      function shuffle(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+        }
+        return arr;
+      }
+      function show(screen) {
+        el.start.classList.toggle("hidden", screen !== "start");
+        el.game.classList.toggle("hidden", screen !== "game");
+        el.end.classList.toggle("hidden", screen !== "end");
+        window.scrollTo(0, 0);
+      }
+
+      /* ---------- Écran de départ : boutons de taille + records ---------- */
+      function renderSizeButtons() {
+        var best = loadBest();
+        el.sizeButtons.innerHTML = "";
+        SIZES.forEach(function (sz) {
+          var b = best[String(sz.pairs)];
+          var sub = sz.level + (b ? " · Record : " + b.moves + " coups, " + fmtTime(b.time) : "");
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn";
+          btn.innerHTML = sz.label + '<span class="btn-sub">' + sub + "</span>";
+          btn.addEventListener("click", function () { startGame(sz); });
+          el.sizeButtons.appendChild(btn);
+        });
+      }
+
+      /* ---------- Partie ---------- */
+      function stopTimer() {
+        if (state.timerId) { clearInterval(state.timerId); state.timerId = null; }
+      }
+      function startTimer() {
+        stopTimer();
+        state.startedAt = Date.now();
+        state.timerId = setInterval(function () {
+          state.elapsed = (Date.now() - state.startedAt) / 1000;
+          el.time.textContent = fmtTime(state.elapsed);
+        }, 250);
+      }
+
+      function startGame(sz) {
+        ensureAudio();
+        state.pairs = sz.pairs;
+        state.cols = sz.cols;
+        state.first = null;
+        state.lock = false;
+        state.moves = 0;
+        state.found = 0;
+        state.elapsed = 0;
+        state.startedAt = null;
+        stopTimer();
+
+        el.moves.textContent = "0";
+        el.time.textContent = "0:00";
+        el.pairs.textContent = "0/" + sz.pairs;
+
+        // Choisir les icônes de la partie, les doubler, mélanger
+        var chosen = shuffle(ICONS.slice()).slice(0, sz.pairs);
+        var deck = shuffle(chosen.concat(chosen));
+
+        el.board.style.gridTemplateColumns = "repeat(" + sz.cols + ", 1fr)";
+        el.board.innerHTML = "";
+
+        deck.forEach(function (icon) {
+          var card = document.createElement("button");
+          card.type = "button";
+          card.className = "card";
+          card.setAttribute("data-icon", icon.id);
+          card.setAttribute("aria-label", "Carte face cachée");
+          card.innerHTML =
+            '<span class="card-inner">' +
+              '<span class="card-face card-back">' + BACK_MOTIF + "</span>" +
+              '<span class="card-face card-front" aria-hidden="true">' +
+                '<svg viewBox="0 0 64 64" aria-hidden="true">' + icon.svg + "</svg>" +
+                '<span class="card-name">' + icon.name + "</span>" +
+              "</span>" +
+            "</span>";
+          card.addEventListener("click", function () { onCard(card, icon); });
+          el.board.appendChild(card);
+        });
+
+        show("game");
+      }
+
+      function onCard(card, icon) {
+        if (state.lock) return;
+        if (card.classList.contains("flipped")) return;
+        ensureAudio();
+
+        if (!state.startedAt) startTimer();
+
+        card.classList.add("flipped");
+        card.setAttribute("aria-label", icon.name);
+        card.querySelector(".card-front").removeAttribute("aria-hidden");
+        sndFlip();
+
+        if (!state.first) {
+          state.first = { card: card, icon: icon };
+          return;
+        }
+
+        // Deuxième carte : un coup de plus
+        state.moves++;
+        el.moves.textContent = String(state.moves);
+        var first = state.first;
+        state.first = null;
+
+        if (first.icon.id === icon.id) {
+          first.card.classList.add("matched");
+          card.classList.add("matched");
+          first.card.disabled = true;
+          card.disabled = true;
+          state.found++;
+          el.pairs.textContent = state.found + "/" + state.pairs;
+          sndMatch();
+          if (state.found === state.pairs) {
+            stopTimer();
+            state.elapsed = (Date.now() - state.startedAt) / 1000;
+            setTimeout(winGame, 650);
+          }
+        } else {
+          state.lock = true;
+          sndMiss();
+          setTimeout(function () {
+            first.card.classList.remove("flipped");
+            card.classList.remove("flipped");
+            first.card.setAttribute("aria-label", "Carte face cachée");
+            card.setAttribute("aria-label", "Carte face cachée");
+            first.card.querySelector(".card-front").setAttribute("aria-hidden", "true");
+            card.querySelector(".card-front").setAttribute("aria-hidden", "true");
+            state.lock = false;
+          }, 850);
+        }
+      }
+
+      function winGame() {
+        sndWin();
+        var best = loadBest();
+        var key = String(state.pairs);
+        var prev = best[key];
+        var isRecord = !prev || state.moves < prev.moves || (state.moves === prev.moves && state.elapsed < prev.time);
+        if (isRecord) {
+          best[key] = { moves: state.moves, time: Math.round(state.elapsed) };
+          saveBest(best);
+        }
+        document.getElementById("end-detail").textContent =
+          "Tu as trouvé les " + state.pairs + " paires" + (state.pairs === 12 ? " — la totale !" : ".");
+        document.getElementById("end-moves").textContent = String(state.moves);
+        document.getElementById("end-time").textContent = fmtTime(state.elapsed);
+        document.getElementById("end-record").textContent = isRecord
+          ? (prev ? "★ Nouveau record sur cette taille !" : "★ Premier record gardé sur ton appareil !")
+          : "Record à battre : " + prev.moves + " coups, " + fmtTime(prev.time) + ".";
+        show("end");
+      }
+
+      /* ---------- Navigation ---------- */
+      document.getElementById("btn-home").addEventListener("click", function () {
+        stopTimer();
+        renderSizeButtons();
+        show("start");
+      });
+      document.getElementById("btn-replay").addEventListener("click", function () {
+        var sz = SIZES.filter(function (s) { return s.pairs === state.pairs; })[0];
+        startGame(sz);
+      });
+      document.getElementById("btn-change-size").addEventListener("click", function () {
+        renderSizeButtons();
+        show("start");
+      });
+
+      renderSizeButtons();
+      show("start");
+    </script>
+  </body>
+</html>
