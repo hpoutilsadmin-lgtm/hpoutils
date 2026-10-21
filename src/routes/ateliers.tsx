@@ -18,9 +18,9 @@ const ATELIERS = [
 ];
 
 const FETES = [
-  { title: "Pain maison à domicile", duration: "3 h · 6 à 8 personnes", price: "350 $ CAD · forfait groupe", desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes." },
-  { title: "L'IA sans jargon", duration: "2 h", price: "275 $ CAD · forfait organisme", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
-  { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "300 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant." },
+  { title: "Pain maison à domicile", duration: "3 h · 6 à 8 personnes", price: "120 $ CAD · forfait groupe", desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes." },
+  { title: "L'IA sans jargon", duration: "2 h", price: "120 $ CAD · forfait organisme", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
+  { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "120 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant." },
 ];
 
 function Page() {
