@@ -133,17 +133,47 @@ function Page() {
           <div className="container">
             <header className="tool-section-head">
               <h2>Outils Sans Honte</h2>
-              <p>Dix kits PDF pour les papiers, les repas, le logement, l'entraide, la fraude et d'autres situations concrètes.</p>
+              <p>Quinze kits PDF pour les papiers, les repas, le logement, l'entraide, la fraude et d'autres situations concrètes.</p>
             </header>
             <div className="tool-grid">
               <article className="tool-card">
-                <span className="tool-tag">Collection PDF — 40 $ CAD au lieu de 50 $ CAD, aucune taxe ajoutée</span>
-                <h3>Collection Sans Honte — 10 kits</h3>
+                <span className="tool-tag">Collection PDF — 40 $ CAD, aucune taxe ajoutée</span>
+                <h3>Collection Sans Honte — Choisis 10 kits parmi 15</h3>
                 <p>
-                  Les 10 kits Sans Honte en un seul PDF — Papiers, Frigo, Tenir Debout,
+                  Choisis 10 kits parmi les 15 Sans Honte, en un seul PDF — Papiers, Frigo, Tenir Debout,
                   Seconde Main, Entraide et plus. Téléchargement immédiat après paiement.
                 </p>
                 <Link to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF →</Link>
+              </article>
+              <article className="tool-card">
+                <span className="tool-tag">Kit PDF — 5 $ CAD, aucune taxe ajoutée — Nouveau</span>
+                <h3>Testament Sans Honte — L'olographe sans erreur</h3>
+                <p>Préparer un testament olographe au Québec, pas à pas.</p>
+                <Link to="/pdf/$slug" params={{ slug: "sans-honte-testament" }}>Découvrir le kit PDF →</Link>
+              </article>
+              <article className="tool-card">
+                <span className="tool-tag">Kit PDF — 5 $ CAD, aucune taxe ajoutée — Nouveau</span>
+                <h3>Papiers de mes parents Sans Honte</h3>
+                <p>Organiser les papiers de ses parents, sans honte.</p>
+                <Link to="/pdf/$slug" params={{ slug: "sans-honte-papiers-parents" }}>Découvrir le kit PDF →</Link>
+              </article>
+              <article className="tool-card">
+                <span className="tool-tag">Kit PDF — 5 $ CAD, aucune taxe ajoutée — Nouveau</span>
+                <h3>Chalet Sans Honte — Les règles qui sauvent les Noëls</h3>
+                <p>Des règles claires pour partager le chalet.</p>
+                <Link to="/pdf/$slug" params={{ slug: "sans-honte-chalet" }}>Découvrir le kit PDF →</Link>
+              </article>
+              <article className="tool-card">
+                <span className="tool-tag">Kit PDF — 5 $ CAD, aucune taxe ajoutée — Nouveau</span>
+                <h3>L'année québécoise Sans Honte</h3>
+                <p>Des repères pour l'année québécoise.</p>
+                <Link to="/pdf/$slug" params={{ slug: "sans-honte-annee-quebecoise" }}>Découvrir le kit PDF →</Link>
+              </article>
+              <article className="tool-card">
+                <span className="tool-tag">Kit PDF — 5 $ CAD, aucune taxe ajoutée — Nouveau</span>
+                <h3>Héritage numérique Sans Honte</h3>
+                <p>Préparer la transmission de son héritage numérique.</p>
+                <Link to="/pdf/$slug" params={{ slug: "sans-honte-heritage-numerique" }}>Découvrir le kit PDF →</Link>
               </article>
               <article className="tool-card">
                 <span className="tool-tag">Kit PDF — 5 $ CAD, aucune taxe ajoutée</span>
