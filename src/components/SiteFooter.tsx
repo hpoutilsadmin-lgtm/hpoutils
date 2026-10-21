@@ -24,7 +24,8 @@ export function SiteFooter() {
             <Link to="/ateliers">Ateliers</Link><br />
             <Link to="/a-propos">À propos</Link><br />
             <Link to="/recuperer-achat">Récupérer un achat</Link><br />
-            <Link to="/confidentialite">Confidentialité</Link>
+            <Link to="/confidentialite">Confidentialité</Link><br />
+            <Link to="/conditions-de-vente">Conditions de vente</Link>
           </p>
         </div>
         <div>
