@@ -5,13 +5,29 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/outils")({
   head: () => createSeoHead({
     title: "Outils web gratuits + kits PDF Sans Honte | HP — Québec",
-    description: "4 outils web gratuits HP : Le reste du mois, Ça vaut-tu la peine ?, Le relais, Maintenant. Et les kits PDF Sans Honte pour la vraie vie. Sans compte, fait au Québec.",
+    description: "Outils web gratuits HP : La Boîte à outils (7 outils pour la vraie vie), En cuisine (629 recettes), Le reste du mois, Ça vaut-tu la peine ?, Le relais, Maintenant. Et les kits PDF Sans Honte. Sans compte, fait au Québec.",
     path: "/outils",
   }),
   component: Page,
 });
 
 const WEB_TOOLS = [
+  {
+    emoji: "🧰",
+    tag: "7 outils",
+    title: "La Boîte à outils",
+    copy: "Sept outils pour la vraie vie : comprendre une lettre officielle, trancher une décision, préparer son héritage, comparer les prix, démêler une situation, savoir quelle démarche faire et garder ses codes en sécurité.",
+    cta: "Ouvrir la Boîte →",
+    href: "/boite/",
+  },
+  {
+    emoji: "🍲",
+    tag: "Recettes",
+    title: "En cuisine — Recettes HP",
+    copy: "629 recettes pour cuisiner avec ce qu'on a sous la main : cherche par ingrédients, convertis les températures du four et trouve quoi faire avec les restes.",
+    cta: "Entrer dans la cuisine →",
+    href: "/en-cuisine/",
+  },
   {
     emoji: "💰",
     tag: "Budget",
@@ -76,7 +92,7 @@ function Page() {
           <span className="editorial-kicker">Outils HP</span>
           <h1>Outils <em>HP</em>.</h1>
           <p className="lead">
-            Des outils simples pour la vraie vie : quatre outils web gratuits,
+            Des outils simples pour la vraie vie : une boîte pleine d'outils web gratuits,
             et les kits PDF Sans Honte pour mettre des mots et avancer.
           </p>
           <div style={tabBarStyle} role="tablist" aria-label="Choisir : outils web ou kits papier">
@@ -107,7 +123,7 @@ function Page() {
           <div className="container">
             <header className="tool-section-head">
               <h2>Outils web gratuits</h2>
-              <p>Quatre petits outils qui s'utilisent en 30 secondes. 100 % gratuits, sans compte : vos données restent sur votre appareil.</p>
+              <p>Des outils 100 % gratuits, sans compte : vos données restent sur votre appareil. Les petits se font en 30 secondes ; la Boîte et la cuisine prennent le temps qu'il faut.</p>
             </header>
             <div className="tool-grid">
               {WEB_TOOLS.map((tool) => (
