@@ -58,7 +58,7 @@ function Page() {
                 Un outil interactif et éducatif pour explorer les bons réflexes
                 du quotidien avec une approche simple, humaine et accessible.
               </p>
-              <span className="pillar-cta" aria-disabled style={{ opacity: 0.6 }}>Bientôt disponible</span>
+              <Link to="/outils/bons-reflexes" className="pillar-cta">Ouvrir l’outil →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">05</span>

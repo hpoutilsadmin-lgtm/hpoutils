@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/balado")({
   head: () => createSeoHead({
     title: "Futur simple — le balado HP sur l'IA, les PME et le futur | Québec",
-    description: "Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur à venir, le bon comme le mauvais. Un nouvel épisode chaque lundi. Direct, concret, sans jargon.",
+    description: "Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur à venir, le bon comme le mauvais. Un nouvel épisode chaque lundi dès le 26 octobre. Direct, concret, sans jargon.",
     path: "/balado",
   }),
   component: Page,
@@ -15,26 +15,26 @@ export const Route = createFileRoute("/balado")({
 const EPISODES = [
   {
     n: "02",
-    label: "Test 2",
+    label: "Mois de la cybersécurité",
     title: "Épisode 2 — Futur simple",
     date: "19 octobre 2026",
-    duration: "Épisode test",
+    duration: "Fraudes et deepfakes",
     description:
-      "Deuxième épisode test du balado, publié le 19 octobre 2026. L'épisode officiel " +
-      "arrive le lundi 26 octobre 2026.",
+      "Fraudes vocales et deepfakes : comment se protéger à l'ère de l'IA. Publié le " +
+      "19 octobre 2026. Le rendez-vous officiel du lundi démarre le 26 octobre 2026.",
     audio:
       "https://muse.ai/podcasts/media/1328712923661622/65e88d46-ef82-42e8-b712-c4e00a40562d/ep-0b89e3d7-83f5-43c8-847b-28931ef6cd92.mp3",
   },
   {
     n: "01",
-    label: "Test 1",
+    label: "Épisode pilote",
     title: "L'entrepreneur solo à l'ère de l'IA : opportunité ou mirage ?",
     date: "15 octobre 2026",
     duration: "6 minutes",
     description:
       "Est-ce vraiment le meilleur moment de l'histoire pour lancer son entreprise tout seul ? " +
-      "Et qu'est-ce qu'on risque d'y perdre ? Le bon : 86 % des solos essaient l'IA avant d'embaucher, " +
-      "12 millions d'entreprises d'une seule personne en Chine. Le mauvais : les équipes gagnent encore " +
+      "Et qu'est-ce qu'on risque d'y perdre ? Le bon : les solos essaient l'IA avant d'embaucher, " +
+      "un peu partout dans le monde. Le mauvais : les équipes gagnent encore " +
       "au sommet, et les risques d'uniformisation et de dépendance.",
     audio:
       "https://muse.ai/podcasts/media/1328712923661622/65e88d46-ef82-42e8-b712-c4e00a40562d/ep-8309fb64-d631-412d-9d33-734e42d4f08a.mp3",
@@ -62,7 +62,7 @@ function Page() {
           <p className="lead">
             Lea et Marc regardent l'intelligence artificielle en face : l'entrepreneuriat,
             les PME et le futur à venir — <strong>le bon comme le mauvais</strong>. Un nouvel
-            épisode chaque lundi. Direct, concret, sans jargon. Comme tout ce qu'on fait ici.
+            épisode chaque lundi, dès le 26 octobre. Direct, concret, sans jargon. Comme tout ce qu'on fait ici.
           </p>
           <div className="lead-actions">
             <a href="#episodes" className="btn-primary">Écouter le dernier épisode</a>

@@ -139,7 +139,7 @@ function tileBackground(game: GameEntry): CSSProperties {
 function JeuxPage() {
   const featured = GAMES.find((g) => g.title === "2 vérités, 1 mensonge") ?? GAMES[0];
   const [genre, setGenre] = useState("Tous");
-  const visibleGames = genre === "Tous" ? GAMES : GAMES.filter((g) => g.tag.split(" · ")[0] === genre);
+  const visibleGames = (genre === "Tous" ? GAMES : GAMES.filter((g) => g.tag.split(" · ")[0] === genre)).filter((g) => g.title !== featured.title);
   return (
     <>
       <section className="editorial-hero hero-banner-image jeux-hero">
