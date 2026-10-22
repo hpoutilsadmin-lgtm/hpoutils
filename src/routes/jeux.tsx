@@ -32,6 +32,16 @@ const GAMES = [
   { title: "Mémoire des Cantons", file: "/apps/memoire-des-cantons/memoire-des-cantons-v1.0.html", copy: "Le jeu de mémoire aux icônes du Québec." },
   { title: "Tir de Boules de Neige", file: "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html", copy: "50 niveaux de tir à la boule de neige, sauvegarde incluse." },
   { title: "Ado odieux, adieu", file: "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html", copy: "Fais des mauvais coups sans te faire pogner… et assume la vraie sentence." },
+  { title: "Couleuvre du Québec", file: "/apps/couleuvre-du-quebec/couleuvre-du-quebec-v1.0.html", copy: "Le serpent d'ici : souris, bestioles dorées, mouettes et vidanges." },
+  { title: "Fusion Sirop", file: "/apps/fusion-sirop/fusion-sirop-v1.0.html", copy: "Le 2048 de la cabane à sucre, de la sève au pain de sucre." },
+  { title: "Trio des Éléments", file: "/apps/trio-des-elements/trio-des-elements-v1.0.html", copy: "Match-3 du tableau périodique : silicium, diamant, or et cuivre." },
+  { title: "Bernache Express", file: "/apps/bernache-express/bernache-express-v1.0.html", copy: "La grande migration vers le Sud, à un seul bouton." },
+  { title: "Le Bonhomme Pendu", file: "/apps/le-bonhomme-pendu/le-bonhomme-pendu-v1.0.html", copy: "673 mots à deviner, dont 100 québécois d'ici — définitions incluses." },
+  { title: "Montgolfière", file: "/apps/montgolfiere/montgolfiere-v1.0.html", copy: "Grimpe toujours plus haut, entre les orages et les éclairs." },
+  { title: "Pop Ballons", file: "/apps/pop-ballons/pop-ballons-v1.0.html", copy: "60 secondes, des combos, et une frénésie finale." },
+  { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "330 manches pour démasquer le mensonge — historique, inusité, cocasse." },
+  { title: "Chat'attaque", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Tower defense avec des chats : 9 chats-tours défendent 50 croquettes. 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local." },
+  { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Tower defense futuriste : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde. Douze vagues, une tempête qui peut tout changer." },
 ];
 
 function JeuxPage() {
