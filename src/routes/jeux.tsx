@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 
 export const Route = createFileRoute("/jeux")({
   head: () => createSeoHead({
@@ -60,6 +60,28 @@ const PALETTES: [string, string][] = [
 
 type GameEntry = (typeof GAMES)[number];
 
+const GENRES = ["Tous", ...Array.from(new Set(GAMES.map((g) => g.tag.split(" · ")[0])))];
+
+const FILTER_BTN_STYLE: CSSProperties = {
+  font: "inherit",
+  fontSize: 13,
+  fontWeight: 800,
+  letterSpacing: ".02em",
+  padding: "7px 14px",
+  borderRadius: 999,
+  border: "1.5px solid rgba(34,26,18,.5)",
+  background: "transparent",
+  color: "#221a12",
+  cursor: "pointer",
+};
+
+const FILTER_BTN_ACTIVE_STYLE: CSSProperties = {
+  ...FILTER_BTN_STYLE,
+  background: "#221a12",
+  color: "#f6eddd",
+  borderColor: "#221a12",
+};
+
 const CHIP_STYLE: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
@@ -116,6 +138,8 @@ function tileBackground(game: GameEntry): CSSProperties {
 
 function JeuxPage() {
   const featured = GAMES.find((g) => g.title === "2 vérités, 1 mensonge") ?? GAMES[0];
+  const [genre, setGenre] = useState("Tous");
+  const visibleGames = genre === "Tous" ? GAMES : GAMES.filter((g) => g.tag.split(" · ")[0] === genre);
   return (
     <>
       <section className="editorial-hero hero-banner-image jeux-hero">
@@ -169,6 +193,19 @@ function JeuxPage() {
           <p style={{ textAlign: "center", maxWidth: 620, margin: "-6px auto 34px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.55 }}>
             Clique sur une tuile et joue tout de suite : rien à installer, rien à payer.
           </p>
+          <div role="group" aria-label="Filtrer les jeux par genre" style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", maxWidth: 900, margin: "0 auto 30px" }}>
+            {GENRES.map((g) => (
+              <button
+                key={g}
+                type="button"
+                aria-pressed={genre === g}
+                onClick={() => setGenre(g)}
+                style={genre === g ? FILTER_BTN_ACTIVE_STYLE : FILTER_BTN_STYLE}
+              >
+                {g}
+              </button>
+            ))}
+          </div>
           <div className="pillar-grid">
             <article className="pillar-card" style={{ gridColumn: "1 / -1", padding: 0, overflow: "hidden", flexDirection: "row", flexWrap: "wrap", gap: 0 }}>
               <a
@@ -189,7 +226,7 @@ function JeuxPage() {
               </div>
             </article>
 
-            {GAMES.map((game) => (
+            {visibleGames.map((game) => (
               <article className="pillar-card" key={game.title} style={{ padding: 0, overflow: "hidden", gap: 0 }}>
                 <a href={game.file} aria-label={"Jouer à " + game.title} style={{ display: "block", textDecoration: "none" }}>
                   <div style={{ ...tileBackground(game), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
