@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Trio des Éléments</title>
+    <style>
+      :root{
+        --bg:#f4efe6;
+        --panel:#fffdf8;
+        --ink:#26221a;
+        --ink-soft:#6d6350;
+        --line:#e3dac6;
+        --accent:#9c6b1e;
+        --accent-strong:#7c5312;
+        --board-bg:#2a241b;
+        --board-well:#171310;
+        --good:#2e7d43;
+        --danger:#b33a2b;
+        --combo-bg:#fff3d6;
+        --shadow:0 2px 10px rgba(60,45,15,.12);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#161310;
+          --panel:#221d17;
+          --ink:#f0e8d8;
+          --ink-soft:#b3a78d;
+          --line:#3d3427;
+          --accent:#e0aa3e;
+          --accent-strong:#f2c766;
+          --board-bg:#0f0c09;
+          --board-well:#050403;
+          --good:#6fce8d;
+          --danger:#ff7d6b;
+          --combo-bg:#3a2d12;
+          --shadow:0 2px 10px rgba(0,0,0,.5);
+        }
+      }
+      *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+      html,body{ margin:0; padding:0; }
+      body{
+        background:var(--bg);
+        color:var(--ink);
+        font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+        min-height:100dvh;
+        padding:14px 12px 26px;
+      }
+      .wrap{ max-width:520px; margin:0 auto; }
+
+      /* ---------- Entête du jeu ---------- */
+      .hud{
+        display:flex; gap:10px; align-items:stretch; margin-bottom:10px;
+      }
+      .hud .stat{
+        flex:1; background:var(--panel); border:1px solid var(--line);
+        border-radius:12px; padding:8px 10px 7px; box-shadow:var(--shadow);
+        text-align:center;
+      }
+      .hud .stat .lbl{
+        font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+        color:var(--ink-soft); font-weight:700;
+      }
+      .hud .stat .val{
+        font-size:26px; font-weight:800; line-height:1.15;
+        font-variant-numeric:tabular-nums;
+      }
+      .hud .stat.coups .val.danger{ color:var(--danger); }
+      .replay{
+        border:1px solid var(--accent); background:var(--accent); color:#fff;
+        border-radius:12px; padding:0 16px; font-size:16px; font-weight:800;
+        cursor:pointer; box-shadow:var(--shadow); min-height:48px;
+      }
+      @media (prefers-color-scheme: dark){ .replay{ color:#1c1507; } }
+      .replay:active{ transform:scale(.97); }
+
+      .combo-line{
+        min-height:28px; display:flex; align-items:center; justify-content:center;
+        margin-bottom:8px;
+      }
+      .combo-badge{
+        background:var(--combo-bg); border:1px solid var(--accent);
+        color:var(--accent-strong); font-weight:800; font-size:15px;
+        border-radius:999px; padding:3px 14px;
+        opacity:0; transform:scale(.8); transition:opacity .15s, transform .15s;
+      }
+      .combo-badge.show{ opacity:1; transform:scale(1); }
+
+      /* ---------- Objectif de partie ---------- */
+      .objective{
+        display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+        background:var(--panel); border:1px solid var(--line); border-radius:12px;
+        padding:8px 12px; margin-bottom:8px; box-shadow:var(--shadow);
+      }
+      .obj-label{
+        font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+        color:var(--ink-soft); font-weight:700;
+      }
+      .obj-text{ font-size:15px; font-weight:800; }
+      .obj-prog{
+        margin-left:auto; font-weight:800; color:var(--accent-strong);
+        font-variant-numeric:tabular-nums;
+      }
+      .obj-bar{
+        flex-basis:100%; height:6px; background:var(--line);
+        border-radius:99px; overflow:hidden;
+      }
+      .obj-fill{
+        height:100%; width:0%; background:var(--accent);
+        border-radius:99px; transition:width .3s ease;
+      }
+
+      /* ---------- Élément instable ---------- */
+      .tile.unstable .gem{
+        animation:unstablePulse .8s ease-in-out infinite;
+        box-shadow:inset 0 -4px 8px rgba(0,0,0,.28), inset 0 3px 5px rgba(255,255,255,.35), 0 0 0 3px rgba(255,255,255,.75), 0 0 16px 4px rgba(255,205,50,.85);
+      }
+      .tile.unstable .gem::before{
+        content:"★"; position:absolute; top:-5px; right:-4px; z-index:2;
+        width:17px; height:17px; border-radius:50%; background:#fff; color:#b3861b;
+        font-size:11px; line-height:17px; text-align:center;
+        box-shadow:0 1px 3px rgba(0,0,0,.4);
+      }
+      @keyframes unstablePulse{
+        0%,100%{ transform:scale(1); }
+        50%{ transform:scale(1.13); }
+      }
+      .card.victory .final-score{ color:var(--good); }
+
+      /* ---------- Plateau ---------- */
+      .board-frame{
+        background:var(--board-bg); border-radius:16px; padding:8px;
+        box-shadow:var(--shadow);
+      }
+      .board{
+        position:relative; width:100%; aspect-ratio:1/1;
+        background:var(--board-well); border-radius:10px; overflow:hidden;
+        touch-action:none; user-select:none; -webkit-user-select:none;
+      }
+      .tile{
+        position:absolute; display:flex; align-items:center; justify-content:center;
+        transition:top .18s ease, left .18s ease, transform .12s ease, opacity .15s ease;
+        will-change:top,left;
+      }
+      .tile .gem{
+        width:88%; height:88%; border-radius:22%;
+        display:flex; align-items:center; justify-content:center;
+        font-weight:800; color:#fff; position:relative;
+        box-shadow:inset 0 -4px 8px rgba(0,0,0,.28), inset 0 3px 5px rgba(255,255,255,.35), 0 2px 4px rgba(0,0,0,.35);
+        text-shadow:0 1px 2px rgba(0,0,0,.45);
+        letter-spacing:.01em;
+      }
+      .tile .gem::after{
+        content:""; position:absolute; top:8%; left:12%; width:34%; height:22%;
+        border-radius:50%; background:rgba(255,255,255,.35); filter:blur(1px);
+      }
+      .tile.selected .gem{
+        outline:3px solid #fff; outline-offset:1px;
+        box-shadow:inset 0 -4px 8px rgba(0,0,0,.28), inset 0 3px 5px rgba(255,255,255,.35), 0 0 0 4px rgba(255,255,255,.35), 0 2px 6px rgba(0,0,0,.4);
+      }
+      .tile.selected{ transform:scale(1.08); z-index:3; }
+      .tile.clearing{ transform:scale(1.25); opacity:0; }
+      .tile.hint .gem{ animation:hintPulse .5s ease-in-out 3; }
+      @keyframes hintPulse{
+        0%,100%{ transform:scale(1); }
+        50%{ transform:scale(1.14); }
+      }
+      .float-score{
+        position:absolute; z-index:5; pointer-events:none;
+        font-weight:900; color:#ffe9a8; font-size:clamp(14px,4.5vw,20px);
+        text-shadow:0 1px 3px rgba(0,0,0,.8);
+        animation:floatUp .8s ease-out forwards;
+      }
+      @keyframes floatUp{
+        from{ transform:translateY(0); opacity:1; }
+        to{ transform:translateY(-34px); opacity:0; }
+      }
+
+      /* ---------- Légende ---------- */
+      .legend{
+        display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+        margin-top:12px;
+      }
+      .legend .item{
+        background:var(--panel); border:1px solid var(--line); border-radius:10px;
+        padding:7px 9px; display:flex; align-items:center; gap:8px; box-shadow:var(--shadow);
+      }
+      .legend .chip{
+        width:30px; height:30px; flex:none; border-radius:8px; color:#fff;
+        display:flex; align-items:center; justify-content:center;
+        font-weight:800; font-size:13px;
+        box-shadow:inset 0 -3px 5px rgba(0,0,0,.25), inset 0 2px 3px rgba(255,255,255,.35);
+        text-shadow:0 1px 2px rgba(0,0,0,.45);
+      }
+      .legend .name{ font-size:13px; font-weight:700; line-height:1.15; }
+      .legend .pts{ font-size:11px; color:var(--ink-soft); font-weight:600; }
+
+      .howto{
+        margin-top:12px; background:var(--panel); border:1px solid var(--line);
+        border-radius:12px; padding:10px 14px; font-size:14px; line-height:1.5;
+        color:var(--ink-soft); box-shadow:var(--shadow);
+      }
+      .howto strong{ color:var(--ink); }
+
+      /* ---------- Fin de partie ---------- */
+      .overlay{
+        position:fixed; inset:0; background:rgba(10,8,5,.62);
+        display:none; align-items:center; justify-content:center;
+        padding:18px; z-index:50;
+      }
+      .overlay.show{ display:flex; }
+      .card{
+        background:var(--panel); color:var(--ink); border-radius:18px;
+        padding:26px 24px; max-width:360px; width:100%; text-align:center;
+        box-shadow:0 12px 40px rgba(0,0,0,.45);
+      }
+      .card h2{ margin:0 0 4px; font-size:24px; }
+      .card .final-score{ font-size:52px; font-weight:900; line-height:1.1; color:var(--accent-strong); }
+      .card .final-lbl{ font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); font-weight:700; }
+      .card p{ margin:10px 0 18px; font-size:15px; line-height:1.5; color:var(--ink-soft); }
+      .card .again{
+        background:var(--accent); color:#fff; border:none; border-radius:12px;
+        padding:13px 26px; font-size:17px; font-weight:800; cursor:pointer; min-height:52px; width:100%;
+      }
+      @media (prefers-color-scheme: dark){ .card .again{ color:#1c1507; } }
+      .card .again:active{ transform:scale(.98); }
+
+      @media (prefers-reduced-motion: reduce){
+        .tile{ transition:none; }
+        .float-score{ animation-duration:.01s; }
+        .tile.hint .gem{ animation:none; }
+        .tile.unstable .gem{ animation:none; }
+        .obj-fill{ transition:none; }
+      }
+    </style>
+    <style id="hp-signature">
+      /* ===== Signature HP Outils : linogravure fait main =====
+         Visuel seulement — aucune mécanique, règle ni pointage touchés. */
+      :root{
+        --bg:#efe3c6;
+        --panel:#fbf2da;
+        --ink:#251a0e;
+        --ink-soft:#6d5738;
+        --line:#251a0e;
+        --accent:#9a6206;
+        --accent-strong:#7a4c04;
+        --board-bg:#332416;
+        --board-well:#20150b;
+        --combo-bg:#f6df9e;
+        --shadow:4px 4px 0 rgba(37,26,14,.26);
+        --grain:rgba(37,26,14,.055);
+        --btn-fg:#f8edd3;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#17110a;
+          --panel:#251b10;
+          --ink:#efdfba;
+          --ink-soft:#bfa87c;
+          --line:#efdfba;
+          --accent:#dfa83c;
+          --accent-strong:#f0c268;
+          --board-bg:#0f0a05;
+          --board-well:#070402;
+          --combo-bg:#3d2c10;
+          --shadow:4px 4px 0 rgba(0,0,0,.55);
+          --grain:rgba(239,223,186,.05);
+          --btn-fg:#251a0e;
+        }
+      }
+      /* Papier crème légèrement grainé, trame imprimée en code */
+      body{
+        background-image:
+          repeating-linear-gradient(0deg, var(--grain) 0 1px, transparent 1px 3px),
+          repeating-linear-gradient(90deg, var(--grain) 0 1px, transparent 1px 3px);
+      }
+      /* Panneaux : fond papier, bordure d'encre épaisse, ombre franche d'estampe */
+      .hud .stat, .objective, .legend .item, .howto{
+        border:2px solid var(--ink);
+        border-radius:10px;
+      }
+      .hud .stat .val, .obj-text, .card .final-score{
+        font-family:Georgia,"Times New Roman",serif;
+      }
+      .replay{
+        background:var(--ink); color:var(--btn-fg);
+        border:2px solid var(--ink); border-radius:10px;
+        text-transform:uppercase; letter-spacing:.05em;
+        box-shadow:3px 3px 0 rgba(0,0,0,.32);
+        font-family:Georgia,"Times New Roman",serif;
+      }
+      /* Bandeau d'objectif, comme imprimé à la main */
+      .objective{
+        border-radius:8px;
+        background-image:repeating-linear-gradient(-45deg, var(--grain) 0 2px, transparent 2px 8px);
+      }
+      .obj-label{
+        background:var(--ink); color:var(--btn-fg);
+        padding:2px 8px; border-radius:4px;
+      }
+      .obj-bar{ border:1.5px solid var(--ink); background:var(--panel); height:8px; }
+      .obj-fill{
+        background:repeating-linear-gradient(-45deg, var(--accent) 0 7px, var(--accent-strong) 7px 14px);
+      }
+      .combo-badge{
+        border:2px solid var(--ink); color:var(--ink); border-radius:8px;
+        text-transform:uppercase; letter-spacing:.05em;
+        box-shadow:3px 3px 0 rgba(0,0,0,.25);
+        font-family:Georgia,"Times New Roman",serif;
+      }
+      /* Plateau : cadre d'encre, bois gravé */
+      .board-frame{
+        border:3px solid var(--ink); border-radius:14px;
+        background-image:repeating-linear-gradient(45deg, rgba(246,234,208,.05) 0 2px, transparent 2px 7px);
+      }
+      .board{
+        border:2px solid rgba(0,0,0,.55);
+        background-image:repeating-linear-gradient(-45deg, rgba(246,234,208,.045) 0 2px, transparent 2px 8px);
+      }
+      /* Éléments : médaillons gravés, bord d'encre épais, fond hachuré */
+      .tile .gem{
+        border:3px solid #211507;
+        border-radius:27%;
+        color:#221503;
+        font-weight:900;
+        text-shadow:0 1px 0 rgba(250,240,214,.45);
+        box-shadow:
+          inset 0 0 0 2px rgba(250,240,214,.28),
+          inset 0 -7px 0 rgba(24,14,2,.22),
+          inset 0 5px 0 rgba(250,240,214,.18),
+          0 2px 3px rgba(0,0,0,.4);
+      }
+      .tile .gem::after{
+        top:0; left:0; width:100%; height:100%;
+        border-radius:inherit; filter:none;
+        background:
+          repeating-linear-gradient(45deg, rgba(26,15,2,.13) 0 2px, transparent 2px 6px),
+          repeating-linear-gradient(-45deg, rgba(252,244,220,.12) 0 2px, transparent 2px 6px);
+      }
+      .tile.selected .gem{
+        outline:3px solid var(--ink); outline-offset:2px;
+        box-shadow:
+          inset 0 0 0 2px rgba(250,240,214,.28),
+          inset 0 -7px 0 rgba(24,14,2,.22),
+          0 0 0 5px rgba(250,240,214,.45),
+          0 2px 6px rgba(0,0,0,.45);
+      }
+      /* Instable ★ : pastille d'encre vive, halo pulsant conservé et renforcé */
+      .tile.unstable .gem::before{
+        background:#cf3a24; color:#ffeec4;
+        border:2px solid #211507;
+        box-shadow:0 1px 3px rgba(0,0,0,.5);
+      }
+      .float-score{
+        color:#ffe9a8;
+        text-shadow:0 1px 0 #221503, 0 2px 4px rgba(0,0,0,.7);
+      }
+      /* Légende : mêmes médaillons gravés */
+      .legend .chip{
+        border:2.5px solid #211507; border-radius:9px;
+        color:#221503; position:relative; overflow:hidden;
+        text-shadow:0 1px 0 rgba(250,240,214,.4);
+        box-shadow:
+          inset 0 -4px 0 rgba(24,14,2,.22),
+          inset 0 0 0 1.5px rgba(250,240,214,.25);
+      }
+      .legend .chip::after{
+        content:""; position:absolute; inset:0;
+        background:repeating-linear-gradient(45deg, rgba(26,15,2,.13) 0 2px, transparent 2px 6px);
+      }
+      .howto strong{ font-family:Georgia,"Times New Roman",serif; }
+      /* Cartes de départ et de fin : cadre gravé double bordure */
+      .card{
+        border:3px solid var(--ink); border-radius:14px;
+        position:relative;
+        box-shadow:
+          0 12px 40px rgba(0,0,0,.45),
+          inset 0 0 0 3px var(--panel),
+          inset 0 0 0 5.5px var(--ink);
+      }
+      .card .again{
+        background:var(--ink); color:var(--btn-fg);
+        border:2px solid var(--ink); border-radius:10px;
+        text-transform:uppercase; letter-spacing:.06em;
+        box-shadow:3px 3px 0 rgba(0,0,0,.3);
+        font-family:Georgia,"Times New Roman",serif;
+      }
+      .stamp-title{
+        font-family:Georgia,"Times New Roman",serif;
+        font-weight:900; text-transform:uppercase;
+        letter-spacing:.13em; font-size:27px; line-height:1.28;
+        margin:8px 0 2px; transform:rotate(-1.2deg);
+      }
+      .hp-sign{
+        margin-top:16px;
+        font-family:Georgia,"Times New Roman",serif;
+        font-size:11px; letter-spacing:.3em; text-transform:uppercase;
+        color:var(--ink-soft);
+      }
+      .hp-mascot{
+        position:absolute; width:80px; height:80px;
+        top:-34px; right:14px; transform:rotate(3deg);
+        filter:drop-shadow(2px 3px 0 rgba(0,0,0,.25));
+        pointer-events:none;
+      }
+      .hp-mascot.end{
+        width:64px; height:64px; top:-26px; right:auto; left:14px;
+        transform:rotate(-3deg);
+      }
+      .start-overlay{ z-index:60; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <div class="hud">
+        <div class="stat">
+          <div class="lbl">Score</div>
+          <div class="val" id="score">0</div>
+        </div>
+        <div class="stat coups" id="coupsStat">
+          <div class="lbl">Coups restants</div>
+          <div class="val" id="coups">30</div>
+        </div>
+        <button class="replay" id="replayBtn" type="button">Rejouer</button>
+      </div>
+
+      <div class="objective">
+        <span class="obj-label">Objectif</span>
+        <span class="obj-text" id="objText">…</span>
+        <span class="obj-prog" id="objProg"></span>
+        <div class="obj-bar"><div class="obj-fill" id="objFill"></div></div>
+      </div>
+
+      <div class="combo-line"><span class="combo-badge" id="comboBadge"></span></div>
+
+      <div class="board-frame">
+        <div class="board" id="board" role="grid" aria-label="Grille des éléments"></div>
+      </div>
+
+      <div class="legend" id="legend"></div>
+
+      <div class="howto">
+        <strong>Comment jouer :</strong> touche un élément, puis un voisin pour les échanger.
+        Aligne <strong>3 éléments pareils ou plus</strong> pour les faire disparaître et marquer des points.
+        Réussis l'<strong>objectif</strong> affiché en haut avant la fin de tes <strong>30 coups</strong> pour gagner la partie !
+        Aligner <strong>4 éléments</strong> crée un <strong>élément instable</strong> (marqué ★) : quand il se retrouve dans un
+        alignement, il explose et nettoie toute sa ligne. Un alignement de <strong>5</strong> crée un instable qui nettoie
+        ligne <em>et</em> colonne. Les cascades valent un bonus.
+      </div>
+    </div>
+
+    <div class="overlay start-overlay show" id="startOverlay">
+      <div class="card">
+        <svg class="hp-mascot" viewBox="0 0 120 120" role="img" aria-label="Mascotte HP, le binoclard, gravée main">
+          <defs>
+            <pattern id="hpHatchA" width="4.5" height="4.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="4.5" stroke="#221809" stroke-width="1.5"/>
+            </pattern>
+          </defs>
+          <path d="M22 120 C26 100 40 94 60 94 C80 94 94 100 98 120 Z" fill="#221809"/>
+          <path d="M50 95 h20 l-10 11 z" fill="#f6ead0"/>
+          <circle cx="29" cy="58" r="5" fill="#f6ead0" stroke="#221809" stroke-width="2.5"/>
+          <circle cx="91" cy="58" r="5" fill="#f6ead0" stroke="#221809" stroke-width="2.5"/>
+          <ellipse cx="60" cy="56" rx="31" ry="35" fill="#f6ead0" stroke="#221809" stroke-width="3.5"/>
+          <path d="M34 66 C36 84 46 92 60 92 C74 92 84 84 86 66 C80 82 70 86.5 60 86.5 C50 86.5 40 82 34 66 Z" fill="url(#hpHatchA)" opacity="0.8"/>
+          <path d="M37 41 Q46 37 54 40" fill="none" stroke="#221809" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M66 40 Q74 37 83 41" fill="none" stroke="#221809" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="46" cy="54" r="12.5" fill="none" stroke="#221809" stroke-width="4"/>
+          <circle cx="74" cy="54" r="12.5" fill="none" stroke="#221809" stroke-width="4"/>
+          <path d="M58.5 52 Q60 49.5 61.5 52" fill="none" stroke="#221809" stroke-width="3.5"/>
+          <path d="M33.5 52 L29 50 M86.5 52 L91 50" stroke="#221809" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="46" cy="55" r="2.4" fill="#221809"/>
+          <circle cx="74" cy="55" r="2.4" fill="#221809"/>
+          <path d="M60 60 Q57 68 59 70 Q61 71.5 63 70" fill="none" stroke="#221809" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M49 76 Q60 83 71 76" fill="none" stroke="#221809" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M33 44 l5 2 M32 50 l5 1 M87 44 l-5 2 M88 50 l-5 1" stroke="#221809" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <div class="stamp-title">Trio des<br/>Éléments</div>
+        <p>Le match-3 du tableau périodique, gravé main. Aligne les éléments, remplis l'objectif avant la fin de tes 30 coups.</p>
+        <button class="again" id="startBtn" type="button">Jouer</button>
+        <div class="hp-sign">HP Outils</div>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay">
+      <div class="card" id="endCard">
+        <svg class="hp-mascot end" viewBox="0 0 120 120" role="img" aria-label="Mascotte HP, le binoclard, gravée main">
+          <defs>
+            <pattern id="hpHatchB" width="4.5" height="4.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="4.5" stroke="#221809" stroke-width="1.5"/>
+            </pattern>
+          </defs>
+          <path d="M22 120 C26 100 40 94 60 94 C80 94 94 100 98 120 Z" fill="#221809"/>
+          <path d="M50 95 h20 l-10 11 z" fill="#f6ead0"/>
+          <circle cx="29" cy="58" r="5" fill="#f6ead0" stroke="#221809" stroke-width="2.5"/>
+          <circle cx="91" cy="58" r="5" fill="#f6ead0" stroke="#221809" stroke-width="2.5"/>
+          <ellipse cx="60" cy="56" rx="31" ry="35" fill="#f6ead0" stroke="#221809" stroke-width="3.5"/>
+          <path d="M34 66 C36 84 46 92 60 92 C74 92 84 84 86 66 C80 82 70 86.5 60 86.5 C50 86.5 40 82 34 66 Z" fill="url(#hpHatchB)" opacity="0.8"/>
+          <path d="M37 41 Q46 37 54 40" fill="none" stroke="#221809" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M66 40 Q74 37 83 41" fill="none" stroke="#221809" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="46" cy="54" r="12.5" fill="none" stroke="#221809" stroke-width="4"/>
+          <circle cx="74" cy="54" r="12.5" fill="none" stroke="#221809" stroke-width="4"/>
+          <path d="M58.5 52 Q60 49.5 61.5 52" fill="none" stroke="#221809" stroke-width="3.5"/>
+          <path d="M33.5 52 L29 50 M86.5 52 L91 50" stroke="#221809" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="46" cy="55" r="2.4" fill="#221809"/>
+          <circle cx="74" cy="55" r="2.4" fill="#221809"/>
+          <path d="M60 60 Q57 68 59 70 Q61 71.5 63 70" fill="none" stroke="#221809" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M49 76 Q60 83 71 76" fill="none" stroke="#221809" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M33 44 l5 2 M32 50 l5 1 M87 44 l-5 2 M88 50 l-5 1" stroke="#221809" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <div class="final-lbl" id="finalTitle">Partie terminée</div>
+        <div class="final-score" id="finalScore">0</div>
+        <div class="final-lbl">points</div>
+        <p id="finalMsg"></p>
+        <button class="again" id="againBtn" type="button">Rejouer une partie</button>
+        <div class="hp-sign">HP Outils</div>
+      </div>
+    </div>
+
+    <script>
+      "use strict";
+
+      /* ============ Données des éléments ============ */
+      var ELEMENTS = [
+        { sym:"Si", name:"Silicium", color:"#3d7ea6", pts:10 },
+        { sym:"C",  name:"Diamant",  color:"#7fb3c8", pts:25 },
+        { sym:"Ca", name:"Calcium",  color:"#8a9a5b", pts:10 },
+        { sym:"Fe", name:"Fer",      color:"#8d8d96", pts:15 },
+        { sym:"Au", name:"Or",       color:"#d9a41c", pts:30 },
+        { sym:"Cu", name:"Cuivre",   color:"#b5632e", pts:15 }
+      ];
+      var ROWS = 8, COLS = 8, START_MOVES = 30;
+
+      /* ============ État ============ */
+      var grid = [];        // grid[r][c] = index d'élément ou -1
+      var spec = [];        // spec[r][c] = 0 normal, 1 instable-ligne, 2 instable-colonne, 3 instable-croix
+      var tileEls = [];     // tileEls[r][c] = élément DOM ou null
+      var score = 0, moves = START_MOVES, busy = false, gameOver = false;
+      var objective = null; // {kind:"collect", type, target} ou {kind:"score", target}
+      var collected = {};   // collected[type] = nombre de tuiles nettoyées de ce type
+      var selected = null;  // {r,c}
+      var tilePx = 0;
+
+      var boardEl = document.getElementById("board");
+      var scoreEl = document.getElementById("score");
+      var coupsEl = document.getElementById("coups");
+      var coupsStat = document.getElementById("coupsStat");
+      var comboBadge = document.getElementById("comboBadge");
+      var overlay = document.getElementById("overlay");
+      var finalScoreEl = document.getElementById("finalScore");
+      var finalMsgEl = document.getElementById("finalMsg");
+      var finalTitleEl = document.getElementById("finalTitle");
+      var endCardEl = document.getElementById("endCard");
+      var objTextEl = document.getElementById("objText");
+      var objProgEl = document.getElementById("objProg");
+      var objFillEl = document.getElementById("objFill");
+
+      /* ============ Utilitaires ============ */
+      function randType(){ return Math.floor(Math.random() * ELEMENTS.length); }
+      function wait(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
+      function inBounds(r,c){ return r>=0 && r<ROWS && c>=0 && c<COLS; }
+      function adjacent(a,b){ return Math.abs(a.r-b.r) + Math.abs(a.c-b.c) === 1; }
+
+      function measure(){
+        tilePx = boardEl.clientWidth / COLS;
+        layoutAll(false);
+      }
+
+      /* ============ Construction visuelle ============ */
+      function createTile(r, c, type){
+        var el = document.createElement("div");
+        el.className = "tile";
+        el.setAttribute("role","gridcell");
+        var gem = document.createElement("div");
+        gem.className = "gem";
+        gem.style.background = ELEMENTS[type].color;
+        gem.textContent = ELEMENTS[type].sym;
+        el.appendChild(gem);
+        position(el, r, c, false);
+        boardEl.appendChild(el);
+        return el;
+      }
+      function position(el, r, c, animate){
+        if (!animate) el.style.transition = "none";
+        el.style.width = tilePx + "px";
+        el.style.height = tilePx + "px";
+        el.style.left = (c * tilePx) + "px";
+        el.style.top = (r * tilePx) + "px";
+        var fs = Math.max(13, Math.round(tilePx * 0.36));
+        el.firstChild.style.fontSize = fs + "px";
+        if (!animate){
+          // réactive les transitions au prochain cadre
+          requestAnimationFrame(function(){ el.style.transition = ""; });
+        }
+      }
+      function layoutAll(animate){
+        for (var r=0; r<ROWS; r++)
+          for (var c=0; c<COLS; c++)
+            if (tileEls[r] && tileEls[r][c]) position(tileEls[r][c], r, c, animate);
+      }
+
+      /* ============ Génération de la grille ============ */
+      function cellVal(g, r, c){
+        if (r<0 || r>=ROWS || c<0 || c>=COLS) return -99;
+        if (!g[r] || g[r][c] === undefined) return -99;
+        return g[r][c];
+      }
+      function createsMatchAt(g, r, c, t){
+        // horizontal
+        var n = 1, cc;
+        for (cc=c-1; cellVal(g,r,cc)===t; cc--) n++;
+        for (cc=c+1; cellVal(g,r,cc)===t; cc++) n++;
+        if (n >= 3) return true;
+        // vertical
+        n = 1; var rr;
+        for (rr=r-1; cellVal(g,rr,c)===t; rr--) n++;
+        for (rr=r+1; cellVal(g,rr,c)===t; rr++) n++;
+        return n >= 3;
+      }
+
+      function findMatches(g){
+        var marked = {}, r, c, len, k;
+        function key(r,c){ return r + "," + c; }
+        // lignes
+        for (r=0; r<ROWS; r++){
+          c = 0;
+          while (c < COLS){
+            if (g[r][c] < 0){ c++; continue; }
+            len = 1;
+            while (c+len < COLS && g[r][c+len] === g[r][c]) len++;
+            if (len >= 3) for (k=0; k<len; k++) marked[key(r, c+k)] = true;
+            c += len;
+          }
+        }
+        // colonnes
+        for (c=0; c<COLS; c++){
+          r = 0;
+          while (r < ROWS){
+            if (g[r][c] < 0){ r++; continue; }
+            len = 1;
+            while (r+len < ROWS && g[r+len][c] === g[r][c]) len++;
+            if (len >= 3) for (k=0; k<len; k++) marked[key(r+k, c)] = true;
+            r += len;
+          }
+        }
+        return Object.keys(marked).map(function(s){
+          var p = s.split(","); return { r:+p[0], c:+p[1] };
+        });
+      }
+
+      // Alignements détaillés : chaque suite de 3+ avec sa direction et sa longueur
+      function findRuns(g){
+        var runs = [], r, c, len, k, cells;
+        for (r=0; r<ROWS; r++){
+          c = 0;
+          while (c < COLS){
+            if (g[r][c] < 0){ c++; continue; }
+            len = 1;
+            while (c+len < COLS && g[r][c+len] === g[r][c]) len++;
+            if (len >= 3){
+              cells = [];
+              for (k=0; k<len; k++) cells.push({ r:r, c:c+k });
+              runs.push({ cells:cells, len:len, dir:"h", type:g[r][c] });
+            }
+            c += len;
+          }
+        }
+        for (c=0; c<COLS; c++){
+          r = 0;
+          while (r < ROWS){
+            if (g[r][c] < 0){ r++; continue; }
+            len = 1;
+            while (r+len < ROWS && g[r+len][c] === g[r][c]) len++;
+            if (len >= 3){
+              cells = [];
+              for (k=0; k<len; k++) cells.push({ r:r+k, c:c });
+              runs.push({ cells:cells, len:len, dir:"v", type:g[r][c] });
+            }
+            r += len;
+          }
+        }
+        return runs;
+      }
+
+      function hasPossibleMove(g){
+        var r, c, dirs = [[0,1],[1,0]];
+        for (r=0; r<ROWS; r++) for (c=0; c<COLS; c++){
+          for (var d=0; d<dirs.length; d++){
+            var r2 = r + dirs[d][0], c2 = c + dirs[d][1];
+            if (!inBounds(r2,c2)) continue;
+            var tmp = g[r][c]; g[r][c] = g[r2][c2]; g[r2][c2] = tmp;
+            var ok = findMatches(g).length > 0;
+            tmp = g[r][c]; g[r][c] = g[r2][c2]; g[r2][c2] = tmp;
+            if (ok) return { a:{r:r,c:c}, b:{r:r2,c:c2} };
+          }
+        }
+        return null;
+      }
+
+      function newGrid(){
+        var g, tries = 0;
+        do {
+          g = [];
+          for (var r=0; r<ROWS; r++){
+            g.push([]);
+            for (var c=0; c<COLS; c++){
+              var t;
+              do { t = randType(); } while (createsMatchAt(g, r, c, t));
+              g[r].push(t);
+            }
+          }
+          tries++;
+        } while (!hasPossibleMove(g) && tries < 60);
+        return g;
+      }
+
+      /* ============ Rendu / synchronisation ============ */
+      function buildBoard(){
+        boardEl.innerHTML = "";
+        tileEls = [];
+        for (var r=0; r<ROWS; r++){
+          tileEls.push([]);
+          for (var c=0; c<COLS; c++){
+            tileEls[r].push(createTile(r, c, grid[r][c]));
+          }
+        }
+      }
+
+      function swapVisual(a, b){
+        var ea = tileEls[a.r][a.c], eb = tileEls[b.r][b.c];
+        tileEls[a.r][a.c] = eb; tileEls[b.r][b.c] = ea;
+        position(ea, b.r, b.c, true);
+        position(eb, a.r, a.c, true);
+      }
+      function swapData(a, b){
+        var t = grid[a.r][a.c]; grid[a.r][a.c] = grid[b.r][b.c]; grid[b.r][b.c] = t;
+        var s = spec[a.r][a.c]; spec[a.r][a.c] = spec[b.r][b.c]; spec[b.r][b.c] = s;
+      }
+
+      function refreshSpecClass(r, c){
+        var el = tileEls[r] && tileEls[r][c];
+        if (el) el.classList.toggle("unstable", spec[r][c] > 0);
+      }
+
+      function showFloat(r, c, text){
+        var el = document.createElement("div");
+        el.className = "float-score";
+        el.textContent = text;
+        el.style.left = (c * tilePx + tilePx * 0.12) + "px";
+        el.style.top = (r * tilePx + tilePx * 0.2) + "px";
+        boardEl.appendChild(el);
+        setTimeout(function(){ el.remove(); }, 850);
+      }
+
+      function showCombo(n){
+        if (n < 2) return;
+        comboBadge.textContent = "Cascade ×" + n + " — bonus !";
+        comboBadge.classList.add("show");
+        clearTimeout(showCombo._t);
+        showCombo._t = setTimeout(function(){ comboBadge.classList.remove("show"); }, 1400);
+      }
+
+      function updateHud(){
+        scoreEl.textContent = score.toLocaleString("fr-CA");
+        coupsEl.textContent = moves;
+        coupsEl.classList.toggle("danger", moves <= 5);
+        renderObjective();
+      }
+
+      /* ============ Objectif de partie ============ */
+      function objectiveCurrent(){
+        if (!objective) return 0;
+        return objective.kind === "score" ? score : (collected[objective.type] || 0);
+      }
+      function objectiveMet(){
+        return !!objective && objectiveCurrent() >= objective.target;
+      }
+      function objectiveLabel(){
+        if (!objective) return "";
+        if (objective.kind === "score")
+          return "Atteins " + objective.target.toLocaleString("fr-CA") + " points";
+        return "Récolte " + objective.target + " " + ELEMENTS[objective.type].name;
+      }
+      function renderObjective(){
+        if (!objective) return;
+        objTextEl.textContent = objectiveLabel();
+        var cur = Math.min(objectiveCurrent(), objective.target);
+        objProgEl.textContent = cur.toLocaleString("fr-CA") + " / " + objective.target.toLocaleString("fr-CA");
+        objFillEl.style.width = (objective.target ? (cur / objective.target) * 100 : 0) + "%";
+      }
+      function drawObjective(){
+        // Récoltes : Or ×5, Fer ×6, Silicium ×8, Calcium ×7, Cuivre ×8, Diamant ×4
+        var COLLECT = [
+          { type:4, n:5 }, { type:3, n:6 }, { type:0, n:8 },
+          { type:2, n:7 }, { type:5, n:8 }, { type:1, n:4 }
+        ];
+        var SCORES = [1200, 1500, 1800, 2000];
+        if (Math.random() < 0.55){
+          var g = COLLECT[Math.floor(Math.random() * COLLECT.length)];
+          objective = { kind:"collect", type:g.type, target:g.n };
+        } else {
+          objective = { kind:"score", target:SCORES[Math.floor(Math.random() * SCORES.length)] };
+        }
+      }
+
+      /* ============ Résolution : disparition, chute, cascades ============ */
+      async function resolveBoard(swapInfo){
+        var chain = 0;
+        var firstStep = true;
+        function key(r, c){ return r + "," + c; }
+        while (true){
+          var runs = findRuns(grid);
+          if (runs.length === 0) break;
+          chain++;
+          // 1) Cases à nettoyer : celles des alignements
+          var clearSet = {}, clearList = [];
+          function addClear(r, c){
+            var k = key(r, c);
+            if (!clearSet[k]){ clearSet[k] = true; clearList.push({ r:r, c:c }); }
+          }
+          runs.forEach(function(run){
+            run.cells.forEach(function(p){ addClear(p.r, p.c); });
+          });
+          // 2) Créations : un alignement de 4+ laisse un élément instable
+          //    à la place de l'échange (ou au centre de l'alignement en cascade)
+          var creations = [], creationKeys = {};
+          runs.forEach(function(run){
+            if (run.len < 4) return;
+            var hasSpec = run.cells.some(function(p){ return spec[p.r][p.c] > 0; });
+            if (hasSpec) return; // ce run déclenche plutôt l'instable déjà présent
+            var anchor = null;
+            if (firstStep && swapInfo){
+              [swapInfo.a, swapInfo.b].forEach(function(s){
+                if (!anchor && run.cells.some(function(p){ return p.r === s.r && p.c === s.c; })) anchor = s;
+              });
+            }
+            if (!anchor) anchor = run.cells[Math.floor((run.len - 1) / 2)];
+            var kind = run.len >= 5 ? 3 : (run.dir === "h" ? 1 : 2); // 1=ligne, 2=colonne, 3=croix
+            creations.push({ r:anchor.r, c:anchor.c, kind:kind });
+            creationKeys[key(anchor.r, anchor.c)] = true;
+            delete clearSet[key(anchor.r, anchor.c)];
+            clearList = clearList.filter(function(p){ return !(p.r === anchor.r && p.c === anchor.c); });
+          });
+          // 3) Déclenchements : un instable pris dans le nettoyage explose
+          //    sa ligne entière (et sa colonne si c'est une croix) ; les
+          //    instables touchés par l'explosion explosent à leur tour
+          var exploded = 0, triggered = {}, queue = clearList.slice();
+          while (queue.length){
+            var cur = queue.shift();
+            var ck = key(cur.r, cur.c);
+            if (triggered[ck] || !(spec[cur.r] && spec[cur.r][cur.c] > 0)) continue;
+            triggered[ck] = true; exploded++;
+            var kind2 = spec[cur.r][cur.c], cells = [], cc, rr;
+            if (kind2 === 1 || kind2 === 3) for (cc=0; cc<COLS; cc++) cells.push({ r:cur.r, c:cc });
+            if (kind2 === 2 || kind2 === 3) for (rr=0; rr<ROWS; rr++) cells.push({ r:rr, c:cur.c });
+            cells.forEach(function(p){
+              if (creationKeys[key(p.r, p.c)]) return; // l'instable fraîchement créé survit
+              var isNew = !clearSet[key(p.r, p.c)];
+              addClear(p.r, p.c);
+              if (isNew && spec[p.r] && spec[p.r][p.c] > 0) queue.push(p);
+            });
+          }
+          // 4) Points : valeur de chaque tuile nettoyée × multiplicateur de
+          //    cascade, bonus d'alignement long ; la récolte alimente l'objectif
+          var gained = 0, byType = {};
+          clearList.forEach(function(m){
+            var t = grid[m.r][m.c];
+            if (t < 0) return;
+            gained += ELEMENTS[t].pts;
+            byType[t] = (byType[t] || 0) + 1;
+          });
+          Object.keys(byType).forEach(function(t){
+            var n = byType[t];
+            if (n >= 4) gained += (n - 3) * 20; // bonus 4+ alignés
+            collected[t] = (collected[t] || 0) + n;
+          });
+          gained *= chain;
+          score += gained;
+          updateHud();
+          showCombo(chain);
+          if (exploded > 0){
+            comboBadge.textContent = "Instable ! Ligne nettoyée !";
+            comboBadge.classList.add("show");
+            clearTimeout(showCombo._t);
+            showCombo._t = setTimeout(function(){ comboBadge.classList.remove("show"); }, 1500);
+          }
+          var mid = clearList[Math.floor(clearList.length / 2)] || { r:0, c:0 };
+          showFloat(mid.r, mid.c, "+" + gained);
+          // 5) Les instables créés prennent place, les autres tuiles disparaissent
+          creations.forEach(function(cr){
+            spec[cr.r][cr.c] = cr.kind;
+            refreshSpecClass(cr.r, cr.c);
+          });
+          clearList.forEach(function(m){
+            var el = tileEls[m.r][m.c];
+            if (el) el.classList.add("clearing");
+            grid[m.r][m.c] = -1;
+            spec[m.r][m.c] = 0;
+          });
+          await wait(190);
+          clearList.forEach(function(m){
+            var el = tileEls[m.r][m.c];
+            if (el) el.remove();
+            tileEls[m.r][m.c] = null;
+          });
+          applyGravity();
+          layoutAll(true);
+          await wait(200);
+          firstStep = false;
+        }
+        return chain;
+      }
+
+      function applyGravity(){
+        for (var c=0; c<COLS; c++){
+          var write = ROWS - 1;
+          for (var r=ROWS-1; r>=0; r--){
+            if (grid[r][c] >= 0){
+              if (write !== r){
+                grid[write][c] = grid[r][c];
+                spec[write][c] = spec[r][c];
+                tileEls[write][c] = tileEls[r][c];
+                grid[r][c] = -1;
+                spec[r][c] = 0;
+                tileEls[r][c] = null;
+              }
+              write--;
+            }
+          }
+          // nouvelles tuiles en haut
+          for (var r2=write; r2>=0; r2--){
+            var t = randType();
+            grid[r2][c] = t;
+            spec[r2][c] = 0;
+            var el = createTile(r2, c, t);
+            // départ au-dessus du plateau pour l'effet de chute
+            el.style.transition = "none";
+            el.style.top = ((r2 - (write+1)) * tilePx) + "px";
+            tileEls[r2][c] = el;
+          }
+        }
+        // force un recalcul puis anime vers les positions finales
+        void boardEl.offsetWidth;
+        layoutAll(true);
+      }
+
+      /* ============ Échange ============ */
+      async function trySwap(a, b){
+        busy = true;
+        clearSelection();
+        swapData(a, b);
+        swapVisual(a, b);
+        await wait(200);
+        var matches = findMatches(grid);
+        if (matches.length === 0){
+          // échange invalide : on remet en place, aucun coup dépensé
+          swapData(a, b);
+          swapVisual(a, b);
+          await wait(200);
+          busy = false;
+          return;
+        }
+        moves--;
+        updateHud();
+        await resolveBoard({ a:a, b:b });
+        await ensurePlayable();
+        busy = false;
+        if (objectiveMet()) victory();
+        else if (moves <= 0) endGame();
+      }
+
+      async function ensurePlayable(){
+        var guard = 0;
+        while (!hasPossibleMove(grid) && guard < 40){
+          guard++;
+          // Mélange : on régénère les types en gardant les tuiles en place
+          var flat = [];
+          for (var r=0; r<ROWS; r++) for (var c=0; c<COLS; c++) flat.push({ t:grid[r][c], s:spec[r][c] });
+          do {
+            for (var i=flat.length-1; i>0; i--){
+              var j = Math.floor(Math.random() * (i+1));
+              var t = flat[i]; flat[i] = flat[j]; flat[j] = t;
+            }
+            var idx = 0;
+            for (var r2=0; r2<ROWS; r2++) for (var c2=0; c2<COLS; c2++){
+              grid[r2][c2] = flat[idx].t; spec[r2][c2] = flat[idx].s; idx++;
+            }
+          } while (findMatches(grid).length > 0 && guard < 40);
+          // reflète le mélange à l'écran
+          boardEl.innerHTML = "";
+          tileEls = [];
+          for (var r3=0; r3<ROWS; r3++){
+            tileEls.push([]);
+            for (var c3=0; c3<COLS; c3++){
+              tileEls[r3].push(createTile(r3, c3, grid[r3][c3]));
+              refreshSpecClass(r3, c3);
+            }
+          }
+          await wait(60);
+        }
+      }
+
+      /* ============ Sélection et entrées ============ */
+      function cellFromPoint(x, y){
+        var rect = boardEl.getBoundingClientRect();
+        var c = Math.floor((x - rect.left) / tilePx);
+        var r = Math.floor((y - rect.top) / tilePx);
+        if (!inBounds(r, c)) return null;
+        return { r:r, c:c };
+      }
+
+      function clearSelection(){
+        if (selected){
+          var el = tileEls[selected.r][selected.c];
+          if (el) el.classList.remove("selected");
+          selected = null;
+        }
+      }
+      function select(cell){
+        clearSelection();
+        selected = cell;
+        var el = tileEls[cell.r][cell.c];
+        if (el) el.classList.add("selected");
+      }
+
+      function tapCell(cell){
+        if (busy || gameOver || !cell) return;
+        if (!selected){ select(cell); return; }
+        if (selected.r === cell.r && selected.c === cell.c){ clearSelection(); return; }
+        if (adjacent(selected, cell)){
+          var a = selected;
+          trySwap(a, cell);
+        } else {
+          select(cell);
+        }
+      }
+
+      var touchStart = null;
+      boardEl.addEventListener("touchstart", function(e){
+        var t = e.touches[0];
+        touchStart = { x:t.clientX, y:t.clientY, cell:cellFromPoint(t.clientX, t.clientY) };
+      }, { passive:true });
+      boardEl.addEventListener("touchend", function(e){
+        if (!touchStart) return;
+        var t = e.changedTouches[0];
+        var dx = t.clientX - touchStart.x, dy = t.clientY - touchStart.y;
+        var startCell = touchStart.cell;
+        touchStart = null;
+        if (busy || gameOver || !startCell) return;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) > tilePx * 0.45){
+          // glissement : échange dans la direction du geste
+          var dir = Math.abs(dx) > Math.abs(dy)
+            ? { r:startCell.r, c:startCell.c + (dx > 0 ? 1 : -1) }
+            : { r:startCell.r + (dy > 0 ? 1 : -1), c:startCell.c };
+          if (inBounds(dir.r, dir.c)) trySwap(startCell, dir);
+        } else {
+          tapCell(cellFromPoint(t.clientX, t.clientY) || startCell);
+        }
+      });
+      boardEl.addEventListener("click", function(e){
+        // le clic suit un touchend sur mobile : on ignore le doublon
+        if (boardEl._justTouched && Date.now() - boardEl._justTouched < 500) return;
+        tapCell(cellFromPoint(e.clientX, e.clientY));
+      });
+      boardEl.addEventListener("touchstart", function(){
+        boardEl._justTouched = Date.now();
+      }, { passive:true });
+
+      // Indice après 6 s sans jouer : fait pulser un coup possible
+      var idleTimer = null;
+      function armIdleHint(){
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(function(){
+          if (busy || gameOver) return;
+          var mv = hasPossibleMove(grid);
+          if (mv){
+            [mv.a, mv.b].forEach(function(p){
+              var el = tileEls[p.r][p.c];
+              if (el){
+                el.classList.add("hint");
+                setTimeout(function(){ el.classList.remove("hint"); }, 1600);
+              }
+            });
+          }
+        }, 6000);
+      }
+      ["touchstart","click"].forEach(function(ev){
+        boardEl.addEventListener(ev, armIdleHint, { passive:true });
+      });
+
+      /* ============ Fin de partie / redémarrage ============ */
+      function endGame(){
+        gameOver = true;
+        endCardEl.classList.remove("victory");
+        finalTitleEl.textContent = "Partie terminée";
+        finalScoreEl.textContent = score.toLocaleString("fr-CA");
+        var missed = "";
+        if (objective && objective.kind === "score"){
+          missed = "Objectif manqué de " + (objective.target - score).toLocaleString("fr-CA") +
+            " points (" + score.toLocaleString("fr-CA") + " / " + objective.target.toLocaleString("fr-CA") + "). ";
+        } else if (objective){
+          var got = collected[objective.type] || 0;
+          missed = "Objectif manqué : " + got + "/" + objective.target + " " +
+            ELEMENTS[objective.type].name + " récoltés — il t'en manquait " + (objective.target - got) + ". ";
+        }
+        var msg;
+        if (score >= 3000) msg = "Un vrai trésor de mineur ! Score de champion.";
+        else if (score >= 2000) msg = "Belle récolte ! L'or et le diamant étaient au rendez-vous.";
+        else if (score >= 1200) msg = "Pas pire pantoute ! Encore un peu de pratique et le filon est à toi.";
+        else msg = "La mine est pleine de trésors — retente ta chance, prospecteur !";
+        finalMsgEl.textContent = missed + msg;
+        overlay.classList.add("show");
+      }
+
+      function victory(){
+        gameOver = true;
+        endCardEl.classList.add("victory");
+        finalTitleEl.textContent = "Objectif atteint !";
+        finalScoreEl.textContent = score.toLocaleString("fr-CA");
+        var used = START_MOVES - moves;
+        finalMsgEl.textContent = "Bravo ! « " + objectiveLabel() + " » réussi en " + used +
+          " coup" + (used > 1 ? "s" : "") + " — la mine te dit merci, prospecteur !";
+        overlay.classList.add("show");
+      }
+
+      function startGame(){
+        score = 0; moves = START_MOVES; busy = false; gameOver = false;
+        selected = null;
+        collected = {};
+        overlay.classList.remove("show");
+        grid = newGrid();
+        spec = [];
+        for (var r=0; r<ROWS; r++){
+          spec.push([]);
+          for (var c=0; c<COLS; c++) spec[r].push(0);
+        }
+        drawObjective();
+        measure();
+        buildBoard();
+        measure();
+        updateHud();
+        armIdleHint();
+      }
+
+      document.getElementById("replayBtn").addEventListener("click", startGame);
+      document.getElementById("againBtn").addEventListener("click", startGame);
+      window.addEventListener("resize", measure);
+
+      /* ============ Légende ============ */
+      (function buildLegend(){
+        var legend = document.getElementById("legend");
+        ELEMENTS.forEach(function(e){
+          var item = document.createElement("div");
+          item.className = "item";
+          var chip = document.createElement("div");
+          chip.className = "chip";
+          chip.style.background = e.color;
+          chip.textContent = e.sym;
+          var txt = document.createElement("div");
+          var nm = document.createElement("div");
+          nm.className = "name"; nm.textContent = e.name;
+          var pt = document.createElement("div");
+          pt.className = "pts"; pt.textContent = e.pts + " pts";
+          txt.appendChild(nm); txt.appendChild(pt);
+          item.appendChild(chip); item.appendChild(txt);
+          legend.appendChild(item);
+        });
+      })();
+
+      startGame();
+    </script>
+    <script>
+      // Écran de départ signature HP : purement visuel, il ne fait que se retirer.
+      (function(){
+        var startOverlay = document.getElementById("startOverlay");
+        function dismiss(){ startOverlay.classList.remove("show"); }
+        document.getElementById("startBtn").addEventListener("click", dismiss);
+        startOverlay.addEventListener("click", function(e){
+          if (e.target === startOverlay) dismiss();
+        });
+      })();
+    </script>
+  </body>
+</html>
