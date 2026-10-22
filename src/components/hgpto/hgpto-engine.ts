@@ -1355,7 +1355,7 @@ export function initHgpto() {
       });
       btnHide.addEventListener('click', function(){
         /* Portage site : « Fermer HGPTO » = fermé pour la session. */
-        try { sessionStorage.setItem('hgpto-closed', '1'); sessionStorage.removeItem('hgpto-tour'); } catch(e) {}
+        try { sessionStorage.setItem('hgpto-closed', '1'); sessionStorage.removeItem('hgpto-tour'); sessionStorage.removeItem('hgpto-guide'); } catch(e) {}
         isHidden = true;
         hideBubble();
         if (tourOn) stopTour(true);
@@ -1381,12 +1381,28 @@ export function initHgpto() {
       });
 
       /* ---------- Guider pour vrai : il marche jusqu'à la section, elle brille ---------- */
-      /* Portage site : correspondance sections du prototype -> routes réelles. */
+      /* Portage site : correspondance sections -> routes réelles.
+         Correctif visite (22 oct. 2026) : les ancres sec-* existent sur les
+         vraies pages. guideTo retourne true si la section a été présentée SUR
+         PLACE (défilement + brillance), false si une navigation vient d'être
+         déclenchée : l'appelant décide alors quoi mémoriser pour l'arrivée
+         (la visite garde son étape en cours ; un guidage ponctuel pose
+         'hgpto-guide', consommé au démarrage de la page d'arrivée). Si
+         l'ancre manque mais qu'on est déjà sur sa page, repli honnête : le
+         haut de page est présenté plutôt que rien du tout. */
       var ROUTE_FOR = { 'sec-accueil':'/', 'sec-jeux':'/jeux', 'sec-kits':'/sans-honte',
-        'sec-recettes':'/en-cuisine/', 'sec-livres':'/livres-pdf', 'sec-ateliers':'/ateliers' };
+        'sec-recettes':'/en-cuisine/', 'sec-livres':'/livres-pdf', 'sec-ateliers':'/ateliers',
+        'sec-arbre':'/' };
       function routeKey(){
         var p = location.pathname.replace(/index\.html$/, '').replace(/\/+$/, '');
         return p === '' ? '/' : p;
+      }
+      function glowEl(el){
+        el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block:'center' });
+        el.classList.add('sec-glow');
+        setTimeout(function(){ el.classList.remove('sec-glow'); }, 4600);
+        var r = el.getBoundingClientRect();
+        guideTarget = (r.left + r.width/2 < vw()/2) ? minX() + 8 : maxX() - 8;
       }
       function guideTo(id, after){
         var el = document.getElementById(id);
@@ -1394,17 +1410,20 @@ export function initHgpto() {
           var route = ROUTE_FOR[id];
           if (route) {
             var target = route === '/' ? '/' : route.replace(/\/+$/, '');
-            if (routeKey() !== target) setTimeout(function(){ window.location.href = route; }, 1500);
+            if (routeKey() !== target) {
+              if (!tourOn) { try { sessionStorage.setItem('hgpto-guide', id); } catch(e) {} }
+              setTimeout(function(){ window.location.href = route; }, 1500);
+              if (after) after();
+              return false;
+            }
           }
-          if (after) after();
-          return;
+          glowEl(document.querySelector('main') || document.body);
+          setTimeout(function(){ if (after) after(); }, 600);
+          return true;
         }
-        el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block:'center' });
-        el.classList.add('sec-glow');
-        setTimeout(function(){ el.classList.remove('sec-glow'); }, 4600);
-        var r = el.getBoundingClientRect();
-        guideTarget = (r.left + r.width/2 < vw()/2) ? minX() + 8 : maxX() - 8;
+        glowEl(el);
         setTimeout(function(){ if (after) after(); }, 600);
+        return true;
       }
 
       /* ---------- Visite guidée : de section en section, avec commentaires ---------- */
@@ -1420,7 +1439,7 @@ export function initHgpto() {
       var tourOn = false, tourIdx = 0, tourTimer = null;
       function stopTour(silent){
         tourOn = false;
-        try { sessionStorage.removeItem('hgpto-tour'); } catch(e) {}
+        try { sessionStorage.removeItem('hgpto-tour'); sessionStorage.removeItem('hgpto-guide'); } catch(e) {}
         if (tourTimer){ clearTimeout(tourTimer); tourTimer = null; }
         document.getElementById('qa-tour').textContent = 'Fais-moi visiter';
         if (!silent) showBubble("Visite finie ! Touche « Une question ? » si tu veux que je te montre autre chose.", 6000);
@@ -1428,11 +1447,24 @@ export function initHgpto() {
       function tourStep(){
         if (!tourOn) return;
         if (tourIdx >= TOUR.length){ stopTour(false); return; }
-        var step = TOUR[tourIdx++];
-        try { sessionStorage.setItem('hgpto-tour', String(tourIdx)); } catch(e) {}
-        guideTo(step.id, null);
+        var step = TOUR[tourIdx];
+        var here = guideTo(step.id, null);
         setExpr('happy');
+        if (!here) {
+          // Navigation en cours vers la page de CETTE étape : l'index gardé
+          // est celui de l'étape en cours — à l'arrivée, la reprise la
+          // présente sur place (commentaire lu sur la bonne page, section
+          // qui défile et brille), puis la visite continue. Avant ce
+          // correctif, l'étape était consommée avant le départ : son
+          // commentaire partait sur la page précédente et ne se rejouait
+          // jamais à l'arrivée.
+          try { sessionStorage.setItem('hgpto-tour', String(tourIdx)); } catch(e) {}
+          showBubble("Suis-moi, je t'y emmène !", 4000, 'talk');
+          return;
+        }
         showBubble(esc(step.t), 5600, 'talk');
+        tourIdx++;
+        try { sessionStorage.setItem('hgpto-tour', String(tourIdx)); } catch(e) {}
         tourTimer = setTimeout(tourStep, 6000);
       }
       function startTour(){
@@ -2303,17 +2335,24 @@ export function initHgpto() {
         var savedTour = sessionStorage.getItem('hgpto-tour');
         if (savedTour !== null) {
           var resumeIdx = parseInt(savedTour, 10);
-          if (!isNaN(resumeIdx) && resumeIdx > 0 && resumeIdx < TOUR.length) {
+          if (!isNaN(resumeIdx) && resumeIdx >= 0 && resumeIdx < TOUR.length) {
             tourOn = true; tourIdx = resumeIdx;
-            document.getElementById('qa-tour').textContent = 'Arrêter la visite';
-            tourTimer = setTimeout(tourStep, 2600);
-          } else if (resumeIdx === 0) {
-            tourOn = true; tourIdx = 0;
             document.getElementById('qa-tour').textContent = 'Arrêter la visite';
             tourTimer = setTimeout(tourStep, 2600);
           } else {
             sessionStorage.removeItem('hgpto-tour');
           }
+        }
+      } catch(e) {}
+
+      /* ---------- Guidage ponctuel en attente : un « Montre-moi… » a changé
+         de page ; à l'arrivée, il présente la section demandée (défilement +
+         brillance). Pendant une visite, c'est la visite qui mène : on ignore. */
+      try {
+        var pendingGuide = sessionStorage.getItem('hgpto-guide');
+        if (pendingGuide) {
+          sessionStorage.removeItem('hgpto-guide');
+          if (!tourOn) setTimeout(function(){ guideTo(pendingGuide, null); }, 1200);
         }
       } catch(e) {}
 

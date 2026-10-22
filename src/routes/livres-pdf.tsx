@@ -62,7 +62,7 @@ function Page() {
           </p>
         </div>
       </section>
-      <section className="subpage-content">
+      <section id="sec-livres" className="subpage-content">
         <div className="container">
           <div className="library-grid">
             {ITEMS.map((b) => {

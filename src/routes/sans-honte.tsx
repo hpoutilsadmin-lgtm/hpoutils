@@ -53,7 +53,7 @@ function Page() {
         </div>
       </section>
 
-      <section className="subpage-content">
+      <section id="sec-kits" className="subpage-content">
         <div className="container">
           <div style={{ maxWidth: 760, margin: "0 auto 48px", textAlign: "center" }}>
             <p style={{ fontSize: 18, lineHeight: 1.7, color: "#3a2a20" }}>

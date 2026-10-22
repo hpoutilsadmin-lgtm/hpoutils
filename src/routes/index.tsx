@@ -42,7 +42,7 @@ function categoryTile(c1: string, c2: string): CSSProperties {
 function Index() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section id="sec-accueil" className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">HP — créé au Québec</span>
           <h1>Des outils concrets pour la <em>vraie vie</em>.</h1>
@@ -62,7 +62,7 @@ function Index() {
       </section>
 
       {/* TU CHERCHES QUOI? */}
-      <section className="three-pillars">
+      <section id="sec-arbre" className="three-pillars">
         <div className="container">
           <span className="editorial-kicker">Par où commencer</span>
           <h2 className="section-title">Tu cherches quoi?</h2>

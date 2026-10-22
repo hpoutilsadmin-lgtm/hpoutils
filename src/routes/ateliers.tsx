@@ -42,7 +42,7 @@ function Page() {
         </div>
       </section>
 
-      <section className="three-pillars">
+      <section id="sec-ateliers" className="three-pillars">
         <div className="container">
           <div className="pillar-grid">
             {ATELIERS.map((a, i) => (

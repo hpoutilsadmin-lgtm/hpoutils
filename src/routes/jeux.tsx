@@ -143,7 +143,7 @@ function JeuxPage() {
   const visibleGames = (genre === "Tous" ? GAMES : GAMES.filter((g) => g.tag.split(" · ")[0] === genre)).filter((g) => g.title !== featured.title);
   return (
     <>
-      <section className="editorial-hero hero-banner-image jeux-hero">
+      <section id="sec-jeux" className="editorial-hero hero-banner-image jeux-hero">
         <div className="container">
           <span className="editorial-kicker">Jeux HP</span>
           <h1>Jouer, choisir, <em>essayer autrement</em>.</h1>
