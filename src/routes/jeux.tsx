@@ -21,7 +21,7 @@ const STORIES = [
 
 const GAMES = [
   { title: "RELÈVE — Chapitre 1 : Surchauffe", file: "/apps/releve/releve-chapitre-1-v1.0.html", copy: "Aventure d'enquête 3D à Percé : Grizz, ourson policier de Faune-Secours, et NID à la radio cherchent la cause d'une surchauffe qui menace la faune. FR/EN.", tag: "Aventure · Enquête 3D", mono: "R1", art: 0 },
-  { title: "LA BANQUE — le jeu de la banque alimentaire", file: "/apps/la-banque/la-banque-v1.0.html", copy: "Gère une banque alimentaire sur une saison de 8 semaines : dons, tri, plats cuisinés, ventes. Ton score : les familles nourries.", tag: "Gestion · Entraide", mono: "LB", art: 1 },
+  { title: "LA BANQUE — le jeu de la banque alimentaire", file: "/apps/la-banque/la-banque-v1.1.html", copy: "Gère une banque alimentaire sur une saison de 8 semaines : dons, tri, cuisine et service aux familles nommées, qui reviennent semaine après semaine. Ton score : les familles nourries.", tag: "Gestion · Entraide", mono: "LB", art: 1 },
   { title: "Les bons réflexes d'HP", file: "/apps/bons-reflexes/index.html", copy: "Jeu éducatif sur les bons réflexes du quotidien, par âge et par activité.", tag: "Éducatif · Toute la famille", mono: "BR", art: 2 },
   { title: "Mystères du Nord", file: "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html", copy: "Sept enquêtes façon Clue : explore les lieux, interroge les suspects et démasque le coupable.", tag: "Enquête · Réflexion", mono: "MN", art: 7 },
   { title: "Fait fructifier 100 $ en 30 jours", file: "/apps/100-en-30-jours/100-en-30-jours-v1.1.html", copy: "Jeu de gestion et d'investissement 100 % fictif : 100 $ de départ, 30 jours pour fructifier.", tag: "Gestion · Simulation", mono: "100", art: 3 },
