@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>2 vérités, 1 mensonge</title>
+<style>
+  :root{
+    --paper:#f6efdd; --paper2:#efe3c8; --ink:#2a241a; --ink-soft:#5a4f3a;
+    --red:#a83226; --red-bg:#f7ddd6; --green:#33684c; --green-bg:#dcead9;
+    --gold:#b8862a; --card:#fffaf0; --line:#2a241a;
+    --shadow:0 3px 0 rgba(42,36,26,.9);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#211c14; --paper2:#292219; --ink:#f0e6cf; --ink-soft:#c9b995;
+      --red:#e0785f; --red-bg:#4a2620; --green:#7fb894; --green-bg:#22392c;
+      --gold:#d9a94f; --card:#2c261b; --line:#f0e6cf;
+      --shadow:0 3px 0 rgba(0,0,0,.6);
+    }
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--paper); color:var(--ink);
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 26px,rgba(120,95,50,.05) 27px);
+    min-height:100vh;
+  }
+  .frame{
+    max-width:560px; margin:0 auto; padding:14px 14px 34px;
+  }
+  .engraved{
+    border:2.5px solid var(--line); border-radius:14px; position:relative;
+    background:var(--paper);
+    padding:18px 16px;
+  }
+  .engraved::before{
+    content:""; position:absolute; inset:5px; border:1.5px solid var(--line);
+    border-radius:9px; pointer-events:none; opacity:.55;
+  }
+  header.top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:6px;}
+  .brand{display:flex; gap:12px; align-items:center;}
+  .mascot{flex:0 0 auto; filter:drop-shadow(1px 2px 0 rgba(42,36,26,.25));}
+  h1{
+    font-family:Georgia,"Times New Roman",serif; font-size:1.55rem; line-height:1.08;
+    margin:0; letter-spacing:.2px;
+  }
+  h1 .accent{color:var(--red);}
+  .tagline{margin:4px 0 0; font-size:.92rem; color:var(--ink-soft); line-height:1.35;}
+  .icon-btn{
+    border:2px solid var(--line); background:var(--card); color:var(--ink);
+    border-radius:10px; width:46px; height:46px; font-size:1.25rem; cursor:pointer;
+    box-shadow:var(--shadow); flex:0 0 auto;
+  }
+  .icon-btn:active{transform:translateY(2px); box-shadow:none;}
+  .speech{
+    margin:14px 0 4px; background:var(--card); border:2px solid var(--line); border-radius:12px;
+    padding:10px 13px; font-size:.95rem; line-height:1.45; position:relative;
+  }
+  .speech::before{
+    content:""; position:absolute; left:26px; top:-9px; width:14px; height:14px;
+    background:var(--card); border-left:2px solid var(--line); border-top:2px solid var(--line);
+    transform:rotate(45deg);
+  }
+  .speech b{font-family:Georgia,serif;}
+  .cat-list{display:flex; flex-direction:column; gap:12px; margin-top:16px;}
+  .cat-btn{
+    display:flex; align-items:center; gap:13px; text-align:left; width:100%;
+    background:var(--card); border:2.5px solid var(--line); border-radius:13px;
+    padding:14px 15px; cursor:pointer; color:var(--ink); box-shadow:var(--shadow);
+  }
+  .cat-btn:active{transform:translateY(2px); box-shadow:none;}
+  .cat-ico{font-size:1.9rem; line-height:1; flex:0 0 auto; width:44px; text-align:center;}
+  .cat-txt{flex:1 1 auto; min-width:0;}
+  .cat-name{font-family:Georgia,serif; font-weight:bold; font-size:1.13rem; display:block;}
+  .cat-sub{font-size:.85rem; color:var(--ink-soft); display:block; margin-top:2px; line-height:1.35;}
+  .cat-meta{font-size:.78rem; color:var(--ink-soft); display:block; margin-top:5px;}
+  .badge-done{
+    display:inline-block; background:var(--green); color:#fff; border-radius:20px;
+    font-size:.72rem; padding:2px 9px; font-weight:700; margin-left:6px; vertical-align:2px;
+  }
+  @media (prefers-color-scheme: dark){ .badge-done{color:#12271a;} }
+  .mix{border-style:dashed;}
+  .rules{
+    margin-top:18px; font-size:.88rem; color:var(--ink-soft); line-height:1.5;
+    border-top:1.5px dashed var(--line); padding-top:12px;
+  }
+  .sign{margin-top:14px; text-align:center; font-family:Georgia,serif; font-style:italic; color:var(--ink-soft); font-size:.85rem;}
+  /* --- Game --- */
+  .hud{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:6px 0 12px;}
+  .chip{
+    border:2px solid var(--line); background:var(--card); border-radius:20px;
+    padding:5px 12px; font-size:.85rem; font-weight:700;
+  }
+  .chip.streak{border-color:var(--gold); color:var(--gold);}
+  .hud .spacer{flex:1;}
+  .small-btn{
+    border:2px solid var(--line); background:var(--card); color:var(--ink); border-radius:20px;
+    padding:6px 13px; font-size:.83rem; font-weight:700; cursor:pointer; box-shadow:0 2px 0 rgba(42,36,26,.8);
+  }
+  .small-btn:active{transform:translateY(2px); box-shadow:none;}
+  .progress{height:12px; border:2px solid var(--line); border-radius:8px; background:var(--card); overflow:hidden; margin-bottom:14px;}
+  .progress > div{height:100%; background:repeating-linear-gradient(45deg,var(--gold),var(--gold) 8px,#a8741f 8px,#a8741f 16px); width:0%; transition:width .4s ease;}
+  .q-label{font-family:Georgia,serif; font-size:1.06rem; margin:2px 0 12px; line-height:1.4;}
+  .q-label .cat-tag{color:var(--red); font-weight:bold;}
+  .cards{display:flex; flex-direction:column; gap:12px;}
+  .stmt{
+    display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left;
+    background:var(--card); border:2.5px solid var(--line); border-radius:13px;
+    padding:15px 14px; font-size:1.02rem; line-height:1.45; color:var(--ink);
+    cursor:pointer; box-shadow:var(--shadow); font-family:inherit;
+  }
+  .stmt:active{transform:translateY(2px); box-shadow:none;}
+  .stmt .num{
+    font-family:Georgia,serif; font-weight:bold; border:2px solid var(--line); border-radius:50%;
+    width:30px; height:30px; flex:0 0 auto; display:flex; align-items:center; justify-content:center;
+    font-size:.95rem; background:var(--paper2);
+  }
+  .stmt .mark{margin-left:auto; font-size:1.3rem; flex:0 0 auto; display:none;}
+  .stmt.revealed{cursor:default;}
+  .stmt.revealed:active{transform:none; box-shadow:var(--shadow);}
+  .stmt.is-lie{background:var(--red-bg); border-color:var(--red);}
+  .stmt.is-lie .mark{display:block;}
+  .stmt.is-truth{background:var(--green-bg); border-color:var(--green);}
+  .stmt.is-truth .mark{display:block;}
+  .stmt.dim{opacity:.55;}
+  .verdict{
+    margin-top:16px; border:2.5px solid var(--line); border-radius:13px; padding:14px 15px;
+    background:var(--card); display:none;
+  }
+  .verdict.show{display:block;}
+  .verdict h2{font-family:Georgia,serif; margin:0 0 6px; font-size:1.2rem;}
+  .verdict.good h2{color:var(--green);}
+  .verdict.bad h2{color:var(--red);}
+  .verdict p{margin:0; font-size:.96rem; line-height:1.55;}
+  .verdict .ex-label{font-weight:700; font-size:.8rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); display:block; margin-bottom:4px;}
+  .next-row{display:flex; flex-direction:column; gap:10px; margin-top:16px;}
+  .big-btn{
+    width:100%; border:2.5px solid var(--line); border-radius:13px; padding:15px;
+    font-size:1.05rem; font-weight:800; cursor:pointer; box-shadow:var(--shadow);
+    background:var(--red); color:#fff7ea; font-family:inherit;
+  }
+  .big-btn:active{transform:translateY(2px); box-shadow:none;}
+  .ghost-btn{
+    width:100%; border:2px solid var(--line); border-radius:13px; padding:12px;
+    font-size:.95rem; font-weight:700; cursor:pointer; background:var(--card); color:var(--ink);
+    box-shadow:0 2px 0 rgba(42,36,26,.8); font-family:inherit;
+  }
+  .ghost-btn:active{transform:translateY(2px); box-shadow:none;}
+  /* --- End screen --- */
+  .end-score{font-family:Georgia,serif; font-size:2.4rem; text-align:center; margin:10px 0 2px;}
+  .end-sub{text-align:center; color:var(--ink-soft); margin:0 0 14px; font-size:.95rem;}
+  .stats{display:flex; gap:10px; margin:14px 0;}
+  .stat{flex:1; border:2px solid var(--line); border-radius:12px; background:var(--card); padding:11px 8px; text-align:center;}
+  .stat .v{font-family:Georgia,serif; font-size:1.45rem; font-weight:bold; display:block;}
+  .stat .l{font-size:.76rem; color:var(--ink-soft); display:block; margin-top:2px;}
+  .hidden{display:none !important;}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="frame">
+ <div class="engraved">
+
+  <header class="top">
+    <div class="brand">
+      <svg class="mascot" width="62" height="62" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M18 34 Q50 2 82 34 L82 40 Q50 26 18 40 Z" fill="#a83226" stroke="#2a241a" stroke-width="3"/>
+        <circle cx="50" cy="20" r="7" fill="#f6efdd" stroke="#2a241a" stroke-width="3"/>
+        <circle cx="50" cy="62" r="34" fill="#eec39a" stroke="#2a241a" stroke-width="3"/>
+        <path d="M20 52 Q24 30 50 28 Q76 30 80 52 L80 44 Q50 24 20 44 Z" fill="#4a3826"/>
+        <circle cx="36" cy="60" r="12.5" fill="rgba(255,255,255,.14)" stroke="#2a241a" stroke-width="3.4"/>
+        <circle cx="64" cy="60" r="12.5" fill="rgba(255,255,255,.14)" stroke="#2a241a" stroke-width="3.4"/>
+        <line x1="48.5" y1="58" x2="51.5" y2="58" stroke="#2a241a" stroke-width="3.4"/>
+        <line x1="23.5" y1="57" x2="16" y2="52" stroke="#2a241a" stroke-width="3.4"/>
+        <line x1="76.5" y1="57" x2="84" y2="52" stroke="#2a241a" stroke-width="3.4"/>
+        <circle cx="36" cy="61" r="2.6" fill="#2a241a"/>
+        <circle cx="64" cy="61" r="2.6" fill="#2a241a"/>
+        <path d="M42 80 Q50 87 58 80" fill="none" stroke="#2a241a" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="26" cy="72" r="4" fill="#e59a7a" opacity=".65"/>
+        <circle cx="74" cy="72" r="4" fill="#e59a7a" opacity=".65"/>
+      </svg>
+      <div>
+        <h1>2 vérités,<br /><span class="accent">1 mensonge</span></h1>
+        <p class="tagline">Trois affirmations, un seul piège.<br />Trouve le mensonge !</p>
+      </div>
+    </div>
+    <button class="icon-btn" id="muteBtn" aria-label="Activer ou couper le son">🔊</button>
+  </header>
+
+  <!-- ACCUEIL -->
+  <section id="homeScreen">
+    <div class="speech"><b>HP binoclard :</b> « Bienvenue ! Dans chaque manche, je te lis trois faits. Deux sont vrais… un seul est un mensonge. À toi de le démasquer — et lis bien l’explication, c’est là qu’on apprend les vraies affaires ! »</div>
+    <div class="cat-list" id="catList"></div>
+    <p class="rules">📜 <b>Comment ça marche :</b> touche l’affirmation que tu crois fausse. La réponse et la vraie histoire s’affichent aussitôt. Enchaîne les bonnes réponses pour faire grandir ta série. Chaque catégorie contient 110 manches — et aucun ensemble ne revient avant que tu aies tout épuisé !<br />🎺 <b>Musique de jeu télé :</b> fanfare au départ, petite tension pendant que tu réfléchis, jingle à la révélation — le bouton 🔊 en haut à droite coupe ou relance tout.</p>
+    <p class="sign">Un jeu HP Outils — pour les curieux de 7 à 107 ans.</p>
+  </section>
+
+  <!-- JEU -->
+  <section id="gameScreen" class="hidden">
+    <div class="hud">
+      <span class="chip" id="hudCat">Catégorie</span>
+      <span class="chip" id="hudProg">Manche 1</span>
+      <span class="spacer"></span>
+      <span class="chip" id="hudScore">Score : 0</span>
+      <span class="chip streak" id="hudStreak">🔥 Série : 0</span>
+    </div>
+    <div class="progress"><div id="progBar"></div></div>
+    <p class="q-label" id="qLabel">Quelle affirmation est le <b>mensonge</b> ?</p>
+    <div class="cards" id="cards"></div>
+    <div class="verdict" id="verdict">
+      <h2 id="verdictTitle"></h2>
+      <p><span class="ex-label">La vraie histoire</span><span id="verdictText"></span></p>
+    </div>
+    <div class="next-row">
+      <button class="big-btn hidden" id="nextBtn">Manche suivante →</button>
+      <button class="ghost-btn" id="quitBtn">Changer de catégorie</button>
+    </div>
+  </section>
+
+  <!-- FIN DE CATÉGORIE -->
+  <section id="endScreen" class="hidden">
+    <div class="speech" id="endSpeech"></div>
+    <p class="end-score" id="endScore">0 / 55</p>
+    <p class="end-sub" id="endSub">Catégorie terminée</p>
+    <div class="stats">
+      <div class="stat"><span class="v" id="endStreak">0</span><span class="l">Meilleure série de la partie</span></div>
+      <div class="stat"><span class="v" id="endRecord">0</span><span class="l">Record de série (appareil)</span></div>
+    </div>
+    <div class="next-row">
+      <button class="big-btn" id="replayBtn">Rejouer cette catégorie</button>
+      <button class="ghost-btn" id="homeBtn">Retour aux catégories</button>
+    </div>
+  </section>
+
+ </div>
+</div>
+
+<script>
+"use strict";
+/* ============ DONNÉES ============
+   Chaque ensemble : a = [3 affirmations], m = index du MENSONGE (0,1,2), e = explication.
+   Les deux autres affirmations sont des faits établis et vérifiables. */
+
+/* ---------- 1) FAIT HISTORIQUE (55 ensembles v1 + 55 v2 = 110) ---------- */
+var HIST = [
+{a:["La ville de Québec a été fondée en 1608 par Samuel de Champlain.","Jacques Cartier est arrivé à Gaspé en 1534.","Montréal a été fondée en 1608, la même année que Québec."],m:2,e:"Le mensonge : Montréal n’a pas été fondée en 1608, mais en 1642, sous le nom de Ville-Marie. Québec date bien de 1608, et Cartier a planté sa croix à Gaspé en 1534."},
+{a:["Le Canada est devenu un pays le 1er juillet 1867.","John A. Macdonald a été le premier premier ministre du Canada.","La première capitale du Canada a été Toronto."],m:2,e:"Le mensonge : la première capitale du Dominion a été Ottawa, choisie par la reine Victoria en 1857. La Confédération date bien de 1867 et Macdonald a bien été le premier à diriger le pays."},
+{a:["Le drapeau canadien à la feuille d’érable a été adopté en 1965.","Avant 1965, le Canada utilisait une version du Red Ensign britannique.","La feuille d’érable du drapeau canadien compte 13 pointes."],m:2,e:"Le mensonge : la feuille du drapeau compte 11 pointes, pas 13. Le drapeau actuel a bien été adopté en 1965, après des décennies sous le Red Ensign."},
+{a:["L’insuline a été découverte à Toronto en 1921 par l’équipe de Frederick Banting.","La découverte de l’insuline a valu un prix Nobel en 1923.","L’insuline a été découverte par un chercheur américain travaillant seul."],m:2,e:"Le mensonge : l’insuline est une découverte canadienne, faite en équipe à l’Université de Toronto (Banting, Best, Macleod et Collip). Elle a sauvé des millions de diabétiques et valu le Nobel en 1923."},
+{a:["La bataille des plaines d’Abraham a eu lieu en 1759, près de Québec.","Les généraux Wolfe et Montcalm sont tous deux morts des suites de cette bataille.","La bataille des plaines d’Abraham a duré plus d’une semaine."],m:2,e:"Le mensonge : la bataille décisive n’a duré qu’environ une demi-heure, le 13 septembre 1759. Les deux commandants, Wolfe et Montcalm, y ont bien perdu la vie."},
+{a:["Alexander Graham Bell a obtenu le brevet du téléphone en 1876.","Bell est né en Écosse avant d’immigrer en Amérique du Nord.","C’est Bell qui a inventé l’ampoule électrique."],m:2,e:"Le mensonge : l’ampoule électrique pratique, c’est Thomas Edison (1879). Bell, né en Écosse, reste l’homme du téléphone, breveté en 1876."},
+{a:["Les frères Wright ont réussi le premier vol motorisé en 1903.","Ce premier vol a eu lieu à Kitty Hawk, en Caroline du Nord.","Le premier vol des frères Wright a duré une heure entière."],m:2,e:"Le mensonge : le premier vol n’a duré que 12 secondes ! C’était bien en 1903 à Kitty Hawk, mais l’avion à peine plus longtemps qu’un saut."},
+{a:["Neil Armstrong a été le premier humain à marcher sur la Lune, en 1969.","La mission qui l’a amené sur la Lune s’appelait Apollo 11.","Le premier humain dans l’espace a été Neil Armstrong."],m:2,e:"Le mensonge : le premier humain dans l’espace a été le Soviétique Youri Gagarine, en 1961. Armstrong, lui, a posé le pied sur la Lune en 1969 avec Apollo 11."},
+{a:["Le Titanic a coulé en 1912 après avoir heurté un iceberg.","Le Titanic traversait l’Atlantique Nord lors de son premier voyage.","Tous les passagers du Titanic ont été sauvés."],m:2,e:"Le mensonge : plus de 1 500 personnes ont péri dans le naufrage de 1912. Le paquebot a bien heurté un iceberg pendant sa traversée inaugurale."},
+{a:["Le mur de Berlin a été construit en 1961.","Le mur de Berlin est tombé en 1989.","Le mur de Berlin a été démoli en une seule nuit par l’armée."],m:2,e:"Le mensonge : en novembre 1989, ce sont les foules qui ont forcé l’ouverture des postes-frontières ; la démolition s’est étalée sur des mois. Le mur avait bien été érigé en 1961."},
+{a:["L’Expo 67 a eu lieu à Montréal.","Le thème de l’Expo 67 était « Terre des Hommes ».","L’Expo 67 s’est tenue dans la ville de Québec."],m:2,e:"Le mensonge : l’Expo 67 s’est déroulée à Montréal, sur des îles du fleuve Saint-Laurent. Son thème, « Terre des Hommes », a attiré plus de 50 millions de visiteurs."},
+{a:["Montréal a accueilli les Jeux olympiques d’été en 1976.","À ces Jeux, la gymnaste Nadia Comaneci a obtenu le premier 10 parfait de l’histoire olympique.","Le Canada a remporté cinq médailles d’or aux Jeux de Montréal."],m:2,e:"Le mensonge : le Canada n’a gagné AUCUNE médaille d’or à ses propres Jeux en 1976 — fait unique pour un pays hôte des Jeux d’été. Comaneci y a bien récolté son fameux 10 parfait."},
+{a:["Montréal a été fondée en 1642 par Paul de Chomedey de Maisonneuve et Jeanne Mance.","À sa fondation, Montréal portait le nom de Ville-Marie.","Montréal est plus vieille que la ville de Québec."],m:2,e:"Le mensonge : Québec (1608) est plus vieille que Montréal (1642) d’une génération. Maisonneuve et Jeanne Mance ont bien fondé Ville-Marie en 1642."},
+{a:["Jacques Cartier a fait trois voyages au Canada.","Le mot « Canada » viendrait du mot iroquoien « kanata », qui signifie village.","Jacques Cartier a fondé la ville de Montréal."],m:2,e:"Le mensonge : Cartier a visité le village d’Hochelaga en 1535, mais Montréal n’a été fondée qu’un siècle plus tard, en 1642. Il a bien fait trois voyages, et « kanata » désignait bien un village."},
+{a:["La déportation des Acadiens a commencé en 1755.","Des Acadiens ont été déportés à partir de Grand-Pré, en Nouvelle-Écosse.","Tous les Acadiens déportés sont revenus chez eux l’année suivante."],m:2,e:"Le mensonge : l’exil acadien a duré des années ; beaucoup ne sont jamais revenus, d’autres se sont installés en Louisiane (les Cadiens). La déportation a bien commencé en 1755."},
+{a:["Laura Secord est célèbre pour avoir marché pour avertir les troupes britanniques d’une attaque américaine en 1813.","Charles-Michel de Salaberry a remporté la bataille de Châteauguay en 1813.","Ce sont des soldats canadiens qui ont brûlé la Maison-Blanche en 1814."],m:2,e:"Le mensonge : Washington a été incendiée en 1814 par des troupes britanniques venues d’Europe, pas par des Canadiens. Laura Secord et de Salaberry ont bien joué leur rôle en 1813."},
+{a:["Le dernier crampon du chemin de fer transcontinental canadien a été enfoncé en 1885.","Ce moment historique a eu lieu à Craigellachie, en Colombie-Britannique.","Le chemin de fer transcontinental a été terminé en 1882."],m:2,e:"Le mensonge : le fameux « dernier crampon » a été enfoncé le 7 novembre 1885 à Craigellachie. Le Canada était enfin relié d’un océan à l’autre."},
+{a:["La ruée vers l’or du Klondike a commencé en 1896.","L’or du Klondike a été découvert au Yukon, près de Dawson.","La ruée vers l’or du Klondike a eu lieu en Alberta."],m:2,e:"Le mensonge : c’est au Yukon, pas en Alberta, que des milliers de chercheurs d’or ont afflué à partir de 1896. Dawson est devenue une ville-champignon du jour au lendemain."},
+{a:["Les Québécoises ont obtenu le droit de vote aux élections provinciales en 1940.","Le Québec a été la dernière province canadienne à accorder ce droit aux femmes.","Les femmes du Québec votaient déjà aux élections provinciales en 1900."],m:2,e:"Le mensonge : en 1900, les Québécoises ne votaient pas encore. Elles ont obtenu le droit de vote provincial seulement en 1940, les dernières au pays."},
+{a:["Wilfrid Laurier est devenu premier ministre du Canada en 1896.","Wilfrid Laurier a été le premier francophone à diriger le Canada.","Wilfrid Laurier est né aux États-Unis."],m:2,e:"Le mensonge : Laurier est né à Saint-Lin, au Québec. Premier francophone premier ministre du Canada, il a pris le pouvoir en 1896 et y est resté 15 ans."},
+{a:["Maurice Richard a compté 50 buts en 50 matchs lors de la saison 1944-1945.","L’émeute de la Saint-Patrick a éclaté au Forum de Montréal en 1955 après la suspension de Maurice Richard.","Maurice Richard a joué quelques saisons pour les Maple Leafs de Toronto."],m:2,e:"Le mensonge : le Rocket a porté les couleurs des Canadiens de Montréal toute sa carrière. Ses 50 buts en 50 matchs (1944-1945) et l’émeute de 1955 sont bien réels."},
+{a:["La coupe Stanley a été créée en 1893, don du gouverneur général Lord Stanley.","La coupe Stanley est le plus vieux trophée du sport professionnel en Amérique du Nord.","La première équipe à gagner la coupe Stanley a été celle de Toronto."],m:2,e:"Le mensonge : la première coupe Stanley a été remportée par le club de Montréal (le Montreal AAA), en 1893. Le trophée de Lord Stanley est bien le plus ancien du sport pro nord-américain."},
+{a:["Le basketball a été inventé en 1891 par James Naismith.","James Naismith était un Canadien né en Ontario.","Naismith a inventé le basketball pour jouer dehors pendant l’été."],m:2,e:"Le mensonge : Naismith a créé le basketball pour l’INTÉRIEUR, l’hiver, dans un gymnase de Springfield. Ce Canadien né en Ontario cherchait un sport pour dépenser ses élèves entre deux saisons."},
+{a:["La première partie de hockey organisée a eu lieu à Montréal en 1875.","Cette partie historique s’est jouée à la patinoire Victoria de Montréal.","Le hockey sur glace a été inventé à Toronto."],m:2,e:"Le mensonge : la première partie organisée documentée s’est jouée à Montréal, en 1875, à la patinoire Victoria. Le hockey moderne est né au Québec."},
+{a:["La bataille de la crête de Vimy a eu lieu en avril 1917.","À Vimy, les quatre divisions canadiennes ont combattu ensemble pour la première fois.","La bataille de Vimy s’est déroulée en Belgique."],m:2,e:"Le mensonge : Vimy se trouve en France, dans le Pas-de-Calais. En avril 1917, les Canadiens y ont remporté une victoire devenue symbole national."},
+{a:["Le débarquement de Normandie a eu lieu le 6 juin 1944.","Les soldats canadiens ont débarqué sur la plage Juno le jour J.","Le jour J, les Alliés ont débarqué en Italie."],m:2,e:"Le mensonge : le jour J, c’est la Normandie, en France — pas l’Italie. Les Canadiens ont bien pris la plage Juno le 6 juin 1944."},
+{a:["La prise de la Bastille a eu lieu le 14 juillet 1789, pendant la Révolution française.","Louis XVI était roi de France au début de la Révolution.","La Révolution française a commencé en 1689."],m:2,e:"Le mensonge : la Révolution a commencé en 1789, un siècle plus tard. La prise de la Bastille, le 14 juillet 1789, en est le symbole le plus célèbre."},
+{a:["La Déclaration d’indépendance des États-Unis date de 1776.","Thomas Jefferson a été le principal rédacteur de la Déclaration d’indépendance.","La Déclaration d’indépendance a été signée à Philadelphie, au Canada."],m:2,e:"Le mensonge : Philadelphie se trouve aux États-Unis (en Pennsylvanie), pas au Canada ! La Déclaration de 1776 a bien été rédigée surtout par Jefferson."},
+{a:["Les pyramides de Gizeh ont été construites il y a environ 4 500 ans.","Le Sphinx se dresse près des pyramides de Gizeh, en Égypte.","Les pyramides de Gizeh ont été construites par les Romains."],m:2,e:"Le mensonge : les pyramides ont été bâties par les anciens Égyptiens, plus de 2 000 ans avant l’Empire romain. Le Sphinx veille sur le plateau de Gizeh depuis tout ce temps."},
+{a:["Le Colisée de Rome a été inauguré en l’an 80.","Des combats de gladiateurs se tenaient dans le Colisée.","Le Colisée se trouve à Athènes, en Grèce."],m:2,e:"Le mensonge : le Colisée est à Rome, en Italie — pas à Athènes. Inauguré en l’an 80, il pouvait accueillir des dizaines de milliers de spectateurs pour les jeux et les combats de gladiateurs."},
+{a:["Jeanne d’Arc a été brûlée à Rouen en 1431.","Jeanne d’Arc a vécu pendant la guerre de Cent Ans.","Jeanne d’Arc est devenue reine de France."],m:2,e:"Le mensonge : Jeanne d’Arc n’a jamais été reine. Elle a aidé à faire couronner Charles VII, puis a été capturée et brûlée à Rouen en 1431, pendant la guerre de Cent Ans."},
+{a:["La Joconde a été peinte par Léonard de Vinci.","Léonard de Vinci a dessiné des projets de machines volantes.","Léonard de Vinci a peint la Joconde en une seule journée."],m:2,e:"Le mensonge : Vinci a travaillé sur la Joconde pendant des années et l’a retouchée jusqu’à la fin de sa vie. Ce génie a aussi esquissé des machines volantes très en avance sur son temps."},
+{a:["William Shakespeare est né en Angleterre.","Shakespeare a écrit Hamlet et Roméo et Juliette.","Shakespeare écrivait ses pièces en français."],m:2,e:"Le mensonge : Shakespeare écrivait en anglais, sa langue natale. Hamlet et Roméo et Juliette comptent parmi les pièces les plus jouées au monde."},
+{a:["Mozart est né à Salzbourg, en Autriche.","Mozart était un enfant prodige qui faisait des tournées en Europe.","Mozart est mort à 80 ans, célèbre et riche."],m:2,e:"Le mensonge : Mozart est mort à seulement 35 ans, en 1791, et plutôt pauvre. Né à Salzbourg, il éblouissait déjà les cours d’Europe quand il était enfant."},
+{a:["Beethoven est devenu sourd au cours de sa vie.","Beethoven a composé la célèbre Ode à la joie dans sa Neuvième symphonie.","Beethoven est né en France."],m:2,e:"Le mensonge : Beethoven est né à Bonn, en Allemagne. Il a composé certaines de ses plus grandes œuvres, dont la Neuvième, alors qu’il était presque complètement sourd."},
+{a:["Alexander Fleming a découvert la pénicilline en 1928.","La pénicilline provient d’une moisissure du genre Penicillium.","C’est Fleming qui a inventé le vaccin contre la rage."],m:2,e:"Le mensonge : le vaccin contre la rage, c’est Louis Pasteur (1885). Fleming a découvert la pénicilline en 1928, par hasard, grâce à une moisissure qui avait contaminé ses cultures."},
+{a:["Louis Pasteur a mis au point un vaccin contre la rage en 1885.","La pasteurisation porte le nom de Louis Pasteur.","Louis Pasteur est né en Allemagne."],m:2,e:"Le mensonge : Pasteur est né à Dole, en France. Il a donné son nom à la pasteurisation et sauvé un petit garçon de la rage grâce à son vaccin en 1885."},
+{a:["Marie Curie est née en Pologne.","Marie Curie a remporté deux prix Nobel, dans deux sciences différentes.","Marie Curie a gagné le prix Nobel de littérature."],m:2,e:"Le mensonge : ses deux Nobel sont en physique (1903) et en chimie (1911) — un exploit unique. Née à Varsovie, en Pologne, elle a fait ses recherches à Paris."},
+{a:["Johannes Gutenberg a développé l’imprimerie à caractères mobiles en Europe vers 1440.","La Bible de Gutenberg est l’un des premiers grands livres imprimés en Europe.","Gutenberg a aussi inventé le papier."],m:2,e:"Le mensonge : le papier a été inventé en Chine, plus de mille ans avant Gutenberg. Son génie à lui, c’est l’imprimerie à caractères mobiles, vers 1440."},
+{a:["La tour Eiffel a été achevée en 1889 pour l’Exposition universelle de Paris.","La tour Eiffel mesure un peu plus de 300 mètres.","La tour Eiffel a été construite pour les Jeux olympiques de 1900."],m:2,e:"Le mensonge : la tour Eiffel a été bâtie pour l’Exposition universelle de 1889, pas pour des Jeux. Elle devait même être démontée après 20 ans — on connaît la suite !"},
+{a:["La première ligne de chemin de fer du Canada a ouvert en 1836.","Elle reliait La Prairie à Saint-Jean-sur-Richelieu, au sud de Montréal.","La première ligne de chemin de fer canadienne reliait Montréal à la ville de Québec."],m:2,e:"Le mensonge : la première ligne, en 1836, ne faisait qu’une vingtaine de kilomètres, entre La Prairie et Saint-Jean-sur-Richelieu. Montréal–Québec par train, c’est venu plus tard."},
+{a:["Des Vikings ont atteint Terre-Neuve vers l’an 1000, à L’Anse aux Meadows.","Les Vikings sont arrivés en Amérique environ 500 ans avant Christophe Colomb.","Les Vikings ont fondé la ville de Québec."],m:2,e:"Le mensonge : Québec a été fondée par Champlain en 1608. Les Vikings, eux, ont bien eu un campement à L’Anse aux Meadows vers l’an 1000, cinq siècles avant Colomb."},
+{a:["La Grande Paix de Montréal a été signée en 1701.","La Grande Paix a réuni la France et des dizaines de nations autochtones.","La Grande Paix de 1701 a été signée dans la ville de Québec."],m:2,e:"Le mensonge : comme son nom l’indique, la Grande Paix a été signée à Montréal, en 1701, devant des milliers de personnes. Elle a mis fin à des décennies de guerres."},
+{a:["La Compagnie de la Baie d’Hudson a été fondée en 1670.","La Compagnie de la Baie d’Hudson a fait le commerce des fourrures pendant plus de trois siècles.","La Compagnie de la Baie d’Hudson a été fondée par un roi de France."],m:2,e:"Le mensonge : la charte de 1670 venait du roi Charles II d’Angleterre — même si deux explorateurs français, Radisson et Des Groseilliers, ont inspiré l’aventure. Après plus de 350 ans d’histoire, la compagnie a fermé ses derniers magasins en 2025."},
+{a:["Le traité de Paris de 1763 a officiellement cédé le Canada à la Grande-Bretagne.","La bataille des plaines d’Abraham a eu lieu avant le traité de Paris.","En 1763, la France a gardé le Canada et cédé seulement la Floride."],m:2,e:"Le mensonge : par le traité de Paris (1763), la France a cédé le Canada à la Grande-Bretagne. Les plaines d’Abraham (1759) avaient déjà scellé le sort de la Nouvelle-France."},
+{a:["Les Filles du Roy sont arrivées en Nouvelle-France entre 1663 et 1673.","Environ 770 Filles du Roy sont venues s’établir dans la colonie.","Les Filles du Roy venaient d’Angleterre."],m:2,e:"Le mensonge : elles venaient de France, envoyées par le roi Louis XIV pour peupler la colonie. Près de 770 d’entre elles sont les ancêtres d’une grande partie des Québécois."},
+{a:["Le premier timbre du Canada, en 1851, montrait un castor.","Ce timbre de trois pennys a été dessiné par Sandford Fleming.","Sandford Fleming a été le premier premier ministre du Canada."],m:2,e:"Le mensonge : le premier premier ministre, c’est John A. Macdonald. Sandford Fleming a dessiné le timbre-castor de 1851 et a plus tard proposé les fuseaux horaires modernes."},
+{a:["Le Canadarm a volé pour la première fois en 1981, à bord de la navette Columbia.","Le Canadarm a été conçu et construit au Canada.","Le Canadarm a été déployé sur la surface de la Lune."],m:2,e:"Le mensonge : le Canadarm travaillait en orbite terrestre, accroché aux navettes spatiales — jamais sur la Lune. Cette fierté canadienne a fait ses débuts en 1981."},
+{a:["Chris Hadfield a été le premier Canadien à faire une sortie dans l’espace, en 2001.","Chris Hadfield a été le premier Canadien à commander la Station spatiale internationale, en 2013.","Chris Hadfield a été le premier Canadien à aller dans l’espace."],m:2,e:"Le mensonge : le premier Canadien dans l’espace a été Marc Garneau, en 1984. Hadfield détient d’autres premières : première sortie spatiale canadienne et premier commandement de la Station."},
+{a:["Roberta Bondar a été la première Canadienne dans l’espace, en 1992.","Roberta Bondar est aussi médecin neurologue.","Roberta Bondar a été la première femme au monde à aller dans l’espace."],m:2,e:"Le mensonge : la première femme dans l’espace a été la Soviétique Valentina Terechkova, en 1963. Bondar, elle, est la première Canadienne, en 1992 — et une neurologue."},
+{a:["Terry Fox a entrepris son Marathon de l’espoir en 1980 pour amasser des fonds contre le cancer.","Terry Fox est parti de St. John’s, à Terre-Neuve.","Terry Fox a réussi à traverser tout le Canada à la course."],m:2,e:"Le mensonge : le cancer l’a forcé à arrêter près de Thunder Bay, après 5 373 km et 143 jours de course. Son Marathon de l’espoir se poursuit chaque année partout au pays."},
+{a:["Le poème « Au champ d’honneur » a été écrit par le médecin canadien John McCrae en 1915.","John McCrae a servi pendant la Première Guerre mondiale, notamment à Ypres.","John McCrae est né en France."],m:2,e:"Le mensonge : McCrae est né à Guelph, en Ontario. Son poème sur les coquelicots, écrit en 1915, est devenu le symbole du jour du Souvenir."},
+{a:["L’avion Avro Arrow a volé pour la première fois en 1958.","Le programme Avro Arrow a été annulé en 1959.","L’Avro Arrow a servi pendant 20 ans dans l’aviation canadienne."],m:2,e:"Le mensonge : l’Arrow n’est jamais entré en service. Avion de chasse canadien très avancé pour son époque, il a volé en 1958, puis le programme a été annulé en 1959 et les prototypes détruits."},
+{a:["Le Canada a rapatrié sa Constitution en 1982.","La Charte canadienne des droits et libertés date de 1982.","La Constitution de 1982 a été signée par la reine à Londres."],m:2,e:"Le mensonge : la reine Elizabeth II a signé la nouvelle Constitution à Ottawa, sur la colline du Parlement, en avril 1982. La Charte des droits et libertés en fait partie depuis ce jour."},
+{a:["Le pont de la Confédération relie l’Île-du-Prince-Édouard au Nouveau-Brunswick.","Le pont de la Confédération, ouvert en 1997, mesure près de 13 kilomètres.","Avant le pont de la Confédération, on se rendait à l’Île-du-Prince-Édouard en train sous-marin."],m:2,e:"Le mensonge : il n’y a jamais eu de train sous-marin ; on prenait le traversier ! Le pont de la Confédération, près de 13 km, relie l’île au continent depuis 1997."}
+];
+
+/* ---------- 2) FAIT INUSITÉ (55 ensembles v1 + 55 v2 = 110) ---------- */
+var INUS = [
+{a:["La pieuvre possède trois cœurs.","Le sang de la pieuvre est bleu.","La pieuvre peut vivre plus de 50 ans."],m:2,e:"Le mensonge : la plupart des pieuvres ne vivent qu’un an à cinq ans. Elles ont bien trois cœurs — et un sang bleu, à base de cuivre plutôt que de fer."},
+{a:["Du miel vieux de 3 000 ans, retrouvé dans des tombes égyptiennes, était encore comestible.","Le miel se conserve presque indéfiniment s’il est bien fermé.","Une abeille produit environ une cuillère à soupe de miel par jour."],m:2,e:"Le mensonge : une abeille produit à peine un douzième de cuillère à thé de miel dans toute sa vie ! C’est le travail de milliers d’abeilles qui remplit un pot — un pot qui peut se garder des millénaires."},
+{a:["Les requins existent depuis environ 450 millions d’années.","Les requins sont plus vieux que les arbres, apparus plus tard sur Terre.","Les requins sont des mammifères."],m:2,e:"Le mensonge : les requins sont des poissons. Ils nageaient déjà dans les océans des millions d’années avant que le premier arbre ne pousse."},
+{a:["Le wombat, un marsupial d’Australie, fait des crottes en forme de cube.","Le wombat utilise ses cubes pour marquer son territoire.","Le wombat est un oiseau qui ne vole pas."],m:2,e:"Le mensonge : le wombat est un mammifère marsupial, cousin du koala. Ses crottes cubiques — uniques dans le règne animal — ne roulent pas et marquent bien son territoire."},
+{a:["La girafe a sept vertèbres dans le cou, comme les humains.","La langue de la girafe peut mesurer environ 50 centimètres.","La girafe dort huit heures par nuit, couchée sur le côté."],m:2,e:"Le mensonge : la girafe dort très peu — souvent moins de deux heures par jour, en courtes siestes, la plupart du temps debout. Mais elle a bien sept vertèbres cervicales, comme nous."},
+{a:["La baleine bleue est le plus gros animal connu ayant vécu sur Terre.","Le cœur d’une baleine bleue peut être gros comme une petite voiture.","La baleine bleue est le plus gros poisson du monde."],m:2,e:"Le mensonge : la baleine bleue n’est pas un poisson, mais un mammifère qui allaite ses petits. C’est le plus gros animal connu de toute l’histoire de la Terre."},
+{a:["La planète Vénus tourne sur elle-même dans le sens inverse de la plupart des planètes.","Sur Vénus, un jour dure plus longtemps que son année.","Vénus est la planète la plus éloignée du Soleil."],m:2,e:"Le mensonge : la planète la plus éloignée du Soleil est Neptune. Vénus, elle, tourne à l’envers et si lentement qu’un de ses jours dépasse son année entière."},
+{a:["La Lune s’éloigne de la Terre d’environ 3,8 centimètres par année.","La lumière du Soleil met environ huit minutes à nous parvenir.","Le Soleil tourne autour de la Terre."],m:2,e:"Le mensonge : c’est la Terre qui tourne autour du Soleil — et sa lumière met bien huit minutes à arriver. Pendant ce temps, la Lune s’éloigne tranquillement de nous, un peu chaque année."},
+{a:["Un éclair de foudre est environ cinq fois plus chaud que la surface du Soleil.","La foudre peut frapper deux fois exactement au même endroit.","La foudre ne frappe jamais deux fois au même endroit."],m:2,e:"Le mensonge : c’est justement le contraire ! La foudre frappe souvent les mêmes points élevés — certains gratte-ciel sont frappés des dizaines de fois par an. Et un éclair est bien plus chaud que la surface du Soleil."},
+{a:["Notre cerveau est actif presque au complet au fil d’une journée, selon l’imagerie médicale.","Le cerveau consomme environ 20 % de notre énergie, bien qu’il ne pèse qu’environ 2 % du corps.","Les humains n’utilisent que 10 % de leur cerveau."],m:2,e:"Le mensonge : le fameux « 10 % » est un mythe. Au cours d’une journée, pratiquement toutes les régions du cerveau travaillent — même pendant le sommeil."},
+{a:["La mémoire d’un poisson rouge dure plusieurs mois, pas quelques secondes.","Un poisson rouge peut apprendre à reconnaître la personne qui le nourrit.","La mémoire d’un poisson rouge ne dure que trois secondes."],m:2,e:"Le mensonge : les poissons rouges retiennent des choses pendant des mois et peuvent même apprendre des petits parcours. La « mémoire de trois secondes » est une légende."},
+{a:["Les chauves-souris ne sont pas aveugles : elles voient, en plus d’utiliser l’écholocation.","La chauve-souris est le seul mammifère capable de vraiment voler.","Toutes les chauves-souris boivent du sang."],m:2,e:"Le mensonge : seulement trois espèces de chauves-souris (sur plus de 1 400) boivent du sang. Les autres mangent des insectes, des fruits ou du nectar — et aucune n’est aveugle."},
+{a:["La Grande Muraille de Chine fait plus de 21 000 kilomètres avec toutes ses ramifications.","La Grande Muraille a été construite et reconstruite sous plusieurs dynasties.","La Grande Muraille de Chine est visible à l’œil nu depuis la Lune."],m:2,e:"Le mensonge : depuis la Lune, on ne voit aucune construction humaine à l’œil nu — les astronautes l’ont confirmé. La Muraille est immense (plus de 21 000 km), mais bien trop mince pour être vue de si loin."},
+{a:["Albert Einstein a reçu le prix Nobel pour ses travaux sur l’effet photoélectrique, pas pour la relativité.","Einstein a publié ses articles révolutionnaires en 1905, son « année miraculeuse ».","Einstein était mauvais en mathématiques à l’école."],m:2,e:"Le mensonge : Einstein excellait en mathématiques dès l’enfance — il maîtrisait le calcul avancé à l’adolescence. Son Nobel récompensait bien l’effet photoélectrique, pas la relativité."},
+{a:["Un escargot peut dormir jusqu’à trois ans en hibernation ou en estivation.","La coquille de l’escargot grandit avec lui.","L’escargot peut quitter sa coquille et en changer, comme le bernard-l’ermite."],m:2,e:"Le mensonge : la coquille fait partie du corps de l’escargot ; il ne peut pas la quitter. Elle grandit avec lui pendant qu’il fait, au besoin, de très longues siestes de plusieurs années."},
+{a:["Le tardigrade, un animal microscopique, a survécu au vide de l’espace.","On surnomme le tardigrade « ourson d’eau ».","Le tardigrade adulte est gros comme un chaton."],m:2,e:"Le mensonge : le tardigrade mesure moins d’un millimètre ! Ce minuscule « ourson d’eau » a pourtant survécu à une exposition directe au vide spatial lors d’expériences en orbite."},
+{a:["Les dauphins dorment avec une moitié de cerveau à la fois, l’autre restant éveillée.","Les dauphins peuvent se reconnaître dans un miroir.","Le dauphin est le plus gros poisson de l’océan."],m:2,e:"Le mensonge : le dauphin est un mammifère, pas un poisson. Il dort bien un hémisphère à la fois, pour continuer à respirer et surveiller les alentours."},
+{a:["Certaines fourmis peuvent soulever jusqu’à environ 50 fois leur propre poids.","On trouve des fourmis sur presque tous les continents, sauf l’Antarctique.","Les fourmis ne dorment jamais."],m:2,e:"Le mensonge : les fourmis dorment, par de nombreuses micro-siestes chaque jour. Elles soulèvent bien des charges énormes pour leur taille, et elles ont conquis presque toute la planète."},
+{a:["Les empreintes digitales du koala ressemblent beaucoup à celles des humains.","Le koala passe jusqu’à une vingtaine d’heures par jour à dormir ou se reposer.","Le koala est un petit ours d’Australie."],m:2,e:"Le mensonge : le koala n’est pas un ours, mais un marsupial — il transporte son bébé dans une poche. Ses empreintes, presque identiques aux nôtres, ont même embêté des enquêteurs !"},
+{a:["L’axolotl peut régénérer des parties de son cœur, de sa moelle épinière et de ses membres.","L’axolotl garde son allure de larve toute sa vie.","L’axolotl vit dans les forêts du Canada."],m:2,e:"Le mensonge : l’axolotl vit dans des lacs près de Mexico, pas au Canada. Cet amphibien étonnant passe sa vie entière sous forme de « larve » et repousse ses membres perdus."},
+{a:["Le coup de « poing » de la crevette-mante est l’un des mouvements les plus rapides du règne animal.","La crevette-mante possède des yeux qui distinguent bien plus de canaux de couleurs que les nôtres.","La crevette-mante peut mesurer deux mètres de long."],m:2,e:"Le mensonge : elle ne mesure qu’une dizaine de centimètres ! Malgré sa petite taille, sa frappe atteint la vitesse d’une balle et ses yeux sont parmi les plus complexes du règne animal."},
+{a:["Le Soleil est une étoile de type naine jaune.","La lumière du Soleil met environ huit minutes vingt secondes à atteindre la Terre.","Le Soleil est l’étoile la plus grosse de l’univers."],m:2,e:"Le mensonge : le Soleil est une étoile plutôt moyenne ; certaines étoiles sont des centaines de fois plus grosses. Sa lumière met bien un peu plus de huit minutes à nous parvenir."},
+{a:["On n’entend aucun son dans le vide de l’espace, car il n’y a pas d’air pour le transporter.","Les astronautes de la Station spatiale sont en chute libre autour de la Terre, ce qui donne l’impression de flotter.","Il n’y a aucune gravité à bord de la Station spatiale internationale."],m:2,e:"Le mensonge : la gravité là-haut vaut environ 90 % de celle au sol ! Les astronautes flottent parce qu’ils tombent en continu autour de la Terre. Et sans air, aucun son ne peut voyager dans le vide."},
+{a:["Le mont Everest grandit de quelques millimètres chaque année.","Le sommet de l’Everest se trouve à environ 8 849 mètres d’altitude.","L’Everest est situé en Europe."],m:2,e:"Le mensonge : l’Everest est en Asie, dans l’Himalaya, entre le Népal et la Chine. Les plaques tectoniques continuent de le pousser vers le haut, quelques millimètres par an."},
+{a:["Le Sahara est le plus grand désert chaud du monde.","Le Sahara couvre une superficie comparable à celle des États-Unis.","Le Sahara est le plus grand désert du monde, point final."],m:2,e:"Le mensonge : le plus grand désert du monde est l’Antarctique — un désert de glace, car un désert se définit par le manque de précipitations. Le Sahara reste le champion des déserts chauds."},
+{a:["L’ADN déroulé d’une seule cellule humaine mesurerait environ deux mètres.","Les humains partagent environ 99,9 % de leur ADN entre eux.","L’ADN ne se trouve que dans le sang."],m:2,e:"Le mensonge : presque toutes nos cellules contiennent de l’ADN, pas seulement le sang. Et mis bout à bout, ce minuscule ruban ferait environ deux mètres par cellule."},
+{a:["Un bébé naît avec plus d’os (environ 300) qu’un adulte (206).","Les os humains sont des tissus vivants qui se renouvellent toute la vie.","Les os sont des tissus morts et inertes dans le corps."],m:2,e:"Le mensonge : les os sont bien vivants — traversés de vaisseaux et en constant renouvellement. Le bébé en a environ 300, dont plusieurs fusionnent en grandissant pour arriver à 206."},
+{a:["Le cœur humain bat environ 100 000 fois par jour.","Le cœur a à peu près la taille de votre poing fermé.","Le cœur s’arrête complètement pendant une fraction de seconde quand on éternue."],m:2,e:"Le mensonge : quand on éternue, le rythme du cœur peut changer un peu, mais il ne s’arrête pas. Ce petit muscle de la taille d’un poing bat bien autour de 100 000 fois par jour."},
+{a:["On perçoit les goûts aussi grâce à l’odorat.","Des papilles gustatives se trouvent ailleurs que sur la langue, comme dans la gorge.","Chaque section de la langue goûte un seul goût : la pointe pour le sucré, les côtés pour le salé."],m:2,e:"Le mensonge : la fameuse « carte de la langue » est fausse — toutes les régions de la langue perçoivent tous les goûts. Le goût dépend aussi beaucoup de l’odorat, et des papilles existent jusqu’au fond de la gorge."},
+{a:["Une petite méduse, Turritopsis, peut inverser son cycle de vie et redevenir jeune.","Les méduses n’ont ni cerveau ni cœur.","Les méduses possèdent un squelette fin et solide."],m:2,e:"Le mensonge : les méduses n’ont aucun squelette — ni cerveau, ni cœur d’ailleurs. L’espèce Turritopsis peut même relancer son cycle de vie, comme si elle remontait le temps."},
+{a:["Le corail est un animal, pas une roche ni une plante.","La Grande Barrière de corail est la plus grande structure construite par des êtres vivants.","Le corail est une sorte de roche colorée."],m:2,e:"Le mensonge : le corail est un animal — des milliers de minuscules polypes qui bâtissent leur squelette calcaire. La Grande Barrière, leur œuvre collective, est visible sur des milliers de kilomètres le long de l’Australie."},
+{a:["La banane est très légèrement radioactive à cause du potassium qu’elle contient.","Botaniquement, la banane est une baie.","Les bananes poussent sur des arbres."],m:2,e:"Le mensonge : le bananier n’est pas un arbre, mais une plante herbacée géante, sans vrai tronc. Sa baie — car c’en est une — contient un soupçon de potassium radioactif, sans danger."},
+{a:["La fraise n’est pas une vraie baie au sens botanique.","Les petits grains sur la fraise sont ses véritables fruits.","La fraise est un fruit unique et simple, comme la pomme."],m:2,e:"Le mensonge : la partie rouge et juteuse n’est pas le fruit ; les vrais fruits sont les petits grains (akènes) à sa surface. Et non, ce n’est pas une baie pour les botanistes."},
+{a:["Les champignons sont génétiquement plus proches des animaux que des plantes.","L’un des plus grands êtres vivants du monde est un champignon souterrain en Oregon.","Les champignons fabriquent leur nourriture par photosynthèse, comme les plantes."],m:2,e:"Le mensonge : les champignons ne font pas de photosynthèse ; ils se nourrissent de matière organique, comme nous. Ils sont bien nos cousins éloignés, plus proches des animaux que des plantes."},
+{a:["Les abeilles communiquent l’emplacement des fleurs par une danse.","Une ruche compte une seule reine.","Toutes les abeilles meurent après avoir piqué."],m:2,e:"Le mensonge : seules les ouvrières de l’abeille domestique meurent après une piqûre (leur dard reste accroché). Les bourdons et plusieurs autres abeilles peuvent piquer sans en mourir. La danse des butineuses, elle, est bien réelle."},
+{a:["Les dents du castor poussent continuellement toute sa vie.","Les incisives du castor sont orangées à cause du fer qu’elles contiennent.","Le castor se nourrit principalement de poissons."],m:2,e:"Le mensonge : le castor est herbivore — écorce, branches et plantes aquatiques, pas de poissons ! Ses dents orangées, renforcées au fer, poussent sans arrêt et s’usent en rongeant."},
+{a:["L’orignal est un excellent nageur qui peut plonger sous l’eau pour manger des plantes.","Le panache du mâle orignal tombe chaque hiver et repousse au printemps.","L’orignal est le plus petit des cervidés du Canada."],m:2,e:"Le mensonge : l’orignal est le PLUS GRAND cervidé du Canada. Il nage admirablement, plonge pour brouter les plantes aquatiques, et perd son panache chaque hiver."},
+{a:["Les bernaches du Canada voyagent en formation en V pour économiser leur énergie.","Les bernaches reviennent souvent aux mêmes endroits d’année en année.","La bernache du Canada est un oiseau incapable de voler."],m:2,e:"Le mensonge : la bernache vole très bien — elle migre sur des milliers de kilomètres ! Sa formation en V réduit l’effort de chacune, et elle retrouve ses haltes habituelles année après année."},
+{a:["Les loups hurlent pour communiquer entre eux et délimiter leur territoire.","La meute de loups est essentiellement une famille : un couple et ses jeunes.","Les loups hurlent uniquement les nuits de pleine lune, que la Lune rend fous."],m:2,e:"Le mensonge : les loups hurlent n’importe quelle nuit ; la pleine lune n’y change rien, on les entend simplement mieux par temps clair. Hurler sert à rassembler la famille et à avertir les voisins."},
+{a:["Le hibou peut tourner sa tête jusqu’à environ 270 degrés.","Les plumes spéciales du hibou rendent son vol presque silencieux.","Le hibou peut faire un tour complet de 360 degrés avec sa tête."],m:2,e:"Le mensonge : 360 degrés, impossible — mais 270 degrés, oui, grâce à des vertèbres supplémentaires et des vaisseaux adaptés. Son vol silencieux lui permet de surprendre ses proies."},
+{a:["La plupart des manchots vivent dans l’hémisphère Sud.","Le mâle du manchot empereur couve l’œuf sur ses pattes pendant l’hiver antarctique.","Les manchots vivent au pôle Nord, côte à côte avec les ours polaires."],m:2,e:"Le mensonge : manchots et ours polaires ne se rencontrent jamais dans la nature — les uns vivent au Sud, les autres au Nord ! Le papa manchot empereur couve bien l’œuf sur ses pattes, en plein hiver."},
+{a:["La peau de l’ours polaire est noire.","Les poils de l’ours polaire sont translucides et paraissent blancs en reflétant la lumière.","Tous les ours polaires sont gauchers."],m:2,e:"Le mensonge : les ours polaires utilisent leurs deux pattes ; le « tous gauchers » est une légende. Sous sa fourrure qui paraît blanche, sa peau est bien noire pour capter la chaleur."},
+{a:["Les serpents « sentent » les odeurs avec leur langue fourchue.","Les serpents n’ont pas de paupières : leurs yeux restent toujours ouverts.","Les serpents se désarticulent la mâchoire pour avaler leurs proies."],m:2,e:"Le mensonge : la mâchoire ne se désarticule pas ; elle est reliée par des ligaments très élastiques qui s’étirent énormément. Le serpent goûte bien l’air avec sa langue, et ses yeux sans paupières ne se ferment jamais."},
+{a:["Le crocodile ne peut pas tirer la langue : elle est attachée au bas de sa bouche.","Certains crocodiles peuvent vivre plus de 70 ans.","Le crocodile est un amphibien, comme la grenouille."],m:2,e:"Le mensonge : le crocodile est un reptile, pas un amphibien. Sa langue est effectivement soudée — impossible pour lui de vous tirer la langue !"},
+{a:["Certaines tortues d’eau douce peuvent respirer en partie par leur derrière.","Les tortues existent sur Terre depuis l’époque des dinosaures.","Une tortue peut sortir de sa carapace si elle est en danger."],m:2,e:"Le mensonge : la carapace est soudée au squelette de la tortue — elle ne peut jamais en sortir. Certaines tortues aquatiques absorbent bien de l’oxygène par l’arrière, et leur lignée côtoyait les dinosaures."},
+{a:["Certaines espèces de bambou peuvent pousser de près d’un mètre en une seule journée.","Les jeunes tournesols suivent la course du Soleil dans le ciel.","Le bambou est un arbre à croissance lente."],m:2,e:"Le mensonge : le bambou n’est pas un arbre, mais une herbe géante — et la plante qui pousse le plus vite au monde, jusqu’à près d’un mètre par jour. Les jeunes tournesols suivent bien le Soleil."},
+{a:["Le plus vieil arbre connu, un pin de Californie, a près de 5 000 ans.","Les séquoias géants comptent parmi les plus gros êtres vivants de la planète.","Les séquoias géants peuvent mesurer plus de 200 mètres de haut."],m:2,e:"Le mensonge : le plus grand séquoia géant mesure un peu moins de 90 mètres — impressionnant, mais loin des 200 mètres. Le plus vieil arbre connu, un pin Bristlecone de Californie surnommé Mathusalem, frôle quant à lui les 5 000 ans."},
+{a:["La fosse des Mariannes, dans le Pacifique, descend à près de 11 kilomètres de profondeur.","Si on plongeait l’Everest dans la fosse des Mariannes, il serait entièrement submergé.","L’océan Pacifique est le plus petit des océans."],m:2,e:"Le mensonge : le Pacifique est le PLUS GRAND océan du monde. Sa fosse des Mariannes est si profonde que l’Everest y disparaîtrait sous plus d’un kilomètre d’eau."},
+{a:["Les glaciers et les calottes glaciaires contiennent la majorité de l’eau douce de la planète.","L’eau des icebergs est de l’eau douce.","Les icebergs sont des blocs d’eau de mer gelée et salée."],m:2,e:"Le mensonge : les icebergs naissent des glaciers, sur la terre ferme — c’est de l’eau douce gelée. Les glaces du monde gardent bien la plus grande part de notre eau douce."},
+{a:["Le plus grand volcan du système solaire, Olympus Mons, se trouve sur Mars.","L’Islande possède à la fois des volcans actifs et d’immenses glaciers.","La lave et le magma sont exactement la même chose, au même endroit."],m:2,e:"Le mensonge : le magma est sous terre ; quand il jaillit en surface, on l’appelle de la lave. Le champion des volcans, Olympus Mons sur Mars, fait environ deux fois et demie la hauteur de l’Everest."},
+{a:["Des tremblements de Lune — des séismes lunaires — ont été enregistrés par les missions Apollo.","Les empreintes des astronautes sur la Lune peuvent durer des millions d’années, faute de vent et d’eau.","La Lune brille parce qu’elle produit sa propre lumière."],m:2,e:"Le mensonge : la Lune ne produit aucune lumière ; elle reflète celle du Soleil. Sans vent ni pluie, les empreintes d’Apollo resteront marquées très, très longtemps — et la Lune tremble bel et bien par moments."},
+{a:["Certaines étoiles que nous voyons sont peut-être déjà éteintes : leur lumière voyage depuis très longtemps.","Les étoiles semblent scintiller à cause des mouvements de l’air dans notre atmosphère.","Les étoiles scintillent parce qu’elles clignotent comme des ampoules."],m:2,e:"Le mensonge : les étoiles ne clignotent pas ; c’est notre atmosphère agitée qui déforme leur lumière. Et cette lumière peut voyager des milliers d’années avant d’atteindre nos yeux."},
+{a:["Les astronautes vieillissent un tout petit peu moins vite à bord de la Station spatiale, à cause de la relativité.","Les satellites GPS doivent corriger leurs horloges à cause des effets de la relativité.","Le temps s’écoule exactement à la même vitesse partout, peu importe la vitesse et la gravité."],m:2,e:"Le mensonge : Einstein l’avait prédit — le temps ralentit avec la vitesse et s’écoule différemment selon la gravité. Les GPS corrigent cet effet chaque jour, sinon ils se tromperaient de plusieurs kilomètres."},
+{a:["Les astronautes grandissent temporairement de quelques centimètres dans l’espace.","En absence de gravité, leurs vertèbres s’espacent légèrement.","Les astronautes ne peuvent pas pleurer dans l’espace."],m:2,e:"Le mensonge : ils peuvent pleurer — les larmes restent simplement collées au visage au lieu de couler ! Et sans gravité qui tasse la colonne, ils « grandissent » de quelques centimètres en orbite."},
+{a:["L’œil de l’autruche est plus gros que son cerveau.","L’autruche est le plus grand oiseau du monde.","Quand elle a peur, l’autruche enfouit sa tête dans le sable."],m:2,e:"Le mensonge : l’autruche ne cache jamais sa tête dans le sable — c’est un mythe célèbre. Son œil, plus gros que son cerveau, est le plus grand de tous les animaux terrestres."}
+];
+
+/* ---------- 3) FAIT COCASSE (55 ensembles v1 + 55 v2 = 110) ---------- */
+var COC = [
+{a:["L’animal national officiel de l’Écosse est la licorne.","L’animal emblème officiel du Canada est le castor.","L’animal national de la France est la vache."],m:2,e:"Le mensonge : l’emblème de la France est le coq gaulois, pas la vache. L’Écosse a vraiment choisi la licorne — un animal de légende pour figurer sur ses armoiries — et le Canada, le castor."},
+{a:["En Suisse, la loi sur le bien-être animal exige qu’un cochon d’Inde vive avec au moins un compagnon de son espèce.","Le cochon d’Inde est un animal social qui souffre de la solitude.","En Suisse, il est interdit d’avoir un chat à la maison."],m:2,e:"Le mensonge : les chats sont tout à fait permis en Suisse ! Mais la loi sur le bien-être animal y interdit de garder un cochon d’Inde seul, car ces petites bêtes ont besoin de compagnie."},
+{a:["L’inventeur de la boîte de Pringles a eu une partie de ses cendres placées dans une boîte de Pringles.","Les Pringles sont empilées en forme de selle pour ne pas se briser.","L’inventeur des Pringles a été enterré dans un sac de croustilles ordinaire."],m:2,e:"Le mensonge : Fredric Baur a été enterré (en partie) dans son invention : une boîte de Pringles originale, selon son propre souhait. Sa boîte cylindrique et ses croustilles en forme de selle protègent bien les chips."},
+{a:["Dans les années 1830, le ketchup a été vendu comme médicament, même en pilules.","On vantait alors le ketchup de tomates contre les maux d’estomac.","Le ketchup accompagnait déjà les frites dans la Rome antique."],m:2,e:"Le mensonge : ni frites ni ketchup dans la Rome antique — la tomate vient d’Amérique ! Dans les années 1830, un médecin vendait bel et bien le ketchup comme remède, en pilules d’extrait de tomate."},
+{a:["Les carottes étaient autrefois surtout violettes, blanches ou jaunes.","La carotte orange a été popularisée par des cultivateurs des Pays-Bas.","Manger des carottes permet de voir dans le noir total."],m:2,e:"Le mensonge : les carottes aident la santé des yeux (vitamine A), mais ne donnent pas une vision de chat dans le noir total — c’était un tuyau de propagande de guerre devenu légende. Les carottes violettes, elles, existent pour vrai."},
+{a:["Un plant d’ananas peut prendre environ deux ans avant de donner son premier fruit.","L’ananas pousse au ras du sol, au centre d’une rosette de feuilles.","Les ananas poussent dans des palmiers, comme les noix de coco."],m:2,e:"Le mensonge : pas de palmier pour l’ananas — il pousse au sol, un fruit à la fois, au centre de sa plante. Et il faut être patient : environ deux ans avant la première récolte !"},
+{a:["La cacahuète n’est pas une noix : c’est une légumineuse, comme les pois.","Les cacahuètes mûrissent sous la terre.","Les cacahuètes poussent sur des arbres, comme les noisettes."],m:2,e:"Le mensonge : après la floraison, la tige de l’arachide s’enfonce dans le sol et la cacahuète mûrit sous terre. C’est une légumineuse, cousine des pois et des haricots."},
+{a:["Botaniquement, la tomate est un fruit.","Il existe des milliers de variétés de tomates dans le monde.","La tomate pousse naturellement l’hiver dehors, sans serre, au Québec."],m:2,e:"Le mensonge : la tomate adore la chaleur ; un hiver québécois dehors la tuerait net. Pour les botanistes, c’est bien un fruit — même si en cuisine, on la traite comme un légume."},
+{a:["La poutine a été inventée au Québec dans les années 1950.","Le fromage en grains frais de la poutine fait « squik-squik » sous la dent.","La poutine a été créée en France au Moyen Âge."],m:2,e:"Le mensonge : la poutine est née au Québec, dans le Centre-du-Québec, dans les années 1950 — frites, sauce brune et fromage en grains qui couine. Aucun Moyen Âge, aucune France là-dedans !"},
+{a:["Il faut environ 40 litres de sève d’érable pour produire un seul litre de sirop.","Le Québec produit la grande majorité du sirop d’érable du monde.","Le sirop d’érable coule de l’arbre déjà tout fait, épais et sucré."],m:2,e:"Le mensonge : ce qui coule de l’érable, c’est une eau à peine sucrée. Il faut en évaporer environ 40 litres pour obtenir un litre de sirop — spécialité dont le Québec est le champion mondial."},
+{a:["Autrefois, le homard était si abondant qu’on le servait aux prisonniers et aux domestiques.","Le homard était jadis broyé avec sa coquille pour nourrir les animaux et engraisser les jardins.","Le homard a toujours été un mets de luxe plus cher que le bœuf."],m:2,e:"Le mensonge : le homard a longtemps été une nourriture de pauvres, si commune qu’on s’en plaignait dans les prisons ! C’est le transport frigorifique et la vogue des restaurants qui en ont fait un mets de luxe."},
+{a:["Le castor frappe l’eau de sa queue plate pour avertir les siens d’un danger.","La queue du castor lui sert aussi de gouvernail quand il nage.","Le castor creuse ses terriers avec sa queue, comme une pelle."],m:2,e:"Le mensonge : la queue ne creuse pas — le castor creuse avec ses pattes. Sa queue lui sert de gouvernail, de béquille pour ronger debout, et de tambour d’alarme sur l’eau."},
+{a:["Les vaches développent des amitiés et peuvent stresser quand on les sépare de leurs copines.","Les vaches montent un escalier plus facilement qu’elles ne le descendent.","Les vaches ne se couchent jamais pour dormir."],m:2,e:"Le mensonge : les vaches se couchent de nombreuses heures par jour pour ruminer et dormir. Elles ont bien leurs amitiés préférées, et leur anatomie rend la descente d’escalier plutôt maladroite."},
+{a:["La forme du cou du porc l’empêche de regarder directement vers le ciel en levant la tête.","Le porc a un odorat parmi les meilleurs du règne animal.","Les porcs transpirent abondamment, comme les humains."],m:2,e:"Le mensonge : « suer comme un porc » est une expression trompeuse — le porc a très peu de glandes sudoripares, d’où ses fameux bains de boue pour se rafraîchir. Et oui, son cou l’empêche de fixer le ciel."},
+{a:["L’hippopotame sécrète un liquide rosé qui le protège du soleil, comme une crème solaire naturelle.","Le plus proche parent vivant de l’hippopotame est… la baleine.","Le lait de l’hippopotame est naturellement rose bonbon."],m:2,e:"Le mensonge : son lait est blanc, comme celui des autres mammifères. Le rose, c’est la sécrétion de sa peau, un écran solaire naturel. Et ses plus proches cousines sont bien les baleines."},
+{a:["Le kangourou avance très mal à reculons : sa grosse queue et ses pattes l’en empêchent.","En marchant lentement, le kangourou utilise sa queue comme une cinquième patte.","Des kangourous vivent à l’état sauvage dans les forêts du Canada."],m:2,e:"Le mensonge : aucun kangourou sauvage au Canada — ils sont australiens. Leur queue musclée fait office de cinquième patte à la marche, mais reculer, pour eux, c’est tout un casse-tête."},
+{a:["Les flamants naissent gris, pas roses.","La couleur rose des flamants vient des pigments de leur nourriture, comme les petites crevettes.","Les flamants pondent des œufs roses."],m:2,e:"Le mensonge : les œufs de flamant sont blancs, et les oisillons naissent tout gris. C’est leur menu riche en caroténoïdes qui les teint en rose avec le temps — sans ce régime, ils pâliraient."},
+{a:["Le cheval ne peut pas vomir.","Le cheval peut dormir debout, grâce à un système de verrouillage de ses pattes.","Un cheval qui ne se couche jamais va très bien : il n’a pas besoin de dormir couché."],m:2,e:"Le mensonge : le cheval a besoin de se coucher un peu chaque jour pour son sommeil profond. Vomir, par contre, lui est anatomiquement impossible — d’où la gravité des coliques chez lui."},
+{a:["Des expériences montrent que les rats émettent des ultrasons qui ressemblent à des rires quand on les chatouille.","Le rat ne peut pas vomir.","Le fromage est la nourriture préférée naturelle de tous les rats."],m:2,e:"Le mensonge : les rats préfèrent souvent les aliments riches en glucides, et le fromage n’est pas leur favori universel — c’est un cliché de dessin animé. En revanche, les rats « rient » bel et bien aux chatouilles, en ultrasons."},
+{a:["Le canard peut dormir avec un œil ouvert et la moitié du cerveau éveillée.","Les pattes du canard ne gèlent pas dans l’eau glacée grâce à une circulation spéciale.","Le cri du canard ne produit aucun écho."],m:2,e:"Le mensonge : le fameux « coin-coin sans écho » est un mythe — son cri produit un écho comme les autres sons, simplement difficile à distinguer. Ses pattes, elles, ont bien un système anti-gel naturel."},
+{a:["LEGO produit plus de pneus par année que n’importe quel fabricant de pneus au monde.","Des briques LEGO de 1958 s’emboîtent encore avec celles d’aujourd’hui.","LEGO est une entreprise canadienne."],m:2,e:"Le mensonge : LEGO est danois. Avec ses milliards de mini-pneus en plastique, l’entreprise dépasse en nombre tous les fabricants de vrais pneus — et ses briques sont compatibles depuis 1958."},
+{a:["Le nom complet de Barbie est Barbara Millicent Roberts.","Barbie a été lancée en 1959.","Le vrai nom complet de Ken est Robert Millicent."],m:2,e:"Le mensonge : Ken s’appelle Kenneth Carson, pas Robert Millicent. C’est Barbie qui porte ce nom complet : Barbara Millicent Roberts, vedette depuis 1959."},
+{a:["Le Rubik’s Cube a été inventé par Ernő Rubik, un professeur hongrois.","Le Rubik’s Cube possède plus de 43 milliards de milliards de combinaisons.","Le Rubik’s Cube a été créé dès le départ comme un jouet pour enfants."],m:2,e:"Le mensonge : Rubik l’a conçu comme un outil pour enseigner la géométrie à ses étudiants, pas comme un jouet. Il lui a fallu un mois pour résoudre sa propre invention la première fois !"},
+{a:["Le mot « robot » vient du tchèque « robota », qui signifie travail forcé.","Le mot « robot » a été popularisé par une pièce de théâtre tchèque en 1920.","Le mot « robot » vient d’un ancien mot japonais."],m:2,e:"Le mensonge : aucune racine japonaise — « robot » est né en Tchécoslovaquie, dans la pièce R.U.R. de Karel Čapek (1920), à partir du mot « robota », le travail forcé."},
+{a:["Le sandwich porterait le nom d’un comte anglais, le comte de Sandwich.","Selon l’histoire populaire, le comte mangeait sa viande entre deux tranches de pain pour ne pas quitter sa table.","Le sandwich a été inventé au Canada en 1900."],m:2,e:"Le mensonge : rien de canadien là-dedans — l’histoire du comte de Sandwich, au 18e siècle en Angleterre, est la plus racontée. La viande entre deux pains lui évitait de s’interrompre."},
+{a:["Les biscuits chinois de fortune (fortune cookies) ont été inventés aux États-Unis.","En Chine, les fortune cookies sont pratiquement inconnus comme tradition.","Les fortune cookies viennent de la Chine impériale d’il y a mille ans."],m:2,e:"Le mensonge : malgré leur nom, ces biscuits à message sont nés aux États-Unis, au début du 20e siècle, probablement en Californie. En Chine, on ne les connaît à peu près pas."},
+{a:["Le mot « sushi » désigne le riz vinaigré, pas le poisson cru.","Le « wasabi » servi dans bien des restaurants hors du Japon est souvent du raifort coloré en vert.","Tous les sushis contiennent du poisson cru."],m:2,e:"Le mensonge : plusieurs sushis sont aux légumes, à l’œuf ou aux fruits de mer cuits. « Sushi » nomme le riz assaisonné — et le vrai wasabi, rare et cher, est souvent remplacé par du raifort vert."},
+{a:["Le croissant français s’inspire d’une pâtisserie viennoise en forme de demi-lune, le kipferl.","C’est en France que le croissant est devenu la viennoiserie feuilletée qu’on connaît.","Marie-Antoinette a inventé le croissant en une nuit dans ses cuisines."],m:2,e:"Le mensonge : Marie-Antoinette n’a rien inventé du tout. L’ancêtre du croissant est bien le kipferl viennois, transformé en France en feuilletage au beurre au 19e siècle."},
+{a:["Le maïs soufflé est connu dans les Amériques depuis des milliers d’années.","Un grain de maïs soufflé peut sauter jusqu’à environ un mètre dans les airs.","Le maïs soufflé a été inventé pour les cinémas, vers l’an 2000."],m:2,e:"Le mensonge : le maïs soufflé a des milliers d’années — on en a retrouvé des traces anciennes au Pérou et au Mexique. Les cinémas ne l’ont popularisé qu’au 20e siècle."},
+{a:["Le manchot papou séduit sa partenaire en lui offrant un beau caillou.","Les cailloux servent aussi à construire le nid des manchots papous.","Les manchots offrent des bouquets de fleurs à leur partenaire."],m:2,e:"Le mensonge : pas de fleurs en Antarctique — mais de très sérieux cailloux ! Le mâle papou choisit et offre une belle pierre, qui servira aussi au nid du couple."},
+{a:["Les loutres de mer dorment en se tenant par la patte pour ne pas dériver.","La loutre de mer garde souvent un caillou favori dans un repli de peau, comme une poche.","Les loutres de mer vivent dans les déserts d’Australie."],m:2,e:"Le mensonge : les loutres de mer vivent dans l’océan Pacifique Nord, pas dans un désert. Elles se tiennent par la patte en dormant et plusieurs gardent précieusement leur caillou-outil préféré."},
+{a:["Des algues vivent dans la fourrure du paresseux et lui donnent une teinte verdâtre.","La digestion d’un repas peut prendre jusqu’à un mois chez le paresseux.","Le paresseux est plus rapide que le guépard sur de courtes distances."],m:2,e:"Le mensonge : le paresseux est l’un des animaux les plus lents du monde — le guépard n’a rien à craindre ! En échange, son pelage-jardin plein d’algues le camoufle dans les arbres."},
+{a:["Le panda roux se dresse parfois sur ses pattes arrière, bras levés, pour paraître plus grand.","La longue queue du panda roux lui sert de couverture par temps froid.","Le panda roux est simplement un bébé panda géant."],m:2,e:"Le mensonge : le panda roux est une espèce à part entière, pas un bébé panda. Il se dresse bien, bras en l’air, pour impressionner — et s’enroule dans sa queue quand il fait froid."},
+{a:["Des études montrent que le renard utilise le champ magnétique terrestre pour bondir sur des proies cachées sous la neige.","Le renard produit des dizaines de sons différents pour communiquer.","Le renard vit toujours en meute d’une trentaine d’individus, comme le loup."],m:2,e:"Le mensonge : le renard est plutôt solitaire ou en petit groupe familial. Pour chasser sous la neige, il s’oriente avec le champ magnétique — un vrai compas interne."},
+{a:["Un chat passe environ les deux tiers de sa vie à dormir.","Le chat possède plus de 200 millions de récepteurs d’odeurs dans le nez.","Les chats voient parfaitement dans le noir total."],m:2,e:"Le mensonge : dans l’obscurité totale, même un chat ne voit rien — il lui faut un minimum de lumière, qu’il exploite bien mieux que nous. Et oui, il passe sa vie à dormir, ou presque."},
+{a:["L’empreinte du nez du chien est unique, comme une empreinte digitale.","Le chien perçoit des odeurs que l’humain est incapable de détecter.","Les chiens voient le monde uniquement en noir et blanc."],m:2,e:"Le mensonge : les chiens voient certaines couleurs, surtout le bleu et le jaune. Leur super-pouvoir, c’est le nez — à l’empreinte unique pour chaque chien."},
+{a:["Les moutons peuvent reconnaître et se souvenir des visages d’autres moutons et d’humains.","Les moutons peuvent se souvenir de certains visages pendant plus de deux ans.","Les moutons sont incapables de reconnaître leur propre berger."],m:2,e:"Le mensonge : les moutons reconnaissent très bien leur berger — les études montrent qu’ils identifient des dizaines de visages et s’en souviennent des années. Pas si « moutons » que ça !"},
+{a:["Les poules connaissent une phase de sommeil avec rêves, comme les humains.","La poule communique avec ses poussins avant même qu’ils éclosent.","Les poules sont absolument incapables de voler, même un peu."],m:2,e:"Le mensonge : une poule peut voler sur de courtes distances — quelques mètres, assez pour se percher. Elle « parle » bien à ses poussins à travers la coquille, et elle rêve pendant son sommeil."},
+{a:["Le bourdonnement de l’abeille vient de ses ailes, qui battent environ 200 fois par seconde.","Les abeilles voient la lumière ultraviolette, invisible pour nous.","Les abeilles produisent leur bourdonnement en chantant avec leur bouche."],m:2,e:"Le mensonge : pas de chant — le « bzz » vient des ailes qui brassent l’air environ 200 fois par seconde. Les abeilles voient bien l’ultraviolet, qui guide vers le cœur des fleurs."},
+{a:["Les papillons goûtent avec leurs pattes.","Plusieurs papillons voient des couleurs ultraviolettes que nous ne voyons pas.","Tous les papillons vivent exactement une journée."],m:2,e:"Le mensonge : la plupart vivent des semaines, certains des mois — le monarque traverse même le continent. Goûter avec leurs pattes leur dit si une feuille est bonne pour leurs chenilles."},
+{a:["La grenouille des bois, présente au Québec, peut survivre en étant partiellement gelée l’hiver.","Les grenouilles absorbent l’eau par leur peau plutôt que de la boire par la bouche.","Toutes les grenouilles du monde sont vertes."],m:2,e:"Le mensonge : il existe des grenouilles brunes, rouges, bleues, jaunes… La grenouille des bois d’ici survit bien à un gel partiel, son cœur arrêté, jusqu’au dégel du printemps."},
+{a:["On avale en moyenne huit araignées par année pendant notre sommeil.","Les araignées ne mâchent pas : elles liquéfient leur nourriture avant de l’avaler.","La soie d’araignée est, à poids égal, plus résistante que l’acier."],m:0,e:"Le mensonge : avaler huit araignées par an en dormant est une légende urbaine — les araignées évitent les humains qui respirent et ronflent. En revanche, elles liquéfient bel et bien leurs proies, et leur soie est plus résistante que l’acier à poids égal."},
+{a:["L’escargot possède des milliers de minuscules dents sur sa langue râpeuse.","La coquille de l’escargot de jardin grandit en spirale avec l’âge.","L’escargot n’a aucune dent et avale tout rond."],m:2,e:"Le mensonge : l’escargot a des milliers de dents minuscules sur sa « langue » râpeuse (la radula) — certains en ont plus de 10 000 ! De quoi râper ses feuilles avec application."},
+{a:["Le porc-épic ne peut PAS projeter ses piquants : ils se détachent seulement au contact.","Les piquants du porc-épic sont des poils modifiés remplis de kératine.","Le porc-épic tire ses piquants comme des flèches quand il a peur."],m:2,e:"Le mensonge : aucun tir de piquants — c’est un mythe tenace. Les piquants se détachent facilement dans la peau de l’attaquant qui touche le porc-épic, ce qui suffit amplement."},
+{a:["Avant de vaporiser, la mouffette avertit : elle tape du pied et se cabre.","Le liquide de la mouffette peut être projeté à environ trois mètres.","Un bain de jus de tomate fait disparaître complètement et instantanément l’odeur de mouffette."],m:2,e:"Le mensonge : le jus de tomate masque surtout l’odeur pour notre nez, sans vraiment la neutraliser. La mouffette, elle, avertit poliment avant de tirer son jet redoutable, à quelques mètres."},
+{a:["Quand le raton laveur « lave » sa nourriture, c’est en partie pour mieux la sentir au toucher, pattes mouillées.","Les pattes avant du raton laveur sont extrêmement sensibles.","Le raton laveur lave sa nourriture parce qu’il est obsédé par la propreté."],m:2,e:"Le mensonge : ce n’est pas un maniaque du ménage ! Mouiller ses pattes rend ses doigts encore plus sensibles, et il « inspecte » sa nourriture au toucher — dans la nature, il manipule souvent sa nourriture près de l’eau."},
+{a:["L’écureuil gris ne tombe pas en hibernation profonde : il reste actif l’hiver.","En oubliant une partie de ses caches de graines, l’écureuil aide à planter des arbres.","L’écureuil gris dort tout l’hiver, de novembre à avril, sans jamais se réveiller."],m:2,e:"Le mensonge : l’écureuil gris ne fait pas de vraie hibernation ; il sort tout l’hiver les jours doux. Ses caches oubliées deviennent de futurs chênes et noyers — un jardinier malgré lui."},
+{a:["Les corbeaux peuvent reconnaître les visages humains et s’en souvenir pendant des années.","Les corbeaux utilisent et fabriquent des outils.","Un corbeau oublie un visage après une journée."],m:2,e:"Le mensonge : des expériences montrent que les corbeaux reconnaissent un visage « dangereux » des années plus tard et avertissent les autres. Et ils se servent d’outils avec une habileté remarquable."},
+{a:["Les pommes de terre ont été parmi les premiers légumes cultivés dans l’espace, en 1995.","La pomme de terre vient des Andes, en Amérique du Sud.","Botaniquement, la pomme de terre est un fruit."],m:2,e:"Le mensonge : le tubercule qu’on mange est une tige souterraine, pas un fruit. La patate, née dans les Andes, a même poussé à bord de la navette Columbia en 1995."},
+{a:["Le chocolat était consommé comme boisson amère en Mésoamérique bien avant l’arrivée des Européens.","Les fèves de cacao ont servi de monnaie dans certaines civilisations mésoaméricaines.","Le chocolat blanc contient autant de poudre de cacao que le chocolat noir."],m:2,e:"Le mensonge : le chocolat blanc ne contient pas de poudre de cacao — seulement du beurre de cacao, du sucre et du lait. Le chocolat des Mayas et des Aztèques était une boisson amère et épicée, et ses fèves valaient de l’argent."},
+{a:["Le caféier produit des fruits rouges appelés cerises de café.","Le grain de café est en fait la graine du fruit du caféier.","Le grain de café est une sorte de noix qui pousse sur un noyer tropical."],m:2,e:"Le mensonge : pas de noix ni de noyer — chaque cerise de café renferme en général deux graines : ce sont les fameux « grains ». Le café est donc, au départ, un fruit."},
+{a:["Le thé est la boisson la plus consommée au monde après l’eau.","Le thé vient à l’origine de Chine, où on le boit depuis des milliers d’années.","Le thé a été inventé en Angleterre au Moyen Âge."],m:2,e:"Le mensonge : l’Angleterre a adopté le thé bien tard (au 17e siècle) ; il se boit en Chine depuis des millénaires. Après l’eau, c’est la boisson la plus populaire de la planète."},
+{a:["Le melon d’eau contient environ 92 % d’eau.","Le melon d’eau pousse sur une plante rampante, comme un gros melon.","Le melon d’eau est un légume-racine qui pousse sous la terre."],m:2,e:"Le mensonge : le melon d’eau pousse au soleil, sur une vigne rampante au sol — pas sous la terre. Composé à 92 % d’eau, c’est le fruit d’été désaltérant par excellence."},
+{a:["La citrouille est, botaniquement, un fruit.","Les graines de citrouille se mangent et sont nutritives.","Les citrouilles poussent dans les arbres, comme les pommes."],m:2,e:"Le mensonge : la citrouille pousse au sol, sur une plante rampante. Comme elle naît d’une fleur et contient les graines, les botanistes la classent parmi les fruits."},
+{a:["Un épi de maïs compte presque toujours un nombre pair de rangées de grains.","Un épi de maïs contient en moyenne environ 800 grains.","Le maïs doux pousse naturellement sous l’eau, comme une algue."],m:2,e:"Le mensonge : le maïs pousse en plein champ, au soleil — pas sous l’eau. Comptez les rangées d’un épi : elles sont presque toujours en nombre pair, avec environ 800 grains."}
+];
+
+
+/* ---------- V2 : 55 NOUVEAUX ENSEMBLES PAR CATÉGORIE (faits vérifiés, 2026-10-21) ---------- */
+var HIST2 = [
+{a:["Trois-Rivières a été fondée en 1634.","Le nom de Trois-Rivières vient des chenaux que forme la rivière Saint-Maurice en arrivant au fleuve.","Trois-Rivières a été fondée 26 ans avant la ville de Québec."],m:2,e:"Le mensonge : Trois-Rivières (1634) est plus jeune que Québec (1608), pas l’inverse. Son nom vient bien des trois chenaux de la rivière Saint-Maurice."},
+{a:["L’Habitation de Port-Royal se trouvait dans l’actuelle province de Québec.","L’Habitation de Port-Royal a été construite en 1605 en Acadie, par l’équipe de Pierre Dugua de Mons et Samuel de Champlain.","L’Ordre du Bon Temps, fondé à Port-Royal en 1606, organisait de joyeux festins pour garder le moral pendant l’hiver."],m:0,e:"Le mensonge : Port-Royal se trouvait en Acadie, dans l’actuelle Nouvelle-Écosse — pas dans le Québec actuel. L’Habitation date bien de 1605, et l’Ordre du Bon Temps réchauffait bien les hivers de 1606-1607."},
+{a:["Marie de l’Incarnation est arrivée à Québec en 1639 avec les Ursulines.","Les Ursulines ont fondé à Québec une école pour les filles, françaises et autochtones.","Les Ursulines sont arrivées en Nouvelle-France en 1739, un siècle après la fondation de Montréal."],m:2,e:"Le mensonge : les Ursulines sont arrivées en 1639, pas en 1739. Marie de l’Incarnation a bien fondé une école pour filles à Québec dès les débuts de la colonie."},
+{a:["Le premier recensement du Canada a été mené en 1666 par l’intendant Jean Talon.","Ce recensement a compté un peu plus de 3 200 habitants en Nouvelle-France.","Jean Talon a mené son premier recensement en 1766, après la conquête britannique."],m:2,e:"Le mensonge : le recensement de Talon date de 1666, un siècle plus tôt. Il a compté environ 3 215 habitants — toute la Nouvelle-France tenait dans un gros village d’aujourd’hui !"},
+{a:["La Compagnie des Cent-Associés a été fondée en 1627 pour coloniser la Nouvelle-France.","Le cardinal Richelieu est à l’origine de la Compagnie des Cent-Associés.","La Compagnie des Cent-Associés était une entreprise anglaise rivale de la France."],m:2,e:"Le mensonge : c’était une compagnie française, créée sous l’impulsion de Richelieu en 1627. Elle devait peupler et développer la Nouvelle-France en échange du commerce des fourrures."},
+{a:["En 1497, Jean Cabot a atteint la côte de l’Amérique du Nord pour le compte de l’Angleterre.","Jean Cabot est le nom francisé de l’explorateur italien Giovanni Caboto.","Jean Cabot a fondé la ville de Québec lors de son voyage de 1497."],m:2,e:"Le mensonge : Cabot n’a fondé aucune ville ; il a atteint la côte nord-américaine en 1497 pour l’Angleterre. Québec ne sera fondée qu’en 1608, par Champlain."},
+{a:["Le navigateur anglais Henry Hudson a exploré en 1610 la grande baie qui porte aujourd’hui son nom.","En 1611, une partie de l’équipage d’Hudson s’est mutinée et l’a abandonné en mer avec quelques hommes.","La baie d’Hudson a été nommée en l’honneur de Samuel de Champlain."],m:2,e:"Le mensonge : la baie porte le nom d’Henry Hudson lui-même, qui l’a explorée en 1610 avant de disparaître après la mutinerie de 1611."},
+{a:["L’Acte de Québec de 1774 a garanti le libre exercice de la religion catholique dans la colonie.","L’Acte de Québec de 1774 a redonné au droit civil français une place officielle.","L’Acte de Québec de 1774 a interdit complètement l’usage de la langue française."],m:2,e:"Le mensonge : l’Acte de 1774 n’a rien interdit du tout — il a au contraire protégé la religion catholique et le droit civil français, et agrandi le territoire du Québec de l’époque."},
+{a:["La Proclamation royale de 1763 a reconnu que les terres des nations autochtones ne pouvaient être cédées qu’à la Couronne, par traité.","La Proclamation royale de 1763 a été émise par le roi George III après la guerre de Sept Ans.","La Proclamation royale de 1763 a été signée par le président des États-Unis."],m:2,e:"Le mensonge : les États-Unis n’existaient pas encore en 1763 ! La Proclamation venait du roi George III de Grande-Bretagne, et son principe de cession par traité structure encore le droit canadien."},
+{a:["Louis-Joseph Papineau a été le chef du Parti patriote dans le Bas-Canada.","La bataille de Saint-Eustache, en décembre 1837, a été un moment tragique des rébellions des Patriotes.","Après les rébellions, Louis-Joseph Papineau est devenu le premier premier ministre du Canada."],m:2,e:"Le mensonge : Papineau s’est exilé, puis est revenu comme député, mais il n’a jamais été premier ministre du Canada. Il reste le grand chef des Patriotes de 1837-1838."},
+{a:["L’Acte d’Union de 1840 a réuni le Haut-Canada et le Bas-Canada en une seule province.","Kingston a été la première capitale de la province unie du Canada, en 1841.","Ottawa est devenue la capitale dès 1841, au moment de l’Union."],m:2,e:"Le mensonge : la première capitale de la province unie a été Kingston (1841), puis Montréal, avant qu’Ottawa ne soit choisie par la reine Victoria en 1857."},
+{a:["En 1848, les Canadiens ont obtenu un gouvernement responsable : les ministres devaient avoir la confiance des députés élus.","Louis-Hippolyte LaFontaine et Robert Baldwin ont été les grands artisans du gouvernement responsable.","Le gouvernement responsable est arrivé au Canada en 1967, pour le centenaire du pays."],m:2,e:"Le mensonge : c’est en 1848, pas en 1967. LaFontaine et Baldwin ont obtenu que le gouvernement soit dirigé par des élus d’ici plutôt que par des gouverneurs imposés."},
+{a:["Quatre provinces ont formé le Canada en 1867 : l’Ontario, le Québec, le Nouveau-Brunswick et la Nouvelle-Écosse.","Le Manitoba faisait partie des quatre provinces fondatrices de 1867.","La conférence qui a préparé la Confédération à Charlottetown a eu lieu en 1864."],m:1,e:"Le mensonge : le Manitoba n’était pas là en 1867 — il n’a été créé qu’en 1870. Les quatre fondatrices sont bien l’Ontario, le Québec, le Nouveau-Brunswick et la Nouvelle-Écosse."},
+{a:["Le Manitoba a été créé en 1870, à la suite des négociations menées par le gouvernement provisoire de Louis Riel.","Louis Riel a été exécuté à Regina en 1885, après la rébellion du Nord-Ouest.","Louis Riel a été le premier premier ministre du Manitoba."],m:2,e:"Le mensonge : Riel a dirigé un gouvernement provisoire des Métis, mais il n’a jamais été premier ministre du Manitoba. Il a été pendu à Regina en 1885, un événement qui a marqué tout le pays."},
+{a:["Terre-Neuve est devenue la dixième province du Canada en 1949.","Joey Smallwood a été le premier premier ministre de Terre-Neuve comme province canadienne.","Terre-Neuve faisait partie du Canada dès 1867, comme le Québec et l’Ontario."],m:2,e:"Le mensonge : Terre-Neuve est restée un dominion séparé pendant plus de 80 ans et ne s’est jointe au Canada qu’en 1949, avec Joey Smallwood comme premier premier ministre provincial."},
+{a:["La conférence de Charlottetown, en 1864, a lancé le projet de la Confédération canadienne.","L’Île-du-Prince-Édouard ne s’est jointe au Canada qu’en 1873, six ans après les autres.","L’Île-du-Prince-Édouard était une province fondatrice du Canada en 1867."],m:2,e:"Le mensonge : l’île a accueilli la conférence de 1864, mais elle a hésité et ne s’est jointe au Canada qu’en 1873. On la surnomme quand même le « berceau de la Confédération »."},
+{a:["La Colombie-Britannique s’est jointe au Canada en 1871.","Ottawa avait promis à la Colombie-Britannique un chemin de fer la reliant au reste du pays.","La Colombie-Britannique est devenue une province en 1905, en même temps que l’Alberta."],m:2,e:"Le mensonge : c’est en 1871, pas en 1905. La promesse du chemin de fer transcontinental a convaincu la colonie du Pacifique de se joindre au Canada."},
+{a:["L’Alberta et la Saskatchewan ont été créées comme provinces en 1905.","Avant 1905, le territoire de l’Alberta et de la Saskatchewan faisait partie des Territoires du Nord-Ouest.","L’Alberta et la Saskatchewan sont des provinces fondatrices de 1867."],m:2,e:"Le mensonge : en 1867, ces terres faisaient partie des Territoires du Nord-Ouest. Elles ne sont devenues des provinces qu’en 1905."},
+{a:["Le Yukon est devenu un territoire distinct en 1898, en pleine ruée vers l’or du Klondike.","Whitehorse est la capitale du Yukon.","Le Yukon est une province du Canada depuis 1898."],m:2,e:"Le mensonge : le Yukon est un territoire, pas une province. Il a été détaché des Territoires du Nord-Ouest en 1898 pour administrer la ruée vers l’or."},
+{a:["Le Nunavut a été créé le 1er avril 1999.","Iqaluit est la capitale du Nunavut.","Le Nunavut a été créé en 1949, la même année que l’entrée de Terre-Neuve dans le Canada."],m:2,e:"Le mensonge : le Nunavut date de 1999 — un demi-siècle après Terre-Neuve. C’est le plus jeune et le plus vaste des territoires et provinces du Canada."},
+{a:["La Loi sur la citoyenneté canadienne, entrée en vigueur en 1947, a créé pour la première fois un statut de citoyen canadien distinct.","Avant 1947, les Canadiens étaient juridiquement des sujets britanniques.","La citoyenneté canadienne distincte existe depuis la Confédération de 1867."],m:2,e:"Le mensonge : avant 1947, on était sujet britannique né au Canada, sans citoyenneté canadienne propre. Le Canada a été le premier pays du Commonwealth à créer la sienne."},
+{a:["En 1929, le plus haut tribunal de l’époque a jugé que les femmes étaient des « personnes » au sens de la loi, pouvant siéger au Sénat.","Les cinq Albertaines derrière cette victoire sont surnommées les « Cinq femmes célèbres » (Famous Five).","C’est en 1929 que les Canadiennes ont voté pour la toute première fois de leur histoire."],m:2,e:"Le mensonge : des Canadiennes votaient déjà avant 1929 — dès 1916 dans certaines provinces et en 1918 au fédéral. L’affaire « Personnes » de 1929 ouvrait plutôt la porte du Sénat."},
+{a:["Agnes Macphail est devenue en 1921 la première femme élue députée à la Chambre des communes du Canada.","Agnes Macphail représentait une circonscription de l’Ontario.","Agnes Macphail a été la première femme première ministre du Canada."],m:2,e:"Le mensonge : Macphail a été la première femme députée fédérale (1921), pas première ministre. La première femme à diriger le pays, Kim Campbell, est arrivée bien plus tard, en 1993."},
+{a:["Le Manitoba a été la première province à accorder le droit de vote aux femmes, en 1916.","En 1918, la plupart des femmes canadiennes ont obtenu le droit de voter aux élections fédérales.","Le Québec a été la première province à accorder le droit de vote aux femmes, en 1916."],m:2,e:"Le mensonge : la première province a été le Manitoba, en 1916. Le Québec a été le dernier, en 1940 — un contraste souvent souligné dans les cours d’histoire."},
+{a:["L’armistice de la Première Guerre mondiale est entré en vigueur le 11 novembre 1918.","Plus de 600 000 Canadiens ont servi en uniforme pendant la Première Guerre mondiale.","La bataille de la crête de Vimy a eu lieu en 1915, au début de la guerre."],m:2,e:"Le mensonge : Vimy, c’est avril 1917. L’armistice du 11 novembre 1918 a mis fin aux combats d’une guerre où plus de 600 000 Canadiens avaient servi."},
+{a:["Le Canada a déclaré la guerre à l’Allemagne le 10 septembre 1939, par une décision de son propre Parlement.","Le Canada a déclaré la guerre une semaine après le Royaume-Uni, pour affirmer son autonomie.","Le Canada a déclaré la guerre à l’Allemagne le même jour que le Royaume-Uni, le 3 septembre 1939."],m:2,e:"Le mensonge : Ottawa a attendu une semaine et a déclaré la guerre le 10 septembre 1939, par un vote du Parlement canadien — une première qui comptait, symboliquement."},
+{a:["Le raid de Dieppe, le 19 août 1942, comptait une majorité de soldats canadiens.","Le raid de Dieppe a coûté très cher en vies et en prisonniers, surtout aux Canadiens.","Le raid de Dieppe a eu lieu sur les côtes de l’Italie."],m:2,e:"Le mensonge : Dieppe se trouve en France, sur la Manche. Le raid de 1942, mené surtout par des Canadiens, a été un désastre coûteux, mais ses leçons ont servi au jour J."},
+{a:["Des soldats canadiens ont combattu en Sicile à partir de juillet 1943.","La bataille d’Ortona, en décembre 1943, a opposé les Canadiens aux troupes allemandes en Italie.","Ortona est une ville de France libérée par les Canadiens en 1944."],m:2,e:"Le mensonge : Ortona est en Italie, sur la mer Adriatique. Les Canadiens y ont livré une bataille de rue acharnée pendant les Fêtes de 1943."},
+{a:["Billy Bishop, as de l’aviation de la Première Guerre mondiale, était canadien.","Billy Bishop est né à Owen Sound, en Ontario.","Billy Bishop a piloté un module lunaire pour la NASA dans les années 1960."],m:2,e:"Le mensonge : Bishop est un héros de 1914-1918, mort en 1956 — bien avant les missions lunaires ! Il reste l’as canadien le plus célèbre de la Première Guerre mondiale."},
+{a:["Le Plan d’entraînement aérien du Commonwealth britannique, pendant la Seconde Guerre mondiale, était basé au Canada.","Plus de 130 000 membres d’équipage d’avion ont été formés au Canada dans le cadre de ce plan.","Ce plan d’entraînement formait surtout des marins pour la bataille de l’Atlantique."],m:2,e:"Le mensonge : c’était un plan d’entraînement AÉRIEN — pilotes, navigateurs, mitrailleurs — installé au Canada, loin des bombardements, et qui a formé plus de 130 000 aviateurs."},
+{a:["La princesse Margriet des Pays-Bas est née à Ottawa en 1943, pendant l’exil de la famille royale néerlandaise.","Chaque printemps, les Pays-Bas envoient des tulipes à Ottawa en signe de gratitude pour l’accueil et la libération de leur pays.","Les fameuses tulipes d’Ottawa sont un cadeau annuel du Japon."],m:2,e:"Le mensonge : ce sont les Pays-Bas qui envoient les tulipes, en remerciement de l’hospitalité canadienne pendant la guerre — et du rôle des Canadiens dans la libération du pays en 1945."},
+{a:["Des bombardiers Lancaster ont été construits au Canada, en Ontario, pendant la Seconde Guerre mondiale.","L’usine de Malton, près de Toronto, produisait des Lancaster pour l’effort de guerre.","Les Lancaster canadiens étaient construits à Vancouver, en Colombie-Britannique."],m:2,e:"Le mensonge : ils sortaient de Malton, en Ontario, chez Victory Aircraft. Plus d’un millier de Lancaster y ont été construits par des équipes canadiennes."},
+{a:["Le 11 septembre 2001, 38 avions ont été déroutés vers Gander, à Terre-Neuve, lors de l’opération Ruban jaune.","Les habitants de Gander et des villages voisins ont accueilli environ 6 700 passagers bloqués pendant plusieurs jours.","Plus de 200 avions ont été déroutés vers Gander le 11 septembre 2001."],m:2,e:"Le mensonge : 38 avions, pas 200 — mais pour une petite ville de moins de 10 000 habitants, accueillir 6 700 passagers d’un coup restait un exploit d’entraide devenu célèbre."},
+{a:["La Révolution tranquille a débuté au Québec avec l’élection de Jean Lesage en 1960.","Le slogan associé à la Révolution tranquille et à la nationalisation de l’électricité était « Maîtres chez nous ».","La Révolution tranquille s’est déroulée au Québec au 19e siècle, sous le régime seigneurial."],m:2,e:"Le mensonge : la Révolution tranquille, c’est les années 1960 — modernisation de l’État québécois, éducation, santé et électricité publique, un siècle après le régime seigneurial."},
+{a:["Hydro-Québec a été créée en 1944.","Le barrage Daniel-Johnson, à Manic-5, est le plus grand barrage à voûtes multiples du monde.","Le barrage Daniel-Johnson se trouve en Ontario, sur la rivière des Outaouais."],m:2,e:"Le mensonge : Manic-5 est au Québec, sur la rivière Manicouagan, au nord de Baie-Comeau. Son mur immense en arcs de béton est une fierté d’ingénierie québécoise."},
+{a:["La Charte de la langue française, surnommée loi 101, a été adoptée au Québec en 1977.","Le ministre Camille Laurin a été le principal artisan de la loi 101.","La loi 101 a interdit complètement de parler anglais au Québec, même à la maison."],m:2,e:"Le mensonge : la loi 101 a fait du français la langue officielle et normale du travail, de l’enseignement et de l’affichage — elle n’a jamais interdit de parler anglais chez soi."},
+{a:["Au référendum de 1980, le Non a remporté environ 60 % des votes au Québec.","Au référendum de 1995, le Non l’a emporté par une marge très mince, environ 50,6 % contre 49,4 %.","Au référendum de 1995, le Oui a gagné par exactement une seule voix."],m:2,e:"Le mensonge : en 1995, c’est le Non qui a gagné, par environ 54 000 voix d’écart sur plus de 4,6 millions de votes — très serré, mais pas une seule voix !"},
+{a:["Le métro de Montréal a été inauguré en 1966, juste avant l’Expo 67.","Les rames du métro de Montréal roulent sur des pneus de caoutchouc, une technique inspirée de Paris.","Le métro de Montréal a été inauguré en 1976, pour les Jeux olympiques."],m:2,e:"Le mensonge : le métro a ouvert en 1966, dix ans avant les Jeux — à temps pour l’Expo 67. Ses trains sur pneus sont une de ses signatures."},
+{a:["La tour du Stade olympique de Montréal est la plus haute tour inclinée du monde, avec ses 165 mètres.","La tour du Stade olympique penche à un angle d’environ 45 degrés.","La tour du Stade olympique est parfaitement verticale, comme celle du CN à Toronto."],m:2,e:"Le mensonge : elle penche bel et bien, à environ 45 degrés — c’est même le record mondial pour une tour inclinée. Elle n’a été achevée qu’en 1987, après les Jeux."},
+{a:["Le pont Jacques-Cartier, à Montréal, a été inauguré en 1930.","À son ouverture, le pont Jacques-Cartier s’appelait le pont du Havre.","Le pont Jacques-Cartier a été inauguré en 1967, pour le centenaire du Canada."],m:2,e:"Le mensonge : il date de 1930 et s’appelait d’abord pont du Havre. On l’a renommé en l’honneur de Jacques Cartier en 1934, 400 ans après son premier voyage."},
+{a:["Le pont de Québec s’est effondré deux fois pendant sa construction, en 1907 et en 1916.","Le pont de Québec détient toujours le record de la plus longue travée de pont cantilever au monde.","Le pont de Québec a été terminé sans aucun accident grave."],m:2,e:"Le mensonge : sa construction a été marquée par deux effondrements tragiques qui ont coûté des dizaines de vies. Achevé en 1917, il reste le champion mondial des travées cantilever."},
+{a:["Le canal Rideau, entre Ottawa et Kingston, a été achevé en 1832.","Le canal Rideau a été construit sous la direction du lieutenant-colonel John By.","Le canal Rideau relie Montréal à Vancouver par voie d’eau intérieure."],m:2,e:"Le mensonge : le canal Rideau relie Ottawa à Kingston, en Ontario — un ouvrage de 202 kilomètres, pas une voie transcontinentale ! L’hiver, un tronçon devient la plus grande patinoire naturelle du monde."},
+{a:["Lors de l’incendie du Parlement d’Ottawa en 1916, la bibliothèque a été sauvée parce qu’on a fermé ses portes de fer à temps.","La tour de la Paix, à Ottawa, a été inaugurée en 1927, en mémoire des soldats morts à la Première Guerre mondiale.","L’incendie de 1916 a détruit la Bibliothèque du Parlement et tous ses livres."],m:2,e:"Le mensonge : la bibliothèque a survécu grâce à ses portes de fer fermées au bon moment — c’est le seul bâtiment d’origine encore debout sur la colline du Parlement."},
+{a:["Le Vieux-Québec a été inscrit au patrimoine mondial de l’UNESCO en 1985.","Québec est la seule ville d’Amérique du Nord, au nord du Mexique, dont les fortifications d’origine existent encore.","Les remparts de Québec ont été entièrement démolis en 1871 et n’existent plus."],m:2,e:"Le mensonge : les remparts existent toujours — ils font la fierté du Vieux-Québec, reconnu par l’UNESCO en 1985. Quelques portes ont été modifiées, mais l’enceinte est bien là."},
+{a:["Le Château Frontenac, à Québec, a ouvert ses portes en 1893.","Le Château Frontenac a été construit par la compagnie de chemin de fer du Canadien Pacifique.","Le Château Frontenac a été construit par Samuel de Champlain comme résidence personnelle."],m:2,e:"Le mensonge : Champlain est mort en 1635, plus de 250 ans avant l’ouverture de l’hôtel ! Le Château, bâti par le Canadien Pacifique, porte le nom du comte de Frontenac, gouverneur de la Nouvelle-France."},
+{a:["La Citadelle de Québec, en forme d’étoile, a été construite par les Britanniques au 19e siècle.","La Citadelle de Québec abrite une résidence officielle du gouverneur général du Canada.","La Citadelle de Québec a été construite par les Français en 1608, l’année de la fondation."],m:2,e:"Le mensonge : la forteresse en étoile actuelle est britannique, construite entre 1820 et 1850. Elle accueille toujours le Royal 22e Régiment et une résidence du gouverneur général."},
+{a:["L’Oratoire Saint-Joseph du Mont-Royal, à Montréal, a été fondé par le frère André en 1904.","L’Oratoire Saint-Joseph est l’église la plus élevée du Canada.","Le frère André a été le premier premier ministre du Québec."],m:2,e:"Le mensonge : le frère André était un religieux portier réputé pour son accueil, pas un premier ministre. Son petit oratoire de 1904 est devenu l’immense basilique qu’on voit aujourd’hui."},
+{a:["Le Jardin botanique de Montréal a été fondé en 1931 par le frère Marie-Victorin.","Le Biodôme de Montréal a ouvert en 1992 dans l’ancien vélodrome des Jeux olympiques de 1976.","Le Biodôme de Montréal a été construit dans une ancienne mine de cuivre."],m:2,e:"Le mensonge : le Biodôme occupe l’ancien vélodrome olympique, recyclé en écosystèmes intérieurs — aucune mine là-dessous ! Le Jardin botanique voisin date bien de 1931."},
+{a:["La télévision de Radio-Canada a commencé ses émissions à Montréal en 1952.","La station montréalaise CBFT a été la première station de télévision au Canada.","La télévision est arrivée au Canada en 1962, dix ans après les États-Unis et l’Europe."],m:2,e:"Le mensonge : c’est 1952, pas 1962. CBFT Montréal a été la toute première station canadienne, suivie de près par celle de Toronto."},
+{a:["Le Canada a accueilli les Jeux olympiques d’hiver à Calgary en 1988 et à Vancouver en 2010.","Aux Jeux de Vancouver en 2010, le Canada a terminé premier pour les médailles d’or, avec 14 titres.","Le Canada a remporté le tournoi masculin de hockey aux Jeux de Calgary en 1988."],m:2,e:"Le mensonge : en 1988, l’or en hockey masculin est allé à l’Union soviétique ; le Canada a fini quatrième. En 2010, par contre, le Canada a gagné l’or en hockey ET dominé le tableau des médailles d’or."},
+{a:["La première coupe Grey a été disputée en 1909.","Le trophée de la coupe Grey a été offert par le gouverneur général Earl Grey.","La coupe Grey récompense les champions canadiens de soccer."],m:2,e:"Le mensonge : la coupe Grey, c’est le championnat de FOOTBALL canadien, pas le soccer. Le premier match a eu lieu en 1909, gagné par l’Université de Toronto."},
+{a:["La crosse est un sport d’origine autochtone, pratiqué depuis des siècles en Amérique du Nord.","Depuis 1994, une loi fédérale reconnaît la crosse comme le sport national d’été du Canada et le hockey comme celui d’hiver.","La crosse a été inventée en Écosse, comme le golf et le curling."],m:2,e:"Le mensonge : la crosse vient des peuples autochtones d’Amérique du Nord, bien avant l’arrivée des Européens. Le Canada l’a reconnue comme sport national d’été en 1994."},
+{a:["L’ingénieur canadien John Hopps a mis au point à Toronto, vers 1950, un des premiers stimulateurs cardiaques externes (pacemakers).","Les travaux de John Hopps ont préparé le terrain pour les stimulateurs cardiaques implantables modernes.","John Hopps est surtout connu comme le concepteur du Canadarm."],m:2,e:"Le mensonge : le Canadarm, c’est une autre équipe, trente ans plus tard. Hopps, lui, a branché la cardiologie moderne avec son stimulateur externe vers 1950."},
+{a:["Alexander Graham Bell a mené plusieurs de ses expériences sur le téléphone à Brantford, en Ontario.","Brantford est surnommée la « ville du téléphone » en souvenir des travaux de Bell.","Le premier appel téléphonique de l’histoire a eu lieu entre Montréal et la ville de Québec."],m:2,e:"Le mensonge : les premiers appels de Bell ont eu lieu entre Brantford et Paris, en Ontario, en 1876 — pas entre Montréal et Québec. La famille Bell vivait à Brantford, où leur maison est devenue un musée."},
+{a:["La ville de Trois-Rivières possède l’un des plus vieux quartiers industriels du Canada, les Forges du Saint-Maurice, où l’on a produit du fer dès 1738.","Les Forges du Saint-Maurice, près de Trois-Rivières, ont été la première entreprise sidérurgique du Canada.","Les Forges du Saint-Maurice produisaient des automobiles dès 1750."],m:2,e:"Le mensonge : on y fondait du fer — poêles, boulets et outils — dès 1738, pas des automobiles, qui n’existaient pas encore ! Ce site industriel pionnier a fonctionné pendant environ 150 ans."}
+];
+var INUS2 = [
+{a:["La longue défense du narval est en fait une dent — sa canine gauche — qui pousse en spirale à travers sa lèvre.","Le narval vit dans les eaux arctiques, notamment dans le nord du Canada.","Le narval est surnommé la « licorne des mers » à cause de sa défense, mais c’est un poisson."],m:2,e:"Le mensonge : le narval est un mammifère marin, cousin du béluga — pas un poisson ! Sa « corne » est bien une dent en spirale qui peut dépasser deux mètres."},
+{a:["Le béluga est surnommé le « canari des mers » parce qu’il produit une grande variété de sons.","Le béluga peut nager à reculons, ce qui est rare chez les baleines.","Le béluga est le plus gros animal terrestre du Canada."],m:2,e:"Le mensonge : le béluga est un mammifère marin de taille moyenne — rien à voir avec un géant terrestre. Son surnom de canari vient de ses sifflements, clics et chants variés."},
+{a:["Chez le caribou, les femelles portent des bois, ce qui est exceptionnel chez les cervidés.","Le caribou d’Amérique du Nord et le renne d’Eurasie appartiennent à la même espèce.","Le caribou hiberne tout l’hiver, comme l’ours noir, sans jamais sortir."],m:2,e:"Le mensonge : le caribou reste actif tout l’hiver — il gratte la neige pour trouver le lichen dont il se nourrit. Et oui, madame caribou porte des bois, elle aussi !"},
+{a:["Le bison d’Amérique est le plus gros mammifère terrestre de l’Amérique du Nord.","La bosse du bison est faite de muscles puissants qui soutiennent sa lourde tête.","Le bison d’Amérique et le buffle d’Afrique sont exactement la même espèce."],m:2,e:"Le mensonge : malgré le surnom de « buffalo », le bison d’Amérique est une espèce distincte du buffle d’Afrique. Sa bosse musculaire lui sert même de pelle pour balayer la neige en hiver."},
+{a:["Un grizzly peut courir à environ 55 km/h sur de courtes distances, malgré sa taille.","Le grizzly possède un odorat extrêmement développé pour repérer sa nourriture.","Un grizzly en hibernation ne se réveille jamais, pas même un instant, avant le printemps."],m:2,e:"Le mensonge : l’hibernation du grizzly est un sommeil profond mais pas absolu — il peut se réveiller et même sortir brièvement. Et réveillé, il peut charger à la vitesse d’une voiture en ville !"},
+{a:["Le lynx du Canada a de très grandes pattes qui agissent comme des raquettes dans la neige profonde.","Les touffes de poils au bout des oreilles du lynx sont une de ses signatures.","Le lynx du Canada vit dans les savanes chaudes de l’Afrique."],m:2,e:"Le mensonge : le lynx du Canada est un animal de la forêt boréale froide. Ses pattes-raquettes l’empêchent de s’enfoncer quand il chasse le lièvre d’Amérique, sa proie préférée."},
+{a:["Le renard arctique change de pelage : blanc l’hiver, brun-gris l’été.","Les petites oreilles rondes du renard arctique limitent ses pertes de chaleur.","Le renard arctique devient rouge vif pendant l’été."],m:2,e:"Le mensonge : l’été, il devient brun-gris pour se fondre dans la toundra sans neige — pas rouge vif. Son pelage d’hiver est si isolant qu’il peut dormir dans la neige par grand froid."},
+{a:["Le lièvre d’Amérique change de couleur selon la saison : brun l’été, blanc l’hiver.","Les grandes pattes arrière du lièvre d’Amérique l’aident à marcher sur la neige.","Le lièvre d’Amérique hiberne dans un terrier de novembre à avril sans se réveiller."],m:2,e:"Le mensonge : le lièvre n’hiberne pas du tout — il passe l’hiver dehors, actif, en comptant sur son camouflage blanc et ses pattes-raquettes pour échapper au lynx."},
+{a:["Le plus grand barrage de castor connu mesure environ 850 mètres, dans le parc national Wood Buffalo, en Alberta.","Ce barrage géant de castor est si grand qu’il a été repéré sur des images satellites.","Les castors construisent leurs barrages avec du béton et des poutres d’acier."],m:2,e:"Le mensonge : que du naturel — branches, boue et pierres, assemblés génération après génération. Le barrage record de Wood Buffalo ferait presque deux fois la longueur du barrage Hoover !"},
+{a:["La petite chauve-souris brune est une espèce présente au Québec et dans une bonne partie du Canada.","La petite chauve-souris brune hiberne l’hiver dans des grottes et des mines.","Chaque automne, la petite chauve-souris brune migre jusqu’en Afrique pour passer l’hiver."],m:2,e:"Le mensonge : elle passe l’hiver bien ici, en hibernation dans des grottes et des mines du Canada. Elle est malheureusement menacée par le syndrome du museau blanc, un champignon venu d’ailleurs."},
+{a:["La sterne arctique fait la plus longue migration du monde animal : de l’Arctique à l’Antarctique et retour, chaque année.","Grâce à ses migrations, la sterne arctique profite de deux étés par année.","La sterne arctique passe toute l’année au pôle Nord, sans jamais migrer."],m:2,e:"Le mensonge : elle fait tout le contraire — un aller-retour de dizaines de milliers de kilomètres entre les deux pôles, le plus long voyage migratoire connu chez un animal."},
+{a:["Des études avec de minuscules enregistreurs ont montré que le martinet noir peut voler 10 mois de suite sans se poser.","Le martinet noir mange, dort et s’accouple même en vol.","Le martinet noir se pose chaque soir dans un arbre pour dormir, comme les moineaux."],m:2,e:"Le mensonge : certains martinets ne touchent pas le sol pendant 10 mois ! Les chercheurs suédois l’ont mesuré en 2016 grâce à des capteurs miniatures — un record de vol ininterrompu."},
+{a:["Le colibri est le seul oiseau capable de voler à reculons de façon soutenue.","Le colibri à gorge rubis est le colibri qui niche au Québec pendant l’été.","Le colibri à gorge rubis est à peu près de la taille d’un canard."],m:2,e:"Le mensonge : le colibri à gorge rubis pèse environ 3 grammes — le poids de deux trombones ! C’est bien notre visiteur d’été au Québec, champion du vol sur place et à reculons."},
+{a:["En piqué, le faucon pèlerin peut dépasser 300 km/h, ce qui en fait l’animal le plus rapide de la planète.","Des faucons pèlerins nichent sur des gratte-ciel de Montréal et d’autres grandes villes.","Le guépard court plus vite que la vitesse du faucon pèlerin en piqué."],m:2,e:"Le mensonge : le guépard plafonne autour de 100 km/h au sol. Le faucon pèlerin, en chute libre contrôlée, dépasse 300 km/h — aucun animal ne va plus vite."},
+{a:["Le saumon atlantique naît en rivière, grandit en mer, puis revient en eau douce pour se reproduire.","Le saumon retrouve sa rivière natale en grande partie grâce à son odorat très fin.","Le saumon atlantique passe toute sa vie dans l’océan Atlantique, sans jamais entrer en rivière."],m:2,e:"Le mensonge : le saumon est un grand voyageur des deux mondes — né en rivière, adulte en mer, il remonte sa rivière d’origine pour frayer, guidé par les odeurs de son enfance."},
+{a:["L’esturgeon jaune, des Grands Lacs et du fleuve Saint-Laurent, peut vivre plus de 100 ans.","L’esturgeon jaune compte parmi les plus gros poissons d’eau douce du Canada.","L’esturgeon jaune adulte mesure au maximum une dizaine de centimètres."],m:2,e:"Le mensonge : ce géant paisible peut dépasser 1,5 mètre et vivre plus longtemps qu’un humain ! Présent ici depuis des millions d’années, il a côtoyé les dinosaures sous une forme proche."},
+{a:["L’anguille d’Amérique naît dans la mer des Sargasses, au milieu de l’Atlantique.","Après avoir grandi dans les rivières et lacs du Québec, l’anguille d’Amérique retourne à la mer des Sargasses pour se reproduire.","L’anguille d’Amérique naît dans les rivières du Québec et migre vers le lac Ontario pour y pondre."],m:2,e:"Le mensonge : c’est l’inverse du saumon — née en pleine mer, dans les Sargasses, la jeune anguille traverse l’Atlantique et remonte nos cours d’eau pour grandir, avant de refaire le voyage à l’envers."},
+{a:["Le requin du Groenland est le vertébré à la plus longue durée de vie connue : il peut vivre plusieurs siècles.","Le requin du Groenland grandit très lentement, d’environ un centimètre par année.","Le requin du Groenland devient adulte vers l’âge de deux ans."],m:2,e:"Le mensonge : il faut attendre autour de 150 ans avant qu’une femelle puisse se reproduire ! Les estimations par datation du cristallin de l’œil donnent des âges de plusieurs siècles — le plus vieux vertébré connu."},
+{a:["L’œil du calmar géant, parmi les plus gros du règne animal, peut atteindre environ 27 centimètres de diamètre.","Le calmar géant vit dans les profondeurs sombres des océans.","Le calmar géant est un petit animal de récif qui mesure moins de 10 centimètres."],m:2,e:"Le mensonge : le calmar géant peut dépasser 10 mètres avec ses tentacules ! Ses yeux énormes, gros comme des ballons, captent la moindre lueur dans le noir des abysses."},
+{a:["Le pangolin est le seul mammifère entièrement couvert d’écailles.","Les écailles du pangolin sont faites de kératine, comme nos ongles.","Les écailles du pangolin sont des os qui poussent à l’extérieur de son corps."],m:2,e:"Le mensonge : aucun os là-dedans — ses écailles sont en kératine pure, comme des ongles géants. Menacé, le pangolin se roule en boule presque impénétrable."},
+{a:["L’ornithorynque pond des œufs, mais il allaite ses petits comme un mammifère.","Le mâle ornithorynque possède un éperon venimeux aux pattes arrière.","L’ornithorynque vit à l’état sauvage dans les rivières du Québec."],m:2,e:"Le mensonge : l’ornithorynque vit en Australie et en Tasmanie, pas au Québec. Ce mammifère qui pond des œufs détecte même les signaux électriques de ses proies avec son bec de canard."},
+{a:["L’échidné fait partie, avec l’ornithorynque, des très rares mammifères qui pondent des œufs.","La longue langue collante de l’échidné lui sert à attraper fourmis et termites.","L’échidné est un oiseau coureur d’Australie, cousin de l’autruche."],m:2,e:"Le mensonge : l’échidné est un mammifère à fourrure et à piquants, pas un oiseau. Il pond un œuf, puis le garde au chaud dans une poche de son ventre."},
+{a:["Le kiwi de Nouvelle-Zélande a ses narines au bout du bec, un cas unique chez les oiseaux.","Le kiwi est un oiseau nocturne qui cherche sa nourriture surtout à l’odorat.","Le kiwi pond les plus petits œufs du monde, gros comme des billes."],m:2,e:"Le mensonge : c’est tout le contraire — par rapport à sa taille, le kiwi pond l’un des plus gros œufs du monde des oiseaux ! Et il renifle ses vers de terre la nuit, narines au ras du sol."},
+{a:["Le kakapo, de Nouvelle-Zélande, est le perroquet le plus lourd du monde.","Le kakapo est un perroquet nocturne incapable de voler.","Le kakapo passe l’hiver au Canada, où il migre chaque année."],m:2,e:"Le mensonge : le kakapo ne vole pas du tout — il ne migre donc nulle part ! Ce perroquet géant et nocturne de Nouvelle-Zélande est l’un des oiseaux les plus rares et les mieux protégés de la planète."},
+{a:["Le macareux moine est surnommé le « perroquet de mer » à cause de son bec coloré en saison de reproduction.","Des colonies de macareux moines nichent sur des îles du golfe et de l’estuaire du Saint-Laurent.","Le macareux moine est un oiseau des déserts d’Australie."],m:2,e:"Le mensonge : le macareux est un oiseau marin de l’Atlantique Nord — on peut l’observer sur des îles du Québec, comme dans la réserve de parc national de l’Archipel-de-Mingan. Son bec ne devient éclatant qu’au printemps."},
+{a:["Le harfang des neiges est l’oiseau emblème officiel du Québec.","Contrairement à la plupart des hiboux, le harfang des neiges chasse aussi le jour.","Le harfang des neiges est un oiseau strictement nocturne qui ne sort que la nuit."],m:2,e:"Le mensonge : le harfang chasse jour et nuit — logique, dans l’Arctique où l’été le soleil ne se couche presque pas ! Les femelles et les jeunes portent plus de taches sombres que les mâles adultes."},
+{a:["L’albatros hurleur possède une envergure de plus de trois mètres, parmi les plus grandes chez les oiseaux volants.","Un jeune albatros peut passer des années en mer avant de revenir se reproduire sur la terre ferme.","L’albatros hurleur est incapable de voler dès qu’il y a du vent."],m:2,e:"Le mensonge : le vent est son meilleur allié ! L’albatros plane des heures sans battre des ailes, porté par les courants d’air au-dessus des vagues."},
+{a:["Les scientifiques estiment le nombre de neurones du cerveau humain à environ 86 milliards.","Malgré son petit poids, le cerveau consomme environ le cinquième de notre énergie au repos.","Le cerveau humain ne contient qu’environ 10 millions de neurones."],m:2,e:"Le mensonge : 86 milliards, pas 10 millions — on en compte des milliers de fois plus. C’est cette immense toile de neurones qui consomme tant d’énergie, même quand on se repose."},
+{a:["La cornée, la partie transparente à l’avant de l’œil, reçoit son oxygène directement de l’air, car elle n’a pas de vaisseaux sanguins.","On cligne des yeux environ 15 à 20 fois par minute, notamment pour les garder humides.","La couleur des yeux change instantanément selon l’humeur de la personne."],m:2,e:"Le mensonge : l’iris ne change pas de couleur avec les émotions — c’est la lumière et la taille de la pupille qui donnent parfois cette impression. La cornée, elle, « respire » vraiment l’air ambiant."},
+{a:["La peau est le plus grand organe du corps humain.","Même des jumeaux identiques n’ont pas les mêmes empreintes digitales.","Des jumeaux identiques ont exactement les mêmes empreintes digitales."],m:2,e:"Le mensonge, c’est la troisième phrase : les empreintes se forment aussi au hasard dans le ventre de la mère — deux jumeaux identiques ont donc des empreintes différentes, et uniques."},
+{a:["Le foie est le plus gros organe interne du corps humain.","Le foie peut repousser et retrouver sa taille après avoir perdu une partie de son tissu.","Le foie se trouve entièrement du côté gauche de l’abdomen."],m:2,e:"Le mensonge : le foie loge surtout à droite, sous les côtes. C’est le seul grand organe capable de se régénérer après une perte partielle, une propriété connue depuis l’Antiquité."},
+{a:["Chez l’humain adulte, les globules rouges matures n’ont pas de noyau.","Un globule rouge humain vit en moyenne environ 120 jours.","Le plasma, la partie liquide du sang, est de couleur rouge vif."],m:2,e:"Le mensonge : le plasma est jaune paille — ce sont les globules rouges qui colorent le sang. Ces globules, sans noyau, transportent l’oxygène pendant environ quatre mois avant d’être recyclés."},
+{a:["Le fémur, l’os de la cuisse, est l’os le plus long du corps humain.","Le plus petit os du corps est l’étrier, dans l’oreille, qui mesure quelques millimètres.","Le fémur est le plus petit os du squelette humain."],m:2,e:"Le mensonge : le fémur est le champion de la longueur, et l’étrier de l’oreille le champion de la petitesse — à peine 3 millimètres pour transmettre les sons !"},
+{a:["L’émail des dents est la substance la plus dure du corps humain.","Malgré sa dureté, une dent n’est pas un os.","Les dents d’adulte repoussent indéfiniment dès qu’une tombe, comme chez le requin."],m:2,e:"Le mensonge : l’humain n’a que deux générations de dents — celles de lait et celles d’adulte. Leur émail est bien la matière la plus dure du corps, mais il ne se répare pas tout seul."},
+{a:["Le nombre de bactéries qui vivent sur et dans le corps humain est du même ordre de grandeur que le nombre de nos propres cellules.","La plupart des bactéries de notre corps sont inoffensives, et beaucoup aident à digérer.","Chez une personne en santé, l’intérieur du corps est complètement stérile, sans aucune bactérie."],m:2,e:"Le mensonge : notre tube digestif héberge des milliards de bactéries utiles — sans ce microbiome, pas de digestion normale ni de bonne défense immunitaire. Nous sommes chacun un petit écosystème ambulant !"},
+{a:["Le poumon droit est un peu plus gros que le poumon gauche, qui laisse de la place au cœur.","Les poumons contiennent des centaines de millions de petites alvéoles où se font les échanges d’air.","Le poumon gauche est plus gros que le droit parce qu’il contient le cœur."],m:2,e:"Le mensonge : c’est l’inverse — le cœur prend de la place du côté gauche, donc le poumon gauche est le plus petit, avec deux lobes contre trois à droite."},
+{a:["Le cœur humain possède quatre cavités : deux oreillettes et deux ventricules.","Le cœur produit ses propres signaux électriques pour battre, sans attendre un ordre du cerveau.","Le cœur humain possède trois cavités, comme celui des grenouilles."],m:2,e:"Le mensonge : quatre cavités chez l’humain. Le cœur garde même son propre chef d’orchestre électrique, le nœud sinusal, qui lance chaque battement."},
+{a:["L’humain distingue les odeurs grâce à environ 400 types de récepteurs dans le nez.","L’odorat joue un grand rôle dans la perception des saveurs des aliments.","L’humain ne possède que quatre types de récepteurs d’odeurs, un par type de parfum."],m:2,e:"Le mensonge : environ 400 types de récepteurs, combinés de mille façons, nous permettent de distinguer une immense variété d’odeurs — bien plus que nos cinq goûts de base."},
+{a:["Les rêves se produisent surtout pendant le sommeil paradoxal, mais ils peuvent aussi survenir dans d’autres phases du sommeil.","Pendant le sommeil, le cerveau trie et consolide les souvenirs de la journée.","Une personne normale ne rêve qu’une seule fois par semaine."],m:2,e:"Le mensonge : on rêve plusieurs fois par nuit, à chaque cycle de sommeil paradoxal — on oublie simplement la plupart de nos rêves au réveil. Une nuit complète contient plusieurs cycles."},
+{a:["La sarracénie pourpre est une plante carnivore des tourbières qui piège des insectes dans ses feuilles en forme d’urne.","La sarracénie pourpre est l’emblème floral de Terre-Neuve-et-Labrador.","La sarracénie pourpre attrape et digère de petits lapins dans ses feuilles."],m:2,e:"Le mensonge : ses urnes noient et digèrent des insectes, pas des lapins ! Cette plante des milieux pauvres complète son menu avec des bibittes — assez pour fasciner les botanistes depuis des siècles."},
+{a:["La dionée attrape-mouche ne pousse à l’état naturel que dans une petite région des Carolines, aux États-Unis.","Le piège de la dionée se referme en une fraction de seconde quand une proie touche ses poils sensibles deux fois de suite.","La dionée attrape-mouche pousse naturellement dans les tourbières du Québec."],m:2,e:"Le mensonge : malgré sa célébrité, la dionée est née seulement dans les marais des Carolines. Au Québec, on ne la trouve qu’en pot, sur les rebords de fenêtre des amateurs de plantes carnivores."},
+{a:["Le peuplier faux-tremble doit son nom à ses feuilles qui tremblent à la moindre brise, à cause de leur tige aplatie.","Une célèbre colonie de peupliers faux-trembles de l’Utah, surnommée Pando, forme un seul organisme relié par le même système de racines.","Pando est une forêt de pins reliés entre eux par leurs branches."],m:2,e:"Le mensonge : Pando, ce sont des peupliers issus d’une seule souche de racines — chaque « arbre » est un clone du même individu, ce qui en fait l’un des plus grands organismes du monde."},
+{a:["La rafflésie produit la plus grande fleur individuelle du monde, qui peut dépasser un mètre de diamètre.","La fleur de rafflésie dégage une odeur de viande pourrie qui attire les mouches pollinisatrices.","La rafflésie est réputée pour son doux parfum de rose qui embaume la forêt."],m:2,e:"Le mensonge : aucune odeur de rose — plutôt un fumet de charogne qui attire les mouches ! Cette fleur géante pousse sur une plante parasite sans feuilles, en Asie du Sud-Est."},
+{a:["La welwitschia, plante du désert de Namib, ne produit que deux feuilles pendant toute sa vie.","Les deux feuilles de la welwitschia poussent sans arrêt et peuvent vivre plus de mille ans avec la plante.","La welwitschia est une plante de la forêt tropicale humide qui exige des pluies quotidiennes."],m:2,e:"Le mensonge : elle vit dans l’un des déserts les plus secs du monde, le Namib, où elle survit grâce au brouillard côtier. Deux feuilles, toute une vie qui peut durer plus de mille ans !"},
+{a:["La Grande Tache rouge de Jupiter est une tempête plus large que la planète Terre.","Une journée sur Jupiter dure moins de 10 heures : aucune planète ne tourne plus vite sur elle-même.","Jupiter est la plus petite planète du système solaire."],m:2,e:"Le mensonge : Jupiter est la PLUS GROSSE planète — plus de 1 300 Terres pourraient entrer dans son volume. Sa tempête géante fait rage depuis des siècles, observée dès les premiers télescopes."},
+{a:["La densité moyenne de Saturne est plus faible que celle de l’eau : elle flotterait dans une baignoire assez grande.","Les anneaux de Saturne sont composés surtout de particules de glace d’eau.","Les anneaux de Saturne forment un seul disque de métal solide, d’une pièce."],m:2,e:"Le mensonge : ce sont des milliards de morceaux de glace et de roche en orbite, pas un disque solide. Et Saturne, planète géante mais très légère pour sa taille, « flotterait » vraiment !"},
+{a:["Uranus tourne presque couchée sur le côté, avec un axe incliné à environ 98 degrés.","Uranus est la planète dont l’atmosphère enregistre les températures les plus froides du système solaire, sous les −220 °C.","Uranus est la planète la plus proche du Soleil."],m:2,e:"Le mensonge : la plus proche du Soleil, c’est Mercure. Uranus, elle, roule comme un tonneau autour du Soleil, couchée sur le flanc, à des températures glaciales record."},
+{a:["Les vents de Neptune sont les plus rapides du système solaire, pouvant atteindre environ 2 000 km/h.","Neptune a été repérée en 1846 à l’endroit prédit par des calculs mathématiques.","Neptune a été découverte par pur hasard, sans aucun calcul préalable."],m:2,e:"Le mensonge : Neptune est le triomphe des mathématiques — Urbain Le Verrier avait calculé sa position à partir des perturbations de l’orbite d’Uranus avant qu’on la voie au télescope."},
+{a:["Sur Mars, une journée (un « sol ») dure environ 24 heures et 37 minutes.","Le canyon Valles Marineris, sur Mars, s’étire sur une longueur comparable à la largeur des États-Unis.","Valles Marineris a été creusé récemment par une grande rivière d’eau liquide qui coule encore aujourd’hui."],m:2,e:"Le mensonge : aucune rivière liquide ne coule à la surface de Mars aujourd’hui — l’eau y est gelée ou souterraine. Valles Marineris est une cicatrice géologique géante, vieille de milliards d’années."},
+{a:["La baie de Fundy, entre le Nouveau-Brunswick et la Nouvelle-Écosse, connaît parmi les plus grandes marées du monde, pouvant dépasser 15 mètres.","Les marées sont causées principalement par l’attraction de la Lune.","La baie de Fundy se trouve sur la côte du Pacifique, en Colombie-Britannique."],m:2,e:"Le mensonge : Fundy est sur la côte ATLANTIQUE, entre le Nouveau-Brunswick et la Nouvelle-Écosse. La forme de la baie amplifie la marée lunaire jusqu’à la hauteur d’un immeuble de cinq étages."},
+{a:["Le lac Baïkal, en Sibérie, est le lac le plus profond du monde, avec plus de 1 600 mètres de profondeur.","Le lac Baïkal contient à lui seul environ le cinquième de l’eau douce liquide de surface de la planète.","Le lac Baïkal se trouve au Canada, au nord de l’Ontario."],m:2,e:"Le mensonge : le Baïkal est en Sibérie, en Russie. Vieux d’environ 25 millions d’années, c’est aussi le plus ancien des grands lacs — un océan d’eau douce en plein continent."},
+{a:["Le lac Supérieur est le plus grand lac d’eau douce du monde par sa superficie.","Le lac Supérieur fait partie des cinq Grands Lacs d’Amérique du Nord.","Le lac Supérieur est le plus petit des cinq Grands Lacs."],m:2,e:"Le mensonge : c’est le plus GRAND des Grands Lacs — assez vaste pour contenir tous les autres, plus trois lacs Érié en prime ! Le plus petit des cinq est le lac Ontario."},
+{a:["Le point Nemo, dans le Pacifique Sud, est l’endroit de l’océan le plus éloigné de toute terre.","On dirige souvent les engins spatiaux en fin de vie vers la région du point Nemo pour leur chute contrôlée.","Le point Nemo se trouve dans l’océan Arctique, au nord du Canada."],m:2,e:"Le mensonge : le point Nemo est dans le Pacifique Sud, à près de 2 700 km de la terre la plus proche — si loin que les humains les plus proches sont souvent les astronautes de la Station spatiale, au-dessus !"},
+{a:["Les aurores boréales sont causées par des particules venues du Soleil qui interagissent avec la haute atmosphère terrestre.","Il existe aussi des aurores dans l’hémisphère Sud : les aurores australes.","Les aurores boréales ne sont visibles qu’au Canada et en Alaska."],m:2,e:"Le mensonge : on les voit tout autour du pôle Nord magnétique — Norvège, Islande, Finlande, Russie… — et leurs sœurs australes dansent près du pôle Sud. Le vert vient surtout de l’oxygène excité par les particules solaires."},
+{a:["Le soleil de minuit est un phénomène réel : près des pôles, le Soleil peut rester visible 24 heures sur 24 en été.","Au Canada, des communautés du Nunavut et du Yukon connaissent des journées d’été où le Soleil ne se couche pratiquement pas.","Le soleil de minuit se produit chaque été à Montréal."],m:2,e:"Le mensonge : Montréal a toujours des nuits, même courtes, en été. Le vrai soleil de minuit appartient aux régions polaires — et l’hiver, les mêmes endroits vivent l’inverse : la nuit polaire."}
+];
+var COC2 = [
+{a:["La pizza hawaïenne a été inventée en 1962 à Chatham, en Ontario, par le restaurateur Sam Panopoulos.","Le nom « hawaïenne » venait de la marque d’ananas en conserve utilisée, pas d’un voyage à Hawaï.","La pizza hawaïenne a été créée à Naples, en Italie, au 18e siècle."],m:2,e:"Le mensonge : Naples a bien inventé la pizza moderne, mais pas celle à l’ananas ! La hawaïenne est une création ontarienne de 1962 — aimée ou détestée, elle est canadienne."},
+{a:["Un des premiers brevets de pâte d’arachide a été obtenu en 1884 par Marcellus Gilmore Edson, un pharmacien de Montréal.","Edson pensait sa pâte d’arachide utile pour les gens qui peinaient à mâcher des aliments solides.","Le beurre d’arachide a été breveté en 1884 par le roi d’Angleterre."],m:2,e:"Le mensonge : aucun roi là-dedans — c’est un pharmacien montréalais qui a breveté un procédé de pâte d’arachide en 1884, pensé comme un aliment nourrissant et facile à manger."},
+{a:["Joseph-Armand Bombardier, de Valcourt au Québec, a mis au point en 1937 un véhicule à chenilles pour se déplacer l’hiver, l’ancêtre de la motoneige.","Le Ski-Doo, lancé en 1959 par Bombardier, a transformé la motoneige en véhicule de loisir.","Joseph-Armand Bombardier est surtout connu pour avoir inventé l’avion à réaction."],m:2,e:"Le mensonge : Bombardier, c’est la neige, pas les avions de ligne ! Son entreprise est née du problème bien québécois de se déplacer l’hiver entre les villages isolés."},
+{a:["La machine à resurfacer la glace des patinoires a été inventée en 1949 par Frank J. Zamboni, en Californie.","Le nom Zamboni est devenu le mot courant pour désigner ces machines, même celles d’autres marques.","La Zamboni a été inventée au Québec en 1800, tirée par des chevaux."],m:2,e:"Le mensonge : 1949, en Californie, avec un moteur — pas de chevaux ! Avant elle, il fallait gratter, laver et arroser la glace à la main, un travail de plusieurs heures."},
+{a:["Le gardien Jacques Plante a porté un masque en match régulier de la LNH à partir de 1959, après avoir été atteint au visage par un tir.","Au début, Jacques Plante ne portait son masque qu’à l’entraînement, son entraîneur hésitant à le laisser jouer avec en match.","Les gardiens de hockey ont toujours porté des masques depuis les tout premiers matchs du 19e siècle."],m:2,e:"Le mensonge : pendant des décennies, les gardiens recevaient les rondelles à visage découvert ! Le masque de Plante, en 1959, a changé le métier — et épargné bien des dents."},
+{a:["Les rondelles de hockey sont faites de caoutchouc vulcanisé.","Dans la LNH, on congèle les rondelles avant les matchs pour réduire leurs rebonds.","Les rondelles officielles de la LNH sont en bois peint, comme à l’origine du hockey."],m:2,e:"Le mensonge : le caoutchouc a remplacé le bois (et les légendes de crottin gelé) depuis longtemps. Les rondelles congelées glissent et rebondissent moins — c’est du sérieux, ces petits disques de 170 grammes lancés à plus de 150 km/h."},
+{a:["La queue de castor est une pâtisserie de pâte frite étirée en forme de queue de castor, souvent garnie de sucre à la cannelle.","Cette pâtisserie a été vendue pour la première fois en 1978, à la foire de Killaloe, en Ontario.","La queue de castor contient de la vraie viande de castor séchée."],m:2,e:"Le mensonge : aucun castor dans la recette — seulement la FORME de sa queue ! La pâtisserie ontarienne de 1978 est devenue un classique des fêtes et des patinoires du pays."},
+{a:["La barre Nanaimo est un dessert sans cuisson à trois étages, nommé d’après la ville de Nanaimo, en Colombie-Britannique.","La barre Nanaimo comprend une couche de crème au beurre entre le chocolat et la base de biscuit.","La barre Nanaimo a été nommée en l’honneur d’une ville du Japon."],m:2,e:"Le mensonge : Nanaimo est une vraie ville portuaire de l’île de Vancouver. Son dessert sans cuisson, né dans les années 1950, est devenu un emblème sucré du Canada."},
+{a:["La tarte au beurre (butter tart) est une spécialité canadienne bien ancrée, surtout en Ontario.","Le garnissage de la tarte au beurre varie : nature, aux noix ou aux raisins secs — un sujet de débat passionné.","La tarte au beurre contient traditionnellement des tranches de bœuf braisé."],m:2,e:"Le mensonge : beurre, sucre et œufs — jamais de bœuf ! Le seul vrai débat, c’est raisins secs ou pas raisins secs. Les familles canadiennes se divisent là-dessus depuis des générations."},
+{a:["Au Canada, les pastilles de sucre appelées Rockets portent ce nom parce que le nom Smarties y désigne déjà des bonbons au chocolat.","Aux États-Unis, ces mêmes pastilles de sucre sont vendues sous le nom de Smarties.","Les Smarties vendus au Canada sont des pastilles de sucre sans aucun chocolat."],m:2,e:"Le mensonge : les Smarties canadiens SONT des bonbons au chocolat enrobé. C’est pour éviter la confusion que les petites pastilles de sucre s’appellent Rockets ici, et Smarties chez nos voisins."},
+{a:["La tire d’érable se fait en versant du sirop d’érable bouillant sur de la neige propre, où il fige en bonbon mou qu’on enroule sur un bâton.","La saison des sucres dépend des nuits de gel et des journées de dégel du début du printemps.","La tire d’érable est fabriquée en faisant geler du sirop dans l’eau de mer salée."],m:2,e:"Le mensonge : c’est la neige qui sert de moule froid, pas l’eau de mer ! Le contraste chaud-froid transforme le sirop en tire fondante — le dessert signature des cabanes à sucre."},
+{a:["Bonhomme Carnaval, la mascotte du Carnaval de Québec, porte une tuque rouge et une ceinture fléchée.","Bonhomme Carnaval a fait son apparition lors du Carnaval moderne de Québec, au milieu des années 1950.","Bonhomme Carnaval est la mascotte officielle des Jeux olympiques d’hiver depuis 1956."],m:2,e:"Le mensonge : Bonhomme appartient au Carnaval de Québec, pas aux Jeux olympiques. Avec son palais de glace et sa ceinture fléchée, il règne sur l’hiver québécois depuis les années 1950."},
+{a:["Le mot « tuque » désigne au Canada un bonnet de laine tricoté pour l’hiver, souvent avec un pompon.","La tuque fait partie des mots canadiens adoptés tels quels en anglais canadien.","La tuque est un chapeau d’été léger inventé pour les plages du Mexique."],m:2,e:"Le mensonge : la tuque, c’est l’hiver canadien incarné — laine, pompon et oreilles au chaud. Son nom viendrait du français « toque », mot de vieux chapeau."},
+{a:["Un igloo se construit avec des blocs de neige compactée, qui isolent remarquablement bien du froid.","À l’intérieur d’un igloo, la température peut être beaucoup plus élevée qu’à l’extérieur, grâce à l’isolation de la neige et à la chaleur des corps.","Un igloo est construit uniquement avec des cubes de glace transparente, comme des fenêtres."],m:2,e:"Le mensonge : ce sont des blocs de NEIGE, pas de glace transparente. La neige emprisonne de l’air, un excellent isolant — assez pour qu’un igloo soit habitable par grand froid arctique."},
+{a:["Le mot « toboggan » vient des langues autochtones algonquiennes, par le micmac, et désigne une luge de bois.","Les traîneaux à chiens ont longtemps été un moyen de transport hivernal essentiel dans le Nord.","Le toboggan a été inventé au 20e siècle pour glisser sur les plages de sable chaud."],m:2,e:"Le mensonge : le toboggan est né pour la neige et la glace — les peuples autochtones l’utilisaient pour transporter des charges l’hiver, bien avant qu’il devienne un jouet de glissade."},
+{a:["Le Post-it est né d’une colle qui collait mal, mise au point chez 3M par Spencer Silver.","C’est Art Fry, collègue de Silver, qui a eu l’idée d’utiliser cette colle faible pour des signets qui tiennent sans abîmer les pages de son livre de chant.","Le Post-it a été inventé au Moyen Âge par des moines copistes."],m:2,e:"Le mensonge : une invention bien moderne (1980) — un échec de colle devenu génial grâce à un signet de chorale qui tombait toujours. Le Post-it colle juste assez, et c’est exactement ce qu’il fallait."},
+{a:["Le Velcro a été inspiré à l’ingénieur suisse George de Mestral par les fruits de bardane accrochés à son pantalon et au pelage de son chien.","Le Velcro fonctionne avec de minuscules crochets qui s’agrippent à de petites boucles, comme la bardane.","George de Mestral a inventé le Velcro en observant les ailes des papillons."],m:2,e:"Le mensonge : pas de papillons — une promenade, un chien, et des graines de bardane impossibles à enlever. De Mestral a mis des années à transformer cette agacerie en fermeture brevetée, en 1955."},
+{a:["Le four à micro-ondes est né d’une barre de chocolat fondue dans la poche de l’ingénieur Percy Spencer, qui travaillait près d’un magnétron de radar en 1945.","Les premiers fours à micro-ondes commerciaux, à la fin des années 1940, étaient énormes et coûtaient très cher.","Le four à micro-ondes a été inventé pour congeler les aliments plus vite."],m:2,e:"Le mensonge : tout le contraire — il réchauffe ! Le chocolat fondu de Spencer lui a donné l’idée de cuire avec les micro-ondes ; le maïs soufflé a été un des premiers tests réussis."},
+{a:["Le Slinky est né en 1943 quand l’ingénieur naval Richard James a fait tomber un ressort qui s’est mis à « marcher » tout seul.","C’est la femme de Richard James, Betty, qui a trouvé le nom « Slinky » dans un dictionnaire.","Le Slinky était au départ un petit animal de compagnie dressé."],m:2,e:"Le mensonge : aucun animal — juste un ressort tombé d’une étagère qui descendait les marches de lui-même. Betty James a ensuite dirigé l’entreprise pendant des décennies."},
+{a:["Le Play-Doh a d’abord été vendu comme un produit pour nettoyer le papier peint.","Une enseignante de Cincinnati a détourné ce produit nettoyant en pâte à modeler pour ses élèves, dans les années 1950.","Le Play-Doh était au départ une crème glacée qui ne fondait pas."],m:2,e:"Le mensonge : il nettoyait la suie des papiers peints ! Quand les foyers ont cessé de chauffer au charbon, le produit a été sauvé en devenant la pâte à modeler colorée des enfants."},
+{a:["Le frisbee descend des moules à tarte de la Frisbie Pie Company, que les étudiants lançaient pour s’amuser.","Le disque de plastique de Walter Morrison s’est d’abord appelé le « Pluto Platter » avant de devenir le Frisbee.","Le frisbee a été inventé au départ comme un jouet pour les chiens."],m:2,e:"Le mensonge : les chiens sont arrivés après, avec leurs propres compétitions ! Au départ, c’étaient des moules à tarte volants entre étudiants, puis un disque de plastique de l’ère de l’espace."},
+{a:["Avant le premier vol humain en montgolfière, un vol d’essai a emporté un mouton, un canard et un coq à Versailles, en 1783.","Le premier vol libre d’humains en montgolfière a eu lieu à Paris en novembre 1783.","Les premiers passagers d’une montgolfière ont été un éléphant et une girafe du zoo de Paris."],m:2,e:"Le mensonge : un mouton, un canard et un coq — les cobayes officiels de 1783, qui s’en sont tirés sans une plume froissée. Les humains ont suivi deux mois plus tard."},
+{a:["L’ours en peluche « teddy bear » doit son nom au président américain Theodore « Teddy » Roosevelt.","Le surnom vient d’une chasse de 1902 où Roosevelt a refusé de tirer sur un ours attaché, jugé sans défense.","Le teddy bear a été nommé en l’honneur du roi Édouard VII d’Angleterre."],m:2,e:"Le mensonge : c’est Roosevelt, pas un roi. Le dessin d’un caricaturiste sur son refus de tirer a inspiré un marchand qui a baptisé ses ours « Teddy’s bears » — le nom est resté pour toujours."},
+{a:["Les crayons de cire Crayola ont été lancés en 1903 par l’entreprise Binney & Smith.","La fameuse boîte de 64 crayons Crayola, avec taille-crayon intégré, est arrivée en 1958.","Les crayons de cire ont été conçus comme des bonbons comestibles pour les enfants."],m:2,e:"Le mensonge : ils sont non toxiques, mais ce ne sont PAS des collations ! Binney & Smith, cousins et chimistes, voulaient des crayons de couleur sûrs et pas chers pour les écoles."},
+{a:["Le visage souriant jaune (smiley) a été dessiné en 1963 par l’artiste Harvey Ball pour remonter le moral des employés d’une compagnie d’assurance.","Harvey Ball n’a été payé que 45 dollars pour ce dessin devenu célèbre dans le monde entier.","Le smiley a été créé en l’an 2000 pour les premiers téléphones intelligents."],m:2,e:"Le mensonge : 1963, bien avant les téléphones intelligents et les émojis ! Ball a dessiné son sourire en une dizaine de minutes pour 45 dollars — sans jamais déposer de marque sur lui."},
+{a:["Le Scrabble a été inventé par Alfred Butts, un architecte américain au chômage pendant la Grande Dépression.","Butts a fixé la valeur des lettres en comptant leur fréquence dans les journaux.","Le Scrabble a été inventé à Montréal par les créateurs de Trivial Pursuit."],m:2,e:"Le mensonge : le Scrabble date des années 1930, bien avant les Montréalais de Trivial Pursuit (1979). L’idée des points selon la fréquence des lettres venait de statistiques découpées dans les journaux."},
+{a:["Trivial Pursuit a été conçu à Montréal en décembre 1979 par Chris Haney et Scott Abbott, deux journalistes.","L’idée de Trivial Pursuit est née après une partie de Scrabble entre Haney et Abbott.","Trivial Pursuit a été créé par deux joueurs professionnels des Canadiens de Montréal."],m:2,e:"Le mensonge : un photographe de presse et un journaliste sportif, pas des joueurs de hockey ! Leur jeu de questions, lancé en 1981, est devenu un phénomène mondial des années 1980."},
+{a:["L’ancêtre du Monopoly, « The Landlord’s Game », a été créé en 1904 par Elizabeth Magie.","Elizabeth Magie voulait que son jeu montre les effets des monopoles sur les gens ordinaires.","Elizabeth Magie a créé son jeu pour célébrer les monopoles et encourager à écraser les concurrents."],m:2,e:"Le mensonge : c’était l’inverse — un jeu-manifeste contre les monopoles ! Une de ses deux séries de règles montrait un monde plus juste quand les richesses sont partagées."},
+{a:["Les premiers casse-têtes (puzzles) étaient des cartes géographiques collées sur du bois et découpées pour apprendre la géographie.","Le graveur londonien John Spilsbury a produit ces cartes découpées dès les années 1760.","Le casse-tête a été inventé dans les casinos pour occuper les joueurs entre deux parties de cartes."],m:2,e:"Le mensonge : aucun casino — une invention d’enseignant ! Les « cartes disséquées » de Spilsbury servaient de leçons de géographie amusantes pour les enfants."},
+{a:["En 1457, le Parlement d’Écosse a interdit le golf parce qu’il distrayait les hommes de la pratique du tir à l’arc.","Le parcours de St Andrews est passé de 22 à 18 trous en 1764, ce qui a fixé le standard des 18 trous.","Le golf a été inventé dans un gymnase intérieur en 1950."],m:2,e:"Le mensonge : le golf a des siècles d’histoire écossaise, au grand air. Il était même si populaire qu’on a dû l’interdire pour remettre les archers à l’entraînement !"},
+{a:["La distance du marathon, 42,195 km, a été fixée à partir des Jeux olympiques de Londres de 1908.","C’est aux Jeux de Londres de 1908 que le parcours est parti du château de Windsor pour se terminer au stade olympique.","La distance officielle du marathon est de 10 kilomètres."],m:2,e:"Le mensonge : un marathon, c’est 42,195 km — pas 10 ! Le chiffre précis vient du parcours londonien de 1908, officialisé ensuite comme LA distance du marathon partout dans le monde."},
+{a:["Lors du premier match de basketball, en 1891, on lançait un ballon de soccer dans des paniers de pêches fermés.","Au début, après chaque panier réussi, il fallait récupérer le ballon dans le panier de pêches à l’aide d’une échelle ou d’un bâton.","Les paniers de basketball ont eu un fond ouvert dès le tout premier match de 1891."],m:2,e:"Le mensonge : les paniers de pêches avaient un fond — on grimpait chercher le ballon après chaque point ! Les paniers ouverts avec filet sont venus quelques années plus tard."},
+{a:["Les pierres de curling de compétition sont taillées dans un granit très dur, souvent associé à l’île écossaise d’Ailsa Craig.","En balayant la glace devant la pierre, les joueurs de curling peuvent influencer sa trajectoire et sa distance.","Les pierres de curling sont faites de glace renforcée et fondent après chaque championnat."],m:2,e:"Le mensonge : des pierres de granit de plus de 19 kilos, conçues pour durer des décennies — elles ne fondent jamais ! Le balayage fait fondre une pellicule de glace, elle, pour guider la pierre."},
+{a:["Le nom « ping-pong » imite le son de la balle de tennis de table qui rebondit.","Le tennis de table est un sport olympique depuis 1988.","La balle de tennis de table est en réalité une miniature de balle de bowling."],m:2,e:"Le mensonge : la balle de ping-pong est creuse et ultralégère, à des années-lumière d’une boule de bowling ! Et malgré sa légèreté, les professionnels la frappent à plus de 100 km/h."},
+{a:["Au Maroc, des chèvres grimpent dans les arganiers pour manger leurs fruits.","Les pupilles des chèvres sont rectangulaires, ce qui leur donne un très large champ de vision.","Les chèvres peuvent voir complètement derrière elles sans jamais tourner la tête."],m:2,e:"Le mensonge : leur vision est panoramique, mais pas à 360 degrés — il leur reste un angle mort derrière. Leurs pupilles horizontales, elles, gardent l’horizon net même tête baissée."},
+{a:["Les chiots dalmatiens naissent presque entièrement blancs.","Les taches du dalmatien apparaissent progressivement au cours de ses premières semaines de vie.","Les dalmatiens naissent avec toutes leurs taches définitives déjà visibles."],m:2,e:"Le mensonge : bébé dalmatien = boule blanche ! Les taches percent la fourrure après quelques semaines, comme une photo qui se révèle lentement."},
+{a:["Les chats ne goûtent pratiquement pas le sucré : il leur manque un récepteur du goût sucré fonctionnel.","Les chats possèdent ce super-pouvoir malgré des papilles moins nombreuses que celles des humains pour d’autres goûts.","Les chats adorent le sucre autant que les humains et le recherchent activement."],m:2,e:"Le mensonge : pour un chat, un bonbon ne goûte à peu près rien. Son récepteur du sucré est brisé génétiquement — ce qui l’intéresse, c’est la viande, pas le dessert."},
+{a:["Les homards libèrent leur urine par des glandes situées à la base de leurs antennes, près de la face, et s’en servent pour communiquer.","Une pince de homard perdue peut repousser au fil des mues suivantes.","Les homards urinent par le bout de la queue pour propulser leurs messages vers l’arrière."],m:2,e:"Le mensonge : tout se passe à l’avant — le homard « envoie » ses signaux chimiques depuis sa face, comme un message parfumé. Et ses pinces, oui, peuvent repousser avec le temps."},
+{a:["Le cœur de la crevette se trouve dans sa tête, plus précisément dans la région du thorax, juste derrière la tête.","Plusieurs espèces de crevettes changent de sexe au cours de leur vie.","Le cœur de la crevette se trouve au bout de sa queue."],m:2,e:"Le mensonge : le cœur est bien côté tête. Le corps de la crevette est rangé autrement que le nôtre — son « ventre » contient d’ailleurs surtout un long muscle, celui qu’on mange."},
+{a:["Plusieurs espèces d’huîtres changent de sexe au cours de leur vie, souvent mâles jeunes puis femelles en vieillissant.","Une perle se forme quand l’huître enrobe un irritant de couches de nacre.","Toutes les huîtres contiennent une belle perle ronde."],m:2,e:"Le mensonge : la plupart des huîtres n’ont aucune perle — et de toute façon, on les cultive surtout pour les manger ! La perle est un accident de parcours, pas la règle."},
+{a:["Un panda géant peut faire pipi en appui renversé, les pattes arrière levées contre un arbre, pour marquer son odeur plus haut.","Le panda géant passe une grande partie de ses heures d’éveil à manger du bambou.","Le panda géant se nourrit presque uniquement de feuilles d’eucalyptus."],m:2,e:"Le mensonge : l’eucalyptus, c’est le menu du koala ! Le panda, lui, dévore des kilos de bambou — et marque son territoire en hauteur, en véritable acrobate des toilettes."},
+{a:["La marmotte est surnommée « siffleux » au Québec à cause de son cri d’alarme sifflé.","La marmotte du Canada hiberne vraiment pendant de longs mois d’hiver.","La marmotte prédit la météo du printemps avec une précision scientifique démontrée."],m:2,e:"Le mensonge : le Jour de la marmotte, le 2 février, est un folklore amusant, pas une science ! La vraie marmotte, elle, dort profondément pendant que les humains débattent de son ombre."},
+{a:["Le dindon sauvage dort perché dans les arbres la nuit pour échapper aux prédateurs.","Malgré son poids, le dindon sauvage peut voler sur de courtes distances, en rafales rapides.","Le dindon sauvage est incapable de décoller du sol, même pour quelques mètres."],m:2,e:"Le mensonge : il décolle très bien quand il le faut — un oiseau de près de 10 kilos qui grimpe aux arbres chaque soir ! Il préfère simplement marcher et courir le reste du temps."},
+{a:["Chez le paon, les longues plumes spectaculaires de la « queue » sont en réalité des plumes de couverture au-dessus de la vraie queue.","Le paon fait vibrer ses plumes déployées, ce qui produit un bruissement audible.","C’est la femelle du paon, la paonne, qui porte la grande traîne colorée aux « yeux »."],m:2,e:"Le mensonge : la traîne appartient au mâle. La paonne, plus discrète, choisit son partenaire en inspectant ces fameux « yeux » iridescents — une centaine scintillent sur l’éventail déployé."},
+{a:["Les ailes du bourdon battent selon un mouvement qui crée des tourbillons d’air lui donnant sa portance.","Le bourdon butine même par temps frais où les abeilles restent plutôt au chaud.","Des scientifiques ont formellement prouvé que le bourdon est incapable de voler, et pourtant il vole."],m:2,e:"Le mensonge : cette « preuve » est une légende urbaine née d’un vieux calcul trop simple. La vraie aérodynamique du bourdon est comprise depuis longtemps — ses ailes tourbillonnantes fonctionnent à merveille."},
+{a:["La limace possède deux paires de tentacules : ceux du dessus portent les yeux, ceux du dessous servent à sentir.","Contrairement à l’escargot, la limace n’a pas de grande coquille externe visible.","La limace porte une coquille externe géante en spirale, encore plus grosse que celle de l’escargot."],m:2,e:"Le mensonge : pas de coquille-spectacle chez la limace — au mieux un petit reste caché sous la peau. Ses quatre « nez »-tentacules, eux, sont bien réels et rétractables."},
+{a:["La limule, surnommée crabe fer à cheval, a un sang bleu à base de cuivre.","La limule est plus proche parente des araignées et des scorpions que des vrais crabes.","La limule est un insecte géant qui vit dans l’océan."],m:2,e:"Le mensonge : ni crabe, ni insecte — une cousine marine des araignées ! Son sang bleu sert même en médecine pour détecter des bactéries dangereuses dans les médicaments."},
+{a:["La trompe de l’éléphant peut lui servir de tuba quand il nage en eau profonde.","L’éléphant possède un odorat remarquable, notamment grâce à sa trompe et à ses nombreux récepteurs d’odeurs.","La trompe de l’éléphant est un long os creux recouvert de peau."],m:2,e:"Le mensonge : aucun os dans la trompe — que des muscles (des milliers !), un nez et des narines. Elle peut arracher une branche, cueillir une brindille ou servir de tuba de fortune."},
+{a:["Chaque zèbre possède un motif de rayures unique, comme une empreinte digitale.","Des études montrent que les rayures du zèbre dérangent les mouches piqueuses, qui peinent à s’y poser.","Tous les zèbres d’un même troupeau ont exactement le même motif de rayures."],m:2,e:"Le mensonge : aucun motif n’est répété — un zébreau reconnaît sa mère à ses rayures et à son odeur. Et ces rayures rendent la vie dure aux mouches, un avantage bien documenté."},
+{a:["L’autruche pond les plus gros œufs de tous les oiseaux actuels, équivalant à environ deux douzaines d’œufs de poule.","L’autruche est l’oiseau terrestre le plus rapide à la course, pouvant approcher 70 km/h.","L’autruche vole plus haut et plus loin que l’aigle."],m:2,e:"Le mensonge : l’autruche ne vole pas du tout — mais quelle coureuse ! Ses œufs géants, eux, nourriraient une classe entière en omelette."},
+{a:["La loutre de rivière glisse volontiers sur la neige et les berges boueuses, pour se déplacer comme pour jouer.","Les vibrisses (moustaches) de la loutre de rivière l’aident à repérer ses proies dans l’eau trouble.","La loutre de rivière dort en hibernation complète du mois de novembre au mois d’avril."],m:2,e:"Le mensonge : elle reste active tout l’hiver, pêchant sous la glace et glissant sur la neige. Ses glissades répétées dans les mêmes pistes sont une signature bien connue des trappeurs d’images."},
+{a:["Le tamia rayé transporte sa nourriture dans des joues extensibles qui peuvent gonfler énormément.","Le tamia passe l’hiver en périodes de torpeur, entrecoupées de réveils pour grignoter ses réserves.","Le tamia rayé n’a en réalité aucune rayure sur le dos."],m:2,e:"Le mensonge : cinq belles rayures foncées sur le dos, c’est sa carte d’identité ! Ses joues-valises, elles, peuvent contenir une impressionnante quantité de graines en un seul voyage."},
+{a:["La chouette effraie a un visage en forme de cœur qui aide à diriger les sons vers ses oreilles.","La chouette effraie avale souvent ses proies entières, puis rejette les parties non digestibles sous forme de pelotes.","La chouette effraie se nourrit principalement de fromage laissé près des granges."],m:2,e:"Le mensonge : pas de fromage au menu — campagnols et souris, avalés tout rond ! Ses pelotes de réjection sont de véritables trésors pour les écoliers qui les dissèquent en classe de sciences."},
+{a:["Le renard roux, très adaptable, vit aussi bien dans les campagnes du Québec que dans ses grandes villes.","L’hiver, le renard roux enroule sa queue touffue autour de son museau pour se protéger du froid en dormant.","La queue du renard roux lui sert d’aile pour planer d’arbre en arbre."],m:2,e:"Le mensonge : pas de vol plané pour le renard — mais une queue-écharpe très efficace par −30 °C ! Ce malin s’est adapté jusque dans les ruelles de Montréal."},
+{a:["La lettre la plus fréquente en français écrit est le « e ».","Le mot « onomatopée » désigne un mot qui imite un son, comme « miaou » ou « boum ».","La lettre la plus fréquente en français est le « z »."],m:2,e:"Le mensonge : le « z » est au contraire une des lettres les plus rares en français. Le champion incontesté, c’est le « e » — il apparaît partout, même dans cette phrase-ci plusieurs fois !"}
+];
+HIST = HIST.concat(HIST2);
+INUS = INUS.concat(INUS2);
+COC = COC.concat(COC2);
+
+/* ============ MOTEUR DU JEU ============ */
+var CATS = {
+  hist:{name:"Fait historique", icon:"🏛️", sub:"Événements, inventions et personnages — le Québec et le Canada d’abord, le monde ensuite.", data:HIST},
+  inus:{name:"Fait inusité", icon:"🔎", sub:"Faits rares mais vrais : nature, science, espace, records et corps humain.", data:INUS},
+  coc:{name:"Fait cocasse", icon:"😄", sub:"Faits drôles et vrais : animaux farfelus, nourriture et vie quotidienne.", data:COC},
+  mix:{name:"Mélange", icon:"🎲", sub:"Les trois catégories mélangées : historique, inusité et cocasse. Pour les champions !", data:null}
+};
+var ALLSETS = [];
+["hist","inus","coc"].forEach(function(k){ CATS[k].data.forEach(function(s,i){ ALLSETS.push({cat:k, idx:i}); }); });
+CATS.mix.data = ALLSETS.map(function(e){ return CATS[e.cat].data[e.idx]; });
+
+var $ = function(id){ return document.getElementById(id); };
+var played = {hist:{}, inus:{}, coc:{}, mix:{}};
+var sessionBest = {hist:0, inus:0, coc:0, mix:0};
+var records = {hist:{best:0,done:false}, inus:{best:0,done:false}, coc:{best:0,done:false}, mix:{best:0,done:false}};
+try{
+  var raw = localStorage.getItem("vvm_records_v1");
+  if(raw){ var p = JSON.parse(raw); for(var k in records){ if(p[k]) records[k] = p[k]; } }
+}catch(e){}
+function saveRecords(){
+  try{ localStorage.setItem("vvm_records_v1", JSON.stringify(records)); }catch(e){}
+}
+
+/* --- Sons WebAudio --- */
+var audioCtx = null, muted = false;
+function beep(freq, dur, type, delay){
+  if(muted) return;
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state === "suspended") audioCtx.resume();
+    var t = audioCtx.currentTime + (delay||0);
+    var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = type||"sine"; o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.14, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  }catch(e){}
+}
+function sndClick(){ beep(520, .07, "triangle"); }
+function sndGood(){ beep(660, .12, "sine"); beep(880, .18, "sine", .1); }
+function sndBad(){ beep(196, .22, "sawtooth"); beep(147, .28, "sawtooth", .08); }
+function sndWin(){ [523,659,784,1047].forEach(function(f,i){ beep(f, .18, "triangle", i*.11); }); }
+
+/* --- Musique « jeu quiz télé » : composition ORIGINALE en WebAudio, dans le style des jeux-questionnaires télé.
+       Aucune mélodie d’émission réelle n’est reproduite : toutes les notes sont originales au jeu. --- */
+var musicGain = null, thinkTimer = null, thinkOn = false, audioUnlocked = false, fanfareToken = 0;
+function mctx(){
+  if(muted) return null;
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state === "suspended") audioCtx.resume();
+    if(!musicGain){ musicGain = audioCtx.createGain(); musicGain.gain.value = 0.9; musicGain.connect(audioCtx.destination); }
+    return audioCtx;
+  }catch(e){ return null; }
+}
+function mnote(freq, off, dur, type, vol, glideTo){
+  var ctx = mctx(); if(!ctx) return;
+  var t = ctx.currentTime + (off||0);
+  var o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+  o.type = type||"sawtooth"; o.frequency.setValueAtTime(freq, t);
+  if(glideTo) o.frequency.exponentialRampToValueAtTime(glideTo, t + dur);
+  f.type = "lowpass"; f.frequency.value = 2400;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol||0.08, t + 0.03);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  o.connect(f); f.connect(g); g.connect(musicGain);
+  o.start(t); o.stop(t + dur + 0.05);
+}
+function mchord(freqs, off, dur, type, vol){ freqs.forEach(function(fr){ mnote(fr, off, dur, type, vol); }); }
+function musicThinkStop(){ thinkOn = false; if(thinkTimer){ clearTimeout(thinkTimer); thinkTimer = null; } }
+function musicStopAll(){ musicThinkStop(); fanfareToken++; }
+function musicThinkStart(){
+  musicThinkStop();
+  if(muted || !audioUnlocked) return;
+  thinkOn = true;
+  var bass = [130.81, 130.81, 155.56, 130.81, 146.83, 130.81, 155.56, 196.00];
+  var step = 0;
+  function loop(){
+    if(!thinkOn || muted) return;
+    var b = bass[step % bass.length];
+    mnote(b, 0, 0.32, "triangle", 0.075);
+    mnote(b * 2, 0, 0.20, "sine", 0.028);
+    if(step % 4 === 2) mnote(1046.50, 0, 0.10, "sine", 0.014);
+    step++;
+    thinkTimer = setTimeout(loop, 400);
+  }
+  loop();
+}
+function fanfareHome(){
+  if(muted || !audioUnlocked) return;
+  fanfareToken++;
+  mchord([261.63, 329.63, 392.00], 0, 0.16, "sawtooth", 0.045);
+  mnote(523.25, 0.02, 0.14, "sawtooth", 0.065);
+  mnote(659.25, 0.18, 0.14, "sawtooth", 0.065);
+  mnote(783.99, 0.34, 0.14, "sawtooth", 0.065);
+  mnote(1046.50, 0.50, 0.42, "sawtooth", 0.08);
+  mchord([261.63, 329.63, 392.00], 0.50, 0.42, "triangle", 0.045);
+}
+function jingleGood(){
+  if(muted) return;
+  audioUnlocked = true;
+  [523.25, 659.25, 783.99, 1046.50].forEach(function(fr, i){ mnote(fr, i * 0.09, 0.22, "sawtooth", 0.07); });
+  mchord([261.63, 329.63, 392.00], 0.38, 0.30, "triangle", 0.04);
+}
+function jingleBad(){
+  if(muted) return;
+  audioUnlocked = true;
+  mnote(329.63, 0, 0.16, "square", 0.04, 311.13);
+  mnote(261.63, 0.16, 0.16, "square", 0.04, 246.94);
+  mnote(196.00, 0.32, 0.36, "square", 0.045, 155.56);
+}
+function fanfareEnd(){
+  if(muted || !audioUnlocked) return;
+  musicThinkStop();
+  [392.00, 523.25, 659.25, 783.99].forEach(function(fr, i){ mnote(fr, i * 0.11, 0.20, "sawtooth", 0.065); });
+  mnote(1046.50, 0.48, 0.25, "sawtooth", 0.08);
+  mnote(783.99, 0.78, 0.14, "sawtooth", 0.055);
+  mnote(1046.50, 0.94, 0.25, "sawtooth", 0.08);
+  mnote(1318.51, 1.22, 0.60, "sawtooth", 0.085);
+  mchord([261.63, 329.63, 392.00, 523.25], 1.22, 0.60, "triangle", 0.04);
+  mnote(65.41, 1.22, 0.50, "sine", 0.11);
+}
+document.addEventListener("pointerdown", function(){
+  if(audioUnlocked) return;
+  audioUnlocked = true;
+  if(!$("gameScreen").classList.contains("hidden")) return;
+  if(!$("homeScreen").classList.contains("hidden")) fanfareHome();
+}, {passive:true});
+$("muteBtn").addEventListener("click", function(){
+  muted = !muted;
+  this.textContent = muted ? "🔇" : "🔊";
+  if(muted){ musicStopAll(); }
+  else {
+    sndClick(); audioUnlocked = true;
+    if(G && !$("gameScreen").classList.contains("hidden") && !G.locked) musicThinkStart();
+    else if(!$("homeScreen").classList.contains("hidden")) fanfareHome();
+  }
+});
+
+/* --- Navigation écrans --- */
+function show(id){
+  ["homeScreen","gameScreen","endScreen"].forEach(function(s){ $(s).classList.toggle("hidden", s !== id); });
+  window.scrollTo(0,0);
+}
+
+/* --- Accueil --- */
+function setOf(catKey, setIdx){
+  if(catKey === "mix"){ var e = ALLSETS[setIdx]; return {set:CATS[e.cat].data[e.idx], catName:CATS[e.cat].name}; }
+  return {set:CATS[catKey].data[setIdx], catName:CATS[catKey].name};
+}
+function renderHome(){
+  var html = "";
+  ["hist","inus","coc","mix"].forEach(function(k){
+    var c = CATS[k], r = records[k];
+    var total = c.data.length;
+    var rest = total - Object.keys(played[k]).length;
+    html += '<button class="cat-btn' + (k==="mix" ? " mix" : "") + '" data-cat="' + k + '">'
+      + '<span class="cat-ico">' + c.icon + '</span>'
+      + '<span class="cat-txt"><span class="cat-name">' + c.name + (r.done ? '<span class="badge-done">Complétée ✓</span>' : "") + '</span>'
+      + '<span class="cat-sub">' + c.sub + '</span>'
+      + '<span class="cat-meta">' + total + ' manches • ' + (r.best > 0 ? '🔥 record de série : ' + r.best : 'aucun record pour l’instant') + (rest < total && rest > 0 ? ' • ' + rest + ' manches restantes' : "") + '</span>'
+      + '</span><span aria-hidden="true" style="font-size:1.3rem;">›</span></button>';
+  });
+  $("catList").innerHTML = html;
+  var btns = $("catList").querySelectorAll(".cat-btn");
+  for(var i=0;i<btns.length;i++){
+    btns[i].addEventListener("click", function(){ sndClick(); startCategory(this.getAttribute("data-cat")); });
+  }
+}
+
+/* --- Partie --- */
+var G = null;
+function shuffled(arr){
+  var a = arr.slice();
+  for(var i=a.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+function startCategory(catKey){
+  musicStopAll(); audioUnlocked = true;
+  var total = CATS[catKey].data.length;
+  if(Object.keys(played[catKey]).length >= total){ played[catKey] = {}; }
+  G = {cat:catKey, score:0, streak:0, best:0, round:0, current:-1, locked:false};
+  show("gameScreen");
+  nextRound();
+}
+function remainingIndices(catKey){
+  var total = CATS[catKey].data.length, out = [];
+  for(var i=0;i<total;i++){ if(!played[catKey][i]) out.push(i); }
+  return out;
+}
+function nextRound(){
+  var rem = remainingIndices(G.cat);
+  if(rem.length === 0){ endCategory(); return; }
+  G.current = rem[Math.floor(Math.random()*rem.length)];
+  played[G.cat][G.current] = true;
+  G.round++;
+  G.locked = false;
+  var info = setOf(G.cat, G.current);
+  var set = info.set;
+  var order = shuffled([0,1,2]);
+  G.display = order.map(function(si){ return {text:set.a[si], isLie:(si === set.m)}; });
+  G.expl = set.e;
+  $("hudCat").textContent = CATS[G.cat].icon + " " + CATS[G.cat].name;
+  $("hudProg").textContent = "Manche " + G.round + (G.cat==="mix" ? "" : "");
+  $("hudScore").textContent = "Score : " + G.score;
+  $("hudStreak").textContent = "🔥 Série : " + G.streak;
+  var total = CATS[G.cat].data.length;
+  $("progBar").style.width = Math.round((Object.keys(played[G.cat]).length / total) * 100) + "%";
+  $("qLabel").innerHTML = (G.cat==="mix" ? '<span class="cat-tag">' + info.catName + '</span> — ' : "") + "Quelle affirmation est le <b>mensonge</b> ?";
+  var html = "";
+  G.display.forEach(function(d, i){
+    html += '<button class="stmt" data-i="' + i + '"><span class="num">' + (i+1) + '</span><span>' + d.text + '</span><span class="mark"></span></button>';
+  });
+  $("cards").innerHTML = html;
+  $("verdict").className = "verdict";
+  $("nextBtn").classList.add("hidden");
+  var stmts = $("cards").querySelectorAll(".stmt");
+  for(var i=0;i<stmts.length;i++){ stmts[i].addEventListener("click", onPick); }
+  musicThinkStart();
+  window.scrollTo(0,0);
+}
+function onPick(){
+  if(!G || G.locked) return;
+  G.locked = true;
+  musicThinkStop();
+  var picked = parseInt(this.getAttribute("data-i"), 10);
+  var good = G.display[picked].isLie;
+  var stmts = $("cards").querySelectorAll(".stmt");
+  G.display.forEach(function(d, i){
+    var el = stmts[i];
+    el.classList.add("revealed");
+    el.disabled = true;
+    if(d.isLie){ el.classList.add("is-lie"); el.querySelector(".mark").textContent = "🤥"; }
+    else { el.classList.add("is-truth"); el.querySelector(".mark").textContent = "✅"; if(i !== picked) el.classList.add("dim"); }
+    if(i === picked && !good){ el.querySelector(".mark").textContent = "❌"; }
+  });
+  if(good){
+    G.score++; G.streak++; if(G.streak > G.best) G.best = G.streak;
+    jingleGood();
+    $("verdictTitle").textContent = "🎉 Bravo, c’était bien le mensonge !";
+    $("verdict").className = "verdict show good";
+  } else {
+    G.streak = 0;
+    jingleBad();
+    $("verdictTitle").textContent = "🤔 Raté ! Le mensonge était l’affirmation " + (G.display.findIndex(function(d){return d.isLie;}) + 1) + ".";
+    $("verdict").className = "verdict show bad";
+  }
+  $("verdictText").textContent = G.expl;
+  $("hudScore").textContent = "Score : " + G.score;
+  $("hudStreak").textContent = "🔥 Série : " + G.streak;
+  if(G.best > sessionBest[G.cat]) sessionBest[G.cat] = G.best;
+  var rem = remainingIndices(G.cat);
+  $("nextBtn").textContent = rem.length === 0 ? "Voir le résultat final →" : "Manche suivante →";
+  $("nextBtn").classList.remove("hidden");
+  $("verdict").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+function endCategory(){
+  var total = CATS[G.cat].data.length;
+  var r = records[G.cat];
+  if(G.best > r.best) r.best = G.best;
+  r.done = true;
+  saveRecords();
+  musicStopAll(); fanfareEnd();
+  $("endSpeech").innerHTML = "<b>HP binoclard :</b> « " + (G.score === total ? "Sans faute ! " + total + " sur " + total + " — tu es un véritable détecteur de mensonges !" : G.score >= total * 0.7 ? "Belle partie ! Tu as l’œil pour repérer les fausses histoires." : G.score >= total * 0.4 ? "Catégorie terminée ! Relis les explications : c’est comme ça qu’on devient imbattable." : "Pas facile, celle-là ! Les explications sont tes meilleures alliées — rejoue et prends ta revanche.") + " »";
+  $("endScore").textContent = G.score + " / " + total;
+  $("endSub").textContent = "Catégorie « " + CATS[G.cat].name + " » terminée — " + total + " manches jouées";
+  $("endStreak").textContent = G.best;
+  $("endRecord").textContent = records[G.cat].best;
+  played[G.cat] = {};
+  show("endScreen");
+}
+$("nextBtn").addEventListener("click", function(){ sndClick(); nextRound(); });
+$("quitBtn").addEventListener("click", function(){ sndClick(); musicStopAll(); renderHome(); show("homeScreen"); fanfareHome(); });
+$("replayBtn").addEventListener("click", function(){ sndClick(); startCategory(G.cat); });
+$("homeBtn").addEventListener("click", function(){ sndClick(); musicStopAll(); renderHome(); show("homeScreen"); fanfareHome(); });
+
+renderHome();
+show("homeScreen");
+</script>
+</body>
+</html>
