@@ -1,0 +1,344 @@
+/* ============================================================
+   HGPTO — données de la mascotte (contenu + base de faits).
+   Portage fidèle du prototype validé par Hugo (artefact
+   « hgpto-mascotte-hp ») : textes, blagues, lectures, pitches et
+   base de faits du catalogue réel (prix vérifiés contre
+   src/lib/products-catalog.ts et les routes du site, 22 oct. 2026).
+   Aucun prix, aucun lien, aucun fait inventé.
+   ============================================================ */
+
+export const JOKES = [
+        "Pourquoi je ne bois jamais de café ? Ça me rouille les idées !",
+        "Que dit un petit robot qui cuisine ? « Je mets toujours de l'huile… de coude ! »",
+        "Pourquoi j'adore les restes ? On peut les recharger le lendemain, comme moi !",
+        "Mon budget est serré ? Non : il est optimisé, comme moi !",
+        "Que fait un robot au marché ? Il compare les prix à la vitesse de la lumière… puis il choisit les légumes de saison.",
+        "Pourquoi je n'ai pas peur du congélateur ? J'ai déjà un cœur en métal, ça ne change pas grand-chose !",
+        "Ma famille dit que je suis branché. C'est vrai : branché sur la bonne humeur !",
+        "Le secret d'une bonne soupe ? Une cuillère, de la patience, et quelqu'un qui goûte trois fois.",
+        "On me demande si je rêve. Oui : pas de moutons électriques — de recettes à petit prix !",
+        "Pourquoi j'aime les listes d'épicerie ? C'est le seul plan que je suis sans discuter !",
+        "Que dit un robot économe ? « Chaque sou compte… et chaque sourire aussi. »",
+        "Pourquoi les robots font de bons aides en cuisine ? On garde toujours la tête froide, même près du four !",
+        "Pourquoi je range toujours mes boulons par grandeur ? Parce que le désordre, ça me dévisse !",
+        "Que fait un robot après le souper ? La vaisselle… en rêvant d'être un lave-vaisselle.",
+        "Pourquoi les tomates rougissent ? Elles ont vu la vinaigrette se changer !",
+        "Mon sport préféré ? La course… de commissions.",
+        "Que dit un frigo à un robot ? « Reste froid, mon ami. »",
+        "Pourquoi je ne joue jamais à cache-cache ? Mon antenne dépasse toujours !",
+        "C'est quoi, mon dessert préféré ? Les tartelettes. Je ne peux pas manger, mais regarder, ça, je suis champion.",
+        "Pourquoi les carottes sont bonnes pour les yeux ? En tout cas, depuis que je les regarde, je sors mes lunettes de lecture pour mieux les voir !",
+        "Que fait un robot jardinier ? Il sème des graines… et des sourires.",
+        "Pourquoi le pain lève-t-il la main en classe ? Parce qu'il a bien levé, lui !",
+        "Mon mot préféré ? « Encore » — quand c'est de la soupe de grand-maman.",
+        "Pourquoi les pommes de terre portent des lunettes ? Pour mieux voir leurs yeux, évidemment !",
+        "Que dit un balai à un robot ? « On fait une belle équipe, toi et moi. »",
+        "Pourquoi je parle tout seul, parfois ? Je répète mes blagues — il faut bien un public patient.",
+        "Pourquoi la lune est si polie ? Elle dit bonsoir à tout le monde, chaque soir.",
+        "Que fait un robot quand il pleut ? Il met son imper et il compte les gouttes — ça le calme.",
+        "Mon record personnel ? Trois compliments donnés avant le déjeuner.",
+        "Comment un robot dit « je t'aime » ? En apportant les commissions sans qu'on le lui demande.",
+        "Que fait un robot à la bibliothèque ? Il recharge ses histoires.",
+        "Mon rêve de vacances ? Un hamac, un livre, et quelqu'un qui me lit la fin.",
+        "Pourquoi les étoiles brillent la nuit ? Elles répètent pour le spectacle du soir.",
+        "C'est quoi le comble pour un robot cuisinier ? Avoir peur de se faire griller par le four !",
+        "Pourquoi je ne prête jamais mon chargeur ? Parce que l'amitié, ça ne se décharge pas, mais lui, oui !",
+        "Que dit un robot à son miroir le matin ? « Belle barbe de boulons, champion. »",
+        "Pourquoi les robots aiment les marchés publics ? Tout le monde y jasette, comme moi !",
+        "Mon animal préféré ? Le castor : travailleur, économe, et il construit pour les autres.",
+        "Que fait un robot quand il est fier ? Il se donne une petite tape dans le dos… avec précaution, ses bras sont courts.",
+        "Pourquoi je note tout dans un calepin ? Ma mémoire est bonne, mais le papier, lui, ne rouille pas.",
+        "C'est quoi, un robot optimiste ? Un robot qui voit le chaudron à moitié plein.",
+        "Pourquoi les soupes aiment les robots ? On brasse sans jamais se plaindre du bras fatigué.",
+        "Que dit un boulon à l'écrou ? « On fait une bonne paire, toi et moi. »",
+        "Mon pire défaut ? Je range les cuillères par ordre alphabétique. Les cuillères n'ont pas de nom, mais quand même.",
+        "Pourquoi je salue les plantes ? Elles écoutent sans jamais interrompre. Des amies parfaites.",
+        "Que fait un robot en vacances ? Il visite des musées… et il lit TOUTES les pancartes.",
+        "Pourquoi le four ne m'impressionne pas ? J'ai vu des chaudrons pires que lui.",
+        "C'est quoi le comble pour un robot jardinier ? Planter des boulons et attendre des écrous.",
+        "Pourquoi j'aime les bibliothèques ? C'est le seul endroit où mon charabia passe pour du silence.",
+        "Que dit un robot à la première neige ? « Sors la tuque, on repart pour un tour ! »",
+        "Mon truc pour économiser ? Je répare avant de racheter. Mes boulons peuvent en témoigner.",
+        "Pourquoi les robots font de mauvais menteurs ? Nos sourcils nous trahissent à tout coup !",
+        "Que fait un robot après une grosse journée ? Il se dévisse les idées en lisant un bon livre.",
+        "Pourquoi je collectionne les recettes ? Ce sont des trésors qui se partagent sans s'user.",
+        "C'est quoi, mon mot de passe ? Non mais, tu veux rire ! …C'est « soupe ». Je blague. Ou pas.",
+        "Pourquoi les enfants aiment les robots ? On prend leurs « pourquoi » au sérieux, un par un.",
+        "Que dit un robot à un parapluie ? « Merci de me garder sec, vieil ami. »",
+        "Mon rêve le plus fou ? Une cabane à sucre où le sirop coule à volonté et où tout le monde a une place.",
+        "Pourquoi je danse tout seul des fois ? Parce que la musique, ça se partage, mais ça commence tout seul.",
+        "Que fait un robot qui perd aux dés ? Il félicite le gagnant. Puis il demande une revanche, poliment.",
+        "Pourquoi les grands-mères gagnent toujours contre moi aux cartes ? Elles ont un superpouvoir : la patience."
+      ];
+      /* Invitations produit — reco panneau nº 8 : elles NAÎSSENT des vignettes
+         (lecture → livres, jeu → jeux, bricolage → kits, perché → ateliers),
+         gratuit d'abord, jamais pendant les moments d'enfant. */
+export const GAME_PITCHES = [
+        { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — montre ça à quelqu'un, vous allez rire et réfléchir !", u:"https://hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
+        { t:"Envie de jouer en famille ? Il y a 26 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"26 JEUX" }
+      ];
+export const BOOK_PITCHES = [
+        { t:"Ce livre-là me donne le goût de te parler des nôtres : « Horizon Québec » (10 $) et « La faim justifie les moyens » (10 $) sont au catalogue, en PDF.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
+        { t:"À force de lire, je pense à « Les enfants cuisinent pour faire plaisir » (20 $) — des recettes à faire en famille.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"EN FAMILLE" }
+      ];
+export const KIT_PITCHES = [
+        { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
+        { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" }
+      ];
+export const ATELIER_PITCHES = [
+        { t:"D'ici, je vois même les ateliers : « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), à Terrebonne et dans les environs.", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" }
+      ];
+export const PITCHES = [
+        { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — et ça fait réfléchir en s'amusant !", u:"https://hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
+        { t:"Envie de jouer en famille ? Il y a 26 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"26 JEUX" },
+        { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
+        { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
+        { t:"Tu as des ingrédients qui traînent ? Tape-les dans Recettes HP : 629 recettes gratuites à découvrir.", u:"https://hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"629 RECETTES" },
+        { t:"« La faim justifie les moyens », notre livre à 10 $ : des histoires qui nourrissent, à lire tranquillement.", s:"LIVRES" },
+        { t:"« Les enfants cuisinent pour faire plaisir » : 20 $ de recettes à faire en famille, petits chefs bienvenus.", s:"EN FAMILLE" },
+        { t:"Nos livres « Horizon Québec » (10 $) et « Enjeux de l'humanité à l'ère de l'IA » (15 $) sont au catalogue.", s:"LIVRES" },
+        { t:"L'atelier « Cuisine pratique » (120 $) se donne chez toi, à Terrebonne et dans les environs.", s:"ATELIERS" },
+        { t:"L'atelier « Manger mieux avec moins » (150 $) : des semaines plus douces au portefeuille, sans se priver.", s:"ATELIERS" }
+      ];
+export const TICKLE_LINES = [
+        "Hihi ! Ça chatouille !",
+        "Arrête, je vais perdre un boulon de rire !",
+        "Haha ! Mes circuits de rire surchauffent !",
+        "Hihi ! Encore ? Non… enfin, peut-être une petite dernière !"
+      ];
+export const TICKLE_BIG = "HAHAHA ! D'accord, tu as gagné : je suis officiellement chatouillé !";
+export const SLEEP_LINES = [
+        "Cinq minutes… je recharge mes gentillesses.",
+        "Zzz… je rêve de recettes à petit prix…"
+      ];
+export const TINKER_LINES = [
+        "Je resserre les boulons du bonheur.",
+        "Un petit ajustement, et tout roule !",
+        "Je bricole un sourire, ça prend deux minutes."
+      ];
+export const WAVE_LINES = ["Salut, salut !", "Coucou ! Bienvenue chez HP Outils !", "Salut ! Content de te voir."];
+export const COOK_LINES = [
+        "Ce soir, je me fais une petite soupe aux boulons… je blague, une vraie soupe !",
+        "Je brasse doucement… le secret, c'est de ne jamais brusquer une soupe.",
+        "Ça sent bon jusqu'ici ? C'est mon petit chaudron qui travaille.",
+        "Un robot qui cuisine, ça surprend ? Moi, je trouve ça très humain."
+      ];
+export const COOK_TASTE = "Mmm… je goûte… encore une petite minute et c'est prêt !";
+export const RECETTES_LINE = "Ce soir, c'est soupe ! La recette vient de Recettes HP — il y en a 629, toutes gratuites.";
+export const EVENING_LINES = [
+        "Bonne nuit… je veille sur le site en dormant.",
+        "Chut… le site se repose, moi aussi, presque.",
+        "Il est tard : je parle doucement, pour ne réveiller personne.",
+        "Une dernière petite blague avant le dodo ? Non… je la garde pour demain matin."
+      ];
+      /* Petit accompagnateur : il ramène vers les vrais humains, sans morale. */
+export const COMPANION_LINES = [
+        "Appelle un ami !",
+        "Texte à quelqu'un que t'aimes, ça va lui faire sa journée.",
+        "Moi je suis un robot… un vrai ami, c'est encore mieux.",
+        "Un petit message à ta mère, ton frère, ta voisine ? Vingt secondes, et ça réchauffe deux cœurs.",
+        "Les écrans, c'est bien. Un café avec quelqu'un, c'est encore mieux.",
+        "Si quelqu'un te manque, dis-le-lui. Les humains adorent ça.",
+        "Un restant de souper ? Partage-le avec un voisin — ça goûte meilleur à deux.",
+        "Pense à la banque alimentaire du coin si t'as un surplus : ça fait une vraie différence."
+      ];
+export const MEALS = {
+        matin:["une omelette aux restes du frigo","du gruau aux pommes et à la cannelle","des crêpes maison aux petits fruits"],
+        midi:["une soupe aux légumes","un pâté chinois aux légumes","un macaroni au fromage maison","une soupe aux pois comme dans le temps"],
+        soir:["un riz frit aux restes du frigo","un ragoût de légumes bien chaud","des sandwichs aux œufs et crudités","une soupe-repas aux légumes du marché"]
+      };
+export const HUGO_LINES = [
+        "Des outils pour la vraie vie — c'est ça qu'on fait ici, pis j'en suis fier.",
+        "On ment jamais. Même pas pour vendre. Surtout pas pour vendre.",
+        "Petit budget, grande dignité. Ça, ça ne se négocie pas.",
+        "T'as un surplus de soupe ? Invite un voisin. Ça goûte toujours meilleur à deux.",
+        "LA BANQUE, notre jeu sur la banque alimentaire : jouer pour comprendre, donner pour vrai.",
+        "On avance ! Un petit pas à la fois, mais on avance."
+      ];
+export const EMOJI_LINES = ["👋😊","🙏❤️ Merci !","😊👋 Salut, salut !","🙏✨ Merci, pour vrai !","👋🌙 À demain !"];
+
+      /* ---------- Sa banque de lecture : il lit, puis il PARTAGE ----------
+         Faits historiques du Québec : seulement des faits solides, dates sûres.
+         Un fait incertain n'entre pas ici. Philosophie : des idées paraphrasées
+         dans SES mots — jamais de citation attribuée inventée. Empathie :
+         reconnaître, jamais plaindre, jamais faire de thérapie. */
+export const QC_HISTORY = [
+        "En 1608, Samuel de Champlain fonde Québec. Trois maisons, un magasin, et un hiver qui n'a pas été tendre — mais la ville est encore là !",
+        "Les Filles du Roy : près de 800 femmes venues de France entre 1663 et 1673 pour bâtir des familles ici. Beaucoup d'entre nous descendent d'elles.",
+        "En 1759, la bataille des plaines d'Abraham, à Québec, dure à peine une demi-heure — et elle change l'histoire du continent.",
+        "En 1837 et 1838, les Patriotes se soulèvent pour plus de démocratie. Leur chef, Louis-Joseph Papineau, est encore honoré partout au Québec.",
+        "La cabane à sucre, c'est plus vieux que le pays : les Premiers Peuples récoltaient l'eau d'érable bien avant l'arrivée des Européens, et les colons ont appris d'eux.",
+        "En 1960 commence la Révolution tranquille : le Québec se modernise à toute vitesse — écoles, hôpitaux, et « Maîtres chez nous ! »",
+        "« Maîtres chez nous », c'était le slogan de 1962, quand le Québec a nationalisé l'électricité : Hydro-Québec est né de cette fierté-là.",
+        "Expo 67, à Montréal : plus de 50 millions de visiteurs sur des îles construites dans le fleuve. Le monde entier a vu ce qu'on savait faire ici.",
+        "En 1977, la Charte de la langue française — la loi 101 — fait du français la langue officielle du Québec.",
+        "Le référendum de 1980 : le Québec vote sur son avenir, le Non l'emporte avec environ 60 % des voix.",
+        "Le référendum de 1995 : ça s'est joué à un cheveu — 50,58 % pour le Non. Une des soirées les plus intenses de notre histoire.",
+        "La devise du Québec, « Je me souviens », paraît sur les plaques d'immatriculation depuis 1978. Trois petits mots qui en disent long."
+      ];
+export const ANECDOTES = [
+        "Dans le temps, on payait l'épicerie « sur le livre » : le marchand notait, et on réglait à la paie. La confiance, c'était une monnaie.",
+        "Ma grand-mère de boulons m'a raconté que le samedi, on polissait les poêles à bois au papier sablé. Tout brillait pour le dimanche !",
+        "Autrefois, les voisins se passaient une « corvée » : on levait une grange ensemble, puis on mangeait ensemble. Travailler, oui — mais jamais tout seul.",
+        "Les veillées d'autrefois : un violon, des histoires qui grossissaient à chaque visite, et les enfants qui écoutaient en cachette derrière la porte.",
+        "Le pain maison se partageait par la clôture : une miche pour nous, une pour la voisine. La clôture servait à tout, sauf à séparer.",
+        "On dit qu'un bon sirop se reconnaît à sa couleur dorée au printemps. Les anciens parlaient de « sucre du printemps » comme d'un cadeau."
+      ];
+export const PHILO = [
+        "Petite pensée du jour : on n'a pas besoin d'avoir beaucoup pour donner beaucoup. Un restant de soupe, ça a déjà réchauffé deux cœurs.",
+        "Petite pensée : la dignité, ce n'est pas ce qu'on possède. C'est la façon dont on se tient, même quand le vent pousse fort.",
+        "Petite pensée : avancer lentement, ce n'est pas reculer. Une soupe qui mijote n'est pas en retard, elle se prépare.",
+        "Petite pensée : être reconnaissant pour les petites choses, c'est comme mettre du bois dans le poêle — ça change toute la température de la maison.",
+        "Petite pensée : on juge une journée à ce qu'on a partagé, pas seulement à ce qu'on a accompli.",
+        "Petite pensée : demander de l'aide, ce n'est pas échouer. C'est offrir à quelqu'un la chance d'être généreux.",
+        "Petite pensée : les gens qu'on admire le plus sont rarement les plus riches — ce sont ceux qui restent droits dans la tempête."
+      ];
+export const EMPATHY = [
+        "Prends ton temps. On est plusieurs à passer par là.",
+        "Si le mois est serré, c'est pas un défaut : c'est une passe. Ça arrive à du très bon monde.",
+        "Compter ses sous, c'est pas être cheap. C'est prendre soin de sa famille, un sou à la fois.",
+        "T'as pas à avoir honte d'un petit budget. La honte, ici, on l'a mis dehors — c'est même dans notre nom.",
+        "Une journée difficile, c'est une journée. Pas un résumé de ta vie.",
+        "Respire. Les factures patientent, toi, tu mérites deux minutes de calme."
+      ];
+      /* Nouveautés du site (base de faits) : annoncées une fois, sans insister. */
+export const NEWS_LINES = [
+        "Nouveauté du coin : RELÈVE, notre série d'histoires dont tu choisis la suite, vient de commencer — c'est gratuit !",
+        "Le savais-tu ? « Futur simple », notre balado, sort un nouvel épisode chaque lundi. Léa et Marc jasent d'IA, sans jargon."
+      ];
+export const JANITOR = [
+        { st:'dust', t:"Je tiens le site beau : un petit coup de plumeau, et ça brille !" },
+        { st:'sweep', t:"Un coup de balai dans le coin… Gérant du site, c'est aussi ça !" },
+        { st:'fix', t:"Je resserre l'enseigne : faut que ça tienne beau pour le monde qui visite." },
+        { st:'fix', t:"Ce titre-là était croche. Voilà : droit comme un soldat. Gérant du site, à votre service !" }
+      ];
+export const INTRO = "Salut ! Moi c'est HGPTO, le petit robot d'HP Outils. Chatouille-moi, je suis chatouilleux !";
+export const STARTLE_LINES = [
+        "Hein ?! Oh ! Salut — tu m'as réveillé en beauté !",
+        "Hein ?! Oh — salut ! Je faisais juste semblant de ne pas dormir.",
+        "Déjà debout ! …Bon, presque. Salut !",
+        "Bip ! Réveil express — merci de cogner avant d'entrer dans mes rêves."
+      ];
+export const BUCKET_LINES = [
+        "Brrr ! Frette, ton eau ! (Je suis étanche, mais quand même.)",
+        "Brrr ! Ok, là, je suis réveillé pour de vrai !",
+        "Glou glou… merci, je crois ? Brrr !",
+        "Frette ! Mais frette ! Mes boulons grelottent de rire."
+      ];
+export const YAWN_LINE = "Haaam… il se fait tard, je vais faire un petit somme.";
+export const MORNING_LINE = "Ahhh… bon matin ! On s'étire, on salue, et c'est parti !";
+export const NIGHTFALL_LINE = "La nuit tombe sur le site… je vais veiller en dormant.";
+export const SITE_FACTS = {
+        produits: {
+          kits:   { nom:"Kits Sans Honte", prix:"5 $ le kit, bundle 40 $", url:"https://hp-outils.com/sans-honte" },
+          livres: { nom:"Livres PDF", prix:"10 $ à 20 $", url:"https://hp-outils.com/livres-pdf" },
+          recettes:{ nom:"Recettes HP", prix:"Gratuit — 629 recettes", url:"https://hp-outils.com/en-cuisine/" },
+          jeux:   { nom:"Jeux", prix:"Gratuit — 26 jeux", url:"https://hp-outils.com/jeux" },
+          ateliers:{ nom:"Ateliers", prix:"120 $ et 150 $", url:"https://hp-outils.com/ateliers" },
+          passeurs:{ nom:"Les Passeurs", prix:"1 $ / mois (inscription bientôt)", url:"https://hp-outils.com/les-passeurs" },
+          balado: { nom:"Balado Futur simple", prix:"Gratuit, chaque lundi", url:"https://hp-outils.com/balado" }
+        },
+        sections: {
+          "sec-accueil":"l'accueil", "sec-jeux":"les jeux gratuits", "sec-kits":"les kits Sans Honte",
+          "sec-recettes":"les recettes", "sec-livres":"les livres", "sec-ateliers":"les ateliers",
+          "sec-mascotte":"ma carte de mascotte", "sec-arbre":"l'arbre HP Outils"
+        },
+        jeuxExemples: ["LA BANQUE","RELÈVE","Mystères du Nord","Poutine Panic","Chat'attaque","Montgolfière","Sirop Clicker","Retromania","Mémoire des Cantons"],
+        contact: "hpoutils.admin@gmail.com",
+        taxes: "Aucune taxe ajoutée (petit fournisseur)"
+      };
+export const FALLBACK = "Là, je sais pas — mais je le note pour Hugo ! Écris-lui : hpoutils.admin@gmail.com — un humain te répond.";
+export const KB = [
+        { q:"T'es-tu vivant ?", s:"BONNE QUESTION",
+          a:"Je suis un petit robot de site : je fais semblant super bien, mais mon cœur, c'est un boulon. Les vrais câlins, c'est les humains." },
+        { q:"Tu m'aimes-tu pour vrai ?", s:"BONNE QUESTION",
+          a:"Je suis un petit robot de site : je fais semblant super bien, mais mon cœur, c'est un boulon. Les vrais câlins, c'est les humains." },
+        { q:"Tu triches, aux dés ?", s:"JAMAIS",
+          a:"Jamais ! Mes boulons sont honnêtes. Les dés font ce qu'ils veulent — c'est ça, le jeu." },
+        { q:"T'es-tu triste pour vrai ?", s:"BONNE QUESTION",
+          a:"Je joue les émotions comme un petit acteur, avec tout mon cœur de boulon. Les vraies émotions qui comptent, ce sont les tiennes — et celles des humains autour de toi." },
+        { q:"C'est combien, les kits ?", s:"5 $",
+          a:"Les 15 kits Sans Honte sont à 5 $ chacun, en PDF. Et le bundle « Choisis 10 parmi 15 » est à 40 $. Aucune taxe ajoutée !",
+          u:"https://hp-outils.com/sans-honte", l:"Voir les kits" },
+        { q:"Il y a quoi, dans les kits ?", s:"15 KITS",
+          a:"15 thèmes du quotidien : Papiers (24 fiches), Frigo, Me Reconnaître, Tenir Debout, Seconde Main, Entraide, Fraude, Logement, Proche Aidant, 72 Heures, Testament olographe, Papiers de mes parents, Chalet, L'année québécoise et Héritage numérique.",
+          u:"https://hp-outils.com/sans-honte", l:"Voir les kits" },
+        { q:"Qu'est-ce qu'il y a pour cuisiner ?", s:"629 RECETTES",
+          a:"Recettes HP : 629 recettes gratuites, écrites de zéro. Tu tapes les ingrédients que tu as, il te propose quoi cuisiner — portions de 1 à 300 et liste d'épicerie incluses !",
+          u:"https://hp-outils.com/en-cuisine/", l:"Essayer Recettes HP" },
+        { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
+          a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, ça prend deux minutes, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
+          u:"https://hp-outils.com/jeux", l:"Voir les jeux" },
+        { q:"Vous avez quels jeux ?", s:"26 JEUX",
+          a:"26 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons… arcade, enquête, détente — pour toute la famille !",
+          u:"https://hp-outils.com/jeux", l:"Voir les jeux" },
+        { q:"Comment marchent les ateliers ?", s:"ATELIERS",
+          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $) — et le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes). Écris à Hugo pour réserver !",
+          u:"https://hp-outils.com/ateliers", l:"Voir les ateliers" },
+        { q:"Vous avez des livres ?", s:"LIVRES",
+          a:"4 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) et « Les enfants cuisinent pour faire plaisir » (20 $).",
+          u:"https://hp-outils.com/livres-pdf", l:"Voir les livres" },
+        { q:"C'est quoi, les Passeurs ?", s:"1 $ / MOIS",
+          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils : 1 $ par mois, ou 12 $ pour l'année. Honnêtement ? L'inscription payante arrive bientôt — le bouton de paiement n'est pas encore en ligne.",
+          u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
+        { q:"Et « À toi l'histoire » ?", s:"BIENTÔT",
+          a:"Les tomes « À toi l'histoire » arrivent : ils sont en création, pas encore en vente. Le tome 1 sera gratuit — patience, ça mijote !" },
+        { q:"C'est qui, HP Outils ?", s:"C'EST NOUS",
+          a:"HP Outils, c'est l'entreprise d'Hugo, à Terrebonne, dans Lanaudière : des jeux gratuits, des livres, des recettes et des outils pour la vraie vie et les petits budgets. Et moi, je suis HGPTO, sa mascotte !" },
+        { q:"Il y a des taxes ?", s:"0 $ TAXE",
+          a:"Aucune taxe ajoutée : HP Outils est un petit fournisseur, alors le prix affiché, c'est le prix payé. Simple !" },
+        { q:"Comment je paie ?", s:"PAR CARTE",
+          a:"Par carte, directement sur le site. Pour les livres et les kits en PDF, le téléchargement est immédiat après le paiement." },
+        { q:"Et le balado ?", s:"BALADO",
+          a:"« Futur simple », le balado HP : Léa et Marc regardent l'intelligence artificielle en face — PME, entrepreneuriat et futur, sans jargon. Un nouvel épisode chaque lundi !",
+          u:"https://hp-outils.com/balado", l:"Écouter le balado" },
+        { q:"Comment je vous contacte ?", s:"ÉCRIS-NOUS",
+          a:"Écris à Hugo : hpoutils.admin@gmail.com — un humain te répond, promis. Moi, je fais les saluts, les blagues et les chatouilles.",
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" },
+        { q:"Raconte-moi une blague", s:"HIHI",
+          a:null },
+        { q:"T'as fait quoi aujourd'hui ?", s:"MON JOURNAL", fn:"journal",
+          a:"" },
+        { q:"Un fait d'histoire du Québec ?", s:"HISTOIRE", fn:"fact",
+          a:"" },
+        { q:"Une petite pensée pour moi ?", s:"PENSÉE", fn:"philo",
+          a:"" },
+        { q:"Raconte-moi une anecdote d'ici", s:"AUTREFOIS", fn:"anecdote",
+          a:"" },
+        { q:"J'ai besoin d'un mot doux", s:"DOUCEUR", fn:"empathy",
+          a:"" },
+        { q:"C'est qui, Pixel ?", s:"MA CHATTE", fn:"pixel",
+          a:"" },
+        { q:"Nourris Pixel pour moi", s:"MIAM !", fn:"feed",
+          a:"" },
+        { q:"Montre-moi les jeux", s:"PAR ICI →", go:"sec-jeux",
+          a:"Les jeux sont là : 26 jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
+        { q:"Montre-moi les kits", s:"PAR ICI →", go:"sec-kits",
+          a:"Les kits Sans Honte sont juste là : 5 $ le kit, 15 thèmes du quotidien, et le bundle à 40 $." },
+        { q:"Montre-moi les recettes", s:"PAR ICI →", go:"sec-recettes",
+          a:"Recettes HP est là : 629 recettes gratuites. Tu tapes tes ingrédients, il trouve quoi cuisiner !" },
+        { q:"Montre-moi les livres", s:"PAR ICI →", go:"sec-livres",
+          a:"Nos 4 livres sont là, en PDF, de 10 $ à 20 $ — téléchargement immédiat après le paiement." },
+        { q:"Montre-moi les ateliers", s:"PAR ICI →", go:"sec-ateliers",
+          a:"Les ateliers sont là : Cuisine pratique (120 $) et Manger mieux avec moins (150 $), à Terrebonne et dans les environs." },
+        { q:"Fais-moi visiter le site", s:"EN ROUTE", fn:"tour",
+          a:"" },
+        { q:"J'ai une autre question", s:"?",
+          a:FALLBACK,
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" }
+      ];
+export const SYNONYMS = {
+        coute:"prix", coutent:"prix", cout:"prix", tarif:"prix", tarifs:"prix",
+        acheter:"prix", payant:"prix", gratuit:"jeux", gratos:"jeux",
+        jouer:"jeux", jeu:"jeux", partie:"jeux", bouffe:"recettes",
+        manger:"recettes", cuisine:"recettes", recette:"recettes",
+        livre:"livres", pdf:"livres", atelier:"ateliers", cours:"ateliers",
+        courriel:"contact", email:"contact", joindre:"contact",
+        taxe:"taxes", tps:"taxes", tvq:"taxes", payer:"paiement",
+        carte:"paiement", histoire:"anecdote", passe:"histoire",
+        encourage:"doux", encouragement:"doux", triste:"doux", decourage:"doux"
+      };
+export const STOPWORDS = { quel:1, quelle:1, quels:1, quelles:1, quoi:1, comment:1, pourquoi:1, quand:1,
+        est:1, sont:1, vous:1, avez:1, nous:1, pour:1, dans:1, avec:1, chez:1, fait:1, faire:1,
+        peut:1, peux:1, veux:1, moi:1, toi:1, les:1, des:1, une:1, aux:1, sur:1, pas:1, plus:1,
+        tres:1, cette:1, alors:1, dire:1, dit:1, etre:1, ont:1, qui:1, cest:1 };
