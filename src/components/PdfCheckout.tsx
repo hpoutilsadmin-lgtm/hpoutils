@@ -5,14 +5,17 @@ import { createPdfCheckoutSession } from "@/utils/payments.functions";
 interface Props {
   priceId: string;
   returnUrl?: string;
+  /** Bundle « Choisis 10 kits parmi 15 » : les slugs des kits choisis. */
+  kitSlugs?: string[];
 }
 
-export function PdfCheckout({ priceId }: Props) {
+export function PdfCheckout({ priceId, kitSlugs }: Props) {
   const fetchClientSecret = async (): Promise<string> => {
     const result = await createPdfCheckoutSession({
       data: {
         priceId,
         environment: getStripeEnvironment(),
+        kitSlugs,
       },
     });
     if ("error" in result) throw new Error(result.error);

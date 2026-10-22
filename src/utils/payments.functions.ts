@@ -2,7 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "@/lib/stripe.server";
-import { getProduct } from "@/lib/products-catalog";
+import {
+  getProduct,
+  COLLECTION_PRICE_ID,
+  resolveKitSelection,
+} from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
 
@@ -46,9 +50,20 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((data: {
     priceId: string;
     environment: StripeEnv;
+    kitSlugs?: string[];
   }) => {
     if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
     if (!getProduct(data.priceId)) throw new Error("Unknown product");
+    if (data.kitSlugs !== undefined) {
+      // La sélection de kits n'a de sens que pour le bundle, et elle doit
+      // être complète et valide (exactement 10 kits Sans Honte, uniques).
+      if (data.priceId !== COLLECTION_PRICE_ID) {
+        throw new Error("Sélection de kits invalide");
+      }
+      if (!resolveKitSelection(data.kitSlugs)) {
+        throw new Error("Sélection de kits invalide");
+      }
+    }
     return data;
   })
   .handler(async ({ data }) => {
@@ -74,7 +89,9 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
         // numériques) — voir scripts/setup-tax-codes.functions.ts.
         automatic_tax: { enabled: true },
         billing_address_collection: "required",
-        metadata: { priceId: data.priceId },
+        metadata: data.kitSlugs
+          ? { priceId: data.priceId, kitSlugs: data.kitSlugs.join(",") }
+          : { priceId: data.priceId },
       });
 
       return { clientSecret: session.client_secret ?? "" };
@@ -119,6 +136,23 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
     const product = getProduct(priceId);
     const pdfPath = product?.pdfPath ?? null;
 
+    // Bundle « Choisis 10 kits parmi 15 » : la sélection voyage dans les
+    // métadonnées de la session Stripe. On la revalide ici avant de livrer ;
+    // si elle est absente ou invalide, on retombe sur la livraison standard
+    // (le PDF de la collection), comme avant.
+    const kitSlugsRaw =
+      typeof session.metadata?.kitSlugs === "string"
+        ? session.metadata.kitSlugs
+        : "";
+    const kitSlugs = kitSlugsRaw ? kitSlugsRaw.split(",").filter(Boolean) : [];
+    const bundleKits =
+      priceId === COLLECTION_PRICE_ID && kitSlugs.length > 0
+        ? resolveKitSelection(kitSlugs)
+        : null;
+    if (priceId === COLLECTION_PRICE_ID && kitSlugs.length > 0 && !bundleKits) {
+      console.error("bundle selection invalid for session", session.id);
+    }
+
     const admin = getAdmin();
 
     // Upsert order (idempotent)
@@ -143,6 +177,20 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       throw new Error("Database error");
     }
 
+    if (bundleKits) {
+      // Mémoriser le choix pour la récupération d'achat. Best-effort : la
+      // colonne kit_slugs est ajoutée par la migration
+      // 20261022_bundle_kit_slugs.sql ; si elle n'existe pas encore,
+      // l'update échoue sans bloquer la livraison.
+      const { error: ksErr } = await admin
+        .from("orders")
+        .update({ kit_slugs: kitSlugs.join(",") })
+        .eq("stripe_session_id", session.id);
+      if (ksErr) {
+        console.warn("kit_slugs not recorded (migration pending?)", ksErr.message);
+      }
+    }
+
     if (!product) {
       return {
         status: "paid" as const,
@@ -157,17 +205,37 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
     // of /checkout/return don't enqueue duplicates.
     if (email && pdfPath) {
       const siteOrigin = getTrustedSiteOrigin();
-      const downloadUrl = `${siteOrigin}${buildDownloadUrl(priceId, email)}`;
-      await enqueueTransactionalEmail({
-        templateName: "purchase-delivery",
-        recipientEmail: email,
-        idempotencyKey: `delivery-${session.id}`,
-        templateData: {
-          title: product.title,
-          downloadUrl,
-          siteOrigin,
-        },
-      });
+      if (bundleKits) {
+        // Livraison du bundle : un lien signé par kit choisi. Les liens
+        // voyagent en chemin relatif ; le gabarit préfixe l'origine du site
+        // (même convention que la récupération d'achat).
+        const items = bundleKits.map((kp) => ({
+          title: kp.title,
+          downloadUrl: buildDownloadUrl(kp.priceId, email),
+        }));
+        await enqueueTransactionalEmail({
+          templateName: "purchase-delivery",
+          recipientEmail: email,
+          idempotencyKey: `delivery-${session.id}`,
+          templateData: {
+            title: product.title,
+            siteOrigin,
+            items,
+          },
+        });
+      } else {
+        const downloadUrl = buildDownloadUrl(priceId, email);
+        await enqueueTransactionalEmail({
+          templateName: "purchase-delivery",
+          recipientEmail: email,
+          idempotencyKey: `delivery-${session.id}`,
+          templateData: {
+            title: product.title,
+            downloadUrl,
+            siteOrigin,
+          },
+        });
+      }
     }
 
     return {
@@ -234,6 +302,31 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
       return { ok: true as const };
     }
 
+    // Choix de kits des commandes bundle, relus en best-effort (colonne
+    // kit_slugs ajoutée par migration ; si elle n'existe pas encore, la
+    // requête échoue et on retombe sur le lien de la collection).
+    const kitSlugsByOrder = new Map<string, string[]>();
+    const orderIds = (orders ?? []).map((o) => o.id as string);
+    if (orderIds.length > 0) {
+      const { data: ksRows, error: ksErr } = await admin
+        .from("orders")
+        .select("id, kit_slugs")
+        .in("id", orderIds);
+      if (!ksErr && ksRows) {
+        for (const row of ksRows as Array<{
+          id: string;
+          kit_slugs?: string | null;
+        }>) {
+          if (typeof row.kit_slugs === "string" && row.kit_slugs) {
+            kitSlugsByOrder.set(
+              row.id,
+              row.kit_slugs.split(",").filter(Boolean),
+            );
+          }
+        }
+      }
+    }
+
     const items: Array<{
       orderId: string;
       title: string;
@@ -244,12 +337,28 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     for (const o of orders ?? []) {
       const product = getProduct(o.price_id);
       if (!product || !o.pdf_path) continue;
-      items.push({
-        orderId: o.id as string,
-        title: product.title,
-        downloadUrl: buildDownloadUrl(o.price_id, data.email),
-        purchasedAt: o.created_at as string,
-      });
+      const slugs = kitSlugsByOrder.get(o.id as string);
+      const kits =
+        o.price_id === COLLECTION_PRICE_ID && slugs
+          ? resolveKitSelection(slugs)
+          : null;
+      if (kits) {
+        for (const kp of kits) {
+          items.push({
+            orderId: o.id as string,
+            title: kp.title,
+            downloadUrl: buildDownloadUrl(kp.priceId, data.email),
+            purchasedAt: o.created_at as string,
+          });
+        }
+      } else {
+        items.push({
+          orderId: o.id as string,
+          title: product.title,
+          downloadUrl: buildDownloadUrl(o.price_id, data.email),
+          purchasedAt: o.created_at as string,
+        });
+      }
     }
 
     // Only send an email if we actually found purchases. The page always

@@ -1,7 +1,13 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { PdfCheckout } from "@/components/PdfCheckout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
-import { getProductBySlug } from "@/lib/products-catalog";
+import {
+  getProductBySlug,
+  getSansHonteKits,
+  BUNDLE_KIT_COUNT,
+  type DigitalProduct,
+} from "@/lib/products-catalog";
 import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/achat/$slug")({
@@ -68,11 +74,162 @@ function Page() {
       <section className="subpage-content">
         <div className="container" style={{ maxWidth: 920 }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32 }}>
-            <PdfCheckout priceId={product.priceId} />
+            {product.slug === "sans-honte-collection" ? (
+              <BundleCheckout product={product} />
+            ) : (
+              <PdfCheckout priceId={product.priceId} />
+            )}
             <p className="purchase-note">PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé</p>
           </div>
         </div>
       </section>
     </>
+  );
+}
+
+// Sélecteur du bundle « Choisis 10 kits parmi 15 » : l'acheteur coche
+// exactement 10 kits, valide son choix, puis le paiement s'ouvre avec
+// cette sélection (elle voyage dans la session Stripe et la livraison
+// envoie les 10 liens choisis).
+function BundleCheckout({ product }: { product: DigitalProduct }) {
+  const kits = getSansHonteKits();
+  const [selected, setSelected] = useState<string[]>([]);
+  const [locked, setLocked] = useState(false);
+
+  function toggle(slug: string) {
+    if (locked) return;
+    setSelected((prev) =>
+      prev.includes(slug)
+        ? prev.filter((s) => s !== slug)
+        : prev.length >= BUNDLE_KIT_COUNT
+          ? prev
+          : [...prev, slug],
+    );
+  }
+
+  if (locked) {
+    return (
+      <div style={{ display: "grid", gap: 20 }}>
+        <div
+          style={{
+            padding: 20,
+            border: "1px solid #e0d8cf",
+            borderRadius: 4,
+            background: "#faf6f1",
+          }}
+        >
+          <p style={{ margin: "0 0 6px", fontWeight: 700 }}>
+            Tes {BUNDLE_KIT_COUNT} kits sont choisis ✓
+          </p>
+          <p style={{ margin: "0 0 12px", fontSize: 14 }}>
+            {selected
+              .map((slug) => kits.find((k) => k.slug === slug)?.title ?? slug)
+              .join(" · ")}
+          </p>
+          <button
+            type="button"
+            onClick={() => setLocked(false)}
+            style={{
+              padding: "10px 18px",
+              background: "transparent",
+              color: "#b04a2f",
+              border: "1px solid #b04a2f",
+              borderRadius: 4,
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Modifier mon choix
+          </button>
+        </div>
+        <PdfCheckout
+          key={selected.join(",")}
+          priceId={product.priceId}
+          kitSlugs={selected}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: "grid", gap: 20 }}>
+      <div>
+        <h2 style={{ fontFamily: "Georgia,serif", fontSize: 24, margin: "0 0 8px" }}>
+          Choisis tes {BUNDLE_KIT_COUNT} kits
+        </h2>
+        <p style={{ margin: 0 }}>
+          Coche exactement {BUNDLE_KIT_COUNT} kits parmi les {kits.length} —
+          ce sont eux que tu recevras par courriel après le paiement.{" "}
+          <strong>
+            {selected.length} / {BUNDLE_KIT_COUNT} choisis
+          </strong>
+        </p>
+      </div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+          gap: 12,
+        }}
+      >
+        {kits.map((kit) => {
+          const checked = selected.includes(kit.slug);
+          const disabled = !checked && selected.length >= BUNDLE_KIT_COUNT;
+          return (
+            <label
+              key={kit.slug}
+              style={{
+                display: "flex",
+                gap: 12,
+                alignItems: "center",
+                padding: 12,
+                border: checked ? "2px solid #b04a2f" : "1px solid #e0d8cf",
+                borderRadius: 4,
+                background: checked ? "#faf6f1" : "#fff",
+                cursor: disabled ? "not-allowed" : "pointer",
+                opacity: disabled ? 0.5 : 1,
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                disabled={disabled}
+                onChange={() => toggle(kit.slug)}
+                style={{ width: 20, height: 20, flexShrink: 0 }}
+              />
+              {kit.cover && (
+                <img
+                  src={kit.cover}
+                  alt=""
+                  width={44}
+                  height={56}
+                  style={{ objectFit: "cover", borderRadius: 2, flexShrink: 0 }}
+                />
+              )}
+              <span style={{ fontWeight: 600, fontSize: 15 }}>{kit.title}</span>
+            </label>
+          );
+        })}
+      </div>
+      <button
+        type="button"
+        disabled={selected.length !== BUNDLE_KIT_COUNT}
+        onClick={() => setLocked(true)}
+        style={{
+          padding: "14px 28px",
+          background: selected.length === BUNDLE_KIT_COUNT ? "#b04a2f" : "#ccc",
+          color: "#fff",
+          border: "none",
+          borderRadius: 4,
+          fontWeight: 600,
+          fontSize: 16,
+          cursor: selected.length === BUNDLE_KIT_COUNT ? "pointer" : "not-allowed",
+        }}
+      >
+        {selected.length === BUNDLE_KIT_COUNT
+          ? "Valider mes 10 kits et passer au paiement"
+          : `Choisis encore ${BUNDLE_KIT_COUNT - selected.length} kit${BUNDLE_KIT_COUNT - selected.length > 1 ? "s" : ""}`}
+      </button>
+    </div>
   );
 }

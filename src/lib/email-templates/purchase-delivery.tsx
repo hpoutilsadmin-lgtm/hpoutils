@@ -13,16 +13,24 @@ import type { TemplateEntry } from './registry'
 
 const SITE_NAME = 'HP Outils'
 
+interface DeliveryItem {
+  title?: string
+  downloadUrl?: string
+}
+
 interface PurchaseDeliveryProps {
   title?: string
   downloadUrl?: string
   siteOrigin?: string
+  /** Bundle « Choisis 10 kits parmi 15 » : un lien par kit choisi. */
+  items?: DeliveryItem[]
 }
 
 const PurchaseDeliveryEmail = ({
   title = '',
   downloadUrl = '',
   siteOrigin = '',
+  items = [],
 }: PurchaseDeliveryProps) => (
   <Html lang="fr" dir="ltr">
     <Head />
@@ -30,18 +38,40 @@ const PurchaseDeliveryEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Heading style={h1}>Merci pour votre achat</Heading>
-        <Text style={text}>
-          Voici votre lien de téléchargement pour <strong>{title}</strong>.
-          Ce lien est valide 7 jours. Conservez ce courriel — vous pouvez
-          toujours revenir sur la page «&nbsp;Récupérer mon achat&nbsp;» pour
-          en générer un nouveau.
-        </Text>
-        <Section style={card}>
-          <Text style={itemTitle}>{title}</Text>
-          <Link href={`${siteOrigin}${downloadUrl}`} style={button}>
-            Télécharger le PDF →
-          </Link>
-        </Section>
+        {items.length > 0 ? (
+          <>
+            <Text style={text}>
+              Voici vos liens de téléchargement pour <strong>{title}</strong>{' '}
+              — vos {items.length} kits choisis. Chaque lien est valide 7
+              jours. Conservez ce courriel — vous pouvez toujours revenir sur
+              la page «&nbsp;Récupérer mon achat&nbsp;» pour en générer de
+              nouveaux.
+            </Text>
+            {items.map((it, idx) => (
+              <Section key={idx} style={card}>
+                <Text style={itemTitle}>{it.title}</Text>
+                <Link href={`${siteOrigin}${it.downloadUrl}`} style={button}>
+                  Télécharger le PDF →
+                </Link>
+              </Section>
+            ))}
+          </>
+        ) : (
+          <>
+            <Text style={text}>
+              Voici votre lien de téléchargement pour <strong>{title}</strong>.
+              Ce lien est valide 7 jours. Conservez ce courriel — vous pouvez
+              toujours revenir sur la page «&nbsp;Récupérer mon achat&nbsp;» pour
+              en générer un nouveau.
+            </Text>
+            <Section style={card}>
+              <Text style={itemTitle}>{title}</Text>
+              <Link href={`${siteOrigin}${downloadUrl}`} style={button}>
+                Télécharger le PDF →
+              </Link>
+            </Section>
+          </>
+        )}
         <Text style={text}>
           Le PDF est filigrané avec votre courriel — il est destiné à un
           usage personnel.

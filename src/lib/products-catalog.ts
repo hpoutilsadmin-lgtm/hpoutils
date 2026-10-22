@@ -291,6 +291,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
       "reprendre un peu de place, doucement",
       "garder une bibliothèque d'outils près de soi",
     ],
+    precaution:
+      "Le choix des kits se fait à l'étape suivante, avant le paiement : tu coches exactement 10 kits parmi les 15, et ce sont ces 10-là que tu reçois par courriel.",
   },
 };
 
@@ -300,6 +302,34 @@ export function getProduct(priceId: string): DigitalProduct | null {
 
 export function getProductBySlug(slug: string): DigitalProduct | null {
   return Object.values(PRODUCTS).find((p) => p.slug === slug) ?? null;
+}
+
+// --- Bundle Sans Honte : « Choisis 10 kits parmi 15 » -----------------------
+
+export const COLLECTION_PRICE_ID = "sans_honte_collection_pdf_40";
+export const BUNDLE_KIT_COUNT = 10;
+
+/** Les 15 kits Sans Honte vendus à l'unité, dans l'ordre du catalogue. */
+export function getSansHonteKits(): DigitalProduct[] {
+  return Object.values(PRODUCTS).filter((p) => p.formatLabel === "Kit PDF");
+}
+
+/**
+ * Valide un choix de bundle : exactement BUNDLE_KIT_COUNT slugs, uniques,
+ * qui correspondent chacun à un kit Sans Honte. Retourne les produits
+ * résolus, ou null si le choix est invalide.
+ */
+export function resolveKitSelection(slugs: unknown): DigitalProduct[] | null {
+  if (!Array.isArray(slugs) || slugs.length !== BUNDLE_KIT_COUNT) return null;
+  if (!slugs.every((s) => typeof s === "string")) return null;
+  if (new Set(slugs).size !== slugs.length) return null;
+  const kits: DigitalProduct[] = [];
+  for (const slug of slugs as string[]) {
+    const p = getProductBySlug(slug);
+    if (!p || p.formatLabel !== "Kit PDF") return null;
+    kits.push(p);
+  }
+  return kits;
 }
 
 // ============================================================================
