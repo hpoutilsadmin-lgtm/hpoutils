@@ -4,6 +4,8 @@ Préparée le 2026-10-21. **Aucun produit Stripe n'a été créé** : cette feui
 
 Ajout le 2026-10-21 (22 h 06, décision d'Hugo) : **4 produits « Duo planificateurs » à 15 $** — voir la section « Duos planificateurs » plus bas. Même statut : aucun n'a été créé dans Stripe ; ils s'ajoutent aux 16 (20 produits au total sur cette feuille).
 
+Ajout le 2026-10-22 (décision d'Hugo) : **1 mini cahier « HP — Hyper potentiel » à 10 $** — voir la section « Mini cahier — Série HP » plus bas. Même statut : aucun produit créé dans Stripe ; entrée de catalogue en brouillon (`MINI_CAHIER_DRAFT` dans `src/lib/products-catalog.ts`). 21 produits au total sur cette feuille.
+
 ## Comment reporter dans le site
 
 Dans ce dépôt, le champ `priceId` de `src/lib/products-catalog.ts` est en fait le **lookup_key** Stripe du prix : le serveur le résout avec `stripe.prices.list({ lookup_keys: [...] })` (voir `src/utils/payments.functions.ts`). Ce n'est **pas** l'identifiant `price_…` généré par Stripe.
@@ -58,6 +60,14 @@ Produits groupés décidés par Hugo le 2026-10-21 (22 h) : le site n'a pas de p
 | Duo — Mon budget par paie + Le Planificateur du gérant | 15,00 $ | Duo planificateurs | Le commerce la semaine, tes paies sans casse-tête : les deux cahiers qui font rouler l'argent, au travail comme à la maison. | `duo_budget_gerant_pdf_15` |
 | Duo — Mon planificateur TDAH + Mes habitudes, jour après jour | 15,00 $ | Duo planificateurs | Le duo sans pression : choisis tes 3 choses d'un côté, suis ton habitude de l'autre — un X à la fois, jamais de retard. | `duo_tdah_habitudes_pdf_15` |
 | Duo — Mon planificateur TDAH + Le Planificateur de l'étudiant | 15,00 $ | Duo planificateurs | Pour l'étudiant TDAH : la session entière d'un côté, la journée en 3 choses de l'autre — les oublis n'ont plus de place où se cacher. | `duo_tdah_etudiant_pdf_15` |
+
+## Mini cahier — Série HP — 10,00 $ CAD
+
+Produit décidé et déposé en brouillon par Hugo le 2026-10-22 : le mini cahier « HP — Hyper potentiel » (20 pages d'exercices, basé sur l'ikigaï et des pratiques appuyées par la recherche ; couverture intégrée p. 1 du PDF). Il a un compagnon : l'**outil web gratuit** du même nom, déposé en attente dans `outils-a-integrer/hp-hyper-potentiel/` (voir son README.md) — « un vend l'autre » : à la mise en ligne, la fiche du cahier pointera vers l'outil gratuit et l'encadré de vente de l'outil pointera vers la fiche du cahier. **Aucun produit n'a été créé dans Stripe.**
+
+| Nom Stripe proposé | Prix (CAD) | Catégorie | Description courte (= accroche) | lookup_key proposé → price_id à reporter dans products-catalog.ts |
+|---|---|---|---|---|
+| HP — Hyper potentiel — le mini cahier | 10,00 $ | Mini cahier — Série HP | Zéro miracle : des pratiques appuyées par la recherche, 20 pages d'exercices pour passer à l'action. | `hp_hyper_potentiel_cahier_pdf_10` |
 
 ## Offre « 2 planificateurs pour 15 $ » — à ne PAS créer tout de suite dans Stripe
 

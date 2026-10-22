@@ -935,3 +935,102 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
     proposedDownloadFileName: "duo-tdah-etudiant.pdf",
   },
 ];
+// ============================================================================
+// MINI CAHIER « HP — HYPER POTENTIEL » — 1 produit EN BROUILLON, NON PUBLIÉ
+// ============================================================================
+// Décidé par Hugo le 2026-10-22, déposé le même jour. Un produit à part des
+// 16 outils papier : un mini cahier d'exercices de 20 pages à 10 $ (série
+// « HP — Hyper potentiel », basée sur l'ikigaï et des pratiques appuyées
+// par la recherche), accompagné d'un outil web GRATUIT compagnon
+// (« un vend l'autre » : l'outil fait découvrir, le cahier vend la version
+// complète à travailler au crayon).
+//
+// Même statut que PAPER_TOOLS_DRAFT et PAPER_TOOL_DUOS_DRAFT : ce tableau
+// n'est consommé par AUCUNE page, route, sitemap ou fonction de paiement.
+// Rien n'est visible ni vendable en l'état ; aucun produit ni prix Stripe
+// n'existe pour ce cahier.
+//
+// L'outil web gratuit n'est PAS publié non plus : son HTML est déposé dans
+// le dossier d'attente `outils-a-integrer/hp-hyper-potentiel/` (voir son
+// README.md) — à la racine du dépôt, PAS dans `public/` (un fichier servi
+// serait public). À la mise en ligne, il vivra à /outils/hp-hyper-potentiel.
+//
+// Publication (après validation d'Hugo) :
+//   1. créer le produit + le prix dans Stripe avec le lookup_key proposé
+//      (voir feuille-stripe-outils-papier.md, section « Mini cahier —
+//      Série HP ») et reporter le lookup_key dans `priceId` ET comme
+//      clé de l'entrée ;
+//   2. téléverser le PDF du cahier (20 pages, couverture intégrée p. 1)
+//      dans le bucket `pdfs` et reporter son chemin dans `pdfPath` ;
+//   3. déplacer l'entrée de `MINI_CAHIER_DRAFT` vers `PRODUCTS`
+//      (type DigitalProduct) ;
+//   4. intégrer l'outil web à /outils/hp-hyper-potentiel et brancher les
+//      liens croisés : la fiche du cahier pointe vers l'outil gratuit,
+//      et l'encadré de vente de l'outil pointe vers la fiche du cahier.
+
+export interface MiniCahierDraft {
+  /** Toujours "draft" tant que l'entrée est dans ce tableau. */
+  status: "draft";
+  /** price_id (lookup_key Stripe) à créer — rien n'existe encore. */
+  priceId: null;
+  proposedLookupKey: string;
+  slug: string;
+  title: string;
+  category: "mini-cahier";
+  categoryLabel: "Mini cahier — Série HP";
+  priceCad: number; // 10 $ CAD, aucune taxe ajoutée
+  priceLabel: string;
+  /** Pages du cahier, couverture intégrée (p. 1) comprise. */
+  pages: number;
+  blurb: string; // accroche de la fiche produit
+  slogan: string;
+  metadataLine: string;
+  taxNote: string;
+  includes: string[]; // bloc « Ce que tu reçois »
+  /** Fichier de vente à téléverser dans le bucket `pdfs` — pas encore fait. */
+  pdfPath: null;
+  proposedDownloadFileName: string;
+  /** Outil web gratuit compagnon (déposé en attente, non publié). */
+  companionTool: {
+    title: string;
+    /** Route suggérée à la mise en ligne — n'existe pas encore. */
+    plannedRoute: string;
+    /** Emplacement du HTML dans le dépôt, en attendant l'intégration. */
+    holdingPath: string;
+  };
+}
+
+export const MINI_CAHIER_DRAFT: MiniCahierDraft[] = [
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "hp_hyper_potentiel_cahier_pdf_10",
+    slug: "mini-cahier-hyper-potentiel",
+    title: "HP — Hyper potentiel — le mini cahier",
+    category: "mini-cahier",
+    categoryLabel: "Mini cahier — Série HP",
+    priceCad: 10,
+    priceLabel: "10 $ CAD, aucune taxe ajoutée",
+    pages: 20,
+    blurb: "Zéro miracle : des pratiques appuyées par la recherche, 20 pages d'exercices pour passer à l'action.",
+    slogan: "Libère l'HP qu'il y a en toi",
+    metadataLine:
+      "20 pages · PDF à imprimer · ikigaï, respiration, méditation, mouvement, buts · Format Lettre (8,5 × 11 po) · Réutilisable — imprime seulement les pages qu'il te faut",
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [
+      "Le fichier PDF complet — 20 pages, couverture comprise",
+      "Des exercices à remplir au crayon dans chaque section : ta carte ikigaï, tes séances de respiration et de méditation, ton plan WOOP, ton suivi de 30 jours",
+      "L'outil web gratuit HP — Hyper potentiel en compagnon (respiration guidée, carte ikigaï interactive, plan WOOP) — sur hp-outils.com",
+      "Téléchargement immédiat après l'achat",
+      "Usage personnel",
+      "À imprimer chez toi ou au centre de copies",
+    ],
+    pdfPath: null,
+    proposedDownloadFileName: "mini-cahier-hyper-potentiel.pdf",
+    companionTool: {
+      title: "HP — Hyper potentiel (outil web gratuit)",
+      plannedRoute: "/outils/hp-hyper-potentiel",
+      holdingPath: "outils-a-integrer/hp-hyper-potentiel/index.html",
+    },
+  },
+];
