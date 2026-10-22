@@ -725,3 +725,183 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     suggestedPairs: ["planificateur-tdah"],
   },
 ];
+
+// ----------------------------------------------------------------------------
+// DUOS PLANIFICATEURS — 4 produits groupés à 15 $, EN BROUILLON, NON PUBLIÉS
+// ----------------------------------------------------------------------------
+// Décision d'Hugo (2026-10-21, 22 h 06) : les 4 paires approuvées de l'offre
+// « 2 planificateurs pour 15 $ » deviennent des produits « Duo » à part
+// entière. Raison : le site n'a pas de panier (paiement mono-produit), donc
+// la réduction automatique de PLANIFICATEUR_PAIR_OFFER n'est pas branchable
+// au flux actuel — chaque duo est UN produit qui livre UN PDF combiné
+// (couverture duo + les deux fichiers de vente complets, chacun avec sa
+// propre couverture et son contenu uniformisé).
+//
+// Même statut que PAPER_TOOLS_DRAFT : ce tableau n'est consommé par AUCUNE
+// page, route, sitemap ou fonction de paiement. Rien n'est visible ni
+// vendable en l'état, aucun produit ni prix Stripe n'existe pour ces duos.
+// Publication (après validation d'Hugo) : mêmes étapes que les outils
+// papier — créer le produit + le prix dans Stripe avec le lookup_key
+// proposé (voir feuille-stripe-outils-papier.md, section « Duos
+// planificateurs »), téléverser le PDF duo dans le bucket `pdfs`, puis
+// déplacer l'entrée vers `PRODUCTS`.
+
+export interface PaperToolDuoComponent {
+  slug: string;
+  title: string;
+  /** Pages de contenu de l'outil (sa couverture de vente ne se compte pas). */
+  contentPages: number;
+}
+
+export interface PaperToolDuoDraft {
+  /** Toujours "draft" tant que l'entrée est dans ce tableau. */
+  status: "draft";
+  /** price_id (lookup_key Stripe) à créer — rien n'existe encore. */
+  priceId: null;
+  proposedLookupKey: string;
+  slug: string;
+  title: string;
+  category: "duo";
+  categoryLabel: "Duo planificateurs";
+  priceCad: number; // 15 $ CAD, aucune taxe ajoutée
+  priceLabel: string;
+  /** Pages du fichier de vente duo, hors couverture duo (les deux outils au complet, couvertures comprises). */
+  pages: number;
+  /** Pages totales du fichier de vente duo, couverture duo comprise. */
+  totalPages: number;
+  blurb: string; // accroche de la paire (passes Marketing)
+  metadataLine: string;
+  taxNote: string;
+  includes: string[]; // bloc « Ce que tu reçois » — nomme les deux planificateurs et leurs pages
+  components: PaperToolDuoComponent[];
+  /** Fichier de vente duo à téléverser dans le bucket `pdfs` — pas encore fait. */
+  pdfPath: null;
+  proposedDownloadFileName: string;
+}
+
+function paperDuoMetadataLine(totalPages: number): string {
+  return `${totalPages} pages au total (couverture duo + les deux planificateurs au complet) · Format Lettre (8,5 × 11 po) · Non daté · Réutilisable — imprime seulement les pages qu'il te faut`;
+}
+
+export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "duo_budget_famille_pdf_15",
+    slug: "duo-budget-famille",
+    title: "Duo — Mon budget par paie + Le Planificateur de famille",
+    category: "duo",
+    categoryLabel: "Duo planificateurs",
+    priceCad: 15,
+    priceLabel: "15 $ CAD, aucune taxe ajoutée",
+    pages: 44,
+    totalPages: 45,
+    blurb: "La maisonnée au complet pour 15 $ : les horaires et les repas d'un bord, l'argent paie par paie de l'autre.",
+    metadataLine: paperDuoMetadataLine(45),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [
+      "Le fichier PDF complet du duo — la couverture duo, puis les deux planificateurs au complet (chacun avec sa couverture)",
+      "Mon budget par paie — 14 pages de contenu",
+      "Le Planificateur de famille — 28 pages de contenu",
+      "Téléchargement immédiat après l'achat",
+      "Usage personnel",
+      "À imprimer chez toi ou au centre de copies",
+    ],
+    components: [
+      { slug: "outil-papier-budget-par-paie", title: "Mon budget par paie", contentPages: 14 },
+      { slug: "planificateur-famille", title: "Le Planificateur de famille", contentPages: 28 },
+    ],
+    pdfPath: null,
+    proposedDownloadFileName: "duo-budget-famille.pdf",
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "duo_budget_gerant_pdf_15",
+    slug: "duo-budget-gerant",
+    title: "Duo — Mon budget par paie + Le Planificateur du gérant",
+    category: "duo",
+    categoryLabel: "Duo planificateurs",
+    priceCad: 15,
+    priceLabel: "15 $ CAD, aucune taxe ajoutée",
+    pages: 40,
+    totalPages: 41,
+    blurb: "Le commerce la semaine, tes paies sans casse-tête : les deux cahiers qui font rouler l'argent, au travail comme à la maison.",
+    metadataLine: paperDuoMetadataLine(41),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [
+      "Le fichier PDF complet du duo — la couverture duo, puis les deux planificateurs au complet (chacun avec sa couverture)",
+      "Mon budget par paie — 14 pages de contenu",
+      "Le Planificateur du gérant — 24 pages de contenu",
+      "Téléchargement immédiat après l'achat",
+      "Usage personnel",
+      "À imprimer chez toi ou au centre de copies",
+    ],
+    components: [
+      { slug: "outil-papier-budget-par-paie", title: "Mon budget par paie", contentPages: 14 },
+      { slug: "planificateur-gerant", title: "Le Planificateur du gérant", contentPages: 24 },
+    ],
+    pdfPath: null,
+    proposedDownloadFileName: "duo-budget-gerant.pdf",
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "duo_tdah_habitudes_pdf_15",
+    slug: "duo-tdah-habitudes",
+    title: "Duo — Mon planificateur TDAH + Mes habitudes, jour après jour",
+    category: "duo",
+    categoryLabel: "Duo planificateurs",
+    priceCad: 15,
+    priceLabel: "15 $ CAD, aucune taxe ajoutée",
+    pages: 40,
+    totalPages: 41,
+    blurb: "Le duo sans pression : choisis tes 3 choses d'un côté, suis ton habitude de l'autre — un X à la fois, jamais de retard.",
+    metadataLine: paperDuoMetadataLine(41),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [
+      "Le fichier PDF complet du duo — la couverture duo, puis les deux planificateurs au complet (chacun avec sa couverture)",
+      "Mon planificateur TDAH — 28 pages de contenu",
+      "Mes habitudes, jour après jour — 10 pages de contenu",
+      "Téléchargement immédiat après l'achat",
+      "Usage personnel",
+      "À imprimer chez toi ou au centre de copies",
+    ],
+    components: [
+      { slug: "planificateur-tdah", title: "Mon planificateur TDAH", contentPages: 28 },
+      { slug: "outil-papier-habitudes-bien-etre", title: "Mes habitudes, jour après jour", contentPages: 10 },
+    ],
+    pdfPath: null,
+    proposedDownloadFileName: "duo-tdah-habitudes.pdf",
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "duo_tdah_etudiant_pdf_15",
+    slug: "duo-tdah-etudiant",
+    title: "Duo — Mon planificateur TDAH + Le Planificateur de l'étudiant",
+    category: "duo",
+    categoryLabel: "Duo planificateurs",
+    priceCad: 15,
+    priceLabel: "15 $ CAD, aucune taxe ajoutée",
+    pages: 54,
+    totalPages: 55,
+    blurb: "Pour l'étudiant TDAH : la session entière d'un côté, la journée en 3 choses de l'autre — les oublis n'ont plus de place où se cacher.",
+    metadataLine: paperDuoMetadataLine(55),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [
+      "Le fichier PDF complet du duo — la couverture duo, puis les deux planificateurs au complet (chacun avec sa couverture)",
+      "Mon planificateur TDAH — 28 pages de contenu",
+      "Le Planificateur de l'étudiant — 24 pages de contenu",
+      "Téléchargement immédiat après l'achat",
+      "Usage personnel",
+      "À imprimer chez toi ou au centre de copies",
+    ],
+    components: [
+      { slug: "planificateur-tdah", title: "Mon planificateur TDAH", contentPages: 28 },
+      { slug: "planificateur-etudiant", title: "Le Planificateur de l'étudiant", contentPages: 24 },
+    ],
+    pdfPath: null,
+    proposedDownloadFileName: "duo-tdah-etudiant.pdf",
+  },
+];

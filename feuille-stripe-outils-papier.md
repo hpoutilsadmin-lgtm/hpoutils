@@ -2,6 +2,8 @@
 
 Préparée le 2026-10-21. **Aucun produit Stripe n'a été créé** : cette feuille sert à créer les 16 produits/prix dans Stripe, un par un, après validation d'Hugo produit par produit. La publication/activation reste chez Mélanie.
 
+Ajout le 2026-10-21 (22 h 06, décision d'Hugo) : **4 produits « Duo planificateurs » à 15 $** — voir la section « Duos planificateurs » plus bas. Même statut : aucun n'a été créé dans Stripe ; ils s'ajoutent aux 16 (20 produits au total sur cette feuille).
+
 ## Comment reporter dans le site
 
 Dans ce dépôt, le champ `priceId` de `src/lib/products-catalog.ts` est en fait le **lookup_key** Stripe du prix : le serveur le résout avec `stripe.prices.list({ lookup_keys: [...] })` (voir `src/utils/payments.functions.ts`). Ce n'est **pas** l'identifiant `price_…` généré par Stripe.
@@ -46,7 +48,20 @@ Devise pour les 16 prix : **CAD**. Mention à garder partout : « Aucune taxe aj
 | Mon planificateur TDAH | 8,00 $ | Planificateur | Trois choses par jour, pas trente — un planificateur qui ne te juge pas. | `planificateur_tdah_pdf_8` |
 | Le Planificateur de l'étudiant | 8,00 $ | Planificateur | Ta session au complet sur papier : échéances, examens et budget, sans application. | `planificateur_etudiant_pdf_8` |
 
+## Duos planificateurs — 15,00 $ CAD
+
+Produits groupés décidés par Hugo le 2026-10-21 (22 h) : le site n'a pas de panier, donc chaque duo est **un seul produit Stripe** qui livre **un seul PDF combiné** (couverture duo + les deux planificateurs au complet, chacun avec sa couverture). C'est le mécanisme retenu pour offrir « 2 planificateurs pour 15 $ » tout de suite, sans attendre un panier. Fichiers de vente prêts, entrées de catalogue en brouillon (`PAPER_TOOL_DUOS_DRAFT` dans `src/lib/products-catalog.ts`) — **aucun de ces produits n'a été créé dans Stripe**.
+
+| Nom Stripe proposé | Prix (CAD) | Catégorie | Description courte (= accroche) | lookup_key proposé → price_id à reporter dans products-catalog.ts |
+|---|---|---|---|---|
+| Duo — Mon budget par paie + Le Planificateur de famille | 15,00 $ | Duo planificateurs | La maisonnée au complet pour 15 $ : les horaires et les repas d'un bord, l'argent paie par paie de l'autre. | `duo_budget_famille_pdf_15` |
+| Duo — Mon budget par paie + Le Planificateur du gérant | 15,00 $ | Duo planificateurs | Le commerce la semaine, tes paies sans casse-tête : les deux cahiers qui font rouler l'argent, au travail comme à la maison. | `duo_budget_gerant_pdf_15` |
+| Duo — Mon planificateur TDAH + Mes habitudes, jour après jour | 15,00 $ | Duo planificateurs | Le duo sans pression : choisis tes 3 choses d'un côté, suis ton habitude de l'autre — un X à la fois, jamais de retard. | `duo_tdah_habitudes_pdf_15` |
+| Duo — Mon planificateur TDAH + Le Planificateur de l'étudiant | 15,00 $ | Duo planificateurs | Pour l'étudiant TDAH : la session entière d'un côté, la journée en 3 choses de l'autre — les oublis n'ont plus de place où se cacher. | `duo_tdah_etudiant_pdf_15` |
+
 ## Offre « 2 planificateurs pour 15 $ » — à ne PAS créer tout de suite dans Stripe
+
+**Mise à jour 2026-10-21 (22 h)** : les 4 paires approuvées ci-dessous existent maintenant en produits « Duo » à 15 $ (section précédente) — c'est par ces produits groupés que l'offre est offerte, pas par une réduction au panier. Ce qui suit reste vrai pour la réduction automatique : elle n'est toujours **pas implémentée** et il n'y a **aucun coupon à créer** dans Stripe pour l'instant.
 
 Encadré prévu sur les fiches Planificateur : « Un deuxième planificateur pour 7 $ — Choisis-en deux : la paire revient à 15 $ au lieu de 16 $. La réduction s'applique automatiquement dans le panier. »
 
