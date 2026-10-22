@@ -21,6 +21,9 @@ export const HGPTO_MARKUP = `
               <pattern id="stub" width="3.4" height="3.4" patternUnits="userSpaceOnUse">
                 <circle cx="0.9" cy="0.9" r="0.7" fill="#444851"/><circle cx="2.5" cy="2.3" r="0.7" fill="#c3c7ce"/><circle cx="2.4" cy="0.7" r="0.5" fill="#8a8f99"/>
               </pattern>
+              <pattern id="plaid" width="18" height="18" patternUnits="userSpaceOnUse">
+                <rect width="18" height="18" fill="#8e2f26"/><rect width="9" height="18" fill="rgba(0,0,0,.35)"/><rect width="18" height="9" fill="rgba(0,0,0,.35)"/><rect y="8" width="18" height="2" fill="rgba(255,240,200,.5)"/><rect x="8" width="2" height="18" fill="rgba(255,240,200,.5)"/>
+              </pattern>
               <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1f3f6"/><stop offset="1" stop-color="#a9b0bc"/></linearGradient>
             </defs>
 
@@ -259,6 +262,103 @@ export const HGPTO_MARKUP = `
               <rect x="66" y="154" width="88" height="14" rx="4" fill="var(--gold)" stroke="var(--botink)" stroke-width="3"/>
               <circle cx="110" cy="161" r="9.5" fill="var(--gold)" stroke="var(--botink)" stroke-width="3"/>
               <path d="M110 155 l1.9 3.8 3.8 1.9 -3.8 1.9 -1.9 3.8 -1.9 -3.8 -3.8 -1.9 3.8 -1.9z" fill="#b97f24"/>
+            </g>
+
+            <!-- DÉGUISEMENTS CONTEXTUELS (lot nº 2, 22 oct.) : un seul à la
+                 fois (attribut data-costume posé par le moteur selon la page
+                 et le calendrier des fêtes du Québec). Dessins 100 %
+                 originaux ; la silhouette reste lisible : crâne chauve,
+                 gros sourcils, barbe et fleur de lys ne sont jamais cachés. -->
+            <!-- /en-cuisine/ : tablier + mitaines de four -->
+            <g class="costume costume-apron">
+              <path d="M93 110 Q110 124 127 110" fill="none" stroke="var(--botink)" stroke-width="3.4"/>
+              <path d="M86 116 h48 l7 60 a8 8 0 0 1 -8 9 h-46 a8 8 0 0 1 -8 -9 z" fill="#fffdf6" stroke="var(--botink)" stroke-width="3.4" stroke-linejoin="round"/>
+              <rect x="97" y="148" width="26" height="17" rx="3.5" fill="none" stroke="#b9a888" stroke-width="2.4"/>
+              <circle cx="110" cy="133" r="5.5" fill="#c0392b"/><path d="M110 127.5 q1 -4 5 -4.5" fill="none" stroke="#2e6b34" stroke-width="2.2" stroke-linecap="round"/>
+              <g fill="#b3392f" stroke="var(--botink)" stroke-width="3">
+                <rect x="49" y="146" width="25" height="33" rx="11"/>
+                <rect x="146" y="146" width="25" height="33" rx="11"/>
+              </g>
+              <g fill="#fffdf6" stroke="var(--botink)" stroke-width="2.4">
+                <rect x="52" y="172" width="19" height="7" rx="3"/>
+                <rect x="149" y="172" width="19" height="7" rx="3"/>
+              </g>
+            </g>
+            <!-- /jeux : super-héros — cape bleue et masque doré ; l'emblème,
+                 c'est la fleur de lys de son chandail, bien visible -->
+            <g class="costume costume-hero">
+              <path d="M72 106 C44 120 33 152 39 197 C45 206 59 203 63 190 C58 158 61 128 76 114 Z" fill="#24405f" stroke="var(--botink)" stroke-width="3.4" stroke-linejoin="round"/>
+              <path d="M148 106 C176 120 187 152 181 197 C175 206 161 203 157 190 C162 158 159 128 144 114 Z" fill="#24405f" stroke="var(--botink)" stroke-width="3.4" stroke-linejoin="round"/>
+              <path fill-rule="evenodd" fill="var(--gold)" stroke="var(--botink)" stroke-width="3"
+                    d="M58 44 h104 a11 11 0 0 1 11 11 v12 a11 11 0 0 1 -11 11 h-104 a11 11 0 0 1 -11 -11 v-12 a11 11 0 0 1 11 -11 z
+                       M75 60 a13 10.5 0 1 0 26 0 a13 10.5 0 1 0 -26 0
+                       M119 60 a13 10.5 0 1 0 26 0 a13 10.5 0 1 0 -26 0"/>
+            </g>
+            <!-- /jeux : lutteur — bandeau de champion, bracelets, et la
+                 ceinture (.belt) s'affiche aussi via le CSS du costume -->
+            <g class="costume costume-wrestler">
+              <rect x="55" y="3" width="110" height="18" rx="9" fill="#b3392f" stroke="var(--botink)" stroke-width="3.2"/>
+              <path d="M110 5.5 l1.9 4.4 4.4 1.9 -4.4 1.9 -1.9 4.4 -1.9 -4.4 -4.4 -1.9 4.4 -1.9z" fill="#fffdf6"/>
+              <g fill="#b3392f" stroke="var(--botink)" stroke-width="2.8">
+                <rect x="54" y="136" width="17" height="13" rx="4.5"/>
+                <rect x="149" y="136" width="17" height="13" rx="4.5"/>
+              </g>
+            </g>
+            <!-- Halloween : cape noire + médaille citrouille sous le lys -->
+            <g class="costume costume-halloween">
+              <path d="M72 106 C44 120 33 152 39 197 C45 206 59 203 63 190 C58 158 61 128 76 114 Z" fill="#2b2118" stroke="var(--botink)" stroke-width="3.4" stroke-linejoin="round"/>
+              <path d="M148 106 C176 120 187 152 181 197 C175 206 161 203 157 190 C162 158 159 128 144 114 Z" fill="#2b2118" stroke="var(--botink)" stroke-width="3.4" stroke-linejoin="round"/>
+              <path d="M97 120 Q110 156 110 178 M123 120 Q110 156 110 178" fill="none" stroke="var(--botink)" stroke-width="1.8"/>
+              <circle cx="110" cy="189" r="11.5" fill="#e07b2a" stroke="var(--botink)" stroke-width="2.8"/>
+              <path d="M110 177.5 q1.5 -4 6 -4.5" fill="none" stroke="#2e6b34" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="M103.5 186 l3.5 -1 -1.5 3.5 z M116.5 186 l-3.5 -1 1.5 3.5 z" fill="var(--botink)"/>
+              <path d="M103 194 l3 -2.5 3 2.5 3 -2.5 3 2.5 2 -2 -1 4.5 h-12 l-1 -4.5z" fill="var(--botink)"/>
+            </g>
+            <!-- Noël : foulard rouge + guirlande lumineuse sous le lys -->
+            <g class="costume costume-noel">
+              <path d="M57 106 Q110 121 163 106 L163 120 Q110 135 57 120 Z" fill="#b3392f" stroke="var(--botink)" stroke-width="3.6" stroke-linejoin="round"/>
+              <path d="M138 118 l9 26 -14 3 -5 -25 Z" fill="#b3392f" stroke="var(--botink)" stroke-width="3.4" stroke-linejoin="round"/>
+              <path d="M64 112 Q110 126 156 112 M141 124 l6 20" stroke="#fffdf6" stroke-width="2.2" fill="none" opacity=".8"/>
+              <path d="M79 148 Q110 170 141 148" fill="none" stroke="#2e6b34" stroke-width="3"/>
+              <g stroke="var(--botink)" stroke-width="1.6">
+                <circle cx="85" cy="153" r="3.6" fill="#b3392f"/><circle cx="97" cy="159" r="3.6" fill="var(--gold)"/>
+                <circle cx="110" cy="161" r="3.6" fill="#6ea8d8"/><circle cx="123" cy="159" r="3.6" fill="#e2795b"/>
+                <circle cx="135" cy="153" r="3.6" fill="#b3392f"/>
+              </g>
+            </g>
+            <!-- Saint-Jean (24 juin) : écharpe blanche aux bords bleus, lys bleu -->
+            <g class="costume costume-stjean">
+              <polygon points="83,114 98,114 141,178 126,178" fill="#fffdf6" stroke="var(--botink)" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M86 116 L129 176 M95 116 L138 176" stroke="#24405f" stroke-width="2.2"/>
+              <g transform="translate(83.2,104.6) scale(0.28)" fill="#24405f">
+                <path d="M110 130 C105.5 137 104.5 143 110 150 C115.5 143 114.5 137 110 130 Z"/>
+                <path d="M107.5 141 C99 135.5 92.5 139.5 94.5 147 C96 152.5 103 153 106 148.5 C107 146.5 107.5 143.5 107.5 141 Z"/>
+                <path d="M112.5 141 C121 135.5 127.5 139.5 125.5 147 C124 152.5 117 153 114 148.5 C113 146.5 112.5 143.5 112.5 141 Z"/>
+                <rect x="99" y="153.5" width="22" height="4.4" rx="2.2"/>
+                <path d="M103.5 160.5 h13 l-2.6 6.5 h-7.8 Z"/>
+              </g>
+            </g>
+            <!-- Temps des sucres : chemise carreautée par-dessus, lys par-dessus -->
+            <g class="costume costume-sucres">
+              <rect x="70" y="114" width="80" height="62" rx="12" fill="url(#plaid)" opacity=".94"/>
+              <path d="M90 114 Q110 129 130 114 L130 123 Q110 137 90 123 Z" fill="#fdf6e3" stroke="var(--botink)" stroke-width="3" stroke-linejoin="round"/>
+              <g fill="#fdf6e3" stroke="var(--botink)" stroke-width="2.1" stroke-linejoin="round">
+                <path d="M110 130 C105.5 137 104.5 143 110 150 C115.5 143 114.5 137 110 130 Z"/>
+                <path d="M107.5 141 C99 135.5 92.5 139.5 94.5 147 C96 152.5 103 153 106 148.5 C107 146.5 107.5 143.5 107.5 141 Z"/>
+                <path d="M112.5 141 C121 135.5 127.5 139.5 125.5 147 C124 152.5 117 153 114 148.5 C113 146.5 112.5 143.5 112.5 141 Z"/>
+                <rect x="99" y="153.5" width="22" height="4.4" rx="2.2"/>
+                <path d="M103.5 160.5 h13 l-2.6 6.5 h-7.8 Z"/>
+              </g>
+            </g>
+            <!-- Rentrée (septembre) : sac à dos et crayon bien rangé -->
+            <g class="costume costume-rentree">
+              <g transform="rotate(22 45 104)">
+                <rect x="42" y="92" width="6.5" height="24" fill="#f0c16d" stroke="var(--botink)" stroke-width="2"/>
+                <path d="M42 92 h6.5 l-3.2 -7.5 z" fill="#f6d7a8" stroke="var(--botink)" stroke-width="1.8" stroke-linejoin="round"/>
+              </g>
+              <rect x="18" y="116" width="35" height="63" rx="12" fill="#b97f24" stroke="var(--botink)" stroke-width="3.4"/>
+              <path d="M18 140 h35 v9 h-35 z" fill="#8a5f1a"/>
+              <rect x="26" y="150" width="19" height="21" rx="4.5" fill="#d9a441" stroke="var(--botink)" stroke-width="2.6"/>
             </g>
             <!-- mur invisible du mime -->
             <g class="mimewall">

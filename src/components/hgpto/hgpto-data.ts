@@ -311,6 +311,10 @@ export const KB = [
           a:"" },
         { q:"Nourris Pixel pour moi", s:"MIAM !", fn:"feed",
           a:"" },
+        { q:"J'hésite, aide-moi à choisir", s:"SANS PRESSE", fn:"choisir",
+          a:"" },
+        { q:"C'est quoi, ton choix du moment ?", s:"MON CHOIX ♥", fn:"choix",
+          a:"" },
         { q:"Montre-moi les jeux", s:"PAR ICI →", go:"sec-jeux",
           a:"Les jeux sont là : 26 jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
         { q:"Montre-moi les kits", s:"PAR ICI →", go:"sec-kits",
@@ -342,3 +346,53 @@ export const STOPWORDS = { quel:1, quelle:1, quels:1, quelles:1, quoi:1, comment
         est:1, sont:1, vous:1, avez:1, nous:1, pour:1, dans:1, avec:1, chez:1, fait:1, faire:1,
         peut:1, peux:1, veux:1, moi:1, toi:1, les:1, des:1, une:1, aux:1, sur:1, pas:1, plus:1,
         tres:1, cette:1, alors:1, dire:1, dit:1, etre:1, ont:1, qui:1, cest:1 };
+
+      /* ---------- LOT Nº 2 (22 oct. 2026) : fredonnage, influenceur, vente
+         éthique, intelligence émotionnelle, déguisements. ----------
+
+         FREDONNAGE — deux sources seulement, aucune autre :
+         (a) les airs ORIGINAUX ci-dessous, composés pour HGPTO dans l'esprit
+             des veillées d'ici (mélodies simples, 100 % originales — aucune
+             citation, aucune proximité visée avec une chanson existante) ;
+         (b) les chansons D'HUGO, son œuvre, autorisée par lui.
+         Format : [note MIDI, durée en secondes].
+         ÉTAT DES CHANSONS D'HUGO : une transcription automatique a été tentée
+         sur les enregistrements masterisés (~/workspace/user/files/), mais
+         elle s'est avérée NON FIABLE : les suites de notes extraites
+         indépendamment de deux occurrences du même refrain ne concordent
+         pas (accord ≈ 0) — le suivi de hauteur saute d'un instrument à
+         l'autre dans le mix. Aucune mélodie n'a donc été inventée « à la
+         manière de » : HUGO_SONGS reste un CADRE VIDE, à remplir seulement
+         par une transcription validée à l'oreille (Hugo ou un humain).
+         Tant que `notes` est null, le moteur ne fredonne que les airs
+         originaux et n'attribue jamais un air à une chanson d'Hugo. */
+export const AIRS_ORIGINAUX = [
+        { titre:"le reel du petit gérant", notes:[[69,.28],[71,.28],[72,.28],[74,.56],[72,.28],[71,.28],[69,.56],[66,.28],[69,.28],[71,.56],[72,.28],[74,.28],[76,.84],[74,.28],[72,.28],[71,.28],[69,1.1]] },
+        { titre:"la veillée douce", notes:[[69,.5],[72,.5],[71,.35],[69,.35],[66,.7],[69,.5],[71,.5],[69,.35],[64,.35],[66,1.3]] },
+        { titre:"la berceuse des boulons", notes:[[67,.55],[69,.55],[72,1.1],[69,.55],[67,.55],[64,1.1],[62,.55],[64,.55],[67,1.6]] }
+      ];
+export const HUGO_SONGS = [
+        { titre:"Je souffre", notes:null },
+        { titre:"Mode tornado", notes:null },
+        { titre:"Lettre à l'inconnue", notes:null },
+        { titre:"Bravo", notes:null }
+      ];
+      /* Influenceur maison : « Le choix d'HGPTO ». Faits réels seulement
+         (base de faits du site), gratuit d'abord, dose faible — reco nº 8 :
+         jamais plus d'une invitation par séquence. */
+export const CHOIX_LINES = [
+        { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Deux minutes, et ça fait réfléchir en s'amusant.", u:"https://hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tape ce qu'il y a dans ton frigo, il te trouve un souper.", u:"https://hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : RELÈVE, notre série d'histoires dont tu choisis la suite. Le chapitre 1 est gratuit !", u:"https://hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : « Futur simple », le balado d'HP Outils — un nouvel épisode chaque lundi, sans jargon.", u:"https://hp-outils.com/balado", l:"Écouter le balado", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment, côté lecture : « Les enfants cuisinent pour faire plaisir » (20 $) — cuisiner en famille, c'est des souvenirs qui se mangent.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"MON CHOIX ♥" }
+      ];
+      /* Savoir-vendre éthique HP : conclure SANS pression. Ces lignes
+         accompagnent les réponses produits quand le visiteur hésite ou
+         compare. Zéro fausse urgence, zéro rareté inventée, zéro promesse. */
+export const ETHIQUE_LINES = [
+        "Prends ton temps : pas de presse, il sera là quand tu seras prêt — et les jeux gratuits, eux, t'attendent tout de suite.",
+        "Aucun compte à rebours ici, promis : le même prix demain, et le même lien.",
+        "Et si tu décides de ne rien prendre, c'est bien correct aussi. Mon travail, c'est de t'informer — pas de te pousser.",
+        "Compare, respire, reviens quand tu veux : ici, on ne joue jamais avec l'urgence."
+      ];

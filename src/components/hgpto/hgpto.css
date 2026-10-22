@@ -180,6 +180,18 @@
       /* Garde-robe météo */
       .scarf,.raincoat,.umbrella,.rain{opacity:0;transition:opacity .3s}
       .bot[data-outfit="froid"] .scarf{opacity:1}
+      /* Déguisements contextuels (lot nº 2) : un seul à la fois, choisi par
+         le moteur (attribut data-costume : page et calendrier des fêtes). */
+      .costume{opacity:0;transition:opacity .3s}
+      .bot[data-costume="apron"] .costume-apron{opacity:1}
+      .bot[data-costume="hero"] .costume-hero{opacity:1}
+      .bot[data-costume="wrestler"] .costume-wrestler{opacity:1}
+      .bot[data-costume="wrestler"] .belt{opacity:1}
+      .bot[data-costume="halloween"] .costume-halloween{opacity:1}
+      .bot[data-costume="noel"] .costume-noel{opacity:1}
+      .bot[data-costume="stjean"] .costume-stjean{opacity:1}
+      .bot[data-costume="sucres"] .costume-sucres{opacity:1}
+      .bot[data-costume="rentree"] .costume-rentree{opacity:1}
       .bot[data-outfit="pluie"] .raincoat,.bot[data-outfit="pluie"] .umbrella,.bot[data-outfit="pluie"] .rain{opacity:1}
       .bot[data-outfit="pluie"] .rain line{animation:rainfall .7s linear infinite}
       .bot[data-outfit="pluie"] .rain line:nth-child(2n){animation-delay:.22s}

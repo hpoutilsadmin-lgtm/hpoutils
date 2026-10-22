@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES } from "./hgpto-data";
 
 export function initHgpto() {
       "use strict";
@@ -48,6 +48,19 @@ export function initHgpto() {
         var py = Math.max(-2.4, Math.min(2.4, dy*5));
         pupils.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px)';
       }, { passive:true });
+      /* ---------- Panneau « Pour Hugo » : discret (lot nº 2) ----------
+         La section « questions sans réponse, à valider » ne doit PAS être
+         visible des visiteurs du site public. La consignation continue en
+         arrière-plan (mémoire de session) et la bulle signature reste
+         publique, mais la section elle-même est RETIRÉE du DOM — sauf si
+         l'URL porte le paramètre discret ?pourhugo=1 (accès pour Hugo
+         seul, sans mot de passe ni compte : juste discret). */
+      var pourHugo = false;
+      try { pourHugo = /[?&]pourhugo=1(&|$)/.test(window.location.search || ''); } catch(e) {}
+      if (!pourHugo){
+        var qaHugoEl = document.getElementById('qa-hugo');
+        if (qaHugoEl) qaHugoEl.remove();
+      }
       (function blinkLoop(){
         setTimeout(function(){
           bot.classList.add('blink');
@@ -126,7 +139,27 @@ export function initHgpto() {
                         simple), LED déménagée à l'encolure — partout, pion du
                         jeu compris. Silhouette lisible en 1 seconde, même en
                         très petit : crâne chauve + gros sourcils ébouriffés +
-                        barbe + lys à la poitrine. */
+                        barbe + lys à la poitrine.
+         · 2026-10-22 — LOT Nº 2 (go d'Hugo : « pousse ça, c'est très bon ») :
+                        (1) FREDONNAGE pendant ses moments calmes — airs
+                        ORIGINAUX composés pour lui + CADRE pour les chansons
+                        d'Hugo (transcription auto des masters jugée non
+                        fiable : aucune mélodie inventée, voir hgpto-data.ts) ;
+                        (2) influenceur maison : « Le choix d'HGPTO », faits
+                        réels, gratuit d'abord, dose faible (reco nº 8) ;
+                        (3) savoir-vendre ÉTHIQUE HP : hésitation détectée →
+                        faits + lien direct + sortie facile, zéro pression ;
+                        (4) INTELLIGENCE ÉMOTIONNELLE de session seulement :
+                        pressé / flâneur / nuit profonde / routes sensibles /
+                        hésitation / perdu — le confort et l'aide, JAMAIS un
+                        levier de vente ; (5) DÉGUISEMENTS contextuels :
+                        tablier+mitaines en cuisine, super-héros/lutteur aux
+                        jeux, costumes des fêtes du Québec ; (6) panneau
+                        « Pour Hugo » (questions sans réponse) CACHÉ aux
+                        visiteurs : la consignation continue en session, la
+                        bulle signature reste publique, et la section ne
+                        réapparaît qu'avec le paramètre d'URL ?pourhugo=1
+                        (accès discret pour Hugo, sans mot de passe). */
       var COMPANION_EVERY = 0.16;              // part des bulles « accompagnateur »
       var TWO_HOURS_MS = 2 * 60 * 60 * 1000;   // scène des 2 heures, une seule fois
       var pitchPoolIdx = 0;
@@ -277,6 +310,74 @@ export function initHgpto() {
         tone(t, 130, 90, 0.5, 0.026, 'sine');
         tone(t + 0.62, 300, 345, 0.16, 0.018, 'triangle'); // le petit « bip » du zzz-bip
       }
+      /* ---------- Fredonnage (lot nº 2) : il fredonne dans ses moments
+         calmes — en balayant, en bricolant, en marchant. Deux sources
+         seulement : ses airs ORIGINAUX composés pour lui, et les chansons
+         d'Hugo quand leur mélodie aura été transcrite et validée à
+         l'oreille (HUGO_SONGS : cadre vide pour l'instant, voir
+         hgpto-data.ts — aucune mélodie inventée). Voix douce en legato,
+         jamais pendant une tâche du visiteur, muet respecté. ---------- */
+      var humSeq = 0;
+      function humTone(t0, midi, dur){
+        if (!actx) return;
+        var f = 440 * Math.pow(2, (midi - 69) / 12);
+        var o = actx.createOscillator(), g = actx.createGain(), fl = actx.createBiquadFilter();
+        o.type = 'sine';
+        fl.type = 'lowpass'; fl.frequency.value = 1150;
+        o.frequency.setValueAtTime(f * 0.995, t0);
+        o.frequency.exponentialRampToValueAtTime(f, t0 + Math.min(0.09, dur * 0.3));
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(0.034, t0 + 0.07);
+        g.gain.setValueAtTime(0.034, t0 + Math.max(0.07, dur - 0.09));
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        o.connect(fl); fl.connect(g); g.connect(actx.destination);
+        o.start(t0); o.stop(t0 + dur + 0.03);
+      }
+      function doHum(){
+        if (!actx || muted || docHidden || paused || isHidden || qaOpen || calm || gameOn) return;
+        if (state === 'sleep' || isBusy()) return;
+        var songs = HUGO_SONGS.filter(function(s){ return s.notes && s.notes.length; });
+        var fromHugo = songs.length && Math.random() < 0.45;
+        var air = fromHugo ? pick(songs) : pick(AIRS_ORIGINAUX);
+        var notes = air.notes;
+        if (!notes || !notes.length) return;
+        var mySeq = ++humSeq;
+        setExpr('happy');
+        if (fromHugo){
+          showBubble(esc("🎵 Ça, c'est une des chansons d'Hugo : « " + air.titre + " » !") +
+            linkHtml({ u:"https://hp-outils.com/balado", l:"Le balado et ses chansons" }), 7000, 'none');
+          logDay("fredonné une chanson d'Hugo (« " + air.titre + " »)");
+        } else if (Math.random() < 0.5){
+          showBubble("🎵 Un petit air de mon cru, " + air.titre + "…", 5200, 'none');
+          logDay("fredonné un de mes airs (" + air.titre + ")");
+        }
+        var t = actx.currentTime + 0.05;
+        notes.forEach(function(nd){
+          if (mySeq !== humSeq) return;
+          humTone(t, nd[0], nd[1] * 0.96);
+          t += nd[1];
+        });
+      }
+      /* ---------- Influenceur maison : « Le choix d'HGPTO » (lot nº 2) ---
+         Dans sa vie, à dose faible (max 2 par session, espacés), il
+         présente un produit/jeu réel de sa base de faits. Gratuit d'abord,
+         une seule invitation à la fois — reco nº 8. ---------- */
+      var choixIdx = 0, choixCount = 0, choixLastAt = 0;
+      function doChoix(){
+        if (paused || isHidden || docHidden || qaOpen || calm || gameOn) return;
+        if (state === 'sleep' || isBusy()) return;
+        if (Date.now() - lastBubbleAt < 9000) return;
+        var p = CHOIX_LINES[choixIdx % CHOIX_LINES.length]; choixIdx++;
+        choixCount++; choixLastAt = Date.now();
+        logDay("présenté mon choix du moment, comme un vrai influenceur de boulons");
+        doInvite(p);
+      }
+      function scheduleChoix(){
+        setTimeout(function(){
+          if (choixCount < 2 && Date.now() - choixLastAt > 150000) doChoix();
+          if (choixCount < 2) scheduleChoix();
+        }, 150000 + Math.random() * 90000);
+      }
       /* Météo intérieure : soupir, reniflement, petit « prout » de mouchoir */
       function sighSound(){
         if (!actx || muted) return;
@@ -346,6 +447,7 @@ export function initHgpto() {
       /* ---------- Parole : blagues, invitations, soir ---------- */
       function talk(){
         if (paused || isHidden || docHidden || qaOpen || calm || gameOn || Date.now() < cornerUntil || state === 'sleep' || isBusy()) return;
+        if (isPresse() && Math.random() < 0.7) return;   // visiteur pressé : il se fait discret (lot nº 2)
         if (isNight() && Math.random() < 0.45){
           showBubble(esc(pick(EVENING_LINES)), 5200, 'sleep');
           alternate++;
@@ -374,6 +476,12 @@ export function initHgpto() {
         }
         if (tr < 0.28){
           showBubble(esc(pick(EMPATHY)), 7000, 'talk');   // beaucoup d'empathie, jamais de pitié
+          alternate++;
+          return;
+        }
+        if (isSensitiveRoute() && Math.random() < 0.6){
+          // Route sensible (Sans Honte) : humour en sourdine, dignité d'abord.
+          showBubble(esc(pick(EMPATHY)), 7000, 'talk');
           alternate++;
           return;
         }
@@ -748,19 +856,25 @@ export function initHgpto() {
         if (lifeTimer) clearTimeout(lifeTimer);
         lifeTimer = setTimeout(function(){
           if (!paused && !isHidden && !docHidden && !qaOpen && !calm && !gameOn && state !== 'sleep' && !isBusy()){
-            var r = Math.random();
-            if (r < 0.16) doTinker();
-            else if (r < 0.32) (Math.random() < 0.35 ? doCookFail() : doCook());
-            else if (r < 0.44) doRead();
-            else if (r < 0.52) doWrestler();
-            else if (r < 0.59) doMime();
-            else if (r < 0.66) doSkate();
-            else if (r < 0.72) doPerch();
-            else if (r < 0.78) doPeek();
-            else if (r < 0.86) doJanitor();
-            else if (r < 0.92) doNosePick();
-            else if (r < 0.96 && seasonDecorKind()) doDecor();
-            else doGraffiti();
+            if (isPresse() && Math.random() < 0.5){
+              // Visiteur pressé : on saute la vignette, il reste tranquille.
+            } else {
+              var r = Math.random();
+              var sensible = isSensitiveRoute();
+              if (r < 0.16) doTinker();
+              else if (r < 0.32) (Math.random() < 0.35 ? doCookFail() : doCook());
+              else if (r < 0.44) doRead();
+              else if (r < 0.52) doWrestler();
+              else if (r < 0.59) doMime();
+              else if (r < 0.66) doSkate();
+              else if (r < 0.72) doPerch();
+              else if (r < 0.78) doPeek();
+              else if (r < 0.86) doJanitor();
+              else if (r < 0.90) doHum();
+              else if (r < 0.95) (sensible ? doJanitor() : doNosePick());
+              else if (r < 0.98 && seasonDecorKind()) doDecor();
+              else (sensible ? doHum() : doGraffiti());
+            }
           }
           scheduleLife();
         }, 20000 + Math.random()*22000);
@@ -834,6 +948,15 @@ export function initHgpto() {
         if (cornerUntil && Date.now() > cornerUntil && state === 'idle' && !paused && !qaOpen && !calm && !gameOn){
           cornerUntil = 0;
           setState(reduced ? 'idle' : 'walk');
+        }
+        // Nuit profonde (0 h – 5 h) : une fois par session, il suggère le
+        // repos, en douceur — le confort du visiteur, jamais de rétention.
+        if (!restSaid){
+          var hh = new Date().getHours();
+          if (hh >= 0 && hh < 5 && state !== 'sleep' && !isBusy()){
+            restSaid = true;
+            showBubble("Il est très tard… le site sera encore là demain. Repose-toi bien — moi, je veille en dormant.", 8000, 'sleep');
+          }
         }
       }, 4000);
 
@@ -1045,7 +1168,7 @@ export function initHgpto() {
         qaPanel.hidden = true;
         if (!paused){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
       }
-      function answerQuestion(item){
+      function answerQuestion(item, opts){
         lastInteract = Date.now();
         engage();
         setExpr('happy');
@@ -1057,9 +1180,16 @@ export function initHgpto() {
         if (item.fn === 'tour'){ startTour(); return; }
         if (item.fn === 'pixel'){ showBubble(esc(PIXEL_STORY), 11000, 'answer'); summonCat('follow'); return; }
         if (item.fn === 'feed'){ closeQA(); doFeedCat(); return; }
+        if (item.fn === 'choix'){ closeQA(); busyUntil = 0; lastBubbleAt = 0; choixCount = 0; doChoix(); return; }
+        if (item.fn === 'choisir'){
+          showBubble(esc("On y va doucement, par étapes — écoute ton besoin d'abord : jouer (c'est gratuit), cuisiner (629 recettes gratuites), ou t'organiser le quotidien (les kits, 5 $ chacun, 15 thèmes). Et si la réponse, c'est « rien pour l'instant », c'est bien correct aussi : je reste là, sans pousser.") +
+            linkHtml({ u:"https://hp-outils.com/jeux", l:"Commencer par les jeux gratuits" }), 12000, 'answer');
+          return;
+        }
         var text = item.a || pick(JOKES);
         var html = esc(text);
         if (item.u) html += linkHtml({ u:item.u, l:item.l });
+        if (opts && opts.doux) html += '<br>' + esc(pick(ETHIQUE_LINES));
         if (item.s){
           signText.textContent = item.s;
           setState('invite'); busy(3400);
@@ -1104,6 +1234,7 @@ export function initHgpto() {
       function renderUnanswered(){
         var box = document.getElementById('qa-hugo');
         var list = document.getElementById('qa-hugo-list');
+        if (!box || !list) return;   // visiteur ordinaire : section absente du DOM, la consignation continue
         if (!unanswered.length){ box.hidden = true; return; }
         box.hidden = false;
         list.innerHTML = '';
@@ -1121,7 +1252,16 @@ export function initHgpto() {
         input.value = '';
         lastInteract = Date.now();
         var hit = searchKB(q);
-        if (hit){ answerQuestion(hit); return; }
+        if (hit){
+          // Savoir-vendre éthique : si la question sent l'hésitation ou la
+          // comparaison et que la réponse parle d'un produit, on ajoute la
+          // sortie facile — jamais de pression (lot nº 2).
+          var nq = normText(q);
+          var hesite = /(hesit|compar|lequel|laquelle|choisir|difference|mieux|pas sur|sais pas|vaut|trop cher)/.test(nq);
+          var produit = hit.u && /(sans-honte|livres-pdf|ateliers)/.test(hit.u);
+          answerQuestion(hit, (hesite && produit) ? { doux:true } : undefined);
+          return;
+        }
         if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
         setExpr('happy');
         showBubble(esc(FALLBACK) + linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" }), 11000, 'answer');
@@ -1371,6 +1511,15 @@ export function initHgpto() {
       var scardEl = document.getElementById('souvenir');
       var scardText = '';
       function outfitLabel(){
+        var cst = bot.getAttribute('data-costume');
+        if (cst === 'apron') return "en tablier et mitaines de four";
+        if (cst === 'hero') return "en super-héros, la fleur de lys en emblème";
+        if (cst === 'wrestler') return "en lutteur, ceinture de champion";
+        if (cst === 'halloween') return "déguisé pour l'Halloween";
+        if (cst === 'noel') return "en lumières de Noël ambulantes";
+        if (cst === 'stjean') return "aux couleurs de la fête nationale";
+        if (cst === 'sucres') return "en carreauté du temps des sucres";
+        if (cst === 'rentree') return "avec son sac à dos de la rentrée";
         var o = bot.getAttribute('data-outfit');
         if (document.body.classList.contains('night')) return "tête nue, comme toujours";
         if (o === 'froid') return "en foulard, tête nue";
@@ -1548,6 +1697,7 @@ export function initHgpto() {
         bot.classList.remove('sleep-book');
         gameOn = true;
         catHideNow();   // Pixel se retire pendant la partie, comme lui pendant les tâches
+        applyCostume();   // costume rangé pendant la partie : il joue en chandail
         document.body.classList.add('game-on');
         document.getElementById('botlayer').style.zIndex = '80';
         gameEl.hidden = false;
@@ -1727,6 +1877,7 @@ export function initHgpto() {
         document.body.classList.remove('game-on');
         document.getElementById('botlayer').style.zIndex = '';
         gameOn = false;
+        applyCostume();
         G = null;
         setExpr('happy');
         setState(reduced ? 'idle' : 'walk');
@@ -2101,6 +2252,7 @@ export function initHgpto() {
       if (vw() < 560) x = clampX(14);
       if (reduced) x = maxX();
       place();
+      applyCostume();
       // Pixel est là dès l'arrivée : lovée en sieste dans un coin ensoleillé.
       catVisible = true;
       catMode = 'stay';
@@ -2128,6 +2280,7 @@ export function initHgpto() {
         scheduleLife();
         scheduleWave();
         scheduleCatLife();
+        scheduleChoix();
         if (seasonDecorKind()) setTimeout(function(){
           if (!isBusy() && state !== 'sleep' && !qaOpen && !gameOn) doDecor();
         }, 17000);
@@ -2164,6 +2317,79 @@ export function initHgpto() {
         }
       } catch(e) {}
 
+      /* ---------- INTELLIGENCE ÉMOTIONNELLE (lot nº 2) ----------
+         Signaux de la SESSION en cours seulement : aucune donnée
+         personnelle, rien n'est conservé entre les visites. Il lit le
+         rythme de la visite et adapte son ton. LIGNE ROUGE : ça sert le
+         confort et l'aide, JAMAIS la vente — aucun levier émotif,
+         aucune culpabilité, aucune tristesse jouée. */
+      var navTimes = [], visitCount = {}, summarySaid = {}, restSaid = false, lostSaidAt = 0, presseUntil = 0;
+      var ROUTE_FACTS = {
+        '/sans-honte': "Petit résumé calme : 15 kits à 5 $ chacun, le bundle « Choisis 10 parmi 15 » à 40 $, aucune taxe ajoutée. Prends ton temps.",
+        '/livres-pdf': "Petit résumé calme : 4 livres en PDF, de 10 $ à 20 $, téléchargement immédiat après le paiement. Prends ton temps.",
+        '/ateliers': "Petit résumé calme : les ateliers vont de 120 $ à 150 $, à Terrebonne et dans Lanaudière, et on répond à tes questions par courriel. Prends ton temps.",
+        '/les-passeurs': "Petit résumé calme : les Passeurs, c'est 1 $ par mois pour soutenir HP Outils — et l'inscription payante arrive bientôt, en toute honnêteté. Prends ton temps."
+      };
+      function isSensitiveRoute(){ return routeKey() === '/sans-honte'; }
+      function isPresse(){ return Date.now() < presseUntil; }
+      function ieOnRoute(k){
+        var now = Date.now();
+        navTimes.push(now);
+        navTimes = navTimes.filter(function(t){ return now - t < 30000; });
+        visitCount[k] = (visitCount[k] || 0) + 1;
+        // Visiteur pressé : 3 pages en moins de 25 s → il se fait bref et discret un moment.
+        var recent = navTimes.filter(function(t){ return now - t < 25000; });
+        if (recent.length >= 3) presseUntil = now + 90000;
+        if (paused || isHidden || docHidden || gameOn || qaOpen) return;
+        // Visiteur perdu : allers-retours rapides → proposer le guidage, rarement, sans l'imposer.
+        if (navTimes.length >= 4 && now - lostSaidAt > 180000 && state !== 'sleep' && !isBusy() && now - lastBubbleAt > 8000){
+          lostSaidAt = now;
+          showBubble("Tu cherches quelque chose de précis ? Touche « Une question ? » — je te guide avec plaisir. Ou continue à ton rythme : je ne te suis pas aux talons, promis.", 9000, 'question');
+          return;
+        }
+        // Hésitation : 3e visite de la même page produit → résumé calme des faits, une fois par page.
+        if (visitCount[k] === 3 && ROUTE_FACTS[k] && !summarySaid[k]){
+          summarySaid[k] = true;
+          setTimeout(function(){
+            if (!paused && !gameOn && !qaOpen && state !== 'sleep' && !isBusy() && Date.now() - lastBubbleAt > 7000){
+              showBubble(esc(ROUTE_FACTS[k]), 10000, 'answer');
+            }
+          }, 1400);
+        }
+      }
+
+      /* ---------- DÉGUISEMENTS CONTEXTUELS (lot nº 2) ----------
+         Un seul costume à la fois. Priorité : le calendrier des fêtes et
+         événements du Québec (assorti aux décos saisonnières déjà en
+         place), puis la page : tablier + mitaines de four en cuisine,
+         super-héros / lutteur en rotation douce aux jeux. Pendant une
+         partie du jeu caché, il joue en chandail : costume rangé. */
+      function calendarCostume(){
+        var d = new Date(), m = d.getMonth(), day = d.getDate();
+        if (seasonDecorKind() === 'halloween') return 'halloween';
+        if (m === 11) return 'noel';
+        if (m === 5 && day >= 21 && day <= 27) return 'stjean';
+        if ((m === 2 && day >= 15) || m === 3) return 'sucres';
+        if (m === 8 && day <= 14) return 'rentree';
+        return null;
+      }
+      var jeuxCostumeIdx = 0;
+      function applyCostume(){
+        var c = calendarCostume();
+        if (!c){
+          var k = routeKey();
+          if (k === '/en-cuisine') c = 'apron';
+          else if (k === '/jeux') c = (jeuxCostumeIdx % 2) ? 'wrestler' : 'hero';
+          else c = '';
+        }
+        if (gameOn) c = '';
+        bot.setAttribute('data-costume', c || '');
+      }
+      setInterval(function(){
+        if (routeKey() === '/jeux' && !calendarCostume()) jeuxCostumeIdx++;
+        applyCostume();
+      }, 45000);
+
       /* ---------- Portage site : « Accompagne-moi » commente les pages (routes) ---------- */
       var ROUTE_COMMENTS = {
         '/': "Te voilà à l'accueil ! C'est ici que tout commence.",
@@ -2180,6 +2406,8 @@ export function initHgpto() {
         var k = routeKey();
         if (k === lastRoute) return;
         lastRoute = k;
+        ieOnRoute(k);
+        applyCostume();
         if (!accompany || paused || isHidden || gameOn || qaOpen || state === 'sleep' || isBusy()) return;
         if (commentedSecs['route:' + k]) return;
         var line = ROUTE_COMMENTS[k];
