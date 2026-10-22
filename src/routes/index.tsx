@@ -107,7 +107,7 @@ function Index() {
               </div>
             </article>
             <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-              <a href="/en-cuisine/" aria-label="Ouvrir En cuisine" style={{ display: "block", textDecoration: "none" }}>
+              <a href="/en-cuisine/index.html" aria-label="Ouvrir En cuisine" style={{ display: "block", textDecoration: "none" }}>
                 <div style={{ ...categoryTile("#9a4a0d", "#c85f16"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                   <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>C</span>
                   <span style={CATEGORY_TAG_STYLE}>Recettes HP</span>
@@ -116,7 +116,7 @@ function Index() {
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>Cuisine</h3>
                 <p>Les enfants cuisinent, recettes et petits budgets</p>
-                <a className="pillar-cta" href="/en-cuisine/">Ouvrir En cuisine →</a>
+                <a className="pillar-cta" href="/en-cuisine/index.html">Ouvrir En cuisine →</a>
               </div>
             </article>
           </div>

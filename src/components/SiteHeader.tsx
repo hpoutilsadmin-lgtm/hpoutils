@@ -46,7 +46,7 @@ export function SiteHeader() {
               {l.label}
             </Link>
           ))}
-          <a href="/en-cuisine/" style={MAIN_LINK_STYLE}>
+          <a href="/en-cuisine/index.html" style={MAIN_LINK_STYLE}>
             En cuisine
           </a>
           {NAV_SECONDARY.map((l) => (
