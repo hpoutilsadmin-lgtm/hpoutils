@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { createSeoHead } from "@/lib/seo";
+import type { CSSProperties } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => createSeoHead({
@@ -10,6 +11,33 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
+
+const CATEGORY_TAG_STYLE: CSSProperties = {
+  position: "absolute",
+  left: 12,
+  bottom: 10,
+  fontSize: 10.5,
+  fontWeight: 900,
+  letterSpacing: ".1em",
+  textTransform: "uppercase",
+  color: "#f0c16d",
+  background: "rgba(7,17,27,.55)",
+  border: "1px solid rgba(240,193,109,.35)",
+  borderRadius: 999,
+  padding: "4px 9px",
+};
+
+function categoryTile(c1: string, c2: string): CSSProperties {
+  return {
+    backgroundColor: c2,
+    backgroundImage:
+      "radial-gradient(circle at 85% 12%, rgba(246,237,221,.22), transparent 46%)," +
+      "radial-gradient(rgba(255,255,255,.13) 1px, transparent 1.6px)," +
+      "linear-gradient(135deg, " + c1 + ", " + c2 + ")",
+    backgroundSize: "auto, 22px 22px, auto",
+    boxShadow: "inset 0 0 0 1px rgba(255,255,255,.12), inset 0 -26px 36px rgba(0,0,0,.28)",
+  };
+}
 
 function Index() {
   return (
@@ -29,6 +57,68 @@ function Index() {
             <Link to="/sans-honte" className="btn-primary">Découvrir les kits Sans Honte</Link>
             <Link to="/livres-pdf" className="btn-primary">Voir livres, PDF &amp; réflexions</Link>
             <Link to="/univers" className="btn-primary">Découvrir Univers alternatif</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* TU CHERCHES QUOI? */}
+      <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Par où commencer</span>
+          <h2 className="section-title">Tu cherches quoi?</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 24 }}>
+            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
+              <Link to="/jeux" aria-label="Voir les jeux" style={{ display: "block", textDecoration: "none" }}>
+                <div style={{ ...categoryTile("#08243a", "#0f3e62"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>J</span>
+                  <span style={CATEGORY_TAG_STYLE}>Gratuits · navigateur</span>
+                </div>
+              </Link>
+              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                <h3 style={{ fontSize: 23 }}>Jeux</h3>
+                <p>26 jeux gratuits, jouables dans ton navigateur</p>
+                <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
+              </div>
+            </article>
+            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
+              <Link to="/outils" aria-label="Voir les outils" style={{ display: "block", textDecoration: "none" }}>
+                <div style={{ ...categoryTile("#294f1e", "#496b2a"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>O</span>
+                  <span style={CATEGORY_TAG_STYLE}>Web · papier</span>
+                </div>
+              </Link>
+              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                <h3 style={{ fontSize: 23 }}>Outils</h3>
+                <p>Interactifs sur le web, ou papier à imprimer : kits Sans Honte et fiches</p>
+                <Link className="pillar-cta" to="/outils">Voir les outils →</Link>
+              </div>
+            </article>
+            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
+              <Link to="/livres-pdf" aria-label="Voir les livres" style={{ display: "block", textDecoration: "none" }}>
+                <div style={{ ...categoryTile("#54432a", "#806943"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>L</span>
+                  <span style={CATEGORY_TAG_STYLE}>PDF à télécharger</span>
+                </div>
+              </Link>
+              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                <h3 style={{ fontSize: 23 }}>Livres</h3>
+                <p>Livres et PDF d'ici</p>
+                <Link className="pillar-cta" to="/livres-pdf">Voir les livres →</Link>
+              </div>
+            </article>
+            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
+              <a href="/en-cuisine/" aria-label="Ouvrir En cuisine" style={{ display: "block", textDecoration: "none" }}>
+                <div style={{ ...categoryTile("#9a4a0d", "#c85f16"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>C</span>
+                  <span style={CATEGORY_TAG_STYLE}>Recettes HP</span>
+                </div>
+              </a>
+              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                <h3 style={{ fontSize: 23 }}>Cuisine</h3>
+                <p>Les enfants cuisinent, recettes et petits budgets</p>
+                <a className="pillar-cta" href="/en-cuisine/">Ouvrir En cuisine →</a>
+              </div>
+            </article>
           </div>
         </div>
       </section>

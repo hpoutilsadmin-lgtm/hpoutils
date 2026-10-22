@@ -1,16 +1,21 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 
-const NAV = [
-  { to: "/", label: "Accueil" },
-  { to: "/outils", label: "Outils" },
+const NAV_MAIN = [
   { to: "/jeux", label: "Jeux" },
+  { to: "/outils", label: "Outils" },
+  { to: "/livres-pdf", label: "Livres" },
+] as const;
+
+const NAV_SECONDARY = [
+  { to: "/", label: "Accueil" },
   { to: "/balado", label: "Balado" },
-  { to: "/livres-pdf", label: "Livres, PDF & réflexions" },
   { to: "/univers", label: "Univers alternatif" },
   { to: "/ateliers", label: "Ateliers" },
   { to: "/a-propos", label: "À propos" },
 ] as const;
+
+const MAIN_LINK_STYLE = { color: "#f0c16d" } as const;
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -31,17 +36,28 @@ export function SiteHeader() {
           Menu
         </button>
         <nav className={`site-nav${open ? " open" : ""}`} aria-label="Navigation principale">
-          {NAV.map((l) => (
-            <Fragment key={l.to}>
-              <Link
-                to={l.to}
-                activeOptions={{ exact: l.to === "/" }}
-                activeProps={{ className: "active" }}
-              >
-                {l.label}
-              </Link>
-              {l.to === "/outils" && <a href="/en-cuisine/">En cuisine</a>}
-            </Fragment>
+          {NAV_MAIN.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              style={MAIN_LINK_STYLE}
+              activeProps={{ className: "active" }}
+            >
+              {l.label}
+            </Link>
+          ))}
+          <a href="/en-cuisine/" style={MAIN_LINK_STYLE}>
+            En cuisine
+          </a>
+          {NAV_SECONDARY.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              activeOptions={{ exact: l.to === "/" }}
+              activeProps={{ className: "active" }}
+            >
+              {l.label}
+            </Link>
           ))}
         </nav>
       </div>
