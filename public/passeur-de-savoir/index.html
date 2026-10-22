@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Le Passeur de savoir — capter le savoir des gens avant qu'il disparaisse</title>
+    <meta name="description" content="Un outil gratuit qui capte le savoir des gens ordinaires — recettes, trucs de métier, histoires de quartier — et le rend transmissible, classé, cherchable. Le concept, et comment le financer au Québec." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f6efdc;
+        --bg-soft: #efe6cd;
+        --surface: #fffaf0;
+        --surface-2: #fdf4e0;
+        --ink: #22332a;
+        --ink-soft: #43544a;
+        --muted: #68766b;
+        --green: #1e4d3b;
+        --green-deep: #123527;
+        --green-ink: #0e2a1f;
+        --rust: #b8491f;
+        --rust-soft: #d96f3c;
+        --ochre: #cf9425;
+        --line: rgba(34, 51, 42, .18);
+        --line-strong: rgba(34, 51, 42, .38);
+        --card-shadow: 0 1px 0 rgba(34,51,42,.06), 0 10px 28px -18px rgba(34,51,42,.35);
+        --on-green: #f3ecd8;
+        --on-green-soft: #cfd8c4;
+        --on-green-line: rgba(243, 236, 216, .25);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #101a14;
+          --bg-soft: #14211a;
+          --surface: #1a2820;
+          --surface-2: #1f2f26;
+          --ink: #f0e8d2;
+          --ink-soft: #ccd4c2;
+          --muted: #97a48f;
+          --green: #2c6a4f;
+          --green-deep: #0c2318;
+          --green-ink: #081b12;
+          --rust: #e07744;
+          --rust-soft: #e88a58;
+          --ochre: #dfa83e;
+          --line: rgba(240, 232, 210, .16);
+          --line-strong: rgba(240, 232, 210, .35);
+          --card-shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 30px -18px rgba(0,0,0,.7);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Archivo", system-ui, sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      img { max-width: 100%; display: block; }
+      a { color: var(--rust); }
+      ::selection { background: var(--ochre); color: #22332a; }
+
+      .wrap { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
+      section { padding: 76px 0; }
+      section + section { border-top: 1px solid var(--line); }
+
+      .num {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px; letter-spacing: .14em;
+        color: var(--rust); text-transform: uppercase;
+        display: flex; align-items: center; gap: 12px; margin: 0 0 14px;
+      }
+      .num::after { content: ""; height: 1px; flex: 0 0 54px; background: var(--rust); opacity: .55; }
+      h2 {
+        font-family: "Spectral", Georgia, serif;
+        font-weight: 700; font-size: clamp(30px, 4.6vw, 44px);
+        line-height: 1.12; letter-spacing: -.01em; margin: 0 0 18px;
+      }
+      h3 {
+        font-family: "Spectral", Georgia, serif;
+        font-weight: 700; font-size: 22px; line-height: 1.25; margin: 0 0 8px;
+      }
+      .lede { font-size: 19px; color: var(--ink-soft); max-width: 44em; margin: 0 0 10px; }
+      p { margin: 0 0 14px; }
+      .small { font-size: 14px; color: var(--muted); }
+
+      /* ---------- Hero ---------- */
+      .hero { padding: 64px 0 0; }
+      .hero-top { max-width: 820px; }
+      .stamp {
+        display: inline-block;
+        font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: .16em;
+        text-transform: uppercase; color: var(--green);
+        border: 1.5px solid var(--green); border-radius: 4px;
+        padding: 6px 12px 5px; transform: rotate(-1.6deg);
+        margin-bottom: 26px;
+      }
+      @media (prefers-color-scheme: dark) { .stamp { color: var(--ochre); border-color: var(--ochre); } }
+      h1 {
+        font-family: "Spectral", Georgia, serif;
+        font-weight: 800; font-size: clamp(44px, 8.4vw, 84px);
+        line-height: .98; letter-spacing: -.015em; margin: 0 0 22px;
+      }
+      h1 em { font-style: italic; font-weight: 600; color: var(--rust); }
+      .hero-sub {
+        font-family: "Spectral", Georgia, serif; font-size: clamp(20px, 3vw, 26px);
+        line-height: 1.4; color: var(--ink-soft); max-width: 34em; margin: 0 0 30px;
+      }
+      .hero-figure { margin: 10px 0 0; }
+      .hero-figure img {
+        width: 100%; border-radius: 6px;
+        border: 1px solid var(--line-strong);
+        box-shadow: var(--card-shadow);
+      }
+      .hero-figure figcaption {
+        font-size: 13.5px; color: var(--muted); padding: 10px 2px 0;
+        display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+      }
+      .hero-facts {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+        border-top: 1px solid var(--line-strong); margin-top: 34px;
+      }
+      .hero-facts div { padding: 18px 20px 6px 0; }
+      .hero-facts div + div { border-left: 1px solid var(--line); padding-left: 20px; }
+      .hero-facts strong {
+        display: block; font-family: "Spectral", Georgia, serif;
+        font-size: 21px; font-weight: 700; line-height: 1.25; margin-bottom: 4px;
+      }
+      .hero-facts span { font-size: 14.5px; color: var(--muted); line-height: 1.5; display: block; }
+
+      /* ---------- Problème ---------- */
+      .losses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 34px; }
+      .loss {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: 6px; padding: 22px 22px 16px; box-shadow: var(--card-shadow);
+      }
+      .loss .who {
+        font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .12em;
+        text-transform: uppercase; color: var(--rust); margin-bottom: 10px; display: block;
+      }
+      .loss p { font-size: 15.5px; color: var(--ink-soft); margin: 0; }
+      .loss p strong { color: var(--ink); }
+      blockquote.proverb {
+        margin: 44px 0 0; padding: 6px 0 6px 28px;
+        border-left: 3px solid var(--ochre);
+        font-family: "Spectral", Georgia, serif; font-style: italic;
+        font-size: clamp(22px, 3.4vw, 30px); line-height: 1.35; max-width: 22em;
+      }
+      blockquote.proverb cite {
+        display: block; font-style: normal; font-family: "Archivo", sans-serif;
+        font-size: 14px; color: var(--muted); margin-top: 12px;
+      }
+
+      /* ---------- Idée ---------- */
+      .idea-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 44px; align-items: start; }
+      .dropcap::first-letter {
+        font-family: "Spectral", Georgia, serif; font-weight: 800;
+        font-size: 58px; line-height: .85; float: left;
+        padding: 6px 12px 0 0; color: var(--rust);
+      }
+      .principles { list-style: none; margin: 6px 0 0; padding: 0; border-top: 1px solid var(--line-strong); }
+      .principles li { padding: 16px 2px; border-bottom: 1px solid var(--line); }
+      .principles li:last-child { border-bottom: none; }
+      .principles strong { font-family: "Spectral", Georgia, serif; font-size: 19px; display: block; margin-bottom: 2px; }
+      .principles span { font-size: 15px; color: var(--ink-soft); }
+
+      /* ---------- Étapes ---------- */
+      .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+      .step {
+        border: 1px solid var(--line-strong); border-radius: 6px;
+        padding: 26px 24px 20px; background: var(--surface-2);
+        position: relative;
+      }
+      .step .n {
+        font-family: "Spectral", Georgia, serif; font-weight: 800;
+        font-size: 52px; line-height: 1; color: var(--green); display: block; margin-bottom: 14px;
+      }
+      @media (prefers-color-scheme: dark) { .step .n { color: var(--ochre); } }
+      .step p { font-size: 15.5px; color: var(--ink-soft); }
+      .step ul { margin: 10px 0 4px; padding-left: 18px; font-size: 15px; color: var(--ink-soft); }
+      .step ul li { margin-bottom: 5px; }
+      .step .tool {
+        margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line-strong);
+        font-size: 13.5px; color: var(--muted);
+      }
+      .step .tool b { color: var(--rust); font-weight: 600; }
+
+      /* Brut -> fiche demo */
+      .demo {
+        margin-top: 44px; background: var(--surface); border: 1px solid var(--line-strong);
+        border-radius: 8px; box-shadow: var(--card-shadow); overflow: hidden;
+      }
+      .demo-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+        padding: 16px 22px; border-bottom: 1px solid var(--line); background: var(--surface-2);
+      }
+      .demo-head span { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+      .toggle { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 999px; overflow: hidden; }
+      .toggle button {
+        appearance: none; border: 0; background: transparent; cursor: pointer;
+        font: inherit; font-size: 14px; font-weight: 600; color: var(--ink-soft);
+        padding: 8px 16px;
+      }
+      .toggle button[aria-pressed="true"] { background: var(--green); color: #f6efdc; }
+      .demo-body { padding: 26px 22px 22px; }
+      .raw {
+        font-family: "Spectral", Georgia, serif; font-style: italic; font-size: 18px;
+        line-height: 1.6; color: var(--ink-soft); max-width: 40em;
+      }
+      .raw .fill { color: var(--muted); }
+      .fiche { display: none; }
+      .demo.show-fiche .fiche { display: block; }
+      .demo.show-fiche .raw-wrap { display: none; }
+      .fiche-card {
+        border: 1px solid var(--line-strong); border-radius: 4px;
+        background:
+          repeating-linear-gradient(to bottom, transparent 0 30px, var(--line) 30px 31px);
+        background-color: var(--surface);
+        padding: 18px 22px 14px; max-width: 640px;
+      }
+      .fiche-card .fc-top {
+        display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+        border-bottom: 2px solid var(--rust); padding-bottom: 10px; margin-bottom: 12px;
+      }
+      .fiche-card h4 { font-family: "Spectral", Georgia, serif; font-size: 21px; margin: 0; line-height: 1.25; }
+      .fiche-card .fc-no { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--rust); white-space: nowrap; padding-top: 5px; }
+      .fiche-card dl { margin: 0; display: grid; grid-template-columns: 128px 1fr; row-gap: 7px; font-size: 15px; }
+      .fiche-card dt { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+      .fiche-card dd { margin: 0; color: var(--ink-soft); }
+      .tags { display: flex; gap: 7px; flex-wrap: wrap; }
+      .tags i {
+        font-style: normal; font-size: 12.5px; font-weight: 600;
+        border: 1px solid var(--line-strong); border-radius: 999px; padding: 2px 10px; color: var(--ink-soft);
+      }
+
+      /* ---------- Collection / recherche ---------- */
+      .searchbar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; }
+      .searchbar input[type="search"] {
+        flex: 1 1 260px; font: inherit; font-size: 16px; color: var(--ink);
+        background: var(--surface); border: 1.5px solid var(--line-strong);
+        border-radius: 6px; padding: 12px 16px;
+      }
+      .searchbar input[type="search"]:focus { outline: 2px solid var(--ochre); outline-offset: 1px; }
+      .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+      .chip {
+        appearance: none; cursor: pointer; font: inherit; font-size: 14px; font-weight: 600;
+        border: 1px solid var(--line-strong); background: transparent; color: var(--ink-soft);
+        border-radius: 999px; padding: 7px 15px;
+      }
+      .chip[aria-pressed="true"] { background: var(--rust); border-color: var(--rust); color: #fff7ea; }
+      .count { font-size: 14px; color: var(--muted); margin-top: 16px; font-family: "IBM Plex Mono", monospace; }
+      .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 12px; }
+      .card {
+        background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--green);
+        border-radius: 6px; padding: 20px 22px 16px; box-shadow: var(--card-shadow);
+      }
+      .card.rust { border-top-color: var(--rust); }
+      .card.ochre { border-top-color: var(--ochre); }
+      .card h4 { font-family: "Spectral", Georgia, serif; font-size: 19.5px; line-height: 1.3; margin: 0 0 6px; }
+      .card .meta { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; display: block; }
+      .card p { font-size: 15px; color: var(--ink-soft); margin: 0 0 10px; }
+      .card .secret { font-size: 14.5px; border-top: 1px dashed var(--line-strong); padding-top: 10px; color: var(--ink-soft); }
+      .card .secret b { color: var(--rust); }
+      .card[hidden] { display: none; }
+      .empty {
+        display: none; border: 1px dashed var(--line-strong); border-radius: 6px;
+        padding: 26px; text-align: center; color: var(--muted); margin-top: 12px; font-size: 15.5px;
+      }
+      .empty.show { display: block; }
+      .atelier-figure { margin-top: 40px; }
+      .atelier-figure img { border-radius: 6px; border: 1px solid var(--line-strong); box-shadow: var(--card-shadow); width: 100%; }
+      .atelier-figure figcaption { font-size: 13.5px; color: var(--muted); padding-top: 10px; }
+
+      /* ---------- À qui ça sert ---------- */
+      .who-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 44px; margin-top: 10px; }
+      .who-item { padding: 20px 0; border-bottom: 1px solid var(--line); }
+      .who-item h3 { font-size: 20px; }
+      .who-item p { font-size: 15.5px; color: var(--ink-soft); margin: 0; }
+
+      /* ---------- Financement ---------- */
+      .funding { background: var(--green-deep); color: var(--on-green); }
+      .funding .num { color: var(--ochre); }
+      .funding .num::after { background: var(--ochre); }
+      .funding h2 { color: var(--on-green); }
+      .funding .lede { color: var(--on-green-soft); }
+      .funding a { color: var(--ochre); }
+      .rule {
+        border: 1px solid var(--on-green-line); border-left: 4px solid var(--ochre);
+        border-radius: 4px; padding: 20px 24px; margin: 30px 0 8px;
+        font-family: "Spectral", Georgia, serif; font-size: clamp(19px, 2.6vw, 24px); line-height: 1.45;
+      }
+      .rule b { color: var(--ochre); }
+      .phases { margin-top: 30px; border-top: 1px solid var(--on-green-line); }
+      .phase {
+        display: grid; grid-template-columns: 190px 1fr 170px; gap: 26px;
+        padding: 24px 0; border-bottom: 1px solid var(--on-green-line); align-items: start;
+      }
+      .phase .ph-name { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ochre); padding-top: 4px; }
+      .phase h3 { color: var(--on-green); font-size: 21px; }
+      .phase p { color: var(--on-green-soft); font-size: 15.5px; margin: 0; }
+      .phase .amount { text-align: right; }
+      .phase .amount strong { font-family: "Spectral", Georgia, serif; font-size: 26px; font-weight: 700; display: block; line-height: 1.15; }
+      .phase .amount span { font-size: 13px; color: var(--on-green-soft); }
+      .sources { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 36px; }
+      .source {
+        border: 1px solid var(--on-green-line); border-radius: 6px; padding: 22px 24px 16px;
+        background: rgba(243, 236, 216, .04);
+      }
+      .source h3 { color: var(--on-green); font-size: 20px; }
+      .source p, .source li { color: var(--on-green-soft); font-size: 15px; }
+      .source ul { margin: 6px 0 8px; padding-left: 18px; }
+      .source li { margin-bottom: 6px; }
+      .source li b { color: var(--on-green); }
+      .perennite { margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .perennite .box { border-top: 2px solid var(--ochre); padding-top: 16px; }
+      .perennite h3 { color: var(--on-green); }
+      .perennite p { color: var(--on-green-soft); font-size: 15.5px; }
+      .funding .fineprint { margin-top: 34px; font-size: 13.5px; color: var(--on-green-soft); opacity: .85; max-width: 52em; }
+
+      /* ---------- Commencer ---------- */
+      .first-steps { counter-reset: fs; list-style: none; margin: 30px 0 0; padding: 0; }
+      .first-steps li {
+        counter-increment: fs; display: grid; grid-template-columns: 56px 1fr; gap: 18px;
+        padding: 18px 0; border-bottom: 1px solid var(--line); align-items: start;
+      }
+      .first-steps li::before {
+        content: counter(fs, decimal-leading-zero);
+        font-family: "IBM Plex Mono", monospace; font-size: 15px; color: var(--rust);
+        border: 1px solid var(--line-strong); border-radius: 50%;
+        width: 44px; height: 44px; display: grid; place-items: center;
+      }
+      .first-steps strong { font-family: "Spectral", Georgia, serif; font-size: 19px; display: block; margin-bottom: 2px; }
+      .first-steps p { font-size: 15.5px; color: var(--ink-soft); margin: 0; max-width: 46em; }
+      .closing {
+        margin-top: 52px; text-align: left;
+        font-family: "Spectral", Georgia, serif; font-size: clamp(24px, 3.6vw, 34px);
+        line-height: 1.35; font-weight: 600; max-width: 24em;
+      }
+      .closing em { color: var(--rust); font-style: italic; }
+      footer {
+        border-top: 1px solid var(--line-strong); padding: 26px 0 40px; margin-top: 10px;
+        display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+        font-size: 13.5px; color: var(--muted);
+      }
+
+      @media (max-width: 860px) {
+        section { padding: 56px 0; }
+        .losses, .steps, .cards, .sources, .perennite { grid-template-columns: 1fr; }
+        .idea-grid, .who-grid { grid-template-columns: 1fr; }
+        .hero-facts { grid-template-columns: 1fr; }
+        .hero-facts div + div { border-left: none; border-top: 1px solid var(--line); padding-left: 0; }
+        .phase { grid-template-columns: 1fr; gap: 8px; }
+        .phase .amount { text-align: left; }
+        .fiche-card dl { grid-template-columns: 1fr; row-gap: 2px; }
+        .fiche-card dd { margin-bottom: 8px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ================= HERO ================= -->
+    <header class="hero">
+      <div class="wrap">
+        <div class="hero-top">
+          <span class="stamp">Concept · Patrimoine vivant</span>
+          <h1>Le Passeur<br />de <em>savoir</em></h1>
+          <p class="hero-sub">Un outil gratuit qui capte le savoir des gens avant qu'il disparaisse — les recettes d'une grand-mère, les trucs d'un artisan retraité, les histoires d'un quartier — et le rend transmissible, classé, cherchable.</p>
+        </div>
+        <figure class="hero-figure">
+          <img src="assets/hero.webp" alt="Gravure style linogravure : les mains d'une aînée transmettent une fiche de recette à des mains plus jeunes, au-dessus d'une table de cuisine, entourées d'une marmite fumante, d'herbes, d'une pelote de laine et d'ustensiles." />
+          <figcaption>
+            <span>Une fiche qui change de mains, au lieu de disparaître avec elles.</span>
+            <span>Illustration originale, style linogravure</span>
+          </figcaption>
+        </figure>
+        <div class="hero-facts">
+          <div>
+            <strong>Gratuit pour les gens</strong>
+            <span>Transmettre son savoir ne devrait jamais coûter un sou à celle ou celui qui le donne.</span>
+          </div>
+          <div>
+            <strong>Simple comme une conversation</strong>
+            <span>On raconte, on montre, on enregistre. La technique se fait oublier.</span>
+          </div>
+          <div>
+            <strong>Le savoir reste aux gens</strong>
+            <span>Chaque fiche appartient à la personne qui l'a transmise — et à sa famille d'abord.</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= 01 PROBLÈME ================= -->
+    <section id="probleme">
+      <div class="wrap">
+        <p class="num">01 — Le problème</p>
+        <h2>Chaque jour, des bibliothèques entières partent en silence</h2>
+        <p class="lede">Le savoir des gens ordinaires n'est écrit nulle part. Il vit dans des mains, des habitudes, des mémoires — et il s'éteint avec les personnes qui le portent. Pas parce qu'il ne vaut rien. Parce que personne ne l'a capté à temps.</p>
+        <div class="losses">
+          <article class="loss">
+            <span class="who">En cuisine</span>
+            <p><strong>« Une pincée, jusqu'à ce que ça goûte comme avant. »</strong> Les recettes de famille vivent dans la tête de quelqu'un. Les quantités, les tours de main, le petit ingrédient secret : rien de tout ça n'est dans un livre.</p>
+          </article>
+          <article class="loss">
+            <span class="who">Dans les métiers</span>
+            <p><strong>40 ans de métier tiennent dans des gestes.</strong> Le menuisier qui « entend » si sa lame est bien affûtée, la couturière qui reprend une maille sans regarder : quand l'atelier ferme, le savoir-faire ferme avec.</p>
+          </article>
+          <article class="loss">
+            <span class="who">Dans les quartiers</span>
+            <p><strong>Qui se souvient du dépanneur, de l'usine, de la veillée ?</strong> L'histoire des rues où l'on vit n'est dans aucun manuel. Elle part avec les derniers témoins — et le quartier perd sa mémoire.</p>
+          </article>
+        </div>
+        <blockquote class="proverb">
+          « Quand un vieillard meurt, c'est une bibliothèque qui brûle. »
+          <cite>Proverbe souvent attribué à l'écrivain malien Amadou Hampâté Bâ</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ================= 02 IDÉE ================= -->
+    <section id="idee">
+      <div class="wrap">
+        <p class="num">02 — L'idée</p>
+        <h2>Un passeur, pas un musée</h2>
+        <div class="idea-grid">
+          <div>
+            <p class="dropcap">Le Passeur de savoir est un outil de captation et de transmission. Une personne raconte ou montre ce qu'elle sait — à voix haute, en vidéo, en photos. L'outil transcrit, structure et classe ce savoir en <strong>fiches</strong> : un titre clair, les étapes, les mots-clés, le nom de la personne qui transmet et d'où elle vient. La fiche peut ensuite être retrouvée par n'importe qui cherche « comment on faisait », partagée à la famille, imprimée, relue dans 30 ans.</p>
+            <p>Ce n'est pas un réseau social, ni une encyclopédie froide. C'est le geste du passeur : quelqu'un qui a reçu un savoir de ses mains, et qui s'assure qu'il se rend aux mains suivantes. La dignité est au centre : les « gens ordinaires » ne sont pas des sujets d'étude — ce sont des maîtres dans leur domaine, souvent sans le savoir eux-mêmes.</p>
+          </div>
+          <ul class="principles">
+            <li>
+              <strong>La voix avant l'écrit</strong>
+              <span>Beaucoup de détenteurs de savoir n'écriraient jamais leurs recettes. Mais tout le monde peut raconter. On part de la parole.</span>
+            </li>
+            <li>
+              <strong>Classé pour être retrouvé</strong>
+              <span>Un enregistrement qui dort dans un tiroir numérique ne transmet rien. Chaque fiche est titrée, étiquetée, cherchable.</span>
+            </li>
+            <li>
+              <strong>Le consentement d'abord</strong>
+              <span>La personne décide ce qui est public, ce qui reste à la famille, ce qui ne sort pas. Son nom reste attaché à son savoir.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 03 FONCTIONNEMENT ================= -->
+    <section id="fonctionnement">
+      <div class="wrap">
+        <p class="num">03 — Comment ça marche</p>
+        <h2>Trois temps : capter, structurer, transmettre</h2>
+        <p class="lede">Concrètement, une fiche naît en moins d'une heure, autour d'une table de cuisine ou d'un établi. Aucune compétence technique n'est demandée à la personne qui transmet.</p>
+        <div class="steps">
+          <article class="step">
+            <span class="n">1</span>
+            <h3>Capter</h3>
+            <p>Un « passeur » — un petit-fils, une animatrice de bibliothèque, un bénévole formé — s'assoit avec la personne et enregistre. L'outil guide l'entretien avec des questions simples : <em>« Montre-moi comment tu fais. » « C'est quoi ton truc pour que ça réussisse à tout coup ? »</em></p>
+            <ul>
+              <li>Audio, vidéo ou photos des gestes</li>
+              <li>Questions-guides selon le sujet (recette, métier, lieu…)</li>
+              <li>Consentement enregistré dès le départ</li>
+            </ul>
+            <p class="tool"><b>Concrètement :</b> un téléphone suffit. Pas de studio, pas de montage.</p>
+          </article>
+          <article class="step">
+            <span class="n">2</span>
+            <h3>Structurer</h3>
+            <p>L'enregistrement est transcrit automatiquement, puis transformé en fiche lisible : un titre, le résumé, les étapes dans l'ordre, les ingrédients ou les outils, les mots-clés. La personne qui a transmis relit et corrige — c'est sa fiche, avec son nom dessus.</p>
+            <ul>
+              <li>Transcription automatique de la voix</li>
+              <li>Mise en fiche : titre, étapes, astuces, étiquettes</li>
+              <li>Validation par la personne avant publication</li>
+            </ul>
+            <p class="tool"><b>Concrètement :</b> l'IA fait le secrétariat, l'humain garde le dernier mot.</p>
+          </article>
+          <article class="step">
+            <span class="n">3</span>
+            <h3>Transmettre</h3>
+            <p>La fiche entre dans la collection : cherchable par sujet, par lieu, par métier, par personne. Elle peut être publique, réservée à la famille, ou versée à la bibliothèque du quartier. Elle s'imprime aussi — le papier reste un excellent passeur.</p>
+            <ul>
+              <li>Recherche plein texte et par thèmes</li>
+              <li>Niveaux de partage choisis par la personne</li>
+              <li>Version imprimable pour les mains qui préfèrent le papier</li>
+            </ul>
+            <p class="tool"><b>Concrètement :</b> un savoir capté une fois peut servir 100 ans.</p>
+          </article>
+        </div>
+
+        <div class="demo" id="demo">
+          <div class="demo-head">
+            <span>Démonstration — de la parole à la fiche</span>
+            <div class="toggle" role="group" aria-label="Basculer entre l'enregistrement brut et la fiche structurée">
+              <button type="button" id="btn-raw" aria-pressed="true">Ce qu'on entend</button>
+              <button type="button" id="btn-fiche" aria-pressed="false">La fiche qui en sort</button>
+            </div>
+          </div>
+          <div class="demo-body">
+            <div class="raw-wrap">
+              <p class="raw">« Ben là, ma tourtière… <span class="fill">euh…</span> le secret, c'est pas la viande, tout le monde pense que c'est la viande. Non. C'est la cannelle. Juste une pincée — pas trop, sinon ça goûte le dessert, <span class="fill">tu comprends ?</span> Pis la pâte, faut la faire la veille. LA VEILLE. Si tu la fais le matin même, elle tough pas, elle déchire. Ma mère faisait ça, sa mère avant elle… <span class="fill">attends, je vais te montrer comment je la roule…</span> »</p>
+              <p class="small">Transcription brute d'un enregistrement de 22 minutes : précieuse, mais introuvable et difficile à suivre. C'est là que la structuration travaille.</p>
+            </div>
+            <div class="fiche">
+              <div class="fiche-card">
+                <div class="fc-top">
+                  <h4>La tourtière : la cannelle et la pâte de la veille</h4>
+                  <span class="fc-no">Fiche nº 0001</span>
+                </div>
+                <dl>
+                  <dt>Transmis par</dt>
+                  <dd>Rose-Aimée, 84 ans — savoir reçu de sa mère</dd>
+                  <dt>L'essentiel</dt>
+                  <dd>Une pincée de cannelle dans la viande (pas plus, « sinon ça goûte le dessert ») et une pâte préparée la veille pour qu'elle ne déchire pas au roulage.</dd>
+                  <dt>Étapes clés</dt>
+                  <dd>1. Faire la pâte, la reposer une nuit au frigo. 2. Assaisonner la viande, ajouter la cannelle en dernier. 3. Rouler la pâte froide, sans la réchauffer aux mains.</dd>
+                  <dt>Audio</dt>
+                  <dd>Enregistrement original de 22 min, joint à la fiche</dd>
+                </dl>
+                <div class="tags" style="margin-top:12px;">
+                  <i>Cuisine</i><i>Recettes de famille</i><i>Tourtière</i><i>Noël</i><i>Tours de main</i>
+                </div>
+              </div>
+              <p class="small" style="margin-top:14px;">Fiche fictive, à titre d'exemple : les quantités floues deviennent des étapes, l'astuce orale devient retrouvable, et la voix de Rose-Aimée reste attachée à son savoir.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 04 COLLECTION ================= -->
+    <section id="collection">
+      <div class="wrap">
+        <p class="num">04 — La collection</p>
+        <h2>Des savoirs à sauver — et à retrouver</h2>
+        <p class="lede">À quoi ressemblerait la collection ? Voici un aperçu, avec recherche et filtres fonctionnels : essaie « cannelle », « bois » ou « sirop ». C'est exactement l'expérience que vivrait quelqu'un qui cherche un savoir capté.</p>
+        <div class="searchbar">
+          <input type="search" id="q" placeholder="Chercher un savoir… (ex. : tourtière, aiguiser, greffer)" aria-label="Chercher dans la collection d'exemples" />
+        </div>
+        <div class="chips" id="chips" role="group" aria-label="Filtrer par thème">
+          <button type="button" class="chip" data-theme="tous" aria-pressed="true">Tous</button>
+          <button type="button" class="chip" data-theme="cuisine" aria-pressed="false">Cuisine</button>
+          <button type="button" class="chip" data-theme="metiers" aria-pressed="false">Métiers</button>
+          <button type="button" class="chip" data-theme="quartier" aria-pressed="false">Quartier</button>
+          <button type="button" class="chip" data-theme="jardin" aria-pressed="false">Jardin &amp; nature</button>
+          <button type="button" class="chip" data-theme="memoire" aria-pressed="false">Mémoire vivante</button>
+        </div>
+        <p class="count" id="count" aria-live="polite"></p>
+        <div class="cards" id="cards">
+          <article class="card" data-theme="cuisine" data-search="tourtière cannelle pâte viande noël recette famille rose-aimée">
+            <h4>La tourtière : la cannelle et la pâte de la veille</h4>
+            <span class="meta">Cuisine · Rose-Aimée, 84 ans · Lanaudière</span>
+            <p>Le tour de main qui change tout : une pincée de cannelle, et une pâte qui repose une nuit entière avant d'être roulée.</p>
+            <p class="secret"><b>Le truc :</b> « Pas plus qu'une pincée — sinon ça goûte le dessert. »</p>
+          </article>
+          <article class="card rust" data-theme="metiers" data-search="aiguiser ciseau bois menuisier affûtage pierre atelier ébéniste">
+            <h4>Aiguiser un ciseau à bois sans le brûler</h4>
+            <span class="meta">Métiers · Menuisier retraité, 40 ans d'atelier</span>
+            <p>L'angle, la pression, et surtout le son : un ciseau bien affûté « chante » sur la pierre. Un geste qui ne s'apprend que les yeux fermés, en écoutant.</p>
+            <p class="secret"><b>Le truc :</b> si la lame bleuit, c'est déjà trop tard — on recommence à l'eau froide.</p>
+          </article>
+          <article class="card ochre" data-theme="quartier" data-search="dépanneur lalonde magasin général quartier histoire rue commerce">
+            <h4>Le dépanneur de M. Lalonde, 1974–1998</h4>
+            <span class="meta">Quartier · Récit recueilli auprès de trois anciens clients</span>
+            <p>Le crédit « sur le bras », la clochette de la porte, les bonbons à une cenne. La mémoire d'un commerce qui était le cœur du quartier.</p>
+            <p class="secret"><b>À retenir :</b> « Ici, on ne vendait pas juste du lait. On vendait du “comment ça va”. »</p>
+          </article>
+          <article class="card" data-theme="jardin" data-search="sirop érable entailler acériculture printemps température cabane à sucre">
+            <h4>Savoir quand partir la première « batch » de sirop</h4>
+            <span class="meta">Jardin &amp; nature · Acériculteur, 3e génération</span>
+            <p>Ni le calendrier ni le thermomètre ne décident : c'est le va-et-vient gel-dégel, lu dans les bourgeons et dans le vent du soir.</p>
+            <p class="secret"><b>Le truc :</b> « Quand les nuits gèlent franc et que les jours sentent le printemps, pars-la. »</p>
+          </article>
+          <article class="card rust" data-theme="metiers" data-search="tricot maille reprendre couture laine réparation vêtement aiguilles">
+            <h4>Reprendre une maille sans tout défaire</h4>
+            <span class="meta">Métiers · Tricoteuse, cercle de fermières</span>
+            <p>La maille tombée se rattrape au crochet, rang par rang, sans défaire l'ouvrage. Dix minutes de patience contre des heures de travail sauvées.</p>
+            <p class="secret"><b>Le truc :</b> toujours rattraper la maille de bas en haut, jamais l'inverse.</p>
+          </article>
+          <article class="card ochre" data-theme="jardin" data-search="greffer pommier arbre fruitier jardin verger greffe printemps">
+            <h4>Greffer un pommier qui repart</h4>
+            <span class="meta">Jardin &amp; nature · Pomiculteur amateur, 60 ans de verger</span>
+            <p>Choisir le greffon en plein hiver, tailler en biseau franc, et sceller à la cire. Un vieil arbre fatigué peut refaire des pommes trois ans plus tard.</p>
+            <p class="secret"><b>Le truc :</b> le cambium contre le cambium — « peau contre peau, comme une poignée de main ».</p>
+          </article>
+          <article class="card" data-theme="memoire" data-search="veillée voisins télévision musique violon contes souvenirs avant télé soirée">
+            <h4>La veillée chez les voisins, avant la télé</h4>
+            <span class="meta">Mémoire vivante · Récit collectif, trois sœurs</span>
+            <p>On poussait les meubles, quelqu'un sortait le violon, les histoires partaient jusqu'à minuit. Une façon d'habiter le temps qui a presque disparu.</p>
+            <p class="secret"><b>À retenir :</b> « On n'avait rien, pis on manquait de rien. On avait les voisins. »</p>
+          </article>
+          <article class="card rust" data-theme="cuisine" data-search="pain maison levain four miche fermentation boulangerie farine">
+            <h4>Le pain de ménagère qui lève à tout coup</h4>
+            <span class="meta">Cuisine · Boulangère de famille, recette de 1952</span>
+            <p>Pas de balance : la pâte est prête quand elle « répond » sous la main, souple et tiède. La température de la cuisine fait partie de la recette.</p>
+            <p class="secret"><b>Le truc :</b> l'eau doit être « comme un bain de bébé » — tiède, jamais chaude.</p>
+          </article>
+        </div>
+        <p class="empty" id="empty">Aucune fiche ne correspond à cette recherche — dans la vraie collection, ce serait un savoir de plus à aller capter.</p>
+        <p class="small" style="margin-top:14px;">Fiches fictives, écrites pour montrer le format. La vraie collection serait faite de vraies personnes, avec leur consentement.</p>
+        <figure class="atelier-figure">
+          <img src="assets/atelier.webp" alt="Gravure style linogravure : dans un atelier, un menuisier retraité montre à un adolescent comment aiguiser un ciseau sur une pierre, entourés d'outils à main et de copeaux de bois." loading="lazy" />
+          <figcaption>Le savoir-faire ne se dicte pas toujours : il se montre. D'où la vidéo et les photos des gestes, pas seulement la voix.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ================= 05 À QUI ÇA SERT ================= -->
+    <section id="publics">
+      <div class="wrap">
+        <p class="num">05 — À qui ça sert</p>
+        <h2>Un outil, plusieurs générations gagnantes</h2>
+        <div class="who-grid">
+          <div class="who-item">
+            <h3>Les aînés</h3>
+            <p>Être reconnu comme détenteur d'un savoir, pas comme bénéficiaire d'un service. Transmettre, c'est rester quelqu'un qui compte — et laisser une trace à son nom.</p>
+          </div>
+          <div class="who-item">
+            <h3>Les familles</h3>
+            <p>Retrouver la recette exacte, la voix grand-papa qui raconte l'atelier, les histoires des photos sans légende. Un héritage qui se consulte au lieu de s'imaginer.</p>
+          </div>
+          <div class="who-item">
+            <h3>Les jeunes</h3>
+            <p>Des projets scolaires qui ont du sens : interviewer, filmer, structurer le savoir d'une vraie personne. Et découvrir que les métiers manuels sont des intelligences.</p>
+          </div>
+          <div class="who-item">
+            <h3>Les bibliothèques et municipalités</h3>
+            <p>Une mémoire locale vivante, construite avec les citoyens : histoires de quartier, métiers disparus, recettes du terroir. Un fonds que nulle archive officielle ne détient.</p>
+          </div>
+          <div class="who-item">
+            <h3>Les artisans et commerces</h3>
+            <p>Les tours de main d'un métier en voie de disparition deviennent un patrimoine de formation — et une vitrine de fierté pour les métiers d'ici.</p>
+          </div>
+          <div class="who-item">
+            <h3>Les nouveaux arrivants</h3>
+            <p>Comprendre un lieu par ceux qui l'habitent depuis toujours — et, en retour, y verser leurs propres savoirs. La collection devient un pont, dans les deux sens.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 06 FINANCEMENT ================= -->
+    <section class="funding" id="financement">
+      <div class="wrap">
+        <p class="num">06 — Monter les fonds</p>
+        <h2>Comment on financerait ça, pour vrai</h2>
+        <p class="lede">Personne ne signe un gros chèque pour une belle idée. On finance un Passeur de savoir comme on construit la collection : palier par palier, chaque palier prouvant le suivant. Voici la stratégie, avec des ordres de grandeur réalistes pour le Québec.</p>
+        <div class="rule">La règle d'or : <b>on ne demande jamais l'argent de la phase 3 avec les preuves de la phase 0.</b> On capte d'abord 25 fiches avec presque rien — puis on montre, chiffres et visages à l'appui, que ça vaut de l'argent.</div>
+
+        <div class="phases">
+          <div class="phase">
+            <div class="ph-name">Phase 0 · La preuve</div>
+            <div>
+              <h3>25 fiches, un quartier, zéro excuse</h3>
+              <p>Un téléphone, une page web simple, des fiches imprimées. On capte les 25 premiers savoirs dans un seul quartier ou une seule résidence, avec des bénévoles. Objectif : prouver que les gens veulent transmettre — et que d'autres veulent consulter.</p>
+            </div>
+            <div class="amount"><strong>0 – 2 000 $</strong><span>impression, déplacements, petit matériel</span></div>
+          </div>
+          <div class="phase">
+            <div class="ph-name">Phase 1 · Le pilote</div>
+            <div>
+              <h3>Un territoire, un animateur, 200 fiches</h3>
+              <p>Une coordination à temps partiel, des ateliers de captation en bibliothèque et en résidence, la première version de l'outil (enregistrement guidé + transcription). C'est le palier des premières subventions : le pilote a un début, une fin et des résultats mesurables.</p>
+            </div>
+            <div class="amount"><strong>25 000 – 45 000 $</strong><span>subventions ciblées + sociofinancement</span></div>
+          </div>
+          <div class="phase">
+            <div class="ph-name">Phase 2 · La plateforme</div>
+            <div>
+              <h3>L'outil complet, ouvert à toutes les régions</h3>
+              <p>Développement de la plateforme : captation guidée, structuration assistée, recherche plein texte, partage familial, impression. Une petite équipe, des partenaires dans plusieurs MRC, une collection qui se compte en milliers de fiches.</p>
+            </div>
+            <div class="amount"><strong>100 000 – 175 000 $</strong><span>grandes subventions + fondations + partenaires</span></div>
+          </div>
+          <div class="phase">
+            <div class="ph-name">Phase 3 · La pérennité</div>
+            <div>
+              <h3>Gratuit pour le public, viable pour de bon</h3>
+              <p>L'outil grand public reste gratuit — c'est le principe. Les revenus viennent des institutions : ateliers de captation payés par les bibliothèques et municipalités, formations, licences pour les musées et sociétés d'histoire, dons.</p>
+            </div>
+            <div class="amount"><strong>Revenus mixtes</strong><span>ateliers institutionnels + subventions récurrentes + dons</span></div>
+          </div>
+        </div>
+
+        <div class="sources">
+          <article class="source">
+            <h3>Sociofinancement</h3>
+            <p>La campagne qui finance la phase 1 — et qui, surtout, prouve qu'un public attend l'outil.</p>
+            <ul>
+              <li><b>La Ruche</b>, la plateforme québécoise de sociofinancement, avec son accompagnement régional</li>
+              <li>Objectif crédible : <b>15 000 à 30 000 $</b>, porté par les familles des premiers « passeurs » et les médias locaux</li>
+              <li>Contreparties qui ont du sens : la fiche de votre grand-mère imprimée et encadrée, un atelier de captation dans votre famille</li>
+            </ul>
+          </article>
+          <article class="source">
+            <h3>Subventions ciblées</h3>
+            <p>Des programmes qui existent précisément pour ce genre de projet — patrimoine vivant, aînés, culture locale.</p>
+            <ul>
+              <li><b>Nouveaux Horizons pour les aînés</b> (fédéral) : jusqu'à 25 000 $ pour des projets communautaires menés par et pour les aînés — le pilote y entre presque sur mesure</li>
+              <li><b>Ministère de la Culture et des Communications du Québec</b> : appels de projets en patrimoine culturel immatériel et en médiation culturelle</li>
+              <li><b>Municipalités et MRC</b> : fonds culturels locaux, politiques culturelles, ententes de développement culturel</li>
+              <li><b>Caisses Desjardins</b> : Fonds d'aide au développement du milieu, faits pour les projets qui renforcent une communauté</li>
+            </ul>
+          </article>
+          <article class="source">
+            <h3>Fondations</h3>
+            <p>Pour la phase 2, quand le pilote a fait ses preuves et que la collection parle d'elle-même.</p>
+            <ul>
+              <li><b>Fondations communautaires</b> (dont la Fondation du Grand Montréal) : des fonds dédiés à la culture, aux aînés et au lien social</li>
+              <li><b>Centraide</b> : si le projet se structure en organisme communautaire ancré dans son milieu</li>
+              <li><b>Fondations familiales québécoises</b> sensibles à l'éducation et à la transmission intergénérationnelle — on y arrive avec le pilote documenté, jamais avant</li>
+            </ul>
+          </article>
+          <article class="source">
+            <h3>Partenaires (argent et nature)</h3>
+            <p>Un partenariat vaut parfois plus qu'un chèque : locaux, publics, crédibilité, relais.</p>
+            <ul>
+              <li><b>Bibliothèques publiques</b> : lieux de captation, ateliers, mise en valeur de la collection locale</li>
+              <li><b>Résidences et centres communautaires</b> : accès aux détenteurs de savoir, en toute confiance</li>
+              <li><b>Écoles et cégeps</b> : projets intergénérationnels, étudiants en journalisme, histoire, multimédia</li>
+              <li><b>Sociétés d'histoire et musées régionaux</b> : expertise patrimoniale et pérennité des archives</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="perennite">
+          <div class="box">
+            <h3>La forme juridique</h3>
+            <p>Un <b>OBNL</b> (ou une coopérative de solidarité) : la forme que les subventions et les fondations connaissent, qui rend le projet admissible à presque tous les programmes — et qui garantit que la collection n'appartiendra jamais à un actionnaire. Le montage se fait dès la phase 1, avec un conseil d'administration où siègent des « passeurs » eux-mêmes.</p>
+          </div>
+          <div class="box">
+            <h3>Ce que les bailleurs voudront voir</h3>
+            <p>Trois choses : des <b>preuves</b> (les 25 fiches de la phase 0, les témoignages filmés), des <b>partenaires signés</b> (une bibliothèque, une résidence, une MRC), et un <b>budget au dollar près</b> pour le palier demandé — jamais pour tout le rêve d'un coup. C'est exactement la discipline qu'un projet comme celui-là inspire naturellement.</p>
+          </div>
+        </div>
+
+        <p class="fineprint">Montants présentés comme des ordres de grandeur de planification, en dollars canadiens, à valider programme par programme au moment du dépôt — les critères et les enveloppes des programmes changent d'une année à l'autre. Aucune de ces pistes ne garantit un financement ; toutes sont des voies réellement empruntées par des projets québécois comparables.</p>
+      </div>
+    </section>
+
+    <!-- ================= 07 COMMENCER ================= -->
+    <section id="commencer">
+      <div class="wrap">
+        <p class="num">07 — Par où commencer</p>
+        <h2>Le premier pas ne coûte rien</h2>
+        <p class="lede">Pas besoin d'attendre un financement pour commencer à sauver des savoirs. La phase 0 tient en cinq gestes, faisables ce mois-ci.</p>
+        <ol class="first-steps">
+          <li>
+            <div>
+              <strong>Choisir un territoire</strong>
+              <p>Un quartier, une résidence, un cercle de fermières, un atelier. Petit et proche : la confiance se bâtit à distance de marche.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Trouver les cinq premiers passeurs</strong>
+              <p>Une grand-mère et sa tourtière, un retraité et son établi, une voisine et son jardin. Par la bibliothèque, le centre communautaire, le bouche-à-oreille.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Capter avec un téléphone</strong>
+              <p>Voix, gestes en vidéo, photos des objets. Le consentement d'abord, la technique après — le contenu brut peut toujours être structuré plus tard.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Structurer à la main les 25 premières fiches</strong>
+              <p>Titre, étapes, astuces, étiquettes — à la main, pour apprendre ce que l'outil devra automatiser. C'est ce travail qui dessine le produit juste.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Montrer, puis demander</strong>
+              <p>Une soirée de présentation à la bibliothèque, les fiches imprimées sur la table. C'est cette soirée-là — avec ses visages et ses témoignages — qui ouvre les portes du sociofinancement et des premières subventions.</p>
+            </div>
+          </li>
+        </ol>
+        <p class="closing">Le savoir des gens ordinaires est un trésor national qui ne figure dans aucun budget. <em>Le Passeur de savoir</em> propose simplement de ne plus le laisser partir en silence.</p>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <footer>
+        <span>Le Passeur de savoir — un concept de patrimoine vivant, gratuit pour les gens.</span>
+        <span>Présenté le 20 octobre 2026</span>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        // --- Démo brut / fiche ---
+        var demo = document.getElementById('demo');
+        var btnRaw = document.getElementById('btn-raw');
+        var btnFiche = document.getElementById('btn-fiche');
+        function setMode(fiche) {
+          demo.classList.toggle('show-fiche', fiche);
+          btnRaw.setAttribute('aria-pressed', String(!fiche));
+          btnFiche.setAttribute('aria-pressed', String(fiche));
+        }
+        btnRaw.addEventListener('click', function () { setMode(false); });
+        btnFiche.addEventListener('click', function () { setMode(true); });
+
+        // --- Recherche dans la collection ---
+        var q = document.getElementById('q');
+        var cards = Array.prototype.slice.call(document.querySelectorAll('#cards .card'));
+        var chips = Array.prototype.slice.call(document.querySelectorAll('#chips .chip'));
+        var count = document.getElementById('count');
+        var empty = document.getElementById('empty');
+        var theme = 'tous';
+
+        function fold(s) {
+          return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+        function apply() {
+          var needle = fold(q.value.trim());
+          var visible = 0;
+          cards.forEach(function (card) {
+            var okTheme = theme === 'tous' || card.getAttribute('data-theme') === theme;
+            var hay = fold(card.textContent + ' ' + (card.getAttribute('data-search') || ''));
+            var okText = !needle || hay.indexOf(needle) !== -1;
+            var show = okTheme && okText;
+            card.hidden = !show;
+            if (show) visible++;
+          });
+          count.textContent = visible + (visible > 1 ? ' savoirs affichés' : ' savoir affiché') + ' sur ' + cards.length;
+          empty.classList.toggle('show', visible === 0);
+        }
+        q.addEventListener('input', apply);
+        chips.forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            theme = chip.getAttribute('data-theme');
+            chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); });
+            apply();
+          });
+        });
+        apply();
+      })();
+    </script>
+  </body>
+</html>
