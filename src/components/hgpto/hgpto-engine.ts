@@ -1251,6 +1251,12 @@ export function initHgpto() {
         if (!q) return;
         input.value = '';
         lastInteract = Date.now();
+        // Phrase du concept TAPÉE : « HGPTO, joue avec moi » (ou juste
+        // « joue avec moi », ponctuation et casse libres) — interceptée
+        // AVANT la recherche dans la base et branchée sur le même point
+        // d'entrée que le bouton qa-play (décision d'Hugo, 22 oct. 2026).
+        var mots = ' ' + normText(q).replace(/\s+/g, ' ').trim() + ' ';
+        if (mots.indexOf(' joue avec moi ') !== -1){ startGame(); return; }
         var hit = searchKB(q);
         if (hit){
           // Savoir-vendre éthique : si la question sent l'hésitation ou la
