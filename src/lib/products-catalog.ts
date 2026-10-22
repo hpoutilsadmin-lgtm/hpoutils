@@ -301,3 +301,427 @@ export function getProduct(priceId: string): DigitalProduct | null {
 export function getProductBySlug(slug: string): DigitalProduct | null {
   return Object.values(PRODUCTS).find((p) => p.slug === slug) ?? null;
 }
+
+// ============================================================================
+// COLLECTION « OUTILS PAPIER » — 16 produits EN BROUILLON, NON PUBLIÉS
+// ============================================================================
+// IMPORTANT — pourquoi ces entrées ne sont PAS dans `PRODUCTS` :
+// `PRODUCTS` est consommé directement par les routes /pdf/$slug et
+// /achat/$slug, par le sitemap et par la création de session de paiement
+// (payments.functions.ts). Y ajouter une entrée la rendrait immédiatement
+// visible et indexée, sans produit Stripe ni fichier PDF en place.
+// Il n'existe aucun mécanisme « brouillon » dans `PRODUCTS`.
+//
+// Ces 16 entrées vivent donc dans un tableau séparé, `PAPER_TOOLS_DRAFT`,
+// qu'AUCUNE page, route, sitemap ou fonction de paiement ne consomme.
+// Elles ne sont ni visibles, ni achetables, ni téléchargeables en l'état.
+//
+// Pour publier un produit (un par un, après validation d'Hugo) :
+//   1. créer le produit + le prix dans Stripe (voir
+//      feuille-stripe-outils-papier.md à la racine du dépôt) et reporter le
+//      lookup_key créé dans `priceId` ET comme clé de l'entrée ;
+//   2. téléverser le fichier PDF de vente (couverture + pages de contenu)
+//      dans le bucket `pdfs` et reporter son chemin dans `pdfPath` ;
+//   3. déplacer l'entrée de `PAPER_TOOLS_DRAFT` vers `PRODUCTS`
+//      (type DigitalProduct) ;
+//   4. seulement alors, la relier à une page catégorie (/outils ou
+//      /livres-pdf, dont les listes sont codées en dur dans les routes).
+
+export type PaperToolCategory = "fiche" | "thematique" | "planificateur";
+
+export interface PaperToolDraft {
+  /** Toujours "draft" tant que l'entrée est dans ce tableau. */
+  status: "draft";
+  /**
+   * price_id à créer — aucun produit ni prix Stripe n'existe encore pour
+   * ces 16 outils. Dans ce catalogue, `priceId` est le lookup_key Stripe
+   * (résolu côté serveur via stripe.prices.list({ lookup_keys })).
+   * Le lookup_key proposé pour chaque produit est dans `proposedLookupKey`
+   * et dans feuille-stripe-outils-papier.md.
+   */
+  priceId: null;
+  proposedLookupKey: string;
+  slug: string;
+  title: string; // nom du produit
+  category: PaperToolCategory;
+  categoryLabel: "Fiche pratique" | "Outil thématique" | "Planificateur";
+  priceCad: number; // prix unitaire, CAD, aucune taxe ajoutée
+  priceLabel: string; // ex. « 5 $ CAD, aucune taxe ajoutée »
+  pages: number; // pages de contenu (la couverture de vente ne se compte pas)
+  blurb: string; // accroche de la fiche produit (spec, section 6, élément 3)
+  metadataLine: string; // spec, section 6, élément 5
+  taxNote: string; // spec, section 6, élément 4
+  includes: string[]; // bloc « Ce que tu reçois » (spec, section 6, élément 7)
+  /** Fichier de vente à téléverser dans le bucket `pdfs` — pas encore fait. */
+  pdfPath: null;
+  proposedDownloadFileName: string;
+  /** Slugs des planificateurs suggérés en paire (offre « 2 pour 15 $ »). */
+  suggestedPairs?: string[];
+}
+
+export const PAPER_TOOL_TAX_NOTE = "Aucune taxe ajoutée — petit fournisseur";
+
+export const PAPER_TOOL_INCLUDES: string[] = [
+  "Le fichier PDF complet — couverture + pages de contenu",
+  "Téléchargement immédiat après l'achat",
+  "Usage personnel",
+  "À imprimer chez toi ou au centre de copies",
+];
+
+function paperToolMetadataLine(pages: number): string {
+  return `${pages} pages · Format Lettre (8,5 × 11 po) · Non daté · Réutilisable — imprime seulement les pages qu'il te faut`;
+}
+
+// ----------------------------------------------------------------------------
+// OFFRE « 2 planificateurs pour 15 $ » (spec, section 6 — l'offre)
+// ----------------------------------------------------------------------------
+// Texte de l'encadré à afficher sous le bouton d'achat, sur les fiches des
+// planificateurs seulement. Données préparées, NON affichées : aucune fiche
+// produit n'existe encore pour ces brouillons.
+//
+// ⚠️ RÉDUCTION NON IMPLÉMENTÉE dans le flux actuel, honnêtement :
+// le site n'a PAS de panier. Le paiement est mono-produit —
+// PdfCheckout.tsx → createPdfCheckoutSession crée une session Stripe
+// Embedded avec UN seul line_item (quantity 1) pour UN priceId.
+// Une réduction « automatique dans le panier » exige donc, avant activation :
+//   a) un panier multi-produits (état client + page panier), OU une offre
+//      groupée dédiée ;
+//   b) une session Checkout multi-lignes sachant appliquer la réduction ;
+//   c) au choix : un coupon / une promotion Stripe, ou un ajustement de
+//      prix calculé côté serveur — à décider au moment de construire le
+//      panier, PAS un rabais appliqué côté client.
+// La règle métier, elle, est codée ci-dessous en fonction pure, prête à être
+// branchée par le futur panier et déjà testable telle quelle.
+export const PLANIFICATEUR_PAIR_OFFER = {
+  category: "planificateur" as PaperToolCategory,
+  pairSize: 2,
+  pairPriceCad: 15,
+  unitPriceCad: 8,
+  discountPerPairCad: 1,
+  boxTitle: "Un deuxième planificateur pour 7 $",
+  boxText:
+    "Choisis-en deux : la paire revient à 15 $ au lieu de 16 $. La réduction s'applique automatiquement dans le panier.",
+  /** Paires suggérées approuvées (slugs) — les autres paires restent à décider. */
+  suggestedPairs: [
+    ["outil-papier-budget-par-paie", "planificateur-famille"],
+    ["planificateur-tdah", "outil-papier-habitudes-bien-etre"],
+    ["planificateur-etudiant", "planificateur-tdah"],
+    ["planificateur-gerant", "outil-papier-budget-par-paie"],
+  ] as Array<[string, string]>,
+};
+
+/**
+ * Règle de l'offre, interprétation retenue : dès que le panier contient
+ * 2 produits de catégorie « planificateur » ou plus, CHAQUE PAIRE COMPLÈTE
+ * donne 1 $ de réduction. Les planificateurs sont comptés tous modèles
+ * confondus (les paires suggérées sont des suggestions, pas une condition) :
+ * 2 planificateurs → −1 $, 3 → −1 $ (une paire complète), 4 → −2 $.
+ * NON BRANCHÉE au checkout actuel (aucun panier — voir ci-dessus).
+ */
+export function planificateurPairDiscountCad(planificateurCount: number): number {
+  const count = Math.max(0, Math.floor(planificateurCount));
+  return Math.floor(count / PLANIFICATEUR_PAIR_OFFER.pairSize) * PLANIFICATEUR_PAIR_OFFER.discountPerPairCad;
+}
+
+export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
+  // --- Fiche pratique — 2 $ -------------------------------------------------
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_code_familial_anti_clone_pdf_2",
+    slug: "outil-papier-code-familial-anti-clone",
+    title: "Le Code familial anti-clone",
+    category: "fiche",
+    categoryLabel: "Fiche pratique",
+    priceCad: 2,
+    priceLabel: "2 $ CAD, aucune taxe ajoutée",
+    pages: 8,
+    blurb: "Un mot de passe que seuls les vrais membres de ta famille connaissent.",
+    metadataLine: paperToolMetadataLine(8),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-code-familial-anti-clone.pdf",
+  },
+  // --- Outils thématiques — 5 $ ---------------------------------------------
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_repas_epicerie_pdf_5",
+    slug: "outil-papier-repas-epicerie",
+    title: "Mes repas, mon épicerie",
+    category: "thematique",
+    categoryLabel: "Outil thématique",
+    priceCad: 5,
+    priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    pages: 10,
+    blurb: "Le souper décidé, la liste faite : l'épicerie sans improviser.",
+    metadataLine: paperToolMetadataLine(10),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-repas-epicerie.pdf",
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_carnet_codes_pdf_5",
+    slug: "outil-papier-carnet-codes",
+    title: "Mon carnet de codes",
+    category: "thematique",
+    categoryLabel: "Outil thématique",
+    priceCad: 5,
+    priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    pages: 16,
+    blurb: "Tous tes codes au même endroit — sans jamais écrire le mot de passe au complet.",
+    metadataLine: paperToolMetadataLine(16),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-carnet-codes.pdf",
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_menage_maison_pdf_5",
+    slug: "outil-papier-menage-maison",
+    title: "Ma maison, sans y penser",
+    category: "thematique",
+    categoryLabel: "Outil thématique",
+    priceCad: 5,
+    priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    pages: 12,
+    blurb: "La maison reste propre presque toute seule : une tâche à la fois.",
+    metadataLine: paperToolMetadataLine(12),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-menage-maison.pdf",
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_demenagement_pdf_5",
+    slug: "outil-papier-demenagement",
+    title: "Je déménage sans virer fou",
+    category: "thematique",
+    categoryLabel: "Outil thématique",
+    priceCad: 5,
+    priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    pages: 12,
+    blurb: "Déménager sans virer fou : chaque étape dans l'ordre, du bail aux cartons.",
+    metadataLine: paperToolMetadataLine(12),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-demenagement.pdf",
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_inventaire_maison_pdf_5",
+    slug: "outil-papier-inventaire-maison",
+    title: "Tout ce qu'on a — inventaire de la maison",
+    category: "thematique",
+    categoryLabel: "Outil thématique",
+    priceCad: 5,
+    priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    pages: 12,
+    blurb: "Tout ce que ta maison contient, noté une fois — pour l'assurance comme pour la succession.",
+    metadataLine: paperToolMetadataLine(12),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-inventaire-maison.pdf",
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_registre_de_mes_ia_pdf_5",
+    slug: "outil-papier-registre-de-mes-ia",
+    title: "Le Registre de mes IA",
+    category: "thematique",
+    categoryLabel: "Outil thématique",
+    priceCad: 5,
+    priceLabel: "5 $ CAD, aucune taxe ajoutée",
+    pages: 10,
+    blurb: "Sache quelles IA voient quoi de ta vie — et garde le contrôle.",
+    metadataLine: paperToolMetadataLine(10),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-registre-de-mes-ia.pdf",
+  },
+  // --- Planificateurs — 8 $ (offre « 2 pour 15 $ », voir plus haut) ---------
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_budget_par_paie_pdf_8",
+    slug: "outil-papier-budget-par-paie",
+    title: "Mon budget par paie",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 14,
+    blurb: "Chaque paie, tu sais où va ton argent — avant qu'il parte.",
+    metadataLine: paperToolMetadataLine(14),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-budget-par-paie.pdf",
+    suggestedPairs: ["planificateur-famille", "planificateur-gerant"],
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_semaine_familiale_pdf_8",
+    slug: "outil-papier-semaine-familiale",
+    title: "Notre semaine",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 10,
+    blurb: "La semaine de toute la famille sur une page, accrochée au frigo.",
+    metadataLine: paperToolMetadataLine(10),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-semaine-familiale.pdf",
+    // Aucune paire suggérée approuvée pour ce produit pour l'instant.
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_habitudes_bien_etre_pdf_8",
+    slug: "outil-papier-habitudes-bien-etre",
+    title: "Mes habitudes, jour après jour",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 10,
+    blurb: "Une case à cocher par jour : tes habitudes deviennent visibles.",
+    metadataLine: paperToolMetadataLine(10),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-habitudes-bien-etre.pdf",
+    suggestedPairs: ["planificateur-tdah"],
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_suivi_sante_pdf_8",
+    slug: "outil-papier-suivi-sante",
+    title: "Mon suivi santé",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 12,
+    blurb: "Tes symptômes et tes médicaments notés au même endroit pour ton prochain rendez-vous.",
+    metadataLine: paperToolMetadataLine(12),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-suivi-sante.pdf",
+    // Aucune paire suggérée approuvée pour ce produit pour l'instant.
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "outil_papier_auto_carnet_pdf_8",
+    slug: "outil-papier-auto-carnet",
+    title: "Mon auto, son carnet",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 12,
+    blurb: "L'historique complet de ton auto, du premier changement d'huile à la revente.",
+    metadataLine: paperToolMetadataLine(12),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "outil-papier-auto-carnet.pdf",
+    // Aucune paire suggérée approuvée pour ce produit pour l'instant.
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "planificateur_famille_pdf_8",
+    slug: "planificateur-famille",
+    title: "Le Planificateur de famille",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 28,
+    blurb: "Toute la semaine de la famille au même endroit — fini la tête qui sait tout.",
+    metadataLine: paperToolMetadataLine(28),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "planificateur-famille.pdf",
+    suggestedPairs: ["outil-papier-budget-par-paie"],
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "planificateur_gerant_pdf_8",
+    slug: "planificateur-gerant",
+    title: "Le Planificateur du gérant",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 24,
+    blurb: "Horaires, ouvertures, passations : le commerce roule, même quand tu n'es pas là.",
+    metadataLine: paperToolMetadataLine(24),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "planificateur-gerant.pdf",
+    suggestedPairs: ["outil-papier-budget-par-paie"],
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "planificateur_tdah_pdf_8",
+    slug: "planificateur-tdah",
+    title: "Mon planificateur TDAH",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 28,
+    blurb: "Trois choses par jour, pas trente — un planificateur qui ne te juge pas.",
+    metadataLine: paperToolMetadataLine(28),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "planificateur-tdah.pdf",
+    suggestedPairs: ["outil-papier-habitudes-bien-etre", "planificateur-etudiant"],
+  },
+  {
+    status: "draft",
+    priceId: null, // price_id à créer
+    proposedLookupKey: "planificateur_etudiant_pdf_8",
+    slug: "planificateur-etudiant",
+    title: "Le Planificateur de l'étudiant",
+    category: "planificateur",
+    categoryLabel: "Planificateur",
+    priceCad: 8,
+    priceLabel: "8 $ CAD, aucune taxe ajoutée",
+    pages: 24,
+    blurb: "Ta session au complet sur papier : échéances, examens et budget, sans application.",
+    metadataLine: paperToolMetadataLine(24),
+    taxNote: PAPER_TOOL_TAX_NOTE,
+    includes: [...PAPER_TOOL_INCLUDES],
+    pdfPath: null,
+    proposedDownloadFileName: "planificateur-etudiant.pdf",
+    suggestedPairs: ["planificateur-tdah"],
+  },
+];
