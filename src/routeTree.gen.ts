@@ -14,16 +14,19 @@ import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as AlbumRouteImport } from './routes/album'
 import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as BaladoRouteImport } from './routes/balado'
+import { Route as BoiteRouteImport } from './routes/boite'
 import { Route as CollaborerRouteImport } from './routes/collaborer'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as ConditionsDeVenteRouteImport } from './routes/conditions-de-vente'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as EnCuisineRouteImport } from './routes/en-cuisine'
 import { Route as JeuxRouteImport } from './routes/jeux'
 import { Route as LesPasseursRouteImport } from './routes/les-passeurs'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
 import { Route as MerciRouteImport } from './routes/merci'
 import { Route as OutilsRouteImport } from './routes/outils'
+import { Route as PasseurDeSavoirRouteImport } from './routes/passeur-de-savoir'
 import { Route as PrixRouteImport } from './routes/prix'
 import { Route as RecupererAchatRouteImport } from './routes/recuperer-achat'
 import { Route as ReflexionsRouteImport } from './routes/reflexions'
@@ -69,6 +72,11 @@ const BaladoRoute = BaladoRouteImport.update({
   path: '/balado',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoiteRoute = BoiteRouteImport.update({
+  id: '/boite',
+  path: '/boite',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CollaborerRoute = CollaborerRouteImport.update({
   id: '/collaborer',
   path: '/collaborer',
@@ -94,6 +102,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnCuisineRoute = EnCuisineRouteImport.update({
+  id: '/en-cuisine',
+  path: '/en-cuisine',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JeuxRoute = JeuxRouteImport.update({
   id: '/jeux',
   path: '/jeux',
@@ -117,6 +130,11 @@ const MerciRoute = MerciRouteImport.update({
 const OutilsRoute = OutilsRouteImport.update({
   id: '/outils',
   path: '/outils',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PasseurDeSavoirRoute = PasseurDeSavoirRouteImport.update({
+  id: '/passeur-de-savoir',
+  path: '/passeur-de-savoir',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrixRoute = PrixRouteImport.update({
@@ -225,16 +243,19 @@ export interface FileRoutesByFullPath {
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
+  '/boite': typeof BoiteRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/en-cuisine': typeof EnCuisineRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
+  '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
@@ -261,16 +282,19 @@ export interface FileRoutesByTo {
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
+  '/boite': typeof BoiteRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/en-cuisine': typeof EnCuisineRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
+  '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
@@ -298,16 +322,19 @@ export interface FileRoutesById {
   '/album': typeof AlbumRoute
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
+  '/boite': typeof BoiteRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/en-cuisine': typeof EnCuisineRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
+  '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
@@ -336,16 +363,19 @@ export interface FileRouteTypes {
     | '/album'
     | '/ateliers'
     | '/balado'
+    | '/boite'
     | '/collaborer'
     | '/comprendre'
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
+    | '/en-cuisine'
     | '/jeux'
     | '/les-passeurs'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/passeur-de-savoir'
     | '/prix'
     | '/recuperer-achat'
     | '/reflexions'
@@ -372,16 +402,19 @@ export interface FileRouteTypes {
     | '/album'
     | '/ateliers'
     | '/balado'
+    | '/boite'
     | '/collaborer'
     | '/comprendre'
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
+    | '/en-cuisine'
     | '/jeux'
     | '/les-passeurs'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/passeur-de-savoir'
     | '/prix'
     | '/recuperer-achat'
     | '/reflexions'
@@ -408,16 +441,19 @@ export interface FileRouteTypes {
     | '/album'
     | '/ateliers'
     | '/balado'
+    | '/boite'
     | '/collaborer'
     | '/comprendre'
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
+    | '/en-cuisine'
     | '/jeux'
     | '/les-passeurs'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/passeur-de-savoir'
     | '/prix'
     | '/recuperer-achat'
     | '/reflexions'
@@ -445,16 +481,19 @@ export interface RootRouteChildren {
   AlbumRoute: typeof AlbumRoute
   AteliersRoute: typeof AteliersRoute
   BaladoRoute: typeof BaladoRoute
+  BoiteRoute: typeof BoiteRoute
   CollaborerRoute: typeof CollaborerRoute
   ComprendreRoute: typeof ComprendreRoute
   ConditionsDeVenteRoute: typeof ConditionsDeVenteRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
+  EnCuisineRoute: typeof EnCuisineRoute
   JeuxRoute: typeof JeuxRoute
   LesPasseursRoute: typeof LesPasseursRoute
   LivresPdfRoute: typeof LivresPdfRoute
   MerciRoute: typeof MerciRoute
   OutilsRoute: typeof OutilsRouteWithChildren
+  PasseurDeSavoirRoute: typeof PasseurDeSavoirRoute
   PrixRoute: typeof PrixRoute
   RecupererAchatRoute: typeof RecupererAchatRoute
   ReflexionsRoute: typeof ReflexionsRoute
@@ -512,6 +551,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BaladoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/boite': {
+      id: '/boite'
+      path: '/boite'
+      fullPath: '/boite'
+      preLoaderRoute: typeof BoiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/collaborer': {
       id: '/collaborer'
       path: '/collaborer'
@@ -547,6 +593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en-cuisine': {
+      id: '/en-cuisine'
+      path: '/en-cuisine'
+      fullPath: '/en-cuisine'
+      preLoaderRoute: typeof EnCuisineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/jeux': {
       id: '/jeux'
       path: '/jeux'
@@ -580,6 +633,13 @@ declare module '@tanstack/react-router' {
       path: '/outils'
       fullPath: '/outils'
       preLoaderRoute: typeof OutilsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/passeur-de-savoir': {
+      id: '/passeur-de-savoir'
+      path: '/passeur-de-savoir'
+      fullPath: '/passeur-de-savoir'
+      preLoaderRoute: typeof PasseurDeSavoirRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/prix': {
@@ -735,16 +795,19 @@ const rootRouteChildren: RootRouteChildren = {
   AlbumRoute: AlbumRoute,
   AteliersRoute: AteliersRoute,
   BaladoRoute: BaladoRoute,
+  BoiteRoute: BoiteRoute,
   CollaborerRoute: CollaborerRoute,
   ComprendreRoute: ComprendreRoute,
   ConditionsDeVenteRoute: ConditionsDeVenteRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
+  EnCuisineRoute: EnCuisineRoute,
   JeuxRoute: JeuxRoute,
   LesPasseursRoute: LesPasseursRoute,
   LivresPdfRoute: LivresPdfRoute,
   MerciRoute: MerciRoute,
   OutilsRoute: OutilsRouteWithChildren,
+  PasseurDeSavoirRoute: PasseurDeSavoirRoute,
   PrixRoute: PrixRoute,
   RecupererAchatRoute: RecupererAchatRoute,
   ReflexionsRoute: ReflexionsRoute,

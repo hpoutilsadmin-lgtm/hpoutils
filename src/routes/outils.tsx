@@ -29,6 +29,14 @@ const WEB_TOOLS = [
     href: "/en-cuisine/",
   },
   {
+    emoji: "📖",
+    tag: "Savoir-faire",
+    title: "Le Passeur de savoir",
+    copy: "Les trucs et les savoirs des gens, recueillis pour être transmis : recettes, remèdes de grand-mère, savoir-faire du quotidien. La fiche nº 1 : le truc contre le hoquet de la grand-mère d'Hugo.",
+    cta: "Ouvrir le Passeur →",
+    href: "/passeur-de-savoir/",
+  },
+  {
     emoji: "💰",
     tag: "Budget",
     title: "Le reste du mois",
