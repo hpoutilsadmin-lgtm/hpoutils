@@ -1,0 +1,3288 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>NORD 2087 — La Ligne de Glace</title>
+<style>
+  :root{
+    --bg:#050b18;
+    --bg2:#081226;
+    --panel:#0b1730;
+    --panel2:#0e1c38;
+    --line:#1c3a66;
+    --cyan:#48e6ff;
+    --cyan-dim:#1e8fb0;
+    --ice:#bfefff;
+    --maple:#ff4d5e;
+    --gold:#ffd166;
+    --text:#e8f4ff;
+    --muted:#8aa3c4;
+    --ok:#57ffa6;
+    --bad:#ff6b81;
+    --radius:12px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:radial-gradient(1200px 700px at 50% -10%, #0a1a3d 0%, var(--bg) 60%);color:var(--text);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;min-height:100%}
+  body{display:flex;justify-content:center;padding:10px}
+  #app{width:100%;max-width:1380px}
+
+  /* ===== HUD ===== */
+  #hud{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:linear-gradient(180deg,#0c1832,#081222);
+    border:1px solid var(--line);border-radius:var(--radius);padding:8px 12px;margin-bottom:10px;
+    box-shadow:0 0 24px rgba(72,230,255,.08), inset 0 1px 0 rgba(72,230,255,.08)}
+  .brand{font-weight:800;letter-spacing:2px;font-size:13px;color:var(--ice);white-space:nowrap;
+    text-shadow:0 0 12px rgba(72,230,255,.6)}
+  .brand small{display:block;font-size:10px;letter-spacing:3px;color:var(--cyan-dim);text-shadow:none}
+  .hud-stats{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-left:8px;font-size:15px}
+  .stat{white-space:nowrap}
+  .stat .lbl{color:var(--muted);font-size:11px;display:block;letter-spacing:1px;text-transform:uppercase}
+  .stat .val{font-weight:800;font-size:17px}
+  #statCredits{color:var(--gold);text-shadow:0 0 10px rgba(255,209,102,.5)}
+  #statHeart{color:var(--maple);text-shadow:0 0 10px rgba(255,77,94,.5)}
+  #statWave{color:var(--cyan)}
+  #statScore{color:var(--ice)}
+  .hud-btns{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:8px;background:#102341;color:var(--text);
+    padding:8px 12px;transition:transform .06s ease, box-shadow .15s ease, background .15s ease}
+  button:hover:not(:disabled){background:#16305a;box-shadow:0 0 12px rgba(72,230,255,.25)}
+  button:active:not(:disabled){transform:scale(.97)}
+  button:disabled{opacity:.38;cursor:not-allowed}
+  #btnWave{background:linear-gradient(180deg,#134e7a,#0e3454);border-color:var(--cyan-dim);font-weight:800;color:#eafcff;
+    text-shadow:0 0 8px rgba(72,230,255,.5)}
+  #btnWave:hover:not(:disabled){background:linear-gradient(180deg,#1a649a,#124a70)}
+  button.toggled{outline:2px solid var(--cyan);background:#0e3a5c}
+  button.warn{border-color:#7a3a44;background:#3a1420}
+  button.warn:hover:not(:disabled){background:#521d2c}
+
+  /* ===== Layout ===== */
+  #layout{display:grid;grid-template-columns:1fr 300px;gap:10px;align-items:start}
+  #stage{position:relative}
+  #canvasWrap{position:relative;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#040914;
+    box-shadow:0 0 40px rgba(72,230,255,.07)}
+  #game{display:block;width:100%;height:auto;aspect-ratio:960/660;cursor:crosshair;touch-action:none}
+  /* Zoom tactile (P0-3) : visible uniquement sur les appareils tactiles */
+  #zoomBar{position:absolute;right:10px;bottom:10px;z-index:6;display:none;gap:6px;align-items:center;
+    background:rgba(6,14,32,.9);border:1px solid var(--line);border-radius:10px;padding:6px}
+  #zoomBar button{min-width:44px;min-height:44px;padding:4px;font-size:19px;font-weight:800;line-height:1}
+  #zoomLabel{font-size:12px;color:var(--muted);min-width:46px;text-align:center;white-space:nowrap}
+  @media (pointer:coarse){#zoomBar{display:flex}}
+
+  /* Banner + toasts over canvas */
+  #banner{position:absolute;top:14px;left:50%;transform:translateX(-50%) translateY(-8px);padding:10px 26px;border-radius:10px;
+    background:rgba(6,14,32,.92);border:1px solid var(--cyan);color:var(--ice);font-weight:800;font-size:17px;letter-spacing:1px;
+    text-shadow:0 0 12px rgba(72,230,255,.7);opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;
+    white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis;z-index:5}
+  #banner.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #banner.bad{border-color:var(--maple);color:#ffd9de;text-shadow:0 0 12px rgba(255,77,94,.7)}
+  #toasts{position:absolute;bottom:10px;left:10px;display:flex;flex-direction:column;gap:6px;pointer-events:none;z-index:5;max-width:70%}
+  .toast{background:rgba(8,16,36,.9);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:8px;
+    padding:6px 10px;font-size:13px;color:var(--text);animation:tin .25s ease}
+  .toast.warn{border-left-color:var(--bad)}
+  .toast.good{border-left-color:var(--ok)}
+  @keyframes tin{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+  #stormClock{position:absolute;top:14px;right:14px;z-index:5;display:none;background:rgba(120,200,255,.12);
+    border:1px solid #9fdcff;border-radius:8px;padding:6px 12px;font-weight:800;color:#dff3ff;
+    text-shadow:0 0 10px rgba(160,220,255,.8);font-size:14px;backdrop-filter:blur(2px)}
+  #patrolBar{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:6;display:none;gap:8px;
+    background:rgba(6,14,32,.94);border:1px solid var(--gold);border-radius:10px;padding:8px 12px;align-items:center;font-size:13px}
+  #patrolBar .pts{font-weight:800;color:var(--gold)}
+
+  /* ===== Side panel ===== */
+  #side{display:flex;flex-direction:column;gap:10px}
+  .card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--radius);
+    padding:10px 12px}
+  .card h2{margin:0 0 8px;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);
+    text-shadow:0 0 8px rgba(72,230,255,.4)}
+  .card h2 .sub{display:block;font-size:11px;color:var(--muted);letter-spacing:0;text-transform:none;font-weight:400;margin-top:2px}
+
+  #shop{display:grid;grid-template-columns:1fr;gap:6px}
+  .shop-item{display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center;padding:7px 8px;border-radius:10px;
+    border:1px solid transparent;cursor:pointer;background:#0d1b36;transition:border-color .12s, background .12s}
+  .shop-item:hover{background:#12244a}
+  .shop-item:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  .shop-item.selected{border-color:var(--cyan);background:#10304f;box-shadow:0 0 14px rgba(72,230,255,.25)}
+  .shop-item.poor .cost{color:var(--bad)}
+  .shop-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:28px;
+    background:#081226;border-radius:8px;border:1px solid var(--line)}
+
+  /* Maps */
+  #mapPick{display:grid;grid-template-columns:1fr;gap:6px}
+  .mapbtn{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;border:1px solid transparent;
+    cursor:pointer;background:#0d1b36;text-align:left;color:var(--text)}
+  .mapbtn:hover{background:#12244a}
+  .mapbtn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  .mapbtn.selected{border-color:var(--cyan);background:#10304f;box-shadow:0 0 14px rgba(72,230,255,.25)}
+  .mapbtn:disabled{opacity:.4;cursor:not-allowed}
+  .map-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:24px;
+    background:#081226;border-radius:8px;border:1px solid var(--line)}
+  .map-name{font-weight:800;font-size:13.5px}
+  .map-sub{font-size:11px;color:var(--muted);line-height:1.35}
+  .map-prog{display:inline-block;margin-top:3px;font-size:11px;font-weight:700;color:var(--gold);
+    background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.25);border-radius:6px;padding:1px 7px}
+  .map-prog.done{color:var(--ok);background:rgba(87,255,166,.08);border-color:rgba(87,255,166,.25)}
+  .shop-name{font-weight:700;font-size:14px}
+  .shop-desc{font-size:11.5px;color:var(--muted);line-height:1.35}
+  .cost{font-weight:800;color:var(--gold);font-size:15px;white-space:nowrap}
+
+  #towerPanel{display:none}
+  #towerPanel .tp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  #towerPanel .tp-name{font-weight:800;font-size:15px}
+  #towerPanel .tp-lvl{font-size:12px;color:var(--cyan);font-weight:700}
+  #towerPanel .tp-desc{font-size:12.5px;color:var(--muted);margin-bottom:8px;line-height:1.4}
+  .tp-btns{display:flex;gap:6px;flex-wrap:wrap}
+  .tp-btns button{flex:1;min-width:120px}
+
+  #intelList{display:flex;flex-direction:column;gap:6px}
+  .intel{border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:12.5px;background:#0c1934}
+  .intel .w{font-weight:800;font-size:13px;color:var(--ice)}
+  .intel .d{color:var(--muted);line-height:1.35;margin-top:2px}
+  .intel.done{opacity:.45}
+  .intel.next{border-color:var(--gold);box-shadow:0 0 10px rgba(255,209,102,.18)}
+  .intel.next .w{color:var(--gold)}
+  .intel.now{border-color:var(--cyan);box-shadow:0 0 10px rgba(72,230,255,.25)}
+
+  #help{font-size:12px;color:var(--muted);line-height:1.5}
+  #help b{color:var(--ice)}
+
+  /* ===== Modals ===== */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:50;
+    background:rgba(2,6,16,.78);backdrop-filter:blur(3px);padding:16px}
+  .modal.show{display:flex}
+  .modal-box{background:linear-gradient(180deg,#0d1a36,#070f24);border:1px solid var(--cyan);
+    border-radius:14px;padding:26px 30px;max-width:520px;width:100%;text-align:center;
+    box-shadow:0 0 60px rgba(72,230,255,.2);animation:pop .3s ease}
+  @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+  .modal-box h1{margin:0 0 10px;font-size:28px;letter-spacing:2px}
+  .modal-box p{color:var(--muted);font-size:14px;line-height:1.6}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:16px 0;text-align:left}
+  .statbox{background:#0a1430;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  .statbox .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  .statbox .v{font-size:19px;font-weight:800}
+  #endTitle.win{color:var(--ok);text-shadow:0 0 18px rgba(87,255,166,.6)}
+  #endTitle.lose{color:var(--maple);text-shadow:0 0 18px rgba(255,77,94,.6)}
+  .best{font-size:13px;color:var(--gold);margin-top:6px}
+  #aboutBox{text-align:left}
+  #aboutBox h1{font-size:20px;text-align:center;color:var(--cyan);margin-bottom:14px}
+  #aboutBox ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.7}
+  #aboutBox b{color:var(--text)}
+
+  @media (max-width:1020px){
+    #layout{grid-template-columns:1fr}
+    #side{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  }
+  @media (max-width:560px){
+    body{padding:6px}
+    .hud-stats{gap:10px}
+    .stat .val{font-size:15px}
+    .brand{font-size:11px}
+    #banner{font-size:14px;padding:8px 14px}
+  }
+
+  /* P0-3 : lisibilité téléphone — cibles tactiles ≥ 44 px, boutique aérée, prix lisibles */
+  @media (max-width:760px){
+    #shop{gap:10px}
+    .shop-item{min-height:56px;padding:9px 10px;gap:10px;grid-template-columns:52px 1fr auto}
+    .shop-name{font-size:15px}
+    .shop-desc{font-size:12.5px}
+    .cost{font-size:17px}
+    .shop-icon{width:48px;height:48px;font-size:30px;flex:0 0 48px}
+    #mapPick{gap:10px}
+    .mapbtn{min-height:56px;padding:10px;gap:10px}
+    .map-icon{width:44px;height:44px;font-size:22px;flex:0 0 44px}
+    .hud-btns button{min-height:44px;padding:10px 12px}
+    .tp-btns button{min-height:48px}
+    #patrolBar button{min-height:44px}
+  }
+
+  /* ===== Écran initial : sélection de carte ===== */
+  #splash{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(1400px 800px at 50% -10%, #0b1d44 0%, #050b18 70%);
+    padding:22px;overflow-y:auto}
+  #splash.hidden{display:none}
+  .splash-inner{width:100%;max-width:1000px;text-align:center;animation:tin .3s ease}
+  .splash-brand{font-weight:800;letter-spacing:6px;font-size:34px;color:var(--ice);
+    text-shadow:0 0 24px rgba(72,230,255,.75)}
+  .splash-brand small{display:block;font-size:14px;letter-spacing:8px;color:var(--cyan);margin-top:4px;text-shadow:0 0 10px rgba(72,230,255,.5)}
+  .splash-sub{color:var(--muted);font-size:15px;margin:10px 0 20px}
+  .splash-sub b{color:var(--ice)}
+  #splashMaps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:left}
+  .splash-card{background:linear-gradient(180deg,#0e1c38,#0a152c);border:1px solid var(--line);
+    border-radius:14px;padding:20px 16px;cursor:pointer;color:var(--text);
+    transition:border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+    display:flex;flex-direction:column;gap:10px;min-height:250px}
+  .splash-card:hover:not(:disabled){border-color:var(--cyan);background:#10304f;box-shadow:0 0 22px rgba(72,230,255,.22)}
+  .splash-card:active:not(:disabled){transform:scale(.98)}
+  .splash-card:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  .sc-top{display:flex;align-items:center;gap:12px}
+  .sc-icon{width:52px;height:52px;flex:0 0 52px;display:flex;align-items:center;justify-content:center;font-size:32px;
+    background:#081226;border-radius:10px;border:1px solid var(--line)}
+  .sc-name{font-weight:800;font-size:17px;line-height:1.25}
+  .sc-dims{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;color:var(--cyan);
+    background:rgba(72,230,255,.08);border:1px solid rgba(72,230,255,.3);border-radius:6px;padding:1px 9px}
+  .sc-flavor{font-size:13.5px;color:var(--muted);line-height:1.5;flex:1}
+  .sc-prog{display:inline-flex;margin-top:2px;font-size:12px;font-weight:700;color:var(--gold);align-self:flex-start;
+    background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.25);border-radius:6px;padding:3px 10px}
+  .sc-prog.done{color:var(--ok);background:rgba(87,255,166,.08);border-color:rgba(87,255,166,.25)}
+  .splash-foot{color:var(--muted);font-size:12.5px;margin-top:18px}
+  @media (max-width:760px){
+    #splashMaps{grid-template-columns:1fr}
+    .splash-brand{font-size:26px;letter-spacing:3px}
+    .splash-card{min-height:0}
+  }
+</style>
+</head>
+
+<body>
+<div id="app">
+  <div id="hud">
+    <div class="brand">NORD 2087<small>LA LIGNE DE GLACE</small></div>
+    <div class="hud-stats">
+      <div class="stat"><span class="lbl">Hydro-crédits</span><span class="val" id="statCredits">220 ₡</span></div>
+      <div class="stat"><span class="lbl">Cœur du Nord</span><span class="val" id="statHeart">20 PV</span></div>
+      <div class="stat"><span class="lbl">Vague</span><span class="val" id="statWave">0 / 12</span></div>
+      <div class="stat"><span class="lbl">Score</span><span class="val" id="statScore">0</span></div>
+    </div>
+    <div class="hud-btns">
+      <button id="btnWave" title="Lancer la prochaine vague">⚡ Lancer la vague</button>
+      <button id="btnSurcharge" title="Surcharge du Cœur : l'ultime. 600 dégâts à tous les ennemis + 2 s de paralysie ; 8 % des PV max sur les boss. 300 ₡, recharge 90 s. Ne fonctionne qu'en pleine vague.">💥 Surcharge</button>
+      <button id="btnSpeed" title="Vitesse de jeu">×1</button>
+      <button id="btnPause" title="Pause">⏸</button>
+      <button id="btnRestart" title="Recommencer la partie (confirmation)">↻</button>
+      <button id="btnMute" title="Son on/off">🔊</button>
+      <button id="btnAbout" title="À propos du prototype">❔</button>
+    </div>
+  </div>
+
+  <div id="layout">
+    <div id="stage">
+      <div id="canvasWrap">
+        <canvas id="game" width="960" height="660" aria-label="Carte de jeu : le Vieux-Montréal gelé"></canvas>
+        <div id="banner" role="status"></div>
+        <div id="stormClock">❄ <span id="stormTime">12</span> s</div>
+        <div id="patrolBar">
+          <span>📍 Trace la patrouille : <span class="pts" id="patrolCount">0</span> / 4 points</span>
+          <button id="btnPatrolDone">✔ Valider</button>
+          <button id="btnPatrolClear">↺ Refaire</button>
+          <button id="btnPatrolCancel" class="warn">✕ Annuler</button>
+        </div>
+        <div id="toasts"></div>
+        <div id="zoomBar" aria-label="Contrôles de zoom">
+          <button id="zoomOut" title="Réduire le zoom" aria-label="Réduire le zoom">−</button>
+          <button id="zoomReset" title="Revenir à la vue complète" aria-label="Revenir à la vue complète">⌂</button>
+          <button id="zoomIn" title="Agrandir le zoom" aria-label="Agrandir le zoom">+</button>
+          <span id="zoomLabel">100 %</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="side">
+      <div class="card">
+        <h2>Boutique — Tours<span class="sub">Clique une tour, puis une case pour la placer (Échap annule)</span></h2>
+        <div id="shop"></div>
+      </div>
+
+      <div class="card">
+        <h2>Cartes<span class="sub">Change de front — une nouvelle partie démarre sur la carte choisie</span></h2>
+        <div id="mapPick"></div>
+      </div>
+
+      <div class="card" id="towerPanel">
+        <h2>Tour sélectionnée</h2>
+        <div class="tp-head"><span class="tp-name" id="tpName">—</span><span class="tp-lvl" id="tpLvl">N1</span></div>
+        <div class="tp-desc" id="tpDesc">—</div>
+        <div class="tp-btns">
+          <button id="btnUpgrade">⬆ Améliorer</button>
+          <button id="btnSell" class="warn">💰 Vendre</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Renseignement<span class="sub">La Horde annonce ses vagues. Prépare-toi, Gardien.</span></h2>
+        <div id="intelList"></div>
+      </div>
+
+      <div class="card">
+        <h2>Conseils du Nord</h2>
+        <div id="help">
+          <b>Dessine le labyrinthe :</b> les ennemis suivent toujours le chemin le plus court — rallonge-le avec tes tours pour gagner du temps de tir.<br>
+          <b>Les castors protègent :</b> pendant une tempête de verglas, tes tours dans l'aura d'un <b>Castor-ingénieur</b> reprennent le tir après quelques secondes — et au <b>N3</b>, elles sont dégelées instantanément dès le début de la tempête.<br>
+          <b>La Décharge</b> coupe le courant de tes Éoliennes à coups d'EMP — garde des Lance-neige en réserve.<br>
+          <b>Pylône Tesla :</b> le seul vrai contre des blindés et du <b>Grand Froid</b> (×1.8 sur tout ce qui porte une armure).<br>
+          <b>Brise-glace :</b> impulsion de zone idéale dans les virages serrés du labyrinthe — au N3, il repousse la Horde.<br>
+          <b>Les Pillards te volent :</b> 20 ₡ chacun s'ils atteignent le Cœur. <b>Surcharge du Cœur</b> (touche <b>S</b>) : l'ultime en pleine vague.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fin de partie -->
+<div class="modal" id="endModal">
+  <div class="modal-box">
+    <h1 id="endTitle">LA LIGNE TIENT !</h1>
+    <p id="endMsg"></p>
+    <div class="stats">
+      <div class="statbox"><div class="l">Ennemis détruits</div><div class="v" id="sKills">0</div></div>
+      <div class="statbox"><div class="l">Vagues terminées</div><div class="v" id="sWaves">0 / 12</div></div>
+      <div class="statbox"><div class="l">Tours placées</div><div class="v" id="sTowers">0</div></div>
+      <div class="statbox"><div class="l">PV restants</div><div class="v" id="sHp">0</div></div>
+      <div class="statbox"><div class="l">Score final</div><div class="v" id="sScore" style="color:var(--gold)">0</div></div>
+      <div class="statbox"><div class="l">Bonus Sans faute</div><div class="v" id="sBonus">—</div></div>
+    </div>
+    <div class="best" id="sBest"></div>
+    <div style="margin-top:14px;display:flex;gap:8px;justify-content:center">
+      <button id="btnReplay" style="font-weight:800;padding:10px 26px">↻ Rejouer</button>
+    </div>
+  </div>
+</div>
+
+<!-- À propos -->
+<div class="modal" id="aboutModal">
+  <div class="modal-box" id="aboutBox">
+    <h1>❔ À propos de ce prototype</h1>
+    <p><b>NORD 2087 — La Ligne de Glace</b>, un tower defense québécois et futuriste. Tu es <b>Gardien du Nord</b> : défends le <b>Cœur</b>, le nœud énergétique gelé, contre la Horde des machines du Givre noir.</p>
+    <ul>
+      <li>🗺️ <b>Contenu :</b> 3 cartes (Vieux-Montréal gelé, Forêt boréale, Pont Jacques-Cartier), 7 tours, 12 vagues et le boss final <b>Le Grand Froid</b>.</li>
+      <li>💥 <b>Surcharge du Cœur :</b> pouvoir d'urgence en pleine vague — 300 ₡, recharge 90 s, touche même le boss.</li>
+      <li>🏆 <b>Progression en local uniquement</b> (sur cet appareil, par carte). Pas de classement en ligne.</li>
+      <li>🌐 <b>Pas de multijoueur en ligne</b> dans cette version.</li>
+      <li>🎨 <b>Visuels :</b> 100 % dessinés en code (vectoriel). Aucune image chargée.</li>
+      <li>🔊 <b>Audio :</b> 100 % généré en WebAudio. Aucun fichier sonore.</li>
+      <li>🔋 <b>Économie :</b> les hydro-crédits (₡) se gagnent en détruisant la Horde. Les Pillards peuvent t'en voler : vise-les d'abord !</li>
+      <li>⚠️ <b>Limites :</b> équilibre calibré pour un solo détendu à expert ; les scores disparaissent si tu vides les données de navigation.</li>
+    </ul>
+    <div style="margin-top:16px;text-align:center"><button id="btnAboutClose" style="padding:10px 26px">Compris, Gardien ✌</button></div>
+  </div>
+</div>
+
+<!-- Changement de carte en cours de session : confirmation -->
+<div class="modal" id="switchModal">
+  <div class="modal-box">
+    <h1 id="switchTitle" style="font-size:20px;color:var(--cyan)">🗺 Changer de front ?</h1>
+    <p><b id="switchName" style="color:var(--ice)">—</b><br>
+    <span id="switchBlurb">—</span><br><br>
+    La partie en cours sera réinitialisée (tours, crédits, score et vagues).</p>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button id="btnSwitchYes" style="font-weight:800;padding:10px 22px">✔ Ouvrir cette carte</button>
+      <button id="btnSwitchNo" class="warn" style="padding:10px 22px">✕ Rester</button>
+    </div>
+  </div>
+</div>
+
+<!-- Écran initial : sélection de la carte -->
+<div id="splash">
+  <div class="splash-inner">
+    <div class="splash-brand">NORD 2087<small>LA LIGNE DE GLACE</small></div>
+    <p class="splash-sub">Gardien, <b>choisis ton front</b> : le plateau s'ouvrira sur la carte choisie.</p>
+    <div id="splashMaps"></div>
+    <p class="splash-foot">🏆 Progression sauvegardée sur cet appareil, carte par carte.</p>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ================================================================
+   NORD 2087 — La Ligne de Glace · prototype solo, fichier unique
+   Tour par tour de labyrinthe (mazing), néon sur glace, Québec 2087
+   ================================================================ */
+const TILE = 60;
+let GW = 16, GH = 11, W = GW * TILE, H = GH * TILE; // selon la carte active
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+/* ---------------- Caméra tactile (P0-3 : pincement pour zoomer, glisser pour déplacer) ---------------- */
+// Le rendu monde passe derrière cette caméra (voir render()) ; les entrées inversent la
+// transformation (voir canvasPos()). Zoom 1× → 3×, recentrage impossible hors carte.
+const VIEW = { z: 1, cx: 480, cy: 330 };
+const pointers = new Map(); // pointerId -> {x, y} en pixels CSS du canvas
+let pinch = null;            // {d0,z0,cx0,cy0,mx0,my0} — geste à deux doigts en cours
+let pendingTap = null;       // {id,x,y,moved} — tape ou glisser à un doigt à départager
+let lastTapT = 0;             // double-tap = réinitialiser le zoom
+function viewClamp() {
+  VIEW.z = Math.min(3, Math.max(1, VIEW.z));
+  if (VIEW.z <= 1.001) { VIEW.z = 1; VIEW.cx = W / 2; VIEW.cy = H / 2; }
+  const vw = W / VIEW.z, vh = H / VIEW.z, m = 40; // le chemin reste toujours atteignable
+  VIEW.cx = Math.min(Math.max(VIEW.cx, vw / 2 - m), W - vw / 2 + m);
+  VIEW.cy = Math.min(Math.max(VIEW.cy, vh / 2 - m), H - vh / 2 + m);
+  updateZoomLabel();
+}
+function resetView() {
+  VIEW.z = 1; VIEW.cx = W / 2; VIEW.cy = H / 2;
+  pointers.clear(); pinch = null; pendingTap = null;
+  updateZoomLabel();
+}
+function updateZoomLabel() {
+  const l = document.getElementById("zoomLabel");
+  if (l) l.textContent = Math.round(VIEW.z * 100) + " %";
+}
+function zoomStep(dir) { // boutons de la barre de zoom (téléphones sans pincement)
+  AudioSys.init(); AudioSys.resume();
+  VIEW.z = Math.min(3, Math.max(1, VIEW.z + dir * 0.5));
+  viewClamp();
+  AudioSys.place();
+}
+
+/* ---------------- Les trois cartes ---------------- */
+const MAPS = {
+  vieuxmontreal: {
+    id: "vieuxmontreal", name: "Vieux-Montréal gelé", blurb: "Le classique — 16×11",
+    flavor: "Le front d'origine : vaste et ouvert, entre les remparts de la vieille ville baignés de néon. Idéal pour apprendre l'art du labyrinthe.",
+    gw: 16, gh: 11, spawn: { cx: 0, cy: 5 }, heart: { cx: 15, cy: 5 },
+    decor: [] // aucune case bloquée : la carte d'origine, inchangée
+  },
+  foret: {
+    id: "foret", name: "Forêt boréale", blurb: "14×10 — fonce sous les épinettes",
+    flavor: "Un terrain resserré où épinettes et chaos de rochers écrasent le front. Ici, chaque case compte — et la Horde adore se faufiler entre les arbres.",
+    gw: 14, gh: 10, spawn: { cx: 0, cy: 1 }, heart: { cx: 13, cy: 8 },
+    decor: [
+      { cx: 2, cy: 2, kind: "sapin" }, { cx: 2, cy: 3, kind: "sapin" }, { cx: 3, cy: 2, kind: "sapin" },
+      { cx: 10, cy: 6, kind: "sapin" }, { cx: 11, cy: 6, kind: "sapin" }, { cx: 10, cy: 7, kind: "sapin" },
+      { cx: 6, cy: 8, kind: "roche" }, { cx: 5, cy: 1, kind: "roche" }, { cx: 8, cy: 4, kind: "roche" }
+    ]
+  },
+  pont: {
+    id: "pont", name: "Pont Jacques-Cartier", blurb: "18×9 — la travée gelée",
+    flavor: "Une travée de glace jetée entre deux rives : longue, étroite, sans aucun abri. Le front des Gardiens aguerris — aucune pitié.",
+    gw: 18, gh: 9, spawn: { cx: 0, cy: 4 }, heart: { cx: 17, cy: 4 },
+    decor: [
+      { cx: 8, cy: 2, kind: "pilonne" }, { cx: 9, cy: 2, kind: "pilonne" },
+      { cx: 8, cy: 6, kind: "pilonne" }, { cx: 9, cy: 6, kind: "pilonne" },
+      { cx: 4, cy: 1, kind: "pilonne" }, { cx: 13, cy: 7, kind: "pilonne" }
+    ]
+  }
+};
+let MAP_ID = "vieuxmontreal";
+const DECOR = new Set(); // "cx,cy" pour la carte active
+let SPAWN = { cx: 0, cy: 5 };   // portail d'apparition
+let HEART = { cx: 15, cy: 5 };  // le Cœur
+function useMap(id) {
+  MAP_ID = id;
+  const m = MAPS[id];
+  GW = m.gw; GH = m.gh; W = GW * TILE; H = GH * TILE;
+  canvas.width = W; canvas.height = H;
+  canvas.style.aspectRatio = W + " / " + H; // la case reste carrée sur toutes les cartes
+  canvas.setAttribute("aria-label", "Carte de jeu : " + m.name);
+  SPAWN = { cx: m.spawn.cx, cy: m.spawn.cy };
+  HEART = { cx: m.heart.cx, cy: m.heart.cy };
+  DECOR.clear();
+  for (const d of m.decor) DECOR.add(d.cx + "," + d.cy);
+}
+function decorAt(cx, cy) {
+  const m = MAPS[MAP_ID];
+  return m.decor.find(d => d.cx === cx && d.cy === cy) || null;
+}
+
+/* ---------------- Progression par carte (locale) ---------------- */
+function mapProgKey(id) { return "nord2087_map_" + id; }
+function mapProg(id) {
+  try {
+    const r = JSON.parse(localStorage.getItem(mapProgKey(id)) || "null");
+    if (r && typeof r === "object") return { best: r.best | 0, bestWave: (r.bestWave || 0) | 0, victories: r.victories | 0 };
+  } catch (e) {}
+  return { best: 0, bestWave: 0, victories: 0 };
+}
+function saveMapProg(id, s, waves, won) {
+  const p = mapProg(id);
+  p.best = Math.max(p.best, s);
+  p.bestWave = Math.max(p.bestWave, waves);
+  if (won) p.victories++;
+  try { localStorage.setItem(mapProgKey(id), JSON.stringify(p)); } catch (e) {}
+}
+const MAP_ICONS = { vieuxmontreal: "🏙️", foret: "🌲", pont: "🌉" };
+function progLabel(p) {
+  if (p.victories > 0) return { t: "★ Victoire (" + p.victories + "×) — record " + p.best + " pts", done: true };
+  if (p.bestWave > 0) return { t: "Vague " + p.bestWave + " / " + TOTAL_WAVES + " — record " + p.best + " pts", done: false };
+  return { t: "Pas encore jouée", done: false };
+}
+function renderMapButtons() {
+  const box = document.getElementById("mapPick");
+  box.innerHTML = "";
+  for (const id of ["vieuxmontreal", "foret", "pont"]) {
+    const m = MAPS[id], p = mapProg(id), pl = progLabel(p);
+    const b = document.createElement("button");
+    b.className = "mapbtn" + (id === MAP_ID ? " selected" : "");
+    b.dataset.map = id;
+    b.setAttribute("aria-label", m.name + " — " + m.blurb + ". " + pl.t);
+    b.innerHTML = '<div class="map-icon">' + MAP_ICONS[id] + '</div><div><div class="map-name">' + m.name + '</div>' +
+      '<div class="map-sub">' + m.blurb + '</div><div class="map-prog' + (pl.done ? " done" : "") + '">' + pl.t + "</div></div>";
+    b.addEventListener("click", () => confirmSwitchMap(id));
+    box.appendChild(b);
+  }
+  refreshMapButtonsState();
+}
+function refreshMapButtonsState() {
+  const busy = G.phase === "wave" || G.paused || !!UI.patrolMode;
+  document.querySelectorAll(".mapbtn").forEach(b => { b.disabled = busy; });
+}
+function pickMap(id) {
+  if (id === MAP_ID) return;
+  if (G.phase === "wave" || UI.patrolMode) { toast("Finis d'abord la vague en cours, Gardien !", "warn"); return; }
+  AudioSys.init(); AudioSys.resume();
+  useMap(id);
+  resetGame();
+  renderMapButtons();
+  banner("🗺 " + MAPS[id].name + " — " + MAPS[id].blurb);
+}
+
+/* ---------------- Changement de carte en cours de session : confirmation ---------------- */
+let pendingMap = null;
+let pendingRestart = false;
+function confirmSwitchMap(id) {
+  if (id === MAP_ID) return; // déjà la carte active : rien à confirmer
+  if (G.phase === "wave" || UI.patrolMode) { toast("Finis d'abord la vague en cours, Gardien !", "warn"); return; }
+  pendingMap = id;
+  pendingRestart = false;
+  document.getElementById("switchTitle").textContent = "🗺 Changer de front ?";
+  document.getElementById("switchName").textContent = MAPS[id].name;
+  document.getElementById("switchBlurb").textContent = MAPS[id].blurb;
+  document.getElementById("btnSwitchYes").textContent = "✔ Ouvrir cette carte";
+  document.getElementById("switchModal").classList.add("show");
+}
+/* Redémarrage de la partie : réutilise la même modale de confirmation */
+function confirmRestart() {
+  pendingMap = null;
+  pendingRestart = true;
+  document.getElementById("switchTitle").textContent = "↻ Recommencer la partie ?";
+  document.getElementById("switchName").textContent = MAPS[MAP_ID].name;
+  document.getElementById("switchBlurb").textContent = "Une nouvelle partie démarre sur ce front.";
+  document.getElementById("btnSwitchYes").textContent = "✔ Recommencer";
+  document.getElementById("switchModal").classList.add("show");
+}
+function closeSwitchModal() {
+  pendingMap = null;
+  pendingRestart = false;
+  document.getElementById("switchModal").classList.remove("show");
+}
+
+/* ---------------- Écran initial : sélection de la carte ---------------- */
+function renderSplash() {
+  const box = document.getElementById("splashMaps");
+  box.innerHTML = "";
+  for (const id of ["vieuxmontreal", "foret", "pont"]) {
+    const m = MAPS[id], p = mapProg(id), pl = progLabel(p);
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "splash-card";
+    b.dataset.map = id;
+    b.setAttribute("aria-label", m.name + " — " + m.gw + " par " + m.gh + " cases. " + m.flavor + " " + pl.t);
+    b.innerHTML = '<div class="sc-top"><div class="sc-icon">' + MAP_ICONS[id] + '</div>' +
+      '<div><div class="sc-name">' + m.name + '</div>' +
+      '<div class="sc-dims">' + m.gw + " × " + m.gh + " cases</div></div></div>" +
+      '<div class="sc-flavor">' + m.flavor + "</div>" +
+      '<div class="sc-prog' + (pl.done ? " done" : "") + '">' + pl.t + "</div>";
+    b.addEventListener("click", () => chooseMap(id));
+    box.appendChild(b);
+  }
+}
+function chooseMap(id) {
+  AudioSys.init(); AudioSys.resume();
+  document.getElementById("splash").classList.add("hidden");
+  if (id === MAP_ID) resetGame(); // carte par défaut : on entame la partie fraîchement
+  else pickMap(id); // change de carte + réinitialise (useMap/resetGame/banner inclus)
+}
+
+/* ---------------- Définition des tours ---------------- */
+const TOWERS = {
+  beaver: {
+    name: "Castor-ingénieur", icon: "🦫", cost: 60, blocks: true,
+    tag: "Soutien — n'attaque pas",
+    levels: [
+      { cost: 0,   aura: 2.0, buff: 0.15, thawAt: 3.0, desc: "Aura : +15 % de cadence aux tours voisines. Dégèle les tours dans son rayon quelques secondes après le début d'une tempête." },
+      { cost: 45,  aura: 3.0, buff: 0.25, thawAt: 3.0, desc: "N2 : rayon élargi, +25 % de cadence. Dégèle après quelques secondes de tempête." },
+      { cost: 80,  aura: 3.0, buff: 0.35, thawAt: 0.0, desc: "N3 : +35 % de cadence et dégèle INSTANTANÉMENT au début d'une tempête." }
+    ]
+  },
+  turbine: {
+    name: "Éolienne à impulsions", icon: "⚡", cost: 100, range: 130, blocks: true,
+    tag: "Chaîne électrique",
+    levels: [
+      { cost: 0,   dmg: 12, targets: 3, rate: 1.4, stun: 0,   desc: "Chaîne électrique : 12 dégâts sur 3 cibles." },
+      { cost: 70,  dmg: 16, targets: 5, rate: 1.6, stun: 0,   desc: "N2 : 16 dégâts sur 5 cibles, plus rapide." },
+      { cost: 120, dmg: 24, targets: 5, rate: 1.8, stun: 0.5, desc: "N3 : 24 dégâts + paralysie de 0,5 s." }
+    ]
+  },
+  plasma: {
+    name: "Lance-neige plasma", icon: "❄", cost: 80, range: 155, blocks: true,
+    tag: "Cône ralentissant",
+    levels: [
+      { cost: 0,   dmg: 3, slow: 0.40, dur: 2.0, cone: 44, freeze: 0,   rate: 0.9,  desc: "Cône de ralentissement : -40 % de vitesse pendant 2 s + petits dégâts." },
+      { cost: 60,  dmg: 5, slow: 0.55, dur: 2.2, cone: 60, freeze: 0,   rate: 0.95, desc: "N2 : cône élargi, -55 % de vitesse." },
+      { cost: 100, dmg: 7, slow: 0.70, dur: 2.5, cone: 72, freeze: 1.0, rate: 1.0,  desc: "N3 : -70 % de vitesse + gel (immobilise 1 s)." }
+    ]
+  },
+  cabane: {
+    name: "Cabane à sucre", icon: "🍁", cost: 50, blocks: false,
+    tag: "Piège au sol",
+    levels: [
+      { cost: 0,  radius: 72, slow: 0.50, dps: 6,  active: 8, recharge: 12, desc: "Nappe de sirop : -50 % de vitesse + dégâts sur la durée, active 8 s puis recharge 12 s." },
+      { cost: 40, radius: 78, slow: 0.52, dps: 10, active: 8, recharge: 8,  desc: "N2 : recharge en 8 s et plus de dégâts." },
+      { cost: 70, radius: 96, slow: 0.60, dps: 14, active: 9, recharge: 8,  desc: "N3 : zone élargie, -60 % de vitesse." }
+    ]
+  },
+  tesla: {
+    name: "Pylône Tesla", icon: "🗼", cost: 150, range: 150, blocks: true,
+    tag: "Anti-blindés — coup puissant",
+    levels: [
+      { cost: 0,   dmg: 70,  rate: 0.55, cannons: 1, antiArmor: 1.6, aoe: 0,  aoeDmg: 0,   desc: "Un éclair concentré : 70 dégâts au seul ennemi le plus avancé. ×1.6 sur les blindés." },
+      { cost: 100, dmg: 95,  rate: 0.58, cannons: 2, antiArmor: 1.8, aoe: 0,  aoeDmg: 0,   desc: "N2 : double décharge de 95 dégâts, ×1.8 sur tout ce qui porte une armure (y compris le Grand Froid)." },
+      { cost: 160, dmg: 120, rate: 0.62, cannons: 2, antiArmor: 1.8, aoe: 60, aoeDmg: 50, desc: "N3 : 120 dégâts ×2 + une onde électrique de 50 dégâts autour de l'impact (zone 60 px)." }
+    ]
+  },
+  brise: {
+    name: "Brise-glace", icon: "🧊", cost: 120, blocks: true,
+    tag: "Impulsion de glace — zone",
+    levels: [
+      { cost: 0,   radius: 80,  dmg: 25, rate: 0.8,  knock: 0,  desc: "Impulsion cryogénique : 25 dégâts à tous les ennemis dans un rayon de 80 px." },
+      { cost: 85,  radius: 110, dmg: 34, rate: 0.85, knock: 0,  desc: "N2 : zone élargie à 110 px, 34 dégâts. Les Foreurs résistent à la moitié des dégâts de zone." },
+      { cost: 140, radius: 125, dmg: 46, rate: 0.9,  knock: 40, desc: "N3 : 46 dégâts + onde de choc qui repousse les ennemis de 40 px en arrière (le Grand Froid résiste à 75 %)." }
+    ]
+  },
+  drone: {
+    name: "Drone sentinelle", icon: "🛸", cost: 200, range: 115, blocks: false,
+    tag: "Tour mobile",
+    levels: [
+      { cost: 0,   dmg: 9,  rate: 2.2, speed: 125, cannons: 1, desc: "Patrouille trace ta patrouille (jusqu'à 4 points) et canarde les ennemis en vol." },
+      { cost: 120, dmg: 14, rate: 2.5, speed: 155, cannons: 1, desc: "N2 : plus vite, plus de dégâts." },
+      { cost: 180, dmg: 14, rate: 2.8, speed: 175, cannons: 2, desc: "N3 : double canon — deux salves à la fois." }
+    ]
+  }
+};
+const SHOP_ORDER = ["beaver", "turbine", "plasma", "cabane", "tesla", "brise", "drone"];
+
+/* ---------------- Ennemis ---------------- */
+const BOSS_HP_BASE = 7500; // PV de base du Grand Froid (× le multiplicateur de vague)
+/* --- Boss Le Grand Froid : seuils de phases & cadences (P0-1) --- */
+const GF_TH2 = 0.66, GF_TH3 = 0.33;       // seuils de PV (fraction) des transitions 1→2 puis 2→3
+const GF_WARN2 = 0.72, GF_WARN3 = 0.39;    // pré-avertissement à l'approche des seuils (P0-2, ~2-3 s avant)
+const GF_SUMMON_FIRST = 2, GF_SUMMON_PERIOD = 8; // escorte de phase 2 : premier paquet 2 s après l'entrée, puis toutes les 8 s
+const GF_BANNER_GAP_MS = 1400;            // saut 1→3 en une image : les deux annonces se lisent en séquence
+/* --- Particules & effets (P0-4) --- */
+const PARTICLE_CAP = 900, PARTICLE_CAP_BOSS = 220; // plafond strict des particules pendant que le Grand Froid est au front
+const FROST_FX_DUR = 3.2;                 // s : durée de la rampe de givre au changement de phase
+const ENEMIES = {
+  glitch:   { name: "Glitch",    hp: 12,  speed: 82,  reward: 6,   dmg: 1, radius: 9,  color: "#ff7b00" },
+  essaim:   { name: "Essaim",    hp: 6,   speed: 102, reward: 2,   dmg: 1, radius: 5,  color: "#ffd166" },
+  blinde:   { name: "Blindé",    hp: 135, speed: 37,  reward: 15,  dmg: 3, radius: 13, color: "#9fb3d1", slowResist: 0.5, armor: true },
+  saboteur: { name: "Saboteur",  hp: 45,  speed: 60,  reward: 12,  dmg: 2, radius: 10, color: "#c77dff" },
+  foreur:   { name: "Foreur",    hp: 30,  speed: 120, reward: 9,   dmg: 2, radius: 8,  color: "#58c7ff", aoeResist: 0.5 },
+  pillard:  { name: "Pillard",   hp: 22,  speed: 132, reward: 3,   dmg: 1, radius: 8,  color: "#ff9de2", steal: 20 },
+  decharge: { name: "La Décharge", hp: 1000, speed: 27, reward: 120, dmg: 6, radius: 24, color: "#ff4d5e", boss: true, slowResist: 0.65 },
+  grandfroid: { name: "Le Grand Froid", hp: BOSS_HP_BASE, speed: 24, reward: 1000, dmg: 12, radius: 34, color: "#bfefff", boss: true, armor: true, slowResist: 0.7, knockResist: 0.75, auraR: 150, auraSlow: 0.4, auraEnr: 0.55 }
+};
+// le boss compte comme blindé : le Pylône Tesla est son contre-naturel (×1.8 aux niveaux 2-3)
+
+/* ---------------- La Surcharge du Cœur (l'ultime) ---------------- */
+const SURCHARGE = { cost: 300, cooldown: 90, damage: 600, stun: 2.0, bossPct: 0.08 };
+
+/* ---------------- Vagues ---------------- */
+// groups: {type, n, interval, delay} — delay = secondes après le début
+const WAVES = [
+  { name: "Éclaireurs", title: "Vague 1 — Éclaireurs",
+    intel: "8 Glitchs rapides. Des éclaireurs qui testent la Ligne.",
+    groups: [{ type: "glitch", n: 8, interval: 1.0, delay: 0.5 }], hpMult: 1.0 },
+  { name: "La Marée", title: "Vague 2 — La Marée",
+    intel: "10 Glitchs + 16 Essaims. Une vague nombreuse : les cônes et les trappes à sirop adorent ça.",
+    groups: [ { type: "glitch", n: 10, interval: 0.8, delay: 0.5 }, { type: "essaim", n: 16, interval: 0.45, delay: 4.0 } ], hpMult: 1.0 },
+  { name: "Les Blindés", title: "Vague 3 — Les Blindés",
+    intel: "6 Blindés lents et coriaces + 6 Glitchs en escorte. Les ralentissements sont réduits de moitié sur les Blindés.",
+    groups: [ { type: "blinde", n: 6, interval: 1.6, delay: 0.5 }, { type: "glitch", n: 6, interval: 0.9, delay: 6.0 } ], hpMult: 1.0 },
+  { name: "Sabotage", title: "Vague 4 — Sabotage",
+    intel: "4 Saboteurs qui désactivent tes tours 5 secondes + 8 Glitchs. Risque de tempête de verglas : 40 % !",
+    groups: [ { type: "saboteur", n: 4, interval: 2.6, delay: 0.5 }, { type: "glitch", n: 8, interval: 0.8, delay: 3.0 } ], hpMult: 1.15, storm: 0.4 },
+  { name: "La Tempête", title: "Vague 5 — La Tempête",
+    intel: "Grosse vague mixte : 12 Glitchs, 20 Essaims, 5 Blindés, 2 Saboteurs. Tempête de verglas GARANTIE — prépare tes castors !",
+    groups: [
+      { type: "glitch", n: 12, interval: 0.65, delay: 0.5 },
+      { type: "essaim", n: 20, interval: 0.38, delay: 3.0 },
+      { type: "blinde", n: 5, interval: 1.8, delay: 8.0 },
+      { type: "saboteur", n: 2, interval: 4.0, delay: 12.0 }
+    ], hpMult: 1.3, storm: 1.0 },
+  { name: "La Décharge", title: "Vague 6 — La Décharge",
+    intel: "Mini-boss : LA DÉCHARGE (gros PV, impulsions EMP qui coupent le courant des Éoliennes proches) + 24 Essaims en escorte. Risque de tempête : 40 %.",
+    groups: [ { type: "essaim", n: 24, interval: 0.4, delay: 0.5 }, { type: "decharge", n: 1, interval: 1, delay: 5.0 } ], hpMult: 1.45, storm: 0.4 },
+  { name: "Les Foreurs", title: "Vague 7 — Les Foreurs",
+    intel: "14 Foreurs rapides qui filent en ligne droite et résistent aux dégâts de zone (-50 %) + 8 Glitchs. Contre eux : vise clair, vise fort, vise le mono-cible (Pylône Tesla).",
+    groups: [ { type: "foreur", n: 14, interval: 0.7, delay: 0.5 }, { type: "glitch", n: 8, interval: 0.8, delay: 3.0 } ], hpMult: 1.55, storm: 0.5 },
+  { name: "Les Pillards", title: "Vague 8 — Les Pillards",
+    intel: "12 Pillards rapides : ils grattent à peine le Cœur, mais VOLENT 20 hydro-crédits chacun s'ils l'atteignent ! 16 Essaims en couverture.",
+    groups: [ { type: "pillard", n: 12, interval: 0.8, delay: 0.5 }, { type: "essaim", n: 16, interval: 0.5, delay: 3.0 } ], hpMult: 1.65, storm: 0.5 },
+  { name: "L'Escadrille", title: "Vague 9 — L'Escadrille",
+    intel: "12 Glitchs, 20 Essaims, 6 Blindés, 10 Foreurs et 4 Pillards. Une vraie mêlée — une seule famille de tours ne suffira pas.",
+    groups: [
+      { type: "glitch", n: 12, interval: 0.6, delay: 0.5 },
+      { type: "essaim", n: 20, interval: 0.38, delay: 3.0 },
+      { type: "blinde", n: 6, interval: 1.7, delay: 6.0 },
+      { type: "foreur", n: 10, interval: 0.7, delay: 9.0 },
+      { type: "pillard", n: 4, interval: 1.2, delay: 13.0 }
+    ], hpMult: 1.8, storm: 0.6 },
+  { name: "La Poudrerie", title: "Vague 10 — La Poudrerie",
+    intel: "18 Foreurs en rafales, 10 Blindés et 4 Saboteurs. Tempête de verglas GARANTIE — tes castors ne sont plus une option, Gardien.",
+    groups: [
+      { type: "foreur", n: 18, interval: 0.62, delay: 0.5 },
+      { type: "blinde", n: 10, interval: 1.6, delay: 8.0 },
+      { type: "saboteur", n: 4, interval: 2.8, delay: 12.0 }
+    ], hpMult: 2.0, storm: 1.0 },
+  { name: "L'Avant-garde", title: "Vague 11 — L'Avant-garde",
+    intel: "Tout ce que la Horde sait faire : 16 Glitchs, 30 Essaims, 12 Blindés, 10 Foreurs, 8 Pillards, 4 Saboteurs. Une rumeur de froid monte du nord… Risque de tempête : 80 %.",
+    groups: [
+      { type: "glitch", n: 16, interval: 0.58, delay: 0.5 },
+      { type: "essaim", n: 30, interval: 0.34, delay: 2.0 },
+      { type: "blinde", n: 12, interval: 1.55, delay: 7.0 },
+      { type: "foreur", n: 10, interval: 0.66, delay: 10.0 },
+      { type: "pillard", n: 8, interval: 1.1, delay: 14.0 },
+      { type: "saboteur", n: 4, interval: 3.2, delay: 18.0 }
+    ], hpMult: 2.2, storm: 0.8 },
+  { name: "Le Grand Froid", title: "Vague 12 — LE GRAND FROID",
+    intel: "LE BOSS : Le Grand Froid (18 000 PV, aura gelante qui ralentit les tours). Phase 1 : il marche ; sous 66 % il convoque des Glitchs d'escorte (phase 2) ; sous 33 % IL EST ENRAGÉ (phase 3 : vitesse ×1.5, aura renforcée) + 10 Foreurs + 12 Glitchs d'escorte. Tout ce que tu as bâti, dans une seule tempête. La Surcharge du Cœur brûle fort contre les géants : 8 % des PV max.",
+    groups: [
+      { type: "foreur", n: 10, interval: 0.8, delay: 0.5 },
+      { type: "glitch", n: 12, interval: 0.6, delay: 6.0 },
+      { type: "grandfroid", n: 1, interval: 1, delay: 14.0 }
+    ], hpMult: 2.4, storm: 0.5 }
+];
+
+const TOTAL_WAVES = 12;
+
+const QUES = [ // répliques québécoises
+  "C'est tiguidou !", "Lâche pas, Gardien !", "Bien glacé, la Horde dérape !",
+  "Ça roule — la Ligne tient le coup !", "Tabarnouche, quel barrage !",
+  "Tu gères ça comme un vrai castor !", "La tempête passe, le Nord reste.", "Belle job de neige, Gardien !"
+];
+const SELL_RATE = 0.7;
+const BEST_KEY = "nord2087_best";
+
+/* ---------------- Moteur audio (WebAudio 100 % généré) ---------------- */
+const AudioSys = {
+  ctx: null, master: null, muted: false, padOn: false,
+  init() {
+    if (this.ctx) return;
+    try {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) { return; }
+    this.master = this.ctx.createGain();
+    this.master.gain.value = 0.55;
+    this.master.connect(this.ctx.destination);
+    this.startPad();
+  },
+  resume() { if (this.ctx && this.ctx.state === "suspended") this.ctx.resume(); },
+  now() { return this.ctx ? this.ctx.currentTime : 0; },
+  env(g, t, a, peak, d) {
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(peak, t + a);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + a + d);
+  },
+  tone(freq, type, a, d, peak, slideTo) {
+    if (!this.ctx || this.muted) return;
+    const t = this.now(), o = this.ctx.createOscillator(), g = this.ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + a + d);
+    this.env(g, t, a, peak, d);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + a + d + 0.05);
+  },
+  noise(dur, peak, filterFreq, filterType) {
+    if (!this.ctx || this.muted) return;
+    const t = this.now(), len = Math.floor(this.ctx.sampleRate * dur);
+    const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const src = this.ctx.createBufferSource(); src.buffer = buf;
+    const f = this.ctx.createBiquadFilter(); f.type = filterType || "lowpass"; f.frequency.value = filterFreq || 1200;
+    const g = this.ctx.createGain(); this.env(g, t, 0.005, peak, dur);
+    src.connect(f); f.connect(g); g.connect(this.master);
+    src.start(t); src.stop(t + dur + 0.05);
+  },
+  zap()   { this.tone(900 + Math.random() * 500, "sawtooth", 0.004, 0.12, 0.10, 90); this.noise(0.08, 0.06, 4000, "highpass"); },
+  bolt()  { this.tone(1400 + Math.random() * 300, "square", 0.003, 0.07, 0.05, 300); },
+  blast() { this.tone(220, "sawtooth", 0.005, 0.18, 0.09, 60); this.noise(0.16, 0.07, 1800); },
+  boom()  { this.tone(70, "sine", 0.005, 0.4, 0.30, 30); this.noise(0.35, 0.22, 700); },
+  place() { this.tone(420, "triangle", 0.004, 0.12, 0.14, 640); },
+  coin()  { this.tone(1180, "sine", 0.004, 0.09, 0.10, 1750); },
+  upgrade(){ this.tone(520, "triangle", 0.005, 0.1, 0.12); setTimeout(() => this.tone(660, "triangle", 0.005, 0.1, 0.12), 70); setTimeout(() => this.tone(880, "triangle", 0.005, 0.16, 0.13), 140); },
+  sell()  { this.tone(700, "triangle", 0.005, 0.12, 0.12, 350); },
+  denied(){ this.tone(130, "square", 0.01, 0.18, 0.10, 90); },
+  thaw()  { [880, 1174, 1568].forEach((f, i) => setTimeout(() => this.tone(f, "sine", 0.005, 0.2, 0.08), i * 60)); },
+  horn()  { this.tone(160, "sawtooth", 0.02, 0.5, 0.16, 150); this.tone(240, "sawtooth", 0.02, 0.5, 0.12, 230); },
+  alarm() { for (let i = 0; i < 3; i++) setTimeout(() => { this.tone(600, "sawtooth", 0.4, 0.2, 0.13, 950); this.tone(600, "sawtooth", 0.4, 0.2, 0.13, 380); }, i * 700); },
+  emp()   { this.tone(120, "sine", 0.01, 0.6, 0.3, 35); this.noise(0.5, 0.14, 500); },
+  sabot() { this.tone(980, "square", 0.003, 0.06, 0.07); this.tone(660, "square", 0.003, 0.06, 0.07); },
+  freeze(){ this.noise(0.6, 0.10, 6000, "highpass"); this.tone(3000, "sine", 0.005, 0.3, 0.05, 1200); },
+  icePulse() { // brise-glace : craquement cristallin + pompage grave
+    this.noise(0.35, 0.12, 3000, "highpass");
+    this.tone(180, "sine", 0.01, 0.4, 0.22, 60);
+    this.tone(2800 + Math.random() * 900, "sine", 0.004, 0.25, 0.06, 900);
+  },
+  tesla() { // décharge massive du pylône
+    this.tone(1600 + Math.random() * 400, "sawtooth", 0.003, 0.2, 0.14, 120);
+    this.noise(0.2, 0.15, 5200, "highpass");
+    this.tone(80, "sine", 0.005, 0.35, 0.25, 40);
+  },
+  bossRoar() { // le Grand Froid arrive
+    this.tone(55, "sawtooth", 0.1, 1.4, 0.34, 38);
+    this.tone(82, "sawtooth", 0.15, 1.2, 0.25, 55);
+    this.noise(1.6, 0.18, 900);
+  },
+  surchargeGo() { // l'ultime du Cœur
+    this.tone(100, "sawtooth", 0.02, 0.9, 0.30, 50);
+    this.tone(1500, "sine", 0.005, 0.5, 0.12, 220);
+    this.noise(0.9, 0.28, 1400);
+    [523, 784, 1046].forEach((f, i) => setTimeout(() => this.tone(f, "triangle", 0.005, 0.3, 0.10), i * 90));
+  },
+  win()   { [523, 659, 784, 1046, 784, 1046, 1318].forEach((f, i) => setTimeout(() => this.tone(f, "triangle", 0.005, 0.28, 0.16), i * 130)); this.noise(1.2, 0.05, 8000, "highpass"); },
+  lose()  { [400, 340, 290, 220, 160].forEach((f, i) => setTimeout(() => this.tone(f, "sawtooth", 0.02, 0.42, 0.14, f * 0.94), i * 200)); },
+  startPad() {
+    if (this.padOn || !this.ctx) return;
+    this.padOn = true;
+    const c = this.ctx, g = c.createGain();
+    const filt = c.createBiquadFilter(); filt.type = "lowpass"; filt.frequency.value = 280; filt.Q.value = 2;
+    const lfo = c.createOscillator(), lfoG = c.createGain();
+    lfo.frequency.value = 0.07; lfoG.gain.value = 120; lfo.connect(lfoG); lfoG.connect(filt.frequency); lfo.start();
+    g.gain.value = 0.05;
+    [110, 164.8, 220.5].forEach(f => {
+      const o = c.createOscillator(); o.type = "sawtooth"; o.frequency.value = f * (1 + (Math.random() - .5) * 0.004);
+      o.connect(filt); o.start();
+    });
+    // couche rythmée qui monte pendant les vagues : pulsation binaire · niveau d'intensité
+    const pulseGate = c.createGain(); pulseGate.gain.value = 0;
+    const pulseLevel = c.createGain(); pulseLevel.gain.value = 0;
+    const po = c.createOscillator(); po.type = "square"; po.frequency.value = 55;
+    const pf = c.createBiquadFilter(); pf.type = "lowpass"; pf.frequency.value = 400;
+    po.connect(pf); pf.connect(pulseGate); pulseGate.connect(pulseLevel); pulseLevel.connect(g); po.start();
+    const plfo = c.createOscillator(), plfoG = c.createGain();
+    plfo.frequency.value = 2.2; plfoG.gain.value = 0.5; plfo.connect(plfoG); plfo.start();
+    const shaper = c.createWaveShaper();
+    shaper.curve = (() => { const n = 256, c2 = new Float32Array(n); for (let i = 0; i < n; i++) c2[i] = (i / n) > 0.66 ? 1 : 0; return c2; })();
+    plfoG.connect(shaper); shaper.connect(pulseGate.gain);
+    this.padFilter = filt; this.padGain = g; this.pulseLevel = pulseLevel;
+  },
+  setIntensity(x) { // 0 = calme, 1 = vague en cours, 2 = tempête
+    if (!this.padGain) return;
+    this.padGain.gain.setTargetAtTime(0.045 + x * 0.05, this.now(), 0.8);
+    this.padFilter.frequency.setTargetAtTime(280 + x * 420, this.now(), 0.8);
+    this.pulseLevel.gain.setTargetAtTime(x >= 1 ? 0.12 : 0.0, this.now(), 1.0);
+  },
+  toggleMute() {
+    this.muted = !this.muted;
+    if (this.master) this.master.gain.value = this.muted ? 0 : 0.55;
+    return this.muted;
+  }
+};
+
+/* ---------------- État du jeu ---------------- */
+const G = {
+  phase: "prep",        // prep | wave | over
+  waveIndex: -1,        // vague en cours (0..5), -1 = aucune
+  waveTime: 0,
+  spawnQueue: [],
+  credits: 220,
+  heartHp: 20, heartMax: 20,
+  score: 0,
+  kills: 0, towersPlaced: 0, wavesDone: 0,
+  heartHit: false,
+  speed: 1,
+  paused: false,
+  over: false, won: false,
+  path: [],             // liste de points {x,y}
+  storm: { active: false, decided: false, willStorm: false, t: 0, dur: 0 },
+  towers: [], enemies: [], particles: [], bolts: [], rings: [], floats: [],
+  time: 0,
+  shake: 0,
+  stormWarned: false,
+  surchargeCd: 0,    // recharge de la Surcharge du Cœur (s)
+  surchargeUses: 0,
+  steals: 0          // hydro-crédits volés par les Pillards
+};
+let grid = []; // [cx][cy] -> tower ou null
+function clearGrid() {
+  grid = [];
+  for (let x = 0; x < GW; x++) { grid[x] = []; for (let y = 0; y < GH; y++) grid[x][y] = null; }
+}
+clearGrid();
+
+/* ---------------- Grille & pathfinding (BFS) ---------------- */
+function cellCenter(cx, cy) { return { x: cx * TILE + TILE / 2, y: cy * TILE + TILE / 2 }; }
+function inGrid(cx, cy) { return cx >= 0 && cx < GW && cy >= 0 && cy < GH; }
+function isSpawnOrHeart(cx, cy) {
+  return (cx === SPAWN.cx && cy === SPAWN.cy) || (cx === HEART.cx && cy === HEART.cy);
+}
+function cellBlockedForPath(cx, cy, extraBlock) {
+  const t = grid[cx][cy];
+  if (t && t.def.blocks) return true;
+  if (DECOR.has(cx + "," + cy)) return true; // les sapins/rochers/pylones bordent le chemin
+  if (extraBlock && extraBlock.cx === cx && extraBlock.cy === cy) return true;
+  return false;
+}
+// BFS du portail vers le Cœur ; extraBlock = case qu'on teste pour un placement
+function computePath(extraBlock) {
+  const key = (x, y) => x + "," + y;
+  const prev = new Map(), seen = new Set([key(SPAWN.cx, SPAWN.cy)]);
+  const q = [{ cx: SPAWN.cx, cy: SPAWN.cy }];
+  while (q.length) {
+    const c = q.shift();
+    if (c.cx === HEART.cx && c.cy === HEART.cy) break;
+    const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+    for (const [dx, dy] of dirs) {
+      const nx = c.cx + dx, ny = c.cy + dy;
+      if (!inGrid(nx, ny) || seen.has(key(nx, ny))) continue;
+      if (cellBlockedForPath(nx, ny, extraBlock)) continue;
+      seen.add(key(nx, ny)); prev.set(key(nx, ny), key(c.cx, c.cy));
+      q.push({ cx: nx, cy: ny });
+    }
+  }
+  // reconstruire depuis le Cœur
+  const hk = key(HEART.cx, HEART.cy), sk = key(SPAWN.cx, SPAWN.cy);
+  if (!prev.has(hk) && hk !== sk) return null;
+  const cells = [];
+  let k = hk;
+  while (k !== sk) { const [x, y] = k.split(",").map(Number); cells.push({ cx: x, cy: y }); k = prev.get(k); }
+  cells.push({ cx: SPAWN.cx, cy: SPAWN.cy });
+  cells.reverse();
+  const pts = cells.map(c => cellCenter(c.cx, c.cy));
+  // le chemin commence un peu hors écran (sortie du portail)
+  pts[0].x = -20; pts[0].y = SPAWN.cy * TILE + TILE / 2;
+  return pts;
+}
+// Replace le progrès de chaque ennemi sur le nouveau chemin (mazing)
+function repathEnemies() {
+  const pts = G.path;
+  if (pts.length < 2) return;
+  for (const e of G.enemies) {
+    let best = 0, bestD = Infinity, bestT = 0;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1];
+      const abx = b.x - a.x, aby = b.y - a.y;
+      const len2 = abx * abx + aby * aby || 1;
+      let t = ((e.x - a.x) * abx + (e.y - a.y) * aby) / len2;
+      t = Math.max(0, Math.min(1, t));
+      const px = a.x + abx * t, py = a.y + aby * t;
+      const d = (e.x - px) * (e.x - px) + (e.y - py) * (e.y - py);
+      // préfère rester près de sa progression actuelle
+      const penalty = Math.abs(i - (e.seg || 0)) * 40;
+      if (d + penalty < bestD) { bestD = d + penalty; best = i; bestT = t; }
+    }
+    e.seg = best; e.segT = bestT;
+  }
+}
+function pathLength() {
+  let L = 0;
+  for (let i = 0; i < G.path.length - 1; i++) {
+    const a = G.path[i], b = G.path[i + 1];
+    L += Math.hypot(b.x - a.x, b.y - a.y);
+  }
+  return L;
+}
+
+/* ---------------- Tours ---------------- */
+let towerSeq = 0;
+function makeTower(type, cx, cy) {
+  const def = TOWERS[type];
+  const p = cellCenter(cx, cy);
+  const t = {
+    id: ++towerSeq, type, def, cx, cy, x: p.x, y: p.y,
+    lvl: 0, invested: def.cost,
+    cool: 0, angle: -Math.PI / 2, blade: Math.random() * Math.PI * 2,
+    frozen: false, thawed: false, disabled: 0,
+    // cabane : cycle actif/recharge
+    cabState: "active", cabT: 0,
+    // drone : patrouille
+    patrol: [], patrolI: 0, patrolActive: false, hover: 0,
+    flash: 0
+  };
+  return t;
+}
+function towerLevel(t) { return t.def.levels[t.lvl]; }
+function refundOf(t) { return Math.floor(t.invested * SELL_RATE); }
+
+function canPlaceAt(cx, cy, type) {
+  if (!inGrid(cx, cy)) return { ok: false, why: "Hors de la carte, Gardien." };
+  if (isSpawnOrHeart(cx, cy)) return { ok: false, why: "Pas sur le portail ni sur le Cœur, Gardien !" };
+  if (grid[cx][cy]) return { ok: false, why: "Cette case est déjà occupée." };
+  if (DECOR.has(cx + "," + cy)) return { ok: false, why: "Le décor est du décor, Gardien — on ne construit pas sur les sapins !" };
+  const def = TOWERS[type];
+  if (def.blocks) {
+    const p = computePath({ cx, cy });
+    if (!p) return { ok: false, why: "Oups ! Ça bloquerait tout passage pour la Horde — impossible, Gardien." };
+  }
+  if (G.credits < def.cost) return { ok: false, why: "Pas assez d'hydro-crédits, Gardien ! (" + def.cost + " ₡ requis)" };
+  return { ok: true };
+}
+function placeTower(type, cx, cy) {
+  const chk = canPlaceAt(cx, cy, type);
+  if (!chk.ok) { toast(chk.why, "warn"); AudioSys.denied(); return null; }
+  const t = makeTower(type, cx, cy);
+  G.credits -= t.def.cost;
+  grid[cx][cy] = t;
+  G.towers.push(t);
+  G.towersPlaced++;
+  // placée en pleine tempête : elle gèle aussi (sauf protection castor)
+  if (G.storm.active && t.type !== "beaver") {
+    const L2 = beaverAuraInfo(t);
+    if (L2 && L2.thawAt <= 0) t.thawed = true;
+    else t.frozen = true;
+  }
+  if (type === "drone") { startPatrolMode(t); }
+  computeRepath();
+  AudioSys.place();
+  burst(t.x, t.y, "#48e6ff", 14, 90);
+  updateHUD();
+  return t;
+}
+function computeRepath() {
+  const p = computePath();
+  if (p) { G.path = p; repathEnemies(); }
+}
+function removeTower(t) {
+  grid[t.cx][t.cy] = null;
+  const i = G.towers.indexOf(t);
+  if (i >= 0) G.towers.splice(i, 1);
+}
+function beaverAuraInfo(t) {
+  // Est-ce que la tour t est dans l'aura d'au moins un castor (et ce castor est actif) ?
+  for (const b of G.towers) {
+    if (b.type !== "beaver" || b === t || b.disabled > 0) continue;
+    const L = towerLevel(b);
+    if (Math.hypot(t.x - b.x, t.y - b.y) <= L.aura * TILE) return L;
+  }
+  return null;
+}
+function beaverBuff(t) {
+  // meilleure aura de cadence applicable
+  const L = beaverAuraInfo(t);
+  return L ? L.buff : 0;
+}
+function tryUpgrade(t) {
+  if (t.lvl >= 2) { toast("Niveau max atteint — c'est déjà une bête !"); return; }
+  const L = t.def.levels[t.lvl + 1];
+  if (G.credits < L.cost) { toast("Pas assez d'hydro-crédits (" + L.cost + " ₡ pour N" + (t.lvl + 2) + ").", "warn"); AudioSys.denied(); return; }
+  G.credits -= L.cost;
+  t.invested += L.cost;
+  t.lvl++;
+  t.flash = 0.6;
+  burst(t.x, t.y, "#ffd166", 18, 120);
+  AudioSys.upgrade();
+  toast(t.def.icon + " " + t.def.name + " → N" + (t.lvl + 1) + " ! " + randomQUIP(), "good");
+  refreshTowerPanel(); updateHUD();
+}
+function trySell(t) {
+  const r = refundOf(t);
+  G.credits += r;
+  AudioSys.sell();
+  toast("Tour revendue : +" + r + " ₡ (70 % remboursé).");
+  burst(t.x, t.y, "#ffd166", 14, 100);
+  deselectTower();
+  removeTower(t);
+  computeRepath();
+  updateHUD();
+}
+
+/* ---------------- Ennemis ---------------- */
+function spawnEnemy(type, hpMult) {
+  const d = ENEMIES[type];
+  const p = G.path[0];
+  const e = {
+    type, def: d, x: p.x - 30 - Math.random() * 30, y: p.y + (Math.random() - 0.5) * 14,
+    hp: d.hp * hpMult, maxHp: d.hp * hpMult,
+    speed: d.speed, seg: 0, segT: 0,
+    slowT: 0, slowAmt: 0, stun: 0, freeze: 0, freezeImmune: 0,
+    dotT: 0, dotDps: 0,
+    hit: 0, dead: false,
+    glitchSeed: Math.random() * 100,
+    sabotDone: 0, sabotChannel: 0,
+    empT: 4.0, // boss : première impulsion
+    xa: (Math.random() - 0.5) * 22, // décalage perpendiculaire pour les essaims
+    // boss Le Grand Froid
+    gfPhase: 1, gfSummonT: 2, enraged: false,
+    gfWarn2: false, gfWarn3: false // pré-avertissements des seuils 1→2 et 2→3 (P0-2)
+  };
+  G.enemies.push(e);
+  if (type === "grandfroid") { // arrivée dramatique du boss
+    AudioSys.bossRoar();
+    G.shake = Math.max(G.shake, 16);
+    banner("⚠ LE GRAND FROID APPROCHE ! ⚠", true);
+    ring(e.x, e.y, "#bfefff", 220);
+    ensureFrostOverlay("cold"); ensureFrostOverlay("rage"); // P0-4 : repli — préchargé AVANT le combat (voir startWave)
+  }
+  return e;
+}
+function enemyProgress(e) { return e.seg + e.segT; }
+function killEnemy(e) {
+  if (e.dead) return;
+  e.dead = true;
+  G.kills++;
+  G.credits += e.def.reward;
+  addFloat(e.x, e.y - 14, "+" + e.def.reward + " ₡", "#ffd166");
+  AudioSys.boom();
+  burst(e.x, e.y, e.def.color, e.def.boss ? 40 : 14, e.def.boss ? 220 : 130);
+  ring(e.x, e.y, e.def.color, e.def.boss ? 120 : 60);
+  if (e.def.boss) { G.shake = Math.max(G.shake, 14); banner(e.def.name.toUpperCase() + (e.type === "grandfroid" ? " EST TOMBÉ ! " : " EST TOMBÉE ! ") + randomQUIP()); }
+  if (e.type === "grandfroid") {
+    G.shake = Math.max(G.shake, 22);
+    banner("LE GRAND FROID S'EST DISSOLVÉ ! Le Nord est sauf, Gardien ! ❄ " + randomQUIP());
+  }
+  updateHUD();
+}
+function enemyAtHeart(e) {
+  if (e.type === "pillard") { // les Pillards volent des crédits sans raser le Cœur
+    const stolen = Math.min(G.credits, e.def.steal);
+    G.credits -= stolen;
+    G.steals += stolen;
+    addFloat(e.x, e.y - 16, "-" + stolen + " ₡ volés !", "#ff9de2");
+    toast("Un Pillard a volé " + stolen + " hydro-crédits au Cœur !", "warn");
+    AudioSys.sabot();
+  }
+  G.heartHp -= e.def.dmg;
+  G.heartHit = true;
+  e.dead = true;
+  G.shake = Math.max(G.shake, 8 + e.def.dmg * 2);
+  const hp = cellCenter(HEART.cx, HEART.cy);
+  burst(hp.x, hp.y, "#ff4d5e", 22, 170);
+  ring(hp.x, hp.y, "#ff4d5e", 120);
+  AudioSys.emp();
+  if (G.heartHp <= 0) { G.heartHp = 0; gameOver(false); }
+  updateHUD();
+}
+
+/* ---------------- Combat des tours ---------------- */
+// modificateur de cadence près du Grand Froid (aura de gel, renforcée enragé)
+function gfAuraMult(t) {
+  if (G.phase !== "wave") return 1;
+  let mult = 1;
+  for (const e of G.enemies) {
+    if (e.type !== "grandfroid" || e.dead) continue;
+    if (Math.hypot(t.x - e.x, t.y - e.y) <= e.def.auraR) {
+      mult = Math.min(mult, 1 - (e.enraged ? e.def.auraEnr : e.def.auraSlow));
+    }
+  }
+  return mult;
+}
+function towerReadyRate(t, base) { return base * (1 + beaverBuff(t)) * gfAuraMult(t); }
+
+// Éolienne : chaîne électrique
+function turbineFire(t, L) {
+  const range = t.def.range;
+  let first = null, best = -1;
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    if (Math.hypot(e.x - t.x, e.y - t.y) <= range) {
+      const p = enemyProgress(e);
+      if (p > best) { best = p; first = e; }
+    }
+  }
+  if (!first) return false;
+  AudioSys.zap();
+  const hit = [first];
+  let cur = first, link = 55;
+  for (let k = 1; k < L.targets; k++) {
+    let nxt = null, nd = link;
+    for (const e of G.enemies) {
+      if (e.dead || hit.includes(e)) continue;
+      const d = Math.hypot(e.x - cur.x, e.y - cur.y);
+      if (d < nd) { nd = d; nxt = e; }
+    }
+    if (!nxt) break;
+    hit.push(nxt); cur = nxt; link = 70;
+  }
+  let from = { x: t.x, y: t.y - 26 };
+  for (const e of hit) {
+    damage(e, L.dmg);
+    if (L.stun) e.stun = Math.max(e.stun, L.stun);
+    bolt(from.x, from.y, e.x, e.y);
+    from = e;
+    burst(e.x, e.y, "#9be8ff", 3, 80);
+  }
+  t.cool = 1 / towerReadyRate(t, L.rate);
+  return true;
+}
+// Lance-neige : cône
+function plasmaFire(t, L) {
+  const range = t.def.range;
+  let best = null, bp = -1;
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    if (Math.hypot(e.x - t.x, e.y - t.y) <= range) {
+      const p = enemyProgress(e);
+      if (p > bp) { bp = p; best = e; }
+    }
+  }
+  if (!best) return false;
+  t.angle = Math.atan2(best.y - t.y, best.x - t.x);
+  AudioSys.blast();
+  const half = (L.cone * Math.PI / 180) / 2;
+  let n = 0;
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    const dx = e.x - t.x, dy = e.y - t.y, d = Math.hypot(dx, dy);
+    if (d > range) continue;
+    let a = Math.atan2(dy, dx) - t.angle;
+    while (a > Math.PI) a -= 2 * Math.PI;
+    while (a < -Math.PI) a += 2 * Math.PI;
+    if (Math.abs(a) <= half) {
+      applySlow(e, L.slow, L.dur);
+      if (L.freeze && e.freeze <= 0 && e.freezeImmune <= 0) e.freeze = L.freeze;
+      damage(e, L.dmg);
+      n++;
+    }
+  }
+  plasmaPuff(t, t.angle, L.cone, range);
+  t.cool = 1 / towerReadyRate(t, L.rate);
+  return n > 0;
+}
+// (la cabane tick en continu via cabaneTick, plus bas)
+// Pylône Tesla : éclair concentré, anti-blindés
+function teslaFire(t, L) {
+  const range = t.def.range;
+  let target = null, bp = -1;
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    if (Math.hypot(e.x - t.x, e.y - t.y) <= range) {
+      const p = enemyProgress(e);
+      if (p > bp) { bp = p; target = e; }
+    }
+  }
+  if (!target) return false;
+  t.angle = Math.atan2(target.y - t.y, target.x - t.x);
+  AudioSys.tesla();
+  let dmg = L.dmg;
+  if (target.def && target.def.armor) dmg *= L.antiArmor; // armes lourdes contre l'armure (y compris le Grand Froid)
+  for (let i = 0; i < L.cannons; i++) {
+    damage(target, dmg);
+    boltCharged(t.x, t.y - 40, target.x, target.y);
+    burst(target.x, target.y, "#ffe08a", 6, 110);
+  }
+  if (L.aoe > 0) { // N3 : surcharge — explosion à l'impact
+    ring(target.x, target.y, "#ffe08a", L.aoe);
+    burst(target.x, target.y, "#ffe08a", 18, 190);
+    AudioSys.boom();
+    for (const e of G.enemies) {
+      if (e.dead || e === target) continue;
+      if (Math.hypot(e.x - target.x, e.y - target.y) <= L.aoe) damage(e, L.aoeDmg, { aoe: true });
+    }
+  }
+  t.flash = 0.2;
+  t.cool = 1 / towerReadyRate(t, L.rate);
+  return true;
+}
+// Brise-glace : impulsion cryogénique en zone
+function brisePulse(t, L) {
+  let n = 0;
+  AudioSys.icePulse();
+  ring(t.x, t.y, "#bfefff", L.radius);
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    if (Math.hypot(e.x - t.x, e.y - t.y) <= L.radius) {
+      damage(e, L.dmg, { aoe: true });
+      if (L.knock > 0 && !e.dead) knockBack(e, L.knock);
+      n++;
+      burst(e.x, e.y, "#bfefff", 3, 90);
+    }
+  }
+  t.flash = 0.3;
+  t.cool = 1 / towerReadyRate(t, L.rate);
+  return n > 0;
+}
+// recul le long du chemin, avec résistance du boss
+function knockBack(e, px) {
+  let back = px * (1 - (e.def && e.def.knockResist ? e.def.knockResist : 0)); // le Grand Froid résiste à 75 %
+  let guard = 0;
+  while (back > 0 && guard++ < 12) {
+    const a = G.path[e.seg], b = G.path[Math.min(e.seg + 1, G.path.length - 1)];
+    const segLen = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+    const fromA = e.segT * segLen;
+    if (fromA >= back) { e.segT -= back / segLen; back = 0; }
+    else { back -= fromA; if (e.seg > 0) { e.seg--; e.segT = 1; } else { e.segT = 0; back = 0; } }
+  }
+  const a = G.path[e.seg], b = G.path[Math.min(e.seg + 1, G.path.length - 1)];
+  e.x = a.x + (b.x - a.x) * e.segT;
+  e.y = a.y + (b.y - a.y) * e.segT;
+}
+// Drone : se déplace et tire
+function droneUpdate(t, L, dt) {
+  t.hover += dt;
+  if (t.patrolActive && t.patrol.length > 0) {
+    const target = t.patrol[t.patrolI];
+    const dx = target.x - t.x, dy = target.y - t.y, d = Math.hypot(dx, dy);
+    const step = L.speed * dt;
+    if (d <= step) { t.x = target.x; t.y = target.y; t.patrolI = (t.patrolI + 1) % t.patrol.length; }
+    else { t.x += dx / d * step; t.y += dy / d * step; }
+  }
+}
+function droneFire(t, L) {
+  const range = t.def.range;
+  let best = null, bp = -1;
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    if (Math.hypot(e.x - t.x, e.y - t.y) <= range) {
+      const p = enemyProgress(e);
+      if (p > bp) { bp = p; best = e; }
+    }
+  }
+  if (!best) return false;
+  AudioSys.bolt();
+  const shots = L.cannons;
+  for (let i = 0; i < shots; i++) {
+    const off = (i - (shots - 1) / 2) * 10;
+    microBolt(t.x, t.y - 8, best.x + off, best.y);
+  }
+  damage(best, L.dmg * shots);
+  t.angle = Math.atan2(best.y - t.y, best.x - t.x);
+  t.cool = 1 / towerReadyRate(t, L.rate);
+  return true;
+}
+
+function damage(e, amt, opts) {
+  if (e.dead || G.over) return;
+  if (opts && opts.aoe && e.def.aoeResist) amt *= (1 - e.def.aoeResist); // les Foreurs résistent à la zone
+  e.hp -= amt;
+  e.hit = Math.max(e.hit, 0.08);
+  if (e.hp <= 0) killEnemy(e);
+}
+function applySlow(e, amt, dur) {
+  if (e.def.slowResist) amt *= (1 - e.def.slowResist);
+  if (amt > e.slowAmt || dur > e.slowT) { e.slowAmt = Math.max(e.slowAmt, amt); e.slowT = Math.max(e.slowT, dur); }
+}
+
+/* ---------------- La Surcharge du Cœur (l'ultime) ---------------- */
+function useSurcharge() {
+  if (G.over) return { ok: false, why: "over" };
+  if (G.phase !== "wave") { toast("La Surcharge ne fonctionne qu'en pleine vague, Gardien !", "warn"); return { ok: false, why: "hors-vague" }; }
+  if (G.surchargeCd > 0) { toast("Le Cœur recharge sa Surcharge (" + Math.ceil(G.surchargeCd) + " s)…", "warn"); return { ok: false, why: "recharge" }; }
+  if (G.credits < SURCHARGE.cost) { toast("Pas assez d'hydro-crédits pour la Surcharge (" + SURCHARGE.cost + " ₡) !", "warn"); return { ok: false, why: "credits" }; }
+  G.credits -= SURCHARGE.cost;
+  G.surchargeCd = SURCHARGE.cooldown;
+  G.surchargeUses++;
+  AudioSys.surchargeGo();
+  const hp = cellCenter(HEART.cx, HEART.cy);
+  ring(hp.x - 0, hp.y, "#fff", Math.max(W, H));
+  ring(hp.x, hp.y + 0, "#48e6ff", 300);
+  burst(hp.x, hp.y, "#ffe08a", 80, 420);
+  G.shake = Math.max(G.shake, 18);
+  let n = 0;
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    e.stun = Math.max(e.stun, SURCHARGE.stun);
+    if (e.def.boss) damage(e, e.maxHp * SURCHARGE.bossPct);
+    else damage(e, SURCHARGE.damage);
+    burst(e.x, e.y, "#ffe08a", 6, 160);
+    n++;
+  }
+  banner("⚡ SURCHARGE DU CŒUR ! ⚡", false);
+  toast(n + " ennemi" + (n > 1 ? "s" : "") + " frappé" + (n > 1 ? "s" : "") + " par l'ultime !", "good");
+  updateHUD();
+  return { ok: true, n };
+}
+// Le Grand Froid appelle sa garde (phase 2)
+function bossSummon(boss) {
+  const wv = WAVES[G.waveIndex];
+  const hpMult = wv ? wv.hpMult : 1;
+  const n = 4;
+  for (let i = 0; i < n; i++) {
+    const e = spawnEnemy("glitch", hpMult);
+    const a = Math.random() * Math.PI * 2, r = 10 + Math.random() * 20;
+    e.x = boss.x + Math.cos(a) * r;
+    e.y = boss.y + Math.sin(a) * r;
+    e.seg = boss.seg; e.segT = boss.segT;
+    burst(e.x, e.y, "#bfefff", 6, 90);
+  }
+  toast("❄ La garde du Grand Froid se matérialise !", "warn");
+  addFloat(boss.x, boss.y - 44, "GRAND FROID : À MOI !", "#bfefff");
+  return n;
+}
+
+/* ---------------- Le Grand Froid : machine de transitions de phases (P0-1) ---------------- */
+// AUDIT P0-1 — ce qu'on a vérifié sur la machine de phases :
+//   1) SAUT 1→3 : l'ancienne logique if/else sautait l'annonce ET la mécanique de phase 2
+//      quand un gros coup de dégâts franchissait les deux seuils dans la même image.
+//      CORRIGÉ : les transitions sont strictement séquentielles — 1→2 puis 2→3 —, chacune
+//      appliquée exactement une fois (boucle de transition avec garde anti-boucle infinie).
+//   2) COINCÉ/INVULNÉRABLE : audit de damage() + update() — aucune invulnérabilité n'existe
+//      entre les phases et les dégâts ne sont jamais réinitialisés. La phase ne recule
+//      jamais (monotonie structurelle : on ne peut pas retomber « entre deux phases »).
+//      La logique de phase ticke uniquement si le boss est vivant et la vague en cours.
+//   3) RENFORTS : les Glitchs d'escorte deviennent des ennemis ordinaires dès leur
+//      invocation — ils ne peuvent jamais bloquer une transition suivante (celle-ci ne
+//      dépend que des PV du boss). En cas de saut 1→3, la phase 2 garde son effet
+//      mécanique : son premier paquet d'escorte arrive avec son annonce.
+function gfTargetPhase(e) {
+  const frac = Math.max(0, e.hp / e.maxHp);
+  return frac > GF_TH2 ? 1 : frac > GF_TH3 ? 2 : 3;
+}
+function gfUpdate(e, dt) {
+  if (e.type !== "grandfroid" || e.dead || G.phase !== "wave") return;
+  const frac = Math.max(0, e.hp / e.maxHp);
+  gfMaybeWarn(e, frac); // pré-avertissement à l'approche des seuils (P0-2)
+  const target = gfTargetPhase(e);
+  const chained = target > e.gfPhase + 1; // saut 1→3 en une seule image : chaîne 1→2→3
+  let delayMs = 0, guard = 0;
+  while (e.gfPhase < target && guard++ < 3) {
+    gfApplyTransition(e, e.gfPhase + 1, delayMs, chained);
+    delayMs += GF_BANNER_GAP_MS; // chaque annonce se lit en séquence, aucune n'est écrasée
+  }
+  if (e.gfPhase === 2) { // escorte de phase 2 : cadence stable, indépendante du reste
+    e.gfSummonT -= dt;
+    if (e.gfSummonT <= 0) { e.gfSummonT = GF_SUMMON_PERIOD; bossSummon(e); }
+  }
+}
+function gfApplyTransition(e, to, delayMs, chained) {
+  if (e.dead || G.over) return;
+  e.gfPhase = to; // l'effet mécanique s'applique IMMÉDIATEMENT ; l'annonce spectaculaire suit
+  if (to === 2) {
+    e.gfSummonT = GF_SUMMON_FIRST;
+    gfScheduleAnnounce(e, delayMs, "❄ LE GRAND FROID — PHASE 2 ❄",
+      "Phase 2 : des Glitchs d'escorte glacés se matérialisent près du boss !", 12, false, "cold");
+    if (chained) setTimeout(() => { // la phase 2 effacée en une image garde son paquet d'escorte
+      if (e.dead || G.over || G.phase !== "wave") return;
+      bossSummon(e);
+    }, delayMs);
+  } else if (to === 3) {
+    e.enraged = true; // vitesse ×1.5 + aura renforcée, effectifs dès le tick
+    gfScheduleAnnounce(e, delayMs, "🔥 LE GRAND FROID — PHASE 3 🔥",
+      "Phase 3 : ENRAGÉ — vitesse ×1.5 et aura encore plus glacée ! Tiens la Ligne !", 16, true, "rage");
+  }
+}
+function gfScheduleAnnounce(e, delayMs, msg, sub, shakeAmt, extraBoom, frostKind) {
+  setTimeout(() => {
+    if (e.dead || G.over || G.phase !== "wave") return; // partie terminée entre-temps : ne plus annoncer
+    banner(msg, true);
+    toast(sub, "warn");
+    AudioSys.bossRoar(); // rugissement grave : la signature du Grand Froid
+    if (extraBoom) AudioSys.boom(); // phase 3 : grondement sous la glace, encore plus lourd
+    G.shake = Math.max(G.shake, shakeAmt); // léger tremblement — l'écran frémit
+    startFrostFx(frostKind); // rampe de givre depuis les bords (P0-2), pré-rendu (P0-4)
+  }, delayMs);
+}
+function gfMaybeWarn(e, frac) {
+  if (e.gfPhase === 1 && !e.gfWarn2 && frac <= GF_WARN2) { e.gfWarn2 = true; gfPreWarn(e); }
+  else if (e.gfPhase === 2 && !e.gfWarn3 && frac <= GF_WARN3) { e.gfWarn3 = true; gfPreWarn(e); }
+}
+function gfPreWarn(e) {
+  if (e.dead || G.over || G.phase !== "wave") return;
+  toast("⚠ Le Grand Froid chancelle — la glace craque… quelque chose change !", "warn");
+  addFloat(e.x, e.y - 56, "le froid se lève…", "#bfefff");
+  G.shake = Math.max(G.shake, 5);
+  AudioSys.icePulse(); // craquement qui monte : on sent la transition 2-3 s avant
+}
+
+/* ---------------- Vagues & tempête ---------------- */
+function startWave() {
+  if (G.phase === "wave" || G.over || G.paused) return;
+  const idx = G.waveIndex + 1;
+  if (idx >= WAVES.length) return;
+  AudioSys.init(); AudioSys.resume();
+  G.waveIndex = idx;
+  G.phase = "wave";
+  G.waveTime = 0;
+  const wv = WAVES[idx];
+  // construire la file de spawn
+  G.spawnQueue = [];
+  for (const g of wv.groups) {
+    for (let i = 0; i < g.n; i++) {
+      G.spawnQueue.push({ at: g.delay + i * g.interval, type: g.type });
+    }
+  }
+  G.spawnQueue.sort((a, b) => a.at - b.at);
+  // tempête : décidée maintenant
+  G.storm.decided = true;
+  G.storm.willStorm = wv.storm ? Math.random() < wv.storm : false;
+  G.storm.active = false;
+  G.storm.t = 0;
+  G.stormWarned = false;
+  G.storm.startedThisWave = false;
+  AudioSys.horn();
+  banner(wv.title + (G.storm.willStorm ? " ❄ (tempête en approche)" : ""));
+  if (idx === 10) { ensureFrostOverlay("cold"); ensureFrostOverlay("rage"); } // P0-4 : précharger les visuels du boss AVANT la vague 12
+  toast("Vague lancée : " + wv.name + ". " + randomQUIP(), "good");
+  AudioSys.setIntensity(1);
+  renderIntel();
+  updateHUD();
+}
+function waveCleared() {
+  const wv = WAVES[G.waveIndex];
+  G.wavesDone++;
+  G.phase = "prep";
+  G.storm.active = false;
+  document.getElementById("stormClock").style.display = "none";
+  // dégeler tout à la fin d'une vague
+  for (const t of G.towers) { t.frozen = false; t.thawed = false; }
+  AudioSys.setIntensity(0);
+  banner("Vague " + (G.waveIndex + 1) + " repoussée ! " + randomQUIP());
+  AudioSys.coin();
+  if (G.wavesDone === 11) { ensureFrostOverlay("cold"); ensureFrostOverlay("rage"); } // P0-4 : repli de préchargement — la vague 12 arrive
+  if (G.wavesDone >= WAVES.length) gameOver(true);
+  renderIntel(); updateHUD();
+}
+function maybeStartStorm(dt) {
+  if (!G.storm.willStorm || G.storm.startedThisWave) return;
+  // la tempête éclate ~4 s après le début de la vague
+  if (G.waveTime >= 4.0) {
+    G.storm.startedThisWave = true;
+    G.storm.active = true;
+    G.storm.t = 0;
+    G.storm.dur = 12;
+    // tout gèle, sauf les castors (toujours au travail)
+    for (const t of G.towers) {
+      if (t.type === "beaver") { t.thawed = true; continue; }
+      const L = beaverAuraInfo(t);
+      if (L && L.thawAt <= 0) { t.thawed = true; AudioSys.thaw(); } // castor N3 : dégèle instantané
+      else { t.frozen = true; t.thawed = false; }
+    }
+    document.getElementById("stormClock").style.display = "block";
+    AudioSys.alarm(); AudioSys.setIntensity(2);
+    banner("❄ TEMPÊTE DE VERGLAS ! Les castors au travail ! ❄", true);
+    toast("Les tours gèlent ! Seules celles près d'un Castor-ingénieur tiennent le coup.", "warn");
+  }
+}
+function updateStorm(dt) {
+  if (!G.storm.active) return;
+  G.storm.t += dt;
+  document.getElementById("stormTime").textContent = Math.ceil(G.storm.dur - G.storm.t);
+  // dégèle différé des tours dans l'aura d'un castor N1/N2
+  for (const t of G.towers) {
+    if (!t.frozen || t.thawed) continue;
+    const L = beaverAuraInfo(t);
+    if (L && G.storm.t >= L.thawAt) {
+      t.thawed = true;
+      burst(t.x, t.y, "#9be8ff", 12, 90);
+      AudioSys.thaw();
+      addFloat(t.x, t.y - 26, "dégelé !", "#9be8ff");
+    }
+  }
+  // flocons en rafale
+  if (Math.random() < 0.6) spawnSnow(true);
+  if (G.storm.t >= G.storm.dur) {
+    G.storm.active = false;
+    document.getElementById("stormClock").style.display = "none";
+    for (const t of G.towers) { t.frozen = false; t.thawed = false; }
+    AudioSys.setIntensity(1);
+    banner("La tempête passe — le Nord reste. ✌");
+    toast(randomQUIP(), "good");
+  }
+}
+
+/* ---------------- Mise à jour du jeu ---------------- */
+function update(dt) {
+  if (G.paused || G.over) return;
+  G.time += dt;
+
+  // vague : spawns
+  if (G.phase === "wave") {
+    G.waveTime += dt;
+    maybeStartStorm(dt);
+    updateStorm(dt);
+    const wv = WAVES[G.waveIndex];
+    while (G.spawnQueue.length && G.spawnQueue[0].at <= G.waveTime) {
+      const s = G.spawnQueue.shift();
+      spawnEnemy(s.type, wv.hpMult);
+    }
+    if (!G.spawnQueue.length && G.enemies.length === 0) waveCleared();
+  }
+
+  // tours
+  for (const t of G.towers) {
+    const L = towerLevel(t);
+    t.cool -= dt;
+    t.disabled = Math.max(0, t.disabled - dt);
+    t.flash = Math.max(0, t.flash - dt);
+    t.blade += dt * (t.type === "turbine" ? (t.frozen && !t.thawed ? 0.3 : 6) : 0);
+    if (t.type === "drone") droneUpdate(t, L, dt);
+    if (t.disabled > 0) continue;
+    const frozenStuck = t.frozen && !t.thawed;
+    if (frozenStuck) continue;
+    if (t.type === "beaver") continue; // soutien pur
+    if (t.cool > 0) continue;
+    if (t.type === "turbine" && G.phase === "wave") turbineFire(t, L);
+    else if (t.type === "plasma" && G.phase === "wave") plasmaFire(t, L);
+    else if (t.type === "drone" && G.phase === "wave") droneFire(t, L);
+    else if (t.type === "tesla" && G.phase === "wave") teslaFire(t, L);
+    else if (t.type === "brise" && G.phase === "wave") brisePulse(t, L);
+  }
+  /* les cabanes tickent en continu via cabaneTick plus bas */
+
+  // recharge de la Surcharge du Cœur (continue hors vague)
+  if (G.surchargeCd > 0) {
+    G.surchargeCd = Math.max(0, G.surchargeCd - dt);
+    if (G.surchargeCd === 0) toast("⚡ La Surcharge du Cœur est rechargée !", "good");
+    refreshSurchargeBtn();
+  }
+
+  // ennemis
+  for (const e of G.enemies) {
+    if (e.dead) continue;
+    e.hit = Math.max(0, e.hit - dt);
+    e.stun = Math.max(0, e.stun - dt);
+    const wasFrozen = e.freeze > 0;
+    e.freeze = Math.max(0, e.freeze - dt);
+    if (wasFrozen && e.freeze <= 0) e.freezeImmune = 2.5; // antigel : le gel ne peut pas être enchaîné à l'infini
+    e.freezeImmune = Math.max(0, e.freezeImmune - dt);
+    e.slowT -= dt;
+    if (e.slowT <= 0) e.slowAmt = 0;
+    // dégâts sur la durée (sirop)
+    if (e.dotT > 0) { e.dotT -= dt; damage(e, e.dotDps * dt); if (e.dead) continue; }
+    // Saboteur : cherche une tour à désactiver
+    if (e.type === "saboteur" && e.sabotDone < 1 && e.sabotChannel <= 0 && G.phase === "wave") {
+      let near = null, nd = 80;
+      for (const t of G.towers) {
+        if (t.type === "beaver") continue;
+        if (t.type === "drone") continue;
+        if (t.disabled > 0) continue;
+        const d = Math.hypot(e.x - t.x, e.y - t.y);
+        if (d < nd) { nd = d; near = t; }
+      }
+      if (near) { e.sabotTarget = near; e.sabotChannel = 1.2; AudioSys.sabot(); }
+    }
+    if (e.sabotChannel > 0) {
+      e.sabotChannel -= dt;
+      if (e.sabotChannel <= 0) {
+        const tg = e.sabotTarget;
+        if (tg) {
+          tg.disabled = 5;
+          e.sabotDone++;
+          burst(tg.x, tg.y, "#c77dff", 16, 130);
+          addFloat(tg.x, tg.y - 30, "SABOTÉ !", "#c77dff");
+          toast("⚠ Un Saboteur a désactivé " + tg.def.name + " pour 5 s !", "warn");
+          AudioSys.emp();
+        }
+        e.sabotTarget = null;
+      }
+    }
+    // Boss : impulsion EMP
+    if (e.type === "decharge" && G.phase === "wave") {
+      e.empT -= dt;
+      if (e.empT <= 0) {
+        e.empT = 5.5;
+        AudioSys.emp();
+        ring(e.x, e.y, "#ff4d5e", 180);
+        let n = 0;
+        for (const t of G.towers) {
+          if (t.type !== "turbine" || t.disabled > 0) continue;
+          if (Math.hypot(e.x - t.x, e.y - t.y) <= 180) { t.disabled = 3.5; n++; burst(t.x, t.y, "#ff4d5e", 8, 100); }
+        }
+        if (n) toast("⚠ La Décharge a court-circuité " + n + " Éolienne" + (n > 1 ? "s" : "") + " !", "warn");
+      }
+    }
+    // boss : Le Grand Froid — phases (machine de transitions auditée P0-1, annoncée P0-2)
+    if (e.type === "grandfroid") gfUpdate(e, dt);
+    // déplacement (seulement si pas en pleine vague ? non, toujours sauf stun/freeze/canalisation)
+    if (e.stun > 0 || e.freeze > 0 || e.sabotChannel > 0) continue;
+    let sp = e.speed * (1 - e.slowAmt);
+    if (G.storm.active) sp *= 0.65; // verglas : la Horde patine
+    if (e.type === "grandfroid" && e.enraged) sp *= 1.5; // phase 3
+    if (G.path.length < 2) continue;
+    let remaining = sp * dt;
+    let guard = 0;
+    while (remaining > 0 && guard++ < 8) {
+      const i = e.seg;
+      if (i >= G.path.length - 1) { enemyAtHeart(e); remaining = 0; break; }
+      const a = G.path[i], b = G.path[i + 1];
+      const segLen = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+      const left = (1 - e.segT) * segLen;
+      if (remaining < left) { e.segT += remaining / segLen; remaining = 0; }
+      else { remaining -= left; e.seg++; e.segT = 0; }
+    }
+    const a = G.path[e.seg], b = G.path[Math.min(e.seg + 1, G.path.length - 1)];
+    e.x = a.x + (b.x - a.x) * e.segT;
+    e.y = a.y + (b.y - a.y) * e.segT;
+  }
+  G.enemies = G.enemies.filter(e => !e.dead);
+
+  // refroidir les tours (cabane tick)
+  for (const t of G.towers) {
+    if (t.type === "cabane") {
+      const L = towerLevel(t);
+      if (!(t.frozen && !t.thawed) && t.disabled <= 0) cabaneTick(t, L, dt);
+    }
+  }
+
+  updateParticles(dt);
+  advanceFrost(dt); // P0-2 : fait progresser la rampe de givre des transitions de phase
+  if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 30);
+}
+
+/* La cabane tick en continu (séparé du tir) */
+function cabaneTick(t, L, dt) {
+  t.cabT += dt;
+  if (t.cabState === "active") {
+    for (const e of G.enemies) {
+      if (e.dead) continue;
+      if (Math.hypot(e.x - t.x, e.y - t.y) <= L.radius) {
+        applySlow(e, L.slow, 0.6);
+        if (L.dps > e.dotDps) { e.dotDps = L.dps; e.dotT = 0.5; }
+      }
+    }
+    if (t.cabT >= L.active) { t.cabState = "recharge"; t.cabT = 0; }
+  } else if (t.cabT >= L.recharge) {
+    t.cabState = "active"; t.cabT = 0;
+    burst(t.x, t.y, "#c98f3d", 12, 90);
+  }
+}
+
+/* ---------------- Particules & effets visuels ---------------- */
+// P0-4 : plafond strict des particules quand le Grand Froid est au front — zéro freeze.
+function bossOnField() {
+  for (const e of G.enemies) if (e.type === "grandfroid" && !e.dead) return true;
+  return false;
+}
+function particleCap() { return bossOnField() ? PARTICLE_CAP_BOSS : PARTICLE_CAP; }
+function particleRoom() { return Math.max(0, particleCap() - G.particles.length); }
+function enforceParticleCap() {
+  const cap = particleCap(), len = G.particles.length;
+  if (len <= cap) return;
+  let excess = len - cap;
+  // cueille les flocons d'ambiance d'abord (décor) : les effets de jeu passent en premier
+  if (excess > 0) G.particles = G.particles.filter(p => {
+    if (excess <= 0) return true;
+    if (p.kind === "flake") { excess--; return false; }
+    return true;
+  });
+  if (excess > 0) G.particles.splice(0, excess); // reste : les plus anciennes
+}
+function burst(x, y, color, n, speed) {
+  n = Math.min(n, particleRoom());
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, s = speed * (0.3 + Math.random() * 0.7);
+    G.particles.push({ kind: "p", x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 0.5 + Math.random() * 0.5, max: 1, color, size: 1.5 + Math.random() * 2.5 });
+  }
+}
+function ring(x, y, color, radius) { G.rings.push({ x, y, r: 6, target: radius, life: 0.45, max: 0.45, color }); }
+function bolt(x1, y1, x2, y2) { G.bolts.push({ pts: lightningPoints(x1, y1, x2, y2), life: 0.16, max: 0.16, color: "#9be8ff", w: 2.5 }); }
+function boltCharged(x1, y1, x2, y2) { G.bolts.push({ pts: lightningPoints(x1, y1, x2, y2), life: 0.2, max: 0.2, color: "#ffe08a", w: 3.5 }); }
+function microBolt(x1, y1, x2, y2) { G.bolts.push({ pts: [[x1, y1], [x2, y2]], life: 0.1, max: 0.1, color: "#ffe08a", w: 2 }); }
+function plasmaPuff(t, angle, coneDeg, range) {
+  const half = (coneDeg * Math.PI / 180) / 2;
+  const n = Math.min(10, particleRoom()); // P0-4 : jamais au-dessus du plafond (cf. burst())
+  for (let i = 0; i < n; i++) {
+    const a = angle + (Math.random() - 0.5) * 2 * half;
+    const d = 20 + Math.random() * range * 0.8;
+    G.particles.push({ kind: "snow", x: t.x + Math.cos(a) * 16, y: t.y + Math.sin(a) * 16, vx: Math.cos(a) * 240 + (Math.random() - .5) * 60, vy: Math.sin(a) * 240 + (Math.random() - .5) * 60, life: 0.35 + Math.random() * 0.3, max: 0.65, color: "#bfefff", size: 2 + Math.random() * 3 });
+  }
+}
+function lightningPoints(x1, y1, x2, y2) {
+  const pts = [[x1, y1]];
+  const segs = 5;
+  for (let i = 1; i < segs; i++) {
+    const t = i / segs;
+    const mx = x1 + (x2 - x1) * t, my = y1 + (y2 - y1) * t;
+    const off = 14;
+    pts.push([mx + (Math.random() - 0.5) * off, my + (Math.random() - 0.5) * off]);
+  }
+  pts.push([x2, y2]);
+  return pts;
+}
+function spawnSnow(stormy) {
+  if (G.particles.length >= particleCap()) return; // P0-4 : l'ambiance ne dépasse jamais le plafond
+  G.particles.push({
+    kind: "flake", x: Math.random() * W, y: -6,
+    vx: (stormy ? -160 : -18) + (Math.random() - 0.5) * (stormy ? 120 : 30),
+    vy: (stormy ? 260 : 46) + Math.random() * (stormy ? 160 : 34),
+    life: 6, max: 6, color: stormy ? "#dff3ff" : "rgba(191,239,255,.55)", size: (stormy ? 2 : 1) + Math.random() * 2.6,
+    spin: Math.random() * Math.PI * 2
+  });
+}
+function addFloat(x, y, text, color) { G.floats.push({ x, y, text, color, life: 1.1, max: 1.1 }); }
+function updateParticles(dt) {
+  // neige d'ambiance
+  if (Math.random() < (G.storm.active ? 0.9 : 0.12)) spawnSnow(G.storm.active);
+  for (const p of G.particles) {
+    p.life -= dt;
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    if (p.kind === "p") { p.vx *= 0.94; p.vy *= 0.94; p.vy -= 30 * dt; }
+    if (p.kind === "flake") { p.spin += dt * 2; }
+    if (p.y > H + 10) p.life = 0;
+  }
+  G.particles = G.particles.filter(p => p.life > 0);
+  // P0-4 : plafond STRICT — 220 quand le Grand Froid est au front, 900 sinon.
+  // Cueillir les flocons d'ambiance en premier (décor), puis les plus anciennes.
+  enforceParticleCap();
+  for (const b of G.bolts) b.life -= dt;
+  G.bolts = G.bolts.filter(b => b.life > 0);
+  for (const r of G.rings) { r.life -= dt; r.r += (r.target - r.r) * dt * 8; }
+  G.rings = G.rings.filter(r => r.life > 0);
+  for (const f of G.floats) { f.life -= dt; f.y -= 34 * dt; }
+  G.floats = G.floats.filter(f => f.life > 0);
+}
+
+/* ---------- Givre des transitions du Grand Froid (P0-2 visuel, P0-4 préchargé) ----------
+   Le motif coûteux est pré-rendu UNE seule fois dans un canvas hors écran AVANT le
+   combat (voir les appels à ensureFrostOverlay : vague 11 + arrivée du boss).
+   Au changement de phase, on ne fait qu'un drawImage par image — zéro gel, zéro jank.
+   Deux variantes préchargées : "cold" (phase 2) et "rage" (phase 3, enragé). */
+const FROST_HOLD = 1.0;  // s : la face du givre une fois qu'il a rampé
+const FROST_FADE = 1.6;  // s : fonte douce (FROST_FX_DUR = montée seule)
+const FROST_VARIANTS = { cold: true, rage: true };
+let frostCache = {};     // variante -> {canvas, w, h}
+let frostVariant = "cold";
+let frostT = -1;         // -1 = inactif ; sinon, temps écoulé (s) depuis le début
+function frostRand() { // RNG déterministe : le pré-rendu est stable d'un chargement à l'autre
+  let s = 20262087;
+  return function () {
+    s |= 0; s = s + 0x6D2B79F5 | 0;
+    let t = Math.imul(s ^ s >>> 15, 1 | s);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const FROST_PAL = {
+  cold: { veil: "190,235,255", crysA: "214,243,255", crysB: "143,212,255", spark: "230,247,255" },
+  rage: { veil: "255,150,120", crysA: "255,205,175", crysB: "255,120,82", spark: "255,225,200" }
+};
+function ensureFrostOverlay(variant) {
+  variant = FROST_VARIANTS[variant] ? variant : "cold";
+  const cached = frostCache[variant];
+  if (cached && cached.w === W && cached.h === H) return cached.canvas; // déjà préchargé : coût nul
+  let fc = null;
+  try {
+    fc = document.createElement("canvas");
+    fc.width = W; fc.height = H;
+    const fx = fc.getContext("2d");
+    if (!fx) return null;
+    const rnd = frostRand(), pal = FROST_PAL[variant];
+    const D = Math.round(Math.min(W, H) * 0.24); // portée max du givre depuis les bords
+    // 1) voile glacé des 4 bords (quatre dégradés superposés)
+    const edges = [
+      [0, 0, 0, D, 0, 0, W, D],            // haut
+      [0, H, 0, H - D, 0, H - D, W, D],    // bas
+      [0, 0, D, 0, 0, 0, D, H],            // gauche
+      [W, 0, W - D, 0, W - D, 0, D, H]     // droite
+    ];
+    for (const [x0, y0, x1, y1, rx, ry, rw, rh] of edges) {
+      const g = fx.createLinearGradient(x0, y0, x1, y1);
+      g.addColorStop(0, "rgba(" + pal.veil + ",.88)");
+      g.addColorStop(1, "rgba(" + pal.veil + ",0)");
+      fx.fillStyle = g;
+      fx.fillRect(rx, ry, rw, rh);
+    }
+    // 2) cristaux : échardes triangulaires le long des 4 bords, pointes vers l'intérieur
+    for (let i = 0; i < 130; i++) {
+      const side = i % 4; // 0 haut, 1 bas, 2 gauche, 3 droite
+      const along = rnd(), len = D * (0.35 + rnd() * 0.65), base = 6 + rnd() * 14;
+      let ax, ay, bx, by, tx, ty;
+      if (side === 0)      { ax = along * W - base / 2; ay = 0; bx = along * W + base / 2; by = 0; tx = along * W; ty = len; }
+      else if (side === 1) { ax = along * W - base / 2; ay = H; bx = along * W + base / 2; by = H; tx = along * W; ty = H - len; }
+      else if (side === 2) { ax = 0; ay = along * H - base / 2; bx = 0; by = along * H + base / 2; tx = len; ty = along * H; }
+      else                 { ax = W; ay = along * H - base / 2; bx = W; by = along * H + base / 2; tx = W - len; ty = along * H; }
+      const a = (0.25 + rnd() * 0.5).toFixed(3);
+      fx.fillStyle = "rgba(" + (rnd() < 0.5 ? pal.crysA : pal.crysB) + "," + a + ")";
+      fx.beginPath(); fx.moveTo(ax, ay); fx.lineTo(bx, by); fx.lineTo(tx, ty); fx.closePath(); fx.fill();
+    }
+    // 3) paillettes de glace, plus denses près des bords
+    for (let i = 0; i < 420; i++) {
+      const x = rnd() * W, y = rnd() * H;
+      const de = Math.min(x, W - x, y, H - y);
+      if (de > D) continue;
+      const a = (0.15 + (1 - de / D) * 0.55).toFixed(3);
+      fx.fillStyle = "rgba(" + pal.spark + "," + a + ")";
+      fx.beginPath(); fx.arc(x, y, 0.8 + rnd() * 1.8, 0, Math.PI * 2); fx.fill();
+    }
+    frostCache[variant] = { canvas: fc, w: W, h: H };
+  } catch (err) { fc = null; } // JAMAIS casser le jeu pour un effet
+  return fc;
+}
+function startFrostFx(variant) {
+  variant = FROST_VARIANTS[variant] ? variant : "cold";
+  frostVariant = variant;
+  ensureFrostOverlay(variant); // repli sûr : coût nul si déjà préchargé
+  frostT = 0;                  // la rampe repart de zéro à chaque transition
+}
+function advanceFrost(dt) {
+  if (frostT >= 0) frostT += dt;
+}
+function drawFrostFx() {
+  if (frostT < 0) return;
+  const cached = frostCache[frostVariant];
+  if (!cached || !cached.canvas) { frostT = -1; return; }
+  const holdEnd = FROST_FX_DUR + FROST_HOLD, end = holdEnd + FROST_FADE;
+  let extra, alpha;
+  if (frostT < FROST_FX_DUR) { // RAMPE : le givre rampe depuis les bords vers l'intérieur
+    const k = Math.min(1, Math.max(0, frostT / FROST_FX_DUR));
+    const ease = 1 - (1 - k) * (1 - k); // ease-out : rentre vite, finit calmement
+    extra = 90 - 66 * ease;             // 90 → 24 : les bords du motif entrent à l'écran
+    alpha = 0.25 + 0.75 * ease;
+  } else if (frostT < holdEnd) {        // PLEINE FACE de la phase
+    extra = 24; alpha = 1;
+  } else if (frostT < end) {            // FONTE douce
+    extra = 24; alpha = Math.max(0, 1 - (frostT - holdEnd) / FROST_FADE);
+  } else { frostT = -1; return; }
+  ctx.save();
+  ctx.globalAlpha = Math.min(1, alpha);
+  // le motif est dessiné élargi : à l'ouverture, ses bords sortent du cadre
+  ctx.drawImage(cached.canvas, -extra, -extra, W + extra * 2, H + extra * 2);
+  ctx.restore();
+}
+
+/* ================================================================
+   RENDU — néon sur glace
+   ================================================================ */
+function render() {
+  ctx.save();
+  if (G.shake > 0) ctx.translate((Math.random() - .5) * G.shake, (Math.random() - .5) * G.shake);
+  ctx.save(); // espace monde : derrière la caméra (P0-3 — pincement tactile)
+  if (VIEW.z > 1.001) {
+    ctx.translate(W / 2, H / 2); ctx.scale(VIEW.z, VIEW.z); ctx.translate(-VIEW.cx, -VIEW.cy);
+  }
+
+  drawBackground();
+  drawPathPreview();
+  drawGrid();
+  drawDecor();
+  drawPortal();
+  drawHeart();
+
+  for (const t of G.towers) { if (t.type === "cabane") drawTower(t); } // pièges sous les ennemis
+  for (const e of G.enemies) drawEnemy(e);
+  for (const t of G.towers) { if (t.type !== "cabane") drawTower(t); }
+  drawEffects();
+  drawGridGhost();
+  drawPathTrailFx();
+
+  if (G.storm.active) drawStormVeil();
+  drawParticles();
+  drawFloats();
+  drawSelection();
+  drawPatrolDraft();
+
+  ctx.restore(); // espace écran (tremblé) : couches aux bords de l'écran
+  drawFrostFx(); // P0-2 : le givre rampe depuis les bords — sous le léger tremblement de phase
+  ctx.restore();
+  if (G.paused) drawPaused();
+}
+
+function drawBackground() {
+  const g = ctx.createRadialGradient(W / 2, -100, 60, W / 2, H / 2, 760);
+  g.addColorStop(0, "#0c1c40");
+  g.addColorStop(0.55, "#071227");
+  g.addColorStop(1, "#030711");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  // étoiles
+  ctx.save();
+  for (let i = 0; i < 90; i++) {
+    const sx = (i * 97.3 + 13) % W, sy = (i * 57.1 + 7) % (H * 0.45);
+    const tw = 0.35 + 0.65 * Math.abs(Math.sin(G.time * 1.4 + i * 1.7));
+    ctx.fillStyle = "rgba(200,230,255," + (0.12 + tw * 0.3) + ")";
+    const s = (i % 3 === 0) ? 1.8 : 1.1;
+    ctx.fillRect(sx, sy, s, s);
+  }
+  // siège froid selon la carte : skyline de la ville, sapins de la forêt, pilonnes du pont
+  if (MAP_ID === "foret") {
+    // silhouette de sapins boréaux, ultra subtile
+    ctx.fillStyle = "rgba(8,24,40,.9)";
+    for (let i = 0; i < 14; i++) {
+      const bx = (i + 0.5) * W / 14;
+      const bh = 46 + (i % 5) * 16 + (i % 3) * 8;
+      ctx.beginPath(); ctx.moveTo(bx, H * 0.36 - bh);
+      ctx.lineTo(bx - bh * 0.28, H * 0.36); ctx.lineTo(bx + bh * 0.28, H * 0.36); ctx.closePath(); ctx.fill();
+    }
+    ctx.fillStyle = "rgba(8,24,40,.9)";
+    ctx.fillRect(0, H * 0.36, W, 18);
+  } else if (MAP_ID === "pont") {
+    // tablier et câbles du pont glacé, ultra subtil
+    ctx.fillStyle = "rgba(10,26,58,.85)";
+    ctx.fillRect(0, H * 0.30, W, 10);
+    for (let i = 0; i <= 6; i++) {
+      const bx = (i + 0.5) * W / 7;
+      ctx.fillRect(bx - 6, H * 0.30 - 90, 12, 100);
+      ctx.save();
+      ctx.strokeStyle = "rgba(10,26,58,.85)"; ctx.lineWidth = 7;
+      ctx.beginPath(); ctx.moveTo(bx - W / 14 + 6, H * 0.30); ctx.lineTo(bx, H * 0.30 - 84);
+      ctx.lineTo(bx + W / 14 - 6, H * 0.30); ctx.stroke();
+      ctx.restore();
+    }
+  } else {
+    // silhouette du Vieux-Montréal gelé (ciel de fond), ultra subtile
+    ctx.fillStyle = "rgba(10,26,58,.85)";
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.34);
+    const skyline = [40, 90, 62, 120, 80, 55, 105, 70, 130, 66, 88, 52, 100, 74, 58, 92];
+    for (let i = 0; i <= 16; i++) ctx.lineTo(i * W / 16, H * 0.34 - skyline[i % skyline.length] * 0.5);
+    ctx.lineTo(W, H * 0.34); ctx.closePath(); ctx.fill();
+  }
+  // aurore boréale timide
+  const ag = ctx.createLinearGradient(0, 0, W, 0);
+  const aa = 0.05 + 0.03 * Math.sin(G.time * 0.5);
+  ag.addColorStop(0, "rgba(72,230,255,0)");
+  ag.addColorStop(0.4, "rgba(72,230,255," + aa + ")");
+  ag.addColorStop(0.65, "rgba(150,120,255," + aa + ")");
+  ag.addColorStop(1, "rgba(72,230,255,0)");
+  ctx.fillStyle = ag;
+  ctx.fillRect(0, 0, W, H * 0.30);
+  ctx.restore();
+}
+function drawGrid() {
+  for (let cx = 0; cx < GW; cx++) for (let cy = 0; cy < GH; cy++) {
+    const frost = 0.05 + 0.028 * Math.abs(Math.sin(cx * 12.9 + cy * 7.7 + G.time * 0.2));
+    ctx.fillStyle = "rgba(120,210,255," + frost + ")";
+    ctx.fillRect(cx * TILE, cy * TILE, TILE, TILE);
+  }
+  ctx.strokeStyle = "rgba(72,230,255,.16)";
+  ctx.lineWidth = 1;
+  ctx.shadowColor = "rgba(72,230,255,.5)"; ctx.shadowBlur = 4;
+  ctx.beginPath();
+  for (let x = 0; x <= GW; x++) { ctx.moveTo(x * TILE, 0); ctx.lineTo(x * TILE, H); }
+  for (let y = 0; y <= GH; y++) { ctx.moveTo(0, y * TILE); ctx.lineTo(W, y * TILE); }
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+}
+function drawDecor() {
+  // éléments de décor par carte (sapin, roche, pilonne) — non constructibles
+  const deco = MAPS[MAP_ID].decor;
+  for (const d of deco) {
+    const p = cellCenter(d.cx, d.cy);
+    ctx.save(); ctx.translate(p.x, p.y);
+    if (d.t === "sapin") {
+      ctx.shadowColor = "#1e7a4f"; ctx.shadowBlur = 8;
+      ctx.fillStyle = "#1e7a4f";
+      ctx.fillRect(-3, 4, 6, 10);
+      const layers = [[-12, 6, 24], [-9, -2, 18], [-6, -9, 12]];
+      let k = 0;
+      for (const [x, y, w] of layers) {
+        ctx.fillStyle = ["#2aa15e", "#238652", "#1d7345"][k++];
+        ctx.beginPath(); ctx.moveTo(0, y - 10); ctx.lineTo(x - 4, y); ctx.lineTo(x + w + 4, y); ctx.closePath(); ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "rgba(235,250,255,.55)";
+      ctx.beginPath(); ctx.moveTo(0, -19); ctx.lineTo(-3.4, -11); ctx.lineTo(3.4, -11); ctx.closePath(); ctx.fill();
+    } else if (d.t === "roche") {
+      ctx.shadowColor = "#000"; ctx.shadowBlur = 6;
+      ctx.fillStyle = "#5b6b7d";
+      ctx.beginPath();
+      ctx.moveTo(-14, 10); ctx.lineTo(-9, -10); ctx.lineTo(3, -13); ctx.lineTo(14, -2); ctx.lineTo(8, 10);
+      ctx.closePath(); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "#8ea3b8";
+      ctx.beginPath(); ctx.moveTo(-9, -10); ctx.lineTo(3, -13); ctx.lineTo(-1, -3); ctx.lineTo(-11, -1); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "rgba(235,250,255,.5)";
+      ctx.beginPath(); ctx.moveTo(1, -13); ctx.lineTo(3, -11); ctx.lineTo(-3, -7); ctx.lineTo(-9, -10); ctx.closePath(); ctx.fill();
+    } else if (d.t === "pilonne") {
+      ctx.shadowColor = "#48e6ff"; ctx.shadowBlur = 6;
+      ctx.fillStyle = "#25323f";
+      ctx.fillRect(-11, -14, 22, 28);
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "#33424f";
+      ctx.fillRect(-11, -14, 10, 28);
+      ctx.strokeStyle = "rgba(72,230,255,.5)"; ctx.lineWidth = 1.5;
+      ctx.strokeRect(-11, -14, 22, 28);
+      ctx.beginPath(); ctx.moveTo(-11, -3); ctx.lineTo(11, -3); ctx.moveTo(-11, 5); ctx.lineTo(11, 5); ctx.stroke();
+    }
+    ctx.restore();
+  }
+}
+function drawPathPreview() {
+  if (G.path.length < 2) return;
+  ctx.save();
+  ctx.setLineDash([8, 10]);
+  ctx.lineDashOffset = -G.time * 40;
+  ctx.strokeStyle = "rgba(255,123,0,.35)";
+  ctx.lineWidth = 3;
+  ctx.shadowColor = "rgba(255,123,0,.5)"; ctx.shadowBlur = 8;
+  ctx.beginPath();
+  ctx.moveTo(G.path[0].x, G.path[0].y);
+  for (const p of G.path) ctx.lineTo(p.x, p.y);
+  ctx.stroke();
+  ctx.restore();
+}
+function drawPortal() {
+  const p = cellCenter(SPAWN.cx, SPAWN.cy);
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  const pulse = 1 + 0.08 * Math.sin(G.time * 5);
+  // cadre
+  ctx.strokeStyle = "#48e6ff"; ctx.lineWidth = 3;
+  ctx.shadowColor = "#48e6ff"; ctx.shadowBlur = 18;
+  ctx.strokeRect(-22 * pulse, -46 * pulse, 44 * pulse, 92 * pulse);
+  // tourbillon
+  for (let i = 0; i < 3; i++) {
+    const a0 = G.time * (2.4 + i * 0.6) + i * 2.1;
+    ctx.strokeStyle = ["#48e6ff", "#9be8ff", "#2aa8d6"][i];
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let t = 0; t <= 1; t += 0.05) {
+      const r = 8 + t * 26, a = a0 + t * 5;
+      const x = Math.cos(a) * r * 0.62, y = Math.sin(a) * r * 1.15;
+      if (t === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawHeart() {
+  const p = cellCenter(HEART.cx, HEART.cy);
+  const low = G.heartHp <= 6;
+  const pulse = 1 + (low ? 0.16 : 0.10) * Math.sin(G.time * (low ? 9 : 4.2));
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  // socle
+  ctx.fillStyle = "#0a1430";
+  ctx.strokeStyle = "rgba(255,77,94,.8)"; ctx.lineWidth = 2;
+  ctx.shadowColor = "#ff4d5e"; ctx.shadowBlur = 22;
+  ctx.beginPath(); ctx.arc(0, 0, 30 * pulse, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  // feuille d'érable stylisée au centre
+  ctx.fillStyle = low && Math.sin(G.time * 9) > 0 ? "#ffb3bb" : "#ff4d5e";
+  drawMapleLeaf(0, 0, 13 * pulse);
+  // anneau d'énergie + PV
+  ctx.strokeStyle = "rgba(255,77,94,.45)"; ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.arc(0, 0, 38, -Math.PI / 2, -Math.PI / 2 + (G.heartHp / G.heartMax) * Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = "#fff";
+  ctx.font = "700 13px system-ui";
+  ctx.textAlign = "center";
+  ctx.fillText(G.heartHp, 0, 58);
+  ctx.restore();
+}
+function drawMapleLeaf(x, y, s) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s / 10, s / 10);
+  ctx.beginPath();
+  const pts = [[0,-10],[2,-6],[5,-8],[4,-4],[8,-5],[6,-1],[10,1],[6,3],[7,7],[3,6],[3,10],
+               [-3,10],[-3,6],[-7,7],[-6,3],[-10,1],[-6,-1],[-8,-5],[-4,-4],[-5,-8],[-2,-6]];
+  for (let i = 0; i < pts.length; i++) { const [px, py] = pts[i]; i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function towerHalo(color) {
+  const g = ctx.createRadialGradient(0, 0, 6, 0, 0, 40);
+  g.addColorStop(0, color + "55");
+  g.addColorStop(1, color + "00");
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(0, 0, 40, 0, Math.PI * 2); ctx.fill();
+}
+function drawTower(t) {
+  ctx.save();
+  const tx = t.type === "drone" ? t.x : t.x;
+  const ty = t.type === "drone" ? t.y + Math.sin(t.hover * 4) * 3 : t.y;
+  ctx.translate(tx, ty);
+
+  if (t.type === "cabane") { drawCabane(t); ctx.restore(); return; }
+  if (t.type === "drone") { drawDrone(t); ctx.restore(); }
+
+  // halo + socle
+  const frozenFx = t.frozen && !t.thawed;
+  const colors = { beaver: "#a9744c", turbine: "#48e6ff", plasma: "#9be8ff", tesla: "#ffd166", brise: "#bfefff" };
+  towerHalo(frozenFx ? "#9be8ff" : (colors[t.type] || "#48e6ff"));
+  ctx.fillStyle = "#0a1430";
+  ctx.strokeStyle = frozenFx ? "#bfefff" : "#2a4a7a";
+  ctx.lineWidth = 2;
+  ring3d(0, 0, 24, 7);
+
+  if (t.type === "beaver") drawBeaver(t);
+  if (t.type === "turbine") drawTurbine(t);
+  if (t.type === "plasma") drawPlasma(t);
+  if (t.type === "tesla") drawTesla(t);
+  if (t.type === "brise") drawBrise(t);
+
+  // aura du castor
+  if (t.type === "beaver") {
+    const L = towerLevel(t);
+    ctx.save();
+    ctx.setLineDash([6, 8]);
+    ctx.strokeStyle = "rgba(87,255,166,.4)";
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 0, L.aura * TILE, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
+  drawTowerOverlays(t, ty);
+  ctx.restore();
+}
+function ring3d(x, y, r, depth) {
+  ctx.beginPath(); ctx.ellipse(x, y + depth / 2, r, r * 0.42, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(x, y - depth / 2, r, r * 0.42, 0, Math.PI, 0); ctx.stroke();
+}
+function drawBeaver(t) {
+  // loge de castor + engrenage qui tourne
+  ctx.fillStyle = "#6b4226";
+  ctx.beginPath();
+  ctx.moveTo(-16, 6); ctx.lineTo(-16, -8); ctx.quadraticCurveTo(0, -22, 16, -8); ctx.lineTo(16, 6);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = "#a9744c"; ctx.lineWidth = 1.5; ctx.stroke();
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath(); ctx.moveTo(-14 + i * 0, -4 + i * 2.4); ctx.lineTo(14, -4 + i * 2.4);
+    ctx.strokeStyle = "rgba(169,116,76,.5)"; ctx.lineWidth = 1; ctx.stroke();
+  }
+  ctx.save();
+  ctx.translate(10, -16); ctx.rotate(G.time * 0.8);
+  ctx.strokeStyle = "#57ffa6"; ctx.lineWidth = 2; ctx.shadowColor = "#57ffa6"; ctx.shadowBlur = 8;
+  for (let i = 0; i < 8; i++) {
+    ctx.rotate(Math.PI / 4);
+    ctx.beginPath(); ctx.moveTo(0, -4); ctx.lineTo(0, -7); ctx.stroke();
+  }
+  ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2); ctx.stroke();
+  ctx.restore();
+}
+function drawTurbine(t) {
+  const slow = (t.frozen && !t.thawed) || t.disabled > 0;
+  ctx.strokeStyle = slow ? "#4a6a8a" : "#bfefff"; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(0, 8); ctx.lineTo(0, -18); ctx.stroke();
+  ctx.save();
+  ctx.translate(0, -20); ctx.rotate(t.blade);
+  ctx.fillStyle = slow ? "#3a5570" : "#48e6ff";
+  ctx.shadowColor = "#48e6ff"; ctx.shadowBlur = 10;
+  for (let i = 0; i < 3; i++) {
+    ctx.rotate(Math.PI * 2 / 3);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(4, -6); ctx.lineTo(3, -22); ctx.lineTo(-1, -6); ctx.closePath(); ctx.fill();
+  }
+  ctx.shadowBlur = 0;
+  ctx.beginPath(); ctx.arc(0, 0, 3.5, 0, Math.PI * 2); ctx.fillStyle = "#fff"; ctx.fill();
+  ctx.restore();
+  // étincelles de bout de pale
+  if (!slow) {
+    for (let i = 0; i < 2; i++) {
+      const a = t.blade + i * Math.PI;
+      const px = Math.sin(a) * 20, py = -20 - Math.cos(a) * 20;
+      ctx.fillStyle = "rgba(155,232,255,.8)";
+      ctx.beginPath(); ctx.arc(px, py, 1.6, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+}
+function drawPlasma(t) {
+  // dôme + canon orienté
+  ctx.fillStyle = "#123a5c";
+  ctx.beginPath(); ctx.arc(0, 2, 13, Math.PI, 0); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = "#9be8ff"; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.save();
+  ctx.rotate(t.angle + Math.PI / 2);
+  const L = towerLevel(t);
+  const glow = t.cool > 0 ? 0.5 : 1;
+  ctx.fillStyle = "rgba(20,60,110,.95)";
+  ctx.strokeStyle = "rgba(155,232,255," + glow + ")"; ctx.lineWidth = 2;
+  const w2 = 9 + L.cone * 0.06;
+  ctx.beginPath();
+  ctx.moveTo(-7, -12); ctx.lineTo(7, -12); ctx.lineTo(w2, -30); ctx.lineTo(-w2, -30);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = "rgba(155,232,255," + (0.5 * glow) + ")";
+  ctx.beginPath(); ctx.ellipse(0, -30, w2 * 0.8, 4, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+function drawTesla(t) {
+  // pylône : mât en treillis + résonateur (Tesla coil)
+  const L = towerLevel(t);
+  const hot = t.flash > 0;
+  const charge = hot ? 1 : 0.35 + 0.15 * Math.sin(G.time * 9 + t.id);
+  // treillis
+  ctx.strokeStyle = "#5a4a2e"; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(-9, 8); ctx.lineTo(-3, -26); ctx.moveTo(9, 8); ctx.lineTo(3, -26); ctx.stroke();
+  ctx.strokeStyle = "#8a6f3e"; ctx.lineWidth = 1.5;
+  for (let i = 0; i < 4; i++) {
+    const y0 = 4 - i * 8;
+    ctx.beginPath(); ctx.moveTo(-8 + i * 1.6, y0); ctx.lineTo(8 - i * 1.6, y0); ctx.stroke();
+  }
+  // bobine
+  ctx.strokeStyle = "#c9a44f"; ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let y = -24; y <= -8; y += 4) {
+    ctx.moveTo(-4, y); ctx.lineTo(4, y);
+  }
+  ctx.stroke();
+  // résonateur d'énergie
+  const r = 9 + (t.lvl) * 1.5 + charge * 2;
+  ctx.shadowColor = "#ffe08a"; ctx.shadowBlur = 12 + charge * 22;
+  const g = ctx.createRadialGradient(0, -34, 1, 0, -34, r);
+  g.addColorStop(0, "#fffbe8");
+  g.addColorStop(0.55, "#ffe08a");
+  g.addColorStop(1, "rgba(255,224,138,0)");
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(0, -34, r, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0;
+  // anneaux du résonateur
+  ctx.strokeStyle = "rgba(255,224,138," + charge + ")"; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.ellipse(0, -34, r + 6, r * 0.42, 0, 0, Math.PI * 2); ctx.stroke();
+  // éclairs parasites
+  if (hot || Math.random() < 0.24) {
+    ctx.strokeStyle = "#ffe08a"; ctx.lineWidth = 1.6;
+    for (let k = 0; k < (hot ? 4 : 1); k++) {
+      const a = Math.random() * Math.PI * 2;
+      const r0 = r, r1 = r + 10 + Math.random() * (hot ? 16 : 8);
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(a) * r0, -34 + Math.sin(a) * r0 * 0.6);
+      const mid = (r0 + r1) / 2;
+      ctx.lineTo(Math.cos(a + 0.3) * mid, -34 + Math.sin(a + 0.3) * mid * 0.6);
+      ctx.lineTo(Math.cos(a - 0.3) * r1, -34 + Math.sin(a - 0.3) * r1 * 0.6);
+      ctx.stroke();
+    }
+  }
+  // lances du double tir N2/N3
+  if (L.cannons >= 2) {
+    ctx.strokeStyle = "rgba(255,224,138,.8)"; ctx.lineWidth = 2;
+    for (const sx of [-1, 1]) {
+      ctx.beginPath(); ctx.moveTo(sx * 8, -22); ctx.lineTo(sx * 13, -36); ctx.stroke();
+      ctx.fillStyle = "rgba(255,224,138,.9)";
+      ctx.beginPath(); ctx.arc(sx * 13, -38, 2.5, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+}
+function drawBrise(t) {
+  // brise-glace : monolithe de glace flottant, impulsion froide
+  const L = towerLevel(t);
+  const hot = t.flash > 0;
+  const pulse = hot ? 1 : 0.2;
+  // éclat de frisson ambiant
+  ctx.shadowColor = "#bfefff"; ctx.shadowBlur = 10 + pulse * 28;
+  ctx.fillStyle = hot ? "#eafbff" : "#bfefff";
+  ctx.beginPath();
+  ctx.moveTo(0, -42); ctx.lineTo(14, -22); ctx.lineTo(9, 10); ctx.lineTo(-9, 10); ctx.lineTo(-14, -22);
+  ctx.closePath(); ctx.fill();
+  ctx.shadowBlur = 0;
+  // cœur cryogénique
+  const cg = ctx.createRadialGradient(0, -16, 2, 0, -16, 16);
+  cg.addColorStop(0, "#ffffff"); cg.addColorStop(0.5, "#9be8ff"); cg.addColorStop(1, "rgba(155,232,255,0)");
+  ctx.fillStyle = cg;
+  ctx.beginPath(); ctx.arc(0, -16, 16, 0, Math.PI * 2); ctx.fill();
+  // facettes
+  ctx.strokeStyle = "rgba(10,40,70,.6)"; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, -42); ctx.lineTo(0, 10); ctx.moveTo(-14, -22); ctx.lineTo(14, -22); ctx.stroke();
+  ctx.fillStyle = "rgba(255,255,255,.7)";
+  ctx.beginPath(); ctx.moveTo(0, -42); ctx.lineTo(7, -28); ctx.lineTo(0, -22); ctx.closePath(); ctx.fill();
+  // satellite orbitant (N2+) et double (N3)
+  for (let k = 0; k < (t.lvl >= 2 ? 2 : t.lvl >= 1 ? 1 : 0); k++) {
+    const a = G.time * 1.6 + k * Math.PI;
+    const sx = Math.cos(a) * 26, sy = -14 + Math.sin(a) * 10;
+    ctx.fillStyle = "#9be8ff";
+    ctx.shadowColor = "#9be8ff"; ctx.shadowBlur = 8;
+    ctx.save(); ctx.translate(sx, sy); ctx.rotate(a * 2);
+    ctx.fillRect(-3.5, -3.5, 7, 7);
+    ctx.restore(); ctx.shadowBlur = 0;
+  }
+  // portée de l'impulsion (subtile)
+  ctx.save();
+  ctx.setLineDash([3, 8]);
+  ctx.strokeStyle = "rgba(191,239,255," + (0.15 + pulse * 0.45) + ")";
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(0, 0, L.radius, 0, Math.PI * 2); ctx.stroke();
+  ctx.restore();
+}
+function drawCabane(t) {
+  const L = towerLevel(t);
+  const hot = t.cabState === "active" && !(t.frozen && !t.thawed) && t.disabled <= 0;
+  // nappe de sirop
+  if (hot) {
+    const wob = 1 + 0.04 * Math.sin(G.time * 3);
+    const g = ctx.createRadialGradient(0, 0, 4, 0, 0, L.radius * wob);
+    g.addColorStop(0, "rgba(201,143,61,.5)");
+    g.addColorStop(0.75, "rgba(150,90,30,.30)");
+    g.addColorStop(1, "rgba(150,90,30,0)");
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, L.radius * wob, 0, Math.PI * 2); ctx.fill();
+    if (Math.random() < 0.2) {
+      const a = Math.random() * Math.PI * 2, r = Math.random() * L.radius * 0.8;
+      G.particles.push({ kind: "p", x: t.x + Math.cos(a) * r, y: t.y + Math.sin(a) * r, vx: 0, vy: -14, life: 0.8, max: 0.8, color: "#e0a54f", size: 2 });
+    }
+  } else if (t.cabState === "recharge") {
+    ctx.setLineDash([4, 6]);
+    ctx.strokeStyle = "rgba(201,143,61,.4)"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 0, L.radius, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+    // progression de recharge
+    const p = t.cabT / L.recharge;
+    ctx.strokeStyle = "#e0a54f"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(0, 0, L.radius, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2); ctx.stroke();
+  }
+  // la cabane
+  ctx.fillStyle = "#4a2c18";
+  ctx.fillRect(-14, -10, 28, 16);
+  ctx.strokeStyle = "#c98f3d"; ctx.lineWidth = 1.5;
+  ctx.strokeRect(-14, -10, 28, 16);
+  ctx.fillStyle = "#6b4226";
+  ctx.beginPath(); ctx.moveTo(-17, -10); ctx.lineTo(0, -22); ctx.lineTo(17, -10); ctx.closePath(); ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = "#ff4d5e";
+  drawMapleLeaf(-9, -2, 4);
+  ctx.fillStyle = "#ffd166";
+  ctx.fillRect(6, -4, 5, 5); // fenêtre éclairée
+  // cheminée + fumée
+  ctx.fillStyle = "#333";
+  ctx.fillRect(9, -26, 6, 10);
+}
+function drawDrone(t) {
+  const L = towerLevel(t);
+  towerHalo("#c77dff");
+  ctx.save();
+  ctx.rotate(Math.sin(G.time * 1.3) * 0.06);
+  // corps
+  ctx.fillStyle = "#1a1030";
+  ctx.strokeStyle = "#c77dff"; ctx.lineWidth = 2;
+  ctx.shadowColor = "#c77dff"; ctx.shadowBlur = 10;
+  ctx.beginPath(); ctx.ellipse(0, 0, 15, 9, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = "rgba(199,125,255,.85)";
+  ctx.beginPath(); ctx.arc(0, -1, 5, 0, Math.PI * 2); ctx.fill();
+  // rotors
+  for (const sx of [-1, 1]) {
+    ctx.strokeStyle = "#8a5cc7"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(sx * 15, -2); ctx.lineTo(sx * 22, -8); ctx.stroke();
+    ctx.strokeStyle = "rgba(155,232,255,.6)"; ctx.lineWidth = 3;
+    const rw = 16 + 6 * Math.sin(G.time * 40 + sx);
+    ctx.beginPath(); ctx.moveTo(sx * 22 - rw / 2, -9); ctx.lineTo(sx * 22 + rw / 2, -9); ctx.stroke();
+  }
+  // canons
+  ctx.save();
+  ctx.translate(0, 6);
+  const n = L.cannons;
+  for (let i = 0; i < n; i++) {
+    const off = (i - (n - 1) / 2) * 9;
+    ctx.fillStyle = "#ffe08a";
+    ctx.fillRect(off - 2, 0, 4, 7);
+  }
+  ctx.restore();
+  ctx.restore();
+  // patrouille visible
+  if (t.patrolActive && t.patrol.length > 1) {
+    ctx.save();
+    ctx.setLineDash([5, 6]);
+    ctx.strokeStyle = "rgba(199,125,255,.5)"; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(t.patrol[0].x - t.x, t.patrol[0].y - t.y);
+    for (let i = 1; i <= t.patrol.length; i++) { const p = t.patrol[i % t.patrol.length]; ctx.lineTo(p.x - t.x, p.y - t.y); }
+    ctx.stroke();
+    ctx.restore();
+  }
+  drawTowerOverlays(t, t.y);
+}
+function drawTowerOverlays(t, ty) {
+  const frozenStuck = t.frozen && !t.thawed;
+  if (frozenStuck) {
+    // bloc de glace
+    ctx.fillStyle = "rgba(160,220,255,.38)";
+    ctx.strokeStyle = "rgba(220,245,255,.9)"; ctx.lineWidth = 2;
+    roundRectLocal(-20, -34, 40, 48, 6);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.65)";
+    ctx.font = "14px system-ui"; ctx.textAlign = "center";
+    ctx.fillText("❄", 0, -2);
+  }
+  if (t.thawed && (G.storm.active)) {
+    ctx.fillStyle = "rgba(87,255,166,.9)";
+    ctx.font = "11px system-ui"; ctx.textAlign = "center";
+    ctx.fillText("✔", 16, -24);
+  }
+  if (t.disabled > 0) {
+    ctx.fillStyle = "#c77dff";
+    ctx.font = "16px system-ui"; ctx.textAlign = "center";
+    ctx.fillText("⚡", 0, -30);
+    ctx.fillStyle = "#ffd9de"; ctx.font = "700 11px system-ui";
+    ctx.fillText(Math.ceil(t.disabled) + "s", 0, 44);
+    if (Math.random() < 0.3) G.particles.push({ kind: "p", x: t.x + (Math.random() - .5) * 20, y: t.y - 20 + (Math.random() - .5) * 20, vx: 0, vy: -40, life: 0.4, max: 0.4, color: "#c77dff", size: 2 });
+  }
+  if (t.flash > 0) {
+    ctx.globalAlpha = t.flash;
+    ctx.strokeStyle = "#ffd166"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(0, 0, 30, 0, Math.PI * 2); ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+  // palier
+  ctx.fillStyle = "rgba(232,244,255,.85)";
+  ctx.font = "700 10px system-ui"; ctx.textAlign = "center";
+  ctx.fillText("N" + (t.lvl + 1), 0, 40);
+}
+function roundRectLocal(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/* ---------------- Ennemis : rendu ---------------- */
+function drawEnemy(e) {
+  const d = e.def;
+  ctx.save();
+  ctx.translate(e.x, e.y);
+  // effet glitch : micro-décalages
+  if (Math.random() < 0.3) ctx.translate((Math.random() - .5) * 3, (Math.random() - .5) * 3);
+  const gx = (Math.random() - .5) * (e.type === "glitch" ? 4 : 2);
+  ctx.translate(gx, 0);
+
+  ctx.shadowColor = d.color; ctx.shadowBlur = 10;
+  const hitFlash = e.hit > 0 ? "#ffffff" : d.color;
+
+  if (e.type === "glitch") {
+    ctx.fillStyle = hitFlash;
+    ctx.beginPath();
+    ctx.moveTo(0, -10); ctx.lineTo(8, -2); ctx.lineTo(5, 8); ctx.lineTo(-5, 8); ctx.lineTo(-8, -2);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "#000"; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = "#0a0a18";
+    ctx.fillRect(-4, -4, 8, 3);
+    // strie de glitch
+    ctx.fillStyle = "rgba(72,230,255,.8)";
+    ctx.fillRect(-8, 1 + Math.sin(e.glitchSeed) * 3, 16, 1.2);
+  } else if (e.type === "essaim") {
+    const wob = Math.sin(G.time * 14 + e.glitchSeed) * 1.5;
+    ctx.fillStyle = hitFlash;
+    ctx.beginPath();
+    ctx.moveTo(0, -6 + wob); ctx.lineTo(4.5, 3); ctx.lineTo(-4.5, 3);
+    ctx.closePath(); ctx.fill();
+  } else if (e.type === "blinde") {
+    ctx.fillStyle = hitFlash;
+    ctx.fillRect(-11, -11, 22, 22);
+    ctx.strokeStyle = "#39465e"; ctx.lineWidth = 2; ctx.strokeRect(-11, -11, 22, 22);
+    ctx.fillStyle = "#39465e";
+    ctx.fillRect(-11, -3, 22, 3); ctx.fillRect(-3, -11, 3, 22);
+    ctx.fillStyle = "#ff7b00";
+    ctx.beginPath(); ctx.arc(0, 0, 3.4, 0, Math.PI * 2); ctx.fill();
+    // plaques
+    ctx.strokeStyle = "#d6e2f5"; ctx.lineWidth = 1.5;
+    for (const sx of [-1, 1]) { ctx.beginPath(); ctx.moveTo(sx * 11, -8); ctx.lineTo(sx * 15, -11); ctx.lineTo(sx * 15, 3); ctx.stroke(); }
+  } else if (e.type === "saboteur") {
+    ctx.fillStyle = hitFlash;
+    ctx.beginPath(); ctx.moveTo(0, -11); ctx.lineTo(9, -4); ctx.lineTo(7, 9); ctx.lineTo(-7, 9); ctx.lineTo(-9, -4);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 1; ctx.stroke();
+    // antenne
+    ctx.strokeStyle = "#c77dff"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, -11); ctx.lineTo(6, -19); ctx.stroke();
+    const blink = Math.sin(G.time * 8 + e.glitchSeed) > 0;
+    ctx.fillStyle = blink ? "#fff" : "#7a3fa8";
+    ctx.beginPath(); ctx.arc(6, -19, 2.4, 0, Math.PI * 2); ctx.fill();
+    // canalisation de sabotage
+    if (e.sabotChannel > 0 && e.sabotTarget) {
+      const tg = e.sabotTarget;
+      ctx.strokeStyle = "rgba(199,125,255,.8)";
+      ctx.lineWidth = 2; ctx.shadowBlur = 6;
+      ctx.save(); ctx.translate(-e.x, -e.y); // repère écran
+      const mid = { x: (e.x + tg.x) / 2 + (Math.random() - .5) * 24, y: (e.y + tg.y) / 2 + (Math.random() - .5) * 24 };
+      ctx.beginPath(); ctx.moveTo(e.x, e.y - 10); ctx.quadraticCurveTo(mid.x, mid.y, tg.x, tg.y); ctx.stroke();
+      ctx.restore();
+      ctx.fillStyle = "#fff"; ctx.font = "12px system-ui"; ctx.textAlign = "center";
+      ctx.fillText("🛠", 0, -24);
+    }
+    if (e.sabotDone > 0) { ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.font = "9px system-ui"; ctx.textAlign = "center"; ctx.fillText("✔", 12, -8); }
+  } else if (e.type === "decharge") {
+    const r = 24 + Math.sin(G.time * 3) * 2;
+    // anneaux concentriques
+    ctx.lineWidth = 3; ctx.strokeStyle = hitFlash;
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.66, G.time * 1.5, G.time * 1.5 + Math.PI * 1.4); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.66, G.time * 1.5 + Math.PI, G.time * 1.5 + Math.PI * 1.6); ctx.stroke();
+    // noyau pulsant
+    const cg = ctx.createRadialGradient(0, 0, 2, 0, 0, r * 0.5);
+    cg.addColorStop(0, "#fff"); cg.addColorStop(0.5, "#ff4d5e"); cg.addColorStop(1, "rgba(255,77,94,0)");
+    ctx.fillStyle = cg;
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.5, 0, Math.PI * 2); ctx.fill();
+    // piques de charge
+    ctx.strokeStyle = "#ffd166"; ctx.lineWidth = 2;
+    for (let i = 0; i < 8; i++) {
+      const a = G.time * 2 + i * Math.PI / 4;
+      ctx.beginPath(); ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r); ctx.lineTo(Math.cos(a) * (r + 8 + Math.random() * 6), Math.sin(a) * (r + 8 + Math.random() * 6)); ctx.stroke();
+    }
+    // compte à rebours EMP
+    const pct = 1 - e.empT / 5.5;
+    ctx.strokeStyle = "rgba(255,209,102,.85)"; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(0, 0, r + 8, -Math.PI / 2, -Math.PI / 2 + pct * Math.PI * 2); ctx.stroke();
+  } else if (e.type === "foreur") {
+    const wob = Math.sin(G.time * 18 + e.glitchSeed) * 0.12;
+    ctx.save(); ctx.rotate(wob);
+    // ogive de forage
+    ctx.fillStyle = hitFlash;
+    ctx.beginPath(); ctx.moveTo(12, 0); ctx.lineTo(-5, -9); ctx.lineTo(-5, 9); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "#000"; ctx.lineWidth = 1; ctx.stroke();
+    // spires du foret qui tournent
+    ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.lineWidth = 1.8;
+    const frac = ((G.time * 3.5 + e.glitchSeed) % 1);
+    for (let i = 0; i < 3; i++) {
+      const off = (((frac + i / 3) % 1) * 16) - 4;
+      ctx.beginPath(); ctx.moveTo(off, -8); ctx.lineTo(off + 5, 8); ctx.stroke();
+    }
+    // embout chauffé
+    ctx.fillStyle = "#d6f3ff";
+    ctx.beginPath(); ctx.moveTo(12, 0); ctx.lineTo(4, -4.4); ctx.lineTo(4, 4.4); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  } else if (e.type === "pillard") {
+    const wob = Math.sin(G.time * 12 + e.glitchSeed) * 0.14;
+    ctx.save(); ctx.rotate(wob);
+    // corps
+    ctx.fillStyle = hitFlash;
+    ctx.beginPath(); ctx.ellipse(0, 0, 9, 7, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#000"; ctx.lineWidth = 1; ctx.stroke();
+    // sac à crédits sur le dos
+    ctx.fillStyle = "#d8b06a";
+    ctx.beginPath(); ctx.arc(9.5, -7, 5.5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#7a5527"; ctx.lineWidth = 1; ctx.stroke();
+    ctx.strokeStyle = "#7a5527"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(5, -6); ctx.lineTo(1, -1); ctx.stroke();
+    ctx.fillStyle = "#5c3d15"; ctx.font = "700 9px system-ui"; ctx.textAlign = "center";
+    ctx.fillText("₡", 9.5, -3.5);
+    // bandeau du bandit
+    ctx.fillStyle = "rgba(10,10,26,.85)";
+    ctx.fillRect(-9, -3.4, 18, 6);
+    ctx.fillStyle = "#fff";
+    ctx.beginPath(); ctx.arc(-4.5, -0.4, 2.1, 0, Math.PI * 2); ctx.arc(4.5, -0.4, 2.1, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  } else if (e.type === "grandfroid") {
+    const ph = e.gfPhase || 1;
+    const enraged = ph === 3;
+    // aura de gel : portée de ralentissement des tours
+    ctx.save(); ctx.setLineDash([8, 12]);
+    ctx.strokeStyle = enraged ? "rgba(255,120,90,.35)" : "rgba(155,232,255,.30)";
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 0, e.def.auraR, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+    // couronne de cristaux qui tourne lentement
+    const R = 34, rot = G.time * 0.6;
+    for (let i = 0; i < 6; i++) {
+      const a = rot + i * Math.PI / 3;
+      ctx.save(); ctx.rotate(a);
+      ctx.globalAlpha = 0.85;
+      ctx.fillStyle = i % 2 ? "#8fd4ff" : "#d6f3ff";
+      ctx.beginPath();
+      ctx.moveTo(0, -R - 14); ctx.lineTo(9, -R + 4); ctx.lineTo(-9, -R + 4);
+      ctx.closePath(); ctx.fill();
+      ctx.restore(); ctx.globalAlpha = 1;
+    }
+    // corps de givre pulsant
+    const bodyR = R + Math.sin(G.time * 2.2) * 2;
+    const g = ctx.createRadialGradient(0, 0, 4, 0, 0, bodyR);
+    g.addColorStop(0, hitFlash); g.addColorStop(0.6, "#bfefff"); g.addColorStop(1, "rgba(143,212,255,.2)");
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, bodyR, 0, Math.PI * 2); ctx.fill();
+    // cœur sombre
+    ctx.fillStyle = enraged ? "rgba(120,10,20,.85)" : "rgba(8,26,50,.85)";
+    ctx.beginPath(); ctx.arc(0, -2, 16, 0, Math.PI * 2); ctx.fill();
+    // yeux du froid
+    const eyeC = enraged ? "#ff7b00" : "#eafbff";
+    ctx.fillStyle = eyeC;
+    ctx.shadowColor = eyeC; ctx.shadowBlur = 12;
+    for (const sx of [-1, 1]) {
+      ctx.beginPath(); ctx.ellipse(sx * 8.5, -5, 4.5, 6.5, sx * 0.28, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.shadowColor = d.color; ctx.shadowBlur = 10;
+    // pips de phase
+    ctx.fillStyle = "rgba(8,26,50,.65)";
+    ctx.fillRect(-30, R + 2, 60, 9);
+    for (let i = 0; i < 3; i++) {
+      ctx.fillStyle = (3 - i) <= ph ? (i === 0 ? "#ff7b00" : "#9be8ff") : "rgba(155,232,255,.22)";
+      ctx.fillRect(-28 + i * 20, R + 3.5, 18, 6);
+    }
+  }
+  ctx.shadowBlur = 0;
+
+  // ralentissement : teinte bleue
+  if (e.slowAmt > 0.05) {
+    ctx.fillStyle = "rgba(155,232,255,.4)";
+    ctx.beginPath(); ctx.arc(0, 0, d.radius + 3, 0, Math.PI * 2); ctx.fill();
+  }
+  // stun / gel
+  if (e.stun > 0) {
+    ctx.fillStyle = "#ffe08a"; ctx.font = "12px system-ui"; ctx.textAlign = "center";
+    ctx.fillText("💫", 0, -d.radius - 8);
+  }
+  if (e.freeze > 0) {
+    ctx.strokeStyle = "rgba(220,245,255,.95)"; ctx.lineWidth = 2;
+    roundRectLocal(-d.radius, -d.radius, d.radius * 2, d.radius * 2, 4); ctx.stroke();
+  }
+  ctx.restore();
+
+  // barre de PV (pas sur les essaims)
+  if (e.hp < e.maxHp && e.type !== "essaim") {
+    const wdt = e.def.boss ? 64 : 26;
+    const p = Math.max(0, e.hp / e.maxHp);
+    ctx.fillStyle = "rgba(0,0,0,.6)";
+    ctx.fillRect(e.x - wdt / 2, e.y - e.def.radius - 12, wdt, 4);
+    ctx.fillStyle = p > 0.5 ? "#57ffa6" : (p > 0.25 ? "#ffd166" : "#ff4d5e");
+    ctx.fillRect(e.x - wdt / 2, e.y - e.def.radius - 12, wdt * p, 4);
+    if (e.def.boss) {
+      ctx.fillStyle = "#ffd9de"; ctx.font = "700 12px system-ui"; ctx.textAlign = "center";
+      ctx.fillText(e.def.name.toUpperCase(), e.x, e.y - e.def.radius - 18);
+    }
+  }
+}
+
+/* ---------------- Effets, particules, fantômes ---------------- */
+function drawEffects() {
+  for (const b of G.bolts) {
+    const a = b.life / b.max;
+    ctx.globalAlpha = a;
+    ctx.strokeStyle = b.color; ctx.lineWidth = b.w;
+    ctx.shadowColor = b.color; ctx.shadowBlur = 8;
+    ctx.beginPath();
+    b.pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+  for (const r of G.rings) {
+    const a = r.life / r.max;
+    ctx.globalAlpha = a;
+    ctx.strokeStyle = r.color; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+function drawParticles() {
+  for (const p of G.particles) {
+    const a = Math.max(0, Math.min(1, p.life / (p.max || 1)));
+    if (p.kind === "flake") {
+      ctx.save();
+      ctx.globalAlpha = a * 0.9;
+      ctx.translate(p.x, p.y); ctx.rotate(p.spin);
+      ctx.strokeStyle = p.color; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 0; i < 3; i++) {
+        const ang = i * Math.PI / 3;
+        ctx.moveTo(-p.size, 0); ctx.lineTo(p.size, 0);
+        ctx.moveTo(-p.size / 2, -p.size * 0.28); ctx.lineTo(-p.size / 2, p.size * 0.28);
+        ctx.rotate(Math.PI / 3);
+      }
+      ctx.stroke();
+      ctx.restore();
+    } else {
+      ctx.globalAlpha = a;
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size * (0.5 + a * 0.5), 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+function drawFloats() {
+  ctx.textAlign = "center"; ctx.font = "700 13px system-ui";
+  for (const f of G.floats) {
+    const a = f.life / f.max;
+    ctx.globalAlpha = a;
+    ctx.fillStyle = f.color;
+    ctx.shadowColor = f.color; ctx.shadowBlur = 6;
+    ctx.fillText(f.text, f.x, f.y);
+  }
+  ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+}
+function drawGridGhost() {
+  if (!UI.hoverCell || UI.patrolMode) return;
+  const { cx, cy } = UI.hoverCell;
+  if (!inGrid(cx, cy)) return;
+  if (UI.shopSel) {
+    const chk = canPlaceAt(cx, cy, UI.shopSel);
+    const ok = chk.ok;
+    ctx.fillStyle = ok ? "rgba(87,255,166,.22)" : "rgba(255,77,94,.25)";
+    ctx.fillRect(cx * TILE, cy * TILE, TILE, TILE);
+    ctx.strokeStyle = ok ? "#57ffa6" : "#ff4d5e"; ctx.lineWidth = 2;
+    ctx.strokeRect(cx * TILE + 2, cy * TILE + 2, TILE - 4, TILE - 4);
+    // rayon de la tour
+    const c = cellCenter(cx, cy);
+    const def = TOWERS[UI.shopSel];
+    let rr = null;
+    if (def.range) rr = def.range;
+    else if (UI.shopSel === "beaver") rr = towerLevelPreview(0).aura * TILE;
+    else if (UI.shopSel === "cabane") rr = TOWERS.cabane.levels[0].radius;
+    else if (UI.shopSel === "brise") rr = TOWERS.brise.levels[0].radius;
+    if (rr) {
+      ctx.save(); ctx.setLineDash([6, 6]);
+      ctx.strokeStyle = ok ? "rgba(87,255,166,.6)" : "rgba(255,77,94,.6)";
+      ctx.beginPath(); ctx.arc(c.x, c.y, rr, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
+  } else if (!isSpawnOrHeart(cx, cy) && !grid[cx][cy]) {
+    ctx.fillStyle = "rgba(72,230,255,.10)";
+    ctx.fillRect(cx * TILE, cy * TILE, TILE, TILE);
+  }
+}
+function towerLevelPreview(lvl) { return TOWERS.beaver.levels[lvl]; }
+function drawSelection() {
+  const t = UI.selTower;
+  if (!t) return;
+  const x = t.type === "drone" ? t.x : t.x, y = t.type === "drone" ? t.y : t.y;
+  ctx.save();
+  ctx.strokeStyle = "#ffd166"; ctx.lineWidth = 2;
+  ctx.shadowColor = "#ffd166"; ctx.shadowBlur = 8;
+  if (t.type !== "drone") ctx.strokeRect(t.cx * TILE + 2, t.cy * TILE + 2, TILE - 4, TILE - 4);
+  ctx.setLineDash([6, 6]);
+  let rr = t.def.range || null;
+  const L = towerLevel(t);
+  if (t.type === "beaver") rr = L.aura * TILE;
+  if (t.type === "cabane") rr = L.radius;
+  if (t.type === "brise") rr = L.radius;
+  if (rr) { ctx.beginPath(); ctx.arc(x, y, rr, 0, Math.PI * 2); ctx.stroke(); }
+  ctx.restore();
+}
+function drawPatrolDraft() {
+  if (!UI.patrolMode) return;
+  const draft = UI.patrolDraft;
+  for (const p of draft) {
+    ctx.fillStyle = "#ffd166";
+    ctx.shadowColor = "#ffd166"; ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI * 2); ctx.fill();
+  }
+  if (draft.length > 1) {
+    ctx.save();
+    ctx.setLineDash([6, 6]);
+    ctx.strokeStyle = "rgba(255,209,102,.7)"; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(draft[0].x, draft[0].y);
+    for (const p of draft) ctx.lineTo(p.x, p.y);
+    if (draft.length >= 4) ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+  }
+  ctx.shadowBlur = 0;
+}
+function drawPathTrailFx() {
+  if (G.path.length < 2) return;
+  for (const e of G.enemies) {
+    if (e.dead || e.type !== "essaim") continue;
+    if (Math.random() < 0.25) {
+      G.particles.push({ kind: "p", x: e.x, y: e.y, vx: -20, vy: -10, life: 0.35, max: 0.35, color: e.def.color, size: 1.6 });
+    }
+  }
+}
+function drawStormVeil() {
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, "rgba(140,200,255,.10)");
+  g.addColorStop(0.5, "rgba(120,190,255,.16)");
+  g.addColorStop(1, "rgba(140,200,255,.10)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  // bords givrés
+  const eg = ctx.createRadialGradient(W / 2, H / 2, H * 0.32, W / 2, H / 2, H * 0.85);
+  eg.addColorStop(0, "rgba(190,235,255,0)");
+  eg.addColorStop(1, "rgba(190,235,255,.30)");
+  ctx.fillStyle = eg;
+  ctx.fillRect(0, 0, W, H);
+}
+function drawPaused() {
+  ctx.fillStyle = "rgba(3,7,17,.6)";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#e8f4ff"; ctx.textAlign = "center";
+  ctx.font = "800 42px system-ui";
+  ctx.shadowColor = "#48e6ff"; ctx.shadowBlur = 16;
+  ctx.fillText("PAUSE", W / 2, H / 2 - 8);
+  ctx.shadowBlur = 0;
+  ctx.font = "15px system-ui"; ctx.fillStyle = "#8aa3c4";
+  ctx.fillText("Le Nord retient son souffle…", W / 2, H / 2 + 26);
+}
+
+/* ---------------- Interface : état & helpers ---------------- */
+const UI = {
+  shopSel: null,       // type de tour choisi en boutique
+  selTower: null,      // tour placée sélectionnée
+  hoverCell: null,
+  patrolMode: null,    // tour drone en cours de tracé
+  patrolDraft: []
+};
+function randomQUIP() { return QUES[Math.floor(Math.random() * QUES.length)]; }
+function toast(msg, kind) {
+  const box = document.getElementById("toasts");
+  while (box.children.length >= 4) box.removeChild(box.firstChild);
+  const el = document.createElement("div");
+  el.className = "toast" + (kind ? " " + kind : "");
+  el.textContent = msg;
+  box.appendChild(el);
+  setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 4200);
+}
+let bannerTimer = null;
+function banner(msg, bad) {
+  const b = document.getElementById("banner");
+  b.textContent = msg;
+  b.classList.toggle("bad", !!bad);
+  b.classList.add("show");
+  clearTimeout(bannerTimer);
+  bannerTimer = setTimeout(() => b.classList.remove("show"), 2800);
+}
+function updateHUD() {
+  document.getElementById("statCredits").textContent = G.credits + " ₡";
+  document.getElementById("statHeart").textContent = G.heartHp + " PV";
+  const wn = G.phase === "wave" ? G.waveIndex + 1 : Math.min(G.wavesDone + 1, TOTAL_WAVES);
+  document.getElementById("statWave").textContent = (G.over ? "—" : wn + " / " + TOTAL_WAVES);
+  document.getElementById("statScore").textContent = G.kills * 10 + G.wavesDone * 100;
+  document.getElementById("btnWave").disabled = G.phase === "wave" || G.over || !!UI.patrolMode;
+  refreshMapButtonsState();
+  refreshSurchargeBtn();
+  // boutique : coûts trop élevés
+  renderIntel();
+  document.querySelectorAll(".shop-item").forEach(el => {
+    const t = el.dataset.type;
+    el.classList.toggle("poor", G.credits < TOWERS[t].cost);
+  });
+}
+function refreshSurchargeBtn() {
+  const b = document.getElementById("btnSurcharge");
+  if (!b) return;
+  const ready = !G.over && G.phase === "wave" && G.surchargeCd <= 0 && G.credits >= SURCHARGE.cost;
+  b.disabled = !ready;
+  b.textContent = G.surchargeCd > 0
+    ? "💥 " + Math.ceil(G.surchargeCd) + " s"
+    : "💥 Surcharge (" + SURCHARGE.cost + " ₡)";
+  b.classList.toggle("toggled", ready);
+}
+function renderShop() {
+  const box = document.getElementById("shop");
+  box.innerHTML = "";
+  for (const type of SHOP_ORDER) {
+    const def = TOWERS[type];
+    const el = document.createElement("div");
+    el.className = "shop-item" + (UI.shopSel === type ? " selected" : "");
+    el.dataset.type = type;
+    el.setAttribute("role", "button");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("aria-label", def.name + ", " + def.cost + " hydro-crédits — " + def.tag);
+    el.innerHTML =
+      '<div class="shop-icon">' + def.icon + "</div>" +
+      '<div><div class="shop-name">' + def.name + '</div>' +
+      '<div class="shop-desc"><b>' + def.tag + "</b> — " + def.levels[0].desc + "</div></div>" +
+      '<div class="cost">' + def.cost + " ₡</div>";
+    el.addEventListener("click", () => { toggleShop(type); });
+    el.addEventListener("keydown", ev => {
+      if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); toggleShop(type); }
+    });
+    box.appendChild(el);
+  }
+}
+function toggleShop(type) {
+  if (UI.patrolMode) return;
+  AudioSys.init(); AudioSys.resume();
+  if (UI.shopSel === type) { UI.shopSel = null; }
+  else { UI.shopSel = type; deselectTower(); }
+  document.querySelectorAll(".shop-item").forEach(el => el.classList.toggle("selected", el.dataset.type === UI.shopSel));
+}
+function deselectTower() { UI.selTower = null; document.getElementById("towerPanel").style.display = "none"; }
+function selectTower(t) {
+  UI.shopSel = null;
+  document.querySelectorAll(".shop-item").forEach(el => el.classList.remove("selected"));
+  UI.selTower = t;
+  refreshTowerPanel();
+}
+function refreshTowerPanel() {
+  const t = UI.selTower;
+  const panel = document.getElementById("towerPanel");
+  if (!t) { panel.style.display = "none"; return; }
+  panel.style.display = "block";
+  document.getElementById("tpName").textContent = t.def.icon + " " + t.def.name;
+  document.getElementById("tpLvl").textContent = "N" + (t.lvl + 1) + " · investi " + t.invested + " ₡";
+  let extra = "";
+  if (t.type === "drone") extra = " (patrouille : " + (t.patrolActive ? t.patrol.length + " points" : "sur place") + ")";
+  document.getElementById("tpDesc").textContent = towerLevel(t).desc + extra;
+  const bu = document.getElementById("btnUpgrade");
+  if (t.lvl >= 2) { bu.disabled = true; bu.textContent = "★ Niveau MAX"; }
+  else { bu.disabled = false; bu.textContent = "⬆ Améliorer → N" + (t.lvl + 2) + " (" + t.def.levels[t.lvl + 1].cost + " ₡)"; }
+  document.getElementById("btnSell").textContent = "💰 Vendre (+" + refundOf(t) + " ₡)";
+}
+function renderIntel() {
+  const box = document.getElementById("intelList");
+  box.innerHTML = "";
+  WAVES.forEach((wv, i) => {
+    const el = document.createElement("div");
+    let cls = "intel";
+    if (i < G.wavesDone) cls += " done";
+    else if (G.phase === "wave" && i === G.waveIndex) cls += " now";
+    else if (i === G.wavesDone && !G.over && G.phase === "prep") cls += " next";
+    el.className = cls;
+    el.innerHTML = '<div class="w">' + (i < G.wavesDone ? "✓ " : "") + wv.title + "</div>" +
+      '<div class="d">' + wv.intel + "</div>";
+    box.appendChild(el);
+  });
+}
+
+/* ---------------- Patrouille du drone ---------------- */
+function startPatrolMode(t) {
+  UI.patrolMode = t;
+  UI.patrolDraft = [];
+  deselectTower();
+  UI.shopSel = null;
+  renderShop();
+  document.getElementById("patrolBar").style.display = "flex";
+  document.getElementById("patrolCount").textContent = "0";
+  banner("🛸 Trace la patrouille du drone (1 à 4 points), puis Valide");
+  updateHUD();
+}
+function patrolAddPoint(x, y) {
+  const d = UI.patrolDraft;
+  if (!UI.patrolMode) return;
+  if (d.length >= 4) { toast("4 points max — le drone a assez à surveiller !"); return; }
+  // le point doit être dans la grille
+  if (x < 0 || x >= W || y < 0 || y >= H) { toast("Dans la carte, Gardien !", "warn"); return; }
+  d.push({ x, y });
+  AudioSys.coin();
+  document.getElementById("patrolCount").textContent = d.length;
+  if (d.length === 4) patrolValidate();
+}
+function patrolValidate() {
+  const t = UI.patrolMode;
+  if (!t) return;
+  const d = UI.patrolDraft;
+  if (d.length === 0) { toast("Trace au moins 1 point de patrouille, Gardien !", "warn"); AudioSys.denied(); return; }
+  t.patrol = d.slice();
+  t.patrolI = 0;
+  t.patrolActive = true;
+  UI.patrolMode = null; UI.patrolDraft = [];
+  document.getElementById("patrolBar").style.display = "none";
+  AudioSys.upgrade();
+  toast("🛸 Patrouille validée — le drone est en l'air !", "good");
+  selectTower(t);
+  updateHUD();
+}
+function patrolCancel() {
+  const t = UI.patrolMode;
+  if (!t) return;
+  G.credits += t.def.cost; // remboursement complet
+  removeTower(t);
+  computeRepath();
+  UI.patrolMode = null; UI.patrolDraft = [];
+  document.getElementById("patrolBar").style.display = "none";
+  toast("Drone annulé — " + t.def.cost + " ₡ remboursés.");
+  updateHUD();
+}
+document.getElementById("btnPatrolDone").addEventListener("click", patrolValidate);
+document.getElementById("btnPatrolClear").addEventListener("click", () => { UI.patrolDraft = []; document.getElementById("patrolCount").textContent = "0"; AudioSys.sell(); });
+document.getElementById("btnPatrolCancel").addEventListener("click", patrolCancel);
+
+/* ---------------- Entrées ---------------- */
+function screenPos(ev) { // pixels CSS dans le canvas (positions de doigts)
+  const r = canvas.getBoundingClientRect();
+  return { x: ev.clientX - r.left, y: ev.clientY - r.top, w: r.width, h: r.height };
+}
+function canvasPos(ev) {
+  const sp = screenPos(ev);
+  let x = sp.x * (W / sp.w), y = sp.y * (H / sp.h);
+  if (VIEW.z > 1.001) { // inverser la caméra tactile : écran → monde (P0-3)
+    x = (x - W / 2) / VIEW.z + VIEW.cx;
+    y = (y - H / 2) / VIEW.z + VIEW.cy;
+  }
+  return { x, y };
+}
+// P0-3 — pincement à deux doigts : zoom 1× → 3× ancré sous le médian des doigts
+function pinchStart() {
+  const pts = [...pointers.values()];
+  const r = canvas.getBoundingClientRect(), sx = W / r.width, sy = H / r.height;
+  const mx = (pts[0].x + pts[1].x) / 2 * sx, my = (pts[0].y + pts[1].y) / 2 * sy;
+  pinch = {
+    d0: Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y) || 1,
+    z0: VIEW.z,
+    wx: (mx - W / 2) / VIEW.z + VIEW.cx, // monde sous le médian, gelé pour le geste
+    wy: (my - H / 2) / VIEW.z + VIEW.cy
+  };
+}
+function pinchMove(ev, sp) {
+  pointers.set(ev.pointerId, sp);
+  const pts = [...pointers.values()];
+  if (pts.length < 2) { pinch = null; return; }
+  const r = canvas.getBoundingClientRect(), sx = W / r.width, sy = H / r.height;
+  const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+  VIEW.z = Math.min(3, Math.max(1, pinch.z0 * d / pinch.d0));
+  const mx = (pts[0].x + pts[1].x) / 2 * sx, my = (pts[0].y + pts[1].y) / 2 * sy;
+  VIEW.cx = pinch.wx - (mx - W / 2) / VIEW.z; // le monde reste ancré sous les doigts
+  VIEW.cy = pinch.wy - (my - H / 2) / VIEW.z;
+  viewClamp();
+}
+// le « tape » du jeu : poser une tour, sélectionner, points de patrouille
+function tapAct(ev) {
+  if (G.over || G.paused) return;
+  const p = canvasPos(ev);
+  if (UI.patrolMode) { patrolAddPoint(p.x, p.y); return; }
+  const cx = Math.floor(p.x / TILE), cy = Math.floor(p.y / TILE);
+  if (!inGrid(cx, cy)) { deselectTower(); return; }
+  if (UI.shopSel) {
+    const t = placeTower(UI.shopSel, cx, cy);
+    if (t) {
+      if (!UI.patrolMode) { UI.shopSel = null; document.querySelectorAll(".shop-item").forEach(el => el.classList.remove("selected")); }
+      renderShop(); updateHUD();
+    }
+    return;
+  }
+  const t = grid[cx][cy];
+  if (t) selectTower(t);
+  else {
+    // clic sur un drone en vol ?
+    for (const d of G.towers) {
+      if (d.type === "drone" && Math.hypot(p.x - d.x, p.y - d.y) <= 24) { selectTower(d); return; }
+    }
+    deselectTower();
+  }
+}
+// P0-3 — tactile : départager le tape (jouer) du glisser (déplacer la vue), double-tap = vue complète
+function endTouchPointer(ev) {
+  const wasTouch = pointers.has(ev.pointerId);
+  pointers.delete(ev.pointerId);
+  if (pinch) { // le pincement a eu lieu : ni tape ni relais
+    if (pointers.size < 2) pinch = null;
+    pendingTap = null;
+    return;
+  }
+  if (wasTouch && pendingTap) {
+    const wasTap = !pendingTap.moved;
+    pendingTap = null;
+    if (!wasTap) return;
+    const now = performance.now();
+    if (now - lastTapT < 350 && VIEW.z > 1.001) {
+      lastTapT = 0; resetView(); AudioSys.place(); // double-tap : vue complète
+      return;
+    }
+    lastTapT = now;
+    tapAct(ev);
+  }
+}
+canvas.addEventListener("pointerup", endTouchPointer);
+canvas.addEventListener("pointercancel", endTouchPointer);
+canvas.addEventListener("pointermove", ev => {
+  if (ev.pointerType === "touch") {
+    const sp = screenPos(ev);
+    if (pinch && pointers.has(ev.pointerId)) { pinchMove(ev, sp); return; }
+    if (pendingTap && pointers.has(ev.pointerId)) { // glisser à un doigt
+      const cx = sp.x * (W / sp.w), cy = sp.y * (H / sp.h);
+      if (Math.hypot(cx - pendingTap.x, cy - pendingTap.y) > 10) { // 10 px de marge
+        pendingTap.moved = true;
+        if (VIEW.z > 1.001) { // zoomé : déplacer la vue, le chemin reste atteignable
+          VIEW.cx -= (cx - pendingTap.x) / VIEW.z;
+          VIEW.cy -= (cy - pendingTap.y) / VIEW.z;
+          viewClamp();
+        }
+        pendingTap.x = cx; pendingTap.y = cy;
+      }
+    }
+    return;
+  }
+  const p = canvasPos(ev);
+  const cx = Math.floor(p.x / TILE), cy = Math.floor(p.y / TILE);
+  UI.hoverCell = inGrid(cx, cy) ? { cx, cy } : null;
+});
+canvas.addEventListener("pointerleave", () => { UI.hoverCell = null; });
+canvas.addEventListener("pointerdown", ev => {
+  AudioSys.init(); AudioSys.resume();
+  if (ev.pointerType === "touch") {
+    pointers.set(ev.pointerId, screenPos(ev));
+    if (pointers.size >= 2) { // deux doigts → pincement de zoom
+      pinchStart(); pendingTap = null;
+      if (ev.cancelable) ev.preventDefault();
+      return;
+    }
+    const sp = pointers.get(ev.pointerId);
+    pendingTap = { x: sp.x * (W / sp.w), y: sp.y * (H / sp.h), moved: false };
+    return; // tape ou glisser : départagé au relâché (endTouchPointer)
+  }
+  tapAct(ev); // souris / stylo : comportement immédiat inchangé
+});
+document.addEventListener("keydown", ev => {
+  if (ev.key === "Escape") {
+    if (UI.patrolMode) { patrolCancel(); return; }
+    if (UI.shopSel) { UI.shopSel = null; renderShop(); return; }
+    deselectTower();
+    closeAbout();
+  }
+  if (ev.key === "Enter" && UI.patrolMode) patrolValidate();
+  if (ev.key === " " && !G.over && G.phase === "prep" && !UI.patrolMode) { ev.preventDefault(); startWave(); }
+  if (ev.key === "s" || ev.key === "S") { if (!G.over && G.phase === "wave") useSurcharge(); }
+  if (ev.key === "p" || ev.key === "P") togglePause();
+});
+
+/* ---------------- Boutons ---------------- */
+document.getElementById("btnWave").addEventListener("click", startWave);
+document.getElementById("zoomIn").addEventListener("click", () => zoomStep(+1)); // P0-3 : zoom tactile à boutons
+document.getElementById("zoomOut").addEventListener("click", () => zoomStep(-1));
+document.getElementById("zoomReset").addEventListener("click", () => { AudioSys.init(); AudioSys.resume(); resetView(); AudioSys.place(); });
+document.getElementById("btnSurcharge").addEventListener("click", () => { AudioSys.init(); AudioSys.resume(); useSurcharge(); });
+document.getElementById("btnSpeed").addEventListener("click", () => {
+  G.speed = G.speed === 1 ? 2 : 1;
+  document.getElementById("btnSpeed").textContent = "×" + G.speed;
+  document.getElementById("btnSpeed").classList.toggle("toggled", G.speed === 2);
+});
+function togglePause() {
+  if (G.over) return;
+  G.paused = !G.paused;
+  document.getElementById("btnPause").textContent = G.paused ? "▶" : "⏸";
+  document.getElementById("btnPause").classList.toggle("toggled", G.paused);
+}
+document.getElementById("btnPause").addEventListener("click", togglePause);
+document.getElementById("btnRestart").addEventListener("click", confirmRestart);
+document.getElementById("btnMute").addEventListener("click", () => {
+  const m = AudioSys.toggleMute();
+  document.getElementById("btnMute").textContent = m ? "🔇" : "🔊";
+});
+document.getElementById("btnUpgrade").addEventListener("click", () => { if (UI.selTower) tryUpgrade(UI.selTower); });
+document.getElementById("btnSell").addEventListener("click", () => { if (UI.selTower) trySell(UI.selTower); });
+document.getElementById("btnAbout").addEventListener("click", openAbout);
+document.getElementById("btnAboutClose").addEventListener("click", closeAbout);
+document.getElementById("aboutModal").addEventListener("click", ev => { if (ev.target.id === "aboutModal") closeAbout(); });
+document.getElementById("btnSwitchYes").addEventListener("click", () => {
+  const id = pendingMap;
+  const restart = pendingRestart;
+  closeSwitchModal();
+  if (restart) { resetGame(); return; }
+  if (id) pickMap(id); // pickMap re-vérifie les gardes (vague en cours, etc.)
+});
+document.getElementById("btnSwitchNo").addEventListener("click", closeSwitchModal);
+document.getElementById("switchModal").addEventListener("click", ev => { if (ev.target.id === "switchModal") closeSwitchModal(); });
+function openAbout() { document.getElementById("aboutModal").classList.add("show"); }
+function closeAbout() { document.getElementById("aboutModal").classList.remove("show"); }
+document.getElementById("btnReplay").addEventListener("click", resetGame);
+
+/* ---------------- Fin de partie ---------------- */
+function finalScore() {
+  return G.kills * 10 + G.wavesDone * 100 + G.heartHp * 25 + ((G.won && !G.heartHit) ? 500 : 0);
+}
+function gameOver(won) {
+  if (G.over) return;
+  G.over = true; G.won = won; G.phase = "prep";
+  G.storm.active = false;
+  document.getElementById("stormClock").style.display = "none";
+  if (UI.patrolMode) { document.getElementById("patrolBar").style.display = "none"; UI.patrolMode = null; }
+  const s = finalScore();
+  document.getElementById("endTitle").textContent = won ? "LA LIGNE TIENT !" : "LE CŒUR S'ÉTEINT...";
+  document.getElementById("endTitle").className = won ? "win" : "lose";
+  document.getElementById("endMsg").textContent = won
+    ? "La Horde est repoussée et le Cœur du Nord pulse encore. Le Québec de 2087 te doit une fière chandelle, Gardien. " + randomQUIP()
+    : "La vague " + (G.waveIndex + 1) + " a eu raison de la Ligne… mais un vrai Gardien du Nord ne lâche jamais. Relève les barrages !";
+  document.getElementById("sKills").textContent = G.kills;
+  document.getElementById("sWaves").textContent = G.wavesDone + " / " + TOTAL_WAVES;
+  document.getElementById("sTowers").textContent = G.towersPlaced;
+  document.getElementById("sHp").textContent = G.heartHp + " / " + G.heartMax;
+  document.getElementById("sScore").textContent = s;
+  document.getElementById("sBonus").textContent = (G.won && !G.heartHit) ? "+500 (Sans faute !)" : "—";
+  let best = 0;
+  try { best = parseInt(localStorage.getItem(BEST_KEY) || "0", 10) || 0; } catch (e) {}
+  const isBest = s > best;
+  if (isBest) { try { localStorage.setItem(BEST_KEY, String(s)); } catch (e) {} best = s; }
+  document.getElementById("sBest").textContent = isBest ? "🏆 Nouveau record local : " + s + " pts !" : "🏆 Record local : " + best + " pts";
+  saveMapProg(MAP_ID, s, G.wavesDone, won); // la progression reste par carte
+  renderMapButtons();
+  if (won) { AudioSys.win(); AudioSys.setIntensity(0); for (let i = 0; i < 5; i++) setTimeout(() => burst(Math.random() * W, Math.random() * H * 0.6, ["#57ffa6","#48e6ff","#ffd166"][i % 3], 30, 220), i * 220); }
+  else AudioSys.lose();
+  updateHUD();
+  setTimeout(() => document.getElementById("endModal").classList.add("show"), 900);
+}
+function resetGame() {
+  document.getElementById("endModal").classList.remove("show");
+  useMap(MAP_ID); // re-charger la carte active (cases bloquées, dimensions)
+  clearGrid();
+  G.phase = "prep"; G.waveIndex = -1; G.waveTime = 0; G.spawnQueue = [];
+  G.credits = 220; G.heartHp = 20; G.score = 0;
+  G.kills = 0; G.towersPlaced = 0; G.wavesDone = 0; G.heartHit = false;
+  G.surchargeCd = 0; G.surchargeUses = 0; G.steals = 0;
+  G.over = false; G.won = false;
+  G.storm = { active: false, decided: false, willStorm: false, t: 0, dur: 0 };
+  G.towers = []; G.enemies = []; G.particles = []; G.bolts = []; G.rings = []; G.floats = [];
+  G.shake = 0;
+  frostT = -1; // P0-2 : aucun givre résiduel après un redémarrage (le pré-rendu reste en cache)
+  resetView(); // P0-3 : revenir à la vue complète au redémarrage / changement de carte
+  UI.shopSel = null; UI.selTower = null; UI.hoverCell = null; UI.patrolMode = null; UI.patrolDraft = [];
+  document.getElementById("patrolBar").style.display = "none";
+  document.getElementById("stormClock").style.display = "none";
+  computeRepath();
+  renderShop(); renderIntel(); updateHUD(); deselectTower();
+  banner("Dessine ton labyrinthe, puis lance la vague 1, Gardien !");
+  toast("Bienvenue : " + MAPS[MAP_ID].name + ". Clique une tour, clique une case — et bonne défense !", "good");
+}
+
+/* ---------------- Boucle principale ---------------- */
+let lastT = performance.now();
+function loop(now) {
+  requestAnimationFrame(loop);
+  let dt = (now - lastT) / 1000;
+  lastT = now;
+  if (dt > 0.06) dt = 0.06;
+  G.time += dt;
+  update(dt * G.speed);
+  render();
+}
+
+/* ---------------- Démarrage ---------------- */
+useMap(MAP_ID);
+computeRepath();
+renderShop();
+renderMapButtons();
+renderIntel();
+updateHUD();
+renderSplash(); // l'écran initial s'affiche en premier : la partie s'ouvre au choix d'une carte
+banner("Bienvenue à NORD 2087, Gardien — la Ligne compte sur toi !");
+setTimeout(() => toast("Les Glitchs sont rapides mais fragiles : une Éolienne près du portail fait des merveilles.", ""), 1200);
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
