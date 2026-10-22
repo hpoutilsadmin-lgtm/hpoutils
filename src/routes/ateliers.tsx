@@ -11,10 +11,10 @@ export const Route = createFileRoute("/ateliers")({
 });
 
 const ATELIERS = [
-  { title: "L'IA sans jargon", price: "120 $ CAD · forfait groupe", desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie." },
-  { title: "Cuisine pratique", price: "120 $ CAD · forfait groupe", desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien." },
-  { title: "Atelier jeunesse", price: "120 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant." },
-  { title: "Manger mieux avec moins", price: "150 $ CAD · forfait groupe", desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles." },
+  { title: "L'IA sans jargon", price: "120 $ CAD · forfait groupe", desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie.", inclus: "Repartez avec un cas d'usage concret. Aucune taxe ajoutée." },
+  { title: "Cuisine pratique", price: "120 $ CAD · forfait groupe", desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
+  { title: "Atelier jeunesse", price: "120 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
+  { title: "Manger mieux avec moins", price: "150 $ CAD · forfait groupe", desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
 ];
 
 const FETES = [
@@ -51,7 +51,7 @@ function Page() {
                 <h3>{a.title}</h3>
                  <p className="workshop-meta">{a.price}</p>
                 <p>{a.desc}</p>
-                <p>Inclut les fiches recette et astuces. Aucune taxe ajoutée.</p>
+                <p>{a.inclus}</p>
               </article>
             ))}
           </div>
