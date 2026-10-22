@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 
 const NAV = [
   { to: "/", label: "Accueil" },
@@ -32,14 +32,16 @@ export function SiteHeader() {
         </button>
         <nav className={`site-nav${open ? " open" : ""}`} aria-label="Navigation principale">
           {NAV.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              activeOptions={{ exact: l.to === "/" }}
-              activeProps={{ className: "active" }}
-            >
-              {l.label}
-            </Link>
+            <Fragment key={l.to}>
+              <Link
+                to={l.to}
+                activeOptions={{ exact: l.to === "/" }}
+                activeProps={{ className: "active" }}
+              >
+                {l.label}
+              </Link>
+              {l.to === "/outils" && <a href="/en-cuisine/">En cuisine</a>}
+            </Fragment>
           ))}
         </nav>
       </div>
