@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/reflexions")({
   beforeLoad: () => {
-    throw redirect({ to: "/livres-pdf" });
+    throw redirect({ to: "/livres-pdf", statusCode: 301 });
   },
   head: () => ({
     meta: [
