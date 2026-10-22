@@ -300,6 +300,15 @@
         text-decoration:none;border-bottom:2px solid var(--gold);
       }
       .bubble a:hover{background:var(--gold);color:#2b2118}
+      /* Lot nº 3 : le refus aussi facile que le oui — bouton discret
+         « Non merci » dans les bulles de suggestion (vente version HP). */
+      .bubble .bubble-no{
+        pointer-events:auto;margin-top:7px;padding:3px 10px;font-size:11.5px;
+        font-family:inherit;font-weight:600;color:#5b4a36;background:transparent;
+        border:1.5px solid rgba(91,74,54,.55);border-radius:999px;cursor:pointer;
+      }
+      .bubble .bubble-no:hover{background:rgba(91,74,54,.12)}
+      .bubble .bubble-no:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
       /* Zzz et éclats (cœurs / étoiles) */
       .zzz{position:absolute;top:-14px;right:0;opacity:0;pointer-events:none}

@@ -319,6 +319,10 @@ export const KB = [
           a:"Les jeux sont là : 26 jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
         { q:"Montre-moi les kits", s:"PAR ICI →", go:"sec-kits",
           a:"Les kits Sans Honte sont juste là : 5 $ le kit, 15 thèmes du quotidien, et le bundle à 40 $." },
+        { q:"Comment préparer mon testament ?", s:"5 $", u:"https://hp-outils.com/sans-honte", l:"Voir les kits",
+          a:"Pour un testament, c'est le kit « Testament olographe » qu'il te faut, dans les kits Sans Honte (5 $) : de l'information claire pour préparer le tien. Ce n'est pas un avis juridique : l'idéal reste de le faire valider par un notaire." },
+        { q:"Comment classer mes papiers ?", s:"5 $", u:"https://hp-outils.com/sans-honte", l:"Voir les kits",
+          a:"Pour classer tes papiers, c'est le kit « Papiers » qu'il te faut, dans les kits Sans Honte (5 $) : 24 fiches pour les classer et les retrouver sans tout virer à l'envers." },
         { q:"Montre-moi les recettes", s:"PAR ICI →", go:"sec-recettes",
           a:"Recettes HP est là : 629 recettes gratuites. Tu tapes tes ingrédients, il trouve quoi cuisiner !" },
         { q:"Montre-moi les livres", s:"PAR ICI →", go:"sec-livres",
@@ -396,3 +400,68 @@ export const ETHIQUE_LINES = [
         "Et si tu décides de ne rien prendre, c'est bien correct aussi. Mon travail, c'est de t'informer — pas de te pousser.",
         "Compare, respire, reviens quand tu veux : ici, on ne joue jamais avec l'urgence."
       ];
+
+      /* ---------- LOT Nº 3 (22 oct. 2026) : « vendeur, version HP » ----------
+         Mandat d'Hugo : HGPTO fait vraiment de la vente, de la suggestion
+         et répond aux clients, avec les meilleures techniques PROPRES :
+         écouter → besoin réel → recommander LE bon produit (specs vraies,
+         prix vrai, lien) → oui facile ET non tout aussi facile.
+         Plafonds appliqués par le moteur : max 1 suggestion par page,
+         jamais le même produit 2× par session, un refus (« Non merci »)
+         fait taire le produit pour la session, jamais deux collées,
+         gratuit d'abord, jamais pendant une tâche/un jeu, jamais sur un
+         signal émotif (pressé, perdu, nuit). Faits seulement : tout vient
+         de la base ci-dessus, aucun chiffre inventé. */
+
+      /* Ses grognes signature — quand quelque chose ne marche pas à SON
+         goût dans SA vie (recette ratée, chute, son serpent au jeu,
+         surchauffe, boulon récalcitrant). Jamais causées par le visiteur,
+         jamais dirigées contre lui. Alternées, dosées (~1 fois sur 2). */
+export const GRUMBLES = [
+        "Saleté d'crème !",
+        "Ti pépère jaune moutarde m'en dira tant."
+      ];
+      /* Besoins exprimés en mots par le visiteur → LE produit qui fait ça.
+         `mots` : sous-chaînes normalisées (sans accents) cherchées dans la
+         question tapée ; `aussi` : un second groupe doit aussi matcher ;
+         `dejaVu` : si la réponse de la base nomme déjà ce produit, la
+         suggestion ne suit pas (pas de double pitch). */
+export const BESOIN_SUGGESTIONS = [
+        { id:'testament', mots:['testament','succession','notaire','olographe'], dejaVu:'testament olographe',
+          t:"Pour ça, c'est celui-là qui fait ça : le kit « Testament olographe », dans les kits Sans Honte (5 $) — de l'information claire pour préparer le tien. Ce n'est pas un avis juridique : l'idéal reste de le faire valider par un notaire.",
+          u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
+        { id:'papiers', mots:['papiers','paperasse','retrouver mes documents'], dejaVu:'papiers',
+          t:"Pour ça, c'est celui-là qui fait ça : le kit « Papiers », dans les kits Sans Honte (5 $) — 24 fiches pour classer tes papiers et les retrouver sans tout virer à l'envers.",
+          u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
+        { id:'enfants-cuisine', mots:['cuisiner','cuisine','recette','manger'], aussi:['enfant','famille','petits chefs'], dejaVu:'enfants cuisinent',
+          t:"Pour cuisiner en famille, c'est celui-là qui fait ça : « Les enfants cuisinent pour faire plaisir » (20 $), des recettes pensées pour les petits chefs. Et au quotidien, Recettes HP reste gratuit : 629 recettes pour tout le monde.",
+          u:"https://hp-outils.com/livres-pdf", l:"Voir le livre", s:"EN FAMILLE" },
+        { id:'apprendre', mots:['apprendre','cours de cuisine','formation','atelier'], dejaVu:'ateliers sont la',
+          t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les ateliers à Terrebonne — « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
+          u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
+        { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
+          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 26 jeux, sans inscription. Et le jour où tu voudras un coup de pouce pour t'organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
+          u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" }
+      ];
+      /* L'alternative honnête : après une réponse qui présente un produit
+         payant, il peut offrir la porte gratuite — la descente honnête fait
+         partie de la vente version HP. */
+export const ALT_LINES = {
+        kits:   { t:"Et si le budget dit « pas maintenant », c'est bien correct aussi : les recettes et les jeux sont gratuits, sans inscription. Les kits seront là quand tu voudras.", u:"https://hp-outils.com/jeux", l:"Voir les jeux gratuits", s:"GRATUIT !" },
+        livres: { t:"Et côté gratuit, pour patienter : « Futur simple », notre balado (un épisode chaque lundi), et RELÈVE, l'histoire dont tu choisis la suite — le chapitre 1 est gratuit.", u:"https://hp-outils.com/balado", l:"Écouter le balado", s:"GRATUIT !" },
+        ateliers:{ t:"Et pour commencer sans payer : Recettes HP — 629 recettes gratuites. Tu tapes tes ingrédients, il te propose quoi cuisiner.", u:"https://hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"GRATUIT !" }
+      };
+      /* Le bundle, dit vrai : déclenché quand le visiteur s'intéresse aux
+         kits pour la 2e fois dans la session. Le calcul est réel :
+         10 kits × 5 $ = 50 $ à l'unité, bundle à 40 $ = 10 $ de moins —
+         conditionné honnêtement (« si tu en veux vraiment 10 »). */
+export const BUNDLE_MATH = { t:"Petit calcul honnête, pendant qu'on parle de kits : à 5 $ le kit, 10 kits pris un par un, ça fait 50 $. Le bundle « Choisis 10 parmi 15 » est à 40 $ — donc 10 $ de moins, si tu en veux vraiment 10. Sinon, un seul kit à 5 $ fait très bien l'affaire.", u:"https://hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" };
+      /* Suggestions d'attente sur les pages produits (visiteur qui regarde
+         longuement) : résumé argumenté + alternative honnête, une seule
+         par page. /sans-honte n'en a pas : route sensible, dignité
+         d'abord — le résumé calme des faits (lot nº 2) y suffit. */
+export const DWELL_SUGGESTIONS = {
+        '/livres-pdf': { t:"Tu regardes les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, « Les enfants cuisinent pour faire plaisir » à 20 $. Téléchargement immédiat après le paiement. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
+        '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), en groupe, à Terrebonne et dans les environs ; réservation et questions par courriel à Hugo. Et les recettes, elles, sont gratuites en tout temps.", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
+        '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 1 $ par mois (ou 12 $ pour l'année) pour soutenir HP Outils. En toute honnêteté : le bouton d'inscription payante n'est pas encore en ligne — ça s'en vient.", u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"1 $ / MOIS" }
+      };

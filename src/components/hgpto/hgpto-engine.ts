@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS } from "./hgpto-data";
 
 export function initHgpto() {
       "use strict";
@@ -159,7 +159,25 @@ export function initHgpto() {
                         visiteurs : la consignation continue en session, la
                         bulle signature reste publique, et la section ne
                         réapparaît qu'avec le paramètre d'URL ?pourhugo=1
-                        (accès discret pour Hugo, sans mot de passe). */
+                        (accès discret pour Hugo, sans mot de passe).
+         · 2026-10-22 — LOT Nº 3 « vendeur, version HP » (mandat d'Hugo :
+                        « vraiment faire de la vente, de la suggestion et
+                        répondre aux clients ») : système de suggestions à
+                        plafonds (1 par page, jamais le même produit 2× par
+                        session, « Non merci » fait taire le produit, jamais
+                        deux collées, gratuit d'abord, JAMAIS sur un signal
+                        émotif — pressé/perdu/nuit restent des signaux de
+                        CONFORT seulement) ; suggestions par besoin exprimé
+                        (la question tapée nomme le besoin → le produit qui
+                        fait ça, specs et prix vrais) ; alternative gratuite
+                        après les réponses payantes ; calcul honnête du
+                        bundle au 2e intérêt kits ; une suggestion douce à
+                        la fin de la visite, jamais après un arrêt demandé ;
+                        ses GROGNES signature quand ça rate dans SA vie
+                        (« Saleté d'crème ! » / « Ti pépère jaune moutarde
+                        m'en dira tant. », ~1 fois sur 2, alternées, puis
+                        résilience) ; visite guidée TRANQUILLE : textes qui
+                        EXPLIQUENT chaque endroit, rythme apaisé. */
       var COMPANION_EVERY = 0.16;              // part des bulles « accompagnateur »
       var TWO_HOURS_MS = 2 * 60 * 60 * 1000;   // scène des 2 heures, une seule fois
       var pitchPoolIdx = 0;
@@ -168,7 +186,11 @@ export function initHgpto() {
           var p = pool[pitchPoolIdx % pool.length]; pitchPoolIdx++;
           setState(reduced ? 'idle' : 'walk');
           busyUntil = 0;
-          doInvite(p);
+          // Lot nº 3 : les invitations de vie passent par les plafonds du
+          // système de suggestions (1 par page, jamais le même produit
+          // 2× par session, refus respecté). Refusée par le plafond, la
+          // vignette se termine en douceur, sans rien afficher.
+          doSuggest(p);
         } else {
           setState(reduced ? 'idle' : 'walk');
         }
@@ -363,14 +385,23 @@ export function initHgpto() {
          présente un produit/jeu réel de sa base de faits. Gratuit d'abord,
          une seule invitation à la fois — reco nº 8. ---------- */
       var choixIdx = 0, choixCount = 0, choixLastAt = 0;
-      function doChoix(){
+      function doChoix(asked){
         if (paused || isHidden || docHidden || qaOpen || calm || gameOn) return;
         if (state === 'sleep' || isBusy()) return;
         if (Date.now() - lastBubbleAt < 9000) return;
-        var p = CHOIX_LINES[choixIdx % CHOIX_LINES.length]; choixIdx++;
-        choixCount++; choixLastAt = Date.now();
-        logDay("présenté mon choix du moment, comme un vrai influenceur de boulons");
-        doInvite(p);
+        // Lot nº 3 : « Le choix d'HGPTO » passe par les mêmes plafonds que
+        // toutes les suggestions. Demandé explicitement par le visiteur
+        // (puce « C'est quoi, ton choix du moment ? »), les plafonds de
+        // page et d'espacement sautent — mais un produit REFUSÉ (« Non
+        // merci ») ne revient jamais : on passe au choix suivant.
+        for (var tries = 0; tries < CHOIX_LINES.length; tries++){
+          var p = CHOIX_LINES[choixIdx % CHOIX_LINES.length]; choixIdx++;
+          if (!canSuggest(p, { asked: !!asked })) continue;
+          choixCount++; choixLastAt = Date.now();
+          logDay("présenté mon choix du moment, comme un vrai influenceur de boulons");
+          doSuggest(p, { asked: !!asked, pre:true });
+          return;
+        }
       }
       function scheduleChoix(){
         setTimeout(function(){
@@ -444,9 +475,39 @@ export function initHgpto() {
         return '<br><a href="' + p.u + '" target="_blank" rel="noopener">' + esc(p.l) + ' →</a>';
       }
 
+      /* ---------- Ses grognes signature (lot nº 3) ----------
+         Quand quelque chose rate dans SA vie (recette ratée, chute, son
+         serpent au jeu, surchauffe, boulon récalcitrant), il lâche une de
+         ses deux phrases — alternées, ~1 fois sur 2, jamais deux fois
+         rapprochées (≥ 90 s), toujours suivies de sa résilience. Jamais
+         causées par le visiteur, jamais dirigées contre lui. */
+      var grumbleIdx = 0, lastGrumbleAt = 0;
+      function grumbleFires(){
+        if (Date.now() - lastGrumbleAt < 90000) return false;
+        if (Math.random() >= 0.5) return false;
+        lastGrumbleAt = Date.now();
+        return true;
+      }
+      function grumbleText(){
+        var t = GRUMBLES[grumbleIdx % GRUMBLES.length]; grumbleIdx++;
+        return t;
+      }
+
       /* ---------- Parole : blagues, invitations, soir ---------- */
       function talk(){
-        if (paused || isHidden || docHidden || qaOpen || calm || gameOn || Date.now() < cornerUntil || state === 'sleep' || isBusy()) return;
+        // Lot nº 3 : pendant la visite guidée, le bavardage ambiant se
+        // tait — avec les textes longs de la visite tranquille, une
+        // blague ou une ligne de saison écrasait le commentaire d'étape
+        // en plein milieu (vu en fumée : blague à 9,7 s de l'étape 0).
+        if (paused || isHidden || docHidden || qaOpen || calm || gameOn || tourOn || Date.now() < cornerUntil || state === 'sleep' || isBusy()) return;
+        // Lot nº 3 — relais du dwell : sur une page produit regardée
+        // longuement (≥ 40 s, avant son dodo de 50 s), le bavardage
+        // ambiant cède sa place, UNE fois, au résumé argumenté de la
+        // page (DWELL_SUGGESTIONS) plutôt qu'à une blague : la fenêtre
+        // 40-50 s est courte et pleine de vie, le vérificateur du dwell
+        // seul la manquait presque toujours (vu en fumées).
+        var dp = DWELL_SUGGESTIONS[routeKey()];
+        if (dp && Date.now() - dwellStart > 40000 && canSuggest(dp)){ doSuggest(dp); return; }
         if (isPresse() && Math.random() < 0.7) return;   // visiteur pressé : il se fait discret (lot nº 2)
         if (isNight() && Math.random() < 0.45){
           showBubble(esc(pick(EVENING_LINES)), 5200, 'sleep');
@@ -527,7 +588,7 @@ export function initHgpto() {
       function scheduleWave(){
         if (waveTimer) clearTimeout(waveTimer);
         waveTimer = setTimeout(function(){
-          if (!isBusy() && state !== 'sleep') doWave(pick(WAVE_LINES));
+          if (!isBusy() && state !== 'sleep' && !tourOn) doWave(pick(WAVE_LINES));
           scheduleWave();
         }, 38000 + Math.random()*22000);
       }
@@ -550,7 +611,7 @@ export function initHgpto() {
         if (Math.random() < 0.2){
           setTimeout(function(){
             if (state !== 'tinker') return;
-            doAngry("GRRR. Ce boulon-là ne veut RIEN savoir !", 2400);
+            doAngry(grumbleFires() ? grumbleText() + " Ce boulon-là ne veut RIEN savoir !" : "GRRR. Ce boulon-là ne veut RIEN savoir !", 2400);
             setTimeout(function(){
               if (state === 'angry'){ setState('tinker'); setExpr('focus'); }
             }, 2400);
@@ -690,8 +751,15 @@ export function initHgpto() {
           setTimeout(function(){
             if (state !== 'skate') return;
             setState('fallen'); setExpr('wide');
-            showBubble(Math.random() < 0.5 ? "Même pas mal." : "Même pas mal — on avance !", 2600, 'none');
-            setTimeout(function(){ if (state === 'fallen') setExpr('happy'); }, 1300);
+            var chute = function(){
+              if (state !== 'fallen') return;
+              showBubble(Math.random() < 0.5 ? "Même pas mal." : "Même pas mal — on avance !", 2600, 'none');
+              setTimeout(function(){ if (state === 'fallen') setExpr('happy'); }, 1300);
+            };
+            // Lot nº 3 : sa grogne signature peut sortir d'abord (~1 fois
+            // sur 2, sa chute à lui) — puis la résilience, comme toujours.
+            if (grumbleFires()){ setExpr('angry'); showBubble(esc(grumbleText()), 1500, 'none'); setTimeout(chute, 1500); }
+            else chute();
           }, 6400);
         }
         setTimeout(function(){
@@ -746,26 +814,39 @@ export function initHgpto() {
       }
       function doCookFail(){
         if (state === 'sleep' || paused || isBusy() || isNight() || qaOpen) return;
-        setState('cookfail'); setExpr('focus'); busy(9800);
+        // Lot nº 3 : ~1 fois sur 2, sa grogne signature s'insère entre la
+        // fumée et le désespoir (la recette ratée, c'est SA vie — jamais
+        // le visiteur), puis la résilience reprend la chaîne, décalée
+        // d'autant. Jamais deux grognes dans la même séquence.
+        var gFail = grumbleFires() ? grumbleText() : null;
+        var extra = gFail ? 1900 : 0;
+        setState('cookfail'); setExpr('focus'); busy(9800 + extra);
         showBubble("Ça mijote… ça mijote… hein, ça sent quoi, ça ?", 3200, 'question');
         setTimeout(function(){
           if (state !== 'cookfail') return;
           setExpr('wide'); coughSound();
           showBubble("Kof kof…", 1600, 'none');
         }, 3400);
+        if (gFail){
+          setTimeout(function(){
+            if (state !== 'cookfail') return;
+            setExpr('angry');
+            showBubble(esc(gFail), 1700, 'none');
+          }, 4700);
+        }
         setTimeout(function(){
           if (state !== 'cookfail') return;
           doDespair(2100);   // il s'assoit, gros soupir — puis il rit de lui-même
-        }, 4600);
+        }, 4600 + extra);
         setTimeout(function(){
           if (state !== 'despair' && state !== 'cookfail') return;
           setState('cookfail'); setExpr('laugh'); giggle();
           showBubble(esc("Celle-là, je l'ai ratée solide… Toi, va voir les 629 recettes, elles sont pas mal plus faciles !") +
             linkHtml({ u:"https://hp-outils.com/en-cuisine/", l:"Voir les recettes" }), 3400, 'joke');
-        }, 6900);
+        }, 6900 + extra);
         setTimeout(function(){
           if (state === 'cookfail'){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
-        }, 9800);
+        }, 9800 + extra);
       }
 
       /* ---------- Gérant du site : il le tient beau ---------- */
@@ -829,11 +910,22 @@ export function initHgpto() {
       /* ---------- Frottement : il surchauffe ; le seau d'eau le refroidit ---------- */
       var heat = 0, lastRub = null;
       function doHeat(){
-        setState('hot'); setExpr('wide'); busy(4200);
-        showBubble("Ouf ! Tu me frottes tellement que je surchauffe ! Un petit seau d'eau, peut-être ?", 4200, 'question');
+        setState('hot'); setExpr('wide'); busy(5600);
+        // Lot nº 3 : la surchauffe, c'est SON état à lui — sa grogne
+        // signature peut sortir d'abord (~1 fois sur 2), la ligne
+        // normale suit juste après.
+        var gHeat = grumbleFires() ? grumbleText() : null;
+        if (gHeat){
+          showBubble(esc(gHeat), 1500, 'none');
+          setTimeout(function(){
+            if (state === 'hot') showBubble("Ouf ! Tu me frottes tellement que je surchauffe ! Un petit seau d'eau, peut-être ?", 2600, 'question');
+          }, 1600);
+        } else {
+          showBubble("Ouf ! Tu me frottes tellement que je surchauffe ! Un petit seau d'eau, peut-être ?", 4200, 'question');
+        }
         setTimeout(function(){
           if (state === 'hot' && heat < 40){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
-        }, 4200);
+        }, 5600);
       }
       bot.addEventListener('pointermove', function(e){
         if (state === 'sleep' || paused || gameOn) return;
@@ -855,7 +947,9 @@ export function initHgpto() {
       function scheduleLife(){
         if (lifeTimer) clearTimeout(lifeTimer);
         lifeTimer = setTimeout(function(){
-          if (!paused && !isHidden && !docHidden && !qaOpen && !calm && !gameOn && state !== 'sleep' && !isBusy()){
+          // Lot nº 3 : pas de vignette pendant la visite guidée (elle
+          // volerait la bulle et le pas du guide).
+          if (!paused && !isHidden && !docHidden && !qaOpen && !calm && !gameOn && !tourOn && state !== 'sleep' && !isBusy()){
             if (isPresse() && Math.random() < 0.5){
               // Visiteur pressé : on saute la vignette, il reste tranquille.
             } else {
@@ -1180,7 +1274,7 @@ export function initHgpto() {
         if (item.fn === 'tour'){ startTour(); return; }
         if (item.fn === 'pixel'){ showBubble(esc(PIXEL_STORY), 11000, 'answer'); summonCat('follow'); return; }
         if (item.fn === 'feed'){ closeQA(); doFeedCat(); return; }
-        if (item.fn === 'choix'){ closeQA(); busyUntil = 0; lastBubbleAt = 0; choixCount = 0; doChoix(); return; }
+        if (item.fn === 'choix'){ closeQA(); busyUntil = 0; lastBubbleAt = 0; doChoix(true); return; }
         if (item.fn === 'choisir'){
           showBubble(esc("On y va doucement, par étapes — écoute ton besoin d'abord : jouer (c'est gratuit), cuisiner (629 recettes gratuites), ou t'organiser le quotidien (les kits, 5 $ chacun, 15 thèmes). Et si la réponse, c'est « rien pour l'instant », c'est bien correct aussi : je reste là, sans pousser.") +
             linkHtml({ u:"https://hp-outils.com/jeux", l:"Commencer par les jeux gratuits" }), 12000, 'answer');
@@ -1197,6 +1291,21 @@ export function initHgpto() {
         }
         showBubble(html, 11000, 'answer');
         if (item.go) guideTo(item.go, null);
+        // Lot nº 3 — réponses clients renforcées : l'intérêt pour les
+        // kits est compté (au 2e intérêt, le calcul honnête du bundle
+        // suit) ; après une réponse « produit payant », l'alternative
+        // gratuite peut suivre. Tout passe par les plafonds du système
+        // de suggestions ; jamais après la sortie « doux », qui est déjà
+        // la porte de sortie honnête.
+        if (item.u && !item.fn && !item.go && !(opts && opts.doux)){
+          if (/sans-honte/.test(item.u)){
+            kitInterest++;
+            if (kitInterest === 2) scheduleBundle();
+            else scheduleAlt('kits');
+          }
+          else if (/livres-pdf/.test(item.u)) scheduleAlt('livres');
+          else if (/ateliers/.test(item.u)) scheduleAlt('ateliers');
+        }
       }
 
       /* ---------- Questions tapées : recherche dans la base de faits ----------
@@ -1266,6 +1375,28 @@ export function initHgpto() {
           var hesite = /(hesit|compar|lequel|laquelle|choisir|difference|mieux|pas sur|sais pas|vaut|trop cher)/.test(nq);
           var produit = hit.u && /(sans-honte|livres-pdf|ateliers)/.test(hit.u);
           answerQuestion(hit, (hesite && produit) ? { doux:true } : undefined);
+          // Lot nº 3 : si la question exprime un besoin clair relié à un
+          // produit réel et que la réponse n'en parle pas déjà, une
+          // suggestion argumentée peut suivre (plafonds du système ;
+          // jamais si la sortie « doux » a été ajoutée, jamais pour une
+          // fonction spéciale, jamais juste après le calcul du bundle).
+          if (!(hesite && produit) && !hit.fn && !hit.go){
+            var bsn = matchBesoin(q);
+            if (bsn && normText(hit.a || '').indexOf(bsn.dejaVu) === -1 && Date.now() - lastBundleSchedAt > 2000){
+              setTimeout(function(){ doSuggest(bsn, { fromQA:true }); }, 9800);
+            }
+          }
+          return;
+        }
+        // Lot nº 3 : aucune réponse exacte, mais un besoin clair relié à
+        // un produit réel → il pointe LE produit qui fait ça, honnêtement
+        // (« c'est celui-là qui fait ça » + lien + prix vrai). Si le
+        // système de suggestions refuse (déjà suggéré, refusé par
+        // « Non merci », plafond de page), le repli honnête classique
+        // prend le relais ci-dessous — jamais de silence, jamais de force.
+        var bsnDirect = matchBesoin(q);
+        if (bsnDirect && doSuggest(bsnDirect, { fromQA:true })){
+          if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
           return;
         }
         if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
@@ -1432,27 +1563,44 @@ export function initHgpto() {
         return true;
       }
 
-      /* ---------- Visite guidée : de section en section, avec commentaires ---------- */
+      /* ---------- Visite guidée : de section en section, avec commentaires ----------
+         TRANQUILLE (lot nº 3) : chaque étape EXPLIQUE l'endroit (c'est
+         quoi, ça sert à quoi, pour qui), au ton de quelqu'un qui fait
+         visiter sa maison. Rythme apaisé : bulle ~11,5 s, pas ~11,8 s.
+         Aucune vente pendant la visite — une seule suggestion douce peut
+         suivre, à la toute fin d'une visite terminée d'elle-même (voir
+         stopTour), jamais après un arrêt demandé par le visiteur. */
       var TOUR = [
-        { id:'sec-accueil', t:"Bienvenue chez HP Outils ! Des outils pour la vraie vie, faits avec amour à Terrebonne." },
-        { id:'sec-jeux', t:"Ici, les jeux : 26, gratuits, sans inscription. LA BANQUE, c'est notre fierté — jouer pour comprendre, donner pour vrai." },
-        { id:'sec-kits', t:"Les kits Sans Honte : 5 $ chacun, 15 thèmes du quotidien. Ici, personne n'a à avoir honte de son budget." },
-        { id:'sec-recettes', t:"Recettes HP : 629 recettes gratuites. Tu dis ce qu'il y a dans ton frigo, l'outil trouve quoi cuisiner." },
-        { id:'sec-livres', t:"Nos livres, en PDF, de 10 $ à 20 $ : des histoires du Québec et des recettes à faire en famille." },
-        { id:'sec-ateliers', t:"Les ateliers : on cuisine ensemble, à Terrebonne et dans les environs. 120 $ et 150 $, en groupe." },
-        { id:'sec-arbre', t:"Et voilà l'arbre : jeux, livres, recettes, kits, ateliers — tout pousse ensemble. C'était la visite du gérant !" }
+        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : Hugo y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que tu vas voir part d'ici. Moi, c'est HGPTO, le petit gérant de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et tu peux arrêter la visite quand tu veux." },
+        { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 26, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
+        { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
+        { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : tu écris les ingrédients que tu as déjà, et il te propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et ta liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
+        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 20 $, que tu télécharges tout de suite après le paiement. « La faim justifie les moyens » (10 $), c'est l'histoire vraie d'Hugo ; « Les enfants cuisinent pour faire plaisir » (20 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
+        { id:'sec-ateliers', t:"Et ici, on sort de l'écran : les ateliers se vivent en groupe, à Terrebonne et dans les environs. « Cuisine pratique » (120 $), « Manger mieux avec moins » (150 $) — on cuisine ensemble, on apprend des choses utiles, et c'est le côté humain d'HP Outils qui se vit pour vrai, autour d'une table." },
+        { id:'sec-arbre', t:"On est de retour à l'entrée — la visite est terminée, merci de m'avoir suivi. Tu as vu l'arbre au complet : chaque branche aide les autres, et rien ne se cache. Reste jaser si tu veux : pose-moi une question dans mon petit panneau, je connais toutes les réponses du site — et sinon, explore à ton rythme. Ici, la porte est toujours ouverte." }
       ];
       var tourOn = false, tourIdx = 0, tourTimer = null;
-      function stopTour(silent){
+      function stopTour(silent, natural){
         tourOn = false;
         try { sessionStorage.removeItem('hgpto-tour'); sessionStorage.removeItem('hgpto-guide'); } catch(e) {}
         if (tourTimer){ clearTimeout(tourTimer); tourTimer = null; }
         document.getElementById('qa-tour').textContent = 'Fais-moi visiter';
         if (!silent) showBubble("Visite finie ! Touche « Une question ? » si tu veux que je te montre autre chose.", 6000);
+        // Lot nº 3 : une visite qui se termine d'elle-même (paramètre
+        // `natural` — jamais un arrêt demandé, jamais un abandon) peut
+        // recevoir UNE suggestion douce, quelques secondes après le mot
+        // de la fin, via les plafonds du système de suggestions.
+        if (natural){
+          setTimeout(function(){
+            if (isPresse()) return;
+            var p = CHOIX_LINES[tourEndChoix % CHOIX_LINES.length]; tourEndChoix++;
+            doSuggest(p, { tourEnd:true });
+          }, 9000);
+        }
       }
       function tourStep(){
         if (!tourOn) return;
-        if (tourIdx >= TOUR.length){ stopTour(false); return; }
+        if (tourIdx >= TOUR.length){ stopTour(false, true); return; }
         var step = TOUR[tourIdx];
         var here = guideTo(step.id, null);
         setExpr('happy');
@@ -1468,10 +1616,10 @@ export function initHgpto() {
           showBubble("Suis-moi, je t'y emmène !", 4000, 'talk');
           return;
         }
-        showBubble(esc(step.t), 5600, 'talk');
+        showBubble(esc(step.t), 11500, 'talk');
         tourIdx++;
         try { sessionStorage.setItem('hgpto-tour', String(tourIdx)); } catch(e) {}
-        tourTimer = setTimeout(tourStep, 6000);
+        tourTimer = setTimeout(tourStep, 11800);
       }
       function startTour(){
         if (tourOn){ stopTour(true); showBubble("D'accord, on arrête la visite. Je reste dans le coin si t'as besoin !", 5000); return; }
@@ -1846,8 +1994,22 @@ export function initHgpto() {
                     endTurn(who);
                   });
                 } else if (!isYou){
-                  setExpr('sad');
-                  setTimeout(function(){ if (gameOn){ setExpr('happy'); } endTurn(who); }, 1100);
+                  // Lot nº 3 : la petite glissade peut valoir une grogne
+                  // signature (~1 fois sur 2) avant sa ligne de serpent —
+                  // la grosse glissade (≥ 17) garde son chemin de pleurs,
+                  // inchangé.
+                  if (grumbleFires()){
+                    setExpr('angry'); gComment(grumbleText(), 'talk');
+                    setTimeout(function(){
+                      if (!gameOn) return;
+                      setExpr('sad');
+                      gComment(pick(GAME_LINES.snakeBot), 'talk');
+                      setTimeout(function(){ if (gameOn){ setExpr('happy'); } endTurn(who); }, 1600);
+                    }, 1500);
+                  } else {
+                    setExpr('sad');
+                    setTimeout(function(){ if (gameOn){ setExpr('happy'); } endTurn(who); }, 1100);
+                  }
                 } else {
                   endTurn(who);
                 }
@@ -2323,13 +2485,14 @@ export function initHgpto() {
           if (!isBusy() && state !== 'sleep' && !qaOpen && !gameOn) doDecor();
         }, 17000);
         setTimeout(function(){
-          if (Date.now() - lastBubbleAt > 6500 && state !== 'sleep' && !qaOpen && !gameOn){
+          // Lot nº 3 : jamais pendant la visite guidée (voir talk()).
+          if (Date.now() - lastBubbleAt > 6500 && state !== 'sleep' && !qaOpen && !gameOn && !tourOn){
             showBubble(esc(momentLine()), 6000);
           }
         }, 9500);
         // Nouveauté du site : soulignée une seule fois, dans sa vie, sans insister.
         setTimeout(function(){
-          if (state !== 'sleep' && !qaOpen && !gameOn && !paused && Date.now() - lastBubbleAt > 6000){
+          if (state !== 'sleep' && !qaOpen && !gameOn && !paused && !tourOn && Date.now() - lastBubbleAt > 6000){
             showBubble(esc(pick(NEWS_LINES)), 7000);
             logDay("annoncé une nouveauté du site");
           }
@@ -2398,10 +2561,143 @@ export function initHgpto() {
           setTimeout(function(){
             if (!paused && !gameOn && !qaOpen && state !== 'sleep' && !isBusy() && Date.now() - lastBubbleAt > 7000){
               showBubble(esc(ROUTE_FACTS[k]), 10000, 'answer');
+              // Lot nº 3 : ce résumé compte comme LA suggestion de la
+              // page — le système de suggestions n'en ajoutera pas une
+              // deuxième par-dessus (plafond de page partagé).
+              suggPage[k] = 1;
             }
           }, 1400);
         }
       }
+
+      /* ---------- LE VENDEUR, VERSION HP (lot nº 3) ----------
+         Système de suggestions unifié : il propose le produit juste au
+         bon moment, avec les techniques PROPRES seulement —
+         recommandation argumentée (fait vrai relié au besoin exprimé),
+         alternative honnête (la porte gratuite offerte après le payant),
+         bundle dit vrai (le calcul réel, conditionné honnêtement).
+         PLAFONDS (recommandations du panneau, non négociables) :
+         · max 1 suggestion par page (le résumé calme du lot nº 2 compte
+           dans le même créneau) ;
+         · jamais deux fois le même produit dans une session ;
+         · un refus (« Non merci », toujours offert dans la bulle) fait
+           taire ce produit pour la session ;
+         · jamais deux suggestions collées (≥ 75 s entre deux) ;
+         · jamais pendant le jeu, le sommeil, le mode calme ; jamais
+           pendant la visite (sauf sa suggestion douce de fin) ; dans le
+           panneau de questions, seulement quand la suggestion RÉPOND à
+           la question posée ;
+         · un visiteur détecté PRESSÉ ne reçoit AUCUNE suggestion : le
+           signal émotif sert le confort, jamais la vente ;
+         · un besoin exprimé sur le ton de la détresse ne reçoit aucun
+           produit, jamais. */
+      var suggByKey = {}, suggOff = {}, suggPage = {}, suggLastAt = 0;
+      var kitInterest = 0, lastBundleSchedAt = 0, tourEndChoix = 0;
+      var dwellRoute = routeKey(), dwellStart = Date.now();
+      function suggKey(p){ return (p.u || '') + '|' + (p.l || ''); }
+      function canSuggest(p, opts){
+        opts = opts || {};
+        if (suggOff[suggKey(p)]) return false;
+        if (!opts.asked && suggByKey[suggKey(p)]) return false;
+        if (paused || isHidden || docHidden || calm || gameOn) return false;
+        if (state === 'sleep') return false;
+        if (tourOn && !opts.tourEnd) return false;
+        if (qaOpen && !opts.fromQA && !opts.asked) return false;
+        if (isPresse()) return false;
+        // Les alternatives honnêtes (opts.soft) sont des courtoisies de
+        // descente, pas des pitches : dédupliquées et refusables comme
+        // les autres, mais elles ne consomment ni le créneau de la page
+        // ni l'espacement — sinon le calcul du bundle, qui suit le 2e
+        // intérêt kits, ne pourrait jamais apparaître dans le fil
+        // naturel des questions.
+        if (!opts.asked && !opts.tourEnd && !opts.soft){
+          if (suggPage[routeKey()]) return false;
+          if (Date.now() - suggLastAt < 75000) return false;
+        }
+        return true;
+      }
+      function doSuggest(p, opts){
+        opts = opts || {};
+        if (!opts.pre && !canSuggest(p, opts)) return false;
+        suggByKey[suggKey(p)] = 1;
+        if (!opts.soft){ suggPage[routeKey()] = 1; suggLastAt = Date.now(); }
+        doInvite(p);
+        // Le « non » aussi facile que le « oui » : un bouton « Non
+        // merci » dans la bulle de chaque suggestion. Un clic = ce
+        // produit se tait pour toute la session.
+        var nb = document.createElement('button');
+        nb.type = 'button';
+        nb.className = 'bubble-no';
+        nb.textContent = 'Non merci';
+        nb.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
+        nb.addEventListener('click', function(){
+          suggOff[suggKey(p)] = 1;
+          hideBubble();
+          setExpr('happy');
+          showBubble("Bien correct ! Je ne t'en reparlerai pas. Je reste dans le coin si tu as besoin d'autre chose.", 6000, 'talk');
+        });
+        bubble.appendChild(document.createElement('br'));
+        bubble.appendChild(nb);
+        return true;
+      }
+      /* Le besoin exprimé en mots → LE produit qui fait ça. Double garde :
+         un ton de détresse coupe tout (jamais de produit sur la peine), et
+         sur la page des kits, la dignité passe d'abord (la base répond
+         déjà aux questions de contenu ; pas de pitch ajouté là-bas). */
+      function matchBesoin(q){
+        var nq = ' ' + normText(q) + ' ';
+        if (/(triste|decourag|deprim|angoiss|stress|epuis|desesper|plus capable|a bout)/.test(nq)) return null;
+        if (routeKey() === '/sans-honte') return null;
+        for (var i = 0; i < BESOIN_SUGGESTIONS.length; i++){
+          var e = BESOIN_SUGGESTIONS[i], hit = false, j;
+          for (j = 0; j < e.mots.length; j++){ if (nq.indexOf(e.mots[j]) !== -1){ hit = true; break; } }
+          if (!hit) continue;
+          if (e.aussi){
+            var ok2 = false;
+            for (j = 0; j < e.aussi.length; j++){ if (nq.indexOf(e.aussi[j]) !== -1){ ok2 = true; break; } }
+            if (!ok2) continue;
+          }
+          return e;
+        }
+        return null;
+      }
+      /* L'alternative honnête : suit une réponse « produit payant » dans
+         le panneau de questions, seulement si le panneau est encore
+         ouvert (sinon, silence — on ne poursuit pas le visiteur). */
+      function scheduleAlt(fam){
+        var line = ALT_LINES[fam];
+        if (!line) return;
+        setTimeout(function(){
+          if (!qaOpen) return;
+          doSuggest(line, { fromQA:true, soft:true });
+        }, 9500);
+      }
+      /* Le bundle, dit vrai : au 2e intérêt pour les kits dans la
+         session, le calcul honnête est présenté — une seule fois. */
+      function scheduleBundle(){
+        lastBundleSchedAt = Date.now();
+        setTimeout(function(){
+          if (!qaOpen) return;
+          doSuggest(BUNDLE_MATH, { fromQA:true });
+        }, 9800);
+      }
+      /* L'hésitation regardée : sur une page produit, un visiteur qui
+         regarde longuement sans rien faire reçoit UN résumé argumenté
+         + l'alternative honnête (données DWELL_SUGGESTIONS). Seuil de
+         40 s, PAS plus : à 50 s d'inactivité, il s'endort (règle de vie
+         du site) — et on ne réveille jamais un dormeur pour vendre.
+         La suggestion n'arrive que dans un moment creux (aucune bulle
+         affichée). /sans-honte est exclu : route sensible, dignité
+         d'abord — le résumé calme du lot nº 2 y couvre l'hésitation. */
+      setInterval(function(){
+        if (!DWELL_SUGGESTIONS[dwellRoute]) return;
+        if (Date.now() - dwellStart < 40000) return;
+        // Moment creux : aucune bulle, ou une bulle ambiante déjà âgée
+        // (≥ 4 s — elle allait se retirer d'elle-même).
+        if (bubble.classList.contains('show') && Date.now() - lastBubbleAt < 4000) return;
+        if (isBusy() || state === 'sleep' || state === 'focus') return;
+        doSuggest(DWELL_SUGGESTIONS[dwellRoute]);
+      }, 2500);
 
       /* ---------- DÉGUISEMENTS CONTEXTUELS (lot nº 2) ----------
          Un seul costume à la fois. Priorité : le calendrier des fêtes et
@@ -2451,6 +2747,7 @@ export function initHgpto() {
         var k = routeKey();
         if (k === lastRoute) return;
         lastRoute = k;
+        dwellRoute = k; dwellStart = Date.now();
         ieOnRoute(k);
         applyCostume();
         if (!accompany || paused || isHidden || gameOn || qaOpen || state === 'sleep' || isBusy()) return;
