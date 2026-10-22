@@ -68,7 +68,7 @@ function Page() {
           <div className="lead-actions">
             <a href="#episodes" className="btn-primary">Écouter le dernier épisode</a>
             <a href={FEED_URL} className="btn-ghost" target="_blank" rel="noreferrer">S'abonner au flux RSS</a>
-            <ShareButton text="Futur simple — le balado HP sur l'IA, les PME et le futur." />
+            <ShareButton text="Futur simple — le balado HP sur l'IA, les PME et le futur. T'es pas game d'écouter 2 minutes ?" />
           </div>
         </div>
       </section>

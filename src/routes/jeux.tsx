@@ -151,7 +151,7 @@ function JeuxPage() {
           <div className="lead-actions">
             <a className="btn-primary" href="/apps/bons-reflexes/index.html">Jouer aux Bons réflexes d'HP</a>
             <a className="btn-ghost" href="#tous-les-jeux">Voir tous les jeux</a>
-            <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils." />
+            <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
             <span style={CHIP_STYLE}>{GAMES.length} jeux gratuits</span>
