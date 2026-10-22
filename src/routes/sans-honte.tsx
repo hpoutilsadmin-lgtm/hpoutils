@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
+import { ShareButton } from "@/components/ShareButton";
 
 export const Route = createFileRoute("/sans-honte")({
   head: () => createSeoHead({
@@ -46,6 +47,9 @@ function Page() {
              Quinze kits PDF concrets pour faire face aux papiers, au frigo, au logement,
              à l'entraide et à d'autres situations de la vraie vie.
           </p>
+          <div className="lead-actions">
+            <ShareButton text="Sans Honte — quinze kits PDF concrets pour la vraie vie, 5 $ CAD le kit, aucune taxe ajoutée." />
+          </div>
         </div>
       </section>
 

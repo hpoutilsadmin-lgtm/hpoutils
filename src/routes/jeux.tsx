@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { ShareButton } from "@/components/ShareButton";
 import { useState, type CSSProperties } from "react";
 
 export const Route = createFileRoute("/jeux")({
@@ -150,6 +151,7 @@ function JeuxPage() {
           <div className="lead-actions">
             <a className="btn-primary" href="/apps/bons-reflexes/index.html">Jouer aux Bons réflexes d'HP</a>
             <a className="btn-ghost" href="#tous-les-jeux">Voir tous les jeux</a>
+            <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils." />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
             <span style={CHIP_STYLE}>{GAMES.length} jeux gratuits</span>

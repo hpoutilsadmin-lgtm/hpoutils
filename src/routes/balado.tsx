@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
+import { ShareButton } from "@/components/ShareButton";
 
 export const Route = createFileRoute("/balado")({
   head: () => createSeoHead({
@@ -67,6 +68,7 @@ function Page() {
           <div className="lead-actions">
             <a href="#episodes" className="btn-primary">Écouter le dernier épisode</a>
             <a href={FEED_URL} className="btn-ghost" target="_blank" rel="noreferrer">S'abonner au flux RSS</a>
+            <ShareButton text="Futur simple — le balado HP sur l'IA, les PME et le futur." />
           </div>
         </div>
       </section>
