@@ -1,0 +1,1306 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Couleuvre du Québec</title>
+    <style>
+      :root {
+        --bg: #f1e8d0;
+        --panel: #faf3df;
+        --ink: #211a10;
+        --ink-soft: #5d5240;
+        --accent: #38662a;
+        --accent-ink: #faf3df;
+        --danger: #a33327;
+        --line: #211a10;
+        --field-a: #a8d08d;
+        --field-b: #9ccb7f;
+        --grain: rgba(33, 26, 16, 0.055);
+        --shadow: 3px 3px 0 rgba(33, 26, 16, 0.8);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #241d12;
+          --panel: #2e2617;
+          --ink: #eee1c2;
+          --ink-soft: #b3a582;
+          --accent: #7fae56;
+          --accent-ink: #241d12;
+          --danger: #e08a7d;
+          --line: #eee1c2;
+          --field-a: #3d5c2e;
+          --field-b: #365128;
+          --grain: rgba(238, 225, 194, 0.05);
+          --shadow: 3px 3px 0 rgba(0, 0, 0, 0.55);
+        }
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+      }
+      main {
+        width: 100%;
+        max-width: 480px;
+        padding: 16px 14px 28px;
+      }
+      h1 {
+        font-size: 1.65rem;
+        margin: 4px 0 2px;
+        letter-spacing: -0.01em;
+      }
+      .tagline {
+        margin: 0 0 14px;
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+      .scorebar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .scorebox {
+        flex: 1;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 12px;
+        box-shadow: var(--shadow);
+      }
+      .scorebox .label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--ink-soft);
+      }
+      .scorebox .value {
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+      .board-wrap {
+        position: relative;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 8px;
+        box-shadow: var(--shadow);
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 8px;
+        touch-action: none;
+      }
+      .overlay {
+        position: absolute;
+        inset: 8px;
+        border-radius: 8px;
+        background: rgba(10, 18, 8, 0.72);
+        color: #f2f7ec;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+        gap: 8px;
+      }
+      .overlay[hidden] { display: none; }
+      .overlay h2 { margin: 0; font-size: 1.4rem; }
+      .overlay p { margin: 0; font-size: 0.95rem; line-height: 1.45; max-width: 30ch; }
+      .overlay .big { font-size: 2.4rem; line-height: 1; }
+      .btn {
+        appearance: none;
+        border: none;
+        cursor: pointer;
+        background: var(--accent);
+        color: var(--accent-ink);
+        font: inherit;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 12px 26px;
+        border-radius: 999px;
+        margin-top: 6px;
+      }
+      .btn:active { transform: scale(0.97); }
+      .actions {
+        display: flex;
+        justify-content: center;
+        margin: 14px 0 4px;
+      }
+      .actions .btn { margin-top: 0; }
+      .legend {
+        margin-top: 14px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 14px;
+        box-shadow: var(--shadow);
+      }
+      .legend h2 { font-size: 0.95rem; margin: 0 0 8px; }
+      .legend ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 6px;
+        font-size: 0.9rem;
+        line-height: 1.35;
+      }
+      .legend .pts { color: var(--ink-soft); }
+      .danger-txt { color: var(--danger); font-weight: 600; }
+      .hint {
+        margin: 12px 2px 0;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        text-align: center;
+        line-height: 1.45;
+      }
+      .dpad {
+        margin: 14px auto 0;
+        width: 168px;
+        display: grid;
+        grid-template-columns: repeat(3, 52px);
+        grid-template-rows: repeat(3, 52px);
+        gap: 6px;
+        justify-content: center;
+      }
+      .dpad button {
+        appearance: none;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--ink);
+        border-radius: 12px;
+        font-size: 1.25rem;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+        touch-action: manipulation;
+      }
+      .dpad button:active { background: var(--accent); color: var(--accent-ink); }
+      .dpad .up { grid-area: 1 / 2; }
+      .dpad .left { grid-area: 2 / 1; }
+      .dpad .right { grid-area: 2 / 3; }
+      .dpad .down { grid-area: 3 / 2; }
+      .speedbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 10px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 12px;
+        box-shadow: var(--shadow);
+      }
+      .speedbar .speed-label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--ink-soft);
+        font-weight: 700;
+      }
+      .spd-btn {
+        appearance: none;
+        border: 1px solid var(--line);
+        background: var(--bg);
+        color: var(--ink);
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 7px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+      .spd-btn:active { transform: scale(0.97); }
+      .spd-btn.active {
+        background: var(--accent);
+        color: var(--accent-ink);
+        border-color: var(--accent);
+      }
+      .golden-msg {
+        margin-bottom: 10px;
+        background: #fff3c4;
+        border: 1px solid #d9a400;
+        color: #5c4300;
+        border-radius: 10px;
+        padding: 8px 12px;
+        font-size: 0.92rem;
+        font-weight: 700;
+        text-align: center;
+      }
+      @media (prefers-color-scheme: dark) {
+        .golden-msg { background: #4a3a05; border-color: #d9a400; color: #ffe98a; }
+      }
+      @media (min-width: 700px) {
+        .dpad { display: none; }
+      }
+    </style>
+    <style>
+      /* ===== Signature HP Outils : linogravure faite main ===== */
+      body {
+        background-image: radial-gradient(var(--grain) 1px, transparent 1.35px);
+        background-size: 7px 7px;
+      }
+      h1, .overlay h2, .legend h2, .sig {
+        font-family: Georgia, "Times New Roman", serif;
+      }
+      h1 { border-bottom: 3px double var(--ink); padding-bottom: 6px; }
+      .h-icon { width: 32px; height: 32px; vertical-align: -7px; margin-right: 2px; }
+      .kln { fill: none; stroke: var(--ink); stroke-linecap: round; stroke-linejoin: round; }
+      .klnf { stroke: var(--ink); stroke-linecap: round; stroke-linejoin: round; }
+      .kfl { fill: var(--ink); }
+      .scorebox, .board-wrap, .legend, .speedbar {
+        border: 2px solid var(--line);
+        border-radius: 6px;
+        box-shadow: var(--shadow);
+      }
+      canvas { border-radius: 3px; }
+      .btn {
+        border: 2px solid var(--line);
+        border-radius: 6px;
+        box-shadow: var(--shadow);
+        font-family: Georgia, "Times New Roman", serif;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+      }
+      .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(33, 26, 16, 0.85); }
+      .spd-btn {
+        border: 2px solid var(--line);
+        border-radius: 4px;
+        background: var(--panel);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.82rem;
+        box-shadow: 2px 2px 0 rgba(33, 26, 16, 0.55);
+      }
+      .spd-btn.active {
+        background: var(--ink);
+        color: var(--panel);
+        border-color: var(--line);
+      }
+      .overlay {
+        background: var(--panel);
+        color: var(--ink);
+        border: 2px solid var(--line);
+        border-radius: 4px;
+        padding-bottom: 46px;
+      }
+      .overlay::after {
+        content: "";
+        position: absolute;
+        inset: 7px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        pointer-events: none;
+      }
+      .overlay h2 { text-transform: uppercase; letter-spacing: 0.07em; }
+      .mascot {
+        position: absolute;
+        right: 15px;
+        bottom: 9px;
+        width: 52px;
+        height: 52px;
+        pointer-events: none;
+      }
+      .sig {
+        position: absolute;
+        left: 17px;
+        bottom: 14px;
+        font-size: 0.7rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        pointer-events: none;
+      }
+      @media (max-width: 480px) {
+        .overlay { padding: 14px 12px 54px; gap: 5px; }
+        .overlay .big { font-size: 1.7rem; }
+        .overlay h2 { font-size: 1.12rem; }
+        .overlay p { font-size: 0.85rem; line-height: 1.35; }
+        .overlay .btn { padding: 9px 20px; font-size: 0.92rem; }
+        .mascot { width: 42px; height: 42px; right: 12px; bottom: 8px; }
+        .sig { font-size: 0.62rem; left: 14px; bottom: 13px; }
+      }
+      .golden-msg { border: 2px solid var(--line); box-shadow: var(--shadow); border-radius: 6px; }
+      .dpad button { border: 2px solid var(--line); border-radius: 6px; box-shadow: var(--shadow); }
+      .legend .ic { width: 21px; height: 21px; vertical-align: -5px; margin-right: 3px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1><svg class="h-icon" viewBox="0 0 32 32" aria-hidden="true"><path class="kln" stroke-width="6.5" d="M3 23c6 1 6-7 11-7 4 0 5 4 8 3"/><path d="M3 23c6 1 6-7 11-7 4 0 5 4 8 3" fill="none" stroke="#557f36" stroke-width="3.6" stroke-linecap="round"/><circle class="klnf" cx="25" cy="18" r="4.4" fill="#557f36" stroke-width="1.6"/><circle class="kfl" cx="26.6" cy="16.8" r="0.95"/><path d="M28.8 19.6 31.6 21M28.8 19.6l2.2 2.6" fill="none" stroke="#a33327" stroke-width="1.1" stroke-linecap="round"/></svg>Couleuvre du Québec</h1>
+      <p class="tagline">
+        Guide ta couleuvre dans la cour : croque les souris et les bestioles pour grandir,
+        mais évite les mouettes qui piquent, les vidanges… et l'humain fâché qui patrouille son terrain!
+      </p>
+
+      <div class="scorebar">
+        <div class="scorebox">
+          <div class="label">Pointage</div>
+          <div class="value" id="score">0</div>
+        </div>
+        <div class="scorebox">
+          <div class="label">Longueur</div>
+          <div class="value" id="length">4</div>
+        </div>
+        <div class="scorebox">
+          <div class="label">Record de session</div>
+          <div class="value" id="best">0</div>
+        </div>
+      </div>
+
+      <div class="speedbar" role="group" aria-label="Choix de vitesse">
+        <span class="speed-label">Vitesse au départ</span>
+        <button type="button" class="spd-btn" data-speed="relax">🐢 Relax</button>
+        <button type="button" class="spd-btn active" data-speed="normal">🐍 Normal</button>
+        <button type="button" class="spd-btn" data-speed="rapide">⚡ Rapide</button>
+      </div>
+
+      <div class="golden-msg" id="goldenMsg" hidden>✨ Une bestiole dorée est apparue — vite, elle ne reste que quelques secondes! (+50 points)</div>
+
+      <div class="board-wrap">
+        <canvas id="board" width="510" height="510" aria-label="Terrain de jeu de la couleuvre"></canvas>
+        <div class="overlay" id="overlay">
+          <div class="big" id="ovEmoji">🐍</div>
+          <h2 id="ovTitle">Prêt à ramper?</h2>
+          <p id="ovText">Choisis ta vitesse ci-dessus (Relax, Normal ou Rapide), puis glisse ton doigt sur le terrain (ou utilise les flèches du clavier) pour diriger la couleuvre. Chaque bouchée la fait grandir… et accélérer! Guette la bestiole dorée : elle ne reste que quelques secondes, mais elle vaut +50 points.</p>
+          <button class="btn" id="ovBtn">Commencer</button>
+          <span class="sig">HP Outils</span>
+          <svg class="mascot" viewBox="0 0 64 64" aria-hidden="true"><circle class="kln" stroke-width="2.8" cx="32" cy="33" r="19"/><path class="kln" stroke-width="2.4" d="M15 27c1-8 8-13 17-13s16 5 17 13"/><path class="kln" stroke-width="1.6" d="M20 20l3 4M27 17l2 5M35 17l-1 5M43 20l-3 4"/><circle class="kln" stroke-width="2.4" cx="23.5" cy="34" r="7"/><circle class="kln" stroke-width="2.4" cx="40.5" cy="34" r="7"/><path class="kln" stroke-width="2.4" d="M30.5 33h3M16.5 32l-3-2M47.5 32l3-2"/><circle class="kfl" cx="23.5" cy="34" r="1.7"/><circle class="kfl" cx="40.5" cy="34" r="1.7"/><path class="kln" stroke-width="1.8" d="M32 39v3.5"/><path class="kln" stroke-width="2" d="M26 45.5c3.5 3 8.5 3 12 0"/><path class="kln" stroke-width="1.3" d="M45 44l4-4M47.5 47l4-4"/></svg>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="replayBtn" hidden>↻ Rejouer</button>
+      </div>
+
+      <div class="dpad" aria-label="Flèches de direction">
+        <button class="up" data-dir="up" aria-label="Haut">▲</button>
+        <button class="left" data-dir="left" aria-label="Gauche">◀</button>
+        <button class="right" data-dir="right" aria-label="Droite">▶</button>
+        <button class="down" data-dir="down" aria-label="Bas">▼</button>
+      </div>
+
+      <section class="legend">
+        <h2>Dans la cour</h2>
+        <ul>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="kln" stroke-width="1.6" d="M4 16c-2 1.5-1 4.5 1.5 5"/><ellipse class="klnf" cx="12.5" cy="14.5" rx="6.8" ry="4.8" fill="#b3a488" stroke-width="1.6"/><circle class="klnf" cx="16.5" cy="9.8" r="2.5" fill="#b3a488" stroke-width="1.4"/><circle class="kfl" cx="17.8" cy="13.4" r="1.05"/><path class="kln" stroke-width="1.1" d="M8.5 12.5l2.5 2M8 15.5l3 .8"/></svg><strong>Souris</strong> — à croquer <span class="pts">(+10 points)</span></li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="kln" stroke-width="1.5" d="M7.5 10 4 8.5M7 13.5H3.5M7.5 17 4 18.5M16.5 10 20 8.5M17 13.5h3.5M16.5 17l3.5 1.5"/><ellipse class="klnf" cx="12" cy="13.5" rx="5" ry="6.8" fill="#77572c" stroke-width="1.6"/><path class="kln" stroke-width="1.3" d="M12 7v13M7.5 11.5h9M7.8 16h8.4"/><path class="kln" stroke-width="1.4" d="M10 6.8 8 3.8M14 6.8l2-3"/></svg><strong>Bestiole</strong> — à croquer aussi <span class="pts">(+5 points)</span></li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="kln" stroke-width="1.4" d="M3 4v3M1.5 5.5h3M21 3.5v3M19.5 5h3"/><ellipse class="klnf" cx="12" cy="14" rx="4.8" ry="6.4" fill="#f2b21c" stroke-width="1.6"/><path class="kln" stroke-width="1.3" d="M12 8v12M7.8 12h8.4M8 16.5h8"/><path class="kln" stroke-width="1.4" d="M10 7.2 8.2 4.4M14 7.2l1.8-2.8"/></svg><strong>Bestiole dorée</strong> — apparaît quelques secondes seulement, il faut oser le détour <span class="pts">(+50 points)</span></li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse class="klnf" cx="11" cy="14.5" rx="7" ry="4.2" fill="#fdfaf0" stroke-width="1.6"/><path class="kln" stroke-width="1.5" d="M6.5 12.5c2-3.5 6-4.5 9-3"/><circle class="klnf" cx="17" cy="10.5" r="3" fill="#fdfaf0" stroke-width="1.5"/><path class="klnf" d="M19.8 10.2 23 11l-3.2 1.2z" fill="#e8a013" stroke-width="1.1"/><circle class="kfl" cx="17.8" cy="10" r="0.95"/></svg><strong>Mouette</strong> — <span class="danger-txt">elle pique en vol, évite-la!</span></li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="kln" stroke-width="1.5" d="M10.5 6.5 9 3.5M13.5 6.5 15 3.5"/><path class="klnf" d="M10 6.8c-3.5 2.5-4 8-2.6 11.7.5 1.3 1.6 2 4.6 2s4.1-.7 4.6-2C17.9 14.8 17.5 9.3 14 6.8c-.7.6-3.3.6-4 0z" fill="#8d8578" stroke-width="1.6"/><path class="kln" stroke-width="1.2" d="M9.5 16.5l4.5-3M9.8 19l4-2.8"/></svg><strong>Vidanges</strong> — <span class="danger-txt">sacs à ordures infranchissables</span></li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="klnf" d="M5 21c.8-3 3.5-4.6 7-4.6s6.2 1.6 7 4.6z" fill="#a34a3a" stroke-width="1.5"/><circle class="klnf" cx="12" cy="10" r="6" fill="#eec79c" stroke-width="1.6"/><path class="kln" stroke-width="1.7" d="M7.6 8.6l3.2 1.1M16.4 8.6l-3.2 1.1"/><circle class="kfl" cx="9.6" cy="11.6" r="1"/><circle class="kfl" cx="14.4" cy="11.6" r="1"/><path class="kln" stroke-width="1.5" d="M9.4 15.8c1.7-1.4 3.5-1.4 5.2 0"/></svg><strong>Humain fâché</strong> — <span class="danger-txt">il patrouille sa cour, ne le touche pas!</span></li>
+        </ul>
+      </section>
+
+      <p class="hint">
+        Contrôles : glissement du doigt sur le terrain, flèches ◀ ▲ ▼ ▶ à l'écran, ou flèches et WASD au clavier.
+        Se mordre la queue ou frapper la clôture met fin à la partie.
+      </p>
+    </main>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var COLS = 24, ROWS = 24;
+        var canvas = document.getElementById("board");
+        var ctx = canvas.getContext("2d");
+        var scoreEl = document.getElementById("score");
+        var lengthEl = document.getElementById("length");
+        var bestEl = document.getElementById("best");
+        var overlay = document.getElementById("overlay");
+        var ovEmoji = document.getElementById("ovEmoji");
+        var ovTitle = document.getElementById("ovTitle");
+        var ovText = document.getElementById("ovText");
+        var ovBtn = document.getElementById("ovBtn");
+        var replayBtn = document.getElementById("replayBtn");
+        var goldenMsg = document.getElementById("goldenMsg");
+        var spdBtns = document.querySelectorAll(".spd-btn");
+
+        // Vitesses au départ : Normal = vitesse actuelle (base 250 ms, plancher 120 ms).
+        // Rapide reste au plus à l'ancienne vitesse d'origine (~165 ms de base).
+        var SPEEDS = {
+          relax:  { base: 330, floor: 185, step: 5 },
+          normal: { base: 250, floor: 120, step: 4 },
+          rapide: { base: 165, floor: 85,  step: 3 }
+        };
+        var selectedSpeed = "normal"; // choix fait sur l'écran de départ
+        var speedCfg = SPEEDS.normal; // figé au début de chaque partie
+        var GOLDEN_PTS = 50;
+
+        var DIRS = {
+          up: { x: 0, y: -1 },
+          down: { x: 0, y: 1 },
+          left: { x: -1, y: 0 },
+          right: { x: 1, y: 0 }
+        };
+
+        var snake, dir, nextDir, food, vidanges, mouettes, human, humanPath, humanIdx;
+        var score, best = 0, foodsEaten, tickMs, timer = null, tickCount;
+        var running = false, dead = false;
+        var golden = null, goldenCountdown = 0;
+
+        // ---------- Audio (petits bips WebAudio, aucun fichier) ----------
+        var audioCtx = null;
+        function beep(freq, dur, type) {
+          try {
+            if (!audioCtx) {
+              var AC = window.AudioContext || window.webkitAudioContext;
+              if (!AC) return;
+              audioCtx = new AC();
+            }
+            if (audioCtx.state === "suspended") audioCtx.resume();
+            var o = audioCtx.createOscillator();
+            var g = audioCtx.createGain();
+            o.type = type || "square";
+            o.frequency.value = freq;
+            g.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + dur);
+          } catch (e) { /* le son est un bonus, jamais un bloqueur */ }
+        }
+
+        // ---------- Utilitaires ----------
+        function key(x, y) { return x + "," + y; }
+        function same(a, b) { return a.x === b.x && a.y === b.y; }
+        function randInt(n) { return Math.floor(Math.random() * n); }
+
+        function isFree(x, y, ignoreMouette) {
+          if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return false;
+          for (var i = 0; i < snake.length; i++) if (snake[i].x === x && snake[i].y === y) return false;
+          for (var j = 0; j < vidanges.length; j++) if (vidanges[j].x === x && vidanges[j].y === y) return false;
+          if (human && human.x === x && human.y === y) return false;
+          if (food && food.x === x && food.y === y) return false;
+          if (golden && golden.x === x && golden.y === y) return false;
+          if (!ignoreMouette) {
+            for (var m = 0; m < mouettes.length; m++) {
+              if (mouettes[m].active && mouettes[m].x === x && mouettes[m].y === y) return false;
+            }
+          }
+          return true;
+        }
+
+        function spawnFood() {
+          var tries = 0;
+          while (tries < 400) {
+            var x = randInt(COLS), y = randInt(ROWS);
+            if (isFree(x, y, false)) {
+              var isMouse = Math.random() < 0.6;
+              food = { x: x, y: y, kind: isMouse ? "souris" : "bestiole", emoji: isMouse ? "🐭" : "🪲", pts: isMouse ? 10 : 5 };
+              return;
+            }
+            tries++;
+          }
+          food = null;
+        }
+
+        function spawnGolden() {
+          // Bestiole dorée temporaire : ~6 secondes à l'écran, où qu'elle tombe.
+          var tries = 0;
+          while (tries < 400) {
+            var x = randInt(COLS), y = randInt(ROWS);
+            if (isFree(x, y, false)) {
+              golden = {
+                x: x, y: y,
+                ticksLeft: Math.max(12, Math.round(6000 / tickMs))
+              };
+              goldenMsg.hidden = false;
+              beep(1180, 0.09, "triangle");
+              return;
+            }
+            tries++;
+          }
+          golden = null;
+          goldenCountdown = 40 + randInt(30);
+        }
+
+        function clearGolden(reschedule) {
+          golden = null;
+          goldenMsg.hidden = true;
+          if (reschedule) goldenCountdown = 40 + randInt(30);
+        }
+
+        function buildHumanPath() {
+          // Patrouille rectangulaire autour du centre de la cour.
+          var path = [];
+          var x0 = 3, y0 = 3, x1 = COLS - 4, y1 = ROWS - 4;
+          var x, y;
+          for (x = x0; x <= x1; x++) path.push({ x: x, y: y0 });
+          for (y = y0 + 1; y <= y1; y++) path.push({ x: x1, y: y });
+          for (x = x1 - 1; x >= x0; x--) path.push({ x: x, y: y1 });
+          for (y = y1 - 1; y > y0; y--) path.push({ x: x0, y: y });
+          return path;
+        }
+
+        function spawnMouette(m) {
+          // La mouette entre par un bord et traverse la cour en ligne droite.
+          var horizontal = Math.random() < 0.5;
+          if (horizontal) {
+            m.y = randInt(ROWS);
+            m.dx = Math.random() < 0.5 ? 1 : -1;
+            m.x = m.dx === 1 ? -1 : COLS;
+            m.dy = 0;
+          } else {
+            m.x = randInt(COLS);
+            m.dy = Math.random() < 0.5 ? 1 : -1;
+            m.y = m.dy === 1 ? -1 : ROWS;
+            m.dx = 0;
+          }
+          m.active = true;
+        }
+
+        // ---------- Initialisation d'une partie ----------
+        function reset() {
+          var cy = Math.floor(ROWS / 2), cx = 4;
+          snake = [
+            { x: cx, y: cy }, { x: cx - 1, y: cy },
+            { x: cx - 2, y: cy }, { x: cx - 3, y: cy }
+          ];
+          dir = DIRS.right;
+          nextDir = DIRS.right;
+          score = 0;
+          foodsEaten = 0;
+          // Le choix de vitesse fait au départ s'applique à toute la partie.
+          speedCfg = SPEEDS[selectedSpeed] || SPEEDS.normal;
+          tickMs = speedCfg.base;
+          tickCount = 0;
+          dead = false;
+          golden = null;
+          goldenCountdown = 30 + randInt(20); // première dorée après quelques secondes
+          goldenMsg.hidden = true;
+
+          // Vidanges : obstacles fixes, loin du départ de la couleuvre.
+          vidanges = [];
+          var placed = 0, guard = 0;
+          while (placed < 10 && guard < 600) {
+            guard++;
+            var vx = 6 + randInt(COLS - 7), vy = randInt(ROWS);
+            var clash = false;
+            for (var i = 0; i < vidanges.length; i++) if (vidanges[i].x === vx && vidanges[i].y === vy) clash = true;
+            if (!clash) { vidanges.push({ x: vx, y: vy }); placed++; }
+          }
+
+          humanPath = buildHumanPath();
+          humanIdx = 0;
+          human = { x: humanPath[0].x, y: humanPath[0].y };
+
+          mouettes = [{ active: false, x: -5, y: -5, dx: 0, dy: 0, wait: 25 }];
+          food = null;
+          spawnFood();
+          updateHud();
+        }
+
+        function updateHud() {
+          scoreEl.textContent = score;
+          lengthEl.textContent = snake ? snake.length : 4;
+          bestEl.textContent = best;
+          // État lisible du jeu (utile aux tests automatisés, invisible pour le joueur).
+          canvas.setAttribute("data-tick-ms", tickMs);
+          canvas.setAttribute("data-speed-base", speedCfg ? speedCfg.base : "");
+          canvas.setAttribute("data-head", snake && snake.length ? snake[0].x + "," + snake[0].y : "");
+          canvas.setAttribute("data-food", food ? food.x + "," + food.y : "");
+          canvas.setAttribute("data-golden", golden ? golden.x + "," + golden.y + "," + golden.ticksLeft : "");
+        }
+
+        // ---------- Boucle de jeu ----------
+        function startGame() {
+          reset();
+          running = true;
+          overlay.hidden = true;
+          replayBtn.hidden = true;
+          draw();
+          schedule();
+          beep(520, 0.08, "triangle");
+        }
+
+        function schedule() {
+          clearTimeout(timer);
+          if (!running) return;
+          timer = setTimeout(tick, tickMs);
+        }
+
+        function tick() {
+          if (!running) return;
+          tickCount++;
+          dir = nextDir;
+
+          var head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+          // Mur / clôture
+          if (head.x < 0 || head.y < 0 || head.x >= COLS || head.y >= ROWS) {
+            return gameOver("cloture");
+          }
+          // Vidanges
+          for (var v = 0; v < vidanges.length; v++) {
+            if (same(head, vidanges[v])) return gameOver("vidange");
+          }
+          // Soi-même (la queue bouge sauf si on mange : on vérifie le corps qui restera)
+          var willEat = food && same(head, food);
+          var willEatGolden = golden && same(head, golden);
+          var bodyToCheck = (willEat || willEatGolden) ? snake : snake.slice(0, snake.length - 1);
+          for (var s = 0; s < bodyToCheck.length; s++) {
+            if (same(head, bodyToCheck[s])) return gameOver("queue");
+          }
+          // Humain fâché
+          if (same(head, human)) return gameOver("humain");
+          // Mouettes
+          for (var m = 0; m < mouettes.length; m++) {
+            if (mouettes[m].active && same(head, mouettes[m])) return gameOver("mouette");
+          }
+
+          snake.unshift(head);
+          if (willEat || willEatGolden) {
+            if (willEatGolden) {
+              // Gros bonus, à temps seulement — la dorée fait aussi grandir.
+              score += GOLDEN_PTS;
+              beep(1180, 0.12, "triangle");
+              clearGolden(true);
+            }
+            if (willEat) {
+              score += food.pts;
+              beep(food.kind === "souris" ? 740 : 620, 0.07, "square");
+              spawnFood();
+            }
+            foodsEaten++;
+            // Un petit coup de vitesse à chaque bouchée, proportionnel au niveau choisi.
+            tickMs = Math.max(speedCfg.floor, speedCfg.base - foodsEaten * speedCfg.step);
+            // Une deuxième mouette se joint à la fête après 8 bouchées.
+            if (foodsEaten === 8 && mouettes.length < 2) {
+              mouettes.push({ active: false, x: -5, y: -5, dx: 0, dy: 0, wait: 30 });
+            }
+          } else {
+            snake.pop();
+          }
+
+          // Bestiole dorée : compte à rebours, apparition et expiration sans pénalité.
+          if (golden && !willEatGolden) {
+            golden.ticksLeft--;
+            if (golden.ticksLeft <= 0) clearGolden(true);
+          } else if (!golden) {
+            goldenCountdown--;
+            if (goldenCountdown <= 0) spawnGolden();
+          }
+
+          // L'humain patrouille : un pas aux deux tours.
+          if (tickCount % 2 === 0) {
+            humanIdx = (humanIdx + 1) % humanPath.length;
+            human = { x: humanPath[humanIdx].x, y: humanPath[humanIdx].y };
+            if (same(snake[0], human)) return gameOver("humain");
+          }
+
+          // Les mouettes traversent la cour.
+          for (var k = 0; k < mouettes.length; k++) {
+            var mo = mouettes[k];
+            if (!mo.active) {
+              mo.wait--;
+              if (mo.wait <= 0) spawnMouette(mo);
+            } else {
+              mo.x += mo.dx; mo.y += mo.dy;
+              if (mo.x < -1 || mo.x > COLS || mo.y < -1 || mo.y > ROWS) {
+                mo.active = false;
+                mo.wait = 20 + randInt(30);
+                mo.x = -5; mo.y = -5;
+              } else if (same(snake[0], mo)) {
+                return gameOver("mouette");
+              }
+            }
+          }
+
+          updateHud();
+          draw();
+          schedule();
+        }
+
+        var DEATHS = {
+          cloture: { emoji: "💥", title: "Cogné dans la clôture!", text: "La cour a des limites, et ta couleuvre vient de les trouver." },
+          queue:   { emoji: "🌀", title: "Tu t'es mordu la queue!", text: "Classique. Même les couleuvres du Québec s'emmêlent parfois." },
+          vidange: { emoji: "🤢", title: "Direct dans les vidanges!", text: "Beurk! Un sac à ordures, ça ne se traverse pas." },
+          mouette: { emoji: "🕊️", title: "Piquée par une mouette!", text: "Elle t'a eu en plein vol. Les mouettes des berges ne pardonnent pas." },
+          humain:  { emoji: "😠", title: "L'humain fâché t'a attrapé!", text: "« Sors de ma cour, la couleuvre! » — partie terminée." }
+        };
+
+        function gameOver(cause) {
+          running = false;
+          dead = true;
+          goldenMsg.hidden = true;
+          clearTimeout(timer);
+          if (score > best) best = score;
+          updateHud();
+          draw();
+          beep(160, 0.3, "sawtooth");
+          var d = DEATHS[cause] || DEATHS.cloture;
+          ovEmoji.textContent = d.emoji;
+          ovTitle.textContent = d.title;
+          ovText.textContent = d.text + " Pointage final : " + score + " points, longueur " + snake.length + ".";
+          ovBtn.textContent = "Rejouer";
+          overlay.hidden = false;
+          replayBtn.hidden = false;
+        }
+
+        // ---------- Dessin ----------
+        function fitCanvas() {
+          var w = canvas.clientWidth;
+          if (!w) return;
+          var dpr = window.devicePixelRatio || 1;
+          canvas.width = Math.round(w * dpr);
+          canvas.height = Math.round(w * dpr);
+          buildBackground();
+          draw();
+        }
+
+        // ---------- Rendu gravé (signature HP Outils) ----------
+        var bgCanvas = null, PAL = null, DARK = false;
+
+        function palette(dark) {
+          return dark ? {
+            paper: "#2a2115", paperAlt: "#332818", grid: "rgba(238,225,194,0.13)",
+            ink: "#eee1c2", head: "#7fae56", snake: "#7fae56", snakeMid: "#679a41",
+            snakeDark: "#4f7d33", hatch: "rgba(18,12,5,0.42)"
+          } : {
+            paper: "#f6efdb", paperAlt: "#efe4c6", grid: "rgba(33,26,16,0.15)",
+            ink: "#211a10", head: "#48742f", snake: "#5c8a3c", snakeMid: "#4f7d33",
+            snakeDark: "#3f6627", hatch: "rgba(33,26,16,0.30)"
+          };
+        }
+
+        function buildBackground() {
+          var W = canvas.width, H = canvas.height;
+          if (!W || !H) { bgCanvas = null; return; }
+          var P = palette(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+          bgCanvas = document.createElement("canvas");
+          bgCanvas.width = W;
+          bgCanvas.height = H;
+          var b = bgCanvas.getContext("2d");
+          var cw = W / COLS, ch = H / ROWS;
+          var x, y, i, t;
+          // Papier crème en damier très doux
+          for (y = 0; y < ROWS; y++) {
+            for (x = 0; x < COLS; x++) {
+              b.fillStyle = (x + y) % 2 === 0 ? P.paper : P.paperAlt;
+              b.fillRect(x * cw, y * ch, cw + 1, ch + 1);
+            }
+          }
+          // Grain du papier, généré en code (déterministe : aucun scintillement)
+          var seed = 987654321;
+          function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+          b.fillStyle = P.grid;
+          var dot = Math.max(1, Math.round(W / 380));
+          for (i = 0; i < 2400; i++) {
+            b.globalAlpha = 0.25 + rnd() * 0.5;
+            b.fillRect(rnd() * W, rnd() * H, dot, dot);
+          }
+          b.globalAlpha = 1;
+          // Grille en traits d'encre discrets
+          b.strokeStyle = P.grid;
+          b.lineWidth = 1;
+          b.beginPath();
+          for (x = 1; x < COLS; x++) { b.moveTo(x * cw, 0); b.lineTo(x * cw, H); }
+          for (y = 1; y < ROWS; y++) { b.moveTo(0, y * ch); b.lineTo(W, y * ch); }
+          b.stroke();
+          // Clôture : double cadre d'encre, hachures entre les deux traits
+          var inset = Math.max(5, W / 55);
+          b.strokeStyle = P.ink;
+          b.lineWidth = Math.max(2.5, W / 120);
+          b.strokeRect(b.lineWidth / 2, b.lineWidth / 2, W - b.lineWidth, H - b.lineWidth);
+          b.lineWidth = Math.max(1.2, W / 300);
+          b.strokeRect(inset, inset, W - inset * 2, H - inset * 2);
+          b.lineWidth = Math.max(1, W / 340);
+          b.beginPath();
+          var step = W / 20;
+          for (t = step * 0.35; t < W - inset; t += step) {
+            b.moveTo(t, 1); b.lineTo(t + inset - 1.5, inset - 1);
+            b.moveTo(t, H - 1); b.lineTo(t + inset - 1.5, H - inset + 1);
+          }
+          for (t = step * 0.35; t < H - inset; t += step) {
+            b.moveTo(1, t); b.lineTo(inset - 1, t + inset - 1.5);
+            b.moveTo(W - 1, t); b.lineTo(W - inset + 1, t + inset - 1.5);
+          }
+          b.stroke();
+        }
+
+        function drawTrashBag(cx, cy, s) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.strokeStyle = PAL.ink;
+          ctx.lineCap = "round";
+          // Nœud du sac
+          ctx.lineWidth = Math.max(1.2, s * 0.06);
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.05, -s * 0.32);
+          ctx.lineTo(-s * 0.17, -s * 0.5);
+          ctx.moveTo(s * 0.05, -s * 0.32);
+          ctx.lineTo(s * 0.18, -s * 0.48);
+          ctx.stroke();
+          // Sac
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.07, -s * 0.34);
+          ctx.bezierCurveTo(-s * 0.44, -s * 0.08, -s * 0.4, s * 0.3, -s * 0.25, s * 0.42);
+          ctx.bezierCurveTo(-s * 0.08, s * 0.5, s * 0.12, s * 0.5, s * 0.26, s * 0.42);
+          ctx.bezierCurveTo(s * 0.4, s * 0.3, s * 0.44, -s * 0.08, s * 0.07, -s * 0.34);
+          ctx.closePath();
+          ctx.fillStyle = DARK ? "#6e6455" : "#8d8578";
+          ctx.fill();
+          ctx.lineWidth = Math.max(1.4, s * 0.07);
+          ctx.stroke();
+          ctx.clip();
+          // Hachures d'ombre
+          ctx.lineWidth = Math.max(1, s * 0.045);
+          ctx.beginPath();
+          ctx.moveTo(s * 0.02, s * 0.06);
+          ctx.lineTo(s * 0.26, -s * 0.18);
+          ctx.moveTo(s * 0.02, s * 0.24);
+          ctx.lineTo(s * 0.3, s * 0);
+          ctx.moveTo(-s * 0.04, s * 0.4);
+          ctx.lineTo(s * 0.22, s * 0.14);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function drawMouse(cx, cy, s) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.strokeStyle = PAL.ink;
+          ctx.lineCap = "round";
+          var fur = DARK ? "#8a7c60" : "#b3a488";
+          // Queue
+          ctx.lineWidth = Math.max(1.1, s * 0.05);
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.3, s * 0.14);
+          ctx.bezierCurveTo(-s * 0.56, s * 0.22, -s * 0.52, -s * 0.3, -s * 0.33, -s * 0.32);
+          ctx.stroke();
+          // Corps
+          ctx.lineWidth = Math.max(1.3, s * 0.06);
+          ctx.beginPath();
+          ctx.ellipse(-s * 0.02, s * 0.05, s * 0.33, s * 0.25, 0, 0, Math.PI * 2);
+          ctx.fillStyle = fur;
+          ctx.fill();
+          ctx.stroke();
+          // Hachures sur le dos
+          ctx.lineWidth = Math.max(1, s * 0.04);
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.2, -s * 0.08);
+          ctx.lineTo(-s * 0.08, s * 0.04);
+          ctx.moveTo(-s * 0.1, -s * 0.13);
+          ctx.lineTo(s * 0.02, -s * 0.01);
+          ctx.stroke();
+          // Oreille
+          ctx.lineWidth = Math.max(1.1, s * 0.05);
+          ctx.beginPath();
+          ctx.arc(s * 0.18, -s * 0.18, s * 0.11, 0, Math.PI * 2);
+          ctx.fillStyle = fur;
+          ctx.fill();
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(s * 0.18, -s * 0.18, s * 0.05, 0, Math.PI * 2);
+          ctx.fillStyle = DARK ? "#5d5240" : "#8a7a5c";
+          ctx.fill();
+          // Œil et moustaches
+          ctx.beginPath();
+          ctx.arc(s * 0.26, -s * 0.01, Math.max(1.1, s * 0.04), 0, Math.PI * 2);
+          ctx.fillStyle = PAL.ink;
+          ctx.fill();
+          ctx.lineWidth = Math.max(0.9, s * 0.03);
+          ctx.beginPath();
+          ctx.moveTo(s * 0.33, s * 0.08);
+          ctx.lineTo(s * 0.48, s * 0.03);
+          ctx.moveTo(s * 0.33, s * 0.11);
+          ctx.lineTo(s * 0.47, s * 0.14);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function drawBeetle(cx, cy, s, isGolden) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.strokeStyle = PAL.ink;
+          ctx.lineCap = "round";
+          // Pattes
+          ctx.lineWidth = Math.max(1.2, s * 0.06);
+          ctx.beginPath();
+          var legs = [-0.18, 0.02, 0.22];
+          for (var i = 0; i < legs.length; i++) {
+            ctx.moveTo(-s * 0.2, s * legs[i]);
+            ctx.lineTo(-s * 0.42, s * (legs[i] - 0.07));
+            ctx.moveTo(s * 0.2, s * legs[i]);
+            ctx.lineTo(s * 0.42, s * (legs[i] - 0.07));
+          }
+          ctx.stroke();
+          // Corps
+          ctx.beginPath();
+          ctx.ellipse(0, s * 0.04, s * 0.24, s * 0.34, 0, 0, Math.PI * 2);
+          ctx.fillStyle = isGolden ? "#f2b21c" : (DARK ? "#8a6a38" : "#77572c");
+          ctx.fill();
+          ctx.stroke();
+          // Ligne médiane et arcs gravés
+          ctx.lineWidth = Math.max(1, s * 0.04);
+          ctx.beginPath();
+          ctx.moveTo(0, -s * 0.28);
+          ctx.lineTo(0, s * 0.36);
+          ctx.moveTo(-s * 0.22, -s * 0.08);
+          ctx.quadraticCurveTo(0, -s * 0.02, s * 0.22, -s * 0.08);
+          ctx.moveTo(-s * 0.23, s * 0.14);
+          ctx.quadraticCurveTo(0, s * 0.2, s * 0.23, s * 0.14);
+          ctx.stroke();
+          // Tête et antennes
+          ctx.lineWidth = Math.max(1.2, s * 0.06);
+          ctx.beginPath();
+          ctx.arc(0, -s * 0.32, s * 0.1, 0, Math.PI * 2);
+          ctx.fillStyle = isGolden ? "#d99a06" : (DARK ? "#6e5227" : "#5d421f");
+          ctx.fill();
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.05, -s * 0.4);
+          ctx.quadraticCurveTo(-s * 0.16, -s * 0.52, -s * 0.24, -s * 0.5);
+          ctx.moveTo(s * 0.05, -s * 0.4);
+          ctx.quadraticCurveTo(s * 0.16, -s * 0.52, s * 0.24, -s * 0.5);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function drawGull(cx, cy, s, flip) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          if (flip) ctx.scale(-1, 1);
+          ctx.strokeStyle = PAL.ink;
+          ctx.lineCap = "round";
+          var plum = DARK ? "#e9e2cf" : "#fdfaf0";
+          // Queue
+          ctx.lineWidth = Math.max(1.1, s * 0.05);
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.3, s * 0.02);
+          ctx.lineTo(-s * 0.48, -s * 0.06);
+          ctx.moveTo(-s * 0.3, s * 0.08);
+          ctx.lineTo(-s * 0.47, s * 0.1);
+          ctx.stroke();
+          // Corps
+          ctx.lineWidth = Math.max(1.3, s * 0.06);
+          ctx.beginPath();
+          ctx.ellipse(0, s * 0.05, s * 0.34, s * 0.21, 0, 0, Math.PI * 2);
+          ctx.fillStyle = plum;
+          ctx.fill();
+          ctx.stroke();
+          // Aile gravée
+          ctx.lineWidth = Math.max(1.1, s * 0.05);
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.22, s * 0.02);
+          ctx.quadraticCurveTo(0, -s * 0.24, s * 0.26, -s * 0.04);
+          ctx.moveTo(-s * 0.14, s * 0.09);
+          ctx.quadraticCurveTo(s * 0.02, -s * 0.12, s * 0.22, s * 0.03);
+          ctx.stroke();
+          // Tête
+          ctx.lineWidth = Math.max(1.2, s * 0.055);
+          ctx.beginPath();
+          ctx.arc(s * 0.3, -s * 0.1, s * 0.13, 0, Math.PI * 2);
+          ctx.fillStyle = plum;
+          ctx.fill();
+          ctx.stroke();
+          // Bec ambré
+          ctx.beginPath();
+          ctx.moveTo(s * 0.41, -s * 0.14);
+          ctx.lineTo(s * 0.58, -s * 0.08);
+          ctx.lineTo(s * 0.41, -s * 0.03);
+          ctx.closePath();
+          ctx.fillStyle = "#e8a013";
+          ctx.fill();
+          ctx.lineWidth = Math.max(0.9, s * 0.035);
+          ctx.stroke();
+          // Œil
+          ctx.beginPath();
+          ctx.arc(s * 0.33, -s * 0.12, Math.max(1.1, s * 0.04), 0, Math.PI * 2);
+          ctx.fillStyle = PAL.ink;
+          ctx.fill();
+          ctx.restore();
+        }
+
+        function drawHuman(cx, cy, s) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.strokeStyle = PAL.ink;
+          ctx.lineCap = "round";
+          // Chandail
+          ctx.lineWidth = Math.max(1.3, s * 0.06);
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.36, s * 0.46);
+          ctx.quadraticCurveTo(-s * 0.3, s * 0.2, 0, s * 0.18);
+          ctx.quadraticCurveTo(s * 0.3, s * 0.2, s * 0.36, s * 0.46);
+          ctx.closePath();
+          ctx.fillStyle = DARK ? "#8a4438" : "#a34a3a";
+          ctx.fill();
+          ctx.stroke();
+          // Visage
+          ctx.beginPath();
+          ctx.arc(0, -s * 0.08, s * 0.27, 0, Math.PI * 2);
+          ctx.fillStyle = DARK ? "#caa06e" : "#eec79c";
+          ctx.fill();
+          ctx.stroke();
+          // Cheveux gravés
+          ctx.beginPath();
+          ctx.arc(0, -s * 0.1, s * 0.27, Math.PI * 1.05, Math.PI * 1.95);
+          ctx.closePath();
+          ctx.fillStyle = PAL.ink;
+          ctx.fill();
+          // Sourcils fâchés
+          ctx.lineWidth = Math.max(1.4, s * 0.07);
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.18, -s * 0.13);
+          ctx.lineTo(-s * 0.04, -s * 0.07);
+          ctx.moveTo(s * 0.18, -s * 0.13);
+          ctx.lineTo(s * 0.04, -s * 0.07);
+          ctx.stroke();
+          // Yeux
+          ctx.beginPath();
+          ctx.arc(-s * 0.1, 0, Math.max(1.1, s * 0.04), 0, Math.PI * 2);
+          ctx.arc(s * 0.1, 0, Math.max(1.1, s * 0.04), 0, Math.PI * 2);
+          ctx.fillStyle = PAL.ink;
+          ctx.fill();
+          // Bouche mécontente
+          ctx.lineWidth = Math.max(1.2, s * 0.055);
+          ctx.beginPath();
+          ctx.arc(0, s * 0.17, s * 0.1, Math.PI * 1.18, Math.PI * 1.82);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function draw() {
+          if (!snake) return;
+          var W = canvas.width, H = canvas.height;
+          var cw = W / COLS, ch = H / ROWS;
+          DARK = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          PAL = palette(DARK);
+
+          // Cour en papier crème gravé (fond pré-rendu : papier, grain, grille, clôture)
+          if (!bgCanvas || bgCanvas.width !== W) buildBackground();
+          if (bgCanvas) ctx.drawImage(bgCanvas, 0, 0);
+          else { ctx.fillStyle = PAL.paper; ctx.fillRect(0, 0, W, H); }
+
+          // Vidanges gravées
+          for (var v = 0; v < vidanges.length; v++) {
+            drawTrashBag(vidanges[v].x * cw + cw / 2, vidanges[v].y * ch + ch / 2, cw);
+          }
+
+          // Nourriture dessinée à la main
+          if (food) {
+            if (food.kind === "souris") drawMouse(food.x * cw + cw / 2, food.y * ch + ch / 2, cw);
+            else drawBeetle(food.x * cw + cw / 2, food.y * ch + ch / 2, cw, false);
+          }
+
+          // Bestiole dorée : halo ambré éclatant; elle clignote quand il lui reste ~2 s.
+          if (golden) {
+            var gx = golden.x * cw + cw / 2, gy = golden.y * ch + ch / 2;
+            var urgent = golden.ticksLeft * tickMs <= 2000;
+            var blinkOff = urgent && tickCount % 2 === 0;
+            ctx.save();
+            if (blinkOff) ctx.globalAlpha = 0.25;
+            ctx.fillStyle = "#f9c81f";
+            ctx.beginPath();
+            ctx.arc(gx, gy, cw * 0.52, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#a86e00";
+            ctx.lineWidth = Math.max(1.5, cw * 0.06);
+            ctx.stroke();
+            // Étincelles gravées autour du halo
+            ctx.strokeStyle = PAL.ink;
+            ctx.lineWidth = Math.max(1, cw * 0.045);
+            ctx.beginPath();
+            var sp = [[0, -1], [0.72, -0.72], [1, 0], [0.72, 0.72], [0, 1], [-0.72, 0.72], [-1, 0], [-0.72, -0.72]];
+            for (var q = 0; q < sp.length; q++) {
+              ctx.moveTo(gx + sp[q][0] * cw * 0.6, gy + sp[q][1] * cw * 0.6);
+              ctx.lineTo(gx + sp[q][0] * cw * 0.74, gy + sp[q][1] * cw * 0.74);
+            }
+            ctx.stroke();
+            ctx.restore();
+            if (blinkOff) ctx.globalAlpha = 0.25;
+            drawBeetle(gx, gy, cw, true);
+            ctx.globalAlpha = 1;
+          }
+
+          // Humain fâché dessiné à la main
+          if (human) {
+            drawHuman(human.x * cw + cw / 2, human.y * ch + ch / 2, cw);
+          }
+
+          // Mouettes gravées
+          for (var m = 0; m < mouettes.length; m++) {
+            var mo = mouettes[m];
+            if (mo.active && mo.x >= 0 && mo.x < COLS && mo.y >= 0 && mo.y < ROWS) {
+              drawGull(mo.x * cw + cw / 2, mo.y * ch + ch / 2, cw, mo.dx < 0);
+            }
+          }
+
+          // Corps de la couleuvre : encre verte et hachures
+          for (var i = snake.length - 1; i >= 1; i--) {
+            var seg = snake[i];
+            var t = i / snake.length;
+            ctx.fillStyle = t < 0.33 ? PAL.snake : (t < 0.7 ? PAL.snakeMid : PAL.snakeDark);
+            var pad = cw * 0.09;
+            var sx = seg.x * cw + pad, sy = seg.y * ch + pad, sw = cw - pad * 2, sh = ch - pad * 2;
+            ctx.beginPath();
+            ctx.roundRect(sx, sy, sw, sh, cw * 0.26);
+            ctx.fill();
+            ctx.strokeStyle = PAL.ink;
+            ctx.lineWidth = Math.max(1.1, cw * 0.05);
+            ctx.stroke();
+            ctx.save();
+            ctx.beginPath();
+            ctx.roundRect(sx, sy, sw, sh, cw * 0.26);
+            ctx.clip();
+            ctx.strokeStyle = PAL.hatch;
+            ctx.lineWidth = Math.max(0.9, cw * 0.04);
+            ctx.beginPath();
+            ctx.moveTo(sx - sh * 0.2, sy + sh * 1.05);
+            ctx.lineTo(sx + sw * 0.55, sy - sh * 0.05);
+            ctx.moveTo(sx + sw * 0.3, sy + sh * 1.05);
+            ctx.lineTo(sx + sw * 1.05, sy + sh * 0.3);
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // Tête gravée
+          var hd = snake[0];
+          ctx.beginPath();
+          ctx.roundRect(hd.x * cw + cw * 0.04, hd.y * ch + ch * 0.04, cw * 0.92, ch * 0.92, cw * 0.32);
+          ctx.fillStyle = PAL.head;
+          ctx.fill();
+          ctx.strokeStyle = PAL.ink;
+          ctx.lineWidth = Math.max(1.4, cw * 0.065);
+          ctx.stroke();
+          // Yeux selon la direction (en croix quand elle est morte)
+          var ex = dir.x, ey = dir.y;
+          var px = -ey, py = ex; // perpendiculaire
+          var cxp = hd.x * cw + cw / 2, cyp = hd.y * ch + ch / 2;
+          var fwd = cw * 0.15, side = cw * 0.18, r = Math.max(2, cw * 0.075);
+          var e1x = cxp + ex * fwd + px * side, e1y = cyp + ey * fwd + py * side;
+          var e2x = cxp + ex * fwd - px * side, e2y = cyp + ey * fwd - py * side;
+          if (dead) {
+            ctx.strokeStyle = PAL.ink;
+            ctx.lineWidth = Math.max(1.4, cw * 0.055);
+            ctx.beginPath();
+            ctx.moveTo(e1x - r, e1y - r); ctx.lineTo(e1x + r, e1y + r);
+            ctx.moveTo(e1x + r, e1y - r); ctx.lineTo(e1x - r, e1y + r);
+            ctx.moveTo(e2x - r, e2y - r); ctx.lineTo(e2x + r, e2y + r);
+            ctx.moveTo(e2x + r, e2y - r); ctx.lineTo(e2x - r, e2y + r);
+            ctx.stroke();
+          } else {
+            ctx.fillStyle = "#fdfaf0";
+            ctx.strokeStyle = PAL.ink;
+            ctx.lineWidth = Math.max(1, cw * 0.04);
+            ctx.beginPath();
+            ctx.arc(e1x, e1y, r * 1.5, 0, Math.PI * 2);
+            ctx.arc(e2x, e2y, r * 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = PAL.ink;
+            ctx.beginPath();
+            ctx.arc(e1x + ex * r * 0.5, e1y + ey * r * 0.5, r * 0.72, 0, Math.PI * 2);
+            ctx.arc(e2x + ex * r * 0.5, e2y + ey * r * 0.5, r * 0.72, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          // Petite langue fourchue quand elle est en vie
+          if (!dead) {
+            ctx.strokeStyle = "#a33327";
+            ctx.lineWidth = Math.max(1.5, cw * 0.05);
+            var tx = cxp + ex * cw * 0.52, ty = cyp + ey * ch * 0.52;
+            ctx.beginPath();
+            ctx.moveTo(cxp + ex * cw * 0.4, cyp + ey * ch * 0.4);
+            ctx.lineTo(tx, ty);
+            ctx.moveTo(tx, ty);
+            ctx.lineTo(tx + (ex + px * 0.5) * cw * 0.12, ty + (ey + py * 0.5) * ch * 0.12);
+            ctx.moveTo(tx, ty);
+            ctx.lineTo(tx + (ex - px * 0.5) * cw * 0.12, ty + (ey - py * 0.5) * ch * 0.12);
+            ctx.stroke();
+          }
+        }
+
+        // ---------- Contrôles ----------
+        function setDirection(name) {
+          var nd = DIRS[name];
+          if (!nd) return;
+          // Pas de demi-tour direct dans son propre corps.
+          if (snake && snake.length > 1 && nd.x === -dir.x && nd.y === -dir.y) return;
+          nextDir = nd;
+        }
+
+        document.addEventListener("keydown", function (e) {
+          var map = {
+            ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right",
+            w: "up", s: "down", a: "left", d: "right",
+            W: "up", S: "down", A: "left", D: "right"
+          };
+          var name = map[e.key];
+          if (name) {
+            e.preventDefault();
+            if (!running && !dead) startGame();
+            setDirection(name);
+          }
+        });
+
+        // Glissement tactile sur le terrain
+        var touchX = null, touchY = null;
+        canvas.addEventListener("touchstart", function (e) {
+          var t = e.changedTouches[0];
+          touchX = t.clientX; touchY = t.clientY;
+        }, { passive: true });
+        canvas.addEventListener("touchmove", function (e) {
+          e.preventDefault();
+          if (touchX === null) return;
+          var t = e.changedTouches[0];
+          var dx = t.clientX - touchX, dy = t.clientY - touchY;
+          if (Math.abs(dx) < 24 && Math.abs(dy) < 24) return;
+          if (Math.abs(dx) > Math.abs(dy)) setDirection(dx > 0 ? "right" : "left");
+          else setDirection(dy > 0 ? "down" : "up");
+          touchX = t.clientX; touchY = t.clientY;
+        }, { passive: false });
+        canvas.addEventListener("touchend", function () { touchX = null; touchY = null; });
+
+        // Flèches à l'écran
+        var dpadBtns = document.querySelectorAll(".dpad button");
+        for (var b = 0; b < dpadBtns.length; b++) {
+          dpadBtns[b].addEventListener("click", function () {
+            if (!running && !dead) startGame();
+            setDirection(this.getAttribute("data-dir"));
+          });
+        }
+
+        // Choix de vitesse : sélectionné sur l'écran de départ, appliqué à la partie suivante.
+        for (var sp = 0; sp < spdBtns.length; sp++) {
+          spdBtns[sp].addEventListener("click", function () {
+            selectedSpeed = this.getAttribute("data-speed");
+            for (var j = 0; j < spdBtns.length; j++) {
+              spdBtns[j].classList.toggle("active", spdBtns[j] === this);
+            }
+            beep(660, 0.05, "triangle");
+          });
+        }
+
+        ovBtn.addEventListener("click", startGame);
+        replayBtn.addEventListener("click", startGame);
+
+        window.addEventListener("resize", fitCanvas);
+        if (window.matchMedia) {
+          window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", fitCanvas);
+        }
+
+        // État initial : terrain dessiné derrière l'écran d'accueil.
+        reset();
+        running = false;
+        fitCanvas();
+        draw();
+      })();
+    </script>
+  </body>
+</html>
