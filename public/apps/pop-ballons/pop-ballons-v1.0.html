@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Pop Ballons</title>
+    <style>
+      :root{
+        --bg:#f6ecd7;
+        --paper:#fbf4e3;
+        --sky:#b7e0ef;
+        --sky2:#eef6e9;
+        --ink:#26201a;
+        --ink-soft:#5d5240;
+        --panel:#fffaf0;
+        --panel-border:#26201a;
+        --accent:#e63946;
+        --accent-dark:#c22430;
+        --gold:#f4b41a;
+        --gold-dark:#c98f06;
+        --good:#2f9e5f;
+        --shadow:0 10px 28px rgba(60,45,20,.25);
+        --hud-bg:rgba(251,244,227,.96);
+        --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.055'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#16120e;
+          --paper:#221c15;
+          --sky:#101c28;
+          --sky2:#15222c;
+          --ink:#f3e9d2;
+          --ink-soft:#c9bda3;
+          --panel:#241d15;
+          --panel-border:#f3e9d2;
+          --accent:#ff5b68;
+          --accent-dark:#ff7a85;
+          --hud-bg:rgba(34,28,21,.96);
+          --shadow:0 10px 28px rgba(0,0,0,.5);
+        }
+      }
+      *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+      html,body{height:100%}
+      body{
+        margin:0;
+        font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+        background:var(--bg);
+        background-image:var(--grain);
+        color:var(--ink);
+        overflow:hidden;
+      }
+      #app{
+        display:flex;flex-direction:column;
+        height:100dvh;max-width:860px;margin:0 auto;
+      }
+      /* ---------- HUD ---------- */
+      header{
+        flex:0 0 auto;
+        background:var(--hud-bg);
+        background-image:var(--grain);
+        border-bottom:3px solid var(--ink);
+        padding:8px 12px calc(8px + env(safe-area-inset-bottom,0)*0);
+        z-index:30;
+      }
+      .hud{
+        display:grid;
+        grid-template-columns:1fr 1fr 1fr 1fr;
+        gap:8px;
+      }
+      .stat{
+        background:var(--panel);
+        background-image:var(--grain);
+        border:2.5px solid var(--ink);
+        border-radius:10px;
+        box-shadow:3px 3px 0 color-mix(in srgb, var(--ink) 45%, transparent);
+        padding:6px 4px 5px;
+        text-align:center;
+        min-width:0;
+      }
+      .stat .lbl{
+        display:block;font-size:.62rem;font-weight:700;letter-spacing:.06em;
+        text-transform:uppercase;color:var(--ink-soft);white-space:nowrap;
+      }
+      .stat .val{
+        display:block;font-size:1.35rem;font-weight:800;line-height:1.15;
+        font-variant-numeric:tabular-nums;white-space:nowrap;
+      }
+      .stat.time .val{color:var(--accent-dark)}
+      .stat.time.low .val{animation:pulse .5s infinite alternate}
+      @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.14)}}
+      .stat.combo .val{color:var(--gold-dark)}
+      .stat.combo.hot{border-color:var(--gold-dark);box-shadow:3px 3px 0 color-mix(in srgb, var(--ink) 45%, transparent),0 0 0 3px rgba(244,180,26,.4)}
+      /* combo timer bar */
+      #comboBarWrap{
+        height:9px;border-radius:99px;background:var(--paper);
+        border:2px solid var(--ink);
+        margin-top:7px;overflow:hidden;
+      }
+      #comboBar{
+        height:100%;width:0%;border-radius:99px;
+        background:repeating-linear-gradient(45deg, var(--gold) 0 7px, var(--gold-dark) 7px 14px);
+        transition:width .08s linear;
+      }
+      #comboBarWrap .cap{
+        font-size:.66rem;color:var(--ink-soft);text-align:center;margin-top:3px;font-weight:600;
+      }
+      /* ---------- Zone de jeu ---------- */
+      #field{
+        position:relative;flex:1 1 auto;overflow:hidden;
+        background:
+          repeating-linear-gradient(0deg, color-mix(in srgb, var(--ink) 4%, transparent) 0 2px, transparent 2px 8px),
+          linear-gradient(180deg,var(--sky) 0%,var(--sky2) 78%,var(--sky2) 100%);
+        touch-action:none;
+        user-select:none;-webkit-user-select:none;
+      }
+      /* nuages gravés (SVG) */
+      .cloud{position:absolute;pointer-events:none;overflow:visible}
+      .cloud .body{fill:var(--panel);stroke:var(--ink);stroke-width:5;stroke-linejoin:round;stroke-linecap:round}
+      .cloud .hatch{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round;opacity:.4}
+      .cloud.c1{width:132px;top:8%;left:5%}
+      .cloud.c2{width:102px;top:21%;right:7%}
+      .cloud.c3{width:150px;top:43%;left:-24px;opacity:.75}
+      /* sol / herbe gravée */
+      #ground{
+        position:absolute;left:0;right:0;bottom:0;height:30px;pointer-events:none;
+        background:
+          repeating-linear-gradient(90deg, rgba(0,0,0,.20) 0 2px, transparent 2px 9px),
+          repeating-linear-gradient(45deg, rgba(255,255,255,.12) 0 3px, transparent 3px 10px),
+          var(--good);
+        border-top:3.5px solid var(--ink);
+      }
+      @media (prefers-color-scheme: dark){#ground{opacity:.55}}
+      /* ---------- Ballons ---------- */
+      .balloon{
+        position:absolute;left:0;top:0;
+        border-radius:50% 50% 50% 50% / 55% 55% 45% 45%;
+        border:3px solid var(--ink);
+        box-shadow:inset -9px -12px 0 rgba(0,0,0,.13), inset 5px 7px 0 rgba(255,255,255,.16);
+        cursor:pointer;
+        will-change:transform;
+        touch-action:none;
+      }
+      .balloon::before{ /* reflet en hachures */
+        content:"";position:absolute;top:14%;left:18%;
+        width:28%;height:36%;border-radius:50%;
+        background:repeating-linear-gradient(118deg, rgba(255,255,255,.95) 0 3px, rgba(255,255,255,0) 3px 7px);
+        transform:rotate(-18deg);
+      }
+      .balloon::after{ /* ficelle en trait d'encre */
+        content:"";position:absolute;left:50%;top:100%;
+        width:3px;height:26px;margin-left:-1.5px;
+        background:var(--ink);
+        border-radius:2px;
+      }
+      .balloon .knot{
+        position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);
+        width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+        border-bottom:7px solid inherit;
+      }
+      .balloon.gold{
+        box-shadow:inset -9px -12px 0 rgba(0,0,0,.13), inset 5px 7px 0 rgba(255,255,255,.16),0 0 0 3px rgba(244,180,26,.55),0 0 22px 6px rgba(244,180,26,.55);
+      }
+      /* ballon +5 secondes : contour turquoise franc */
+      .balloon.time{
+        border-color:#0b8a7d;
+        box-shadow:inset -9px -12px 0 rgba(0,0,0,.13), inset 5px 7px 0 rgba(255,255,255,.16),0 0 0 3px rgba(18,181,165,.6),0 0 20px 5px rgba(18,181,165,.5);
+      }
+      /* ballon piège : contour rouge franc */
+      .balloon.trap{
+        border-color:#c22430;
+        box-shadow:inset -9px -12px 0 rgba(0,0,0,.2), inset 5px 7px 0 rgba(255,255,255,.1),0 0 0 3px rgba(30,30,40,.55),0 0 16px 4px rgba(30,30,40,.45);
+      }
+      .balloon .tag{
+        position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);
+        font-weight:900;color:#fff;pointer-events:none;
+        text-shadow:0 1px 3px rgba(0,0,0,.45);
+        white-space:nowrap;line-height:1;
+      }
+      .balloon.spawn{animation:spawnIn .18s ease-out}
+      @keyframes spawnIn{from{scale:.4}to{scale:1}}
+      /* particules d'éclatement */
+      .particle{
+        position:absolute;border-radius:50%;pointer-events:none;z-index:20;
+      }
+      .floatPts{
+        position:absolute;z-index:25;pointer-events:none;
+        font-weight:900;font-size:1.25rem;color:var(--ink);
+        text-shadow:0 2px 0 var(--paper),2px 0 0 var(--paper),-2px 0 0 var(--paper),0 0 10px var(--paper);
+        animation:floatUp .8s ease-out forwards;
+        white-space:nowrap;
+      }
+      .floatPts.gold{color:var(--gold-dark);font-size:1.55rem}
+      .floatPts.time{color:#0b8a7d;font-size:1.55rem}
+      .floatPts.trap{color:#c22430;font-size:1.45rem}
+      .floatPts.frenzy{color:var(--accent-dark)}
+      @media (prefers-color-scheme: dark){
+        .floatPts.time{color:#2fe0cd}
+        .floatPts.trap{color:#ff7070}
+      }
+      @keyframes floatUp{
+        from{opacity:1;transform:translate(-50%,0) scale(1)}
+        to{opacity:0;transform:translate(-50%,-64px) scale(1.25)}
+      }
+      .ring{
+        position:absolute;border:3px solid #fff;border-radius:50%;
+        pointer-events:none;z-index:19;
+        animation:ringOut .35s ease-out forwards;
+      }
+      @keyframes ringOut{
+        from{opacity:.9;transform:translate(-50%,-50%) scale(.3)}
+        to{opacity:0;transform:translate(-50%,-50%) scale(1.6)}
+      }
+      /* message combo perdu */
+      #comboLost{
+        position:absolute;left:50%;top:16%;transform:translateX(-50%);
+        z-index:26;pointer-events:none;
+        background:rgba(20,30,45,.88);color:#fff;
+        border:2.5px solid #fbf4e3;
+        font-weight:800;font-size:.95rem;
+        padding:7px 16px;border-radius:99px;
+        opacity:0;transition:opacity .2s;
+        white-space:nowrap;
+      }
+      #comboLost.show{opacity:1}
+      /* ---------- Frénésie finale ---------- */
+      #field.frenzy{
+        background:
+          repeating-linear-gradient(45deg, rgba(194,36,48,.10) 0 12px, transparent 12px 24px),
+          linear-gradient(180deg,#ffd9a0 0%,#ffe9c9 78%,#ffe9c9 100%);
+        box-shadow:inset 0 0 0 5px #c22430, inset 0 0 46px rgba(244,180,26,.55);
+      }
+      @media (prefers-color-scheme: dark){
+        #field.frenzy{
+          background:
+            repeating-linear-gradient(45deg, rgba(255,91,104,.12) 0 12px, transparent 12px 24px),
+            linear-gradient(180deg,#3a2415 0%,#2c1d20 78%,#2c1d20 100%);
+          box-shadow:inset 0 0 0 5px rgba(255,91,104,.6), inset 0 0 46px rgba(244,180,26,.35);
+        }
+      }
+      #frenzyBanner{
+        position:absolute;left:50%;top:10px;transform:translateX(-50%) rotate(-1.5deg);
+        z-index:27;pointer-events:none;
+        background:var(--accent);color:#fff;
+        border:3px solid var(--ink);
+        font-weight:900;font-size:1rem;letter-spacing:.05em;text-transform:uppercase;
+        padding:8px 18px;border-radius:10px;
+        box-shadow:4px 4px 0 var(--ink);
+        opacity:0;transition:opacity .25s;
+        white-space:nowrap;
+        animation:frenzyPulse .45s infinite alternate;
+      }
+      #frenzyBanner.show{opacity:1}
+      @keyframes frenzyPulse{from{scale:1}to{scale:1.07}}
+      /* ---------- Écrans (départ / fin) ---------- */
+      .overlay{
+        position:absolute;inset:0;z-index:40;
+        display:flex;align-items:center;justify-content:center;
+        padding:18px;
+        background:rgba(38,28,16,.5);
+        backdrop-filter:blur(3px);
+        overflow-y:auto;
+      }
+      .overlay .card{margin:auto}
+      .overlay[hidden]{display:none}
+      .card{
+        position:relative;
+        background:var(--panel);background-image:var(--grain);
+        border:3px solid var(--ink);
+        border-radius:14px;
+        box-shadow:inset 0 0 0 2px var(--panel), inset 0 0 0 5px var(--ink), 8px 8px 0 color-mix(in srgb, var(--ink) 35%, transparent);
+        max-width:420px;width:100%;
+        padding:30px 24px 24px;text-align:center;
+      }
+      .card .big{
+        display:flex;align-items:center;justify-content:center;
+        width:86px;height:86px;margin:2px auto 4px;
+        font-size:2.7rem;line-height:1;
+        background:var(--paper);border:3px solid var(--ink);border-radius:50%;
+        box-shadow:3px 3px 0 color-mix(in srgb, var(--ink) 45%, transparent);
+      }
+      /* titre « tampon imprimé main » */
+      .card h1{
+        display:inline-block;margin:14px 0 8px;padding:7px 18px 8px;
+        font-size:1.85rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;
+        color:var(--accent-dark);
+        border:3px solid var(--accent-dark);outline:2px solid var(--accent-dark);outline-offset:3px;
+        border-radius:6px;background:var(--paper);
+        transform:rotate(-1.6deg);
+      }
+      .card h2{
+        display:inline-block;margin:10px 0 8px;padding:5px 14px;
+        font-size:1.45rem;font-weight:900;letter-spacing:.03em;
+        color:var(--ink);
+        border:3px solid var(--ink);outline:2px solid var(--ink);outline-offset:3px;
+        border-radius:6px;background:var(--paper);
+        transform:rotate(-1.2deg);
+      }
+      /* mascotte HP binoclard, gravée, dans le coin de la carte */
+      .mascot{
+        position:absolute;top:8px;right:8px;width:58px;height:auto;
+        transform:rotate(5deg);pointer-events:none;z-index:2;
+      }
+      /* écrans courts : carte compacte pour que tout tienne sans couper */
+      @media (max-height:780px){
+        .card{padding:20px 18px 16px}
+        .card .big{width:64px;height:64px;font-size:2rem}
+        .card h1{font-size:1.5rem;margin:10px 0 6px;padding:5px 14px 6px}
+        .card h2{font-size:1.25rem;margin:6px 0 6px}
+        .card p{font-size:.92rem}
+        .rules{margin-top:10px}
+        .rules li{padding-top:3px;padding-bottom:3px;font-size:.9rem}
+        .btn{margin-top:12px;padding:11px 26px;font-size:1.05rem}
+        .sig{margin-top:12px}
+        .mascot{width:50px}
+        .finalScore{font-size:2.7rem}
+      }
+      /* signature discrète */
+      .sig{
+        margin-top:16px;display:flex;align-items:center;justify-content:center;gap:10px;
+        font-size:.68rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;
+        color:var(--ink-soft);
+      }
+      .sig::before,.sig::after{
+        content:"";height:2px;width:34px;background:var(--ink-soft);opacity:.6;
+      }
+      .card p{margin:6px 0;color:var(--ink-soft);font-size:.98rem;line-height:1.45}
+      .card p strong{color:var(--ink)}
+      .rules{text-align:left;margin:14px auto 4px;max-width:320px;padding:0;list-style:none}
+      .rules li{padding:5px 0 5px 30px;position:relative;font-size:.95rem;color:var(--ink-soft);border-bottom:1.5px dashed color-mix(in srgb, var(--ink) 25%, transparent)}
+      .rules li:last-child{border-bottom:none}
+      .rules li::before{position:absolute;left:0;top:3px;font-size:1.05rem}
+      .rules li:nth-child(1)::before{content:"🎈"}
+      .rules li:nth-child(2)::before{content:"🔥"}
+      .rules li:nth-child(3)::before{content:"⭐"}
+      .rules li:nth-child(4)::before{content:"⏱️"}
+      .rules li:nth-child(5)::before{content:"💣"}
+      .rules li:nth-child(6)::before{content:"⚡"}
+      .rules li:nth-child(7)::before{content:"💨"}
+      .finalScore{display:inline-block;font-size:3.4rem;font-weight:900;line-height:1.05;color:var(--accent-dark);transform:rotate(-1deg);text-shadow:3px 3px 0 color-mix(in srgb, var(--gold) 55%, transparent)}
+      .finalLbl{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+      .bestLine{margin-top:8px;font-weight:700;color:var(--gold-dark);min-height:1.2em}
+      .btn{
+        display:inline-block;margin-top:16px;
+        background:var(--accent);color:#fff;border:3px solid var(--ink);
+        font-size:1.15rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+        padding:14px 34px;border-radius:14px;cursor:pointer;
+        box-shadow:0 6px 0 var(--ink);
+        transition:transform .06s, box-shadow .06s;
+        font-family:inherit;
+      }
+      .btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+      .miniStats{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+      .miniStats span{
+        background:var(--paper);border:2px solid var(--ink);border-radius:8px;
+        box-shadow:2px 2px 0 color-mix(in srgb, var(--ink) 35%, transparent);
+        padding:5px 10px;font-size:.85rem;font-weight:700;color:var(--ink-soft);
+      }
+      .miniStats span b{color:var(--ink)}
+      @media (prefers-reduced-motion: reduce){
+        .stat.time.low .val{animation:none}
+        #frenzyBanner{animation:none}
+        .floatPts{animation-duration:.4s}
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="hud">
+          <div class="stat time" id="statTime">
+            <span class="lbl">Temps</span>
+            <span class="val" id="hudTime">60</span>
+          </div>
+          <div class="stat">
+            <span class="lbl">Score</span>
+            <span class="val" id="hudScore">0</span>
+          </div>
+          <div class="stat combo" id="statCombo">
+            <span class="lbl">Combo</span>
+            <span class="val" id="hudCombo">×1</span>
+          </div>
+          <div class="stat">
+            <span class="lbl">Meilleur</span>
+            <span class="val" id="hudBest">0</span>
+          </div>
+        </div>
+        <div id="comboBarWrap" aria-hidden="true">
+          <div id="comboBar"></div>
+          <div class="cap" id="comboCap">Enchaîne les ballons vite pour faire monter ton combo !</div>
+        </div>
+      </header>
+
+      <main id="field" aria-label="Zone de jeu Pop Ballons">
+        <svg class="cloud c1" viewBox="0 0 200 110" aria-hidden="true"><path class="body" d="M28 84 C14 84 8 70 16 60 C18 44 34 34 48 40 C54 22 76 12 94 20 C104 6 128 4 140 16 C156 8 176 20 174 38 C188 44 190 62 180 72 C174 80 164 84 154 84 Z"/><path class="hatch" d="M42 66 q10 -4 20 0"/><path class="hatch" d="M118 58 q10 -4 19 0"/><path class="hatch" d="M74 74 q11 -3 21 1"/></svg>
+        <svg class="cloud c2" viewBox="0 0 200 110" aria-hidden="true"><path class="body" d="M28 84 C14 84 8 70 16 60 C18 44 34 34 48 40 C54 22 76 12 94 20 C104 6 128 4 140 16 C156 8 176 20 174 38 C188 44 190 62 180 72 C174 80 164 84 154 84 Z"/><path class="hatch" d="M42 66 q10 -4 20 0"/><path class="hatch" d="M118 58 q10 -4 19 0"/><path class="hatch" d="M74 74 q11 -3 21 1"/></svg>
+        <svg class="cloud c3" viewBox="0 0 200 110" aria-hidden="true"><path class="body" d="M28 84 C14 84 8 70 16 60 C18 44 34 34 48 40 C54 22 76 12 94 20 C104 6 128 4 140 16 C156 8 176 20 174 38 C188 44 190 62 180 72 C174 80 164 84 154 84 Z"/><path class="hatch" d="M42 66 q10 -4 20 0"/><path class="hatch" d="M118 58 q10 -4 19 0"/><path class="hatch" d="M74 74 q11 -3 21 1"/></svg>
+        <div id="ground"></div>
+        <div id="comboLost">Combo perdu ! 💨</div>
+        <div id="frenzyBanner" aria-hidden="true">⚡ FRÉNÉSIE ×2 ! ⚡</div>
+
+        <!-- Écran de départ -->
+        <div class="overlay" id="startScreen">
+          <div class="card">
+            <svg class="mascot" viewBox="0 0 120 120" aria-hidden="true"><path d="M28 120 C30 102 74 102 76 120 Z" fill="#2f9e5f" stroke="#26201a" stroke-width="4" stroke-linejoin="round"/><circle cx="88" cy="24" r="14" fill="#e63946" stroke="#26201a" stroke-width="4"/><path d="M88 38 l-4 6 h8 Z" fill="#e63946" stroke="#26201a" stroke-width="3" stroke-linejoin="round"/><path d="M88 44 C82 55 92 63 84 76" fill="none" stroke="#26201a" stroke-width="3" stroke-linecap="round"/><circle cx="83" cy="79" r="5.5" fill="#f6d7ae" stroke="#26201a" stroke-width="3.5"/><circle cx="52" cy="66" r="34" fill="#f6d7ae" stroke="#26201a" stroke-width="4.5"/><path d="M20 58 C22 34 82 34 84 58" fill="none" stroke="#26201a" stroke-width="5" stroke-linecap="round"/><path d="M34 41 l4 8 M48 37 l3 8 M62 39 l3 8" stroke="#26201a" stroke-width="3" stroke-linecap="round"/><path d="M30 49 q8 -4 15 -1 M59 48 q8 -3 15 1" fill="none" stroke="#26201a" stroke-width="3.5" stroke-linecap="round"/><circle cx="38" cy="64" r="12.5" fill="rgba(255,255,255,.28)" stroke="#26201a" stroke-width="4.5"/><circle cx="66" cy="64" r="12.5" fill="rgba(255,255,255,.28)" stroke="#26201a" stroke-width="4.5"/><path d="M50.5 63 q1.5 -2 3 0 M25.5 62 L19 58 M78.5 62 L84 57" fill="none" stroke="#26201a" stroke-width="4" stroke-linecap="round"/><circle cx="38" cy="64" r="2.6" fill="#26201a"/><circle cx="66" cy="64" r="2.6" fill="#26201a"/><path d="M52 68 q3 5 0 8" fill="none" stroke="#26201a" stroke-width="3" stroke-linecap="round"/><path d="M40 81 q12 9 24 0" fill="none" stroke="#26201a" stroke-width="4" stroke-linecap="round"/></svg>
+            <div class="big" aria-hidden="true">🎈</div>
+            <h1>Pop Ballons</h1>
+            <p><strong>60 secondes</strong> pour éclater le plus de ballons possible. Pèse dessus avec ton doigt ou ta souris — vite, ils s'envolent !</p>
+            <ul class="rules">
+              <li>Chaque ballon éclaté donne des points.</li>
+              <li>Enchaîne-les rapidement : ton <strong>combo</strong> monte (×2, ×3, ×4, ×5) et chaque ballon vaut plus cher.</li>
+              <li>Le <strong>ballon doré</strong> ⭐ vaut 5 fois plus. Rare, mais payant !</li>
+              <li>Le <strong>ballon turquoise « +5 »</strong> ⏱️ est rare : l'éclater <strong>ajoute 5 secondes</strong> au chrono.</li>
+              <li>Le <strong>ballon piège noir</strong> 💣 avec un X : <strong>ne l'éclate surtout pas !</strong> Sinon, ton combo retombe à zéro et tu perds <strong>3 secondes</strong>.</li>
+              <li><strong>Frénésie finale</strong> ⚡ : pendant les <strong>10 dernières secondes</strong>, tous les points valent <strong>double (×2)</strong>, en plus du combo !</li>
+              <li>Un ballon qui s'échappe fait <strong>tomber ton combo</strong>. Amuse-toi !</li>
+            </ul>
+            <button class="btn" id="btnStart" type="button">C'est parti ! 🎈</button>
+            <div class="sig">HP Outils</div>
+          </div>
+        </div>
+
+        <!-- Écran de fin -->
+        <div class="overlay" id="endScreen" hidden>
+          <div class="card">
+            <svg class="mascot" viewBox="0 0 120 120" aria-hidden="true"><path d="M28 120 C30 102 74 102 76 120 Z" fill="#2f9e5f" stroke="#26201a" stroke-width="4" stroke-linejoin="round"/><circle cx="88" cy="24" r="14" fill="#e63946" stroke="#26201a" stroke-width="4"/><path d="M88 38 l-4 6 h8 Z" fill="#e63946" stroke="#26201a" stroke-width="3" stroke-linejoin="round"/><path d="M88 44 C82 55 92 63 84 76" fill="none" stroke="#26201a" stroke-width="3" stroke-linecap="round"/><circle cx="83" cy="79" r="5.5" fill="#f6d7ae" stroke="#26201a" stroke-width="3.5"/><circle cx="52" cy="66" r="34" fill="#f6d7ae" stroke="#26201a" stroke-width="4.5"/><path d="M20 58 C22 34 82 34 84 58" fill="none" stroke="#26201a" stroke-width="5" stroke-linecap="round"/><path d="M34 41 l4 8 M48 37 l3 8 M62 39 l3 8" stroke="#26201a" stroke-width="3" stroke-linecap="round"/><path d="M30 49 q8 -4 15 -1 M59 48 q8 -3 15 1" fill="none" stroke="#26201a" stroke-width="3.5" stroke-linecap="round"/><circle cx="38" cy="64" r="12.5" fill="rgba(255,255,255,.28)" stroke="#26201a" stroke-width="4.5"/><circle cx="66" cy="64" r="12.5" fill="rgba(255,255,255,.28)" stroke="#26201a" stroke-width="4.5"/><path d="M50.5 63 q1.5 -2 3 0 M25.5 62 L19 58 M78.5 62 L84 57" fill="none" stroke="#26201a" stroke-width="4" stroke-linecap="round"/><circle cx="38" cy="64" r="2.6" fill="#26201a"/><circle cx="66" cy="64" r="2.6" fill="#26201a"/><path d="M52 68 q3 5 0 8" fill="none" stroke="#26201a" stroke-width="3" stroke-linecap="round"/><path d="M40 81 q12 9 24 0" fill="none" stroke="#26201a" stroke-width="4" stroke-linecap="round"/></svg>
+            <h2>Temps écoulé ! ⏰</h2>
+            <div class="finalLbl">Ton score</div>
+            <div class="finalScore" id="finalScore">0</div>
+            <div class="bestLine" id="bestLine"></div>
+            <div class="miniStats">
+              <span>Ballons éclatés : <b id="finalPops">0</b></span>
+              <span>Combo max : <b id="finalCombo">×1</b></span>
+              <span>Dorés : <b id="finalGold">0</b> ⭐</span>
+              <span>+5 s attrapés : <b id="finalTime">0</b> ⏱️</span>
+              <span>Pièges éclatés : <b id="finalTrap">0</b> 💣</span>
+              <span>Points en frénésie : <b id="finalFrenzy">0</b> ⚡</span>
+            </div>
+            <button class="btn" id="btnReplay" type="button">Rejouer 🔁</button>
+            <div class="sig">HP Outils</div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+    (function(){
+      "use strict";
+      var DURATION = 60;            // secondes
+      var COMBO_WINDOW = 1500;       // ms pour enchaîner
+      var GOLD_CHANCE = 0.07;        // 7 % de ballons dorés
+      var TIME_CHANCE = 0.045;       // ~4,5 % de ballons « +5 s »
+      var TRAP_CHANCE = 0.055;       // ~5,5 % de ballons pièges
+      var FRENZY_AT = 10;            // frénésie pendant les 10 dernières secondes
+      var COLORS = ["#e63946","#f4842b","#f4b41a","#2a9d5c","#1f8ac0","#ef6fb0","#7ac74f","#ff7847"];
+
+      var field = document.getElementById("field");
+      var hudTime = document.getElementById("hudTime");
+      var hudScore = document.getElementById("hudScore");
+      var hudCombo = document.getElementById("hudCombo");
+      var hudBest = document.getElementById("hudBest");
+      var statTime = document.getElementById("statTime");
+      var statCombo = document.getElementById("statCombo");
+      var comboBar = document.getElementById("comboBar");
+      var comboCap = document.getElementById("comboCap");
+      var comboLost = document.getElementById("comboLost");
+      var frenzyBanner = document.getElementById("frenzyBanner");
+      var startScreen = document.getElementById("startScreen");
+      var endScreen = document.getElementById("endScreen");
+
+      var running = false;
+      var balloons = [];       // {el,x,y,size,speed,wobble,phase,gold,dead}
+      var startTs = 0;
+      var lastFrame = 0;
+      var spawnTimer = 0;
+      var score = 0;
+      var pops = 0;
+      var goldPops = 0;
+      var timePops = 0;        // ballons « +5 s » éclatés
+      var trapPops = 0;        // ballons pièges éclatés (aïe !)
+      var frenzyPoints = 0;    // points gagnés pendant la frénésie
+      var bonusTime = 0;       // secondes ajoutées (+5 s) moins pénalités (−3 s)
+      var frenzyOn = false;
+      var streak = 0;          // enchaînement actuel
+      var maxMult = 1;
+      var lastPopAt = 0;
+      var best = 0;            // meilleur score de la session (mémoire seulement)
+      var rafId = null;
+      var audioCtx = null;
+      var comboLostTimer = null;
+
+      function multiplier(){
+        if (streak <= 0) return 1;
+        var m = 1 + Math.floor((streak - 1) / 4); // +1 aux 4 ballons enchaînés
+        return Math.min(m, 5);
+      }
+
+      function ensureAudio(){
+        try{
+          if (!audioCtx){
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (AC) audioCtx = new AC();
+          }
+          if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+        }catch(e){ audioCtx = null; }
+      }
+      function popSound(kind){
+        if (!audioCtx) return;
+        try{
+          var t = audioCtx.currentTime;
+          if (kind === "trap"){
+            // son grave et inquiétant : le piège, ça fait mal !
+            var o2 = audioCtx.createOscillator();
+            var g3 = audioCtx.createGain();
+            o2.type = "sawtooth";
+            o2.frequency.setValueAtTime(160, t);
+            o2.frequency.exponentialRampToValueAtTime(55, t + 0.28);
+            g3.gain.setValueAtTime(0.20, t);
+            g3.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+            o2.connect(g3); g3.connect(audioCtx.destination);
+            o2.start(t); o2.stop(t + 0.32);
+            return;
+          }
+          if (kind === "time"){
+            // petit carillon montant : du temps en cadeau
+            [880, 1174, 1568].forEach(function(f, i){
+              var o3 = audioCtx.createOscillator();
+              var g4 = audioCtx.createGain();
+              o3.type = "sine";
+              o3.frequency.setValueAtTime(f, t + i*0.06);
+              g4.gain.setValueAtTime(0.16, t + i*0.06);
+              g4.gain.exponentialRampToValueAtTime(0.001, t + i*0.06 + 0.18);
+              o3.connect(g4); g4.connect(audioCtx.destination);
+              o3.start(t + i*0.06); o3.stop(t + i*0.06 + 0.2);
+            });
+          }
+          var gold = kind === "gold";
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(gold ? 880 : 520 + Math.random()*160, t);
+          osc.frequency.exponentialRampToValueAtTime(gold ? 1400 : 180, t + 0.09);
+          gain.gain.setValueAtTime(0.22, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.11);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.12);
+          // petit "bang" de bruit
+          var len = Math.floor(audioCtx.sampleRate * 0.05);
+          var buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+          var d = buf.getChannelData(0);
+          for (var i=0;i<len;i++) d[i] = (Math.random()*2-1) * (1 - i/len);
+          var src = audioCtx.createBufferSource(); src.buffer = buf;
+          var g2 = audioCtx.createGain(); g2.gain.value = 0.18;
+          src.connect(g2); g2.connect(audioCtx.destination);
+          src.start(t);
+        }catch(e){}
+      }
+
+      function spawnBalloon(elapsed){
+        var fw = field.clientWidth;
+        var size = 62 + Math.random()*26;            // 62–88 px : gros, faciles à toucher
+        if (fw < 360) size = 58 + Math.random()*22;
+        var roll = Math.random();
+        var type = "normal";
+        if (roll < TIME_CHANCE) type = "time";
+        else if (roll < TIME_CHANCE + TRAP_CHANCE) type = "trap";
+        else if (roll < TIME_CHANCE + TRAP_CHANCE + GOLD_CHANCE) type = "gold";
+        var gold = type === "gold";
+        var el = document.createElement("div");
+        el.className = "balloon spawn" + (type !== "normal" ? " " + type : "");
+        el.setAttribute("role", "button");
+        el.setAttribute("aria-label",
+          type === "gold" ? "Ballon doré" :
+          type === "time" ? "Ballon plus 5 secondes" :
+          type === "trap" ? "Ballon piège, à ne pas éclater" : "Ballon");
+        el.setAttribute("tabindex", "-1");
+        el.style.width = size + "px";
+        el.style.height = (size*1.14) + "px";
+        var color =
+          type === "gold" ? "#f4b41a" :
+          type === "time" ? "#12b5a5" :
+          type === "trap" ? "#23232e" :
+          COLORS[Math.floor(Math.random()*COLORS.length)];
+        el.style.background = "radial-gradient(circle at 32% 28%, " + color + " 0%, " + color + " 55%, rgba(0,0,0,.18) 130%)";
+        el.style.backgroundColor = color;
+        var knot = document.createElement("span");
+        knot.className = "knot";
+        knot.style.borderBottomColor = color;
+        el.appendChild(knot);
+        if (type === "time" || type === "trap"){
+          var tag = document.createElement("span");
+          tag.className = "tag";
+          tag.textContent = type === "time" ? "+5" : "✕";
+          tag.style.fontSize = (type === "time" ? size*0.34 : size*0.46) + "px";
+          if (type === "trap") tag.style.color = "#ff5b68";
+          el.appendChild(tag);
+        }
+
+        var x = 6 + Math.random() * Math.max(10, fw - size - 12);
+        var y = field.clientHeight + 10; // juste sous le bas de l'écran
+        // vitesse : base + progression dans la partie
+        var speed = (62 + Math.random()*55) + elapsed * 2.4;   // px/s
+        var b = {
+          el: el, x: x, y: y, size: size,
+          speed: speed,
+          wobble: 10 + Math.random()*16,
+          phase: Math.random()*Math.PI*2,
+          wobbleSpeed: 1.2 + Math.random()*1.4,
+          gold: gold, type: type, dead: false
+        };
+        el.addEventListener("pointerdown", function(ev){
+          ev.preventDefault();
+          popBalloon(b);
+        });
+        field.appendChild(el);
+        balloons.push(b);
+      }
+
+      function removeBalloon(b){
+        b.dead = true;
+        if (b.el && b.el.parentNode) b.el.parentNode.removeChild(b.el);
+      }
+
+      function burst(x, y, color, gold){
+        var n = gold ? 14 : 10;
+        for (var i=0;i<n;i++){
+          var p = document.createElement("div");
+          p.className = "particle";
+          var s = 5 + Math.random()*7;
+          p.style.width = s+"px"; p.style.height = s+"px";
+          p.style.background = color;
+          p.style.left = x+"px"; p.style.top = y+"px";
+          field.appendChild(p);
+          var ang = (Math.PI*2/n)*i + Math.random()*.5;
+          var dist = 34 + Math.random()*46;
+          var dx = Math.cos(ang)*dist, dy = Math.sin(ang)*dist - 12;
+          (function(p, dx, dy){
+            var t0 = performance.now();
+            function step(now){
+              var k = (now - t0)/380;
+              if (k >= 1){ if (p.parentNode) p.parentNode.removeChild(p); return; }
+              p.style.transform = "translate(" + (dx*k) + "px," + (dy*k + 26*k*k) + "px) scale(" + (1-k*.6) + ")";
+              p.style.opacity = String(1-k);
+              requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+          })(p, dx, dy);
+        }
+        var ring = document.createElement("div");
+        ring.className = "ring";
+        ring.style.width = "54px"; ring.style.height = "54px";
+        ring.style.left = x+"px"; ring.style.top = y+"px";
+        ring.style.borderColor = color;
+        field.appendChild(ring);
+        setTimeout(function(){ if (ring.parentNode) ring.parentNode.removeChild(ring); }, 380);
+      }
+
+      function floatPoints(x, y, txt, cls){
+        var f = document.createElement("div");
+        f.className = "floatPts" + (cls ? " " + cls : "");
+        f.textContent = txt;
+        f.style.left = x+"px"; f.style.top = y+"px";
+        field.appendChild(f);
+        setTimeout(function(){ if (f.parentNode) f.parentNode.removeChild(f); }, 820);
+      }
+
+      function showNotice(txt, ms){
+        comboLost.textContent = txt;
+        comboLost.classList.add("show");
+        clearTimeout(comboLostTimer);
+        comboLostTimer = setTimeout(function(){ comboLost.classList.remove("show"); }, ms || 1400);
+      }
+
+      function remainingNow(now){
+        return DURATION + bonusTime - (now - startTs)/1000;
+      }
+
+      function popBalloon(b){
+        if (!running || b.dead) return;
+        ensureAudio();
+        var now = performance.now();
+        var cx = b.x + b.size/2, cy = b.y + b.size*0.55;
+
+        if (b.type === "trap"){
+          // PIÈGE ! Combo à zéro et −3 secondes au chrono.
+          trapPops++;
+          streak = 0;
+          bonusTime -= 3;
+          burst(cx, cy, "#23232e", false);
+          floatPoints(cx, cy - 10, "💣 −3 s !", "trap");
+          popSound("trap");
+          showNotice("Piège ! Combo à zéro et −3 secondes 💣", 1700);
+          removeBalloon(b);
+          comboBar.style.width = "0%";
+          updateHUD();
+          return;
+        }
+
+        if (now - lastPopAt <= COMBO_WINDOW) streak++;
+        else streak = 1;
+        lastPopAt = now;
+        var m = multiplier();
+        if (m > maxMult) maxMult = m;
+        var inFrenzy = remainingNow(now) <= FRENZY_AT;
+        var pts = (b.gold ? 5 : 1) * m * (inFrenzy ? 2 : 1);
+        score += pts;
+        if (inFrenzy) frenzyPoints += pts;
+        pops++;
+        if (b.gold) goldPops++;
+        var burstColor = b.type === "time" ? "#12b5a5" : (b.gold ? "#f4b41a" : b.el.style.backgroundColor);
+        burst(cx, cy, burstColor, b.gold);
+        if (b.type === "time"){
+          timePops++;
+          bonusTime += 5;
+          floatPoints(cx, cy - 10, "+5 s ⏱️", "time");
+          showNotice("+5 secondes au chrono ! ⏱️", 1200);
+          popSound("time");
+        } else {
+          floatPoints(cx, cy - 10, "+" + pts + (b.gold ? " ⭐" : "") + (inFrenzy ? " ×2 ⚡" : ""),
+            b.gold ? "gold" : (inFrenzy ? "frenzy" : ""));
+          popSound(b.gold ? "gold" : "normal");
+        }
+        removeBalloon(b);
+        updateHUD();
+      }
+
+      function loseCombo(escaped){
+        if (streak >= 3){
+          showNotice(escaped ? "Un ballon s'est échappé — combo perdu ! 💨" : "Combo perdu ! 💨", 1400);
+        }
+        streak = 0;
+      }
+
+      function updateHUD(){
+        hudScore.textContent = score;
+        var m = multiplier();
+        hudCombo.textContent = "×" + m + (streak >= 2 ? " (" + streak + ")" : "");
+        statCombo.classList.toggle("hot", m >= 2);
+        if (m >= 2) comboCap.textContent = "Combo ×" + m + " — continue, ça paye ! 🔥";
+        else comboCap.textContent = "Enchaîne les ballons vite pour faire monter ton combo !";
+      }
+
+      function loop(now){
+        if (!running) return;
+        var dt = Math.min(0.05, (now - lastFrame)/1000);
+        lastFrame = now;
+        var elapsed = (now - startTs)/1000;
+        var remaining = DURATION + bonusTime - elapsed;
+
+        if (remaining <= 0){ endGame(); return; }
+
+        hudTime.textContent = Math.ceil(remaining);
+        statTime.classList.toggle("low", remaining <= 10);
+
+        // frénésie finale : 10 dernières secondes, tout vaut double
+        var fz = remaining <= FRENZY_AT;
+        if (fz !== frenzyOn){
+          frenzyOn = fz;
+          field.classList.toggle("frenzy", fz);
+          frenzyBanner.classList.toggle("show", fz);
+        }
+
+        // combo : la fenêtre se vide
+        if (streak > 0){
+          var left = COMBO_WINDOW - (now - lastPopAt);
+          if (left <= 0){ loseCombo(false); updateHUD(); comboBar.style.width = "0%"; }
+          else comboBar.style.width = (left/COMBO_WINDOW*100) + "%";
+        } else comboBar.style.width = "0%";
+
+        // apparition : de plus en plus rapide
+        spawnTimer -= dt*1000;
+        var interval = Math.max(260, 720 - elapsed*11); // 720 ms → 260 ms
+        if (spawnTimer <= 0){
+          spawnBalloon(elapsed);
+          spawnTimer = interval * (0.75 + Math.random()*0.5);
+        }
+
+        // déplacement
+        var fh = field.clientHeight;
+        for (var i = balloons.length-1; i >= 0; i--){
+          var b = balloons[i];
+          if (b.dead){ balloons.splice(i,1); continue; }
+          b.y -= b.speed * dt;
+          b.phase += b.wobbleSpeed * dt;
+          var sway = Math.sin(b.phase) * b.wobble * 0.35;
+          b.el.style.transform = "translate(" + (b.x + sway) + "px," + b.y + "px)";
+          if (b.y + b.size*1.14 < -34){
+            // échappé ! (un piège qui s'échappe, c'est une bonne nouvelle : aucune pénalité)
+            removeBalloon(b);
+            balloons.splice(i,1);
+            if (b.type !== "trap" && streak > 0){ loseCombo(true); updateHUD(); }
+          }
+        }
+        rafId = requestAnimationFrame(loop);
+      }
+
+      function startGame(){
+        ensureAudio();
+        // nettoyer
+        for (var i=0;i<balloons.length;i++) removeBalloon(balloons[i]);
+        balloons = [];
+        score = 0; pops = 0; goldPops = 0;
+        timePops = 0; trapPops = 0; frenzyPoints = 0;
+        bonusTime = 0; frenzyOn = false;
+        field.classList.remove("frenzy");
+        frenzyBanner.classList.remove("show");
+        streak = 0; maxMult = 1; lastPopAt = 0;
+        spawnTimer = 150;
+        startScreen.hidden = true;
+        endScreen.hidden = true;
+        hudTime.textContent = DURATION;
+        statTime.classList.remove("low");
+        updateHUD();
+        running = true;
+        startTs = performance.now();
+        lastFrame = startTs;
+        // quelques ballons dès le départ
+        spawnBalloon(0); spawnBalloon(0); spawnBalloon(0);
+        rafId = requestAnimationFrame(loop);
+      }
+
+      function endGame(){
+        running = false;
+        if (rafId) cancelAnimationFrame(rafId);
+        for (var i=0;i<balloons.length;i++) removeBalloon(balloons[i]);
+        balloons = [];
+        field.classList.remove("frenzy");
+        frenzyBanner.classList.remove("show");
+        frenzyOn = false;
+        hudTime.textContent = "0";
+        comboBar.style.width = "0%";
+        var isRecord = score > best;
+        if (isRecord) best = score;
+        hudBest.textContent = best;
+        document.getElementById("finalScore").textContent = score;
+        document.getElementById("finalPops").textContent = pops;
+        document.getElementById("finalCombo").textContent = "×" + maxMult;
+        document.getElementById("finalGold").textContent = goldPops;
+        document.getElementById("finalTime").textContent = timePops;
+        document.getElementById("finalTrap").textContent = trapPops;
+        document.getElementById("finalFrenzy").textContent = frenzyPoints;
+        document.getElementById("bestLine").textContent =
+          isRecord && score > 0 ? "🏆 Nouveau record de la session !" :
+          (best > 0 ? "Meilleur de la session : " + best + " points" : "");
+        endScreen.hidden = false;
+      }
+
+      document.getElementById("btnStart").addEventListener("click", startGame);
+      document.getElementById("btnReplay").addEventListener("click", startGame);
+      // empêcher le défilement / zoom pendant le jeu sur le terrain
+      field.addEventListener("touchmove", function(e){ if (running) e.preventDefault(); }, {passive:false});
+      field.addEventListener("dblclick", function(e){ e.preventDefault(); });
+    })();
+    </script>
+  </body>
+</html>
