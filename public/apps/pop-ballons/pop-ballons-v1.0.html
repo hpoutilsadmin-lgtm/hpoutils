@@ -600,7 +600,8 @@
         var x = 6 + Math.random() * Math.max(10, fw - size - 12);
         var y = field.clientHeight + 10; // juste sous le bas de l'écran
         // vitesse : base + progression dans la partie
-        var speed = (62 + Math.random()*55) + elapsed * 2.4;   // px/s
+        // (adoucie le 22 oct. au soir — retour de la testeuse Mel : « trop vite, ça frustre »)
+        var speed = (48 + Math.random()*42) + elapsed * 1.5;   // px/s
         var b = {
           el: el, x: x, y: y, size: size,
           speed: speed,
@@ -770,7 +771,7 @@
 
         // apparition : de plus en plus rapide
         spawnTimer -= dt*1000;
-        var interval = Math.max(260, 720 - elapsed*11); // 720 ms → 260 ms
+        var interval = Math.max(300, 780 - elapsed*9); // 780 ms → 300 ms (cadence adoucie le 22 oct. au soir)
         if (spawnTimer <= 0){
           spawnBalloon(elapsed);
           spawnTimer = interval * (0.75 + Math.random()*0.5);
