@@ -335,6 +335,25 @@ function JeuxPage() {
           </div>
         </div>
       </section>
+
+<section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Découvre aussi</span>
+          <h2 className="section-title">Après le jeu, <em>le reste d'HP</em></h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Les livres et les kits</h3>
+              <p>Les histoires et les idées continuent en livres et en kits PDF, à petit prix.</p>
+              <Link to="/livres-pdf" className="pillar-cta">Voir les livres →</Link>
+            </article>
+            <article className="pillar-card">
+              <h3>Les outils gratuits</h3>
+              <p>Pour la vraie vie entre deux parties : des outils web gratuits, sans compte — budget, papiers, proches aidants.</p>
+              <Link to="/outils" className="pillar-cta">Voir les outils →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

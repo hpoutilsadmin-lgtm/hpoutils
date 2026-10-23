@@ -54,6 +54,21 @@ function Page() {
         </div>
       </section>
 
+      <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Découvre aussi</span>
+          <h2 className="section-title">Avant l'atelier, <em>le gratuit</em></h2>
+          <p className="strip-intro">
+            La Boîte à outils rassemble les outils web gratuits d'HP — sans compte,
+            à essayer dès maintenant avec ton groupe, ton équipe ou ta classe.
+          </p>
+          <div className="lead-actions">
+            <a className="btn-primary" href="/boite/">Ouvrir la Boîte à outils</a>
+            <Link to="/ateliers" className="btn-ghost">Voir les ateliers</Link>
+          </div>
+        </div>
+      </section>
+
       <section className="collections-strip" style={{ textAlign: "center" }}>
         <div className="container" style={{ maxWidth: 720 }}>
           <h2>Une idée <em>sur mesure</em> ?</h2>

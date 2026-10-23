@@ -81,6 +81,24 @@ function Page() {
           </div>
         </div>
       </section>
+      <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Découvre aussi</span>
+          <h2 className="section-title">Le gratuit, <em>juste à côté</em></h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>En cuisine — gratuit</h3>
+              <p>Le pendant libre des livres de recettes : 629 recettes gratuites, un convertisseur et des idées pour les petits budgets.</p>
+              <a className="pillar-cta" href="/en-cuisine/">Ouvrir En cuisine →</a>
+            </article>
+            <article className="pillar-card">
+              <h3>Les jeux gratuits</h3>
+              <p>Une pause entre deux lectures : 26 jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
+              <Link className="pillar-cta" to="/jeux">Jouer →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

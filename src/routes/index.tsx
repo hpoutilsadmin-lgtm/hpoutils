@@ -162,6 +162,42 @@ function Index() {
                 <a className="pillar-cta" href="/en-cuisine/index.html">Ouvrir En cuisine →</a>
               </div>
             </article>
+            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
+              <a href="/boite/" aria-label="Ouvrir la Boîte à outils" style={{ display: "block", textDecoration: "none" }}>
+                <div style={{ ...categoryTile("#3d2a56", "#5a3d80"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>B</span>
+                  <span style={CATEGORY_TAG_STYLE}>Gratuit · sans compte</span>
+                </div>
+              </a>
+              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                <h3 style={{ fontSize: 23 }}>Boîte à outils</h3>
+                <p>Des outils web gratuits, sans compte, pour le quotidien</p>
+                <a className="pillar-cta" href="/boite/">Ouvrir la Boîte →</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Découvre aussi</span>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Les Passeurs</h3>
+              <p>Le programme qui tiendra le gratuit debout : 1 $ par mois, bientôt en ligne.</p>
+              <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
+            </article>
+            <article className="pillar-card">
+              <h3>Le Passeur de savoir</h3>
+              <p>Les trucs et les savoirs de nos grands-parents, recueillis et transmis.</p>
+              <a className="pillar-cta" href="/passeur-de-savoir/">Ouvrir le Passeur →</a>
+            </article>
+            <article className="pillar-card">
+              <h3>Futur simple, le balado</h3>
+              <p>L'IA, les PME et le futur, racontés simplement — un épisode par semaine.</p>
+              <Link className="pillar-cta" to="/balado">Écouter le balado →</Link>
+            </article>
           </div>
         </div>
       </section>

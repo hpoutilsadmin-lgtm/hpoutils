@@ -64,6 +64,20 @@ function Page() {
             <div><h3>Un écosystème d'outils pour la vraie vie.</h3><p>Livres, guides, ateliers, musique et ressources pratiques : tout part du même besoin d'avancer simplement.</p></div>
             <Link className="hero-btn gold" to="/outils">Découvrir les outils</Link>
           </div>
+          <div className="cards" style={{ marginTop: 28 }}>
+            <article className="info-card">
+              <span className="mini-note">Transmettre</span>
+              <h3>Le Passeur de savoir</h3>
+              <p>Les trucs et les savoirs de nos grands-parents, recueillis avant qu'ils ne partent en silence.</p>
+              <a className="pillar-cta" href="/passeur-de-savoir/">Ouvrir le Passeur →</a>
+            </article>
+            <article className="info-card">
+              <span className="mini-note">Soutenir</span>
+              <h3>Les Passeurs</h3>
+              <p>Le programme qui tiendra le gratuit debout : 1 $ par mois, bientôt en ligne.</p>
+              <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
+            </article>
+          </div>
         </div>
       </div>
     </>

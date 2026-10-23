@@ -132,6 +132,25 @@ function Page() {
           </div>
         </div>
       </section>
+
+      <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Découvre aussi</span>
+          <h2 className="section-title">Prolonger <em>l'atelier</em></h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Collaborer avec HP</h3>
+              <p>Un milieu, un groupe, un besoin particulier : la page Collaborer explique comment on adapte les outils HP à ton contexte.</p>
+              <Link className="pillar-cta" to="/collaborer">Collaborer →</Link>
+            </article>
+            <article className="pillar-card">
+              <h3>En cuisine, gratuitement</h3>
+              <p>Le pendant libre des ateliers cuisine : 629 recettes gratuites, un convertisseur et des idées pour les petits budgets.</p>
+              <a className="pillar-cta" href="/en-cuisine/">Ouvrir En cuisine →</a>
+            </article>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

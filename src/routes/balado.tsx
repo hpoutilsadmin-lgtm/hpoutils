@@ -157,6 +157,25 @@ function Page() {
           </div>
         </div>
       </section>
+
+      <section className="collections-strip">
+        <div className="container">
+          <span className="editorial-kicker">Découvre aussi</span>
+          <h2>Continuer <em>ailleurs sur HP</em></h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Les livres HP</h3>
+              <p>Le sujet du balado te suit en lecture : <em>Enjeux de l'humanité à l'ère de l'IA</em> et les autres livres et PDF d'HP.</p>
+              <Link to="/livres-pdf" className="pillar-cta">Voir les livres →</Link>
+            </article>
+            <article className="pillar-card">
+              <h3>Les jeux gratuits</h3>
+              <p>Une pause entre deux épisodes : 26 jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
+              <Link to="/jeux" className="pillar-cta">Jouer →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

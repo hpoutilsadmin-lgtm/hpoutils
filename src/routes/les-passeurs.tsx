@@ -34,6 +34,23 @@ function Page() {
           <p className="strip-intro">
             Les Passeurs, c'est le monde qui tient ça debout: un petit montant qui revient chaque mois et qui fait passer le savoir d'une main à l'autre, comme les passeurs de savoir l'ont toujours fait.
           </p>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Les jeux gratuits</h3>
+              <p>26 jeux qui restent gratuits pour tout le monde, sans inscription.</p>
+              <Link to="/jeux" className="pillar-cta">Voir les jeux →</Link>
+            </article>
+            <article className="pillar-card">
+              <h3>Les livres et les kits</h3>
+              <p>Des livres et des kits PDF à petit prix, pensés pour la vraie vie.</p>
+              <Link to="/livres-pdf" className="pillar-cta">Voir les livres →</Link>
+            </article>
+            <article className="pillar-card">
+              <h3>Les outils gratuits</h3>
+              <p>Des outils web gratuits, sans compte, pour les papiers, le budget et le quotidien.</p>
+              <Link to="/outils" className="pillar-cta">Voir les outils →</Link>
+            </article>
+          </div>
         </div>
       </section>
 

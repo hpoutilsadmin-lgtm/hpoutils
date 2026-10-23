@@ -18,10 +18,15 @@ export function SiteFooter() {
           <h4>Liens rapides</h4>
           <p>
             <Link to="/">Accueil</Link><br />
+            <Link to="/jeux">Jeux gratuits</Link><br />
             <Link to="/outils">Outils</Link><br />
+            <a href="/boite/">Boîte à outils</a><br />
             <Link to="/livres-pdf">Livres, PDF &amp; réflexions</Link><br />
+            <a href="/passeur-de-savoir/">Le Passeur de savoir</a><br />
             <Link to="/univers">Univers alternatif</Link><br />
             <Link to="/ateliers">Ateliers</Link><br />
+            <Link to="/balado">Balado Futur simple</Link><br />
+            <Link to="/les-passeurs">Les Passeurs</Link><br />
             <Link to="/a-propos">À propos</Link><br />
             <Link to="/recuperer-achat">Récupérer un achat</Link><br />
             <Link to="/confidentialite">Confidentialité</Link><br />

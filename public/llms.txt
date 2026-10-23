@@ -37,7 +37,7 @@ Conçus au Québec, dans l'esprit de la Loi 25 ; sélecteur de province pour tou
 - Ça vaut-tu la peine ? (/outils-web/ca-vaut-tu-la-peine.html) : vrai coût d'un achat — coût par usage et équivalent en heures de travail.
 - Le relais (/outils-web/le-relais.html) : cahier de transmission pour proches aidants — qui a fait quoi, quand. Transmet l'information, ne prend jamais de décision médicale.
 - Maintenant (/outils-web/maintenant.html) : mini tableau de bord de la vraie vie — Argent, Repas, Maison, Demain, Moi.
-- La Boîte à outils (/boite/) : 7 outils pour la vraie vie réunis au même endroit.
+- La Boîte à outils (/boite/) : 8 outils pour la vraie vie réunis au même endroit.
 - Le Passeur de savoir (/passeur-de-savoir/) : les trucs et savoirs des gens, recueillis pour être transmis.
 
 ## Les kits Sans Honte — 5 $ le kit (page /sans-honte)

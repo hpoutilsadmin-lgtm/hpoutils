@@ -340,6 +340,38 @@ function Page() {
               </div>
             )}
 
+            {(() => {
+              const cross =
+                product.slug === "enjeux-humanite"
+                  ? { desc: "Le même sujet, en audio : Futur simple, le balado HP sur l'IA — un épisode gratuit par semaine.", href: "/balado", label: "Écouter le balado" }
+                  : product.slug === "faim-justifie-les-moyens"
+                    ? { desc: "Le pendant gratuit de ce livre : 629 recettes, pensées pour les petits budgets.", href: "/en-cuisine/", label: "Ouvrir En cuisine" }
+                    : product.slug === "enfants-cuisinent"
+                      ? { desc: "Le pendant gratuit de ce livre : des recettes à faire en famille, avec le convertisseur.", href: "/en-cuisine/", label: "Ouvrir En cuisine" }
+                      : product.slug === "horizon-quebec"
+                        ? { desc: "L'autre porte du même monde : BD, musique et récits dans l'univers HP.", href: "/univers", label: "Découvrir l'univers" }
+                        : { desc: "Avant ou après le PDF : des outils web gratuits, sans compte, pour le même genre de situations.", href: "/outils", label: "Voir les outils gratuits" };
+              return (
+                <div
+                  style={{
+                    border: "1px solid rgba(58,42,32,.2)",
+                    borderRadius: 8,
+                    background: "rgba(247,244,236,.7)",
+                    padding: "16px 20px",
+                    marginBottom: 32,
+                  }}
+                >
+                  <h2 style={{ fontFamily: "Georgia,serif", fontSize: 22, marginBottom: 8, color: "#2a1a12" }}>
+                    Découvre aussi
+                  </h2>
+                  <p style={{ lineHeight: 1.7, color: "#3a2a20", marginBottom: 10 }}>{cross.desc}</p>
+                  <a href={cross.href} style={{ fontWeight: 700, color: "#2a1a12" }}>
+                    {cross.label} →
+                  </a>
+                </div>
+              );
+            })()}
+
             <div className="cta-band">
               <div>
                 <h3>{product.title}</h3>

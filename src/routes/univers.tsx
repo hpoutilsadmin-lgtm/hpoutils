@@ -80,6 +80,25 @@ function Page() {
           </div>
         </div>
       </section>
+
+      <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Découvre aussi</span>
+          <h2 className="section-title">Les univers se vivent <em>aussi en jouant</em></h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Les jeux gratuits</h3>
+              <p>RELÈVE et 25 autres jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
+              <Link to="/jeux" className="pillar-cta">Jouer →</Link>
+            </article>
+            <article className="pillar-card">
+              <h3>Les livres HP</h3>
+              <p>Les récits continuent en livres et en PDF : une nouvelle, des guides et des réflexions d'ici.</p>
+              <Link to="/livres-pdf" className="pillar-cta">Voir les livres →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
