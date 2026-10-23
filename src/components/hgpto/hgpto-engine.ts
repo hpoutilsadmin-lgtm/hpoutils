@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES } from "./hgpto-data";
 
 export function initHgpto() {
       "use strict";
@@ -558,6 +558,40 @@ export function initHgpto() {
         return t;
       }
 
+      /* ---------- Surprises et retour de page (service client, 23 oct. 2026) ----------
+         Continuité de SESSION seulement (sessionStorage, comme
+         « hgpto-closed ») : les pages déjà vues et celles déjà
+         clin-d'œillées vivent le temps de la visite, pas plus.
+         Portes de probabilité par occasion de bavardage, décision
+         d'Hugo : micro-clin d'œil 1/15, surprise moyenne 1/35, grosse
+         surprise 1/80 — tirées en cascade (la plus rare d'abord) et
+         jamais rapprochées (≥ 90 s entre deux surprises). */
+      function loadSet(key){
+        try { var v = JSON.parse(sessionStorage.getItem(key) || '[]'); return Array.isArray(v) ? v : []; }
+        catch(e){ return []; }
+      }
+      function saveSet(key, arr){
+        try { sessionStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
+      }
+      var visitedRoutes = loadSet('hgpto-visited');
+      var winkedRoutes = loadSet('hgpto-winked');
+      var returnWinkPending = false;
+      var lastSurpriseAt = 0;
+      function markWinked(k){
+        if (winkedRoutes.indexOf(k) === -1){ winkedRoutes.push(k); saveSet('hgpto-winked', winkedRoutes); }
+      }
+      function rollSurprise(){
+        if (Date.now() - lastSurpriseAt < 90000) return null;
+        var r = Math.random();
+        var tier = null;
+        if (r < 1/80) tier = 'big';
+        else if (r < 1/80 + 1/35) tier = 'med';
+        else if (r < 1/80 + 1/35 + 1/15) tier = 'wink';
+        if (!tier) return null;
+        lastSurpriseAt = Date.now();
+        return { tier:tier, line: tier === 'big' ? pick(SURPRISE_BIG_LINES) : tier === 'med' ? pick(SURPRISE_MED_LINES) : pick(SURPRISE_WINK_LINES) };
+      }
+
       /* ---------- Parole : blagues, invitations, soir ---------- */
       function talk(){
         // Lot nº 3 : pendant la visite guidée, le bavardage ambiant se
@@ -574,6 +608,43 @@ export function initHgpto() {
         var dp = DWELL_SUGGESTIONS[routeKey()];
         if (dp && Date.now() - dwellStart > 40000 && canSuggest(dp)){ doSuggest(dp); return; }
         if (isPresse() && Math.random() < 0.7) return;   // visiteur pressé : il se fait discret (lot nº 2)
+        // Clin d'œil de retour (service client, 23 oct. 2026) : le
+        // visiteur revient sur une page déjà vue CETTE visite-ci —
+        // un clin d'œil court, une fois par page et par session,
+        // jamais sur une route sensible ; les gardes en tête de
+        // talk() assurent déjà « jamais pendant une tâche ».
+        if (returnWinkPending){
+          returnWinkPending = false;
+          if (!isSensitiveRoute()){
+            markWinked(routeKey());
+            showBubble(esc(pick(RETURN_WINK_LINES)), 6000, 'talk');
+            alternate++;
+            return;
+          }
+        }
+        // Surprises probabilisées (1/15, 1/35, 1/80 — voir rollSurprise) :
+        // cosmétiques seulement, jamais sur une route sensible, et le
+        // visiteur pressé ci-dessus garde sa tranquillité 70 % du temps.
+        if (!isSensitiveRoute()){
+          var surp = rollSurprise();
+          if (surp){
+            if (surp.tier === 'big'){
+              // Grosse surprise rare : le salut du lutteur — état « wave »
+              // existant, aucun nouvel état inventé.
+              setState('wave'); setExpr('laugh'); busy(2400);
+              spawnBurst(['✦','⭐','✧'], 8);
+              showBubble(esc(surp.line), 6600, 'joke');
+              setTimeout(function(){ if (state === 'wave'){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); } }, 2450);
+            } else if (surp.tier === 'med'){
+              spawnBurst(['♪','♫','✦'], 5);
+              showBubble(esc(surp.line), 5800, 'talk');
+            } else {
+              showBubble(esc(surp.line), 5000, 'talk');
+            }
+            alternate++;
+            return;
+          }
+        }
         // Lot nº 4, humeur Drôle : l'espièglerie passe devant — une
         // chance sur deux, le bavardage devient directement une blague.
         if (mood === 'drole' && Math.random() < 0.5){
@@ -1312,10 +1383,43 @@ export function initHgpto() {
         }, 1950);
       }
       var BUSY_VIGNETTES = ['read','cook','cookfail','tinker','mime','wrestler','fix','dust','sweep','janitor'];
+      /* Micro-célébration (pack taquin du document, 23 oct. 2026) :
+         quand le visiteur TROUVE ce qu'il cherchait — un lien de
+         réponse cliqué, une section montrée qui existe — une toute
+         petite pluie d'étincelles, moins d'une seconde, non bloquante,
+         jamais sonore. spawnBurst respecte déjà le mode réduit. */
+      function microCelebrate(){
+        if (gameOn || tourOn) return;
+        spawnBurst(['✦','✧','✦'], 4);
+      }
+
+      /* Chatouillage de trop (pack taquin du document, 23 oct. 2026) :
+         après le grand fou rire (combo ≥ 3), si ça continue (combo ≥ 5),
+         il rit, prévient en riant… et s'échappe ~2 s avant de revenir,
+         avec la réplique du document. Aucun nouvel état : un simple
+         déplacement avec l'idiome de transition déjà utilisé ailleurs
+         (startGame), puis retour à sa place. */
+      var tickleEscaping = false;
+      function tickleEscape(){
+        tickleEscaping = true;
+        setExpr('laugh'); giggle();
+        var prevX = x;
+        bot.style.transition = 'transform .45s ease';
+        x = maxX(); place();
+        setTimeout(function(){
+          x = prevX; place();
+          setTimeout(function(){
+            bot.style.transition = '';
+            tickleEscaping = false;
+            showBubble("OK, là je suis officiellement chatouillé à pleine capacité. On avance ?", 4200, 'none');
+          }, 480);
+        }, 1550);
+      }
       function tickle(){
         lastInteract = Date.now();
         engage();
         if (paused || isHidden) return;
+        if (tickleEscaping) return;
         if (state === 'nosepick'){ caughtPick(); return; }
         if (state === 'sleep'){ wake(true); return; }
         if (state === 'graffiti'){ caughtGraffiti(); return; }
@@ -1329,6 +1433,7 @@ export function initHgpto() {
         var wasCook = (state === 'cook');
         tickleCombo++;
         if (tickleTimer) clearTimeout(tickleTimer);
+        if (tickleCombo >= 5){ tickleCombo = 0; tickleEscape(); return; }
         tickleTimer = setTimeout(function(){ tickleCombo = 0; }, 2600);
         var big = tickleCombo >= 3;
         setState(big ? 'tickle-big' : 'tickle');
@@ -1463,11 +1568,7 @@ export function initHgpto() {
         if (item.fn === 'pixel'){ showBubble(esc(PIXEL_STORY), 11000, 'answer'); summonCat('follow'); return; }
         if (item.fn === 'feed'){ closeQA(); doFeedCat(); return; }
         if (item.fn === 'choix'){ closeQA(); busyUntil = 0; lastBubbleAt = 0; doChoix(true); return; }
-        if (item.fn === 'choisir'){
-          showBubble(esc("On y va doucement, par étapes — écoute ton besoin d'abord : jouer (c'est gratuit), cuisiner (629 recettes gratuites), ou t'organiser le quotidien (les kits, 5 $ chacun, 15 thèmes). Et si la réponse, c'est « rien pour l'instant », c'est bien correct aussi : je reste là, sans pousser.") +
-            linkHtml({ u:"https://hp-outils.com/jeux", l:"Commencer par les jeux gratuits" }), 12000, 'answer');
-          return;
-        }
+        if (item.fn === 'choisir'){ startAideChoix(); return; }
         var text = item.a || pick(JOKES);
         var deliver = function(prefix){
           var html = esc(prefix + text);
@@ -1503,6 +1604,75 @@ export function initHgpto() {
           (!!item.u && item.u.indexOf('mailto:') !== 0);
         if (isInfo) flashInfo(deliver);
         else deliver('');
+      }
+
+      /* ---------- Aide au choix — méthode closer façon HP
+         (document service client, décisions d'Hugo du 23 oct. 2026) ------
+         Service d'abord : DEUX questions maximum (pour qui, pour faire
+         quoi), puis UNE seule recommandation honnête — y compris « le
+         gratuit fait la job » quand c'est vrai. Le bon calcul du lot
+         (40 $ plutôt que 10 × 5 $ = 50 $) seulement là où il est réel.
+         Sortie propre partout : annuler restaure les questions, et chaque
+         recommandation se ferme sur une ligne d'éthique (non tout aussi
+         facile que le oui). Jamais d'invitation pendant cette séquence
+         au-delà de la recommandation elle-même. */
+      function choixOptions(head, options, onPick){
+        qaChips.innerHTML = '';
+        var h = document.createElement('div');
+        h.className = 'qa-choix-head';
+        h.textContent = head;
+        qaChips.appendChild(h);
+        options.forEach(function(opt){
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = opt.label;
+          b.addEventListener('click', function(){ onPick(opt.key); });
+          qaChips.appendChild(b);
+        });
+        var back = document.createElement('button');
+        back.type = 'button';
+        back.textContent = '← Toutes les questions';
+        back.addEventListener('click', function(){ buildQAChips(); });
+        qaChips.appendChild(back);
+      }
+      function startAideChoix(){
+        showBubble("Avec plaisir — deux petites questions, pas plus, et je te fais UNE recommandation honnête. Même si la réponse, c'est « rien pour l'instant ».", 10000, 'answer');
+        choixOptions("1 sur 2 — C'est pour qui ?", [
+          { key:'moi', label:"Pour moi" },
+          { key:'enfants', label:"Pour mes enfants" },
+          { key:'offrir', label:"Pour offrir" }
+        ], function(pourQui){ choixQ2(pourQui); });
+      }
+      function choixQ2(pourQui){
+        choixOptions("2 sur 2 — Tu cherches quoi, surtout ?", [
+          { key:'jouer', label:"Jouer, sans payer" },
+          { key:'cuisiner', label:"Cuisiner" },
+          { key:'organiser', label:"M'organiser au quotidien" },
+          { key:'atelier', label:"Un atelier en vrai" }
+        ], function(quoi){ choixReco(pourQui, quoi); });
+      }
+      function choixReco(pourQui, quoi){
+        var t = "", p = null;
+        if (quoi === 'jouer'){
+          t = "Mon honnête recommandation : commence par les jeux gratuits — 33 jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
+          p = { u:"https://hp-outils.com/jeux", l:"Voir les jeux gratuits" };
+        } else if (quoi === 'cuisiner'){
+          if (pourQui === 'enfants'){
+            t = "Mon honnête recommandation : le livre « Les enfants cuisinent pour faire plaisir » (20 $) — fait pour cuisiner EN famille, avec des recettes pensées pour les petites mains. Et les recettes gratuites du site sont parfaites pour essayer avant.";
+            p = { u:"https://hp-outils.com/en-cuisine", l:"Voir la cuisine" };
+          } else {
+            t = "Mon honnête recommandation : commence par les 629 recettes gratuites du site — ça coûte zéro et ça dépanne pour vrai. Si tu veux un livre ensuite, « La faim justifie les moyens » est à 10 $.";
+            p = { u:"https://hp-outils.com/en-cuisine", l:"Voir les recettes gratuites" };
+          }
+        } else if (quoi === 'organiser'){
+          t = "Mon honnête recommandation : un seul kit Sans Honte pour ton besoin le plus pressant — 5 $, pas plus. Et le vrai calcul, si un jour tu en vises plusieurs : pris un par un, 10 kits = 50 $ ; le lot « choisis 10 parmi 15 » est à 40 $. Pas besoin de décider ça aujourd'hui.";
+          p = { u:"https://hp-outils.com/sans-honte", l:"Voir les kits Sans Honte" };
+        } else {
+          t = "Mon honnête recommandation : un atelier avec Hugo, en vrai — Cuisine de base à 120 $, ou Pain maison (à l'atelier à 150 $, à domicile à 120 $), à Terrebonne et dans Lanaudière. Écris-lui en disant pour qui c'est, combien de personnes et quand tu vises : c'est lui qui confirme, en personne, sous 3 jours ouvrables.";
+          p = { u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" };
+        }
+        showBubble(esc(t) + linkHtml(p) + '<br>' + esc(pick(ETHIQUE_LINES)), 14000, 'answer');
+        buildQAChips();
       }
 
       /* ---------- Questions tapées : recherche dans la base de faits ----------
@@ -1560,6 +1730,35 @@ export function initHgpto() {
          toute vraie question produit (gardes dans le submit).
          Rotation sans répétition immédiate, session seulement. */
       var lastGnome = -1;
+      /* ---------- Escalades service client (23 oct. 2026) ----------
+         Document « Service client HP Outils » : une plainte, un cas de
+         remboursement ou un lien perdu = porte humaine. HGPTO accueille
+         (phrase de repli EXACTE du document), il ne tranche jamais un
+         cas, il ne promet aucun délai ni montant de remboursement, il
+         n'invente aucun rabais. La question de POLITIQUE, elle, reçoit
+         le cadre factuel adopté par Hugo. Une escalade résolue n'est
+         PAS consignée dans « Pour Hugo » (même précédent que le gnome :
+         ce n'est pas une question sans réponse). */
+      function escalationIntent(q){
+        var n = normText(q);
+        var has = function(list){ return list.some(function(w){ return n.indexOf(w) >= 0; }); };
+        var refundish = has(['rembours','echange','echanger']);
+        // Question de politique (pas un cas) : le cadre factuel adopté.
+        if (refundish && has(['politique','comment ca marche','comment ca fonctionne','conditions','regle','regles','principe'])) return 'refund-policy';
+        // Plainte / insatisfaction : accueil + phrase de repli.
+        if (has(['pas content','pas contente','mecontent','decu','decevant','arnaque','escroquerie','plainte','scandaleux','inacceptable','pas satisfait','insatisfait','service pourri','c est nul','vraiment nul','nul ton','honteux']))
+          return 'plainte';
+        // Problème de lien / de téléchargement : marche à suivre.
+        if (has(['perdu mon lien','perdu le lien','lien casse','lien mort','lien ne marche','lien marche pas','pas recu mon lien','pas recu le lien','ou est mon lien','ou est mon telechargement','telechargement ne marche','telechargement marche pas','jamais recu mon','pas recu mon achat','impossible a ouvrir','impossible d ouvrir','ne s ouvre pas','s ouvre pas']))
+          return 'lien';
+        // Cas personnel de remboursement / d'échange : phrase de repli.
+        if (has(['rembourse moi','remboursez','je veux etre rembourse','veux un remboursement','veux me faire rembourser','rembourser','rembourse','mauvais produit','pas le bon produit','erreur de produit','produit defectueux','echanger','echange mon','echange le']))
+          return 'refund-case';
+        // Le mot « remboursement » tout seul = question de politique.
+        if (has(['remboursement'])) return 'refund-policy';
+        return null;
+      }
+
       function mascotteJab(q){
         var n = normText(q).replace(/\s+/g, ' ').trim();
         if (!/(^| )mascottes?( |$)/.test(n)) return false;
@@ -1597,6 +1796,19 @@ export function initHgpto() {
         // d'entrée que le bouton qa-play (décision d'Hugo, 22 oct. 2026).
         var mots = ' ' + normText(q).replace(/\s+/g, ' ').trim() + ' ';
         if (mots.indexOf(' joue avec moi ') !== -1){ startGame(); return; }
+        // Escalades service client (23 oct. 2026) : plainte, cas de
+        // remboursement, lien perdu — interceptées AVANT la base de
+        // faits : la porte humaine d'abord, mot pour mot du document.
+        var escKind = escalationIntent(q);
+        if (escKind){
+          setExpr('happy');
+          var mailLink = linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" });
+          if (escKind === 'plainte') showBubble(esc(ESCALATION_EMPATHY + ' ' + ESCALATION_LINE) + mailLink, 14000, 'answer');
+          else if (escKind === 'refund-case') showBubble(esc(ESCALATION_LINE) + mailLink, 14000, 'answer');
+          else if (escKind === 'refund-policy') showBubble(esc(REFUND_POLICY) + mailLink, 14000, 'answer');
+          else showBubble(esc(LIEN_PERDU_TEXT) + mailLink, 14000, 'answer');
+          return;
+        }
         var jab = mascotteJab(q);
         var hit = searchKB(q);
         if (hit){
@@ -1650,14 +1862,27 @@ export function initHgpto() {
         setExpr('happy');
         showBubble(esc(FALLBACK) + linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" }), 11000, 'answer');
       });
-      KB.forEach(function(item){
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.textContent = item.q;
-        b.addEventListener('click', function(){ answerQuestion(item); });
-        qaChips.appendChild(b);
-      });
+      /* Construction des chips de questions — extraite en fonction
+         (lot service client, 23 oct. 2026) : l'aide au choix remplace
+         temporairement les chips par ses propres boutons, puis les
+         restaure avec buildQAChips(). */
+      function buildQAChips(){
+        qaChips.innerHTML = '';
+        KB.forEach(function(item){
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = item.q;
+          b.addEventListener('click', function(){ answerQuestion(item); });
+          qaChips.appendChild(b);
+        });
+      }
+      buildQAChips();
       btnAsk.addEventListener('click', function(){ qaOpen ? closeQA() : openQA(); });
+      // Micro-célébration : un clic sur un lien DANS une bulle de
+      // réponse = le visiteur suit le chemin trouvé (23 oct. 2026).
+      bubble.addEventListener('click', function(ev){
+        if (ev.target && ev.target.closest && ev.target.closest('a')) microCelebrate();
+      });
       qaClose.addEventListener('click', closeQA);
       btnTickle.addEventListener('click', function(){ ensureAudio(); tickle(); });
       btnBucket.addEventListener('click', doBucket);
@@ -1868,6 +2093,7 @@ export function initHgpto() {
           return true;
         }
         glowEl(el);
+        microCelebrate();
         setTimeout(function(){ if (after) after(); }, 600);
         return true;
       }
@@ -2076,7 +2302,12 @@ export function initHgpto() {
         // DISPOSITION seulement : il joue premier, et les serpents glissent un
         // peu moins loin que les échelles ne montent (dérive douce pour tous).
         ladders: { 4:25, 12:29, 19:38, 28:47, 35:50, 44:59 },
-        snakes:  { 17:7, 31:14, 39:22, 48:30, 54:38, 62:45 }
+        snakes:  { 17:7, 31:14, 39:22, 48:30, 54:38, 62:45 },
+        // Surprises du jeu caché (pack taquin du document, 23 oct. 2026) :
+        // cases libres (ni échelle, ni serpent) à effet PUREMENT
+        // cosmétique — les dés et les positions ne changent jamais.
+        // 23 = la tournée de Pixel ; 51 = la case sieste d'HGPTO.
+        surprises: { 23:'pixel', 51:'sieste' }
       };
       var GAME_LINES = {
         start: ["Serpents et échelles ! Premier arrivé à la case 64. Tu commences — lance le dé !",
@@ -2090,6 +2321,9 @@ export function initHgpto() {
         ladderBot: ["Une échelle pour moi ! Je danse de joie — intérieurement, je suis en métal.", "Je monte ! Regarde-moi ce style.", "Échelle ! Les dés et moi, on est copains."],
         snakeYou: ["Oups, un serpent gentil mais glissant…", "Glissade ! Ça arrive aux meilleurs — parole de robot.", "Le serpent t'a offert un petit voyage, disons ça comme ça."],
         snakeBot: ["Un serpent ! Je glisse… avec dignité. Enfin, presque.", "Ouille. Mes sourcils sont catastrophés.", "Je descends, mais je descends en riant. Presque."],
+        pixelCross: ["🐾 Pixel traverse la planche ! Elle change rien à ton dé, promis — elle fait juste sa tournée.", "🐾 Regarde : Pixel passe sur la planche, toute fière. Les dés n'ont pas bougé d'un poil. Enfin, de boulon."],
+        siesteBot: ["Case sieste… je m'endors une seconde sur ma case. Une. Seconde. 💤"],
+        siesteYou: ["La case sieste ! Tu passes doucement — c'est là qu'HGPTO fait ses micro-siestes entre deux parties."],
         youWin: ["Tu as gagné ! Bravo pour vrai — quelle partie !", "Bravo ! Je m'incline, et je ne tombe même pas."],
         botWin: ["Revanche quand tu veux !", "C'était serré — les dés ont décidé."],
         quit: "Bonne partie ! On se reprend quand tu veux."
@@ -2323,6 +2557,23 @@ export function initHgpto() {
                   endTurn(who);
                 }
               });
+            } else if (GAME_CFG.surprises[target] === 'pixel'){
+              // Surprise cosmétique (23 oct. 2026) : Pixel traverse la
+              // planche — un commentaire, une courte pause, rien d'autre
+              // ne bouge (ni dé, ni position).
+              gComment(pick(GAME_LINES.pixelCross), 'joke');
+              setTimeout(function(){ if (gameOn) endTurn(who); }, 1400);
+            } else if (GAME_CFG.surprises[target] === 'sieste'){
+              if (!isYou){
+                // HGPTO atterrit sur SA case sieste : il somnole ~1 s
+                // avant de passer le tour — le visiteur, lui, ne perd
+                // rien, et aucun dé n'est touché.
+                gComment(pick(GAME_LINES.siesteBot), 'talk');
+                setTimeout(function(){ if (gameOn) endTurn(who); }, 2100);
+              } else {
+                gComment(pick(GAME_LINES.siesteYou), 'talk');
+                endTurn(who);
+              }
             } else if (!isYou && n === 1 && Math.random() < 0.4){
               doAngry("GRRR. Un 1 ! Ce dé-là va finir dans le tiroir à chaussettes.", 2200);
               setTimeout(function(){
@@ -4199,13 +4450,28 @@ export function initHgpto() {
         '/les-passeurs': "Les Passeurs : les gens qui soutiennent HP Outils, 1 $ par mois."
       };
       var lastRoute = routeKey();
+      // Service client (23 oct. 2026) — page d'arrivée : si elle a déjà
+      // été vue dans CETTE session (retour après navigation), le clin
+      // d'œil de retour est armé ; sinon, on la consigne comme vue.
+      (function(){
+        var k0 = routeKey();
+        if (visitedRoutes.indexOf(k0) !== -1 && winkedRoutes.indexOf(k0) === -1) returnWinkPending = true;
+        if (visitedRoutes.indexOf(k0) === -1){ visitedRoutes.push(k0); saveSet('hgpto-visited', visitedRoutes); }
+      })();
       setInterval(function(){
         var k = routeKey();
         if (k === lastRoute) return;
         lastRoute = k;
         dwellRoute = k; dwellStart = Date.now();
         ieOnRoute(k);
+        // Retour sur une page déjà vue cette session : armer le clin
+        // d'œil (livré par talk(), une fois par page) et sauter le
+        // commentaire de route cette fois — le clin d'œil le remplace.
+        var isReturn = visitedRoutes.indexOf(k) !== -1;
+        if (!isReturn){ visitedRoutes.push(k); saveSet('hgpto-visited', visitedRoutes); }
+        else if (winkedRoutes.indexOf(k) === -1) returnWinkPending = true;
         applyCostume();
+        if (returnWinkPending) return;
         if (!accompany || paused || isHidden || gameOn || qaOpen || state === 'sleep' || isBusy()) return;
         if (commentedSecs['route:' + k]) return;
         var line = ROUTE_COMMENTS[k];

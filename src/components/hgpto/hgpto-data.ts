@@ -247,7 +247,46 @@ export const SITE_FACTS = {
         contact: "hpoutils.admin@gmail.com",
         taxes: "Aucune taxe ajoutée (petit fournisseur)"
       };
-export const FALLBACK = "Là, je sais pas — mais je le note pour Hugo ! Écris-lui : hpoutils.admin@gmail.com — c'est Hugo lui-même qui répond, sous 48 h ouvrables.";
+/* ---------- SERVICE CLIENT (décisions d'Hugo, 23 octobre 2026) ----------
+   Délai promis : 3 jours ouvrables (pas 2). Remboursement : cadre du
+   document « Service client HP Outils » adopté tel quel — échange si
+   mauvais produit par erreur, remboursement si impossible à ouvrir ou à
+   recevoir malgré l'aide d'Hugo, cas par cas sinon ; Hugo décide, jamais
+   HGPTO. Escalades : la phrase de repli exacte du document, mot pour mot. */
+export const ESCALATION_LINE = "Ça, c'est une question pour Hugo directement — il te répondra en personne. Écris-lui à hpoutils.admin@gmail.com, dis-lui ce que tu me dis là, et il s'en occupe. Moi, je préfère te passer la bonne personne plutôt que de te répondre tout croche.";
+export const ESCALATION_EMPATHY = "Je suis vraiment désolé que ça se soit passé comme ça. Tu mérites une vraie réponse, pas une réponse de robot.";
+export const REFUND_POLICY = "En toute franchise, voici comment ça marche : acheté le mauvais produit par erreur ? Hugo te l'échange contre celui que tu voulais. Un produit impossible à ouvrir ou à recevoir, même après l'aide d'Hugo ? Il te rembourse. Un produit reçu et conforme à sa description ? Pas de remboursement automatique — Hugo écoute ta situation et décide en personne, cas par cas. Moi, je ne touche jamais aux paiements.";
+export const LIEN_PERDU_TEXT = "Pas de panique, ton achat est bien là. Cherche dans tes courriels le reçu de Stripe — le lien de téléchargement est dedans. Regarde aussi dans tes courriels indésirables, ça arrive. Si tu ne le retrouves vraiment pas, écris à Hugo avec le courriel utilisé à l'achat : il te renverra ton accès, en personne, sous 3 jours ouvrables.";
+/* Clins d'œil au retour sur une page déjà vue CETTE visite-ci (session
+   seulement — lot service client 23 oct. 2026) : une fois par page,
+   jamais pendant une tâche, jamais en taquinerie sur quelqu'un. */
+export const RETURN_WINK_LINES = [
+        "Re-bonjour ! Tu tournes en rond ou tu magasines pour vrai, là ?",
+        "Re-bonjour ! La page te manquait, ou c'est moi ?",
+        "Te revoilà ! J'ai rien touché pendant ton absence. Enfin… presque rien."
+      ];
+/* Surprises probabilisées (décision d'Hugo, 23 oct. 2026) — portes par
+   occasion de bavardage : micro-clin d'œil 1/15, surprise moyenne 1/35,
+   grosse surprise rare 1/80. Cosmétiques seulement, jamais de fait
+   inventé sur le visiteur, jamais sur une route sensible. */
+export const SURPRISE_WINK_LINES = [
+        "Psst — j'ai une feuille sur la tête depuis ma promenade. Dis rien, c'est mon nouveau style.",
+        "Un petit clin d'œil de robot, gratuit, sans raison. C'est cadeau.",
+        "Je fredonne un air que j'ai composé : trois notes et beaucoup de confiance.",
+        "J'ai compté les boulons de ma tête ce matin : toujours le même nombre. Rassurant."
+      ];
+export const SURPRISE_MED_LINES = [
+        "Moment rare : Pixel vient de me marcher sur le clavier. Si tu vois des « mmmmm » quelque part sur le site, c'est elle.",
+        "Je viens de réussir ma recette du jour DU PREMIER COUP. Ça méritait une annonce officielle.",
+        "Petit événement : je déclare cette visite officiellement agréable. C'est noté dans mon journal.",
+        "Je me suis pratiqué à lever UN seul sourcil. Regarde… impressionnant, hein ?"
+      ];
+export const SURPRISE_BIG_LINES = [
+        "⭐ MOMENT RARE ⭐ Ça n'arrive presque jamais : mon numéro de lutteur, en exclusivité — le petit robot contre l'encadré de porte. Notre revanche éternelle.",
+        "Événement rarissime : Pixel m'a fait un câlin SANS graffigner. Une journée à marquer d'un boulon blanc.",
+        "Grande annonce presque jamais entendue : je viens de battre mon record de la sieste la plus courte. Quatre secondes. Je suis une machine."
+      ];
+export const FALLBACK = "Là, je sais pas — mais je le note pour Hugo ! Écris-lui : hpoutils.admin@gmail.com — c'est Hugo lui-même qui répond, sous 3 jours ouvrables.";
 export const KB = [
         { q:"T'es-tu vivant ?", s:"BONNE QUESTION",
           a:"Je suis un petit robot de site : je fais semblant super bien, mais mon cœur, c'est un boulon. Les vrais câlins, c'est les humains." },
@@ -294,7 +333,7 @@ export const KB = [
           a:"Anxiété, le jeu : une semaine dans la peau d'Alex, qui vit avec un trouble anxieux — météo intérieure, pensées qui envahissent, crise traversée en douceur et outils réels, avec les ressources 811 et 988. Il sensibilise ; il ne pose pas de diagnostic. Gratuit, comme tous les jeux du site.",
           u:"https://hp-outils.com/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", l:"Jouer à Anxiété" },
         { q:"Comment marchent les ateliers ?", s:"ATELIERS",
-          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $) — et le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes). Écris à Hugo pour réserver !",
+          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $) — et le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes). Écris à Hugo pour réserver : dis-lui pour qui c'est, combien de personnes et quand tu vises — il te répond en personne, sous 3 jours ouvrables !",
           u:"https://hp-outils.com/ateliers", l:"Voir les ateliers" },
         { q:"Vous avez des livres ?", s:"LIVRES",
           a:"4 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) et « Les enfants cuisinent pour faire plaisir » (20 $).",
@@ -314,7 +353,13 @@ export const KB = [
           a:"« Futur simple », le balado HP : Léa et Marc regardent l'intelligence artificielle en face — PME, entrepreneuriat et futur, sans jargon. Un nouvel épisode chaque lundi !",
           u:"https://hp-outils.com/balado", l:"Écouter le balado" },
         { q:"Comment je vous contacte ?", s:"ÉCRIS-NOUS",
-          a:"Écris à Hugo : hpoutils.admin@gmail.com — c'est lui-même qui te répond, sous 48 h ouvrables. Moi, je fais les saluts, les blagues et les chatouilles.",
+          a:"Écris à Hugo : hpoutils.admin@gmail.com — c'est lui-même qui te répond, sous 3 jours ouvrables. Moi, je fais les saluts, les blagues et les chatouilles.",
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" },
+        { q:"C'est quoi, la politique de remboursement ?", s:"ÉCHANGE D'ABORD",
+          a:REFUND_POLICY,
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" },
+        { q:"J'ai perdu mon lien de téléchargement", s:"PAS DE PANIQUE",
+          a:LIEN_PERDU_TEXT,
           u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" },
         { q:"Raconte-moi une blague", s:"HIHI",
           a:null },

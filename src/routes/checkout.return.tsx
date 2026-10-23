@@ -126,7 +126,7 @@ function Page() {
                 <a href="mailto:hpoutils.admin@gmail.com">
                   hpoutils.admin@gmail.com
                 </a>{" "}
-                : une réponse d'Hugo, pas d'un robot, sous 48 h ouvrables.
+                : une réponse d'Hugo, pas d'un robot, sous 3 jours ouvrables.
                 Si c'est une panne technique de notre côté, on répare ou
                 on rembourse, comme le disent les{" "}
                 <Link to="/conditions-de-vente">conditions de vente</Link>.

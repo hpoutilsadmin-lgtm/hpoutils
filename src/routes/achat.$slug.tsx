@@ -100,7 +100,7 @@ function Page() {
                 <a href="mailto:hpoutils.admin@gmail.com">
                   hpoutils.admin@gmail.com
                 </a>{" "}
-                — une réponse d'Hugo, pas d'un robot, sous 48 h ouvrables.
+                — une réponse d'Hugo, pas d'un robot, sous 3 jours ouvrables.
               </p>
               <p style={{ margin: 0, fontSize: 14 }}>
                 Et si c'est une panne technique de notre côté — un fichier

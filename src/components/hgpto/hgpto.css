@@ -383,6 +383,9 @@
         border:2px solid var(--line);border-radius:999px;padding:6px 11px;
       }
       .qa-chips button:hover{background:var(--gold);color:#2b2118}
+      /* Aide au choix (23 oct. 2026) : l'en-tête de question prend toute
+         la rangée des chips pendant que les options la remplacent. */
+      .qa-choix-head{flex:0 0 100%;font-size:13px;font-weight:800;color:var(--ink);padding:2px 2px 0}
       .qa-preview{
         margin-top:9px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;
         background:none;border:none;color:var(--ink-soft);
