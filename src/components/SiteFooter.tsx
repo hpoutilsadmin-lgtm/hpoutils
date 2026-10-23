@@ -20,7 +20,7 @@ export function SiteFooter() {
             <Link to="/">Accueil</Link><br />
             <Link to="/jeux">Jeux gratuits</Link><br />
             <Link to="/outils">Outils</Link><br />
-            <a href="/boite/">Boîte à outils</a><br />
+            <a href="/boite/">La Boîte à outils</a><br />
             <Link to="/livres-pdf">Livres, PDF &amp; réflexions</Link><br />
             <a href="/passeur-de-savoir/">Le Passeur de savoir</a><br />
             <Link to="/univers">Univers alternatif</Link><br />
@@ -40,7 +40,7 @@ export function SiteFooter() {
             <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a><br />
             <Link to="/contact">Formulaire de contact</Link><br />
             <a href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Formulaire atelier</a><br />
-            Une réponse d'Hugo, pas d'un robot — sous 48 h ouvrables.
+            Une réponse d'Hugo, pas d'un robot — sous 3 jours ouvrables.
           </p>
         </div>
         <div style={{ textAlign: "center" }}>

@@ -37,6 +37,23 @@ function Page() {
     }
   }
 
+  const cardStyle: React.CSSProperties = {
+    padding: 20,
+    border: "1px solid #e0d8cf",
+    borderRadius: 4,
+    background: "#faf6f1",
+    marginBottom: 20,
+  };
+  const stepTitleStyle: React.CSSProperties = {
+    margin: "0 0 8px",
+    fontSize: 20,
+  };
+  const stepTextStyle: React.CSSProperties = {
+    margin: 0,
+    fontSize: 16,
+    lineHeight: 1.55,
+  };
+
   return (
     <>
       <PaymentTestModeBanner />
@@ -44,23 +61,39 @@ function Page() {
         <div className="container" style={{ maxWidth: 720 }}>
           <h1>Récupérer mon achat</h1>
           <p>
-            Entrez le courriel utilisé lors de votre achat. Si une commande
-            payée est associée à cette adresse, vous recevrez par courriel
-            un nouveau lien de téléchargement (valide 7 jours).
+            Pas de panique&nbsp;: votre achat n'est pas perdu. Suivez les
+            étapes ci-dessous, dans l'ordre — la plupart des gens retrouvent
+            leur accès à l'étape 1 ou 2.
           </p>
         </div>
       </section>
       <section className="subpage-content">
-        <div className="container" style={{ maxWidth: 560 }}>
+        <div className="container" style={{ maxWidth: 720 }}>
+          <div style={cardStyle}>
+            <h2 style={stepTitleStyle}>
+              Étape 1 — Cherchez le reçu Stripe dans vos courriels
+            </h2>
+            <p style={stepTextStyle}>
+              Après votre achat, Stripe vous a envoyé un reçu par courriel,
+              et le lien de téléchargement se trouve dedans. Cherchez
+              «&nbsp;Stripe&nbsp;» ou «&nbsp;HP Outils&nbsp;» dans votre
+              boîte de réception. Jetez aussi un œil au dossier
+              «&nbsp;Indésirables&nbsp;» (le pourriel)&nbsp;: le reçu s'y
+              glisse parfois.
+            </p>
+          </div>
+          <div style={cardStyle}>
+            <h2 style={stepTitleStyle}>
+              Étape 2 — Recevez un nouveau lien par courriel
+            </h2>
+            <p style={{ ...stepTextStyle, marginBottom: 16 }}>
+              Entrez l'adresse exacte utilisée lors de votre achat. Si une
+              commande payée est associée à cette adresse, un nouveau lien
+              de téléchargement (valide 7 jours) vous sera envoyé par
+              courriel dans les prochaines minutes.
+            </p>
           {submitted ? (
-            <div
-              style={{
-                padding: 20,
-                border: "1px solid #e0d8cf",
-                borderRadius: 4,
-                background: "#faf6f1",
-              }}
-            >
+            <div>
               <p style={{ margin: 0 }}>
                 Si un achat est associé à cette adresse, un courriel
                 contenant vos liens de téléchargement vient d'être envoyé.
@@ -108,6 +141,24 @@ function Page() {
             </button>
             </form>
           )}
+          </div>
+          <div style={cardStyle}>
+            <h2 style={stepTitleStyle}>
+              Étape 3 — Toujours rien&nbsp;? Un humain s'en occupe
+            </h2>
+            <p style={stepTextStyle}>
+              Écrivez à{" "}
+              <a href="mailto:hpoutils.admin@gmail.com">
+                hpoutils.admin@gmail.com
+              </a>{" "}
+              avec l'adresse courriel utilisée à l'achat — et, si vous vous
+              en souvenez, le nom du produit et la date approximative.
+              Hugo retrouvera votre commande et vous renverra votre accès,
+              en personne&nbsp;: une réponse d'Hugo, pas d'un robot, sous
+              3 jours ouvrables. Vous pouvez aussi passer par le{" "}
+              <a href="/contact">formulaire de contact</a>.
+            </p>
+          </div>
         </div>
       </section>
     </>
