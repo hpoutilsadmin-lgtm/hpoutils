@@ -55,6 +55,7 @@ function Page() {
             de Terrebonne, de Lanaudière et des environs. Chaque proposition peut
             être adaptée à votre milieu.
           </p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des ateliers pour la vraie vie. »</p>
           <div className="lead-actions">
             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">Demander un atelier</a>
             <Link to="/outils" className="btn-ghost">Voir les outils</Link>

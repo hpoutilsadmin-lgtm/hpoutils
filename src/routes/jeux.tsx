@@ -165,6 +165,7 @@ function JeuxPage() {
           <span className="editorial-kicker">Jeux HP</span>
           <h1>Jouer, choisir, <em>essayer autrement</em>.</h1>
           <p className="lead">Des jeux courts et des histoires interactives pour exercer ses réflexes, imaginer la suite et apprendre sans pression.</p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des jeux pour la vraie vie. »</p>
           <div className="lead-actions">
             <a className="btn-primary" href="/apps/bons-reflexes/index.html">Jouer aux Bons réflexes d'HP</a>
             <a className="btn-ghost" href="#tous-les-jeux">Voir tous les jeux</a>

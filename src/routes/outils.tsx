@@ -120,6 +120,7 @@ function Page() {
             Des outils simples pour la vraie vie : une boîte pleine d'outils web gratuits,
             et les kits PDF Sans Honte pour mettre des mots et avancer.
           </p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. »</p>
           <div style={tabBarStyle} role="tablist" aria-label="Choisir : outils web ou kits papier">
             <button
               type="button"

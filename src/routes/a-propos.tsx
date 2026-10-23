@@ -18,6 +18,7 @@ function Page() {
           <div>
             <p className="page-kicker">À propos</p>
             <h1>Comprendre. Agir. Transmettre.</h1>
+            <p className="lead" style={{ fontFamily: "Georgia,serif", fontStyle: "italic", marginTop: 16 }}>« J'ai jamais su qui j'étais, ce que j'aimais — alors je fais un peu de tout. »</p>
             <p className="lead">HP est né d'une approche simple : tester, apprendre, recommencer, puis partager ce qui fonctionne concrètement dans la vraie vie.</p>
             <p className="lead" style={{ marginTop: 12 }}>Je ne prétends pas avoir toutes les réponses. Mon objectif est de créer des outils simples, utiles et dignes, pensés pour être réellement utilisables au quotidien.</p>
             <div className="lead-actions">

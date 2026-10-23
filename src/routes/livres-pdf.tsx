@@ -60,6 +60,7 @@ function Page() {
              Des PDF, kits et livres concrets à télécharger pour la cuisine,
              l'organisation, la famille et les situations de la vraie vie.
           </p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai aussi fait des livres pour la vraie vie. »</p>
         </div>
       </section>
       <section id="sec-livres" className="subpage-content">

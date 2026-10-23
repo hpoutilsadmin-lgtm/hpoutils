@@ -96,6 +96,7 @@ function Page() {
              Quinze kits PDF concrets pour faire face aux papiers, au frigo, au logement,
              à l'entraide et à d'autres situations de la vraie vie.
           </p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des kits d'aide sans honte — oui, ça aussi, c'est la vraie vie. »</p>
           <div className="lead-actions">
             <ShareButton text="Sans Honte — quinze kits PDF concrets pour la vraie vie, 5 $ CAD le kit, aucune taxe ajoutée." />
           </div>

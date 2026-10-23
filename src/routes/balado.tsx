@@ -84,6 +84,7 @@ function Page() {
             les PME et le futur à venir — <strong>le bon comme le mauvais</strong>. Un nouvel
             épisode chaque lundi, dès le 26 octobre. Direct, concret, sans jargon. Comme tout ce qu'on fait ici.
           </p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait un balado IA à direction humaine, qui parle de vraie vie. »</p>
           <div className="lead-actions">
             <a href="#episodes" className="btn-primary">Écouter le dernier épisode</a>
             <a href={FEED_URL} className="btn-ghost" target="_blank" rel="noreferrer">S'abonner au flux RSS</a>

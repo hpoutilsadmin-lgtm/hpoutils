@@ -92,6 +92,9 @@ function Index() {
           <p style={{ margin: "0 0 28px", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
             Tout doit sembler humain. On ment jamais. L'IA est un outil très rapide et efficace — la direction, l'émotion, le "ce que je fais", c'est pour les humains.
           </p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, margin: "0 0 28px", maxWidth: 700 }}>
+            « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — Hugo
+          </p>
           <div className="lead-actions">
             <Link to="/sans-honte" className="btn-primary">Découvrir les kits Sans Honte</Link>
             <Link to="/livres-pdf" className="btn-primary">Voir livres, PDF &amp; réflexions</Link>
