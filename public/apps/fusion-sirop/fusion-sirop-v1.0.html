@@ -578,5 +578,10 @@
   window.__fusionSirop = { move: doMove, start: startGame, undo: undoMove, getState: function(){ return {board:board.slice(), score:score, moves:moves, gameOver:gameOver, won:won, highest:highestLevel(), canUndo: !!(prevState && !undoUsed), undoUsed: undoUsed}; } };
 })();
 </script>
+<!-- ===== Barre de jeu HP — NE PAS ÉDITER À LA MAIN =====
+     Retour / Pause / Partager. Source : src/components/barre-jeu/barre-jeu.js
+     (régénérer le module : bun run build:barre) -->
+<script src="/barre/barre-jeu.js" defer></script>
+<!-- ===== Fin barre de jeu HP ===== -->
 </body>
 </html>
