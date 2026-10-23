@@ -510,17 +510,80 @@ export function initHgpto() {
 
       /* ---------- Bulles ---------- */
       var lastBubbleAt = 0;
-      function showBubble(html, dur, mood){
+      /* Correctif lecture (Hugo, 23 oct. 2026) : avant, une bulle vivait
+         le temps plat passé par l'appelant (plancher de 8 s, aucun lien
+         avec la longueur) et n'importe quelle réplique suivante
+         l'écrasait instantanément — mesuré : l'intro de la visite
+         disparaissait après 1,6 s, une étape de 340 caractères tenait
+         11,6 s, les répliques des scènes se remplaçaient toutes les
+         1,5 à 4 s. Maintenant : durée PROPORTIONNELLE au texte
+         (minimum 8 s — reco du panneau pour les aînés — + ~50 ms par
+         caractère, plafond 45 s pour les très longues réponses), et
+         une réplique ambiante ne peut plus écraser une bulle encore
+         dans son temps de lecture garanti : elle attend son tour dans
+         une file — les répliques se succèdent, sans se chevaucher.
+         Les réponses demandées par le visiteur (mood « answer » /
+         « question ») et les réactions immédiates à ses gestes
+         (opts.now) passent tout de suite, comme avant. */
+      var bubbleFreeAt = 0;
+      var bubbleQueue = [];
+      var bubbleFlushTimer = null;
+      function bubbleReadMs(html, dur){
+        var len = plainText(html).length;
+        var ms = Math.max(dur || 0, 8000 + len * 50);
+        return Math.min(ms, 45000);
+      }
+      function renderBubble(html, dur, mood, onShow){
         bubble.innerHTML = html;
         bubble.classList.add('show');
         lastBubbleAt = Date.now();
         speak(plainText(html), mood || (state === 'sleep' ? 'sleep' : 'talk'));
+        if (onShow) onShow();
         if (bubbleTimer) clearTimeout(bubbleTimer);
-        if (dur) bubbleTimer = setTimeout(hideBubble, Math.max(dur, 8000)); // reco panneau : bulle ≥ ~8 s
+        bubbleTimer = null;
+        if (dur){
+          var ms = bubbleReadMs(html, dur);
+          bubbleFreeAt = Date.now() + ms;
+          bubbleTimer = setTimeout(expireBubble, ms);
+          return ms;
+        }
+        bubbleFreeAt = 0;
+        return 0;
+      }
+      function expireBubble(){
+        bubbleTimer = null;
+        bubble.classList.remove('show');
+        bubbleFreeAt = 0;
+        flushBubbleQueue();
+      }
+      function flushBubbleQueue(){
+        if (bubbleFlushTimer){ clearTimeout(bubbleFlushTimer); bubbleFlushTimer = null; }
+        if (!bubbleQueue.length) return;
+        // Le jeu, le panneau, la visite et le sommeil ont leurs propres
+        // canaux : la file ambiante se vide plutôt que de s'y immiscer.
+        if (gameOn || qaOpen || tourOn || state === 'sleep' || paused){ bubbleQueue.length = 0; return; }
+        var next = bubbleQueue.shift();
+        renderBubble(next.html, next.dur, next.mood, next.onShow);
+      }
+      function showBubble(html, dur, mood, opts){
+        var priority = (mood === 'answer' || mood === 'question') || (opts && opts.now);
+        var onShow = opts && opts.onShow;
+        if (!priority && dur && bubble.classList.contains('show') && Date.now() < bubbleFreeAt){
+          bubbleQueue.push({ html:html, dur:dur, mood:mood, onShow:onShow });
+          if (bubbleQueue.length > 5) bubbleQueue.shift();
+          if (bubbleFlushTimer) clearTimeout(bubbleFlushTimer);
+          bubbleFlushTimer = setTimeout(flushBubbleQueue, Math.max(50, bubbleFreeAt - Date.now()));
+          return 0;
+        }
+        if (priority) bubbleQueue.length = 0;
+        return renderBubble(html, dur, mood, onShow);
       }
       function hideBubble(){
         bubble.classList.remove('show');
         if (bubbleTimer){ clearTimeout(bubbleTimer); bubbleTimer = null; }
+        if (bubbleFlushTimer){ clearTimeout(bubbleFlushTimer); bubbleFlushTimer = null; }
+        bubbleQueue.length = 0;
+        bubbleFreeAt = 0;
       }
       function linkHtml(p){
         return '<br><a href="' + p.u + '" target="_blank" rel="noopener">' + esc(p.l) + ' →</a>';
@@ -710,11 +773,11 @@ export function initHgpto() {
       }
 
       /* ---------- Invitation : pancarte + bras qui pointe ---------- */
-      function doInvite(p){
-        if (paused || state === 'sleep' || isBusy()) { showBubble(esc(p.t) + (p.u ? linkHtml(p) : ''), 6000); return; }
+      function doInvite(p, onShow, immediate){
+        if (paused || state === 'sleep' || isBusy()) { showBubble(esc(p.t) + (p.u ? linkHtml(p) : ''), 6000, null, { onShow:onShow, now:immediate }); return; }
         setState('invite'); setExpr('happy'); busy(5600);
         signText.textContent = p.s || 'PAR ICI →';
-        showBubble(esc(p.t) + (p.u ? linkHtml(p) : ''), 6200);
+        showBubble(esc(p.t) + (p.u ? linkHtml(p) : ''), 6200, null, { onShow:onShow, now:immediate });
         setTimeout(function(){
           if (state === 'invite') setState(reduced ? 'idle' : 'walk');
         }, 5600);
@@ -1091,7 +1154,7 @@ export function initHgpto() {
         lastInteract = Date.now();
         setState('caughtpick'); setExpr('wide'); busy(3400);
         whistleSound();
-        showBubble("🎵 …moi ? Je sifflais en regardant le paysage. Rien d'autre.", 3400, 'none');
+        showBubble("🎵 …moi ? Je sifflais en regardant le paysage. Rien d'autre.", 3400, 'none', { now:true });
         setTimeout(function(){
           if (state === 'caughtpick'){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
         }, 3400);
@@ -1107,11 +1170,11 @@ export function initHgpto() {
       var tapTimes = [];
       function doTumble(){
         setState('tumble'); setExpr('wide'); busy(3600);
-        showBubble("Ouille ouille…", 1400, 'none');
+        showBubble("Ouille ouille…", 1400, 'none', { now:true });
         setTimeout(function(){
           if (state !== 'tumble') return;
           setExpr('laugh'); giggle();
-          showBubble("Même pas mal — on avance !", 2600, 'joke');
+          showBubble("Même pas mal — on avance !", 2600, 'joke', { now:true });
         }, 2100);
         setTimeout(function(){
           if (state === 'tumble'){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
@@ -1156,7 +1219,7 @@ export function initHgpto() {
         // normale suit juste après.
         var gHeat = grumbleFires() ? grumbleText() : null;
         if (gHeat){
-          showBubble(esc(gHeat), 1500, 'none');
+          showBubble(esc(gHeat), 1500, 'none', { now:true });
           setTimeout(function(){
             if (state === 'hot') showBubble("Ouf ! Tu me frottes tellement que je surchauffe ! Un petit seau d'eau, peut-être ?", 2600, 'question');
           }, 1600);
@@ -1276,7 +1339,7 @@ export function initHgpto() {
         lastInteract = Date.now();
         if (startled){
           setState('startle'); setExpr('wide'); busy(1600);
-          showBubble(esc(pick(STARTLE_LINES)), 3200);
+          showBubble(esc(pick(STARTLE_LINES)), 3200, null, { now:true });
           spawnBurst(['!','✦'], 4);
           setTimeout(function(){
             if (state === 'startle'){ setExpr('happy'); busyUntil = 0; doWave(null); }
@@ -1286,10 +1349,14 @@ export function initHgpto() {
         }
       }
       setInterval(function(){
-        if (paused || isHidden || docHidden || qaOpen || gameOn) return;
+        if (paused || isHidden || docHidden || qaOpen || gameOn || tourOn) return;
         var idleFor = Date.now() - lastInteract;
         var threshold = isNight() ? 22000 : 50000;   // la nuit, il s'endort vite
-        if (state !== 'sleep' && idleFor > threshold && !isBusy()){
+        // Correctif lecture (23 oct. 2026) : tant qu'une bulle est dans
+        // son temps de lecture garanti, il est en train de PARLER, pas
+        // inactif — il ne s'endort plus au milieu d'une longue réponse
+        // (la nuit, le seuil de 22 s la coupait avant la fin).
+        if (state !== 'sleep' && idleFor > threshold && !isBusy() && Date.now() >= bubbleFreeAt){
           goSleep();
         } else if (state === 'sleep'){
           snore();
@@ -1376,7 +1443,7 @@ export function initHgpto() {
         if (bot.classList.contains('frozen')) return;
         bot.classList.add('frozen');
         var keep = bubble.innerHTML;
-        showBubble("Minute ! J't'en pause ! 😄", 1900, 'none');
+        showBubble("Minute ! J't'en pause ! 😄", 1900, 'none', { now:true });
         setTimeout(function(){
           bot.classList.remove('frozen');
           if (keep && state !== 'sleep'){ bubble.innerHTML = keep; bubble.classList.add('show'); }
@@ -1411,7 +1478,7 @@ export function initHgpto() {
           setTimeout(function(){
             bot.style.transition = '';
             tickleEscaping = false;
-            showBubble("OK, là je suis officiellement chatouillé à pleine capacité. On avance ?", 4200, 'none');
+            showBubble("OK, là je suis officiellement chatouillé à pleine capacité. On avance ?", 4200, 'none', { now:true });
           }, 480);
         }, 1550);
       }
@@ -1442,7 +1509,7 @@ export function initHgpto() {
         var line = big ? TICKLE_BIG
           : (wasTinker ? "Hihi ! Attention, je bricole… enfin, je bricolais !"
           : (wasCook ? "Hihi ! Doucement, ma soupe va renverser de rire !" : pick(TICKLE_LINES)));
-        showBubble(esc(line), big ? 3600 : 2800, 'none');
+        showBubble(esc(line), big ? 3600 : 2800, 'none', { now:true });
         giggle();
         spawnBurst(['♥','✦','♥','✧'], big ? 9 : 5);
         setTimeout(function(){
@@ -1552,23 +1619,37 @@ export function initHgpto() {
         qaPanel.hidden = true;
         if (!paused){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
       }
+      /* Fermeture « réponse » (correctif Hugo, 23 oct. 2026) : le
+         panneau se referme dès qu'HGPTO répond ou qu'une scène part,
+         pour laisser voir la scène et sa bulle — le panneau (z-index
+         62, quasi plein écran sur mobile) couvrait l'étage du robot
+         (z-index 60) et tout se jouait invisible derrière. Contrairement
+         à closeQA (fermeture manuelle), la pose en cours est préservée :
+         il continue ce qu'il faisait (pancarte, guidage…) en répondant.
+         Le visiteur rouvre le panneau quand il veut (bouton
+         « Une question ? » / dock), rien n'est perdu. */
+      function dismissQA(){
+        qaOpen = false;
+        qaPanel.hidden = true;
+      }
       function answerQuestion(item, opts){
         lastInteract = Date.now();
         engage();
         setExpr('happy');
         if (reading.on) stopReading(false);   // on change d'activité : la lecture s'arrête proprement
         if (item.fn === 'mg'){ closeQA(); startMG(); return; }
-        if (item.fn === 'read'){ readPage(); return; }
-        if (item.fn === 'journal'){ showBubble(esc(journalText()), 11000, 'answer'); return; }
-        if (item.fn === 'fact'){ var r1 = nextReading(); showBubble(esc("J'ai lu ça, écoute : " + pick(QC_HISTORY)), 11000, 'answer'); logDay("raconté un fait d'histoire du Québec"); return; }
-        if (item.fn === 'philo'){ showBubble(esc(pick(PHILO)), 11000, 'answer'); return; }
-        if (item.fn === 'anecdote'){ showBubble(esc("J'ai lu ça tantôt : " + pick(ANECDOTES)), 11000, 'answer'); return; }
-        if (item.fn === 'empathy'){ showBubble(esc(pick(EMPATHY)), 11000, 'answer'); return; }
+        if (item.fn === 'read'){ dismissQA(); readPage(); return; }
+        if (item.fn === 'journal'){ dismissQA(); showBubble(esc(journalText()), 11000, 'answer'); return; }
+        if (item.fn === 'fact'){ dismissQA(); var r1 = nextReading(); showBubble(esc("J'ai lu ça, écoute : " + pick(QC_HISTORY)), 11000, 'answer'); logDay("raconté un fait d'histoire du Québec"); return; }
+        if (item.fn === 'philo'){ dismissQA(); showBubble(esc(pick(PHILO)), 11000, 'answer'); return; }
+        if (item.fn === 'anecdote'){ dismissQA(); showBubble(esc("J'ai lu ça tantôt : " + pick(ANECDOTES)), 11000, 'answer'); return; }
+        if (item.fn === 'empathy'){ dismissQA(); showBubble(esc(pick(EMPATHY)), 11000, 'answer'); return; }
         if (item.fn === 'tour'){ startTour(); return; }
-        if (item.fn === 'pixel'){ showBubble(esc(PIXEL_STORY), 11000, 'answer'); summonCat('follow'); return; }
+        if (item.fn === 'pixel'){ dismissQA(); showBubble(esc(PIXEL_STORY), 11000, 'answer'); summonCat('follow'); return; }
         if (item.fn === 'feed'){ closeQA(); doFeedCat(); return; }
         if (item.fn === 'choix'){ closeQA(); busyUntil = 0; lastBubbleAt = 0; doChoix(true); return; }
         if (item.fn === 'choisir'){ startAideChoix(); return; }
+        dismissQA();
         var text = item.a || pick(JOKES);
         var deliver = function(prefix){
           var html = esc(prefix + text);
@@ -1577,7 +1658,7 @@ export function initHgpto() {
           if (item.s){
             signText.textContent = item.s;
             setState('invite'); busy(3400);
-            setTimeout(function(){ if (qaOpen && state === 'invite') setState('idle'); }, 3400);
+            setTimeout(function(){ if (state === 'invite') setState(qaOpen ? 'idle' : (reduced ? 'idle' : 'walk')); }, 3400);
           }
           showBubble(html, 11000, 'answer');
           if (item.go) guideTo(item.go, null);
@@ -1673,6 +1754,7 @@ export function initHgpto() {
         }
         showBubble(esc(t) + linkHtml(p) + '<br>' + esc(pick(ETHIQUE_LINES)), 14000, 'answer');
         buildQAChips();
+        dismissQA();
       }
 
       /* ---------- Questions tapées : recherche dans la base de faits ----------
@@ -1766,7 +1848,7 @@ export function initHgpto() {
         if (/(t es|tu es|es tu|c est tu|petite? mascotte|cute|belle mascotte|la mascotte|allo mascotte|salut mascotte|bonjour mascotte)/.test(n)) return true;
         return n.split(' ').length <= 4;
       }
-      function gnomeReply(){
+      function gnomeReply(immediate){
         var lines = (mood === 'grognon') ? GNOME_LINES_GROGNON : GNOME_LINES;
         var i = Math.floor(Math.random() * lines.length);
         if (lines.length > 1 && i === lastGnome) i = (i + 1) % lines.length;
@@ -1780,7 +1862,7 @@ export function initHgpto() {
         } else {
           setExpr('happy');
         }
-        showBubble(esc(lines[i]), 9000, mood === 'drole' ? 'joke' : 'talk');
+        showBubble(esc(lines[i]), 9000, mood === 'drole' ? 'joke' : 'talk', immediate ? { now:true } : undefined);
       }
       document.getElementById('qa-form').addEventListener('submit', function(ev){
         ev.preventDefault();
@@ -1801,6 +1883,7 @@ export function initHgpto() {
         // faits : la porte humaine d'abord, mot pour mot du document.
         var escKind = escalationIntent(q);
         if (escKind){
+          dismissQA();
           setExpr('happy');
           var mailLink = linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" });
           if (escKind === 'plainte') showBubble(esc(ESCALATION_EMPATHY + ' ' + ESCALATION_LINE) + mailLink, 14000, 'answer');
@@ -1849,16 +1932,20 @@ export function initHgpto() {
         // « Non merci », plafond de page), le repli honnête classique
         // prend le relais ci-dessous — jamais de silence, jamais de force.
         var bsnDirect = matchBesoin(q);
-        if (bsnDirect && doSuggest(bsnDirect, { fromQA:true })){
-          if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
-          return;
+        if (bsnDirect){
+          dismissQA();
+          if (doSuggest(bsnDirect, { fromQA:true, now:true })){
+            if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
+            return;
+          }
         }
         // Ajout « mascotte » : aucune réponse dans la base, aucun
         // besoin produit servi — si le mot lui était adressé, la
         // réplique du gnome remplace le repli (ce n'est pas une
         // question à consigner pour Hugo).
-        if (jab){ gnomeReply(); return; }
+        if (jab){ dismissQA(); gnomeReply(true); return; }
         if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
+        dismissQA();
         setExpr('happy');
         showBubble(esc(FALLBACK) + linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" }), 11000, 'answer');
       });
@@ -1976,6 +2063,10 @@ export function initHgpto() {
         }, 3200);
       }
       function previewTwoHours(){
+        // Même précédent que le barbouillage : la scène se joue À VUE —
+        // le panneau se referme dès le tap, sinon elle passe derrière.
+        if (qaOpen) closeQA();
+        busyUntil = 0;
         var keep = twoHoursDone;
         twoHoursDone = false;
         doTwoHours();
@@ -2000,11 +2091,11 @@ export function initHgpto() {
         btnPause.setAttribute('aria-pressed', paused ? 'true' : 'false');
         if (paused){
           if (state !== 'sleep'){ setState('idle'); setExpr('happy'); }
-          showBubble("Je suis en pause — touche Pause pour repartir.", 8000, 'none');
+          showBubble("Je suis en pause — touche Pause pour repartir.", 8000, 'none', { now:true });
         } else {
           lastInteract = Date.now();
           if (state !== 'sleep'){ setState(reduced ? 'idle' : 'walk'); setExpr('happy'); }
-          showBubble("On repart !", 2600, 'joke');
+          showBubble("On repart !", 2600, 'joke', { now:true });
         }
       }
       btnPause.addEventListener('click', function(){ setLifePause(!paused); });
@@ -2101,7 +2192,10 @@ export function initHgpto() {
       /* ---------- Visite guidée : de section en section, avec commentaires ----------
          TRANQUILLE (lot nº 3) : chaque étape EXPLIQUE l'endroit (c'est
          quoi, ça sert à quoi, pour qui), au ton de quelqu'un qui fait
-         visiter sa maison. Rythme apaisé : bulle ~11,5 s, pas ~11,8 s.
+         visiter sa maison. Rythme apaisé : chaque commentaire reste le
+         temps d'être LU (durée proportionnelle au texte — correctif
+         lecture du 23 oct. 2026) et le pas suivant attend la fin de
+         cette durée avant de partir.
          Aucune vente pendant la visite — une seule suggestion douce peut
          suivre, à la toute fin d'une visite terminée d'elle-même (voir
          stopTour), jamais après un arrêt demandé par le visiteur. */
@@ -2151,21 +2245,21 @@ export function initHgpto() {
           showBubble("Suis-moi, je t'y emmène !", 4000, 'talk');
           return;
         }
-        showBubble(esc(step.t), 11500, 'talk');
+        var stepMs = showBubble(esc(step.t), 11500, 'talk', { now:true });
         tourIdx++;
         try { sessionStorage.setItem('hgpto-tour', String(tourIdx)); } catch(e) {}
-        tourTimer = setTimeout(tourStep, 11800);
+        tourTimer = setTimeout(tourStep, (stepMs || 11500) + 900);
       }
       function startTour(){
-        if (tourOn){ stopTour(true); showBubble("D'accord, on arrête la visite. Je reste dans le coin si t'as besoin !", 5000); return; }
+        if (tourOn){ stopTour(true); showBubble("D'accord, on arrête la visite. Je reste dans le coin si t'as besoin !", 5000, null, { now:true }); return; }
         closeQA();
         if (state === 'sleep') wake(false);
         tourOn = true; tourIdx = 0;
         try { sessionStorage.setItem('hgpto-tour', '0'); } catch(e) {}
         document.getElementById('qa-tour').textContent = 'Arrêter la visite';
         logDay("fait visiter le site, section par section");
-        showBubble("En route ! Suis-moi, je te montre le site comme un gérant qui se respecte.", 5000, 'question');
-        tourTimer = setTimeout(tourStep, 1600);
+        var introMs = showBubble("En route ! Suis-moi, je te montre le site comme un gérant qui se respecte.", 5000, 'question');
+        tourTimer = setTimeout(tourStep, (introMs || 5000) + 400);
       }
       document.getElementById('qa-tour').addEventListener('click', startTour);
 
@@ -2193,7 +2287,7 @@ export function initHgpto() {
           if (state === 'sleep') wake(false);
           showBubble("Je t'accompagne ! Clique sur ce qui t'intéresse : je te suis et je t'explique. Pour arrêter, touche le même bouton.", 7000, 'question');
         } else {
-          showBubble("Parfait, je retourne à ma petite vie. Je suis là si t'as besoin !", 4500);
+          showBubble("Parfait, je retourne à ma petite vie. Je suis là si t'as besoin !", 4500, null, { now:true });
         }
       });
       if ('IntersectionObserver' in window){
@@ -2265,7 +2359,7 @@ export function initHgpto() {
         scardEl.hidden = false;
         logDay("posé pour une photo souvenir");
       }
-      document.getElementById('qa-photo').addEventListener('click', function(){ openSouvenir(false); });
+      document.getElementById('qa-photo').addEventListener('click', function(){ if (qaOpen) closeQA(); openSouvenir(false); });
       document.getElementById('card-photo').addEventListener('click', function(){ openSouvenir(true); });
       document.getElementById('scard-close').addEventListener('click', function(){ scardEl.hidden = true; });
       document.getElementById('scard-copy').addEventListener('click', function(){
@@ -2394,7 +2488,7 @@ export function initHgpto() {
         pawn.style.left = p.left + '%';
         pawn.style.top = p.top + '%';
       }
-      function gComment(line, mood){ showBubble(esc(line), 6000, mood || 'talk'); }
+      function gComment(line, mood){ showBubble(esc(line), 6000, mood || 'talk', { now:true }); }
       function gStatus(t){ gameStatus.textContent = t; }
       function tickSound(){
         if (!actx || muted) return;
@@ -2757,6 +2851,7 @@ export function initHgpto() {
         TTS.speak(u);
       }
       function readPage(){
+        dismissQA();   // la lecture se regarde : le panneau se referme (le bouton du dock permet aussi d'arrêter)
         if (reading.on){ stopReading(true); return; }
         if (!TTS){
           showBubble("Ton appareil n'a pas de voix de lecture intégrée — je ne peux pas te lire ça à voix haute ici. Mais tout est écrit sur la page !", 7000, 'answer');
@@ -2783,7 +2878,7 @@ export function initHgpto() {
         reading.on = false; reading.chunks = []; reading.i = 0;
         setReadLabels('Lis-moi ça');
         if (was && state === 'read') setState(reduced ? 'idle' : 'walk');
-        if (was && manual) showBubble("Ok, j'arrête là. Le reste est écrit sur la page !", 4200, 'talk');
+        if (was && manual) showBubble("Ok, j'arrête là. Le reste est écrit sur la page !", 4200, 'talk', { now:true });
       }
       function finishReading(){
         reading.on = false; reading.chunks = []; reading.i = 0;
@@ -2799,7 +2894,7 @@ export function initHgpto() {
         btnVoice.textContent = voiceOn ? 'Voix : oui' : 'Voix : non';
         btnVoice.setAttribute('aria-pressed', voiceOn ? 'true' : 'false');
         if (!voiceOn){ if (reading.on) stopReading(false); if (TTS) { try { TTS.cancel(); } catch(e){} } }
-        else { pickFrVoice(); showBubble("Voix rouverte ! Demande-moi « Lis-moi ça » quand tu veux.", 4200, 'talk'); }
+        else { pickFrVoice(); showBubble("Voix rouverte ! Demande-moi « Lis-moi ça » quand tu veux.", 4200, 'talk', { now:true }); }
       });
 
       /* ---------- Flash info : avant chaque info produit demandée ----------
@@ -2973,7 +3068,7 @@ export function initHgpto() {
       function mgComment(line){
         if (Date.now() - MG.lastComment < 6500) return;
         MG.lastComment = Date.now();
-        showBubble(esc(line), 5200, 'talk');
+        showBubble(esc(line), 5200, 'talk', { now:true });
       }
       function mgSpawnObstacle(){
         var alt = MG.alt, roll = Math.random();
@@ -4015,6 +4110,11 @@ export function initHgpto() {
         catBlockHops();
       }, 30000);
       function previewCatHops(){
+        // La scène des sauts exige qaOpen === false (garde de
+        // catBlockHops) : sans fermer le panneau, le bouton était mort
+        // ET la scène invisible. Même geste que le barbouillage.
+        if (qaOpen) closeQA();
+        busyUntil = 0;
         lastHopAt = 0;
         if (!catVisible || (catMode !== 'follow' && catMode !== 'stay')) summonCat('follow');
         if (catState === 'sleep') setCatState('idle');
@@ -4328,23 +4428,25 @@ export function initHgpto() {
         if (mood === 'vendeur' && !opts.soft){
           pp = { t: pick(VENDEUR_HOOKS) + p.t, u: p.u, l: p.l, s: p.s };
         }
-        doInvite(pp);
-        // Le « non » aussi facile que le « oui » : un bouton « Non
-        // merci » dans la bulle de chaque suggestion. Un clic = ce
-        // produit se tait pour toute la session.
-        var nb = document.createElement('button');
-        nb.type = 'button';
-        nb.className = 'bubble-no';
-        nb.textContent = 'Non merci';
-        nb.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
-        nb.addEventListener('click', function(){
-          suggOff[suggKey(p)] = 1;
-          hideBubble();
-          setExpr('happy');
-          showBubble("Bien correct ! Je ne t'en reparlerai pas. Je reste dans le coin si tu as besoin d'autre chose.", 6000, 'talk');
-        });
-        bubble.appendChild(document.createElement('br'));
-        bubble.appendChild(nb);
+        // Le bouton « Non merci » est ajouté via onShow : si la
+        // suggestion doit attendre son tour (file des bulles, correctif
+        // lecture du 23 oct. 2026), il se pose sur SA bulle au moment où
+        // elle s'affiche — jamais sur celle d'une réponse en lecture.
+        doInvite(pp, function(){
+          var nb = document.createElement('button');
+          nb.type = 'button';
+          nb.className = 'bubble-no';
+          nb.textContent = 'Non merci';
+          nb.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
+          nb.addEventListener('click', function(){
+            suggOff[suggKey(p)] = 1;
+            hideBubble();
+            setExpr('happy');
+            showBubble("Bien correct ! Je ne t'en reparlerai pas. Je reste dans le coin si tu as besoin d'autre chose.", 6000, 'talk');
+          });
+          bubble.appendChild(document.createElement('br'));
+          bubble.appendChild(nb);
+        }, !!opts.now);
         return true;
       }
       /* Le besoin exprimé en mots → LE produit qui fait ça. Double garde :

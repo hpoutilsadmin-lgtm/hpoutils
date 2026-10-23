@@ -362,6 +362,12 @@
       .qa{
         position:fixed;left:12px;bottom:58px;z-index:62;
         width:min(330px,calc(100vw - 24px));
+        /* Correctif 23 oct. 2026 : le panneau dépassait l'écran sur
+           mobile (1026 px de haut pour 844 px de viewport mesurés —
+           son bouton ✕ sortait par le haut, intappable). Hauteur
+           plafonnée au viewport, défilement interne : tout le panneau,
+           fermeture comprise, reste toujours à l'écran. */
+        max-height:calc(100dvh - 70px);overflow-y:auto;
         background:var(--paper);color:var(--ink);
         border:2.5px solid var(--line);border-radius:14px;
         box-shadow:5px 5px 0 var(--shadow);padding:12px 12px 10px;
