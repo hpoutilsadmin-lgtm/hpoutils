@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/les-passeurs")({
   head: () => createSeoHead({
-    title: "Les Passeurs — 1 $ par mois | HP Outils",
-    description: "Un dollar par mois. Douze dollars pour l'année. C'est tout. Les Passeurs soutiennent les jeux, les livres et les outils pour la vraie vie de HP Outils.",
+    title: "Les Passeurs — soutenir HP Outils pour 1 $ par mois",
+    description: "Un dollar par mois, douze pour l'année : les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils, créés au Québec pour la vraie vie.",
     path: "/les-passeurs",
   }),
   component: Page,

@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/univers")({
   head: () => createSeoHead({
-    title: "Univers alternatif — HP",
-    description: "BD, musique, personnages et récits HP — une autre façon de parler du réel : imparfait, lucide et humain.",
+    title: "Univers HP — BD, musique et récits québécois | HP Outils",
+    description: "Les mondes de création de HP : la BD PH — Déséquilibré, Famille atypique, l'album Humain imparfait et les récits à venir. Créé au Québec, imparfait et humain.",
     path: "/univers",
   }),
   component: Page,

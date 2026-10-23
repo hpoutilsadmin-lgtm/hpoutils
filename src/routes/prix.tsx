@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/prix")({
   head: () => createSeoHead({
-    title: "Prix des PDF, kits et ateliers — HP Québec",
-    description: "Tarifs des PDF, des kits Sans Honte et des ateliers HP au Québec, présentés clairement au même endroit.",
+    title: "Prix HP — kits 5 $, livres 10 à 20 $, ateliers 120 $/150 $, aucune taxe ajoutée",
+    description: "Tous les prix HP au même endroit : kits Sans Honte 5 $, lot de 10 kits 40 $, livres PDF 10 à 20 $, ateliers 120 $/150 $. Petit fournisseur : aucune taxe ajoutée.",
     path: "/prix",
   }),
   component: Page,

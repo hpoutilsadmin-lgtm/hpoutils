@@ -2,11 +2,60 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import { ShareButton } from "@/components/ShareButton";
 
+const FAQ = [
+  {
+    q: "Combien coûte un kit Sans Honte ?",
+    a: "5 $ CAD le kit, ou 40 $ CAD pour 10 kits au choix parmi les 15. HP est petit fournisseur : aucune taxe n'est ajoutée.",
+  },
+  {
+    q: "Le kit Testament remplace-t-il un notaire ?",
+    a: "Non. Le kit aide à préparer un testament olographe au Québec, pas à pas ; ce n'est pas un avis juridique. Pour une situation complexe, un notaire reste la bonne porte.",
+  },
+  {
+    q: "Comment je reçois mon kit après l'achat ?",
+    a: "Par téléchargement immédiat après le paiement : un PDF imprimable, à utiliser seul, avec un proche ou dans un contexte d'intervention.",
+  },
+];
+
 export const Route = createFileRoute("/sans-honte")({
-  head: () => createSeoHead({
-    title: "Collection Sans Honte : 15 kits PDF | HP — Québec",
-    description: "15 kits PDF concrets : papiers, frigo, logement, entraide… 5 $ CAD le kit, 40 $ CAD pour 10 kits au choix. Aucune taxe ajoutée.",
-    path: "/sans-honte",
+  head: () => ({
+    ...createSeoHead({
+      title: "Collection Sans Honte : 15 kits PDF | HP — Québec",
+      description: "15 kits PDF concrets : papiers, frigo, logement, entraide… 5 $ CAD le kit, 40 $ CAD pour 10 kits au choix. Aucune taxe ajoutée.",
+      path: "/sans-honte",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: "Collection Sans Honte — 10 kits au choix (PDF)",
+          description:
+            "Le bundle regroupe 10 kits Sans Honte au choix, parmi les 15 de la collection, en format PDF.",
+          brand: { "@id": "https://www.hp-outils.com/#organisation" },
+          offers: {
+            "@type": "Offer",
+            url: "https://www.hp-outils.com/pdf/sans-honte-collection",
+            priceCurrency: "CAD",
+            price: "40.00",
+            availability: "https://schema.org/InStock",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQ.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
   }),
   component: Page,
 });
@@ -100,6 +149,20 @@ function Page() {
           <div className="quote-grid">
             {QUOTES.map((q) => (
               <blockquote key={q} className="strong-quote">« {q} »</blockquote>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="subpage-content">
+        <div className="container">
+          <h2 className="section-title">Questions fréquentes</h2>
+          <div style={{ maxWidth: 760, margin: "0 auto" }}>
+            {FAQ.map((f) => (
+              <article key={f.q} style={{ marginBottom: 28 }}>
+                <h3 style={{ fontSize: 20, marginBottom: 8 }}>{f.q}</h3>
+                <p style={{ fontSize: 16, lineHeight: 1.7, color: "#3a2a20" }}>{f.a}</p>
+              </article>
             ))}
           </div>
         </div>

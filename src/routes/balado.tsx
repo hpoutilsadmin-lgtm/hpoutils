@@ -2,11 +2,30 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import { ShareButton } from "@/components/ShareButton";
 
+const BALADO_DESCRIPTION =
+  "Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode chaque lundi, direct et sans jargon.";
+
 export const Route = createFileRoute("/balado")({
-  head: () => createSeoHead({
-    title: "Futur simple — le balado HP sur l'IA, les PME et le futur | Québec",
-    description: "Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur à venir, le bon comme le mauvais. Un nouvel épisode chaque lundi dès le 26 octobre. Direct, concret, sans jargon.",
-    path: "/balado",
+  head: () => ({
+    ...createSeoHead({
+      title: "Futur simple — balado québécois sur l'IA, les PME et le futur | HP Outils",
+      description: BALADO_DESCRIPTION,
+      path: "/balado",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "PodcastSeries",
+          name: "Futur simple",
+          inLanguage: "fr",
+          url: "https://www.hp-outils.com/balado",
+          description: BALADO_DESCRIPTION,
+          publisher: { "@id": "https://www.hp-outils.com/#organisation" },
+        }),
+      },
+    ],
   }),
   component: Page,
 });

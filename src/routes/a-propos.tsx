@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => createSeoHead({
-    title: "À propos de HP — Des outils créés au Québec",
-    description: "HP crée au Québec des PDF, des kits, des livres et des ateliers sur mesure : des outils concrets pour la vraie vie.",
+    title: "À propos — Hugo Pierre Bertrand, créateur de HP Outils | Terrebonne",
+    description: "HP Outils, c'est Hugo Pierre Bertrand, créateur à Terrebonne (Lanaudière) : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets.",
     path: "/a-propos",
   }),
   component: Page,

@@ -4,8 +4,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/livres-pdf")({
   head: () => createSeoHead({
-    title: "PDF à télécharger : kits, guides et livres | HP — Québec",
-    description: "20 PDF à télécharger : collection Sans Honte, cuisine, organisation, famille. Petits prix, aucune taxe ajoutée.",
+    title: "Livres et kits PDF à télécharger — dès 5 $, aucune taxe ajoutée | HP Outils",
+    description: "20 PDF à télécharger : les 15 kits Sans Honte à 5 $, des livres de cuisine, d'organisation et de réflexion de 10 à 20 $. Aucune taxe ajoutée, téléchargement immédiat.",
     path: "/livres-pdf",
   }),
   component: Page,

@@ -3,10 +3,27 @@ import { useState } from "react";
 import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/outils")({
-  head: () => createSeoHead({
-    title: "Outils web gratuits + kits PDF Sans Honte | HP — Québec",
-    description: "Outils web gratuits HP : La Boîte à outils (7 outils pour la vraie vie), En cuisine (629 recettes), Le reste du mois, Ça vaut-tu la peine ?, Le relais, Maintenant. Et les kits PDF Sans Honte. Sans compte, fait au Québec.",
-    path: "/outils",
+  head: () => ({
+    ...createSeoHead({
+      title: "Outils web gratuits, sans compte — budget, recettes, proches aidants | HP Outils",
+      description: "La Boîte à outils HP : budget du mois, coût par usage, relais des proches aidants, 629 recettes. 100 % gratuit, sans compte, et tes données restent sur ton appareil.",
+      path: "/outils",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: WEB_TOOLS.map((t, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: t.title,
+            url: `https://www.hp-outils.com${t.href}`,
+          })),
+        }),
+      },
+    ],
   }),
   component: Page,
 });

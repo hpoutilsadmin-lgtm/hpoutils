@@ -2,10 +2,30 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/ateliers")({
-  head: () => createSeoHead({
-    title: "Ateliers sur mesure pour organismes et écoles | HP — Lanaudière",
-    description: "Ateliers de groupe et offre Édition des Fêtes à Terrebonne et dans Lanaudière. Prix fermes en $ CAD, aucune taxe ajoutée.",
-    path: "/ateliers",
+  head: () => ({
+    ...createSeoHead({
+      title: "Ateliers sur mesure pour organismes et écoles | HP — Lanaudière",
+      description: "Ateliers de groupe et offre Édition des Fêtes à Terrebonne et dans Lanaudière. Prix fermes en $ CAD, aucune taxe ajoutée.",
+      path: "/ateliers",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: "Ateliers sur mesure pour organismes et écoles",
+          serviceType: "Ateliers de groupe",
+          url: "https://www.hp-outils.com/ateliers",
+          provider: { "@id": "https://www.hp-outils.com/#organisation" },
+          areaServed: "Lanaudière",
+          offers: [
+            { "@type": "Offer", price: "120.00", priceCurrency: "CAD" },
+            { "@type": "Offer", price: "150.00", priceCurrency: "CAD" },
+          ],
+        }),
+      },
+    ],
   }),
   component: Page,
 });

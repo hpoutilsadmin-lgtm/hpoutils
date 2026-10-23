@@ -3,11 +3,50 @@ import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { createSeoHead } from "@/lib/seo";
 import type { CSSProperties } from "react";
 
+const ORGANISATION_JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.hp-outils.com/#organisation",
+      name: "HP Outils",
+      url: "https://www.hp-outils.com/",
+      slogan: "Des outils pour la vraie vie",
+      description:
+        "Jeux gratuits, kits PDF, livres, recettes et outils web créés au Québec pour les familles et les petits budgets. Petit fournisseur : prix affichés sans taxe ajoutée.",
+      email: "hpoutils.admin@gmail.com",
+      founder: { "@id": "https://www.hp-outils.com/#hugo" },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Terrebonne",
+        addressRegion: "QC",
+        addressCountry: "CA",
+      },
+      areaServed: ["Lanaudière", "Québec", "Canada"],
+      sameAs: ["https://youtube.com/@hp-2zl"],
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.hp-outils.com/#hugo",
+      name: "Hugo Pierre Bertrand",
+      jobTitle: "Créateur — jeux, livres et outils pour la vraie vie",
+      worksFor: { "@id": "https://www.hp-outils.com/#organisation" },
+      homeLocation: { "@type": "Place", name: "Terrebonne, Lanaudière, Québec" },
+    },
+  ],
+};
+
 export const Route = createFileRoute("/")({
-  head: () => createSeoHead({
-    title: "HP — Kits PDF et outils concrets pour la vraie vie | Québec",
-    description: "Kits PDF Sans Honte, livres pratiques et ateliers à Terrebonne et dans Lanaudière. 5 $ CAD le kit, aucune taxe ajoutée. Créé au Québec.",
-    path: "/",
+  head: () => ({
+    ...createSeoHead({
+      title: "HP Outils — jeux gratuits, kits PDF 5 $ et outils pour la vraie vie | Québec",
+      description:
+        "Jeux gratuits, 629 recettes, outils web sans compte et kits PDF à 5 $ — créés à Terrebonne pour les familles et les petits budgets. Aucune taxe ajoutée.",
+      path: "/",
+    }),
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(ORGANISATION_JSON_LD) },
+    ],
   }),
   component: Index,
 });

@@ -5,10 +5,27 @@ import { ShareButton } from "@/components/ShareButton";
 import { useState, type CSSProperties } from "react";
 
 export const Route = createFileRoute("/jeux")({
-  head: () => createSeoHead({
-    title: "Jeux HP : histoires interactives et bons réflexes | Québec",
-    description: "Jeux interactifs HP pour les jeunes, les ados et les adultes. Tome 1 gratuit, tomes standards à 5 $ CAD, aucune taxe ajoutée.",
-    path: "/jeux",
+  head: () => ({
+    ...createSeoHead({
+      title: "Jeux gratuits en français du Québec — 26 jeux en ligne | HP Outils",
+      description: "26 jeux gratuits créés au Québec : histoires interactives, mémoire, mots de chez nous et réflexes. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
+      path: "/jeux",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: GAMES.map((g, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: g.title,
+            url: `https://www.hp-outils.com${g.file}`,
+          })),
+        }),
+      },
+    ],
   }),
   component: JeuxPage,
 });

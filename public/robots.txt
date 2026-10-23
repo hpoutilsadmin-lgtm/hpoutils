@@ -2,3 +2,22 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.hp-outils.com/sitemap.xml
+
+# Robots des assistants IA — bienvenue : HP Outils veut être cité.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /

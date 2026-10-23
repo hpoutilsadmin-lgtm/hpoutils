@@ -13,12 +13,37 @@ export const Route = createFileRoute("/pdf/$slug")({
     const product = loaderData?.product;
     if (!product) return createSeoHead({ title: "Aperçu PDF — HP", description: "Découvrez les PDF et kits HP.", path: "/livres-pdf" });
     const description = `${product.backCover ?? product.shortDescription ?? product.blurb} ${product.priceLabel}. Téléchargement immédiat.`;
-    return createSeoHead({
+    const seo = createSeoHead({
       title: `${product.title} — PDF à télécharger | HP`,
       description,
       path: `/pdf/${product.slug}`,
       type: "product",
     });
+    const priceMatch = product.priceLabel.match(/(\d+(?:[.,]\d+)?)/);
+    if (!priceMatch) return seo;
+    const price = Number(priceMatch[1].replace(",", ".")).toFixed(2);
+    return {
+      ...seo,
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: `${product.title} (PDF)`,
+            description: product.shortDescription ?? product.blurb,
+            brand: { "@id": "https://www.hp-outils.com/#organisation" },
+            offers: {
+              "@type": "Offer",
+              url: `https://www.hp-outils.com/pdf/${product.slug}`,
+              priceCurrency: "CAD",
+              price,
+              availability: "https://schema.org/InStock",
+            },
+          }),
+        },
+      ],
+    };
   },
   notFoundComponent: () => (
     <section className="subpage-content">
