@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/les-passeurs")({
   head: () => createSeoHead({
     title: "Les Passeurs — soutenir HP Outils pour 1 $ par mois",
-    description: "Un dollar par mois, douze pour l'année : les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils, créés au Québec pour la vraie vie.",
+    description: "Les Passeurs soutiendront les jeux, les livres et les outils gratuits de HP Outils pour un dollar par mois. L'inscription n'est pas encore en ligne : aucun paiement n'est demandé pour l'instant.",
     path: "/les-passeurs",
   }),
   component: Page,
@@ -42,7 +42,29 @@ function Page() {
           <span className="editorial-kicker">Simple et clair</span>
           <h2>Pas de contrat déguisé, <em>pas de promesse en l'air.</em></h2>
           <p className="strip-intro">Juste: tu passes, et d'autres reçoivent.</p>
-          <h3>1 $ / mois — ou 12 $ / an.</h3>
+          <h3>Ce sera 1 $ / mois — ou 12 $ / an.</h3>
+          <div
+            style={{
+              maxWidth: 640,
+              margin: "24px auto 0",
+              border: "1px solid rgba(58,42,32,.25)",
+              borderLeft: "4px solid #3a2a20",
+              borderRadius: 8,
+              background: "rgba(247,244,236,.85)",
+              padding: "18px 22px",
+              textAlign: "left",
+            }}
+          >
+            <p style={{ fontWeight: 700, marginBottom: 8, color: "#2a1a12" }}>
+              L'inscription n'est pas encore en ligne.
+            </p>
+            <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
+              Le programme se prépare : le bouton d'inscription s'en vient, mais il n'est pas encore
+              là — aucun montant n'est prélevé d'ici là, et tout ce qui est gratuit sur HP Outils
+              le reste. Tu veux être prévenu·e quand ça ouvre ?{" "}
+              <Link to="/contact">Écris-moi</Link> — et merci de vouloir passer le savoir.
+            </p>
+          </div>
         </div>
       </section>
     </>

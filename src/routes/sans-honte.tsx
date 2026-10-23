@@ -144,6 +144,47 @@ function Page() {
         </div>
       </section>
 
+      <section className="subpage-content">
+        <div className="container">
+          <div
+            style={{
+              maxWidth: 760,
+              margin: "0 auto",
+              border: "1px solid rgba(122,74,38,.35)",
+              borderLeft: "4px solid #7a4a26",
+              background: "rgba(247,244,236,.9)",
+              borderRadius: 8,
+              padding: "22px 26px",
+            }}
+          >
+            <h2 style={{ fontFamily: "Georgia,serif", fontSize: 24, marginBottom: 10, color: "#2a1a12" }}>
+              Si ça devient trop lourd
+            </h2>
+            <p style={{ fontSize: 16, lineHeight: 1.7, color: "#3a2a20", marginBottom: 10 }}>
+              Ces kits aident à avancer à son rythme, une petite étape à la fois.{" "}
+              <strong>Ils ne remplacent pas un professionnel de la santé.</strong> Certains parlent
+              de moments lourds — Tenir Debout, Me Reconnaître, Proche Aidant, 72 heures. Si ce que
+              tu traverses devient trop lourd — pour toi ou pour un proche que tu aides — de l'aide
+              existe, gratuite et sans jugement :
+            </p>
+            <ul style={{ fontSize: 16, lineHeight: 1.7, color: "#3a2a20", marginBottom: 10, paddingLeft: 20 }}>
+              <li>
+                <strong>988</strong> — Ligne d'aide en cas de crise de suicide (partout au Canada) :
+                appelle ou texte le 988, en tout temps.
+              </li>
+              <li>
+                <strong>811, option 2</strong> — Info-Social (Québec) : des intervenants
+                psychosociaux, en tout temps.
+              </li>
+            </ul>
+            <p style={{ fontSize: 16, lineHeight: 1.7, color: "#3a2a20" }}>
+              Les organismes d'aide et d'écoute de ta région peuvent aussi t'accompagner. Pour les
+              proches aidants, L'Appui est là pour ça.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="strong-quotes">
         <div className="container">
           <h2 className="section-title">Phrases fortes</h2>
@@ -182,7 +223,7 @@ function Page() {
             <article className="pillar-card">
               <span className="pillar-num">→</span>
               <h3>La phrase qu'on ne dit pas</h3>
-              <p>Sortir une chose, en sécurité, et voir ce que ça change.</p>
+              <p>Sortir une chose, en privé, et voir ce que ça change.</p>
               <Link to="/outils" className="pillar-cta">Ouvrir l'outil</Link>
             </article>
             <article className="pillar-card">

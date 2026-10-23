@@ -79,14 +79,95 @@ function buyLabel(fmt: "Version PDF" | "Kit PDF" | "Collection PDF"): string {
   return "Acheter le PDF";
 }
 
+// Filet d'aide santé — affiché sur les fiches des produits qui touchent
+// la détresse, l'anxiété ou la proche-aidance (donnée : healthSupport).
+function HealthSupportNote() {
+  return (
+    <div
+      style={{
+        border: "1px solid rgba(122,74,38,.35)",
+        borderLeft: "4px solid #7a4a26",
+        background: "rgba(247,244,236,.9)",
+        borderRadius: 8,
+        padding: "18px 20px",
+        marginBottom: 32,
+      }}
+    >
+      <h2 style={{ fontFamily: "Georgia,serif", fontSize: 22, marginBottom: 10, color: "#2a1a12" }}>
+        Si ça devient trop lourd
+      </h2>
+      <p style={{ lineHeight: 1.7, color: "#3a2a20", marginBottom: 10 }}>
+        Ce produit est un outil du quotidien : il aide à avancer à son rythme, une petite étape à la
+        fois. <strong>Il ne remplace pas un professionnel de la santé.</strong> Si ce que tu traverses
+        devient trop lourd — pour toi ou pour un proche que tu aides — de l'aide existe, gratuite et
+        sans jugement :
+      </p>
+      <ul style={{ lineHeight: 1.7, color: "#3a2a20", marginBottom: 10, paddingLeft: 20 }}>
+        <li>
+          <strong>988</strong> — Ligne d'aide en cas de crise de suicide (partout au Canada) :
+          appelle ou texte le 988, en tout temps.
+        </li>
+        <li>
+          <strong>811, option 2</strong> — Info-Social (Québec) : des intervenants psychosociaux,
+          en tout temps.
+        </li>
+      </ul>
+      <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
+        Les organismes d'aide et d'écoute de ta région peuvent aussi t'accompagner. Pour les
+        proches aidants, L'Appui est là pour ça.
+      </p>
+    </div>
+  );
+}
+
+// « Avant d'acheter » — les faits des Conditions de vente (§5, §6, §7),
+// repris tels quels, placés avant le bouton d'achat.
+function BeforeYouBuyNote() {
+  return (
+    <div
+      style={{
+        border: "1px solid rgba(58,42,32,.25)",
+        borderRadius: 8,
+        background: "rgba(247,244,236,.7)",
+        padding: "14px 16px",
+        marginBottom: 16,
+        fontSize: 14,
+        lineHeight: 1.65,
+        color: "#3a2a20",
+      }}
+    >
+      <p style={{ fontWeight: 700, marginBottom: 8 }}>Avant d'acheter</p>
+      <ul style={{ paddingLeft: 18, margin: 0 }}>
+        <li>
+          Produit numérique : <strong>la vente est finale, sans remboursement</strong> — un fichier
+          téléchargé ne peut pas être « retourné ».
+        </li>
+        <li>
+          <strong>Exception — panne technique</strong> : si le lien ou le fichier reçu ne fonctionne
+          pas, écrivez-nous. On répare — nouveau lien, nouveau fichier — et si on n'arrive pas à
+          vous donner un accès qui fonctionne, on vous rembourse.
+        </li>
+        <li>
+          Après le paiement, vous recevez un <strong>lien de téléchargement personnel, valide
+          7 jours</strong>. Téléchargez votre fichier dès que vous le recevez, et gardez-le.
+        </li>
+        <li>
+          Le courriel n'arrive pas, ou votre lien est expiré ? La page{" "}
+          <Link to="/recuperer-achat">Récupérer un achat</Link> vous redonne accès à ce que vous
+          avez acheté — ou écrivez-nous.
+        </li>
+      </ul>
+      <p style={{ marginTop: 8 }}>
+        Le détail complet : <Link to="/conditions-de-vente">Conditions de vente</Link>.
+      </p>
+    </div>
+  );
+}
+
 function Page() {
   const { product } = Route.useLoaderData();
   const fmt = resolveFormat(product);
-  const shortDescription =
-    product.shortDescription ??
-    (fmt === "Kit PDF"
-      ? "Un kit PDF pour explorer une facette de la honte, mettre des mots sur ce qui reste souvent caché et reprendre un peu de place sans se juger."
-      : product.blurb);
+  const shortDescription = product.shortDescription ?? product.blurb;
 
   // 4e de couverture — texte éditorial
   const backCover =
@@ -143,10 +224,10 @@ function Page() {
               <span className="dot" />
               {fmt} — {product.priceLabel}
             </div>
-            {product.precaution && <p className="product-precaution">{product.precaution}</p>}
             <p style={{ fontSize: 14, color: "rgba(58,42,32,.7)", fontStyle: "italic", marginBottom: 16 }}>
               PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé
             </p>
+            <BeforeYouBuyNote />
             <Link
               to="/achat/$slug"
               params={{ slug: product.slug }}
@@ -167,6 +248,8 @@ function Page() {
           </div>
 
           <div>
+            {product.healthSupport && <HealthSupportNote />}
+
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
               4e de couverture
             </h2>
@@ -181,12 +264,81 @@ function Page() {
               {audienceSentence}
             </p>
 
+            {product.contents && product.contents.length > 0 && (
+              <>
+                <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
+                  Sommaire
+                </h2>
+                <ol style={{ marginBottom: 32, lineHeight: 1.8, color: "#3a2a20", paddingLeft: 22 }}>
+                  {product.contents.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ol>
+              </>
+            )}
+
+            {product.includes && product.includes.length > 0 && (
+              <>
+                <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
+                  Ce que contient ce PDF
+                </h2>
+                <ul style={{ marginBottom: 32, lineHeight: 1.8, color: "#3a2a20", paddingLeft: 20 }}>
+                  {product.includes.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {product.preview && (
+              <>
+                <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
+                  Aperçu — un extrait du produit
+                </h2>
+                <div
+                  style={{
+                    border: "1px solid rgba(58,42,32,.2)",
+                    borderRadius: 8,
+                    background: "rgba(247,244,236,.7)",
+                    padding: "16px 20px",
+                    marginBottom: 32,
+                  }}
+                >
+                  <p style={{ fontWeight: 700, color: "#2a1a12", marginBottom: 8 }}>{product.preview.title}</p>
+                  <p style={{ lineHeight: 1.8, color: "#3a2a20" }}>{product.preview.text}</p>
+                  <p style={{ fontSize: 13, color: "rgba(58,42,32,.65)", fontStyle: "italic", marginTop: 10 }}>
+                    Extrait authentique, tiré du produit.
+                  </p>
+                </div>
+              </>
+            )}
+
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
               Format
             </h2>
             <p style={{ color: "#3a2a20", marginBottom: 32 }}>
-              PDF téléchargeable après achat. Aucun envoi postal, aucun produit physique.
+              PDF téléchargeable après achat.
+              {product.volumeLabel && <> {product.volumeLabel}.</>} Aucun envoi postal, aucun
+              produit physique.
             </p>
+
+            {product.precaution && (
+              <div
+                style={{
+                  border: "1px solid rgba(58,42,32,.25)",
+                  borderLeft: "4px solid #3a2a20",
+                  borderRadius: 8,
+                  background: "rgba(247,244,236,.7)",
+                  padding: "16px 20px",
+                  marginBottom: 32,
+                }}
+              >
+                <h2 style={{ fontFamily: "Georgia,serif", fontSize: 22, marginBottom: 8, color: "#2a1a12" }}>
+                  À savoir
+                </h2>
+                <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>{product.precaution}</p>
+              </div>
+            )}
 
             <div className="cta-band">
               <div>

@@ -15,6 +15,10 @@ export interface DigitalProduct {
   formatLabel?: "Version PDF" | "Kit PDF" | "Collection PDF";
   shortDescription?: string;
   includes?: string[];      // « Ce PDF contient »
+  contents?: string[];      // « Sommaire » — liste réelle des fiches/sections du produit
+  volumeLabel?: string;     // volume vérifié seulement, ex. « 24 fiches · 14 pages »
+  preview?: { title: string; text: string }; // aperçu authentique, tiré du produit
+  healthSupport?: boolean;  // afficher le filet d'aide santé (988, 811) sur la fiche
   audience?: string[];      // « Pour qui ? »
   backCover?: string;       // Texte éditorial « 4e de couverture »
   audienceSentence?: string; // Phrase « Ce PDF s'adresse aux personnes qui veulent... »
@@ -24,13 +28,46 @@ export interface DigitalProduct {
 export const PRODUCTS: Record<string, DigitalProduct> = {
   sans_honte_testament_pdf_5: {
     priceId: "sans_honte_testament_pdf_5", slug: "sans-honte-testament",
-    title: "Testament Sans Honte — L'olographe sans erreur",
+    title: "Testament Sans Honte — L'olographe, pas à pas",
     pdfPath: "sans-honte-testament.pdf", downloadFileName: "Testament_Sans_Honte.pdf",
     priceLabel: "5 $ CAD, aucune taxe ajoutée", formatLabel: "Kit PDF",
     blurb: "Préparer un testament olographe au Québec, pas à pas.",
     cover: "/images/sans-honte/kit-11.jpg",
+    shortDescription:
+      "Un testament olographe au Québec, écrit à la main et signé : ce que c'est, les erreurs qui le rendent invalide et l'ordre à suivre, fiche par fiche.",
+    volumeLabel: "24 fiches · 14 pages",
+    contents: [
+      "La soirée du testament",
+      "C'est quoi, un olographe ?",
+      "Manuscrit et signé",
+      "Erreur n° 1 : le tapé",
+      "Erreur n° 2 : la date",
+      "Erreur n° 3 : la signature",
+      "Erreur n° 4 : les ratures",
+      "Erreur n° 5 : le flou",
+      "Qui suis-je ?",
+      "« Je révoque… »",
+      "Le liquidateur : qui ?",
+      "Le remplaçant",
+      "Les legs particuliers",
+      "Le résidu",
+      "Les enfants mineurs",
+      "Ce qu'on n'y met pas",
+      "Les dettes",
+      "Les phrases à recopier",
+      "L'ordre du document",
+      "Où le garder",
+      "Le registre",
+      "Dire où il est",
+      "Après moi : la vérification",
+      "Relire, dater, signer",
+    ],
+    preview: {
+      title: "Fiche 2 — C'est quoi, un olographe ?",
+      text: "Comprendre la forme la plus simple du testament au Québec. Au Québec, un testament écrit au complet à la main et signé est valide : pas de notaire, pas de témoin. Phrase à retenir : « Simple ne veut pas dire fragile. »",
+    },
     audienceSentence: "Ce kit s'adresse aux personnes qui veulent préparer un testament olographe au Québec et organiser leurs volontés.",
-    precaution: "Ce kit vous guide pas à pas pour préparer un testament olographe conforme aux règles du Québec. C'est de l'information générale, pas un avis juridique. L'idéal : faire valider votre testament par un notaire — surtout s'il y a des enfants mineurs, un conjoint, une entreprise ou des biens hors Québec.",
+    precaution: "Le kit aide à préparer un testament olographe au Québec, pas à pas ; ce n'est pas un avis juridique. Pour une situation complexe, un notaire reste la bonne porte.",
   },
   sans_honte_papiers_parents_pdf_5: {
     priceId: "sans_honte_papiers_parents_pdf_5", slug: "sans-honte-papiers-parents",
@@ -38,6 +75,39 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Papiers_de_mes_parents_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Organiser les papiers de ses parents, sans honte.",
     cover: "/images/sans-honte/kit-12.jpg",
+    shortDescription:
+      "Organiser les papiers de ses parents sans braquer personne : la conversation, l'inventaire, les comptes, les assurances, le testament, le mandat et le classeur, fiche par fiche.",
+    volumeLabel: "24 fiches · 14 pages",
+    contents: [
+      "Par où commencer",
+      "La conversation",
+      "L'inventaire",
+      "Les papiers d'identité",
+      "Comptes et placements",
+      "Les assurances",
+      "Factures et abonnements",
+      "Les dettes",
+      "Le testament",
+      "Le mandat de protection",
+      "La procuration",
+      "L'homologation",
+      "Le Curateur public",
+      "Les directives médicales",
+      "La maison",
+      "Le courrier",
+      "Mots de passe et en ligne",
+      "Les arnaques",
+      "Les prestations",
+      "Aides et crédits",
+      "Organismes et ressources",
+      "Le classeur",
+      "La fratrie",
+      "Et moi là-dedans",
+    ],
+    preview: {
+      title: "Fiche 2 — La conversation",
+      text: "Amorcer le sujet sans braquer ses parents. Personne n'aime se faire dire qu'il ne gère plus : parle d'aide, pas de contrôle.",
+    },
     audienceSentence: "Ce kit s'adresse aux personnes qui accompagnent leurs parents dans l'organisation de leurs papiers.",
   },
   sans_honte_chalet_pdf_5: {
@@ -46,6 +116,39 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Chalet_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Des règles claires pour partager le chalet.",
     cover: "/images/sans-honte/kit-13.jpg",
+    shortDescription:
+      "Les règles d'un chalet partagé, écrites quand tout va bien : qui paie quoi, qui décide, le calendrier, les invités, les réparations et la clause de sortie.",
+    volumeLabel: "24 fiches · 14 pages",
+    contents: [
+      "La soirée des règles",
+      "Les 5 chicanes classiques",
+      "Notre convention : le papier",
+      "Qui décide ?",
+      "Qui paie quoi ?",
+      "Le fonds de réserve",
+      "La grille des coûts",
+      "Les grosses réparations",
+      "Le compte commun",
+      "Les périodes protégées",
+      "Rotation, tirage ou points",
+      "La règle des 48 heures",
+      "Deux familles à la fois",
+      "Les invités : qui et combien",
+      "Qui invite, ramasse",
+      "La question Airbnb",
+      "Les règles de la maison",
+      "L'ouverture du printemps",
+      "La fermeture de l'automne",
+      "Les corvées invisibles",
+      "La réunion annuelle",
+      "La médiation",
+      "La clause de sortie",
+      "Et maintenant, on signe",
+    ],
+    preview: {
+      title: "Fiche 1 — La soirée des règles",
+      text: "Poser les règles du chalet en une seule soirée, tous ensemble. Une règle écrite quand tout va bien vaut dix discussions quand ça va mal.",
+    },
     audienceSentence: "Ce kit s'adresse aux familles et aux proches qui partagent un chalet et veulent clarifier leurs règles ensemble.",
   },
   sans_honte_annee_quebecoise_pdf_5: {
@@ -54,6 +157,39 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Annee_quebecoise_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Des repères pour l'année québécoise.",
     cover: "/images/sans-honte/kit-14.jpg",
+    shortDescription:
+      "L'année québécoise mois par mois : impôts, REER, pneus, rentrée et Fêtes — plus les rendez-vous annuels qu'on oublie toujours, de la SAAQ aux assurances.",
+    volumeLabel: "24 fiches · 14 pages",
+    contents: [
+      "Janvier : on repart",
+      "Février : le REER",
+      "Mars : les impôts",
+      "Avril : date limite",
+      "Mai : le printemps",
+      "Juin : fin d'école",
+      "Le 1er juillet",
+      "Août : la rentrée",
+      "Septembre : on s'installe",
+      "Octobre : l'hiver s'en vient",
+      "Novembre : on hiverne",
+      "Décembre : pneus et Fêtes",
+      "Les congés fériés",
+      "Taxes municipales",
+      "SAAQ : permis et plaques",
+      "Assurances : le renouvellement",
+      "Abonnements annuels",
+      "Santé : les rendez-vous",
+      "L'auto au fil des saisons",
+      "La maison au fil des saisons",
+      "CELI et REER",
+      "Prestations et crédits",
+      "Urgences saisonnières",
+      "Mon année en une page",
+    ],
+    preview: {
+      title: "Fiche 3 — Mars : les impôts",
+      text: "S'y mettre tôt au lieu de paniquer le 29 avril. Mars, c'est le mois où on rassemble : feuillets, reçus, factures.",
+    },
     audienceSentence: "Ce kit s'adresse aux personnes qui veulent organiser leur année avec des repères adaptés au Québec.",
   },
   sans_honte_heritage_numerique_pdf_5: {
@@ -62,6 +198,39 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Heritage_numerique_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Préparer la transmission de son héritage numérique.",
     cover: "/images/sans-honte/kit-15.jpg",
+    shortDescription:
+      "Préparer la transmission de sa vie en ligne : l'inventaire des comptes, le coffre à mots de passe, les photos, les abonnements et la personne de confiance.",
+    volumeLabel: "24 fiches · 14 pages",
+    contents: [
+      "C'est quoi, ça ?",
+      "L'inventaire",
+      "Le coffre à mots de passe",
+      "Le gestionnaire",
+      "La double vérification",
+      "Ton courriel, la clé",
+      "Banque et argent",
+      "Photos et souvenirs",
+      "Réseaux sociaux",
+      "Compte inactif Google",
+      "Contact légataire Apple",
+      "Les abonnements",
+      "Cryptos et portefeuilles",
+      "Le document central",
+      "La personne de confiance",
+      "L'accès d'urgence",
+      "Ce qu'il faut détruire",
+      "Ce qu'il faut transmettre",
+      "Les arnaques post-décès",
+      "Démarches pour les proches",
+      "Le côté légal",
+      "Le grand ménage",
+      "Automatiser",
+      "Mon plan en une page",
+    ],
+    preview: {
+      title: "Fiche 3 — Le coffre à mots de passe",
+      text: "Centralise tes mots de passe de façon sécuritaire, pas n'importe comment. Un seul mot de passe partout = toutes les portes ouvertes avec une seule clé.",
+    },
     audienceSentence: "Ce kit s'adresse aux personnes qui veulent préparer la transmission de leurs comptes et de leurs documents numériques.",
   },
   enjeux_humanite_pdf_15: {
@@ -146,6 +315,18 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "Repères concrets pour manger sans se juger.",
     cover: "/images/sans-honte/kit-03.jpg",
     formatLabel: "Kit PDF",
+    shortDescription:
+      "Reprendre le contrôle de son frigo : une méthode pour bâtir un repas avec ce qu'on a déjà, sauver ce qui fatigue et comprendre les dates sans paniquer.",
+    contents: [
+      "La méthode des 4 morceaux : bâtir un repas avec ce que tu as",
+      "Sauver les aliments fatigués, sans jouer avec la salubrité",
+      "Comprendre les dates sans paniquer",
+      "Des listes réalistes pour cuisiner avec peu",
+    ],
+    preview: {
+      title: "Fiche — La méthode des 4 morceaux",
+      text: "Pour bâtir un repas simple, cherche une base, une protéine, un légume et une sauce ou un élément de goût.",
+    },
     audienceSentence:
       "Ce kit s'adresse aux personnes qui veulent simplifier les repas et composer avec ce qu'elles ont déjà. Il propose des repères concrets pour organiser le frigo, réduire le gaspillage et manger sans viser la perfection.",
   },
@@ -159,6 +340,9 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "Quand la journée tient sur un fil — un kit court.",
     cover: "/images/sans-honte/kit-04.jpg",
     formatLabel: "Kit PDF",
+    healthSupport: true,
+    shortDescription:
+      "Quand les tâches ordinaires semblent trop lourdes : choisir l'essentiel, avancer par petites étapes et garder des repères simples, sans se juger.",
     audienceSentence:
       "Ce kit s'adresse aux personnes qui traversent des journées où les tâches ordinaires semblent trop lourdes. Il aide à choisir l'essentiel, avancer par petites étapes et garder des repères simples quand tout tient sur un fil.",
   },
@@ -172,6 +356,9 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "24 fiches pour reprendre le contrôle de ses papiers.",
     cover: "/images/sans-honte/kit-01.jpg",
     formatLabel: "Kit PDF",
+    shortDescription:
+      "24 fiches pour trier, classer et reprendre le contrôle de ses papiers — courrier, factures, démarches — sans tout régler en une seule journée.",
+    volumeLabel: "24 fiches",
     audienceSentence:
       "Ce kit s'adresse aux personnes qui se sentent dépassées par le courrier, les factures ou les démarches administratives. Ses 24 fiches aident à trier, classer et reprendre le contrôle des papiers sans tout régler en une seule journée.",
   },
@@ -185,6 +372,9 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "Adapter sa journée à son cerveau, sans se juger.",
     cover: "/images/sans-honte/kit-02.jpg",
     formatLabel: "Kit PDF",
+    healthSupport: true,
+    shortDescription:
+      "Se retrouver quand on s'est perdu·e de vue : reconnaître sa façon de fonctionner et adapter sa journée à son énergie, sans se comparer.",
     audienceSentence:
       "Ce kit s'adresse aux personnes qui veulent mieux reconnaître leur façon de fonctionner au quotidien. Il propose des outils pour adapter la journée à son énergie, ses besoins et son rythme, sans se comparer.",
   },
@@ -198,6 +388,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "S'équiper et consommer autrement, simplement.",
     cover: "/images/sans-honte/kit-05.jpg",
     formatLabel: "Kit PDF",
+    shortDescription:
+      "S'habiller, se meubler et s'équiper en seconde main, par choix ou par nécessité : acheter, vendre, donner et récupérer, simplement et sans jugement.",
     audienceSentence:
       "Ce kit s'adresse aux personnes qui veulent s'habiller, se meubler ou s'équiper en seconde main, par choix ou par nécessité. Il rassemble des repères pour acheter, vendre, donner et récupérer simplement, sans jugement.",
   },
@@ -211,6 +403,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "Donner et recevoir de l'aide, sans honte.",
     cover: "/images/sans-honte/kit-06.jpg",
     formatLabel: "Kit PDF",
+    shortDescription:
+      "Demander de l'aide sans s'excuser, en offrir sans s'épuiser : formuler un besoin, poser ses limites et créer une entraide respectueuse.",
     audienceSentence:
       "Ce kit s'adresse aux personnes qui hésitent à demander de l'aide ou ne savent pas toujours comment en offrir. Il propose des façons concrètes de formuler un besoin, poser ses limites et créer une entraide respectueuse.",
   },
@@ -224,6 +418,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "Reconnaître, réagir, se protéger.",
     cover: "/images/sans-honte/kit-07.jpg",
     formatLabel: "Kit PDF",
+    shortDescription:
+      "Reconnaître les arnaques courantes et savoir quoi faire devant un message suspect : vérifier, réagir et protéger ses renseignements, sans avoir honte d'avoir douté.",
     audienceSentence:
       "Ce kit s'adresse aux personnes qui veulent reconnaître les arnaques courantes et savoir quoi faire devant un message suspect. Il donne des réflexes clairs pour vérifier, réagir et protéger ses renseignements sans avoir honte d'avoir douté.",
   },
@@ -237,6 +433,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "Repères concrets autour du logement.",
     cover: "/images/sans-honte/kit-08.jpg",
     formatLabel: "Kit PDF",
+    shortDescription:
+      "Garder, retrouver ou mieux organiser un chez-soi : des repères concrets pour préparer ses démarches, comprendre sa situation et savoir vers qui se tourner.",
     audienceSentence:
       "Ce kit s'adresse aux personnes qui cherchent à garder, retrouver ou mieux organiser un chez-soi. Il réunit des repères concrets pour préparer ses démarches, comprendre une situation et savoir vers qui se tourner.",
   },
@@ -250,6 +448,9 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "Tenir le rôle de proche aidant sans s'épuiser.",
     cover: "/images/sans-honte/kit-09.jpg",
     formatLabel: "Kit PDF",
+    healthSupport: true,
+    shortDescription:
+      "Soutenir un proche sans s'oublier : nommer ce qui pèse, organiser l'aide autour de soi et garder une place pour ses propres besoins.",
     audienceSentence:
       "Ce kit s'adresse aux personnes qui soutiennent régulièrement un proche et qui portent beaucoup de responsabilités. Il aide à nommer ce qui pèse, organiser l'aide et préserver une place pour ses propres besoins.",
   },
@@ -263,6 +464,9 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     blurb: "Se préparer aux 72 premières heures d'une urgence.",
     cover: "/images/sans-honte/kit-10.jpg",
     formatLabel: "Kit PDF",
+    healthSupport: true,
+    shortDescription:
+      "Se préparer aux 72 premières heures d'une urgence : vérifier les besoins essentiels, rassembler le matériel et établir un plan réaliste, avant que ça arrive.",
     audienceSentence:
       "Ce kit s'adresse aux personnes et aux familles qui veulent se préparer aux 72 premières heures d'une urgence. Il fournit une méthode simple pour vérifier les besoins essentiels, rassembler le matériel et établir un plan réaliste.",
   },
@@ -279,6 +483,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     formatLabel: "Collection PDF",
     shortDescription:
       "Le bundle regroupe 10 kits Sans Honte au choix, parmi les 15 de la collection, en format PDF.",
+    healthSupport: true,
     includes: [
       "10 kits Sans Honte au choix (parmi 15), en PDF",
       "Textes courts et exercices de réflexion",
