@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>L'hydroélectricité, comment ça marche</title>
+    <style>
+      :root{
+        --paper:#f6f1e3; --card:#fffdf4; --ink:#20313b; --ink-soft:#4a5f6a;
+        --line:#20313b; --water:#2e7fb8; --deep:#14506e; --teal:#177e70;
+        --energy:#e8930c; --energy-soft:#fbd38d; --good:#2f9e5f; --bad:#d9534f;
+        --copper:#b87333; --sky:#bfe3f2; --shadow:0 3px 0 rgba(32,49,59,.9);
+        --radius:14px;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --paper:#12212c; --card:#1b3040; --ink:#eef4f1; --ink-soft:#b9cdc9;
+          --line:#d8e6e2; --water:#4aa3d8; --deep:#7cc0e8; --teal:#3bbfa9;
+          --energy:#f5a623; --energy-soft:#8a5f14; --good:#4cc47c; --bad:#e07a76;
+          --copper:#d99a55; --sky:#274b61; --shadow:0 3px 0 rgba(0,0,0,.55);
+        }
+      }
+      *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+      html,body{margin:0;padding:0;}
+      body{
+        background:var(--paper); color:var(--ink);
+        font-family:"Trebuchet MS","Segoe UI",Verdana,system-ui,sans-serif;
+        line-height:1.45; padding:10px 10px 34px;
+      }
+      #app{max-width:560px;margin:0 auto;}
+      h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.15;margin:0;}
+      button{font-family:inherit;cursor:pointer;}
+      .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 10px;}
+      .dots{display:flex;gap:5px;flex-wrap:wrap;}
+      .dot{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;background:var(--card);}
+      .dot.done{background:var(--teal);color:#fff;border-color:var(--line);}
+      .dot.now{background:var(--energy);color:#fff;transform:scale(1.12);}
+      .sonbtn{border:2.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 12px;font-weight:700;font-size:.85rem;box-shadow:var(--shadow);}
+      .sonbtn:active{transform:translateY(2px);box-shadow:none;}
+      .card{background:var(--card);border:3px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px;}
+      .hero{text-align:center;padding:22px 16px 18px;}
+      .hero h1{font-size:1.72rem;margin:8px 0 6px;}
+      .hero p{color:var(--ink-soft);margin:6px auto;max-width:44ch;}
+      .bigtitle{font-size:1.35rem;}
+      .kicker{font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem;color:var(--deep);}
+      @media (prefers-color-scheme: dark){.kicker{color:var(--water);}}
+      .btn{
+        display:inline-block;border:3px solid var(--line);border-radius:12px;background:var(--energy);
+        color:#fff;font-weight:800;font-size:1.05rem;padding:12px 20px;box-shadow:var(--shadow);
+        text-shadow:0 1px 0 rgba(0,0,0,.25);min-height:52px;
+      }
+      .btn:active{transform:translateY(2px);box-shadow:none;}
+      .btn:disabled{opacity:.45;cursor:default;}
+      .btn.second{background:var(--card);color:var(--ink);text-shadow:none;}
+      .btn.teal{background:var(--teal);}
+      .btn.big{width:100%;font-size:1.15rem;padding:15px;}
+      .btn.hold{user-select:none;-webkit-user-select:none;touch-action:none;}
+      .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+      .btnrow .btn{flex:1 1 140px;}
+      .guide{display:flex;gap:10px;align-items:flex-start;}
+      .guide .face{flex:0 0 62px;}
+      .bubble{background:var(--card);border:3px solid var(--line);border-radius:14px;padding:10px 12px;position:relative;flex:1;box-shadow:var(--shadow);}
+      .bubble:before{content:"";position:absolute;left:-13px;top:22px;border:7px solid transparent;border-right:9px solid var(--line);}
+      .bubble b{color:var(--deep);}
+      @media (prefers-color-scheme: dark){.bubble b{color:var(--water);}}
+      .scene{border:3px solid var(--line);border-radius:var(--radius);overflow:hidden;background:linear-gradient(180deg,#aedcf0 0%,#d8f0e4 78%,#cdeac9 100%);box-shadow:var(--shadow);margin-bottom:12px;}
+      .scene svg{display:block;width:100%;height:auto;}
+      .gauge{margin:10px 0;}
+      .gauge .glabel{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:4px;}
+      .gtrack{height:22px;border:3px solid var(--line);border-radius:999px;background:var(--card);position:relative;overflow:hidden;}
+      .gfill{height:100%;width:0%;background:var(--water);transition:width .18s ease;}
+      .gfill.energy{background:var(--energy);}
+      .gfill.good{background:var(--good);}
+      .gzone{position:absolute;top:0;bottom:0;background:rgba(47,158,95,.35);border-left:2.5px dashed var(--good);border-right:2.5px dashed var(--good);}
+      input[type=range]{width:100%;height:44px;accent-color:var(--water);cursor:pointer;}
+      .msg{border:3px dashed var(--teal);border-radius:12px;padding:10px 12px;background:rgba(23,126,112,.08);font-weight:600;margin:12px 0;}
+      .msg.warn{border-color:var(--energy);background:rgba(232,147,12,.10);}
+      .qbtn{display:block;width:100%;text-align:left;border:3px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-size:1.02rem;font-weight:700;padding:14px;margin:8px 0;box-shadow:var(--shadow);min-height:52px;}
+      .qbtn:active{transform:translateY(2px);box-shadow:none;}
+      .qbtn.good{background:var(--good);color:#fff;}
+      .qbtn.bad{background:var(--bad);color:#fff;}
+      .factcard{background:var(--card);border:3px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 16px;text-align:center;}
+      .factcard .facttitle{font-family:Georgia,serif;font-size:1.5rem;color:var(--deep);margin:6px 0 10px;}
+      @media (prefers-color-scheme: dark){.factcard .facttitle{color:var(--water);}}
+      .factcard p{font-size:1.08rem;max-width:46ch;margin:0 auto 14px;}
+      .starsline{font-size:1.25rem;letter-spacing:.15em;color:var(--energy);}
+      .namein{width:100%;font-size:1.1rem;padding:12px;border:3px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-family:inherit;font-weight:700;text-align:center;}
+      label.flabel{display:block;font-weight:700;margin:12px 0 6px;text-align:left;}
+      .stationlist{list-style:none;margin:10px 0;padding:0;text-align:left;}
+      .stationlist li{display:flex;justify-content:space-between;gap:8px;padding:7px 2px;border-bottom:2px dotted var(--ink-soft);}
+      .stationlist li:last-child{border-bottom:none;}
+      .diploma{border:4px double var(--line);border-radius:10px;padding:22px 16px;text-align:center;background:var(--card);}
+      .diploma h2{font-size:1.55rem;margin:4px 0;}
+      .diploma .nom{font-family:Georgia,serif;font-size:1.5rem;color:var(--deep);font-style:italic;}
+      @media (prefers-color-scheme: dark){.diploma .nom{color:var(--water);}}
+      .honnete{font-size:.92rem;color:var(--ink-soft);text-align:center;margin:14px auto;max-width:48ch;}
+      .voltbig{font-family:Georgia,serif;font-size:2rem;font-weight:700;text-align:center;color:var(--deep);margin:6px 0;}
+      @media (prefers-color-scheme: dark){.voltbig{color:var(--energy);}}
+      .wattline{display:flex;justify-content:space-between;border-bottom:2px dotted var(--ink-soft);padding:6px 2px;font-weight:600;}
+      .pulse-ring{animation:pring 1s ease-in-out infinite;}
+      @keyframes pring{0%,100%{opacity:.25}50%{opacity:1}}
+      .bob{animation:bob 2.2s ease-in-out infinite;}
+      @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+      @media (prefers-reduced-motion: reduce){.bob,.pulse-ring,.starsline.pop{animation:none;}}
+      .center{text-align:center;}
+      .small{font-size:.9rem;color:var(--ink-soft);}
+      .hidden{display:none !important;}
+      .dot.done{cursor:pointer;}
+      .starsline.pop{animation:popstar .55s ease;}
+      @keyframes popstar{0%{transform:scale(.4)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+      @keyframes cfall{to{transform:translateY(106vh) rotate(320deg);opacity:.1}}
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+    "use strict";
+    /* ============ ÉTAT + SAUVEGARDE ============ */
+    var SAVE_KEY = "hydro-visite-v1";
+    var save = { name: "Pluie", stars: {}, best: null };
+    try {
+      var raw = localStorage.getItem(SAVE_KEY);
+      if (raw) { var p = JSON.parse(raw); if (p && p.stars) save = p; }
+    } catch (e) {}
+    function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {} }
+    function buzz(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
+    var S = { station: 0, runStars: {}, raf: null, timers: [], humOsc: null, humGain: null, t0: null };
+    function stopLoops() {
+      if (S.raf) cancelAnimationFrame(S.raf); S.raf = null;
+      S.timers.forEach(function (t) { clearInterval(t); clearTimeout(t); });
+      S.timers = []; stopHum();
+    }
+    function later(fn, ms) { var t = setTimeout(fn, ms); S.timers.push(t); return t; }
+    function every(fn, ms) { var t = setInterval(fn, ms); S.timers.push(t); return t; }
+    function $(s, r) { return (r || document).querySelector(s); }
+    function totalStars(stars) { var t = 0; for (var k in stars) t += stars[k]; return t; }
+    function starStr(n) { var s = ""; for (var i = 0; i < 2; i++) s += (i < n ? "★" : "☆"); return s; }
+
+    /* ============ SONS WebAudio (100 % synthétisés) ============ */
+    var AC = null, soundOn = true;
+    function ac() {
+      if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+      if (AC && AC.state === "suspended") AC.resume();
+      return AC;
+    }
+    function tone(freq, dur, type, vol, slideTo, delay) {
+      if (!soundOn) return; var c = ac(); if (!c) return;
+      var t0 = c.currentTime + (delay || 0);
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = type || "sine"; o.frequency.setValueAtTime(freq, t0);
+      if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol || 0.12, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0 + dur + 0.05);
+    }
+    function waterSound(dur) {
+      if (!soundOn) return; var c = ac(); if (!c) return;
+      dur = dur || 0.7;
+      var len = Math.floor(c.sampleRate * dur), buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+      var src = c.createBufferSource(); src.buffer = buf;
+      var f = c.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 700;
+      var g = c.createGain(); g.gain.value = 0.16;
+      src.connect(f); f.connect(g); g.connect(c.destination); src.start();
+    }
+    function startHum(base) {
+      if (!soundOn || S.humOsc) return; var c = ac(); if (!c) return;
+      try {
+        S.humOsc = c.createOscillator(); S.humGain = c.createGain();
+        S.humOsc.type = "sawtooth"; S.humOsc.frequency.value = base || 55;
+        var f = c.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 220;
+        S.humGain.gain.value = 0.0;
+        S.humOsc.connect(f); f.connect(S.humGain); S.humGain.connect(c.destination);
+        S.humOsc.start();
+      } catch (e) {}
+    }
+    function setHum(level, freq) {
+      if (S.humGain && AC) { try {
+        S.humGain.gain.setTargetAtTime(Math.min(0.14, level), AC.currentTime, 0.08);
+        if (freq && S.humOsc) S.humOsc.frequency.setTargetAtTime(freq, AC.currentTime, 0.08);
+      } catch (e) {} }
+    }
+    function stopHum() {
+      if (S.humOsc) { try { S.humOsc.stop(); } catch (e) {} S.humOsc = null; S.humGain = null; }
+    }
+    function sndClick() { tone(620, 0.07, "triangle", 0.08); }
+    function sndGood() { tone(523, 0.14, "sine", 0.12); tone(659, 0.14, "sine", 0.12, null, 0.1); tone(784, 0.22, "sine", 0.13, null, 0.2); }
+    function sndZap() { tone(1200, 0.16, "square", 0.05, 300); tone(180, 0.1, "sawtooth", 0.05); }
+    function sndDing() { tone(880, 0.18, "sine", 0.1); tone(1320, 0.25, "sine", 0.08, null, 0.08); }
+
+    /* ============ PERSONNAGES SVG ============ */
+    function guideSVG(cls) {
+      return '<svg class="' + (cls || "") + '" viewBox="0 0 80 96" width="62" height="75" aria-hidden="true">'
+        + '<circle cx="40" cy="34" r="17" fill="#f2c79b" stroke="#20313b" stroke-width="3"/>'
+        + '<path d="M22 32 a18 15 0 0 1 36 0 l0 4 -36 0 z" fill="#f5a623" stroke="#20313b" stroke-width="3"/>'
+        + '<rect x="18" y="34" width="44" height="5" rx="2" fill="#f5a623" stroke="#20313b" stroke-width="2.5"/>'
+        + '<path d="M24 30 q-3 14 2 20 M56 30 q3 14 -2 20" stroke="#6b4226" stroke-width="5" fill="none" stroke-linecap="round"/>'
+        + '<circle cx="34" cy="36" r="2.2" fill="#20313b"/><circle cx="46" cy="36" r="2.2" fill="#20313b"/>'
+        + '<path d="M34 44 q6 5 12 0" stroke="#20313b" stroke-width="2.5" fill="none" stroke-linecap="round"/>'
+        + '<path d="M26 58 L54 58 L58 92 L22 92 Z" fill="#177e70" stroke="#20313b" stroke-width="3"/>'
+        + '<path d="M31 58 L40 74 L49 58" fill="#fffdf4" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect x="36" y="76" width="8" height="10" fill="#e8930c" stroke="#20313b" stroke-width="2"/>'
+        + '</svg>';
+    }
+    function dropSVG(size, mood) {
+      var mouth = mood === "tired" ? '<path d="M34 62 q6 -4 12 0" stroke="#20313b" stroke-width="2.5" fill="none" stroke-linecap="round"/>'
+        : '<path d="M33 58 q7 7 14 0" stroke="#20313b" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+      var eyes = mood === "tired"
+        ? '<path d="M28 50 l8 0 M44 50 l8 0" stroke="#20313b" stroke-width="2.5" stroke-linecap="round"/>'
+        : '<circle cx="32" cy="50" r="3" fill="#20313b"/><circle cx="48" cy="50" r="3" fill="#20313b"/>';
+      return '<svg viewBox="0 0 80 96" width="' + size + '" height="' + Math.round(size * 1.2) + '" aria-hidden="true">'
+        + '<path d="M40 6 C40 6 14 40 14 60 a26 26 0 0 0 52 0 C66 40 40 6 40 6 Z" fill="#4aa3d8" stroke="#20313b" stroke-width="3.5"/>'
+        + '<ellipse cx="30" cy="58" rx="6" ry="9" fill="#bfe3f2" opacity="0.8"/>'
+        + eyes + mouth + '</svg>';
+    }
+    function boltSVG(size, color) {
+      return '<svg viewBox="0 0 40 64" width="' + size + '" height="' + Math.round(size * 1.6) + '" aria-hidden="true">'
+        + '<path d="M24 2 L6 36 L17 36 L12 62 L34 26 L22 26 Z" fill="' + (color || "#f5a623") + '" stroke="#20313b" stroke-width="3" stroke-linejoin="round"/></svg>';
+    }
+
+    /* ============ CHROME COMMUN ============ */
+    var STATION_TITLES = [
+      "Le barrage et le réservoir", "La conduite forcée", "La turbine",
+      "L'alternateur", "Le transformateur", "Les lignes de transport", "Jusqu'à ta maison"
+    ];
+    var OBJECTIFS = [
+      "Ouvre les vannes et laisse l'eau partir en douceur, sans vider le réservoir.",
+      "Fais dévaler ta goutte jusqu'en bas de la conduite forcée.",
+      "Fais tourner la turbine et garde sa vitesse dans la zone verte.",
+      "Fais tourner les aimants jusqu'à environ 60 hertz, et tiens le rythme.",
+      "Monte la tension jusqu'à 735 000 volts, puis compare les pertes des deux voyages.",
+      "Guide l'éclair de pylône en pylône, jusqu'à la ville.",
+      "Abaisse la tension en deux crans, puis branche les trois appareils."
+    ];
+    function topbarHTML(active) {
+      var dots = "";
+      for (var i = 1; i <= 7; i++) {
+        var done = (save.stars[i] || 0) > 0 || (S.runStars[i] && (S.runStars[i].jeu || S.runStars[i].q));
+        if (done && i !== active) {
+          dots += '<button type="button" class="dot done" data-i="' + i + '" aria-label="Revoir la station ' + i + '" style="font-family:inherit">' + i + "</button>";
+        } else {
+          dots += '<div class="dot' + (i === active ? " now" : (done ? " done" : "")) + '" data-i="' + i + '">' + i + "</div>";
+        }
+      }
+      return '<div class="topbar"><div class="dots">' + dots + '</div>'
+        + '<button class="sonbtn" id="sonBtn" type="button">' + (soundOn ? "Son : marche" : "Son : arrêt") + "</button></div>";
+    }
+    function wireTopbar(active) {
+      var b = $("#sonBtn");
+      if (b) b.addEventListener("click", function () {
+        soundOn = !soundOn; if (!soundOn) stopHum();
+        b.textContent = soundOn ? "Son : marche" : "Son : arrêt";
+        if (soundOn) sndClick();
+      });
+      document.querySelectorAll(".dot").forEach(function (d) {
+        var i = parseInt(d.getAttribute("data-i"), 10);
+        var doneIt = (save.stars[i] || 0) > 0 || (S.runStars[i] && (S.runStars[i].jeu || S.runStars[i].q));
+        if (i && i !== active && doneIt) {
+          d.title = "Revoir la station " + i;
+          d.addEventListener("click", function () { sndClick(); if (S.t0 == null) S.t0 = performance.now(); stopLoops(); STATION_FNS[i - 1](); });
+        }
+      });
+    }
+    function holdKeys(btn) {
+      if (!btn) return;
+      btn.addEventListener("keydown", function (e) {
+        if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); btn.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true })); }
+      });
+      btn.addEventListener("keyup", function (e) {
+        if (e.key === " " || e.key === "Enter") { e.preventDefault(); btn.dispatchEvent(new PointerEvent("pointerup", { bubbles: true })); }
+      });
+      btn.addEventListener("blur", function () { btn.dispatchEvent(new PointerEvent("pointerup", { bubbles: true })); });
+    }
+    function guideBubble(texte) {
+      return '<div class="guide"><div class="face">' + guideSVG() + '</div><div class="bubble">' + texte + "</div></div>";
+    }
+    function stationHead(n, sousTitre) {
+      return topbarHTML(n)
+        + '<div class="card"><p class="kicker">Station ' + n + " sur 7 — centrale de la rivière aux Saumons</p>"
+        + "<h2 class='bigtitle'>" + STATION_TITLES[n - 1] + "</h2>"
+        + (sousTitre ? '<p class="small" style="margin:6px 0 0">' + sousTitre + "</p>" : "")
+        + '<p style="margin:8px 0 0"><b>Ton objectif :</b> ' + OBJECTIFS[n - 1] + "</p></div>";
+    }
+    function award(n, kind) {
+      if (!S.runStars[n]) S.runStars[n] = { jeu: false, q: false };
+      S.runStars[n][kind] = true;
+      var total = (S.runStars[n].jeu ? 1 : 0) + (S.runStars[n].q ? 1 : 0);
+      if (total > (save.stars[n] || 0)) { save.stars[n] = total; persist(); }
+    }
+    function stationStarsHTML(n) {
+      var t = (S.runStars[n] && S.runStars[n].jeu ? 1 : 0) + (S.runStars[n] && S.runStars[n].q ? 1 : 0);
+      return '<span class="starsline pop">' + starStr(t) + "</span>";
+    }
+
+    /* ============ QUESTIONS + FAITS ============ */
+    var QUESTIONS = [
+      { q: "L'eau retenue en hauteur derrière le barrage, c'est comme…",
+        opts: ["Une batterie géante, pleine d'énergie en réserve", "De l'eau qui ne sert à rien", "Un lac qui sert seulement aux bateaux et aux poissons"],
+        bonne: 0, expl: "Exactement ! Gardée en hauteur, l'eau possède une énergie de position : elle n'attend qu'à descendre pour travailler." },
+      { q: "Qu'est-ce qui rend l'eau de plus en plus rapide dans la conduite forcée ?",
+        opts: ["Un moteur caché dans le tuyau qui pousse l'eau", "La hauteur de la chute : plus elle tombe de haut, plus elle arrive vite et fort", "La couleur du tuyau"],
+        bonne: 1, expl: "Oui ! La hauteur de chute compte autant que la quantité d'eau. En tombant, l'eau transforme sa hauteur en vitesse." },
+      { q: "La turbine transforme le mouvement de l'eau en…",
+        opts: ["Rotation, comme une grande roue qui tourne", "Chaleur pour réchauffer la rivière", "Lumière pour éclairer la centrale"],
+        bonne: 0, expl: "Bravo ! L'eau pousse les aubes, la roue tourne : c'est devenu un mouvement mécanique de rotation." },
+      { q: "Dans l'alternateur, l'électricité naît grâce à…",
+        opts: ["Des piles cachées dans la machine", "Des aimants qui tournent tout près de bobines de fil de cuivre", "Le frottement de l'eau dans les tuyaux"],
+        bonne: 1, expl: "C'est ça ! Le va-et-vient des aimants devant le cuivre fait naître un courant qui complète 60 allers-retours par seconde : c'est le 60 hertz." },
+      { q: "Pourquoi transporter l'électricité à très haute tension, comme 735 000 volts ?",
+        opts: ["Pour perdre beaucoup moins d'énergie en route", "Pour faire chauffer les fils et fondre la neige", "Pour que l'électricité voyage plus vite que la lumière"],
+        bonne: 0, expl: "Bien vu ! À haute tension, le même voyage coûte presque rien en pertes. À basse tension, les fils chaufferaient pour rien." },
+      { q: "À quelle vitesse l'électricité voyage-t-elle dans les fils ?",
+        opts: ["À la vitesse d'un bon vélo", "Presque à la vitesse de la lumière : c'est quasi instantané", "À la vitesse du son, comme le tonnerre après l'éclair"],
+        bonne: 1, expl: "Oui ! Quand tu ouvres l'interrupteur, la lumière s'allume tout de suite, même si la centrale est à des centaines de kilomètres." },
+      { q: "Rendue au poteau près de ta maison, la tension de 735 000 volts devient…",
+        opts: ["120/240 volts, douce et adaptée aux appareils", "Elle reste à 735 000 volts partout dans la maison", "Elle devient du courant de pile, qui ne bouge plus"],
+        bonne: 0, expl: "Exact ! Le transformateur du poteau abaisse la tension : 120 volts pour la plupart des appareils, 240 pour les gros comme la cuisinière." }
+    ];
+    var FAITS = [
+      { t: "Une batterie géante… ou presque rien",
+        x: "Il existe deux sortes de centrales. Une centrale <b>à réservoir</b>, comme celle-ci, garde l'eau derrière son barrage : c'est une immense batterie naturelle. Une centrale <b>au fil de l'eau</b>, elle, n'a presque pas de réservoir : elle utilise le courant de la rivière au fur et à mesure." },
+      { t: "Haut, c'est fort",
+        x: "Pour fabriquer beaucoup d'électricité, il faut de l'eau… et de la hauteur ! Un petit ruisseau qui tombe de très haut peut pousser une turbine aussi fort qu'une grosse rivière presque à plat. Les ingénieurs cherchent donc les endroits où la rivière peut « sauter » de haut." },
+      { t: "Trois turbines, trois métiers",
+        x: "La <b>Francis</b>, comme ici, est la turbine la plus répandue au monde. La <b>Kaplan</b> ressemble à une hélice aux pales orientables : parfaite pour les faibles chutes et les gros débits. La <b>Pelton</b>, elle, reçoit un jet d'eau fin comme un doigt… lancé à très grande vitesse par les hautes chutes de montagne." },
+      { t: "Soixante fois par seconde",
+        x: "Le courant qui sort de l'alternateur complète <b>60 allers-retours par seconde</b> — il change donc de sens 120 fois chaque seconde ! C'est le courant alternatif à 60 hertz, la norme partout en Amérique du Nord. C'est pour ça qu'on l'appelle « alternatif » : il alterne, il va et vient sans arrêt. Et tout le réseau doit rester exactement à 60, comme un orchestre qui joue en mesure : des opérateurs surveillent la fréquence jour et nuit, et corrigent dès qu'elle dévie." },
+      { t: "Une première mondiale québécoise",
+        x: "En <b>1965</b>, le Québec met en service les premières lignes de transport à <b>735 000 volts</b> au monde, pour amener l'électricité des centrales Manic-Outardes jusqu'aux villes. Personne n'avait jamais transporté l'électricité à une tension aussi élevée. Une invention d'ici !" },
+      { t: "La plus grande du Canada",
+        x: "La centrale <b>Robert-Bourassa</b>, dans le Nord-du-Québec, est la plus grande centrale hydroélectrique du Canada : environ <b>5 600 mégawatts</b>. Pour te donner une idée, ça prend près de <b>4 millions de bouilloires</b> électriques branchées en même temps pour l'égaler !" },
+      { t: "L'eau, notre richesse",
+        x: "Au Québec, <b>plus de 9 kilowattheures sur 10</b> consommés viennent de l'eau des rivières. Les ingénieurs québécois ont construit parmi les plus grands barrages du monde — et tout ça commence comme ton voyage : par une goutte de pluie." }
+    ];
+
+    var GLOSSAIRE = [
+      ["Le débit", "la quantité d'eau qui passe à chaque seconde."],
+      ["La pression", "la force avec laquelle l'eau pousse."],
+      ["La tension (en volts)", "la « pression » de l'électricité : plus elle est haute, plus l'électricité voyage loin sans faiblir."],
+      ["Le watt", "la « soif » d'un appareil : la quantité d'énergie qu'il boit chaque seconde."],
+      ["Le kilowattheure (kWh)", "l'énergie utilisée avec le temps : 1 000 watts pendant une heure = 1 kWh. C'est l'unité de la facture."],
+      ["Le hertz", "le nombre de va-et-vient du courant chaque seconde. Chez nous : 60 hertz."],
+      ["La turbine", "la grande roue que l'eau fait tourner."],
+      ["L'alternateur", "la machine qui transforme la rotation en électricité, grâce à des aimants et des bobines de cuivre."],
+      ["Le rotor et le stator", "dans l'alternateur, le rotor tourne (les aimants) et le stator reste fixe (les bobines)."],
+      ["Le transformateur", "la machine immobile qui monte ou abaisse la tension."],
+      ["La conduite forcée", "le gros tuyau en pente qui amène l'eau du réservoir jusqu'à la turbine."],
+      ["Le pylône", "le grand support de métal qui porte les fils très haut, loin des arbres et des gens."]
+    ];
+    function glossaireHTML() {
+      return '<div class="card"><h3>Les mots de la visite</h3>'
+        + '<p class="small">Douze mots d\'électricité, expliqués en mots de tous les jours. À consulter avant, pendant ou après la visite !</p>'
+        + '<ul class="stationlist">'
+        + GLOSSAIRE.map(function (g) { return "<li><span><b>" + g[0] + "</b> — " + g[1] + "</span></li>"; }).join("")
+        + "</ul></div>";
+    }
+
+    function showQuestion(n, suite) {
+      stopLoops();
+      var Q = QUESTIONS[n - 1];
+      var app = $("#app");
+      var zone = $("#zone");
+      var html = '<div class="card"><p class="kicker">La question de ton guide</p>'
+        + guideBubble("<b>Ingénieure Nadia :</b> " + Q.q)
+        + '<div id="qOpts">'
+        + Q.opts.map(function (o, i) { return '<button class="qbtn" type="button" data-i="' + i + '">' + o + "</button>"; }).join("")
+        + '</div><div id="qFeed"></div></div>';
+      if (zone) { zone.innerHTML = html; } else { app.insertAdjacentHTML("beforeend", html); }
+      var essais = 0;
+      $("#qOpts").addEventListener("click", function (ev) {
+        var b = ev.target.closest(".qbtn"); if (!b || b.disabled) return;
+        var i = parseInt(b.getAttribute("data-i"), 10);
+        essais++;
+        if (i === Q.bonne) {
+          b.classList.add("good"); sndGood(); award(n, "q");
+          $("#qFeed").innerHTML = '<div class="msg">' + Q.expl + '</div>'
+            + '<div class="center">' + stationStarsHTML(n) + '</div>'
+            + '<button class="btn big" id="qSuite" type="button">Continuer la visite</button>';
+          $("#qSuite").addEventListener("click", function () { sndClick(); suite(); });
+          $("#qOpts").querySelectorAll(".qbtn").forEach(function (x) { x.disabled = true; });
+        } else {
+          b.classList.add("bad"); b.disabled = true; tone(220, 0.15, "sine", 0.08, 180);
+          $("#qFeed").innerHTML = '<div class="msg warn">Pas tout à fait — mais c\'est en essayant qu\'on apprend ! Écoute bien : ' + Q.expl + ' Essaie une autre réponse.</div>';
+        }
+      });
+      var cible = $("#zone") || app; cible.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    function showFact(n, btnLabel, suite) {
+      stopLoops();
+      var F = FAITS[n - 1];
+      $("#app").innerHTML = topbarHTML(n)
+        + '<div class="factcard"><div>' + boltSVG(30) + '</div>'
+        + '<p class="kicker">Le savais-tu ?</p><h2 class="facttitle">' + F.t + "</h2>"
+        + "<p>" + F.x + "</p>"
+        + '<button class="btn big" id="factBtn" type="button">' + btnLabel + "</button></div>";
+      wireTopbar(n);
+      $("#factBtn").addEventListener("click", function () { sndClick(); suite(); });
+      window.scrollTo(0, 0);
+    }
+    function doneBanner(n, texte) {
+      return '<div class="msg"><b>Réussi !</b> ' + texte + '</div>'
+        + '<button class="btn big teal" id="btnSuite" type="button">Continuer</button>';
+    }
+    function wireDone(n, texte, suite) {
+      var z = $("#actions"); if (!z) return;
+      z.innerHTML = doneBanner(n, texte);
+      $("#btnSuite").addEventListener("click", function () { sndClick(); showQuestion(n, suite); });
+    }
+    /* ============ MISE EN PAGE D'UNE STATION ============ */
+    function gaugeHTML(id, label, zone) {
+      var z = zone ? '<div class="gzone" style="left:' + zone[0] + '%;width:' + (zone[1] - zone[0]) + '%"></div>' : "";
+      return '<div class="gauge"><div class="glabel"><span>' + label + '</span><span id="' + id + 'Val"></span></div>'
+        + '<div class="gtrack">' + z + '<div class="gfill" id="' + id + '"></div></div></div>';
+    }
+    function stLayout(n, sousTitre, bubble, scene, controls) {
+      return stationHead(n, sousTitre)
+        + '<div class="card">' + guideBubble(bubble) + "</div>"
+        + '<div class="scene">' + scene + "</div>"
+        + '<div class="card">' + controls
+        + '<div id="resume" class="msg hidden"></div><div id="actions"></div></div>'
+        + '<div id="zone"></div>';
+    }
+    function finishStation(n, resumeTexte, texte, suite) {
+      award(n, "jeu"); sndGood(); buzz(35);
+      var r = $("#resume");
+      if (r) { r.innerHTML = "<b>En résumé :</b> " + resumeTexte; r.classList.remove("hidden"); }
+      wireDone(n, texte, suite);
+    }
+
+    /* ============ ACCUEIL ============ */
+    function showHome() {
+      stopLoops(); S.station = 0;
+      var liste = "";
+      if (totalStars(save.stars) > 0) {
+        liste = '<div class="card"><h3>Tes visites précédentes</h3><ul class="stationlist">'
+          + STATION_TITLES.map(function (t, i) {
+              return "<li><span>Station " + (i + 1) + " — " + t + '</span><span class="starsline">' + starStr(save.stars[i + 1] || 0) + "</span></li>";
+            }).join("")
+          + '</ul><p class="small">Total : ' + totalStars(save.stars) + " étoiles sur 14. Tu peux refaire la visite pour tenter de toutes les décrocher !</p></div>";
+      }
+      $("#app").innerHTML = topbarHTML(0)
+        + '<div class="card hero"><div class="bob" style="display:inline-block">' + dropSVG(54) + boltSVG(30) + "</div>"
+        + "<h1>L'hydroélectricité,<br>comment ça marche</h1>"
+        + "<p>Une visite guidée, pas à pas, au cœur d'une centrale — pensée pour les curieux qui partent de zéro. Aucune connaissance requise : on t'explique tout, avec des mots de tous les jours.</p>"
+        + "<p><b>Une fierté d'ici :</b> l'électricité du Québec vient presque toute de nos rivières, grâce à des centrales parmi les plus grandes du monde, construites par du monde d'ici.</p></div>"
+        + '<div class="card">' + guideBubble("<b>Bonjour ! Moi, c'est Nadia, ingénieure.</b> Aujourd'hui, je te fais visiter la <b>centrale de la rivière aux Saumons</b>. C'est une centrale inventée pour notre visite, mais tout ce que tu vas voir fonctionne pour vrai, comme dans les vraies centrales. Enfile ton casque de visiteur : on va suivre une goutte d'eau, de la pluie… jusqu'à l'ampoule de ta maison !")
+        + '<label class="flabel" for="nomGoutte">Donne un prénom à ta goutte d\'eau :</label>'
+        + '<input class="namein" id="nomGoutte" type="text" maxlength="16" value="' + String(save.name || "Pluie").replace(/"/g, "&quot;") + '">'
+        + '<div style="height:12px"></div>'
+        + '<button class="btn big" id="btnStart" type="button">Commencer la visite</button>'
+        + '<p class="small center" style="margin:10px 0 0">7 stations, 7 petites expériences à faire du doigt, et un diplôme à la fin.</p></div>'
+        + liste
+        + glossaireHTML()
+        + '<p class="honnete">Schéma simplifié, mais fidèle : une vraie centrale a des centaines de systèmes de plus.</p>';
+      wireTopbar(0);
+      $("#btnStart").addEventListener("click", function () {
+        var v = $("#nomGoutte").value.trim().replace(/[<>&"']/g, "");
+        save.name = v ? v : "Pluie"; persist();
+        S.runStars = {}; S.t0 = performance.now(); sndClick(); waterSound(0.5); station1();
+      });
+      window.scrollTo(0, 0);
+    }
+    function nom() { return save.name || "Pluie"; }
+
+    /* ============ STATION 1 — BARRAGE ET RÉSERVOIR ============ */
+    function station1() {
+      stopLoops(); S.station = 1;
+      var scene = '<svg viewBox="0 0 360 240" role="img" aria-label="Un barrage retenant un grand réservoir d\'eau">'
+        + '<polygon points="0,90 60,30 120,90" fill="#8fb996" stroke="#20313b" stroke-width="3"/>'
+        + '<polygon points="60,90 130,18 200,90" fill="#7aa886" stroke="#20313b" stroke-width="3"/>'
+        + '<rect id="s1water" x="4" y="66" width="158" height="140" fill="#2e7fb8" opacity="0.88"/>'
+        + '<path d="M4 66 q20 -6 40 0 t40 0 t40 0 t38 0" stroke="#bfe3f2" stroke-width="4" fill="none" id="s1surf"/>'
+        + '<path d="M168 44 L214 44 L228 208 L182 208 Z" fill="#c3ccd1" stroke="#20313b" stroke-width="3.5"/>'
+        + '<rect x="164" y="36" width="56" height="10" rx="3" fill="#e8930c" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect id="s1porte" x="196" y="172" width="18" height="34" fill="#14506e" stroke="#20313b" stroke-width="2.5"/>'
+        + '<path id="s1jet" d="M206 196 q44 8 78 2 q36 -6 72 2" stroke="#4aa3d8" stroke-width="4" fill="none" opacity="0" stroke-linecap="round"/>'
+        + '<rect x="228" y="206" width="132" height="34" fill="#2e7fb8" opacity="0.75"/>'
+        + '<path d="M228 208 q22 -6 44 0 t44 0 t44 0" stroke="#bfe3f2" stroke-width="4" fill="none"/>'
+        + '<g transform="translate(52,6)">' + dropSVG(36) + "</g>"
+        + '<text x="70" y="140" font-size="13" font-weight="700" fill="#fff">Le réservoir</text>'
+        + '<text x="238" y="140" font-size="13" font-weight="700" fill="#20313b">La rivière</text>'
+        + '<text x="176" y="26" font-size="13" font-weight="700" fill="#20313b">Le barrage</text>'
+        + "</svg>";
+      var controls = '<h3>À toi de jouer : ouvre les vannes</h3>'
+        + '<p>Les <b>vannes</b>, ce sont de grosses portes au bas du barrage. Tourne le curseur <b>doucement</b> pour les ouvrir et laisser passer l\'eau — et regarde bien le niveau du réservoir et le <b>débit</b> (la quantité d\'eau qui passe).</p>'
+        + '<input type="range" id="s1range" min="0" max="100" value="0" step="1" aria-label="Ouverture des vannes">'
+        + gaugeHTML("s1debit", "Débit de l'eau")
+        + gaugeHTML("s1niveau", "Niveau du réservoir")
+        + '<p class="small" id="s1note">La goutte ' + nom() + ' attend là-haut, dans le réservoir. Plus l\'eau est gardée haut, plus elle a d\'énergie en réserve.</p>';
+      $("#app").innerHTML = stLayout(1, "Là où l'eau attend, bien haut, pleine d'énergie en réserve.",
+        "<b>Nadia :</b> Voici " + nom() + ", notre goutte vedette ! Elle est dans le réservoir, tout en haut. Imagine une <b>glissade d'eau</b> : plus tu pars de haut, plus tu arrives vite en bas. C'est pareil pour l'eau : gardée en hauteur, elle est pleine d'<b>énergie en réserve</b>, comme une batterie géante qui attend son heure.",
+        scene, controls);
+      wireTopbar(1);
+      $("#s1niveau").style.width = "100%"; $("#s1niveauVal").textContent = "plein";
+      var done = false, lastSnd = 0;
+      $("#s1range").addEventListener("input", function (ev) {
+        var v = parseInt(ev.target.value, 10);
+        $("#s1debit").style.width = v + "%";
+        $("#s1debitVal").textContent = v < 25 ? "un filet" : (v < 60 ? "ça coule bien" : (v < 90 ? "fort" : "maximum !"));
+        var niv = Math.round(100 - v * 0.3);
+        $("#s1niveau").style.width = niv + "%";
+        $("#s1niveauVal").textContent = niv > 90 ? "plein" : (niv > 78 ? "il baisse un peu" : "il baisse doucement");
+        var w = $("#s1water");
+        w.setAttribute("y", String(66 + v * 0.34)); w.setAttribute("height", String(140 - v * 0.34));
+        $("#s1surf").setAttribute("transform", "translate(0," + (v * 0.34) + ")");
+        $("#s1jet").setAttribute("opacity", String(v / 100));
+        $("#s1jet").setAttribute("stroke-width", String(3 + v * 0.13));
+        $("#s1porte").setAttribute("transform", "translate(0," + (-v * 0.3) + ")");
+        var now = Date.now();
+        if (v > 5 && now - lastSnd > 450) { waterSound(0.35); lastSnd = now; }
+        if (v > 90) $("#s1note").textContent = "Ouf, c'est le maximum ! En vrai, on ouvre les vannes tranquillement : trop d'eau d'un coup, ça brasse la rivière en bas.";
+        if (v >= 70 && !done) {
+          done = true; ev.target.disabled = true;
+          finishStation(1,
+            "l'eau gardée en hauteur, c'est de l'énergie en réserve, comme une batterie géante. Les vannes la laissent descendre quand on en a besoin.",
+            "Tu as ouvert les vannes en douceur : l'eau commence son grand voyage, et " + nom() + " part avec elle !",
+            function () { showFact(1, "Station suivante : la conduite forcée", station2); });
+        }
+      });
+      window.scrollTo(0, 0);
+    }
+
+    /* ============ STATION 2 — LA CONDUITE FORCÉE ============ */
+    function station2() {
+      stopLoops(); S.station = 2;
+      var scene = '<svg viewBox="0 0 360 240" role="img" aria-label="Un gros tuyau en pente que la goutte dévale">'
+        + '<rect x="6" y="8" width="104" height="42" rx="8" fill="#2e7fb8" stroke="#20313b" stroke-width="3"/>'
+        + '<text x="11" y="35" font-size="11" font-weight="700" fill="#fff">Réservoir</text>'
+        + '<path d="M84 52 C 140 60, 190 132, 252 172 C 290 194, 322 202, 338 206" stroke="#7d8a91" stroke-width="30" fill="none" stroke-linecap="round"/>'
+        + '<path id="s2path" d="M84 52 C 140 60, 190 132, 252 172 C 290 194, 322 202, 338 206" stroke="#aeb9be" stroke-width="22" fill="none" stroke-linecap="round"/>'
+        + '<path d="M84 52 C 140 60, 190 132, 252 172 C 290 194, 322 202, 338 206" stroke="#20313b" stroke-width="2.5" fill="none" opacity="0.35"/>'
+        + '<g id="s2drop"><g transform="translate(-17,-46)">' + dropSVG(34) + "</g></g>"
+        + '<rect x="306" y="196" width="50" height="38" rx="5" fill="#c3ccd1" stroke="#20313b" stroke-width="3"/>'
+        + '<text x="354" y="188" font-size="12" font-weight="700" fill="#20313b" text-anchor="end">La centrale</text>'
+        + '<text x="120" y="96" font-size="13" font-weight="700" fill="#20313b" transform="rotate(24 120 96)">La conduite forcée</text>'
+        + "</svg>";
+      var controls = '<h3>À toi de jouer : laisse glisser ' + nom() + "</h3>"
+        + '<p><b>Tiens le bouton enfoncé</b> pour ouvrir la conduite et laisser ' + nom() + ' dévaler le gros tuyau. Regarde la jauge : plus la goutte descend, plus elle va <b>vite</b> et plus la <b>pression</b> monte (la pression, c\'est la force avec laquelle l\'eau pousse).</p>'
+        + '<button class="btn big hold" id="s2btn" type="button">Tiens pour laisser glisser ' + nom() + "</button>"
+        + gaugeHTML("s2vit", "Vitesse de la goutte")
+        + gaugeHTML("s2pres", "Pression de l'eau");
+      $("#app").innerHTML = stLayout(2, "Un gros tuyau en pente : la glissade commence.",
+        "<b>Nadia :</b> Ce tuyau géant s'appelle la <b>conduite forcée</b> — « forcée » parce qu'elle force l'eau à descendre tout d'un bloc vers la centrale, au lieu de couler tranquillement dans la rivière. " + nom() + " va la dévaler comme une glissade d'eau… et prendre beaucoup, beaucoup de vitesse ! Dans les plus grandes centrales du Québec, ce tuyau fait jusqu'à une dizaine de mètres de diamètre : un autobus pourrait y passer !",
+        scene, controls);
+      wireTopbar(2);
+      var path = $("#s2path"), L = path.getTotalLength(), drop = $("#s2drop");
+      function placeDrop(p) {
+        var pt = path.getPointAtLength(p * L);
+        drop.setAttribute("transform", "translate(" + pt.x + "," + pt.y + ")");
+      }
+      placeDrop(0);
+      var p = 0, holding = false, done = false, last = null, lastSnd = 0;
+      var btn = $("#s2btn");
+      holdKeys(btn);
+      function completeSlide() {
+        if (done) return;
+        p = 1; placeDrop(1);
+        done = true; btn.disabled = true; waterSound(0.8);
+        finishStation(2,
+          "en tombant de haut, l'eau change sa hauteur en vitesse : en bas de la conduite, elle arrive vite et elle pousse très fort.",
+          nom() + " arrive en bas à toute vitesse, pleine de force. Direction : la turbine !",
+          function () { showFact(2, "Station suivante : la turbine", station3); });
+      }
+      function dn(e) { e.preventDefault(); holding = true; if (!done) { p = Math.min(1, p + 0.1); if (p >= 0.999) completeSlide(); } sndClick(); }
+      function up() { holding = false; }
+      btn.addEventListener("pointerdown", dn);
+      btn.addEventListener("pointerup", up); btn.addEventListener("pointerleave", up); btn.addEventListener("pointercancel", up);
+      function tick(ts) {
+        if (done) return;
+        if (last === null) last = ts;
+        var dt = Math.min(0.05, (ts - last) / 1000); last = ts;
+        if (holding) {
+          p += dt * (0.09 + 0.30 * p);
+          var now = Date.now();
+          if (now - lastSnd > 500) { waterSound(0.3); lastSnd = now; }
+          if (p >= 0.999) { completeSlide(); return; }
+        }
+        placeDrop(p);
+        var vit = Math.round(Math.min(100, 15 + 85 * p));
+        $("#s2vit").style.width = vit + "%";
+        $("#s2vitVal").textContent = p <= 0 ? "au départ" : (vit < 45 ? "ça accélère…" : (vit < 80 ? "vite !" : "très vite !"));
+        $("#s2pres").style.width = Math.round(p * 100) + "%";
+        $("#s2presVal").textContent = p < 0.4 ? "ça pousse un peu" : (p < 0.8 ? "ça pousse fort" : "ça pousse très fort !");
+        S.raf = requestAnimationFrame(tick);
+      }
+      S.raf = requestAnimationFrame(tick);
+      window.scrollTo(0, 0);
+    }
+    /* ============ STATION 3 — LA TURBINE ============ */
+    function station3() {
+      stopLoops(); S.station = 3;
+      var blades = "";
+      for (var i = 0; i < 9; i++) {
+        blades += '<path d="M180 118 L180 62 Q204 78 200 106 Q196 126 180 118 Z" fill="#4aa3d8" stroke="#20313b" stroke-width="2.5" transform="rotate(' + (i * 40) + ' 180 118)"/>';
+      }
+      var scene = '<svg viewBox="0 0 360 240" role="img" aria-label="Une turbine Francis vue de face, avec ses aubes courbes" id="s3svg">'
+        + '<circle cx="180" cy="118" r="98" fill="#aeb9be" stroke="#20313b" stroke-width="4"/>'
+        + '<circle cx="180" cy="118" r="84" fill="#dfe9ec" stroke="#20313b" stroke-width="2.5"/>'
+        + '<path d="M20 30 q30 14 18 40 M340 30 q-30 14 -18 40" stroke="#4aa3d8" stroke-width="7" fill="none" stroke-linecap="round"/>'
+        + '<g id="s3runner">' + blades + '<circle cx="180" cy="118" r="17" fill="#e8930c" stroke="#20313b" stroke-width="3"/></g>'
+        + '<text x="180" y="234" font-size="13" font-weight="700" fill="#20313b" text-anchor="middle">La turbine Francis et ses aubes courbes</text>'
+        + "</svg>";
+      var controls = '<h3>À toi de jouer : fais tourner la turbine… puis stabilise-la</h3>'
+        + '<p><b>Tiens le bouton</b> pour lancer la rotation, comme l\'eau qui pousse. Ensuite, joue avec le bouton (tiens, relâche, retiens) pour <b>garder la vitesse dans la zone verte</b> : la jauge de stabilité se remplit quand tu y es. Ni trop lente, ni trop rapide — juste bien !</p>'
+        + '<button class="btn big hold" id="s3btn" type="button">Tiens pour faire tourner</button>'
+        + gaugeHTML("s3vit", "Vitesse de la turbine", [55, 80])
+        + gaugeHTML("s3stab", "Stabilité dans la zone verte");
+      $("#app").innerHTML = stLayout(3, "L'eau pousse, la roue tourne : la force devient un mouvement.",
+        "<b>Nadia :</b> " + nom() + " arrive ici à toute vitesse et frappe les <b>aubes</b> — les grandes pales courbes de la turbine. C'est comme un moulinet sous un robinet ouvert : l'eau pousse, et la roue se met à tourner. On vient de changer la force de l'eau en <b>mouvement qui tourne</b>. Cette turbine s'appelle une <b>Francis</b> : c'est la plus utilisée dans le monde. En vrai, l'eau est guidée par de petites <b>aubes directrices</b> que l'opérateur ajuste sans arrêt : jouer avec le bouton pour garder la zone verte, c'est un peu faire son métier.",
+        scene, controls);
+      wireTopbar(3);
+      $("#s3stab").classList.add("good");
+      var speed = 0, stab = 0, angle = 0, holding = false, done = false, last = null;
+      var btn = $("#s3btn");
+      holdKeys(btn);
+      btn.addEventListener("pointerdown", function (e) { e.preventDefault(); holding = true; speed = Math.min(100, speed + 10); startHum(48); sndClick(); });
+      ["pointerup", "pointerleave", "pointercancel"].forEach(function (t) { btn.addEventListener(t, function () { holding = false; }); });
+      function tick(ts) {
+        if (done) return;
+        if (last === null) last = ts;
+        var dt = Math.min(0.05, (ts - last) / 1000); last = ts;
+        if (holding) speed += (96 - speed) * dt * 1.5;
+        else speed -= speed * dt * 0.55;
+        speed = Math.max(0, Math.min(100, speed));
+        angle = (angle + speed * dt * 2.4) % 360;
+        $("#s3runner").setAttribute("transform", "rotate(" + angle.toFixed(1) + " 180 118)");
+        $("#s3vit").style.width = speed + "%";
+        $("#s3vitVal").textContent = speed < 20 ? "au ralenti" : (speed < 55 ? "ça tourne…" : (speed <= 80 ? "dans la zone verte !" : "trop vite !"));
+        var inZone = speed >= 55 && speed <= 80;
+        if (inZone) stab += dt * 50; else if (speed > 90) stab = Math.max(0, stab - dt * 6);
+        $("#s3stab").style.width = Math.min(100, stab) + "%";
+        setHum(speed / 100 * 0.13, 42 + speed * 0.5);
+        if (stab >= 100) {
+          done = true; btn.disabled = true; stopHum();
+          finishStation(3,
+            "la turbine change la poussée de l'eau en rotation — un mouvement qui tourne, prêt à fabriquer de l'électricité.",
+            nom() + " a fait tourner la turbine comme une championne. Mais une roue qui tourne, ce n'est pas encore de l'électricité… Suis-moi !",
+            function () { showFact(3, "Station suivante : l'alternateur", station4); });
+          return;
+        }
+        S.raf = requestAnimationFrame(tick);
+      }
+      S.raf = requestAnimationFrame(tick);
+      window.scrollTo(0, 0);
+    }
+
+    /* ============ STATION 4 — L'ALTERNATEUR ============ */
+    function station4() {
+      stopLoops(); S.station = 4;
+      var coils = "";
+      for (var i = 0; i < 6; i++) {
+        var a = i * 60 * Math.PI / 180, cx = 180 + 74 * Math.cos(a), cy = 112 + 74 * Math.sin(a);
+        coils += '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="13" fill="#b87333" stroke="#20313b" stroke-width="2.5"/>'
+          + '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="6" fill="#d99a55" stroke="#20313b" stroke-width="1.5"/>';
+      }
+      var scene = '<svg viewBox="0 0 360 240" role="img" aria-label="Un alternateur : des aimants tournent au centre, entourés de bobines de cuivre">'
+        + '<circle cx="180" cy="112" r="100" fill="#dfe9ec" stroke="#20313b" stroke-width="4"/>'
+        + coils
+        + '<g id="s4rotor">'
+        + '<rect x="132" y="96" width="40" height="32" rx="5" fill="#d9534f" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect x="188" y="96" width="40" height="32" rx="5" fill="#2e7fb8" stroke="#20313b" stroke-width="2.5"/>'
+        + '<text x="144" y="118" font-size="15" font-weight="800" fill="#fff">N</text>'
+        + '<text x="200" y="118" font-size="15" font-weight="800" fill="#fff">S</text>'
+        + '<circle cx="180" cy="112" r="9" fill="#e8930c" stroke="#20313b" stroke-width="2.5"/>'
+        + "</g>"
+        + '<path d="M286 196 q20 16 8 34" stroke="#4aa3d8" stroke-width="6" fill="none" stroke-linecap="round"/>'
+        + '<g id="s4drop" class="hidden" transform="translate(268,158)"><g transform="translate(-15,-40)">' + dropSVG(30, "tired") + "</g></g>"
+        + '<text x="16" y="228" font-size="12.5" font-weight="700" fill="#20313b">Les ronds orange : les bobines de cuivre</text>'
+        + "</svg>";
+      var controls = '<h3>À toi de jouer : fais naître le courant</h3>'
+        + '<p><b>Tiens le bouton</b> pour faire tourner les aimants. Regarde la vague en dessous : c\'est le <b>courant alternatif</b> qui naît. Vise environ <b>60 vagues par seconde</b> — on dit « 60 hertz ». Garde la vitesse dans la zone verte jusqu\'à ce que le compteur de stabilité soit plein.</p>'
+        + '<button class="btn big hold" id="s4btn" type="button">Tiens pour faire tourner les aimants</button>'
+        + '<div class="voltbig" id="s4hz">0 fois par seconde</div>'
+        + '<canvas id="s4wave" width="340" height="92" style="width:100%;height:auto;border:3px solid var(--line);border-radius:12px;background:#12242f"></canvas>'
+        + gaugeHTML("s4vit", "Vitesse de rotation", [72, 88])
+        + gaugeHTML("s4stab", "Stabilité à environ 60 hertz");
+      $("#app").innerHTML = stLayout(4, "Des aimants qui tournent près du cuivre : l'électricité naît.",
+        "<b>Nadia :</b> La turbine tourne… et, juste au-dessus d'elle, sur le même axe, elle entraîne l'<b>alternateur</b>, la machine qui fabrique l'électricité. Dedans, de gros <b>aimants</b> tournent tout près de <b>bobines de fil de cuivre</b>. La partie qui tourne — les aimants — s'appelle le <b>rotor</b> ; les bobines autour, qui restent fixes, forment le <b>stator</b>. Quand un aimant passe près du cuivre, ça pousse les petits électrons dans le fil : un courant naît ! Comme les aimants tournent, le courant change de sens sans arrêt — c'est le <b>courant alternatif</b>.",
+        scene, controls);
+      wireTopbar(4);
+      $("#s4stab").classList.add("good");
+      var cv = $("#s4wave"), ctx = cv.getContext("2d");
+      var speed = 0, stab = 0, phase = 0, angle = 0, holding = false, done = false, last = null;
+      var btn = $("#s4btn");
+      holdKeys(btn);
+      btn.addEventListener("pointerdown", function (e) { e.preventDefault(); holding = true; speed = Math.min(100, speed + 11); startHum(90); sndClick(); });
+      ["pointerup", "pointerleave", "pointercancel"].forEach(function (t) { btn.addEventListener(t, function () { holding = false; }); });
+      function drawWave() {
+        var W = cv.width, H = cv.height;
+        ctx.clearRect(0, 0, W, H);
+        ctx.strokeStyle = "rgba(255,255,255,0.14)"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
+        var amp = 6 + speed * 0.36, fr = 0.02 + speed * 0.0011;
+        ctx.strokeStyle = "#f5a623"; ctx.lineWidth = 3.5; ctx.beginPath();
+        for (var x = 0; x <= W; x += 3) {
+          var y = H / 2 + Math.sin(x * fr + phase) * amp;
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      function tick(ts) {
+        if (done) return;
+        if (last === null) last = ts;
+        var dt = Math.min(0.05, (ts - last) / 1000); last = ts;
+        if (holding) speed += (97 - speed) * dt * 1.4;
+        else speed -= speed * dt * 0.5;
+        speed = Math.max(0, Math.min(100, speed));
+        angle = (angle + speed * dt * 3.2) % 360;
+        phase += dt * (2 + speed * 0.55);
+        $("#s4rotor").setAttribute("transform", "rotate(" + angle.toFixed(1) + " 180 112)");
+        var hz = Math.round(speed * 0.75);
+        $("#s4hz").textContent = hz + " fois par seconde" + (hz >= 54 && hz <= 66 ? " — environ 60 hertz !" : "");
+        $("#s4vit").style.width = speed + "%";
+        $("#s4vitVal").textContent = speed < 30 ? "doucement…" : (hz >= 54 && hz <= 66 ? "dans la zone verte !" : (speed > 88 ? "trop vite !" : "ça tourne…"));
+        var inZone = hz >= 54 && hz <= 66;
+        if (inZone) stab += dt * 55; else if (hz > 70) stab = Math.max(0, stab - dt * 6);
+        $("#s4stab").style.width = Math.min(100, stab) + "%";
+        setHum(speed / 100 * 0.10, 80 + speed * 0.6);
+        drawWave();
+        if (stab >= 100) {
+          done = true; btn.disabled = true; stopHum();
+          $("#s4drop").classList.remove("hidden");
+          finishStation(4,
+            "les aimants qui tournent près des bobines de cuivre fabriquent un courant qui complète 60 allers-retours par seconde. Et la goutte, elle, a fini son travail : c'est l'énergie qui continue le voyage, sans elle.",
+            nom() + " ressort épuisée — elle a donné toute sa force. Mais regarde : son énergie, elle, continue sans elle, devenue électricité !",
+            function () { showFact(4, "Station suivante : le transformateur", station5); });
+          return;
+        }
+        S.raf = requestAnimationFrame(tick);
+      }
+      S.raf = requestAnimationFrame(tick);
+      window.scrollTo(0, 0);
+    }
+    /* ============ STATION 5 — LE TRANSFORMATEUR ============ */
+    function station5() {
+      stopLoops(); S.station = 5;
+      var scene = '<svg viewBox="0 0 360 230" role="img" aria-label="Un transformateur : peu de tours de fil d\'un côté, beaucoup de l\'autre">'
+        + '<rect x="128" y="40" width="104" height="130" rx="10" fill="#aeb9be" stroke="#20313b" stroke-width="3.5"/>'
+        + '<rect x="146" y="58" width="26" height="94" fill="none" stroke="#b87333" stroke-width="6"/>'
+        + '<path d="M146 66 h26 M146 82 h26 M146 98 h26 M146 114 h26 M146 130 h26 M146 146 h26" stroke="#b87333" stroke-width="5"/>'
+        + '<path d="M188 62 v86 M196 62 v86 M204 62 v86 M212 62 v86 M220 62 v86" stroke="#8a5a24" stroke-width="4"/>'
+        + '<rect x="188" y="58" width="40" height="94" fill="none" stroke="#8a5a24" stroke-width="5"/>'
+        + '<path d="M60 105 h68 M232 105 h68" stroke="#20313b" stroke-width="5"/>'
+        + '<path d="M52 105 l14 -8 v16 z" fill="#e8930c" stroke="#20313b" stroke-width="2"/>'
+        + '<path d="M292 105 l14 -8 v16 z" fill="#e8930c" stroke="#20313b" stroke-width="2"/>'
+        + '<text x="52" y="88" font-size="12.5" font-weight="700" fill="#20313b">Peu de tours</text>'
+        + '<text x="238" y="88" font-size="12.5" font-weight="700" fill="#20313b">Beaucoup de tours</text>'
+        + '<text x="180" y="198" font-size="13" font-weight="700" fill="#20313b" text-anchor="middle">Le transformateur, la machine qui ne bouge pas</text>'
+        + "</svg>";
+      var controls = '<h3>Étape 1 : monte la tension, palier par palier</h3>'
+        + '<p>Appuie sur le bouton pour monter la <b>tension</b> — la « pression » de l\'électricité — jusqu\'à <b>735 000 volts</b>.</p>'
+        + '<div class="voltbig" id="s5volt">Environ 13 800 volts, à la sortie de l\'alternateur</div>'
+        + gaugeHTML("s5g", "Tension")
+        + '<button class="btn big" id="s5up" type="button">Monte la tension d\'un palier</button>'
+        + '<div id="s5suite" class="hidden">'
+        + '<h3 style="margin-top:18px">Étape 2 : la petite expérience des pertes</h3>'
+        + '<p>On doit envoyer <b>la même quantité d\'énergie</b> jusqu\'à la ville. Essaie les <b>deux</b> façons et compare ce qui arrive au fil :</p>'
+        + '<svg viewBox="0 0 360 90" style="width:100%;height:auto" aria-hidden="true">'
+        + '<rect x="8" y="30" width="34" height="34" rx="4" fill="#c3ccd1" stroke="#20313b" stroke-width="2.5"/>'
+        + '<line id="s5wire" x1="42" y1="47" x2="292" y2="47" stroke="#7d8a91" stroke-width="6" stroke-linecap="round"/>'
+        + '<path id="s5heat" d="M110 34 q6 -12 0 -22 M170 34 q6 -12 0 -22 M230 34 q6 -12 0 -22" stroke="#d9534f" stroke-width="3.5" fill="none" opacity="0" stroke-linecap="round"/>'
+        + '<rect x="292" y="24" width="56" height="46" rx="4" fill="#f2d38a" stroke="#20313b" stroke-width="2.5"/>'
+        + '<polygon points="286,24 320,4 354,24" fill="#b3543f" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect id="s5win" x="308" y="40" width="16" height="16" fill="#7d8a91" stroke="#20313b" stroke-width="2"/>'
+        + "</svg>"
+        + '<div class="btnrow"><button class="btn second" id="s5low" type="button">Essai : basse tension</button>'
+        + '<button class="btn second" id="s5high" type="button">Essai : haute tension</button></div>'
+        + '<p id="s5res" style="font-weight:600"></p>'
+        + gaugeHTML("s5pertes", "Énergie perdue en route")
+        + "</div>";
+      $("#app").innerHTML = stLayout(5, "On « gonfle » la pression de l'électricité pour le grand voyage.",
+        "<b>Nadia :</b> Pour voyager loin, l'électricité a besoin de <b>tension</b> — pense à la pression dans un boyau d'arrosage : plus la pression est forte, plus l'eau se rend loin sans faiblir. Le <b>transformateur</b> augmente cette pression sans rien bouger : d'un côté peu de tours de fil, de l'autre beaucoup, et hop, la tension grimpe ! Au départ, l'alternateur produit environ 13 800 volts : déjà beaucoup… mais pas assez pour traverser tout le Québec sans pertes.",
+        scene, controls);
+      wireTopbar(5);
+      $("#s5g").classList.add("energy"); $("#s5pertes").style.background = "#d9534f";
+      var paliers = [
+        "Palier 1 : 120 000 volts…",
+        "Palier 2 : 315 000 volts…",
+        "735 000 volts ! Le maximum du Québec"
+      ];
+      var clics = 0, triedLow = false, triedHigh = false;
+      $("#s5up").addEventListener("click", function () {
+        if (clics >= 3) return;
+        clics++; sndZap();
+        $("#s5volt").textContent = paliers[clics - 1];
+        $("#s5g").style.width = Math.round(clics * 100 / 3) + "%";
+        $("#s5gVal").textContent = clics < 3 ? "palier " + clics + " sur 3" : "735 000 volts";
+        if (clics === 3) {
+          this.disabled = true;
+          $("#s5suite").classList.remove("hidden");
+          $("#s5suite").scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+      function checkExp() {
+        if (triedLow && triedHigh) {
+          finishStation(5,
+            "à haute tension, l'électricité voyage loin en perdant presque rien ; c'est pour ça qu'on la monte à 735 000 volts pour le transport, même si cette tension serait beaucoup trop forte pour une maison.",
+            "735 000 volts : notre électricité est prête pour le long voyage à travers le Québec !",
+            function () { showFact(5, "Station suivante : les lignes de transport", station6); });
+        }
+      }
+      $("#s5low").addEventListener("click", function () {
+        triedLow = true; sndZap();
+        $("#s5wire").setAttribute("stroke", "#d9534f");
+        $("#s5heat").setAttribute("opacity", "1");
+        $("#s5win").setAttribute("fill", "#9db3ba");
+        $("#s5pertes").style.width = "80%";
+        $("#s5pertesVal").textContent = "beaucoup !";
+        $("#s5res").textContent = "En basse tension : pour pousser la même énergie, le courant doit être énorme… le fil chauffe, et une grande partie de l'énergie part en chaleur. Gaspillage !";
+        checkExp();
+      });
+      $("#s5high").addEventListener("click", function () {
+        triedHigh = true; sndZap();
+        $("#s5wire").setAttribute("stroke", "#f5a623");
+        $("#s5heat").setAttribute("opacity", "0");
+        $("#s5win").setAttribute("fill", "#ffd94d");
+        $("#s5pertes").style.width = "5%";
+        $("#s5pertesVal").textContent = "presque rien";
+        $("#s5res").textContent = "En haute tension : le fil reste froid, la maison au bout reçoit presque toute l'énergie. Voilà le secret des grandes lignes !";
+        checkExp();
+      });
+      window.scrollTo(0, 0);
+    }
+
+    /* ============ STATION 6 — LES LIGNES DE TRANSPORT ============ */
+    function station6() {
+      stopLoops(); S.station = 6;
+      function pylone(x, y) {
+        return '<g stroke="#20313b" stroke-width="3"><path d="M' + x + ' ' + y + ' L' + (x + 10) + ' ' + (y - 62) + ' L' + (x + 20) + ' ' + y + '" fill="none"/>'
+          + '<path d="M' + (x - 8) + ' ' + (y - 52) + ' L' + (x + 28) + ' ' + (y - 52) + '" /><path d="M' + (x - 4) + ' ' + (y - 34) + ' L' + (x + 24) + ' ' + (y - 34) + '" /></g>';
+      }
+      var scene = '<svg viewBox="0 0 360 220" role="img" aria-label="Des pylônes qui traversent la forêt, une rivière et une colline enneigée jusqu\'à la ville">'
+        + '<rect x="0" y="150" width="150" height="70" fill="#7aa886"/>'
+        + '<rect x="140" y="150" width="90" height="70" fill="#e8f4f8"/>'
+        + '<rect x="220" y="150" width="140" height="70" fill="#dcebf5"/>'
+        + '<path d="M150 150 q24 22 46 6 q20 -14 34 0 l0 70 l-80 0 z" fill="#2e7fb8" opacity="0.8"/>'
+        + '<polygon points="18,150 36,104 54,150" fill="#2f6b45" stroke="#20313b" stroke-width="2.5"/>'
+        + '<polygon points="52,150 72,96 92,150" fill="#2f6b45" stroke="#20313b" stroke-width="2.5"/>'
+        + '<polygon points="92,150 108,116 124,150" fill="#35744d" stroke="#20313b" stroke-width="2.5"/>'
+        + '<polygon points="238,150 268,96 298,150" fill="#fff" stroke="#20313b" stroke-width="2.5"/>'
+        + '<polygon points="272,150 296,112 320,150" fill="#fff" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect x="6" y="128" width="30" height="24" fill="#c3ccd1" stroke="#20313b" stroke-width="2.5"/>'
+        + '<text x="2" y="120" font-size="11" font-weight="700" fill="#20313b">La centrale</text>'
+        + pylone(76, 152) + pylone(168, 154) + pylone(258, 152)
+        + '<path id="s6path" d="M28 132 L86 100 L178 102 L268 100 L322 108" stroke="#20313b" stroke-width="3" fill="none"/>'
+        + '<g id="s6bolt" opacity="0"><g transform="translate(-9,-14)">' + boltSVG(18) + "</g></g>"
+        + '<g id="s6city"><rect x="308" y="118" width="20" height="34" fill="#aeb9be" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect x="330" y="106" width="24" height="46" fill="#9db3ba" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect class="s6win" x="313" y="126" width="6" height="6" fill="#5b717c"/><rect class="s6win" x="313" y="138" width="6" height="6" fill="#5b717c"/>'
+        + '<rect class="s6win" x="337" y="114" width="6" height="6" fill="#5b717c"/><rect class="s6win" x="337" y="126" width="6" height="6" fill="#5b717c"/><rect class="s6win" x="337" y="138" width="6" height="6" fill="#5b717c"/></g>'
+        + '<text x="290" y="168" font-size="12" font-weight="700" fill="#20313b">La ville</text>'
+        + '<text x="10" y="176" font-size="11.5" font-weight="700" fill="#20313b">La forêt</text>'
+        + '<text x="152" y="196" font-size="11.5" font-weight="700" fill="#14506e">La rivière</text>'
+        + '<text x="238" y="176" font-size="11.5" font-weight="700" fill="#20313b">L\'hiver du Nord</text>'
+        + "</svg>";
+      var controls = '<h3>À toi de jouer : guide l\'éclair, pylône par pylône</h3>'
+        + '<p>Appuie sur le bouton : l\'éclair d\'énergie part de la centrale et file sur les fils. À chaque pylône, il s\'arrête — <b>relance-le</b> pour continuer le voyage à travers la forêt, la rivière et la neige, jusqu\'aux maisons.</p>'
+        + '<button class="btn big" id="s6go" type="button">Envoie l\'électricité !</button>'
+        + '<p class="small" id="s6note">Notre centrale est à des centaines de kilomètres de la ville. Combien de temps le voyage prendra-t-il, à ton avis ?</p>'
+        + '<p class="small"><b>Règle des vrais électriciens :</b> on ne touche jamais à un pylône ni à un fil tombé par terre. Ici, c\'est un jeu ; dans la vraie vie, on reste loin et on prévient un adulte.</p>';
+      $("#app").innerHTML = stLayout(6, "Des centaines de kilomètres, en une fraction de seconde.",
+        "<b>Nadia :</b> Ces grands bonhommes de métal s'appellent des <b>pylônes</b>. Ils portent les fils très haut, loin des arbres et des gens. Notre électricité va traverser le paysage québécois — forêt, rivières, collines enneigées — exactement comme les vraies grandes lignes qui partent du Nord vers les villes du Sud.",
+        scene, controls);
+      wireTopbar(6);
+      var path = $("#s6path"), L = path.getTotalLength(), bolt = $("#s6bolt");
+      var cibles = [0.218, 0.522, 0.819, 1], cur = 0, seg = 0, enCours = false;
+      var goBtn = $("#s6go");
+      function placeBolt(f) { var pt = path.getPointAtLength(f * L); bolt.setAttribute("transform", "translate(" + pt.x + "," + pt.y + ")"); }
+      placeBolt(0);
+      goBtn.addEventListener("click", function () {
+        if (enCours || seg >= cibles.length) return;
+        enCours = true; goBtn.disabled = true; sndZap();
+        bolt.setAttribute("opacity", "1");
+        var from = cur, to = cibles[seg], t0 = null, DUR = 850;
+        function step(ts) {
+          if (t0 === null) t0 = ts;
+          var t = Math.min(1, (ts - t0) / DUR);
+          cur = from + (to - from) * t;
+          placeBolt(cur);
+          if (t < 1) { S.raf = requestAnimationFrame(step); return; }
+          enCours = false; seg++; buzz(25);
+          if (seg < cibles.length) {
+            goBtn.disabled = false;
+            goBtn.textContent = "Relance l'éclair !";
+            $("#s6note").textContent = "L'éclair attend au pylône " + seg + " sur 3… Relance-le ! Dans la vraie vie, bien sûr, rien ne s'arrête en route : tout voyage d'un trait, presque à la vitesse de la lumière.";
+          } else {
+            goBtn.textContent = "L'électricité est arrivée !";
+            bolt.setAttribute("opacity", "0");
+            document.querySelectorAll(".s6win").forEach(function (w) { w.setAttribute("fill", "#ffd94d"); });
+            sndDing();
+            $("#s6note").textContent = "Déjà arrivée ! L'électricité voyage presque à la vitesse de la lumière : entre la centrale et ta maison, c'est quasi instantané.";
+            finishStation(6,
+              "sur les grandes lignes, l'électricité traverse des centaines de kilomètres presque à la vitesse de la lumière — le voyage dure une fraction de seconde.",
+              "La ville s'illumine ! Plus qu'une étape : descendre de la grande ligne jusqu'à ta maison.",
+              function () { showFact(6, "Station suivante : jusqu'à ta maison", station7); });
+          }
+        }
+        S.raf = requestAnimationFrame(step);
+      });
+      window.scrollTo(0, 0);
+    }
+
+    /* ============ STATION 7 — JUSQU'À TA MAISON ============ */
+    function station7() {
+      stopLoops(); S.station = 7;
+      var scene = '<svg viewBox="0 0 360 240" role="img" aria-label="Un poteau avec un transformateur, et une maison dont les appareils s\'allument">'
+        + '<rect x="34" y="60" width="10" height="150" fill="#8a6b48" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect x="16" y="56" width="46" height="8" fill="#8a6b48" stroke="#20313b" stroke-width="2"/>'
+        + '<rect id="s7can" x="48" y="66" width="30" height="40" rx="7" fill="#aeb9be" stroke="#20313b" stroke-width="3"/>'
+        + '<path d="M62 56 C 130 30, 220 34, 300 52" stroke="#20313b" stroke-width="3" fill="none"/>'
+        + '<path d="M62 106 C 120 130, 170 120, 196 96" stroke="#20313b" stroke-width="2.5" fill="none" stroke-dasharray="5 4"/>'
+        + '<text x="6" y="46" font-size="12" font-weight="700" fill="#20313b">Le transformateur du poteau</text>'
+        + '<rect x="196" y="92" width="150" height="118" fill="#f2d38a" stroke="#20313b" stroke-width="3.5"/>'
+        + '<polygon points="186,92 271,52 356,92" fill="#b3543f" stroke="#20313b" stroke-width="3.5"/>'
+        + '<rect x="252" y="152" width="34" height="58" fill="#8a6b48" stroke="#20313b" stroke-width="2.5"/>'
+        + '<circle id="s7glow" cx="226" cy="122" r="17" fill="#ffd94d" opacity="0"/>'
+        + '<circle id="s7bulb" cx="226" cy="122" r="10" fill="#c8d2d6" stroke="#20313b" stroke-width="2.5"/>'
+        + '<path d="M226 104 v8 M214 112 l5 5 M238 112 l-5 5" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect id="s7frigo" x="300" y="118" width="30" height="56" rx="4" fill="#c8d2d6" stroke="#20313b" stroke-width="2.5"/>'
+        + '<line x1="300" y1="140" x2="330" y2="140" stroke="#20313b" stroke-width="2"/>'
+        + '<rect id="s7frigolight" x="306" y="146" width="8" height="8" fill="#7d8a91"/>'
+        + '<rect id="s7heat" x="206" y="186" width="62" height="14" rx="4" fill="#c8d2d6" stroke="#20313b" stroke-width="2.5"/>'
+        + '<path id="s7waves" d="M216 178 q4 -7 0 -13 M236 178 q4 -7 0 -13 M256 178 q4 -7 0 -13" stroke="#d9534f" stroke-width="3" fill="none" opacity="0" stroke-linecap="round"/>'
+        + '<text x="196" y="228" font-size="12" font-weight="700" fill="#20313b">Ampoule — Frigo — Chauffage</text>'
+        + "</svg>";
+      var controls = '<h3>Étape 1 : abaisse la tension</h3>'
+        + '<p>735 000 volts dans une prise de maison ? Beaucoup trop fort ! La tension descend en <b>deux crans</b> : d\'abord le poste de distribution (souvent vers <b>25 000 volts</b>, pour alimenter tout le quartier), puis le petit transformateur du poteau, jusqu\'à <b>120/240 volts</b> — la bonne « pression » pour la maison. Appuie deux fois pour descendre les deux crans !</p>'
+        + '<div class="voltbig" id="s7volt">735 000 volts</div>'
+        + '<button class="btn big" id="s7down" type="button">Abaisse la tension (premier cran)</button>'
+        + '<div id="s7apps" class="hidden">'
+        + '<h3 style="margin-top:18px">Étape 2 : branche les appareils</h3>'
+        + '<p>Touche chaque appareil pour le brancher, et regarde combien d\'énergie il boit. L\'unité s\'appelle le <b>watt</b> — comme la « soif » de l\'appareil.</p>'
+        + '<div class="btnrow" style="flex-direction:column">'
+        + '<button class="btn second" data-app="ampoule" type="button">Brancher : l\'ampoule (environ 10 watts)</button>'
+        + '<button class="btn second" data-app="frigo" type="button">Brancher : le réfrigérateur (environ 150 watts)</button>'
+        + '<button class="btn second" data-app="chauffage" type="button">Brancher : le chauffage (environ 1 500 watts)</button>'
+        + "</div>"
+        + '<div class="wattline"><span>Total de la maison</span><span id="s7total">0 watt</span></div>'
+        + '<p class="small">Et le <b>kilowattheure</b>, sur la facture ? C\'est simplement l\'énergie utilisée avec le temps : un appareil de 1 000 watts qui marche une heure consomme 1 kilowattheure.</p>'
+        + "</div>";
+      $("#app").innerHTML = stLayout(7, "Dernière étape : la bonne tension, puis la lumière !",
+        "<b>Nadia :</b> On y est presque ! En chemin, un <b>poste de distribution</b> a déjà abaissé la tension des grandes lignes pour le quartier. Il reste le dernier cran : le petit baril gris sur le poteau, c'est un <b>transformateur</b> — le frère de celui de la station 5, mais il fait le travail inverse : il <b>abaisse</b> la tension pour qu'elle soit douce et sécuritaire dans la maison.",
+        scene, controls);
+      wireTopbar(7);
+      var total = 0, branches = 0;
+      var s7cran = 0;
+      $("#s7down").addEventListener("click", function () {
+        sndZap();
+        if (s7cran === 0) {
+          s7cran = 1; buzz(20);
+          $("#s7volt").textContent = "25 000 volts — la tension du quartier";
+          this.textContent = "Deuxième cran : le transformateur du poteau";
+          return;
+        }
+        this.disabled = true;
+        $("#s7volt").textContent = "120 / 240 volts — parfait pour la maison";
+        $("#s7can").setAttribute("fill", "#f5a623");
+        $("#s7apps").classList.remove("hidden");
+        $("#s7apps").scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      var WATTS = { ampoule: 10, frigo: 150, chauffage: 1500 };
+      $("#s7apps").addEventListener("click", function (ev) {
+        var b = ev.target.closest("[data-app]"); if (!b || b.disabled) return;
+        var app = b.getAttribute("data-app");
+        b.disabled = true; b.classList.add("teal"); b.textContent = "Branchée : " + b.textContent.replace("Brancher : ", "");
+        total += WATTS[app]; branches++;
+        $("#s7total").textContent = total.toLocaleString("fr-CA") + " watts";
+        tone(700 + branches * 120, 0.12, "sine", 0.1);
+        if (app === "ampoule") { $("#s7bulb").setAttribute("fill", "#ffd94d"); $("#s7glow").setAttribute("opacity", "0.55"); }
+        if (app === "frigo") { $("#s7frigo").setAttribute("fill", "#bfe3f2"); $("#s7frigolight").setAttribute("fill", "#ffd94d"); }
+        if (app === "chauffage") { $("#s7heat").setAttribute("fill", "#e8a09a"); $("#s7waves").setAttribute("opacity", "1"); }
+        if (branches === 3) {
+          sndDing();
+          finishStation(7,
+            "près des maisons, un transformateur abaisse la tension à 120/240 volts ; ensuite, chaque appareil boit l'énergie dont il a besoin — le chauffage, beaucoup plus que l'ampoule !",
+            "L'ampoule s'allume. De la pluie sur les montagnes jusqu'à la lumière de ta maison : le voyage de " + nom() + " est complet !",
+            function () { showFact(7, "Voir la fin du voyage", showFinale); });
+        }
+      });
+      window.scrollTo(0, 0);
+    }
+    /* ============ FINALE ============ */
+    function fmtDuree(sec) {
+      sec = Math.max(0, Math.round(sec));
+      var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+      if (h > 0) return h + " h " + (m < 10 ? "0" : "") + m + " min";
+      return m > 0 ? (m + " min " + (s < 10 ? "0" : "") + s + " s") : (s + " s");
+    }
+    function confetti() {
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var wrap = document.createElement("div");
+      wrap.setAttribute("aria-hidden", "true");
+      wrap.style.cssText = "position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50";
+      var colors = ["#2e7fb8", "#f5a623", "#177e70", "#4aa3d8"];
+      for (var i = 0; i < 22; i++) {
+        var s = document.createElement("span");
+        var sz = 6 + Math.random() * 7;
+        s.style.cssText = "position:absolute;top:-22px;left:" + (Math.random() * 100) + "%;width:" + sz + "px;height:" + (sz * 1.5) + "px;border-radius:60% 60% 60% 60%/50% 50% 60% 60%;background:" + colors[i % 4] + ";opacity:.9;animation:cfall " + (2.2 + Math.random() * 1.6) + "s ease-in " + (Math.random() * 0.7) + "s forwards";
+        wrap.appendChild(s);
+      }
+      document.body.appendChild(wrap);
+      later(function () { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 5200);
+    }
+    function showFinale() {
+      stopLoops(); S.station = 0;
+      var tempsHTML = "";
+      if (S.t0 != null) {
+        var sec = Math.max(0, Math.round((performance.now() - S.t0) / 1000));
+        var record = false;
+        if (!(save.best > 0)) save.best = null;
+        if (sec > 0 && (!save.best || sec < save.best)) { save.best = sec; persist(); record = true; }
+        tempsHTML = '<p style="font-size:1.05rem"><b>Durée de ta visite : ' + fmtDuree(sec) + "</b>"
+          + (record ? " — c'est ton meilleur temps !" : (save.best ? " — ton record : " + fmtDuree(save.best) : "")) + "</p>";
+        S.t0 = null;
+      }
+      var map = '<svg viewBox="0 0 360 150" role="img" aria-label="La carte du voyage : pluie, rivière, réservoir, turbine, fil, maison" style="width:100%;height:auto">'
+        + '<path d="M28 84 C 90 50, 140 116, 196 82 C 240 56, 290 96, 334 78" stroke="#2e7fb8" stroke-width="4" fill="none" stroke-dasharray="8 6" stroke-linecap="round"/>'
+        + '<g><ellipse cx="28" cy="52" rx="20" ry="12" fill="#fff" stroke="#20313b" stroke-width="2.5"/>'
+        + '<path d="M18 68 l-3 8 M28 70 l-3 8 M38 68 l-3 8" stroke="#2e7fb8" stroke-width="2.5" stroke-linecap="round"/>'
+        + '<text x="28" y="128" font-size="11.5" font-weight="700" fill="#20313b" text-anchor="middle">Pluie</text></g>'
+        + '<g><path d="M78 92 q8 -10 16 0 t16 0" stroke="#2e7fb8" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+        + '<path d="M78 106 q8 -10 16 0 t16 0" stroke="#2e7fb8" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+        + '<text x="94" y="128" font-size="11.5" font-weight="700" fill="#20313b" text-anchor="middle">Rivière</text></g>'
+        + '<g><path d="M140 66 L156 66 L160 108 L146 108 Z" fill="#c3ccd1" stroke="#20313b" stroke-width="2.5"/>'
+        + '<path d="M118 76 q10 -5 22 0" stroke="#2e7fb8" stroke-width="3.5" fill="none"/>'
+        + '<text x="146" y="128" font-size="11.5" font-weight="700" fill="#20313b" text-anchor="middle">Réservoir</text></g>'
+        + '<g><circle cx="212" cy="84" r="17" fill="#dfe9ec" stroke="#20313b" stroke-width="2.5"/>'
+        + '<path d="M212 70 v28 M198 84 h28 M202 74 l20 20 M222 74 l-20 20" stroke="#14506e" stroke-width="3"/>'
+        + '<text x="212" y="128" font-size="11.5" font-weight="700" fill="#20313b" text-anchor="middle">Turbine</text></g>'
+        + '<g><path d="M272 108 L280 62 L288 108 M262 72 h36 M266 88 h28" stroke="#20313b" stroke-width="2.5" fill="none"/>'
+        + '<text x="280" y="128" font-size="11.5" font-weight="700" fill="#20313b" text-anchor="middle">Fil</text></g>'
+        + '<g><rect x="312" y="76" width="34" height="28" fill="#f2d38a" stroke="#20313b" stroke-width="2.5"/>'
+        + '<polygon points="306,76 329,58 352,76" fill="#b3543f" stroke="#20313b" stroke-width="2.5"/>'
+        + '<rect x="324" y="88" width="10" height="16" fill="#ffd94d" stroke="#20313b" stroke-width="1.5"/>'
+        + '<text x="329" y="128" font-size="11.5" font-weight="700" fill="#20313b" text-anchor="middle">Maison</text></g>'
+        + "</svg>";
+      var liste = STATION_TITLES.map(function (t, i) {
+        return "<li><span>Station " + (i + 1) + " — " + t + '</span><span class="starsline">' + starStr(save.stars[i + 1] || 0) + "</span></li>";
+      }).join("");
+      $("#app").innerHTML = topbarHTML(0)
+        + '<div class="card"><h2 class="bigtitle center">Le voyage complet de ' + nom() + "</h2>"
+        + '<p class="center">De la pluie tombée sur les montagnes… jusqu\'à l\'ampoule de ta maison.</p>' + map + "</div>"
+        + '<div class="factcard"><p class="kicker">Notre fierté</p><h2 class="facttitle">Fait ici, par du monde d\'ici</h2>'
+        + "<p>Les lignes à <b>735 000 volts</b> ont été inventées au Québec — une première mondiale en 1965 — puis copiées ailleurs sur la planète.</p>"
+        + "<p>La centrale <b>Robert-Bourassa</b>, la plus grande du Canada (environ 5 600 mégawatts), a été construite dans le Nord, en plein hiver, par des travailleuses et des travailleurs d'ici.</p>"
+        + "<p>Et aujourd'hui, <b>plus de 9 kilowattheures sur 10</b> consommés au Québec viennent de nos rivières : une électricité presque entièrement renouvelable, produite chez nous.</p></div>"
+        + '<div class="card"><h3>L\'essentiel à retenir</h3><ul class="stationlist">'
+        + '<li><span><b>1.</b> L\'eau gardée en hauteur, c\'est de l\'énergie en réserve.</span></li>'
+        + '<li><span><b>2.</b> En tombant, l\'eau gagne de la vitesse et de la pression.</span></li>'
+        + '<li><span><b>3.</b> La turbine transforme la poussée de l\'eau en rotation.</span></li>'
+        + '<li><span><b>4.</b> L\'alternateur — aimants et bobines de cuivre — transforme la rotation en courant alternatif : 60 allers-retours par seconde, le 60 hertz.</span></li>'
+        + '<li><span><b>5.</b> Le transformateur monte la tension à 735 000 volts pour voyager loin en perdant presque rien.</span></li>'
+        + '<li><span><b>6.</b> Les grandes lignes traversent le Québec presque à la vitesse de la lumière.</span></li>'
+        + '<li><span><b>7.</b> Près des maisons, la tension redescend à 120/240 volts, et chaque appareil boit les watts dont il a besoin.</span></li>'
+        + "</ul></div>"
+        + '<div class="diploma"><p class="kicker">Centrale de la rivière aux Saumons</p>'
+        + "<h2>Diplôme de visiteur de centrale</h2>"
+        + '<p>Décerné à</p><p class="nom">' + nom() + ", la goutte d'eau</p>"
+        + "<p>et à la personne curieuse qui l'a accompagnée, pour avoir suivi le voyage complet de l'électricité : du réservoir à la turbine, de l'alternateur aux grandes lignes, jusqu'à la maison.</p>"
+        + '<ul class="stationlist">' + liste + "</ul>"
+        + '<p style="font-size:1.1rem"><b>Total : ' + totalStars(save.stars) + " étoiles sur 14</b></p>"
+        + tempsHTML
+        + '<div class="btnrow"><button class="btn" id="btnReplay" type="button">Rejouer la visite</button>'
+        + '<button class="btn second" id="btnHome" type="button">Retour à l\'accueil</button></div></div>'
+        + '<p class="honnete">Schéma simplifié, mais fidèle : une vraie centrale a des centaines de systèmes de plus. La centrale de la rivière aux Saumons est inventée ; les principes, les chiffres et les faits québécois racontés dans la visite sont réels.</p>';
+      wireTopbar(0);
+      sndGood(); buzz([50, 80, 50]); confetti();
+      later(function () { tone(1047, 0.3, "sine", 0.1); }, 250);
+      $("#btnReplay").addEventListener("click", function () { S.runStars = {}; S.t0 = performance.now(); sndClick(); station1(); });
+      $("#btnHome").addEventListener("click", function () { sndClick(); showHome(); });
+      window.scrollTo(0, 0);
+    }
+
+    /* ============ DÉMARRAGE ============ */
+    var STATION_FNS = [station1, station2, station3, station4, station5, station6, station7];
+    showHome();
+</script>
+<!-- ===== Barre de jeu HP — NE PAS ÉDITER À LA MAIN =====
+     Retour / Pause / Partager. Source : src/components/barre-jeu/barre-jeu.js
+     (régénérer le module : bun run build:barre) -->
+<script src="/barre/barre-jeu.js" defer></script>
+<!-- ===== Fin barre de jeu HP ===== -->
+</body>
+</html>

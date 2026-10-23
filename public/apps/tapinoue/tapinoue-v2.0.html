@@ -1,0 +1,2634 @@
+<!doctype html>
+<html lang="fr-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Tapinoue</title>
+    <style>
+      :root{
+        --paper:#fdf3df;
+        --card:#fffaf0;
+        --ink:#4a3220;
+        --ink-soft:#7a5c40;
+        --carrot:#ef7d2d;
+        --carrot-dark:#d9621a;
+        --gold:#e9a13b;
+        --leaf:#5f9e46;
+        --bark:#6b4429;
+        --line:#e5d3ae;
+        --shadow:0 6px 0 rgba(107,68,41,.18);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --paper:#2b2019;
+          --card:#3a2c20;
+          --ink:#f7e8cf;
+          --ink-soft:#d9bd97;
+          --line:#5a4330;
+          --shadow:0 6px 0 rgba(0,0,0,.35);
+        }
+      }
+      *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+      html,body{ margin:0; padding:0; }
+      body{
+        font-family:"Avenir Next Rounded","Chalkboard SE","Comic Sans MS","Segoe UI Rounded","Segoe UI",system-ui,sans-serif;
+        background:var(--paper);
+        color:var(--ink);
+        min-height:100vh;
+      }
+      .wrap{ max-width:470px; margin:0 auto; padding:10px 12px 28px; }
+
+      /* ---------- Barre du haut : progression + son ---------- */
+      .topbar{ display:flex; align-items:flex-start; gap:8px; margin:4px 0 10px; }
+      .steps{ flex:1; display:flex; gap:5px; }
+      .step{
+        flex:1; text-align:center; font-size:.68rem; font-weight:700; color:var(--ink-soft);
+        background:var(--card); border:2px solid var(--line); border-radius:12px; padding:5px 2px 4px;
+        line-height:1.15;
+      }
+      .step .dot{
+        display:block; width:22px; height:22px; margin:0 auto 2px; border-radius:50%;
+        background:var(--line); color:var(--ink); font-size:.8rem; line-height:22px; font-weight:800;
+      }
+      .step.on{ border-color:var(--carrot); color:var(--ink); }
+      .step.on .dot{ background:var(--carrot); color:#fff; }
+      .step.done{ border-color:var(--leaf); }
+      .step.done .dot{ background:var(--leaf); color:#fff; }
+      .sound-btn{
+        flex:none; width:44px; height:44px; border-radius:50%; border:2px solid var(--line);
+        background:var(--card); color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center;
+        box-shadow:var(--shadow);
+      }
+      .sound-btn:active{ transform:scale(.94); }
+      .sound-btn svg{ width:24px; height:24px; }
+      .sound-btn .barre{ display:none; }
+      .sound-btn.off .barre{ display:block; }
+      .sound-btn.off .ondes{ display:none; }
+
+      /* ---------- Écrans ---------- */
+      .screen{ display:none; }
+      .screen.on{ display:block; animation:entre .35s ease both; }
+      @keyframes entre{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:none;} }
+
+      h1{ font-size:2.3rem; margin:.15em 0 .1em; text-align:center; letter-spacing:.01em; }
+      h2{ font-size:1.45rem; margin:.1em 0 .25em; text-align:center; }
+      .sous-titre{ text-align:center; color:var(--ink-soft); font-size:1.02rem; margin:0 0 12px; line-height:1.45; }
+      .consigne{
+        text-align:center; font-size:1.05rem; line-height:1.45; margin:0 0 10px;
+        background:var(--card); border:2px solid var(--line); border-radius:14px; padding:9px 12px;
+      }
+      .consigne b{ color:var(--carrot-dark); }
+      @media (prefers-color-scheme: dark){ .consigne b{ color:var(--gold); } }
+
+      .stage{
+        position:relative; background:var(--card); border:3px solid var(--bark); border-radius:20px;
+        overflow:hidden; box-shadow:var(--shadow);
+      }
+      .stage svg.scene{ display:block; width:100%; height:auto; touch-action:none; user-select:none; -webkit-user-select:none; }
+
+      /* ---------- Jauges ---------- */
+      .jauge-wrap{ margin:10px 2px 4px; }
+      .jauge-label{ display:flex; justify-content:space-between; font-weight:800; font-size:.95rem; margin-bottom:4px; }
+      .jauge{ height:20px; background:var(--line); border-radius:99px; overflow:hidden; border:2px solid var(--bark); }
+      .jauge > div{ height:100%; width:0%; border-radius:99px; background:var(--leaf); transition:width .25s ease; }
+      .jauge.orange > div{ background:var(--carrot); }
+      .jauge.soleil > div{ background:var(--gold); }
+
+      /* ---------- Boutons ---------- */
+      .btn{
+        display:block; width:100%; margin:14px auto 0; padding:15px 18px; border:none; cursor:pointer;
+        background:var(--carrot); color:#fff; font:inherit; font-size:1.2rem; font-weight:800;
+        border-radius:16px; box-shadow:0 5px 0 var(--carrot-dark);
+      }
+      .btn:active{ transform:translateY(3px); box-shadow:0 2px 0 var(--carrot-dark); }
+      .btn.vert{ background:var(--leaf); box-shadow:0 5px 0 #477c33; }
+      .btn.vert:active{ box-shadow:0 2px 0 #477c33; }
+
+      .message{
+        min-height:1.5em; text-align:center; font-weight:800; font-size:1.05rem; color:var(--leaf);
+        margin:8px 0 0;
+      }
+
+      /* ---------- Choix (scène 3) ---------- */
+      .choix{ display:flex; gap:10px; margin-top:10px; }
+      .choix button{
+        flex:1; font:inherit; cursor:pointer; background:var(--card); border:3px solid var(--line);
+        border-radius:16px; padding:10px 4px 8px; color:var(--ink); font-weight:800; font-size:.95rem;
+        box-shadow:var(--shadow);
+      }
+      .choix button:active{ transform:scale(.96); }
+      .choix button.choisi{ border-color:var(--carrot); background:#fff2df; }
+      @media (prefers-color-scheme: dark){ .choix button.choisi{ background:#4a3826; } }
+      .choix button svg{ display:block; margin:0 auto 4px; }
+      .etape{ display:none; }
+      .etape.on{ display:block; animation:entre .3s ease both; }
+      .etape-titre{ text-align:center; font-weight:800; font-size:1.08rem; margin:12px 0 2px; }
+
+      /* curseurs-outils qui suivent le doigt */
+      .outil{
+        position:absolute; width:54px; height:54px; pointer-events:none; display:none; z-index:5;
+        transform:translate(-12px,-42px); filter:drop-shadow(0 2px 2px rgba(0,0,0,.25));
+      }
+
+      /* ---------- Intro ---------- */
+      .intro-lapin{ width:min(66vw,250px); margin:2px auto 0; animation:flotte 2.6s ease-in-out infinite; }
+      @keyframes flotte{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-7px);} }
+      .meilleur{ text-align:center; margin-top:12px; color:var(--ink-soft); font-weight:700; min-height:1.4em; }
+      .etoiles-txt{ color:var(--gold); letter-spacing:.1em; }
+
+      /* ---------- Finale ---------- */
+      .finale-carte{
+        background:var(--card); border:3px solid var(--bark); border-radius:20px; box-shadow:var(--shadow);
+        padding:16px 16px 18px; margin-top:12px; text-align:center; position:relative; overflow:hidden;
+      }
+      .finale-carte h2{ font-size:1.5rem; margin:.1em 0 .3em; }
+      .couple{ width:min(78vw,300px); margin:0 auto; }
+      .resume{ list-style:none; margin:12px auto 4px; padding:0; max-width:300px; text-align:left; font-size:1.02rem; }
+      .resume li{ padding:5px 0 5px 30px; position:relative; line-height:1.35; }
+      .resume li::before{ content:"✓"; position:absolute; left:4px; top:4px; color:var(--leaf); font-weight:900; font-size:1.15rem; }
+      .grosses-etoiles{ font-size:2.6rem; letter-spacing:.12em; margin:6px 0 2px; line-height:1; }
+      .grosses-etoiles .e{ display:inline-block; color:#d8c9a8; animation:pop .5s ease both; }
+      .grosses-etoiles .e.pleine{ color:var(--gold); text-shadow:0 2px 0 rgba(107,68,41,.25); }
+      .grosses-etoiles .e:nth-child(2){ animation-delay:.18s; }
+      .grosses-etoiles .e:nth-child(3){ animation-delay:.36s; }
+      @keyframes pop{ 0%{ transform:scale(0) rotate(-30deg);} 70%{ transform:scale(1.35) rotate(6deg);} 100%{ transform:scale(1) rotate(0);} }
+      .coeurs{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+      .coeurs span{ position:absolute; bottom:-30px; animation:monte linear infinite; opacity:0; }
+      @keyframes monte{
+        0%{ transform:translateY(0) scale(.7) rotate(-6deg); opacity:0; }
+        12%{ opacity:1; }
+        100%{ transform:translateY(-430px) scale(1.1) rotate(8deg); opacity:0; }
+      }
+
+      /* ---------- Bravo (transition) ---------- */
+      #bravo{
+        position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:50;
+        background:rgba(74,50,32,.35); pointer-events:none;
+      }
+      #bravo.on{ display:flex; }
+      #bravo .mot{
+        background:var(--card); color:var(--ink); border:3px solid var(--bark); border-radius:20px;
+        font-size:1.7rem; font-weight:900; padding:18px 30px; text-align:center; box-shadow:var(--shadow);
+        animation:pop .45s ease both; max-width:86vw;
+      }
+      #bravo .mot small{ display:block; font-size:1rem; font-weight:700; color:var(--ink-soft); margin-top:4px; }
+
+      .etincelle{ animation:scintille 1.1s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+      @keyframes scintille{ 0%,100%{ transform:scale(.55) rotate(0deg); opacity:.35;} 50%{ transform:scale(1.15) rotate(25deg); opacity:1;} }
+      .oreille{ transform-box:fill-box; transform-origin:50% 92%; animation:oreille 3.4s ease-in-out infinite; }
+      @keyframes oreille{ 0%,88%,100%{ transform:rotate(0);} 92%{ transform:rotate(-5deg);} 96%{ transform:rotate(4deg);} }
+      .soleil-rayons{ transform-box:fill-box; transform-origin:center; animation:tourne 26s linear infinite; }
+      @keyframes tourne{ to{ transform:rotate(360deg);} }
+      .pulse{ transform-box:fill-box; transform-origin:center; animation:pulse 1s ease-in-out infinite; }
+      @keyframes pulse{ 0%,100%{ transform:scale(1); opacity:.85;} 50%{ transform:scale(1.3); opacity:.35;} }
+
+      /* ---------- Accueil : les tableaux ---------- */
+      .tab-carte{
+        width:100%; text-align:left; font:inherit; color:var(--ink); background:var(--card);
+        border:3px solid var(--line); border-radius:18px; box-shadow:var(--shadow);
+        padding:13px 14px; margin:0 0 12px; cursor:pointer; display:block;
+      }
+      .tab-carte:active{ transform:scale(.99); }
+      .tab-carte .haut{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+      .tab-carte .num{ font-size:.78rem; font-weight:900; letter-spacing:.06em; color:var(--ink-soft); text-transform:uppercase; }
+      .tab-carte h3{ margin:3px 0 4px; font-size:1.28rem; }
+      .tab-carte p{ margin:0; color:var(--ink-soft); font-size:.95rem; line-height:1.4; }
+      .tab-carte .st{ font-weight:900; color:var(--carrot-dark); margin-top:8px; font-size:1rem; }
+      @media (prefers-color-scheme: dark){ .tab-carte .st{ color:var(--gold); } }
+      .tab-carte.faite{ border-color:var(--leaf); }
+      .tab-carte.faite .st{ color:var(--leaf); }
+      .tab-carte.verrou{ opacity:.72; cursor:default; }
+      .tab-carte.verrou .st{ color:var(--ink-soft); }
+
+      .btn.secondaire{ background:var(--card); color:var(--ink); border:2px solid var(--line); box-shadow:0 5px 0 var(--line); }
+      .btn.secondaire:active{ box-shadow:0 2px 0 var(--line); }
+      .btn.lien{
+        background:none; box-shadow:none; color:var(--ink-soft); text-decoration:underline;
+        font-size:.98rem; font-weight:700; padding:8px; width:auto; margin-left:auto; margin-right:auto;
+      }
+      .btn.lien:active{ transform:none; box-shadow:none; }
+
+      .asuivre{
+        margin-top:14px; background:#fff2df; border:2px dashed var(--gold); border-radius:16px;
+        padding:12px 14px; text-align:center;
+      }
+      .asuivre h3{ margin:.1em 0 .25em; font-size:1.3rem; }
+      .asuivre p{ margin:0; line-height:1.45; }
+      @media (prefers-color-scheme: dark){ .asuivre{ background:#4a3826; } }
+
+      /* ---------- Mécaniques des nouveaux tableaux ---------- */
+      .glissable{ cursor:grab; }
+      .bondit{ animation:bondit .45s ease; }
+      @keyframes bondit{ 0%{ transform:translateY(0);} 40%{ transform:translateY(-9px);} 100%{ transform:translateY(0);} }
+      .secoue{ animation:secoue .5s ease; transform-box:fill-box; transform-origin:center bottom; }
+      @keyframes secoue{ 0%,100%{ transform:rotate(0);} 25%{ transform:rotate(-3.5deg);} 75%{ transform:rotate(3.5deg);} }
+      .fige{
+        display:none; margin:10px 2px 0; text-align:center; font-weight:900; font-size:1.12rem; color:#fff;
+        background:#d64541; border:3px solid var(--bark); border-radius:14px; padding:10px 8px;
+      }
+      .fige.on{ display:block; animation:figePulse .45s ease-in-out infinite alternate; }
+      @keyframes figePulse{ from{ transform:scale(1);} to{ transform:scale(1.03);} }
+      .choix button:disabled{ opacity:.45; }
+
+      @media (prefers-reduced-motion: reduce){
+        .intro-lapin,.etincelle,.oreille,.soleil-rayons,.pulse{ animation:none; }
+        .coeurs span{ animation-duration:6s; }
+        .bondit,.secoue,.fige.on{ animation:none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="steps" id="steps">
+          <div class="step" data-s="1"><span class="dot">1</span>Terrier propre</div>
+          <div class="step" data-s="2"><span class="dot">2</span>Carottes</div>
+          <div class="step" data-s="3"><span class="dot">3</span>Beau comme un cœur</div>
+          <div class="step" data-s="4"><span class="dot">4</span>La rencontre</div>
+        </div>
+        <button class="sound-btn" id="soundBtn" aria-label="Son : activé" aria-pressed="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none"/>
+            <g class="ondes"><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.4 2.2 2.4 8.8 0 11"/></g>
+            <line class="barre" x1="3" y1="21" x2="21" y2="3" stroke="#d64541"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- ============ ACCUEIL — LES TABLEAUX ============ -->
+      <section class="screen on" id="scr-accueil">
+        <h1>Les tableaux de Tapinoue</h1>
+        <p class="sous-titre">Les aventures de Tapinoue et de sa famille, un tableau à la fois.<br/>
+        Termine un tableau pour débloquer le suivant !</p>
+        <div class="intro-lapin" id="accueilLapin"></div>
+        <div id="listeTableaux" style="margin-top:14px"></div>
+        <p class="meilleur" id="accueilNote"></p>
+      </section>
+
+      <!-- ============ INTRO (TABLEAU 1) ============ -->
+      <section class="screen" id="scr-intro">
+        <h1>Tapinoue</h1>
+        <p class="sous-titre">C'est le printemps, la saison des amours !<br/>
+        Tapinoue veut rencontrer <b>Lapinette</b>.<br/>
+        Aide-le à se préparer, étape par étape.</p>
+        <div class="intro-lapin" id="introLapin"></div>
+        <button class="btn" id="btnStart">Commencer l'aventure</button>
+        <p class="meilleur" id="meilleurIntro"></p>
+        <button class="btn lien" id="btnRetourIntro" type="button">← Tous les tableaux</button>
+      </section>
+
+      <!-- ============ SCÈNE 1 ============ -->
+      <section class="screen" id="scr-s1">
+        <h2>1. Un terrier propre</h2>
+        <p class="consigne"><b>Glisse ton doigt</b> sur la poussière et les toiles pour les balayer vers la sortie. <b>Tape les épluchures</b> pour les mettre au panier !</p>
+        <div class="stage" id="stage1"></div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Terrier propre</span><span id="pct1">0 %</span></div>
+          <div class="jauge"><div id="bar1"></div></div>
+        </div>
+        <p class="message" id="msg1"></p>
+      </section>
+
+      <!-- ============ SCÈNE 2 ============ -->
+      <section class="screen" id="scr-s2">
+        <h2>2. La réserve de carottes</h2>
+        <p class="consigne">Au potager ! <b>Tape chaque carotte</b> qui sort de terre pour la récolter. Il en faut <b>12</b> pour remplir la réserve, avant que le soleil se couche.</p>
+        <div class="stage" id="stage2"></div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Carottes au panier</span><span id="nb2">0 / 12</span></div>
+          <div class="jauge orange"><div id="bar2"></div></div>
+        </div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Le soleil descend doucement…</span><span id="txtSoleil"></span></div>
+          <div class="jauge soleil"><div id="barSoleil"></div></div>
+        </div>
+        <p class="message" id="msg2"></p>
+      </section>
+
+      <!-- ============ SCÈNE 3 ============ -->
+      <section class="screen" id="scr-s3">
+        <h2>3. Beau comme un cœur</h2>
+        <div class="etape on" id="e3a">
+          <p class="etape-titre">Choisis un nœud papillon pour Tapinoue.</p>
+          <div class="stage" id="stage3a"></div>
+          <div class="choix" id="choixNoeud"></div>
+        </div>
+        <div class="etape" id="e3b">
+          <p class="etape-titre">Brosse son pelage : glisse ton doigt sur Tapinoue, jusqu'à ce que ça brille !</p>
+          <div class="stage" id="stage3b"></div>
+          <div class="jauge-wrap">
+            <div class="jauge-label"><span>Pelage qui brille</span><span id="pct3">0 %</span></div>
+            <div class="jauge"><div id="bar3"></div></div>
+          </div>
+        </div>
+        <div class="etape" id="e3c">
+          <p class="etape-titre">Et maintenant, choisis la fleur à offrir à Lapinette.</p>
+          <div class="stage" id="stage3c"></div>
+          <div class="choix" id="choixFleur"></div>
+        </div>
+        <p class="message" id="msg3"></p>
+      </section>
+
+      <!-- ============ SCÈNE 4 ============ -->
+      <section class="screen" id="scr-s4">
+        <h2>4. La rencontre</h2>
+        <p class="consigne"><b>Tape le pré</b> pour faire sauter Tapinoue de bosse en bosse. Ramasse les <b>3 fleurs sauvages</b> en chemin, Lapinette t'attend au bout !</p>
+        <div class="stage" id="stage4"></div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Fleurs sauvages ramassées</span><span id="nb4">0 / 3</span></div>
+          <div class="jauge orange"><div id="bar4"></div></div>
+        </div>
+        <p class="message" id="msg4"></p>
+      </section>
+
+      <!-- ============ FINALE ============ -->
+      <section class="screen" id="scr-fin">
+        <div class="finale-carte">
+          <div class="coeurs" id="coeurs"></div>
+          <h2>La saison des amours commence bien !</h2>
+          <div class="couple" id="couple"></div>
+          <div class="grosses-etoiles" id="etoilesFin"></div>
+          <p style="margin:2px 0 0;font-weight:800;" id="tempsFin"></p>
+          <ul class="resume" id="resumeFin"></ul>
+          <p class="meilleur" id="meilleurFin"></p>
+          <button class="btn vert" id="btnRejouer">Rejouer</button>
+          <button class="btn" id="btnSuivant1">Tableau suivant : Le terrier à deux</button>
+          <button class="btn secondaire" id="btnTableaux1">Tous les tableaux</button>
+        </div>
+      </section>
+
+      <!-- ============ TABLEAU 2 — SCÈNE 1 ============ -->
+      <section class="screen" id="scr-t2s1">
+        <h2>Tableau 2 · On s'installe</h2>
+        <p class="consigne">Tapinoue et Lapinette aménagent leur terrier ensemble ! <b>Glisse chaque objet</b> jusqu'à sa place en pointillés.</p>
+        <div class="stage" id="stageT2a"></div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Terrier aménagé</span><span id="pctT2a">0 %</span></div>
+          <div class="jauge"><div id="barT2a"></div></div>
+        </div>
+        <p class="message" id="msgT2a"></p>
+      </section>
+
+      <!-- ============ TABLEAU 2 — SCÈNE 2 ============ -->
+      <section class="screen" id="scr-t2s2">
+        <h2>Tableau 2 · Chercher de la salade</h2>
+        <p class="consigne">D'abord, <b>choisis ton sentier</b> : le <b>direct</b>, plus court mais avec les feuilles amères sur le chemin, ou le <b>détour</b>, un peu plus long qui les évite. Ensuite, <b>tape le pré</b> pour sauter de bosse en bosse et ramasser <b>10 belles feuilles de laitue</b>. Les feuilles amères, on les écarte doucement — ce n'est pas grave !</p>
+        <div class="stage" id="stageT2b"></div>
+        <div class="choix" id="choixCheminT2"></div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Feuilles au panier</span><span id="nbT2b">0 / 10</span></div>
+          <div class="jauge"><div id="barT2b"></div></div>
+        </div>
+        <p class="message" id="msgT2b"></p>
+      </section>
+
+      <!-- ============ TABLEAU 3 — SCÈNE 1 ============ -->
+      <section class="screen" id="scr-t3s1">
+        <h2>Tableau 3 · La famille s'agrandit</h2>
+        <p class="consigne">Trois bébés lapins sont arrivés : les <b>lapinous</b> ! <b>Tape chaque nid</b> plusieurs fois pour le rendre tout douillet.</p>
+        <div class="stage" id="stageT3a"></div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Nids douillets</span><span id="pctT3a">0 %</span></div>
+          <div class="jauge"><div id="barT3a"></div></div>
+        </div>
+        <p class="message" id="msgT3a"></p>
+      </section>
+
+      <!-- ============ TABLEAU 3 — SCÈNE 2 ============ -->
+      <section class="screen" id="scr-t3s2">
+        <h2>Tableau 3 · Le potager de M. Grincheux</h2>
+        <p class="consigne">Il faut nourrir tout ce monde ! Récolte <b>12 légumes</b> pendant la sieste de M. Grincheux. Quand il lève la tête et ouvre un œil… <b>FIGE-TOI</b>, ne tape plus rien jusqu'à ce qu'il se rendorme !</p>
+        <div class="stage" id="stageT3b"></div>
+        <div class="fige" id="figeT3">FIGE-TOI ! M. Grincheux regarde !</div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Légumes au panier</span><span id="nbT3b">0 / 12</span></div>
+          <div class="jauge orange"><div id="barT3b"></div></div>
+        </div>
+        <p class="message" id="msgT3b"></p>
+      </section>
+
+      <!-- ============ TABLEAU 3 — SCÈNE 3 ============ -->
+      <section class="screen" id="scr-t3s3">
+        <h2>Tableau 3 · Le repas de famille</h2>
+        <p class="consigne">À table ! Regarde les <b>bulles</b> : chacun demande le légume qu'il veut. <b>Tape un légume du panier</b>, puis <b>tape le membre de la famille</b> à nourrir. Servir le légume demandé fait extra plaisir — mais <b>tout légume servi compte</b>, sans punition : la bulle demandera juste à nouveau. Jusqu'à ce que les 5 ventres soient pleins !</p>
+        <div class="stage" id="stageT3c"></div>
+        <div class="choix" id="chipsT3"></div>
+        <p class="message" id="msgT3c"></p>
+      </section>
+
+      <!-- ============ TABLEAU 4 — SCÈNE 1 ============ -->
+      <section class="screen" id="scr-t4s1">
+        <h2>Tableau 4 · Un bruit dans les buissons</h2>
+        <p class="consigne">Le soir tombe sur le terrier… Chut ! Quelque chose bouge dans les buissons. <b>Tape chaque buisson</b> pour regarder ce qui s'y cache.</p>
+        <div class="stage" id="stageT4a"></div>
+        <p class="message" id="msgT4a"></p>
+        <button class="btn" id="btnT4Barricade" type="button" style="display:none">Vite, on se barricade !</button>
+      </section>
+
+      <!-- ============ TABLEAU 4 — SCÈNE 2 ============ -->
+      <section class="screen" id="scr-t4s2">
+        <h2>Tableau 4 · On se barricade !</h2>
+        <p class="consigne"><b>Glisse planches, roches, branches et ronces</b> sur les <b>3 entrées</b> du terrier pour les fermer solidement, avant que le soleil se couche.</p>
+        <div class="stage" id="stageT4b"></div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>La porte</span><span id="pctT4p">0 %</span></div>
+          <div class="jauge"><div id="barT4p"></div></div>
+        </div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>La fenêtre</span><span id="pctT4f">0 %</span></div>
+          <div class="jauge"><div id="barT4f"></div></div>
+        </div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>La galerie</span><span id="pctT4g">0 %</span></div>
+          <div class="jauge"><div id="barT4g"></div></div>
+        </div>
+        <div class="jauge-wrap">
+          <div class="jauge-label"><span>Le soleil se couche doucement…</span><span></span></div>
+          <div class="jauge soleil"><div id="barT4soleil"></div></div>
+        </div>
+        <p class="message" id="msgT4b"></p>
+      </section>
+
+      <!-- ============ TABLEAU 4 — SCÈNE 3 ============ -->
+      <section class="screen" id="scr-t4s3">
+        <h2>Tableau 4 · La nuit tombe</h2>
+        <p class="consigne" id="t4s3Texte">La nuit est tombée sur le terrier… Quand le renard essaie une entrée, elle scintille : tu peux la taper pour la vérifier — c'est facultatif, la nuit se déroule pareil si tu regardes seulement.</p>
+        <div class="stage" id="stageT4c"></div>
+        <button class="btn vert" id="btnT4Fin" type="button" style="display:none">Voir la fin du tableau</button>
+      </section>
+
+      <!-- ============ FINALE D'UN TABLEAU (2, 3 et 4) ============ -->
+      <section class="screen" id="scr-fintab">
+        <div class="finale-carte">
+          <div class="coeurs" id="fintabCoeurs"></div>
+          <h2 id="fintabTitre"></h2>
+          <div id="fintabIllu"></div>
+          <div class="grosses-etoiles" id="fintabEtoiles"></div>
+          <p style="margin:2px 0 0;font-weight:800;" id="fintabTemps"></p>
+          <ul class="resume" id="fintabResume"></ul>
+          <div class="asuivre" id="asuivre" style="display:none">
+            <h3>À suivre…</h3>
+            <p>La famille Tapinoue a encore plein d'aventures devant elle.<br/>De nouveaux tableaux arriveront bientôt !</p>
+          </div>
+          <button class="btn" id="btnFintabSuivant">Tableau suivant</button>
+          <button class="btn vert" id="btnFintabRejouer">Rejouer ce tableau</button>
+          <button class="btn secondaire" id="btnFintabTableaux">Tous les tableaux</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="bravo"><div class="mot" id="bravoMot"></div></div>
+
+    <script>
+    "use strict";
+    const $ = s => document.querySelector(s);
+    const SVGNS = "http://www.w3.org/2000/svg";
+    function el(tag, attrs, parent){
+      const n = document.createElementNS(SVGNS, tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(n);
+      return n;
+    }
+    function svgPoint(svg, cx, cy){
+      const pt = svg.createSVGPoint(); pt.x = cx; pt.y = cy;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+    function fmtTemps(sec){
+      sec = Math.round(sec);
+      const m = Math.floor(sec/60), s = sec % 60;
+      return m > 0 ? (m + " min " + String(s).padStart(2,"0") + " s") : (s + " s");
+    }
+
+    /* ================= AUDIO — 100 % synthétisé ================= */
+    let AC = null, master = null, sonActif = true;
+    function audio(){
+      if (!AC){
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        AC = new Ctx();
+        master = AC.createGain(); master.gain.value = 0.5; master.connect(AC.destination);
+      }
+      if (AC.state === "suspended") AC.resume();
+      return AC;
+    }
+    function tone(f0, f1, dur, type, vol, delay){
+      if (!sonActif) return;
+      const ac = audio(); if (!ac) return;
+      const t = ac.currentTime + (delay || 0);
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = type || "sine";
+      o.frequency.setValueAtTime(f0, t);
+      o.frequency.exponentialRampToValueAtTime(Math.max(30, f1), t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol || 0.25, t + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.05);
+    }
+    let bruitBuf = null;
+    function bruit(dur, freq, vol, type){
+      if (!sonActif) return;
+      const ac = audio(); if (!ac) return;
+      if (!bruitBuf){
+        bruitBuf = ac.createBuffer(1, ac.sampleRate * 0.5, ac.sampleRate);
+        const d = bruitBuf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      }
+      const t = ac.currentTime;
+      const src = ac.createBufferSource(); src.buffer = bruitBuf; src.loop = true;
+      const f = ac.createBiquadFilter(); f.type = type || "bandpass"; f.frequency.value = freq; f.Q.value = 0.8;
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol || 0.12, t + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(g); g.connect(master);
+      src.start(t); src.stop(t + dur + 0.05);
+    }
+    const sPop     = () => tone(520, 940, 0.10, "sine", 0.22);
+    const sPluck   = () => { tone(280, 560, 0.14, "triangle", 0.25); tone(560, 840, 0.10, "sine", 0.12, 0.03); };
+    const sChime   = () => { tone(880, 880, 0.22, "sine", 0.18); tone(1318, 1318, 0.3, "sine", 0.14, 0.09); };
+    const sBoing   = () => tone(190, 520, 0.24, "sine", 0.22);
+    const sBalai   = () => bruit(0.14, 900, 0.07);
+    const sBrosse  = () => bruit(0.12, 1400, 0.05);
+    const sEtincelle = () => { tone(1560, 2100, 0.16, "sine", 0.12); tone(2100, 2600, 0.14, "sine", 0.08, 0.07); };
+    const sJingle  = () => [523, 659, 784, 1046].forEach((f, i) => tone(f, f, 0.28, "triangle", 0.2, i * 0.11));
+    const sCoeur   = () => [392, 523, 659].forEach((f, i) => tone(f, f * 1.01, 0.4, "sine", 0.14, i * 0.13));
+
+    const btnSon = $("#soundBtn");
+    btnSon.addEventListener("click", () => {
+      sonActif = !sonActif;
+      btnSon.classList.toggle("off", !sonActif);
+      btnSon.setAttribute("aria-pressed", String(sonActif));
+      btnSon.setAttribute("aria-label", sonActif ? "Son : activé" : "Son : coupé");
+      if (sonActif) sPop();
+    });
+
+    /* ================= PERSONNAGES SVG (dessin animé, contours gravés) ================= */
+    const TRAIT = "#54382a";
+    function etincelles(opacite){
+      const pos = [[38,60],[164,52],[28,128],[172,120],[52,26],[150,160]];
+      return '<g class="brille-groupe" opacity="' + opacite + '">' + pos.map((p, i) =>
+        '<path class="etincelle" style="animation-delay:' + (i * 0.17) + 's" d="M' + p[0] + ' ' + (p[1]-9) +
+        ' L' + (p[0]+2.6) + ' ' + (p[1]-2.6) + ' L' + (p[0]+9) + ' ' + p[1] + ' L' + (p[0]+2.6) + ' ' + (p[1]+2.6) +
+        ' L' + p[0] + ' ' + (p[1]+9) + ' L' + (p[0]-2.6) + ' ' + (p[1]+2.6) + ' L' + (p[0]-9) + ' ' + p[1] +
+        ' L' + (p[0]-2.6) + ' ' + (p[1]-2.6) + ' Z" fill="#f4b942" stroke="' + TRAIT + '" stroke-width="1.4"/>'
+      ).join("") + "</g>";
+    }
+    function noeudPapillon(cx, cy, couleur, echelle){
+      const s = echelle || 1;
+      return '<g transform="translate(' + cx + " " + cy + ") scale(" + s + ')">' +
+        '<path d="M-4 -3 L-26 -13 Q-31 0 -26 13 L-4 3 Z" fill="' + couleur + '" stroke="' + TRAIT + '" stroke-width="2.6" stroke-linejoin="round"/>' +
+        '<path d="M4 -3 L26 -13 Q31 0 26 13 L4 3 Z" fill="' + couleur + '" stroke="' + TRAIT + '" stroke-width="2.6" stroke-linejoin="round"/>' +
+        '<path d="M-20 -8 Q-10 0 -20 8" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="2.4"/>' +
+        '<path d="M20 -8 Q10 0 20 8" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="2.4"/>' +
+        '<circle r="6.5" fill="' + couleur + '" stroke="' + TRAIT + '" stroke-width="2.6"/></g>';
+    }
+    /* kind: marguerite | tulipe | tournesol | sauvage */
+    function fleurSVG(kind, taille){
+      const t = taille || 54;
+      let coeur = "";
+      if (kind === "marguerite"){
+        let pet = "";
+        for (let i = 0; i < 8; i++){
+          pet += '<ellipse cx="0" cy="-13" rx="5.4" ry="10" fill="#fffdf4" stroke="' + TRAIT + '" stroke-width="1.8" transform="rotate(' + (i * 45) + ')"/>';
+        }
+        coeur = pet + '<circle r="7.5" fill="#f4b942" stroke="' + TRAIT + '" stroke-width="1.8"/>';
+      } else if (kind === "tulipe"){
+        coeur = '<path d="M-13 -12 Q-13 12 0 14 Q13 12 13 -12 L6 -5 L2 -14 L-2 -14 L-6 -5 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="2" stroke-linejoin="round"/>';
+      } else if (kind === "tournesol"){
+        let pet = "";
+        for (let i = 0; i < 10; i++){
+          pet += '<ellipse cx="0" cy="-14" rx="4.6" ry="9" fill="#ffc93c" stroke="' + TRAIT + '" stroke-width="1.6" transform="rotate(' + (i * 36) + ')"/>';
+        }
+        coeur = pet + '<circle r="8" fill="#8a5a2e" stroke="' + TRAIT + '" stroke-width="1.8"/><circle r="3" cx="-2" cy="-2" fill="#6e4522"/><circle r="2.2" cx="3" cy="3" fill="#6e4522"/>';
+      } else { /* sauvage */
+        let pet = "";
+        const cols = ["#ff9ec4", "#ffd166", "#a0d8ef"];
+        for (let i = 0; i < 5; i++){
+          pet += '<circle cx="0" cy="-8" r="6" fill="' + cols[i % 3] + '" stroke="' + TRAIT + '" stroke-width="1.6" transform="rotate(' + (i * 72) + ')"/>';
+        }
+        coeur = pet + '<circle r="4.4" fill="#fff3b0" stroke="' + TRAIT + '" stroke-width="1.5"/>';
+      }
+      return '<svg viewBox="-26 -26 52 52" width="' + t + '" height="' + t + '" aria-hidden="true">' + coeur + "</svg>";
+    }
+    function fleurGroupe(kind, x, y, s){
+      /* version "dans le décor" : tige + fleur, dessinée en SVG de scène */
+      const cols = { marguerite:["#fffdf4","#f4b942"], tulipe:["#ef6f8b","#ef6f8b"], tournesol:["#ffc93c","#8a5a2e"], sauvage:["#ff9ec4","#fff3b0"] };
+      let tete = "";
+      if (kind === "marguerite" || kind === "tournesol" || kind === "sauvage"){
+        const n = kind === "tournesol" ? 10 : (kind === "marguerite" ? 8 : 5);
+        const rPet = kind === "sauvage" ? 5.5 : 8;
+        for (let i = 0; i < n; i++){
+          tete += '<ellipse cx="0" cy="' + (-rPet - 2) + '" rx="' + (rPet * 0.62) + '" ry="' + rPet + '" fill="' + cols[kind][0] + '" stroke="' + TRAIT + '" stroke-width="1.5" transform="rotate(' + (i * 360 / n) + ')"/>';
+        }
+        tete += '<circle r="' + (kind === "sauvage" ? 4 : 6.5) + '" fill="' + cols[kind][1] + '" stroke="' + TRAIT + '" stroke-width="1.5"/>';
+      } else {
+        tete = '<path d="M-11 -10 Q-11 10 0 12 Q11 10 11 -10 L5 -4 L1.5 -12 L-1.5 -12 L-5 -4 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="1.8" stroke-linejoin="round"/>';
+      }
+      return '<g transform="translate(' + x + " " + y + ") scale(" + (s || 1) + ')">' +
+        '<path d="M0 34 Q3 16 0 0" fill="none" stroke="#4e7d3a" stroke-width="3.4" stroke-linecap="round"/>' +
+        '<path d="M0 22 Q-11 18 -13 9 Q-4 10 0 17" fill="#5f9e46" stroke="' + TRAIT + '" stroke-width="1.4"/>' +
+        "<g>" + tete + "</g></g>";
+    }
+    /* Tapinoue (ou Lapinette) — vue de face, viewBox 0 0 200 232 */
+    function lapinSVG(o){
+      o = o || {};
+      const fourrure = o.fourrure || "#f3e7d3";
+      const ventre = "#fffaf0";
+      const rose = "#f6b8c8";
+      const cils = o.cils ?
+        '<path d="M70 84 l-6 -4 M73 80 l-4 -6 M118 80 l4 -6 M121 84 l6 -4" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linecap="round" fill="none"/>' : "";
+      const noeudOreille = o.noeudOreille ?
+        '<g transform="translate(128 16)"><path d="M-2 -2 L-15 -9 Q-18 1 -14 9 L-2 3 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><path d="M2 -2 L15 -9 Q18 1 14 9 L2 3 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><circle r="4.6" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="2.2"/></g>' : "";
+      const papillon = o.papillon ? noeudPapillon(100, 141, o.papillon, 1) : "";
+      const fleurMain = o.fleurMain ?
+        '<g transform="translate(152 176) rotate(18)"><path d="M0 22 Q2 8 0 -6" stroke="#4e7d3a" stroke-width="3.2" fill="none" stroke-linecap="round"/><g transform="translate(0 -12) scale(0.62)">' +
+        (function(){
+          if (o.fleurMain === "tulipe") return '<path d="M-11 -10 Q-11 10 0 12 Q11 10 11 -10 L5 -4 L1.5 -12 L-1.5 -12 L-5 -4 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="2.4" stroke-linejoin="round"/>';
+          const n = o.fleurMain === "tournesol" ? 10 : 8;
+          const cPet = o.fleurMain === "tournesol" ? "#ffc93c" : "#fffdf4";
+          const cCoeur = o.fleurMain === "tournesol" ? "#8a5a2e" : "#f4b942";
+          let p = "";
+          for (let i = 0; i < n; i++) p += '<ellipse cx="0" cy="-10" rx="5" ry="8" fill="' + cPet + '" stroke="' + TRAIT + '" stroke-width="1.8" transform="rotate(' + (i * 360 / n) + ')"/>';
+          return p + '<circle r="6.5" fill="' + cCoeur + '" stroke="' + TRAIT + '" stroke-width="1.8"/>';
+        })() + "</g></g>" : "";
+      return '<svg viewBox="0 0 200 232" width="100%" role="img" aria-label="' + (o.nom || "Tapinoue, un lapin") + '">' +
+        /* oreilles */
+        '<g class="oreille"><ellipse cx="76" cy="40" rx="14" ry="37" transform="rotate(-8 76 40)" fill="' + fourrure + '" stroke="' + TRAIT + '" stroke-width="3.4"/><ellipse cx="77" cy="44" rx="6.8" ry="25" transform="rotate(-8 77 44)" fill="' + rose + '"/></g>' +
+        '<g><ellipse cx="124" cy="40" rx="14" ry="37" transform="rotate(8 124 40)" fill="' + fourrure + '" stroke="' + TRAIT + '" stroke-width="3.4"/><ellipse cx="123" cy="44" rx="6.8" ry="25" transform="rotate(8 123 44)" fill="' + rose + '"/></g>' +
+        noeudOreille +
+        /* corps + ventre */
+        '<ellipse cx="100" cy="172" rx="53" ry="47" fill="' + fourrure + '" stroke="' + TRAIT + '" stroke-width="3.4"/>' +
+        '<ellipse cx="100" cy="182" rx="31" ry="31" fill="' + ventre + '"/>' +
+        /* pattes avant */
+        '<ellipse cx="56" cy="168" rx="10" ry="20" transform="rotate(18 56 168)" fill="' + fourrure + '" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<ellipse cx="144" cy="168" rx="10" ry="20" transform="rotate(-18 144 168)" fill="' + fourrure + '" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        fleurMain +
+        /* pieds */
+        '<ellipse cx="70" cy="216" rx="19" ry="9.5" fill="' + fourrure + '" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<ellipse cx="130" cy="216" rx="19" ry="9.5" fill="' + fourrure + '" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        /* tête */
+        '<circle cx="100" cy="98" r="45" fill="' + fourrure + '" stroke="' + TRAIT + '" stroke-width="3.4"/>' +
+        '<ellipse cx="100" cy="113" rx="21" ry="13.5" fill="' + ventre + '"/>' +
+        '<ellipse cx="66" cy="106" rx="8" ry="5" fill="' + rose + '" opacity=".65"/>' +
+        '<ellipse cx="134" cy="106" rx="8" ry="5" fill="' + rose + '" opacity=".65"/>' +
+        /* yeux */
+        '<circle cx="83" cy="93" r="5.6" fill="#38241a"/><circle cx="85" cy="91" r="1.9" fill="#fff"/>' +
+        '<circle cx="117" cy="93" r="5.6" fill="#38241a"/><circle cx="119" cy="91" r="1.9" fill="#fff"/>' +
+        cils +
+        /* sourcils */
+        '<path d="M75 82 q8 -5 15 -1 M110 81 q7 -4 15 1" stroke="' + TRAIT + '" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+        /* nez, bouche, dent */
+        '<path d="M94 106 q6 -4.5 12 0 q-1.5 6 -6 6 q-4.5 0 -6 -6 Z" fill="#ef8fa8" stroke="' + TRAIT + '" stroke-width="2"/>' +
+        '<path d="M100 112 v4 M100 116 q-5 6 -12 2.5 M100 116 q5 6 12 2.5" stroke="' + TRAIT + '" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+        '<rect x="95.4" y="117" width="9.2" height="9" rx="2" fill="#fff" stroke="' + TRAIT + '" stroke-width="1.6"/>' +
+        /* moustaches */
+        '<path d="M76 110 L52 105 M77 116 L54 117 M124 110 L148 105 M123 116 L146 117" stroke="' + TRAIT + '" stroke-width="1.7" stroke-linecap="round" opacity=".7"/>' +
+        papillon +
+        (o.brille != null ? etincelles(Math.max(0.001, o.brille)) : "") +
+        "</svg>";
+    }
+
+    /* ================= ÉTAT DU JEU ================= */
+    const G = {
+      debut: 0,               /* horodatage du début de la partie */
+      refills: 0,              /* fois où le soleil est remonté (scène 2) */
+      noeud: null, noeudNom: "",
+      fleur: null, fleurNom: ""
+    };
+    const NOEUDS = [
+      { id: "rouge", nom: "Rouge",  couleur: "#d64541" },
+      { id: "bleu",  nom: "Bleu",   couleur: "#3e7cb1" },
+      { id: "dore",  nom: "Doré",   couleur: "#e9a13b" }
+    ];
+    const FLEURS = [
+      { id: "marguerite", nom: "Marguerite" },
+      { id: "tulipe",     nom: "Tulipe" },
+      { id: "tournesol",  nom: "Tournesol" }
+    ];
+
+    function majEtapes(n){
+      document.querySelectorAll("#steps .step").forEach(st => {
+        const s = +st.dataset.s;
+        st.classList.toggle("on", s === n);
+        st.classList.toggle("done", s < n);
+        st.querySelector(".dot").textContent = s < n ? "✓" : String(s);
+      });
+    }
+    function montrer(id){
+      document.querySelectorAll(".screen").forEach(sc => sc.classList.toggle("on", sc.id === id));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    let bravoTimer = null;
+    function bravo(mot, sous, suite){
+      const b = $("#bravo");
+      $("#bravoMot").innerHTML = mot + (sous ? "<small>" + sous + "</small>" : "");
+      b.classList.add("on");
+      clearTimeout(bravoTimer);
+      bravoTimer = setTimeout(() => { b.classList.remove("on"); if (suite) suite(); }, 1500);
+    }
+    function meilleur(){
+      try {
+        const m = JSON.parse(localStorage.getItem("tapinoue_meilleur") || "null");
+        return (m && typeof m.etoiles === "number") ? m : null;
+      } catch (e) { return null; }
+    }
+    function sauverMeilleur(etoiles, temps){
+      try {
+        const m = meilleur();
+        if (!m || etoiles > m.etoiles || (etoiles === m.etoiles && temps < m.temps)) {
+          localStorage.setItem("tapinoue_meilleur", JSON.stringify({ etoiles: etoiles, temps: temps }));
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
+    function txtMeilleur(){
+      const m = meilleur();
+      if (!m) return "";
+      return 'Ton meilleur résultat : <span class="etoiles-txt">' + "★".repeat(m.etoiles) + "☆".repeat(3 - m.etoiles) + "</span> en " + fmtTemps(m.temps);
+    }
+
+    /* ================= SCÈNE 1 — Un terrier propre ================= */
+    let S1 = null;
+    function initS1(){
+      G.debut = performance.now();
+      const stage = $("#stage1");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le terrier de Tapinoue, en désordre">' +
+        /* mur + plancher */
+        '<rect width="360" height="400" fill="#a06a38"/>' +
+        '<circle cx="60" cy="40" r="120" fill="#96622f"/>' +
+        '<circle cx="320" cy="30" r="100" fill="#96622f"/>' +
+        '<ellipse cx="180" cy="402" rx="230" ry="118" fill="#7c4c22"/>' +
+        '<ellipse cx="180" cy="392" rx="190" ry="88" fill="#8a5727"/>' +
+        /* tapis */
+        '<ellipse cx="168" cy="330" rx="104" ry="30" fill="#b84a39"/>' +
+        '<ellipse cx="168" cy="330" rx="104" ry="30" fill="none" stroke="#8f3125" stroke-width="4"/>' +
+        '<ellipse cx="168" cy="330" rx="72" ry="19" fill="none" stroke="#d9765f" stroke-width="4"/>' +
+        /* porte de sortie (arche lumineuse, à droite) */
+        '<path d="M284 268 v-84 a34 34 0 0 1 68 0 v84 Z" fill="#5d3a1e"/>' +
+        '<path d="M292 268 v-80 a26 26 0 0 1 52 0 v80 Z" fill="#ffd98a"/>' +
+        '<path d="M304 268 v-66 a14 14 0 0 1 28 0 v66 Z" fill="#ffedb8"/>' +
+        '<g stroke="#fff3c4" stroke-width="3" stroke-linecap="round" opacity=".85">' +
+          '<path d="M318 118 l0 -14 M300 128 l-9 -11 M336 128 l9 -11"/></g>' +
+        '<text x="318" y="292" text-anchor="middle" font-size="13" font-weight="800" fill="#ffe9bd">SORTIE</text>' +
+        /* étagère + pot */
+        '<rect x="28" y="182" width="104" height="10" rx="4" fill="#6e4423" stroke="' + TRAIT + '" stroke-width="2"/>' +
+        '<path d="M52 182 v-20 q0 -6 8 -6 h18 q8 0 8 6 v20 Z" fill="#c96f2e" stroke="' + TRAIT + '" stroke-width="2.2"/>' +
+        '<ellipse cx="70" cy="156" rx="17" ry="4" fill="#a8541f"/>' +
+        '<path d="M70 156 q-3 -16 -12 -22 M70 156 q1 -18 8 -26 M70 156 q6 -14 16 -18" stroke="#5f9e46" stroke-width="3.4" fill="none" stroke-linecap="round"/>' +
+        /* petit lit */
+        '<g><rect x="238" y="300" width="86" height="26" rx="9" fill="#7a8fc4" stroke="' + TRAIT + '" stroke-width="2.4"/>' +
+        '<rect x="246" y="288" width="38" height="18" rx="7" fill="#fdf6e3" stroke="' + TRAIT + '" stroke-width="2.2"/>' +
+        '<path d="M238 309 h86" stroke="#5d6f9e" stroke-width="3"/></g>' +
+        '<g id="s1items"></g>' +
+        /* panier */
+        '<g id="s1panier">' +
+          '<path d="M18 344 h64 l-8 44 a8 8 0 0 1 -8 6 H34 a8 8 0 0 1 -8 -6 Z" fill="#c98f3d" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+          '<path d="M14 344 h72" stroke="' + TRAIT + '" stroke-width="5" stroke-linecap="round"/>' +
+          '<path d="M24 362 h52 M28 378 h44" stroke="#a06c26" stroke-width="3.4" stroke-linecap="round"/>' +
+          '<path d="M50 344 q0 -22 0 -22" stroke="' + TRAIT + '" stroke-width="3" fill="none"/>' +
+        '</g>' +
+        '<g id="s1tapinoue" transform="translate(196 236) scale(0.52)"></g>' +
+      "</svg>" +
+      '<div class="outil" id="outil1"></div>';
+      $("#outil1").innerHTML =
+        '<svg viewBox="0 0 60 60"><g transform="rotate(28 30 30)">' +
+        '<rect x="27" y="2" width="6" height="34" rx="3" fill="#a06a38" stroke="' + TRAIT + '" stroke-width="2"/>' +
+        '<path d="M18 36 h24 l4 20 a3 3 0 0 1 -3 3 H17 a3 3 0 0 1 -3 -3 Z" fill="#e9c46a" stroke="' + TRAIT + '" stroke-width="2"/>' +
+        '<path d="M22 40 v14 M30 40 v15 M38 40 v14" stroke="#c79a3d" stroke-width="2.4"/></g></svg>';
+      $("#s1tapinoue").innerHTML = lapinSVG({ nom: "Tapinoue regarde son terrier en désordre" })
+        .replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"');
+
+      const g = $("#s1items");
+      S1 = { fini: false, total: 12, fait: 0, poussiere: [], pelures: [], toiles: [], balaiSnd: 0 };
+
+      /* --- toiles d'araignée (coins) --- */
+      const toilePos = [[6, 4], [354, 4]];
+      toilePos.forEach(p => {
+        const t = el("g", { opacity: "0.95" }, g);
+        const sx = p[0] < 180 ? 1 : -1;
+        for (let i = 0; i < 4; i++){
+          el("path", { d: "M" + p[0] + " " + p[1] + " L" + (p[0] + sx * (16 + i * 13)) + " " + (p[1] + 58 - i * 3), stroke: "#e8e2d4", "stroke-width": "1.7", fill: "none", opacity: ".8" }, t);
+          el("path", { d: "M" + p[0] + " " + p[1] + " L" + (p[0] + sx * (58 - i * 3)) + " " + (p[1] + 16 + i * 13), stroke: "#e8e2d4", "stroke-width": "1.7", fill: "none", opacity: ".8" }, t);
+        }
+        for (let i = 0; i < 3; i++){
+          const d = 14 + i * 13;
+          el("path", { d: "M" + (p[0] + sx * d) + " " + (p[1] + 4) + " Q" + (p[0] + sx * (d + 7)) + " " + (p[1] + d * 0.62) + " " + (p[0] + sx * 4) + " " + (p[1] + d), stroke: "#e8e2d4", "stroke-width": "1.5", fill: "none", opacity: ".7" }, t);
+        }
+        S1.toiles.push({ g: t, x: p[0] + sx * 26, y: p[1] + 26, r: 40, prog: 0, ok: false });
+      });
+
+      /* --- tas de poussière --- */
+      const pousPos = [[96, 300, 27], [168, 344, 31], [238, 288, 24], [128, 252, 21], [276, 336, 22]];
+      pousPos.forEach(p => {
+        const grp = el("g", {}, g);
+        grp.innerHTML =
+          '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="' + p[2] + '" ry="' + (p[2] * 0.52) + '" fill="#cdbd9e"/>' +
+          '<ellipse cx="' + (p[0] - p[2] * 0.3) + '" cy="' + (p[1] - 5) + '" rx="' + (p[2] * 0.55) + '" ry="' + (p[2] * 0.3) + '" fill="#dccbA8"/>' +
+          '<circle cx="' + (p[0] + 6) + '" cy="' + (p[1] - 3) + '" r="2.4" fill="#b3a07c"/>' +
+          '<circle cx="' + (p[0] - 9) + '" cy="' + (p[1] + 3) + '" r="1.9" fill="#b3a07c"/>';
+        S1.poussiere.push({ g: grp, x: p[0], y: p[1], r: p[2] + 8, prog: 0, ok: false });
+      });
+
+      /* --- épluchures de carotte --- */
+      const pelPos = [[150, 276], [214, 322], [66, 330], [262, 246], [104, 214]];
+      pelPos.forEach(p => {
+        const grp = el("g", { transform: "translate(" + p[0] + " " + p[1] + ") rotate(" + (Math.random() * 50 - 25) + ")", cursor: "pointer" }, g);
+        grp.innerHTML =
+          '<path d="M-13 5 Q-2 -13 13 1 Q4 -1 2 7 Q10 5 13 11 Q0 16 -13 5 Z" fill="#f59e42" stroke="' + TRAIT + '" stroke-width="1.8" stroke-linejoin="round"/>' +
+          '<path d="M-7 3 Q0 -6 8 0" fill="none" stroke="#d97c1e" stroke-width="1.8"/>';
+        S1.pelures.push({ g: grp, x: p[0], y: p[1], ok: false, anim: false });
+      });
+
+      majJauge1();
+      $("#msg1").textContent = "";
+      attacheS1(stage.querySelector("svg"));
+    }
+    function majJauge1(){
+      let fait = 0;
+      S1.poussiere.forEach(d => fait += d.prog);
+      S1.toiles.forEach(t => fait += t.prog);
+      S1.pelures.forEach(p => fait += p.ok ? 1 : 0);
+      const pct = Math.round(fait / S1.total * 100);
+      $("#bar1").style.width = pct + "%";
+      $("#pct1").textContent = pct + " %";
+      if (pct >= 100 && !S1.fini){
+        S1.fini = true;
+        sJingle();
+        bravo("Bravo !", "Le terrier est tout propre.", () => { montrer("scr-s2"); majEtapes(2); initS2(); });
+      }
+    }
+    function attacheS1(svg){
+      const stage = $("#stage1"), outil = $("#outil1");
+      let actif = false, lastX = 0, lastY = 0;
+      function posOutil(e){
+        const r = stage.getBoundingClientRect();
+        outil.style.left = (e.clientX - r.left) + "px";
+        outil.style.top = (e.clientY - r.top) + "px";
+      }
+      function ramassePelure(p){
+        if (p.ok || p.anim) return;
+        p.anim = true; sPluck();
+        const panier = { x: 50, y: 336 };
+        const x0 = p.x, y0 = p.y, t0 = performance.now();
+        (function pas(t){
+          const k = Math.min(1, (t - t0) / 420);
+          const x = x0 + (panier.x - x0) * k;
+          const y = y0 + (panier.y - y0) * k - Math.sin(k * Math.PI) * 46;
+          p.g.setAttribute("transform", "translate(" + x + " " + y + ") rotate(" + (k * 160) + ") scale(" + (1 - k * 0.35) + ")");
+          if (k < 1) requestAnimationFrame(pas);
+          else {
+            p.ok = true; p.g.style.display = "none"; sPop();
+            const pan = $("#s1panier");
+            pan.style.transformBox = "fill-box"; pan.style.transformOrigin = "center bottom";
+            pan.style.transition = "transform .18s ease"; pan.style.transform = "scale(1.12)";
+            setTimeout(() => { pan.style.transform = "scale(1)"; }, 190);
+            majJauge1();
+          }
+        })(t0);
+      }
+      svg.addEventListener("pointerdown", e => {
+        audio();
+        const pt = svgPoint(svg, e.clientX, e.clientY);
+        const pel = S1.pelures.find(p => !p.ok && !p.anim && Math.hypot(pt.x - p.x, pt.y - p.y) < 30);
+        if (pel) { ramassePelure(pel); return; }
+        actif = true; lastX = pt.x; lastY = pt.y;
+        svg.setPointerCapture(e.pointerId);
+        outil.style.display = "block"; posOutil(e);
+        e.preventDefault();
+      });
+      svg.addEventListener("pointermove", e => {
+        if (!actif) return;
+        posOutil(e);
+        const pt = svgPoint(svg, e.clientX, e.clientY);
+        const dist = Math.hypot(pt.x - lastX, pt.y - lastY);
+        lastX = pt.x; lastY = pt.y;
+        if (dist < 1.5) return;
+        let touche = false;
+        const coup = (item, vitesse) => {
+          if (item.ok) return;
+          if (Math.hypot(pt.x - item.x, pt.y - item.y) < item.r){
+            item.prog = Math.min(1, item.prog + dist * vitesse);
+            touche = true;
+            if (item.prog >= 1){ item.ok = true; item.g.style.display = "none"; sPop(); }
+            else if (item.g.firstChild) item.g.setAttribute("opacity", String(1 - item.prog * 0.92));
+          }
+        };
+        S1.poussiere.forEach(d => coup(d, 0.006));
+        S1.toiles.forEach(t => coup(t, 0.005));
+        if (touche){
+          const now = performance.now();
+          if (now - S1.balaiSnd > 130){ S1.balaiSnd = now; sBalai(); }
+          majJauge1();
+        }
+        e.preventDefault();
+      });
+      const fin = () => { actif = false; outil.style.display = "none"; };
+      svg.addEventListener("pointerup", fin);
+      svg.addEventListener("pointercancel", fin);
+    }
+
+    /* ================= SCÈNE 2 — La réserve de carottes ================= */
+    const S2DUREE = 60000, S2RAJOUT = 25000, S2BUT = 12;
+    let S2 = null;
+    function initS2(){
+      const stage = $("#stage2");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le potager, sous le soleil">' +
+        '<rect width="360" height="252" fill="#bfe6f5"/>' +
+        '<g id="s2soleil">' +
+          '<g class="soleil-rayons" stroke="#f4b942" stroke-width="4" stroke-linecap="round">' +
+            '<path d="M0 -40 v-9 M28 -28 l7 -7 M40 0 h9 M28 28 l7 7 M0 40 v9 M-28 28 l-7 7 M-40 0 h-9 M-28 -28 l-7 -7"/></g>' +
+          '<circle r="24" fill="#ffd23e" stroke="#e9a13b" stroke-width="3"/>' +
+          '<circle cx="-7" cy="-3" r="3.2" fill="#54382a"/><circle cx="7" cy="-3" r="3.2" fill="#54382a"/>' +
+          '<path d="M-7 6 q7 6 14 0" stroke="#54382a" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+        "</g>" +
+        '<g fill="#ffffff" opacity=".92"><ellipse cx="66" cy="52" rx="30" ry="12"/><ellipse cx="90" cy="45" rx="20" ry="10"/><ellipse cx="292" cy="86" rx="26" ry="10"/><ellipse cx="312" cy="80" rx="16" ry="8"/></g>' +
+        /* haie + clôture */
+        '<path d="M0 238 q30 -20 62 -6 q28 -18 58 -4 q30 -16 62 -3 q30 -15 60 -2 q28 -14 58 -2 q30 -12 60 4 v27 H0 Z" fill="#7cb45e"/>' +
+        '<g stroke="#a5713d" stroke-width="5" stroke-linecap="round"><path d="M28 218 v26 M92 214 v28 M158 212 v28 M224 212 v28 M290 214 v28 M338 218 v24"/></g>' +
+        '<path d="M0 226 h360" stroke="#a5713d" stroke-width="5"/>' +
+        /* terre */
+        '<rect y="248" width="360" height="152" fill="#8a5a30"/>' +
+        '<g fill="#744a24"><ellipse cx="52" cy="292" rx="40" ry="10"/><ellipse cx="180" cy="292" rx="40" ry="10"/><ellipse cx="308" cy="292" rx="40" ry="10"/>' +
+        '<ellipse cx="116" cy="336" rx="40" ry="10"/><ellipse cx="244" cy="336" rx="40" ry="10"/><ellipse cx="180" cy="376" rx="42" ry="10"/></g>' +
+        '<g id="s2carottes"></g>' +
+        /* panier */
+        '<g id="s2panier">' +
+          '<path d="M288 356 h66 l-7 34 a8 8 0 0 1 -8 6 h-36 a8 8 0 0 1 -8 -6 Z" fill="#c98f3d" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+          '<path d="M284 356 h74" stroke="' + TRAIT + '" stroke-width="5" stroke-linecap="round"/>' +
+          '<path d="M296 374 h50" stroke="#a06c26" stroke-width="3.4" stroke-linecap="round"/>' +
+          '<g id="s2pile"></g>' +
+        "</g>" +
+        '<g id="s2tapinoue" transform="translate(6 268) scale(0.42)"></g>' +
+      "</svg>";
+      $("#s2tapinoue").innerHTML = lapinSVG({ nom: "Tapinoue au potager" })
+        .replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"');
+
+      S2 = {
+        fini: false, nb: 0, reste: S2DUREE, derniere: performance.now(),
+        courante: null, intervalle: null, spots: [
+          { x: 52, y: 282 }, { x: 180, y: 282 }, { x: 308, y: 282 },
+          { x: 116, y: 326 }, { x: 244, y: 326 }, { x: 180, y: 366 },
+          { x: 52, y: 340 }, { x: 308, y: 344 }
+        ], dernierSpot: -1
+      };
+      $("#nb2").textContent = "0 / " + S2BUT;
+      $("#bar2").style.width = "0%";
+      $("#msg2").textContent = "";
+      $("#txtSoleil").textContent = "";
+      majSoleil();
+      faitPousser();
+      S2.intervalle = setInterval(ticS2, 100);
+      stage.querySelector("svg").addEventListener("pointerdown", tapeS2);
+    }
+    function majSoleil(){
+      const k = Math.max(0, S2.reste / S2DUREE);       /* 1 = haut, 0 = couché */
+      const y = 228 - k * 168;                          /* de 60 à 228 */
+      $("#s2soleil").setAttribute("transform", "translate(306 " + y + ")");
+      $("#barSoleil").style.width = (k * 100) + "%";
+    }
+    function ticS2(){
+      if (!S2 || S2.fini) return;
+      const now = performance.now();
+      S2.reste -= (now - S2.derniere); S2.derniere = now;
+      if (S2.reste <= 0){
+        if (S2.nb >= S2BUT) return;
+        G.refills++;
+        S2.reste = S2RAJOUT;
+        $("#msg2").textContent = "Le soleil remonte un peu… Continue, tu es capable !";
+        sChime();
+      }
+      majSoleil();
+    }
+    function faitPousser(){
+      if (!S2 || S2.fini) return;
+      let i;
+      do { i = Math.floor(Math.random() * S2.spots.length); } while (i === S2.dernierSpot);
+      S2.dernierSpot = i;
+      const s = S2.spots[i];
+      const zone = $("#s2carottes");
+      zone.innerHTML = "";
+      const g = el("g", { transform: "translate(" + s.x + " " + s.y + ") scale(0.15)", cursor: "pointer" }, zone);
+      g.innerHTML =
+        '<circle r="30" fill="rgba(0,0,0,0)"/>' +
+        '<path d="M0 2 C-3 -12 -10 -18 -16 -22 M0 2 C0 -14 2 -22 0 -28 M0 2 C3 -12 10 -18 17 -21" stroke="#4e7d3a" stroke-width="5" fill="none" stroke-linecap="round"/>' +
+        '<path d="M-9 0 Q0 7 9 0 L5 22 Q0 27 -5 22 Z" fill="#f07f2e" stroke="' + TRAIT + '" stroke-width="2.4" stroke-linejoin="round"/>' +
+        '<path d="M-4 9 h7 M-2.4 16 h5" stroke="#d9621a" stroke-width="2" stroke-linecap="round"/>';
+      const t0 = performance.now();
+      (function pousse(t){
+        if (!S2 || S2.fini || !g.isConnected) return;
+        const k = Math.min(1, (t - t0) / 380);
+        const e = 1 - Math.pow(1 - k, 3);
+        g.setAttribute("transform", "translate(" + s.x + " " + s.y + ") scale(" + (0.15 + 0.85 * e) + ")");
+        if (k < 1) requestAnimationFrame(pousse);
+      })(t0);
+      S2.courante = { g: g, x: s.x, y: s.y, prete: true };
+    }
+    function tapeS2(e){
+      if (!S2 || S2.fini || !S2.courante) return;
+      audio();
+      const svg = e.currentTarget;
+      const pt = svgPoint(svg, e.clientX, e.clientY);
+      const c = S2.courante;
+      if (Math.hypot(pt.x - c.x, pt.y - (c.y - 4)) > 36) return;
+      S2.courante = null;
+      sPluck();
+      const panier = { x: 320, y: 344 };
+      const x0 = c.x, y0 = c.y, t0 = performance.now();
+      (function vole(t){
+        const k = Math.min(1, (t - t0) / 430);
+        const x = x0 + (panier.x - x0) * k;
+        const y = y0 + (panier.y - y0) * k - Math.sin(k * Math.PI) * 70;
+        c.g.setAttribute("transform", "translate(" + x + " " + y + ") rotate(" + (k * 200) + ") scale(" + (1 - k * 0.3) + ")");
+        if (k < 1) requestAnimationFrame(vole);
+        else {
+          c.g.remove();
+          S2.nb++;
+          sPop();
+          const pile = $("#s2pile");
+          const n = pile.childNodes.length;
+          const mini = el("g", { transform: "translate(" + (306 + (n % 3) * 14) + " " + (348 - Math.floor(n / 3) * 7) + ") rotate(" + (n * 37 % 50 - 25) + ") scale(0.55)" }, pile);
+          mini.innerHTML = '<path d="M-9 0 Q0 7 9 0 L5 22 Q0 27 -5 22 Z" fill="#f07f2e" stroke="' + TRAIT + '" stroke-width="2.4" stroke-linejoin="round"/>';
+          $("#nb2").textContent = S2.nb + " / " + S2BUT;
+          $("#bar2").style.width = (S2.nb / S2BUT * 100) + "%";
+          if (S2.nb >= S2BUT){
+            S2.fini = true; clearInterval(S2.intervalle); sJingle();
+            bravo("Bravo !", "La réserve est pleine : 12 belles carottes.", () => { montrer("scr-s3"); majEtapes(3); initS3(); });
+          } else {
+            setTimeout(faitPousser, 160);
+          }
+        }
+      })(t0);
+      e.preventDefault();
+    }
+
+    /* ================= SCÈNE 3 — Beau comme un cœur ================= */
+    let S3 = null;
+    function decorSalon(titre){
+      return '<svg class="scene" viewBox="0 0 360 300" aria-label="' + titre + '">' +
+        '<rect width="360" height="300" fill="#f7e3c2"/>' +
+        '<rect y="218" width="360" height="82" fill="#c98f5f"/>' +
+        '<path d="M0 218 h360" stroke="#a5713d" stroke-width="4"/>' +
+        '<g stroke="#b57e49" stroke-width="3"><path d="M50 222 v74 M130 222 v74 M215 222 v74 M300 222 v74"/></g>' +
+        /* fenêtre ronde avec soleil */
+        '<circle cx="306" cy="62" r="34" fill="#bfe6f5" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<circle cx="296" cy="54" r="10" fill="#ffd23e" stroke="#e9a13b" stroke-width="2.4"/>' +
+        '<path d="M278 78 q14 -8 28 0 q14 -8 26 1" stroke="#ffffff" stroke-width="6" fill="none" stroke-linecap="round"/>' +
+        '<path d="M306 28 v68 M272 62 h68" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+        /* cadre au mur */
+        '<g><rect x="24" y="34" width="66" height="52" rx="6" fill="#fff6df" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<path d="M57 74 c-12 -10 -20 -16 -20 -24 a7.5 7.5 0 0 1 14 -3 a7.5 7.5 0 0 1 14 3 c0 8 -8 14 -8 24 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="2"/></g>' +
+        /* tapis + lapin */
+        '<ellipse cx="180" cy="262" rx="118" ry="24" fill="#b84a39"/>' +
+        '<ellipse cx="180" cy="262" rx="118" ry="24" fill="none" stroke="#8f3125" stroke-width="3.6"/>' +
+        '<ellipse cx="180" cy="262" rx="80" ry="15" fill="none" stroke="#d9765f" stroke-width="3.4"/>' +
+        '<g id="DECORLAPIN" transform="translate(80 36) scale(1)"></g>' +
+      "</svg>";
+    }
+    function poseLapin3(conteneur, opts){
+      conteneur.innerHTML = decorSalon("Tapinoue dans son salon");
+      const g = conteneur.querySelector("#DECORLAPIN");
+      g.innerHTML = lapinSVG(opts).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"');
+    }
+    function initS3(){
+      S3 = { brille: 0, fini: false, brosseSnd: 0, noeudChoisi: false, fleurChoisie: false };
+      G.noeud = null; G.fleur = null;
+      $("#msg3").textContent = "";
+      ["e3a", "e3b", "e3c"].forEach((id, i) => $("#" + id).classList.toggle("on", i === 0));
+      /* Étape A : le nœud papillon */
+      poseLapin3($("#stage3a"), { nom: "Tapinoue choisit son nœud papillon" });
+      const cn = $("#choixNoeud"); cn.innerHTML = "";
+      NOEUDS.forEach(n => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.innerHTML = '<svg viewBox="-34 -18 68 36" width="68" height="36">' +
+          '<path d="M-4 -3 L-26 -13 Q-31 0 -26 13 L-4 3 Z" fill="' + n.couleur + '" stroke="' + TRAIT + '" stroke-width="2.6" stroke-linejoin="round"/>' +
+          '<path d="M4 -3 L26 -13 Q31 0 26 13 L4 3 Z" fill="' + n.couleur + '" stroke="' + TRAIT + '" stroke-width="2.6" stroke-linejoin="round"/>' +
+          '<circle r="6.5" fill="' + n.couleur + '" stroke="' + TRAIT + '" stroke-width="2.6"/></svg>' + n.nom;
+        b.addEventListener("click", () => {
+          if (S3.noeudChoisi) return;
+          S3.noeudChoisi = true;
+          audio(); sPop();
+          G.noeud = n.couleur; G.noeudNom = n.nom;
+          cn.querySelectorAll("button").forEach(x => x.classList.remove("choisi"));
+          b.classList.add("choisi");
+          poseLapin3($("#stage3a"), { papillon: n.couleur, nom: "Tapinoue avec son nœud papillon " + n.nom.toLowerCase() });
+          $("#msg3").textContent = "Très chic, le " + n.nom.toLowerCase() + " !";
+          setTimeout(() => { $("#msg3").textContent = ""; etapeBrosse(); }, 650);
+        });
+        cn.appendChild(b);
+      });
+    }
+    function etapeBrosse(){
+      if (S3.etapeBrosseFaite) return;
+      S3.etapeBrosseFaite = true;
+      S3.brille = 0;
+      $("#e3a").classList.remove("on");
+      $("#e3c").classList.remove("on");
+      $("#e3b").classList.add("on");
+      const stage = $("#stage3b");
+      poseLapin3(stage, { papillon: G.noeud, brille: 0, nom: "Tapinoue se fait brosser" });
+      stage.insertAdjacentHTML("beforeend",
+        '<div class="outil" id="outil3">' +
+        '<svg viewBox="0 0 60 60"><g transform="rotate(24 30 30)">' +
+        '<rect x="22" y="26" width="17" height="26" rx="6" fill="#c96f2e" stroke="' + TRAIT + '" stroke-width="2.2"/>' +
+        '<rect x="20" y="8" width="21" height="20" rx="5" fill="#8a5a30" stroke="' + TRAIT + '" stroke-width="2.2"/>' +
+        '<path d="M25 12 v11 M30.5 12 v11 M36 12 v11" stroke="#e9c46a" stroke-width="2.6"/></g></svg></div>');
+      $("#bar3").style.width = "0%";
+      $("#pct3").textContent = "0 %";
+      const svg = stage.querySelector("svg");
+      const outil = $("#outil3");
+      let actif = false, lx = 0, ly = 0;
+      function posOutil(e){
+        const r = stage.getBoundingClientRect();
+        outil.style.left = (e.clientX - r.left) + "px";
+        outil.style.top = (e.clientY - r.top) + "px";
+      }
+      svg.addEventListener("pointerdown", e => {
+        audio(); actif = true; const pt = svgPoint(svg, e.clientX, e.clientY); lx = pt.x; ly = pt.y;
+        svg.setPointerCapture(e.pointerId);
+        outil.style.display = "block"; posOutil(e); e.preventDefault();
+      });
+      svg.addEventListener("pointermove", e => {
+        if (!actif || S3.fini) return;
+        posOutil(e);
+        const pt = svgPoint(svg, e.clientX, e.clientY);
+        /* le lapin occupe le centre du décor */
+        if (pt.x < 62 || pt.x > 298 || pt.y < 22 || pt.y > 292){ lx = pt.x; ly = pt.y; return; }
+        const dist = Math.hypot(pt.x - lx, pt.y - ly);
+        lx = pt.x; ly = pt.y;
+        if (dist < 2) return;
+        const avant = S3.brille;
+        S3.brille = Math.min(1, S3.brille + dist * 0.0016);
+        if (S3.brille !== avant){
+          const pct = Math.round(S3.brille * 100);
+          $("#bar3").style.width = pct + "%";
+          $("#pct3").textContent = pct + " %";
+          const grp = svg.querySelector(".brille-groupe");
+          if (grp) grp.setAttribute("opacity", S3.brille.toFixed(2));
+          const now = performance.now();
+          if (now - S3.brosseSnd > 150){ S3.brosseSnd = now; sBrosse(); }
+          if (Math.floor(avant * 4) !== Math.floor(S3.brille * 4) && S3.brille < 1) sEtincelle();
+          if (S3.brille >= 1){
+            S3.fini = true; actif = false; outil.style.display = "none";
+            sChime(); sEtincelle();
+            poseLapin3(stage, { papillon: G.noeud, brille: 1, nom: "Tapinoue, le pelage tout brillant" });
+            $("#msg3").textContent = "Wow, ça brille comme un sou neuf !";
+            setTimeout(() => { $("#msg3").textContent = ""; etapeFleur(); }, 900);
+          }
+        }
+        e.preventDefault();
+      });
+      const fin = () => { actif = false; outil.style.display = "none"; };
+      svg.addEventListener("pointerup", fin);
+      svg.addEventListener("pointercancel", fin);
+    }
+    function etapeFleur(){
+      $("#e3b").classList.remove("on");
+      $("#e3a").classList.remove("on");
+      $("#e3c").classList.add("on");
+      poseLapin3($("#stage3c"), { papillon: G.noeud, brille: 1, nom: "Tapinoue choisit une fleur" });
+      const cf = $("#choixFleur"); cf.innerHTML = "";
+      FLEURS.forEach(f => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.innerHTML = fleurSVG(f.id, 52) + f.nom;
+        b.addEventListener("click", () => {
+          if (S3.fleurChoisie) return;
+          S3.fleurChoisie = true;
+          audio(); sChime();
+          G.fleur = f.id; G.fleurNom = f.nom;
+          cf.querySelectorAll("button").forEach(x => x.classList.remove("choisi"));
+          b.classList.add("choisi");
+          poseLapin3($("#stage3c"), { papillon: G.noeud, brille: 1, fleurMain: f.id, nom: "Tapinoue tient sa " + f.nom.toLowerCase() });
+          $("#msg3").textContent = "Une " + f.nom.toLowerCase() + " pour Lapinette. Parfait !";
+          setTimeout(() => {
+            $("#msg3").textContent = "";
+            bravo("Prêt !", "Direction le pré, Lapinette attend.", () => { montrer("scr-s4"); majEtapes(4); initS4(); });
+          }, 800);
+        });
+        cf.appendChild(b);
+      });
+    }
+
+    /* ================= SCÈNE 4 — La rencontre ================= */
+    let S4 = null;
+    function initS4(){
+      const bosses = [
+        { x: 40, y: 330 }, { x: 92, y: 288 }, { x: 138, y: 326 }, { x: 186, y: 282 },
+        { x: 232, y: 320 }, { x: 276, y: 280 }, { x: 316, y: 312 }, { x: 322, y: 238 }
+      ];
+      const fleursSur = { 2: true, 4: true, 5: true };   /* bosses avec une fleur sauvage */
+      const stage = $("#stage4");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le pré, avec des bosses à traverser">' +
+        '<rect width="360" height="400" fill="#bfe6f5"/>' +
+        '<circle cx="46" cy="44" r="20" fill="#ffd23e" stroke="#e9a13b" stroke-width="3"/>' +
+        '<g fill="#ffffff" opacity=".92"><ellipse cx="150" cy="40" rx="30" ry="11"/><ellipse cx="172" cy="34" rx="19" ry="9"/><ellipse cx="286" cy="66" rx="24" ry="9"/></g>' +
+        /* collines + pré */
+        '<path d="M0 210 q90 -44 190 -18 q110 26 170 -6 v214 H0 Z" fill="#8fce6d"/>' +
+        '<path d="M0 268 q100 -30 200 -8 q100 20 160 -4 v144 H0 Z" fill="#79bd58"/>' +
+        /* petites fleurs du décor */
+        '<g id="s4deco"></g>' +
+        /* colline de Lapinette */
+        '<ellipse cx="322" cy="252" rx="52" ry="24" fill="#8fce6d"/>' +
+        '<g id="s4lapinette" transform="translate(272 128) scale(0.5)"></g>' +
+        '<g transform="translate(322 116)">' +
+          '<path class="pulse" d="M0 10 C-14 -4 -8 -16 0 -8 C8 -16 14 -4 0 10 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="1.6" transform="scale(1.1)"/></g>' +
+        /* bosses */
+        '<g id="s4bosses"></g>' +
+        '<circle id="s4cible" r="13" fill="none" stroke="#ffffff" stroke-width="3.4" class="pulse"/>' +
+        '<g id="s4tapinoue"></g>' +
+      "</svg>";
+      const deco = $("#s4deco");
+      [[26, 250], [70, 356], [120, 250], [205, 356], [255, 246], [150, 372], [330, 356], [96, 300]].forEach((p, i) => {
+        deco.innerHTML += fleurGroupe("sauvage", p[0], p[1], 0.55 + (i % 3) * 0.1);
+      });
+      const gb = $("#s4bosses");
+      bosses.forEach((b, i) => {
+        const derniere = i === bosses.length - 1;
+        el("ellipse", { cx: b.x, cy: b.y + 8, rx: derniere ? 30 : 24, ry: 10, fill: "#6aa84f", stroke: "#4e7d3a", "stroke-width": "2.4" }, gb);
+        el("path", { d: "M" + (b.x - 12) + " " + (b.y + 4) + " q4 -6 8 0 M" + (b.x + 3) + " " + (b.y + 3) + " q4 -6 8 0", stroke: "#4e7d3a", "stroke-width": "2", fill: "none", "stroke-linecap": "round" }, gb);
+        if (fleursSur[i]){
+          const f = document.createElementNS(SVGNS, "g");
+          f.setAttribute("id", "s4fleur" + i);
+          f.innerHTML = fleurGroupe("sauvage", b.x + 14, b.y - 8, 0.8);
+          gb.appendChild(f);
+        }
+      });
+      $("#s4lapinette").innerHTML = lapinSVG({ fourrure: "#f6ddd8", cils: true, noeudOreille: true, nom: "Lapinette attend Tapinoue" })
+        .replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"');
+      S4 = { bosses: bosses, idx: 0, fleurs: 0, fleursSur: fleursSur, saut: false, fini: false };
+      placeTapinoueS4(bosses[0].x, bosses[0].y, 0);
+      majCibleS4();
+      $("#nb4").textContent = "0 / 3";
+      $("#bar4").style.width = "0%";
+      $("#msg4").textContent = "Tape le pré pour sauter !";
+      stage.querySelector("svg").addEventListener("pointerdown", tapeS4);
+    }
+    function placeTapinoueS4(x, yBosse, dy){
+      const g = $("#s4tapinoue");
+      g.setAttribute("transform", "translate(" + (x - 42) + " " + (yBosse - 96 + (dy || 0)) + ") scale(0.42)");
+      if (!g.innerHTML) g.innerHTML = lapinSVG({ papillon: G.noeud, brille: 1, nom: "Tapinoue traverse le pré" })
+        .replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"');
+    }
+    function majCibleS4(){
+      const c = $("#s4cible");
+      if (!c || !S4) return;
+      if (S4.idx >= S4.bosses.length - 1){ c.style.display = "none"; return; }
+      const b = S4.bosses[S4.idx + 1];
+      c.setAttribute("cx", b.x); c.setAttribute("cy", b.y - 12);
+      c.style.display = "";
+    }
+    function tapeS4(e){
+      if (!S4 || S4.fini || S4.saut) return;
+      audio();
+      if (S4.idx >= S4.bosses.length - 1) return;
+      S4.saut = true;
+      sBoing();
+      const a = S4.bosses[S4.idx], b = S4.bosses[S4.idx + 1];
+      S4.idx++;
+      majCibleS4();
+      const t0 = performance.now();
+      (function bond(t){
+        const k = Math.min(1, (t - t0) / 460);
+        const x = a.x + (b.x - a.x) * k;
+        const y = a.y + (b.y - a.y) * k;
+        placeTapinoueS4(x, y, -Math.sin(k * Math.PI) * 44);
+        if (k < 1) requestAnimationFrame(bond);
+        else {
+          S4.saut = false;
+          placeTapinoueS4(b.x, b.y, 0);
+          /* fleur sauvage sur cette bosse ? */
+          if (S4.fleursSur[S4.idx]){
+            delete S4.fleursSur[S4.idx];
+            const f = document.getElementById("s4fleur" + S4.idx);
+            if (f) f.style.display = "none";
+            S4.fleurs++;
+            sChime();
+            $("#nb4").textContent = S4.fleurs + " / 3";
+            $("#bar4").style.width = (S4.fleurs / 3 * 100) + "%";
+            $("#msg4").textContent = S4.fleurs === 3 ? "Tu as les 3 fleurs ! Encore un saut…" : "Une fleur sauvage ! Plus que " + (3 - S4.fleurs) + "…";
+          }
+          if (S4.idx >= S4.bosses.length - 1){
+            S4.fini = true;
+            setTimeout(finale, 450);
+          }
+        }
+      })(t0);
+      e.preventDefault();
+    }
+
+    /* ================= FINALE ================= */
+    function finale(){
+      majEtapes(5);
+      const temps = (performance.now() - G.debut) / 1000;
+      let etoiles;
+      if (G.refills === 0 && temps <= 240) etoiles = 3;
+      else if (G.refills <= 2 && temps <= 420) etoiles = 2;
+      else etoiles = 1;
+      const nouveauRecord = sauverMeilleur(etoiles, temps);
+      sauverTableau(1, etoiles, temps);
+
+      $("#couple").innerHTML =
+        '<div style="display:flex;gap:2px;justify-content:center;align-items:flex-end">' +
+          '<div style="width:47%">' + lapinSVG({ papillon: G.noeud, brille: 1, fleurMain: G.fleur, nom: "Tapinoue, prêt pour la rencontre" }) + "</div>" +
+          '<div style="width:47%">' + lapinSVG({ fourrure: "#f6ddd8", cils: true, noeudOreille: true, nom: "Lapinette, ravie" }) + "</div>" +
+        "</div>";
+      $("#etoilesFin").innerHTML = [1, 2, 3].map(i =>
+        '<span class="e ' + (i <= etoiles ? "pleine" : "") + '">' + (i <= etoiles ? "★" : "☆") + "</span>").join("");
+      $("#tempsFin").textContent = "Aventure terminée en " + fmtTemps(temps) + " — " + etoiles + (etoiles > 1 ? " étoiles" : " étoile") + " !";
+      $("#resumeFin").innerHTML =
+        "<li>Terrier propre : impeccable, pas un grain de poussière !</li>" +
+        "<li>Réserve de carottes : 12 belles carottes au panier" + (G.refills > 0 ? " (le soleil est remonté " + G.refills + " fois, et c'est correct !)" : " (récoltées avant le coucher du soleil !)") + "</li>" +
+        "<li>Nœud papillon : " + (G.noeudNom || "—").toLowerCase() + ", pelage brillant comme un sou neuf</li>" +
+        "<li>Fleur offerte à Lapinette : une " + (G.fleurNom || "fleur").toLowerCase() + ", plus 3 fleurs sauvages du pré</li>";
+      $("#meilleurFin").innerHTML = (nouveauRecord ? "C'est ton meilleur résultat !<br/>" : "") + txtMeilleur();
+
+      /* pluie de cœurs */
+      const zone = $("#coeurs"); zone.innerHTML = "";
+      for (let i = 0; i < 14; i++){
+        const s = document.createElement("span");
+        const taille = 16 + Math.random() * 18;
+        s.innerHTML = '<svg viewBox="0 0 24 24" width="' + taille + '" height="' + taille + '"><path d="M12 21 C4 15 2 10 5.5 6.6 C8 4.2 11.4 5 12 7.6 C12.6 5 16 4.2 18.5 6.6 C22 10 20 15 12 21 Z" fill="' + (i % 3 === 0 ? "#ef6f8b" : i % 3 === 1 ? "#f4a6bb" : "#e2543e") + '"/></svg>';
+        s.style.left = (4 + Math.random() * 90) + "%";
+        s.style.animationDuration = (3.4 + Math.random() * 2.6) + "s";
+        s.style.animationDelay = (Math.random() * 2.4) + "s";
+        zone.appendChild(s);
+      }
+      montrer("scr-fin");
+      sJingle();
+      setTimeout(sCoeur, 350);
+    }
+
+    /* ================= SONS SUPPLÉMENTAIRES ================= */
+    const sPouet   = () => tone(340, 130, 0.14, "square", 0.07);
+    const sDoux    = () => tone(660, 880, 0.16, "sine", 0.12);
+    const sToc     = () => bruit(0.09, 420, 0.16, "lowpass");
+    const sGrogne  = () => { tone(150, 80, 0.32, "sawtooth", 0.10); tone(110, 65, 0.30, "sawtooth", 0.09, 0.16); };
+    const sOiseau  = () => { tone(1250, 1750, 0.11, "sine", 0.12); tone(1450, 1950, 0.11, "sine", 0.10, 0.13); };
+
+    /* ================= AIDES COMMUNES ================= */
+    function defEtapes(labels){
+      $("#steps").innerHTML = labels.map((l, i) =>
+        '<div class="step" data-s="' + (i + 1) + '"><span class="dot">' + (i + 1) + "</span>" + l + "</div>").join("");
+    }
+    function animePos(g, x1, y1, dur, fait){
+      const x0 = parseFloat(g.dataset.x || "0"), y0 = parseFloat(g.dataset.y || "0"), t0 = performance.now();
+      (function pas(t){
+        const k = Math.min(1, (t - t0) / dur);
+        const x = x0 + (x1 - x0) * k, y = y0 + (y1 - y0) * k;
+        g.dataset.x = x; g.dataset.y = y;
+        g.setAttribute("transform", "translate(" + x + " " + y + ")");
+        if (k < 1) requestAnimationFrame(pas); else if (fait) fait();
+      })(t0);
+    }
+    /* Glisser-déposer générique : les éléments .glissable portent dataset.x / dataset.y (leur position). */
+    function fabriqueGlisser(svg, onDrop){
+      let cur = null;
+      function pt(e){ return svgPoint(svg, e.clientX, e.clientY); }
+      svg.addEventListener("pointerdown", e => {
+        let n = e.target;
+        while (n && n !== svg && !(n.classList && n.classList.contains("glissable"))) n = n.parentNode;
+        if (!n || n === svg || n.dataset.fait === "1") return;
+        audio();
+        const p = pt(e);
+        cur = { g: n, dx: p.x - parseFloat(n.dataset.x || "0"), dy: p.y - parseFloat(n.dataset.y || "0") };
+        try { svg.setPointerCapture(e.pointerId); } catch (err) {}
+        if (n.parentNode) n.parentNode.appendChild(n);
+        e.preventDefault();
+      });
+      svg.addEventListener("pointermove", e => {
+        if (!cur) return;
+        const p = pt(e);
+        const x = p.x - cur.dx, y = p.y - cur.dy;
+        cur.g.dataset.x = x; cur.g.dataset.y = y;
+        cur.g.setAttribute("transform", "translate(" + x + " " + y + ")");
+        e.preventDefault();
+      });
+      function fin(){
+        if (!cur) return;
+        const g = cur.g; cur = null;
+        onDrop(g, parseFloat(g.dataset.x || "0"), parseFloat(g.dataset.y || "0"));
+      }
+      svg.addEventListener("pointerup", fin);
+      svg.addEventListener("pointercancel", fin);
+    }
+    function pluieCoeurs(zone){
+      zone.innerHTML = "";
+      for (let i = 0; i < 14; i++){
+        const s = document.createElement("span");
+        const taille = 16 + Math.random() * 18;
+        s.innerHTML = '<svg viewBox="0 0 24 24" width="' + taille + '" height="' + taille + '"><path d="M12 21 C4 15 2 10 5.5 6.6 C8 4.2 11.4 5 12 7.6 C12.6 5 16 4.2 18.5 6.6 C22 10 20 15 12 21 Z" fill="' + (i % 3 === 0 ? "#ef6f8b" : i % 3 === 1 ? "#f4a6bb" : "#e2543e") + '"/></svg>';
+        s.style.left = (4 + Math.random() * 90) + "%";
+        s.style.animationDuration = (3.4 + Math.random() * 2.6) + "s";
+        s.style.animationDelay = (Math.random() * 2.4) + "s";
+        zone.appendChild(s);
+      }
+    }
+    function illuCouple(){
+      return '<div style="display:flex;gap:2px;justify-content:center;align-items:flex-end">' +
+        '<div style="width:47%">' + lapinSVG({ papillon: G.noeud, brille: 1, nom: "Tapinoue" }) + "</div>" +
+        '<div style="width:47%">' + lapinSVG({ fourrure: "#f6ddd8", cils: true, noeudOreille: true, nom: "Lapinette" }) + "</div></div>";
+    }
+    function illuFamille(){
+      return '<div style="display:flex;gap:2px;justify-content:center;align-items:flex-end">' +
+          '<div style="width:33%">' + lapinSVG({ papillon: G.noeud, brille: 1, nom: "Tapinoue" }) + "</div>" +
+          '<div style="width:33%">' + lapinSVG({ fourrure: "#f6ddd8", cils: true, noeudOreille: true, nom: "Lapinette" }) + "</div></div>" +
+        '<div style="display:flex;gap:2px;justify-content:center;align-items:flex-end;margin-top:2px">' +
+          '<div style="width:21%">' + lapinSVG({ fourrure: "#f3e7d3", nom: "Un bébé lapinou" }) + "</div>" +
+          '<div style="width:21%">' + lapinSVG({ fourrure: "#f6ddd8", noeudOreille: true, nom: "Un bébé lapinou" }) + "</div>" +
+          '<div style="width:21%">' + lapinSVG({ fourrure: "#eee3cc", nom: "Un bébé lapinou" }) + "</div></div>";
+    }
+    function dessinLegume(type){
+      if (type === "carotte") return '<g><path d="M0 0 C-3 -12 -10 -18 -16 -22 M0 0 C0 -14 2 -22 0 -28 M0 0 C3 -12 10 -18 17 -21" stroke="#4e7d3a" stroke-width="4.6" fill="none" stroke-linecap="round"/><path d="M-9 0 Q0 7 9 0 L5 22 Q0 27 -5 22 Z" fill="#f07f2e" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><path d="M-4 9 h7 M-2.4 16 h5" stroke="#d9621a" stroke-width="1.8" stroke-linecap="round"/></g>';
+      if (type === "laitue") return '<g stroke="' + TRAIT + '" stroke-width="1.8"><circle cx="-9" cy="3" r="10" fill="#79bd58"/><circle cx="9" cy="3" r="10" fill="#79bd58"/><circle cx="0" cy="-6" r="11" fill="#8fce6d"/></g><path d="M0 -13 v18 M-6 -8 q3 7 0 13 M6 -8 q-3 7 0 13" stroke="#5f9e46" stroke-width="1.8" fill="none"/>';
+      return '<g><circle r="16" fill="#8fce6d" stroke="' + TRAIT + '" stroke-width="2"/><path d="M-11 -8 q11 -6 22 0 M-13 3 q13 6 26 0 M-6 -13 q-3 13 0 26 M6 -13 q3 13 0 26" stroke="#5f9e46" stroke-width="1.8" fill="none"/><circle r="6.5" fill="#a5dd8a"/></g>';
+    }
+    const NOMS_LEGUMES = { carotte: "Carotte", laitue: "Laitue", chou: "Chou" };
+    const ENVIES_TXT = { carotte: "une carotte", laitue: "une laitue", chou: "un chou" };
+
+    /* ================= PROGRESSION — LES TABLEAUX ================= */
+    const TABDEF = [
+      { n: 1, titre: "La rencontre", desc: "Un terrier propre, une réserve de carottes, un nœud papillon… et Lapinette au bout du pré." },
+      { n: 2, titre: "Le terrier à deux", desc: "Tapinoue et Lapinette aménagent leur terrier ensemble, puis partent chercher de la salade au pré." },
+      { n: 3, titre: "Les lapinous", desc: "Trois bébés lapins arrivent ! Il faut préparer leurs nids et les nourrir au potager de M. Grincheux…" },
+      { n: 4, titre: "Le renard qui rôde", desc: "Un renard rôde près du terrier le soir. Vite, toute la famille se barricade pour la nuit !" }
+    ];
+    function progression(){
+      try {
+        const p = JSON.parse(localStorage.getItem("tapinoue_tableaux") || "null");
+        if (p && typeof p === "object") return p;
+      } catch (e) {}
+      const p0 = {};
+      const m = meilleur();
+      if (m) p0["1"] = { etoiles: m.etoiles, temps: m.temps };
+      return p0;
+    }
+    function sauverTableau(n, etoiles, temps){
+      try {
+        const p = progression();
+        const old = p[String(n)];
+        if (!old || etoiles > old.etoiles || (etoiles === old.etoiles && temps < old.temps)) {
+          p[String(n)] = { etoiles: etoiles, temps: temps };
+        }
+        localStorage.setItem("tapinoue_tableaux", JSON.stringify(p));
+      } catch (e) {}
+    }
+    function debloque(n){
+      if (n === 1) return true;
+      return !!progression()[String(n - 1)];
+    }
+    function rendreAccueil(){
+      const p = progression();
+      const faits = TABDEF.filter(t => p[String(t.n)]).length;
+      defEtapes(["Tableau 1", "Tableau 2", "Tableau 3", "Tableau 4"]);
+      majEtapes(faits + 1);
+      const zone = $("#listeTableaux");
+      zone.innerHTML = "";
+      TABDEF.forEach(t => {
+        const fait = p[String(t.n)];
+        const ouv = debloque(t.n);
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "tab-carte" + (fait ? " faite" : ouv ? " dispo" : " verrou");
+        let haut = '<span class="num">Tableau ' + t.n + "</span>";
+        if (fait) haut += '<span class="etoiles-txt">' + "★".repeat(fait.etoiles) + "☆".repeat(3 - fait.etoiles) + "</span>";
+        else if (!ouv) haut += '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#b3a07c"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#b3a07c" stroke-width="2.4"/></svg>';
+        b.innerHTML = '<span class="haut">' + haut + "</span>" +
+          "<h3>" + t.titre + "</h3><p>" + t.desc + "</p>" +
+          '<p class="st">' + (fait ? "Terminé — touche pour rejouer" : ouv ? "À toi de jouer !" : "Termine le tableau précédent pour débloquer celui-ci.") + "</p>";
+        if (ouv) b.addEventListener("click", () => { audio(); sPop(); lancerTableau(t.n); });
+        zone.appendChild(b);
+      });
+      $("#accueilNote").textContent = faits === 4 ? "Tu as terminé tous les tableaux. Bravo, la famille Tapinoue te dit merci !" : "";
+    }
+    function retourAccueil(){
+      rendreAccueil();
+      montrer("scr-accueil");
+    }
+    function lancerTableau(n){
+      if (n === 1){
+        defEtapes(["Terrier propre", "Carottes", "Beau comme un cœur", "La rencontre"]);
+        montrer("scr-intro");
+      }
+      else if (n === 2) debutT2();
+      else if (n === 3) debutT3();
+      else if (n === 4) debutT4();
+    }
+
+    /* ================= FINALE GÉNÉRIQUE (TABLEAUX 2 À 4) ================= */
+    let FIN = { n: 0 };
+    function finaleTableau(n, titre, illu, resumeLignes, etoiles, temps){
+      sauverTableau(n, etoiles, temps);
+      FIN.n = n;
+      $("#fintabTitre").textContent = titre;
+      $("#fintabIllu").innerHTML = illu;
+      $("#fintabEtoiles").innerHTML = [1, 2, 3].map(i =>
+        '<span class="e ' + (i <= etoiles ? "pleine" : "") + '">' + (i <= etoiles ? "★" : "☆") + "</span>").join("");
+      $("#fintabTemps").textContent = "Tableau terminé en " + fmtTemps(temps) + " — " + etoiles + (etoiles > 1 ? " étoiles" : " étoile") + " !";
+      $("#fintabResume").innerHTML = resumeLignes.map(l => "<li>" + l + "</li>").join("");
+      $("#asuivre").style.display = n === 4 ? "block" : "none";
+      const suiv = $("#btnFintabSuivant");
+      if (n < 4){
+        suiv.style.display = "";
+        suiv.textContent = "Tableau suivant : " + TABDEF[n].titre;
+      } else suiv.style.display = "none";
+      pluieCoeurs($("#fintabCoeurs"));
+      montrer("scr-fintab");
+      majEtapes(99);
+      sJingle();
+      setTimeout(sCoeur, 350);
+    }
+
+    /* ================= TABLEAU 2 — LE TERRIER À DEUX ================= */
+    let T2 = null;
+    function debutT2(){
+      T2 = { debut: performance.now(), places: 0, feuilles: 0, ameres: 0, chemin: null, cheminNom: "" };
+      defEtapes(["On s'installe", "Chercher de la salade"]);
+      initT2S1();
+    }
+    const T2ITEMS = [
+      { id: "tapis", nom: "le tapis de mousse", cible: { x: 168, y: 320 }, home: { x: 52, y: 372 }, rx: 52, ry: 22,
+        dessin: () => '<ellipse cx="0" cy="0" rx="46" ry="15" fill="#79bd58" stroke="' + TRAIT + '" stroke-width="2.4"/><path d="M-30 -3 q10 -6 20 0 M-8 -5 q10 -6 20 0 M14 -3 q10 -6 18 -1" stroke="#5f9e46" stroke-width="2.6" fill="none" stroke-linecap="round"/>' },
+      { id: "bols", nom: "les deux bols", cible: { x: 84, y: 272 }, home: { x: 128, y: 374 }, rx: 42, ry: 20,
+        dessin: () => '<path d="M-36 -4 h28 q0 14 -14 14 q-14 0 -14 -14 Z" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><path d="M8 -4 h28 q0 14 -14 14 q-14 0 -14 -14 Z" fill="#3e7cb1" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><path d="M-24 -6 q3 -8 8 -10 M20 -6 q-2 -8 -7 -11" stroke="#5f9e46" stroke-width="3" fill="none" stroke-linecap="round"/>' },
+      { id: "lampe", nom: "la lampe champignon", cible: { x: 46, y: 232 }, home: { x: 196, y: 366 }, rx: 27, ry: 34,
+        dessin: () => '<circle cx="0" cy="-14" r="25" fill="#ffd98a" opacity=".35"/><rect x="-3.4" y="-4" width="7" height="24" rx="3" fill="#f3e7d3" stroke="' + TRAIT + '" stroke-width="2"/><path d="M-21 -2 A21 15 0 0 1 21 -2 Z" fill="#d64541" stroke="' + TRAIT + '" stroke-width="2.4"/><circle cx="-9" cy="-8" r="3" fill="#fff"/><circle cx="7" cy="-11" r="2.4" fill="#fff"/><ellipse cx="0" cy="21" rx="12" ry="4" fill="#8a5a30" stroke="' + TRAIT + '" stroke-width="1.8"/>' },
+      { id: "nid", nom: "le nid douillet", cible: { x: 272, y: 302 }, home: { x: 264, y: 370 }, rx: 42, ry: 22,
+        dessin: () => '<ellipse cx="0" cy="4" rx="35" ry="14" fill="#b5792f" stroke="' + TRAIT + '" stroke-width="2.4"/><path d="M-28 0 q9 -8 19 -3 M-10 -2 q10 -8 20 -2 M8 0 q9 -7 17 -2" stroke="#8a5a30" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="0" cy="0" rx="20" ry="8" fill="#f6d9a8" stroke="#d9a75f" stroke-width="2"/>' },
+      { id: "cadre", nom: "le cadre-cœur", cible: { x: 150, y: 90 }, home: { x: 326, y: 366 }, rx: 27, ry: 31,
+        dessin: () => '<rect x="-19" y="-23" width="38" height="46" rx="5" fill="#fff6df" stroke="#8a5a30" stroke-width="4"/><path d="M0 12 C-11 3 -13 -4 -8.5 -8 C-5 -11 -1 -8 0 -4.6 C1 -8 5 -11 8.5 -8 C13 -4 11 3 0 12 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="1.8"/>' }
+    ];
+    function initT2S1(){
+      montrer("scr-t2s1"); majEtapes(1);
+      T2.places = 0;
+      const stage = $("#stageT2a");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le terrier à aménager à deux">' +
+        '<rect width="360" height="400" fill="#a06a38"/>' +
+        '<circle cx="60" cy="40" r="120" fill="#96622f"/>' +
+        '<circle cx="320" cy="30" r="100" fill="#96622f"/>' +
+        '<ellipse cx="180" cy="402" rx="230" ry="118" fill="#7c4c22"/>' +
+        '<ellipse cx="180" cy="392" rx="190" ry="88" fill="#8a5727"/>' +
+        '<path d="M284 268 v-84 a34 34 0 0 1 68 0 v84 Z" fill="#5d3a1e"/>' +
+        '<path d="M292 268 v-80 a26 26 0 0 1 52 0 v80 Z" fill="#ffd98a"/>' +
+        '<path d="M304 268 v-66 a14 14 0 0 1 28 0 v66 Z" fill="#ffedb8"/>' +
+        '<text x="318" y="292" text-anchor="middle" font-size="13" font-weight="800" fill="#ffe9bd">SORTIE</text>' +
+        '<g id="t2cibles"></g>' +
+        '<g transform="translate(232 14) scale(0.3)">' + lapinSVG({ nom: "Tapinoue regarde" }).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') + "</g>" +
+        '<g transform="translate(294 18) scale(0.3)">' + lapinSVG({ fourrure: "#f6ddd8", cils: true, noeudOreille: true, nom: "Lapinette regarde" }).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') + "</g>" +
+        '<rect x="0" y="342" width="360" height="58" fill="#6e4423"/>' +
+        '<path d="M0 342 h360" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<text x="180" y="358" text-anchor="middle" font-size="11.5" font-weight="800" fill="#ffe9bd">Glisse les objets à leur place !</text>' +
+        '<g id="t2items"></g>' +
+      "</svg>";
+      const zc = $("#t2cibles"), zi = $("#t2items");
+      T2ITEMS.forEach(it => {
+        const c = el("g", { transform: "translate(" + it.cible.x + " " + it.cible.y + ")", opacity: "0.4" }, zc);
+        c.innerHTML = it.dessin() +
+          '<ellipse cx="0" cy="0" rx="' + it.rx + '" ry="' + it.ry + '" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-dasharray="6 5"/>';
+        const g = el("g", { "class": "glissable", transform: "translate(" + it.home.x + " " + it.home.y + ")" }, zi);
+        g.dataset.x = it.home.x; g.dataset.y = it.home.y; g.dataset.id = it.id;
+        g.innerHTML = '<ellipse cx="0" cy="0" rx="' + (it.rx + 6) + '" ry="' + (it.ry + 6) + '" fill="rgba(0,0,0,0)"/>' + it.dessin();
+      });
+      $("#barT2a").style.width = "0%";
+      $("#pctT2a").textContent = "0 %";
+      $("#msgT2a").textContent = "";
+      fabriqueGlisser(stage.querySelector("svg"), (g, x, y) => {
+        const it = T2ITEMS.find(i => i.id === g.dataset.id);
+        if (!it) return;
+        if (Math.hypot(x - it.cible.x, y - it.cible.y) < 52){
+          g.dataset.fait = "1";
+          g.classList.remove("glissable");
+          animePos(g, it.cible.x, it.cible.y, 160);
+          sPop();
+          T2.places++;
+          const pct = Math.round(T2.places / T2ITEMS.length * 100);
+          $("#barT2a").style.width = pct + "%";
+          $("#pctT2a").textContent = pct + " %";
+          if (T2.places >= T2ITEMS.length){
+            sJingle();
+            bravo("Bravo !", "Le terrier est prêt pour deux.", () => choixCheminT2());
+          } else {
+            $("#msgT2a").textContent = "Et voilà " + it.nom + " ! Plus que " + (T2ITEMS.length - T2.places) + "…";
+          }
+        } else {
+          sPouet();
+          $("#msgT2a").textContent = "Presque ! La place en pointillés t'attend.";
+          animePos(g, it.home.x, it.home.y, 220);
+        }
+      });
+    }
+    function dessinFeuille(){
+      return '<path d="M0 15 C-15 10 -19 -6 -10 -13 C-11 -5 -5 -1 0 -3 C5 -1 11 -5 10 -13 C19 -6 15 10 0 15 Z" fill="#7fc95e" stroke="' + TRAIT + '" stroke-width="2" stroke-linejoin="round"/><path d="M0 12 V-6" stroke="#5f9e46" stroke-width="2.4" stroke-linecap="round"/>';
+    }
+    function dessinFeuilleAmere(){
+      return '<path d="M0 15 L-6 6 L-15 9 L-11 -2 L-17 -6 L-7 -8 L-8 -16 L0 -10 L8 -16 L7 -8 L17 -6 L11 -2 L15 9 L6 6 Z" fill="#a3a34d" stroke="' + TRAIT + '" stroke-width="2" stroke-linejoin="round"/><circle cx="-4" cy="0" r="1.7" fill="#6d6d2f"/><circle cx="5" cy="4" r="1.7" fill="#6d6d2f"/>';
+    }
+    function choixCheminT2(){
+      montrer("scr-t2s2"); majEtapes(2);
+      T2.chemin = null; T2.cheminNom = "";
+      const stage = $("#stageT2b");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le pré, avec deux sentiers au choix : le direct et le détour">' +
+        '<rect width="360" height="400" fill="#bfe6f5"/>' +
+        '<circle cx="46" cy="44" r="20" fill="#ffd23e" stroke="#e9a13b" stroke-width="3"/>' +
+        '<g fill="#ffffff" opacity=".92"><ellipse cx="150" cy="40" rx="30" ry="11"/><ellipse cx="172" cy="34" rx="19" ry="9"/><ellipse cx="286" cy="66" rx="24" ry="9"/></g>' +
+        '<path d="M0 210 q90 -44 190 -18 q110 26 170 -6 v214 H0 Z" fill="#8fce6d"/>' +
+        '<path d="M0 268 q100 -30 200 -8 q100 20 160 -4 v144 H0 Z" fill="#79bd58"/>' +
+        '<path d="M24 362 Q120 336 205 326 Q295 316 340 258" fill="none" stroke="#fff6df" stroke-width="4" stroke-dasharray="1 10" stroke-linecap="round" opacity=".75"/>' +
+        '<path d="M24 362 Q80 258 175 240 Q275 224 340 258" fill="none" stroke="#ffe1a8" stroke-width="4" stroke-dasharray="1 10" stroke-linecap="round" opacity=".75"/>' +
+        '<g transform="translate(112 292)"><rect x="-4" y="-2" width="8" height="36" fill="#8a5a30" stroke="' + TRAIT + '" stroke-width="1.8"/><path d="M-50 -18 h100 l11 11 -11 11 h-100 l-11 -11 Z" fill="#c98f3d" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><text x="0" y="4.5" text-anchor="middle" font-size="12.5" font-weight="900" fill="#4a3220">DIRECT</text></g>' +
+        '<g transform="translate(238 226)"><rect x="-4" y="-2" width="8" height="36" fill="#8a5a30" stroke="' + TRAIT + '" stroke-width="1.8"/><path d="M-50 -18 h100 l11 11 -11 11 h-100 l-11 -11 Z" fill="#c98f3d" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><text x="0" y="4.5" text-anchor="middle" font-size="12.5" font-weight="900" fill="#4a3220">DÉTOUR</text></g>' +
+        '<g transform="translate(2 258) scale(0.42)">' + lapinSVG({ nom: "Tapinoue choisit son sentier" }).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') + "</g>" +
+      "</svg>";
+      const zone = $("#choixCheminT2");
+      zone.innerHTML = "";
+      const bD = document.createElement("button");
+      bD.type = "button";
+      bD.innerHTML = '<svg viewBox="-22 -22 44 44" width="40" height="40" aria-hidden="true">' + dessinFeuilleAmere() + '</svg>Sentier direct<br/><span style="font-weight:600;font-size:.82rem">Plus court — avec les feuilles amères</span>';
+      bD.addEventListener("click", () => { audio(); sPop(); T2.chemin = "direct"; T2.cheminNom = "le sentier direct"; initT2S2(); });
+      const bL = document.createElement("button");
+      bL.type = "button";
+      bL.innerHTML = '<svg viewBox="-22 -22 44 44" width="40" height="40" aria-hidden="true">' + dessinFeuille() + '</svg>Sentier détour<br/><span style="font-weight:600;font-size:.82rem">Un peu plus long — il évite les feuilles amères</span>';
+      bL.addEventListener("click", () => { audio(); sChime(); T2.chemin = "detour"; T2.cheminNom = "le sentier détour"; initT2S2(); });
+      zone.appendChild(bD);
+      zone.appendChild(bL);
+      $("#nbT2b").textContent = "0 / 10";
+      $("#barT2b").style.width = "0%";
+      $("#msgT2b").textContent = "Deux sentiers mènent chez Lapinette. Lequel choisis-tu ?";
+    }
+    let T2S2 = null;
+    function initT2S2(){
+      montrer("scr-t2s2"); majEtapes(2);
+      $("#choixCheminT2").innerHTML = "";
+      const detour = T2.chemin === "detour";
+      const bosses = detour ? [
+        { x: 34, y: 328 }, { x: 52, y: 278 }, { x: 74, y: 312 }, { x: 96, y: 258 },
+        { x: 118, y: 290 }, { x: 138, y: 244 }, { x: 160, y: 274 }, { x: 182, y: 232 },
+        { x: 204, y: 262 }, { x: 224, y: 220 }, { x: 246, y: 250 }, { x: 264, y: 214 },
+        { x: 284, y: 242 }, { x: 302, y: 208 }, { x: 322, y: 214 }
+      ] : [
+        { x: 34, y: 328 }, { x: 66, y: 286 }, { x: 98, y: 324 }, { x: 128, y: 282 },
+        { x: 156, y: 320 }, { x: 184, y: 278 }, { x: 212, y: 318 }, { x: 240, y: 282 },
+        { x: 266, y: 322 }, { x: 292, y: 284 }, { x: 314, y: 318 }, { x: 330, y: 272 }, { x: 322, y: 214 }
+      ];
+      const bonnes = detour
+        ? { 1: 1, 2: 1, 4: 1, 5: 1, 7: 1, 8: 1, 10: 1, 11: 1, 12: 1, 13: 1 }
+        : { 1: 1, 2: 1, 3: 1, 5: 1, 6: 1, 7: 1, 9: 1, 10: 1, 11: 1, 12: 1 };
+      const ameres = detour ? {} : { 4: 1, 8: 1 };
+      const stage = $("#stageT2b");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le pré, avec des bosses et des feuilles de laitue">' +
+        '<rect width="360" height="400" fill="#bfe6f5"/>' +
+        '<circle cx="46" cy="44" r="20" fill="#ffd23e" stroke="#e9a13b" stroke-width="3"/>' +
+        '<g fill="#ffffff" opacity=".92"><ellipse cx="150" cy="40" rx="30" ry="11"/><ellipse cx="172" cy="34" rx="19" ry="9"/><ellipse cx="286" cy="66" rx="24" ry="9"/></g>' +
+        '<path d="M0 210 q90 -44 190 -18 q110 26 170 -6 v214 H0 Z" fill="#8fce6d"/>' +
+        '<path d="M0 268 q100 -30 200 -8 q100 20 160 -4 v144 H0 Z" fill="#79bd58"/>' +
+        '<g id="t2deco"></g>' +
+        '<ellipse cx="322" cy="228" rx="52" ry="24" fill="#8fce6d"/>' +
+        '<g transform="translate(272 90) scale(0.5)">' + lapinSVG({ fourrure: "#f6ddd8", cils: true, noeudOreille: true, nom: "Lapinette attend avec le panier" }).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') + "</g>" +
+        '<g transform="translate(322 78)"><path class="pulse" d="M0 10 C-14 -4 -8 -16 0 -8 C8 -16 14 -4 0 10 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="1.6" transform="scale(1.1)"/></g>' +
+        '<g id="t2bosses"></g>' +
+        '<g transform="translate(14 336)">' +
+          '<path d="M0 8 h58 l-6 30 a7 7 0 0 1 -7 6 H13 a7 7 0 0 1 -7 -6 Z" fill="#c98f3d" stroke="' + TRAIT + '" stroke-width="2.4"/>' +
+          '<path d="M-3 8 h64" stroke="' + TRAIT + '" stroke-width="4.6" stroke-linecap="round"/>' +
+          '<g id="t2pile"></g>' +
+        "</g>" +
+        '<circle id="t2cible" r="13" fill="none" stroke="#ffffff" stroke-width="3.4" class="pulse"/>' +
+        '<g id="t2tapinoue"></g>' +
+      "</svg>";
+      const deco = $("#t2deco");
+      [[26, 250], [120, 250], [205, 356], [150, 372], [96, 300], [255, 246]].forEach((p, i) => {
+        deco.innerHTML += fleurGroupe("sauvage", p[0], p[1], 0.55 + (i % 3) * 0.1);
+      });
+      const gb = $("#t2bosses");
+      el("polyline", { points: bosses.map(b => b.x + "," + (b.y + 8)).join(" "), fill: "none", stroke: "#fff6df", "stroke-width": "3.4", "stroke-dasharray": "0.5 9", "stroke-linecap": "round", opacity: "0.65" }, gb);
+      bosses.forEach((b, i) => {
+        const derniere = i === bosses.length - 1;
+        el("ellipse", { cx: b.x, cy: b.y + 8, rx: derniere ? 30 : 24, ry: 10, fill: "#6aa84f", stroke: "#4e7d3a", "stroke-width": "2.4" }, gb);
+        el("path", { d: "M" + (b.x - 12) + " " + (b.y + 4) + " q4 -6 8 0 M" + (b.x + 3) + " " + (b.y + 3) + " q4 -6 8 0", stroke: "#4e7d3a", "stroke-width": "2", fill: "none", "stroke-linecap": "round" }, gb);
+        if (bonnes[i]){
+          const f = el("g", { id: "t2feuille" + i, transform: "translate(" + (b.x + 13) + " " + (b.y - 14) + ")" }, gb);
+          f.innerHTML = dessinFeuille();
+        }
+        if (ameres[i]){
+          const f = el("g", { id: "t2amere" + i, transform: "translate(" + (b.x + 13) + " " + (b.y - 14) + ")" }, gb);
+          f.innerHTML = dessinFeuilleAmere();
+        }
+      });
+      T2S2 = { bosses: bosses, idx: 0, saut: false, fini: false, bonnes: bonnes, ameres: ameres };
+      T2.feuilles = 0;
+      placeTapinoueT2(bosses[0].x, bosses[0].y, 0);
+      majCibleT2();
+      $("#nbT2b").textContent = "0 / 10";
+      $("#barT2b").style.width = "0%";
+      $("#msgT2b").textContent = "En route par " + T2.cheminNom + " ! Tape le pré pour sauter !";
+      stage.querySelector("svg").addEventListener("pointerdown", tapeT2S2);
+    }
+    function placeTapinoueT2(x, yBosse, dy){
+      const g = $("#t2tapinoue");
+      g.setAttribute("transform", "translate(" + (x - 42) + " " + (yBosse - 96 + (dy || 0)) + ") scale(0.42)");
+      if (!g.innerHTML) g.innerHTML = lapinSVG({ nom: "Tapinoue cherche de la salade" })
+        .replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"');
+    }
+    function majCibleT2(){
+      const c = $("#t2cible");
+      if (!c || !T2S2) return;
+      if (T2S2.idx >= T2S2.bosses.length - 1){ c.style.display = "none"; return; }
+      const b = T2S2.bosses[T2S2.idx + 1];
+      c.setAttribute("cx", b.x); c.setAttribute("cy", b.y - 12);
+      c.style.display = "";
+    }
+    function tapeT2S2(e){
+      if (!T2S2 || T2S2.fini || T2S2.saut) return;
+      audio();
+      if (T2S2.idx >= T2S2.bosses.length - 1) return;
+      T2S2.saut = true;
+      sBoing();
+      const a = T2S2.bosses[T2S2.idx], b = T2S2.bosses[T2S2.idx + 1];
+      T2S2.idx++;
+      majCibleT2();
+      const t0 = performance.now();
+      (function bond(t){
+        const k = Math.min(1, (t - t0) / 460);
+        const x = a.x + (b.x - a.x) * k;
+        const y = a.y + (b.y - a.y) * k;
+        placeTapinoueT2(x, y, -Math.sin(k * Math.PI) * 44);
+        if (k < 1) requestAnimationFrame(bond);
+        else {
+          T2S2.saut = false;
+          placeTapinoueT2(b.x, b.y, 0);
+          const idx = T2S2.idx;
+          if (T2S2.bonnes[idx]){
+            delete T2S2.bonnes[idx];
+            const f = document.getElementById("t2feuille" + idx);
+            if (f){
+              const x0 = b.x + 13, y0 = b.y - 14, tf = performance.now();
+              (function vole(tv){
+                const k = Math.min(1, (tv - tf) / 450);
+                const x = x0 + (43 - x0) * k;
+                const y = y0 + (336 - y0) * k - Math.sin(k * Math.PI) * 60;
+                f.setAttribute("transform", "translate(" + x + " " + y + ") scale(" + (1 - k * 0.4) + ")");
+                if (k < 1) requestAnimationFrame(vole); else f.remove();
+              })(tf);
+            }
+            T2.feuilles++;
+            sChime();
+            const pile = $("#t2pile");
+            const n = pile.childNodes.length;
+            const mini = el("g", { transform: "translate(" + (8 + (n % 4) * 11) + " " + (2 - Math.floor(n / 4) * 6) + ") scale(0.55)" }, pile);
+            mini.innerHTML = dessinFeuille();
+            $("#nbT2b").textContent = T2.feuilles + " / 10";
+            $("#barT2b").style.width = (T2.feuilles / 10 * 100) + "%";
+            $("#msgT2b").textContent = T2.feuilles >= 10 ? "Le panier est plein !" : "Belle feuille ! Plus que " + (10 - T2.feuilles) + "…";
+          }
+          if (T2S2.ameres[idx]){
+            delete T2S2.ameres[idx];
+            T2.ameres++;
+            const f = document.getElementById("t2amere" + idx);
+            sPouet();
+            $("#msgT2b").textContent = "Oups, une feuille amère ! On l'écarte doucement, ce n'est pas grave.";
+            if (f){
+              f.classList.add("secoue");
+              setTimeout(() => { f.style.transition = "opacity .4s"; f.style.opacity = "0"; setTimeout(() => f.remove(), 420); }, 450);
+            }
+          }
+          if (T2S2.idx >= T2S2.bosses.length - 1){
+            T2S2.fini = true;
+            setTimeout(() => { sJingle(); bravo("Bravo !", "Le panier est plein de belle salade.", finaleT2); }, 700);
+          }
+        }
+      })(t0);
+      e.preventDefault();
+    }
+    function finaleT2(){
+      const temps = (performance.now() - T2.debut) / 1000;
+      const etoiles = temps <= 210 ? 3 : temps <= 380 ? 2 : 1;
+      finaleTableau(2, "Le premier repas à deux", illuCouple(),
+        ["Terrier aménagé à deux : le nid douillet, les deux bols, la lampe champignon, le tapis de mousse et le cadre-cœur.",
+         "Salade fraîche : 10 belles feuilles de laitue ramassées au pré, par " + (T2.cheminNom || "le sentier direct") + (T2.ameres > 0 ? " (et " + T2.ameres + " feuille" + (T2.ameres > 1 ? "s amères écartées" : " amère écartée") + " en douceur)" : " (sans toucher une seule feuille amère !)") + ".",
+         "Premier repas à deux dans le terrier — miam, que c'est bon !"],
+        etoiles, temps);
+    }
+
+    /* ================= TABLEAU 3 — LES LAPINOUS ================= */
+    let T3 = null;
+    function debutT3(){
+      T3 = { debut: performance.now(), grincements: 0, panier: { carotte: 0, laitue: 0, chou: 0 }, recolte: [] };
+      defEtapes(["La famille s'agrandit", "Le potager de M. Grincheux", "Le repas de famille"]);
+      initT3S1();
+    }
+    let T3S1 = null;
+    function initT3S1(){
+      montrer("scr-t3s1"); majEtapes(1);
+      const stage = $("#stageT3a");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le terrier et les trois nids des bébés lapins">' +
+        '<rect width="360" height="400" fill="#a06a38"/>' +
+        '<circle cx="60" cy="40" r="120" fill="#96622f"/>' +
+        '<circle cx="320" cy="30" r="100" fill="#96622f"/>' +
+        '<ellipse cx="180" cy="402" rx="230" ry="118" fill="#7c4c22"/>' +
+        '<ellipse cx="180" cy="392" rx="190" ry="88" fill="#8a5727"/>' +
+        '<text x="180" y="56" text-anchor="middle" font-size="16.5" font-weight="800" fill="#ffe9bd">Trois petits lapinous sont arrivés !</text>' +
+        '<g transform="translate(8 74) scale(0.3)">' + lapinSVG({ papillon: G.noeud, nom: "Tapinoue, fier papa" }).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') + "</g>" +
+        '<g transform="translate(292 74) scale(0.3)">' + lapinSVG({ fourrure: "#f6ddd8", cils: true, noeudOreille: true, nom: "Lapinette, fière maman" }).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') + "</g>" +
+        '<g id="t3nids"></g>' +
+      "</svg>";
+      const defs = [
+        { x: 70, fourrure: "#f3e7d3", noeud: false },
+        { x: 180, fourrure: "#f6ddd8", noeud: true },
+        { x: 290, fourrure: "#eee3cc", noeud: false }
+      ];
+      T3S1 = { total: 0, nids: [] };
+      const zone = $("#t3nids");
+      defs.forEach(d => {
+        const g = el("g", {}, zone);
+        g.innerHTML =
+          '<ellipse cx="' + d.x + '" cy="308" rx="52" ry="17" fill="#b5792f" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+          '<g class="paille"></g>' +
+          '<g transform="translate(' + (d.x - 34) + ' 198) scale(0.34)"><g class="bebe">' +
+            lapinSVG({ fourrure: d.fourrure, noeudOreille: d.noeud, nom: "Un bébé lapinou dans son nid" }).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') +
+          "</g></g>" +
+          '<g class="dots"></g>' +
+          '<g class="coeur-fait" style="display:none"><path d="M' + d.x + ' 178 C' + (d.x - 11) + ' 166 ' + (d.x - 6) + ' 156 ' + d.x + ' 162 C' + (d.x + 6) + ' 156 ' + (d.x + 11) + ' 166 ' + d.x + ' 178 Z" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="1.6"/></g>';
+        const dots = g.querySelector(".dots");
+        for (let k = 0; k < 4; k++) el("circle", { cx: d.x - 21 + k * 14, cy: 340, r: 5, fill: "#d8c9a8", stroke: TRAIT, "stroke-width": "1.4" }, dots);
+        T3S1.nids.push({ x: d.x, taps: 0, fait: false, g: g, dots: dots, bebe: g.querySelector(".bebe"), paille: g.querySelector(".paille") });
+      });
+      $("#barT3a").style.width = "0%";
+      $("#pctT3a").textContent = "0 %";
+      $("#msgT3a").textContent = "Tape un nid pour le rendre douillet !";
+      stage.querySelector("svg").addEventListener("pointerdown", tapeT3S1);
+    }
+    function majT3S1Jauge(){
+      const pct = Math.round(T3S1.total / 12 * 100);
+      $("#barT3a").style.width = pct + "%";
+      $("#pctT3a").textContent = pct + " %";
+    }
+    function tapeT3S1(e){
+      if (!T3S1) return;
+      audio();
+      const svg = e.currentTarget;
+      const pt = svgPoint(svg, e.clientX, e.clientY);
+      const n = T3S1.nids.find(nd => !nd.fait && Math.hypot(pt.x - nd.x, pt.y - 254) < 62);
+      if (!n) return;
+      n.taps++; T3S1.total++;
+      sDoux(); if (n.taps % 2 === 0) sPop();
+      n.bebe.classList.add("bondit");
+      setTimeout(() => n.bebe.classList.remove("bondit"), 470);
+      el("path", { d: "M" + (n.x - 28 + Math.random() * 50) + " 302 q6 -8 12 -3", stroke: "#d9a75f", "stroke-width": "3", fill: "none", "stroke-linecap": "round" }, n.paille);
+      const dot = n.dots.childNodes[n.taps - 1];
+      if (dot) dot.setAttribute("fill", "#5f9e46");
+      if (n.taps >= 4){
+        n.fait = true;
+        n.g.querySelector(".coeur-fait").style.display = "";
+        sChime();
+        $("#msgT3a").textContent = "Ce nid est tout douillet !";
+      } else {
+        $("#msgT3a").textContent = "Encore un peu de paille douce…";
+      }
+      majT3S1Jauge();
+      if (T3S1.nids.every(nd => nd.fait)){
+        sJingle();
+        bravo("Bravo !", "Les trois nids sont tout douillets.", () => initT3S2());
+      }
+      e.preventDefault();
+    }
+    function grincheuxSVG(etat){
+      const yeux = (etat === "reveille" || etat === "grogne")
+        ? '<circle cx="-6" cy="-20" r="2.8" fill="#38241a"/><circle cx="7" cy="-20" r="2.8" fill="#38241a"/>'
+        : '<path d="M-9 -19 q3 2.6 6 0 M4 -19 q3 2.6 6 0" stroke="#38241a" stroke-width="2" fill="none" stroke-linecap="round"/>';
+      const sourcils = etat === "grogne"
+        ? '<path d="M-11 -27 l9 3 M12 -27 l-9 3" stroke="#f3ede2" stroke-width="4" stroke-linecap="round"/>'
+        : etat === "reveille"
+        ? '<path d="M-11 -29 q4 -3 9 -1 M3 -30 q5 -2 9 1" stroke="#f3ede2" stroke-width="3.6" fill="none" stroke-linecap="round"/>'
+        : '<path d="M-11 -26 q5 -2 9 0 M3 -26 q5 -2 9 0" stroke="#f3ede2" stroke-width="3.6" fill="none" stroke-linecap="round"/>';
+      const bouche = etat === "grogne"
+        ? '<path d="M-5 -5 l3.4 3 3.4 -3 3.4 3" stroke="#7a3b2e" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+        : etat === "reveille"
+        ? '<ellipse cx="1" cy="-4" rx="3" ry="3.8" fill="#7a3b2e"/>'
+        : '<ellipse cx="1" cy="-4" rx="2.2" ry="2.8" fill="#a5713d"/>';
+      const zzz = etat === "dort" ? '<text x="19" y="-36" font-size="12" font-weight="900" fill="#7a5c40">Z z</text>' : "";
+      return '<rect x="-19" y="16" width="38" height="30" rx="6" fill="#a5713d" stroke="' + TRAIT + '" stroke-width="2.2"/>' +
+        '<path d="M-19 25 h38 M-19 37 h38" stroke="#8a5a30" stroke-width="2.6"/>' +
+        '<path d="M-15 18 q-2 -24 15 -24 q17 0 15 24 Z" fill="#7a9e4f" stroke="' + TRAIT + '" stroke-width="2.4"/>' +
+        '<path d="M-15 5 h30" stroke="#5f7d3a" stroke-width="3"/>' +
+        '<circle cx="0" cy="-18" r="15.5" fill="#f2c49b" stroke="' + TRAIT + '" stroke-width="2.4"/>' +
+        '<ellipse cx="1" cy="-12.5" rx="4.4" ry="3.2" fill="#e8a87c"/>' +
+        '<path d="M-8 -8.5 q9 4.5 18 0 q-2 6.5 -9 6.5 q-7 0 -9 -6.5 Z" fill="#f3ede2" stroke="#d8cdbd" stroke-width="1.2"/>' +
+        yeux + sourcils + bouche +
+        '<ellipse cx="0" cy="-33" rx="25" ry="5.6" fill="#e9c46a" stroke="' + TRAIT + '" stroke-width="2.2"/>' +
+        '<path d="M-13 -33 a13 10 0 0 1 26 0 Z" fill="#e9c46a" stroke="' + TRAIT + '" stroke-width="2.2"/>' + zzz;
+    }
+    let T3S2 = null;
+    function initT3S2(){
+      montrer("scr-t3s2"); majEtapes(2);
+      const stage = $("#stageT3b");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le potager de M. Grincheux, qui fait la sieste">' +
+        '<rect width="360" height="252" fill="#bfe6f5"/>' +
+        '<circle cx="52" cy="46" r="21" fill="#ffd23e" stroke="#e9a13b" stroke-width="3"/>' +
+        '<g fill="#ffffff" opacity=".92"><ellipse cx="150" cy="52" rx="28" ry="11"/><ellipse cx="172" cy="46" rx="17" ry="8"/></g>' +
+        '<path d="M0 238 q30 -20 62 -6 q28 -18 58 -4 q30 -16 62 -3 q30 -15 60 -2 q28 -14 58 -2 q30 -12 60 4 v27 H0 Z" fill="#7cb45e"/>' +
+        '<g stroke="#a5713d" stroke-width="5" stroke-linecap="round"><path d="M28 218 v26 M92 214 v28 M158 212 v28 M224 212 v28"/></g>' +
+        '<path d="M0 226 h268" stroke="#a5713d" stroke-width="5"/>' +
+        '<g transform="translate(238 232)"><rect x="-36" y="-11" width="72" height="22" rx="4" fill="#c98f3d" stroke="' + TRAIT + '" stroke-width="2"/><text x="0" y="3.5" text-anchor="middle" font-size="9.5" font-weight="800" fill="#4a3220">MON POTAGER</text></g>' +
+        '<g transform="translate(300 178)"><g id="t3g"></g></g>' +
+        '<g id="t3bulle" style="display:none"><rect x="196" y="76" width="138" height="30" rx="10" fill="#fffaf0" stroke="' + TRAIT + '" stroke-width="2.2"/><path d="M282 106 l-4 10 l14 -8" fill="#fffaf0" stroke="' + TRAIT + '" stroke-width="2"/><text id="t3bulleTxt" x="265" y="96" text-anchor="middle" font-size="12" font-weight="800" fill="#4a3220"></text></g>' +
+        '<rect y="248" width="360" height="152" fill="#8a5a30"/>' +
+        '<g fill="#744a24"><ellipse cx="52" cy="292" rx="40" ry="10"/><ellipse cx="180" cy="292" rx="40" ry="10"/><ellipse cx="308" cy="292" rx="40" ry="10"/>' +
+        '<ellipse cx="116" cy="336" rx="40" ry="10"/><ellipse cx="244" cy="336" rx="40" ry="10"/><ellipse cx="180" cy="376" rx="42" ry="10"/></g>' +
+        '<g id="t3legume"></g>' +
+        '<g><path d="M288 356 h66 l-7 34 a8 8 0 0 1 -8 6 h-36 a8 8 0 0 1 -8 -6 Z" fill="#c98f3d" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+        '<path d="M284 356 h74" stroke="' + TRAIT + '" stroke-width="5" stroke-linecap="round"/>' +
+        '<g id="t3pile"></g></g>' +
+        '<g transform="translate(6 268) scale(0.42)">' + lapinSVG({ nom: "Tapinoue récolte doucement" }).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') + "</g>" +
+      "</svg>";
+      T3S2 = {
+        nb: 0, fini: false, etat: "dort", pris: false, legume: null, minuteurs: [],
+        spots: [
+          { x: 52, y: 282 }, { x: 180, y: 282 }, { x: 308, y: 282 },
+          { x: 116, y: 326 }, { x: 244, y: 326 }, { x: 180, y: 366 },
+          { x: 52, y: 340 }, { x: 308, y: 344 }
+        ], dernierSpot: -1
+      };
+      $("#msgT3b").textContent = "Chut… il dort. Récolte en douceur !";
+      majGrincheux();
+      majPanierT3();
+      faitPousserT3();
+      cycleGrincheux(2600);
+      stage.querySelector("svg").addEventListener("pointerdown", tapeT3S2);
+    }
+    function majGrincheux(){
+      if (!T3S2) return;
+      $("#t3g").innerHTML = grincheuxSVG(T3S2.etat);
+      const b = $("#t3bulle");
+      if (T3S2.etat === "dort") b.style.display = "none";
+      else {
+        b.style.display = "";
+        $("#t3bulleTxt").textContent = T3S2.etat === "remue" ? "…" : T3S2.etat === "reveille" ? "… !" : "Grrr ! Mes légumes !";
+      }
+      $("#figeT3").classList.toggle("on", T3S2.etat === "reveille");
+    }
+    function cycleGrincheux(delai){
+      T3S2.minuteurs.push(setTimeout(() => {
+        if (!T3S2 || T3S2.fini) return;
+        T3S2.etat = "remue"; majGrincheux();
+        bruit(0.2, 300, 0.045);
+        T3S2.minuteurs.push(setTimeout(() => {
+          if (!T3S2 || T3S2.fini) return;
+          T3S2.etat = "reveille"; T3S2.pris = false; majGrincheux();
+          tone(740, 740, 0.12, "sine", 0.09);
+          T3S2.minuteurs.push(setTimeout(() => {
+            if (!T3S2 || T3S2.fini) return;
+            if (T3S2.etat === "reveille"){ T3S2.etat = "dort"; majGrincheux(); }
+            cycleGrincheux(2400 + Math.random() * 2400);
+          }, 1500));
+        }, 700));
+      }, delai));
+    }
+    function faitPousserT3(){
+      if (!T3S2 || T3S2.fini) return;
+      let i;
+      do { i = Math.floor(Math.random() * T3S2.spots.length); } while (i === T3S2.dernierSpot);
+      T3S2.dernierSpot = i;
+      const s = T3S2.spots[i];
+      const types = ["carotte", "laitue", "chou"];
+      const type = types[Math.floor(Math.random() * types.length)];
+      const zone = $("#t3legume");
+      zone.innerHTML = "";
+      const g = el("g", { transform: "translate(" + s.x + " " + s.y + ") scale(0.2)", cursor: "pointer" }, zone);
+      g.innerHTML = '<circle r="32" fill="rgba(0,0,0,0)"/>' + dessinLegume(type);
+      const t0 = performance.now();
+      (function pousse(t){
+        if (!T3S2 || T3S2.fini || !g.isConnected) return;
+        const k = Math.min(1, (t - t0) / 360);
+        const e = 1 - Math.pow(1 - k, 3);
+        g.setAttribute("transform", "translate(" + s.x + " " + s.y + ") scale(" + (0.2 + 0.8 * e) + ")");
+        if (k < 1) requestAnimationFrame(pousse);
+      })(t0);
+      T3S2.legume = { g: g, x: s.x, y: s.y, type: type };
+    }
+    function majPanierT3(){
+      $("#nbT3b").textContent = T3S2.nb + " / 12";
+      $("#barT3b").style.width = (T3S2.nb / 12 * 100) + "%";
+      const pile = $("#t3pile");
+      pile.innerHTML = "";
+      T3.recolte.slice(-9).forEach((t, i) => {
+        const mini = el("g", { transform: "translate(" + (304 + (i % 3) * 15) + " " + (350 - Math.floor(i / 3) * 8) + ") scale(0.5)" }, pile);
+        mini.innerHTML = dessinLegume(t);
+      });
+    }
+    function prisT3(){
+      T3S2.pris = true;
+      T3S2.etat = "grogne";
+      majGrincheux();
+      sGrogne();
+      T3.grincements++;
+      if (T3S2.nb > 0){
+        T3S2.nb--;
+        const t = T3.recolte.pop();
+        if (t) T3.panier[t]--;
+      }
+      majPanierT3();
+      $("#msgT3b").textContent = "M. Grincheux a grogné de façon comique… Le panier perd 1 légume. Ce n'est pas grave, on continue doucement !";
+      T3S2.minuteurs.push(setTimeout(() => {
+        if (T3S2 && !T3S2.fini && T3S2.etat === "grogne"){ T3S2.etat = "dort"; majGrincheux(); }
+      }, 1150));
+    }
+    function tapeT3S2(e){
+      if (!T3S2 || T3S2.fini) return;
+      audio();
+      if (T3S2.etat === "reveille" && !T3S2.pris){ prisT3(); e.preventDefault(); return; }
+      if (T3S2.etat !== "dort" && T3S2.etat !== "remue") return;
+      if (!T3S2.legume) return;
+      const svg = e.currentTarget;
+      const pt = svgPoint(svg, e.clientX, e.clientY);
+      const c = T3S2.legume;
+      if (Math.hypot(pt.x - c.x, pt.y - c.y) > 40) return;
+      T3S2.legume = null;
+      sPluck();
+      const panier = { x: 320, y: 344 };
+      const x0 = c.x, y0 = c.y, t0 = performance.now();
+      (function vole(t){
+        const k = Math.min(1, (t - t0) / 430);
+        const x = x0 + (panier.x - x0) * k;
+        const y = y0 + (panier.y - y0) * k - Math.sin(k * Math.PI) * 70;
+        c.g.setAttribute("transform", "translate(" + x + " " + y + ") rotate(" + (k * 160) + ") scale(" + (1 - k * 0.3) + ")");
+        if (k < 1) requestAnimationFrame(vole);
+        else {
+          c.g.remove();
+          T3S2.nb++;
+          T3.recolte.push(c.type);
+          T3.panier[c.type]++;
+          sPop();
+          if (T3S2.etat === "dort") $("#msgT3b").textContent = "Chut… il dort toujours. Continue !";
+          majPanierT3();
+          if (T3S2.nb >= 12){
+            T3S2.fini = true;
+            T3S2.minuteurs.forEach(clearTimeout);
+            $("#figeT3").classList.remove("on");
+            sJingle();
+            bravo("Bravo !", "12 légumes pour nourrir toute la famille.", () => initT3S3());
+          } else {
+            setTimeout(faitPousserT3, 180);
+          }
+        }
+      })(t0);
+      e.preventDefault();
+    }
+    let T3S3 = null;
+    function envieDispo(type){
+      if (T3.panier[type] > 0) return type;
+      const dispo = ["carotte", "laitue", "chou"].find(t => T3.panier[t] > 0);
+      return dispo || type;
+    }
+    function nouvelleEnvie(m){
+      const candidates = ["carotte", "laitue", "chou"].filter(t => T3.panier[t] > 0);
+      if (!candidates.length) return m.veut;
+      return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+    function majBullesT3(){
+      if (!T3S3) return;
+      const zone = $("#t3bulles");
+      if (!zone) return;
+      zone.innerHTML = "";
+      const dys = [-42, -42, -46, -48, -46];
+      T3S3.membres.forEach((m, i) => {
+        if (m.plein) { m.bulleG = null; return; }
+        const by = m.y + (dys[i] || -42);
+        const g = el("g", { "class": "bulle-envie" }, zone);
+        g.innerHTML =
+          '<path d="M' + (m.cx - 5) + " " + (by + 14) + ' l5 9 l5 -9 Z" fill="#fffaf0" stroke="' + TRAIT + '" stroke-width="1.8" stroke-linejoin="round"/>' +
+          '<rect x="' + (m.cx - 39) + '" y="' + (by - 16) + '" width="78" height="30" rx="11" fill="#fffaf0" stroke="' + TRAIT + '" stroke-width="1.8"/>' +
+          '<text x="' + m.cx + '" y="' + (by - 3) + '" text-anchor="middle" font-size="9" font-weight="700" fill="#7a5c40">Je veux</text>' +
+          '<text x="' + m.cx + '" y="' + (by + 9) + '" text-anchor="middle" font-size="9" font-weight="900" fill="#4a3220">' + ENVIES_TXT[m.veut] + ' !</text>';
+        m.bulleG = g;
+      });
+    }
+    function initT3S3(){
+      montrer("scr-t3s3"); majEtapes(3);
+      const stage = $("#stageT3c");
+      const membres = [
+        { nom: "Tapinoue", x: 8, y: 150, s: 0.5, opts: { papillon: G.noeud, brille: 1 }, cx: 58, cy: 216 },
+        { nom: "Lapinette", x: 252, y: 150, s: 0.5, opts: { fourrure: "#f6ddd8", cils: true, noeudOreille: true }, cx: 302, cy: 216 },
+        { nom: "Bébé 1", x: 78, y: 118, s: 0.34, opts: { fourrure: "#f3e7d3" }, cx: 112, cy: 160 },
+        { nom: "Bébé 2", x: 146, y: 106, s: 0.34, opts: { fourrure: "#f6ddd8", noeudOreille: true }, cx: 180, cy: 148 },
+        { nom: "Bébé 3", x: 214, y: 118, s: 0.34, opts: { fourrure: "#eee3cc" }, cx: 248, cy: 160 }
+      ];
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="La famille Tapinoue autour de la table">' +
+        '<rect width="360" height="400" fill="#a06a38"/>' +
+        '<circle cx="60" cy="40" r="120" fill="#96622f"/>' +
+        '<circle cx="320" cy="30" r="100" fill="#96622f"/>' +
+        '<ellipse cx="180" cy="402" rx="230" ry="118" fill="#7c4c22"/>' +
+        '<ellipse cx="180" cy="392" rx="190" ry="88" fill="#8a5727"/>' +
+        '<ellipse cx="180" cy="322" rx="128" ry="25" fill="#8a5a30" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+        '<ellipse cx="180" cy="317" rx="128" ry="25" fill="#c98f3d"/>' +
+        '<g fill="#fdf6e3" stroke="' + TRAIT + '" stroke-width="1.6"><circle cx="86" cy="316" r="11"/><circle cx="140" cy="326" r="11"/><circle cx="180" cy="318" r="11"/><circle cx="222" cy="326" r="11"/><circle cx="276" cy="316" r="11"/></g>' +
+        '<g id="t3membres"></g>' +
+        '<g id="t3coeurs"></g>' +
+        '<g id="t3bulles"></g>' +
+        '<g id="t3vol"></g>' +
+      "</svg>";
+      const zm = $("#t3membres");
+      membres.forEach((m, i) => {
+        const g = el("g", { transform: "translate(" + m.x + " " + m.y + ") scale(" + m.s + ")" }, zm);
+        g.innerHTML = '<g class="bond">' + lapinSVG(Object.assign({ nom: m.nom }, m.opts)).replace('<svg viewBox="0 0 200 232" width="100%"', '<svg viewBox="0 0 200 232" width="200"') + "</g>";
+        m.g = g; m.bond = g.querySelector(".bond");
+        m.faim = 2; m.plein = false;
+      });
+      T3S3 = { membres: membres, choix: null };
+      const enviesBase = ["carotte", "laitue", "chou", "carotte", "laitue"];
+      membres.forEach((m, i) => { m.veut = envieDispo(enviesBase[i]); majCoeursT3(i); });
+      majBullesT3();
+      $("#msgT3c").textContent = "Regarde les bulles, puis choisis un légume du panier pour commencer !";
+      majChipsT3();
+      stage.querySelector("svg").addEventListener("pointerdown", tapeT3S3);
+    }
+    function majCoeursT3(i){
+      const m = T3S3.membres[i];
+      const zone = $("#t3coeurs");
+      let g = zone.querySelector('[data-m="' + i + '"]');
+      if (!g){ g = el("g", { "data-m": i }, zone); }
+      const y = m.y - 12;
+      let s = "";
+      for (let k = 0; k < 2; k++){
+        const plein = k < (2 - m.faim);
+        s += '<g transform="translate(' + (m.cx - 13 + k * 26) + " " + y + ')"><path d="M0 5.5 C-6.5 -3 -3.4 -8.6 0 -4.8 C3.4 -8.6 6.5 -3 0 5.5 Z" fill="' + (plein ? "#ef6f8b" : "#d8c9a8") + '" stroke="' + TRAIT + '" stroke-width="1.3"/></g>';
+      }
+      g.innerHTML = s;
+    }
+    function majChipsT3(){
+      const zone = $("#chipsT3");
+      zone.innerHTML = "";
+      ["carotte", "laitue", "chou"].forEach(t => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.innerHTML = '<svg viewBox="-32 -34 64 68" width="42" height="46" aria-hidden="true">' + dessinLegume(t) + "</svg>" +
+          NOMS_LEGUMES[t] + " × " + T3.panier[t];
+        if (T3.panier[t] <= 0){ b.disabled = true; if (T3S3.choix === t) T3S3.choix = null; }
+        if (T3S3.choix === t) b.classList.add("choisi");
+        b.addEventListener("click", () => {
+          audio(); sPop();
+          T3S3.choix = t;
+          majChipsT3();
+          $("#msgT3c").textContent = "Une " + NOMS_LEGUMES[t].toLowerCase() + " ! Maintenant, tape le ventre à nourrir.";
+        });
+        zone.appendChild(b);
+      });
+    }
+    function tapeT3S3(e){
+      if (!T3S3) return;
+      audio();
+      const svg = e.currentTarget;
+      const pt = svgPoint(svg, e.clientX, e.clientY);
+      let best = null, bd = 1e9;
+      T3S3.membres.forEach(m => {
+        const d = Math.hypot(pt.x - m.cx, pt.y - m.cy);
+        if (d < bd){ bd = d; best = m; }
+      });
+      if (!best || bd > 58) return;
+      if (!T3S3.choix){
+        $("#msgT3c").textContent = "Choisis d'abord un légume du panier, puis tape le ventre à nourrir !";
+        sPouet();
+        return;
+      }
+      if (best.plein){
+        $("#msgT3c").textContent = best.nom + " a déjà le ventre plein. Miam !";
+        return;
+      }
+      const type = T3S3.choix;
+      if (T3.panier[type] <= 0){ majChipsT3(); return; }
+      T3.panier[type]--;
+      const i = T3S3.membres.indexOf(best);
+      const zone = $("#t3vol");
+      const g = el("g", { transform: "translate(180 392)" }, zone);
+      g.innerHTML = dessinLegume(type);
+      sPluck();
+      const x0 = 180, y0 = 392, x1 = best.cx, y1 = best.cy - 8, t0 = performance.now();
+      (function vole(t){
+        const k = Math.min(1, (t - t0) / 420);
+        const x = x0 + (x1 - x0) * k;
+        const y = y0 + (y1 - y0) * k - Math.sin(k * Math.PI) * 40;
+        g.setAttribute("transform", "translate(" + x + " " + y + ") scale(" + (1 - k * 0.35) + ")");
+        if (k < 1) requestAnimationFrame(vole);
+        else {
+          g.remove();
+          const voulait = best.veut;
+          const accord = type === voulait;
+          best.faim--;
+          sPop();
+          if (accord) sChime();
+          best.bond.classList.add("bondit");
+          setTimeout(() => best.bond.classList.remove("bondit"), 470);
+          majCoeursT3(i);
+          if (best.faim <= 0){
+            best.plein = true;
+            sChime();
+            $("#msgT3c").textContent = accord
+              ? "C'est exactement ce que " + best.nom + " voulait ! Le ventre est plein !"
+              : best.nom + " a le ventre plein ! Miam !";
+          } else if (accord){
+            best.veut = envieDispo(nouvelleEnvie(best));
+            $("#msgT3c").textContent = "Oui ! C'est ce que " + best.nom + " voulait ! Et maintenant, regarde sa nouvelle bulle…";
+          } else {
+            $("#msgT3c").textContent = "Miam, ça compte quand même ! " + best.nom + " demande encore : « Je veux " + ENVIES_TXT[best.veut] + " ! »";
+            if (best.bulleG){ best.bulleG.classList.add("secoue"); setTimeout(() => { if (best.bulleG) best.bulleG.classList.remove("secoue"); }, 520); }
+          }
+          majBullesT3();
+          majChipsT3();
+          if (T3S3.membres.every(m => m.plein)){
+            sJingle();
+            bravo("Bravo !", "Toute la famille a bien mangé.", finaleT3);
+          }
+        }
+      })(t0);
+      e.preventDefault();
+    }
+    function finaleT3(){
+      const temps = (performance.now() - T3.debut) / 1000;
+      const etoiles = (T3.grincements === 0 && temps <= 620) ? 3 : T3.grincements <= 2 ? 2 : 1;
+      finaleTableau(3, "La famille repue", illuFamille(),
+        ["Trois nids tout douillets, préparés avec amour pour les lapinous.",
+         "12 légumes récoltés au potager de M. Grincheux" + (T3.grincements > 0 ? " (il a grogné " + T3.grincements + " fois — et ce n'est pas grave !)" : " (sans le réveiller une seule fois, chut !)") + ".",
+         "Le repas de famille : les 5 ventres sont pleins et les cœurs aussi."],
+        etoiles, temps);
+    }
+
+    /* ================= TABLEAU 4 — LE RENARD QUI RÔDE ================= */
+    let T4 = null;
+    function debutT4(){
+      T4 = { debut: performance.now(), refills: 0, verifs: 0 };
+      defEtapes(["Un bruit dans les buissons", "On se barricade !", "La nuit tombe"]);
+      initT4S1();
+    }
+    function renardSVG(o){
+      o = o || {};
+      const oreilleG = o.triste ? ' transform="rotate(16 46 26)"' : "";
+      const oreilleD = o.triste ? ' transform="rotate(-14 78 22)"' : "";
+      const sourcil = o.triste
+        ? '<path d="M118 34 l10 4" stroke="' + TRAIT + '" stroke-width="2.4" stroke-linecap="round"/>'
+        : '<path d="M116 32 q6 -3 11 0" stroke="' + TRAIT + '" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+      const bouche = o.triste
+        ? '<path d="M146 66 q6 -4 12 -1" stroke="' + TRAIT + '" stroke-width="2.2" fill="none" stroke-linecap="round"/>'
+        : '<path d="M146 62 q6 5 12 2" stroke="' + TRAIT + '" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
+      return '<svg viewBox="0 0 200 150" width="200" role="img" aria-label="Le renard, un peu penaud">' +
+        '<path d="M34 92 Q2 88 8 58 Q12 36 32 46 Q50 55 44 76 Q40 92 34 92 Z" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<path d="M10 62 Q6 78 16 90 Q8 76 10 62 Z" fill="#fff3e2"/>' +
+        '<ellipse cx="94" cy="92" rx="52" ry="30" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<ellipse cx="102" cy="104" rx="33" ry="15" fill="#fff3e2"/>' +
+        '<rect x="66" y="112" width="11" height="24" rx="5" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+        '<rect x="112" y="112" width="11" height="24" rx="5" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+        '<ellipse cx="71" cy="138" rx="9" ry="5" fill="#54382a"/>' +
+        '<ellipse cx="117" cy="138" rx="9" ry="5" fill="#54382a"/>' +
+        '<g' + oreilleG + '><path d="M42 44 L36 12 L62 26 Z" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="3" stroke-linejoin="round"/><path d="M45 36 L42 20 L56 28 Z" fill="#54382a"/></g>' +
+        '<g' + oreilleD + '><path d="M84 40 L96 12 L104 40 Z" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="3" stroke-linejoin="round"/><path d="M88 34 L95 20 L99 35 Z" fill="#54382a"/></g>' +
+        '<circle cx="82" cy="52" r="31" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<ellipse cx="106" cy="64" rx="17" ry="11" fill="#fff3e2"/>' +
+        '<ellipse cx="120" cy="58" rx="6" ry="4.6" fill="#38241a"/>' +
+        '<circle cx="88" cy="48" r="4.4" fill="#38241a"/><circle cx="89.5" cy="46.5" r="1.5" fill="#fff"/>' +
+        sourcil + bouche +
+      "</svg>";
+    }
+    let T4S1 = null;
+    function initT4S1(){
+      montrer("scr-t4s1"); majEtapes(1);
+      $("#btnT4Barricade").style.display = "none";
+      const stage = $("#stageT4a");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="Le soir près du terrier, avec trois buissons">' +
+        '<rect width="360" height="400" fill="#f2a65a"/>' +
+        '<rect y="150" width="360" height="250" fill="#e8895a" opacity=".45"/>' +
+        '<circle cx="66" cy="72" r="24" fill="#ffd23e" stroke="#e9a13b" stroke-width="3"/>' +
+        '<path d="M0 218 q90 -40 190 -16 q110 24 170 -4 v202 H0 Z" fill="#5f9e46"/>' +
+        '<path d="M0 276 q100 -26 200 -6 q100 18 160 -2 v132 H0 Z" fill="#54863e"/>' +
+        '<ellipse cx="180" cy="330" rx="118" ry="52" fill="#6aa84f" stroke="#4e7d3a" stroke-width="2.6"/>' +
+        '<path d="M156 344 v-30 a24 24 0 0 1 48 0 v30 Z" fill="#5d3a1e"/>' +
+        '<path d="M163 344 v-26 a17 17 0 0 1 34 0 v26 Z" fill="#ffd98a"/>' +
+        '<circle cx="238" cy="312" r="11" fill="#ffd98a" stroke="' + TRAIT + '" stroke-width="2.2"/>' +
+        '<path d="M238 301 v22 M227 312 h22" stroke="' + TRAIT + '" stroke-width="2"/>' +
+        '<g id="t4buissons"></g>' +
+      "</svg>";
+      const revels = [
+        '<g class="revel" style="display:none"><ellipse cx="0" cy="0" rx="11" ry="8" fill="#7fb3d5" stroke="' + TRAIT + '" stroke-width="1.8"/><circle cx="9" cy="-5" r="5.4" fill="#7fb3d5" stroke="' + TRAIT + '" stroke-width="1.8"/><path d="M14 -5 l6 2 -6 2 Z" fill="#e9a13b"/><path d="M-4 -2 q-8 -8 -14 -6 q4 8 10 10" fill="#5b8fb9" stroke="' + TRAIT + '" stroke-width="1.4"/></g>',
+        '<g class="revel" style="display:none"><circle r="12.5" fill="#a5713d" stroke="#6b4429" stroke-width="4.5" stroke-dasharray="3.5 4"/><circle cx="4" cy="1" r="8.4" fill="#e8c39a" stroke="' + TRAIT + '" stroke-width="1.6"/><circle cx="7" cy="-1" r="1.6" fill="#38241a"/><circle cx="11.5" cy="2.5" r="1.9" fill="#54382a"/></g>',
+        '<g class="revel" style="display:none"><path d="M-17 8 L-21 -15 L-4 -4 Z" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><path d="M17 8 L21 -15 L4 -4 Z" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="2.2" stroke-linejoin="round"/><ellipse cx="0" cy="9" rx="17" ry="11.5" fill="#ef7d2d" stroke="' + TRAIT + '" stroke-width="2.2"/><circle cx="-6" cy="7" r="2.6" fill="#38241a"/><circle cx="6" cy="7" r="2.6" fill="#38241a"/><ellipse cx="0" cy="13" rx="4.6" ry="3.2" fill="#fff3e2"/></g>'
+      ];
+      const pos = [{ x: 58, y: 298 }, { x: 180, y: 322 }, { x: 302, y: 298 }];
+      T4S1 = { vus: 0, faits: {} };
+      const zone = $("#t4buissons");
+      pos.forEach((p, i) => {
+        const g = el("g", { "class": "buisson", transform: "translate(" + p.x + " " + p.y + ")", cursor: "pointer" }, zone);
+        g.innerHTML =
+          '<g transform="translate(0 -34)">' + revels[i] + "</g>" +
+          '<circle cx="-24" cy="0" r="24" fill="#4e7d3a" stroke="' + TRAIT + '" stroke-width="2"/>' +
+          '<circle cx="0" cy="-12" r="30" fill="#5f9e46" stroke="' + TRAIT + '" stroke-width="2"/>' +
+          '<circle cx="24" cy="0" r="24" fill="#4e7d3a" stroke="' + TRAIT + '" stroke-width="2"/>' +
+          '<circle cx="0" cy="7" r="26" fill="#54863e" stroke="' + TRAIT + '" stroke-width="2"/>' +
+          '<circle cx="-11" cy="-14" r="3" fill="#79bd58"/><circle cx="13" cy="-4" r="2.6" fill="#79bd58"/><circle cx="-3" cy="8" r="2.8" fill="#79bd58"/>';
+        g.dataset.i = i;
+        T4S1["g" + i] = g;
+      });
+      T4S1.pos = pos;
+      $("#msgT4a").textContent = "Tape un buisson pour regarder…";
+      stage.querySelector("svg").addEventListener("pointerdown", tapeT4S1);
+    }
+    function tapeT4S1(e){
+      if (!T4S1) return;
+      audio();
+      const svg = e.currentTarget;
+      const pt = svgPoint(svg, e.clientX, e.clientY);
+      let best = -1, bd = 1e9;
+      T4S1.pos.forEach((p, i) => {
+        if (T4S1.faits[i]) return;
+        const d = Math.hypot(pt.x - p.x, pt.y - p.y);
+        if (d < bd){ bd = d; best = i; }
+      });
+      if (best < 0 || bd > 60) return;
+      T4S1.faits[best] = true;
+      T4S1.vus++;
+      const g = T4S1["g" + best];
+      g.classList.add("secoue");
+      setTimeout(() => g.classList.remove("secoue"), 520);
+      const rev = g.querySelector(".revel");
+      if (rev) rev.style.display = "";
+      if (best === 0){ sOiseau(); $("#msgT4a").textContent = "Un petit oiseau ! Il s'envole tranquillement. Ce n'est rien."; }
+      else if (best === 1){ sDoux(); $("#msgT4a").textContent = "Un petit hérisson qui passe son chemin. Pas de danger !"; }
+      else { tone(220, 150, 0.3, "triangle", 0.14); $("#msgT4a").textContent = "Des oreilles rousses, un museau pointu… C'est le renard qui rôde près du terrier !"; }
+      if (T4S1.vus >= 3){
+        sChime();
+        $("#msgT4a").textContent = "Le renard rôde… La famille décide de se barricader pour la nuit. Vite, au travail !";
+        $("#btnT4Barricade").style.display = "";
+      }
+      e.preventDefault();
+    }
+    const T4ENTREES = [
+      { id: "porte", nom: "la porte", x: 306, y: 262, bar: "#barT4p", pct: "#pctT4p" },
+      { id: "fenetre", nom: "la fenêtre", x: 78, y: 196, bar: "#barT4f", pct: "#pctT4f" },
+      { id: "galerie", nom: "la galerie", x: 66, y: 330, bar: "#barT4g", pct: "#pctT4g" }
+    ];
+    const T4ITEMS = [
+      { kind: "planche", dessin: () => '<rect x="-23" y="-7" width="46" height="14" rx="3" fill="#c98f3d" stroke="' + TRAIT + '" stroke-width="2.2"/><path d="M-20 -2 h40" stroke="#a5713d" stroke-width="2"/><circle cx="-16" cy="0" r="1.8" fill="#54382a"/><circle cx="16" cy="0" r="1.8" fill="#54382a"/>' },
+      { kind: "roche", dessin: () => '<path d="M-18 8 Q-20 -6 -6 -10 Q8 -14 16 -4 Q22 4 14 9 Q0 13 -18 8 Z" fill="#a8a29e" stroke="' + TRAIT + '" stroke-width="2.2"/><path d="M-8 -4 q6 -3 12 0" stroke="#78716c" stroke-width="2" fill="none"/>' },
+      { kind: "branche", dessin: () => '<path d="M-20 8 Q0 -10 20 -6" stroke="#6b4429" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M-6 -2 q-4 -10 -12 -12 M8 -6 q2 -10 10 -13" stroke="#6b4429" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="-18" cy="-13" r="4.6" fill="#5f9e46" stroke="' + TRAIT + '" stroke-width="1.4"/><circle cx="18" cy="-18" r="4.6" fill="#5f9e46" stroke="' + TRAIT + '" stroke-width="1.4"/>' },
+      { kind: "ronce", dessin: () => '<path d="M-20 10 Q0 -16 20 8" stroke="#4e7d3a" stroke-width="4.4" fill="none" stroke-linecap="round"/><path d="M-12 -2 l-5 -3 M-2 -8 l-1 -6 M8 -6 l3 -5 M15 1 l6 -2" stroke="#4e7d3a" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="-10" r="3.4" fill="#ef6f8b" stroke="' + TRAIT + '" stroke-width="1.2"/>' }
+    ];
+    const T4SOLEIL_DUREE = 80000, T4SOLEIL_RAJOUT = 35000;
+    let T4S2 = null;
+    function initT4S2(){
+      montrer("scr-t4s2"); majEtapes(2);
+      const stage = $("#stageT4b");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 460" aria-label="Le terrier et ses trois entrées, à barricader">' +
+        '<rect width="360" height="170" fill="#f7c98b"/>' +
+        '<g id="t4soleil2"><circle r="19" fill="#ffd23e" stroke="#e9a13b" stroke-width="3"/><circle cx="-6" cy="-2" r="2.8" fill="#54382a"/><circle cx="6" cy="-2" r="2.8" fill="#54382a"/><path d="M-6 5 q6 5 12 0" stroke="#54382a" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>' +
+        '<path d="M0 150 q90 -34 190 -14 q110 20 170 -2 v326 H0 Z" fill="#79bd58"/>' +
+        '<ellipse cx="180" cy="302" rx="172" ry="118" fill="#6aa84f" stroke="#4e7d3a" stroke-width="2.6"/>' +
+        '<g id="t4entreePorte"><path d="M276 306 v-62 a30 30 0 0 1 60 0 v62 Z" fill="#5d3a1e"/><path d="M284 306 v-56 a22 22 0 0 1 44 0 v56 Z" fill="#8a5a30"/><circle cx="296" cy="272" r="4" fill="#e9c46a"/></g>' +
+        '<text x="306" y="326" text-anchor="middle" font-size="11.5" font-weight="800" fill="#fff6df">LA PORTE</text>' +
+        '<g id="t4entreeFenetre"><circle cx="78" cy="196" r="21" fill="#ffd98a" stroke="' + TRAIT + '" stroke-width="3"/><path d="M78 175 v42 M57 196 h42" stroke="' + TRAIT + '" stroke-width="2.4"/></g>' +
+        '<text x="78" y="234" text-anchor="middle" font-size="11.5" font-weight="800" fill="#fff6df">LA FENÊTRE</text>' +
+        '<g id="t4entreeGalerie"><ellipse cx="66" cy="330" rx="31" ry="17" fill="#4a3220" stroke="' + TRAIT + '" stroke-width="2.6"/><ellipse cx="66" cy="332" rx="21" ry="10" fill="#33241a"/></g>' +
+        '<text x="66" y="364" text-anchor="middle" font-size="11.5" font-weight="800" fill="#fff6df">LA GALERIE</text>' +
+        '<g id="t4poses"></g>' +
+        '<rect x="0" y="374" width="360" height="86" fill="#8a5a30"/>' +
+        '<path d="M0 374 h360" stroke="' + TRAIT + '" stroke-width="3"/>' +
+        '<text x="180" y="390" text-anchor="middle" font-size="11.5" font-weight="800" fill="#ffe9bd">Glisse un objet sur une entrée pour la fermer !</text>' +
+        '<g id="t4items"></g>' +
+      "</svg>";
+      T4S2 = {
+        fini: false, reste: T4SOLEIL_DUREE, derniere: performance.now(), intervalle: null,
+        entrees: T4ENTREES.map(en => ({ def: en, pct: 0, poses: 0 }))
+      };
+      const ordre = ["planche", "roche", "branche", "ronce", "planche", "roche", "branche", "ronce", "planche"];
+      const homes = [
+        { x: 40, y: 414 }, { x: 110, y: 414 }, { x: 180, y: 414 }, { x: 250, y: 414 }, { x: 320, y: 414 },
+        { x: 75, y: 444 }, { x: 145, y: 444 }, { x: 215, y: 444 }, { x: 285, y: 444 }
+      ];
+      const zi = $("#t4items");
+      ordre.forEach((kind, i) => {
+        const def = T4ITEMS.find(d => d.kind === kind);
+        const g = el("g", { "class": "glissable", transform: "translate(" + homes[i].x + " " + homes[i].y + ")" }, zi);
+        g.dataset.x = homes[i].x; g.dataset.y = homes[i].y; g.dataset.homeX = homes[i].x; g.dataset.homeY = homes[i].y;
+        g.innerHTML = '<ellipse cx="0" cy="0" rx="30" ry="22" fill="rgba(0,0,0,0)"/>' + def.dessin();
+      });
+      majT4Jauges();
+      majT4Soleil();
+      $("#msgT4b").textContent = "";
+      T4S2.intervalle = setInterval(ticT4Soleil, 100);
+      fabriqueGlisser(stage.querySelector("svg"), (g, x, y) => {
+        let best = null, bd = 1e9;
+        T4S2.entrees.forEach(en => {
+          const d = Math.hypot(x - en.def.x, y - en.def.y);
+          if (d < bd){ bd = d; best = en; }
+        });
+        const hx = parseFloat(g.dataset.homeX), hy = parseFloat(g.dataset.homeY);
+        if (best && bd < 64){
+          if (best.pct >= 100){
+            $("#msgT4b").textContent = "Cette entrée est déjà solide comme un roc !";
+            sPouet();
+            animePos(g, hx, hy, 220);
+            return;
+          }
+          best.pct = Math.min(100, best.pct + 34);
+          best.poses++;
+          const decal = [[0, 4], [-17, 15], [17, 17], [0, 26]][best.poses % 4];
+          g.dataset.fait = "1";
+          g.classList.remove("glissable");
+          const pose = el("g", {}, $("#t4poses"));
+          pose.appendChild(g);
+          animePos(g, best.def.x + decal[0], best.def.y + decal[1], 180);
+          sToc();
+          majT4Jauges();
+          if (T4S2.entrees.every(en => en.pct >= 100)){
+            T4S2.fini = true;
+            clearInterval(T4S2.intervalle);
+            sJingle();
+            bravo("Bravo !", "Le terrier est barricadé comme un petit château.", () => initT4S3());
+          } else {
+            $("#msgT4b").textContent = best.def.nom.charAt(0).toUpperCase() + best.def.nom.slice(1) + " : " + best.pct + " % fermée !";
+          }
+        } else {
+          sPouet();
+          animePos(g, hx, hy, 220);
+        }
+      });
+    }
+    function majT4Jauges(){
+      T4S2.entrees.forEach(en => {
+        $(en.def.bar).style.width = en.pct + "%";
+        $(en.def.pct).textContent = en.pct + " %";
+      });
+    }
+    function majT4Soleil(){
+      const k = Math.max(0, T4S2.reste / T4SOLEIL_DUREE);
+      const s = $("#t4soleil2");
+      if (s) s.setAttribute("transform", "translate(" + (312 - (1 - k) * 220) + " " + (48 + (1 - k) * 66) + ")");
+      $("#barT4soleil").style.width = (k * 100) + "%";
+    }
+    function ticT4Soleil(){
+      if (!T4S2 || T4S2.fini) return;
+      const now = performance.now();
+      T4S2.reste -= (now - T4S2.derniere);
+      T4S2.derniere = now;
+      if (T4S2.reste <= 0){
+        if (T4S2.entrees.every(en => en.pct >= 100)) return;
+        T4.refills++;
+        T4S2.reste = T4SOLEIL_RAJOUT;
+        $("#msgT4b").textContent = "Le soleil remonte un peu… Continue, tu es capable !";
+        sChime();
+      }
+      majT4Soleil();
+    }
+    let T4S3 = null;
+    function initT4S3(){
+      montrer("scr-t4s3"); majEtapes(3);
+      $("#btnT4Fin").style.display = "none";
+      const stage = $("#stageT4c");
+      stage.innerHTML =
+      '<svg class="scene" viewBox="0 0 360 400" aria-label="La nuit, le renard essaie les entrées du terrier">' +
+        '<rect id="t4ciel" width="360" height="400" fill="#33406e"/>' +
+        '<g id="t4etoiles" fill="#fff6df"><circle cx="36" cy="40" r="2"/><circle cx="120" cy="24" r="1.6"/><circle cx="210" cy="52" r="2"/><circle cx="300" cy="30" r="1.6"/><circle cx="330" cy="90" r="2"/><circle cx="70" cy="96" r="1.5"/><circle cx="170" cy="86" r="1.5"/><circle cx="250" cy="110" r="1.8"/></g>' +
+        '<g id="t4lune"><circle cx="316" cy="52" r="17" fill="#fdf6e3"/><circle cx="309" cy="47" r="14" fill="#33406e"/></g>' +
+        '<circle id="t4soleil3" cx="52" cy="392" r="20" fill="#ffd23e" stroke="#e9a13b" stroke-width="3" style="display:none"/>' +
+        '<path d="M0 190 q90 -36 190 -14 q110 22 170 -4 v228 H0 Z" fill="#3d6031"/>' +
+        '<ellipse cx="180" cy="292" rx="172" ry="110" fill="#3f6b35" stroke="#2c4d24" stroke-width="2.6"/>' +
+        '<g id="t4porte3"><path d="M276 296 v-58 a30 30 0 0 1 60 0 v58 Z" fill="#4a3220"/><g transform="translate(306 258) rotate(-24)">' + T4ITEMS[0].dessin() + '</g><g transform="translate(306 276) rotate(18)">' + T4ITEMS[0].dessin() + '</g><g transform="translate(288 292) scale(0.9)">' + T4ITEMS[1].dessin() + "</g></g>" +
+        '<g id="t4fenetre3"><circle cx="78" cy="188" r="21" fill="#5d3a1e" stroke="' + TRAIT + '" stroke-width="3"/><g transform="translate(78 182) rotate(-14) scale(0.95)">' + T4ITEMS[2].dessin() + '</g><g transform="translate(78 198) scale(0.9)">' + T4ITEMS[3].dessin() + "</g></g>" +
+        '<g id="t4galerie3"><ellipse cx="66" cy="318" rx="31" ry="17" fill="#33241a" stroke="' + TRAIT + '" stroke-width="2.6"/><g transform="translate(52 322)">' + T4ITEMS[1].dessin() + '</g><g transform="translate(82 310) rotate(14) scale(0.9)">' + T4ITEMS[0].dessin() + "</g></g>" +
+        '<g><circle cx="238" cy="292" r="27" fill="#ffd98a" stroke="' + TRAIT + '" stroke-width="2.6"/>' +
+        '<path d="M216 300 q22 -14 44 0 l0 8 q-22 -10 -44 0 Z" fill="#b84a39"/>' +
+        '<path d="M226 282 q3 -8 7 -10 M246 282 q-2 -8 -6 -11" stroke="#f3e7d3" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+        '<text x="252" y="272" font-size="11" font-weight="900" fill="#7a5c40" class="pulse">Z z</text></g>' +
+        '<g id="t4verif" style="display:none"></g>' +
+        '<g id="t4renard" transform="translate(-120 246)"><g id="t4renardIn" transform="scale(0.85)">' + renardSVG({}) + "</g></g>" +
+      "</svg>";
+      const txt = $("#t4s3Texte");
+      const renard = $("#t4renard");
+      renard.dataset.x = -120; renard.dataset.y = 246;
+      txt.textContent = "La nuit est tombée. Dans le terrier, la famille dort, bien au chaud sous la couverture. Si une entrée scintille, tu peux la taper pour la vérifier — seulement si tu veux !";
+      T4S3 = { verif: null, faits: {} };
+      const ENTREES_NUIT = {
+        porte: { x: 306, y: 262, nom: "la porte" },
+        fenetre: { x: 78, y: 188, nom: "la fenêtre" },
+        galerie: { x: 66, y: 318, nom: "la galerie" }
+      };
+      function activeVerif(id){
+        if (!T4S3 || T4S3.faits[id]) return;
+        T4S3.verif = id;
+        const en = ENTREES_NUIT[id];
+        const zone = $("#t4verif");
+        if (!zone) return;
+        const bx = Math.max(64, Math.min(296, en.x));
+        const by = en.y - 66;
+        zone.innerHTML =
+          '<circle cx="' + en.x + '" cy="' + en.y + '" r="37" fill="none" stroke="#ffd23e" stroke-width="3.4" stroke-dasharray="7 6" class="pulse"/>' +
+          '<path d="M' + bx + " " + (by + 24) + ' l-5 10 l11 -5 Z" fill="#fffaf0" stroke="' + TRAIT + '" stroke-width="1.8" stroke-linejoin="round"/>' +
+          '<rect x="' + (bx - 62) + '" y="' + (by - 2) + '" width="124" height="26" rx="12" fill="#fffaf0" stroke="' + TRAIT + '" stroke-width="2"/>' +
+          '<text x="' + bx + '" y="' + (by + 15) + '" text-anchor="middle" font-size="11.5" font-weight="900" fill="#4a3220">Vérifie l\'entrée !</text>';
+        zone.style.display = "";
+      }
+      function finVerif(){
+        if (T4S3) T4S3.verif = null;
+        const zone = $("#t4verif");
+        if (zone) zone.style.display = "none";
+      }
+      stage.querySelector("svg").addEventListener("pointerdown", e => {
+        if (!T4S3 || !T4S3.verif) return;
+        const en = ENTREES_NUIT[T4S3.verif];
+        const pt = svgPoint(e.currentTarget, e.clientX, e.clientY);
+        if (Math.hypot(pt.x - en.x, pt.y - en.y) > 76) return;
+        const id = T4S3.verif;
+        T4S3.faits[id] = true;
+        T4.verifs++;
+        finVerif();
+        sDoux(); sChime();
+        txt.textContent = "Bien vérifié : " + en.nom + " tient bon ! Le renard recule, tout penaud.";
+        const rx = parseFloat(renard.dataset.x || "0"), ry = parseFloat(renard.dataset.y || "246");
+        animePos(renard, Math.max(-112, rx - 20), ry, 450);
+        e.preventDefault();
+      });
+      const etapes = [
+        [1900, () => { txt.textContent = "Le renard arrive en silence… Il pousse la porte de toutes ses forces."; animePos(renard, 138, 246, 1300); }],
+        [3900, () => { const p = $("#t4porte3"); p.classList.add("secoue"); setTimeout(() => p.classList.remove("secoue"), 520); bruit(0.16, 300, 0.1, "lowpass"); txt.textContent = "Cric, crac… Les planches tiennent bon !"; animePos(renard, 116, 246, 500); activeVerif("porte"); }],
+        [5600, () => { finVerif(); txt.textContent = "Il grimpe vers la fenêtre…"; animePos(renard, -6, 128, 1300); }],
+        [7500, () => { renard.classList.add("secoue"); setTimeout(() => renard.classList.remove("secoue"), 520); sPouet(); txt.textContent = "Les branches et les ronces bloquent tout. Rien à faire !"; activeVerif("fenetre"); }],
+        [9200, () => { finVerif(); txt.textContent = "Il tente la galerie… Une grosse roche bien lourde. Impossible !"; animePos(renard, -34, 246, 1300); }],
+        [9900, () => { activeVerif("galerie"); }],
+        [11000, () => { finVerif(); $("#t4renardIn").innerHTML = renardSVG({ triste: true }); txt.textContent = "Bredouille ! Le renard hausse les épaules et repart, penaud."; }],
+        [12400, () => { animePos(renard, 400, 246, 1700); }],
+        [14500, () => {
+          $("#t4ciel").setAttribute("fill", "#f2a65a");
+          $("#t4etoiles").style.display = "none";
+          $("#t4lune").style.display = "none";
+          const s = $("#t4soleil3");
+          s.style.display = "";
+          const t0 = performance.now();
+          (function leve(t){
+            const k = Math.min(1, (t - t0) / 1400);
+            s.setAttribute("cy", 392 - k * 66);
+            if (k < 1) requestAnimationFrame(leve);
+          })(t0);
+          sChime();
+          txt.textContent = "L'aube se lève… La famille est en sécurité !";
+          $("#btnT4Fin").style.display = "";
+        }]
+      ];
+      etapes.forEach(([delai, fn]) => setTimeout(() => { if ($("#scr-t4s3").classList.contains("on")) fn(); }, delai));
+    }
+    function finaleT4(){
+      const temps = (performance.now() - T4.debut) / 1000;
+      const etoiles = T4.refills === 0 ? 3 : T4.refills <= 2 ? 2 : 1;
+      const lignesT4 = [
+        "Les buissons inspectés un à un : un oiseau, un hérisson… et le renard !",
+        "Les 3 entrées barricadées à 100 % : planches, roches, branches et ronces.",
+        "Le renard est reparti bredouille, et la famille a dormi en paix toute la nuit."
+      ];
+      if (T4.verifs > 0) lignesT4.splice(2, 0, "Pendant la nuit, tu as vérifié " + (T4.verifs === 1 ? "1 entrée" : T4.verifs + " entrées") + " pendant que le renard essayait : tout tenait bon !");
+      finaleTableau(4, "La famille est en sécurité", illuFamille(), lignesT4, etoiles, temps);
+    }
+
+    /* ================= NAVIGATION DES TABLEAUX ================= */
+    $("#accueilLapin").innerHTML = lapinSVG({ nom: "Tapinoue, prêt pour de nouvelles aventures" });
+    rendreAccueil();
+    $("#btnRetourIntro").addEventListener("click", () => { audio(); sPop(); retourAccueil(); });
+    $("#btnTableaux1").addEventListener("click", () => { audio(); sPop(); retourAccueil(); });
+    $("#btnSuivant1").addEventListener("click", () => { audio(); sPop(); lancerTableau(2); });
+    $("#btnFintabRejouer").addEventListener("click", () => { audio(); sPop(); lancerTableau(FIN.n); });
+    $("#btnFintabSuivant").addEventListener("click", () => { audio(); sPop(); lancerTableau(FIN.n + 1); });
+    $("#btnFintabTableaux").addEventListener("click", () => { audio(); sPop(); retourAccueil(); });
+    $("#btnT4Barricade").addEventListener("click", () => { audio(); sPop(); initT4S2(); });
+    $("#btnT4Fin").addEventListener("click", () => { audio(); sJingle(); finaleT4(); });
+
+    /* ================= DÉMARRAGE ================= */
+    $("#introLapin").innerHTML = lapinSVG({ nom: "Tapinoue, un lapin tout excité" });
+    $("#meilleurIntro").innerHTML = txtMeilleur();
+    $("#btnStart").addEventListener("click", () => {
+      audio(); sPop();
+      G.refills = 0;
+      defEtapes(["Terrier propre", "Carottes", "Beau comme un cœur", "La rencontre"]);
+      montrer("scr-s1"); majEtapes(1); initS1();
+    });
+    $("#btnRejouer").addEventListener("click", () => {
+      audio(); sPop();
+      G.refills = 0;
+      defEtapes(["Terrier propre", "Carottes", "Beau comme un cœur", "La rencontre"]);
+      montrer("scr-s1"); majEtapes(1); initS1();
+      $("#meilleurIntro").innerHTML = txtMeilleur();
+    });
+    document.addEventListener("pointerdown", () => audio(), { once: true });
+    </script>
+  <!-- ===== Barre de jeu HP — NE PAS ÉDITER À LA MAIN =====
+     Retour / Pause / Partager. Source : src/components/barre-jeu/barre-jeu.js
+     (régénérer le module : bun run build:barre) -->
+<script src="/barre/barre-jeu.js" defer></script>
+<!-- ===== Fin barre de jeu HP ===== -->
+</body>
+</html>

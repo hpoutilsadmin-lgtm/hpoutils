@@ -7,8 +7,8 @@ import { useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 26 jeux en ligne | HP Outils",
-      description: "26 jeux gratuits créés au Québec : histoires interactives, mémoire, mots de chez nous et réflexes. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
+      title: "Jeux gratuits en français du Québec — 33 jeux en ligne | HP Outils",
+      description: "33 jeux gratuits créés au Québec : histoires interactives, mémoire, mots de chez nous et réflexes. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
       path: "/jeux",
     }),
     scripts: [
@@ -63,6 +63,13 @@ const GAMES = [
   { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "330 manches pour démasquer le mensonge — historique, inusité, cocasse.", tag: "Quiz · Déduction", faits: "Pour les curieux de 7 à 107 ans · 110 manches par catégorie", mono: "2V", art: 7 },
   { title: "Chat'attaque", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Tower defense avec des chats : 9 chats-tours défendent 50 croquettes. 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local.", tag: "Stratégie · Tower defense", faits: "Solo ou 2 joueurs local · 12 cartes · 3 difficultés", mono: "CA", art: 2 },
   { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Tower defense futuriste : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde. Douze vagues, une tempête qui peut tout changer.", tag: "Stratégie · Science-fiction", faits: "Solo · 12 vagues", mono: "87", art: 7 },
+  { title: "IGLOO — La guerre des igloos", file: "/apps/igloo/igloo-v1.0.html", copy: "Bataille de boules de neige en arène : déploie tes cartes, défends ton igloo et fais tomber celui d'en face — chaque bataille tire une loi du quartier au hasard !", tag: "Stratégie · Arène", faits: "Campagne de 10 batailles · parties d'environ 3 minutes", mono: "IG", art: 7 },
+  { title: "Que vois-tu ?", file: "/apps/que-vois-tu/que-vois-tu-v2.0.html", copy: "Jeu de perception : dis ce que tu vois en premier dans chaque image — il n'y a pas de mauvaise réponse.", tag: "Perception · Toute la famille", faits: "42 défis · 3 terrains : Jeunesse, Ado, Adulte", mono: "QV", art: 4 },
+  { title: "Tapinoue", file: "/apps/tapinoue/tapinoue-v2.0.html", copy: "Les aventures de Tapinoue et de sa famille, en 4 tableaux qui se débloquent un à un : la rencontre, le terrier, le potager de M. Grincheux… et le renard qui rôde.", tag: "Aventure · Jeunesse", faits: "4 tableaux · progression sauvegardée", mono: "TP", art: 1 },
+  { title: "Ton chum frotte son char plus que toi !", file: "/apps/ton-chum-frotte-son-char/ton-chum-frotte-son-char-v2.0.html", copy: "Le vrai job d'esthétique automobile, du bout des doigts : choisis ton véhicule et frotte — roues, lavage, argile, cire — jusqu'à ce qu'il brille. Mets le son !", tag: "ASMR · Frottage", faits: "4 véhicules · 8 étapes du métier", mono: "TC", art: 2 },
+  { title: "Conception de molécules 3D", file: "/apps/conception-de-molecules-3d/conception-de-molecules-3d-v2.0.html", copy: "Un labo pour explorer l'ADN et fabriquer des remèdes : des missions sur de vraies molécules (aspirine, caféine, insuline…), en 4 niveaux.", tag: "Sciences · 3D", faits: "4 niveaux · d'enfant à très avancé", mono: "M3", art: 3 },
+  { title: "L'hydroélectricité, comment ça marche", file: "/apps/hydro-electricite/hydro-electricite-v1.1.html", copy: "Visite guidée d'une centrale hydroélectrique québécoise en suivant une goutte d'eau : barrage, turbine, alternateur… jusqu'à ta maison.", tag: "Éducatif · Visite guidée", faits: "7 stations · pensée pour partir de zéro", mono: "HY", art: 0 },
+  { title: "Anxiété, le jeu", file: "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", copy: "Une semaine dans la peau d'Alex, qui vit avec un trouble anxieux : météo intérieure, pensées qui envahissent et outils réels pour traverser. Ce jeu ne pose pas de diagnostic.", tag: "Sensibilisation · Santé mentale", faits: "5 journées · ressources 811 et 988 incluses", mono: "AX", art: 5 },
 ];
 
 const PALETTES: [string, string][] = [

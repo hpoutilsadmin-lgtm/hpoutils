@@ -1,0 +1,1560 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Que vois-tu ?</title>
+    <style>
+      :root{
+        --paper:#faf4e8;
+        --card:#fffdf6;
+        --ink:#26324a;
+        --ink-soft:#5a6a86;
+        --accent:#d95f36;
+        --accent-soft:#fbe3d7;
+        --teal:#2e7d74;
+        --gold:#e0a83c;
+        --line:#26324a;
+        --shadow:0 6px 0 rgba(38,50,74,.14);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --paper:#161c2a;
+          --card:#212a3f;
+          --ink:#ece5d3;
+          --ink-soft:#a9b4c9;
+          --accent:#ef7d52;
+          --accent-soft:#41303a;
+          --teal:#4fb3a6;
+          --gold:#eec35e;
+          --line:#ece5d3;
+          --shadow:0 6px 0 rgba(0,0,0,.35);
+        }
+      }
+      *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+      html,body{ margin:0; padding:0; }
+      body{
+        background:var(--paper);
+        color:var(--ink);
+        font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        min-height:100vh;
+        display:flex; flex-direction:column; align-items:center;
+        padding:14px 14px 30px;
+      }
+      .wrap{ width:100%; max-width:430px; margin:0 auto; display:flex; flex-direction:column; gap:14px; }
+      .topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+      .lvlname{ font-weight:700; font-size:.95rem; color:var(--ink-soft); }
+      .dots{ display:flex; gap:4px; flex-wrap:wrap; min-width:0; }
+      .dot{ width:10px; height:10px; border-radius:50%; border:2px solid var(--line); background:transparent; opacity:.55; flex:0 0 auto; }
+      .dot.done{ background:var(--accent); border-color:var(--accent); opacity:1; }
+      .dot.now{ background:var(--gold); border-color:var(--gold); opacity:1; transform:scale(1.2); }
+      .sndbtn{
+        border:2px solid var(--line); background:var(--card); color:var(--ink);
+        width:44px; height:44px; border-radius:14px 4px 14px 4px;
+        display:flex; align-items:center; justify-content:center; cursor:pointer; flex:0 0 auto;
+      }
+      .sndbtn:active{ transform:scale(.94); }
+      h1,h2{ font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive; margin:0; line-height:1.15; }
+      .bigtitle{ font-size:2.5rem; text-align:center; margin-top:16px; }
+      .subtitle{ text-align:center; color:var(--ink-soft); font-size:1.05rem; line-height:1.5; margin:0; }
+      .card{
+        background:var(--card); border:2.5px solid var(--line);
+        border-radius:18px 6px 20px 8px/8px 20px 6px 18px;
+        box-shadow:var(--shadow); padding:14px;
+      }
+      .scene{ width:100%; height:auto; display:block; border-radius:10px; }
+      .q{ font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive; font-size:1.45rem; text-align:center; margin:2px 0 0; }
+      .hint{ text-align:center; color:var(--ink-soft); font-size:.95rem; margin:0; line-height:1.45; }
+      .choices{ display:flex; flex-direction:column; gap:10px; }
+      .choice{
+        font-family:inherit; font-size:1.12rem; font-weight:600; color:var(--ink);
+        background:var(--card); border:2.5px solid var(--line);
+        border-radius:16px 5px 16px 5px/5px 16px 5px 16px;
+        padding:15px 14px; cursor:pointer; text-align:center; min-height:56px;
+        transition:transform .08s ease, background .15s ease;
+      }
+      .choice:active{ transform:scale(.97); }
+      .choice.picked{ background:var(--accent-soft); border-color:var(--accent); }
+      .choice:disabled{ opacity:.75; cursor:default; }
+      .feedback{ min-height:1.5em; text-align:center; font-size:1rem; color:var(--teal); font-weight:600; line-height:1.45; margin:0; }
+      .bigbtn{
+        font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive;
+        font-size:1.5rem; color:#fff; background:var(--accent);
+        border:2.5px solid var(--line); border-radius:18px 6px 18px 6px;
+        padding:14px 26px; cursor:pointer; box-shadow:var(--shadow); align-self:center;
+      }
+      .bigbtn:active{ transform:scale(.96); }
+      .lvlbtn{
+        font-family:inherit; text-align:left; width:100%; cursor:pointer;
+        background:var(--card); border:2.5px solid var(--line);
+        border-radius:18px 6px 20px 8px/8px 20px 6px 18px;
+        box-shadow:var(--shadow); padding:16px 18px; color:var(--ink);
+        display:flex; flex-direction:column; gap:3px;
+      }
+      .lvlbtn:active{ transform:scale(.98); }
+      .lvlbtn .lname{ font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive; font-size:1.7rem; color:var(--accent); }
+      .lvlbtn .lsub{ font-size:1rem; color:var(--ink); line-height:1.4; }
+      .lvlbtn .lmeta{ font-size:.88rem; color:var(--ink-soft); }
+      .lvlbtn .llast{ font-size:.92rem; color:var(--teal); font-weight:600; }
+      .tiles{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+      .tile{
+        background:var(--card); border:2.5px solid var(--line); border-radius:16px 6px 16px 6px;
+        padding:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; min-height:104px;
+      }
+      .tile:active{ transform:scale(.96); }
+      .tile.picked{ background:var(--accent-soft); border-color:var(--accent); }
+      .tile.reveal{ border-color:var(--teal); border-width:3.5px; }
+      .tile svg{ width:84px; height:84px; }
+      .ctile{ min-height:118px; border-radius:16px 6px 16px 6px; }
+      .duo{ display:flex; gap:10px; }
+      .duo figure{ margin:0; flex:1; }
+      .duo figcaption{ text-align:center; font-size:.9rem; color:var(--ink-soft); margin-top:4px; font-weight:600; }
+      .stroop{ text-align:center; font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive; font-size:4rem; font-weight:700; letter-spacing:.06em; padding:22px 0 10px; }
+      .stroop2w{ text-align:center; font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive; font-size:2.9rem; font-weight:700; letter-spacing:.05em; line-height:1.25; padding:14px 0 6px; }
+      .bignum{ text-align:center; font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive; font-size:2.1rem; font-weight:700; letter-spacing:.04em; padding:20px 0 12px; }
+      .seqrow{ display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; padding:10px 0 4px; }
+      .seqcell{ width:52px; height:52px; border:2px dashed var(--ink-soft); border-radius:12px 4px 12px 4px; display:flex; align-items:center; justify-content:center; }
+      .seqcell.full{ border-style:solid; border-color:var(--line); background:var(--card); }
+      .seqcell svg{ width:36px; height:36px; }
+      .grid3{ display:grid; grid-template-columns:repeat(3,64px); gap:8px; justify-content:center; padding:8px 0 2px; }
+      .grid3 .seqcell{ width:64px; height:64px; }
+      .shapebtns{ display:flex; gap:10px; justify-content:center; }
+      .shapebtn{ width:76px; height:64px; background:var(--card); border:2.5px solid var(--line); border-radius:14px 5px 14px 5px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+      .shapebtn:active{ transform:scale(.95); }
+      .shapebtn svg{ width:38px; height:38px; }
+      .eyehero{ display:flex; justify-content:center; padding-top:10px; }
+      .profilename{ font-size:2.1rem; text-align:center; color:var(--accent); }
+      .profdesc{ font-size:1.05rem; line-height:1.6; text-align:center; margin:0; }
+      .readhead{ font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive; font-size:1.25rem; color:var(--accent); margin:0 0 4px; }
+      .readtxt{ font-size:1rem; line-height:1.55; margin:0 0 14px; }
+      .readtxt:last-child{ margin-bottom:0; }
+      .gauges{ display:flex; flex-direction:column; gap:16px; }
+      .glabels{ display:flex; justify-content:space-between; font-size:.92rem; font-weight:700; margin-bottom:5px; }
+      .gtrack{ position:relative; height:14px; border:2px solid var(--line); border-radius:99px; background:var(--paper); }
+      .gcenter{ position:absolute; left:50%; top:-4px; bottom:-4px; width:2px; background:var(--ink-soft); opacity:.6; }
+      .gmark{ position:absolute; top:50%; width:22px; height:22px; border-radius:50%; background:var(--accent); border:2.5px solid var(--line); transform:translate(-50%,-50%); transition:left .8s ease; }
+      .honest{ text-align:center; color:var(--ink-soft); font-size:.9rem; line-height:1.5; margin:0; }
+      body[data-level="jeunesse"] .choice{ font-size:1.3rem; padding:20px 14px; min-height:70px; }
+      body[data-level="jeunesse"] .q{ font-size:1.7rem; }
+      body[data-level="jeunesse"] .hint{ font-size:1.05rem; }
+      body[data-level="jeunesse"] .tile{ min-height:124px; }
+      body[data-level="jeunesse"] .tile svg{ width:100px; height:100px; }
+      .fadein{ animation:fadein .35s ease both; }
+      @keyframes fadein{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:none;} }
+      .pulse{ animation:pulse 1s ease infinite; transform-origin:center; transform-box:fill-box; }
+      @keyframes pulse{ 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.18);} }
+      .shake{ animation:shake .3s ease; }
+      @keyframes shake{ 0%,100%{ transform:translateX(0);} 25%{ transform:translateX(-5px);} 75%{ transform:translateX(5px);} }
+      @media (prefers-reduced-motion: reduce){
+        .fadein,.pulse,.shake{ animation:none; }
+        .gmark{ transition:none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap" id="app"></div>
+
+    <script>
+    "use strict";
+    /* ============ État du jeu ============ */
+    var app = document.getElementById("app");
+    var state = { idx: -1, level: null, a: 0, b: 0, c: 0, busy: false, startedAt: 0 };
+    /* a : Détail(-) / Global(+)   b : Logique(-) / Intuition(+)   c : Réflexion(-) / Premier réflexe(+) */
+    function bank(){ return state.level ? BANKS[state.level] : []; }
+
+    /* ============ Sons doux 100 % WebAudio ============ */
+    var audioCtx = null, soundOn = true;
+    function ac(){
+      if(!audioCtx){
+        try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ audioCtx = null; }
+      }
+      if(audioCtx && audioCtx.state === "suspended"){ audioCtx.resume(); }
+      return audioCtx;
+    }
+    function tone(freq, t0, dur, type, vol){
+      var ctx = ac(); if(!ctx || !soundOn) return;
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type || "sine"; o.frequency.value = freq;
+      var t = ctx.currentTime + (t0 || 0);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol || 0.12, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + dur + 0.05);
+    }
+    function sndTap(){ tone(560, 0, 0.12, "triangle", 0.10); }
+    function sndNext(){ tone(523, 0, 0.16, "sine", 0.10); tone(784, 0.09, 0.22, "sine", 0.09); }
+    function sndFound(){ tone(880, 0, 0.14, "sine", 0.10); tone(1174, 0.08, 0.16, "sine", 0.10); tone(1568, 0.16, 0.26, "sine", 0.09); }
+    function sndFinal(){ var n=[392,523,659,784,1046]; for(var i=0;i<n.length;i++){ tone(n[i], i*0.11, 0.3, "triangle", 0.10); } }
+
+    /* ============ Utilitaires ============ */
+    function shuffle(arr){
+      var a = arr.slice();
+      for(var i=a.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+      return a;
+    }
+    var LEVELMETA = {
+      jeunesse: { name: "Jeunesse", sub: "Des images douces, de gros boutons, zéro pression.", meta: "12 petits défis · à ton rythme" },
+      ado: { name: "Ado", sub: "Plus subtil, plus rapide. À toi de voir ce que tu vois.", meta: "14 défis · un peu plus corsé" },
+      adulte: { name: "Adulte", sub: "Figure-fond, visages cachés, mémoire fine. Le complet.", meta: "16 défis · la grosse banque" }
+    };
+    function topbar(){
+      var rounds = bank();
+      var dots = "";
+      if(state.level && state.idx >= 0){
+        for(var i=0;i<rounds.length;i++){
+          var cls = "dot";
+          if(i < state.idx) cls += " done";
+          else if(i === state.idx && state.idx < rounds.length) cls += " now";
+          dots += '<span class="' + cls + '"></span>';
+        }
+      }
+      var icon = soundOn
+        ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.2 6a9 9 0 0 1 0 12"/></svg>'
+        : '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><line x1="16" y1="9" x2="22" y2="15"/><line x1="22" y1="9" x2="16" y2="15"/></svg>';
+      var left = state.level && state.idx >= 0
+        ? '<span class="lvlname">' + LEVELMETA[state.level].name + '</span><div class="dots">' + dots + '</div>'
+        : '<div class="dots">' + dots + '</div>';
+      return '<div class="topbar">' + left +
+        '<button class="sndbtn" id="sndBtn" aria-label="Son activé ou coupé">' + icon + '</button></div>';
+    }
+    function bindTop(){
+      var b = document.getElementById("sndBtn");
+      if(b){ b.addEventListener("click", function(){ soundOn = !soundOn; if(soundOn){ ac(); sndTap(); } render(); }); }
+    }
+    function timeAxis(){
+      var dt = (performance.now() - state.startedAt) / 1000;
+      if(dt < 2.5) state.c += 1;
+      else if(dt > 7) state.c -= 1;
+    }
+    function applyScore(s){
+      if(!s) return;
+      if(s.a) state.a += s.a;
+      if(s.b) state.b += s.b;
+      if(s.c) state.c += s.c;
+    }
+    var INK = "#26324a";
+
+    /* ============ Scènes SVG 100 % originales — banque ADO ============ */
+    var SVG_VOILIER =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Un voilier au coucher du soleil">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#f7c873"/>' +
+      '<circle cx="252" cy="62" r="30" fill="#f59e4c" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M60,52 q10,-10 22,0 M96,38 q8,-8 18,0" stroke="' + INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+      '<path d="M0,138 Q40,130 80,138 T160,138 T240,138 T320,138 V240 H0 Z" fill="#2a7f8c" stroke="' + INK + '" stroke-width="3"/>' +
+      '<g fill="#8fd0c8" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round">' +
+        '<path d="M58,196 C58,172 96,158 140,160 C184,162 214,176 220,192 C226,208 206,222 160,224 C110,226 58,220 58,196 Z"/>' +
+        '<path d="M62,186 L34,166 C29,161 22,166 24,175 L29,196 L24,215 C22,224 30,228 36,221 L62,203 Z"/>' +
+      '</g>' +
+      '<circle cx="196" cy="192" r="3.5" fill="' + INK + '"/>' +
+      '<path d="M184,207 q11,6 22,1" stroke="' + INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+      '<path d="M18,158 q12,-7 24,0 M262,160 q12,-7 24,0 M20,224 q12,-7 24,0" stroke="#dff3f0" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+      '<g stroke="' + INK + '" stroke-width="3" stroke-linejoin="round">' +
+        '<path d="M84,140 L142,140 L133,153 L93,153 Z" fill="#7a4a2b"/>' +
+        '<line x1="113" y1="140" x2="113" y2="90"/>' +
+        '<path d="M113,93 L113,136 L87,136 Z" fill="#fff8ec"/>' +
+        '<path d="M117,99 L117,136 L141,136 Z" fill="#ffe9c9"/>' +
+        '<path d="M113,90 L127,94 L113,99 Z" fill="#d95f36"/>' +
+      '</g>' +
+    '</svg>';
+
+    var SVG_ARBRE =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Un arbre au feuillage étrange">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#bfe3ea"/>' +
+      '<circle cx="42" cy="36" r="17" fill="#f6c453" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M0,204 C60,196 120,208 180,202 C240,196 290,206 320,200 V240 H0 Z" fill="#7fb069" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M148,238 C150,202 150,164 146,130" stroke="#7a4a2b" stroke-width="11" fill="none" stroke-linecap="round"/>' +
+      '<path d="M147,152 C132,140 120,134 106,129 M148,144 C163,132 177,126 191,121" stroke="#7a4a2b" stroke-width="6" fill="none" stroke-linecap="round"/>' +
+      '<path d="M84,116 C76,96 92,74 118,66 C128,50 152,40 176,44 C196,40 214,48 222,60 L247,66 C253,68 253,77 246,79 L224,83 C226,99 214,113 196,119 C188,133 168,141 148,137 C120,141 92,135 84,116 Z" fill="#4e9a51" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<circle cx="206" cy="61" r="6" fill="#bfe3ea" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M84,104 l-12,-4 M85,118 l-13,2" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<circle cx="122" cy="97" r="5.5" fill="#d95f36" stroke="' + INK + '" stroke-width="2"/>' +
+      '<circle cx="163" cy="112" r="5.5" fill="#d95f36" stroke="' + INK + '" stroke-width="2"/>' +
+      '<circle cx="140" cy="76" r="5.5" fill="#d95f36" stroke="' + INK + '" stroke-width="2"/>' +
+      '<path d="M52,222 q6,-8 12,0 M262,226 q6,-8 12,0 M210,230 q6,-8 12,0" stroke="' + INK + '" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+    '</svg>';
+
+    var SVG_ESCALIER =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Un escalier bizarre">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#e9e2d0"/>' +
+      '<path d="M36,182 L84,182 L84,142 L132,142 L132,102 L180,102 L180,62 L228,62 L228,22 L268,22 L268,62 L220,62 L220,102 L172,102 L172,142 L124,142 L124,182 L76,182 L76,222 L36,222 Z" fill="#a9bedd" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<circle cx="52" cy="36" r="4" fill="#e0a83c"/><circle cx="288" cy="196" r="4" fill="#e0a83c"/><circle cx="292" cy="30" r="3" fill="#d95f36"/>' +
+    '</svg>';
+
+    var SVG_MONTAGNE =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Des montagnes sous la lune">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#26355e"/>' +
+      '<circle cx="52" cy="42" r="2.5" fill="#fff"/><circle cx="120" cy="26" r="2" fill="#fff"/><circle cx="196" cy="48" r="2.5" fill="#fff"/><circle cx="88" cy="74" r="2" fill="#fff"/><circle cx="238" cy="20" r="2" fill="#fff"/>' +
+      '<path d="M272,30 a27,27 0 1,0 13,45 a21,21 0 1,1 -13,-45 Z" fill="#f4d58a" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M0,240 L0,176 C24,158 44,138 70,130 C88,125 100,128 106,138 C112,118 126,100 142,96 C152,94 159,102 156,112 C151,121 145,125 148,132 C157,129 167,131 171,138 C179,145 177,153 168,158 C183,165 200,171 218,179 C248,191 282,199 320,202 L320,240 Z" fill="#3d4f7a" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M133,107 L142,93 L152,107 C146,103 138,103 133,107 Z" fill="#eef4ff"/>' +
+      '<path d="M58,152 q10,6 21,0" stroke="#dfe8ff" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<path d="M20,214 q14,-8 28,0 M250,222 q14,-8 28,0" stroke="#5f74a3" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+    '</svg>';
+
+    var SVG_CHANDELLES =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Deux chandelles allumées">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#33283f"/>' +
+      '<line x1="16" y1="216" x2="304" y2="216" stroke="#191221" stroke-width="4" stroke-linecap="round"/>' +
+      '<path d="M52,214 L52,94 C52,81 60,74 70,76 L78,64 C86,53 100,53 106,66 C114,63 121,70 121,81 L122,86 C123,94 124,99 127,106 C131,119 141,131 149,139 L152,143 L152,186 C152,192 145,195 136,197 L129,199 C125,206 125,210 127,214 Z" fill="#f3e6cf" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M268,214 L268,94 C268,81 260,74 250,76 L242,64 C234,53 220,53 214,66 C206,63 199,70 199,81 L198,86 C197,94 196,99 193,106 C189,119 179,131 171,139 L168,143 L168,186 C168,192 175,195 184,197 L191,199 C195,206 195,210 193,214 Z" fill="#f3e6cf" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M86,24 C95,37 97,46 86,57 C75,46 77,37 86,24 Z" fill="#f6a83c" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M86,38 C90,44 90,49 86,53 C82,49 82,44 86,38 Z" fill="#ffd97a"/>' +
+      '<path d="M234,24 C243,37 245,46 234,57 C223,46 225,37 234,24 Z" fill="#f6a83c" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M234,38 C238,44 238,49 234,53 C230,49 230,44 234,38 Z" fill="#ffd97a"/>' +
+      '<line x1="86" y1="57" x2="86" y2="65" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<line x1="234" y1="57" x2="234" y2="65" stroke="' + INK + '" stroke-width="2.5"/>' +
+    '</svg>';
+
+    var SVG_JARDIN =
+    '<svg class="scene" id="gardenSvg" viewBox="0 0 320 240" role="img" aria-label="Un jardin plein de fleurs">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#bfe3ea"/>' +
+      '<circle cx="46" cy="38" r="19" fill="#f6c453" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M196,36 q10,-12 24,-6 q14,-8 24,4 q10,2 6,12 l-56,0 q-6,-6 2,-10 Z" fill="#ffffff" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M28,118 L28,196 M44,120 L44,198" stroke="#7a4a2b" stroke-width="9" stroke-linecap="round"/>' +
+      '<circle cx="36" cy="92" r="31" fill="#4e9a51" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="68" cy="106" r="21" fill="#5cab60" stroke="' + INK + '" stroke-width="3"/>' +
+      '<g stroke="#b98a5e" stroke-width="6"><line x1="96" y1="128" x2="320" y2="128"/><line x1="96" y1="152" x2="320" y2="152"/></g>' +
+      '<g stroke="#a1764e" stroke-width="4"><line x1="120" y1="118" x2="120" y2="162"/><line x1="168" y1="118" x2="168" y2="162"/><line x1="216" y1="118" x2="216" y2="162"/><line x1="264" y1="118" x2="264" y2="162"/><line x1="306" y1="118" x2="306" y2="162"/></g>' +
+      '<rect x="0" y="168" width="320" height="72" fill="#7fb069"/>' +
+      '<circle cx="42" cy="208" r="33" fill="#4e9a51" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="98" cy="220" r="28" fill="#5cab60" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="160" cy="209" r="35" fill="#4e9a51" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="226" cy="219" r="29" fill="#5cab60" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="288" cy="207" r="33" fill="#4e9a51" stroke="' + INK + '" stroke-width="3"/>' +
+      '<g fill="#d95f36"><circle cx="52" cy="198" r="5"/><circle cx="150" cy="216" r="5"/><circle cx="84" cy="226" r="5"/></g>' +
+      '<g fill="#f2f0ff"><circle cx="176" cy="196" r="5"/><circle cx="36" cy="222" r="5"/></g>' +
+      '<g fill="#f6c453"><circle cx="118" cy="204" r="5"/><circle cx="298" cy="220" r="5"/><circle cx="206" cy="228" r="5"/></g>' +
+      '<g id="theKey">' +
+        '<circle cx="238" cy="197" r="7" fill="none" stroke="#c9932f" stroke-width="4.5"/>' +
+        '<line x1="243" y1="202" x2="258" y2="217" stroke="#c9932f" stroke-width="4.5" stroke-linecap="round"/>' +
+        '<line x1="252" y1="210" x2="258" y2="204" stroke="#c9932f" stroke-width="4" stroke-linecap="round"/>' +
+        '<line x1="257" y1="215" x2="263" y2="209" stroke="#c9932f" stroke-width="4" stroke-linecap="round"/>' +
+      '</g>' +
+      '<circle class="hotspot" cx="246" cy="205" r="27" fill="#ffffff" opacity="0"/>' +
+    '</svg>';
+
+    /* Scène mémoire ADO : une chambre montrée 3 secondes */
+    var SVG_CHAMBRE =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Une chambre bien rangée">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#f3e2c7"/>' +
+      '<rect x="0" y="188" width="320" height="52" fill="#b08968"/>' +
+      '<rect x="24" y="26" width="74" height="64" fill="#bfe3ea" stroke="' + INK + '" stroke-width="3"/>' +
+      '<line x1="61" y1="26" x2="61" y2="90" stroke="' + INK + '" stroke-width="2.5"/><line x1="24" y1="58" x2="98" y2="58" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<circle cx="42" cy="42" r="8" fill="#f6c453"/>' +
+      '<rect x="238" y="20" width="58" height="58" fill="#fffdf6" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M267,32 L272,45 L286,45 L275,53 L279,67 L267,59 L255,67 L259,53 L248,45 L262,45 Z" fill="#e0a83c" stroke="' + INK + '" stroke-width="2"/>' +
+      '<rect x="30" y="150" width="150" height="10" fill="#7a4a2b" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<rect x="38" y="160" width="8" height="30" fill="#7a4a2b"/><rect x="164" y="160" width="8" height="30" fill="#7a4a2b"/>' +
+      '<rect x="52" y="128" width="34" height="22" rx="2" fill="#2e7d74" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<line x1="69" y1="128" x2="69" y2="150" stroke="' + INK + '" stroke-width="2"/>' +
+      '<rect x="98" y="118" width="13" height="32" fill="#d95f36" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<rect x="113" y="124" width="11" height="26" fill="#3f74b5" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M140,150 L146,132 L158,132 L164,150 Z" fill="#c93b4e" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<ellipse cx="152" cy="128" rx="17" ry="6" fill="#e8737f" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M196,190 L196,140 L286,140 L286,158 L214,158 L214,190 Z" fill="#3f74b5" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<rect x="196" y="128" width="90" height="14" rx="5" fill="#fffdf6" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<circle cx="282" cy="112" r="15" fill="#fffdf6" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<line x1="282" y1="112" x2="282" y2="101" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<line x1="282" y1="112" x2="290" y2="116" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<path d="M226,206 q8,-10 16,0 M262,210 q8,-10 16,0" stroke="' + INK + '" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+    '</svg>';
+
+    /* ============ Scènes SVG 100 % originales — banque JEUNESSE ============ */
+    /* Chat ou lune : le croissant de lune fait les oreilles et la queue du chat */
+    var SVG_CHAT_LUNE =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Une grosse lune jaune dans le ciel">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#a8d8ea"/>' +
+      '<circle cx="52" cy="34" r="3" fill="#ffffff"/><circle cx="282" cy="52" r="3.5" fill="#ffffff"/><circle cx="238" cy="24" r="2.5" fill="#ffffff"/><circle cx="30" cy="120" r="2.5" fill="#ffffff"/><circle cx="292" cy="140" r="3" fill="#ffffff"/>' +
+      '<path d="M196,26 a86,86 0 1,0 18,166 a68,68 0 1,1 -18,-166 Z" fill="#f6c453" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"/>' +
+      '<path d="M118,74 L104,38 L146,56 M168,60 L186,28 L196,66" fill="#f6c453" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"/>' +
+      '<circle cx="128" cy="110" r="6" fill="' + INK + '"/><circle cx="172" cy="104" r="6" fill="' + INK + '"/>' +
+      '<path d="M140,128 q9,7 18,0" stroke="' + INK + '" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<path d="M96,116 l-20,-4 M98,130 l-19,4 M206,110 l20,-6" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<path d="M212,178 q30,10 24,34 q-3,13 -16,11" stroke="' + INK + '" stroke-width="6" fill="none" stroke-linecap="round"/>' +
+      '<path d="M40,214 q14,-9 28,0 M240,222 q14,-9 28,0" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+    '</svg>';
+
+    /* Maison ou champignon : le toit est un chapeau de champignon */
+    var SVG_MAISON_CHAMPIGNON =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Une drôle de maison dans une clairière">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#bfe3ea"/>' +
+      '<circle cx="278" cy="36" r="19" fill="#f6c453" stroke="' + INK + '" stroke-width="3"/>' +
+      '<rect x="0" y="186" width="320" height="54" fill="#7fb069"/>' +
+      '<path d="M58,120 C58,72 104,44 160,44 C216,44 262,72 262,120 C262,132 250,138 236,136 L84,136 C70,138 58,132 58,120 Z" fill="#d95f36" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"/>' +
+      '<circle cx="112" cy="82" r="13" fill="#fff3d6"/><circle cx="196" cy="70" r="10" fill="#fff3d6"/><circle cx="228" cy="104" r="8" fill="#fff3d6"/><circle cx="88" cy="112" r="7" fill="#fff3d6"/>' +
+      '<path d="M112,136 L112,196 C112,206 120,210 130,210 L190,210 C200,210 208,206 208,196 L208,136 Z" fill="#f3e6cf" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"/>' +
+      '<path d="M146,210 L146,168 C146,160 152,156 160,156 C168,156 174,160 174,168 L174,210 Z" fill="#a33f2a" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="168" cy="184" r="3" fill="#f6c453"/>' +
+      '<circle cx="126" cy="152" r="9" fill="#8ec9d8" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<circle cx="194" cy="152" r="9" fill="#8ec9d8" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M30,222 q6,-14 12,0 M272,226 q6,-14 12,0 M52,208 q6,-12 12,0" stroke="#4e7a3a" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="34" cy="196" r="6" fill="#c93b4e" stroke="' + INK + '" stroke-width="2"/><circle cx="288" cy="200" r="6" fill="#c93b4e" stroke="' + INK + '" stroke-width="2"/>' +
+    '</svg>';
+
+    /* Poisson ou oiseau : le même corps, une aile-nageoire, un bec-bouche */
+    var SVG_POISSON_OISEAU =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Un drôle d\'animal dans l\'eau et le ciel">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#a8d8ea"/>' +
+      '<path d="M30,44 q12,-14 28,-6 q12,-10 26,-2 q4,8 -4,12 l-52,0 q-6,-2 2,-4 Z" fill="#ffffff" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M226,30 q10,-11 23,-5 q10,-8 21,-1 q3,7 -4,10 l-42,0 q-5,-2 2,-4 Z" fill="#ffffff" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M0,168 Q40,160 80,168 T160,168 T240,168 T320,168 V240 H0 Z" fill="#5aa7bd" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M52,116 C80,76 140,60 196,68 C240,74 268,96 274,114 L292,122 L274,130 C264,152 228,170 178,172 C124,174 74,152 52,116 Z" fill="#f2a03d" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"/>' +
+      '<path d="M62,104 L30,80 C24,75 16,80 18,90 L24,116 L18,140 C16,150 25,155 32,148 L64,128 Z" fill="#e8737f" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M138,78 C150,58 178,52 194,64 C184,84 156,92 140,86 Z" fill="#3f74b5" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M150,140 q16,10 34,4" stroke="' + INK + '" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="238" cy="106" r="7" fill="#ffffff" stroke="' + INK + '" stroke-width="2.5"/><circle cx="240" cy="107" r="3.5" fill="' + INK + '"/>' +
+      '<circle cx="92" cy="196" r="5" fill="none" stroke="#dff3f0" stroke-width="2.5"/><circle cx="112" cy="212" r="4" fill="none" stroke="#dff3f0" stroke-width="2.5"/><circle cx="238" cy="204" r="5" fill="none" stroke="#dff3f0" stroke-width="2.5"/>' +
+    '</svg>';
+
+    /* Soleil ou fleur : les pétales sont aussi des rayons */
+    var SVG_SOLEIL_FLEUR =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Un gros soleil fleuri dans un pré">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#bfe3ea"/>' +
+      '<rect x="0" y="196" width="320" height="44" fill="#7fb069"/>' +
+      '<path d="M160,196 C158,168 162,150 160,132" stroke="#4e7a3a" stroke-width="7" fill="none" stroke-linecap="round"/>' +
+      '<path d="M160,176 C142,174 132,162 134,148 C150,150 160,160 160,176 Z" fill="#4e9a51" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<g fill="#f6c453" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round">' +
+        '<ellipse cx="160" cy="34" rx="13" ry="20"/>' +
+        '<ellipse cx="160" cy="34" rx="13" ry="20" transform="rotate(45 160 84)"/>' +
+        '<ellipse cx="160" cy="34" rx="13" ry="20" transform="rotate(90 160 84)"/>' +
+        '<ellipse cx="160" cy="34" rx="13" ry="20" transform="rotate(135 160 84)"/>' +
+        '<ellipse cx="160" cy="34" rx="13" ry="20" transform="rotate(180 160 84)"/>' +
+        '<ellipse cx="160" cy="34" rx="13" ry="20" transform="rotate(225 160 84)"/>' +
+        '<ellipse cx="160" cy="34" rx="13" ry="20" transform="rotate(270 160 84)"/>' +
+        '<ellipse cx="160" cy="34" rx="13" ry="20" transform="rotate(315 160 84)"/>' +
+      '</g>' +
+      '<circle cx="160" cy="84" r="34" fill="#f59e4c" stroke="' + INK + '" stroke-width="3.5"/>' +
+      '<circle cx="148" cy="78" r="4.5" fill="' + INK + '"/><circle cx="172" cy="78" r="4.5" fill="' + INK + '"/>' +
+      '<path d="M146,94 q14,12 28,0" stroke="' + INK + '" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<path d="M44,222 q6,-12 12,0 M262,224 q6,-12 12,0" stroke="#4e7a3a" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="52" cy="210" r="5" fill="#e8737f"/><circle cx="272" cy="212" r="5" fill="#f2f0ff"/>' +
+    '</svg>';
+
+    /* Pré JEUNESSE : un gros papillon orange bien visible sur une fleur */
+    var SVG_PRE =
+    '<svg class="scene" id="gardenSvg" viewBox="0 0 320 240" role="img" aria-label="Un pré plein de grosses fleurs">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#a8d8ea"/>' +
+      '<circle cx="44" cy="36" r="20" fill="#f6c453" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M210,34 q10,-12 24,-6 q12,-8 22,3 q10,2 6,11 l-54,0 q-6,-5 2,-8 Z" fill="#ffffff" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<rect x="0" y="150" width="320" height="90" fill="#7fb069"/>' +
+      '<g stroke="#4e7a3a" stroke-width="4" stroke-linecap="round"><line x1="52" y1="196" x2="52" y2="164"/><line x1="130" y1="206" x2="130" y2="172"/><line x1="272" y1="200" x2="272" y2="168"/></g>' +
+      '<g fill="#e8737f" stroke="' + INK + '" stroke-width="2.5"><circle cx="52" cy="152" r="9"/><circle cx="40" cy="162" r="9"/><circle cx="64" cy="162" r="9"/><circle cx="46" cy="172" r="9"/><circle cx="58" cy="172" r="9"/></g>' +
+      '<circle cx="52" cy="162" r="6" fill="#f6c453"/>' +
+      '<g fill="#b48ce8" stroke="' + INK + '" stroke-width="2.5"><circle cx="130" cy="160" r="9"/><circle cx="118" cy="170" r="9"/><circle cx="142" cy="170" r="9"/><circle cx="124" cy="180" r="9"/><circle cx="136" cy="180" r="9"/></g>' +
+      '<circle cx="130" cy="170" r="6" fill="#f6c453"/>' +
+      '<g fill="#f2f0ff" stroke="' + INK + '" stroke-width="2.5"><circle cx="272" cy="156" r="9"/><circle cx="260" cy="166" r="9"/><circle cx="284" cy="166" r="9"/><circle cx="266" cy="176" r="9"/><circle cx="278" cy="176" r="9"/></g>' +
+      '<circle cx="272" cy="166" r="6" fill="#f6c453"/>' +
+      '<g id="theKey">' +
+        '<ellipse cx="212" cy="104" rx="24" ry="17" fill="#f59e4c" stroke="' + INK + '" stroke-width="3" transform="rotate(-24 212 104)"/>' +
+        '<ellipse cx="250" cy="104" rx="24" ry="17" fill="#f59e4c" stroke="' + INK + '" stroke-width="3" transform="rotate(24 250 104)"/>' +
+        '<ellipse cx="218" cy="128" rx="16" ry="11" fill="#e8737f" stroke="' + INK + '" stroke-width="2.5" transform="rotate(20 218 128)"/>' +
+        '<ellipse cx="244" cy="128" rx="16" ry="11" fill="#e8737f" stroke="' + INK + '" stroke-width="2.5" transform="rotate(-20 244 128)"/>' +
+        '<rect x="226" y="98" width="10" height="34" rx="5" fill="' + INK + '"/>' +
+        '<path d="M226,98 q-8,-12 -16,-13 M236,98 q8,-12 16,-13" stroke="' + INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+      '</g>' +
+      '<circle class="hotspot" cx="231" cy="112" r="34" fill="#ffffff" opacity="0"/>' +
+      '<path d="M30,226 q6,-12 12,0 M96,230 q6,-12 12,0 M196,228 q6,-12 12,0 M292,230 q6,-12 12,0" stroke="#4e7a3a" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+    '</svg>';
+
+    /* Ballons à compter (JEUNESSE) */
+    var SVG_BALLONS =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Des ballons colorés dans le ciel">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#a8d8ea"/>' +
+      '<path d="M24,40 q10,-12 24,-6 q12,-8 22,3 q10,2 6,11 l-54,0 q-6,-5 2,-6 Z" fill="#ffffff" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M236,66 q9,-10 20,-5 q10,-7 19,2 q8,2 5,9 l-46,0 q-5,-4 2,-6 Z" fill="#ffffff" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<g stroke="' + INK + '" stroke-width="2.5" fill="none"><path d="M72,108 q-4,26 2,44 q5,16 -2,30"/><path d="M148,84 q4,30 -2,52 q-5,18 2,34"/><path d="M226,102 q-3,24 2,40 q5,15 -2,28"/><path d="M282,140 q3,18 -2,30"/></g>' +
+      '<ellipse cx="72" cy="76" rx="26" ry="32" fill="#d95f36" stroke="' + INK + '" stroke-width="3"/>' +
+      '<ellipse cx="148" cy="52" rx="26" ry="32" fill="#3f74b5" stroke="' + INK + '" stroke-width="3"/>' +
+      '<ellipse cx="226" cy="70" rx="26" ry="32" fill="#f6c453" stroke="' + INK + '" stroke-width="3"/>' +
+      '<ellipse cx="282" cy="110" rx="23" ry="29" fill="#4e9a51" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M63,58 a18,22 0 0,1 10,-8" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<path d="M139,34 a18,22 0 0,1 10,-8" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<rect x="0" y="206" width="320" height="34" fill="#7fb069"/>' +
+      '<circle cx="40" cy="222" r="5" fill="#e8737f"/><circle cx="290" cy="226" r="5" fill="#f2f0ff"/>' +
+    '</svg>';
+
+    /* Tuiles JEUNESSE : chats et un chien */
+    function catTileSVG(color){
+      return '<svg viewBox="0 0 84 84"><path d="M18,30 L14,8 L34,18 M66,30 L70,8 L50,18" fill="' + color + '" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<circle cx="42" cy="46" r="27" fill="' + color + '" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="32" cy="42" r="3.5" fill="' + INK + '"/><circle cx="52" cy="42" r="3.5" fill="' + INK + '"/>' +
+      '<path d="M39,52 L45,52 L42,56 Z" fill="#e8737f"/>' +
+      '<path d="M30,60 q12,8 24,0" stroke="' + INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+      '<path d="M12,50 l14,2 M13,60 l13,-2 M72,50 l-14,2 M71,60 l-13,-2" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/></svg>';
+    }
+    var SVG_CHIEN_TUILE =
+    '<svg viewBox="0 0 84 84"><ellipse cx="14" cy="34" rx="9" ry="19" fill="#8a5a34" stroke="' + INK + '" stroke-width="3" transform="rotate(14 14 34)"/><ellipse cx="70" cy="34" rx="9" ry="19" fill="#8a5a34" stroke="' + INK + '" stroke-width="3" transform="rotate(-14 70 34)"/>' +
+    '<circle cx="42" cy="44" r="27" fill="#c98d54" stroke="' + INK + '" stroke-width="3"/>' +
+    '<ellipse cx="42" cy="56" rx="13" ry="10" fill="#f3e2c7"/>' +
+    '<circle cx="32" cy="38" r="3.5" fill="' + INK + '"/><circle cx="52" cy="38" r="3.5" fill="' + INK + '"/>' +
+    '<ellipse cx="42" cy="51" rx="6" ry="4.5" fill="' + INK + '"/>' +
+    '<path d="M42,55 q0,6 -6,7 M42,55 q0,6 6,7" stroke="' + INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>';
+
+    /* Cour JEUNESSE : un ballon rouge attaché à la clôture… ou pas */
+    function courSVG(withBalloon){
+      var b = withBalloon
+        ? '<path d="M252,148 q4,-14 -2,-24" stroke="' + INK + '" stroke-width="2" fill="none"/><ellipse cx="250" cy="102" rx="19" ry="24" fill="#d95f36" stroke="' + INK + '" stroke-width="3"/><path d="M243,84 a13,16 0 0,1 8,-6" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+        : '<path d="M252,148 q6,-8 2,-16" stroke="' + INK + '" stroke-width="2" fill="none"/>';
+      return '<svg class="scene" viewBox="0 0 150 120" role="img" aria-label="Une cour avec une maisonnette">' +
+        '<rect x="0" y="0" width="150" height="120" fill="#a8d8ea"/>' +
+        '<circle cx="132" cy="16" r="8" fill="#f6c453" stroke="' + INK + '" stroke-width="2"/>' +
+        '<rect x="0" y="92" width="150" height="28" fill="#7fb069"/>' +
+        '<path d="M14,52 L44,28 L74,52 Z" fill="#b5542f" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+        '<rect x="20" y="52" width="48" height="42" fill="#f3e6cf" stroke="' + INK + '" stroke-width="2.5"/>' +
+        '<rect x="36" y="64" width="15" height="30" fill="#a33f2a" stroke="' + INK + '" stroke-width="2"/>' +
+        '<circle cx="106" cy="62" r="17" fill="#4e9a51" stroke="' + INK + '" stroke-width="2.5"/>' +
+        '<rect x="103" y="76" width="6" height="18" fill="#7a4a2b"/>' +
+        '<g stroke="#b98a5e" stroke-width="3.5"><line x1="82" y1="86" x2="146" y2="86"/><line x1="88" y1="78" x2="88" y2="96"/><line x1="112" y1="78" x2="112" y2="96"/><line x1="136" y1="78" x2="136" y2="96"/></g>' +
+        b +
+      '</svg>';
+    }
+
+    /* ============ Scènes SVG 100 % originales — banque ADULTE ============ */
+    /* Forêt de conifères / livres sur une étagère */
+    var SVG_FORET_LIVRES =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Une forêt de grands sapins">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#dceef2"/>' +
+      '<circle cx="46" cy="34" r="16" fill="#f6c453" stroke="' + INK + '" stroke-width="3"/>' +
+      '<rect x="0" y="206" width="320" height="34" fill="#5d8a5a"/>' +
+      '<g fill="#2e6b46" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round">' +
+        '<path d="M38,206 L38,168 L24,168 L40,138 L28,138 L48,102 L68,138 L56,138 L72,168 L58,168 L58,206 Z"/>' +
+        '<path d="M104,206 L104,160 L88,160 L106,126 L92,126 L116,84 L140,126 L126,126 L144,160 L128,160 L128,206 Z"/>' +
+        '<path d="M172,206 L172,172 L160,172 L174,146 L164,146 L180,116 L196,146 L186,146 L200,172 L188,172 L188,206 Z"/>' +
+        '<path d="M232,206 L232,156 L214,156 L234,120 L218,120 L244,72 L270,120 L254,120 L274,156 L256,156 L256,206 Z"/>' +
+        '<path d="M292,206 L292,176 L282,176 L294,152 L286,152 L300,128 L314,152 L306,152 L318,176 L308,176 L308,206 Z"/>' +
+      '</g>' +
+      '<path d="M14,220 q10,-6 20,0 M150,226 q10,-6 20,0 M282,222 q10,-6 20,0" stroke="#3f6340" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+    '</svg>';
+
+    /* Paréidolie cuisine : les chaudrons et la théière forment un visage */
+    var SVG_CUISINE =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Une cuisine bien équipée">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#f3e2c7"/>' +
+      '<rect x="0" y="176" width="320" height="64" fill="#b08968"/>' +
+      '<line x1="14" y1="34" x2="306" y2="34" stroke="#7a4a2b" stroke-width="6" stroke-linecap="round"/>' +
+      '<line x1="96" y1="34" x2="96" y2="56" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="96" cy="76" r="21" fill="#8a8f98" stroke="' + INK + '" stroke-width="3"/>' +
+      '<line x1="96" y1="56" x2="96" y2="97" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="96" cy="76" r="4" fill="' + INK + '"/>' +
+      '<line x1="224" y1="34" x2="224" y2="56" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="224" cy="76" r="21" fill="#8a8f98" stroke="' + INK + '" stroke-width="3"/>' +
+      '<line x1="224" y1="56" x2="224" y2="97" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="224" cy="76" r="4" fill="' + INK + '"/>' +
+      '<path d="M132,148 C132,122 142,110 160,110 C178,110 188,122 188,148 L182,148 C176,134 144,134 138,148 Z" fill="#3f74b5" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M188,124 q20,-4 20,10 q0,12 -18,10" fill="none" stroke="' + INK + '" stroke-width="3.5"/>' +
+      '<path d="M132,128 q-14,2 -12,12" fill="none" stroke="' + INK + '" stroke-width="3.5" stroke-linecap="round"/>' +
+      '<circle cx="160" cy="106" r="5" fill="' + INK + '"/>' +
+      '<line x1="160" y1="101" x2="160" y2="86" stroke="' + INK + '" stroke-width="3" stroke-linecap="round"/>' +
+      '<rect x="104" y="186" width="112" height="34" rx="4" fill="#6b7280" stroke="' + INK + '" stroke-width="3"/>' +
+      '<line x1="118" y1="196" x2="202" y2="196" stroke="' + INK + '" stroke-width="4" stroke-linecap="round"/>' +
+      '<circle cx="126" cy="210" r="4" fill="' + INK + '"/><circle cx="160" cy="210" r="4" fill="' + INK + '"/><circle cx="194" cy="210" r="4" fill="' + INK + '"/>' +
+      '<rect x="20" y="120" width="44" height="56" fill="#a8d8ea" stroke="' + INK + '" stroke-width="3"/>' +
+      '<path d="M28,168 q6,-22 14,-26 M42,170 q2,-16 10,-22" stroke="#4e9a51" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<rect x="262" y="128" width="38" height="48" rx="3" fill="#d95f36" stroke="' + INK + '" stroke-width="3"/>' +
+      '<line x1="262" y1="144" x2="300" y2="144" stroke="' + INK + '" stroke-width="2.5"/>' +
+    '</svg>';
+
+    /* Entrepôt / circuit : les tuyaux dessinent un labyrinthe… ou un serpent */
+    var SVG_TUYAUX =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Des tuyaux dans un atelier">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#e6e1d3"/>' +
+      '<g stroke="#c7cfd8" stroke-width="1.5"><line x1="0" y1="60" x2="320" y2="60"/><line x1="0" y1="120" x2="320" y2="120"/><line x1="0" y1="180" x2="320" y2="180"/><line x1="80" y1="0" x2="80" y2="240"/><line x1="160" y1="0" x2="160" y2="240"/><line x1="240" y1="0" x2="240" y2="240"/></g>' +
+      '<path d="M28,204 L28,60 C28,42 42,30 62,30 L196,30 C214,30 224,42 224,58 L224,84 C224,100 214,110 200,110 L128,110 C112,110 104,120 104,134 L104,156 C104,172 114,182 130,182 L256,182 C272,182 282,190 292,190" fill="none" stroke="#2e7d74" stroke-width="17" stroke-linecap="round"/>' +
+      '<path d="M28,204 L28,60 C28,42 42,30 62,30 L196,30 C214,30 224,42 224,58 L224,84 C224,100 214,110 200,110 L128,110 C112,110 104,120 104,134 L104,156 C104,172 114,182 130,182 L256,182 C272,182 282,190 292,190" fill="none" stroke="' + INK + '" stroke-width="17" stroke-linecap="round" stroke-dasharray="0.1 26" opacity="0.16"/>' +
+      '<circle cx="292" cy="190" r="15" fill="#2e7d74" stroke="' + INK + '" stroke-width="3"/>' +
+      '<circle cx="297" cy="185" r="3" fill="#ffffff"/>' +
+      '<path d="M303,196 l9,3 l-8,4" fill="#d95f36" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"/>' +
+      '<g fill="#e0a83c" stroke="' + INK + '" stroke-width="2.5"><circle cx="28" cy="132" r="9"/><circle cx="150" cy="30" r="9"/><circle cx="224" cy="140" r="9"/><circle cx="104" cy="182" r="9"/></g>' +
+      '<rect x="28" y="196" width="16" height="16" fill="#8a8f98" stroke="' + INK + '" stroke-width="2.5"/>' +
+    '</svg>';
+
+    /* Ville la nuit / constellation : les fenêtres allumées relient un voilier */
+    var SVG_VILLE =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Une ville la nuit">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#1f2c4e"/>' +
+      '<circle cx="288" cy="30" r="2" fill="#fff"/><circle cx="36" cy="52" r="2" fill="#fff"/><circle cx="120" cy="18" r="1.8" fill="#fff"/><circle cx="210" cy="44" r="1.8" fill="#fff"/>' +
+      '<path d="M28,58 a20,20 0 1,0 9,34 a15,15 0 1,1 -9,-34 Z" fill="#f4d58a" stroke="' + INK + '" stroke-width="2"/>' +
+      '<g fill="#141d33" stroke="' + INK + '" stroke-width="2.5">' +
+        '<rect x="8" y="120" width="44" height="120"/><rect x="58" y="92" width="38" height="148"/><rect x="102" y="132" width="48" height="108"/>' +
+        '<rect x="156" y="78" width="40" height="162"/><rect x="202" y="118" width="46" height="122"/><rect x="254" y="98" width="40" height="142"/><rect x="298" y="138" width="22" height="102"/>' +
+      '</g>' +
+      '<g fill="#f6c453">' +
+        '<rect x="18" y="136" width="8" height="10"/><rect x="34" y="160" width="8" height="10"/><rect x="18" y="188" width="8" height="10"/>' +
+        '<rect x="66" y="108" width="8" height="10"/><rect x="80" y="140" width="8" height="10"/><rect x="66" y="196" width="8" height="10"/>' +
+        '<rect x="112" y="148" width="8" height="10"/><rect x="130" y="176" width="8" height="10"/>' +
+        '<rect x="164" y="94" width="8" height="10"/><rect x="178" y="130" width="8" height="10"/><rect x="164" y="168" width="8" height="10"/><rect x="178" y="204" width="8" height="10"/>' +
+        '<rect x="212" y="134" width="8" height="10"/><rect x="228" y="164" width="8" height="10"/><rect x="212" y="198" width="8" height="10"/>' +
+        '<rect x="262" y="114" width="8" height="10"/><rect x="276" y="150" width="8" height="10"/><rect x="262" y="188" width="8" height="10"/>' +
+        '<rect x="303" y="156" width="7" height="9"/><rect x="303" y="196" width="7" height="9"/>' +
+      '</g>' +
+      '<g stroke="#ffd97a" stroke-width="2" stroke-dasharray="1 6" stroke-linecap="round" fill="none" opacity="0.95">' +
+        '<path d="M117,153 L168,99 L182,135 L134,181 L70,113 L38,165 L22,141"/>' +
+      '</g>' +
+      '<g fill="#ffd97a"><circle cx="117" cy="153" r="3.4"/><circle cx="168" cy="99" r="3.4"/><circle cx="182" cy="135" r="3.4"/><circle cx="134" cy="181" r="3.4"/><circle cx="70" cy="113" r="3.4"/><circle cx="38" cy="165" r="3.4"/><circle cx="22" cy="141" r="3.4"/></g>' +
+    '</svg>';
+
+    /* Atelier ADULTE : une clé perdue parmi les outils */
+    var SVG_ATELIER =
+    '<svg class="scene" id="gardenSvg" viewBox="0 0 320 240" role="img" aria-label="Un établi plein d\'outils">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#d9c9a8"/>' +
+      '<rect x="0" y="150" width="320" height="90" fill="#8a6844"/>' +
+      '<line x1="0" y1="150" x2="320" y2="150" stroke="' + INK + '" stroke-width="3"/>' +
+      '<rect x="14" y="18" width="292" height="10" fill="#7a4a2b" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<g stroke="' + INK + '" stroke-width="3" stroke-linecap="round">' +
+        '<line x1="44" y1="28" x2="44" y2="66"/><path d="M34,66 L54,66 L50,92 L38,92 Z" fill="#c93b4e"/>' +
+        '<line x1="96" y1="28" x2="96" y2="58"/><circle cx="96" cy="72" r="14" fill="none"/><line x1="106" y1="82" x2="118" y2="94"/>' +
+        '<line x1="150" y1="28" x2="150" y2="60"/><path d="M138,60 L162,60 L156,96 L144,96 Z" fill="#3f74b5"/>' +
+        '<line x1="206" y1="28" x2="206" y2="56"/><rect x="192" y="56" width="28" height="34" fill="#e0a83c"/>' +
+        '<line x1="262" y1="28" x2="262" y2="62"/><path d="M250,62 L274,62 L270,88 L254,88 Z" fill="#2e7d74"/>' +
+      '</g>' +
+      '<g stroke="' + INK + '" stroke-width="2.5"><rect x="22" y="168" width="52" height="12" fill="#a1764e"/><rect x="22" y="184" width="52" height="12" fill="#8a5f36"/><rect x="22" y="200" width="52" height="12" fill="#a1764e"/></g>' +
+      '<rect x="96" y="176" width="60" height="38" rx="4" fill="#fffdf6" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<g stroke="#9aa4b5" stroke-width="2"><line x1="104" y1="188" x2="148" y2="188"/><line x1="104" y1="197" x2="148" y2="197"/><line x1="104" y1="206" x2="136" y2="206"/></g>' +
+      '<path d="M196,214 L196,180 L232,180 L232,194 L214,194 L214,214 Z" fill="#c93b4e" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<ellipse cx="214" cy="176" rx="21" ry="6" fill="#e8737f" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M262,168 q22,-16 34,2 q8,12 -2,22 l-30,14 q-12,-20 -2,-38 Z" fill="#4e9a51" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M272,196 q4,14 -2,24" stroke="#4e7a3a" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<g id="theKey">' +
+        '<circle cx="252" cy="128" r="5.5" fill="none" stroke="#c9932f" stroke-width="3.5"/>' +
+        '<line x1="256" y1="132" x2="267" y2="143" stroke="#c9932f" stroke-width="3.5" stroke-linecap="round"/>' +
+        '<line x1="262" y1="137" x2="267" y2="132" stroke="#c9932f" stroke-width="3" stroke-linecap="round"/>' +
+        '<line x1="265" y1="140" x2="270" y2="135" stroke="#c9932f" stroke-width="3" stroke-linecap="round"/>' +
+      '</g>' +
+      '<circle class="hotspot" cx="258" cy="134" r="20" fill="#ffffff" opacity="0"/>' +
+      '<g fill="#6b7280"><circle cx="120" cy="160" r="3"/><circle cx="180" cy="164" r="3"/><circle cx="60" cy="158" r="3"/></g>' +
+    '</svg>';
+
+    /* Marché ADULTE (mémoire) : un étal bien garni, montré 3 secondes */
+    var SVG_MARCHE =
+    '<svg class="scene" viewBox="0 0 320 240" role="img" aria-label="Un étal de marché">' +
+      '<rect x="0" y="0" width="320" height="240" fill="#f7e8c9"/>' +
+      '<rect x="0" y="196" width="320" height="44" fill="#c9a87c"/>' +
+      '<path d="M30,84 L290,84 L268,44 L52,44 Z" fill="#c93b4e" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M84,44 L96,84 M132,44 L138,84 M180,44 L180,84 M228,44 L222,84" stroke="#f3e6cf" stroke-width="9"/>' +
+      '<line x1="44" y1="84" x2="44" y2="196" stroke="#7a4a2b" stroke-width="7"/><line x1="276" y1="84" x2="276" y2="196" stroke="#7a4a2b" stroke-width="7"/>' +
+      '<rect x="36" y="140" width="248" height="12" fill="#7a4a2b" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<g fill="#d95f36" stroke="' + INK + '" stroke-width="2"><circle cx="62" cy="126" r="11"/><circle cx="84" cy="126" r="11"/><circle cx="73" cy="108" r="11"/></g>' +
+      '<path d="M52,152 C70,138 96,138 108,152 C94,164 64,164 52,152 Z" fill="#f6c453" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<g fill="#b48ce8" stroke="' + INK + '" stroke-width="2"><circle cx="140" cy="118" r="9"/><circle cx="158" cy="118" r="9"/><circle cx="149" cy="102" r="9"/></g>' +
+      '<path d="M138,152 L146,128 M158,152 L156,128" stroke="#4e7a3a" stroke-width="3"/>' +
+      '<rect x="196" y="106" width="52" height="34" rx="4" fill="#8a5f36" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<g fill="#e8b45a" stroke="' + INK + '" stroke-width="2"><ellipse cx="208" cy="98" rx="10" ry="7" transform="rotate(-18 208 98)"/><ellipse cx="226" cy="94" rx="10" ry="7"/><ellipse cx="240" cy="100" rx="10" ry="7" transform="rotate(16 240 100)"/></g>' +
+      '<path d="M56,196 L64,168 L84,168 L90,196 Z" fill="#3f74b5" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<path d="M120,196 q4,-22 20,-26 q-2,16 -8,26 Z" fill="#4e9a51" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<circle cx="238" cy="176" r="13" fill="#f2f0ff" stroke="' + INK + '" stroke-width="2.5"/>' +
+      '<path d="M230,168 l-3,-6 M246,168 l3,-6" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/>' +
+      '<circle cx="233" cy="174" r="2" fill="' + INK + '"/><circle cx="243" cy="174" r="2" fill="' + INK + '"/>' +
+    '</svg>';
+
+    /* Café ADULTE : la même scène, un seul petit changement (la tasse) */
+    function cafeSVG(tasseRouge){
+      var tasse = tasseRouge ? "#c93b4e" : "#3f74b5";
+      return '<svg class="scene" viewBox="0 0 150 120" role="img" aria-label="Un petit café">' +
+        '<rect x="0" y="0" width="150" height="120" fill="#efe6d4"/>' +
+        '<rect x="0" y="88" width="150" height="32" fill="#b08968"/>' +
+        '<rect x="10" y="12" width="40" height="34" fill="#a8d8ea" stroke="' + INK + '" stroke-width="2.5"/>' +
+        '<line x1="30" y1="12" x2="30" y2="46" stroke="' + INK + '" stroke-width="2"/>' +
+        '<circle cx="122" cy="24" r="12" fill="#fffdf6" stroke="' + INK + '" stroke-width="2.5"/>' +
+        '<line x1="122" y1="24" x2="122" y2="16" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/>' +
+        '<line x1="122" y1="24" x2="128" y2="27" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/>' +
+        '<rect x="16" y="66" width="52" height="6" fill="#7a4a2b" stroke="' + INK + '" stroke-width="2"/>' +
+        '<rect x="22" y="72" width="5" height="18" fill="#7a4a2b"/><rect x="57" y="72" width="5" height="18" fill="#7a4a2b"/>' +
+        '<path d="M28,66 L28,56 L44,56 L44,66 Z" fill="' + tasse + '" stroke="' + INK + '" stroke-width="2"/>' +
+        '<path d="M44,58 q8,1 6,5 q-1,3 -6,2" fill="none" stroke="' + INK + '" stroke-width="2"/>' +
+        '<path d="M32,50 q3,-4 0,-8 M40,50 q3,-4 0,-8" stroke="#9aa4b5" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+        '<rect x="92" y="58" width="10" height="14" fill="#2e7d74" stroke="' + INK + '" stroke-width="2"/>' +
+        '<path d="M97,58 q-10,-4 -10,-14 q10,0 12,8 q4,-8 12,-8 q0,10 -8,13 Z" fill="#4e9a51" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"/>' +
+        '<rect x="86" y="86" width="44" height="5" fill="#7a4a2b"/>' +
+        '<path d="M104,106 l6,-15 l6,15 M134,106 l-4,-13" stroke="' + INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+      '</svg>';
+    }
+
+    /* Petites formes réutilisables */
+    function shapeSVG(kind, color){
+      if(kind === "cercle") return '<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="' + color + '" stroke="' + INK + '" stroke-width="2.5"/></svg>';
+      if(kind === "triangle") return '<svg viewBox="0 0 40 40"><path d="M20,7 L34,32 L6,32 Z" fill="' + color + '" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/></svg>';
+      if(kind === "carre") return '<svg viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="24" rx="3" fill="' + color + '" stroke="' + INK + '" stroke-width="2.5"/></svg>';
+      if(kind === "etoile") return '<svg viewBox="0 0 40 40"><path d="M20,5 L24,15 L35,15 L26,22 L29,33 L20,26 L11,33 L14,22 L5,15 L16,15 Z" fill="' + color + '" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/></svg>';
+      return "";
+    }
+    function dirSVG(deg, color){
+      return '<svg viewBox="0 0 40 40"><g transform="rotate(' + deg + ' 20 20)"><path d="M20,6 L33,32 L20,25 L7,32 Z" fill="' + color + '" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/></g></svg>';
+    }
+
+    /* Tuiles de l'intrus ADO */
+    var SVG_POMME = '<svg viewBox="0 0 84 84"><path d="M42,26 C34,14 22,16 18,28 C13,43 24,66 34,68 C38,69 40,66 42,66 C44,66 46,69 50,68 C60,66 71,43 66,28 C62,16 50,14 42,26 Z" fill="#d95f36" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/><path d="M42,24 C42,16 46,11 53,9 C54,17 49,23 42,24 Z" fill="#4e9a51" stroke="' + INK + '" stroke-width="2.5"/></svg>';
+    var SVG_BANANE = '<svg viewBox="0 0 84 84"><path d="M16,20 C14,44 30,64 58,68 C64,69 66,62 60,59 C38,49 27,36 25,17 C24,11 15,12 16,20 Z" fill="#f6c453" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/><path d="M22,24 C24,40 34,52 48,59" stroke="#d9a441" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+    var SVG_CERISES = '<svg viewBox="0 0 84 84"><path d="M30,38 C34,24 44,14 56,10 M52,40 C50,28 52,18 56,10" stroke="#4e7a3a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M56,10 C62,4 72,5 74,6 C73,13 66,17 59,15 Z" fill="#4e9a51" stroke="' + INK + '" stroke-width="2.5"/><circle cx="28" cy="56" r="15" fill="#c93b4e" stroke="' + INK + '" stroke-width="3"/><circle cx="56" cy="60" r="15" fill="#c93b4e" stroke="' + INK + '" stroke-width="3"/><circle cx="23" cy="50" r="4" fill="#f2b8c1"/><circle cx="51" cy="54" r="4" fill="#f2b8c1"/></svg>';
+    var SVG_AUTO = '<svg viewBox="0 0 84 84"><path d="M10,52 L14,36 C15,32 18,30 22,30 L28,18 C29,15 32,13 36,13 L52,13 C56,13 59,15 61,19 L66,30 L70,30 C74,30 77,33 77,37 L77,52 Z" fill="#3f74b5" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/><path d="M31,20 L28,30 L42,30 L42,20 Z M46,20 L46,30 L62,30 L56,20 Z" fill="#bfe3ea" stroke="' + INK + '" stroke-width="2.5"/><circle cx="26" cy="54" r="8" fill="#26324a"/><circle cx="60" cy="54" r="8" fill="#26324a"/><circle cx="26" cy="54" r="3.5" fill="#dfe8ff"/><circle cx="60" cy="54" r="3.5" fill="#dfe8ff"/></svg>';
+
+    /* Tuiles ADULTE : quatre visages, un seul fait un clin d'œil */
+    function faceTileSVG(wink){
+      var eyeL = wink
+        ? '<path d="M24,38 q6,5 12,0" stroke="' + INK + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
+        : '<circle cx="30" cy="38" r="3.6" fill="' + INK + '"/>';
+      return '<svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="31" fill="#f6c453" stroke="' + INK + '" stroke-width="3"/>' +
+      eyeL + '<circle cx="54" cy="38" r="3.6" fill="' + INK + '"/>' +
+      '<path d="M29,55 q13,11 26,0" stroke="' + INK + '" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="20" cy="50" r="4.5" fill="#e8a0a8" opacity="0.7"/><circle cx="64" cy="50" r="4.5" fill="#e8a0a8" opacity="0.7"/></svg>';
+    }
+
+    /* Maison pour « qu'est-ce qui a changé ? » (ADO) */
+    function cottageSVG(withCat){
+      var cat = withCat
+        ? '<g fill="#26324a"><ellipse cx="118" cy="104" rx="9" ry="6"/><circle cx="126" cy="97" r="5"/><path d="M122,93 l-2,-5 l5,3 M128,92 l1,-5 l4,4" stroke="#26324a" stroke-width="2" fill="none"/><path d="M110,102 q-8,-2 -7,-10" stroke="#26324a" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>'
+        : "";
+      return '<svg class="scene" viewBox="0 0 150 120" role="img" aria-label="Une petite maison">' +
+        '<rect x="0" y="0" width="150" height="120" fill="#bfe3ea"/>' +
+        '<circle cx="22" cy="18" r="9" fill="#f6c453" stroke="' + INK + '" stroke-width="2.5"/>' +
+        '<rect x="0" y="98" width="150" height="22" fill="#7fb069"/>' +
+        '<path d="M38,60 L75,28 L112,60 Z" fill="#b5542f" stroke="' + INK + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+        '<rect x="44" y="60" width="62" height="40" fill="#f3e6cf" stroke="' + INK + '" stroke-width="2.5"/>' +
+        '<rect x="88" y="34" width="10" height="18" fill="#8a8f98" stroke="' + INK + '" stroke-width="2"/>' +
+        '<path d="M93,28 q4,-5 0,-9 q-4,-4 0,-8" stroke="#9aa4b5" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+        '<rect x="52" y="68" width="16" height="16" fill="#8ec9d8" stroke="' + INK + '" stroke-width="2.5"/>' +
+        '<line x1="60" y1="68" x2="60" y2="84" stroke="' + INK + '" stroke-width="2"/>' +
+        '<rect x="80" y="66" width="16" height="34" fill="#a33f2a" stroke="' + INK + '" stroke-width="2.5"/>' +
+        '<circle cx="92" cy="84" r="2" fill="#f6c453"/>' +
+        cat +
+      '</svg>';
+    }
+
+    /* ============ Les trois banques d'épreuves (42 défis distincts) ============ */
+    var BANKS = {
+      /* ---------- JEUNESSE : doux, court, zéro pression ---------- */
+      jeunesse: [
+        { type: "choix", svg: SVG_CHAT_LUNE, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Un chat", s: { a: -1, b: 1 } },
+            { t: "La lune", s: { a: 1 } },
+            { t: "Un gros fromage", s: { b: 1 } }
+          ],
+          fb: "La lune a des oreilles de chat… et même des moustaches !" },
+        { type: "cache", svg: SVG_PRE, svgId: "gardenSvg",
+          q: "Un papillon se cache dans le pré…",
+          hint: "Touche l'endroit où il est. Prends tout ton temps.",
+          fbFound: "Le voilà ! Il se reposait près des fleurs.",
+          hints: ["Pas là… regarde bien les fleurs.", "Petit indice : il est en haut, à droite, et il est orange."] },
+        { type: "choix", svg: SVG_MAISON_CHAMPIGNON, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Une maison", s: { a: 1 } },
+            { t: "Un champignon", s: { a: -1, b: 1 } },
+            { t: "Un parapluie", s: { a: 1, b: 1 } }
+          ],
+          fb: "Une maison avec un toit-champignon ! Les fées adorent ça." },
+        { type: "compte", svg: SVG_BALLONS, q: "Combien de ballons vois-tu ?",
+          hint: "Compte-les doucement, un par un.",
+          choices: [
+            { t: "3 ballons", s: { b: 1 } },
+            { t: "4 ballons", s: { a: -1, b: -1 } },
+            { t: "5 ballons", s: { b: 1 } }
+          ],
+          fb: "Il y en a 4 : rouge, bleu, jaune et vert !" },
+        { type: "choix", svg: SVG_POISSON_OISEAU, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Un poisson", s: { a: 1 } },
+            { t: "Un oiseau", s: { a: -1, b: 1 } },
+            { t: "Un avion", s: { b: 1 } }
+          ],
+          fb: "Il nage ET il vole : son aile est aussi une nageoire !" },
+        { type: "intrus", q: "Qui n'est pas un chat ?",
+          hint: "Touche celui qui est différent des autres.",
+          tiles: [
+            { svg: catTileSVG("#f2a03d"), ok: false },
+            { svg: catTileSVG("#8a8f98"), ok: false },
+            { svg: catTileSVG("#f3e6cf"), ok: false },
+            { svg: SVG_CHIEN_TUILE, ok: true }
+          ],
+          scoreOk: { a: -2, b: -1 }, scoreNo: { b: 1 },
+          fbOk: "Oui ! Trois chats… et un chien qui s'est faufilé !",
+          fbNo: "C'était le chien, avec ses grandes oreilles tombantes !" },
+        { type: "choix", svg: SVG_SOLEIL_FLEUR, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Un soleil", s: { a: 1 } },
+            { t: "Une fleur", s: { a: -1, b: 1 } },
+            { t: "Une orange", s: { b: 1 } }
+          ],
+          fb: "Un soleil qui fleure bon le printemps : ses rayons sont des pétales !" },
+        { type: "suite", q: "Qu'est-ce qui vient ensuite ?",
+          seq: ["cercle", "carre", "cercle", "carre", "cercle"],
+          cols: { cercle: "#3f74b5", carre: "#d95f36", etoile: "#e0a83c" },
+          options: ["carre", "cercle", "etoile"], answer: "carre",
+          scoreOk: { b: -2, a: -1 }, scoreNo: { b: 1 },
+          fb: "Rond, carré, rond, carré… après le rond, c'était le carré !" },
+        { type: "flash", dur: 900, min: 3, max: 5,
+          qIntro: "Des étoiles vont apparaître…", hintIntro: "Regarde bien, puis compte-les dans ta tête.",
+          qAsk: "Combien d'étoiles as-tu vues ?", fb: "Il y en avait %N% ! Bien regardé." },
+        { type: "complete", q: "Quelle forme va dans le trou ?",
+          hint: "Regarde bien la forme du trou, puis touche la bonne pièce.",
+          grid: ["cercle", "etoile", "etoile", null],
+          cols: { cercle: "#3f74b5", etoile: "#e0a83c", carre: "#d95f36" },
+          options: ["cercle", "etoile", "carre"], answer: "cercle",
+          scoreOk: { b: -2, a: -1 }, scoreNo: { b: 1 },
+          fb: "C'était le cercle : chaque forme apparaît deux fois !" },
+        { type: "change", sceneA: courSVG(true), sceneB: courSVG(false), wide: false,
+          q: "Qu'est-ce qui a changé ?",
+          choices: [
+            { t: "Le ballon a disparu", s: { a: -2, b: -1 } },
+            { t: "L'arbre a poussé", s: { b: 1 } },
+            { t: "La porte est ouverte", s: { b: 1 } }
+          ],
+          fb: "Le beau ballon rouge s'est envolé ! Tu as l'œil vif." },
+        { type: "choix", svg: SVG_CHAT_LUNE, q: "Encore un coup d'œil sur la lune…",
+          choices: [
+            { t: "Je vois le chat en premier, maintenant", s: { a: -1, b: 1 } },
+            { t: "Je vois la lune en premier, maintenant", s: { a: 1 } },
+            { t: "Je vois les deux en même temps", s: { b: -1 } }
+          ],
+          fb: "Drôle, hein ? La même image peut changer selon le regard !" }
+      ],
+      /* ---------- ADO : la banque d'origine, poussée et plus rapide ---------- */
+      ado: [
+        { type: "choix", svg: SVG_VOILIER, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Un voilier", s: { a: 1 } },
+            { t: "Une baleine", s: { a: -2, b: 1 } },
+            { t: "Le coucher de soleil", s: { a: 1, b: 1 } }
+          ],
+          fb: "Certains voient d'abord le voilier, d'autres la baleine cachée dans l'eau !" },
+        { type: "cache", svg: SVG_JARDIN, svgId: "gardenSvg",
+          q: "Une clé se cache dans le jardin…",
+          hint: "Touche l'endroit où elle se cache. Prends ton temps, il n'y a pas de piège.",
+          fbFound: "Bravo, œil de lynx ! La clé était dans le buisson, près des fleurs jaunes.",
+          hints: ["Pas là… cherche du côté des buissons.", "Petit indice : à droite, là où les fleurs sont jaunes."] },
+        { type: "choix", svg: SVG_ARBRE, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Un arbre", s: { a: 1 } },
+            { t: "Un oiseau", s: { a: -1, b: 1 } },
+            { t: "Des pommes", s: { a: -2 } }
+          ],
+          fb: "Le feuillage cache un oiseau : bec à droite, œil bien rond !" },
+        { type: "suite", q: "Qu'est-ce qui vient ensuite ?",
+          seq: ["cercle", "triangle", "cercle", "triangle", "cercle"],
+          cols: { cercle: "#3f74b5", triangle: "#e0a83c", carre: "#d95f36" },
+          options: ["triangle", "cercle", "carre"], answer: "triangle",
+          scoreOk: { b: -2, a: -1 }, scoreNo: { b: 1 },
+          fb: "Cercle, triangle, cercle, triangle… la suite logique, c'était le triangle !" },
+        { type: "choix", svg: SVG_ESCALIER, q: "Cet escalier…",
+          choices: [
+            { t: "Il monte vers la droite", s: { b: -1 } },
+            { t: "Il descend vers la droite", s: { b: 1 } },
+            { t: "C'est un bout de papier plié", s: { a: -1, b: -1 } }
+          ],
+          fb: "Drôle d'escalier : cligne des yeux, il peut basculer dans l'autre sens !" },
+        { type: "flash", dur: 700, min: 5, max: 9,
+          qIntro: "Attention, ça va flasher !", hintIntro: "Des étoiles vont apparaître un court instant. Essaie de les compter.",
+          qAsk: "Combien d'étoiles as-tu vues ?", fb: "Il y en avait %N% ! Compter en un éclair, pas facile." },
+        { type: "choix", svg: SVG_MONTAGNE, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Des montagnes", s: { a: 1 } },
+            { t: "Un visage endormi", s: { a: -1, b: 1 } },
+            { t: "Un paysage de nuit", s: { a: 1, b: 1 } }
+          ],
+          fb: "La crête dessine un visage qui dort : front, nez, petites lèvres… chut !" },
+        { type: "intrus", q: "Qui est l'intrus du groupe ?",
+          hint: "Touche celui qui n'a pas sa place avec les autres.",
+          tiles: [
+            { svg: SVG_POMME, ok: false },
+            { svg: SVG_BANANE, ok: false },
+            { svg: SVG_CERISES, ok: false },
+            { svg: SVG_AUTO, ok: true }
+          ],
+          scoreOk: { b: -2, a: -1 }, scoreNo: { b: 1 },
+          fbOk: "Eh oui : trois fruits… et une auto égarée !",
+          fbNo: "C'était l'auto ! Les trois autres sont des fruits." },
+        { type: "stroop" },
+        { type: "memoire", svg: SVG_CHAMBRE, dur: 3000,
+          qIntro: "Regarde bien cette chambre…", hintIntro: "Elle va disparaître dans 3 secondes. Mémorise les détails !",
+          q: "De quelle couleur est le livre debout sur le bureau ?",
+          choices: [
+            { t: "Rouge", s: { a: -2, b: -1 } },
+            { t: "Vert", s: { b: 1 } },
+            { t: "Bleu", s: { b: 1 } }
+          ],
+          fb: "Le livre debout était rouge, juste à côté du bleu, à plat." },
+        { type: "choix", svg: SVG_CHANDELLES, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Deux chandelles", s: { a: 1 } },
+            { t: "Un verre à vin", s: { a: -1, b: 1 } },
+            { t: "Deux flammes", s: { a: -2 } }
+          ],
+          fb: "Entre les deux chandelles, l'espace vide forme un verre à vin !" },
+        { type: "motif",
+          grid: ["cercle","carre","triangle", "carre","triangle","cercle", "triangle","cercle", null],
+          cols: { cercle: "#3f74b5", carre: "#d95f36", triangle: "#e0a83c" },
+          options: ["carre", "cercle", "triangle"], answer: "carre",
+          scoreOk: { b: -2, a: -1 }, scoreNo: { b: 1 },
+          fb: "C'était le carré : chaque ligne et chaque colonne a ses trois formes." },
+        { type: "suite", q: "Suite plus corsée. Et après ?",
+          seq: ["cercle", "triangle", "triangle", "cercle", "triangle", "triangle", "cercle"],
+          cols: { cercle: "#3f74b5", triangle: "#e0a83c", carre: "#d95f36" },
+          options: ["triangle", "cercle", "carre"], answer: "triangle",
+          scoreOk: { b: -2, a: -1 }, scoreNo: { b: 1 },
+          fb: "Le motif allait par deux : cercle, triangle, triangle… puis ça repartait !" },
+        { type: "change", sceneA: cottageSVG(true), sceneB: cottageSVG(false), wide: false,
+          q: "Qu'est-ce qui a changé ?",
+          choices: [
+            { t: "Le chat a disparu", s: { a: -2, b: -1 } },
+            { t: "La porte a changé de couleur", s: { b: 1 } },
+            { t: "Un oiseau s'est ajouté", s: { b: 1 } }
+          ],
+          fb: "Le chat était là… puis pouf, disparu ! L'œil qui compare ne pardonne pas." }
+      ],
+      /* ---------- ADULTE : la plus fournie, la plus nuancée ---------- */
+      adulte: [
+        { type: "choix", svg: SVG_FORET_LIVRES, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Une forêt de sapins", s: { a: 1 } },
+            { t: "Des livres sur une étagère", s: { a: -1, b: 1 } },
+            { t: "Une rangée de maisons", s: { a: 1, b: 1 } }
+          ],
+          fb: "Les troncs droits et leurs hauteurs différentes font aussi penser à des dos de livres bien serrés." },
+        { type: "choix", svg: SVG_CUISINE, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Une cuisine bien rangée", s: { a: 1 } },
+            { t: "Un visage", s: { a: -2, b: 1 } },
+            { t: "Des chaudrons, juste des chaudrons", s: { a: -1, b: -1 } }
+          ],
+          fb: "Deux chaudrons pour les yeux, la théière pour le nez, le four pour la bouche : le cerveau adore trouver des visages partout. Ça s'appelle la paréidolie." },
+        { type: "estimation" },
+        { type: "choix", svg: SVG_TUYAUX, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Un tuyau d'atelier", s: { a: 1 } },
+            { t: "Un serpent", s: { a: -1, b: 1 } },
+            { t: "Un labyrinthe", s: { a: -1, b: -1 } }
+          ],
+          fb: "Le tuyau serpente, bifurque… et sa tête de vanne, à droite, fait presque office d'œil." },
+        { type: "stroopComplet" },
+        { type: "choix", svg: SVG_VILLE, q: "Qu'est-ce que tu vois en premier ?",
+          choices: [
+            { t: "Une ville la nuit", s: { a: 1 } },
+            { t: "Un voilier dessiné par les fenêtres", s: { a: -2, b: 1 } },
+            { t: "Des fenêtres au hasard", s: { a: -1, b: -1 } }
+          ],
+          fb: "Relie les fenêtres allumées point par point : un voilier se dessine, voile et coque comprises." },
+        { type: "memoire", svg: SVG_MARCHE, dur: 3000,
+          qIntro: "Regarde bien cet étal de marché…", hintIntro: "Il disparaît dans 3 secondes. Compte, note les couleurs, les places.",
+          q: "Combien y avait-il d'oranges sur l'étal ?",
+          choices: [
+            { t: "2 oranges", s: { b: 1 } },
+            { t: "3 oranges", s: { a: -2, b: -1 } },
+            { t: "4 oranges", s: { b: 1 } }
+          ],
+          fb: "Trois oranges : deux côte à côte, une par-dessus. Les prunes violettes, elles, étaient aussi trois." },
+        { type: "cache", svg: SVG_ATELIER, svgId: "gardenSvg",
+          q: "Une petite clé se cache dans l'atelier…",
+          hint: "Elle est dorée et bien plus petite que dans tes souvenirs d'enfant. Bonne chasse.",
+          fbFound: "Bien vu ! Elle pendait au mur, entre le marteau et l'établi.",
+          hints: ["Pas là… lève les yeux, elle n'est pas sur l'établi.", "Petit indice : en haut, entre deux outils qui pendent."] },
+        { type: "flash", dur: 450, min: 7, max: 11,
+          qIntro: "Attention, flash très court !", hintIntro: "Des étoiles, une fraction de seconde. Fie-toi à ton impression globale.",
+          qAsk: "Combien d'étoiles, à peu près ?", fb: "Il y en avait %N%. À cette vitesse, même les meilleurs yeux estiment plus qu'ils ne comptent." },
+        { type: "motifDir",
+          grid: [0, 90, 180, 90, 180, 270, 180, 270, null], color: "#3f74b5",
+          options: [0, 90, 270], answer: 0,
+          scoreOk: { b: -2, a: -1 }, scoreNo: { b: 1 },
+          fb: "Chaque flèche tourne d'un quart de tour, en rangées comme en colonnes. La dernière pointe en haut." },
+        { type: "change", sceneA: cafeSVG(true), sceneB: cafeSVG(false), wide: false,
+          q: "Entre les deux cafés, qu'est-ce qui a changé ?",
+          choices: [
+            { t: "La tasse a changé de couleur", s: { a: -2, b: -1 } },
+            { t: "L'horloge a avancé", s: { b: 1 } },
+            { t: "La plante a disparu", s: { b: 1 } }
+          ],
+          fb: "Un seul détail : la tasse, bleue à gauche, rouge à droite. L'horloge, elle, n'a pas bougé d'une minute." },
+        { type: "suiteNombres",
+          seqTxt: "3 · 6 · 11 · 18 · 27 · ?",
+          q: "Quel nombre complète la suite ?",
+          hint: "Regarde comment l'écart entre les nombres grandit.",
+          choices: [
+            { t: "36", s: { b: 1 } },
+            { t: "38", s: { b: -2, a: -1 } },
+            { t: "40", s: { b: 1 } }
+          ],
+          fb: "Les écarts grandissent de 2 chaque fois : +3, +5, +7, +9, puis +11. 27 + 11 = 38." },
+        { type: "nuance" },
+        { type: "intrus", q: "Quatre visages. Un seul est différent…",
+          hint: "Prends le temps de les comparer un à un.",
+          tiles: [
+            { svg: faceTileSVG(false), ok: false },
+            { svg: faceTileSVG(false), ok: false },
+            { svg: faceTileSVG(false), ok: false },
+            { svg: faceTileSVG(true), ok: true }
+          ],
+          scoreOk: { a: -2, b: -1 }, scoreNo: { b: 1 },
+          fbOk: "Exact : un clin d'œil, un seul. Le détail qui change tout.",
+          fbNo: "L'un d'eux faisait un clin d'œil. Les trois autres souriaient des deux yeux." },
+        { type: "suite", q: "Dernier motif. Qu'est-ce qui vient ensuite ?",
+          seq: ["etoile", "cercle", "carre", "etoile", "cercle", "carre", "etoile"],
+          cols: { etoile: "#e0a83c", cercle: "#3f74b5", carre: "#d95f36" },
+          options: ["cercle", "carre", "etoile"], answer: "cercle",
+          scoreOk: { b: -2, a: -1 }, scoreNo: { b: 1 },
+          fb: "Étoile, cercle, carré : le trio tournait en boucle depuis le début." },
+        { type: "choix", svg: SVG_VILLE, q: "Un dernier dilemme, à la première impression.",
+          hint: "Pas de calcul : la toute première image qui te vient.",
+          choices: [
+            { t: "Une ville endormie, calme et rangée", s: { a: 1, b: -1 } },
+            { t: "Un départ, un voilier qui prend le large", s: { a: -1, b: 1 } },
+            { t: "Juste des lumières, sans histoire", s: { a: -1, b: -1 } }
+          ],
+          fb: "Première impression ou lecture patiente : les deux regards disent quelque chose de ta façon de voir." }
+      ]
+    };
+
+    /* ============ Profils finaux, par niveau ============ */
+    var PROFILES = {
+      jeunesse: {
+        detective: { name: "Œil de lynx", desc: "Tu vois tout, même les petits trucs cachés dans les coins ! Rien ne t'échappe : un papillon dans le pré, un ballon disparu… Bravo, super œil !" },
+        reveur: { name: "Petit rêveur", desc: "Tu vois des chats dans la lune et des maisons-champignons ! Ton imagination transforme les images en histoires. C'est un vrai super-pouvoir." },
+        stratege: { name: "Super détective", desc: "Tu réfléchis, tu compares, tu trouves les suites et les intrus sans te presser. Les mystères n'ont qu'à bien se tenir !" },
+        explorateur: { name: "Grand explorateur", desc: "Tu regardes partout : les détails, les grandes formes, les drôles d'idées. Curieux comme toi, on explore le monde entier !" }
+      },
+      ado: {
+        detective: { name: "Détective des détails", desc: "Rien ne t'échappe : un truc caché dans un coin et ton œil est déjà dessus. Clés perdues, détails qui changent, nuances fines — c'est ton terrain. Les autres voient l'image ; toi, tu vois ce qu'elle cache." },
+        reveur: { name: "Rêveur visionnaire", desc: "Tu vois grand, et tu vois ce qui n'est pas écrit : un visage dans une cuisine, un voilier dans des fenêtres. Ton premier réflexe, c'est l'ensemble — et ton imagination fait le reste." },
+        stratege: { name: "Stratège logique", desc: "Suites, motifs, pièges de lecture : tu démontes les images comme des casse-têtes. Tu prends le temps d'analyser avant de répondre — et ça paraît dans tes choix." },
+        explorateur: { name: "Explorateur équilibré", desc: "Un pied dans les détails, l'autre dans l'ensemble : tu changes de regard selon le défi. C'est le profil des curieux qui s'adaptent — jamais coincés dans une seule façon de voir." }
+      },
+      adulte: {
+        detective: {
+          name: "Détective des détails",
+          desc: "Tu remarques ce que la plupart des gens ne voient qu'au deuxième coup d'œil — parfois jamais.",
+          lecture: [
+            { h: "Ton style de perception", t: "Local avant tout : ton regard accroche les éléments un par un, compare, vérifie. Devant une image ambiguë, tu repères vite la forme cachée et les micro-différences — la tasse qui change de couleur, le clin d'œil unique." },
+            { h: "Ton style de décision", t: "Tu réponds après avoir regardé pour vrai, quitte à prendre quelques secondes de plus. Ton premier réflexe est tempéré par une vérification rapide : tu fais confiance à ce que tu as vu, pas à ce qu'on te suggère." },
+            { h: "Une piste à explorer, pour le plaisir", t: "Les métiers et passe-temps où l'œil fait la différence : contrôle qualité, photographie, enquête, restauration d'art, recherche d'objets perdus dans des armoires trop pleines. À prendre comme un jeu, pas comme un verdict." }
+          ]
+        },
+        reveur: {
+          name: "Rêveur visionnaire",
+          desc: "Tu trouves des formes et des histoires là où les autres ne voient que des taches.",
+          lecture: [
+            { h: "Ton style de perception", t: "Global d'abord : tu saisis l'ensemble, l'ambiance, la silhouette — puis les détails suivent, s'ils suivent. C'est le regard qui voit un visage dans une cuisine et un voilier dans une rangée de fenêtres." },
+            { h: "Ton style de décision", t: "L'intuition mène : ta première impression arrive vite et tu lui fais confiance. Tu décides souvent juste, surtout quand le temps manque — ton cerveau a fait le tri avant que tu t'en rendes compte." },
+            { h: "Une piste à explorer, pour le plaisir", t: "Les territoires où l'imagination est un outil : écriture, design, publicité, raconter des histoires aux enfants, repérer la forme d'un nuage avant tout le monde. À prendre comme un jeu, pas comme un verdict." }
+          ]
+        },
+        stratege: {
+          name: "Stratège logique",
+          desc: "Tu aimes quand ça se tient — et tu vérifies que ça se tient.",
+          lecture: [
+            { h: "Ton style de perception", t: "Analytique : tu cherches la règle derrière l'image. Suites, motifs qui tournent, écarts qui grandissent — ton regard organise avant même de conclure." },
+            { h: "Ton style de décision", t: "Réfléchi et séquentiel : tu compares les options, tu élimines, tu choisis. Même le mot écrit dans la mauvaise couleur ne te fait pas dévier facilement — tu lis la consigne, pas le piège." },
+            { h: "Une piste à explorer, pour le plaisir", t: "Les jeux et domaines où la structure récompense la patience : échecs, programmation, finances personnelles, mots croisés corsés, débats bien menés. À prendre comme un jeu, pas comme un verdict." }
+          ]
+        },
+        explorateur: {
+          name: "Explorateur équilibré",
+          desc: "Ni tout détail, ni tout ensemble : tu ajustes ton regard au défi.",
+          lecture: [
+            { h: "Ton style de perception", t: "Souple : selon l'image, tu plonges dans le détail ou tu prends du recul. Cette alternance est une force — beaucoup de gens restent coincés dans un seul mode de lecture." },
+            { h: "Ton style de décision", t: "Tu alternes premier réflexe et vérification, selon l'enjeu du moment. Pas de méthode unique : une boîte à outils, et le bon outil au bon moment." },
+            { h: "Une piste à explorer, pour le plaisir", t: "Les rôles de passeur : enseigner, animer, coordonner, raconter — partout où il faut voir à la fois le portrait d'ensemble et le petit détail qui compte. À prendre comme un jeu, pas comme un verdict." }
+          ]
+        }
+      }
+    };
+    function pickProfileKey(){
+      var a = state.a, b = state.b, c = state.c;
+      if(b <= -2 && c <= -1) return "stratege";
+      if(a <= -2 && (b <= -1 || c <= -1)) return "detective";
+      if(a >= 2 && b >= 1) return "reveur";
+      if(a <= -3) return "detective";
+      if(b >= 3 && a >= 0) return "reveur";
+      if(b <= -3) return "stratege";
+      return "explorateur";
+    }
+
+    /* ============ Navigation ============ */
+    function render(){
+      if(state.idx < 0){ renderStart(); return; }
+      var rounds = bank();
+      if(state.idx >= rounds.length){ renderFinal(); return; }
+      var r = rounds[state.idx];
+      state.busy = false;
+      state.startedAt = performance.now();
+      if(r.type === "choix" || r.type === "compte") renderChoix(r);
+      else if(r.type === "cache") renderCache(r);
+      else if(r.type === "suite") renderSuite(r);
+      else if(r.type === "flash") renderFlash(r);
+      else if(r.type === "estimation") renderEstimation();
+      else if(r.type === "intrus") renderIntrus(r);
+      else if(r.type === "stroop") renderStroop();
+      else if(r.type === "stroopComplet") renderStroopComplet();
+      else if(r.type === "motif" || r.type === "complete") renderMotif(r);
+      else if(r.type === "motifDir") renderMotifDir(r);
+      else if(r.type === "change") renderChange(r);
+      else if(r.type === "memoire") renderMemoire(r);
+      else if(r.type === "nuance") renderNuance(r);
+      else if(r.type === "suiteNombres") renderSuiteNombres(r);
+      bindTop();
+    }
+    function next(){
+      state.idx += 1;
+      render();
+      window.scrollTo(0, 0);
+    }
+    function finish(feedbackText, soundFn){
+      if(state.busy) return;
+      state.busy = true;
+      var fb = document.getElementById("fb");
+      if(fb) fb.textContent = feedbackText || "";
+      if(soundFn) soundFn(); else sndNext();
+      setTimeout(next, state.level === "jeunesse" ? 2100 : 1800);
+    }
+    function choicesHTML(choices){
+      var h = '<div class="choices">';
+      for(var i=0;i<choices.length;i++){
+        h += '<button class="choice" data-i="' + i + '">' + choices[i].t + '</button>';
+      }
+      return h + '</div><p class="feedback" id="fb"></p>';
+    }
+    function bindChoices(r){
+      var btns = app.querySelectorAll(".choice");
+      for(var i=0;i<btns.length;i++){
+        btns[i].addEventListener("click", function(){
+          if(state.busy) return;
+          var c = r.choices[parseInt(this.getAttribute("data-i"), 10)];
+          this.classList.add("picked");
+          var all = app.querySelectorAll(".choice");
+          for(var j=0;j<all.length;j++) all[j].disabled = true;
+          sndTap(); applyScore(c.s); timeAxis();
+          finish(r.fb);
+        });
+      }
+    }
+
+    /* ============ Choix simple (ambiguïté, compte, dilemme) ============ */
+    function renderChoix(r){
+      app.innerHTML = topbar() +
+        '<div class="card fadein">' + r.svg + '</div>' +
+        '<p class="q">' + r.q + '</p>' +
+        (r.hint ? '<p class="hint">' + r.hint + '</p>' : '') +
+        choicesHTML(r.choices);
+      bindChoices(r);
+    }
+
+    /* ============ Objet caché ============ */
+    function renderCache(r){
+      state.cacheMisses = 0;
+      app.innerHTML = topbar() +
+        '<div class="card fadein">' + r.svg + '</div>' +
+        '<p class="q">' + r.q + '</p>' +
+        '<p class="hint">' + r.hint + '</p>' +
+        '<p class="feedback" id="fb"></p>';
+      var svg = document.getElementById(r.svgId);
+      if(!svg) return;
+      svg.addEventListener("click", function(ev){
+        if(state.busy) return;
+        if(ev.target && ev.target.classList && ev.target.classList.contains("hotspot")){
+          applyScore({ a: -2 }); timeAxis();
+          var key = document.getElementById("theKey");
+          if(key) key.classList.add("pulse");
+          finish(r.fbFound, sndFound);
+        } else {
+          state.cacheMisses += 1;
+          sndTap();
+          svg.classList.remove("shake"); void svg.offsetWidth; svg.classList.add("shake");
+          var fb = document.getElementById("fb");
+          if(state.cacheMisses === 2) fb.textContent = r.hints[0];
+          else if(state.cacheMisses >= 4) fb.textContent = r.hints[1];
+          else fb.textContent = state.level === "jeunesse" ? "Pas là… cherche encore, tu vas le trouver !" : "Raté ! C'est bien caché.";
+        }
+      });
+    }
+
+    /* ============ Suite de formes ============ */
+    function renderSuite(r){
+      var h = '<div class="seqrow">';
+      for(var i=0;i<r.seq.length;i++){
+        h += '<div class="seqcell full">' + shapeSVG(r.seq[i], r.cols[r.seq[i]]) + '</div>';
+      }
+      h += '<div class="seqcell"><span style="font-size:1.5rem;font-weight:700">?</span></div></div>';
+      var btns = "";
+      for(var j=0;j<r.options.length;j++){
+        btns += '<button class="shapebtn" data-k="' + r.options[j] + '">' + shapeSVG(r.options[j], r.cols[r.options[j]]) + '</button>';
+      }
+      app.innerHTML = topbar() +
+        '<div class="card fadein"><p class="q">' + r.q + '</p>' + h + '</div>' +
+        '<div class="shapebtns">' + btns + '</div><p class="feedback" id="fb"></p>';
+      var els = app.querySelectorAll(".shapebtn");
+      for(var m=0;m<els.length;m++){
+        els[m].addEventListener("click", function(){
+          if(state.busy) return;
+          var k = this.getAttribute("data-k");
+          sndTap();
+          if(k === r.answer) applyScore(r.scoreOk); else applyScore(r.scoreNo);
+          timeAxis();
+          finish(r.fb);
+        });
+      }
+    }
+
+    /* ============ Motif / forme à compléter (grille) ============ */
+    function gridHTML(r, cellFn){
+      var h = '<div class="grid3">';
+      for(var i=0;i<r.grid.length;i++){
+        if(r.grid[i] !== null && r.grid[i] !== undefined) h += '<div class="seqcell full">' + cellFn(r.grid[i]) + '</div>';
+        else h += '<div class="seqcell"><span style="font-size:1.5rem;font-weight:700">?</span></div>';
+      }
+      return h + '</div>';
+    }
+    function renderMotif(r){
+      var h = gridHTML(r, function(k){ return shapeSVG(k, r.cols[k]); });
+      var btns = "";
+      for(var j=0;j<r.options.length;j++){
+        btns += '<button class="shapebtn" data-k="' + r.options[j] + '">' + shapeSVG(r.options[j], r.cols[r.options[j]]) + '</button>';
+      }
+      var title = r.type === "complete" ? r.q : "Quelle forme complète le motif ?";
+      var hint = r.hint ? '<p class="hint">' + r.hint + '</p>' : '<p class="hint">Chaque rangée et chaque colonne contient les trois formes, une seule fois chacune.</p>';
+      app.innerHTML = topbar() +
+        '<div class="card fadein"><p class="q">' + title + '</p>' + hint + h + '</div>' +
+        '<div class="shapebtns">' + btns + '</div><p class="feedback" id="fb"></p>';
+      bindShapeAnswer(r);
+    }
+    function renderMotifDir(r){
+      var h = gridHTML(r, function(d){ return dirSVG(d, r.color); });
+      var btns = "";
+      for(var j=0;j<r.options.length;j++){
+        btns += '<button class="shapebtn" data-k="' + r.options[j] + '">' + dirSVG(r.options[j], r.color) + '</button>';
+      }
+      app.innerHTML = topbar() +
+        '<div class="card fadein"><p class="q">Quelle flèche complète le motif ?</p>' +
+        '<p class="hint">Les flèches tournent, en rangées comme en colonnes.</p>' + h + '</div>' +
+        '<div class="shapebtns">' + btns + '</div><p class="feedback" id="fb"></p>';
+      bindShapeAnswer(r);
+    }
+    function bindShapeAnswer(r){
+      var els = app.querySelectorAll(".shapebtn");
+      for(var m=0;m<els.length;m++){
+        els[m].addEventListener("click", function(){
+          if(state.busy) return;
+          var k = this.getAttribute("data-k");
+          var ok = (String(k) === String(r.answer));
+          sndTap();
+          if(ok) applyScore(r.scoreOk); else applyScore(r.scoreNo);
+          timeAxis();
+          finish(r.fb);
+        });
+      }
+    }
+
+    /* ============ Flash d'étoiles / estimation de points ============ */
+    function starField(n){
+      var spots = [[40,50],[110,36],[185,58],[255,40],[70,120],[150,105],[225,125],[45,180],[130,175],[205,185],[280,110],[285,175],[95,80],[255,200],[160,55],[90,215]];
+      spots = shuffle(spots).slice(0, n);
+      var stars = "";
+      for(var i=0;i<spots.length;i++){
+        stars += '<path transform="translate(' + spots[i][0] + ',' + spots[i][1] + ') scale(1.15)" d="M0,-13 L3.5,-4 L13,-4 L5.5,2.5 L8,12 L0,6.5 L-8,12 L-5.5,2.5 L-13,-4 L-3.5,-4 Z" fill="#f6c453" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"/>';
+      }
+      return '<svg class="scene" viewBox="0 0 320 240"><rect x="0" y="0" width="320" height="240" fill="#26355e"/>' + stars + '</svg>';
+    }
+    function renderFlash(r){
+      var n = r.min + Math.floor(Math.random() * (r.max - r.min + 1));
+      app.innerHTML = topbar() +
+        '<div class="card fadein" id="flashCard">' + starField(n) + '</div>' +
+        '<p class="q">' + r.qIntro + '</p>' +
+        '<p class="hint">' + r.hintIntro + '</p>' +
+        '<p class="feedback" id="fb"></p>';
+      bindTop();
+      var myIdx = state.idx;
+      setTimeout(function(){
+        if(state.idx !== myIdx || state.busy || state.idx < 0 || state.idx >= bank().length) return;
+        if(bank()[state.idx].type !== "flash") return;
+        var opts = shuffle([n - 1, n, n + 1]);
+        var ch = [];
+        for(var i=0;i<opts.length;i++){
+          ch.push({ t: opts[i] + " étoiles", s: opts[i] === n ? { a: -1, b: -1 } : { b: 1 } });
+        }
+        var r2 = { choices: ch, fb: r.fb.replace("%N%", n) };
+        app.innerHTML = topbar() +
+          '<div class="card fadein"><svg class="scene" viewBox="0 0 320 240"><rect x="0" y="0" width="320" height="240" fill="#26355e"/><text x="160" y="128" text-anchor="middle" font-size="52" fill="#f4d58a">?</text></svg></div>' +
+          '<p class="q">' + r.qAsk + '</p>' + choicesHTML(r2.choices);
+        state.startedAt = performance.now();
+        bindChoices(r2); bindTop();
+      }, 700 + r.dur);
+    }
+    function renderEstimation(){
+      var n = 14 + Math.floor(Math.random() * 10); /* 14 à 23 points */
+      var dots = "";
+      var placed = [];
+      for(var i=0;i<n;i++){
+        var x, y, okTry, tries = 0;
+        do {
+          x = 24 + Math.random() * 272; y = 24 + Math.random() * 192; okTry = true;
+          for(var j=0;j<placed.length;j++){
+            var dx = placed[j][0] - x, dy = placed[j][1] - y;
+            if(dx * dx + dy * dy < 520){ okTry = false; break; }
+          }
+          tries++;
+        } while(!okTry && tries < 30);
+        placed.push([x, y]);
+        dots += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="6.5" fill="#f6c453" stroke="' + INK + '" stroke-width="2"/>';
+      }
+      var svgDots = '<svg class="scene" viewBox="0 0 320 240"><rect x="0" y="0" width="320" height="240" fill="#26355e"/>' + dots + '</svg>';
+      app.innerHTML = topbar() +
+        '<div class="card fadein">' + svgDots + '</div>' +
+        '<p class="q">Combien de points, en un coup d\'œil ?</p>' +
+        '<p class="hint">Ils disparaissent vite. Pas le temps de compter : estime !</p>' +
+        '<p class="feedback" id="fb"></p>';
+      bindTop();
+      var myIdx = state.idx;
+      setTimeout(function(){
+        if(state.idx !== myIdx || state.busy) return;
+        var opts = shuffle([n - 3, n, n + 3]);
+        var ch = [];
+        for(var i=0;i<opts.length;i++){
+          ch.push({ t: "Environ " + opts[i], s: opts[i] === n ? { a: -1, b: -1 } : { b: 1, c: 1 } });
+        }
+        var r2 = { choices: ch, fb: "Il y en avait " + n + ". L'œil qui estime juste, c'est un œil qui prend l'ensemble d'un coup." };
+        app.innerHTML = topbar() +
+          '<div class="card fadein"><svg class="scene" viewBox="0 0 320 240"><rect x="0" y="0" width="320" height="240" fill="#26355e"/><text x="160" y="128" text-anchor="middle" font-size="52" fill="#f4d58a">?</text></svg></div>' +
+          '<p class="q">Combien de points, en un coup d\'œil ?</p>' + choicesHTML(r2.choices);
+        state.startedAt = performance.now();
+        bindChoices(r2); bindTop();
+      }, 1200);
+    }
+
+    /* ============ L'intrus (tuiles) ============ */
+    function renderIntrus(r){
+      var tiles = shuffle(r.tiles.slice());
+      var h = '<div class="tiles">';
+      for(var i=0;i<tiles.length;i++){
+        h += '<button class="tile" data-ok="' + (tiles[i].ok ? "1" : "0") + '">' + tiles[i].svg + '</button>';
+      }
+      h += '</div>';
+      app.innerHTML = topbar() +
+        '<p class="q">' + r.q + '</p>' +
+        '<p class="hint">' + r.hint + '</p>' +
+        h + '<p class="feedback" id="fb"></p>';
+      var btns = app.querySelectorAll(".tile");
+      for(var j=0;j<btns.length;j++){
+        btns[j].addEventListener("click", function(){
+          if(state.busy) return;
+          var ok = this.getAttribute("data-ok") === "1";
+          this.classList.add("picked");
+          sndTap();
+          if(ok) applyScore(r.scoreOk); else applyScore(r.scoreNo);
+          timeAxis();
+          finish(ok ? r.fbOk : r.fbNo);
+        });
+      }
+    }
+
+    /* ============ Couleur-mot (ADO) et Stroop complet (ADULTE) ============ */
+    function renderStroop(){
+      var r = { fb: "Le mot dit « rouge », mais l'encre, elle, est bleue. Ton cerveau a dû choisir !",
+        choices: [
+          { t: "Bleu", s: { b: -2 } },
+          { t: "Rouge", s: { b: 2, c: 1 } },
+          { t: "Jaune", s: { b: 1 } }
+        ] };
+      app.innerHTML = topbar() +
+        '<div class="card fadein"><div class="stroop" style="color:#2f5fd0">ROUGE</div></div>' +
+        '<p class="q">Quelle est la couleur des lettres ?</p>' +
+        '<p class="hint">Pas ce que le mot dit… la couleur, pour vrai.</p>' +
+        choicesHTML(r.choices);
+      bindChoices(r);
+    }
+    function renderStroopComplet(){
+      var r = { fb: "VERT en jaune, JAUNE en vert, BLEU en rouge : trois mots, trois pièges. Lire le mot est automatique ; nommer l'encre demande un vrai effort d'attention.",
+        choices: [
+          { t: "Rouge", s: { b: -2 } },
+          { t: "Bleu", s: { b: 2, c: 1 } },
+          { t: "Vert", s: { b: 1 } }
+        ] };
+      app.innerHTML = topbar() +
+        '<div class="card fadein"><div class="stroop2w">' +
+          '<div style="color:#e0a83c">VERT</div>' +
+          '<div style="color:#2e7d74">JAUNE</div>' +
+          '<div style="color:#c0392b">BLEU</div>' +
+        '</div></div>' +
+        '<p class="q">Quelle est la couleur des lettres du troisième mot ?</p>' +
+        '<p class="hint">Le troisième mot seulement. Pas ce qu\'il dit : sa couleur d\'encre.</p>' +
+        choicesHTML(r.choices);
+      bindChoices(r);
+    }
+
+    /* ============ Suite de nombres (ADULTE) ============ */
+    function renderSuiteNombres(r){
+      app.innerHTML = topbar() +
+        '<div class="card fadein"><div class="bignum">' + r.seqTxt + '</div></div>' +
+        '<p class="q">' + r.q + '</p>' +
+        '<p class="hint">' + r.hint + '</p>' +
+        choicesHTML(r.choices);
+      bindChoices(r);
+    }
+
+    /* ============ Qu'est-ce qui a changé ? ============ */
+    function renderChange(r){
+      app.innerHTML = topbar() +
+        '<div class="duo fadein">' +
+          '<figure><div class="card" style="padding:8px">' + r.sceneA + '</div><figcaption>Avant</figcaption></figure>' +
+          '<figure><div class="card" style="padding:8px">' + r.sceneB + '</div><figcaption>Après</figcaption></figure>' +
+        '</div>' +
+        '<p class="q">' + r.q + '</p>' + choicesHTML(r.choices);
+      bindChoices(r);
+    }
+
+    /* ============ Mémoire visuelle ============ */
+    function renderMemoire(r){
+      app.innerHTML = topbar() +
+        '<div class="card fadein">' + r.svg + '</div>' +
+        '<p class="q">' + r.qIntro + '</p>' +
+        '<p class="hint">' + r.hintIntro + '</p>' +
+        '<p class="feedback" id="fb"></p>';
+      bindTop();
+      var myIdx = state.idx;
+      setTimeout(function(){
+        if(state.idx !== myIdx || state.busy || state.idx < 0 || state.idx >= bank().length) return;
+        if(bank()[state.idx].type !== "memoire") return;
+        app.innerHTML = topbar() +
+          '<div class="card fadein"><svg class="scene" viewBox="0 0 320 240"><rect x="0" y="0" width="320" height="240" fill="#26355e"/><text x="160" y="128" text-anchor="middle" font-size="52" fill="#f4d58a">?</text></svg></div>' +
+          '<p class="q">' + r.q + '</p>' + choicesHTML(r.choices);
+        state.startedAt = performance.now();
+        bindChoices(r); bindTop();
+      }, r.dur);
+    }
+
+    /* ============ Nuance : quatre tuiles, une seule différente ============ */
+    function renderNuance(r){
+      var diffIdx = Math.floor(Math.random() * 4);
+      var base = "#7d9dbd", diff = "#87a8c6";
+      var h = '<div class="tiles">';
+      for(var i=0;i<4;i++){
+        h += '<button class="tile ctile" data-ok="' + (i === diffIdx ? "1" : "0") + '" style="background:' + (i === diffIdx ? diff : base) + '"></button>';
+      }
+      h += '</div>';
+      app.innerHTML = topbar() +
+        '<p class="q">Quatre tuiles bleues. Une seule n\'a pas exactement la même teinte…</p>' +
+        '<p class="hint">Touche celle qui te semble un tout petit peu différente.</p>' +
+        h + '<p class="feedback" id="fb"></p>';
+      bindTop();
+      var btns = app.querySelectorAll(".tile");
+      for(var j=0;j<btns.length;j++){
+        btns[j].addEventListener("click", function(){
+          if(state.busy) return;
+          var ok = this.getAttribute("data-ok") === "1";
+          this.classList.add("picked");
+          var all = app.querySelectorAll(".tile");
+          for(var m=0;m<all.length;m++){ if(all[m].getAttribute("data-ok") === "1") all[m].classList.add("reveal"); }
+          sndTap();
+          if(ok) applyScore({ a: -2, b: -1 }); else applyScore({ b: 1 });
+          timeAxis();
+          finish(ok ? "C'est elle : un rien plus pâle. Il fallait l'œil fin." : "C'était celle entourée en vert : un rien plus pâle que les autres.");
+        });
+      }
+    }
+
+    /* ============ Profils sauvegardés, par niveau ============ */
+    function lastProfile(level){
+      try{
+        var raw = localStorage.getItem("queVoisTuProfil_" + level);
+        if(!raw) return null;
+        var p = JSON.parse(raw);
+        return p && p.type ? p : null;
+      }catch(e){ return null; }
+    }
+
+    /* ============ Écran de départ : le choix du public ============ */
+    function renderStart(){
+      document.body.removeAttribute("data-level");
+      var eye = '<svg width="120" height="84" viewBox="0 0 120 84"><path d="M6,42 C26,12 94,12 114,42 C94,72 26,72 6,42 Z" fill="#fffdf6" stroke="' + INK + '" stroke-width="3.5"/><circle cx="60" cy="42" r="17" fill="#2e7d74" stroke="' + INK + '" stroke-width="3"/><circle cx="60" cy="42" r="7" fill="' + INK + '"/><circle cx="66" cy="36" r="3.5" fill="#ffffff"/></svg>';
+      var keys = ["jeunesse", "ado", "adulte"];
+      var btns = "";
+      for(var i=0;i<keys.length;i++){
+        var m = LEVELMETA[keys[i]];
+        var last = lastProfile(keys[i]);
+        btns += '<button class="lvlbtn" data-lvl="' + keys[i] + '">' +
+          '<span class="lname">' + m.name + '</span>' +
+          '<span class="lsub">' + m.sub + '</span>' +
+          '<span class="lmeta">' + m.meta + '</span>' +
+          (last ? '<span class="llast">La dernière fois : ' + last.type + '</span>' : '') +
+        '</button>';
+      }
+      app.innerHTML = topbar() +
+        '<div class="eyehero">' + eye + '</div>' +
+        '<h1 class="bigtitle">Que vois-tu ?</h1>' +
+        '<p class="subtitle">Un petit jeu d\'images et de coups d\'œil.<br/>Réponds ce qui te vient en premier —<br/>il n\'y a pas de mauvaise réponse.<br/>Choisis ton terrain de jeu :</p>' +
+        btns +
+        '<p class="hint">42 images et défis en tout, dessinés juste pour ce jeu. À la fin de chaque partie, une petite surprise t\'attend…</p>';
+      bindTop();
+      var els = app.querySelectorAll(".lvlbtn");
+      for(var j=0;j<els.length;j++){
+        els[j].addEventListener("click", function(){
+          var lvl = this.getAttribute("data-lvl");
+          ac(); sndNext();
+          state.level = lvl;
+          document.body.setAttribute("data-level", lvl);
+          state.idx = 0; state.a = 0; state.b = 0; state.c = 0;
+          render();
+          window.scrollTo(0, 0);
+        });
+      }
+    }
+
+    /* ============ Profil final ============ */
+    function gaugeHTML(leftLabel, rightLabel, val){
+      var norm = Math.max(-1, Math.min(1, val / 12));
+      var pct = 50 + norm * 44;
+      return '<div><div class="glabels"><span>' + leftLabel + '</span><span>' + rightLabel + '</span></div>' +
+        '<div class="gtrack"><div class="gcenter"></div><div class="gmark" style="left:' + pct + '%"></div></div></div>';
+    }
+    function renderFinal(){
+      var key = pickProfileKey();
+      var p = PROFILES[state.level][key];
+      try{ localStorage.setItem("queVoisTuProfil_" + state.level, JSON.stringify({ type: p.name, date: new Date().toISOString() })); }catch(e){}
+      sndFinal();
+      var lecture = "";
+      if(p.lecture){
+        lecture = '<div class="card fadein">';
+        for(var i=0;i<p.lecture.length;i++){
+          lecture += '<p class="readhead">' + p.lecture[i].h + '</p><p class="readtxt">' + p.lecture[i].t + '</p>';
+        }
+        lecture += '</div>';
+      }
+      app.innerHTML = topbar() +
+        '<h2 style="text-align:center;font-size:1.5rem;margin-top:8px">Ton profil de joueur</h2>' +
+        '<div class="card fadein">' +
+          '<h2 class="profilename">' + p.name + '</h2>' +
+          '<p class="profdesc">' + p.desc + '</p>' +
+        '</div>' +
+        '<div class="card fadein"><div class="gauges">' +
+          gaugeHTML("Détail", "Global", state.a) +
+          gaugeHTML("Logique", "Intuition", state.b) +
+          gaugeHTML("Réflexion", "Premier réflexe", state.c) +
+        '</div></div>' +
+        lecture +
+        '<p class="honest">Un profil de joueur, pour le plaisir — ceci n\'est pas un test médical. Tes réponses dessinent un style de regard, pas un score.</p>' +
+        '<button class="bigbtn" id="againBtn">Rejouer</button>';
+      bindTop();
+      document.getElementById("againBtn").addEventListener("click", function(){
+        sndTap();
+        state.idx = -1; state.level = null; state.a = 0; state.b = 0; state.c = 0;
+        renderStart(); bindTop();
+        window.scrollTo(0, 0);
+      });
+      /* Petite animation des jauges */
+      var marks = app.querySelectorAll(".gmark");
+      var targets = [];
+      for(var i=0;i<marks.length;i++){ targets.push(marks[i].style.left); marks[i].style.left = "50%"; }
+      setTimeout(function(){
+        for(var j=0;j<marks.length;j++) marks[j].style.left = targets[j];
+      }, 60);
+    }
+
+    /* ============ Démarrage ============ */
+    state.idx = -1;
+    renderStart();
+    bindTop();
+    </script>
+  <!-- ===== Barre de jeu HP — NE PAS ÉDITER À LA MAIN =====
+     Retour / Pause / Partager. Source : src/components/barre-jeu/barre-jeu.js
+     (régénérer le module : bun run build:barre) -->
+<script src="/barre/barre-jeu.js" defer></script>
+<!-- ===== Fin barre de jeu HP ===== -->
+</body>
+</html>

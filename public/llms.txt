@@ -14,10 +14,11 @@
 
 ## Les jeux — gratuits (page /jeux)
 
-26 jeux créés au Québec, jouables dans le navigateur, sans compte et sans téléchargement.
+33 jeux créés au Québec, jouables dans le navigateur, sans compte et sans téléchargement.
 Exemples : Caribou Run, Montgolfière, Bernache Express, LA BANQUE, Mots de chez nous,
 Mémoire des Cantons, Chat'attaque, NORD 2087, Mystères du Nord, Fusion Sirop, Bons réflexes,
-2 vérités 1 mensonge, Ado odieux adieu, Devine l'humeur, Le bonhomme pendu, Pop Ballons.
+2 vérités 1 mensonge, Ado odieux adieu, Devine l'humeur, Le bonhomme pendu, Pop Ballons,
+IGLOO — La guerre des igloos, Que vois-tu ?, Tapinoue, Anxiété le jeu, L'hydroélectricité.
 La page /jeux présente aussi les histoires interactives « À toi l'histoire » (tome 1 gratuit).
 Sur le site vit aussi HGPTO, le petit robot assistant du site, qui répond aux questions des visiteurs.
 

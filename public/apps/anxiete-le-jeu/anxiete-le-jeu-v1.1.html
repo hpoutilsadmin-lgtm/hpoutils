@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Anxiété, le jeu</title>
+    <style>
+      :root{
+        --bg:#eef3ec; --bg2:#e2ece0; --card:#fbfdf9; --ink:#22392c; --ink-soft:#47604f;
+        --line:#b9cdb6; --accent:#3e7d5b; --accent-soft:#cfe5d4; --warm:#e8a25e; --warm-soft:#f7e3cb;
+        --sky:#7fa8c9; --sky-soft:#d7e7f3; --danger:#c96f5e; --bubble:#fffdf6; --shadow:0 6px 22px rgba(34,57,44,.13);
+        --radius:18px;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#16211b; --bg2:#1b2a21; --card:#223128; --ink:#e6f0e6; --ink-soft:#a9c2ae;
+          --line:#3a5041; --accent:#7fc79b; --accent-soft:#2c4636; --warm:#e0a766; --warm-soft:#4a3a26;
+          --sky:#8fb8d9; --sky-soft:#2b4257; --danger:#e08a76; --bubble:#2a3a2e; --shadow:0 6px 22px rgba(0,0,0,.4);
+        }
+      }
+      *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+      html,body{margin:0;padding:0;}
+      body{
+        font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+        background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+        color:var(--ink); min-height:100vh; line-height:1.5;
+      }
+      h1,h2,h3{font-family:Georgia,"Times New Roman",serif; font-weight:600; line-height:1.2; margin:0;}
+      button{font-family:inherit; cursor:pointer;}
+      #app{max-width:520px; margin:0 auto; padding:0 14px 40px;}
+      /* ---------- HUD ---------- */
+      #hud{position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(6px); padding:10px 2px 8px;}
+      .hud-row{display:flex; align-items:center; gap:10px;}
+      .hud-day{font-size:.8rem; font-weight:700; letter-spacing:.04em; color:var(--ink-soft); white-space:nowrap;}
+      .hud-btns{margin-left:auto; display:flex; gap:6px;}
+      .icon-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line); background:var(--card); color:var(--ink); font-size:1.05rem; display:flex; align-items:center; justify-content:center;}
+      .icon-btn:focus-visible,.btn:focus-visible,.opt-btn:focus-visible,.task-item:focus-visible,.sense-chip:focus-visible{outline:3px solid var(--sky); outline-offset:2px;}
+      .gauge-wrap{margin-top:8px;}
+      .gauge-label{display:flex; justify-content:space-between; font-size:.78rem; color:var(--ink-soft); font-weight:600;}
+      .gauge{display:flex; gap:3px; margin-top:4px;}
+      .gauge i{flex:1; height:12px; border-radius:6px; background:var(--accent-soft); transition:background .6s ease;}
+      .gauge i.on1{background:#9cc7a4}.gauge i.on2{background:#7fb98e}.gauge i.on3{background:#a8c66a}
+      .gauge i.on4{background:#e3c95f}.gauge i.on5{background:#e8a25e}.gauge i.on6{background:#dd7f57}.gauge i.on7{background:#c95f4e}
+      .batt-row{display:flex; align-items:center; gap:8px; margin-top:7px;}
+      .batt{width:86px; height:16px; border:2px solid var(--ink-soft); border-radius:5px; position:relative; flex:none;}
+      .batt::after{content:""; position:absolute; right:-7px; top:3px; width:4px; height:6px; background:var(--ink-soft); border-radius:2px;}
+      .batt-fill{height:100%; border-radius:3px; background:var(--accent); transition:width .8s ease, background .8s ease;}
+      .batt-fill.mid{background:var(--warm);} .batt-fill.low{background:var(--danger);}
+      .batt-txt{font-size:.78rem; color:var(--ink-soft); font-weight:600;}
+      /* ---------- Screens & cards ---------- */
+      .screen{display:none;} .screen.active{display:block; animation:fadein .45s ease;}
+      @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+      .card{background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 18px; margin-top:14px;}
+      .card h2{font-size:1.45rem; margin-bottom:8px;}
+      .card p{margin:8px 0;}
+      .soft-note{background:var(--sky-soft); border-radius:14px; padding:12px 14px; font-size:.95rem;}
+      .warm-note{background:var(--warm-soft); border-radius:14px; padding:12px 14px; font-size:.95rem;}
+      .btn{display:block; width:100%; padding:15px 18px; margin-top:12px; border-radius:14px; border:none; background:var(--accent); color:#fff; font-size:1.05rem; font-weight:700; box-shadow:var(--shadow);}
+      @media (prefers-color-scheme: dark){ .btn{color:#12241a;} }
+      .btn.secondary{background:var(--card); color:var(--ink); border:1.5px solid var(--line); font-weight:600;}
+      .btn.small{width:auto; display:inline-block; padding:10px 16px; font-size:.95rem;}
+      .btn:disabled{opacity:.45; cursor:default;}
+      .title-big{font-size:2.15rem; text-align:center; margin-top:6px;}
+      .subtitle{text-align:center; color:var(--ink-soft); margin-top:4px;}
+      .center{text-align:center;}
+      .small{font-size:.85rem; color:var(--ink-soft);}
+      .scene-art{display:flex; justify-content:center; margin:6px 0 2px;}
+      .scene-art svg{max-width:100%; height:auto;}
+      /* day map */
+      .day-list{display:flex; flex-direction:column; gap:10px; margin-top:14px;}
+      .day-btn{display:flex; align-items:center; gap:12px; text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:14px 16px; box-shadow:var(--shadow); color:var(--ink); width:100%;}
+      .day-btn .num{width:42px;height:42px;flex:none;border-radius:50%; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; font-family:Georgia,serif; font-size:1.25rem; font-weight:700;}
+      .day-btn.done .num{background:var(--accent); color:#fff;}
+      .day-btn.locked{opacity:.5;}
+      .day-btn b{display:block; font-size:1.02rem;}
+      .day-btn span{font-size:.85rem; color:var(--ink-soft);}
+      /* choices */
+      .opt-btn{display:block; width:100%; text-align:left; padding:14px 16px; margin-top:10px; border-radius:14px; border:1.5px solid var(--line); background:var(--card); color:var(--ink); font-size:1rem; box-shadow:var(--shadow);}
+      .opt-btn:active{transform:scale(.99);}
+      .resp{background:var(--accent-soft); border-radius:14px; padding:12px 14px; margin-top:12px;}
+      /* bubbles scene */
+      .play-zone{position:relative; margin-top:12px; border:1.5px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); overflow:hidden; min-height:430px;}
+      .task-bar{padding:12px 14px 6px;}
+      .task-items{display:flex; flex-wrap:wrap; gap:8px; padding:4px 14px 14px;}
+      .task-item{border:1.5px solid var(--line); background:var(--bg); color:var(--ink); border-radius:999px; padding:9px 14px; font-size:.95rem; font-weight:600;}
+      .task-item.done{background:var(--accent); color:#fff; border-color:var(--accent); text-decoration:line-through; opacity:.75;}
+      .task-item.blocked{opacity:.35;}
+      .bubble{position:absolute; max-width:62%; background:var(--bubble); border:1.5px solid var(--ink-soft); color:var(--ink); border-radius:18px; padding:9px 13px; font-size:.88rem; font-style:italic; box-shadow:var(--shadow); animation:bin .5s ease; text-align:left; z-index:5;}
+      .bubble::after{content:""; position:absolute; bottom:-7px; left:26px; width:12px; height:12px; background:inherit; border-right:1.5px solid var(--ink-soft); border-bottom:1.5px solid var(--ink-soft); transform:rotate(45deg);}
+      @keyframes bin{from{opacity:0; transform:translateY(10px) scale(.92);} to{opacity:1; transform:none;}}
+      .bubble.pop{transition:opacity .3s, transform .3s; opacity:0; transform:scale(.7);}
+      .overflow-note{position:absolute; inset:auto 10px 10px 10px; background:var(--warm-soft); border-radius:12px; padding:9px 12px; font-size:.88rem; z-index:6; display:none;}
+      .overflow-note.show{display:block;}
+      body.calm .bubble{animation:none;}
+      /* breathing */
+      .breath-stage{display:flex; flex-direction:column; align-items:center; padding:26px 0 10px;}
+      .breath-circle{font-family:inherit; width:170px; height:170px; border-radius:50%; background:radial-gradient(circle at 38% 34%, var(--sky-soft), var(--sky)); border:2.5px solid var(--ink-soft); display:flex; align-items:center; justify-content:center; color:var(--ink); font-weight:700; font-size:1.05rem; text-align:center; padding:16px; touch-action:none; user-select:none; -webkit-user-select:none; transition:transform .2s linear; box-shadow:var(--shadow);}
+      .breath-circle:active{border-color:var(--accent);}
+      .breath-hint{min-height:1.5em; margin-top:14px; font-weight:600; color:var(--ink-soft); text-align:center;}
+      /* grounding */
+      .sense-count{font-family:Georgia,serif; font-size:1.3rem; text-align:center; margin:10px 0 2px;}
+      .sense-grid{display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin-top:12px;}
+      .sense-chip{border:1.5px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px; padding:11px 16px; font-size:.98rem; box-shadow:var(--shadow);}
+      .sense-chip.found{background:var(--accent); color:#fff; border-color:var(--accent);}
+      @media (prefers-color-scheme: dark){ .sense-chip.found{color:#12241a;} }
+      /* notebook */
+      .thought-card{background:var(--bubble); border:1.5px solid var(--ink-soft); border-radius:16px; padding:14px 16px; margin-top:12px; font-style:italic; box-shadow:var(--shadow);}
+      .notebook{background:repeating-linear-gradient(180deg, var(--card) 0 30px, var(--accent-soft) 30px 31px); border:1.5px solid var(--line); border-radius:12px; padding:14px 16px; margin-top:12px; min-height:70px;}
+      .notebook div{font-style:italic; padding:3px 0; border-bottom:1px dashed var(--line);}
+      /* carnet */
+      .sym-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;}
+      .sym-card{border:1.5px solid var(--line); border-radius:14px; padding:12px; background:var(--card); box-shadow:var(--shadow); text-align:left; color:var(--ink); width:100%;}
+      .sym-card.locked{opacity:.45;}
+      .sym-card b{display:block; font-size:.98rem; margin-bottom:3px;}
+      .sym-card span{font-size:.8rem; color:var(--ink-soft);}
+      .tool-list{display:flex; flex-direction:column; gap:8px; margin-top:10px;}
+      .tool-row{display:flex; gap:10px; align-items:flex-start; background:var(--card); border:1.5px solid var(--line); border-radius:12px; padding:10px 12px;}
+      .tool-row.locked{opacity:.45;}
+      .tool-row .tic{font-size:1.2rem;}
+      /* body silhouette zones */
+      .zone{fill:var(--warm); opacity:0; transition:opacity .8s ease;}
+      .zone.lit{opacity:.85;}
+      .zone-list{margin:10px 0 0; padding-left:20px;}
+      /* panic */
+      .panic-wrap{position:relative;}
+      body:not(.calm) .panic-shake{animation:shake 1.6s ease-in-out infinite;}
+      @keyframes shake{0%,100%{transform:translate(0,0);}25%{transform:translate(.7px,-.5px);}50%{transform:translate(-.7px,.6px);}75%{transform:translate(.5px,.4px);}}
+      .heart-beat{transform-origin:center; animation:beat 1.05s ease-in-out infinite;}
+      @keyframes beat{0%,100%{transform:scale(1);}18%{transform:scale(1.13);}36%{transform:scale(1);}}
+      body.calm .heart-beat{animation-duration:1.6s;}
+      .vignette{position:absolute; inset:0; pointer-events:none; border-radius:var(--radius); box-shadow:inset 0 0 60px rgba(80,60,40,.35); animation:breathe-v 5s ease-in-out infinite;}
+      @keyframes breathe-v{0%,100%{opacity:.45;}50%{opacity:.8;}}
+      body.calm .vignette{animation:none; opacity:.4;}
+      /* toast / unlock banner */
+      #toast{position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(90px); visibility:hidden; background:var(--ink); color:var(--bg); padding:12px 18px; border-radius:999px; font-size:.92rem; font-weight:600; box-shadow:var(--shadow); z-index:80; transition:transform .45s ease, visibility .45s; max-width:92vw; text-align:center;}
+      #toast.show{transform:translateX(-50%) translateY(0); visibility:visible;}
+      /* modal */
+      .modal-bg{position:fixed; inset:0; background:rgba(20,30,22,.5); z-index:60; display:none; align-items:flex-end; justify-content:center;}
+      .modal-bg.open{display:flex;}
+      .modal{background:var(--bg); width:100%; max-width:520px; max-height:88vh; overflow-y:auto; border-radius:22px 22px 0 0; padding:20px 18px 30px;}
+      .modal h2{font-size:1.3rem; margin-bottom:6px;}
+      .closerow{position:sticky; top:0; z-index:3; display:flex; justify-content:flex-end; height:0;}
+      .closepill{width:38px; height:38px; flex:none; border-radius:50%; background:var(--card); border:1.5px solid var(--line); color:var(--ink); font-size:1rem; line-height:1; cursor:pointer; box-shadow:var(--shadow); margin-top:-8px;}
+      .facts-line{display:flex; gap:10px; margin-top:10px; align-items:flex-start;}
+      .facts-line .n{flex:none; width:26px; height:26px; border-radius:50%; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.85rem;}
+      .important{background:var(--warm-soft); border:2px solid var(--warm); border-radius:14px; padding:13px 15px; margin-top:14px; font-weight:700;}
+      .res-big{font-family:Georgia,serif; font-size:1.6rem; font-weight:700;}
+      .progress-dots{display:flex; gap:6px; justify-content:center; margin-top:10px;}
+      .progress-dots i{width:9px; height:9px; border-radius:50%; background:var(--line);}
+      .progress-dots i.done{background:var(--accent);}
+      .collection{display:flex; justify-content:space-around; text-align:center; margin-top:14px;}
+      .collection .big{font-family:Georgia,serif; font-size:1.7rem; font-weight:700; display:block;}
+      @media (prefers-reduced-motion: reduce){
+        .bubble,.heart-beat,.vignette,.panic-shake{animation:none !important;}
+        .screen.active{animation:none;}
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- HUD -->
+      <div id="hud" style="display:none">
+        <div class="hud-row">
+          <span class="hud-day" id="hud-day">Jour 1</span>
+          <div class="hud-btns">
+            <button class="icon-btn" id="btn-sound" aria-label="Son activé ou coupé">♪</button>
+            <button class="icon-btn" id="btn-calm" aria-label="Réduire les mouvements">◐</button>
+            <button class="icon-btn" id="btn-carnet" aria-label="Ouvrir le carnet">▤</button>
+            <button class="icon-btn" id="btn-pause" aria-label="Pause">II</button>
+          </div>
+        </div>
+        <div class="gauge-wrap">
+          <div class="gauge-label"><span>Météo intérieure</span><span id="meteo-txt">3 — Léger voile</span></div>
+          <div class="gauge" id="gauge"></div>
+        </div>
+        <div class="batt-row">
+          <div class="batt"><div class="batt-fill" id="batt-fill" style="width:100%"></div></div>
+          <span class="batt-txt" id="batt-txt">Énergie : 100 %</span>
+        </div>
+      </div>
+
+      <!-- ACCUEIL -->
+      <section class="screen" id="scr-home">
+        <div class="scene-art" id="home-art"></div>
+        <h1 class="title-big">Anxiété, le jeu</h1>
+        <p class="subtitle">Une semaine dans la peau d’Alex — comprendre l’anxiété de l’intérieur.</p>
+        <div class="card">
+          <p>Alex travaille, a des ami·es, une vie pleine. L’anxiété en fait partie — elle n’est pas toute sa vie.</p>
+          <p><b>5 journées</b> avec Alex : un appel, l’épicerie, le dentiste, le cinéma. Des choses simples — qui coûtent cher quand le cerveau scanne le danger sans arrêt.</p>
+          <div class="soft-note">Ce jeu montre l’anxiété, et une crise de panique, en douceur. Joue à ton rythme : pause et arrêt toujours possibles.</div>
+          <button class="btn" id="btn-start">Commencer la semaine</button>
+          <button class="btn secondary" id="btn-days">Choisir une journée</button>
+          <button class="btn secondary" id="btn-home-carnet">Le carnet d’Alex</button>
+          <button class="btn secondary" id="btn-home-res">Ressources d’aide</button>
+          <p class="small center" id="home-progress"></p>
+        </div>
+        <div class="card">
+          <h2>Comment ça se joue ?</h2>
+          <p><b>La météo intérieure (1 à 10)</b> monte et descend. À 10 : la crise de panique — une vague qui monte, culmine, puis redescend. Toujours.</p>
+          <p><b>La batterie d’énergie</b> se vide au fil des petites choses. Une journée « où il ne s’est rien passé » peut la vider. C’est ça, l’effort invisible.</p>
+          <p><b>Les pensées qui tournent</b> arrivent en bulles : écarte-les du doigt pour continuer.</p>
+          <p>Pas de score, pas d’échec : on collectionne les <b>moments traversés</b>, les <b>cartes de symptômes</b> et les <b>outils</b> qui aident pour vrai.</p>
+        </div>
+      </section>
+
+      <!-- CHOIX DE JOURNÉE -->
+      <section class="screen" id="scr-days">
+        <div class="card">
+          <h2>Les 5 journées</h2>
+          <p class="small">Les journées se débloquent une à la fois.</p>
+          <div class="day-list" id="day-list"></div>
+          <button class="btn secondary" data-goto="home">← Retour à l’accueil</button>
+        </div>
+      </section>
+
+      <!-- JEU -->
+      <section class="screen" id="scr-play">
+        <div id="play-root"></div>
+      </section>
+
+      <!-- FIN DE JOURNÉE -->
+      <section class="screen" id="scr-dayend">
+        <div id="dayend-root"></div>
+      </section>
+
+      <!-- FIN DU JEU -->
+      <section class="screen" id="scr-end">
+        <div id="end-root"></div>
+      </section>
+    </div>
+
+    <!-- MODAL CARNET -->
+    <div class="modal-bg" id="modal-carnet">
+      <div class="modal">
+        <div class="closerow"><button class="closepill" data-close="modal-carnet" aria-label="Fermer le carnet">✕</button></div>
+        <h2>Le carnet d’Alex</h2>
+        <p class="small">Chaque symptôme rencontré débloque sa carte : ce que c’est, ce que ça fait de l’intérieur.</p>
+        <h3 style="margin-top:16px">Cartes de symptômes — <span id="sym-count"></span></h3>
+        <div class="sym-grid" id="sym-grid"></div>
+        <div id="sym-detail"></div>
+        <h3 style="margin-top:18px">Outils qui aident</h3>
+        <div class="tool-list" id="tool-list"></div>
+        <button class="btn" data-close="modal-carnet">Fermer le carnet</button>
+      </div>
+    </div>
+
+    <!-- MODAL PAUSE -->
+    <div class="modal-bg" id="modal-pause">
+      <div class="modal">
+        <div class="closerow"><button class="closepill" data-close="modal-pause" aria-label="Fermer la pause">✕</button></div>
+        <h2>Pause</h2>
+        <p>Prendre une pause, c’est aussi un des outils. Rien ne presse.</p>
+        <button class="btn" data-close="modal-pause">Reprendre le jeu</button>
+        <button class="btn secondary" id="btn-quit-day">Arrêter la journée et revenir à l’accueil</button>
+        <button class="btn secondary" id="btn-pause-res">Voir les ressources d’aide</button>
+        <div class="soft-note" style="margin-top:14px">Réglages : <button class="btn secondary small" id="btn-set-sound">Son : oui</button> <button class="btn secondary small" id="btn-set-calm">Mouvements réduits : non</button></div>
+      </div>
+    </div>
+
+    <!-- MODAL RESSOURCES -->
+    <div class="modal-bg" id="modal-res">
+      <div class="modal">
+        <div class="closerow"><button class="closepill" data-close="modal-res" aria-label="Fermer les ressources">✕</button></div>
+        <h2>Ressources d’aide</h2>
+        <p>Si l’anxiété prend trop de place — pour toi ou pour quelqu’un que tu aimes — des gens formés peuvent aider, gratuitement et en toute confidentialité. Tu n’as pas besoin d’être « en crise » pour appeler : être dépassé·e suffit.</p>
+        <div class="card" style="margin-top:12px">
+          <div class="res-big">811 — Info-Social</div>
+          <p>Au Québec : compose le <b>811</b> et choisis Info-Social pour parler à un·e intervenant·e psychosocial·e, 24 h sur 24.</p>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="res-big">988 — Ligne d’aide en cas de crise</div>
+          <p>Partout au Canada : appelle ou texte le <b>988</b>, 24 h sur 24, 7 jours sur 7, si tu traverses une crise ou si tu t’inquiètes pour quelqu’un.</p>
+        </div>
+        <div class="important">Une première douleur à la poitrine doit toujours être vérifiée par un médecin.</div>
+        <p class="small" style="margin-top:12px">Ce jeu sensibilise, il ne pose aucun diagnostic et ne remplace pas un professionnel de la santé.</p>
+        <button class="btn" data-close="modal-res">Fermer</button>
+      </div>
+    </div>
+
+    <div id="toast" role="status"></div>
+
+    <script>
+    "use strict";
+    /* ================= DONNÉES ================= */
+    var CARDS = {
+      rumination:{nom:"Inquiétude et rumination", txt:"L’esprit repasse les mêmes pensées en boucle : « et si… », « j’aurais dû… ». Difficile de décrocher, même épuisé.", vecu:"Comme une chanson prise dans la tête — mais faite de soucis. Elle joue au réveil, sous la douche, à 3 h du matin."},
+      hypervigilance:{nom:"Hypervigilance", txt:"Le cerveau scanne le danger sans arrêt : un bruit, un regard, un silence — tout est analysé comme une menace possible.", vecu:"Impossible de « juste relaxer » : une partie de la tête reste en sentinelle, même dans les moments doux."},
+      tremblements:{nom:"Tremblements et frissons", txt:"En mode alarme, le corps peut trembler ou frissonner — même sans avoir froid.", vecu:"On espère que personne ne remarque nos mains. Tenir un café devient une épreuve."},
+      palpitations:{nom:"Palpitations", txt:"Le cœur bat fort, vite ou de travers. C’est la réaction de « lutte ou fuite » : le corps se prépare à un danger… qui souvent n’existe pas.", vecu:"On entend son cœur dans ses oreilles — et cette impression le fait battre encore plus fort."},
+      souffle:{nom:"Souffle court", txt:"La respiration devient rapide et haute, comme si l’air ne descendait pas assez. On soupire souvent.", vecu:"Chaque souffle semble à moitié plein. Respirer lentement, appris d’avance, devient une bouée."},
+      nausees:{nom:"Nausées et ventre noué", txt:"Le ventre réagit à l’alarme : nœud à l’estomac, nausées, digestion perturbée. Ventre et cerveau se parlent beaucoup.", vecu:"Le petit-déjeuner ne « passe » pas : le corps dit non avant même que la journée commence."},
+      tensions:{nom:"Tensions musculaires", txt:"Mâchoire serrée, nuque raide, épaules aux oreilles : à force d’être en garde, les muscles restent contractés — et ça fait mal.", vecu:"Le soir, on réalise qu’on a serré les dents toute la journée. Ça épuise autant que ça fait mal."},
+      sudation:{nom:"Sudation", txt:"Mains moites, sueurs soudaines : le corps en alarme se refroidit comme s’il allait courir un sprint.", vecu:"Serrer une main devient stressant. On essuie ses paumes en espérant que ça ne se voit pas."},
+      sommeil:{nom:"Troubles du sommeil", txt:"Difficile de s’endormir quand la tête repasse la journée — ou réveils la nuit, l’esprit déjà reparti.", vecu:"La nuit, tout semble plus gros. Et le lendemain, la fatigue rend l’anxiété plus forte : un cercle."},
+      concentration:{nom:"Difficulté de concentration", txt:"Quand une partie du cerveau surveille le danger, il en reste moins pour lire, écouter, retenir. Ce n’est pas un manque d’effort.", vecu:"On relit la même phrase quatre fois. On a l’air absent — en dedans, c’est tout le contraire : c’est plein."},
+      irritabilite:{nom:"Irritabilité", txt:"Un système d’alarme déjà à bout réagit fort aux petites choses : un bruit, une question de trop. Pas de la mauvaise volonté.", vecu:"On répond sec, puis on s’en veut. La culpabilité se rajoute aux pensées qui tournent."},
+      fatigue:{nom:"Fatigue profonde", txt:"Vivre en mode alarme coûte une énergie énorme. Ce n’est pas de la paresse : c’est un corps qui a travaillé fort, en dedans.", vecu:"Une journée « tranquille » peut finir comme un marathon — épuisé sans avoir « rien fait », en apparence."},
+      appetit:{nom:"Appétit qui change", txt:"L’anxiété peut couper l’appétit… ou l’augmenter. Les deux existent, parfois chez la même personne. Sans jugement.", vecu:"Certains jours, la gorge est trop serrée pour manger. D’autres jours, manger est la seule pause que le cerveau accepte."},
+      evitement:{nom:"Évitement", txt:"Éviter ce qui fait peur soulage sur le coup — mais l’alarme apprend que « c’était vraiment dangereux », et la peur grandit.", vecu:"Annuler fait du bien… dix minutes. Après : « la prochaine fois, ce sera pire »."},
+      irrealite:{nom:"Sensation d’irréel", txt:"Pendant une crise de panique, le monde peut sembler étrange, lointain, comme dans un rêve. C’est le corps submergé — ça passe.", vecu:"Les sons semblent loin, les mains pas tout à fait les nôtres. Très déstabilisant… et ça redescend."},
+      controle:{nom:"Peur de perdre le contrôle", txt:"Au sommet d’une panique, on peut craindre de s’évanouir, de « devenir fou » ou de mourir. La crise impressionne — mais elle redescend toujours.", vecu:"On est sûr que « cette fois, c’est différent ». Et pourtant, vague après vague, le corps finit par se calmer."}
+    };
+    var TOOLS = {
+      respiration:{nom:"Respiration lente", ico:"◎", txt:"Inspirer doucement, expirer plus lentement. Ça dit au corps : « pas de danger ». S’apprend au calme, sert dans la tempête."},
+      pause:{nom:"Prendre une pause", ico:"❦", txt:"S’éloigner quelques minutes, boire de l’eau, regarder au loin. Une pause n’est pas une fuite : c’est un entretien de l’alarme."},
+      carnet:{nom:"Le carnet de pensées", ico:"▤", txt:"Écrire une pensée qui tourne la « stationne » sur papier. Elle arrête de crier — on la regardera plus tard, au calme."},
+      marche:{nom:"Marcher et bouger", ico:"♞", txt:"Bouger aide le corps à utiliser l’énergie de l’alarme. Dix minutes de marche changent souvent la météo intérieure."},
+      ancrage:{nom:"Ancrage 5-4-3-2-1", ico:"⚓", txt:"Revenir au présent par les sens : 5 choses vues, 4 entendues, 3 touchées, 2 senties, 1 goûtée."},
+      appel:{nom:"Appeler une personne de confiance", ico:"☎", txt:"Dire « ça brasse en dedans aujourd’hui » à quelqu’un de sûr. Être entendu baisse la pression."},
+      suivi:{nom:"Le suivi professionnel", ico:"✚", txt:"Un·e professionnel·le peut aider concrètement. La TCC aide beaucoup de gens à recalibrer leur alarme. Une médication peut aussi être proposée — seulement si un médecin la prescrit."}
+    };
+    var ZONES = {
+      tete:"la tête qui bourdonne", machoire:"la mâchoire serrée", nuque:"la nuque raide", epaules:"les épaules montées aux oreilles",
+      dos:"le dos tendu", poitrine:"la poitrine serrée", ventre:"le ventre noué", mains:"les mains moites et tremblantes"
+    };
+    var METEO_TXT = ["","Presque calme","Léger voile","Léger voile","Nuageux","Nuageux","Orage intérieur","Orage intérieur","Grosse tempête","Grosse tempête","Crise de panique — la vague"];
+
+    /* ---------- Petits dessins SVG (contours gravés, palette douce) ---------- */
+    function alexSVG(mood){
+      var mouth = mood==="tendu" ? "M62 96 q10 6 20 0" : mood==="fatigue" ? "M64 98 q8 3 16 0" : "M62 94 q10 9 20 0";
+      var eyes = mood==="fatigue" ? "M50 74 h12 M82 74 h12" : "";
+      var eyeDot = mood==="fatigue" ? "" : '<circle cx="56" cy="72" r="3.4" fill="#22392c"/><circle cx="88" cy="72" r="3.4" fill="#22392c"/>';
+      return '<svg viewBox="0 0 144 150" width="150" role="img" aria-label="Alex, le personnage du jeu">'
+      + '<path d="M30 148 q-4-44 16-58 q26-16 52 0 q20 14 16 58 Z" fill="#7fa8c9" stroke="#22392c" stroke-width="3"/>'
+      + '<circle cx="72" cy="66" r="42" fill="#f2c9a0" stroke="#22392c" stroke-width="3"/>'
+      + '<path d="M31 58 q-2-34 41-36 q43 2 41 36 q-8-20-22-24 q-24 8-38 2 q-16 4-22 22 Z" fill="#6b4a2f" stroke="#22392c" stroke-width="3"/>'
+      + eyeDot + '<path d="'+eyes+'" stroke="#22392c" stroke-width="3" fill="none" stroke-linecap="round"/>'
+      + '<path d="M52 84 q-6 2-8-3 M92 84 q6 2 8-3" stroke="#d98d64" stroke-width="3" fill="none" stroke-linecap="round"/>'
+      + '<path d="'+mouth+'" stroke="#22392c" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+    }
+    function sceneSVG(kind){
+      var s = {
+      matin:'<circle cx="238" cy="30" r="17" fill="#e8a25e" stroke="#22392c" stroke-width="2.5"/><rect x="18" y="34" width="96" height="70" rx="8" fill="#d7e7f3" stroke="#22392c" stroke-width="2.5"/><path d="M66 34 v70 M18 69 h96" stroke="#22392c" stroke-width="2"/><path d="M14 118 h230" stroke="#22392c" stroke-width="2.5"/><path d="M150 118 v-30 q24-14 48 0 v30 Z" fill="#cfe5d4" stroke="#22392c" stroke-width="2.5"/><circle cx="174" cy="72" r="7" fill="#f2c9a0" stroke="#22392c" stroke-width="2"/>',
+      bureau:'<rect x="26" y="24" width="120" height="76" rx="6" fill="#d7e7f3" stroke="#22392c" stroke-width="2.5"/><rect x="38" y="36" width="96" height="8" fill="#7fa8c9"/><rect x="38" y="52" width="96" height="8" fill="#9cc7a4"/><rect x="38" y="68" width="60" height="8" fill="#e8a25e"/><path d="M14 122 h240 M176 122 v-40 l44-10 v50" stroke="#22392c" stroke-width="2.5" fill="none"/><circle cx="212" cy="96" r="9" fill="#e8a25e" stroke="#22392c" stroke-width="2"/>',
+      tel:'<path d="M96 20 q60 4 58 44 q-2 34-30 44 l-8-22 q18-8 20-24 q2-22-22-26 Z" fill="#c95f4e" stroke="#22392c" stroke-width="2.5"/><circle cx="66" cy="30" r="7" fill="none" stroke="#22392c" stroke-width="2.5"/><path d="M52 16 a22 22 0 0 1 30 0 M40 6 a36 36 0 0 1 44 0" stroke="#22392c" stroke-width="2.5" fill="none"/><rect x="160" y="86" width="80" height="36" rx="8" fill="#f7e3cb" stroke="#22392c" stroke-width="2.5"/><path d="M172 100 h56 M172 110 h36" stroke="#22392c" stroke-width="2"/>',
+      epicerie:'<path d="M30 44 h120 l-14 62 H48 Z" fill="#cfe5d4" stroke="#22392c" stroke-width="2.5"/><path d="M30 44 L22 24 H8" stroke="#22392c" stroke-width="2.5" fill="none"/><circle cx="60" cy="120" r="8" fill="none" stroke="#22392c" stroke-width="2.5"/><circle cx="120" cy="120" r="8" fill="none" stroke="#22392c" stroke-width="2.5"/><circle cx="72" cy="66" r="12" fill="#c95f4e" stroke="#22392c" stroke-width="2"/><rect x="94" y="52" width="22" height="28" fill="#e8a25e" stroke="#22392c" stroke-width="2"/><path d="M180 122 V50 q30-26 60 0 v72" fill="none" stroke="#22392c" stroke-width="2.5"/><circle cx="210" cy="86" r="10" fill="#f2c9a0" stroke="#22392c" stroke-width="2"/>',
+      dentiste:'<rect x="20" y="86" width="150" height="16" rx="8" fill="#7fa8c9" stroke="#22392c" stroke-width="2.5"/><path d="M44 86 q10-30 44-30 l60 6" stroke="#22392c" stroke-width="2.5" fill="none"/><circle cx="150" cy="60" r="10" fill="#f2c9a0" stroke="#22392c" stroke-width="2"/><path d="M196 20 v44 M184 34 q12-10 24 0" stroke="#22392c" stroke-width="2.5" fill="none"/><circle cx="196" cy="72" r="6" fill="#e8a25e" stroke="#22392c" stroke-width="2"/><path d="M14 122 h230" stroke="#22392c" stroke-width="2.5"/>',
+      cinema:'<rect x="26" y="14" width="200" height="76" rx="6" fill="#2c4636" stroke="#22392c" stroke-width="2.5"/><path d="M46 70 l30-40 24 26 30-34 40 48" stroke="#e8a25e" stroke-width="3" fill="none"/><circle cx="196" cy="34" r="8" fill="#f7e3cb"/><path d="M20 118 h18 M52 118 h18 M84 118 h18 M116 118 h18 M148 118 h18 M180 118 h18 M212 118 h18" stroke="#c95f4e" stroke-width="9"/>',
+      nuit:'<circle cx="206" cy="30" r="15" fill="#f7e3cb" stroke="#22392c" stroke-width="2.5"/><path d="M214 16 a15 15 0 1 0 8 26 a12 12 0 0 1-8-26Z" fill="#eef3ec"/><path d="M16 96 h150 v26 H16 Z" fill="#7fa8c9" stroke="#22392c" stroke-width="2.5"/><rect x="30" y="76" width="52" height="22" rx="9" fill="#fbfdf9" stroke="#22392c" stroke-width="2.5"/><path d="M120 40 l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z" fill="#e8a25e"/>',
+      parc:'<circle cx="36" cy="26" r="15" fill="#e8a25e" stroke="#22392c" stroke-width="2.5"/><path d="M120 122 V66 M86 84 q34-30 68 0 M96 62 q24-22 48 0" stroke="#22392c" stroke-width="2.5" fill="none"/><circle cx="120" cy="48" r="26" fill="#9cc7a4" stroke="#22392c" stroke-width="2.5"/><path d="M10 122 h240 M196 122 v-26 q22-12 40 0 v26" stroke="#22392c" stroke-width="2.5" fill="none"/>',
+      coeur:'<path class="heart-beat" d="M128 112 C70 78 52 52 66 32 C78 15 108 18 128 44 C148 18 178 15 190 32 C204 52 186 78 128 112Z" fill="#c95f4e" stroke="#22392c" stroke-width="3"/>'
+      };
+      return '<svg viewBox="0 0 256 132" width="290" role="img" aria-hidden="true">'+(s[kind]||s.matin)+'</svg>';
+    }
+    function bodySVG(lit){
+      function z(id,d){ return '<path class="zone'+(lit.indexOf(id)>=0?" lit":"")+'" data-zone="'+id+'" d="'+d+'"/>'; }
+      return '<svg viewBox="0 0 120 240" width="150" role="img" aria-label="Silhouette du corps d’Alex">'
+      + '<circle cx="60" cy="24" r="17" fill="#f2c9a0" stroke="#22392c" stroke-width="2.5"/>'
+      + '<path d="M60 41 v14 M38 62 q22-12 44 0 l6 44 q2 12-8 12 l-6-30 v52 l6 60 q1 10-9 10 q-8 0-9-9 l-2-52-2 52 q-1 9-9 9 q-10 0-9-10 l6-60 v-52 l-6 30 q-10 0-8-12 Z" fill="#d7e7f3" stroke="#22392c" stroke-width="2.5"/>'
+      + z("tete","M44 20 a17 12 0 0 1 32 0 a17 9 0 0 1-32 0Z")
+      + z("machoire","M48 33 a13 8 0 0 0 24 0 a13 6 0 0 0-24 0Z")
+      + z("nuque","M50 40 h20 v8 h-20 Z")
+      + z("epaules","M36 58 q24-12 48 0 l3 12 q-27-8-54 0 Z")
+      + z("poitrine","M44 74 h32 v18 h-32 Z")
+      + z("ventre","M45 96 h30 v20 h-30 Z")
+      + z("dos","M86 74 q8 20 0 44 l-8 0 q4-22 0-44 Z")
+      + z("mains","M28 108 a7 9 0 1 0 4 17 a7 9 0 0 0-4-17Z M88 108 a7 9 0 1 1 4 17 a7 9 0 0 1-4-17Z")
+      + '</svg>';
+    }
+
+    /* ================= LES 5 JOURNÉES ================= */
+    var DAYS = [
+    { titre:"Une journée ordinaire", sous:"Réveil, un appel, le bureau — et l’alarme qui part pour une toast brûlée.", steps:[
+      {t:"nar", scene:"matin", art:"matin", meteo:3, text:"7 h. Alex ouvre les yeux avant le cadran. La journée n’a pas commencé que la tête est déjà au bureau, à l’épicerie et à la fin du mois.", text2:"L’anxiété, c’est une alarme du corps devenue trop sensible : le système de « lutte ou fuite », fait pour les vrais dangers, se déclenche pour une toast brûlée.", card:"rumination", zone:"epaules"},
+      {t:"bubbles", titre:"Se préparer et déjeuner", scene:"matin", text:"Touche les objets pour mettre la table. Les pensées vont arriver en bulles : écarte-les du doigt pour continuer.", taskLabel:"Préparer la table :", items:["Les assiettes","Les verres","Le pain grillé","Le café","Les serviettes"], bulles:["Et si je suis en retard…","Est-ce que j’ai fermé la porte, hier ?","Le courriel d’hier… il voulait dire quoi ?","Et si le char part pas…","J’ai une drôle de sensation au ventre.","Aujourd’hui, ça va-tu bien aller ?"], meteo:4, batt:-10, card:"hypervigilance", zone:"ventre"},
+      {t:"nar", scene:"tel", art:"tel", meteo:5, text:"Le téléphone sonne. Un numéro inconnu. Rien que la sonnerie, et le cœur d’Alex accélère.", text2:"Rien n’est encore arrivé — mais le cerveau a déjà imaginé dix fins possibles à cet appel. Il a gardé les pires.", card:"palpitations", zone:"poitrine"},
+      {t:"choice", titre:"L’appel", text:"Le téléphone sonne une deuxième fois. Qu’est-ce qu’Alex fait ?", options:[
+        {label:"Répondre tout de suite, le cœur qui débat", resp:"C’était le garage : la voiture est prête. Tout ça pour ça. Le corps, lui, met dix minutes à redescendre.", meteo:6, batt:-8},
+        {label:"Laisser sonner, regarder qui c’est d’abord", resp:"Le message vocal dit : garage, voiture prête. Éviter a soulagé sur le coup — mais Alex se demande déjà comment il va rappeler.", meteo:5, batt:-6, card:"evitement"},
+        {label:"Respirer lentement trois fois, puis répondre", resp:"Trois respirations lentes, le cœur ralentit un peu. « Allô ? » — c’était le garage.", meteo:4, batt:-3, tool:"respiration"}
+      ]},
+      {t:"breath", mode:"hold", cycles:3, titre:"L’outil nº 1 : la respiration lente", text:"On apprend l’outil au calme, pour l’avoir dans la tempête. Doigt appuyé quand le cercle grandit (inspire), relâché quand il rapetisse (expire, plus lentement).", meteoTo:3, batt:8},
+      {t:"choice", titre:"Au bureau — le courriel imprévu", scene:"bureau", text:"« OBJET : À discuter dès que possible. » Aucun détail. La tête d’Alex part en vrille : erreur ? plainte ?", options:[
+        {label:"Relire le courriel cinq fois, mot à mot", resp:"Cinq lectures plus tard, Alex n’en sait pas plus — nuque raide, tête qui bourdonne. Relire ne calme pas la rumination : ça la nourrit.", meteo:7, batt:-10, card:"concentration", zone:"nuque"},
+        {label:"Prendre une pause de cinq minutes avant d’ouvrir la suite", resp:"Eau, fenêtre, air frais. La pause ne règle pas le courriel, mais elle empêche l’alarme de décider à la place d’Alex.", meteo:5, batt:-2, tool:"pause"},
+        {label:"Aller demander tout de suite, même si c’est dur", resp:"C’était… la machine à café à discuter pour la salle de pause. L’alarme avait crié « danger », la réalité répond « café ».", meteo:4, batt:-6}
+      ]},
+      {t:"choice", titre:"Le dîner", scene:"bureau", text:"Midi. Le matin a été long, même s’il « ne s’est rien passé ».", options:[
+        {label:"Manger à peine — le ventre est trop noué", resp:"Quelques bouchées. Chez bien des gens, l’anxiété coupe l’appétit : gorge et ventre sont trop occupés par l’alarme.", meteo:5, batt:-4, card:"appetit", zone:"ventre"},
+        {label:"Manger plus que d’habitude, vite, sans trop y penser", resp:"Aujourd’hui, manger est la seule pause que le cerveau accepte. L’appétit peut aussi augmenter — c’est une réponse du corps, pas une faute.", meteo:5, batt:-2, card:"appetit"}
+      ]}
+    ]},
+    { titre:"Le dentiste et l’épicerie", sous:"Une salle d’attente, des bruits de fraise, et une épicerie bondée.", steps:[
+      {t:"nar", scene:"dentiste", art:"matin", meteo:4, text:"Aujourd’hui : le dentiste. Un rendez-vous pris il y a des semaines — et redouté chaque jour depuis.", text2:"Ce matin, le corps sait avant la tête : mâchoire déjà serrée au réveil.", zone:"machoire", card:"tensions"},
+      {t:"bubbles", titre:"La salle d’attente du dentiste", scene:"dentiste", text:"Derrière la porte, le bruit de la fraise. Fais tes petites tâches — et écarte les pensées qui envahissent.", taskLabel:"À faire dans la salle d’attente :", items:["Dire ton nom à l’accueil","Prendre un magazine","T’asseoir","Regarder l’heure une fois","Boire une gorgée d’eau"], bulles:["Est-ce que ça va faire mal ?","Et s’il trouve quelque chose de grave ?","Le bruit… c’est pour qui, là ?","Et si je dois revenir souvent ?","Je devrais annuler… non, je peux pas.","Tout le monde a l’air calme, sauf moi."], meteo:6, batt:-12, card:"sudation", zone:"mains"},
+      {t:"breath", mode:"follow", cycles:3, titre:"Sur la chaise", text:"La fraise approche. Alex respire lentement, comme appris hier. Le cercle respire tout seul : suis-le des yeux.", meteoTo:4, batt:6},
+      {t:"nar", scene:"dentiste", meteo:3, text:"C’est fait : un détartrage, rien de grave. Alex rit dans l’auto — l’alarme avait prévu trois catastrophes, la réalité en a choisi zéro.", text2:"L’alarme recommencera. Mais chaque fois qu’elle se trompe, c’est une donnée de plus pour la recalibler."},
+      {t:"bubbles", titre:"L’épicerie achalandée", scene:"epicerie", text:"Vendredi, 17 h : l’épicerie est pleine. Trouve les articles de la liste — et écarte les pensées qui s’ajoutent au bruit.", taskLabel:"La liste d’épicerie :", items:["Le lait","Les œufs","Le pain","Les pommes","Le riz","Le fromage"], bulles:["Il y a trop de monde…","La file va être interminable.","Est-ce que je bloque le passage ?","On me regarde bizarre, non ?","J’ai-tu oublié quelque chose sur la liste ?","Et si ma carte passe pas à la caisse ?","Le cœur… faut pas que ça parte ici."], meteo:7, batt:-14, card:"fatigue", zone:"dos"},
+      {t:"notebook", titre:"Le soir — le carnet de pensées", text:"Sur le divan, la tête repasse la journée en boucle. Nouvel outil : écrire la pensée la « stationne » sur papier. Lis chaque pensée, puis stationne-la.", thoughts:["« La caissière m’a trouvé lent, c’est sûr. »","« Et si le dentiste avait manqué quelque chose ? »","« Demain, le bureau… la présentation s’en vient. »","« Je suis donc bien fatigué pour une journée normale. »"], tool:"carnet", meteoTo:3, batt:6},
+      {t:"nar", scene:"nuit", art:"nuit", meteo:4, text:"23 h. La journée est finie — pas pour la tête, qui rejoue la file à la caisse et les « et si » de demain.", text2:"L’endormissement prendra une heure. Quand l’alarme ne veut pas fermer, le sommeil écope en premier.", card:"sommeil"}
+    ]},
+    { titre:"La présentation", sous:"Le jour redouté depuis deux semaines — et l’ancrage qui change tout.", steps:[
+      {t:"nar", scene:"bureau", art:"bureau", meteo:5, text:"Aujourd’hui, Alex présente le projet devant l’équipe. Quinze minutes. Quinze minutes que l’alarme répète, en version catastrophe, depuis deux semaines.", text2:"Préparer les diapos a pris le double du temps : chaque phrase relue comme si un danger s’y cachait.", card:"irritabilite", zone:"tete"},
+      {t:"bubbles", titre:"Les minutes avant", scene:"bureau", text:"Salle de réunion. Prépare la présentation — les pensées, elles, ne jasent pas : elles crient.", taskLabel:"Préparer la présentation :", items:["Ouvrir le fichier","Brancher l’écran","Prendre une gorgée d’eau","Regarder tes notes une fois","Dire bonjour à l’équipe"], bulles:["Et si je perds mes mots ?","Tout le monde va voir mes mains trembler.","Mon collègue a l’air tanné déjà…","Et si on me pose LA question ?","J’aurais dû annuler. Malade. N’importe quoi.","Mon cœur bat trop fort, ça paraît-tu ?"], meteo:8, batt:-12, card:"tremblements", zone:"mains"},
+      {t:"ground", titre:"L’outil : l’ancrage 5-4-3-2-1", text:"Juste avant de commencer : un outil transmis par une amie — revenir au présent par les sens. Touche les éléments, un sens à la fois.", sets:{voir:["L’écran bleu","La fenêtre","Une plante verte","Les chaises rouges","Le tableau blanc"], entendre:["Le ventilateur","Des voix dans le corridor","Le clic d’une souris","La pluie dehors"], toucher:["La table froide","Le dossier de la chaise","Le carton du dossier"], sentir:["Le café","Le papier neuf"], gouter:["L’eau fraîche"]}, tool:"ancrage", meteoTo:5, batt:6},
+      {t:"nar", scene:"bureau", meteo:4, text:"La présentation se passe… normalement. Une question difficile, un blanc de trois secondes, puis ça continue. Personne n’a vu de catastrophe. Parce qu’il n’y en avait pas.", text2:"Alex ne se sent pas « guéri ». Alex se sent fier — et crevé. Les deux en même temps, c’est souvent ça.", card:"souffle"},
+      {t:"choice", titre:"Le retour à la maison", text:"La journée est finie. Il reste un fond d’alarme, comme une radio mal fermée.", options:[
+        {label:"Marcher jusqu’à la maison plutôt que l’autobus bondé", resp:"Vingt minutes de marche : le corps utilise l’énergie de l’alarme pour avancer. La météo descend à chaque coin de rue.", meteo:3, batt:4, tool:"marche"},
+        {label:"Appeler Maya, sa personne de confiance", resp:"« Ça brassait aujourd’hui, mais je l’ai faite, ma présentation. » Être entendu baisse la pression.", meteo:3, batt:2, tool:"appel"},
+        {label:"Rentrer vite et s’écraser sur le divan", resp:"Repos total. Le corps le réclame — il a travaillé en double toute la journée, en dedans.", meteo:4, batt:2}
+      ]}
+    ]},
+    { titre:"Le cinéma — et la vague", sous:"Un film en soirée… et la crise de panique qui monte, culmine, puis redescend.", steps:[
+      {t:"nar", scene:"cinema", art:"cinema", meteo:5, text:"Ce soir, cinéma avec des ami·es. Une sortie « le fun » — mais depuis le matin, l’alarme prépare la soirée à sa façon : scénarios, sensations guettées, plan de sortie.", text2:"Le corps est déjà fatigué avant même d’arriver. C’est aussi ça, l’hypervigilance : la sortie commence des heures avant la sortie.", zone:"epaules"},
+      {t:"choice", titre:"Choisir son siège", scene:"cinema", text:"La salle se remplit. Pour la plupart des gens, un siège est un siège. Pour Alex, c’est un casse-tête :", options:[
+        {label:"Près de la sortie, bout d’allée — « au cas où »", resp:"Le siège est stratégique : si la vague monte, sortir sans déranger personne. Ce plan-là, personne d’autre dans la salle ne l’a fait.", meteo:6, batt:-6},
+        {label:"Au centre, entouré — « faut que je sois capable »", resp:"Alex se force un peu. Au début ça va… mais l’impression d’être « pris » au milieu de la rangée garde l’alarme allumée.", meteo:7, batt:-6},
+        {label:"Le siège qu’il reste, sans trop y penser", resp:"Aujourd’hui, les pensées décident moins fort. Alex s’assoit, popcorn en main. La soirée peut commencer.", meteo:5, batt:-4}
+      ]},
+      {t:"bubbles", titre:"Pendant les annonces", scene:"cinema", text:"Le film commence bientôt. Profite des annonces — mais la salle est pleine, il fait chaud, et la tête repart…", taskLabel:"Profiter du moment :", items:["Manger du popcorn","Regarder une annonce","Rire avec tes ami·es","Boire une gorgée","Regarder l’écran"], bulles:["Si je dois sortir, je dérange tout le monde.","Mon cœur… il cogne trop, non ?","La sortie est loin, par là.","Et si je me sens mal devant tout le monde ?","Ça monte… ça monte pour vrai cette fois.","J’aurais donc dû rester chez nous."], meteo:9, batt:-10, card:"nausees", zone:"ventre"},
+      {t:"panic"}
+    ]},
+    { titre:"Le lendemain", sous:"Une journée plus douce : suivi, proches, et le bilan de la semaine.", steps:[
+      {t:"nar", scene:"matin", art:"matin", meteo:2, text:"Le lendemain de la vague, le corps est comme après un gros effort : courbaturé en dedans, mais au calme.", text2:"Aujourd’hui, rendez-vous de suivi. Pas parce que « ça va mal » : parce qu’une alarme trop sensible, ça se fait recalibrer par quelqu’un qui s’y connaît."},
+      {t:"nar", scene:"bureau", meteo:2, text:"Au rendez-vous, on parle des outils — et de la TCC, la thérapie cognitivo-comportementale, qui aide beaucoup de gens à apprivoiser leurs pensées catastrophes.", text2:"Si un médecin proposait un jour une médication, ce serait leur décision à deux — jamais un conseil d’ami ou d’internet.", tool:"suivi"},
+      {t:"choice", titre:"Le message de Maya", text:"Le téléphone vibre. Maya écrit : « Hey ! Ça a été hier soir ? Tu es parti vite après le film… »", options:[
+        {label:"Lui dire vrai : « J’ai eu une crise de panique. Ça va mieux. »", resp:"Maya répond : « Merci de me le dire. La prochaine fois, je m’assois à côté de la sortie avec toi. » Un allié de plus, ça change une journée.", meteo:2, batt:3},
+        {label:"Dire juste « oui oui, fatigué » et changer de sujet", resp:"C’est correct aussi : on choisit à qui on se confie, et quand. Garder ça pour soi, c’est légitime.", meteo:3, batt:0}
+      ]},
+      {t:"ground", titre:"Une soirée douce", text:"Ce soir, pas de performance : une marche tranquille. Alex refait l’ancrage, juste pour le plaisir de remarquer le monde.", sets:{voir:["Le ciel rose","Un chat sur un perron","Les lumières qui s’allument","Un arbre immense","La lune qui se lève"], entendre:["Des oiseaux","Une porte qui claque doucement","Le vent dans les feuilles","Un rire au loin"], toucher:["L’air frais","Le banc de parc","Sa propre main, calme"], sentir:["La pluie proche","Le souper d’un voisin"], gouter:["Un thé chaud"]}, meteoTo:1, batt:8},
+      {t:"nar", scene:"parc", art:"parc", meteo:1, text:"La semaine est traversée. Pas « gagnée » — traversée. L’anxiété d’Alex est encore là, et elle reviendra. Mais Alex a maintenant des cartes, des outils, et des gens.", text2:"Et ce qu’on oublie souvent : les personnes anxieuses ont des forces — une perception fine des autres, beaucoup d’empathie, un art de se préparer."}
+    ]}
+    ];
+
+    /* ================= ÉTAT & SAUVEGARDE ================= */
+    var SAVE_KEY = "anxiete-jeu-v1";
+    var save = { unlocked:1, done:[], cards:{}, tools:{}, moments:0, sound:true, calm:false };
+    try{ var raw = localStorage.getItem(SAVE_KEY); if(raw){ var p = JSON.parse(raw); for(var k in p){ save[k]=p[k]; } } }catch(e){}
+    function persist(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){} }
+    var S = { day:0, step:0, meteo:2, batt:100, zones:[], playing:false, timers:[] };
+    function $(id){ return document.getElementById(id); }
+    function clampM(v){ return Math.max(1, Math.min(10, Math.round(v))); }
+    function clampB(v){ return Math.max(2, Math.min(100, Math.round(v))); }
+    function clearTimers(){ S.timers.forEach(function(t){ clearInterval(t); clearTimeout(t); }); S.timers=[]; }
+    function later(fn, ms){ var t=setTimeout(fn, ms); S.timers.push(t); return t; }
+    function every(fn, ms){ var t=setInterval(fn, ms); S.timers.push(t); return t; }
+
+    /* ================= AUDIO (WebAudio, très doux) ================= */
+    var AC=null;
+    function tone(freq, dur, type, vol, when){
+      if(!save.sound) return;
+      try{
+        if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
+        if(AC.state==="suspended") AC.resume();
+        var t0 = AC.currentTime + (when||0);
+        var o=AC.createOscillator(), g=AC.createGain();
+        o.type=type||"sine"; o.frequency.value=freq;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(vol||0.05, t0+0.06);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0+dur+0.05);
+      }catch(e){}
+    }
+    function sndPop(){ tone(520,0.18,"sine",0.045); tone(760,0.22,"sine",0.03,0.05); }
+    function sndGood(){ tone(523,0.3,"sine",0.045); tone(659,0.3,"sine",0.04,0.12); tone(784,0.45,"sine",0.04,0.24); }
+    function sndCard(){ tone(880,0.35,"triangle",0.04); tone(1174,0.5,"triangle",0.03,0.1); }
+    function sndBreath(up){ tone(up?392:330, 1.6, "sine", 0.028); }
+
+    /* ================= TOAST ================= */
+    var toastTimer=null;
+    function toast(msg){ var t=$("toast"); t.textContent=msg; t.classList.add("show"); if(toastTimer) clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove("show"); }, 3400); }
+
+    /* ================= DÉBLOCAGES ================= */
+    function unlockCard(id){
+      if(!id || save.cards[id]) return;
+      save.cards[id]=true; persist(); sndCard();
+      toast("Nouvelle carte au carnet : « " + CARDS[id].nom + " »");
+    }
+    function unlockTool(id){
+      if(!id || save.tools[id]) return;
+      save.tools[id]=true; persist(); sndCard();
+      toast("Nouvel outil appris : " + TOOLS[id].nom);
+    }
+
+    /* ================= HUD ================= */
+    function buildGauge(){ var g=$("gauge"); g.innerHTML=""; for(var i=0;i<10;i++){ var el=document.createElement("i"); g.appendChild(el); } }
+    function setMeteo(v, silent){
+      S.meteo = clampM(v);
+      var cells = $("gauge").children;
+      var lvl = S.meteo<=2?1 : S.meteo<=4?2 : S.meteo<=6?4 : S.meteo<=8?6 : 7;
+      for(var i=0;i<10;i++){ cells[i].className = i < S.meteo ? ("on"+lvl) : ""; }
+      $("meteo-txt").textContent = S.meteo + " — " + METEO_TXT[S.meteo];
+    }
+    function setBatt(v){
+      S.batt = clampB(v);
+      var f=$("batt-fill"); f.style.width=S.batt+"%";
+      f.className = "batt-fill" + (S.batt<=25?" low":S.batt<=50?" mid":"");
+      $("batt-txt").textContent = "Énergie : " + S.batt + " %" + (S.batt<=25 ? " — Alex est à plat" : S.batt<=50 ? " — ça tire" : "");
+    }
+    function addZone(z){ if(z && S.zones.indexOf(z)<0) S.zones.push(z); }
+
+    /* ================= NAVIGATION ================= */
+    function show(id){
+      ["scr-home","scr-days","scr-play","scr-end"].forEach(function(x){ $(x).classList.toggle("active", x===id); });
+      $("scr-dayend").classList.toggle("active", id==="scr-dayend");
+      $("hud").style.display = (id==="scr-play") ? "block" : "none";
+      window.scrollTo(0,0);
+    }
+    function openModal(id){ $(id).classList.add("open"); }
+    function closeModal(id){ $(id).classList.remove("open"); }
+
+    /* ================= MOTEUR DE SCÈNES ================= */
+    function startDay(d){
+      S.day=d; S.step=0; S.playing=true; S.zones=[]; setBatt(100);
+      $("hud-day").textContent = "Jour " + (d+1) + " — " + DAYS[d].titre;
+      var first = DAYS[d].steps[0];
+      setMeteo(first.meteo||2);
+      show("scr-play"); renderStep();
+    }
+    function dayIntro(cb){
+      var root=$("play-root");
+      root.innerHTML = '<div class="card center"><div class="scene-art">'+alexSVG("calme")+'</div>'
+        + '<h2>Jour '+(S.day+1)+' — '+DAYS[S.day].titre+'</h2><p>'+DAYS[S.day].sous+'</p>'
+        + '<p class="small">Énergie du matin : 100 %. Garde-la à l’œil : les petites choses coûtent plus qu’on pense.</p>'
+        + '<button class="btn" id="di-go">Commencer la journée</button></div>';
+      $("di-go").onclick=function(){ sndPop(); cb(); };
+    }
+    function renderStep(){
+      clearTimers();
+      if(S.step===0 && !S._introDone){ S._introDone=true; dayIntro(renderStep); return; }
+      var steps = DAYS[S.day].steps;
+      if(S.step >= steps.length){ endDay(); return; }
+      var st = steps[S.step];
+      if(st.t==="nar") renderNar(st);
+      else if(st.t==="choice") renderChoice(st);
+      else if(st.t==="bubbles") renderBubbles(st);
+      else if(st.t==="breath") renderBreath(st);
+      else if(st.t==="ground") renderGround(st);
+      else if(st.t==="notebook") renderNotebook(st);
+      else if(st.t==="panic") renderPanic(st);
+    }
+    function nextStep(){
+      S.step++; save.moments++; persist(); renderStep();
+    }
+    function fx(st){
+      if(st.meteo!=null) setMeteo(st.meteo);
+      if(st.batt) setBatt(S.batt + st.batt);
+      if(st.card) unlockCard(st.card);
+      if(st.tool) unlockTool(st.tool);
+      if(st.zone) addZone(st.zone);
+    }
+    function contBtn(label){
+      var b=document.createElement("button"); b.className="btn"; b.textContent=label||"Continuer"; 
+      b.onclick=function(){ sndPop(); nextStep(); };
+      return b;
+    }
+    function renderNar(st){
+      fx(st);
+      var root=$("play-root");
+      var art = st.art ? '<div class="scene-art">'+sceneSVG(st.art)+'</div>' : (st.scene ? '<div class="scene-art">'+alexSVG(S.meteo>=7?"tendu":S.meteo>=4?"calme":"calme")+'</div>' : '<div class="scene-art">'+alexSVG("calme")+'</div>');
+      root.innerHTML = '<div class="card">'+art+'<p>'+st.text+'</p>'+(st.text2?'<p>'+st.text2+'</p>':'')+'<div id="nar-btn"></div></div>';
+      $("nar-btn").appendChild(contBtn("Continuer"));
+    }
+    function renderChoice(st){
+      if(st.meteo!=null) setMeteo(st.meteo);
+      var root=$("play-root");
+      var html = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p><div id="opts">';
+      st.options.forEach(function(o,i){ html += '<button class="opt-btn" data-i="'+i+'">'+o.label+'</button>'; });
+      html += '</div><div id="choice-resp"></div></div>';
+      root.innerHTML = html;
+      var btns = root.querySelectorAll(".opt-btn");
+      btns.forEach(function(b){
+        b.onclick=function(){
+          var o = st.options[+b.getAttribute("data-i")];
+          btns.forEach(function(x){ x.disabled=true; });
+          b.style.borderColor="var(--accent)";
+          if(o.meteo!=null) setMeteo(o.meteo);
+          if(o.batt) setBatt(S.batt+o.batt);
+          if(o.card) unlockCard(o.card);
+          if(o.tool) unlockTool(o.tool);
+          if(o.zone) addZone(o.zone);
+          sndPop();
+          var r=$("choice-resp"); r.innerHTML='<div class="resp">'+o.resp+'</div>';
+          r.appendChild(contBtn("Continuer"));
+          r.scrollIntoView({behavior:"smooth", block:"nearest"});
+        };
+      });
+    }
+    function renderBubbles(st){
+      if(st.meteo!=null) setMeteo(st.meteo);
+      if(st.batt) setBatt(S.batt + st.batt);
+      if(st.card) unlockCard(st.card);
+      if(st.zone) addZone(st.zone);
+      var root=$("play-root");
+      root.innerHTML = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p></div>'
+        + '<div class="play-zone" id="pz"><div class="task-bar"><b>'+st.taskLabel+'</b> <span class="small" id="task-count"></span></div>'
+        + '<div class="task-items" id="task-items"></div>'
+        + '<div class="scene-art">'+sceneSVG(st.scene||"matin")+'</div>'
+        + '<div class="overflow-note" id="ovf">Trop de pensées à la fois. Écarte quelques bulles pour te rouvrir de l’espace.</div></div>'
+        + '<div id="bub-done"></div>';
+      var itemsEl=$("task-items"), pz=$("pz");
+      var remaining = st.items.length, active=0, finished=false;
+      function updateCount(){ $("task-count").textContent = "(" + (st.items.length-remaining) + "/" + st.items.length + ")"; refreshBlock(); }
+      function refreshBlock(){
+        var blocked = active>=5;
+        $("ovf").classList.toggle("show", blocked && !finished);
+        itemsEl.querySelectorAll(".task-item:not(.done)").forEach(function(el){ el.classList.toggle("blocked", blocked); el.disabled = blocked; });
+      }
+      st.items.forEach(function(label){
+        var b=document.createElement("button"); b.className="task-item"; b.textContent=label;
+        b.onclick=function(){
+          if(b.classList.contains("done")||finished) return;
+          b.classList.add("done"); remaining--; sndPop(); updateCount();
+          if(remaining<=0) finish();
+        };
+        itemsEl.appendChild(b);
+      });
+      var bIdx=0;
+      var slots=[[3,150],[36,150],[3,216],[36,216],[3,282],[36,282],[19,344],[3,344]];
+      var usedSlots={}, visibleTexts={};
+      function spawn(){
+        if(finished) return;
+        if(active>=7) return; /* saturation oui, ensevelissement non : jamais plus de 7 pensées visibles à la fois */
+        if(bIdx>=st.bulles.length*4) return;
+        var free=[]; for(var si=0; si<slots.length; si++){ if(!usedSlots[si]) free.push(si); }
+        if(!free.length) return;
+        /* jamais deux fois la même pensée visible en même temps : on prend la suivante qui n’est pas déjà à l’écran */
+        var txt=null, pick=-1;
+        for(var a=0; a<st.bulles.length; a++){ var cand = st.bulles[(bIdx+a) % st.bulles.length]; if(!visibleTexts[cand]){ txt=cand; pick=(bIdx+a) % st.bulles.length; break; } }
+        if(txt===null) return;
+        bIdx = pick+1;
+        var slot = free[Math.floor(Math.random()*free.length)];
+        usedSlots[slot]=true; visibleTexts[txt]=true;
+        var el=document.createElement("button"); el.className="bubble"; el.textContent="« "+txt+" »";
+        el.style.left = slots[slot][0] + "%";
+        el.style.top = slots[slot][1] + "px";
+        el.style.zIndex = 5 + (bIdx % 24);
+        el.onclick=function(){
+          if(finished) return;
+          el.classList.add("pop"); el.style.pointerEvents="none"; active--; setBatt(S.batt+1);
+          delete usedSlots[slot]; delete visibleTexts[txt];
+          setTimeout(function(){ el.remove(); }, 300);
+          updateCount();
+        };
+        pz.appendChild(el); active++;
+        if(active>=4) setMeteo(Math.min(9, S.meteo+0)); /* la pression monte via le blocage, pas par punition */
+        refreshBlock();
+      }
+      spawn(); spawn();
+      var spawnRate = Math.max(1500, 3000 - S.meteo*160);
+      every(spawn, spawnRate);
+      every(function(){ if(!finished && active>=3) setBatt(S.batt-1); }, 4000);
+      updateCount();
+      function finish(){
+        finished=true; clearTimers();
+        pz.querySelectorAll(".bubble").forEach(function(el){ el.remove(); });
+        $("ovf").classList.remove("show");
+        sndGood();
+        var d=$("bub-done");
+        d.innerHTML='<div class="card"><p><b>C’est fait.</b> La tâche était simple — regarde tout ce qu’elle a demandé en dedans. C’est ça, une activité banale avec un trouble anxieux : le double travail, invisible.</p></div>';
+        d.firstChild.appendChild(contBtn("Continuer"));
+      }
+    }
+    function renderBreath(st){
+      if(st.tool) unlockTool(st.tool);
+      var root=$("play-root");
+      root.innerHTML = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p>'
+        + '<div class="breath-stage"><button type="button" class="breath-circle" id="bc">Prêt·e ?</button>'
+        + '<div class="breath-hint" id="bh">'+(st.mode==="hold"?"Touche le cercle et garde ton doigt appuyé pour commencer.":"Le cercle respire : suis-le des yeux.")+'</div>'
+        + '<div class="progress-dots" id="bdots"></div></div><div id="br-done"></div></div>';
+      var circle=$("bc"), hint=$("bh"), dots=$("bdots");
+      var total=st.cycles||3, doneCycles=0;
+      for(var i=0;i<total;i++){ var d=document.createElement("i"); dots.appendChild(d); }
+      var holding=false, phase="", phaseStart=0, raf=null, finished=false, phaseFails=0;
+      var IN_MS=4000, OUT_MS=6000;
+      function scaleFor(p, elapsed){
+        if(p==="in") return 1 + 0.38*Math.min(1, elapsed/IN_MS);
+        return 1.38 - 0.38*Math.min(1, elapsed/OUT_MS);
+      }
+      function runPhase(p){
+        if(finished) return;
+        phase=p; phaseStart=performance.now();
+        if(p==="in"){ hint.textContent="Inspire… le cercle grandit."; circle.textContent="Inspire"; sndBreath(true); }
+        else { hint.textContent="Expire… lentement, le cercle rapetisse."; circle.textContent="Expire"; sndBreath(false); }
+        cancelAnimationFrame(raf);
+        (function tick(){
+          if(finished) return;
+          var el=performance.now()-phaseStart;
+          var dur = p==="in"?IN_MS:OUT_MS;
+          circle.style.transform="scale("+scaleFor(p,el).toFixed(3)+")";
+          if(el>=dur){
+            if(st.mode==="hold"){
+              var ok = (p==="in") ? holding : !holding;
+              if(!ok){
+                phaseFails++;
+                if(phaseFails>=2){ phaseFails=0; /* après deux essais, on accepte le souffle tel qu’il est — respirer n’est pas un examen */ }
+                else {
+                  hint.textContent = p==="in" ? "Doigt appuyé pendant que ça grandit — on réessaie, tranquillement." : "Doigt relâché pendant que ça rapetisse — on réessaie, sans se presser.";
+                  runPhase(p); return;
+                }
+              } else phaseFails=0;
+            }
+            if(p==="in"){ runPhase("out"); }
+            else {
+              doneCycles++; dots.children[doneCycles-1].classList.add("done"); sndPop();
+              if(doneCycles>=total){ finishBreath(); } else { runPhase("in"); }
+            }
+            return;
+          }
+          raf=requestAnimationFrame(tick);
+        })();
+      }
+      function finishBreath(){
+        finished=true; cancelAnimationFrame(raf);
+        circle.style.transform="scale(1)"; circle.textContent="Bien respiré";
+        hint.textContent="Le corps a reçu le signal : pas de danger.";
+        if(st.meteoTo!=null) setMeteo(st.meteoTo);
+        if(st.batt) setBatt(S.batt+st.batt);
+        sndGood();
+        $("br-done").appendChild(contBtn("Continuer"));
+      }
+      if(st.mode==="hold"){
+        circle.addEventListener("pointerdown", function(e){ e.preventDefault(); holding=true; if(!phase) runPhase("in"); });
+        window.addEventListener("pointerup", function(){ holding=false; });
+        circle.addEventListener("pointerleave", function(){ holding=false; });
+      } else {
+        later(function(){ runPhase("in"); }, 700);
+      }
+    }
+    function renderGround(st){
+      if(st.meteo!=null) setMeteo(st.meteo);
+      var root=$("play-root");
+      var senses=[["voir",5,"choses que tu VOIS"],["entendre",4,"choses que tu ENTENDS"],["toucher",3,"choses que tu TOUCHES"],["sentir",2,"choses que tu SENS"],["gouter",1,"chose que tu GOÛTES"]];
+      var idx=0, foundInSense=0;
+      root.innerHTML = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p>'
+        + '<div class="sense-count" id="gs-count"></div><p class="center small" id="gs-sub"></p>'
+        + '<div class="sense-grid" id="gs-grid"></div><div id="gs-done"></div></div>';
+      function renderSense(){
+        var key=senses[idx][0], need=senses[idx][1];
+        foundInSense=0;
+        $("gs-count").textContent = need + " " + senses[idx][2];
+        $("gs-sub").textContent = "Touche-les une à une, en les remarquant pour vrai.";
+        var grid=$("gs-grid"); grid.innerHTML="";
+        var pool = st.sets[key].slice();
+        /* ajouter 2 distracteurs doux des autres sens pour faire chercher — non : on garde simple et vrai, tous les éléments comptent */
+        pool.forEach(function(label){
+          var b=document.createElement("button"); b.className="sense-chip"; b.textContent=label;
+          b.onclick=function(){
+            if(b.classList.contains("found")) return;
+            b.classList.add("found"); foundInSense++; sndPop();
+            if(foundInSense>=need){
+              idx++;
+              if(idx>=senses.length){ finishGround(); }
+              else { toast("Sens suivant…"); later(renderSense, 650); }
+            }
+          };
+          grid.appendChild(b);
+        });
+      }
+      function finishGround(){
+        $("gs-count").textContent="Ici. Maintenant.";
+        $("gs-sub").textContent="L’esprit est revenu ici, maintenant.";
+        $("gs-grid").innerHTML="";
+        if(st.tool) unlockTool(st.tool);
+        if(st.meteoTo!=null) setMeteo(st.meteoTo);
+        if(st.batt) setBatt(S.batt+st.batt);
+        sndGood();
+        $("gs-done").appendChild(contBtn("Continuer"));
+      }
+      renderSense();
+    }
+    function renderNotebook(st){
+      if(st.meteo!=null) setMeteo(st.meteo);
+      var root=$("play-root");
+      root.innerHTML = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p>'
+        + '<div id="th-zone"></div><h3 style="margin-top:16px">Le carnet</h3><div class="notebook" id="nb"><div class="small" style="border:none">Les pensées stationnées apparaîtront ici…</div></div>'
+        + '<div id="nb-done"></div></div>';
+      var idx=0, nb=$("nb"), first=true;
+      function showThought(){
+        var zone=$("th-zone");
+        if(idx>=st.thoughts.length){
+          if(st.tool) unlockTool(st.tool);
+          if(st.meteoTo!=null) setMeteo(st.meteoTo);
+          if(st.batt) setBatt(S.batt+st.batt);
+          zone.innerHTML='<p><b>La pensée est sur papier.</b> Elle existe encore, mais elle ne tourne plus en rond. Elle attendra demain, au calme.</p>';
+          sndGood();
+          $("nb-done").appendChild(contBtn("Continuer"));
+          return;
+        }
+        zone.innerHTML='<div class="thought-card">'+st.thoughts[idx]+'</div><button class="btn" id="th-park">Stationner cette pensée dans le carnet</button>';
+        $("th-park").onclick=function(){
+          if(first){ nb.innerHTML=""; first=false; }
+          var line=document.createElement("div"); line.textContent=st.thoughts[idx]; nb.appendChild(line);
+          idx++; sndPop(); showThought();
+        };
+      }
+      showThought();
+    }
+    function renderPanic(st){
+      var root=$("play-root");
+      setMeteo(10);
+      root.innerHTML = '<div class="card panic-wrap" id="panic-card"><div class="vignette"></div><div id="panic-inner">'
+        + '<div class="panic-shake"><div class="scene-art">'+sceneSVG("coeur")+'</div></div>'
+        + '<h2 class="center">La vague monte</h2>'
+        + '<p>Le cœur cogne comme s’il voulait sortir. La poitrine se serre, des frissons traversent le dos, les mains tremblent, le souffle ne descend plus. La salle semble loin, irréelle — comme derrière une vitre.</p>'
+        + '<p>Alex a l’impression que cette fois, c’est grave. Que c’est le cœur. Que le contrôle va lâcher.</p>'
+        + '<p><b>C’est une crise de panique.</b> Elle monte vite, elle est en train de culminer — et comme toutes les vagues, elle va redescendre. Il n’y a rien à réussir. Juste à traverser, une respiration à la fois.</p>'
+        + '<p class="small">En vrai, bien des gens quittent la salle à ce moment-là — c’est une réaction normale, pas un échec. Ici aussi, tu peux sortir de la scène quand tu veux : le jeu continue quand même.</p>'
+        + '<button class="btn" id="panic-go">Traverser la vague, guidé</button>'
+        + '<button class="btn secondary" id="panic-skip">Passer la scène — lire les faits directement</button>'
+        + '<p class="small center">Passer la scène ou arrêter là, c’est correct aussi — sans explication à donner. Le bouton pause est toujours là, en haut.</p>'
+        + '</div></div>';
+      unlockCard("irrealite"); unlockCard("controle"); unlockCard("tremblements");
+      $("panic-skip").onclick=function(){ sndPop(); setMeteo(3); panicFacts(); };
+      $("panic-go").onclick=function(){
+        sndPop();
+        root.innerHTML = '<div class="card"><h2 class="center">D’abord, respirer</h2><p class="center">Le cercle respire lentement. Suis-le des yeux — on laisse la vague passer.</p>'
+          + '<div class="breath-stage"><div class="breath-circle" id="pc">…</div><div class="breath-hint" id="ph"></div><div class="progress-dots" id="pdots"></div></div><div id="p-next"></div></div>';
+        var circle=$("pc"), hint=$("ph"), dots=$("pdots");
+        for(var i=0;i<4;i++) dots.appendChild(document.createElement("i"));
+        var cyc=0, raf=null, phaseStart=0, phase="in";
+        var meteoSteps=[8,7,6,5];
+        function runP(p){
+          phase=p; phaseStart=performance.now(); sndBreath(p==="in");
+          hint.textContent = p==="in" ? "Inspire…" : "Expire… la vague redescend, un peu.";
+          (function tick(){
+            var el=performance.now()-phaseStart, dur=p==="in"?4000:6000;
+            var sc = p==="in" ? 1+0.38*Math.min(1,el/dur) : 1.38-0.38*Math.min(1,el/dur);
+            circle.style.transform="scale("+sc.toFixed(3)+")";
+            circle.textContent = p==="in"?"Inspire":"Expire";
+            if(el>=dur){
+              if(p==="in"){ runP("out"); }
+              else{
+                dots.children[cyc].classList.add("done"); setMeteo(meteoSteps[cyc]); cyc++;
+                if(cyc>=4){
+                  circle.style.transform="scale(1)"; circle.textContent="Ça redescend";
+                  hint.textContent="Le sommet est passé. Le cœur ralentit. La vague s’en va, comme toujours.";
+                  sndGood();
+                  var b=document.createElement("button"); b.className="btn"; b.textContent="Continuer — revenir au présent";
+                  b.onclick=function(){ sndPop(); panicGround(); };
+                  $("p-next").appendChild(b);
+                } else runP("in");
+              }
+              return;
+            }
+            raf=requestAnimationFrame(tick);
+          })();
+        }
+        later(function(){ runP("in"); }, 600);
+      };
+      function panicGround(){
+        root.innerHTML="";
+        var wrap=document.createElement("div");
+        root.appendChild(wrap);
+        var fakeStep={ titre:"Maintenant, s’ancrer", text:"La vague redescend. L’ancrage ramène Alex dans la salle, dans le présent.", sets:{voir:["L’écran du cinéma","Les sièges rouges","La porte de sortie éclairée","Les souliers d’Alex","Le popcorn renversé"], entendre:["Le film qui joue","La respiration d’Alex, plus lente","Un rire dans la salle","Le climatiseur"], toucher:["L’accoudoir","Le siège en velours","Le plancher sous les pieds"], sentir:["Le popcorn","L’air frais de la sortie"], gouter:["Une gorgée d’eau"]}, meteoTo:4, batt:5 };
+        /* réutilise le moteur d’ancrage dans le conteneur courant */
+        var saveRoot=$("play-root");
+        renderGroundIn(wrap, fakeStep, function(){
+          setMeteo(3);
+          root.innerHTML = '<div class="card"><div class="scene-art">'+alexSVG("fatigue")+'</div>'
+            + '<h2>La vague est passée</h2>'
+            + '<p>Alex sort tranquillement : « Je vous explique dehors, ça va mieux. » Dehors, l’air frais. Le cœur est redevenu un cœur. Il reste une grosse fatigue — et un immense soulagement.</p>'
+            + '<p>Ce qui vient de se passer a un nom, une durée et une fin. Les faits, calmement, à l’écran suivant.</p></div>';
+          root.firstChild.appendChild(contBtn("Voir les faits sur la panique"));
+          root.firstChild.querySelector(".btn").onclick=function(){ sndPop(); panicFacts(); };
+        });
+      }
+      function panicFacts(){
+        root.innerHTML = '<div class="card"><h2>Les faits, au calme</h2>'
+          + '<div class="facts-line"><span class="n">1</span><p><b>Une crise de panique monte vite</b>, culmine en quelques minutes — souvent autour de 10 — puis redescend, toujours. Le corps ne peut pas rester au maximum indéfiniment.</p></div>'
+          + '<div class="facts-line"><span class="n">2</span><p><b>Elle peut ressembler à une crise cardiaque</b> : cœur qui débat, poitrine serrée, souffle court, frissons. C’est pour ça qu’elle fait si peur — et c’est pour ça qu’il ne faut jamais la prendre à la légère la première fois.</p></div>'
+          + '<div class="facts-line"><span class="n">3</span><p><b>Des outils existent et s’apprennent</b> : la respiration lente et l’ancrage 5-4-3-2-1 aident à traverser la vague. Un·e professionnel·le peut aider à les pratiquer — et à réduire la fréquence des crises.</p></div>'
+          + '<div class="important">Une première douleur à la poitrine doit toujours être vérifiée par un médecin.</div>'
+          + '<p class="small">Ce jeu sensibilise, il ne pose aucun diagnostic et ne remplace pas un professionnel de la santé.</p></div>';
+        root.firstChild.appendChild(contBtn("Terminer la journée"));
+        var rb=document.createElement("button"); rb.className="btn secondary"; rb.textContent="Ressources d’aide (811 · 988)";
+        rb.onclick=function(){ openModal("modal-res"); };
+        root.firstChild.appendChild(rb);
+      }
+    }
+    /* ancrage réutilisable dans un conteneur donné */
+    function renderGroundIn(container, st, onDone){
+      var senses=[["voir",5,"choses que tu VOIS"],["entendre",4,"choses que tu ENTENDS"],["toucher",3,"choses que tu TOUCHES"],["sentir",2,"choses que tu SENS"],["gouter",1,"chose que tu GOÛTES"]];
+      var idx=0;
+      container.innerHTML = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p><div class="sense-count" id="gg-count"></div><p class="center small">Touche-les une à une, en les remarquant pour vrai.</p><div class="sense-grid" id="gg-grid"></div></div>';
+      function renderSense(){
+        var key=senses[idx][0], need=senses[idx][1], found=0;
+        container.querySelector("#gg-count").textContent = need + " " + senses[idx][2];
+        var grid=container.querySelector("#gg-grid"); grid.innerHTML="";
+        st.sets[key].forEach(function(label){
+          var b=document.createElement("button"); b.className="sense-chip"; b.textContent=label;
+          b.onclick=function(){
+            if(b.classList.contains("found")) return;
+            b.classList.add("found"); found++; sndPop();
+            if(found>=need){ idx++; if(idx>=senses.length){ if(st.meteoTo!=null) setMeteo(st.meteoTo); if(st.batt) setBatt(S.batt+st.batt); sndGood(); onDone(); } else later(renderSense, 600); }
+          };
+          grid.appendChild(b);
+        });
+      }
+      renderSense();
+    }
+    /* rendre renderGround générique via le conteneur principal */
+    var _origRenderGround = renderGround;
+    renderGround = function(st){
+      var root=$("play-root"); root.innerHTML="";
+      var wrap=document.createElement("div"); root.appendChild(wrap);
+      if(st.meteo!=null) setMeteo(st.meteo);
+      renderGroundIn(wrap, st, function(){ if(st.tool) unlockTool(st.tool); wrap.querySelector(".card").appendChild(contBtn("Continuer")); });
+    };
+
+    /* ================= FIN DE JOURNÉE ================= */
+    function endDay(){
+      clearTimers(); S.playing=false;
+      if(save.done.indexOf(S.day)<0){ save.done.push(S.day); }
+      if(S.day+2>save.unlocked && S.day<4) save.unlocked=Math.min(5, S.day+2);
+      if(S.day===4) save.unlocked=5;
+      persist();
+      var root=$("dayend-root");
+      var zoneHTML = S.zones.length ? S.zones.map(function(z){ return "<li>"+ZONES[z]+"</li>"; }).join("") : "<li>Une journée étonnamment douce pour le corps.</li>";
+      var battMsg = S.batt<=30 ? "Regarde la batterie : presque vide. Pourtant, « il ne s’est rien passé » aujourd’hui — en apparence. Voilà l’effort invisible." : S.batt<=60 ? "La batterie a bien baissé pour une journée « ordinaire ». Chaque petite chose a coûté quelque chose." : "La batterie a tenu un peu mieux aujourd’hui — les outils et les pauses font une vraie différence.";
+      root.innerHTML = '<div class="card center"><h2>Journée '+(S.day+1)+' traversée</h2>'
+        + '<div class="scene-art">'+bodySVG(S.zones)+'</div>'
+        + '<h3>Ce que le corps d’Alex a porté aujourd’hui</h3><ul class="zone-list" style="text-align:left; display:inline-block">'+zoneHTML+'</ul>'
+        + '<p>'+battMsg+'</p>'
+        + '<div class="collection"><div><span class="big">'+Object.keys(save.cards).length+'/16</span><span class="small">cartes de symptômes</span></div>'
+        + '<div><span class="big">'+Object.keys(save.tools).length+'/7</span><span class="small">outils appris</span></div>'
+        + '<div><span class="big">'+save.done.length+'/5</span><span class="small">journées traversées</span></div></div>'
+        + '<button class="btn" id="de-next">'+(S.day<4 ? "Passer au jour "+(S.day+2) : "Voir le bilan de la semaine")+'</button>'
+        + '<button class="btn secondary" id="de-home">Retour à l’accueil</button></div>';
+      show("scr-dayend"); sndGood();
+      $("de-home").onclick=function(){ renderHome(); show("scr-home"); };
+      $("de-next").onclick=function(){
+        if(S.day<4){ S._introDone=false; startDay(S.day+1); }
+        else { renderEnd(); }
+      };
+    }
+
+    /* ================= FIN DU JEU ================= */
+    function renderEnd(){
+      var root=$("end-root");
+      root.innerHTML = '<div class="card center"><div class="scene-art">'+alexSVG("calme")+'</div>'
+        + '<h2>Semaine traversée</h2>'
+        + '<p>On ne « gagne » pas contre l’anxiété. On apprend à vivre avec : à connaître son alarme, à avoir ses outils, à s’entourer.</p>'
+        + '<p>Alex aura encore des journées nuageuses, des tempêtes, peut-être d’autres vagues. Mais Alex sait : <b>ça monte, ça culmine, ça passe — et on peut être accompagné là-dedans.</b></p>'
+        + '<p>Et les personnes anxieuses ont des forces réelles : perception fine des autres, grande empathie, art de se préparer.</p>'
+        + '<div class="collection"><div><span class="big">'+Object.keys(save.cards).length+'/16</span><span class="small">cartes de symptômes</span></div>'
+        + '<div><span class="big">'+Object.keys(save.tools).length+'/7</span><span class="small">outils appris</span></div>'
+        + '<div><span class="big">'+save.moments+'</span><span class="small">moments traversés</span></div></div>'
+        + '<button class="btn" id="end-carnet">Ouvrir le carnet d’Alex</button>'
+        + '<button class="btn secondary" id="end-res">Ressources d’aide</button>'
+        + '<button class="btn secondary" id="end-home">Retour à l’accueil</button></div>'
+        + '<div class="card"><h3>Si tu retiens une chose…</h3><p>Quand quelqu’un te dit « je suis fatigué » après une journée qui avait l’air de rien, souviens-toi de la batterie d’Alex. Une partie du travail des gens anxieux ne se voit pas. La bienveillance, elle, se voit.</p>'
+        + '<p class="small">Ce jeu sensibilise, il ne pose aucun diagnostic et ne remplace pas un professionnel de la santé. Si l’anxiété prend trop de place dans ta vie, parles-en : Info-Social <b>811</b> (Québec) ou ligne d’aide en cas de crise <b>988</b> (Canada, 24/7).</p></div>';
+      show("scr-end");
+      $("end-carnet").onclick=function(){ renderCarnet(); openModal("modal-carnet"); };
+      $("end-res").onclick=function(){ openModal("modal-res"); };
+      $("end-home").onclick=function(){ renderHome(); show("scr-home"); };
+    }
+
+    /* ================= CARNET ================= */
+    function renderCarnet(){
+      $("sym-count").textContent = Object.keys(save.cards).length + " / 16";
+      var grid=$("sym-grid"); grid.innerHTML="";
+      Object.keys(CARDS).forEach(function(id){
+        var has=!!save.cards[id];
+        var b=document.createElement("button"); b.className="sym-card"+(has?"":" locked");
+        b.innerHTML="<b>"+(has?CARDS[id].nom:"Carte à découvrir")+"</b><span>"+(has?"Touche pour relire":"Se débloque en jouant")+"</span>";
+        if(has) b.onclick=function(){
+          $("sym-detail").innerHTML='<div class="resp" style="margin-top:12px"><b>'+CARDS[id].nom+'</b><p>'+CARDS[id].txt+'</p><p><i>'+CARDS[id].vecu+'</i></p></div>';
+          sndPop();
+        };
+        grid.appendChild(b);
+      });
+      var tl=$("tool-list"); tl.innerHTML="";
+      Object.keys(TOOLS).forEach(function(id){
+        var has=!!save.tools[id];
+        var row=document.createElement("div"); row.className="tool-row"+(has?"":" locked");
+        row.innerHTML='<span class="tic">'+TOOLS[id].ico+'</span><div><b>'+TOOLS[id].nom+'</b>'+(has?'<div class="small" style="color:var(--ink)">'+TOOLS[id].txt+'</div>':'<div class="small">À apprendre au fil de la semaine…</div>')+'</div>';
+        tl.appendChild(row);
+      });
+    }
+
+    /* ================= ACCUEIL & LISTE DES JOURS ================= */
+    function renderHome(){
+      $("home-art").innerHTML = alexSVG("calme");
+      var n=save.done.length;
+      $("home-progress").textContent = n>0 ? ("Ta semaine : " + n + " journée" + (n>1?"s":"") + " traversée" + (n>1?"s":"") + " · " + Object.keys(save.cards).length + " cartes · " + Object.keys(save.tools).length + " outils") : "";
+      $("btn-start").textContent = n>0 && n<5 ? "Continuer la semaine (jour " + (Math.min(5, save.done.length+1)) + ")" : n>=5 ? "Recommencer une semaine" : "Commencer la semaine";
+    }
+    function renderDays(){
+      var list=$("day-list"); list.innerHTML="";
+      DAYS.forEach(function(d,i){
+        var locked = i+1>save.unlocked, done = save.done.indexOf(i)>=0;
+        var b=document.createElement("button"); b.className="day-btn"+(done?" done":"")+(locked?" locked":"");
+        b.innerHTML='<span class="num">'+(done?"✓":(i+1))+'</span><span><b>Jour '+(i+1)+' — '+d.titre+'</b><span>'+(locked?"Termine la journée précédente pour débloquer celle-ci.":d.sous)+'</span></span>';
+        if(!locked) b.onclick=function(){ S._introDone=false; startDay(i); };
+        list.appendChild(b);
+      });
+    }
+
+    /* ================= RÉGLAGES & ÉVÉNEMENTS ================= */
+    function applySettings(){
+      document.body.classList.toggle("calm", !!save.calm);
+      $("btn-sound").textContent = save.sound ? "♪" : "✕";
+      $("btn-sound").style.opacity = save.sound ? "1" : ".5";
+      $("btn-set-sound").textContent = "Son : " + (save.sound?"oui":"non");
+      $("btn-set-calm").textContent = "Mouvements réduits : " + (save.calm?"oui":"non");
+    }
+    function toggleSound(){ save.sound=!save.sound; persist(); applySettings(); if(save.sound) sndPop(); }
+    function toggleCalm(){ save.calm=!save.calm; persist(); applySettings(); toast(save.calm?"Mouvements réduits activés : tout devient plus immobile et doux.":"Mouvements réduits désactivés."); }
+
+    document.addEventListener("DOMContentLoaded", function(){
+      buildGauge(); setMeteo(2); setBatt(100);
+      if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches && !localStorage.getItem(SAVE_KEY)) save.calm=true;
+      applySettings(); renderHome(); show("scr-home");
+      $("btn-start").onclick=function(){
+        sndPop(); S._introDone=false;
+        var nextDay = save.done.length>=5 ? 0 : save.done.length;
+        if(save.done.length>=5){ save.done=[]; save.unlocked=1; persist(); renderHome(); }
+        startDay(Math.min(nextDay, 4));
+      };
+      $("btn-days").onclick=function(){ renderDays(); show("scr-days"); };
+      $("btn-home-carnet").onclick=function(){ renderCarnet(); openModal("modal-carnet"); };
+      $("btn-home-res").onclick=function(){ openModal("modal-res"); };
+      $("btn-sound").onclick=toggleSound;
+      $("btn-calm").onclick=toggleCalm;
+      $("btn-carnet").onclick=function(){ renderCarnet(); openModal("modal-carnet"); };
+      $("btn-pause").onclick=function(){ openModal("modal-pause"); };
+      $("btn-set-sound").onclick=toggleSound;
+      $("btn-set-calm").onclick=toggleCalm;
+      $("btn-pause-res").onclick=function(){ closeModal("modal-pause"); openModal("modal-res"); };
+      $("btn-quit-day").onclick=function(){ closeModal("modal-pause"); clearTimers(); S.playing=false; renderHome(); show("scr-home"); };
+      document.querySelectorAll("[data-close]").forEach(function(b){ b.onclick=function(){ closeModal(b.getAttribute("data-close")); }; });
+      document.querySelectorAll("[data-goto]").forEach(function(b){ b.onclick=function(){ renderHome(); show("scr-home"); }; });
+      document.querySelectorAll(".modal-bg").forEach(function(m){ m.addEventListener("click", function(e){ if(e.target===m) m.classList.remove("open"); }); });
+    });
+    </script>
+  <!-- ===== Barre de jeu HP — NE PAS ÉDITER À LA MAIN =====
+     Retour / Pause / Partager. Source : src/components/barre-jeu/barre-jeu.js
+     (régénérer le module : bun run build:barre) -->
+<script src="/barre/barre-jeu.js" defer></script>
+<!-- ===== Fin barre de jeu HP ===== -->
+</body>
+</html>

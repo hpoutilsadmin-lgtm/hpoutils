@@ -78,10 +78,8 @@
       nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null
     },
     "/apps/100-en-30-jours/100-en-30-jours-v1.2.html": {
-      /* Version présente au dépôt mais pas encore liée depuis /jeux
-         (écart signalé au chantier vérité) : config prête pour le
-         jour où le lien basculera — mêmes ancres de score que v1.1,
-         vérifiées dans le fichier v1.2. */
+      /* Liée depuis /jeux depuis le 22 oct. (dépôt 6d0a05f) — mêmes
+         ancres de score que v1.1, vérifiées dans le fichier v1.2. */
       nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null
     },
     "/apps/caribou-run/caribou-run-v1.1.html": {
@@ -169,6 +167,35 @@
     "/apps/nord-2087/nord-2087-v1.1.html": {
       nom: "NORD 2087", score: ["#statScore", "#sScore"],
       pause: { type: "btnToggle", sel: "#btnPause", pausedText: "▶" }
+    },
+    /* Ajouts du 22 oct. au soir (ordre d'Hugo : envoyer les jeux
+       absents) — les 6 du « paquet 6 jeux » préparé pour le site +
+       IGLOO, retrouvés dans l'atelier. Pauses : null partout sauf
+       IGLOO — jeux au clic / tour par tour, rien n'avance tout seul.
+       IGLOO est une arène en temps réel : le gel « gate » a été
+       PROUVÉ sur son compte à rebours de bataille (3:00 figé pendant
+       la pause, reprise nette) avant de brancher le bouton. */
+    "/apps/igloo/igloo-v1.0.html": {
+      nom: "IGLOO — La guerre des igloos", score: null,
+      pause: { type: "gate" }
+    },
+    "/apps/que-vois-tu/que-vois-tu-v2.0.html": {
+      nom: "Que vois-tu ?", score: null, pause: null
+    },
+    "/apps/tapinoue/tapinoue-v2.0.html": {
+      nom: "Tapinoue", score: null, pause: null
+    },
+    "/apps/ton-chum-frotte-son-char/ton-chum-frotte-son-char-v2.0.html": {
+      nom: "Ton chum frotte son char plus que toi !", score: null, pause: null
+    },
+    "/apps/conception-de-molecules-3d/conception-de-molecules-3d-v2.0.html": {
+      nom: "Conception de molécules 3D", score: null, pause: null
+    },
+    "/apps/hydro-electricite/hydro-electricite-v1.1.html": {
+      nom: "L'hydroélectricité, comment ça marche", score: null, pause: null
+    },
+    "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html": {
+      nom: "Anxiété, le jeu", score: null, pause: null
     }
   };
 

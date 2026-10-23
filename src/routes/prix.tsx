@@ -68,7 +68,7 @@ function Page() {
           <h2>Et le <em>gratuit</em> ?</h2>
           <p className="strip-intro">
             Avant de payer quoi que ce soit, le gratuit d'HP vaut le détour :{" "}
-            <a href="/jeux">26 jeux gratuits, sans inscription</a>, et{" "}
+            <a href="/jeux">33 jeux gratuits, sans inscription</a>, et{" "}
             <a href="/balado">Futur simple, le balado sur l'IA</a> — un épisode par semaine, gratuit lui aussi.
           </p>
         </div>

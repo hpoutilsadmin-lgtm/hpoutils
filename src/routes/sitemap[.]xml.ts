@@ -29,12 +29,12 @@ const STATIC_PATHS = [
   "/outils-web/ca-vaut-tu-la-peine.html",
   "/outils-web/le-relais.html",
   "/outils-web/maintenant.html",
-  // Les 26 jeux (URLs des fichiers liés depuis /jeux)
+  // Les 33 jeux (URLs des fichiers liés depuis /jeux)
   "/apps/releve/releve-chapitre-1-v1.0.html",
   "/apps/la-banque/la-banque-v1.1.html",
   "/apps/bons-reflexes/index.html",
   "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html",
-  "/apps/100-en-30-jours/100-en-30-jours-v1.1.html",
+  "/apps/100-en-30-jours/100-en-30-jours-v1.2.html",
   "/apps/caribou-run/caribou-run-v1.1.html",
   "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html",
   "/apps/devine-l-humeur/devine-l-humeur-v1.1.html",
@@ -56,6 +56,13 @@ const STATIC_PATHS = [
   "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html",
   "/apps/chat-attaque/chat-attaque-v1.2.html",
   "/apps/nord-2087/nord-2087-v1.1.html",
+  "/apps/igloo/igloo-v1.0.html",
+  "/apps/que-vois-tu/que-vois-tu-v2.0.html",
+  "/apps/tapinoue/tapinoue-v2.0.html",
+  "/apps/ton-chum-frotte-son-char/ton-chum-frotte-son-char-v2.0.html",
+  "/apps/conception-de-molecules-3d/conception-de-molecules-3d-v2.0.html",
+  "/apps/hydro-electricite/hydro-electricite-v1.1.html",
+  "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html",
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({

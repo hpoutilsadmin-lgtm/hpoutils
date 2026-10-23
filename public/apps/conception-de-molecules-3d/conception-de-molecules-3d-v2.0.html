@@ -1,0 +1,1926 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Conception de molécules 3D</title>
+    <style>
+      :root{
+        --paper:#f8f2e2; --paper2:#fffaf0; --ink:#2e2a24; --ink-soft:#5c554a;
+        --teal:#17877b; --teal-dark:#0f655c; --coral:#e4572e; --mustard:#f2b134;
+        --green:#4f9e57; --red:#d84b4b; --blue:#3d7bd6; --violet:#7d5ba6;
+        --card:#fffdf6; --line:#2e2a24; --shadow:rgba(46,42,36,.18);
+        --baseA:#4f9e57; --baseT:#e4572e; --baseC:#3d7bd6; --baseG:#f2b134;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --paper:#22252b; --paper2:#2a2e35; --ink:#f2ead6; --ink-soft:#c9c0aa;
+          --card:#2e333b; --line:#f2ead6; --shadow:rgba(0,0,0,.45);
+          --teal:#2bb3a3; --teal-dark:#57c9bb; --coral:#ff7a4d; --mustard:#ffc94d;
+        }
+      }
+      *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+      html,body{margin:0;padding:0;}
+      body{
+        font-family:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",sans-serif;
+        background:
+          radial-gradient(circle at 12% 8%, rgba(242,177,52,.14), transparent 42%),
+          radial-gradient(circle at 88% 92%, rgba(23,135,123,.12), transparent 45%),
+          var(--paper);
+        color:var(--ink); min-height:100vh;
+      }
+      .hand{font-family:"Segoe Print","Bradley Hand","Chalkboard SE","Comic Sans MS",ui-rounded,cursive;}
+      .wrap{max-width:560px;margin:0 auto;padding:14px 14px 40px;}
+      .wob{border:2.5px solid var(--line);border-radius:255px 18px 225px 18px/18px 225px 18px 255px;}
+      .wob2{border:2.5px solid var(--line);border-radius:18px 225px 18px 255px/225px 18px 255px 18px;}
+      .card{background:var(--card);box-shadow:3px 4px 0 var(--shadow);padding:14px;}
+      button{font-family:inherit;cursor:pointer;color:var(--ink);}
+      .btn{
+        display:inline-flex;align-items:center;justify-content:center;gap:8px;
+        background:var(--mustard);border:2.5px solid var(--line);
+        border-radius:225px 18px 255px 18px/18px 255px 18px 225px;
+        padding:12px 18px;font-weight:800;font-size:1.02rem;box-shadow:2px 3px 0 var(--shadow);
+        transition:transform .08s ease;
+      }
+      .btn:active{transform:scale(.96) rotate(-.5deg);}
+      .btn.teal{background:var(--teal);color:#fff;}
+      .btn.coral{background:var(--coral);color:#fff;}
+      .btn.ghost{background:var(--card);}
+      .btn:disabled{opacity:.45;cursor:default;}
+      .btn.big{width:100%;font-size:1.15rem;padding:15px;}
+      /* top bar */
+      .topbar{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+      .badgepill{
+        flex:1;display:flex;align-items:center;gap:10px;background:var(--card);
+        padding:8px 12px;min-height:52px;
+      }
+      .badgepill .star{font-size:1.5rem;line-height:1;color:var(--mustard);text-shadow:0 0 1px var(--line);}
+      .badgepill .bt{font-weight:800;font-size:.98rem;}
+      .badgepill .bs{font-size:.78rem;color:var(--ink-soft);}
+      .iconbtn{
+        width:48px;height:48px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+        background:var(--card);border:2.5px solid var(--line);
+        border-radius:18px 225px 18px 255px/225px 18px 255px 18px;box-shadow:2px 3px 0 var(--shadow);
+      }
+      .iconbtn svg{width:26px;height:26px;}
+      .iconbtn:active{transform:scale(.94);}
+      h1{font-size:1.55rem;margin:6px 2px 2px;line-height:1.15;}
+      .sub{color:var(--ink-soft);margin:0 2px 12px;font-size:.95rem;}
+      .note{
+        background:var(--paper2);border:2px dashed var(--ink-soft);border-radius:14px;
+        padding:9px 12px;font-size:.85rem;color:var(--ink-soft);margin:12px 0;
+      }
+      /* mode cards */
+      .modecard{display:block;width:100%;text-align:left;margin:0 0 14px;padding:0;overflow:hidden;background:var(--card);}
+      .modecard .inner{display:flex;gap:12px;align-items:center;padding:14px;}
+      .modecard .art{flex:0 0 74px;width:74px;height:74px;display:flex;align-items:center;justify-content:center;}
+      .modecard .art svg{width:74px;height:74px;}
+      .modecard h2{margin:0 0 3px;font-size:1.18rem;}
+      .modecard p{margin:0;font-size:.88rem;color:var(--ink-soft);}
+      .modecard .done{
+        margin-left:auto;flex:0 0 auto;background:var(--green);color:#fff;font-weight:800;font-size:.8rem;
+        padding:5px 10px;border:2px solid var(--line);border-radius:999px;transform:rotate(3deg);
+      }
+      .modecard .go{margin-left:auto;flex:0 0 auto;font-size:1.5rem;font-weight:900;color:var(--teal);}
+      .modecard:active{transform:scale(.985);}
+      /* screens */
+      .screen{display:none;}
+      .screen.on{display:block;animation:pop .25s ease;}
+      @keyframes pop{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+      .backrow{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+      .backbtn{background:var(--card);font-weight:800;padding:9px 14px;font-size:.95rem;}
+      .screentitle{font-size:1.3rem;margin:0;}
+      .explain{font-size:.95rem;line-height:1.45;margin:8px 2px 12px;}
+      /* species chips */
+      .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+      .chip{
+        padding:9px 14px;font-weight:800;font-size:.95rem;background:var(--card);
+        border:2.5px solid var(--line);border-radius:999px;box-shadow:2px 2px 0 var(--shadow);
+      }
+      .chip.sel{background:var(--teal);color:#fff;}
+      .chip .seen{color:var(--green);font-weight:900;}
+      .chip.sel .seen{color:#bff3c9;}
+      canvas.stage{width:100%;display:block;touch-action:none;border-radius:14px;}
+      .canvasbox{background:var(--paper2);padding:8px;}
+      .legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px;}
+      .legbtn{
+        display:inline-flex;align-items:center;gap:7px;padding:8px 12px;font-weight:700;font-size:.88rem;
+        background:var(--card);border:2.5px solid var(--line);border-radius:999px;
+      }
+      .legbtn.sel{background:var(--mustard);}
+      .dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);flex:0 0 auto;}
+      .factbox{margin-top:10px;}
+      .factbox .pct{font-size:1.5rem;font-weight:900;color:var(--teal-dark);}
+      @media (prefers-color-scheme: dark){.factbox .pct{color:var(--teal);}}
+      .factbox .pctl{font-size:.82rem;color:var(--ink-soft);font-weight:700;}
+      .factbox p{margin:8px 0 0;font-size:.95rem;line-height:1.45;}
+      .progressline{font-size:.85rem;font-weight:700;color:var(--ink-soft);margin-top:8px;}
+      /* LABO */
+      .virusrow{display:flex;gap:12px;align-items:center;}
+      .virusrow svg{flex:0 0 104px;width:104px;height:104px;}
+      .lockname{font-weight:900;font-size:1.05rem;}
+      .gridwrap{display:flex;gap:12px;flex-wrap:wrap;}
+      .gridcol{flex:1 1 150px;}
+      .gridtitle{font-weight:800;font-size:.9rem;margin:0 0 6px;text-align:center;}
+      .grid{display:grid;gap:5px;margin:0 auto;}
+      .cell{
+        aspect-ratio:1/1;border:2px dashed rgba(120,110,95,.5);border-radius:10px;background:var(--paper2);
+        display:flex;align-items:center;justify-content:center;position:relative;padding:0;
+      }
+      .cell.target{border-style:solid;border-color:var(--ink-soft);}
+      .cell.mine{border:2.5px solid var(--line);border-style:solid;cursor:pointer;}
+      .cell.mine:active{transform:scale(.93);}
+      .atom{
+        width:78%;height:78%;border-radius:50%;border:2.5px solid var(--line);
+        display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;
+        font-size:clamp(.8rem,4.5vw,1.15rem);text-shadow:0 1px 2px rgba(0,0,0,.35);pointer-events:none;
+        box-shadow:inset -3px -4px 0 rgba(0,0,0,.18), inset 3px 4px 0 rgba(255,255,255,.25);
+      }
+      .atom.C{background:#3a3a3a;} .atom.H{background:#f4f4f4;color:#333;text-shadow:none;}
+      .atom.O{background:#d84b4b;} .atom.N{background:#3d7bd6;}
+      .atom.ghost{opacity:.9;}
+      .palette{display:flex;gap:8px;justify-content:center;margin:12px 0 4px;flex-wrap:wrap;}
+      .palbtn{
+        width:56px;height:56px;border-radius:50%;border:3px solid var(--line);padding:0;
+        display:flex;align-items:center;justify-content:center;background:var(--card);
+      }
+      .palbtn .atom{width:44px;height:44px;font-size:1.1rem;}
+      .palbtn.sel{outline:3px solid var(--mustard);outline-offset:2px;transform:scale(1.08) rotate(-3deg);}
+      .palbtn.erase{border-radius:16px;font-size:1.3rem;font-weight:900;background:var(--card);}
+      .feedback{
+        min-height:52px;margin:12px 0;padding:10px 12px;font-weight:700;font-size:.95rem;line-height:1.4;
+        background:var(--paper2);border:2px dashed var(--ink-soft);border-radius:14px;
+      }
+      .feedback.good{border-color:var(--green);border-style:solid;background:rgba(79,158,87,.12);}
+      .feedback.bad{border-color:var(--coral);border-style:solid;background:rgba(228,87,46,.10);}
+      .costbox{display:none;margin-top:12px;text-align:center;}
+      .costbox.on{display:block;animation:pop .3s ease;}
+      .costrow{display:flex;gap:10px;}
+      .costrow .half{flex:1;padding:10px 8px;text-align:center;}
+      .costrow .price{font-size:1.7rem;font-weight:900;}
+      .costrow .brand .price{color:var(--coral);text-decoration:line-through;text-decoration-thickness:3px;}
+      .costrow .generic .price{color:var(--green);}
+      .costrow .lbl{font-size:.8rem;font-weight:800;color:var(--ink-soft);}
+      .savings{font-weight:900;font-size:1.05rem;margin-top:8px;color:var(--teal-dark);}
+      @media (prefers-color-scheme: dark){.savings{color:var(--teal);}}
+      /* success overlay */
+      .overlay{
+        position:fixed;inset:0;background:rgba(20,18,14,.55);display:none;z-index:50;
+        align-items:center;justify-content:center;padding:18px;
+      }
+      .overlay.on{display:flex;}
+      .panel{
+        background:var(--card);max-width:420px;width:100%;padding:20px 18px;text-align:center;
+        animation:panelin .35s cubic-bezier(.2,1.6,.4,1);
+      }
+      @keyframes panelin{from{transform:scale(.7) rotate(-3deg);opacity:0;}to{transform:none;opacity:1;}}
+      .keyanim{position:relative;height:110px;margin:4px 0 8px;}
+      .keyanim svg{position:absolute;top:50%;}
+      .keyanim .locksvg{right:8px;transform:translateY(-50%);width:96px;height:96px;}
+      .keyanim .keysvg{left:4px;width:110px;height:60px;transform:translateY(-50%);animation:keyin 1.1s ease .2s both;}
+      @keyframes keyin{0%{left:4px;transform:translateY(-50%) rotate(-8deg);}70%{left:calc(100% - 190px);transform:translateY(-50%) rotate(0deg);}85%{left:calc(100% - 178px);transform:translateY(-50%) rotate(24deg);}100%{left:calc(100% - 178px);transform:translateY(-50%) rotate(0deg);}}
+      .panel h3{margin:4px 0 6px;font-size:1.35rem;}
+      .panel p{margin:0 0 12px;font-size:.95rem;line-height:1.45;}
+      .confetti{position:fixed;width:10px;height:14px;z-index:60;pointer-events:none;border-radius:2px;}
+      /* INSULINE */
+      .scene{
+        position:relative;height:380px;overflow:hidden;
+        background:
+          radial-gradient(circle at 20% 20%, rgba(228,87,46,.10), transparent 55%),
+          radial-gradient(circle at 85% 75%, rgba(61,123,214,.10), transparent 55%),
+          var(--paper2);
+      }
+      .cellbody{position:absolute;width:128px;height:118px;}
+      .cellbody svg{width:100%;height:100%;}
+      .cellbody .door{transition:transform .5s ease;transform-origin:12% 50%;transform-box:fill-box;}
+      .cellbody.open .door{transform:rotate(-58deg);}
+      .sugar{
+        position:absolute;width:31px;height:31px;background:var(--mustard);border:2.5px solid var(--line);
+        border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.52rem;font-weight:900;
+        transition:all .8s ease;z-index:3;
+      }
+      .keydrag{
+        position:absolute;width:64px;height:40px;z-index:5;cursor:grab;touch-action:none;
+        filter:drop-shadow(2px 3px 0 rgba(0,0,0,.2));
+      }
+      .keydrag svg{width:100%;height:100%;pointer-events:none;}
+      .keydrag.used{opacity:0;pointer-events:none;transition:opacity .3s;}
+      .missioncount{font-weight:900;font-size:1.05rem;text-align:center;margin:10px 0 2px;}
+      .factline{display:flex;gap:10px;align-items:flex-start;margin-top:12px;}
+      .factline .pin{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;
+        display:flex;align-items:center;justify-content:center;font-weight:900;border:2.5px solid var(--line);}
+      .factline p{margin:5px 0 0;font-size:.93rem;line-height:1.45;}
+      .resetrow{margin-top:18px;text-align:center;}
+      .tiny{font-size:.8rem;color:var(--ink-soft);}
+      /* NIVEAUX */
+      .lvlgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 0 14px;}
+      .lvlbtn{text-align:left;background:var(--card);padding:10px 12px;box-shadow:2px 3px 0 var(--shadow);}
+      .lvlbtn .lt{font-weight:900;font-size:1rem;display:block;}
+      .lvlbtn .ls{font-size:.78rem;color:var(--ink-soft);display:block;margin-top:2px;line-height:1.3;}
+      .lvlbtn.sel{background:var(--teal);color:#fff;}
+      .lvlbtn.sel .ls{color:#e6fffa;}
+      .lvlbtn:active{transform:scale(.97);}
+      /* codons / séquences */
+      .codonrow{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0;}
+      .codon{text-align:center;}
+      .codon .letters{display:flex;gap:3px;}
+      .basebtn{width:38px;height:44px;font-size:1.12rem;font-weight:900;border:2.5px solid var(--line);border-radius:10px;background:var(--paper2);padding:0;display:inline-flex;align-items:center;justify-content:center;color:var(--ink);}
+      button.basebtn:active{transform:scale(.92);}
+      .basebtn.bA{background:#4f9e57;color:#fff;} .basebtn.bT{background:#e4572e;color:#fff;}
+      .basebtn.bC{background:#3d7bd6;color:#fff;} .basebtn.bG{background:#e8a90c;color:#fff;}
+      .basebtn.found{outline:3px solid var(--mustard);outline-offset:1px;}
+      .basebtn.arn{background:var(--violet);color:#fff;border-color:var(--line);}
+      .codon .aa{font-size:.72rem;font-weight:800;color:var(--ink-soft);margin-top:3px;min-height:1em;max-width:120px;}
+      .seqletters{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0 10px;}
+      .seqletters .sl{width:26px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:900;border:2px solid var(--line);border-radius:7px;background:var(--paper2);font-size:.95rem;padding:0;}
+      button.sl:active{transform:scale(.92);}
+      .seqletters .sl.diff{background:var(--coral);color:#fff;}
+      .seqletters .sl.arn{background:var(--violet);color:#fff;}
+      /* compteur de formule */
+      .frow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:2px dashed rgba(120,110,95,.35);}
+      .frow:last-of-type{border-bottom:none;}
+      .frow .fname{flex:1;font-weight:800;display:flex;align-items:center;gap:8px;}
+      .frow .ftarget{font-size:.8rem;color:var(--ink-soft);font-weight:700;}
+      .fbtn{width:42px;height:42px;border-radius:50%;border:2.5px solid var(--line);font-size:1.25rem;font-weight:900;background:var(--mustard);padding:0;line-height:1;flex:0 0 auto;}
+      .fbtn:active{transform:scale(.92);}
+      .fcount{min-width:32px;text-align:center;font-size:1.25rem;font-weight:900;}
+      .fcount.ok{color:var(--green);}
+      /* graphique du protocole */
+      .chart{display:flex;align-items:flex-end;gap:24px;height:180px;padding:16px 8px 0;border-bottom:3px solid var(--line);margin:10px 0 4px;}
+      .barcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+      .bar{width:62px;max-width:72%;border:2.5px solid var(--line);border-bottom:none;position:relative;border-radius:8px 8px 0 0;}
+      .bar .err{position:absolute;left:50%;transform:translateX(-50%);width:3px;background:var(--ink);border-radius:2px;}
+      .bar .errcap{position:absolute;left:50%;transform:translateX(-50%);width:22px;height:3px;background:var(--ink);border-radius:2px;}
+      .barlbl{font-size:.8rem;font-weight:800;text-align:center;margin-top:6px;line-height:1.3;}
+      .barval{font-size:.85rem;font-weight:900;margin-bottom:4px;}
+      /* silhouette (double contrainte) */
+      .cell.shapefill{background:rgba(23,135,123,.22);border-style:solid;border-color:var(--teal);}
+      .cell.off{opacity:.35;}
+      .learnlist{margin:8px 0;padding-left:20px;}
+      .learnlist li{margin:0 0 9px;line-height:1.45;font-size:.95rem;}
+      table.codetable{border-collapse:collapse;margin:10px 0;font-size:.86rem;}
+      table.codetable td{border:2px solid var(--line);padding:5px 8px;background:var(--paper2);}
+      table.codetable td:first-child{font-weight:900;}
+      @media (prefers-reduced-motion: reduce){
+        *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <!-- ======== BARRE DU HAUT ======== -->
+      <div class="topbar">
+        <div class="badgepill wob">
+          <div class="star" id="badgeStar">★</div>
+          <div>
+            <div class="bt hand" id="badgeName">Apprenti scientifique</div>
+            <div class="bs" id="badgeSub">Termine des missions pour monter de grade !</div>
+          </div>
+        </div>
+        <button class="iconbtn" id="soundBtn" aria-label="Son activé ou coupé">
+          <svg id="soundOnIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none"/><path d="M16 9c1.2 1.6 1.2 4.4 0 6"/><path d="M18.5 6.5c2.4 3.2 2.4 7.8 0 11"/></svg>
+          <svg id="soundOffIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none"/><path d="M16 9l6 6M22 9l-6 6"/></svg>
+        </button>
+      </div>
+
+      <!-- ======== ÉCRAN LABO (ACCUEIL) ======== -->
+      <section class="screen on" id="scr-home">
+        <h1 class="hand">Bienvenue au laboratoire des molécules !</h1>
+        <p class="sub">Ici, on explore l'ADN, on fabrique des remèdes et on comprend comment le corps fonctionne. Choisis ton niveau, puis ta mission, futur scientifique.</p>
+
+        <p class="hand" style="margin:0 2px 8px;font-size:1.08rem;">Choisis ton niveau :</p>
+        <div class="lvlgrid" id="lvlGrid">
+          <button class="lvlbtn wob sel" data-level="enfant"><span class="lt">Enfant</span><span class="ls">Découvrir l'ADN et les remèdes en s'amusant</span></button>
+          <button class="lvlbtn wob2" data-level="ado"><span class="lt">Ado</span><span class="ls">Gènes, chromosomes, mutations et vraies molécules</span></button>
+          <button class="lvlbtn wob2" data-level="adulte"><span class="lt">Adulte</span><span class="ls">Le génome en chiffres et les molécules par formule</span></button>
+          <button class="lvlbtn wob" data-level="avance"><span class="lt">Très avancé</span><span class="ls">Lire une vraie séquence, comme en laboratoire</span></button>
+        </div>
+
+        <button class="modecard wob" data-goto="scr-dna">
+          <span class="inner">
+            <span class="art"><svg viewBox="0 0 80 80"><path d="M28 6 C58 22, 22 38, 28 52 C32 62, 44 70, 52 74" fill="none" stroke="#17877b" stroke-width="5" stroke-linecap="round"/><path d="M52 6 C22 22, 58 38, 52 52 C48 62, 36 70, 28 74" fill="none" stroke="#e4572e" stroke-width="5" stroke-linecap="round"/><path d="M31 14 H49 M27 26 H53 M27 40 H53 M31 53 H49" stroke="#2e2a24" stroke-width="3.4" stroke-linecap="round"/></svg></span>
+            <span><h2 class="hand">Explorer l'ADN</h2><p id="dnaCardDesc">Une double hélice en 3D à faire tourner. Compare l'humain, le chimpanzé, la souris et… la banane !</p></span>
+            <span class="done" data-done="dna" style="display:none">Fait ✓</span><span class="go" data-go="dna">→</span>
+          </span>
+        </button>
+
+        <button class="modecard wob2" data-goto="scr-labo">
+          <span class="inner">
+            <span class="art"><svg viewBox="0 0 80 80"><circle cx="30" cy="34" r="15" fill="#3a3a3a" stroke="#2e2a24" stroke-width="2.5"/><text x="30" y="40" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">C</text><circle cx="52" cy="24" r="11" fill="#d84b4b" stroke="#2e2a24" stroke-width="2.5"/><text x="52" y="29" text-anchor="middle" font-size="11" font-weight="900" fill="#fff">O</text><circle cx="54" cy="50" r="12" fill="#3d7bd6" stroke="#2e2a24" stroke-width="2.5"/><text x="54" y="56" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">N</text><path d="M42 28 L44 32 M40 42 L45 46" stroke="#2e2a24" stroke-width="3"/></svg></span>
+            <span><h2 class="hand">Labo : crée ton remède générique</h2><p id="laboCardDesc">Assemble la molécule-clé qui ouvre la serrure du microbe. Même ingrédient actif, beaucoup moins cher !</p></span>
+            <span class="done" data-done="labo" style="display:none">Fait ✓</span><span class="go" data-go="labo">→</span>
+          </span>
+        </button>
+
+        <button class="modecard wob" data-goto="scr-insu">
+          <span class="inner">
+            <span class="art"><svg viewBox="0 0 80 80"><path d="M14 40 a26 24 0 1 1 52 0 a26 24 0 1 1 -52 0" fill="#f6c6cf" stroke="#2e2a24" stroke-width="2.5"/><rect x="52" y="30" width="13" height="20" rx="3" fill="#f2b134" stroke="#2e2a24" stroke-width="2.5"/><circle cx="58.5" cy="40" r="2.6" fill="#2e2a24"/><path d="M6 40 h10 M10 30 l6 6 M10 52 l6 -6" stroke="#17877b" stroke-width="3.4" stroke-linecap="round"/></svg></span>
+            <span><h2 class="hand" id="missCardTitle">Mission maladie : le diabète</h2><p id="missCardDesc">Le sucre veut entrer dans la cellule, mais la porte est fermée. L'insuline est la clé ! Ouvre 3 portes.</p></span>
+            <span class="done" data-done="insu" style="display:none">Fait ✓</span><span class="go" data-go="insu">→</span>
+          </span>
+        </button>
+
+        <button class="btn teal big" data-goto="scr-learned">📚 Ce que tu as appris</button>
+
+        <div class="note">Modèle simplifié pour apprendre : la vraie science est plus détaillée, mais les idées ici sont vraies. Ce jeu explique — il ne remplace jamais un médecin.</div>
+
+        <div class="resetrow">
+          <button class="btn ghost" id="resetBtn">Recommencer du début</button>
+          <p class="tiny" id="resetMsg"></p>
+        </div>
+      </section>
+
+      <!-- ======== MODE 1 : EXPLORER L'ADN ======== -->
+      <section class="screen" id="scr-dna">
+        <div class="backrow">
+          <button class="btn ghost backbtn" data-goto="scr-home">← Labo</button>
+          <h2 class="screentitle hand">Explorer l'ADN</h2>
+        </div>
+        <p class="explain" id="dnaIntro">L'ADN, c'est le grand livre de recettes du vivant, écrit avec 4 lettres : <b>A, T, C, G</b>. Glisse ton doigt sur l'hélice pour la faire tourner en 3D !</p>
+
+        <div class="chips" id="speciesChips"></div>
+
+        <div class="canvasbox wob">
+          <canvas class="stage" id="dnaCanvas" height="360" aria-label="Double hélice d'ADN en 3D"></canvas>
+        </div>
+        <p class="tiny" style="text-align:center;margin:6px 0 0;">Glisse pour pivoter • Elle tourne aussi doucement toute seule</p>
+
+        <div class="legend" id="pairLegend">
+          <button class="legbtn sel" data-pair="all"><span class="dot" style="background:linear-gradient(90deg,var(--baseA) 50%,var(--baseT) 50%)"></span>Toutes les paires</button>
+          <button class="legbtn" data-pair="AT"><span class="dot" style="background:var(--baseA)"></span><span class="dot" style="background:var(--baseT);margin-left:-12px"></span>A – T</button>
+          <button class="legbtn" data-pair="CG"><span class="dot" style="background:var(--baseC)"></span><span class="dot" style="background:var(--baseG);margin-left:-12px"></span>C – G</button>
+        </div>
+        <p class="tiny" id="pairExplain" style="margin:2px 2px 0;">Les bases vont toujours par paires : <b>A</b> (adénine) avec <b>T</b> (thymine), et <b>C</b> (cytosine) avec <b>G</b> (guanine). Touche un bouton pour les voir briller sur l'hélice.</p>
+
+        <div class="factbox card wob2">
+          <div class="pctl">RESSEMBLANCE AVEC L'ADN HUMAIN</div>
+          <div class="pct" id="dnaPct">100 %</div>
+          <p id="dnaFact"></p>
+          <div class="progressline" id="dnaProgress"></div>
+        </div>
+
+        <!-- ADO : gènes, chromosomes, mutation -->
+        <div id="dnaAdo" class="card wob" style="display:none;margin-top:14px;">
+          <h3 class="hand" style="margin:0 0 6px;">Gènes et chromosomes</h3>
+          <p style="margin:0 0 8px;line-height:1.45;">Un <b>gène</b>, c'est un morceau d'ADN qui contient la recette pour fabriquer une protéine — et les protéines font presque tout le travail dans une cellule. Chez l'humain, tout l'ADN d'une cellule est rangé en <b>46 chromosomes</b> : <b>23 paires</b>, une copie de chaque parent.</p>
+          <h4 class="hand" style="margin:12px 0 4px;">La mutation : change une lettre !</h4>
+          <p style="margin:0;line-height:1.45;">L'ADN se lit par « mots » de 3 lettres : les <b>codons</b>. Chaque codon dit à la cellule quel acide aminé ajouter à la protéine. Touche une lettre pour la changer (A → C → G → T…) et regarde le mot changer sous tes yeux.</p>
+          <div class="codonrow" id="mutSeq"></div>
+          <div class="feedback" id="mutFeedback">Change une lettre et observe : le codon change. Est-ce que l'acide aminé en dessous change aussi ?</div>
+        </div>
+
+        <!-- ADULTE : génome en chiffres + comparaison -->
+        <div id="dnaAdulte" class="card wob" style="display:none;margin-top:14px;">
+          <h3 class="hand" style="margin:0 0 6px;">Le génome humain en chiffres</h3>
+          <p style="margin:0 0 8px;line-height:1.45;">Le génome humain compte environ <b>3 milliards de paires de bases</b> et quelque <b>20 000 gènes</b>. Fait surprenant : une grande part de notre ADN est <b>non codante</b> — elle ne sert pas directement de recette de protéine, et les scientifiques étudient encore tous ses rôles.</p>
+          <h4 class="hand" style="margin:12px 0 4px;">Compare deux séquences, lettre par lettre</h4>
+          <p style="margin:0;line-height:1.45;">Même court segment d'ADN, chez l'humain et chez le chimpanzé. À votre avis, combien de lettres diffèrent sur 24 ?</p>
+          <div class="chips" id="cmpChoices"></div>
+          <div id="cmpRows" style="display:none;">
+            <div class="tiny" style="font-weight:800;">HUMAIN</div>
+            <div class="seqletters" id="cmpH"></div>
+            <div class="tiny" style="font-weight:800;">CHIMPANZÉ</div>
+            <div class="seqletters" id="cmpC"></div>
+          </div>
+          <div class="feedback" id="cmpFeedback">Choisissez un nombre, puis comparez lettre par lettre.</div>
+        </div>
+
+        <!-- TRÈS AVANCÉ : lire une séquence -->
+        <div id="dnaAvance" class="card wob" style="display:none;margin-top:14px;">
+          <h3 class="hand" style="margin:0 0 6px;">Lire une vraie séquence</h3>
+          <p style="margin:0 0 6px;line-height:1.45;">Un gène se lit par codons de 3 lettres, à partir du <b>codon de départ ATG</b> jusqu'à un <b>codon stop</b> (TAA, TAG ou TGA). La séquence à lire : <b>AAG · ATG · CAC · CTG · ACT · TAA · GTG</b>.</p>
+          <p style="margin:0 0 4px;font-weight:800;" id="seqStepText">Étape 1 — Touchez le codon de départ.</p>
+          <div class="codonrow" id="seqCodons"></div>
+          <div id="transcBox" style="display:none;">
+            <p style="margin:10px 0 4px;font-weight:800;">Étape 3 — Transcription ADN → ARN : touchez chaque <b>T</b> pour le transformer en <b>U</b> (dans l'ARN, la thymine est remplacée par l'uracile).</p>
+            <div class="seqletters" id="transcRow"></div>
+          </div>
+          <div id="tradBox" style="display:none;">
+            <p style="margin:10px 0 4px;font-weight:800;">Étape 4 — Traduction : touchez chaque codon pour révéler son acide aminé, à l'aide du code génétique ci-dessous.</p>
+            <div class="codonrow" id="tradRow"></div>
+            <table class="codetable">
+              <tr><td>ATG</td><td>Méthionine (départ)</td><td>CAC</td><td>Histidine</td></tr>
+              <tr><td>CTG</td><td>Leucine</td><td>ACT</td><td>Thréonine</td></tr>
+              <tr><td>CCT</td><td>Proline</td><td>GTG</td><td>Valine</td></tr>
+              <tr><td>GAG</td><td>Glutamate</td><td>AAG</td><td>Lysine</td></tr>
+              <tr><td>TAA · TAG · TGA</td><td colspan="3">STOP — la protéine se termine</td></tr>
+            </table>
+            <p class="tiny">Extrait fidèle du code génétique standard : ce sont les vraies correspondances codon → acide aminé.</p>
+          </div>
+          <div class="feedback" id="seqFeedback">Par où commence la lecture d'un gène ?</div>
+        </div>
+      </section>
+
+      <!-- ======== MODE 2 : LABO GÉNÉRIQUE ======== -->
+      <section class="screen" id="scr-labo">
+        <div class="backrow">
+          <button class="btn ghost backbtn" data-goto="scr-home">← Labo</button>
+          <h2 class="screentitle hand">Crée ton remède générique</h2>
+        </div>
+        <p class="explain" id="laboIntro">Beaucoup de remèdes marchent comme une <b>clé dans une serrure</b> : la molécule doit avoir exactement la bonne forme pour ouvrir la serrure du microbe. Recopie la forme cible avec les atomes, puis teste ton hypothèse !</p>
+
+        <div class="card wob" style="margin-bottom:12px;">
+          <div class="virusrow">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="52" r="30" fill="#a8d86e" stroke="#2e2a24" stroke-width="3"/>
+              <g stroke="#2e2a24" stroke-width="3" stroke-linecap="round">
+                <path d="M28 32 L20 22"/><path d="M50 22 L50 10"/><path d="M72 32 L80 22"/><path d="M24 56 L12 56"/><path d="M76 56 L88 56"/><path d="M32 74 L26 86"/><path d="M68 74 L74 86"/>
+              </g>
+              <g fill="#2e2a24"><circle cx="20" cy="20" r="4"/><circle cx="50" cy="8" r="4"/><circle cx="82" cy="20" r="4"/><circle cx="10" cy="56" r="4"/><circle cx="90" cy="56" r="4"/><circle cx="24" cy="88" r="4"/><circle cx="76" cy="88" r="4"/></g>
+              <circle cx="40" cy="48" r="4" fill="#2e2a24"/><circle cx="62" cy="48" r="4" fill="#2e2a24"/>
+              <path d="M40 64 Q50 58 60 64" fill="none" stroke="#2e2a24" stroke-width="3" stroke-linecap="round"/>
+              <rect x="43" y="30" width="14" height="12" rx="3" fill="#f2b134" stroke="#2e2a24" stroke-width="2.5"/>
+            </svg>
+            <div>
+              <div class="lockname hand" id="virusName">Le microbe du rhume rigolo</div>
+              <p style="margin:4px 0 0;font-size:.9rem;" id="virusDesc">Sa serrure a une forme bien précise. Ta molécule-clé doit la recopier à l'atome près.</p>
+              <p style="margin:6px 0 0;font-size:.85rem;font-weight:800;color:var(--teal-dark);" id="challengeTag">Défi 1 sur 3</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="gridZone">
+        <div class="gridwrap">
+          <div class="gridcol">
+            <p class="gridtitle" id="targetTitle">🎯 La forme cible (la serrure)</p>
+            <div class="grid" id="targetGrid"></div>
+          </div>
+          <div class="gridcol">
+            <p class="gridtitle" id="playTitle">🧪 Ta molécule-clé</p>
+            <div class="grid" id="playGrid"></div>
+          </div>
+        </div>
+
+        <div class="palette" id="palette"></div>
+        <p class="tiny" style="text-align:center;margin:0;">Choisis un atome, puis touche une case pour le poser. Touche la gomme pour effacer.</p>
+        <p class="tiny" style="text-align:center;margin:2px 0 0;"><b>C</b> carbone • <b>H</b> hydrogène • <b>O</b> oxygène • <b>N</b> azote</p>
+        </div>
+
+        <div id="formulaPanel" class="card wob2" style="display:none;margin:12px 0;padding:12px 14px;"></div>
+
+        <div class="feedback" id="laboFeedback">Pose tes atomes pour recopier la forme cible, puis appuie sur « Tester l'hypothèse ».</div>
+
+        <button class="btn teal big" id="testBtn">Tester l'hypothèse 🔬</button>
+        <button class="btn ghost big" id="nextChallengeBtn" style="display:none;margin-top:10px;">Défi suivant →</button>
+
+        <div class="costbox card wob2" id="costBox">
+          <div class="costrow">
+            <div class="half brand"><div class="lbl">MÉDICAMENT DE MARQUE</div><div class="price" id="brandPrice">0 $</div></div>
+            <div class="half generic"><div class="lbl">TON GÉNÉRIQUE</div><div class="price" id="genericPrice">0 $</div></div>
+          </div>
+          <div class="savings" id="savingsLine"></div>
+          <p class="tiny" style="margin:6px 0 0;">Même ingrédient actif, même effet visé — le générique coûte moins cher parce qu'on ne paie pas la marque.</p>
+        </div>
+
+        <div class="feedback" id="laboFact" style="display:none;"></div>
+
+        <!-- TRÈS AVANCÉ : mini-protocole de recherche -->
+        <div id="protoPanel" class="card wob" style="display:none;margin-top:14px;">
+          <h3 class="hand" style="margin:0 0 6px;">Mini-protocole de recherche</h3>
+          <p style="margin:0 0 8px;line-height:1.45;">Tester un remède pour vrai demande une méthode : une hypothèse claire, un <b>groupe témoin</b> qui reçoit un <b>placebo</b> (une substance sans effet, pour comparer), puis des mesures avec leur <b>variation</b> — car deux personnes ne réagissent jamais exactement pareil.</p>
+          <p style="margin:0 0 4px;font-weight:800;">1. Formule ton hypothèse :</p>
+          <div class="chips" id="protoHypo">
+            <button class="chip" data-hypo="oui">Le remède réduit la fièvre plus vite que le placebo</button>
+            <button class="chip" data-hypo="non">Le remède et le placebo font exactement pareil</button>
+          </div>
+          <p style="margin:10px 0 4px;font-weight:800;">2. Lance l'expérience simulée :</p>
+          <button class="btn teal big" id="protoRun" disabled>Lancer l'expérience</button>
+          <div id="protoResult" style="display:none;">
+            <div class="chart">
+              <div class="barcol">
+                <div class="barval">7,2 ± 1,5</div>
+                <div class="bar" style="height:56%;background:var(--teal);"><div class="err" style="top:2%;height:24%;"></div><div class="errcap" style="top:2%;"></div><div class="errcap" style="top:26%;"></div></div>
+                <div class="barlbl">Groupe remède<br><span class="tiny">baisse de fièvre moyenne (points)</span></div>
+              </div>
+              <div class="barcol">
+                <div class="barval">3,1 ± 1,4</div>
+                <div class="bar" style="height:24%;background:var(--mustard);"><div class="err" style="top:0%;height:52%;"></div><div class="errcap" style="top:0%;"></div><div class="errcap" style="top:52%;"></div></div>
+                <div class="barlbl">Groupe témoin (placebo)<br><span class="tiny">baisse de fièvre moyenne (points)</span></div>
+              </div>
+            </div>
+            <p class="tiny">Les traits noirs montrent la variation (±) : les résultats des personnes s'éparpillent autour de la moyenne.</p>
+            <p style="margin:10px 0 4px;font-weight:800;">3. Tire ta conclusion :</p>
+            <div class="chips" id="protoConcl">
+              <button class="chip" data-concl="reel">L'effet semble réel : l'écart dépasse la variation</button>
+              <button class="chip" data-concl="hasard">L'écart est compatible avec le hasard</button>
+            </div>
+          </div>
+          <div class="feedback" id="protoFeedback">Choisis une hypothèse pour commencer.</div>
+        </div>
+      </section>
+
+      <!-- ======== MODE 3 : MISSION INSULINE ======== -->
+      <section class="screen" id="scr-insu">
+        <div class="backrow">
+          <button class="btn ghost backbtn" data-goto="scr-home">← Labo</button>
+          <h2 class="screentitle hand" id="missionTitle">Mission : le diabète et l'insuline</h2>
+        </div>
+        <div id="missionEnfant">
+        <p class="explain">Quand on mange, le sucre (le glucose) voyage dans le sang. Pour entrer dans les cellules et leur donner de l'énergie, il lui faut une clé : <b>l'insuline</b>. Dans le diabète, cette clé manque ou fonctionne mal — le sucre reste dehors. <b>Glisse les 3 clés d'insuline jusqu'aux portes des cellules !</b></p>
+
+        <div class="scene wob" id="insuScene"></div>
+        <div class="missioncount" id="insuCount">Portes ouvertes : 0 / 3</div>
+
+        <div class="factline">
+          <div class="pin">!</div>
+          <p><b>Toronto, 1921.</b> Frederick Banting et Charles Best découvrent comment obtenir l'insuline. Avant ça, le diabète de type 1 était presque toujours mortel. Leur découverte sauve encore des vies chaque jour.</p>
+        </div>
+        <div class="factline">
+          <div class="pin">!</div>
+          <p><b>Le savais-tu ?</b> L'insuline est fabriquée par le pancréas, un organe caché derrière l'estomac. C'est une hormone : un messager chimique du corps.</p>
+        </div>
+        <div class="note">Modèle simplifié pour apprendre. Ce jeu explique le principe — il ne donne aucun conseil médical.</div>
+        <button class="btn ghost big" id="insuReset">Rejouer la mission</button>
+        </div><!-- /missionEnfant -->
+
+        <!-- ADO : drépanocytose -->
+        <div id="missionAdo" style="display:none">
+          <p class="explain">La <b>drépanocytose</b> est une maladie du sang. Les globules rouges, normalement ronds et souples, transportent l'oxygène partout dans le corps. Tout part d'<b>une seule lettre d'ADN changée</b> dans le gène de la bêta-globine, un morceau de l'hémoglobine.</p>
+          <div class="card wob2" style="text-align:center;margin-bottom:12px;">
+            <svg viewBox="0 0 200 110" style="width:190px;max-width:82%;" aria-label="Globule rouge">
+              <g id="rbcRound"><ellipse cx="100" cy="55" rx="62" ry="42" fill="#e2574c" stroke="#2e2a24" stroke-width="3"/><ellipse cx="100" cy="55" rx="30" ry="18" fill="#ef8a80"/></g>
+              <g id="rbcSickle" style="display:none"><path d="M28 78 Q60 18 150 22 Q178 24 186 40 Q150 38 122 58 Q88 84 44 88 Q30 88 28 78 Z" fill="#e2574c" stroke="#2e2a24" stroke-width="3"/></g>
+            </svg>
+            <p style="margin:4px 0 0;font-weight:700;" id="rbcCaption">Globule rouge normal : rond et souple, il se faufile partout.</p>
+          </div>
+          <p style="line-height:1.45;">Voici le début du gène de la bêta-globine, lu en codons. Le <b>premier codon GAG</b> est le nº 7. Touche ses lettres pour changer son <b>A</b> en <b>T</b> — et regarde ce qui arrive au globule rouge.</p>
+          <div class="codonrow" id="drepaSeq"></div>
+          <div class="feedback" id="drepaFeedback">Trouve le premier GAG (codon nº 7) et change son A en T.</div>
+          <button class="btn ghost" id="drepaReset">Recommencer la séquence</button>
+          <div class="note">Modèle simplifié pour apprendre. Ce jeu explique le principe — il ne donne aucun conseil médical.</div>
+        </div>
+
+        <!-- ADULTE : antibiotiques et résistance -->
+        <div id="missionAdulte" style="display:none">
+          <p class="explain">Un <b>antibiotique</b> s'attaque aux bactéries — souvent comme une clé dans une serrure de la bactérie. Mais une bactérie peut <b>muter</b> : sa serrure change, et l'ancienne clé ne tourne plus. C'est la <b>résistance aux antibiotiques</b>. À vous de réajuster la clé !</p>
+          <p style="font-weight:800;margin:0 0 8px;" id="abxPhase">Phase 1 — Fabriquez la clé qui correspond à la serrure de la bactérie.</p>
+          <div class="gridwrap">
+            <div class="gridcol">
+              <p class="gridtitle">🎯 La serrure de la bactérie</p>
+              <div class="grid" id="abxTarget"></div>
+            </div>
+            <div class="gridcol">
+              <p class="gridtitle">🧪 Votre clé-antibiotique</p>
+              <div class="grid" id="abxPlay"></div>
+            </div>
+          </div>
+          <div class="palette" id="abxPalette"></div>
+          <div class="feedback" id="abxFeedback">Recopiez la serrure atome par atome, puis testez votre clé.</div>
+          <button class="btn teal big" id="abxTest">Tester la clé</button>
+          <div class="factline">
+            <div class="pin">!</div>
+            <p><b>Pourquoi finir son traitement ?</b> Si on arrête un antibiotique trop tôt, les bactéries les plus résistantes sont justement celles qui survivent — et elles se multiplient. Finir le traitement prescrit aide à les éliminer et à garder les antibiotiques efficaces pour tout le monde.</p>
+          </div>
+          <div class="note">Modèle simplifié pour apprendre. Ce jeu explique le principe — il ne donne aucun conseil médical.</div>
+        </div>
+
+        <!-- TRÈS AVANCÉ : bêta-globine -->
+        <div id="missionAvance" style="display:none">
+          <p class="explain">Voici le vrai début du gène de la <b>bêta-globine</b> (gène HBB) en séquence normale, puis la séquence correspondante chez une personne atteinte de drépanocytose. Les deux ne diffèrent que par <b>un seul codon</b>. Comparez-les codon par codon, et touchez le codon différent dans la séquence « patiente ».</p>
+          <div class="tiny" style="font-weight:800;">SÉQUENCE NORMALE</div>
+          <div class="codonrow" id="globNormal"></div>
+          <div class="tiny" style="font-weight:800;">SÉQUENCE « PATIENTE » — touchez le codon différent</div>
+          <div class="codonrow" id="globPatient"></div>
+          <div id="globChoices" style="display:none;">
+            <p style="font-weight:800;margin:10px 0 4px;">Ce codon est passé de GAG à GTG. Quel acide aminé change, et en quoi ?</p>
+            <div class="chips">
+              <button class="chip" data-glob="gv">Glutamate → Valine</button>
+              <button class="chip" data-glob="vg">Valine → Glutamate</button>
+              <button class="chip" data-glob="lp">Lysine → Proline</button>
+            </div>
+          </div>
+          <div class="feedback" id="globFeedback">Comparez les deux séquences, codon par codon…</div>
+          <div class="note">Séquence réelle du début du gène HBB (bêta-globine), présentée en codons pour apprendre.</div>
+        </div>
+      </section>
+
+      <!-- ======== CE QUE TU AS APPRIS ======== -->
+      <section class="screen" id="scr-learned">
+        <div class="backrow">
+          <button class="btn ghost backbtn" data-goto="scr-home">← Labo</button>
+          <h2 class="screentitle hand">Ce que tu as appris</h2>
+        </div>
+        <div class="card wob2">
+          <div id="learnedLevel" style="font-weight:900;font-size:1.05rem;"></div>
+          <ul class="learnlist" id="learnedList"></ul>
+          <div class="progressline" id="learnedProg"></div>
+        </div>
+        <div class="note">Modèle simplifié pour apprendre : la vraie science est plus détaillée, mais les idées ici sont vraies.</div>
+      </section>
+
+    </div><!-- /wrap -->
+
+    <!-- ======== SUCCÈS ======== -->
+    <div class="overlay" id="overlay">
+      <div class="panel wob">
+        <div class="keyanim">
+          <svg class="keysvg" viewBox="0 0 120 60"><circle cx="24" cy="30" r="16" fill="none" stroke="#b8860b" stroke-width="7"/><path d="M38 30 H104 M88 30 V44 M102 30 V40" stroke="#b8860b" stroke-width="7" stroke-linecap="round"/></svg>
+          <svg class="locksvg" viewBox="0 0 100 100"><rect x="22" y="42" width="56" height="44" rx="9" fill="#f2b134" stroke="#2e2a24" stroke-width="3.5"/><path d="M34 42 V30 a16 16 0 0 1 32 0 V42" fill="none" stroke="#2e2a24" stroke-width="6"/><circle cx="50" cy="60" r="6" fill="#2e2a24"/><path d="M50 62 v10" stroke="#2e2a24" stroke-width="5" stroke-linecap="round"/></svg>
+        </div>
+        <h3 class="hand" id="ovTitle">Remède créé !</h3>
+        <p id="ovText"></p>
+        <button class="btn teal big" id="ovBtn">Super !</button>
+      </div>
+    </div>
+
+<script>
+"use strict";
+/* ================= ÉTAT + SAUVEGARDE ================= */
+var LS_KEY = "conception-molecules-3d-v1";
+function blankProg(){ return { dnaSeen:{}, dnaExtra:false, laboDone:0, missDone:false, bestAttempts:null, protoDone:false }; }
+var state = { level:"enfant", levels:{ enfant:blankProg(), ado:blankProg(), adulte:blankProg(), avance:blankProg() } };
+try{
+  var saved = JSON.parse(localStorage.getItem(LS_KEY) || "null");
+  if(saved && typeof saved === "object"){
+    if(saved.levels){
+      if(saved.level && state.levels[saved.level]) state.level = saved.level;
+      ["enfant","ado","adulte","avance"].forEach(function(lv){
+        if(saved.levels[lv]){ var bp = blankProg(); for(var kk in bp){ if(saved.levels[lv][kk] !== undefined) bp[kk] = saved.levels[lv][kk]; } state.levels[lv] = bp; }
+      });
+    } else if(saved.dnaSeen){
+      /* ancien format : la progression existante devient celle du niveau Enfant */
+      var old = blankProg();
+      old.dnaSeen = saved.dnaSeen || {}; old.laboDone = saved.laboDone || 0;
+      old.missDone = !!saved.insuDone; old.bestAttempts = (saved.bestAttempts !== undefined) ? saved.bestAttempts : null;
+      state.levels.enfant = old;
+    }
+  }
+}catch(e){}
+var cur = state.levels[state.level];
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ================= SONS (WebAudio, 100 % synthétisés) ================= */
+var audioCtx = null, soundOn = true;
+function ac(){
+  if(!audioCtx){ try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
+  if(audioCtx && audioCtx.state === "suspended"){ audioCtx.resume(); }
+  return audioCtx;
+}
+function tone(freq, dur, type, vol, when, slideTo){
+  if(!soundOn) return; var c = ac(); if(!c) return;
+  var t = c.currentTime + (when||0);
+  var o = c.createOscillator(), g = c.createGain();
+  o.type = type||"sine"; o.frequency.setValueAtTime(freq, t);
+  if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t+dur);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol||0.15, t+0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+dur+0.05);
+}
+function sndClick(){ tone(620, .07, "triangle", .12); }
+function sndPlace(){ tone(440, .09, "sine", .16); tone(660, .08, "sine", .10, .03); }
+function sndPop(){ tone(300, .12, "sine", .2, 0, 900); }
+function sndError(){ tone(160, .22, "sawtooth", .08); tone(120, .25, "sawtooth", .08, .05); }
+function sndWin(){ [523,659,784,1047].forEach(function(f,i){ tone(f, .22, "triangle", .16, i*.09); }); tone(1319,.35,"sine",.10, .4); }
+function sndUnlock(){ tone(392,.12,"triangle",.15); tone(587,.12,"triangle",.15,.1); tone(880,.25,"triangle",.16,.2); }
+
+var soundBtn = document.getElementById("soundBtn");
+soundBtn.addEventListener("click", function(){
+  soundOn = !soundOn;
+  document.getElementById("soundOnIco").style.display = soundOn ? "" : "none";
+  document.getElementById("soundOffIco").style.display = soundOn ? "none" : "";
+  if(soundOn) sndClick();
+});
+
+/* ================= NAVIGATION ================= */
+function show(id){
+  document.querySelectorAll(".screen").forEach(function(s){ s.classList.toggle("on", s.id === id); });
+  window.scrollTo({top:0});
+  if(id === "scr-dna"){ startHelix(); } else { stopHelix(); }
+  if(id === "scr-insu"){ showMission(); }
+  if(id === "scr-learned"){ renderLearned(); }
+}
+document.querySelectorAll("[data-goto]").forEach(function(b){
+  b.addEventListener("click", function(){ ac(); sndClick(); show(b.getAttribute("data-goto")); });
+});
+
+/* ================= BADGES ================= */
+function dnaDone(){
+  return Object.keys(cur.dnaSeen).length >= 4 && (state.level === "enfant" || cur.dnaExtra);
+}
+function laboDoneAll(){
+  return cur.laboDone >= LABO_SETS[state.level].length && (state.level !== "avance" || cur.protoDone);
+}
+function modesDone(){
+  var n = 0;
+  if(dnaDone()) n++;
+  if(laboDoneAll()) n++;
+  if(cur.missDone) n++;
+  return n;
+}
+function refreshBadge(){
+  var n = modesDone();
+  var name = n >= 3 ? "Chercheur étoile" : (n === 2 ? "Chercheur" : "Apprenti scientifique");
+  var sub = n >= 3 ? "Les 3 missions sont terminées. Bravo, scientifique !" :
+            n === 2 ? "Plus qu'une mission pour devenir Chercheur étoile !" :
+            n === 1 ? "Une mission terminée — continue !" :
+                      "Termine des missions pour monter de grade !";
+  document.getElementById("badgeName").textContent = name;
+  document.getElementById("badgeSub").textContent = sub;
+  document.getElementById("badgeStar").textContent = n >= 3 ? "★" : (n >= 1 ? "☆" : "✦");
+  document.getElementById("badgeStar").style.color = n >= 3 ? "var(--mustard)" : "var(--ink-soft)";
+  setDone("dna", dnaDone());
+  setDone("labo", laboDoneAll());
+  setDone("insu", cur.missDone);
+}
+function setDone(key, done){
+  var d = document.querySelector('[data-done="'+key+'"]'), g = document.querySelector('[data-go="'+key+'"]');
+  if(d) d.style.display = done ? "" : "none";
+  if(g) g.style.display = done ? "none" : "";
+}
+
+/* Recommencer (confirmation en 2 touches, pas de fenêtre système) */
+var resetArmed = false, resetTimer = null;
+document.getElementById("resetBtn").addEventListener("click", function(){
+  var msg = document.getElementById("resetMsg");
+  if(!resetArmed){
+    resetArmed = true; this.textContent = "Tu es sûr ? Touche encore pour tout effacer";
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(function(){ resetArmed = false; document.getElementById("resetBtn").textContent = "Recommencer du début"; }, 4000);
+    return;
+  }
+  clearTimeout(resetTimer); resetArmed = false; this.textContent = "Recommencer du début";
+  state = { level: state.level, levels:{ enfant:blankProg(), ado:blankProg(), adulte:blankProg(), avance:blankProg() } };
+  cur = state.levels[state.level];
+  save(); refreshBadge(); renderSpeciesChips(); selectSpecies(currentSpecies);
+  loadChallenge(0); showMission(); buildMut(); buildDrepa();
+  msg.textContent = "Tout est effacé. Bon nouveau départ, scientifique !";
+  sndClick();
+});
+
+/* ================= SUCCÈS + CONFETTIS ================= */
+var overlay = document.getElementById("overlay");
+function showSuccess(title, text){
+  document.getElementById("ovTitle").textContent = title;
+  document.getElementById("ovText").textContent = text;
+  overlay.classList.add("on"); sndWin(); confetti();
+}
+document.getElementById("ovBtn").addEventListener("click", function(){ overlay.classList.remove("on"); sndClick(); });
+function confetti(){
+  var colors = ["#e4572e","#f2b134","#17877b","#3d7bd6","#4f9e57","#d84b4b"];
+  for(var i = 0; i < 26; i++){
+    var d = document.createElement("div"); d.className = "confetti";
+    d.style.background = colors[i % colors.length];
+    d.style.left = (8 + Math.random()*84) + "vw"; d.style.top = "-20px";
+    document.body.appendChild(d);
+    var dx = (Math.random()*2-1) * 90, rot = Math.random()*540 - 270, dur = 1100 + Math.random()*900;
+    d.animate([
+      { transform:"translate(0,0) rotate(0deg)", opacity:1 },
+      { transform:"translate("+dx+"px, 105vh) rotate("+rot+"deg)", opacity:.7 }
+    ], { duration: dur, easing:"cubic-bezier(.2,.7,.4,1)" });
+    (function(el, dd){ setTimeout(function(){ el.remove(); }, dd + 100); })(d, dur);
+  }
+}
+
+/* ============================================================
+   MODE 1 — ADN : double hélice 3D, projection maison sur canvas
+   ============================================================ */
+var SPECIES = {
+  humain:   { name:"Humain",    seed:7,  backbone:"#17877b", pct:"100 %",
+    pctLabel:"C'est nous !",
+    fact:"Ton ADN est un livre d'environ 3 milliards de lettres (A, T, C, G). Si on déroulait l'ADN d'une seule de tes cellules, il mesurerait environ 2 mètres !" },
+  chimpanze:{ name:"Chimpanzé", seed:21, backbone:"#b06a28", pct:"≈ 98 %",
+    pctLabel:"Notre plus proche cousin vivant",
+    fact:"Humains et chimpanzés partagent environ 98 % de leur ADN. La différence tient à peu près à 2 lettres sur 100 — et ça change beaucoup de choses !" },
+  souris:   { name:"Souris",    seed:42, backbone:"#7d5ba6", pct:"La grande majorité",
+    pctLabel:"de nos gènes ont un équivalent chez la souris",
+    fact:"La grande majorité des gènes humains ont leur équivalent chez la souris. C'est pour ça qu'elle aide les scientifiques à comprendre le corps humain — avec des règles strictes pour protéger les animaux." },
+  banane:   { name:"Banane",    seed:99, backbone:"#d9a514", pct:"≈ la moitié",
+    pctLabel:"de nos gènes ont un cousin chez la banane",
+    fact:"Environ la moitié de nos gènes ont un cousin chez la banane. Ça ne veut pas dire qu'on est moitié banane ! Nos cellules partagent des outils de base très anciens, inventés il y a des milliards d'années." }
+};
+var BASE_COLORS = { A:"#4f9e57", T:"#e4572e", C:"#3d7bd6", G:"#e8a90c" };
+var BASE_NAMES = { A:"adénine", T:"thymine", C:"cytosine", G:"guanine" };
+/* générateur pseudo-aléatoire reproductible (même hélice à chaque visite) */
+function rng(seed){ var s = seed >>> 0; return function(){ s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+function makeSequence(seed, n){
+  var r = rng(seed), letters = ["A","C","G","T"], seq = [];
+  for(var i = 0; i < n; i++){
+    var a = letters[Math.floor(r()*4)];
+    var pair = (a === "A") ? "T" : (a === "T") ? "A" : (a === "C") ? "G" : "C";
+    seq.push({ a:a, b:pair, type: (a==="A"||a==="T") ? "AT" : "CG" });
+  }
+  return seq;
+}
+var currentSpecies = "humain", helixSeq = makeSequence(SPECIES.humain.seed, 18);
+var pairFilter = "all";
+
+var chipsBox = document.getElementById("speciesChips");
+function renderSpeciesChips(){
+  chipsBox.innerHTML = "";
+  Object.keys(SPECIES).forEach(function(key){
+    var b = document.createElement("button");
+    b.className = "chip" + (key === currentSpecies ? " sel" : "");
+    b.innerHTML = SPECIES[key].name + (cur.dnaSeen[key] ? ' <span class="seen">✓</span>' : "");
+    b.addEventListener("click", function(){ sndClick(); selectSpecies(key); });
+    chipsBox.appendChild(b);
+  });
+}
+function selectSpecies(key){
+  currentSpecies = key;
+  helixSeq = makeSequence(SPECIES[key].seed, 18);
+  cur.dnaSeen[key] = true; save();
+  renderSpeciesChips();
+  var sp = SPECIES[key];
+  document.getElementById("dnaPct").innerHTML = sp.pct + ' <span style="font-size:.85rem;font-weight:700;color:var(--ink-soft)">— ' + sp.pctLabel + '</span>';
+  document.getElementById("dnaFact").textContent = sp.fact;
+  var seen = Object.keys(cur.dnaSeen).length;
+  document.getElementById("dnaProgress").textContent = dnaDone()
+    ? "✓ Mission ADN terminée pour ce niveau !"
+    : "Espèces explorées : " + seen + " / 4" + (seen >= 4
+        ? " — il reste l'activité du niveau, plus bas sur cette page."
+        : " — visite-les toutes pour terminer la mission.");
+  refreshBadge();
+}
+document.querySelectorAll("#pairLegend .legbtn").forEach(function(b){
+  b.addEventListener("click", function(){
+    document.querySelectorAll("#pairLegend .legbtn").forEach(function(x){ x.classList.remove("sel"); });
+    b.classList.add("sel"); pairFilter = b.getAttribute("data-pair"); sndClick();
+    var ex = document.getElementById("pairExplain");
+    if(pairFilter === "AT") ex.innerHTML = "<b>A</b> = adénine, <b>T</b> = thymine. Sur l'hélice, les paires A–T brillent, les autres s'effacent.";
+    else if(pairFilter === "CG") ex.innerHTML = "<b>C</b> = cytosine, <b>G</b> = guanine. Sur l'hélice, les paires C–G brillent, les autres s'effacent.";
+    else ex.innerHTML = "Les bases vont toujours par paires : <b>A</b> (adénine) avec <b>T</b> (thymine), et <b>C</b> (cytosine) avec <b>G</b> (guanine). Touche un bouton pour les voir briller sur l'hélice.";
+  });
+});
+
+/* --- moteur 3D maison --- */
+var dnaCanvas = document.getElementById("dnaCanvas"), dctx = dnaCanvas.getContext("2d");
+var rotY = 0.6, rotX = -0.32, velY = 0.0035, dragging = false, lastPX = 0, lastPY = 0, helixRAF = null;
+function sizeCanvas(){
+  var w = dnaCanvas.clientWidth || 320, h = 360, dpr = window.devicePixelRatio || 1;
+  dnaCanvas.width = w * dpr; dnaCanvas.height = h * dpr;
+  dnaCanvas.style.height = h + "px"; dctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+function project(x, y, z, cx, cy){
+  /* rotation X puis Y, puis perspective simple */
+  var y1 = y * Math.cos(rotX) - z * Math.sin(rotX);
+  var z1 = y * Math.sin(rotX) + z * Math.cos(rotX);
+  var x2 = x * Math.cos(rotY) + z1 * Math.sin(rotY);
+  var z2 = -x * Math.sin(rotY) + z1 * Math.cos(rotY);
+  var f = 620, s = f / (f + z2);
+  return { x: cx + x2 * s, y: cy + y1 * s, z: z2, s: s };
+}
+function drawHelix(){
+  var W = dnaCanvas.clientWidth || 320, H = 360;
+  dctx.clearRect(0, 0, W, H);
+  var cx = W / 2, cy = H / 2, R = Math.min(W * 0.26, 92), N = helixSeq.length;
+  var stepY = (H - 90) / (N - 1), twist = 0.55, backbone = SPECIES[currentSpecies].backbone;
+  var pts = [];
+  for(var i = 0; i < N; i++){
+    var ang = i * twist, y = -((N - 1) * stepY) / 2 + i * stepY;
+    pts.push({
+      p1: project(Math.cos(ang) * R, y, Math.sin(ang) * R, cx, cy),
+      p2: project(Math.cos(ang + Math.PI) * R, y, Math.sin(ang + Math.PI) * R, cx, cy),
+      rung: helixSeq[i]
+    });
+  }
+  /* Algorithme du peintre : chaque morceau (segment de brin, barreau, boule)
+     est trié par profondeur, du plus loin au plus près. */
+  var items = [];
+  pts.forEach(function(pt, i){
+    items.push({ z:(pt.p1.z + pt.p2.z) / 2, kind:"rung", pt:pt });
+    items.push({ z:pt.p1.z - 0.5, kind:"ball", p:pt.p1, letter:pt.rung.a, type:pt.rung.type });
+    items.push({ z:pt.p2.z - 0.5, kind:"ball", p:pt.p2, letter:pt.rung.b, type:pt.rung.type });
+    if(i < N - 1){
+      items.push({ z:(pt.p1.z + pts[i+1].p1.z) / 2 + 0.25, kind:"seg", a:pt.p1, b:pts[i+1].p1, col:backbone });
+      items.push({ z:(pt.p2.z + pts[i+1].p2.z) / 2 + 0.25, kind:"seg", a:pt.p2, b:pts[i+1].p2, col:backbone });
+    }
+  });
+  items.sort(function(a, b){ return b.z - a.z; });
+  items.forEach(function(it){
+    if(it.kind === "seg"){
+      dctx.beginPath(); dctx.moveTo(it.a.x, it.a.y); dctx.lineTo(it.b.x, it.b.y);
+      dctx.strokeStyle = it.col; dctx.lineWidth = 5.5 * ((it.a.s + it.b.s) / 2); dctx.lineCap = "round"; dctx.stroke();
+      dctx.beginPath(); dctx.moveTo(it.a.x, it.a.y); dctx.lineTo(it.b.x, it.b.y);
+      dctx.strokeStyle = "rgba(46,42,36,.30)"; dctx.lineWidth = 1.3; dctx.stroke();
+    } else if(it.kind === "rung"){
+      var pt = it.pt, dim = pairFilter !== "all" && pt.rung.type !== pairFilter;
+      dctx.save(); dctx.globalAlpha = dim ? 0.13 : 1;
+      var mx = (pt.p1.x + pt.p2.x) / 2, my = (pt.p1.y + pt.p2.y) / 2;
+      dctx.beginPath(); dctx.moveTo(pt.p1.x, pt.p1.y); dctx.lineTo(mx, my);
+      dctx.strokeStyle = BASE_COLORS[pt.rung.a]; dctx.lineWidth = 5 * pt.p1.s; dctx.lineCap = "round"; dctx.stroke();
+      dctx.beginPath(); dctx.moveTo(mx, my); dctx.lineTo(pt.p2.x, pt.p2.y);
+      dctx.strokeStyle = BASE_COLORS[pt.rung.b]; dctx.lineWidth = 5 * pt.p2.s; dctx.stroke();
+      dctx.restore();
+    } else { /* ball */
+      var p = it.p, dim2 = pairFilter !== "all" && it.type !== pairFilter;
+      var r = 11.5 * p.s;
+      dctx.save(); dctx.globalAlpha = dim2 ? 0.15 : 1;
+      dctx.beginPath(); dctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      dctx.fillStyle = BASE_COLORS[it.letter]; dctx.fill();
+      dctx.lineWidth = 2; dctx.strokeStyle = "rgba(30,27,22,.75)"; dctx.stroke();
+      dctx.beginPath(); dctx.arc(p.x - r * .3, p.y - r * .35, r * .28, 0, Math.PI * 2);
+      dctx.fillStyle = "rgba(255,255,255,.4)"; dctx.fill();
+      dctx.fillStyle = "#fff"; dctx.font = "900 " + Math.round(r * 1.05) + "px ui-rounded, system-ui, sans-serif";
+      dctx.textAlign = "center"; dctx.textBaseline = "middle";
+      dctx.fillText(it.letter, p.x, p.y + 1);
+      dctx.restore();
+    }
+  });
+}
+function helixLoop(){
+  if(!document.getElementById("scr-dna").classList.contains("on")){ helixRAF = null; return; }
+  if(!dragging){ rotY += velY; velY += (0.0035 - velY) * 0.02; }
+  drawHelix();
+  helixRAF = requestAnimationFrame(helixLoop);
+}
+function startHelix(){ sizeCanvas(); if(!helixRAF) helixRAF = requestAnimationFrame(helixLoop); }
+function stopHelix(){ if(helixRAF){ cancelAnimationFrame(helixRAF); helixRAF = null; } }
+window.addEventListener("resize", function(){
+  if(document.getElementById("scr-dna").classList.contains("on")) sizeCanvas();
+  if(document.getElementById("scr-insu").classList.contains("on") && state.level === "enfant") buildInsu();
+});
+dnaCanvas.addEventListener("pointerdown", function(e){
+  dragging = true; lastPX = e.clientX; lastPY = e.clientY;
+  dnaCanvas.setPointerCapture(e.pointerId);
+});
+dnaCanvas.addEventListener("pointermove", function(e){
+  if(!dragging) return;
+  var dx = e.clientX - lastPX, dy = e.clientY - lastPY;
+  lastPX = e.clientX; lastPY = e.clientY;
+  rotY += dx * 0.012; velY = dx * 0.012;
+  rotX += dy * 0.006; rotX = Math.max(-0.85, Math.min(0.85, rotX));
+});
+["pointerup","pointercancel"].forEach(function(ev){
+  dnaCanvas.addEventListener(ev, function(){ dragging = false; });
+});
+
+/* ============================================================
+   MODE 2 — LABO : molécule-clé / serrure
+   ============================================================ */
+var ATOMS = ["C","H","O","N"];
+var ATOM_NAMES = { C:"carbone", H:"hydrogène", O:"oxygène", N:"azote" };
+var CHALLENGES = [
+  { virus:"Le microbe du rhume rigolo", mode:"shape", rows:3, cols:3, brand:24, generic:6,
+    cells:{ "0,1":"O", "1,0":"C", "1,1":"C", "1,2":"N", "2,1":"H" } },
+  { virus:"La grippe farceuse", mode:"shape", rows:4, cols:4, brand:48, generic:11,
+    cells:{ "0,1":"H", "0,2":"O", "1,0":"C", "1,1":"C", "1,2":"C", "2,1":"N", "2,2":"O", "3,2":"H" } },
+  { virus:"Le Méga-Microbe", mode:"shape", rows:4, cols:5, brand:85, generic:19,
+    cells:{ "0,0":"H", "0,2":"O", "0,4":"H", "1,0":"C", "1,1":"C", "1,2":"N", "1,3":"C", "1,4":"C", "2,2":"C", "3,1":"H", "3,3":"O" } }
+];
+var LABO_SETS = {
+  enfant: CHALLENGES,
+  ado: [
+    { virus:"Le microbe à crête", mode:"shape", rows:4, cols:5, brand:56, generic:13,
+      desc:"Sa serrure est plus grande et plus tordue. Recopie-la à l'atome près.",
+      cells:{ "0,2":"O", "1,1":"C", "1,2":"C", "1,3":"N", "2,0":"H", "2,2":"C", "2,4":"H", "3,1":"O", "3,3":"C" } },
+    { virus:"La bactérie couronne", mode:"shape", rows:5, cols:5, brand:72, generic:16,
+      desc:"Douze atomes à placer exactement. Prends ton temps, scientifique.",
+      cells:{ "0,1":"H", "0,3":"H", "1,0":"C", "1,2":"O", "1,4":"C", "2,1":"C", "2,3":"N", "3,0":"O", "3,2":"C", "3,4":"H", "4,1":"N", "4,3":"O" } },
+    { virus:"Molécule réelle : l'eau", mode:"gridcount", rows:3, cols:3, formula:{ H:2, O:1 },
+      desc:"Pas de serrure ici : assemble une vraie molécule. L'eau, c'est H₂O — 2 hydrogènes et 1 oxygène, à placer où tu veux dans la grille (forme simplifiée)." },
+    { virus:"Molécule réelle : le glucose", mode:"gridcount", rows:5, cols:5, formula:{ C:6, H:12, O:6 },
+      desc:"Le glucose, le sucre qui donne de l'énergie aux cellules : C₆H₁₂O₆. Place 6 carbones, 12 hydrogènes et 6 oxygènes, où tu veux (forme simplifiée)." }
+  ],
+  adulte: [
+    { virus:"Aspirine", mode:"counter", formula:{ C:9, H:8, O:4 }, brand:12, generic:4,
+      desc:"Formule cible : C₉H₈O₄. Ajustez le nombre de chaque atome avec les boutons + et −, puis testez : le comptage est vérifié à l'atome près.",
+      fact:"<b>Ingrédient actif :</b> l'acide acétylsalicylique — c'est lui, et lui seul, qui produit l'effet de l'aspirine. C'est un médicament très ancien : le brevet d'origine est expiré depuis longtemps, donc plusieurs fabricants peuvent produire la même molécule en version générique." },
+    { virus:"Caféine", mode:"counter", formula:{ C:8, H:10, N:4, O:2 }, brand:9, generic:3,
+      desc:"Formule cible : C₈H₁₀N₄O₂. La molécule du café, du thé… et de certains médicaments contre la douleur.",
+      fact:"<b>La caféine</b> est une molécule naturelle, connue depuis très longtemps : il n'y a pas de brevet actif sur la molécule elle-même. Un produit « de marque » et un produit sans marque contiennent la même caféine — seule l'étiquette change." },
+    { virus:"Paracétamol", mode:"counter", formula:{ C:8, H:9, N:1, O:2 }, brand:11, generic:4,
+      desc:"Formule cible : C₈H₉NO₂. L'un des médicaments les plus utilisés au monde contre la douleur et la fièvre.",
+      fact:"<b>Ingrédient actif :</b> le paracétamol (aussi appelé acétaminophène). Son brevet d'origine est expiré depuis des décennies : les génériques contiennent exactement la même molécule, C₈H₉NO₂, vérifiée par les mêmes contrôles de qualité." }
+  ],
+  avance: [
+    { virus:"Double contrainte nº 1", mode:"double", rows:4, cols:4,
+      silhouette:["0,1","0,2","1,0","1,1","1,2","1,3","2,1","2,2"], formula:{ C:3, H:3, O:2 },
+      desc:"Deux contraintes à la fois : remplissez exactement les cases colorées (la forme imposée) avec 3 C, 3 H et 2 O (la formule imposée : C₃H₃O₂). Score de précision selon le nombre d'essais." },
+    { virus:"Double contrainte nº 2", mode:"double", rows:5, cols:5,
+      silhouette:["0,2","1,1","1,2","1,3","2,0","2,1","2,2","2,3","2,4","3,2","4,1","4,3"], formula:{ C:5, H:4, N:2, O:1 },
+      desc:"Forme imposée de 12 cases, formule imposée C₅H₄N₂O. Chaque atome compte double : position et quantité." }
+  ]
+};
+function curSet(){ return LABO_SETS[state.level]; }
+var SUBD = { "0":"₀","1":"₁","2":"₂","3":"₃","4":"₄","5":"₅","6":"₆","7":"₇","8":"₈","9":"₉" };
+function formulaHTML(f){
+  var out = "";
+  ["C","H","O","N"].forEach(function(a){
+    if(f[a]){ out += a; if(f[a] > 1){ String(f[a]).split("").forEach(function(d){ out += SUBD[d]; }); } }
+  });
+  return out;
+}
+function countAtoms(cells){
+  var counts = {};
+  Object.keys(cells).forEach(function(k){ counts[cells[k]] = (counts[cells[k]] || 0) + 1; });
+  return counts;
+}
+var chIdx = 0, playerCells = {}, formulaCounts = {}, selectedAtom = "C", attempts = 0;
+var targetGrid = document.getElementById("targetGrid"), playGrid = document.getElementById("playGrid");
+var palette = document.getElementById("palette"), feedback = document.getElementById("laboFeedback");
+
+ATOMS.forEach(function(a){
+  var b = document.createElement("button");
+  b.className = "palbtn" + (a === "C" ? " sel" : ""); b.setAttribute("data-atom", a);
+  b.setAttribute("aria-label", "Atome " + a);
+  b.innerHTML = '<span class="atom ' + a + '">' + a + "</span>";
+  b.addEventListener("click", function(){ selectAtom(a); });
+  palette.appendChild(b);
+});
+var eraseBtn = document.createElement("button");
+eraseBtn.className = "palbtn erase"; eraseBtn.textContent = "⌫"; eraseBtn.setAttribute("aria-label", "Gomme");
+eraseBtn.addEventListener("click", function(){ selectAtom("X"); });
+palette.appendChild(eraseBtn);
+function selectAtom(a){
+  selectedAtom = a; sndClick();
+  palette.querySelectorAll(".palbtn").forEach(function(x){
+    x.classList.toggle("sel", x.getAttribute("data-atom") === a || (a === "X" && x === eraseBtn));
+  });
+}
+function key2(r, c){ return r + "," + c; }
+function renderGrids(){
+  var ch = curSet()[chIdx];
+  [targetGrid, playGrid].forEach(function(g){
+    g.style.gridTemplateColumns = "repeat(" + ch.cols + ", 1fr)";
+    g.style.maxWidth = (ch.cols * 62) + "px";
+    g.innerHTML = "";
+  });
+  /* atomes fantômes de la cible, pour le mode « formule sur grille » */
+  var ghostArr = null;
+  if(ch.mode === "gridcount"){
+    ghostArr = [];
+    ["C","H","O","N"].forEach(function(a){ var n = ch.formula[a] || 0; for(var gi = 0; gi < n; gi++) ghostArr.push(a); });
+  }
+  var sil = {};
+  if(ch.mode === "double") ch.silhouette.forEach(function(k){ sil[k] = true; });
+  for(var r = 0; r < ch.rows; r++) for(var c = 0; c < ch.cols; c++){
+    var k = key2(r, c), idx = r * ch.cols + c;
+    var t = document.createElement("div");
+    t.className = "cell target";
+    if(ch.mode === "shape" && ch.cells[k]) t.innerHTML = '<span class="atom ghost ' + ch.cells[k] + '">' + ch.cells[k] + "</span>";
+    if(ch.mode === "gridcount" && ghostArr[idx]) t.innerHTML = '<span class="atom ghost ' + ghostArr[idx] + '">' + ghostArr[idx] + "</span>";
+    if(ch.mode === "double" && sil[k]) t.className = "cell target shapefill";
+    targetGrid.appendChild(t);
+    var p = document.createElement("button");
+    p.className = "cell mine" + (ch.mode === "double" && !sil[k] ? " off" : "");
+    p.setAttribute("data-k", k);
+    p.setAttribute("aria-label", "Case ligne " + (r+1) + ", colonne " + (c+1));
+    if(playerCells[k]) p.innerHTML = '<span class="atom ' + playerCells[k] + '">' + playerCells[k] + "</span>";
+    (function(cell, inSil){
+      cell.addEventListener("click", function(){
+        if(ch.mode === "double" && !inSil){ tone(220,.06,"triangle",.08); return; }
+        var kk = cell.getAttribute("data-k");
+        if(selectedAtom === "X"){ delete playerCells[kk]; tone(220,.06,"triangle",.08); }
+        else { playerCells[kk] = selectedAtom; sndPlace(); }
+        renderGrids();
+      });
+    })(p, !!sil[k]);
+    playGrid.appendChild(p);
+  }
+}
+function renderFormulaPanel(){
+  var ch = curSet()[chIdx], panel = document.getElementById("formulaPanel");
+  panel.innerHTML = '<p style="margin:0 0 4px;font-weight:900;">Formule cible : ' + formulaHTML(ch.formula) + "</p>";
+  ["C","H","O","N"].forEach(function(a){
+    if(!ch.formula[a]) return;
+    var row = document.createElement("div"); row.className = "frow";
+    row.innerHTML = '<span class="fname"><span class="atom ' + a + '" style="width:34px;height:34px;font-size:.95rem;">' + a + '</span>' + ATOM_NAMES[a] + ' <span class="ftarget">cible : ' + ch.formula[a] + "</span></span>";
+    var minus = document.createElement("button"); minus.className = "fbtn"; minus.textContent = "−"; minus.setAttribute("aria-label", "Enlever un " + ATOM_NAMES[a]);
+    var cnt = document.createElement("span"); cnt.className = "fcount" + ((formulaCounts[a] || 0) === ch.formula[a] ? " ok" : ""); cnt.textContent = formulaCounts[a] || 0;
+    var plus = document.createElement("button"); plus.className = "fbtn"; plus.textContent = "+"; plus.setAttribute("aria-label", "Ajouter un " + ATOM_NAMES[a]);
+    minus.addEventListener("click", function(){ formulaCounts[a] = Math.max(0, (formulaCounts[a] || 0) - 1); tone(300,.06,"triangle",.1); renderFormulaPanel(); });
+    plus.addEventListener("click", function(){ formulaCounts[a] = (formulaCounts[a] || 0) + 1; sndPlace(); renderFormulaPanel(); });
+    row.appendChild(minus); row.appendChild(cnt); row.appendChild(plus);
+    panel.appendChild(row);
+  });
+  var tot = document.createElement("p");
+  tot.className = "tiny"; tot.style.margin = "8px 0 0";
+  var total = 0; Object.keys(formulaCounts).forEach(function(a){ total += formulaCounts[a]; });
+  var targetTotal = 0; Object.keys(ch.formula).forEach(function(a){ targetTotal += ch.formula[a]; });
+  tot.textContent = "Atomes assemblés : " + total + " / " + targetTotal + " — forme simplifiée : en vrai, les atomes sont liés dans un ordre précis.";
+  panel.appendChild(tot);
+}
+function loadChallenge(i){
+  chIdx = i; playerCells = {}; formulaCounts = {}; attempts = 0;
+  var set = curSet(), ch = set[i];
+  document.getElementById("virusName").textContent = ch.virus;
+  document.getElementById("virusDesc").textContent = ch.desc || "Sa serrure a une forme bien précise. Ta molécule-clé doit la recopier à l'atome près.";
+  document.getElementById("challengeTag").textContent =
+    "Défi " + (i+1) + " sur " + set.length + (cur.bestAttempts ? " • Ton record : " + cur.bestAttempts + " essai(s) pour un défi" : "");
+  document.getElementById("costBox").classList.remove("on");
+  document.getElementById("laboFact").style.display = "none";
+  document.getElementById("nextChallengeBtn").style.display = "none";
+  document.getElementById("testBtn").disabled = false;
+  document.getElementById("gridZone").style.display = ch.mode === "counter" ? "none" : "";
+  document.getElementById("formulaPanel").style.display = ch.mode === "counter" ? "" : "none";
+  document.getElementById("targetTitle").textContent =
+    ch.mode === "gridcount" ? "🧮 La formule : " + formulaHTML(ch.formula) :
+    ch.mode === "double" ? "🎯 Forme + formule : " + formulaHTML(ch.formula) : "🎯 La forme cible (la serrure)";
+  document.getElementById("playTitle").textContent = ch.mode === "shape" ? "🧪 Ta molécule-clé" : "🧪 Ta molécule";
+  feedback.className = "feedback";
+  feedback.textContent =
+    ch.mode === "counter" ? "Défi " + (i+1) + " : ajustez le compteur de chaque atome jusqu'à la formule cible, puis testez." :
+    ch.mode === "gridcount" ? "Défi " + (i+1) + " : place les atomes de la formule, dans l'ordre que tu veux, puis teste." :
+    ch.mode === "double" ? "Défi " + (i+1) + " : remplissez les cases colorées avec le bon nombre de chaque atome, puis testez." :
+    "Défi " + (i+1) + " : recopie la forme cible atome par atome, puis teste ton hypothèse.";
+  if(ch.mode === "counter") renderFormulaPanel(); else renderGrids();
+}
+function regionName(r, c, ch){
+  var v = r < ch.rows / 2 ? "en haut" : "en bas";
+  var h = c < ch.cols / 2 ? "à gauche" : "à droite";
+  return v + " " + h;
+}
+function challengeSuccess(ch, extraMsg){
+  sndUnlock();
+  var set = curSet(), last = chIdx >= set.length - 1;
+  if(!cur.bestAttempts || attempts < cur.bestAttempts) cur.bestAttempts = attempts;
+  if(chIdx >= cur.laboDone) cur.laboDone = chIdx + 1;
+  save(); refreshBadge();
+  if(ch.brand) animateCost(ch);
+  if(ch.fact){
+    var lf = document.getElementById("laboFact");
+    lf.innerHTML = ch.fact; lf.style.display = ""; lf.className = "feedback good";
+  }
+  document.getElementById("testBtn").disabled = true;
+  if(!last) document.getElementById("nextChallengeBtn").style.display = "";
+  showSuccess("Remède créé !",
+    (extraMsg ? extraMsg + " " : "") + (last
+      ? (state.level === "avance"
+          ? "Défis du labo terminés ! Il reste le mini-protocole de recherche, plus bas, pour compléter le niveau."
+          : "Tous les défis du labo sont terminés pour ce niveau : tu es un vrai concepteur de molécules.")
+      : "Défi " + (chIdx+1) + " réussi en " + attempts + " essai(s). Prêt pour le suivant ?"));
+}
+document.getElementById("testBtn").addEventListener("click", function(){
+  var ch = curSet()[chIdx];
+  attempts++;
+  if(ch.mode === "counter" || ch.mode === "gridcount"){
+    var mine = ch.mode === "counter" ? formulaCounts : countAtoms(playerCells);
+    var off = [];
+    ["C","H","O","N"].forEach(function(a){
+      var want = ch.formula[a] || 0, got = mine[a] || 0;
+      if(got !== want) off.push({ a:a, want:want, got:got });
+    });
+    if(off.length === 0){
+      feedback.className = "feedback good";
+      feedback.innerHTML = "🎉 <b>Formule exacte !</b> " + formulaHTML(ch.formula) + " — le comptage est vérifié : " +
+        ["C","H","O","N"].filter(function(a){ return ch.formula[a]; }).map(function(a){ return ch.formula[a] + " × " + a; }).join(", ") +
+        ". Molécule assemblée en <b>" + attempts + "</b> essai(s).";
+      challengeSuccess(ch, "");
+    } else {
+      sndError();
+      var o = off[0];
+      feedback.className = "feedback bad";
+      feedback.innerHTML = "🔍 Essai nº " + attempts + " — le compte n'y est pas : il te faut <b>" + o.want + " " + o.a + "</b> (" + ATOM_NAMES[o.a] + "), tu en as " + o.got + ". Ajuste, puis reteste.";
+    }
+    return;
+  }
+  if(ch.mode === "double"){
+    var sil = {}; ch.silhouette.forEach(function(k){ sil[k] = true; });
+    var outside = Object.keys(playerCells).filter(function(k){ return !sil[k]; });
+    var missing = ch.silhouette.filter(function(k){ return !playerCells[k]; });
+    var counts2 = countAtoms(playerCells), offF = [];
+    ["C","H","O","N"].forEach(function(a){
+      var want = ch.formula[a] || 0, got = counts2[a] || 0;
+      if(got !== want) offF.push({ a:a, want:want, got:got });
+    });
+    if(outside.length === 0 && missing.length === 0 && offF.length === 0){
+      var score = Math.max(40, 100 - (attempts - 1) * 12);
+      feedback.className = "feedback good";
+      feedback.innerHTML = "🎉 <b>Double contrainte réussie !</b> Forme exacte et formule " + formulaHTML(ch.formula) + " respectée. <b>Score de précision : " + score + " / 100</b> (" + attempts + " essai(s)).";
+      challengeSuccess(ch, "Score de précision : " + score + " / 100.");
+    } else {
+      sndError();
+      var msg;
+      if(missing.length) msg = "la forme n'est pas complète : <b>" + missing.length + " case(s) colorée(s)</b> encore vide(s).";
+      else if(offF.length) msg = "la forme est pleine, mais la formule dévie : il faut <b>" + offF[0].want + " " + offF[0].a + "</b>, vous en avez " + offF[0].got + ".";
+      else msg = "des atomes sont hors de la forme imposée.";
+      feedback.className = "feedback bad";
+      feedback.innerHTML = "🔍 Essai nº " + attempts + " — " + msg + " Ajustez, puis retestez.";
+    }
+    return;
+  }
+  /* mode "shape" : la clé doit recopier la serrure */
+  var wrong = [], allKeys = {};
+  Object.keys(ch.cells).forEach(function(k){ allKeys[k] = true; });
+  Object.keys(playerCells).forEach(function(k){ allKeys[k] = true; });
+  Object.keys(allKeys).forEach(function(k){
+    if(playerCells[k] !== ch.cells[k]) wrong.push(k);
+  });
+  if(wrong.length === 0){
+    feedback.className = "feedback good";
+    feedback.innerHTML = "🎉 <b>Hypothèse confirmée !</b> Ta clé entre parfaitement dans la serrure. Remède créé en <b>" + attempts + "</b> essai(s).";
+    challengeSuccess(ch, "Tu as fabriqué ce générique : la même molécule que le médicament de marque, pour une fraction du prix.");
+  } else {
+    sndError();
+    /* indice : la région qui contient le plus d'erreurs */
+    var counts = {}, bestK = wrong[0];
+    wrong.forEach(function(k){
+      var parts = k.split(","), reg = regionName(+parts[0], +parts[1], ch);
+      counts[reg] = (counts[reg] || 0) + 1;
+      if(counts[reg] > (counts[regionName(+bestK.split(",")[0], +bestK.split(",")[1], ch)] || 0)) bestK = k;
+    });
+    var bp = bestK.split(",");
+    var hint = wrong.length === 1
+      ? "Presque ! Il reste <b>1 seule case</b> à corriger. Regarde bien " + regionName(+bp[0], +bp[1], ch) + " de ta molécule."
+      : "La clé ne tourne pas encore : <b>" + wrong.length + " cases</b> diffèrent de la cible. Commence par regarder " + regionName(+bp[0], +bp[1], ch) + ". Ajuste, puis reteste — c'est ça, la science !";
+    feedback.className = "feedback bad";
+    feedback.innerHTML = "🔍 Essai nº " + attempts + " — " + hint;
+  }
+});
+document.getElementById("nextChallengeBtn").addEventListener("click", function(){
+  sndClick(); loadChallenge(Math.min(chIdx + 1, curSet().length - 1));
+});
+function animateCost(ch){
+  var box = document.getElementById("costBox"); box.classList.add("on");
+  var bEl = document.getElementById("brandPrice"), gEl = document.getElementById("genericPrice");
+  var start = null;
+  function step(ts){
+    if(!start) start = ts;
+    var p = Math.min((ts - start) / 900, 1);
+    bEl.textContent = Math.round(ch.brand * p) + " $";
+    gEl.textContent = Math.round(ch.generic * p) + " $";
+    if(p < 1) requestAnimationFrame(step);
+    else document.getElementById("savingsLine").textContent =
+      "Tu économises " + (ch.brand - ch.generic) + " $ — soit environ " + Math.round((1 - ch.generic / ch.brand) * 100) + " % de moins !";
+  }
+  requestAnimationFrame(step);
+}
+
+/* ============================================================
+   MODE 3 — MISSION INSULINE
+   ============================================================ */
+var insuOpened = 0;
+var CELL_SVG = function(open){
+  return '<svg viewBox="0 0 128 118">' +
+    '<path d="M14 59 a50 48 0 1 1 100 0 a50 48 0 1 1 -100 0" fill="#f6c6cf" stroke="#2e2a24" stroke-width="3"/>' +
+    '<circle cx="42" cy="42" r="4" fill="#e79fb0"/><circle cx="86" cy="80" r="5" fill="#e79fb0"/><circle cx="70" cy="30" r="3" fill="#e79fb0"/>' +
+    '<circle cx="48" cy="54" r="3.2" fill="#2e2a24"/><circle cx="76" cy="54" r="3.2" fill="#2e2a24"/>' +
+    (open
+      ? '<path d="M44 74 Q62 86 80 74" fill="none" stroke="#2e2a24" stroke-width="3" stroke-linecap="round"/>'
+      : '<path d="M48 76 Q62 70 76 76" fill="none" stroke="#2e2a24" stroke-width="3" stroke-linecap="round"/>') +
+    '<g class="door"><rect x="98" y="38" width="24" height="42" rx="5" fill="#f2b134" stroke="#2e2a24" stroke-width="3"/>' +
+    '<circle cx="106" cy="59" r="3.4" fill="#2e2a24"/></g></svg>';
+};
+var KEY_SVG = '<svg viewBox="0 0 64 40"><circle cx="15" cy="20" r="10" fill="none" stroke="#b8860b" stroke-width="5"/><path d="M24 20 H56 M46 20 V31 M55 20 V28" stroke="#b8860b" stroke-width="5" stroke-linecap="round"/></svg>';
+
+function buildInsu(){
+  var scene = document.getElementById("insuScene");
+  scene.innerHTML = ""; insuOpened = 0;
+  document.getElementById("insuCount").textContent = "Portes ouvertes : 0 / 3";
+  var W = scene.clientWidth || 340;
+  var spots = [
+    { x: 10,            y: 18  },
+    { x: W - 205,       y: 128 },
+    { x: 24,            y: 238 }
+  ];
+  var cellEls = [], sugarEls = [];
+  spots.forEach(function(sp, i){
+    var cell = document.createElement("div");
+    cell.className = "cellbody"; cell.style.left = sp.x + "px"; cell.style.top = sp.y + "px";
+    cell.innerHTML = CELL_SVG(false);
+    scene.appendChild(cell); cellEls.push(cell);
+    /* 2 sucres coincés dehors, près de la porte */
+    for(var s = 0; s < 2; s++){
+      var sg = document.createElement("div");
+      sg.className = "sugar"; sg.textContent = "sucre";
+      sg.style.left = Math.min(sp.x + 134 + (s % 2) * 6, W - 34) + "px";
+      sg.style.top = (sp.y + 20 + s * 34) + "px";
+      scene.appendChild(sg); sugarEls.push({ el: sg, cell: i, homeX: sp.x + 132, homeY: sp.y + 20 + s * 34 });
+    }
+  });
+  /* les 3 clés d'insuline, en bas de la scène */
+  for(var ki = 0; ki < 3; ki++){
+    var key = document.createElement("div");
+    key.className = "keydrag"; key.innerHTML = KEY_SVG;
+    key.setAttribute("aria-label", "Clé d'insuline " + (ki + 1));
+    var kx = 20 + ki * ((W - 100) / 2), ky = 336;
+    key.style.left = kx + "px"; key.style.top = ky + "px";
+    key.dataset.homeX = kx; key.dataset.homeY = ky;
+    scene.appendChild(key);
+    attachDrag(key, cellEls, sugarEls, spots);
+  }
+}
+function attachDrag(key, cellEls, sugarEls, spots){
+  var startX = 0, startY = 0, origX = 0, origY = 0, active = false;
+  key.addEventListener("pointerdown", function(e){
+    if(key.classList.contains("used")) return;
+    active = true; ac();
+    startX = e.clientX; startY = e.clientY;
+    origX = parseFloat(key.style.left); origY = parseFloat(key.style.top);
+    key.setPointerCapture(e.pointerId); key.style.zIndex = 9;
+    e.preventDefault();
+  });
+  key.addEventListener("pointermove", function(e){
+    if(!active) return;
+    key.style.left = (origX + e.clientX - startX) + "px";
+    key.style.top = (origY + e.clientY - startY) + "px";
+  });
+  function end(){
+    if(!active) return; active = false; key.style.zIndex = 5;
+    var scene = document.getElementById("insuScene");
+    var sr = scene.getBoundingClientRect();
+    var kx = parseFloat(key.style.left) + 32, ky = parseFloat(key.style.top) + 20;
+    var hit = -1;
+    cellEls.forEach(function(cell, i){
+      if(cell.classList.contains("open")) return;
+      var doorX = spots[i].x + 110, doorY = spots[i].y + 59;
+      if(Math.hypot(kx - doorX, ky - doorY) < 62) hit = i;
+    });
+    if(hit >= 0){
+      key.classList.add("used");
+      var cell = cellEls[hit];
+      cell.classList.add("open"); cell.innerHTML = CELL_SVG(true);
+      sndUnlock(); insuOpened++;
+      document.getElementById("insuCount").textContent = "Portes ouvertes : " + insuOpened + " / 3";
+      sugarEls.forEach(function(sg){
+        if(sg.cell === hit){
+          sg.el.style.left = (spots[hit].x + 44) + "px";
+          sg.el.style.top = (spots[hit].y + 84) + "px";
+          sg.el.style.transform = "scale(.55) rotate(20deg)";
+          sg.el.style.opacity = ".0";
+        }
+      });
+      tone(740, .15, "sine", .12, .15);
+      if(insuOpened >= 3){
+        state.levels.enfant.missDone = true; save(); refreshBadge();
+        setTimeout(function(){
+          showSuccess("Mission réussie !",
+            "Les 3 portes sont ouvertes et le sucre nourrit les cellules. Tu viens de jouer le rôle de l'insuline, découverte à Toronto en 1921 par Banting et Best. Chez une personne diabétique, des médicaments ou de l'insuline prescrite par un médecin font ce travail chaque jour.");
+        }, 650);
+      }
+    } else {
+      /* retour en douceur à la maison */
+      key.style.transition = "left .35s ease, top .35s ease";
+      key.style.left = key.dataset.homeX + "px"; key.style.top = key.dataset.homeY + "px";
+      setTimeout(function(){ key.style.transition = ""; }, 380);
+      tone(240, .1, "triangle", .08);
+    }
+  }
+  key.addEventListener("pointerup", end);
+  key.addEventListener("pointercancel", end);
+}
+document.getElementById("insuReset").addEventListener("click", function(){ sndClick(); buildInsu(); });
+
+/* ============================================================
+   NIVEAUX — configuration, changement de niveau, apprentissages
+   ============================================================ */
+var LEVELS = {
+  enfant:{ name:"Enfant",
+    dnaDesc:"Une double hélice en 3D à faire tourner. Compare l'humain, le chimpanzé, la souris et… la banane !",
+    laboDesc:"Assemble la molécule-clé qui ouvre la serrure du microbe. Même ingrédient actif, beaucoup moins cher !",
+    missCard:"Mission maladie : le diabète",
+    missDesc:"Le sucre veut entrer dans la cellule, mais la porte est fermée. L'insuline est la clé ! Ouvre 3 portes.",
+    missTitle:"Mission : le diabète et l'insuline",
+    dnaIntro:"L'ADN, c'est le grand livre de recettes du vivant, écrit avec 4 lettres : <b>A, T, C, G</b>. Glisse ton doigt sur l'hélice pour la faire tourner en 3D !",
+    laboIntro:"Beaucoup de remèdes marchent comme une <b>clé dans une serrure</b> : la molécule doit avoir exactement la bonne forme pour ouvrir la serrure du microbe. Recopie la forme cible avec les atomes, puis teste ton hypothèse !" },
+  ado:{ name:"Ado",
+    dnaDesc:"L'hélice 3D, plus les gènes, les chromosomes (46 !) et une mutation à essayer toi-même.",
+    laboDesc:"Des serrures plus corsées, et de vraies molécules à assembler par leur formule : l'eau et le glucose.",
+    missCard:"Mission maladie nº 2 : la drépanocytose",
+    missDesc:"Une seule lettre d'ADN changée… et le globule rouge prend une forme de faucille.",
+    missTitle:"Mission : la drépanocytose",
+    dnaIntro:"L'ADN, c'est le grand livre de recettes du vivant, écrit avec 4 lettres : <b>A, T, C, G</b>. Fais tourner l'hélice, puis descends voir les <b>gènes</b>, les <b>chromosomes</b>… et essaie une <b>mutation</b> de tes propres doigts.",
+    laboIntro:"Les serrures se corsent ! Recopie des formes plus grandes, puis assemble de <b>vraies molécules</b> à partir de leur formule : l'eau (H₂O) et le glucose (C₆H₁₂O₆), le sucre qui donne de l'énergie aux cellules." },
+  adulte:{ name:"Adulte",
+    dnaDesc:"Les chiffres du génome humain (≈ 3 milliards de paires de bases, ≈ 20 000 gènes) et une comparaison de séquences humain–chimpanzé.",
+    laboDesc:"Construisez de vraies molécules par leur formule cible, comptage vérifié : aspirine, caféine, paracétamol.",
+    missCard:"Mission maladie nº 3 : les antibiotiques",
+    missDesc:"La bactérie change de serrure par mutation : réajustez la clé. Et pourquoi il faut finir son traitement.",
+    missTitle:"Mission : antibiotiques et résistance",
+    dnaIntro:"L'ADN, le grand livre de recettes du vivant, écrit avec 4 lettres : <b>A, T, C, G</b>. Faites tourner l'hélice, puis descendez : le génome en chiffres, et une comparaison de séquences lettre par lettre avec le chimpanzé.",
+    laboIntro:"Ici, on construit de <b>vraies molécules</b> à partir de leur formule chimique, avec comptage d'atomes vérifié. Un générique contient exactement le même <b>ingrédient actif</b> que le médicament d'origine. Quand le <b>brevet</b> qui protégeait la molécule (une vingtaine d'années) expire, d'autres fabricants peuvent la produire — et la concurrence fait baisser le prix, à molécule égale." },
+  avance:{ name:"Très avancé",
+    dnaDesc:"Lire une vraie séquence : codon de départ, transcription ADN → ARN, traduction en acides aminés.",
+    laboDesc:"Défis à double contrainte (forme + formule) avec score de précision, et un mini-protocole de recherche complet.",
+    missCard:"Mission experte : la bêta-globine",
+    missDesc:"La vraie séquence du début du gène de la bêta-globine. Repérez l'unique mutation de la drépanocytose.",
+    missTitle:"Mission experte : la bêta-globine",
+    dnaIntro:"L'ADN s'écrit avec 4 lettres : <b>A, T, C, G</b>. Faites tourner l'hélice, puis descendez lire une séquence comme en laboratoire : codon de départ, codon stop, transcription, traduction.",
+    laboIntro:"Niveau expert : chaque défi impose <b>deux contraintes à la fois</b> — la forme (les cases à remplir) et la formule (le nombre exact de chaque atome). Votre score de précision dépend du nombre d'essais. Plus bas : un <b>mini-protocole de recherche</b> complet, avec hypothèse, groupe témoin et placebo." }
+};
+var LEARNED = {
+  enfant:[
+    "L'ADN est le livre de recettes du vivant, écrit avec 4 lettres — A, T, C, G — toujours en paires A–T et C–G.",
+    "Les humains et les chimpanzés partagent environ 98 % de leur ADN ; environ la moitié de nos gènes ont un cousin chez la banane.",
+    "Un médicament générique contient le même ingrédient actif que le médicament de marque, pour beaucoup moins cher.",
+    "L'insuline, découverte à Toronto en 1921 par Banting et Best, est la clé qui permet au sucre d'entrer dans les cellules."
+  ],
+  ado:[
+    "Un gène est un morceau d'ADN qui contient la recette d'une protéine ; chez l'humain, l'ADN est rangé en 46 chromosomes, soit 23 paires.",
+    "Une mutation, c'est une lettre d'ADN changée : elle peut changer un codon, donc un acide aminé de la protéine fabriquée.",
+    "Les molécules ont des formules qui comptent leurs atomes : l'eau H₂O, le glucose C₆H₁₂O₆.",
+    "La drépanocytose vient d'une seule lettre changée dans le gène de la bêta-globine : le globule rouge prend une forme de faucille."
+  ],
+  adulte:[
+    "Le génome humain compte environ 3 milliards de paires de bases et ≈ 20 000 gènes ; une grande part de l'ADN est non codante.",
+    "Sur un court segment comparé lettre par lettre, l'ADN humain et celui du chimpanzé ne diffèrent que par quelques lettres.",
+    "Un générique coûte moins cher à molécule égale : le brevet du médicament d'origine (environ 20 ans) est expiré, et il n'y a plus les mêmes coûts de recherche à récupérer.",
+    "La résistance aux antibiotiques naît par mutation : les bactéries qui survivent à un traitement inachevé peuvent être les plus résistantes — d'où l'importance de finir le traitement prescrit."
+  ],
+  avance:[
+    "Un gène se lit par codons de 3 lettres : ATG marque le départ, TAA, TAG et TGA marquent l'arrêt (stop).",
+    "Transcription : l'ADN est copié en ARN, où le T devient U. Traduction : chaque codon devient un acide aminé, selon le code génétique.",
+    "Bêta-globine : ATG GTG CAC CTG ACT CCT GAG GAG AAG. La mutation de la drépanocytose change le premier GAG en GTG : Glutamate → Valine.",
+    "Une expérience solide compare un groupe traité à un groupe témoin (placebo) et tient compte de la variation : un écart net plus grand que la variation suggère un effet réel."
+  ]
+};
+function renderLearned(){
+  document.getElementById("learnedLevel").textContent = "Niveau " + LEVELS[state.level].name + " — les notions de ce niveau :";
+  var ul = document.getElementById("learnedList"); ul.innerHTML = "";
+  LEARNED[state.level].forEach(function(t){
+    var li = document.createElement("li"); li.textContent = t; ul.appendChild(li);
+  });
+  var n = modesDone();
+  document.getElementById("learnedProg").textContent = "Missions terminées à ce niveau : " + n + " / 3" +
+    (n >= 3 ? " — niveau complété, bravo !" : " — termine les 3 missions du niveau pour le compléter.");
+}
+function setLevel(lv){
+  state.level = lv; cur = state.levels[lv]; save();
+  document.querySelectorAll("#lvlGrid .lvlbtn").forEach(function(b){
+    b.classList.toggle("sel", b.getAttribute("data-level") === lv);
+  });
+  var L = LEVELS[lv];
+  document.getElementById("dnaCardDesc").textContent = L.dnaDesc;
+  document.getElementById("laboCardDesc").textContent = L.laboDesc;
+  document.getElementById("missCardTitle").textContent = L.missCard;
+  document.getElementById("missCardDesc").textContent = L.missDesc;
+  document.getElementById("missionTitle").textContent = L.missTitle;
+  document.getElementById("dnaIntro").innerHTML = L.dnaIntro;
+  document.getElementById("laboIntro").innerHTML = L.laboIntro;
+  document.getElementById("dnaAdo").style.display = lv === "ado" ? "" : "none";
+  document.getElementById("dnaAdulte").style.display = lv === "adulte" ? "" : "none";
+  document.getElementById("dnaAvance").style.display = lv === "avance" ? "" : "none";
+  document.getElementById("protoPanel").style.display = lv === "avance" ? "" : "none";
+  loadChallenge(0);
+  renderSpeciesChips(); selectSpecies(currentSpecies);
+  refreshBadge();
+}
+document.querySelectorAll("#lvlGrid .lvlbtn").forEach(function(b){
+  b.addEventListener("click", function(){ ac(); sndClick(); setLevel(b.getAttribute("data-level")); });
+});
+
+/* ---------- outils codons ---------- */
+var MINI_TABLE = { ATG:"Méthionine (départ)", CAC:"Histidine", CTG:"Leucine", ACT:"Thréonine", CCT:"Proline", GTG:"Valine", GAG:"Glutamate", AAG:"Lysine" };
+function aaOf(codon){ return MINI_TABLE[codon] || "autre acide aminé"; }
+function codonEl(codon, aaText){
+  var wrap = document.createElement("div"); wrap.className = "codon";
+  var letters = document.createElement("div"); letters.className = "letters";
+  codon.split("").forEach(function(L){
+    var s = document.createElement("span"); s.className = "basebtn b" + L; s.textContent = L; letters.appendChild(s);
+  });
+  wrap.appendChild(letters);
+  if(aaText !== null && aaText !== undefined){
+    var aa = document.createElement("div"); aa.className = "aa"; aa.textContent = aaText; wrap.appendChild(aa);
+  }
+  return wrap;
+}
+function nextBase(b){ return b === "A" ? "C" : b === "C" ? "G" : b === "G" ? "T" : "A"; }
+
+/* ---------- ADO : la mutation ---------- */
+var mutCodons = ["CTG","GAG","AAG"], mutOrig = ["CTG","GAG","AAG"];
+function buildMut(){
+  mutCodons = mutOrig.slice();
+  renderMut();
+  var fb = document.getElementById("mutFeedback");
+  fb.className = "feedback";
+  fb.textContent = cur.dnaExtra
+    ? "✓ Tu as déjà réussi à changer un acide aminé par une mutation. Continue d'expérimenter !"
+    : "Change une lettre et observe : le codon change. Est-ce que l'acide aminé en dessous change aussi ?";
+}
+function renderMut(){
+  var box = document.getElementById("mutSeq"); box.innerHTML = "";
+  mutCodons.forEach(function(codon, ci){
+    var wrap = document.createElement("div"); wrap.className = "codon";
+    var letters = document.createElement("div"); letters.className = "letters";
+    codon.split("").forEach(function(L, li){
+      var b = document.createElement("button");
+      b.className = "basebtn b" + L; b.textContent = L;
+      b.setAttribute("aria-label", "Lettre " + (li+1) + " du codon " + (ci+1));
+      b.addEventListener("click", function(){
+        var arr = mutCodons[ci].split(""); arr[li] = nextBase(arr[li]);
+        mutCodons[ci] = arr.join(""); sndPlace(); renderMut(); checkMut();
+      });
+      letters.appendChild(b);
+    });
+    wrap.appendChild(letters);
+    var aa = document.createElement("div"); aa.className = "aa"; aa.textContent = aaOf(codon);
+    wrap.appendChild(aa);
+    box.appendChild(wrap);
+  });
+}
+function checkMut(){
+  var fb = document.getElementById("mutFeedback");
+  var changed = -1;
+  for(var i = 0; i < 3; i++){ if(aaOf(mutCodons[i]) !== aaOf(mutOrig[i])) changed = i; }
+  if(changed >= 0){
+    fb.className = "feedback good";
+    fb.innerHTML = "🧬 <b>Mutation réussie !</b> Le codon " + mutOrig[changed] + " est devenu " + mutCodons[changed] +
+      " : l'acide aminé passe de « " + aaOf(mutOrig[changed]) + " » à « " + aaOf(mutCodons[changed]) +
+      " ». Une seule lettre changée, et la protéine n'est plus tout à fait la même — retiens ça pour la mission drépanocytose !";
+    if(!cur.dnaExtra){ cur.dnaExtra = true; save(); refreshBadge(); selectSpecies(currentSpecies); sndUnlock(); }
+  } else {
+    fb.className = "feedback";
+    fb.textContent = "La séquence dit maintenant : " + mutCodons.join(" · ") + ". Pour l'instant, les acides aminés sont les mêmes qu'au départ — continue de changer des lettres !";
+  }
+}
+
+/* ---------- ADULTE : comparaison de séquences ---------- */
+var CMP_H = "ATGGTGCACCTGACTCCTGAGGAG", CMP_C = "ATGGTGCATCTGACTCCCGAGGAG", cmpAnswered = false;
+function buildCompare(){
+  var box = document.getElementById("cmpChoices"); box.innerHTML = "";
+  [0, 1, 2, 5].forEach(function(n){
+    var b = document.createElement("button");
+    b.className = "chip"; b.textContent = n + (n <= 1 ? " différence" : " différences");
+    b.addEventListener("click", function(){ answerCompare(n, b); });
+    box.appendChild(b);
+  });
+}
+function answerCompare(n, btn){
+  if(cmpAnswered) return;
+  cmpAnswered = true; sndClick();
+  document.querySelectorAll("#cmpChoices .chip").forEach(function(x){ x.classList.toggle("sel", x === btn); });
+  var diffs = 0;
+  var rh = document.getElementById("cmpH"), rc = document.getElementById("cmpC");
+  rh.innerHTML = ""; rc.innerHTML = "";
+  for(var i = 0; i < CMP_H.length; i++){
+    var d = CMP_H[i] !== CMP_C[i]; if(d) diffs++;
+    var s1 = document.createElement("span"); s1.className = "sl" + (d ? " diff" : ""); s1.textContent = CMP_H[i]; rh.appendChild(s1);
+    var s2 = document.createElement("span"); s2.className = "sl" + (d ? " diff" : ""); s2.textContent = CMP_C[i]; rc.appendChild(s2);
+  }
+  document.getElementById("cmpRows").style.display = "";
+  var fb = document.getElementById("cmpFeedback");
+  fb.className = "feedback good";
+  fb.innerHTML = (n === diffs ? "🎯 <b>Exact !</b> " : "On compte ensemble : ") +
+    "il y a <b>" + diffs + " différences sur 24 lettres</b> (en rouge) sur ce segment — soit plus de 90 % d'identité ici. À l'échelle du génome entier, humains et chimpanzés partagent environ 98 % de leur ADN : les différences sont rares, mais elles comptent.";
+  if(!cur.dnaExtra){ cur.dnaExtra = true; save(); refreshBadge(); selectSpecies(currentSpecies); sndUnlock(); }
+}
+
+/* ---------- TRÈS AVANCÉ : lire une séquence ---------- */
+var SEQ_CODONS = ["AAG","ATG","CAC","CTG","ACT","TAA","GTG"], seqStep = 0, transcLeft = 0, tradLeft = 0;
+function buildSeqRead(){
+  seqStep = 0; transcLeft = 0; tradLeft = 0;
+  document.getElementById("transcBox").style.display = "none";
+  document.getElementById("tradBox").style.display = "none";
+  document.getElementById("seqStepText").textContent = "Étape 1 — Touchez le codon de départ.";
+  var fb = document.getElementById("seqFeedback");
+  fb.className = "feedback"; fb.textContent = "Par où commence la lecture d'un gène ?";
+  var box = document.getElementById("seqCodons"); box.innerHTML = "";
+  SEQ_CODONS.forEach(function(codon, ci){
+    var el = codonEl(codon, null);
+    el.style.cursor = "pointer";
+    el.setAttribute("role", "button");
+    el.addEventListener("click", function(){ seqCodonTap(ci, el); });
+    box.appendChild(el);
+  });
+}
+function seqCodonTap(ci, el){
+  var fb = document.getElementById("seqFeedback");
+  if(seqStep === 0){
+    if(SEQ_CODONS[ci] === "ATG"){
+      seqStep = 1; sndUnlock();
+      el.querySelectorAll(".basebtn").forEach(function(s){ s.classList.add("found"); });
+      document.getElementById("seqStepText").textContent = "Étape 2 — Touchez maintenant un codon stop.";
+      fb.className = "feedback good";
+      fb.innerHTML = "✓ <b>ATG trouvé</b> : c'est le codon de départ — il code aussi la méthionine, le premier acide aminé de presque toutes les protéines. La lecture commence là. Trouvez maintenant le codon stop.";
+    } else {
+      sndError(); fb.className = "feedback bad";
+      fb.textContent = "Pas celui-là. Le codon de départ, c'est ATG — cherchez-le dans la séquence.";
+    }
+  } else if(seqStep === 1){
+    if(["TAA","TAG","TGA"].indexOf(SEQ_CODONS[ci]) >= 0){
+      seqStep = 2; sndUnlock();
+      el.querySelectorAll(".basebtn").forEach(function(s){ s.classList.add("found"); });
+      fb.className = "feedback good";
+      fb.innerHTML = "✓ <b>TAA : codon stop.</b> La lecture va donc de ATG à TAA. Passons à la transcription : l'ADN est copié en ARN messager.";
+      buildTransc();
+    } else {
+      sndError(); fb.className = "feedback bad";
+      fb.textContent = "Ce codon code un acide aminé, ce n'est pas un stop. Les stops sont TAA, TAG et TGA.";
+    }
+  }
+}
+function buildTransc(){
+  document.getElementById("transcBox").style.display = "";
+  var row = document.getElementById("transcRow"); row.innerHTML = "";
+  var seq = "ATGCACCTGACTTAA"; transcLeft = 0;
+  seq.split("").forEach(function(L){
+    if(L === "T"){
+      transcLeft++;
+      var b = document.createElement("button");
+      b.className = "sl"; b.textContent = "T"; b.setAttribute("aria-label", "T à transcrire en U");
+      b.addEventListener("click", function(){
+        if(b.textContent === "U") return;
+        b.textContent = "U"; b.classList.add("arn"); transcLeft--; sndPlace();
+        if(transcLeft === 0){
+          seqStep = 3; sndUnlock();
+          var fb = document.getElementById("seqFeedback");
+          fb.className = "feedback good";
+          fb.innerHTML = "✓ <b>Transcription terminée</b> : AUG CAC CUG ACU UAA — le même message, en ARN (le T est devenu U). Passons à la traduction en acides aminés.";
+          buildTrad();
+        }
+      });
+      row.appendChild(b);
+    } else {
+      var s = document.createElement("span"); s.className = "sl"; s.textContent = L; row.appendChild(s);
+    }
+  });
+}
+function buildTrad(){
+  document.getElementById("tradBox").style.display = "";
+  var row = document.getElementById("tradRow"); row.innerHTML = "";
+  var codons = ["ATG","CAC","CTG","ACT","TAA"]; tradLeft = codons.length;
+  codons.forEach(function(codon){
+    var el = codonEl(codon, "???");
+    el.style.cursor = "pointer";
+    el.addEventListener("click", function(){
+      var aa = el.querySelector(".aa");
+      if(aa.textContent !== "???") return;
+      aa.textContent = codon === "TAA" ? "STOP" : aaOf(codon);
+      tradLeft--; sndPlace();
+      if(tradLeft === 0){
+        var fb = document.getElementById("seqFeedback");
+        fb.className = "feedback good";
+        fb.innerHTML = "🎉 <b>Protéine décodée !</b> Méthionine → Histidine → Leucine → Thréonine → STOP. Tu viens de lire un gène de bout en bout : départ, transcription, traduction. C'est exactement ce que font les ribosomes dans tes cellules, des milliers de fois par seconde.";
+        if(!cur.dnaExtra){ cur.dnaExtra = true; save(); refreshBadge(); selectSpecies(currentSpecies); sndUnlock(); }
+      }
+    });
+    row.appendChild(el);
+  });
+}
+
+/* ---------- TRÈS AVANCÉ : mini-protocole ---------- */
+var protoHypo = null;
+document.querySelectorAll("#protoHypo .chip").forEach(function(b){
+  b.addEventListener("click", function(){
+    protoHypo = b.getAttribute("data-hypo"); sndClick();
+    document.querySelectorAll("#protoHypo .chip").forEach(function(x){ x.classList.toggle("sel", x === b); });
+    document.getElementById("protoRun").disabled = false;
+    var fb = document.getElementById("protoFeedback");
+    fb.className = "feedback";
+    fb.textContent = "Hypothèse notée. Lance l'expérience : un groupe reçoit le remède, l'autre un placebo — sans savoir lequel (ni les participants, ni toi avant les résultats).";
+  });
+});
+document.getElementById("protoRun").addEventListener("click", function(){
+  if(!protoHypo) return;
+  sndUnlock();
+  document.getElementById("protoResult").style.display = "";
+  var fb = document.getElementById("protoFeedback");
+  fb.className = "feedback";
+  fb.innerHTML = "Résultats : le groupe remède baisse de <b>7,2 points</b> en moyenne (± 1,5), le groupe placebo de <b>3,1 points</b> (± 1,4). Le placebo aide un peu aussi (le corps se soigne, l'attente joue un rôle) — mais l'écart est net. À toi de conclure.";
+});
+document.querySelectorAll("#protoConcl .chip").forEach(function(b){
+  b.addEventListener("click", function(){
+    var fb = document.getElementById("protoFeedback");
+    document.querySelectorAll("#protoConcl .chip").forEach(function(x){ x.classList.toggle("sel", x === b); });
+    if(b.getAttribute("data-concl") === "reel"){
+      sndUnlock();
+      fb.className = "feedback good";
+      fb.innerHTML = "✓ <b>Bonne conclusion, et bien raisonnée.</b> L'écart (7,2 − 3,1 = 4,1 points) est nettement plus grand que la variation (± 1,5) : il est peu compatible avec le simple hasard. Ton hypothèse de départ " +
+        (protoHypo === "oui" ? "était la bonne" : "était prudente — les données la dépassent") +
+        ". En vraie recherche, on répéterait l'expérience et on calculerait des statistiques précises avant de conclure pour de bon.";
+      if(!cur.protoDone){ cur.protoDone = true; save(); refreshBadge(); }
+    } else {
+      sndError();
+      fb.className = "feedback bad";
+      fb.innerHTML = "Regarde encore : l'écart entre les moyennes est de 4,1 points, alors que la variation de chaque groupe est d'environ ± 1,5. Les deux groupes ne se chevauchent presque pas — un tel écart serait très étonnant si le remède ne faisait rien. Réessaie.";
+    }
+  });
+});
+
+/* ============================================================
+   MISSIONS — aiguillage + nouvelles missions
+   ============================================================ */
+function showMission(){
+  document.getElementById("missionEnfant").style.display = state.level === "enfant" ? "" : "none";
+  document.getElementById("missionAdo").style.display = state.level === "ado" ? "" : "none";
+  document.getElementById("missionAdulte").style.display = state.level === "adulte" ? "" : "none";
+  document.getElementById("missionAvance").style.display = state.level === "avance" ? "" : "none";
+  document.getElementById("missionTitle").textContent = LEVELS[state.level].missTitle;
+  if(state.level === "enfant") buildInsu();
+  else if(state.level === "ado") buildDrepa();
+  else if(state.level === "adulte") buildAbx();
+  else buildGlob();
+}
+
+/* ---------- ADO : drépanocytose ---------- */
+var GLOB_CODONS = ["ATG","GTG","CAC","CTG","ACT","CCT","GAG","GAG","AAG"];
+var drepaCodons = GLOB_CODONS.slice(), drepaDoneFlag = false;
+function buildDrepa(){
+  drepaCodons = GLOB_CODONS.slice(); drepaDoneFlag = state.levels.ado.missDone;
+  document.getElementById("rbcRound").style.display = "";
+  document.getElementById("rbcSickle").style.display = "none";
+  document.getElementById("rbcCaption").textContent = "Globule rouge normal : rond et souple, il se faufile partout.";
+  var fb = document.getElementById("drepaFeedback");
+  fb.className = "feedback";
+  fb.textContent = drepaDoneFlag
+    ? "✓ Mission déjà réussie — tu peux refaire l'expérience : change le A du premier GAG en T."
+    : "Trouve le premier GAG (codon nº 7) et change son A en T.";
+  renderDrepa();
+}
+function renderDrepa(){
+  var box = document.getElementById("drepaSeq"); box.innerHTML = "";
+  drepaCodons.forEach(function(codon, ci){
+    var wrap = document.createElement("div"); wrap.className = "codon";
+    var letters = document.createElement("div"); letters.className = "letters";
+    codon.split("").forEach(function(L, li){
+      if(ci === 6 || ci === 7){
+        var b = document.createElement("button");
+        b.className = "basebtn b" + L; b.textContent = L;
+        b.setAttribute("aria-label", "Lettre modifiable, codon " + (ci+1));
+        b.addEventListener("click", function(){
+          var arr = drepaCodons[ci].split(""); arr[li] = nextBase(arr[li]);
+          drepaCodons[ci] = arr.join(""); sndPlace(); renderDrepa(); checkDrepa();
+        });
+        letters.appendChild(b);
+      } else {
+        var s = document.createElement("span"); s.className = "basebtn b" + L; s.textContent = L; letters.appendChild(s);
+      }
+    });
+    wrap.appendChild(letters);
+    var aa = document.createElement("div"); aa.className = "aa"; aa.textContent = (ci === 0) ? "départ" : aaOf(codon);
+    wrap.appendChild(aa);
+    box.appendChild(wrap);
+  });
+}
+function checkDrepa(){
+  var fb = document.getElementById("drepaFeedback");
+  if(drepaCodons[6] === "GTG"){
+    document.getElementById("rbcRound").style.display = "none";
+    document.getElementById("rbcSickle").style.display = "";
+    document.getElementById("rbcCaption").textContent = "Globule en faucille : dur et crochu, il peut bloquer les petits vaisseaux.";
+    fb.className = "feedback good";
+    fb.innerHTML = "🧬 <b>Voilà la drépanocytose.</b> Une seule lettre — le A de GAG devenu T, donc GTG — change un acide aminé : le <b>glutamate</b> devient <b>valine</b>. L'hémoglobine se déforme, et le globule rouge prend cette forme de faucille au lieu de rester rond et souple. Tout ça, pour une lettre sur 3 milliards.";
+    if(!state.levels.ado.missDone){
+      state.levels.ado.missDone = true; save(); refreshBadge(); sndUnlock();
+      setTimeout(function(){
+        showSuccess("Mission réussie !",
+          "Tu as reproduit la vraie mutation de la drépanocytose : GAG → GTG dans le gène de la bêta-globine. Une lettre, un acide aminé, une forme de globule complètement différente.");
+      }, 500);
+    }
+  } else if(drepaCodons[7] !== "GAG"){
+    fb.className = "feedback bad";
+    fb.textContent = "Tu as touché au deuxième GAG (codon nº 8) — dans la vraie drépanocytose, c'est le premier GAG, le nº 7, qui change. Remets le nº 8 comme avant et vise le nº 7.";
+  } else {
+    fb.className = "feedback";
+    fb.textContent = "Séquence actuelle : " + drepaCodons.join(" · ") + ". Continue : vise le A du premier GAG (nº 7).";
+  }
+}
+document.getElementById("drepaReset").addEventListener("click", function(){ sndClick(); buildDrepa(); });
+
+/* ---------- ADULTE : antibiotiques et résistance ---------- */
+var ABX_TARGETS = [
+  { "0,1":"O", "1,0":"C", "1,1":"C", "1,2":"N", "2,1":"H" },
+  { "0,0":"H", "0,2":"O", "1,1":"C", "1,2":"C", "2,0":"N", "2,2":"H" }
+];
+var abxPhase = 0, abxCells = {}, abxSel = "C";
+function buildAbx(){
+  abxPhase = 0; abxCells = {}; abxSel = "C";
+  document.getElementById("abxPhase").textContent = "Phase 1 — Fabriquez la clé qui correspond à la serrure de la bactérie.";
+  var fb = document.getElementById("abxFeedback");
+  fb.className = "feedback";
+  fb.textContent = state.levels.adulte.missDone
+    ? "✓ Mission déjà réussie — refaites l'expérience : la bactérie va encore muter…"
+    : "Recopiez la serrure atome par atome, puis testez votre clé.";
+  document.getElementById("abxTest").disabled = false;
+  renderAbxPalette(); renderAbxGrids();
+}
+function renderAbxPalette(){
+  var pal = document.getElementById("abxPalette"); pal.innerHTML = "";
+  ATOMS.forEach(function(a){
+    var b = document.createElement("button");
+    b.className = "palbtn" + (a === abxSel ? " sel" : "");
+    b.innerHTML = '<span class="atom ' + a + '">' + a + "</span>";
+    b.setAttribute("aria-label", "Atome " + a);
+    b.addEventListener("click", function(){ abxSel = a; sndClick(); renderAbxPalette(); });
+    pal.appendChild(b);
+  });
+  var eb = document.createElement("button");
+  eb.className = "palbtn erase" + (abxSel === "X" ? " sel" : ""); eb.textContent = "⌫"; eb.setAttribute("aria-label", "Gomme");
+  eb.addEventListener("click", function(){ abxSel = "X"; sndClick(); renderAbxPalette(); });
+  pal.appendChild(eb);
+}
+function renderAbxGrids(){
+  var target = ABX_TARGETS[abxPhase];
+  var tg = document.getElementById("abxTarget"), pg = document.getElementById("abxPlay");
+  [tg, pg].forEach(function(g){
+    g.style.gridTemplateColumns = "repeat(3, 1fr)"; g.style.maxWidth = "186px"; g.innerHTML = "";
+  });
+  for(var r = 0; r < 3; r++) for(var c = 0; c < 3; c++){
+    var k = key2(r, c);
+    var t = document.createElement("div"); t.className = "cell target";
+    if(target[k]) t.innerHTML = '<span class="atom ghost ' + target[k] + '">' + target[k] + "</span>";
+    tg.appendChild(t);
+    var p = document.createElement("button"); p.className = "cell mine"; p.setAttribute("data-k", k);
+    if(abxCells[k]) p.innerHTML = '<span class="atom ' + abxCells[k] + '">' + abxCells[k] + "</span>";
+    (function(cell){
+      cell.addEventListener("click", function(){
+        var kk = cell.getAttribute("data-k");
+        if(abxSel === "X"){ delete abxCells[kk]; tone(220,.06,"triangle",.08); }
+        else { abxCells[kk] = abxSel; sndPlace(); }
+        renderAbxGrids();
+      });
+    })(p);
+    pg.appendChild(p);
+  }
+}
+document.getElementById("abxTest").addEventListener("click", function(){
+  var target = ABX_TARGETS[abxPhase];
+  var ok = true, keys = {};
+  Object.keys(target).forEach(function(k){ keys[k] = true; });
+  Object.keys(abxCells).forEach(function(k){ keys[k] = true; });
+  Object.keys(keys).forEach(function(k){ if(abxCells[k] !== target[k]) ok = false; });
+  var fb = document.getElementById("abxFeedback");
+  if(!ok){
+    sndError();
+    fb.className = "feedback bad";
+    fb.innerHTML = "La clé ne tourne pas : comparez-la à la serrure, case par case, et réajustez.";
+    return;
+  }
+  if(abxPhase === 0){
+    abxPhase = 1; abxCells = {}; sndUnlock();
+    document.getElementById("abxPhase").textContent = "Phase 2 — La bactérie a muté : sa serrure a changé de forme ! Réajustez la clé.";
+    fb.className = "feedback good";
+    fb.innerHTML = "✓ <b>La clé fonctionne… pour l'instant.</b> Mais des bactéries ont survécu et leur descendance a <b>muté</b> : regardez la nouvelle serrure, à gauche. L'ancien antibiotique ne suffit plus — réajustez la clé.";
+    renderAbxGrids();
+  } else {
+    fb.className = "feedback good";
+    fb.innerHTML = "✓ <b>Clé réajustée !</b> Vous venez de rejouer, en miniature, la course entre les antibiotiques et les mutations des bactéries. Les scientifiques doivent sans cesse concevoir de nouvelles clés.";
+    this.disabled = true; sndUnlock();
+    if(!state.levels.adulte.missDone){
+      state.levels.adulte.missDone = true; save(); refreshBadge();
+      setTimeout(function(){
+        showSuccess("Mission réussie !",
+          "Retenez le message vrai : un traitement antibiotique arrêté trop tôt laisse survivre les bactéries les plus résistantes. Finir le traitement prescrit, c'est protéger tout le monde.");
+      }, 500);
+    }
+  }
+});
+
+/* ---------- TRÈS AVANCÉ : bêta-globine ---------- */
+var PATIENT_CODONS = ["ATG","GTG","CAC","CTG","ACT","CCT","GTG","GAG","AAG"], globFound = false;
+function buildGlob(){
+  globFound = false;
+  document.getElementById("globChoices").style.display = "none";
+  document.querySelectorAll("#globChoices .chip").forEach(function(x){ x.classList.remove("sel"); });
+  var fb = document.getElementById("globFeedback");
+  fb.className = "feedback";
+  fb.textContent = state.levels.avance.missDone
+    ? "✓ Mission déjà réussie — refaites la comparaison, codon par codon."
+    : "Comparez les deux séquences, codon par codon…";
+  var n = document.getElementById("globNormal"); n.innerHTML = "";
+  GLOB_CODONS.forEach(function(codon){ n.appendChild(codonEl(codon, null)); });
+  var p = document.getElementById("globPatient"); p.innerHTML = "";
+  PATIENT_CODONS.forEach(function(codon, ci){
+    var el = codonEl(codon, null);
+    el.style.cursor = "pointer";
+    el.addEventListener("click", function(){
+      if(globFound) return;
+      if(ci === 6){
+        globFound = true; sndUnlock();
+        el.querySelectorAll(".basebtn").forEach(function(s){ s.classList.add("found"); });
+        document.getElementById("globChoices").style.display = "";
+        fb.className = "feedback good";
+        fb.innerHTML = "✓ <b>Codon nº 7 repéré</b> : GTG au lieu de GAG. Tous les autres codons sont identiques. Dernière question : quel acide aminé change ?";
+      } else {
+        sndError();
+        fb.className = "feedback bad";
+        fb.textContent = "Ce codon (nº " + (ci+1) + ") est identique dans les deux séquences. Continuez la comparaison, codon par codon.";
+      }
+    });
+    p.appendChild(el);
+  });
+}
+document.querySelectorAll("#globChoices .chip").forEach(function(b){
+  b.addEventListener("click", function(){
+    var fb = document.getElementById("globFeedback");
+    document.querySelectorAll("#globChoices .chip").forEach(function(x){ x.classList.toggle("sel", x === b); });
+    if(b.getAttribute("data-glob") === "gv"){
+      sndUnlock();
+      fb.className = "feedback good";
+      fb.innerHTML = "✓ <b>Exact : Glutamate → Valine.</b> GAG code le glutamate, GTG code la valine. Ce seul échange, au 7e codon de la bêta-globine, suffit à déformer l'hémoglobine et à donner aux globules rouges leur forme de faucille : c'est la mutation de la drépanocytose, identifiée au niveau moléculaire dès les années 1950.";
+      if(!state.levels.avance.missDone){
+        state.levels.avance.missDone = true; save(); refreshBadge();
+        setTimeout(function(){
+          showSuccess("Mission experte réussie !",
+            "Vous avez repéré, dans une vraie séquence, la mutation unique responsable de la drépanocytose : le premier GAG devenu GTG, Glutamate → Valine.");
+        }, 500);
+      }
+    } else {
+      sndError();
+      fb.className = "feedback bad";
+      fb.textContent = "Pas tout à fait : la séquence normale a GAG (glutamate) à cet endroit, la séquence patiente a GTG. Que code GTG, d'après le code génétique ?";
+    }
+  });
+});
+
+/* ================= DÉMARRAGE ================= */
+renderSpeciesChips();
+selectSpecies("humain");
+loadChallenge(0);
+buildMut();
+buildCompare();
+buildSeqRead();
+refreshBadge();
+setLevel(state.level);
+</script>
+  <!-- ===== Barre de jeu HP — NE PAS ÉDITER À LA MAIN =====
+     Retour / Pause / Partager. Source : src/components/barre-jeu/barre-jeu.js
+     (régénérer le module : bun run build:barre) -->
+<script src="/barre/barre-jeu.js" defer></script>
+<!-- ===== Fin barre de jeu HP ===== -->
+</body>
+</html>

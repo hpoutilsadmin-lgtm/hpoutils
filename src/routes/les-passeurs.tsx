@@ -37,7 +37,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>26 jeux qui restent gratuits pour tout le monde, sans inscription.</p>
+              <p>33 jeux qui restent gratuits pour tout le monde, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Voir les jeux →</Link>
             </article>
             <article className="pillar-card">

@@ -1,0 +1,1825 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>IGLOO — La guerre des igloos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #cfe4f2;
+        --bg-deep: #a9cbe4;
+        --panel: #ffffff;
+        --panel-2: #eef6fb;
+        --ink: #14313f;
+        --ink-soft: #4a6b7d;
+        --line: #b9d4e6;
+        --blue: #1f7ac0;
+        --blue-deep: #155e96;
+        --red: #d64541;
+        --red-deep: #a92f2c;
+        --gold: #f0a81c;
+        --gold-soft: #ffe9bd;
+        --green: #2e9e5b;
+        --shadow: 0 6px 18px rgba(20, 49, 63, .18);
+        --card-off: #d7e4ec;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d2233;
+          --bg-deep: #081826;
+          --panel: #16334a;
+          --panel-2: #1d405c;
+          --ink: #eaf5fc;
+          --ink-soft: #a8c6da;
+          --line: #2c5573;
+          --blue: #3f9be0;
+          --blue-deep: #2b7bbd;
+          --red: #e8605c;
+          --red-deep: #c04440;
+          --gold: #f5b93e;
+          --gold-soft: #4d3d17;
+          --shadow: 0 6px 18px rgba(0, 0, 0, .45);
+          --card-off: #274b63;
+        }
+      }
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: "Nunito", system-ui, sans-serif;
+        color: var(--ink);
+        background: linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+      }
+      h1, h2, h3, .baloo { font-family: "Baloo 2", "Nunito", sans-serif; }
+      button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+      .wrap { width: 100%; max-width: 460px; padding: 10px 12px 18px; display: flex; flex-direction: column; gap: 10px; }
+
+      /* ---------- Écrans ---------- */
+      .screen { display: none; flex-direction: column; gap: 12px; }
+      .screen.active { display: flex; }
+
+      /* ---------- Accueil ---------- */
+      .hero {
+        text-align: center;
+        padding: 18px 10px 6px;
+      }
+      .hero .igloo-art { display: block; margin: 0 auto 4px; }
+      .hero h1 {
+        margin: 0;
+        font-size: 2.35rem;
+        line-height: 1.02;
+        font-weight: 800;
+        letter-spacing: .5px;
+      }
+      .hero h1 .guerre { color: var(--red); }
+      .hero p.tagline { margin: 6px 0 0; color: var(--ink-soft); font-weight: 700; font-size: .98rem; }
+      .wallet {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: 1.05rem;
+      }
+      .wallet .coin {
+        width: 22px; height: 22px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #ffd970, var(--gold) 70%);
+        border: 2px solid #c07f0d; display: inline-block;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 14px;
+      }
+      .panel h2 { margin: 0 0 4px; font-size: 1.15rem; }
+      .panel .sub { color: var(--ink-soft); font-weight: 600; font-size: .88rem; margin: 0 0 10px; }
+      .levels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+      .lvl {
+        aspect-ratio: 1;
+        min-width: 0;
+        border-radius: 14px;
+        background: var(--panel-2);
+        border: 2px solid var(--line);
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800; font-size: 1.15rem;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+        color: var(--ink);
+        position: relative;
+        transition: transform .08s ease;
+      }
+      .lvl small { font-size: .52rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .4px; text-align: center; line-height: 1.1; padding: 0 2px; }
+      .lvl:not(:disabled):active { transform: scale(.94); }
+      .lvl.boss { border-color: var(--red); background: #fdeceb; }
+      @media (prefers-color-scheme: dark) { .lvl.boss { background: #472524; } }
+      .lvl:disabled { opacity: .45; cursor: not-allowed; }
+      .lvl.done { border-color: var(--green); }
+      .lvl .star { position: absolute; top: 3px; right: 6px; font-size: .7rem; color: var(--gold); }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 1.05rem;
+        padding: 12px 20px; border-radius: 14px;
+        background: var(--blue); color: #fff;
+        box-shadow: 0 4px 0 var(--blue-deep), var(--shadow);
+        transition: transform .08s ease, box-shadow .08s ease;
+        width: 100%;
+      }
+      .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--blue-deep); }
+      .btn.red { background: var(--red); box-shadow: 0 4px 0 var(--red-deep), var(--shadow); }
+      .btn.red:active { box-shadow: 0 1px 0 var(--red-deep); }
+      .btn.ghost { background: var(--panel); color: var(--ink); border: 2px solid var(--line); box-shadow: var(--shadow); }
+      .btn.small { width: auto; padding: 8px 14px; font-size: .92rem; }
+      .btn:disabled { opacity: .5; cursor: not-allowed; }
+      .deck-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .deck-item { display: flex; gap: 9px; align-items: center; background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; }
+      .deck-item .ic { flex: 0 0 auto; width: 34px; height: 34px; display: grid; place-items: center; }
+      .deck-item b { font-size: .86rem; display: block; line-height: 1.15; }
+      .deck-item span.desc { font-size: .72rem; color: var(--ink-soft); font-weight: 600; line-height: 1.25; display: block; }
+      .cost-badge {
+        display: inline-grid; place-items: center;
+        min-width: 20px; height: 20px; padding: 0 4px;
+        border-radius: 10px; background: #7fd0ff; color: #0b3552;
+        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: .8rem;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 4px rgba(0,0,0,.25);
+      }
+      .howto { margin: 0; padding-left: 18px; font-weight: 600; color: var(--ink-soft); font-size: .9rem; line-height: 1.55; }
+      .howto b { color: var(--ink); }
+
+      /* ---------- Améliorations ---------- */
+      .upg { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+      .upg:last-child { border-bottom: none; }
+      .upg .info { flex: 1; }
+      .upg b { display: block; font-size: .95rem; }
+      .upg span { font-size: .78rem; color: var(--ink-soft); font-weight: 600; }
+      .pips { display: flex; gap: 3px; margin-top: 3px; }
+      .pip { width: 16px; height: 6px; border-radius: 3px; background: var(--card-off); }
+      .pip.on { background: var(--gold); }
+      .upg .buy {
+        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: .85rem;
+        background: var(--gold); color: #4a2f00; border-radius: 10px; padding: 8px 10px;
+        box-shadow: 0 3px 0 #c07f0d; white-space: nowrap;
+      }
+      .upg .buy:active { transform: translateY(2px); box-shadow: 0 1px 0 #c07f0d; }
+      .upg .buy:disabled { opacity: .45; box-shadow: none; }
+
+      /* ---------- Bataille ---------- */
+      #screen-battle { gap: 8px; }
+      .battle-top {
+        display: flex; align-items: center; gap: 8px;
+      }
+      .battle-top .lvl-name { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: .95rem; flex: 1; line-height: 1.1; }
+      .battle-top .lvl-name small { display: block; font-family: "Nunito", sans-serif; font-weight: 700; font-size: .68rem; color: var(--ink-soft); }
+      .timer {
+        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 1.05rem;
+        background: var(--panel); border: 2px solid var(--line); border-radius: 10px; padding: 3px 10px;
+        min-width: 64px; text-align: center;
+      }
+      .timer.hot { color: var(--red); border-color: var(--red); }
+      .icon-btn {
+        width: 38px; height: 38px; border-radius: 10px; background: var(--panel);
+        border: 2px solid var(--line); display: grid; place-items: center; font-size: 1rem;
+      }
+      .law-badge {
+        display: none;
+        background: var(--gold-soft); border: 1.5px dashed var(--gold);
+        color: var(--ink); border-radius: 10px; padding: 5px 9px;
+        font-size: .76rem; font-weight: 800; align-items: center; gap: 6px;
+      }
+      .law-badge.show { display: flex; }
+      .field-wrap {
+        position: relative;
+        width: min(100%, 440px, max(250px, calc((100dvh - 292px) * 0.625)));
+        margin: 0 auto;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        border: 3px solid var(--panel);
+        line-height: 0;
+      }
+      canvas#field { width: 100%; height: auto; display: block; touch-action: none; }
+      .banner {
+        position: absolute; left: 50%; top: 34%;
+        transform: translate(-50%, -50%) scale(.8);
+        background: rgba(16, 42, 58, .92); color: #fff;
+        font-family: "Baloo 2", sans-serif; font-weight: 800;
+        font-size: 1.25rem; text-align: center;
+        padding: 10px 18px; border-radius: 14px;
+        opacity: 0; pointer-events: none;
+        transition: opacity .18s ease, transform .18s ease;
+        max-width: 88%; line-height: 1.15; z-index: 5;
+      }
+      .banner small { display: block; font-family: "Nunito", sans-serif; font-size: .78rem; font-weight: 700; color: #bfe3ff; margin-top: 2px; }
+      .banner.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      .hint-bar {
+        min-height: 22px; text-align: center; font-weight: 800; font-size: .85rem; color: var(--blue-deep);
+      }
+      @media (prefers-color-scheme: dark) { .hint-bar { color: #8fd0ff; } }
+      .energy-row { display: flex; align-items: center; gap: 8px; }
+      .energy-label { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: .8rem; white-space: nowrap; }
+      .energy-bar {
+        flex: 1; height: 20px; border-radius: 10px; background: var(--card-off);
+        border: 2px solid var(--panel); box-shadow: inset 0 2px 4px rgba(0,0,0,.18);
+        position: relative; overflow: hidden;
+      }
+      .energy-fill {
+        height: 100%; width: 50%;
+        background: repeating-linear-gradient(90deg, #57b8f5 0 22px, #7fd0ff 22px 24px);
+        border-radius: 8px; transition: width .15s linear;
+      }
+      .energy-num { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 1rem; min-width: 22px; text-align: center; }
+      .hand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      .card {
+        position: relative;
+        background: var(--panel); border: 2.5px solid var(--line); border-radius: 14px;
+        padding: 7px 4px 6px;
+        display: flex; flex-direction: column; align-items: center; gap: 2px;
+        box-shadow: var(--shadow);
+        transition: transform .08s ease, border-color .1s ease;
+        min-height: 86px;
+      }
+      .card .ic { height: 34px; display: grid; place-items: center; }
+      .card b { font-size: .68rem; line-height: 1.1; text-align: center; font-weight: 800; }
+      .card .cost-badge { position: absolute; top: -8px; left: -6px; }
+      .card.selected { border-color: var(--gold); transform: translateY(-6px); box-shadow: 0 10px 18px rgba(240, 168, 28, .35); }
+      .card.unaffordable { opacity: .45; filter: saturate(.4); }
+      .card.shake { animation: shake .3s ease; }
+      @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+      .next-card { text-align: center; font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
+
+      /* ---------- Surcouche fin de partie / tuto ---------- */
+      .overlay {
+        position: fixed; inset: 0; z-index: 40;
+        background: rgba(10, 28, 40, .62);
+        display: none; align-items: center; justify-content: center;
+        padding: 18px;
+      }
+      .overlay.show { display: flex; }
+      .overlay .box {
+        background: var(--panel); border-radius: 20px; box-shadow: var(--shadow);
+        padding: 22px 20px; max-width: 400px; width: 100%; text-align: center;
+        max-height: 88dvh; overflow-y: auto;
+      }
+      .overlay h2 { margin: 0 0 6px; font-size: 1.7rem; }
+      .overlay p { font-weight: 600; color: var(--ink-soft); margin: 6px 0; line-height: 1.5; }
+      .overlay .big-emoji { font-size: 2.6rem; line-height: 1; }
+      .overlay.show .box { animation: boxpop .38s cubic-bezier(.2, 1.5, .35, 1); }
+      @keyframes boxpop { from { transform: scale(.72) translateY(14px); opacity: 0; } }
+      .overlay.show .big-emoji { display: inline-block; animation: emojipop .7s ease; }
+      @keyframes emojipop { 0% { transform: scale(0) rotate(-14deg); } 60% { transform: scale(1.25) rotate(6deg); } 100% { transform: scale(1); } }
+      .card:active { transform: scale(.93); }
+      .overlay .reward {
+        display: inline-flex; gap: 8px; align-items: center;
+        background: var(--gold-soft); border-radius: 12px; padding: 8px 14px;
+        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 1.05rem; margin: 8px 0;
+      }
+      .overlay .stack { display: flex; flex-direction: column; gap: 9px; margin-top: 14px; }
+      .tuto-steps { text-align: left; margin: 10px 0; padding-left: 20px; font-weight: 700; line-height: 1.6; color: var(--ink); }
+      footer.note { text-align: center; color: var(--ink-soft); font-size: .72rem; font-weight: 600; padding: 2px 10px 0; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <!-- ============ ACCUEIL ============ -->
+      <section id="screen-home" class="screen active">
+        <div class="hero">
+          <svg class="igloo-art" width="120" height="74" viewBox="0 0 120 74" aria-hidden="true">
+            <path d="M14 70 a46 40 0 0 1 92 0 Z" fill="#eef6fb" stroke="#9fc3dc" stroke-width="3"/>
+            <path d="M30 44 h60 M22 57 h76" stroke="#c3dcee" stroke-width="3" fill="none"/>
+            <path d="M48 70 v-16 a12 12 0 0 1 24 0 v16 Z" fill="#d7ecfa" stroke="#9fc3dc" stroke-width="3"/>
+            <circle cx="20" cy="12" r="3" fill="#fff"/><circle cx="102" cy="8" r="2.4" fill="#fff"/>
+            <circle cx="88" cy="18" r="2" fill="#fff"/><circle cx="34" cy="6" r="2" fill="#fff"/>
+          </svg>
+          <h1>IGLOO<br /><span class="guerre">La guerre des igloos</span></h1>
+          <p class="tagline">La bataille de boules de neige du quartier : construis ta défense, lance tes troupes, fais tomber l'igloo rouge !</p>
+        </div>
+
+        <div class="wallet"><span class="coin" aria-hidden="true"></span><span id="wallet-coins">0</span>&nbsp;pièces</div>
+
+        <div class="panel">
+          <h2>Campagne — 10 batailles</h2>
+          <p class="sub">Chaque bataille tire une <b>loi du quartier</b> au hasard. Les batailles 3, 5, 7 et 10 cachent un boss… et plus tu avances, plus l'adversaire est coriace !</p>
+          <div class="levels" id="level-grid"></div>
+        </div>
+
+        <button class="btn" id="btn-upgrades">Améliorer mon igloo</button>
+
+        <div class="panel">
+          <h2>Ton paquet — 12 cartes</h2>
+          <p class="sub">L'énergie se recharge toute seule. Choisis le bon moment !</p>
+          <div class="deck-list" id="deck-list"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Comment jouer</h2>
+          <ul class="howto">
+            <li><b>Touche une carte</b>, puis <b>touche ta moitié de terrain</b> (en bas) pour déployer.</li>
+            <li>Tes unités avancent et se battent <b>toutes seules</b> : ton travail, c'est la stratégie.</li>
+            <li>Détruis <b>l'igloo rouge</b> avant que le tien tombe. À la fin du temps, les tours détruites départagent.</li>
+            <li>Le <b>bonhomme de neige</b> protège les alliés autour de lui. Le <b>Gèleux</b> ralentit les ennemis.</li>
+            <li>Le <b>Castor</b> ronge les bâtiments, la <b>Mini-souffleuse</b> repousse les ennemis, la <b>Rafale</b> fait pleuvoir les boules de neige et le <b>Chocolat chaud</b> réchauffe tes troupes.</li>
+            <li>Gagne des <b>pièces</b> et améliore ton igloo entre les batailles.</li>
+          </ul>
+        </div>
+        <footer class="note">Prototype pour essais — aucun multijoueur, aucune dépense réelle. Les progrès restent dans cette session.</footer>
+      </section>
+
+      <!-- ============ AMÉLIORATIONS ============ -->
+      <section id="screen-shop" class="screen">
+        <div class="panel">
+          <h2>Améliorations</h2>
+          <p class="sub">Tes pièces : <b id="shop-coins">0</b>. Chaque amélioration a 3 rangs.</p>
+          <div id="upg-list"></div>
+        </div>
+        <button class="btn ghost" id="btn-shop-back">Retour</button>
+      </section>
+
+      <!-- ============ BATAILLE ============ -->
+      <section id="screen-battle" class="screen">
+        <div class="battle-top">
+          <div class="lvl-name"><span id="battle-title">Bataille 1</span><small id="battle-sub"></small></div>
+          <div class="timer" id="timer">3:00</div>
+          <button class="icon-btn" id="btn-sound" aria-label="Son activé ou coupé">🔊</button>
+          <button class="icon-btn" id="btn-quit" aria-label="Quitter la bataille">✕</button>
+        </div>
+        <div class="law-badge" id="law-badge"></div>
+        <div class="field-wrap">
+          <canvas id="field" width="400" height="640" role="img" aria-label="Terrain de bataille enneigé : touche ta moitié du bas pour déployer tes unités"></canvas>
+          <div class="banner" id="banner"></div>
+        </div>
+        <div class="hint-bar" id="hint">Touche une carte pour commencer !</div>
+        <div class="energy-row">
+          <span class="energy-label">Énergie</span>
+          <div class="energy-bar"><div class="energy-fill" id="energy-fill"></div></div>
+          <span class="energy-num" id="energy-num">5</span>
+        </div>
+        <div class="hand" id="hand"></div>
+        <div class="next-card" id="next-card"></div>
+      </section>
+    </div>
+
+    <!-- ============ FIN DE PARTIE ============ -->
+    <div class="overlay" id="overlay-end">
+      <div class="box">
+        <div class="big-emoji" id="end-emoji">🏆</div>
+        <h2 id="end-title">Victoire !</h2>
+        <p id="end-text"></p>
+        <div class="reward" id="end-reward"></div>
+        <div class="stack">
+          <button class="btn" id="btn-end-next">Bataille suivante</button>
+          <button class="btn ghost" id="btn-end-replay">Rejouer</button>
+          <button class="btn ghost" id="btn-end-home">Retour à l'accueil</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TUTORIEL ============ -->
+    <div class="overlay" id="overlay-tuto">
+      <div class="box">
+        <div class="big-emoji">❄️</div>
+        <h2>Prêt pour la bataille ?</h2>
+        <ol class="tuto-steps">
+          <li>Touche une <b>carte</b> en bas de l'écran.</li>
+          <li>Touche <b>ta moitié de terrain</b> (la bleue, en bas) pour la déployer.</li>
+          <li>Détruis <b>l'igloo rouge</b> avant la fin du temps. Attention à la loi du quartier !</li>
+        </ol>
+        <div class="stack">
+          <button class="btn red" id="btn-tuto-go">C'est parti !</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    "use strict";
+    /* =====================================================================
+       IGLOO — La guerre des igloos (prototype)
+       Arène de défense en temps réel : cartes + énergie, unités autonomes,
+       lois du quartier, campagne de 10 batailles avec boss.
+       ===================================================================== */
+
+    // ---------- Constantes du terrain (coordonnées logiques) ----------
+    var W = 400, H = 640;
+    var MID_Y = 320;
+    var MOUND = { x: 200, y: 320, r: 44 };          // butte de neige centrale
+    var SNOWMAN_POS = { x: 200, y: 320 };           // (référence visuelle)
+
+    // ---------- Cartes ----------
+    // kind: 'unit' (se déploie), 'spell' (effet au point touché)
+    var CARDS = {
+      lanceur:    { name: "Le lanceur",        cost: 2, kind: "unit", hp: 95,  dmg: 13, range: 92,  speed: 36, atk: 0.85, radius: 11, desc: "Rapide, lance des boules de loin." },
+      bonhomme:   { name: "Bonhomme de neige", cost: 3, kind: "unit", hp: 260, dmg: 10, range: 112, speed: 0,  atk: 1.1,  radius: 14, desc: "Immobile. Protège les alliés autour de lui." },
+      castor:     { name: "Le Castor",         cost: 3, kind: "unit", hp: 130, dmg: 14, range: 20,  speed: 48, atk: 0.7,  radius: 11, structMul: 2, desc: "Vite ! Et ses dents rongent les bâtiments deux fois plus fort." },
+      manteau:    { name: "Le gros manteau",   cost: 4, kind: "unit", hp: 430, dmg: 22, range: 20,  speed: 21, atk: 1.0,  radius: 15, desc: "Un mur sur deux jambes. Frappe au corps à corps." },
+      geleux:     { name: "Le Gèleux",         cost: 3, kind: "unit", hp: 115, dmg: 6,  range: 86,  speed: 31, atk: 1.0,  radius: 11, desc: "Ses boules gèlent : les ennemis ralentissent." },
+      canon:      { name: "Canon à neige",     cost: 5, kind: "unit", hp: 170, dmg: 30, range: 125, speed: 14, atk: 2.0,  radius: 14, splash: 34, desc: "Lent, mais ses boules géantes éclatent en zone." },
+      souffleuse: { name: "Mini-souffleuse",   cost: 6, kind: "unit", hp: 300, dmg: 16, range: 70,  speed: 16, atk: 1.4,  radius: 15, splash: 30, push: 30, desc: "Souffle un jet de neige qui repousse les ennemis." },
+      traineau:   { name: "Traîneau explosif", cost: 5, kind: "spell", dmg: 72, splash: 62, desc: "Fonce sur la voie touchée et explose en gerbe de neige." },
+      glace:      { name: "Glace noire",       cost: 2, kind: "spell", desc: "Une plaque de glace : les ennemis qui marchent dessus glissent et tombent." },
+      rafale:     { name: "Rafale de neige",   cost: 4, kind: "spell", dmg: 45, splash: 72, desc: "Une bordée de boules de neige s'abat sur la zone touchée." },
+      chocolat:   { name: "Chocolat chaud",    cost: 2, kind: "spell", heal: 80, desc: "Réchauffe tes troupes : +80 PV aux alliés autour, et fini le gel !" },
+      reparation: { name: "Réparation",        cost: 3, kind: "spell", heal: 200, desc: "Recolle les blocs : soigne ton igloo ou ta tour la plus amochée. « C'est carré ! »" }
+    };
+    var DECK = ["lanceur", "bonhomme", "castor", "manteau", "geleux", "canon", "souffleuse", "traineau", "glace", "rafale", "chocolat", "reparation"];
+
+    // Icônes SVG simples par carte
+    function cardIcon(id, size) {
+      var s = size || 32, c1 = "#1f7ac0", c2 = "#d64541";
+      var inner = "";
+      switch (id) {
+        case "lanceur": inner = '<circle cx="16" cy="20" r="8" fill="' + c1 + '"/><circle cx="16" cy="9" r="5" fill="#ffd9a0"/><path d="M11 5 a5 5 0 0 1 10 0 Z" fill="' + c2 + '"/><circle cx="27" cy="12" r="4" fill="#fff" stroke="#9fc3dc" stroke-width="1.5"/>'; break;
+        case "bonhomme": inner = '<circle cx="16" cy="24" r="7" fill="#fff" stroke="#9fc3dc" stroke-width="1.5"/><circle cx="16" cy="13" r="5.5" fill="#fff" stroke="#9fc3dc" stroke-width="1.5"/><path d="M21 13 l6 1.6 -6 1.6 Z" fill="#f08c1e"/><circle cx="14.4" cy="12" r=".9" fill="#14313f"/><circle cx="17.6" cy="12" r=".9" fill="#14313f"/>'; break;
+        case "manteau": inner = '<rect x="7" y="8" width="18" height="18" rx="6" fill="#7a4a21"/><circle cx="16" cy="7" r="4.4" fill="#ffd9a0"/><path d="M9 12 h14" stroke="#5d3717" stroke-width="2"/>'; break;
+        case "geleux": inner = '<circle cx="16" cy="20" r="8" fill="#59c2e8"/><circle cx="16" cy="9" r="5" fill="#dff3ff"/><path d="M16 2 v5 M12 4 l4 3 4-3" stroke="#59c2e8" stroke-width="1.8" fill="none"/><path d="M6 26 l4-3 M26 26 l-4-3" stroke="#59c2e8" stroke-width="1.8"/>'; break;
+        case "canon": inner = '<rect x="6" y="18" width="20" height="9" rx="3" fill="#5b6b78"/><rect x="12" y="8" width="9" height="12" rx="3" fill="#74879a"/><circle cx="27" cy="10" r="4.6" fill="#fff" stroke="#9fc3dc" stroke-width="1.5"/><circle cx="11" cy="28" r="3" fill="#33424e"/><circle cx="22" cy="28" r="3" fill="#33424e"/>'; break;
+        case "traineau": inner = '<path d="M5 20 h21 l-3 5 H9 Z" fill="' + c2 + '"/><path d="M4 27 q8 4 24 0" stroke="#7a4a21" stroke-width="2.4" fill="none"/><path d="M12 12 l3 6 M20 10 l2 8" stroke="#f0a81c" stroke-width="2.2"/><circle cx="13" cy="10" r="2.2" fill="#f0a81c"/><circle cx="21" cy="8" r="2.2" fill="#f0a81c"/>'; break;
+        case "glace": inner = '<path d="M4 24 a12 7 0 0 1 24 0 Z" fill="#aee3f7"/><path d="M10 21 l4-4 M18 22 l5-6 M24 21 l3-3" stroke="#fff" stroke-width="1.8"/><path d="M16 4 v6 M12 6 l4 3 4-3" stroke="#59c2e8" stroke-width="1.8" fill="none"/>'; break;
+        case "reparation": inner = '<path d="M8 26 v-9 a8 8 0 0 1 16 0 v9 Z" fill="#eef6fb" stroke="#9fc3dc" stroke-width="1.6"/><path d="M17 12 v8 M13 16 h8" stroke="#2e9e5b" stroke-width="2.6"/>'; break;
+        case "castor": inner = '<ellipse cx="23" cy="24" rx="6" ry="3.6" fill="#6e4520" transform="rotate(24 23 24)"/><circle cx="15" cy="19" r="8" fill="#8a5a2b"/><circle cx="15" cy="10" r="5.4" fill="#a06a33"/><circle cx="11" cy="6.4" r="1.8" fill="#8a5a2b"/><circle cx="19" cy="6.4" r="1.8" fill="#8a5a2b"/><rect x="12.8" y="13.4" width="4.4" height="3.6" rx="1" fill="#fff"/><circle cx="13" cy="9.4" r="1" fill="#14313f"/><circle cx="17" cy="9.4" r="1" fill="#14313f"/>'; break;
+        case "souffleuse": inner = '<rect x="7" y="15" width="17" height="10" rx="3" fill="#e07b1f"/><rect x="12" y="6" width="6" height="10" rx="2" fill="#b85f10"/><circle cx="11" cy="27" r="3" fill="#33424e"/><circle cx="21" cy="27" r="3" fill="#33424e"/><circle cx="26" cy="4" r="1.8" fill="#fff" stroke="#9fc3dc"/><circle cx="29" cy="8" r="1.4" fill="#fff" stroke="#9fc3dc"/><circle cx="24" cy="9" r="1.2" fill="#fff" stroke="#9fc3dc"/>'; break;
+        case "rafale": inner = '<path d="M8 15 a6 6 0 0 1 2-11.6 A7 7 0 0 1 24 6 a5.5 5.5 0 0 1 1 10.9 Z" fill="#cfe8f7" stroke="#9fc3dc" stroke-width="1.4" transform="translate(0,2)"/><circle cx="10" cy="24" r="2.6" fill="#fff" stroke="#9fc3dc"/><circle cx="17" cy="27" r="2.6" fill="#fff" stroke="#9fc3dc"/><circle cx="24" cy="24" r="2.6" fill="#fff" stroke="#9fc3dc"/><path d="M10 19 v2 M17 21 v2 M24 19 v2" stroke="#59c2e8" stroke-width="1.6"/>'; break;
+        case "chocolat": inner = '<path d="M9 13 h14 v9 a5 5 0 0 1 -5 5 h-4 a5 5 0 0 1 -5 -5 Z" fill="#b3541e"/><path d="M23 15 q5 1.4 0 6" stroke="#b3541e" stroke-width="2.4" fill="none"/><rect x="11" y="15.4" width="10" height="3" rx="1.5" fill="#6e3410"/><path d="M13 10 q1.6 -2 0 -4 M18 10 q1.6 -2 0 -4" stroke="#c9a37e" stroke-width="1.8" fill="none"/><circle cx="16" cy="20.4" r="1.7" fill="#fff"/>'; break;
+      }
+      return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 32 32" aria-hidden="true">' + inner + "</svg>";
+    }
+
+    // ---------- Niveaux & boss ----------
+    var LEVELS = [
+      { n: 1,  name: "La ruelle tranquille", boss: null },
+      { n: 2,  name: "Premiers flocons",     boss: null },
+      { n: 3,  name: "Le chef d'équipe",     boss: { name: "Chef d'équipe ado", hp: 640, dmg: 16, speed: 24, radius: 17, range: 80, atk: 1.0 } },
+      { n: 4,  name: "Ça glisse en maudit",  boss: null },
+      { n: 5,  name: "Le voisin à la pelle", boss: { name: "Le voisin à la pelle", hp: 950, dmg: 30, speed: 19, radius: 18, range: 24, atk: 1.1 } },
+      { n: 6,  name: "Bataille de ruelle",   boss: null },
+      { n: 7,  name: "La cheffe d'équipe",   boss: { name: "Cheffe d'équipe ado", hp: 1050, dmg: 18, speed: 27, radius: 17, range: 84, atk: 0.9 } },
+      { n: 8,  name: "Tempête de neige",     boss: null },
+      { n: 9,  name: "La veille du grand jour", boss: null },
+      { n: 10, name: "Le roi de la souffleuse", boss: { name: "Le roi de la souffleuse", hp: 1500, dmg: 26, speed: 16, radius: 21, range: 95, atk: 1.3, souffle: true } }
+    ];
+
+    // ---------- Courbe de difficulté (par bataille) ----------
+    // hp/dmg : multiplicateurs des unités et bâtiments ennemis ; ai : énergie ennemie par seconde.
+    // Bataille 1 douce pour apprendre, boss corsés, bataille 10 exigeante.
+    var DIFF = [
+      { hp: 0.90, dmg: 0.88, ai: 0.55 },
+      { hp: 0.96, dmg: 0.94, ai: 0.59 },
+      { hp: 1.00, dmg: 1.00, ai: 0.62 },
+      { hp: 1.05, dmg: 1.03, ai: 0.65 },
+      { hp: 1.09, dmg: 1.06, ai: 0.68 },
+      { hp: 1.13, dmg: 1.09, ai: 0.71 },
+      { hp: 1.18, dmg: 1.13, ai: 0.74 },
+      { hp: 1.23, dmg: 1.16, ai: 0.78 },
+      { hp: 1.29, dmg: 1.20, ai: 0.82 },
+      { hp: 1.36, dmg: 1.25, ai: 0.87 }
+    ];
+
+    // ---------- Lois du quartier ----------
+    var LAWS = [
+      { id: "glisse",    name: "Loi — Ça glisse en maudit",        desc: "Des plaques de glace apparaissent partout. Tout le monde peut glisser !" },
+      { id: "tempete",   name: "Loi — Tempête annoncée",           desc: "Une rafale traverse une voie toutes les 20 secondes. Tiens ton tuque !" },
+      { id: "cour",      name: "Loi — Pas dans ma cour",           desc: "Une voie se ferme par moments. Tout le monde passe par l'autre côté." },
+      { id: "bonhomme",  name: "Loi — Respect du bonhomme de neige", desc: "Les bonshommes de neige protègent leurs alliés deux fois mieux." }
+    ];
+
+    // ---------- Améliorations ----------
+    var UPGRADES = [
+      { id: "murs",    name: "Murs renforcés",   desc: "+150 PV pour ton igloo, par rang.",        costs: [40, 70, 110] },
+      { id: "tours",   name: "Tours glacées",    desc: "+20 % de dégâts pour tes tours, par rang.", costs: [40, 70, 110] },
+      { id: "energie", name: "Énergie vive",     desc: "Énergie qui se recharge 15 % plus vite, par rang.", costs: [40, 70, 110] },
+      { id: "boules",  name: "Boules dures",     desc: "+12 % de dégâts pour tes unités, par rang.", costs: [40, 70, 110] },
+      { id: "mitaines", name: "Mitaines chaudes", desc: "+12 % de PV pour tes unités, par rang.",  costs: [40, 70, 110] }
+    ];
+
+    // ---------- État global (session seulement) ----------
+    var P = {
+      coins: 60,
+      unlocked: 1,          // plus haut niveau accessible
+      done: {},             // niveaux terminés
+      upg: { murs: 0, tours: 0, energie: 0, boules: 0, mitaines: 0 },
+      tutoSeen: false,
+      sound: true
+    };
+
+    // ---------- Audio (petits sons synthétisés) ----------
+    var AC = null;
+    function beep(freq, dur, type, vol, slideTo) {
+      if (!P.sound) return;
+      try {
+        if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+        if (AC.state === "suspended") AC.resume();
+        var o = AC.createOscillator(), g = AC.createGain();
+        o.type = type || "sine"; o.frequency.value = freq;
+        if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, AC.currentTime + dur);
+        g.gain.setValueAtTime(vol || 0.08, AC.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + dur);
+        o.connect(g); g.connect(AC.destination);
+        o.start(); o.stop(AC.currentTime + dur);
+      } catch (e) { /* audio non dispo : silence */ }
+    }
+    function sfx(name) {
+      if (name === "throw") beep(520, 0.08, "triangle", 0.03, 300);
+      else if (name === "hit") beep(200, 0.06, "square", 0.025, 120);
+      else if (name === "boom") { beep(120, 0.35, "sawtooth", 0.09, 40); beep(70, 0.4, "square", 0.06, 30); }
+      else if (name === "slip") beep(700, 0.22, "sine", 0.05, 1400);
+      else if (name === "play") beep(660, 0.09, "triangle", 0.05, 880);
+      else if (name === "win") { beep(523, 0.14, "triangle", 0.07); setTimeout(function(){ beep(659, 0.14, "triangle", 0.07); }, 130); setTimeout(function(){ beep(784, 0.24, "triangle", 0.08); }, 270); }
+      else if (name === "lose") { beep(392, 0.2, "triangle", 0.07); setTimeout(function(){ beep(330, 0.2, "triangle", 0.07); }, 180); setTimeout(function(){ beep(262, 0.34, "triangle", 0.08); }, 360); }
+    }
+
+    // ---------- Utilitaires ----------
+    function $(id) { return document.getElementById(id); }
+    function dist(a, b) { var dx = a.x - b.x, dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy); }
+    function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+    function rand(a, b) { return a + Math.random() * (b - a); }
+    function shuffle(arr) {
+      var a = arr.slice();
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function showScreen(id) {
+      var screens = document.querySelectorAll(".screen");
+      for (var i = 0; i < screens.length; i++) screens[i].classList.remove("active");
+      $(id).classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    // =====================================================================
+    //  ACCUEIL & BOUTIQUE
+    // =====================================================================
+    function renderHome() {
+      $("wallet-coins").textContent = P.coins;
+      var grid = $("level-grid");
+      grid.innerHTML = "";
+      LEVELS.forEach(function (lv) {
+        var b = document.createElement("button");
+        b.className = "lvl" + (lv.boss ? " boss" : "") + (P.done[lv.n] ? " done" : "");
+        b.disabled = lv.n > P.unlocked;
+        b.innerHTML = (P.done[lv.n] ? '<span class="star">★</span>' : "") + lv.n + "<small>" + (lv.boss ? "BOSS" : lv.name.split(" ")[0]) + "</small>";
+        b.setAttribute("aria-label", "Bataille " + lv.n + " : " + lv.name + (lv.n > P.unlocked ? " (verrouillée)" : ""));
+        b.addEventListener("click", function () { startBattle(lv.n); });
+        grid.appendChild(b);
+      });
+      var dl = $("deck-list");
+      dl.innerHTML = "";
+      DECK.forEach(function (id) {
+        var c = CARDS[id];
+        var d = document.createElement("div");
+        d.className = "deck-item";
+        d.innerHTML = '<div class="ic">' + cardIcon(id, 34) + '</div><div><b>' + c.name + ' <span class="cost-badge">' + c.cost + "</span></b><span class=\"desc\">" + c.desc + "</span></div>";
+        dl.appendChild(d);
+      });
+    }
+    function renderShop() {
+      $("shop-coins").textContent = P.coins;
+      var list = $("upg-list");
+      list.innerHTML = "";
+      UPGRADES.forEach(function (u) {
+        var rank = P.upg[u.id];
+        var row = document.createElement("div");
+        row.className = "upg";
+        var pips = "";
+        for (var i = 0; i < 3; i++) pips += '<span class="pip' + (i < rank ? " on" : "") + '"></span>';
+        var btnHtml = rank >= 3
+          ? '<button class="buy" disabled>MAX</button>'
+          : '<button class="buy" data-upg="' + u.id + '"' + (P.coins < u.costs[rank] ? " disabled" : "") + ">⬆ " + u.costs[rank] + " pièces</button>";
+        row.innerHTML = '<div class="info"><b>' + u.name + '</b><span>' + u.desc + '</span><div class="pips">' + pips + "</div></div>" + btnHtml;
+        list.appendChild(row);
+      });
+      var buys = list.querySelectorAll(".buy[data-upg]");
+      for (var i = 0; i < buys.length; i++) {
+        buys[i].addEventListener("click", function () {
+          var id = this.getAttribute("data-upg");
+          var u = null;
+          UPGRADES.forEach(function (x) { if (x.id === id) u = x; });
+          var rank = P.upg[id];
+          if (rank < 3 && P.coins >= u.costs[rank]) {
+            P.coins -= u.costs[rank];
+            P.upg[id]++;
+            beep(880, 0.12, "triangle", 0.06, 1200);
+            renderShop(); renderHome();
+          }
+        });
+      }
+    }
+
+    // =====================================================================
+    //  BATAILLE
+    // =====================================================================
+    var G = null; // état de la partie en cours
+    var cv = $("field"), ctx = cv.getContext("2d");
+    var rafId = null, lastTs = 0;
+
+    function makeStructure(team, kind, x, y) {
+      var isIgloo = kind === "igloo";
+      var hp = isIgloo ? 900 : 440;
+      if (team === "player") {
+        if (isIgloo) hp += P.upg.murs * 150;
+      }
+      var dmgMul = 1;
+      if (team === "player" && !isIgloo) dmgMul = 1 + P.upg.tours * 0.20;
+      if (team === "enemy") { hp = Math.round(hp * G.hpMul); }
+      return {
+        team: team, kind: kind, x: x, y: y,
+        r: isIgloo ? 30 : 20,
+        hp: hp, maxHp: hp,
+        dmg: Math.round((isIgloo ? 0 : 17) * dmgMul * (team === "enemy" ? G.dmgMul : 1)),
+        range: 135, atk: 1.15, cd: rand(0.2, 0.8),
+        dead: false, flash: 0
+      };
+    }
+
+    function startBattle(levelNum) {
+      var lv = LEVELS[levelNum - 1];
+      var law = LAWS[Math.floor(Math.random() * LAWS.length)];
+      G = {
+        level: lv,
+        law: law,
+        time: 180,
+        over: false,
+        units: [],
+        shots: [],
+        patches: [],      // {x,y,r,t,dur,team: 'all'|'enemy'}
+        parts: [],        // particules
+        floats: [],       // textes flottants {x,y,text,color,t}
+        traineaux: [],    // traîneaux en course
+        energy: 5, energyMax: 10,
+        aiEnergy: 4 + (levelNum >= 5 ? 1 : 0) + (levelNum >= 9 ? 1 : 0),
+        hpMul: DIFF[levelNum - 1].hp,
+        dmgMul: DIFF[levelNum - 1].dmg,
+        aiRegen: DIFF[levelNum - 1].ai,
+        shake: 0, rings: [],
+        aiSpellT: 22, overFx: 0,
+        deck: shuffle(DECK),
+        hand: [],
+        queue: [],
+        selected: -1,
+        iglooHurt: false,   // ton igloo a-t-il pris des dégâts ? (Masterclass)
+        kills: 0,
+        lawT: 0, gustT: 20, gustActive: 0, gustLane: 0, gustWarn: 0,
+        courT: 12, courClosed: 0, courLane: -1,
+        aiT: 1.2,
+        sixSevenDone: false,
+        bossSpawned: false,
+        endShown: false
+      };
+      // main de départ : 4 cartes, le reste en file
+      G.hand = G.deck.slice(0, 4);
+      G.queue = G.deck.slice(4);
+      // structures
+      G.structs = [
+        makeStructure("enemy", "igloo", 200, 56),
+        makeStructure("enemy", "tower", 108, 168),
+        makeStructure("enemy", "tower", 292, 168),
+        makeStructure("player", "igloo", 200, 584),
+        makeStructure("player", "tower", 108, 472),
+        makeStructure("player", "tower", 292, 472)
+      ];
+      // bonhomme de neige décoratif au centre (le vrai, celui de la loi)
+      G.centerSnowman = { x: 200, y: 320 };
+
+      $("battle-title").textContent = "Bataille " + lv.n + " — " + lv.name;
+      $("battle-sub").textContent = lv.boss ? "Boss : " + lv.boss.name : "Détruis l'igloo rouge !";
+      var lb = $("law-badge");
+      lb.innerHTML = "📜 <span><b>" + law.name + "</b> — " + law.desc + "</span>";
+      lb.classList.add("show");
+      showScreen("screen-battle");
+      renderHand();
+      setHint("Touche une carte, puis ton terrain !");
+      showBanner(law.name.replace("Loi — ", ""), law.desc, 2600);
+
+      if (!P.tutoSeen) {
+        $("overlay-tuto").classList.add("show");
+      } else {
+        beginLoop();
+      }
+    }
+
+    function beginLoop() {
+      lastTs = 0;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(loop);
+    }
+
+    // ---------- Main de cartes ----------
+    function renderHand() {
+      var hand = $("hand");
+      hand.innerHTML = "";
+      G.hand.forEach(function (id, i) {
+        var c = CARDS[id];
+        var b = document.createElement("button");
+        b.className = "card" + (G.selected === i ? " selected" : "") + (G.energy < c.cost ? " unaffordable" : "");
+        b.innerHTML = '<span class="cost-badge">' + c.cost + '</span><span class="ic">' + cardIcon(id, 34) + "</span><b>" + c.name + "</b>";
+        b.setAttribute("aria-label", c.name + ", coût " + c.cost);
+        b.addEventListener("click", function () { selectCard(i); });
+        hand.appendChild(b);
+      });
+      $("next-card").textContent = G.queue.length ? "Prochaine carte : " + CARDS[G.queue[0]].name : "";
+      $("energy-num").textContent = Math.floor(G.energy);
+      $("energy-fill").style.width = (G.energy / G.energyMax * 100) + "%";
+    }
+    function selectCard(i) {
+      var c = CARDS[G.hand[i]];
+      if (G.energy < c.cost) {
+        var cards = $("hand").children;
+        if (cards[i]) { cards[i].classList.remove("shake"); void cards[i].offsetWidth; cards[i].classList.add("shake"); }
+        addFloat(200, 600, "La hess ! Plus d'énergie…", "#d64541", 1.1);
+        beep(160, 0.15, "square", 0.05);
+        return;
+      }
+      G.selected = (G.selected === i) ? -1 : i;
+      sfx("play");
+      if (G.selected >= 0) {
+        if (c.kind === "unit") setHint(c.name + " : touche ta moitié de terrain (en bas).");
+        else if (G.hand[i] === "glace") setHint("Glace noire : touche le terrain ennemi (en haut).");
+        else if (G.hand[i] === "traineau") setHint("Traîneau : touche une voie, il fonce tout droit !");
+        else if (G.hand[i] === "rafale") setHint("Rafale de neige : touche une zone chez l'ennemi !");
+        else if (G.hand[i] === "chocolat") setHint("Chocolat chaud : touche tes troupes pour les soigner et les dégeler.");
+        else setHint("Réparation : elle soigne ton bâtiment le plus amoché.");
+      } else setHint("Touche une carte, puis ton terrain !");
+      renderHand();
+    }
+    function setHint(t) { $("hint").textContent = t; }
+
+    // ---------- Déploiement ----------
+    cv.addEventListener("pointerdown", function (ev) {
+      if (!G || G.over || $("overlay-tuto").classList.contains("show")) return;
+      var rect = cv.getBoundingClientRect();
+      var x = (ev.clientX - rect.left) / rect.width * W;
+      var y = (ev.clientY - rect.top) / rect.height * H;
+      if (G.selected < 0) return;
+      var id = G.hand[G.selected];
+      var c = CARDS[id];
+      if (G.energy < c.cost) { selectCard(G.selected); return; }
+
+      if (id === "reparation") {
+        playRepair();
+      } else if (id === "glace") {
+        if (y > MID_Y - 10) { setHint("La glace noire se pose chez l'ennemi (moitié du haut) !"); return; }
+        G.patches.push({ x: clamp(x, 30, W - 30), y: clamp(y, 40, MID_Y - 20), r: 46, t: 0, dur: 7, team: "enemy" });
+        burst(x, y, "#aee3f7", 10);
+        consumeCard();
+        setHint("Glace noire posée… qui va glisser ?");
+      } else if (id === "traineau") {
+        var laneX = x < 200 ? 108 : 292;
+        G.traineaux.push({ x: laneX, y: 540, team: "player", dir: -1, speed: 265, dmg: c.dmg * (1 + P.upg.boules * 0.12), splash: c.splash });
+        sfx("throw");
+        consumeCard();
+        setHint("Le traîneau fonce !");
+      } else if (id === "rafale") {
+        if (y > MID_Y - 10) { setHint("La rafale tombe chez l'ennemi (moitié du haut) !"); return; }
+        var rx = clamp(x, 40, W - 40), ry = clamp(y, 50, MID_Y - 10);
+        var dmgMulR = 1 + P.upg.boules * 0.12;
+        var hits = 0;
+        G.units.forEach(function (o) { if (o.team === "enemy" && dist(o, { x: rx, y: ry }) < c.splash + o.radius) { damage(o, c.dmg * dmgMulR, "player"); hits++; } });
+        G.structs.forEach(function (s) { if (s.team === "enemy" && !s.dead && dist(s, { x: rx, y: ry }) < c.splash + s.r) damage(s, c.dmg * dmgMulR, "player"); });
+        for (var bi = 0; bi < 3; bi++) burst(rx + rand(-24, 24), ry + rand(-14, 14), "#ffffff", 12);
+        addRing(rx, ry, "#7fd0ff", c.splash);
+        addShake(5);
+        sfx("boom"); noiseHit(0.18, 0.12);
+        if (hits >= 3) addFloat(rx, ry - 34, "BORDÉE !", "#f0a81c", 1.2);
+        else addFloat(rx, ry - 34, "Rafale !", "#155e96", 1);
+        consumeCard();
+        setHint("Quelle bordée !");
+      } else if (id === "chocolat") {
+        if (y < MID_Y + 10) { setHint("Le chocolat chaud se sert à TES troupes (moitié du bas) !"); return; }
+        var hx = clamp(x, 30, W - 30), hy = clamp(y, MID_Y + 20, H - 30);
+        var served = 0;
+        G.units.forEach(function (o) {
+          if (o.team === "player" && dist(o, { x: hx, y: hy }) < 85) {
+            o.hp = Math.min(o.maxHp, o.hp + c.heal); o.slowT = 0; served++;
+            burst(o.x, o.y - 8, "#ffb37b", 4);
+          }
+        });
+        addRing(hx, hy, "#f0a81c", 85);
+        sfx("play");
+        addFloat(hx, hy - 28, served ? ("Chocolat chaud ! +" + c.heal + " PV") : "Personne à réchauffer…", "#b35c00", 1.2);
+        consumeCard();
+        setHint(served ? "Tes troupes sont réchauffées !" : "Touche une carte, puis ton terrain !");
+      } else {
+        // unité : zone joueur seulement
+        if (y < MID_Y + 26) { setHint("Tu déploies dans TA moitié (en bas, la bleue) !"); return; }
+        if (dist({ x: x, y: y }, MOUND) < MOUND.r + 16) { setHint("Pas sur la butte de neige !"); return; }
+        spawnUnit("player", id, clamp(x, 24, W - 24), clamp(y, MID_Y + 30, H - 24));
+        consumeCard();
+        setHint("Touche une carte, puis ton terrain !");
+      }
+      renderHand();
+    });
+
+    function consumeCard() {
+      var c = CARDS[G.hand[G.selected]];
+      G.energy -= c.cost;
+      var used = G.hand[G.selected];
+      if (G.queue.length) {
+        G.hand[G.selected] = G.queue.shift();
+        G.queue.push(used);
+      }
+      G.selected = -1;
+    }
+
+    function playRepair() {
+      var best = null;
+      G.structs.forEach(function (s) {
+        if (s.team === "player" && !s.dead && s.hp < s.maxHp) {
+          if (!best || (s.hp / s.maxHp) < (best.hp / best.maxHp)) best = s;
+        }
+      });
+      if (!best) { addFloat(200, 520, "Tout est déjà beau !", "#2e9e5b", 1.1); G.selected = -1; renderHand(); return; }
+      var c = CARDS.reparation;
+      best.hp = Math.min(best.maxHp, best.hp + c.heal);
+      burst(best.x, best.y - 10, "#7be495", 14);
+      if (best.hp >= best.maxHp) addFloat(best.x, best.y - 44, "C'est carré !", "#2e9e5b", 1.3);
+      else addFloat(best.x, best.y - 44, "+" + c.heal + " PV", "#2e9e5b", 1.1);
+      sfx("play");
+      consumeCard();
+    }
+
+    function spawnUnit(team, id, x, y) {
+      var c = CARDS[id];
+      var hpMul = 1, dmgMul = 1;
+      if (team === "player") { hpMul = 1 + P.upg.mitaines * 0.12; dmgMul = 1 + P.upg.boules * 0.12; }
+      else { hpMul = G.hpMul; dmgMul = G.dmgMul; }
+      var u = {
+        team: team, id: id, x: x, y: y,
+        hp: Math.round(c.hp * hpMul), maxHp: Math.round(c.hp * hpMul),
+        dmg: Math.round(c.dmg * dmgMul),
+        range: c.range, speed: c.speed, atk: c.atk, cd: rand(0.1, 0.5),
+        radius: c.radius, splash: c.splash || 0,
+        push: c.push || 0, structMul: c.structMul || 1,
+        slowT: 0, stunT: 0, slipCd: 0,
+        bubble: null, bubbleT: 0,
+        flash: 0, wob: rand(0, 6.28)
+      };
+      G.units.push(u);
+      burst(x, y, team === "player" ? "#7fd0ff" : "#ffb3b0", 6);
+      // Provocation à l'arrivée des grosses unités ennemies
+      if (team === "enemy" && (id === "manteau" || id === "canon")) {
+        u.bubble = "Wesh !"; u.bubbleT = 1.4;
+      }
+      return u;
+    }
+
+    function spawnBoss() {
+      var b = G.level.boss;
+      var u = {
+        team: "enemy", id: "boss", x: 200, y: 104,
+        hp: Math.round(b.hp * (1 + (G.level.n - 3) * 0.04)), maxHp: Math.round(b.hp * (1 + (G.level.n - 3) * 0.04)),
+        dmg: b.dmg, range: b.range, speed: b.speed, atk: b.atk, cd: 0.6,
+        radius: b.radius, splash: b.souffle ? 40 : 0, souffle: !!b.souffle, souffleCd: 5,
+        slowT: 0, stunT: 0, slipCd: 0, bubble: "Wesh ! C'est moi le boss !", bubbleT: 2.2, flash: 0, wob: 0
+      };
+      G.units.push(u);
+      showBanner("BOSS — " + b.name, "Il s'en vient… tiens ta position !", 2000);
+      beep(140, 0.4, "sawtooth", 0.08, 70);
+    }
+
+    // ---------- IA adverse ----------
+    function aiThink(dt) {
+      G.aiEnergy = Math.min(10, G.aiEnergy + G.aiRegen * dt);
+      G.aiT -= dt;
+      if (G.aiT > 0) return;
+      G.aiT = rand(0.7, 1.2);
+      // Le boss sort après 6 secondes
+      if (G.level.boss && !G.bossSpawned && G.time < 174) { G.bossSpawned = true; spawnBoss(); return; }
+      // Menace proche de ses bâtiments ?
+      var threat = null;
+      G.units.forEach(function (u) {
+        if (u.team === "player" && u.y < 260) { if (!threat || u.y < threat.y) threat = u; }
+      });
+      var pool = ["lanceur", "lanceur", "bonhomme", "manteau", "geleux", "canon", "castor", "castor"];
+      var pick = null, px = 0, py = 0;
+      if (threat && G.aiEnergy >= 3) {
+        pick = Math.random() < 0.55 ? "manteau" : "bonhomme";
+        if (G.aiEnergy < CARDS[pick].cost) pick = "lanceur";
+        px = clamp(threat.x + rand(-24, 24), 30, W - 30);
+        py = clamp(threat.y - rand(46, 80), 60, MID_Y - 30);
+      } else if (G.aiEnergy >= 7) {
+        pick = ["canon", "manteau", "souffleuse"][Math.floor(Math.random() * 3)];
+        px = Math.random() < 0.5 ? 108 : 292; py = rand(120, 210);
+        if (G.aiEnergy >= 9 && Math.random() < 0.6) {
+          // double poussée
+          spawnUnit("enemy", "lanceur", px === 108 ? 292 : 108, rand(130, 200));
+          G.aiEnergy -= CARDS.lanceur.cost;
+        }
+      } else if (G.aiEnergy >= 2) {
+        pick = pool[Math.floor(Math.random() * pool.length)];
+        px = Math.random() < 0.5 ? 108 + rand(-18, 18) : 292 + rand(-18, 18);
+        py = rand(120, 230);
+      }
+      if (pick && G.aiEnergy >= CARDS[pick].cost) {
+        spawnUnit("enemy", pick, px, py);
+        G.aiEnergy -= CARDS[pick].cost;
+      }
+    }
+
+    // Sorts de l'IA (à partir de la bataille 5) : glace noire sur tes troupes
+    // avancées, ou traîneau adverse qui descend une voie.
+    function aiSpells(dt) {
+      if (G.level.n < 5) return;
+      G.aiSpellT -= dt;
+      if (G.aiSpellT > 0) return;
+      G.aiSpellT = Math.max(11, rand(18, 25) - G.level.n * 0.7);
+      if (G.aiEnergy >= 5 && Math.random() < 0.45) {
+        var tlane = Math.random() < 0.5 ? 108 : 292;
+        G.traineaux.push({ x: tlane, y: 100, team: "enemy", dir: 1, speed: 265, dmg: Math.round(65 * G.dmgMul), splash: 62 });
+        G.aiEnergy -= 5;
+        addFloat(tlane, 140, "Traîneau adverse !", "#d64541", 1.2);
+        sfx("throw");
+      } else if (G.aiEnergy >= 2) {
+        var adv = null;
+        G.units.forEach(function (o) { if (o.team === "player" && o.speed > 0) { if (!adv || o.y < adv.y) adv = o; } });
+        var gx2 = adv ? clamp(adv.x, 40, W - 40) : rand(60, W - 60);
+        var gy2 = adv ? clamp(adv.y + 24, MID_Y + 30, H - 50) : rand(390, 540);
+        G.patches.push({ x: gx2, y: gy2, r: 46, t: 0, dur: 7, team: "player" });
+        G.aiEnergy -= 2;
+        burst(gx2, gy2, "#aee3f7", 8);
+        addFloat(gx2, gy2 - 22, "Glace noire !", "#d64541", 1.1);
+      }
+    }
+
+    // ---------- Lois du quartier ----------
+    function lawUpdate(dt) {
+      G.lawT += dt;
+      if (G.law.id === "glisse") {
+        if (G.lawT > 6.5) {
+          G.lawT = 0;
+          var side = Math.random() < 0.5;
+          G.patches.push({ x: rand(50, W - 50), y: side ? rand(90, 280) : rand(360, 560), r: 40, t: 0, dur: 8, team: "all" });
+        }
+      } else if (G.law.id === "tempete") {
+        G.gustT -= dt;
+        if (G.gustT <= 3 && G.gustT + dt > 3) {
+          G.gustLane = Math.random() < 0.5 ? 0 : 1;
+          addFloat(G.gustLane ? 292 : 108, 320, "Rafale dans 3…", "#155e96", 1.2);
+          beep(300, 0.3, "sine", 0.04, 500);
+        }
+        if (G.gustT <= 0) { G.gustT = 20; G.gustActive = 1.3; addFloat(G.gustLane ? 292 : 108, 320, "RAFALE !", "#155e96", 1); }
+        if (G.gustActive > 0) G.gustActive -= dt;
+      } else if (G.law.id === "cour") {
+        if (G.courClosed > 0) {
+          G.courClosed -= dt;
+          if (G.courClosed <= 0) { G.courLane = -1; addFloat(200, 300, "La voie rouvre !", "#2e9e5b", 1.1); }
+        } else {
+          G.courT -= dt;
+          if (G.courT <= 0) {
+            G.courT = rand(14, 20); G.courClosed = 9;
+            G.courLane = Math.random() < 0.5 ? 0 : 1;
+            addFloat(G.courLane ? 292 : 108, 320, "Pas dans ma cour !", "#d64541", 1.4);
+            beep(220, 0.25, "square", 0.05, 160);
+          }
+        }
+      }
+    }
+    function laneClosedFor(x) {
+      if (!G || G.law.id !== "cour" || G.courLane < 0) return false;
+      return (G.courLane === 0 && x < 200) || (G.courLane === 1 && x >= 200);
+    }
+
+    // ---------- Événement absurde 6-7 ----------
+    function maybeSixSeven() {
+      if (G.sixSevenDone || G.time > 95 || G.time < 55) return;
+      G.sixSevenDone = true;
+      if (Math.random() < 0.6) {
+        G.energy = Math.min(G.energyMax, G.energy + 3);
+        G.aiEnergy = Math.min(10, G.aiEnergy + 3);
+        showBanner("6-7 !", "Événement absurde : +3 énergie pour tout le monde !", 1800);
+        renderHand();
+      } else {
+        // Un traîneau perdu traverse le terrain et fait des dégâts des deux bords
+        G.traineaux.push({ x: 108, y: 320, team: "both", speed: 200, dmg: 30, splash: 40, horizontal: true });
+        showBanner("6-7 !", "Un traîneau perdu traverse le terrain !", 1800);
+      }
+    }
+
+    // ---------- Boucle principale ----------
+    function loop(ts) {
+      if (!G) return;
+      if (!lastTs) lastTs = ts;
+      var dt = Math.min(0.05, (ts - lastTs) / 1000);
+      lastTs = ts;
+      if (!G.over) {
+        update(dt);
+        draw();
+        rafId = requestAnimationFrame(loop);
+      } else if (G.overFx > 0) {
+        // Séquence de fin : les particules et la secousse finissent leur danse
+        G.overFx -= dt;
+        for (var j2 = G.parts.length - 1; j2 >= 0; j2--) {
+          var p2 = G.parts[j2]; p2.t += dt; p2.x += p2.vx * dt; p2.y += p2.vy * dt; p2.vy += 160 * dt;
+          if (p2.t > p2.dur) G.parts.splice(j2, 1);
+        }
+        for (var r4 = G.rings.length - 1; r4 >= 0; r4--) {
+          G.rings[r4].t += dt;
+          if (G.rings[r4].t >= G.rings[r4].dur) G.rings.splice(r4, 1);
+        }
+        if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 26);
+        draw();
+        rafId = requestAnimationFrame(loop);
+      }
+    }
+
+    function update(dt) {
+      // Temps
+      G.time -= dt;
+      var t = Math.max(0, Math.ceil(G.time));
+      var mm = Math.floor(t / 60), ss = ("0" + (t % 60)).slice(-2);
+      var timerEl = $("timer");
+      timerEl.textContent = mm + ":" + ss;
+      timerEl.classList.toggle("hot", G.time <= 30);
+      if (G.time <= 0) { endByTime(); return; }
+
+      // Énergie (double dans les 30 dernières secondes)
+      var regen = 0.78 * (1 + P.upg.energie * 0.15) * (G.time <= 30 ? 2 : 1);
+      var before = Math.floor(G.energy);
+      G.energy = Math.min(G.energyMax, G.energy + regen * dt);
+      if (Math.floor(G.energy) !== before || G.energy >= G.energyMax) renderHand();
+
+      aiThink(dt);
+      aiSpells(dt);
+      lawUpdate(dt);
+      maybeSixSeven();
+
+      updateUnits(dt);
+      updateStructs(dt);
+      updateShots(dt);
+      updateTraineaux(dt);
+
+      // Plaques de glace
+      for (var i = G.patches.length - 1; i >= 0; i--) {
+        G.patches[i].t += dt;
+        if (G.patches[i].t >= G.patches[i].dur) G.patches.splice(i, 1);
+      }
+      // Particules & textes
+      for (var j = G.parts.length - 1; j >= 0; j--) {
+        var p = G.parts[j]; p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 160 * dt;
+        if (p.t > p.dur) G.parts.splice(j, 1);
+      }
+      for (var k = G.floats.length - 1; k >= 0; k--) {
+        var f = G.floats[k]; f.t += dt; f.y -= 26 * dt;
+        if (f.t > f.dur) G.floats.splice(k, 1);
+      }
+      // Ondes de choc & secousse d'écran
+      for (var r3 = G.rings.length - 1; r3 >= 0; r3--) {
+        G.rings[r3].t += dt;
+        if (G.rings[r3].t >= G.rings[r3].dur) G.rings.splice(r3, 1);
+      }
+      if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 26);
+    }
+
+    function nearestFoe(u, list, maxR) {
+      var best = null, bd = maxR;
+      list.forEach(function (o) {
+        if (o.team === u.team || o.dead) return;
+        var d = dist(u, o);
+        if (d < bd) { bd = d; best = o; }
+      });
+      return best;
+    }
+
+    function updateUnits(dt) {
+      // Nettoyage des morts
+      for (var i = G.units.length - 1; i >= 0; i--) {
+        var u = G.units[i];
+        if (u.hp <= 0) {
+          burst(u.x, u.y, "#ffffff", 12);
+          if (u.team === "enemy") {
+            G.kills++;
+            if (Math.random() < 0.3) addFloat(u.x, u.y - 18, "Slay !", "#f0a81c", 0.9);
+          }
+          G.units.splice(i, 1);
+        }
+      }
+      G.units.forEach(function (u) {
+        if (u.flash > 0) u.flash -= dt;
+        if (u.bubbleT > 0) u.bubbleT -= dt;
+        if (u.slipCd > 0) u.slipCd -= dt;
+        if (u.slowT > 0) u.slowT -= dt;
+        if (u.cd > 0) u.cd -= dt;
+
+        // Glissade sur plaque de glace
+        if (u.stunT <= 0 && u.slipCd <= 0 && u.speed > 0) {
+          for (var pi = 0; pi < G.patches.length; pi++) {
+            var patch = G.patches[pi];
+            var affects = patch.team === "all" || patch.team === u.team;
+            if (affects && dist(u, patch) < patch.r) {
+              u.stunT = 1.15; u.slipCd = 3;
+              u.bubble = Math.random() < 0.5 ? "Sheh !" : "C'est gênant…";
+              u.bubbleT = 1.2;
+              sfx("slip");
+              burst(u.x, u.y, "#aee3f7", 8);
+              break;
+            }
+          }
+        }
+        if (u.stunT > 0) { u.stunT -= dt; return; }
+
+        var speedMul = u.slowT > 0 ? 0.55 : 1;
+
+        // Cible : unité ennemie proche, sinon bâtiment
+        var foe = nearestFoe(u, G.units, 135);
+        var target = foe;
+        var targetIsStruct = false;
+        if (!target) {
+          var bd = 1e9;
+          G.structs.forEach(function (s) {
+            if (s.team === u.team || s.dead) return;
+            var d = dist(u, s) - s.r;
+            if (d < bd) { bd = d; target = s; }
+          });
+          targetIsStruct = true;
+        }
+        if (!target) return;
+        var d = dist(u, target) - (targetIsStruct ? target.r : target.radius) - u.radius;
+
+        if (d <= u.range) {
+          // Attaque
+          if (u.cd <= 0) {
+            u.cd = u.atk;
+            fireShot(u, target);
+            if (u.id === "boss" && u.souffle) { /* géré dans fireShot */ }
+          }
+        } else if (u.speed > 0) {
+          // Déplacement vers la cible
+          var tx = target.x, ty = target.y;
+          var dx = tx - u.x, dy = ty - u.y;
+          var len = Math.sqrt(dx * dx + dy * dy) || 1;
+          dx /= len; dy /= len;
+          // Éviter la butte centrale
+          var dm = dist(u, MOUND);
+          if (dm < MOUND.r + u.radius + 14) {
+            var ax = (u.x - MOUND.x) / (dm || 1), ay = (u.y - MOUND.y) / (dm || 1);
+            dx += ax * 1.6; dy += ay * 1.6;
+            var l2 = Math.sqrt(dx * dx + dy * dy) || 1; dx /= l2; dy /= l2;
+          }
+          // Voie fermée (loi « Pas dans ma cour ») : viser l'autre voie
+          if (laneClosedFor(u.x) && ((u.team === "player" && u.y > 260 && u.y < 380) || (u.team === "enemy" && u.y > 260 && u.y < 380))) {
+            var openX = G.courLane === 0 ? 292 : 108;
+            dx += (openX - u.x) / 90;
+            var l3 = Math.sqrt(dx * dx + dy * dy) || 1; dx /= l3; dy /= l3;
+          }
+          // Rafale de tempête
+          var gustPush = 0;
+          if (G.law.id === "tempete" && G.gustActive > 0) {
+            var inLane = (G.gustLane === 0 && u.x < 200) || (G.gustLane === 1 && u.x >= 200);
+            if (inLane) gustPush = u.team === "player" ? 55 : -55;
+          }
+          u.x += dx * u.speed * speedMul * dt;
+          u.y += dy * u.speed * speedMul * dt + gustPush * dt;
+          u.x = clamp(u.x, u.radius + 4, W - u.radius - 4);
+          u.y = clamp(u.y, u.radius + 4, H - u.radius - 4);
+        }
+        // Séparation douce entre unités
+        G.units.forEach(function (o) {
+          if (o === u) return;
+          var dd = dist(u, o), min = u.radius + o.radius + 2;
+          if (dd > 0 && dd < min) {
+            var push = (min - dd) / 2;
+            u.x += (u.x - o.x) / dd * push * 0.5;
+            u.y += (u.y - o.y) / dd * push * 0.5;
+          }
+        });
+        // Souffleuse du boss : repousse les joueurs proches
+        if (u.id === "boss" && u.souffle) {
+          u.souffleCd -= dt;
+          if (u.souffleCd <= 0) {
+            u.souffleCd = 5;
+            G.units.forEach(function (o) {
+              if (o.team === "player" && dist(u, o) < 80) { o.y += 44; burst(o.x, o.y, "#dff3ff", 5); }
+            });
+            addFloat(u.x, u.y - 34, "SOUFFLE !", "#d64541", 1);
+            addShake(3);
+            beep(90, 0.35, "sawtooth", 0.06, 160);
+          }
+        }
+      });
+    }
+
+    function fireShot(from, target) {
+      var splash = from.splash || 0;
+      if (from.kind === "tower" || from.kind === "igloo") splash = 0;
+      G.shots.push({
+        x: from.x, y: from.y - 6, target: target,
+        tx: target.x, ty: target.y,
+        speed: 300, dmg: from.dmg, team: from.team,
+        splash: splash, slow: from.id === "geleux",
+        push: from.push || 0, structMul: from.structMul || 1,
+        big: (from.id === "canon" || from.id === "boss")
+      });
+      sfx("throw");
+    }
+
+    function updateStructs(dt) {
+      G.structs.forEach(function (s) {
+        if (s.dead || s.kind === "igloo") return;
+        if (s.flash > 0) s.flash -= dt;
+        if (s.cd > 0) { s.cd -= dt; return; }
+        var foe = nearestFoe(s, G.units, s.range);
+        if (foe) { s.cd = s.atk; fireShot(s, foe); }
+      });
+    }
+
+    function damage(target, amount, byTeam) {
+      // Aura du bonhomme de neige : réduction de dégâts pour les unités alliées proches
+      if (target.maxHp && target.id) { // une unité
+        var aura = 0;
+        G.units.forEach(function (o) {
+          if (o !== target && o.team === target.team && o.id === "bonhomme" && dist(o, target) < 78) aura = Math.max(aura, 1);
+        });
+        if (target.id === "bonhomme") aura = 0;
+        if (aura) amount *= (G.law.id === "bonhomme" ? 0.5 : 0.75);
+      }
+      target.hp -= amount;
+      target.flash = 0.12;
+      // Punch : chiffres de dégâts sur les gros coups, étincelles sur les bâtiments
+      if (amount >= 20) addFloat(target.x + rand(-10, 10), target.y - (target.r || target.radius || 12) - 16, "-" + Math.round(amount), byTeam === "player" ? "#e08a00" : "#d64541", 0.55, 12);
+      if (target.kind) burst(target.x, target.y - 6, "#ffffff", 3);
+      if (target.team === "player" && target.kind === "igloo") G.iglooHurt = true;
+      if (target.kind === "igloo" && target.hp <= 0 && !target.dead) {
+        target.dead = true;
+        bigBurst(target.x, target.y, target.team === "player" ? "#7fd0ff" : "#ffb3b0");
+        addRing(target.x, target.y, "#ffffff", 120);
+        addShake(16);
+        sfx("boom"); noiseHit(0.4, 0.2);
+        endBattle(target.team === "enemy");
+      }
+      if (target.kind === "tower" && target.hp <= 0 && !target.dead) {
+        target.dead = true;
+        bigBurst(target.x, target.y, "#ffffff");
+        addRing(target.x, target.y, "#ffffff", 62);
+        addShake(8);
+        sfx("boom"); noiseHit(0.25, 0.15);
+        addFloat(target.x, target.y, "Tour tombée !", target.team === "enemy" ? "#2e9e5b" : "#d64541", 1.3);
+        if (target.team === "enemy") showBanner("Tour détruite !", "En route vers l'igloo rouge !", 1200);
+      }
+    }
+
+    function updateShots(dt) {
+      for (var i = G.shots.length - 1; i >= 0; i--) {
+        var sh = G.shots[i];
+        if (sh.target && !sh.target.dead && sh.target.hp > 0) { sh.tx = sh.target.x; sh.ty = sh.target.y; }
+        var dx = sh.tx - sh.x, dy = sh.ty - sh.y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        var step = sh.speed * dt;
+        if (d <= step + 4) {
+          // Impact
+          if (sh.splash > 0) {
+            var hitCount = 0;
+            G.units.forEach(function (o) {
+              if (o.team !== sh.team && dist(o, sh) < sh.splash + o.radius) {
+                damage(o, sh.dmg, sh.team);
+                if (sh.slow) o.slowT = 2;
+                if (sh.push) { var pd = dist(o, sh) || 1; o.x += (o.x - sh.x) / pd * sh.push * 0.7; o.y += (o.y - sh.y) / pd * sh.push * 0.7; }
+                hitCount++;
+              }
+            });
+            G.structs.forEach(function (s) {
+              if (s.team !== sh.team && !s.dead && dist(s, sh) < sh.splash + s.r) damage(s, sh.dmg * sh.structMul, sh.team);
+            });
+            if (hitCount >= 3 && sh.team === "player") addFloat(sh.x, sh.y - 16, "BANGER !", "#f0a81c", 1.2);
+            burst(sh.x, sh.y, "#ffffff", 12);
+            sfx("boom");
+          } else if (sh.target && !sh.target.dead && sh.target.hp > 0 && sh.target.team !== sh.team) {
+            var amt = sh.dmg;
+            if (sh.target.kind) amt *= sh.structMul;
+            damage(sh.target, amt, sh.team);
+            if (sh.slow) sh.target.slowT = 2;
+            if (sh.push && !sh.target.kind) { var dd2 = Math.sqrt(dx * dx + dy * dy) || 1; sh.target.x += dx / dd2 * sh.push; sh.target.y += dy / dd2 * sh.push; }
+            burst(sh.x, sh.y, "#eaf6ff", 4);
+            sfx("hit");
+          }
+          G.shots.splice(i, 1);
+        } else {
+          sh.x += dx / d * step; sh.y += dy / d * step;
+        }
+      }
+    }
+
+    function updateTraineaux(dt) {
+      for (var i = G.traineaux.length - 1; i >= 0; i--) {
+        var tr = G.traineaux[i];
+        if (tr.horizontal) { tr.x += tr.speed * dt; }
+        else tr.y += tr.speed * dt * (tr.dir || -1);
+        burst(tr.x, tr.y + 8, "#ffffff", 1);
+        var boom = false;
+        if (tr.horizontal) { if (tr.x > W - 20) boom = true; }
+        else {
+          // Explose au contact d'un adversaire ou d'un de ses bâtiments, ou rendu au bout
+          var foeTeam = tr.team === "enemy" ? "player" : "enemy";
+          G.units.forEach(function (o) { if (o.team === foeTeam && dist(o, tr) < 22 + o.radius) boom = true; });
+          G.structs.forEach(function (s) { if (s.team === foeTeam && !s.dead && dist(s, tr) < 16 + s.r) boom = true; });
+          if ((tr.dir || -1) < 0 ? tr.y < 26 : tr.y > H - 26) boom = true;
+        }
+        if (boom) {
+          G.units.forEach(function (o) {
+            if (tr.team === "both" ? true : o.team !== tr.team) {
+              if (dist(o, tr) < tr.splash + o.radius) damage(o, tr.dmg, tr.team);
+            }
+          });
+          G.structs.forEach(function (s) {
+            if (!s.dead && (tr.team === "both" || s.team !== tr.team) && dist(s, tr) < tr.splash + s.r) damage(s, tr.dmg, tr.team);
+          });
+          bigBurst(tr.x, tr.y, "#ffd970");
+          addRing(tr.x, tr.y, "#ffd970", tr.splash + 16);
+          addShake(5);
+          sfx("boom"); noiseHit(0.22, 0.14);
+          addFloat(tr.x, tr.y - 20, "BOUM !", "#d64541", 1);
+          G.traineaux.splice(i, 1);
+        }
+      }
+    }
+
+    // ---------- Particules & textes ----------
+    function burst(x, y, color, n) {
+      for (var i = 0; i < n; i++) {
+        G.parts.push({ x: x, y: y, vx: rand(-60, 60), vy: rand(-90, -10), t: 0, dur: rand(0.3, 0.6), color: color, r: rand(1.5, 3.5) });
+      }
+    }
+    function bigBurst(x, y, color) { burst(x, y, color, 34); burst(x, y, "#ffffff", 22); }
+    function addFloat(x, y, text, color, dur, size) {
+      G.floats.push({ x: clamp(x, 60, W - 60), y: y, text: text, color: color, t: 0, dur: dur || 1.1, size: size || 14 });
+    }
+    function addRing(x, y, color, maxR) {
+      if (!G) return;
+      G.rings.push({ x: x, y: y, t: 0, dur: 0.45, color: color, maxR: maxR || 70 });
+    }
+    function addShake(m) {
+      if (!G) return;
+      G.shake = Math.min(18, (G.shake || 0) + m);
+    }
+    // Bruit d'impact (neige qui écrase) : souffle filtré, bien plus percutant qu'un bip
+    function noiseHit(dur, vol) {
+      if (!P.sound) return;
+      try {
+        if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+        if (AC.state === "suspended") AC.resume();
+        var len = Math.max(1, Math.floor(AC.sampleRate * dur));
+        var buf = AC.createBuffer(1, len, AC.sampleRate);
+        var d = buf.getChannelData(0);
+        for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+        var src = AC.createBufferSource(); src.buffer = buf;
+        var f = AC.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 900;
+        var g = AC.createGain(); g.gain.value = vol;
+        src.connect(f); f.connect(g); g.connect(AC.destination);
+        src.start();
+      } catch (e) { /* audio non dispo : silence */ }
+    }
+    var bannerTimer = null;
+    function showBanner(main, sub, ms) {
+      var b = $("banner");
+      b.innerHTML = main + (sub ? "<small>" + sub + "</small>" : "");
+      b.classList.add("show");
+      if (bannerTimer) clearTimeout(bannerTimer);
+      bannerTimer = setTimeout(function () { b.classList.remove("show"); }, ms || 1600);
+    }
+
+    // ---------- Fin de partie ----------
+    function towersDown(team) {
+      var n = 0;
+      G.structs.forEach(function (s) { if (s.team === team && s.kind === "tower" && s.dead) n++; });
+      return n;
+    }
+    function iglooOf(team) {
+      var f = null;
+      G.structs.forEach(function (s) { if (s.team === team && s.kind === "igloo") f = s; });
+      return f;
+    }
+    function endByTime() {
+      var pT = towersDown("enemy"), eT = towersDown("player");
+      if (pT !== eT) { endBattle(pT > eT, "Temps écoulé !"); return; }
+      var pi = iglooOf("player"), ei = iglooOf("enemy");
+      var pr = pi.hp / pi.maxHp, er = ei.hp / ei.maxHp;
+      if (Math.abs(pr - er) < 0.02) { endBattle(false, "Match nul ! Égalité parfaite.", true); return; }
+      endBattle(pr > er, "Temps écoulé !");
+    }
+    function endBattle(won, reason, draw) {
+      if (G.endShown) return;
+      G.endShown = true; G.over = true; G.overFx = 1.25;
+      var lv = G.level;
+      var coins = draw ? 30 : (won ? 60 + lv.n * 10 : 20);
+      P.coins += coins;
+      if (won) {
+        P.done[lv.n] = true;
+        if (lv.n + 1 <= 10) P.unlocked = Math.max(P.unlocked, lv.n + 1);
+        sfx("win");
+      } else if (!draw) sfx("lose");
+      var title, emoji, text;
+      if (draw) { title = "Match nul"; emoji = "🤝"; text = reason + " Personne ne perd sa tuque aujourd'hui."; }
+      else if (won) {
+        emoji = "🏆"; title = "Victoire !";
+        text = lv.boss ? "Le boss est vaincu. C'est malade !" : "L'igloo rouge est tombé en mille flocons.";
+        if (!G.iglooHurt) text += " Et ton igloo n'a même pas une égratignure : MASTERCLASS !";
+        if (lv.n === 10) text = "Le roi de la souffleuse est vaincu : tu es le GOAT de la ruelle ! La guerre des igloos est gagnée… jusqu'à la prochaine bordée.";
+      } else {
+        emoji = "🧣"; title = "C'est dead…";
+        text = (reason ? reason + " " : "") + "Ton igloo est en compote. J'avoue, ça fait mal — mais la prochaine bordée sera la bonne. Améliore tes défenses et retourne au front !";
+      }
+      $("end-emoji").textContent = emoji;
+      $("end-title").textContent = title;
+      $("end-text").textContent = text;
+      $("end-reward").innerHTML = '<span class="coin" style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd970,#f0a81c 70%);border:2px solid #c07f0d;display:inline-block"></span> +' + coins + " pièces";
+      $("btn-end-next").style.display = (won && lv.n < 10) ? "" : "none";
+      if (won) {
+        // Séquence de victoire : gerbes de flocons en cascade avant le panneau
+        addShake(9);
+        bigBurst(200, 300, "#ffd970");
+        setTimeout(function () { if (G) { bigBurst(rand(90, 310), rand(180, 420), "#7fd0ff"); bigBurst(rand(90, 310), rand(180, 420), "#ffb3b0"); } }, 220);
+        setTimeout(function () { if (G) bigBurst(200, 320, "#ffffff"); }, 440);
+      }
+      setTimeout(function () { $("overlay-end").classList.add("show"); }, won ? 1150 : 800);
+      renderHome();
+    }
+
+    // =====================================================================
+    //  DESSIN
+    // =====================================================================
+    var snowDots = [];
+    (function () {
+      var seed = 42;
+      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      for (var i = 0; i < 130; i++) snowDots.push({ x: rnd() * W, y: rnd() * H, r: rnd() * 2 + 0.6 });
+    })();
+
+    function hpBar(x, y, w, ratio, color) {
+      ctx.fillStyle = "rgba(20,49,63,.55)";
+      ctx.fillRect(x - w / 2 - 1, y - 1, w + 2, 6);
+      ctx.fillStyle = "#e8eef2";
+      ctx.fillRect(x - w / 2, y, w, 4);
+      ctx.fillStyle = color;
+      ctx.fillRect(x - w / 2, y, Math.max(0, w * clamp(ratio, 0, 1)), 4);
+    }
+
+    function draw() {
+      // Secousse d'écran (impacts, chutes de bâtiments)
+      ctx.save();
+      if (G.shake > 0.3) ctx.translate(rand(-G.shake, G.shake) * 0.5, rand(-G.shake, G.shake) * 0.5);
+      // Fond enneigé
+      var grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, "#f3d9d7"); grad.addColorStop(0.18, "#eef4f9");
+      grad.addColorStop(0.5, "#f7fbfe"); grad.addColorStop(0.82, "#eef4f9");
+      grad.addColorStop(1, "#d3e7f5");
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      // Zones de base
+      ctx.fillStyle = "rgba(214,69,65,.10)"; ctx.fillRect(0, 0, W, 96);
+      ctx.fillStyle = "rgba(31,122,192,.12)"; ctx.fillRect(0, H - 96, W, 96);
+      // Ligne du milieu
+      ctx.strokeStyle = "rgba(120,170,205,.5)"; ctx.lineWidth = 2; ctx.setLineDash([8, 8]);
+      ctx.beginPath(); ctx.moveTo(0, MID_Y); ctx.lineTo(W, MID_Y); ctx.stroke(); ctx.setLineDash([]);
+      // Points de neige
+      ctx.fillStyle = "rgba(255,255,255,.85)";
+      snowDots.forEach(function (d) { ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 6.29); ctx.fill(); });
+      // Voies
+      ctx.fillStyle = "rgba(190,220,242,.35)";
+      ctx.fillRect(84, 100, 48, H - 200); ctx.fillRect(268, 100, 48, H - 200);
+
+      // Voie fermée (loi cour)
+      if (G.law.id === "cour" && G.courLane >= 0) {
+        var cx = G.courLane === 0 ? 108 : 292;
+        ctx.fillStyle = "rgba(214,69,65,.18)"; ctx.fillRect(cx - 34, 288, 68, 64);
+        ctx.strokeStyle = "#d64541"; ctx.lineWidth = 3;
+        ctx.strokeRect(cx - 34, 288, 68, 64);
+        ctx.fillStyle = "#d64541"; ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center";
+        ctx.fillText("PAS DANS", cx, 316); ctx.fillText("MA COUR !", cx, 330);
+      }
+
+      // Plaques de glace
+      G.patches.forEach(function (p) {
+        var fade = Math.min(1, (p.dur - p.t) / 1.2, p.t / 0.3 + 0.2);
+        ctx.globalAlpha = 0.55 * fade + 0.2;
+        ctx.fillStyle = "#8fd4f2";
+        ctx.beginPath(); ctx.ellipse(p.x, p.y, p.r, p.r * 0.62, 0, 0, 6.29); ctx.fill();
+        ctx.globalAlpha = 0.8 * fade;
+        ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(p.x - p.r * 0.5, p.y + 3); ctx.lineTo(p.x - p.r * 0.15, p.y - 5);
+        ctx.moveTo(p.x + 0, p.y + 5); ctx.lineTo(p.x + p.r * 0.4, p.y - 6); ctx.stroke();
+        ctx.globalAlpha = 1;
+      });
+
+      // Butte centrale + bonhomme décoratif
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath(); ctx.ellipse(MOUND.x, MOUND.y + 8, MOUND.r + 14, MOUND.r * 0.72, 0, 0, 6.29); ctx.fill();
+      ctx.strokeStyle = "#c3dcee"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.ellipse(MOUND.x, MOUND.y + 8, MOUND.r + 14, MOUND.r * 0.72, 0, 0, 6.29); ctx.stroke();
+      drawSnowmanFigure(MOUND.x, MOUND.y - 2, 1);
+
+      // Bâtiments
+      G.structs.forEach(function (s) { drawStruct(s); });
+
+      // Traîneaux
+      G.traineaux.forEach(function (tr) {
+        ctx.save();
+        ctx.translate(tr.x, tr.y);
+        if (tr.horizontal) ctx.rotate(0);
+        ctx.fillStyle = "#d64541";
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(-14, -6, 28, 11, 4); else ctx.rect(-14, -6, 28, 11);
+        ctx.fill();
+        ctx.strokeStyle = "#7a4a21"; ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.moveTo(-15, 8); ctx.quadraticCurveTo(0, 13, 15, 8); ctx.stroke();
+        ctx.fillStyle = "#f0a81c";
+        ctx.beginPath(); ctx.arc(-5, -9, 3, 0, 6.29); ctx.arc(5, -11, 3, 0, 6.29); ctx.fill();
+        ctx.restore();
+      });
+
+      // Unités
+      var sorted = G.units.slice().sort(function (a, b) { return a.y - b.y; });
+      sorted.forEach(function (u) { drawUnit(u); });
+
+      // Projectiles
+      G.shots.forEach(function (sh) {
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#9fc3dc"; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.arc(sh.x, sh.y, sh.big ? 7 : 4.4, 0, 6.29); ctx.fill(); ctx.stroke();
+        if (sh.slow) { ctx.fillStyle = "#59c2e8"; ctx.beginPath(); ctx.arc(sh.x, sh.y, 2, 0, 6.29); ctx.fill(); }
+      });
+
+      // Particules
+      G.parts.forEach(function (p) {
+        ctx.globalAlpha = 1 - p.t / p.dur;
+        ctx.fillStyle = p.color;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.29); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+
+      // Ondes de choc des explosions
+      G.rings.forEach(function (r) {
+        var pr = r.t / r.dur;
+        ctx.globalAlpha = (1 - pr) * 0.8;
+        ctx.strokeStyle = r.color; ctx.lineWidth = 3.5 * (1 - pr) + 0.5;
+        ctx.beginPath(); ctx.arc(r.x, r.y, Math.max(1, r.maxR * pr), 0, 6.29); ctx.stroke();
+      });
+      ctx.globalAlpha = 1;
+
+      // Textes flottants
+      G.floats.forEach(function (f) {
+        ctx.globalAlpha = Math.min(1, (f.dur - f.t) / 0.3);
+        ctx.font = "800 " + (f.size || 14) + "px 'Baloo 2', sans-serif"; ctx.textAlign = "center";
+        ctx.lineWidth = 3.5; ctx.strokeStyle = "rgba(255,255,255,.9)";
+        ctx.strokeText(f.text, f.x, f.y);
+        ctx.fillStyle = f.color; ctx.fillText(f.text, f.x, f.y);
+      });
+      ctx.globalAlpha = 1;
+
+      // Rafale de tempête : lignes de vent
+      if (G.law.id === "tempete" && G.gustActive > 0) {
+        ctx.strokeStyle = "rgba(90,160,210,.65)"; ctx.lineWidth = 2.5;
+        var lx = G.gustLane === 0 ? 108 : 292;
+        for (var i = 0; i < 5; i++) {
+          var yy = 140 + i * 88 + Math.sin(Date.now() / 60 + i) * 6;
+          ctx.beginPath(); ctx.moveTo(lx - 30, yy); ctx.quadraticCurveTo(lx, yy - 12, lx + 30, yy); ctx.stroke();
+        }
+      }
+
+      // Zone de déploiement quand une carte est choisie
+      if (G.selected >= 0 && !G.over) {
+        var id = G.hand[G.selected];
+        ctx.fillStyle = "rgba(31,122,192,.10)";
+        if (CARDS[id].kind === "unit" || id === "chocolat") ctx.fillRect(0, MID_Y + 24, W, H - MID_Y - 24);
+        else if (id === "glace" || id === "rafale") { ctx.fillStyle = "rgba(89,194,232,.13)"; ctx.fillRect(0, 0, W, MID_Y - 8); }
+        ctx.strokeStyle = "rgba(240,168,28,.8)"; ctx.lineWidth = 2.5; ctx.setLineDash([6, 5]);
+        if (CARDS[id].kind === "unit" || id === "chocolat") ctx.strokeRect(3, MID_Y + 27, W - 6, H - MID_Y - 30);
+        else if (id === "glace" || id === "rafale") ctx.strokeRect(3, 3, W - 6, MID_Y - 11);
+        ctx.setLineDash([]);
+      }
+      ctx.restore();
+    }
+
+    function drawSnowmanFigure(x, y, scale) {
+      ctx.save(); ctx.translate(x, y); ctx.scale(scale, scale);
+      ctx.fillStyle = "#ffffff"; ctx.strokeStyle = "#b9d4e6"; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(0, 8, 10, 0, 6.29); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(0, -4, 7, 0, 6.29); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#f08c1e";
+      ctx.beginPath(); ctx.moveTo(6, -4); ctx.lineTo(14, -2.4); ctx.lineTo(6, -1); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#14313f";
+      ctx.beginPath(); ctx.arc(-2.4, -5.4, 1, 0, 6.29); ctx.arc(2.4, -5.4, 1, 0, 6.29); ctx.fill();
+      ctx.strokeStyle = "#7a4a21"; ctx.lineWidth = 1.8;
+      ctx.beginPath(); ctx.moveTo(-6, 2); ctx.lineTo(-13, -3); ctx.moveTo(6, 2); ctx.lineTo(13, -5); ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawStruct(s) {
+      var teamColor = s.team === "player" ? "#1f7ac0" : "#d64541";
+      if (s.dead) {
+        // Ruines : tas de neige
+        ctx.fillStyle = "#e8eef2";
+        ctx.beginPath(); ctx.ellipse(s.x, s.y + 8, s.r + 8, 12, 0, 0, 6.29); ctx.fill();
+        ctx.strokeStyle = "#c3dcee"; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.ellipse(s.x, s.y + 8, s.r + 8, 12, 0, 0, 6.29); ctx.stroke();
+        return;
+      }
+      ctx.save();
+      if (s.flash > 0) { ctx.shadowColor = "#fff"; ctx.shadowBlur = 16; }
+      if (s.kind === "igloo") {
+        // Dôme d'igloo
+        ctx.fillStyle = "#f4fafd";
+        ctx.strokeStyle = "#9fc3dc"; ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.arc(s.x, s.y + 12, s.r + 6, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = "#c3dcee"; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(s.x - s.r - 2, s.y - 4); ctx.lineTo(s.x + s.r + 2, s.y - 4);
+        ctx.moveTo(s.x - s.r + 3, s.y + 6); ctx.lineTo(s.x + s.r - 3, s.y + 6); ctx.stroke();
+        // Entrée
+        ctx.fillStyle = "#bfe0f2";
+        ctx.beginPath(); ctx.arc(s.x, s.y + 12, 10, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Drapeau
+        ctx.strokeStyle = "#7a4a21"; ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.moveTo(s.x, s.y - s.r - 4); ctx.lineTo(s.x, s.y - s.r - 20); ctx.stroke();
+        ctx.fillStyle = teamColor;
+        ctx.beginPath(); ctx.moveTo(s.x, s.y - s.r - 20); ctx.lineTo(s.x + 13, s.y - s.r - 15.5); ctx.lineTo(s.x, s.y - s.r - 11); ctx.closePath(); ctx.fill();
+      } else {
+        // Tour : fort de neige
+        ctx.fillStyle = "#f4fafd"; ctx.strokeStyle = "#9fc3dc"; ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(s.x - 19, s.y - 14, 38, 30, 6); else ctx.rect(s.x - 19, s.y - 14, 38, 30);
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = "#e2f0f9";
+        ctx.fillRect(s.x - 19, s.y - 14, 9, 8); ctx.fillRect(s.x - 4.5, s.y - 14, 9, 8); ctx.fillRect(s.x + 10, s.y - 14, 9, 8);
+        // Lanceur sur la tour
+        ctx.fillStyle = teamColor;
+        ctx.beginPath(); ctx.arc(s.x, s.y - 2, 6.4, 0, 6.29); ctx.fill();
+        ctx.fillStyle = "#fff"; ctx.strokeStyle = "#9fc3dc"; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(s.x + 7, s.y - 9, 3.6, 0, 6.29); ctx.fill(); ctx.stroke();
+      }
+      ctx.restore();
+      hpBar(s.x, s.y - (s.kind === "igloo" ? 48 : 30), s.kind === "igloo" ? 62 : 42, s.hp / s.maxHp, teamColor);
+      if (s.kind === "igloo") {
+        ctx.font = "800 10px Nunito, sans-serif"; ctx.textAlign = "center";
+        ctx.fillStyle = teamColor;
+        ctx.fillText(s.team === "player" ? "TON IGLOO" : "IGLOO ENNEMI", s.x, s.y + 30);
+      }
+    }
+
+    function drawUnit(u) {
+      var teamColor = u.team === "player" ? "#1f7ac0" : "#d64541";
+      var slipping = u.stunT > 0;
+      ctx.save();
+      ctx.translate(u.x, u.y);
+      // Ombre
+      ctx.fillStyle = "rgba(90,140,175,.25)";
+      ctx.beginPath(); ctx.ellipse(0, u.radius * 0.85, u.radius * 0.95, u.radius * 0.34, 0, 0, 6.29); ctx.fill();
+      // Aura du bonhomme
+      if (u.id === "bonhomme") {
+        ctx.fillStyle = u.team === "player" ? "rgba(31,122,192,.09)" : "rgba(214,69,65,.09)";
+        ctx.beginPath(); ctx.arc(0, 0, 78, 0, 6.29); ctx.fill();
+        ctx.strokeStyle = u.team === "player" ? "rgba(31,122,192,.3)" : "rgba(214,69,65,.3)";
+        ctx.lineWidth = 1.4; ctx.setLineDash([5, 6]);
+        ctx.beginPath(); ctx.arc(0, 0, 78, 0, 6.29); ctx.stroke(); ctx.setLineDash([]);
+      }
+      if (slipping) ctx.rotate(Math.sin(Date.now() / 90) * 0.5);
+      if (u.flash > 0) { ctx.shadowColor = "#fff"; ctx.shadowBlur = 12; }
+
+      var bob = u.speed > 0 && !slipping ? Math.sin(Date.now() / 130 + u.wob) * 1.6 : 0;
+      ctx.translate(0, bob);
+
+      if (u.id === "bonhomme") {
+        drawSnowmanFigure(0, 2, 1.25);
+        // Écharpe aux couleurs de l'équipe
+        ctx.fillStyle = teamColor; ctx.fillRect(-7, -8, 14, 3.6);
+      } else if (u.id === "canon") {
+        ctx.fillStyle = "#5b6b78";
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(-13, -3, 26, 13, 4); else ctx.rect(-13, -3, 26, 13);
+        ctx.fill();
+        ctx.fillStyle = "#74879a";
+        var dirY = u.team === "player" ? -1 : 1;
+        ctx.fillRect(-4, dirY < 0 ? -14 : 4, 8, 12);
+        ctx.fillStyle = "#33424e";
+        ctx.beginPath(); ctx.arc(-8, 12, 3.6, 0, 6.29); ctx.arc(8, 12, 3.6, 0, 6.29); ctx.fill();
+        ctx.fillStyle = "#fff"; ctx.strokeStyle = "#9fc3dc"; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(10, dirY < 0 ? -13 : 9, 4.6, 0, 6.29); ctx.fill(); ctx.stroke();
+      } else if (u.id === "boss") {
+        // Boss : gros personnage avec casquette aux couleurs ennemies
+        ctx.fillStyle = "#8a4b2a";
+        ctx.beginPath(); ctx.arc(0, 2, u.radius - 2, 0, 6.29); ctx.fill();
+        ctx.fillStyle = "#ffd9a0";
+        ctx.beginPath(); ctx.arc(0, -u.radius + 4, 9.5, 0, 6.29); ctx.fill();
+        ctx.fillStyle = teamColor;
+        ctx.beginPath(); ctx.arc(0, -u.radius + 2, 9.5, Math.PI, 0); ctx.closePath(); ctx.fill();
+        ctx.fillRect(-11, -u.radius + 1, 22, 3);
+        ctx.fillStyle = "#14313f";
+        ctx.beginPath(); ctx.arc(-3.4, -u.radius + 4, 1.3, 0, 6.29); ctx.arc(3.4, -u.radius + 4, 1.3, 0, 6.29); ctx.fill();
+        if (u.souffle) {
+          ctx.fillStyle = "#9fb3c1";
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(-13, 8, 26, 9, 3); else ctx.rect(-13, 8, 26, 9);
+          ctx.fill();
+        }
+      } else if (u.id === "castor") {
+        // Queue plate derrière, corps brun, grandes dents
+        ctx.fillStyle = "#6e4520";
+        ctx.beginPath(); ctx.ellipse(8, 10, 8, 4.2, 0.5, 0, 6.29); ctx.fill();
+        ctx.fillStyle = "#8a5a2b";
+        ctx.beginPath(); ctx.arc(0, 2, u.radius - 1, 0, 6.29); ctx.fill();
+        ctx.fillStyle = "#a06a33";
+        ctx.beginPath(); ctx.arc(0, -u.radius + 5, 6.4, 0, 6.29); ctx.fill();
+        ctx.fillStyle = "#ffffff"; ctx.fillRect(-2.4, -u.radius + 9.5, 4.8, 3.6);
+        ctx.fillStyle = "#14313f";
+        ctx.beginPath(); ctx.arc(-2.6, -u.radius + 4, 1.1, 0, 6.29); ctx.arc(2.6, -u.radius + 4, 1.1, 0, 6.29); ctx.fill();
+      } else if (u.id === "souffleuse") {
+        ctx.fillStyle = "#e07b1f";
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(-13, -4, 26, 14, 4); else ctx.rect(-13, -4, 26, 14);
+        ctx.fill();
+        ctx.fillStyle = "#b85f10";
+        var dirY2 = u.team === "player" ? -1 : 1;
+        ctx.fillRect(-3, dirY2 < 0 ? -15 : 7, 7, 11);
+        ctx.fillStyle = "#33424e";
+        ctx.beginPath(); ctx.arc(-8, 12, 3.8, 0, 6.29); ctx.arc(8, 12, 3.8, 0, 6.29); ctx.fill();
+        // Jet de neige projeté
+        ctx.fillStyle = "rgba(255,255,255,.85)";
+        for (var sn = 0; sn < 3; sn++) { ctx.beginPath(); ctx.arc(rand(-4, 6), dirY2 * (19 + sn * 5), 2.2 - sn * 0.4, 0, 6.29); ctx.fill(); }
+      } else {
+        // Personnage standard
+        var bodyColor = u.id === "manteau" ? "#7a4a21" : (u.id === "geleux" ? "#59c2e8" : teamColor);
+        ctx.fillStyle = bodyColor;
+        ctx.beginPath(); ctx.arc(0, 2, u.radius - 1, 0, 6.29); ctx.fill();
+        if (u.id === "manteau") { // capuche fourrure
+          ctx.strokeStyle = "#e8d9bd"; ctx.lineWidth = 3.4;
+          ctx.beginPath(); ctx.arc(0, -u.radius + 5, 7.4, 0, 6.29); ctx.stroke();
+        }
+        ctx.fillStyle = "#ffd9a0";
+        ctx.beginPath(); ctx.arc(0, -u.radius + 5, 6.6, 0, 6.29); ctx.fill();
+        // Tuque aux couleurs de l'équipe
+        ctx.fillStyle = teamColor;
+        ctx.beginPath(); ctx.arc(0, -u.radius + 4, 6.8, Math.PI, 0); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.arc(0, -u.radius - 2.4, 2.3, 0, 6.29); ctx.fill();
+        // Boule de neige en main pour les lanceurs
+        if (u.id === "lanceur" || u.id === "geleux") {
+          ctx.fillStyle = "#fff"; ctx.strokeStyle = "#9fc3dc"; ctx.lineWidth = 1.1;
+          ctx.beginPath(); ctx.arc(u.radius - 1, -2, 3.8, 0, 6.29); ctx.fill(); ctx.stroke();
+        }
+        if (u.slowT > 0) { // gelé
+          ctx.strokeStyle = "#59c2e8"; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(0, 0, u.radius + 2.5, 0, 6.29); ctx.stroke();
+        }
+      }
+      ctx.restore();
+
+      // Bulles de répliques
+      if (u.bubble && u.bubbleT > 0) {
+        ctx.font = "800 11px 'Baloo 2', sans-serif"; ctx.textAlign = "center";
+        var tw = ctx.measureText(u.bubble).width + 14;
+        ctx.fillStyle = "rgba(255,255,255,.95)";
+        ctx.strokeStyle = "#b9d4e6"; ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        var bx = clamp(u.x, tw / 2 + 2, W - tw / 2 - 2), by = u.y - u.radius - 26;
+        if (ctx.roundRect) ctx.roundRect(bx - tw / 2, by - 10, tw, 19, 8); else ctx.rect(bx - tw / 2, by - 10, tw, 19);
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = "#14313f";
+        ctx.fillText(u.bubble, bx, by + 3.5);
+      }
+      // Barre de vie des unités amochées
+      if (u.hp < u.maxHp) hpBar(u.x, u.y - u.radius - 12, 30, u.hp / u.maxHp, teamColor);
+    }
+
+    // =====================================================================
+    //  ÉVÉNEMENTS D'INTERFACE
+    // =====================================================================
+    $("btn-upgrades").addEventListener("click", function () { renderShop(); showScreen("screen-shop"); });
+    $("btn-shop-back").addEventListener("click", function () { showScreen("screen-home"); });
+    $("btn-quit").addEventListener("click", function () {
+      if (rafId) cancelAnimationFrame(rafId);
+      G = null;
+      $("overlay-end").classList.remove("show");
+      renderHome(); showScreen("screen-home");
+    });
+    $("btn-sound").addEventListener("click", function () {
+      P.sound = !P.sound;
+      this.textContent = P.sound ? "🔊" : "🔇";
+    });
+    $("btn-tuto-go").addEventListener("click", function () {
+      P.tutoSeen = true;
+      $("overlay-tuto").classList.remove("show");
+      beginLoop();
+    });
+    $("btn-end-next").addEventListener("click", function () {
+      $("overlay-end").classList.remove("show");
+      if (G && G.level.n < 10) startBattle(G.level.n + 1);
+    });
+    $("btn-end-replay").addEventListener("click", function () {
+      $("overlay-end").classList.remove("show");
+      if (G) startBattle(G.level.n);
+    });
+    $("btn-end-home").addEventListener("click", function () {
+      $("overlay-end").classList.remove("show");
+      if (rafId) cancelAnimationFrame(rafId);
+      G = null;
+      renderHome(); showScreen("screen-home");
+    });
+
+    // Dessin statique initial derrière l'accueil (rien à dessiner : le canvas est dans l'écran bataille)
+    renderHome();
+    </script>
+  <!-- ===== Barre de jeu HP — NE PAS ÉDITER À LA MAIN =====
+     Retour / Pause / Partager. Source : src/components/barre-jeu/barre-jeu.js
+     (régénérer le module : bun run build:barre) -->
+<script src="/barre/barre-jeu.js" defer></script>
+<!-- ===== Fin barre de jeu HP ===== -->
+</body>
+</html>
