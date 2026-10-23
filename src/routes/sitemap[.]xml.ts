@@ -30,7 +30,7 @@ const STATIC_PATHS = [
   "/outils-web/ca-vaut-tu-la-peine.html",
   "/outils-web/le-relais.html",
   "/outils-web/maintenant.html",
-  // Les 33 jeux (adresses stables /apps/<slug> — redirection 301 vers le fichier courant)
+  // Les 34 jeux (adresses stables /apps/<slug> — redirection 301 vers le fichier courant)
   "/apps/releve",
   "/apps/la-banque",
   "/apps/bons-reflexes",
@@ -58,6 +58,7 @@ const STATIC_PATHS = [
   "/apps/chat-attaque",
   "/apps/nord-2087",
   "/apps/igloo",
+  "/apps/chevalier-du-fleuve",
   "/apps/que-vois-tu",
   "/apps/tapinoue",
   "/apps/ton-chum-frotte-son-char",

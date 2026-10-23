@@ -43,7 +43,7 @@ function Page() {
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
               Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et
               veulent apprendre, partager et repartir. C'est pour eux que je construis. Du gratuit
-              chaque fois que c'est possible — 33 jeux, 629 recettes, des outils web sans compte —
+              chaque fois que c'est possible — 34 jeux, 629 recettes, des outils web sans compte —
               et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ le kit,
               aucune taxe ajoutée.
             </p>

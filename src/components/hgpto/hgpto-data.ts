@@ -75,11 +75,11 @@ export const JOKES = [
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
         { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — montre ça à quelqu'un, vous allez rire et réfléchir !", u:"https://hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 33 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"33 JEUX" }
+        { t:"Envie de jouer en famille ? Il y a 34 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"34 JEUX" }
       ];
 export const BOOK_PITCHES = [
         { t:"Ce livre-là me donne le goût de te parler des nôtres : « Horizon Québec » (10 $) et « La faim justifie les moyens » (10 $) sont au catalogue, en PDF.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
-        { t:"À force de lire, je pense à « Les enfants cuisinent pour faire plaisir » (20 $) — des recettes à faire en famille.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"EN FAMILLE" }
+        { t:"À force de lire, je pense à « Les enfants cuisinent pour faire plaisir » (10 $) — des recettes à faire en famille.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"EN FAMILLE" }
       ];
 export const KIT_PITCHES = [
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
@@ -90,12 +90,12 @@ export const ATELIER_PITCHES = [
       ];
 export const PITCHES = [
         { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — et ça fait réfléchir en s'amusant !", u:"https://hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 33 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"33 JEUX" },
+        { t:"Envie de jouer en famille ? Il y a 34 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"34 JEUX" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
         { t:"Tu as des ingrédients qui traînent ? Tape-les dans Recettes HP : 629 recettes gratuites à découvrir.", u:"https://hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"629 RECETTES" },
         { t:"« La faim justifie les moyens », notre livre à 10 $ : des histoires qui nourrissent, à lire tranquillement.", s:"LIVRES" },
-        { t:"« Les enfants cuisinent pour faire plaisir » : 20 $ de recettes à faire en famille, petits chefs bienvenus.", s:"EN FAMILLE" },
+        { t:"« Les enfants cuisinent pour faire plaisir » : 10 $ de recettes à faire en famille, petits chefs bienvenus.", s:"EN FAMILLE" },
         { t:"Nos livres « Horizon Québec » (10 $) et « Enjeux de l'humanité à l'ère de l'IA » (15 $) sont au catalogue.", s:"LIVRES" },
         { t:"L'atelier « Cuisine pratique » (120 $) se donne chez toi, à Terrebonne et dans les environs.", s:"ATELIERS" },
         { t:"L'atelier « Manger mieux avec moins » (150 $) : des semaines plus douces au portefeuille, sans se priver.", s:"ATELIERS" }
@@ -231,9 +231,9 @@ export const NIGHTFALL_LINE = "La nuit tombe sur le site… je vais veiller en d
 export const SITE_FACTS = {
         produits: {
           kits:   { nom:"Kits Sans Honte", prix:"5 $ le kit, bundle 40 $", url:"https://hp-outils.com/sans-honte" },
-          livres: { nom:"Livres PDF", prix:"10 $ à 20 $", url:"https://hp-outils.com/livres-pdf" },
+          livres: { nom:"Livres PDF", prix:"10 $ à 15 $", url:"https://hp-outils.com/livres-pdf" },
           recettes:{ nom:"Recettes HP", prix:"Gratuit — 629 recettes", url:"https://hp-outils.com/en-cuisine/" },
-          jeux:   { nom:"Jeux", prix:"Gratuit — 33 jeux", url:"https://hp-outils.com/jeux" },
+          jeux:   { nom:"Jeux", prix:"Gratuit — 34 jeux", url:"https://hp-outils.com/jeux" },
           ateliers:{ nom:"Ateliers", prix:"120 $ et 150 $", url:"https://hp-outils.com/ateliers" },
           passeurs:{ nom:"Les Passeurs", prix:"1 $ / mois (inscription bientôt)", url:"https://hp-outils.com/les-passeurs" },
           balado: { nom:"Balado Futur simple", prix:"Gratuit, chaque lundi", url:"https://hp-outils.com/balado" }
@@ -308,12 +308,18 @@ export const KB = [
         { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
           a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, ça prend deux minutes, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
           u:"https://hp-outils.com/jeux", l:"Voir les jeux" },
-        { q:"Vous avez quels jeux ?", s:"33 JEUX",
-          a:"33 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille !",
+        { q:"Vous avez quels jeux ?", s:"34 JEUX",
+          a:"34 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille !",
           u:"https://hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"C'est quoi, IGLOO ?", s:"GRATUIT !",
           a:"IGLOO — La guerre des igloos : une bataille de boules de neige en arène ! Tu déploies tes cartes, tu défends ton igloo et tu fais tomber celui d'en face — et chaque bataille tire une loi du quartier au hasard. Campagne de 10 batailles, parties d'environ 3 minutes. Gratuit !",
           u:"https://hp-outils.com/apps/igloo/igloo-v1.0.html", l:"Jouer à IGLOO" },
+        { q:"C'est quoi, Chevalier du fleuve ?", s:"NOUVEAU !",
+          a:"Chevalier du fleuve : notre grand jeu de stratégie temps réel — pour les 16 ans et plus. Tu refais la campagne VRAIE de Pierre Le Moyne d'Iberville, né à Ville-Marie, premier Canadien fait chevalier de Saint-Louis : la baie James en 1686, la défense de Québec en 1690, le Pélican en 1697, le fort Maurepas en 1699. Tu bâtis, tu lèves ton armée, tu conquiers le littoral du fleuve — et il y a même la légende des nains albinos des terriers et leur Forge des Rois Gybbys ! Gratuit en entier : les pierres précieuses se gagnent en jouant.",
+          u:"https://hp-outils.com/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.2.html", l:"Jouer à Chevalier du fleuve" },
+        { q:"C'est quoi, les pierres précieuses et les Gybbys ?", s:"LÉGENDE DU FLEUVE",
+          a:"Dans Chevalier du fleuve, les pierres précieuses sont la monnaie des Gybbys — les nains albinos, le peuple oublié des terriers du fleuve, une invention d'Hugo. On les gagne en jouant (missions, filons, trocs) et elles servent à forger l'équipement épique et légendaire à la Forge des Rois Gybbys. C'est la part de légende du jeu ; la campagne, elle, est de l'histoire vraie, sources à l'appui.",
+          u:"https://hp-outils.com/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.2.html", l:"Découvrir la Forge" },
         { q:"C'est quoi, Que vois-tu ?", s:"GRATUIT !",
           a:"Que vois-tu ? : un jeu de perception. Tu regardes une image et tu dis ce que tu vois en premier — il n'y a pas de mauvaise réponse ! 42 défis en 3 terrains : Jeunesse, Ado et Adulte. Gratuit !",
           u:"https://hp-outils.com/apps/que-vois-tu/que-vois-tu-v2.0.html", l:"Jouer à Que vois-tu ?" },
@@ -336,8 +342,11 @@ export const KB = [
           a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $) — et le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes). Écris à Hugo pour réserver : dis-lui pour qui c'est, combien de personnes et quand tu vises — il te répond en personne, sous 3 jours ouvrables !",
           u:"https://hp-outils.com/ateliers", l:"Voir les ateliers" },
         { q:"Vous avez des livres ?", s:"LIVRES",
-          a:"4 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) et « Les enfants cuisinent pour faire plaisir » (20 $).",
+          a:"4 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) et « Les enfants cuisinent pour faire plaisir » (10 $).",
           u:"https://hp-outils.com/livres-pdf", l:"Voir les livres" },
+        { q:"Combien coûte « Les enfants cuisinent pour faire plaisir » ?", s:"10 $",
+          a:"« Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Petit point d'honnêteté : son prix vient de baisser et l'achat en ligne rouvrira bientôt à ce nouveau prix — pour l'instant, la fiche le présente, sans paiement possible.",
+          u:"https://hp-outils.com/pdf/enfants-cuisinent", l:"Voir le livre" },
         { q:"C'est quoi, les Passeurs ?", s:"1 $ / MOIS",
           a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils : 1 $ par mois, ou 12 $ pour l'année. Honnêtement ? L'inscription payante arrive bientôt — le bouton de paiement n'est pas encore en ligne.",
           u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
@@ -382,7 +391,7 @@ export const KB = [
         { q:"C'est quoi, ton choix du moment ?", s:"MON CHOIX ♥", fn:"choix",
           a:"" },
         { q:"Montre-moi les jeux", s:"PAR ICI →", go:"sec-jeux",
-          a:"Les jeux sont là : 33 jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
+          a:"Les jeux sont là : 34 jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
         { q:"Montre-moi les kits", s:"PAR ICI →", go:"sec-kits",
           a:"Les kits Sans Honte sont juste là : 5 $ le kit, 15 thèmes du quotidien, et le bundle à 40 $." },
         { q:"Comment préparer mon testament ?", s:"5 $", u:"https://hp-outils.com/sans-honte", l:"Voir les kits",
@@ -392,7 +401,7 @@ export const KB = [
         { q:"Montre-moi les recettes", s:"PAR ICI →", go:"sec-recettes",
           a:"Recettes HP est là : 629 recettes gratuites. Tu tapes tes ingrédients, il trouve quoi cuisiner !" },
         { q:"Montre-moi les livres", s:"PAR ICI →", go:"sec-livres",
-          a:"Nos 4 livres sont là, en PDF, de 10 $ à 20 $ — téléchargement immédiat après le paiement." },
+          a:"Nos 4 livres sont là, en PDF, de 10 $ à 15 $ — téléchargement immédiat après le paiement." },
         { q:"Montre-moi les ateliers", s:"PAR ICI →", go:"sec-ateliers",
           a:"Les ateliers sont là : Cuisine pratique (120 $) et Manger mieux avec moins (150 $), à Terrebonne et dans les environs." },
         { q:"Fais-moi visiter le site", s:"EN ROUTE", fn:"tour",
@@ -464,7 +473,7 @@ export const CHOIX_LINES = [
         { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tape ce qu'il y a dans ton frigo, il te trouve un souper.", u:"https://hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : RELÈVE, notre série d'histoires dont tu choisis la suite. Le chapitre 1 est gratuit !", u:"https://hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : « Futur simple », le balado d'HP Outils — un nouvel épisode chaque lundi, sans jargon.", u:"https://hp-outils.com/balado", l:"Écouter le balado", s:"MON CHOIX ♥" },
-        { t:"Mon choix du moment, côté lecture : « Les enfants cuisinent pour faire plaisir » (20 $) — cuisiner en famille, c'est des souvenirs qui se mangent.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"MON CHOIX ♥" }
+        { t:"Mon choix du moment, côté lecture : « Les enfants cuisinent pour faire plaisir » (10 $) — cuisiner en famille, c'est des souvenirs qui se mangent.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"MON CHOIX ♥" }
       ];
       /* Savoir-vendre éthique HP : conclure SANS pression. Ces lignes
          accompagnent les réponses produits quand le visiteur hésite ou
@@ -509,13 +518,13 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour ça, c'est celui-là qui fait ça : le kit « Papiers », dans les kits Sans Honte (5 $) — 24 fiches pour classer tes papiers et les retrouver sans tout virer à l'envers.",
           u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { id:'enfants-cuisine', mots:['cuisiner','cuisine','recette','manger'], aussi:['enfant','famille','petits chefs'], dejaVu:'enfants cuisinent',
-          t:"Pour cuisiner en famille, c'est celui-là qui fait ça : « Les enfants cuisinent pour faire plaisir » (20 $), des recettes pensées pour les petits chefs. Et au quotidien, Recettes HP reste gratuit : 629 recettes pour tout le monde.",
+          t:"Pour cuisiner en famille, c'est celui-là qui fait ça : « Les enfants cuisinent pour faire plaisir » (10 $), des recettes pensées pour les petits chefs. Et au quotidien, Recettes HP reste gratuit : 629 recettes pour tout le monde.",
           u:"https://hp-outils.com/livres-pdf", l:"Voir le livre", s:"EN FAMILLE" },
         { id:'apprendre', mots:['apprendre','cours de cuisine','formation','atelier'], dejaVu:'ateliers sont la',
           t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les ateliers à Terrebonne — « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
           u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
-          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 33 jeux, sans inscription. Et le jour où tu voudras un coup de pouce pour t'organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
+          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 34 jeux, sans inscription. Et le jour où tu voudras un coup de pouce pour t'organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
           u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" }
       ];
       /* L'alternative honnête : après une réponse qui présente un produit
@@ -584,7 +593,7 @@ export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
          par page. /sans-honte n'en a pas : route sensible, dignité
          d'abord — le résumé calme des faits (lot nº 2) y suffit. */
 export const DWELL_SUGGESTIONS = {
-        '/livres-pdf': { t:"Tu regardes les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, « Les enfants cuisinent pour faire plaisir » à 20 $. Téléchargement immédiat après le paiement. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
+        '/livres-pdf': { t:"Tu regardes les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, « Les enfants cuisinent pour faire plaisir » à 10 $. Téléchargement immédiat après le paiement. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
         '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), en groupe, à Terrebonne et dans les environs ; réservation et questions par courriel à Hugo. Et les recettes, elles, sont gratuites en tout temps.", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 1 $ par mois (ou 12 $ pour l'année) pour soutenir HP Outils. En toute honnêteté : le bouton d'inscription payante n'est pas encore en ligne — ça s'en vient.", u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"1 $ / MOIS" }
       };

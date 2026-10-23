@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/prix")({
   head: () => createSeoHead({
-    title: "Prix HP — kits 5 $, livres 10 à 20 $, ateliers 120 $/150 $, aucune taxe ajoutée",
-    description: "Tous les prix HP au même endroit : kits Sans Honte 5 $, lot de 10 kits 40 $, livres PDF 10 à 20 $, ateliers 120 $/150 $. Petit fournisseur : aucune taxe ajoutée.",
+    title: "Prix HP — kits 5 $, livres 10 à 15 $, ateliers 120 $/150 $, aucune taxe ajoutée",
+    description: "Tous les prix HP au même endroit : kits Sans Honte 5 $, lot de 10 kits 40 $, livres PDF 10 à 15 $, ateliers 120 $/150 $. Petit fournisseur : aucune taxe ajoutée.",
     path: "/prix",
   }),
   component: Page,
@@ -14,7 +14,7 @@ const ROWS: Array<{ cat: string; offre: string; prix: string; href: string; labe
   { cat: "PDF", offre: "Enjeux de l’humanité à l’ère de l’IA (PDF)", prix: "15 $ CAD, aucune taxe ajoutée", href: "/achat/enjeux-humanite", label: "Acheter le PDF" },
   { cat: "Guide", offre: "La faim justifie les moyens (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/faim-justifie-les-moyens", label: "Acheter le PDF" },
   { cat: "PDF", offre: "Horizon Québec (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/horizon-quebec", label: "Acheter le PDF" },
-  { cat: "PDF", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "20 $ CAD, aucune taxe ajoutée", href: "/achat/enfants-cuisinent", label: "Acheter le PDF" },
+  { cat: "PDF", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/enfants-cuisinent", label: "Voir la fiche" },
   { cat: "Sans Honte", offre: "Kits Sans Honte — 15 titres au choix, un par un (Frigo, Papiers, Fraude, Tenir Debout, Seconde Main, Entraide…)", prix: "5 $ CAD le kit, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les 15 kits" },
   { cat: "Sans Honte", offre: "Bundle Sans Honte — Choisis 10 kits parmi 15", prix: "40 $ CAD, aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
   { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 4 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
@@ -68,7 +68,7 @@ function Page() {
           <h2>Et le <em>gratuit</em> ?</h2>
           <p className="strip-intro">
             Avant de payer quoi que ce soit, le gratuit d'HP vaut le détour :{" "}
-            <a href="/jeux">33 jeux gratuits, sans inscription</a>, et{" "}
+            <a href="/jeux">34 jeux gratuits, sans inscription</a>, et{" "}
             <a href="/balado">Futur simple, le balado sur l'IA</a> — un épisode par semaine, gratuit lui aussi.
           </p>
         </div>

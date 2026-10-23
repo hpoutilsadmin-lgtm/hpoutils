@@ -33,6 +33,13 @@
                          dont la config a un « lien » : UN lien doux,
                          gratuit d'abord, en lien avec le sujet du
                          jeu ; rien à acheter pour continuer à jouer)
+     ✓ Tampons           (décision d'Hugo, 23 oct. 2026, 08 h 18 —
+                         seulement les jeux approuvés par les testeurs :
+                         le tampon du testeur, à sa couleur, tel que
+                         posé sur /jeux ; source : le registre des
+                         approbations du 22 oct. 2026, 21 h 31. La
+                         couleur de Lo n'y est pas précisée : tampon
+                         neutre, rien d'inventé)
 
    Source unique : src/components/barre-jeu/barre-jeu.js
    Généré vers public/barre/barre-jeu.js par :
@@ -88,7 +95,8 @@
       lien: { href: "/pdf/sans-honte-fraude", texte: "Le kit Sans Honte — Fraude : garder ses réflexes aiguisés face aux pièges (5 $)" }
     },
     "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html": {
-      nom: "Mystères du Nord", score: ["#scorePot"], pause: null
+      nom: "Mystères du Nord", score: ["#scorePot"], pause: null,
+      tampons: ["lo"]
     },
     "/apps/100-en-30-jours/100-en-30-jours-v1.1.html": {
       nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null,
@@ -102,26 +110,28 @@
     },
     "/apps/caribou-run/caribou-run-v1.1.html": {
       nom: "Caribou Run", score: ["#points", "#overScore"],
-      pause: { type: "gate" }
+      pause: { type: "gate" },
+      tampons: ["maeva"]
     },
     "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html": {
-      nom: "Cherche & Trouve — La vraie vie", score: null,
+      nom: "Cherche & Trouve — La vraie vie", score: null, tampons: ["tous"],
       pause: { type: "fnPair", pauseFn: "mettreEnPause", resumeSel: "#overlay",
                probeSel: "#overlay", probeClass: "show" },
       lien: { href: "/passeur-de-savoir", texte: "Le Passeur de savoir : l'application gratuite des savoirs d'ici" }
     },
     "/apps/devine-l-humeur/devine-l-humeur-v1.1.html": {
-      nom: "Devine l'humeur", score: ["#hudScore", "#finalScore"], pause: null
+      nom: "Devine l'humeur", score: ["#hudScore", "#finalScore"], pause: null,
+      tampons: ["lo"]
     },
     "/apps/la-spirale-asmr/la-spirale-asmr-v1.1.html": {
-      nom: "La Spirale ASMR", score: null,
+      nom: "La Spirale ASMR", score: null, tampons: ["louka"],
       pause: { type: "btnToggle", sel: "#btnPause", textSel: "#lblPause", pausedText: "Reprendre" }
     },
     "/apps/poutine-panic/poutine-panic-v1.1.html": {
       nom: "Poutine Panic", score: ["#money"],
       pause: { type: "btnPair", pauseSel: "#restartBtn", resumeSel: "#startBtn",
                probeSel: "#startBtn", probeText: "Reprendre", probeVisibleSel: "#tutorial" },
-      lien: { href: "/pdf/enfants-cuisinent", texte: "Le livre « Les enfants cuisinent pour faire plaisir » (20 $)" }
+      lien: { href: "/pdf/enfants-cuisinent", texte: "Le livre « Les enfants cuisinent pour faire plaisir » (10 $)" }
     },
     "/apps/retromania/retromania-v1.1.html": {
       nom: "Retromania", score: ["#soloScoreChip", "#finalScore"],
@@ -135,7 +145,7 @@
       nom: "Sirop Clicker", score: null, pause: null
     },
     "/apps/mots-de-chez-nous/mots-de-chez-nous-v1.0.html": {
-      nom: "Mots de Chez Nous", score: ["#jeu-trouves"], pause: null,
+      nom: "Mots de Chez Nous", score: ["#jeu-trouves"], pause: null, tampons: ["hp"],
       lien: { href: "/passeur-de-savoir", texte: "Le Passeur de savoir : l'application gratuite des savoirs d'ici" }
     },
     "/apps/memoire-des-cantons/memoire-des-cantons-v1.0.html": {
@@ -144,7 +154,8 @@
     },
     "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html": {
       nom: "Tir de Boules de Neige", score: ["#hudScore"],
-      pause: { type: "gate" }
+      pause: { type: "gate" },
+      tampons: ["maeva", "lo"]
     },
     "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html": {
       nom: "Ado odieux, adieu", score: ["#hud-points"],
@@ -159,36 +170,42 @@
       pause: { type: "gateTimeout" }
     },
     "/apps/fusion-sirop/fusion-sirop-v1.0.html": {
-      nom: "Fusion Sirop", score: ["#score"], pause: null
+      nom: "Fusion Sirop", score: ["#score"], pause: null, tampons: ["hp"]
     },
     "/apps/trio-des-elements/trio-des-elements-v1.0.html": {
-      nom: "Trio des Éléments", score: ["#score"], pause: null
+      nom: "Trio des Éléments", score: ["#score"], pause: null, tampons: ["hp"]
     },
     "/apps/bernache-express/bernache-express-v1.0.html": {
       nom: "Bernache Express", score: null, /* distance en mètres, pas un score */
-      pause: { type: "gate" }
+      pause: { type: "gate" },
+      tampons: ["maeva"]
     },
     "/apps/le-bonhomme-pendu/le-bonhomme-pendu-v1.0.html": {
       nom: "Le Bonhomme Pendu", score: ["#nb-gagnees"], pause: null
     },
     "/apps/montgolfiere/montgolfiere-v1.0.html": {
       nom: "Montgolfière", score: null, /* altitude en mètres, pas un score */
-      pause: { type: "gate" }
+      pause: { type: "gate" },
+      tampons: ["louka", "maeva"]
     },
     "/apps/pop-ballons/pop-ballons-v1.0.html": {
       nom: "Pop Ballons", score: ["#hudScore", "#finalScore"],
-      pause: { type: "gate" }
+      pause: { type: "gate" },
+      tampons: ["mel"]
     },
     "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html": {
-      nom: "2 vérités, 1 mensonge", score: ["#hudScore", "#endScore"], pause: null
+      nom: "2 vérités, 1 mensonge", score: ["#hudScore", "#endScore"], pause: null,
+      tampons: ["mel"]
     },
     "/apps/chat-attaque/chat-attaque-v1.2.html": {
       nom: "Chat'attaque", score: null,
-      pause: { type: "btnToggle", sel: "#pauseBtn", pausedText: "▶" }
+      pause: { type: "btnToggle", sel: "#pauseBtn", pausedText: "▶" },
+      tampons: ["louka"]
     },
     "/apps/nord-2087/nord-2087-v1.1.html": {
       nom: "NORD 2087", score: ["#statScore", "#sScore"],
-      pause: { type: "btnToggle", sel: "#btnPause", pausedText: "▶" }
+      pause: { type: "btnToggle", sel: "#btnPause", pausedText: "▶" },
+      tampons: ["maeva"]
     },
     /* Ajouts du 22 oct. au soir (ordre d'Hugo : envoyer les jeux
        absents) — les 6 du « paquet 6 jeux » préparé pour le site +
@@ -221,6 +238,14 @@
     "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html": {
       nom: "Anxiété, le jeu", score: null, pause: null,
       lien: { href: "/pdf/sans-honte-tenir-debout", texte: "Le kit Sans Honte — Tenir debout : traverser les journées lourdes (5 $)" }
+    },
+    /* Ajout du 22 oct. au soir (chantier de nuit, commande d'Hugo) :
+       Chevalier du fleuve — RTS à boucle requestAnimationFrame :
+       le gel « gate » fige la simulation (prouvé au playtest :
+       positions et minuteurs identiques pendant la pause). */
+    "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.2.html": {
+      nom: "Chevalier du fleuve", score: null,
+      pause: { type: "gate" }
     }
   };
 
@@ -236,6 +261,18 @@
   cfg = cfg || {
     nom: (document.title || "Jeu").replace(/\s*[|—-]\s*HP.*$/, "").trim() || "Jeu",
     score: null, pause: null
+  };
+
+  /* ---------------- Tampons des testeurs ----------------
+     Mêmes signatures que sur /jeux (registre du 22 oct. 2026) :
+     nom court dans la barre, nom complet en infobulle. */
+  var TAMPONS = {
+    louka: { court: "Louka", complet: "Louka", couleur: "#2e7d32", rotation: -2 },
+    maeva: { court: "Maëva", symbole: "☾", complet: "Maëva (tampon noir, petite lune)", couleur: "#23201c", rotation: 1.5 },
+    mel: { court: "Mel", complet: "Mel « The girl boss »", couleur: "#7b2d8b", rotation: -1.5 },
+    lo: { court: "Lo", complet: "Lo « le petit Raptor »", couleur: "#6f6455", rotation: 2 },
+    hp: { court: "HP", complet: "HP, le créateur", couleur: "#2456a6", rotation: -1.5 },
+    tous: { court: "Tous", complet: "Tous les testeurs — à l'unanimité", couleur: "#221a12", rotation: 0 }
   };
 
   /* ---------------- Styles (injectés) ---------------- */
@@ -261,7 +298,9 @@
     ".bj-lien p{margin:0 0 8px}",
     ".bj-lien a{color:#8a5a00;font-weight:800}",
     ".bj-coeur.bj-actif{color:#ff9d94}",
-    "@media (max-width:520px){.bj-btn{font-size:13px;padding:0 10px;min-height:38px}.bj-long{display:none}}",
+    ".bj-tampons{display:inline-flex;gap:5px;align-items:center;padding-left:2px}",
+    ".bj-tampon{display:inline-flex;align-items:center;gap:4px;background:#fffaf0;border:1.6px solid #221a12;border-radius:6px;padding:3px 8px 4px;font-size:11.5px;font-weight:800;letter-spacing:.02em;line-height:1.15;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}",
+    "@media (max-width:520px){.bj-btn{font-size:13px;padding:0 10px;min-height:38px}.bj-long{display:none}.bj-tampon-nom{display:none}.bj-tampon{padding:3px 6px 4px}}",
     "@media print{.bj-bar,.bj-veil,.bj-toast{display:none!important}}"
   ].join("\n");
 
@@ -686,6 +725,42 @@
       } catch (e) { /* pas de compteur : le cœur reste un favori local */ }
     }
 
+    /* ✓ Tampons des testeurs : même signature que sur /jeux,
+       posée dans la barre pour les jeux approuvés (corps de preuve
+       en partie). Purement informatif — aucun bouton, aucun clic. */
+    if (cfg.tampons && cfg.tampons.length) {
+      var zoneTampons = el("span", "bj-tampons");
+      zoneTampons.setAttribute("role", "img");
+      zoneTampons.setAttribute("aria-label",
+        "Approuvé par : " + cfg.tampons.map(function (c) {
+          return (TAMPONS[c] || {}).complet || c;
+        }).join(", "));
+      cfg.tampons.forEach(function (cle) {
+        var t = TAMPONS[cle];
+        if (!t) return;
+        var pastille = el("span", "bj-tampon");
+        pastille.style.borderColor = t.couleur;
+        pastille.style.color = t.couleur;
+        pastille.style.transform = "rotate(" + t.rotation + "deg)";
+        pastille.title = "Approuvé par " + t.complet + ", testeur HP";
+        var coche = el("span", null, "✓");
+        coche.setAttribute("aria-hidden", "true");
+        pastille.appendChild(coche);
+        /* Le symbole (la petite lune de Maëva) reste visible même
+           sur petit écran, où le nom se replie : la couleur et le
+           symbole portent alors la signature. */
+        if (t.symbole) {
+          var symb = el("span", null, t.symbole);
+          symb.setAttribute("aria-hidden", "true");
+          pastille.appendChild(symb);
+        }
+        var nomT = el("span", "bj-tampon-nom", t.court);
+        pastille.appendChild(nomT);
+        zoneTampons.appendChild(pastille);
+      });
+      bar.appendChild(zoneTampons);
+    }
+
     /* « Après ta partie » (item nº 5) : un seul lien doux, seulement
        pour les jeux dont la config en déclare un. Le panneau le dit
        d'emblée : rien à acheter pour continuer à jouer. */
@@ -693,7 +768,7 @@
       var lienPanneau = el("div", "bj-lien" + (cfg.pos === "top" ? " bj-lien-top" : ""));
       lienPanneau.hidden = true;
       var lp1 = el("p", null,
-        "Rien à acheter pour continuer : ce jeu reste gratuit, comme les 33 jeux d'HP.");
+        "Rien à acheter pour continuer : ce jeu reste gratuit, comme les 34 jeux d'HP.");
       lienPanneau.appendChild(lp1);
       var lp2 = el("p", null, "Si le sujet te parle, en lien avec ce jeu : ");
       var la = el("a", null, cfg.lien.texte);

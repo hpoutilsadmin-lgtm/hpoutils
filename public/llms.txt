@@ -14,7 +14,7 @@
 
 ## Les jeux — gratuits (page /jeux)
 
-33 jeux créés au Québec, jouables dans le navigateur, sans compte et sans téléchargement.
+34 jeux créés au Québec, jouables dans le navigateur, sans compte et sans téléchargement.
 Exemples : Caribou Run, Montgolfière, Bernache Express, LA BANQUE, Mots de chez nous,
 Mémoire des Cantons, Chat'attaque, NORD 2087, Mystères du Nord, Fusion Sirop, Bons réflexes,
 2 vérités 1 mensonge, Ado odieux adieu, Devine l'humeur, Le bonhomme pendu, Pop Ballons,
@@ -50,12 +50,12 @@ tenir debout, me reconnaître, seconde main.
 Prix : 5 $ CAD le kit ; lot de 10 kits au choix : 40 $ CAD. Aucune taxe ajoutée. Téléchargement immédiat.
 Le kit Testament aide à préparer un testament olographe au Québec ; ce n'est pas un avis juridique.
 
-## Les livres PDF — 10 $ à 20 $ (page /livres-pdf)
+## Les livres PDF — 10 $ à 15 $ (page /livres-pdf)
 
 - La faim justifie les moyens
 - Horizon Québec
 - Enjeux de l'humanité à l'ère de l'IA
-- Les enfants cuisinent pour faire plaisir (20 $)
+- Les enfants cuisinent pour faire plaisir (10 $)
 Aucune taxe ajoutée. Téléchargement immédiat.
 
 ## Les ateliers — Terrebonne et Lanaudière (page /ateliers)
@@ -64,10 +64,11 @@ Ateliers de groupe pour organismes, écoles et groupes, à Terrebonne et dans La
 Quatre ateliers pratiques (dont « L'IA sans jargon ») ; chaque proposition peut être adaptée au milieu.
 Prix fermes : 120 $ et 150 $ CAD selon l'atelier. Aucune taxe ajoutée.
 
-## Les Passeurs — 1 $ par mois (page /les-passeurs)
+## Les Passeurs — bientôt (page /les-passeurs)
 
-Un dollar par mois, douze dollars pour l'année : les Passeurs soutiennent financièrement
-les jeux, les livres et les outils gratuits de HP Outils.
+Programme de soutien à venir : ce sera 1 $ par mois, douze dollars pour l'année,
+pour soutenir financièrement les jeux, les livres et les outils gratuits de HP Outils.
+L'inscription n'est pas encore en ligne : aucun paiement n'est demandé pour l'instant.
 
 ## Le balado Futur simple (page /balado)
 
@@ -77,7 +78,7 @@ Un nouvel épisode chaque lundi, dès le 26 octobre 2026.
 
 ## Questions fréquentes (réponses officielles)
 
-- C'est gratuit ? Les jeux, les recettes et les outils web sont 100 % gratuits. Les kits coûtent 5 $, les livres de 10 $ à 20 $, les ateliers 120 $/150 $.
+- C'est gratuit ? Les jeux, les recettes et les outils web sont 100 % gratuits. Les kits coûtent 5 $, les livres de 10 $ à 15 $, les ateliers 120 $/150 $.
 - Les prix incluent-ils les taxes ? HP est petit fournisseur : aucune taxe n'est ajoutée — le prix affiché est le prix payé.
 - Faut-il un compte ? Non. Aucun compte, aucune inscription pour les jeux, les recettes et les outils.
 - Où vont mes données ? Nulle part : dans les outils web, tout reste sur l'appareil de l'utilisateur.

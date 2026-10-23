@@ -97,7 +97,7 @@ function Index() {
             « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — Hugo
           </p>
           <div className="lead-actions">
-            <Link to="/jeux" className="btn-primary">Jouer — 33 jeux gratuits</Link>
+            <Link to="/jeux" className="btn-primary">Jouer — 34 jeux gratuits</Link>
             <Link to="/outils" className="btn-primary">Outils gratuits, sans compte</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
@@ -119,7 +119,7 @@ function Index() {
               </Link>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>Jeux</h3>
-                <p>33 jeux gratuits, jouables dans ton navigateur</p>
+                <p>34 jeux gratuits, jouables dans ton navigateur</p>
                 <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
               </div>
             </article>
@@ -170,8 +170,8 @@ function Index() {
                 </div>
               </a>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                <h3 style={{ fontSize: 23 }}>Boîte à outils</h3>
-                <p>Des outils web gratuits, sans compte, pour le quotidien</p>
+                <h3 style={{ fontSize: 23 }}>La Boîte à outils</h3>
+                <p>8 outils gratuits, sans compte, pour le quotidien : budget, frigo, listes et plus.</p>
                 <a className="pillar-cta" href="/boite/">Ouvrir la Boîte →</a>
               </div>
             </article>
@@ -240,7 +240,7 @@ function Index() {
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Les enfants cuisinent pour faire plaisir</h3>
-              <p>Un projet doux pour transmettre le plaisir, pas la performance. — 20 $ CAD, aucune taxe ajoutée</p>
+              <p>Un projet doux pour transmettre le plaisir, pas la performance. — 10 $ CAD, aucune taxe ajoutée</p>
               <Link to="/pdf/$slug" params={{ slug: "enfants-cuisinent" }} className="pillar-cta">Voir le PDF →</Link>
             </article>
             <article className="pillar-card">

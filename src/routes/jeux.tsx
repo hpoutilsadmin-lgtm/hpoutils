@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 33 jeux en ligne | HP Outils",
-      description: "33 jeux gratuits créés au Québec : histoires interactives, mémoire, mots de chez nous et réflexes. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
+      title: "Jeux gratuits en français du Québec — 34 jeux en ligne | HP Outils",
+      description: "34 jeux gratuits créés au Québec : histoires interactives, mémoire, mots de chez nous et réflexes. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
       path: "/jeux",
     }),
     scripts: [
@@ -64,6 +64,7 @@ const GAMES = [
   { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "330 manches pour démasquer le mensonge — historique, inusité, cocasse.", tag: "Quiz · Déduction", faits: "Pour les curieux de 7 à 107 ans · 110 manches par catégorie", mono: "2V", art: 7 },
   { title: "Chat'attaque", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Tower defense avec des chats : 9 chats-tours défendent 50 croquettes. 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local.", tag: "Stratégie · Tower defense", faits: "Solo ou 2 joueurs local · 12 cartes · 3 difficultés", mono: "CA", art: 2 },
   { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Tower defense futuriste : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde. Douze vagues, une tempête qui peut tout changer.", tag: "Stratégie · Science-fiction", faits: "Solo · 12 vagues", mono: "87", art: 7 },
+  { title: "Chevalier du fleuve", file: "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.2.html", copy: "Stratégie temps réel : refais la campagne vraie de Pierre Le Moyne d'Iberville — bâtis, lève ton armée, prends les forts de la baie James, défends Québec, coule la flotte à bord du Pélican. Et sur les berges, la légende des nains albinos des terriers et leur Forge des Rois Gybbys…", tag: "Stratégie · Temps réel · Histoire vraie", faits: "16 ans et plus · Campagne 1686-1699 + mode libre · Gratuit en entier — pierres précieuses gagnées en jouant", mono: "CF", art: 7 },
   { title: "IGLOO — La guerre des igloos", file: "/apps/igloo/igloo-v1.0.html", copy: "Bataille de boules de neige en arène : déploie tes cartes, défends ton igloo et fais tomber celui d'en face — chaque bataille tire une loi du quartier au hasard !", tag: "Stratégie · Arène", faits: "Campagne de 10 batailles · parties d'environ 3 minutes", mono: "IG", art: 7 },
   { title: "Que vois-tu ?", file: "/apps/que-vois-tu/que-vois-tu-v2.0.html", copy: "Jeu de perception : dis ce que tu vois en premier dans chaque image — il n'y a pas de mauvaise réponse.", tag: "Perception · Toute la famille", faits: "42 défis · 3 terrains : Jeunesse, Ado, Adulte", mono: "QV", art: 4 },
   { title: "Tapinoue", file: "/apps/tapinoue/tapinoue-v2.0.html", copy: "Les aventures de Tapinoue et de sa famille, en 4 tableaux qui se débloquent un à un : la rencontre, le terrier, le potager de M. Grincheux… et le renard qui rôde.", tag: "Aventure · Jeunesse", faits: "4 tableaux · progression sauvegardée", mono: "TP", art: 1 },
@@ -232,6 +233,114 @@ function BoutonCoeur({
         <span aria-label={total + " cœurs reçus"}>{total}</span>
       ) : null}
     </button>
+  );
+}
+
+/* ── Tampons des testeurs (décision d'Hugo, 23 oct. 2026, 08 h 18 :
+   « Oui — les tampons au site, noms + couleurs ») ──────────────────
+   Source de vérité : le registre des approbations rapportées par Hugo
+   le 22 oct. 2026, 21 h 31 (approbations-joueurs-2026-10-22.md).
+   Chaque testeur a SA couleur ; les noms sont les prénoms/surnoms du
+   registre, affichés tels quels. La couleur de Lo n'est pas précisée
+   au registre : son tampon est posé en neutre, sans rien inventer.
+   « Fusion Shop », approuvé par Mel au registre, n'existe pas (encore)
+   sur le site : aucun tampon posé pour lui. */
+const TESTEURS = {
+  louka: { nom: "Louka", couleur: "#2e7d32", fond: "rgba(46,125,50,.10)", rotation: -1.4 },
+  maeva: { nom: "Maëva ☾", couleur: "#23201c", fond: "rgba(35,32,28,.07)", rotation: 1 },
+  mel: { nom: "Mel « The girl boss »", couleur: "#7b2d8b", fond: "rgba(123,45,139,.09)", rotation: -0.8 },
+  lo: { nom: "Lo « le petit Raptor »", couleur: "#6f6455", fond: "rgba(111,100,85,.10)", rotation: 1.3 },
+  hp: { nom: "HP, le créateur", couleur: "#2456a6", fond: "rgba(36,86,166,.09)", rotation: -1 },
+  tous: { nom: "Tous les testeurs", couleur: "#221a12", fond: "rgba(34,26,18,.06)", rotation: 0 },
+} as const;
+
+type CleTesteur = keyof typeof TESTEURS;
+
+/* Approbations par slug stable de jeu (registre du 22 oct. 2026). */
+const APPROBATIONS: Record<string, CleTesteur[]> = {
+  "chat-attaque": ["louka"],
+  "montgolfiere": ["louka", "maeva"],
+  "la-spirale-asmr": ["louka"],
+  "bernache-express": ["maeva"],
+  "tir-de-boules-de-neige": ["maeva", "lo"],
+  "caribou-run": ["maeva"],
+  "nord-2087": ["maeva"],
+  "mysteres-du-nord": ["lo"],
+  "devine-l-humeur": ["lo"],
+  "2-verites-1-mensonge": ["mel"],
+  "pop-ballons": ["mel"],
+  "fusion-sirop": ["hp"],
+  "mots-de-chez-nous": ["hp"],
+  "trio-des-elements": ["hp"],
+  "cherche-trouve-la-vraie-vie": ["tous"],
+};
+
+/* Ordre d'affichage du bloc de preuve (celui du texte d'origine). */
+const ORDRE_PREUVE = [
+  "chat-attaque",
+  "montgolfiere",
+  "bernache-express",
+  "caribou-run",
+  "nord-2087",
+  "mysteres-du-nord",
+  "trio-des-elements",
+  "mots-de-chez-nous",
+  "fusion-sirop",
+  "pop-ballons",
+  "devine-l-humeur",
+  "tir-de-boules-de-neige",
+  "la-spirale-asmr",
+  "2-verites-1-mensonge",
+  "cherche-trouve-la-vraie-vie",
+];
+
+function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
+  const t = TESTEURS[cle];
+  return (
+    <span
+      title={
+        cle === "tous"
+          ? "Approuvé à l'unanimité par tous les testeurs"
+          : "Approuvé par " + t.nom + ", testeur HP"
+      }
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 5,
+        padding: grand ? "6px 12px 7px" : "4px 9px 5px",
+        border: "1.6px solid " + t.couleur,
+        borderRadius: 6,
+        background: t.fond,
+        color: t.couleur,
+        fontSize: grand ? 13 : 11.5,
+        fontWeight: 800,
+        letterSpacing: ".03em",
+        lineHeight: 1.15,
+        transform: "rotate(" + t.rotation + "deg)",
+        boxShadow: "inset 0 0 0 1px rgba(255,255,255,.45)",
+        whiteSpace: "nowrap",
+      }}
+    >
+      <span aria-hidden="true">✓</span>
+      {t.nom}
+    </span>
+  );
+}
+
+function RangeeTampons({ slug, grand }: { slug: string; grand?: boolean }) {
+  const cles = APPROBATIONS[slug];
+  if (!cles || cles.length === 0) return null;
+  return (
+    <div
+      aria-label={
+        "Approuvé par : " + cles.map((c) => TESTEURS[c].nom).join(", ")
+      }
+      style={{ display: "flex", flexWrap: "wrap", gap: 7, alignItems: "center" }}
+    >
+      {cles.map((c) => (
+        <PastilleTampon key={c} cle={c} grand={grand} />
+      ))}
+    </div>
   );
 }
 
@@ -445,6 +554,7 @@ function JeuxPage() {
                 <span style={TAG_ON_PAPER_STYLE}>{featured.tag}</span>
                 <p>{featured.copy}</p>
                 {"faits" in featured && featured.faits ? <p className="workshop-meta">{featured.faits}</p> : null}
+                <RangeeTampons slug={slugDepuisFichier(featured.file)} />
                 <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
                   <a className="btn-primary" href={hrefJeu(featured.file)}>Jouer maintenant</a>
                   <BoutonCoeur {...etatCoeur(featured)} />
@@ -469,6 +579,7 @@ function JeuxPage() {
                   <h3 style={{ fontSize: 23 }}>{game.title}</h3>
                   <p>{game.copy}</p>
                   {"faits" in game && game.faits ? <p className="workshop-meta">{game.faits}</p> : null}
+                  <RangeeTampons slug={slugDepuisFichier(game.file)} />
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginTop: "auto" }}>
                     <a className="pillar-cta" href={hrefJeu(game.file)}>Jouer maintenant →</a>
                     <BoutonCoeur {...etatCoeur(game)} />
@@ -490,13 +601,39 @@ function JeuxPage() {
             « approuvé » ne s'achète pas et ne s'invente pas : il se mérite,
             partie par partie.
           </p>
-          <p style={{ textAlign: "center", maxWidth: 680, margin: "0 auto", color: "#5a4a3f", fontSize: 16, lineHeight: 1.6 }}>
-            Déjà approuvés par nos testeurs : Chat'attaque, Montgolfière,
-            Bernache Express, Caribou Run, NORD 2087, Mystères du Nord, Trio
-            des Éléments, Mots de Chez Nous, Fusion Sirop, Pop Ballons,
-            Devine l'humeur, Tir de Boules de Neige, La Spirale ASMR,
-            2 vérités 1 mensonge et Cherche &amp; Trouve — La vraie vie
-            (approuvé à l'unanimité).
+          <p style={{ textAlign: "center", maxWidth: 680, margin: "0 auto 22px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.6 }}>
+            Chaque testeur a son tampon, sa couleur, sa signature :
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 9, justifyContent: "center", margin: "0 auto 30px", maxWidth: 680 }}>
+            {(Object.keys(TESTEURS) as CleTesteur[])
+              .filter((c) => c !== "tous")
+              .map((c) => (
+                <PastilleTampon key={c} cle={c} grand />
+              ))}
+          </div>
+          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 13 }}>
+            {ORDRE_PREUVE.map((slug) => {
+              const g = GAMES.find((x) => slugDepuisFichier(x.file) === slug);
+              if (!g) return null;
+              return (
+                <li
+                  key={slug}
+                  style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center", textAlign: "center" }}
+                >
+                  <a
+                    href={hrefJeu(g.file)}
+                    style={{ color: "#221a12", fontWeight: 700, fontSize: 15.5, textDecoration: "underline", textUnderlineOffset: 3 }}
+                  >
+                    {g.title}
+                  </a>
+                  <RangeeTampons slug={slug} />
+                </li>
+              );
+            })}
+          </ul>
+          <p style={{ textAlign: "center", maxWidth: 680, margin: "22px auto 0", color: "#5a4a3f", fontSize: 15, lineHeight: 1.6 }}>
+            Et Cherche &amp; Trouve — La vraie vie a été approuvé à
+            l'unanimité : tous les tampons d'un coup.
           </p>
         </div>
       </section>
