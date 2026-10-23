@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END } from "./hgpto-data";
 
 export function initHgpto() {
       "use strict";
@@ -27,7 +27,9 @@ export function initHgpto() {
       var btnPause = document.getElementById('btn-pause');
       var btnHide = document.getElementById('btn-hide');
       var btnAsk = document.getElementById('btn-ask');
+      var btnGames = document.getElementById('btn-games');
       var btnSound = document.getElementById('btn-sound');
+      var selMood = document.getElementById('sel-mood');
       var qaPanel = document.getElementById('qa');
       var qaChips = document.getElementById('qa-chips');
       var qaClose = document.getElementById('qa-close');
@@ -177,11 +179,37 @@ export function initHgpto() {
                         (« Saleté d'crème ! » / « Ti pépère jaune moutarde
                         m'en dira tant. », ~1 fois sur 2, alternées, puis
                         résilience) ; visite guidée TRANQUILLE : textes qui
-                        EXPLIQUENT chaque endroit, rythme apaisé. */
+                        EXPLIQUENT chaque endroit, rythme apaisé.
+         · 2026-10-22 — LOT Nº 4 « contrôles + humeurs » (demandes d'Hugo :
+                        « il manque des endroits pour revenir aux jeux,
+                        faire pause, ajuster le son » + le sélecteur
+                        d'humeur) : rangée de contrôles complétée — bouton
+                        JEUX (guideTo sec-jeux, la mécanique de guidage
+                        existante), bouton PAUSE qui fige sa VIE avec sa
+                        bulle (« Je suis en pause — touche Pause pour
+                        repartir ») sans bloquer ni les questions ni le
+                        jeu en cours, SON en trois niveaux (Fort → Doux →
+                        Muet, facteur appliqué à la voix, aux sons et au
+                        fredonnage), et le sélecteur d'HUMEUR choisi par le
+                        visiteur (session seulement) : Normal (défaut) /
+                        Vendeur (accroches franches en tête des suggestions
+                        + fréquence au maximum permis — plafonds du lot
+                        nº 3 INCHANGÉS, annonce honnête du mode) / Drôle
+                        (blagues et vignettes comiques rapprochées, plus
+                        aucune suggestion spontanée — seulement en réponse
+                        à une question) / Grognon (comique, jamais contre
+                        le visiteur : ses grognes deviennent fréquentes,
+                        grawlix « (%#!!) » et tape-du-pied sur SES
+                        malchances, mini-scène de l'encadré de porte,
+                        résilience intacte). */
       var COMPANION_EVERY = 0.16;              // part des bulles « accompagnateur »
       var TWO_HOURS_MS = 2 * 60 * 60 * 1000;   // scène des 2 heures, une seule fois
       var pitchPoolIdx = 0;
       function endVignette(pool, prob){
+        // Lot nº 4, humeur Vendeur : la probabilité d'essayer une
+        // suggestion en fin de vignette monte au maximum — les plafonds
+        // du lot nº 3 (canSuggest) décident toujours, eux, inchangés.
+        if (mood === 'vendeur') prob = Math.max(prob == null ? 0.55 : prob, 0.95);
         if (pool && Math.random() < (prob == null ? 0.55 : prob)){
           var p = pool[pitchPoolIdx % pool.length]; pitchPoolIdx++;
           setState(reduced ? 'idle' : 'walk');
@@ -236,6 +264,7 @@ export function initHgpto() {
       var state = 'idle';  // idle|wave|walk|tinker|cook|invite|sleep|tickle|tickle-big|startle|stretch
       var x = 0, dir = 1, speed = 26; // px/s
       var paused = false, isHidden = false, docHidden = false;
+      var mood = 'normal';   // lot nº 4 : humeur choisie par le visiteur, session seulement
       var calm = false, cornerUntil = 0, gameOn = false, byeDone = false;
       var busyUntil = 0;
       var guideTarget = null;   // x visé quand il « marche jusqu'à » une section
@@ -268,6 +297,15 @@ export function initHgpto() {
          Des blips formantiques doux, synchronisés avec le texte de la bulle.
          Le son ne peut démarrer qu'après un premier geste du visiteur. */
       var actx = null, muted = false;
+      /* Lot nº 4 : le son devient un réglage en trois niveaux — Fort →
+         Doux → Muet — appliqué à TOUT ce qu'il émet (voix charabia,
+         petits sons, fredonnage, sons de Pixel) via volMul(), lu au
+         point unique d'émission. `muted` reste le garde historique des
+         fonctions de son : il vaut vrai exactement au niveau Muet.
+         Session seulement, comme tout chez lui. */
+      var soundLevel = 2;   // 2 = fort, 1 = doux, 0 = muet
+      function volMul(){ return soundLevel === 2 ? 1 : soundLevel === 1 ? 0.45 : 0; }
+      function syncMuted(){ muted = soundLevel === 0; }
       function ensureAudio(){
         if (!actx){
           var AC = window.AudioContext || window.webkitAudioContext;
@@ -276,14 +314,14 @@ export function initHgpto() {
         if (actx && actx.state === 'suspended') actx.resume();
       }
       function tone(t0, f0, f1, dur, vol, type){
-        if (!actx) return;
+        if (!actx || soundLevel === 0) return;
         var o = actx.createOscillator(), g = actx.createGain(), fl = actx.createBiquadFilter();
         o.type = type || 'triangle';
         fl.type = 'bandpass'; fl.frequency.value = 950; fl.Q.value = 1.1;
         o.frequency.setValueAtTime(f0, t0);
         o.frequency.exponentialRampToValueAtTime(Math.max(40, f1), t0 + dur);
         g.gain.setValueAtTime(0.0001, t0);
-        g.gain.exponentialRampToValueAtTime(vol, t0 + dur*0.25);
+        g.gain.exponentialRampToValueAtTime(vol * volMul(), t0 + dur*0.25);
         g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
         o.connect(fl); fl.connect(g); g.connect(actx.destination);
         o.start(t0); o.stop(t0 + dur + 0.02);
@@ -341,7 +379,8 @@ export function initHgpto() {
          jamais pendant une tâche du visiteur, muet respecté. ---------- */
       var humSeq = 0;
       function humTone(t0, midi, dur){
-        if (!actx) return;
+        if (!actx || soundLevel === 0) return;
+        var hv = 0.034 * volMul();   // lot nº 4 : le fredonnage suit le niveau de son choisi
         var f = 440 * Math.pow(2, (midi - 69) / 12);
         var o = actx.createOscillator(), g = actx.createGain(), fl = actx.createBiquadFilter();
         o.type = 'sine';
@@ -349,8 +388,8 @@ export function initHgpto() {
         o.frequency.setValueAtTime(f * 0.995, t0);
         o.frequency.exponentialRampToValueAtTime(f, t0 + Math.min(0.09, dur * 0.3));
         g.gain.setValueAtTime(0.0001, t0);
-        g.gain.exponentialRampToValueAtTime(0.034, t0 + 0.07);
-        g.gain.setValueAtTime(0.034, t0 + Math.max(0.07, dur - 0.09));
+        g.gain.exponentialRampToValueAtTime(hv, t0 + 0.07);
+        g.gain.setValueAtTime(hv, t0 + Math.max(0.07, dur - 0.09));
         g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
         o.connect(fl); fl.connect(g); g.connect(actx.destination);
         o.start(t0); o.stop(t0 + dur + 0.03);
@@ -389,6 +428,10 @@ export function initHgpto() {
         if (paused || isHidden || docHidden || qaOpen || calm || gameOn) return;
         if (state === 'sleep' || isBusy()) return;
         if (Date.now() - lastBubbleAt < 9000) return;
+        // Lot nº 4, humeur Drôle : le « choix » SPONTANÉ se tait (il
+        // passe par doSuggest en mode pre, hors canSuggest) — demandé
+        // explicitement par la puce, il répond comme avant.
+        if (mood === 'drole' && !asked) return;
         // Lot nº 3 : « Le choix d'HGPTO » passe par les mêmes plafonds que
         // toutes les suggestions. Demandé explicitement par le visiteur
         // (puce « C'est quoi, ton choix du moment ? »), les plafonds de
@@ -405,7 +448,11 @@ export function initHgpto() {
       }
       function scheduleChoix(){
         setTimeout(function(){
-          if (choixCount < 2 && Date.now() - choixLastAt > 150000) doChoix();
+          // Lot nº 4, humeur Vendeur : l'espacement du « choix » descend
+          // au plancher du lot nº 3 (75 s) — jamais en-dessous, et le
+          // maximum de 2 par session ne bouge pas.
+          var gap = mood === 'vendeur' ? 75000 : 150000;
+          if (choixCount < 2 && Date.now() - choixLastAt > gap) doChoix();
           if (choixCount < 2) scheduleChoix();
         }, 150000 + Math.random() * 90000);
       }
@@ -483,13 +530,27 @@ export function initHgpto() {
          causées par le visiteur, jamais dirigées contre lui. */
       var grumbleIdx = 0, lastGrumbleAt = 0;
       function grumbleFires(){
-        if (Date.now() - lastGrumbleAt < 90000) return false;
-        if (Math.random() >= 0.5) return false;
+        // Lot nº 4, humeur Grognon : ses grognes deviennent FRÉQUENTES
+        // (~85 %, rappel ramené à 20 s) — comiques, dans SA vie
+        // seulement. Dans les autres humeurs, le dosage du lot nº 3
+        // (~1 fois sur 2, ≥ 90 s) reste exactement le même.
+        var cd = mood === 'grognon' ? 20000 : 90000;
+        var pr = mood === 'grognon' ? 0.85 : 0.5;
+        if (Date.now() - lastGrumbleAt < cd) return false;
+        if (Math.random() >= pr) return false;
         lastGrumbleAt = Date.now();
         return true;
       }
       function grumbleText(){
         var t = GRUMBLES[grumbleIdx % GRUMBLES.length]; grumbleIdx++;
+        if (mood === 'grognon'){
+          // Le grawlix du grognon comique, et le tape-du-pied qui va
+          // avec : la classe réutilise l'animation « stomp » existante
+          // (celle de sa colère brève), trois petits coups de pied.
+          bot.classList.add('stomping');
+          setTimeout(function(){ bot.classList.remove('stomping'); }, 950);
+          return t + " (%#!!)";
+        }
         return t;
       }
 
@@ -509,6 +570,14 @@ export function initHgpto() {
         var dp = DWELL_SUGGESTIONS[routeKey()];
         if (dp && Date.now() - dwellStart > 40000 && canSuggest(dp)){ doSuggest(dp); return; }
         if (isPresse() && Math.random() < 0.7) return;   // visiteur pressé : il se fait discret (lot nº 2)
+        // Lot nº 4, humeur Drôle : l'espièglerie passe devant — une
+        // chance sur deux, le bavardage devient directement une blague.
+        if (mood === 'drole' && Math.random() < 0.5){
+          showBubble(esc(JOKES[jokeIdx % JOKES.length]), 5200, 'joke'); jokeIdx++;
+          logDay("raconté des blagues — j'en connais 62 !");
+          alternate++;
+          return;
+        }
         if (isNight() && Math.random() < 0.45){
           showBubble(esc(pick(EVENING_LINES)), 5200, 'sleep');
           alternate++;
@@ -562,7 +631,7 @@ export function initHgpto() {
         talkTimer = setTimeout(function(){
           talk();
           scheduleTalk();
-        }, (isNight() ? 16000 : 11000) + Math.random()*5000);
+        }, (isNight() ? 16000 : (mood === 'drole' ? 6500 : 11000)) + Math.random()*5000);
       }
 
       /* ---------- Invitation : pancarte + bras qui pointe ---------- */
@@ -907,6 +976,35 @@ export function initHgpto() {
         }, 3600);
       }
 
+      /* ---------- L'encadré de porte (lot nº 4) : il se cogne, grogne, repart ----------
+         Mini-scène légère de SA vie : en marchant, il se cogne sur un
+         encadré de porte imaginaire. Petit sursaut, puis — selon le tirage
+         des grognes (fréquent et grawlixé en humeur Grognon) — sa phrase
+         signature OU la ligne de la scène, et toujours la résilience au
+         bout. Jamais causée par le visiteur, jamais contre lui. */
+      function doBump(){
+        if (state === 'sleep' || paused || isBusy() || qaOpen) return;
+        setState('startle'); setExpr('wide'); busy(4800);
+        showBubble("Aïe !", 1500, 'none');
+        setTimeout(function(){
+          if (state !== 'startle') return;
+          setExpr('angry');
+          if (grumbleFires()){
+            showBubble(esc(grumbleText()) + " " + esc(BUMP_LINE), 2600, 'none');
+          } else {
+            showBubble(esc(BUMP_LINE), 2600, 'none');
+          }
+        }, 1300);
+        setTimeout(function(){
+          if (state !== 'startle') return;
+          setExpr('happy');
+          showBubble(esc(BUMP_END), 2600, 'joke');
+        }, 3700);
+        setTimeout(function(){
+          if (state === 'startle'){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
+        }, 4800);
+      }
+
       /* ---------- Frottement : il surchauffe ; le seau d'eau le refroidit ---------- */
       var heat = 0, lastRub = null;
       function doHeat(){
@@ -955,7 +1053,20 @@ export function initHgpto() {
             } else {
               var r = Math.random();
               var sensible = isSensitiveRoute();
-              if (r < 0.16) doTinker();
+              // Lot nº 4, humeur Drôle : les vignettes comiques passent
+              // régulièrement devant les autres (lutteur, mime, skate).
+              var drolePick = false;
+              if (mood === 'drole' && Math.random() < 0.35){
+                var cp = Math.random();
+                if (cp < 0.4) doWrestler();
+                else if (cp < 0.7) doMime();
+                else doSkate();
+                drolePick = true;
+              }
+              if (drolePick){
+                // déjà servi : on ne tire pas une deuxième vignette
+              }
+              else if (r < 0.16) doTinker();
               else if (r < 0.32) (Math.random() < 0.35 ? doCookFail() : doCook());
               else if (r < 0.44) doRead();
               else if (r < 0.52) doWrestler();
@@ -963,7 +1074,8 @@ export function initHgpto() {
               else if (r < 0.66) doSkate();
               else if (r < 0.72) doPerch();
               else if (r < 0.78) doPeek();
-              else if (r < 0.86) doJanitor();
+              else if (r < 0.83) doJanitor();
+              else if (r < 0.86) doBump();
               else if (r < 0.90) doHum();
               else if (r < 0.95) (sensible ? doJanitor() : doNosePick());
               else if (r < 0.98 && seasonDecorKind()) doDecor();
@@ -971,7 +1083,7 @@ export function initHgpto() {
             }
           }
           scheduleLife();
-        }, 20000 + Math.random()*22000);
+        }, (mood === 'drole' ? 12000 : 20000) + Math.random() * (mood === 'drole' ? 12000 : 22000));
       }
 
       /* ---------- Cuisine : il se fait à manger ---------- */
@@ -1253,7 +1365,7 @@ export function initHgpto() {
         if (catVisible && catState !== 'sleep' && catState !== 'console') catLeave();
         lastInteract = Date.now();
         if (state === 'sleep') wake(false);
-        if (paused){ paused = false; btnPause.textContent = 'Repose-toi'; btnPause.setAttribute('aria-pressed','false'); }
+        if (paused){ paused = false; btnPause.textContent = 'Pause'; btnPause.setAttribute('aria-pressed','false'); }
         setState('idle'); setExpr('focus'); busy(1200);
         showBubble("Gérant du site, à ton service ! Touche une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
       }
@@ -1414,6 +1526,21 @@ export function initHgpto() {
       qaClose.addEventListener('click', closeQA);
       btnTickle.addEventListener('click', function(){ ensureAudio(); tickle(); });
       btnBucket.addEventListener('click', doBucket);
+      /* Lot nº 4 : retour direct aux jeux — on réutilise guideTo()
+         (la mécanique « Montre-moi… ») : sur place, la section des
+         jeux défile et brille ; ailleurs, il emmène le visiteur sur
+         /jeux et présente la section à l'arrivée. Pendant une partie
+         du jeu caché ou une visite guidée, le bouton ne dérange rien
+         (le jeu et le guide ont déjà la main). */
+      btnGames.addEventListener('click', function(){
+        ensureAudio();
+        lastInteract = Date.now();
+        if (gameOn || tourOn) return;
+        if (qaOpen) closeQA();
+        if (paused){ paused = false; btnPause.textContent = 'Pause'; btnPause.setAttribute('aria-pressed','false'); }
+        if (state === 'sleep') wake(false);
+        guideTo('sec-jeux', null);
+      });
 
       /* ---------- Garde-robe météo (prototype : saison déduite de la date,
          ou tenue choisie dans le sélecteur pour prévisualiser) ---------- */
@@ -1429,11 +1556,49 @@ export function initHgpto() {
       }
       selWeather.addEventListener('change', function(){ applyOutfit(selWeather.value); });
       applyOutfit('auto');
+      /* Lot nº 4 : le bouton Son devient un cycle Fort → Doux → Muet.
+         Le niveau s'applique partout via volMul() (voir la section
+         voix) ; l'étiquette dit toujours l'état, et un petit rire
+         confirme le nouveau niveau à l'oreille quand il y a du son. */
+      var SOUND_LABELS = ['Son : muet', 'Son : doux', 'Son : fort'];
+      function refreshSoundBtn(){
+        btnSound.textContent = SOUND_LABELS[soundLevel];
+        btnSound.setAttribute('aria-pressed', soundLevel > 0 ? 'true' : 'false');
+      }
       btnSound.addEventListener('click', function(){
-        muted = !muted;
-        btnSound.textContent = muted ? 'Son : non' : 'Son : oui';
-        btnSound.setAttribute('aria-pressed', muted ? 'false' : 'true');
-        if (!muted){ ensureAudio(); giggle(); }
+        soundLevel = (soundLevel + 2) % 3;   // 2 fort → 1 doux → 0 muet → 2 fort…
+        syncMuted();
+        refreshSoundBtn();
+        if (soundLevel > 0){ ensureAudio(); giggle(); }
+      });
+      refreshSoundBtn();
+
+      /* ---------- HUMEUR (lot nº 4) : le visiteur choisit, il annonce ----------
+         Normal = comportement actuel, inchangé. Vendeur / Drôle /
+         Grognon règlent les paramètres des systèmes existants (voir
+         canSuggest, doSuggest, talk, scheduleLife, grumbleFires) —
+         aucune règle contournée. Session seulement. */
+      function applyMood(m){
+        mood = m;
+        bot.setAttribute('data-mood', m);
+        lastInteract = Date.now();
+        if (m === 'vendeur'){
+          showBubble(esc(MOOD_LINES.vendeur), 9000, 'talk');
+          logDay("passé en mode vendeur — honnêtement annoncé, comme il se doit");
+        } else if (m === 'drole'){
+          showBubble(esc(MOOD_LINES.drole), 9000, 'joke');
+          giggle();
+        } else if (m === 'grognon'){
+          setExpr('angry');
+          showBubble(esc(MOOD_LINES.grognon), 9000, 'talk');
+          setTimeout(function(){ if (!isBusy()) setExpr('happy'); }, 2600);
+        } else {
+          showBubble(esc(MOOD_LINES.normal), 8000, 'talk');
+        }
+      }
+      selMood.addEventListener('change', function(){
+        ensureAudio();
+        applyMood(selMood.value);
       });
 
       /* ---------- Scène des 2 heures : il suggère une pause, en riant, une fois ---------- */
@@ -1462,18 +1627,27 @@ export function initHgpto() {
       document.getElementById('qa-2h').addEventListener('click', previewTwoHours);
 
       /* ---------- Contrôles ---------- */
-      btnPause.addEventListener('click', function(){
-        paused = !paused;
-        btnPause.textContent = paused ? 'Réveille-toi' : 'Repose-toi';
+      /* Lot nº 4 : « Pause » met sa VIE en pause, pour vrai — la même
+         variable `paused` que l'ancien « Repose-toi » (tout le moteur
+         la respecte déjà : promenades, vignettes, bavardage et Pixel
+         figent ; le cadre d'animation s'arrête). Elle ne bloque ni les
+         questions/réponses (ouvrir le panneau la lève, comme avant) ni
+         le jeu caché en cours (sa logique n'en dépend pas). Bouton
+         bascule Pause / Reprendre, avec sa bulle prescrite. */
+      function setLifePause(v){
+        paused = v;
+        btnPause.textContent = paused ? 'Reprendre' : 'Pause';
         btnPause.setAttribute('aria-pressed', paused ? 'true' : 'false');
         if (paused){
-          hideBubble();
           if (state !== 'sleep'){ setState('idle'); setExpr('happy'); }
+          showBubble("Je suis en pause — touche Pause pour repartir.", 8000, 'none');
         } else {
           lastInteract = Date.now();
-          setState(reduced ? 'idle' : 'walk'); setExpr('happy');
+          if (state !== 'sleep'){ setState(reduced ? 'idle' : 'walk'); setExpr('happy'); }
+          showBubble("On repart !", 2600, 'joke');
         }
-      });
+      }
+      btnPause.addEventListener('click', function(){ setLifePause(!paused); });
       btnCalm.addEventListener('click', function(){
         calm = !calm;
         bot.classList.toggle('calm', calm);
@@ -2184,13 +2358,13 @@ export function initHgpto() {
       /* Ses sons à elle : miaou doux, ronron grave (oscillateur direct, sans
          le filtre « voix de robot ») — jamais de parole, c'est un animal. */
       function toneRaw(t0, f0, f1, dur, vol, type){
-        if (!actx) return;
+        if (!actx || soundLevel === 0) return;
         var o = actx.createOscillator(), g = actx.createGain();
         o.type = type || 'sine';
         o.frequency.setValueAtTime(f0, t0);
         o.frequency.exponentialRampToValueAtTime(Math.max(30, f1), t0 + dur);
         g.gain.setValueAtTime(0.0001, t0);
-        g.gain.exponentialRampToValueAtTime(vol, t0 + dur * 0.3);
+        g.gain.exponentialRampToValueAtTime(vol * volMul(), t0 + dur * 0.3);
         g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
         o.connect(g); g.connect(actx.destination);
         o.start(t0); o.stop(t0 + dur + 0.02);
@@ -2604,6 +2778,11 @@ export function initHgpto() {
         if (tourOn && !opts.tourEnd) return false;
         if (qaOpen && !opts.fromQA && !opts.asked) return false;
         if (isPresse()) return false;
+        // Lot nº 4, humeur Drôle : les suggestions tombent au minimum —
+        // plus rien de spontané (ni vignette, ni attente, ni « choix »,
+        // ni fin de visite) ; seules survivent celles qui RÉPONDENT à
+        // une question du visiteur (fromQA / asked), comme en normal.
+        if (mood === 'drole' && !opts.fromQA && !opts.asked) return false;
         // Les alternatives honnêtes (opts.soft) sont des courtoisies de
         // descente, pas des pitches : dédupliquées et refusables comme
         // les autres, mais elles ne consomment ni le créneau de la page
@@ -2621,7 +2800,15 @@ export function initHgpto() {
         if (!opts.pre && !canSuggest(p, opts)) return false;
         suggByKey[suggKey(p)] = 1;
         if (!opts.soft){ suggPage[routeKey()] = 1; suggLastAt = Date.now(); }
-        doInvite(p);
+        // Lot nº 4, humeur Vendeur : une accroche franche et drôle part
+        // en tête de la suggestion — le produit, son prix et son lien
+        // restent EXACTEMENT ceux de la base. Jamais sur les
+        // alternatives honnêtes (soft) : la porte de sortie ne se vend pas.
+        var pp = p;
+        if (mood === 'vendeur' && !opts.soft){
+          pp = { t: pick(VENDEUR_HOOKS) + p.t, u: p.u, l: p.l, s: p.s };
+        }
+        doInvite(pp);
         // Le « non » aussi facile que le « oui » : un bouton « Non
         // merci » dans la bulle de chaque suggestion. Un clic = ce
         // produit se tait pour toute la session.

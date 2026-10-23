@@ -610,13 +610,20 @@ export const HGPTO_MARKUP = `
 
     <div class="bot-controls" id="bot-controls" role="group" aria-label="Contrôles de la mascotte">
       <button type="button" id="btn-dock" aria-label="Ouvrir les contrôles d'HGPTO" aria-expanded="false">•••</button>
+      <button type="button" id="btn-games" aria-label="Aller aux jeux">Jeux</button>
       <button type="button" id="btn-ask">Une question ?</button>
       <button type="button" id="btn-accompany" aria-pressed="false">Accompagne-moi</button>
       <button type="button" id="btn-tickle">Chatouiller</button>
       <button type="button" id="btn-bucket">Seau d'eau</button>
       <button type="button" id="btn-calm" aria-pressed="false">Mode calme</button>
-      <button type="button" id="btn-pause" aria-pressed="false">Repose-toi</button>
-      <button type="button" id="btn-sound" aria-pressed="true">Son : oui</button>
+      <button type="button" id="btn-pause" aria-pressed="false">Pause</button>
+      <button type="button" id="btn-sound" aria-pressed="true">Son : fort</button>
+      <select id="sel-mood" aria-label="Humeur d'HGPTO — choisis mon humeur !">
+        <option value="normal">Humeur : normale</option>
+        <option value="vendeur">Humeur : vendeur</option>
+        <option value="drole">Humeur : drôle</option>
+        <option value="grognon">Humeur : grognon</option>
+      </select>
       <select id="sel-weather" aria-label="Météo — aperçu des tenues d'HGPTO">
         <option value="auto">Météo : auto</option>
         <option value="froid">Froid</option>

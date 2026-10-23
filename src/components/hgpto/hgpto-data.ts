@@ -456,6 +456,38 @@ export const ALT_LINES = {
          10 kits × 5 $ = 50 $ à l'unité, bundle à 40 $ = 10 $ de moins —
          conditionné honnêtement (« si tu en veux vraiment 10 »). */
 export const BUNDLE_MATH = { t:"Petit calcul honnête, pendant qu'on parle de kits : à 5 $ le kit, 10 kits pris un par un, ça fait 50 $. Le bundle « Choisis 10 parmi 15 » est à 40 $ — donc 10 $ de moins, si tu en veux vraiment 10. Sinon, un seul kit à 5 $ fait très bien l'affaire.", u:"https://hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" };
+      /* ---------- LOT Nº 4 (22 oct. 2026) : « contrôles + humeurs » ----------
+         Le visiteur peut choisir l'humeur d'HGPTO (Normal / Vendeur /
+         Drôle / Grognon) — un jeu, pour la session seulement. Les humeurs
+         règlent les PARAMÈTRES des systèmes existants ; elles ne
+         contournent aucune règle (les plafonds du lot nº 3 restent
+         entiers en mode Vendeur). */
+
+      /* Mode Vendeur : accroches franches et drôles, placées en tête des
+         suggestions (jamais des alternatives honnêtes « douces »). Le ton
+         monte, les faits ne changent pas : mêmes produits, mêmes prix. */
+export const VENDEUR_HOOKS = [
+        "Je te le dis comme je le pense : ",
+        "Mot de vendeur — et de robot honnête : ",
+        "Regarde ça, ça vaut le détour : ",
+        "Celui-là, je le recommande les yeux fermés (enfin, ouverts — je suis un robot) : "
+      ];
+      /* L'annonce d'humeur : il dit toujours dans quel mode il est —
+         en mode Vendeur, l'annonce est un engagement d'honnêteté
+         (le visiteur sait qu'on va lui parler des produits, et qu'il
+         peut changer d'humeur quand il veut). */
+export const MOOD_LINES = {
+        normal: "Humeur normale : me revoilà moi-même — gentil, utile, un brin espiègle.",
+        vendeur: "Mode vendeur : je vais te parler des produits — change-moi d'humeur quand tu veux.",
+        drole: "Humeur drôle ! Je sors mes meilleures blagues — j'en ai 62, et je les ai toutes répétées devant Pixel.",
+        grognon: "Humeur grognon… (%#!!) Encore une journée pour grogner un peu. T'inquiète : jamais contre toi — juste contre mes boulons."
+      };
+      /* La mini-scène de l'encadré de porte (humeur Grognon la rend
+         fréquente via ses grognes ; elle existe dans sa vie dans toutes
+         les humeurs, dosée comme les autres malchances). */
+export const BUMP_LINE = "Aïe ! Qui c'est qui a mis un encadré de porte là, d'abord ?!";
+export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
+
       /* Suggestions d'attente sur les pages produits (visiteur qui regarde
          longuement) : résumé argumenté + alternative honnête, une seule
          par page. /sans-honte n'en a pas : route sensible, dignité

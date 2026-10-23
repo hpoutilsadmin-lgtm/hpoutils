@@ -72,6 +72,10 @@
       /* Météo intérieure : colère comique, désespoir bref, pleurs résilients */
       .bot[data-state="angry"] .bot-inner{animation:stomp .28s ease-in-out infinite}
       @keyframes stomp{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px) rotate(-1deg)}}
+      /* Lot nº 4 : le tape-du-pied du grognon comique — trois petits
+         coups, déclenchés par la classe .stomping quand une de ses
+         grognes signature sort en humeur Grognon. */
+      .bot.stomping .bot-inner{animation:stomp .28s ease-in-out 3}
       .angersteam{opacity:0}
       .bot[data-state="angry"] .angersteam{opacity:1}
       .bot[data-state="angry"] .angersteam circle{animation:steampuff .7s ease-out infinite}
