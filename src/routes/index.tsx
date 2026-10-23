@@ -86,8 +86,8 @@ function Index() {
           <span className="editorial-kicker">HP — créé au Québec</span>
           <h1>Des outils concrets pour la <em>vraie vie</em>.</h1>
           <p className="lead">
-            Des PDF et des kits à télécharger, des livres, et des ateliers sur mesure —
-            créés au Québec.
+            Des jeux gratuits, des recettes et des outils web sans compte — et des kits
+            PDF à petit prix, des livres et des ateliers, créés au Québec.
           </p>
           <p style={{ margin: "0 0 28px", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
             Tout doit sembler humain. On ment jamais. L'IA est un outil très rapide et efficace — la direction, l'émotion, le "ce que je fais", c'est pour les humains.
@@ -96,9 +96,9 @@ function Index() {
             « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — Hugo
           </p>
           <div className="lead-actions">
-            <Link to="/sans-honte" className="btn-primary">Découvrir les kits Sans Honte</Link>
-            <Link to="/livres-pdf" className="btn-primary">Voir livres, PDF &amp; réflexions</Link>
-            <Link to="/univers" className="btn-primary">Découvrir Univers alternatif</Link>
+            <Link to="/jeux" className="btn-primary">Jouer — 26 jeux gratuits</Link>
+            <Link to="/outils" className="btn-primary">Outils gratuits, sans compte</Link>
+            <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
         </div>
       </section>
@@ -165,16 +165,6 @@ function Index() {
         </div>
       </section>
 
-      <section className="collections-strip">
-        <div className="container">
-          <span className="editorial-kicker">Du 1er octobre au 23 décembre</span>
-          <h2>Ateliers &amp; conférence — <em>Édition des Fêtes</em></h2>
-          <p className="strip-intro">Pain maison à domicile, IA sans jargon et conférence La faim justifie les moyens.</p>
-          <div className="lead-actions">
-            <Link to="/ateliers" hash="edition-des-fetes" className="btn-primary">Découvrir l'Édition des Fêtes</Link>
-          </div>
-        </div>
-      </section>
 
       {/* SANS HONTE */}
       <section className="collections-strip">
@@ -225,6 +215,17 @@ function Index() {
           </div>
           <div className="lead-actions" style={{ marginTop: 28 }}>
             <Link to="/livres-pdf" className="btn-primary">Voir livres, PDF &amp; réflexions</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="collections-strip">
+        <div className="container">
+          <span className="editorial-kicker">Du 1er octobre au 23 décembre</span>
+          <h2>Ateliers &amp; conférence — <em>Édition des Fêtes</em></h2>
+          <p className="strip-intro">Pain maison à domicile, IA sans jargon et conférence La faim justifie les moyens.</p>
+          <div className="lead-actions">
+            <Link to="/ateliers" hash="edition-des-fetes" className="btn-primary">Découvrir l'Édition des Fêtes</Link>
           </div>
         </div>
       </section>

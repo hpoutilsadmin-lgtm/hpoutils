@@ -31,9 +31,9 @@ export const Route = createFileRoute("/outils")({
 const WEB_TOOLS = [
   {
     emoji: "🧰",
-    tag: "7 outils",
+    tag: "8 outils",
     title: "La Boîte à outils",
-    copy: "Sept outils pour la vraie vie : comprendre une lettre officielle, trancher une décision, préparer son héritage, comparer les prix, démêler une situation, savoir quelle démarche faire et garder ses codes en sécurité.",
+    copy: "Huit outils pour la vraie vie : préparer son héritage, trancher une décision, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand.",
     cta: "Ouvrir la Boîte →",
     href: "/boite/",
   },

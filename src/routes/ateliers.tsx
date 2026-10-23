@@ -35,6 +35,8 @@ const ATELIERS = [
   { title: "Cuisine pratique", price: "120 $ CAD · forfait groupe", desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
   { title: "Atelier jeunesse", price: "120 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
   { title: "Manger mieux avec moins", price: "150 $ CAD · forfait groupe", desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
+  { title: "Les enfants cuisinent", price: "120 $ CAD · forfait groupe", duree: "90 min", desc: "Cuisiner ensemble, apprendre et gagner en autonomie.", inclus: "Aucune taxe ajoutée." },
+  { title: "Hygiène & salubrité", price: "120 $ CAD · forfait groupe", duree: "60 à 90 min", desc: "Sensibilisation aux bons gestes du quotidien.", inclus: "Aucune taxe ajoutée." },
 ];
 
 const FETES = [
@@ -51,7 +53,7 @@ function Page() {
           <span className="editorial-kicker">Ateliers HP</span>
           <h1>Des ateliers pour mettre les outils en <em>mouvement</em>.</h1>
           <p className="lead">
-             Quatre ateliers pratiques pour les organismes, les écoles et les groupes
+             Six ateliers pratiques pour les organismes, les écoles et les groupes
             de Terrebonne, de Lanaudière et des environs. Chaque proposition peut
             être adaptée à votre milieu.
           </p>
@@ -70,7 +72,7 @@ function Page() {
               <article key={a.title} className="pillar-card">
                 <span className="pillar-num">{String(i + 1).padStart(2, "0")}</span>
                 <h3>{a.title}</h3>
-                 <p className="workshop-meta">{a.price}</p>
+                 <p className="workshop-meta">{a.price}{"duree" in a && a.duree ? ` · ${a.duree}` : ""}</p>
                 <p>{a.desc}</p>
                 <p>{a.inclus}</p>
               </article>
@@ -78,6 +80,34 @@ function Page() {
           </div>
           <div className="lead-actions" style={{ marginTop: 32, justifyContent: "center" }}>
             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="three-pillars" id="organismes-ecoles">
+        <div className="container" style={{ maxWidth: 820 }}>
+          <span className="editorial-kicker">Organismes &amp; écoles</span>
+          <h2 className="section-title">La fiche, en clair</h2>
+          <div style={{ fontSize: 16.5, lineHeight: 1.65 }}>
+            <p>
+              <strong>Prix :</strong> forfaits groupe de 120 $ ou 150 $ CAD selon l'atelier,
+              aucune taxe ajoutée (petit fournisseur). Les fiches recette et astuces sont
+              incluses aux ateliers de cuisine.
+            </p>
+            <p>
+              <strong>Territoire :</strong> Terrebonne, Lanaudière et les environs.
+              <strong> Réservation :</strong> par courriel à{" "}
+              <a href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a> —
+              chaque proposition peut être adaptée à votre milieu.
+            </p>
+            <p>
+              <strong>Ce qui se précise à la demande :</strong> les groupes d'âge visés, les
+              ratios d'encadrement, les allergies et la sécurité alimentaire, la taille de
+              votre groupe, les assurances et les vérifications d'antécédents. Ces points se
+              confirment avec Hugo avant toute réservation — ils ne sont pas promis ici à
+              l'avance. (Repère déjà établi : l'atelier Pain maison de l'Édition des Fêtes
+              accueille 6 à 8 personnes.)
+            </p>
           </div>
         </div>
       </section>

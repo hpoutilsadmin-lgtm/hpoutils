@@ -17,7 +17,7 @@ const ROWS: Array<{ cat: string; offre: string; prix: string; href: string; labe
   { cat: "PDF", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "20 $ CAD, aucune taxe ajoutée", href: "/achat/enfants-cuisinent", label: "Acheter le PDF" },
   { cat: "Sans Honte", offre: "Kits Sans Honte — 15 titres au choix, un par un (Frigo, Papiers, Fraude, Tenir Debout, Seconde Main, Entraide…)", prix: "5 $ CAD le kit, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les 15 kits" },
   { cat: "Sans Honte", offre: "Bundle Sans Honte — Choisis 10 kits parmi 15", prix: "40 $ CAD, aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
-  { cat: "Outils", offre: "Outils web HP — 4 outils gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
+  { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 4 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
   { cat: "Atelier", offre: "IA, cuisine ou jeunesse — forfait groupe", prix: "120 $ CAD, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Atelier", offre: "Manger mieux avec moins — forfait groupe", prix: "150 $ CAD, aucune taxe ajoutée", href: "/ateliers", label: "Voir l'atelier" },
 ];

@@ -7,7 +7,7 @@ const STATIC_PATHS = [
   "/",
   "/outils",
   "/jeux",
-  "/en-cuisine/index.html",
+  "/en-cuisine/",
   "/balado",
   "/confidentialite",
   "/conditions-de-vente",
@@ -65,7 +65,9 @@ export const Route = createFileRoute("/sitemap.xml")({
         const slugs = Array.from(
           new Set(Object.values(PRODUCTS).map((p) => p.slug).filter(Boolean)),
         );
-        const dynamicPaths = slugs.flatMap((s) => [`/pdf/${s}`, `/achat/${s}`]);
+        // Pages /achat/* exclues volontairement : ce sont des pages d'achat
+        // noindex, elles n'ont pas leur place dans le sitemap.
+        const dynamicPaths = slugs.map((s) => `/pdf/${s}`);
         const paths = [...STATIC_PATHS, ...dynamicPaths];
         const urls = paths.map(
           (p) => `  <url><loc>${BASE_URL}${p}</loc><changefreq>weekly</changefreq></url>`

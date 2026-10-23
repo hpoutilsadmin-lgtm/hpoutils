@@ -37,32 +37,32 @@ const STORIES = [
 ];
 
 const GAMES = [
-  { title: "RELÈVE — Chapitre 1 : Surchauffe", file: "/apps/releve/releve-chapitre-1-v1.0.html", copy: "Aventure d'enquête 3D à Percé : Grizz, ourson policier de Faune-Secours, et NID à la radio cherchent la cause d'une surchauffe qui menace la faune. FR/EN.", tag: "Aventure · Enquête 3D", mono: "R1", art: 0 },
-  { title: "LA BANQUE — le jeu de la banque alimentaire", file: "/apps/la-banque/la-banque-v1.1.html", copy: "Gère une banque alimentaire sur une saison de 8 semaines : dons, tri, cuisine et service aux familles nommées, qui reviennent semaine après semaine. Ton score : les familles nourries.", tag: "Gestion · Entraide", mono: "LB", art: 1 },
-  { title: "Les bons réflexes d'HP", file: "/apps/bons-reflexes/index.html", copy: "Jeu éducatif sur les bons réflexes du quotidien, par âge et par activité.", tag: "Éducatif · Toute la famille", mono: "BR", art: 2 },
-  { title: "Mystères du Nord", file: "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html", copy: "Sept enquêtes façon Clue : explore les lieux, interroge les suspects et démasque le coupable.", tag: "Enquête · Réflexion", mono: "MN", art: 7 },
-  { title: "Fait fructifier 100 $ en 30 jours", file: "/apps/100-en-30-jours/100-en-30-jours-v1.1.html", copy: "Jeu de gestion et d'investissement 100 % fictif : 100 $ de départ, 30 jours pour fructifier.", tag: "Gestion · Simulation", mono: "100", art: 3 },
-  { title: "Caribou Run", file: "/apps/caribou-run/caribou-run-v1.1.html", copy: "Endless runner québécois : saute les bancs de neige et échappe à la déneigeuse !", tag: "Arcade · Adresse", mono: "CR", art: 0 },
-  { title: "Cherche & Trouve — La vraie vie", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html", copy: "Un cherche-et-trouve dans des scènes de la vraie vie.", tag: "Observation · Toute la famille", mono: "CT", art: 6 },
-  { title: "Devine l'humeur", file: "/apps/devine-l-humeur/devine-l-humeur-v1.1.html", copy: "Devine l'émotion cachée derrière chaque situation.", tag: "Émotions · Jeunesse", mono: "DH", art: 4 },
-  { title: "La Spirale ASMR", file: "/apps/la-spirale-asmr/la-spirale-asmr-v1.1.html", copy: "Tourbillon de sable hypnotique à personnaliser : couleurs, effets et sons doux.", tag: "Détente · Créatif", mono: "SA", art: 0 },
-  { title: "Poutine Panic", file: "/apps/poutine-panic/poutine-panic-v1.1.html", copy: "Sers des poutines à toute vitesse avant la fin du service !", tag: "Arcade · Rapidité", mono: "PP", art: 2 },
-  { title: "Retromania", file: "/apps/retromania/retromania-v1.1.html", copy: "Devine le prix d'époque d'objets d'hier à aujourd'hui. Le plus proche sans dépasser gagne !", tag: "Quiz · Nostalgie", mono: "RM", art: 6 },
-  { title: "Sirop Clicker", file: "/apps/sirop-clicker/sirop-clicker-v1.1.html", copy: "Clique pour produire du sirop d'érable au Temps des sucres.", tag: "Clics · Détente", mono: "SC", art: 3 },
-  { title: "Mots de Chez Nous", file: "/apps/mots-de-chez-nous/mots-de-chez-nous-v1.0.html", copy: "Mots cachés : 665 mots d'ici à retrouver, définitions incluses.", tag: "Mots cachés · D'ici", mono: "MC", art: 5 },
+  { title: "RELÈVE — Chapitre 1 : Surchauffe", file: "/apps/releve/releve-chapitre-1-v1.0.html", copy: "Aventure d'enquête 3D à Percé : Grizz, ourson policier de Faune-Secours, et NID à la radio cherchent la cause d'une surchauffe qui menace la faune. FR/EN.", tag: "Aventure · Enquête 3D", faits: "Histoire d'enquête · FR/EN", mono: "R1", art: 0 },
+  { title: "LA BANQUE — le jeu de la banque alimentaire", file: "/apps/la-banque/la-banque-v1.1.html", copy: "Gère une banque alimentaire sur une saison de 8 semaines : dons, tri, cuisine et service aux familles nommées, qui reviennent semaine après semaine. Ton score : les familles nourries.", tag: "Gestion · Entraide", faits: "Partie longue : une saison de 8 semaines", mono: "LB", art: 1 },
+  { title: "Les bons réflexes d'HP", file: "/apps/bons-reflexes/index.html", copy: "Jeu éducatif sur les bons réflexes du quotidien, par âge et par activité.", tag: "Éducatif · Toute la famille", faits: "Par âge et par activité", mono: "BR", art: 2 },
+  { title: "Mystères du Nord", file: "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html", copy: "Sept enquêtes façon Clue : explore les lieux, interroge les suspects et démasque le coupable.", tag: "Enquête · Réflexion", faits: "7 enquêtes · pour les jeunes détectives aussi", mono: "MN", art: 7 },
+  { title: "Fait fructifier 100 $ en 30 jours", file: "/apps/100-en-30-jours/100-en-30-jours-v1.1.html", copy: "Jeu de gestion et d'investissement 100 % fictif : 100 $ de départ, 30 jours pour fructifier.", tag: "Gestion · Simulation", faits: "100 $ fictifs · 30 jours pour fructifier", mono: "100", art: 3 },
+  { title: "Caribou Run", file: "/apps/caribou-run/caribou-run-v1.1.html", copy: "Endless runner québécois : saute les bancs de neige et échappe à la déneigeuse !", tag: "Arcade · Adresse", faits: "Endless runner : la partie dure tant que tu tiens", mono: "CR", art: 0 },
+  { title: "Cherche & Trouve — La vraie vie", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html", copy: "Un cherche-et-trouve dans des scènes de la vraie vie.", tag: "Observation · Toute la famille", faits: "3 manches · 15 défis · sprint de 3 minutes", mono: "CT", art: 6 },
+  { title: "Devine l'humeur", file: "/apps/devine-l-humeur/devine-l-humeur-v1.1.html", copy: "Devine l'émotion cachée derrière chaque situation.", tag: "Émotions · Jeunesse", faits: "10 manches · 13 humeurs · 52 visages", mono: "DH", art: 4 },
+  { title: "La Spirale ASMR", file: "/apps/la-spirale-asmr/la-spirale-asmr-v1.1.html", copy: "Tourbillon de sable hypnotique à personnaliser : couleurs, effets et sons doux.", tag: "Détente · Créatif", faits: "Solo · respiration guidée de 1 à 10 minutes", mono: "SA", art: 0 },
+  { title: "Poutine Panic", file: "/apps/poutine-panic/poutine-panic-v1.1.html", copy: "Sers des poutines à toute vitesse avant la fin du service !", tag: "Arcade · Rapidité", faits: "Parties de 2 minutes", mono: "PP", art: 2 },
+  { title: "Retromania", file: "/apps/retromania/retromania-v1.1.html", copy: "Devine le prix d'époque d'objets d'hier à aujourd'hui. Le plus proche sans dépasser gagne !", tag: "Quiz · Nostalgie", faits: "10 manches · 280 objets · 20 secondes par objet", mono: "RM", art: 6 },
+  { title: "Sirop Clicker", file: "/apps/sirop-clicker/sirop-clicker-v1.1.html", copy: "Clique pour produire du sirop d'érable au Temps des sucres.", tag: "Clics · Détente", faits: "Sauvegarde automatique sur l'appareil", mono: "SC", art: 3 },
+  { title: "Mots de Chez Nous", file: "/apps/mots-de-chez-nous/mots-de-chez-nous-v1.0.html", copy: "Mots cachés : 665 mots d'ici à retrouver, définitions incluses.", tag: "Mots cachés · D'ici", faits: "665 mots · grilles de 6 à 10 mots", mono: "MC", art: 5 },
   { title: "Mémoire des Cantons", file: "/apps/memoire-des-cantons/memoire-des-cantons-v1.0.html", copy: "Le jeu de mémoire aux icônes du Québec.", tag: "Mémoire · Québec", mono: "MÉ", art: 1 },
-  { title: "Tir de Boules de Neige", file: "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html", copy: "50 niveaux de tir à la boule de neige, sauvegarde incluse.", tag: "Adresse · 50 niveaux", mono: "TB", art: 0 },
+  { title: "Tir de Boules de Neige", file: "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html", copy: "50 niveaux de tir à la boule de neige, sauvegarde incluse.", tag: "Adresse · 50 niveaux", faits: "50 niveaux · sauvegarde incluse", mono: "TB", art: 0 },
   { title: "Ado odieux, adieu", file: "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html", copy: "Fais des mauvais coups sans te faire pogner… et assume la vraie sentence.", tag: "Humour · Choix", mono: "AO", art: 5 },
   { title: "Couleuvre du Québec", file: "/apps/couleuvre-du-quebec/couleuvre-du-quebec-v1.0.html", copy: "Le serpent d'ici : souris, bestioles dorées, mouettes et vidanges.", tag: "Arcade · Serpent", mono: "CQ", art: 1 },
   { title: "Fusion Sirop", file: "/apps/fusion-sirop/fusion-sirop-v1.0.html", copy: "Le 2048 de la cabane à sucre, de la sève au pain de sucre.", tag: "Réflexion · 2048", mono: "FS", art: 3 },
   { title: "Trio des Éléments", file: "/apps/trio-des-elements/trio-des-elements-v1.0.html", copy: "Match-3 du tableau périodique : silicium, diamant, or et cuivre.", tag: "Match-3 · Sciences", mono: "T3", art: 4 },
-  { title: "Bernache Express", file: "/apps/bernache-express/bernache-express-v1.0.html", copy: "La grande migration vers le Sud, à un seul bouton.", tag: "Arcade · Un bouton", mono: "BE", art: 0 },
-  { title: "Le Bonhomme Pendu", file: "/apps/le-bonhomme-pendu/le-bonhomme-pendu-v1.0.html", copy: "673 mots à deviner, dont 100 québécois d'ici — définitions incluses.", tag: "Mots · Devinettes", mono: "BP", art: 6 },
+  { title: "Bernache Express", file: "/apps/bernache-express/bernache-express-v1.0.html", copy: "La grande migration vers le Sud, à un seul bouton.", tag: "Arcade · Un bouton", faits: "Un seul bouton", mono: "BE", art: 0 },
+  { title: "Le Bonhomme Pendu", file: "/apps/le-bonhomme-pendu/le-bonhomme-pendu-v1.0.html", copy: "673 mots à deviner, dont 100 québécois d'ici — définitions incluses.", tag: "Mots · Devinettes", faits: "Solo ou 2 joueurs · 673 mots", mono: "BP", art: 6 },
   { title: "Montgolfière", file: "/apps/montgolfiere/montgolfiere-v1.0.html", copy: "Grimpe toujours plus haut, entre les orages et les éclairs.", tag: "Adresse · Altitude", mono: "MG", art: 2 },
-  { title: "Pop Ballons", file: "/apps/pop-ballons/pop-ballons-v1.0.html", copy: "60 secondes, des combos, et une frénésie finale.", tag: "Rapidité · 60 secondes", mono: "PB", art: 5 },
-  { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "330 manches pour démasquer le mensonge — historique, inusité, cocasse.", tag: "Quiz · Déduction", mono: "2V", art: 7 },
-  { title: "Chat'attaque", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Tower defense avec des chats : 9 chats-tours défendent 50 croquettes. 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local.", tag: "Stratégie · Tower defense", mono: "CA", art: 2 },
-  { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Tower defense futuriste : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde. Douze vagues, une tempête qui peut tout changer.", tag: "Stratégie · Science-fiction", mono: "87", art: 7 },
+  { title: "Pop Ballons", file: "/apps/pop-ballons/pop-ballons-v1.0.html", copy: "60 secondes, des combos, et une frénésie finale.", tag: "Rapidité · 60 secondes", faits: "Parties de 60 secondes", mono: "PB", art: 5 },
+  { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "330 manches pour démasquer le mensonge — historique, inusité, cocasse.", tag: "Quiz · Déduction", faits: "Pour les curieux de 7 à 107 ans · 110 manches par catégorie", mono: "2V", art: 7 },
+  { title: "Chat'attaque", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Tower defense avec des chats : 9 chats-tours défendent 50 croquettes. 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local.", tag: "Stratégie · Tower defense", faits: "Solo ou 2 joueurs local · 12 cartes · 3 difficultés", mono: "CA", art: 2 },
+  { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Tower defense futuriste : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde. Douze vagues, une tempête qui peut tout changer.", tag: "Stratégie · Science-fiction", faits: "Solo · 12 vagues", mono: "87", art: 7 },
 ];
 
 const PALETTES: [string, string][] = [
@@ -231,10 +231,13 @@ function JeuxPage() {
               <a
                 href={featured.file}
                 aria-label={"Jouer à " + featured.title}
-                style={{ ...tileBackground(featured), flex: "1 1 260px", minHeight: 230, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}
+                style={{ ...tileBackground(featured), flex: "1 1 260px", minHeight: 230, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, textDecoration: "none", padding: "18px 14px" }}
               >
                 <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 118, lineHeight: 1, color: "#f6eddd", textShadow: "0 12px 30px rgba(0,0,0,.45)", letterSpacing: ".01em" }}>
                   {featured.mono}
+                </span>
+                <span style={{ fontSize: 17, fontWeight: 800, lineHeight: 1.25, color: "#f6eddd", textAlign: "center", textShadow: "0 2px 10px rgba(0,0,0,.5)" }}>
+                  {featured.title}
                 </span>
               </a>
               <div style={{ flex: "2 1 320px", padding: "30px 32px", display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
@@ -242,6 +245,7 @@ function JeuxPage() {
                 <h3 style={{ fontSize: 34 }}>{featured.title}</h3>
                 <span style={TAG_ON_PAPER_STYLE}>{featured.tag}</span>
                 <p>{featured.copy}</p>
+                {"faits" in featured && featured.faits ? <p className="workshop-meta">{featured.faits}</p> : null}
                 <a className="btn-primary" href={featured.file}>Jouer maintenant</a>
               </div>
             </article>
@@ -249,9 +253,12 @@ function JeuxPage() {
             {visibleGames.map((game) => (
               <article className="pillar-card" key={game.title} style={{ padding: 0, overflow: "hidden", gap: 0 }}>
                 <a href={game.file} aria-label={"Jouer à " + game.title} style={{ display: "block", textDecoration: "none" }}>
-                  <div style={{ ...tileBackground(game), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                    <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>
+                  <div style={{ ...tileBackground(game), minHeight: 148, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 7, position: "relative", padding: "16px 14px 30px" }}>
+                    <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 52, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>
                       {game.mono}
+                    </span>
+                    <span style={{ fontSize: 14.5, fontWeight: 800, lineHeight: 1.25, color: "#f6eddd", textAlign: "center", textShadow: "0 2px 8px rgba(0,0,0,.5)" }}>
+                      {game.title}
                     </span>
                     <span style={TAG_ON_TILE_STYLE}>{game.tag}</span>
                   </div>
@@ -259,6 +266,7 @@ function JeuxPage() {
                 <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                   <h3 style={{ fontSize: 23 }}>{game.title}</h3>
                   <p>{game.copy}</p>
+                  {"faits" in game && game.faits ? <p className="workshop-meta">{game.faits}</p> : null}
                   <a className="pillar-cta" href={game.file}>Jouer maintenant →</a>
                 </div>
               </article>

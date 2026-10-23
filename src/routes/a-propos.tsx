@@ -36,6 +36,29 @@ function Page() {
       </section>
       <div className="subpage-content">
         <div className="container">
+          <section style={{ maxWidth: 760, margin: "0 auto 44px" }}>
+            <span className="mini-note">Qui est Hugo</span>
+            <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>L'homme derrière HP</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Je m'appelle <strong>Hugo Pierre Bertrand</strong>. HP Outils, c'est le projet que je
+              construis à Terrebonne, dans Lanaudière : des jeux, des livres, des recettes et des
+              outils concrets — « des outils pour la vraie vie ».
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et
+              veulent apprendre, partager et repartir. C'est pour eux que je construis. Du gratuit
+              chaque fois que c'est possible — 26 jeux, 629 recettes, des outils web sans compte —
+              et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ le kit,
+              aucune taxe ajoutée.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
+              Je crée tout ce que tu vois ici, avec l'IA comme outil de fabrication — la direction,
+              les idées et les mots restent humains. Chaque jeu et chaque outil est testé avant
+              d'être publié. Et je fais aussi de la musique : j'écris et j'enregistre mes propres
+              chansons — l'album <em>Humain imparfait</em> et le balado <em>Futur simple</em> racontent
+              le même monde, autrement.
+            </p>
+          </section>
           <div className="cards">
             <article className="info-card"><span className="mini-note">Vision</span><h3>Comprendre</h3><p>Voir le monde avec lucidité et bienveillance pour faire des choix alignés.</p></article>
             <article className="info-card"><span className="mini-note">Action</span><h3>Agir</h3><p>Passer à l'action avec des outils concrets, adaptés à la vraie vie.</p></article>
