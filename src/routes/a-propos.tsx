@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
+import HugoDeguise from "@/components/deguisements/HugoDeguise";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => createSeoHead({
@@ -26,12 +27,7 @@ function Page() {
               <Link className="outline-btn" to="/">Voir l'écosystème</Link>
             </div>
           </div>
-          <img
-            src="/images/photo-hp.jpg"
-            alt="Portrait de HP"
-            className="hero-portrait"
-            style={{ width: 240, height: 240, borderRadius: "50%", objectFit: "cover", border: "4px solid rgba(246,237,221,.92)", boxShadow: "0 20px 50px rgba(0,0,0,.55)" }}
-          />
+          <HugoDeguise />
         </div>
       </section>
       <div className="subpage-content">
