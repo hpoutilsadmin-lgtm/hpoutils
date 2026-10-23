@@ -50,7 +50,7 @@ function Page() {
     </ul>
     <h2>9. Changements à ces conditions</h2>
     <p>On peut mettre à jour ces conditions de temps en temps. La version publiée sur cette page au moment de votre achat est celle qui s'applique à cet achat.</p>
-    <h2>10. Des questions ?</h2>
-    <p>Écrivez à hpoutils.admin@gmail.com — réponse rapide et humaine. Pour vos renseignements personnels, voyez la Politique de confidentialité.</p>
+    <h2>10. Nous joindre — service client</h2>
+    <p>Une question, un souci avec un achat, un lien qui ne fonctionne pas ? Écrivez à hpoutils.admin@gmail.com. Une réponse d'Hugo, pas d'un robot — sous 48 h ouvrables. C'est la même personne qui écrit les produits et qui vous répond. Pour vos renseignements personnels, voyez la Politique de confidentialité.</p>
   </div></section>;
 }

@@ -107,6 +107,34 @@ function Page() {
               Vous avez perdu votre lien plus tard ?{" "}
               <Link to="/recuperer-achat">Récupérez-le ici</Link>.
             </p>
+            <div
+              style={{
+                marginTop: 32,
+                padding: 20,
+                border: "1px solid #e0d8cf",
+                borderRadius: 4,
+                background: "#faf6f1",
+                textAlign: "left",
+              }}
+            >
+              <p style={{ margin: "0 0 8px", fontWeight: 700 }}>
+                Tu as réussi à ouvrir ton PDF ?
+              </p>
+              <p style={{ margin: 0, fontSize: 14 }}>
+                Si ça coince — un fichier qui ne s'ouvre pas, un lien
+                mort, le mauvais fichier — écris à{" "}
+                <a href="mailto:hpoutils.admin@gmail.com">
+                  hpoutils.admin@gmail.com
+                </a>{" "}
+                : une réponse d'Hugo, pas d'un robot, sous 48 h ouvrables.
+                Si c'est une panne technique de notre côté, on répare ou
+                on rembourse, comme le disent les{" "}
+                <Link to="/conditions-de-vente">conditions de vente</Link>.
+              </p>
+              <p style={{ margin: "12px 0 0", fontSize: 14 }}>
+                Merci pour ta confiance. — Hugo
+              </p>
+            </div>
           </>
         )}
       </div>

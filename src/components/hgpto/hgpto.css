@@ -695,6 +695,13 @@
       .cat[data-state="stare"] .cat-head{transform:translateY(-2.5px)}
       .cat[data-state="startle"] .cat-inner{animation:catjump .45s ease-out}
       @keyframes catjump{35%{transform:translateY(-13px) scaleY(1.05)}}
+      /* Sauts de bloc en bloc (ajout d'Hugo, 22 oct.) : l'arc du saut ;
+         le déplacement horizontal et la hauteur du bloc sont posés par
+         le moteur. Placée après les règles d'état pour primer le temps
+         du saut seulement (la classe « hopping » est retirée à
+         l'atterrissage). */
+      .cat.hopping .cat-inner{animation:cathop .55s cubic-bezier(.34,.56,.4,1)}
+      @keyframes cathop{0%{transform:translateY(0)}45%{transform:translateY(-52px)}100%{transform:translateY(0)}}
       #poseCurl{display:none}
       .cat[data-state="sleep"] #poseStand,.cat[data-state="console"] #poseStand{display:none}
       .cat[data-state="sleep"] #poseCurl,.cat[data-state="console"] #poseCurl{display:block}

@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON } from "./hgpto-data";
 
 export function initHgpto() {
       "use strict";
@@ -751,6 +751,73 @@ export function initHgpto() {
         }, 3200);
       }
 
+      /* ---------- Barbouiller la photo d'Hugo (ajout d'Hugo, 22 oct.
+         2026) : vignette RARE, seulement sur les pages qui hébergent
+         la photo d'Hugo avec son système de déguisements (détection
+         ci-dessous). Il s'approche de la photo, joue l'artiste
+         (posture « graffiti », sans l'élément graffiti), puis émet
+         l'événement fenêtre `hgpto:barbouille-photo` — c'est le
+         système photo, de son côté, qui applique son état
+         « barbouillage » (chapeau melon + lunettes griffonnés).
+         Plafonds de session : 2 fois au plus, jamais à moins de
+         8 minutes d'intervalle — jamais en boucle. */
+      var barbouilleCount = 0, lastBarbouilleAt = 0;
+      function photoSystemEl(){
+        return document.querySelector('[data-deguisements], [data-hugo-photo], img[src*="photo-hp"]');
+      }
+      function canBarbouille(){
+        if (barbouilleCount >= 2) return false;
+        if (Date.now() - lastBarbouilleAt < 8 * 60 * 1000) return false;
+        return !!photoSystemEl();
+      }
+      function doBarbouille(){
+        var el = photoSystemEl();
+        if (!el || state === 'sleep' || paused || isBusy() || qaOpen || gameOn || tourOn || isNight()) return;
+        barbouilleCount++; lastBarbouilleAt = Date.now();
+        var rect = el.getBoundingClientRect();
+        var target = Math.max(4, Math.min(vw() - botW() - 4, rect.left + rect.width / 2 - botW() / 2));
+        setState('idle'); setExpr('focus'); busy(9500);
+        showBubble("Chuuut… l'artiste travaille.", 2600, 'question');
+        if (reduced){ x = target; place(); }
+        else {
+          bot.classList.remove('nosmooth');
+          bot.style.transition = 'transform .9s ease';
+          x = target; place();
+          setTimeout(function(){ bot.style.transition = ''; }, 950);
+        }
+        setTimeout(function(){
+          if (state !== 'idle' || gameOn || tourOn) return;
+          setState('graffiti'); setExpr('focus');
+          logDay("barbouillé la photo d'Hugo — chapeau melon et lunettes, signés HGPTO");
+        }, 1200);
+        setTimeout(function(){
+          // Le geste est fait : on prévient le système photo. (S'il
+          // s'est fait prendre sur le fait — état « caught » — le
+          // barbouillage a quand même eu lieu.)
+          if (state === 'graffiti' || state === 'caught'){
+            window.dispatchEvent(new CustomEvent('hgpto:barbouille-photo'));
+          }
+        }, 3600);
+        setTimeout(function(){
+          if (state !== 'graffiti') return;
+          setExpr('laugh'); giggle();
+          showBubble("Tadam ! Je lui ai dessiné un chapeau melon et des lunettes — regarde sa photo !", 3600, 'joke');
+        }, 4100);
+        setTimeout(function(){
+          if (state === 'graffiti'){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
+        }, 9500);
+      }
+      function previewBarbouille(){
+        lastBarbouilleAt = 0; barbouilleCount = 0;
+        // Le bouton vit dans le panneau de questions : on le referme
+        // et on libère l'occupation d'ouverture, sinon les gardes de
+        // la vignette (qaOpen, isBusy) la bloqueraient à tout coup.
+        if (qaOpen) closeQA();
+        busyUntil = 0;
+        doBarbouille();
+      }
+      document.getElementById('qa-barbouille').addEventListener('click', previewBarbouille);
+
       /* ---------- Perché sur un bloc ---------- */
       function doPerch(){
         if (state === 'sleep' || paused || isBusy() || qaOpen) return;
@@ -1066,6 +1133,7 @@ export function initHgpto() {
               if (drolePick){
                 // déjà servi : on ne tire pas une deuxième vignette
               }
+              else if (r < 0.05 && canBarbouille()) doBarbouille();
               else if (r < 0.16) doTinker();
               else if (r < 0.32) (Math.random() < 0.35 ? doCookFail() : doCook());
               else if (r < 0.44) doRead();
@@ -1425,6 +1493,7 @@ export function initHgpto() {
          réponse hors base : repli courriel + consignation « Pour Hugo »
          (mémoire de session seulement, aucune donnée personnelle). */
       var unanswered = [];
+      var qaSeq = 0;
       function normText(s){
         return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ');
       }
@@ -1465,6 +1534,38 @@ export function initHgpto() {
           list.appendChild(li);
         });
       }
+      /* ---------- La réplique « mascotte » (ajout validé par Hugo,
+         22 oct. 2026) : HGPTO déteste « mascotte » — il se prend pour
+         un « gnome magique érudit ». Détection prudente : le mot doit
+         lui être ADRESSÉ (2e personne, apostrophe, compliment, ou
+         message très court) ; un usage non adressé (« je cherche une
+         mascotte pour mon équipe ») laisse la question primer, comme
+         toute vraie question produit (gardes dans le submit).
+         Rotation sans répétition immédiate, session seulement. */
+      var lastGnome = -1;
+      function mascotteJab(q){
+        var n = normText(q).replace(/\s+/g, ' ').trim();
+        if (!/(^| )mascottes?( |$)/.test(n)) return false;
+        if (/(cherche|recherche|veux|voudrais|besoin|acheter|achete|trouver|embaucher|engager|pour mon|pour notre|pour une equipe|pour l equipe|c est quoi|qu est ce|definition)/.test(n)) return false;
+        if (/(t es|tu es|es tu|c est tu|petite? mascotte|cute|belle mascotte|la mascotte|allo mascotte|salut mascotte|bonjour mascotte)/.test(n)) return true;
+        return n.split(' ').length <= 4;
+      }
+      function gnomeReply(){
+        var lines = (mood === 'grognon') ? GNOME_LINES_GROGNON : GNOME_LINES;
+        var i = Math.floor(Math.random() * lines.length);
+        if (lines.length > 1 && i === lastGnome) i = (i + 1) % lines.length;
+        lastGnome = i;
+        if (mood === 'grognon'){
+          setExpr('angry');
+          setTimeout(function(){ if (!isBusy()) setExpr('happy'); }, 2600);
+        } else if (mood === 'drole'){
+          setExpr('laugh');
+          giggle();
+        } else {
+          setExpr('happy');
+        }
+        showBubble(esc(lines[i]), 9000, mood === 'drole' ? 'joke' : 'talk');
+      }
       document.getElementById('qa-form').addEventListener('submit', function(ev){
         ev.preventDefault();
         var input = document.getElementById('qa-input');
@@ -1472,12 +1573,14 @@ export function initHgpto() {
         if (!q) return;
         input.value = '';
         lastInteract = Date.now();
+        var mySeq = ++qaSeq;
         // Phrase du concept TAPÉE : « HGPTO, joue avec moi » (ou juste
         // « joue avec moi », ponctuation et casse libres) — interceptée
         // AVANT la recherche dans la base et branchée sur le même point
         // d'entrée que le bouton qa-play (décision d'Hugo, 22 oct. 2026).
         var mots = ' ' + normText(q).replace(/\s+/g, ' ').trim() + ' ';
         if (mots.indexOf(' joue avec moi ') !== -1){ startGame(); return; }
+        var jab = mascotteJab(q);
         var hit = searchKB(q);
         if (hit){
           // Savoir-vendre éthique : si la question sent l'hésitation ou la
@@ -1498,6 +1601,16 @@ export function initHgpto() {
               setTimeout(function(){ doSuggest(bsn, { fromQA:true }); }, 9800);
             }
           }
+          // Ajout « mascotte » : le message le traitait de mascotte ET
+          // la réponse n'est pas un produit (aucun lien, aucune
+          // fonction, aucun besoin servi → aucun suivi de suggestion
+          // ne peut être écrasé) : la grogne du gnome suit en
+          // post-scriptum léger, jamais à la place de la réponse.
+          if (jab && !hit.u && !hit.fn && !hit.go && !matchBesoin(q)){
+            setTimeout(function(){
+              if (qaSeq === mySeq && !gameOn && !tourOn) gnomeReply();
+            }, 12500);
+          }
           return;
         }
         // Lot nº 3 : aucune réponse exacte, mais un besoin clair relié à
@@ -1511,6 +1624,11 @@ export function initHgpto() {
           if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
           return;
         }
+        // Ajout « mascotte » : aucune réponse dans la base, aucun
+        // besoin produit servi — si le mot lui était adressé, la
+        // réplique du gnome remplace le repli (ce n'est pas une
+        // question à consigner pour Hugo).
+        if (jab){ gnomeReply(); return; }
         if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
         setExpr('happy');
         showBubble(esc(FALLBACK) + linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" }), 11000, 'answer');
@@ -2506,6 +2624,151 @@ export function initHgpto() {
           }
         }, 7000);
       }
+      /* ---------- Pixel saute de bloc en bloc (ajout d'Hugo, 22 oct.
+         2026) : comportement OCCASIONNEL et bref — au plus une
+         séquence par ~4 minutes. Elle quitte le sol, enchaîne 2 à
+         4 sauts sur le HAUT de blocs de contenu (sections « sec-* »
+         quand elles existent, sinon grands blocs visibles),
+         atterrissage propre, petit temps d'arrêt sur chaque bloc —
+         parfois une micro-sieste sur le dernier — puis elle
+         redescend et reprend son suivi d'HGPTO. Jamais pendant une
+         tâche du visiteur, une visite guidée, le jeu caché ou la
+         Pause ; pointeur désactivé le temps des sauts (elle reste
+         non interactive, aucun contenu déplacé, aucun clic bloqué :
+         elle ne fait que se poser sur le haut des blocs dans la
+         zone fixe d'HGPTO). Si quelqu'un d'autre prend la main sur
+         Pixel (elle part, elle se cache pour le jeu…), la séquence
+         s'efface proprement sans lui disputer la suite. */
+      var hopBusy = false, lastHopAt = Date.now(), hopBlock = null, hopSync = null;
+      var hopHomeMode = 'follow', hopHomeX = 0;
+      function hopTargets(){
+        var out = [];
+        function collect(list, minW, minH){
+          Array.prototype.slice.call(list).forEach(function(el){
+            if (out.indexOf(el) !== -1) return;
+            var r = el.getBoundingClientRect();
+            // Bloc réellement visible : une bonne partie à l'écran,
+            // son haut sous le haut de la fenêtre (atterrissage
+            // possible sur le haut du bloc).
+            if (r.width > minW && r.height > minH && r.bottom > 120 && r.top < window.innerHeight - 30) out.push(el);
+          });
+        }
+        collect(document.querySelectorAll('[id^="sec-"]'), 220, 60);
+        if (out.length < 2){
+          // Ex. l'accueil au chargement : une seule section visible,
+          // mais ses grands blocs intérieurs font d'autres perchoirs.
+          collect(document.querySelectorAll('main section, main article, main > div, main section > div, main section > article'), 260, 110);
+        }
+        return out;
+      }
+      function hopCleanup(){
+        if (hopSync){ clearInterval(hopSync); hopSync = null; }
+        hopBlock = null;
+        catEl.classList.remove('hopping');
+        catEl.style.transition = 'bottom .5s ease';
+        catEl.style.bottom = '4px';
+        setTimeout(function(){ catEl.style.transition = ''; }, 550);
+        catEl.style.pointerEvents = '';
+        hopBusy = false;
+      }
+      function catBlockHops(){
+        if (hopBusy || !catVisible || catTarget !== null) return false;
+        if (catMode !== 'follow' && catMode !== 'stay') return false;
+        if (paused || gameOn || tourOn || qaOpen || calm || isHidden || docHidden) return false;
+        if (catState === 'sleep' || catState === 'console' || catState === 'eat') return false;
+        if (state === 'sleep') return false;
+        var targets = hopTargets();
+        if (targets.length < 2) return false;
+        hopBusy = true; lastHopAt = Date.now();
+        hopHomeMode = catMode; hopHomeX = catX;
+        catMode = 'hop';
+        catEl.style.pointerEvents = 'none';
+        targets.sort(function(a, b){
+          return Math.abs(a.getBoundingClientRect().left - catX) - Math.abs(b.getBoundingClientRect().left - catX);
+        });
+        var n = 2 + Math.floor(Math.random() * 3);   // 2 à 4 sauts
+        var seq = targets.slice(0, Math.min(n, targets.length));
+        var i = 0;
+        var scroll0 = window.scrollY;
+        function finish(){
+          hopCleanup();
+          if (catVisible){
+            setCatState('idle');
+            if (hopHomeMode === 'follow'){
+              catMode = 'follow';
+              catGo(catBesideX(), 230, catArrivedFollow);
+            } else {
+              // Elle retourne à son coin, comme elle était.
+              catMode = 'stay';
+              catGo(hopHomeX, 200, function(){ if (catMode === 'stay') setCatState('idle'); });
+            }
+          }
+        }
+        function step(){
+          // Quelqu'un d'autre a pris la main (départ, jeu…) : on rend
+          // l'élément propre, sans disputer ni le mode ni la route.
+          if (catMode !== 'hop' || !catVisible){ hopCleanup(); return; }
+          if (gameOn || tourOn || paused){ finish(); return; }
+          if (Math.abs(window.scrollY - scroll0) > 160){ finish(); return; }
+          if (i >= seq.length){
+            if (Math.random() < 0.3){
+              // Micro-sieste sur le dernier bloc, dans son caractère.
+              setCatState('sleep');
+              setTimeout(function(){
+                if (catMode !== 'hop'){ hopCleanup(); return; }
+                setCatState('idle');
+                finish();
+              }, 6000 + Math.random() * 5000);
+            } else {
+              setTimeout(function(){ if (catMode === 'hop') finish(); else hopCleanup(); }, 900);
+            }
+            return;
+          }
+          var el = seq[i++];
+          hopBlock = el;
+          var r = el.getBoundingClientRect();
+          var tx = Math.max(4, Math.min(vw() - CAT_W - 4, r.left + 26));
+          catEl.style.transition = 'bottom .55s cubic-bezier(.34,.56,.4,1)';
+          catEl.style.bottom = Math.max(6, window.innerHeight - r.top + 2) + 'px';
+          catEl.classList.remove('hopping');
+          void catEl.offsetWidth;
+          catEl.classList.add('hopping');
+          setCatState('walk');
+          catGo(tx, 330, function(){
+            if (catMode !== 'hop'){ hopCleanup(); return; }
+            setCatState(Math.random() < 0.4 ? 'stare' : 'idle');
+            // Rester collée au haut du bloc si la page glisse un peu.
+            if (hopSync) clearInterval(hopSync);
+            hopSync = setInterval(function(){
+              if (catMode !== 'hop' || hopBlock !== el){ if (hopSync){ clearInterval(hopSync); hopSync = null; } return; }
+              var rr = el.getBoundingClientRect();
+              if (rr.bottom < 0 || rr.top > window.innerHeight){ if (hopSync){ clearInterval(hopSync); hopSync = null; } finish(); return; }
+              catEl.style.bottom = Math.max(6, window.innerHeight - rr.top + 2) + 'px';
+            }, 300);
+            setTimeout(step, 1100 + Math.random() * 900);
+          });
+        }
+        step();
+        return true;
+      }
+      setInterval(function(){
+        if (hopBusy) return;
+        if (Date.now() - lastHopAt < 4 * 60 * 1000) return;
+        if (Math.random() > 0.3) return;
+        catBlockHops();
+      }, 30000);
+      function previewCatHops(){
+        lastHopAt = 0;
+        if (!catVisible || (catMode !== 'follow' && catMode !== 'stay')) summonCat('follow');
+        if (catState === 'sleep') setCatState('idle');
+        var tries = 0;
+        var iv = setInterval(function(){
+          tries++;
+          if (catBlockHops() || tries > 14) clearInterval(iv);
+        }, 700);
+      }
+      document.getElementById('qa-sauts').addEventListener('click', previewCatHops);
+
       catEl.addEventListener('pointerdown', function(ev){
         ev.preventDefault();
         ev.stopPropagation();

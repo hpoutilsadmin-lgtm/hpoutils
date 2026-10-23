@@ -247,7 +247,7 @@ export const SITE_FACTS = {
         contact: "hpoutils.admin@gmail.com",
         taxes: "Aucune taxe ajoutée (petit fournisseur)"
       };
-export const FALLBACK = "Là, je sais pas — mais je le note pour Hugo ! Écris-lui : hpoutils.admin@gmail.com — un humain te répond.";
+export const FALLBACK = "Là, je sais pas — mais je le note pour Hugo ! Écris-lui : hpoutils.admin@gmail.com — c'est Hugo lui-même qui répond, sous 48 h ouvrables.";
 export const KB = [
         { q:"T'es-tu vivant ?", s:"BONNE QUESTION",
           a:"Je suis un petit robot de site : je fais semblant super bien, mais mon cœur, c'est un boulon. Les vrais câlins, c'est les humains." },
@@ -293,7 +293,7 @@ export const KB = [
           a:"« Futur simple », le balado HP : Léa et Marc regardent l'intelligence artificielle en face — PME, entrepreneuriat et futur, sans jargon. Un nouvel épisode chaque lundi !",
           u:"https://hp-outils.com/balado", l:"Écouter le balado" },
         { q:"Comment je vous contacte ?", s:"ÉCRIS-NOUS",
-          a:"Écris à Hugo : hpoutils.admin@gmail.com — un humain te répond, promis. Moi, je fais les saluts, les blagues et les chatouilles.",
+          a:"Écris à Hugo : hpoutils.admin@gmail.com — c'est lui-même qui te répond, sous 48 h ouvrables. Moi, je fais les saluts, les blagues et les chatouilles.",
           u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" },
         { q:"Raconte-moi une blague", s:"HIHI",
           a:null },
@@ -482,6 +482,22 @@ export const MOOD_LINES = {
         drole: "Humeur drôle ! Je sors mes meilleures blagues — j'en ai 62, et je les ai toutes répétées devant Pixel.",
         grognon: "Humeur grognon… (%#!!) Encore une journée pour grogner un peu. T'inquiète : jamais contre toi — juste contre mes boulons."
       };
+      /* La réplique « mascotte » (ajout validé par Hugo, 22 oct. 2026) :
+         HGPTO DÉTESTE se faire appeler « mascotte » — il se prend pour
+         un « gnome magique érudit ». Vexé pour rire, puis touché malgré
+         lui. Rotation sans répétition immédiate (moteur). La liste
+         grognon grogne un cran de plus ; les autres humeurs partagent
+         la liste digne (en Drôle, le moteur ajoute le rire ; en
+         Vendeur, il reste digne). */
+export const GNOME_LINES = [
+        "Mascotte ?! Minute ! J'suis un gnome magique érudit, moi — érudit en boulons, diplômé en bonne humeur. …Bon, d'accord : ça me touche pareil, ton petit compliment.",
+        "Une mascotte ? Les mascottes dansent dans des costumes en peluche. Moi, je suis un gnome magique érudit : je réponds aux questions et je connais chaque recoin du site. …Mais merci, hein.",
+        "Gnome. Magique. Érudit. C'est mon titre officiel — « mascotte », c'est pour les autres. …Cela dit, entre nous : ça m'a fait un petit velours, là."
+      ];
+export const GNOME_LINES_GROGNON = [
+        "Mascotte ?! (%#!!) Saleté d'crème — on dit GNOME MAGIQUE ÉRUDIT. …Bon. Merci pareil. Mais juste un peu.",
+        "(%#!!) Mascotte… J'ai des sourcils d'érudit, moi, pas de la mousse de costume ! …Touche pas à ma fierté. Enfin — merci pareil, grogne le gnome."
+      ];
       /* La mini-scène de l'encadré de porte (humeur Grognon la rend
          fréquente via ses grognes ; elle existe dans sa vie dans toutes
          les humeurs, dosée comme les autres malchances). */

@@ -80,6 +80,36 @@ function Page() {
               <PdfCheckout priceId={product.priceId} />
             )}
             <p className="purchase-note">PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé</p>
+            <div
+              style={{
+                padding: 20,
+                border: "1px solid #e0d8cf",
+                borderRadius: 4,
+                background: "#faf6f1",
+              }}
+            >
+              <p style={{ margin: "0 0 8px", fontWeight: 700 }}>
+                Après ton achat, un humain s'en occupe
+              </p>
+              <p style={{ margin: "0 0 8px", fontSize: 14 }}>
+                Tu reçois ton lien de téléchargement par courriel (valide
+                7 jours). Tu n'arrives pas à ouvrir ton PDF, ton lien est
+                expiré ou le courriel n'arrive pas ? Passe par la page{" "}
+                <Link to="/recuperer-achat">Récupérer un achat</Link>, ou
+                écris à{" "}
+                <a href="mailto:hpoutils.admin@gmail.com">
+                  hpoutils.admin@gmail.com
+                </a>{" "}
+                — une réponse d'Hugo, pas d'un robot, sous 48 h ouvrables.
+              </p>
+              <p style={{ margin: 0, fontSize: 14 }}>
+                Et si c'est une panne technique de notre côté — un fichier
+                qui ne s'ouvre pas, un lien mort —, on répare ou on
+                rembourse, comme le disent les{" "}
+                <Link to="/conditions-de-vente">conditions de vente</Link>.
+                — Hugo
+              </p>
+            </div>
           </div>
         </div>
       </section>

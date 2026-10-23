@@ -559,6 +559,8 @@ export const HGPTO_MARKUP = `
       </div>
       <button type="button" id="qa-play" class="qa-play">HGPTO, joue avec moi !</button>
       <button type="button" id="qa-2h" class="qa-preview">Prévisualiser la scène des 2 heures</button>
+      <button type="button" id="qa-barbouille" class="qa-preview">Prévisualiser le barbouillage de la photo</button>
+      <button type="button" id="qa-sauts" class="qa-preview">Pixel : prévisualiser les sauts de blocs</button>
     </div>
 
     <!-- ===== Le jeu caché : Serpents et échelles ===== -->
