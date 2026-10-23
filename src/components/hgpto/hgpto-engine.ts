@@ -181,6 +181,10 @@ export function initHgpto() {
                         résilience) ; visite guidée TRANQUILLE : textes qui
                         EXPLIQUENT chaque endroit, rythme apaisé.
          · 2026-10-22 — LOT Nº 4 « contrôles + humeurs » (demandes d'Hugo :
+         · 2026-10-23 — lot « HGPTO joueur » (porté de l'artefact vérifié) :
+                        tampons officiels au panneau, « Jouer avec HGPTO » à
+                        Montgolfière, « Lis-moi ça » (Web Speech), gag hélium,
+                        flash info avant les infos produit demandées.
                         « il manque des endroits pour revenir aux jeux,
                         faire pause, ajuster le son » + le sélecteur
                         d'humeur) : rangée de contrôles complétée — bouton
@@ -337,13 +341,13 @@ export function initHgpto() {
         // doux, et il baisse pendant qu'on lit une réponse (mood 'answer').
         // Le charabia se groupe en petits « mots » de 3-4 syllabes, séparés par
         // des souffles — allo, hello, hola, ciao vivent dans le rythme, dosés.
-        var base = mood === 'sleep' ? 175 : mood === 'joke' ? 392 : mood === 'answer' ? 318 : 292;
+        var base = mood === 'sleep' ? 175 : mood === 'joke' ? 392 : mood === 'answer' ? 318 : mood === 'helium' ? 615 : 292;
         var step = mood === 'sleep' ? 0.22 : mood === 'joke' ? 0.1 : 0.12;
-        var vol = mood === 'sleep' ? 0.03 : (mood === 'answer' ? 0.033 : 0.046);
+        var vol = mood === 'sleep' ? 0.03 : (mood === 'answer' ? 0.033 : (mood === 'helium' ? 0.034 : 0.046));
         var n = Math.max(2, Math.min(24, Math.round(text.length / 6)));
         var tt = actx.currentTime + 0.02;
         for (var i=0;i<n;i++){
-          var f = Math.min(470, base * (0.9 + Math.random()*0.32));
+          var f = Math.min(mood === 'helium' ? 860 : 470, base * (0.9 + Math.random()*0.32));
           var f1 = f * (0.92 + Math.random()*0.2);
           if (mood === 'question' && i >= n-2){ f *= 1.12; f1 = f * 1.24; }
           tone(tt, f, f1, step*0.92, vol, 'triangle');
@@ -1147,6 +1151,7 @@ export function initHgpto() {
               else if (r < 0.90) doHum();
               else if (r < 0.95) (sensible ? doJanitor() : doNosePick());
               else if (r < 0.98 && seasonDecorKind()) doDecor();
+              else if (r < 0.995) doBalloon();
               else (sensible ? doHum() : doGraffiti());
             }
           }
@@ -1446,6 +1451,9 @@ export function initHgpto() {
         lastInteract = Date.now();
         engage();
         setExpr('happy');
+        if (reading.on) stopReading(false);   // on change d'activité : la lecture s'arrête proprement
+        if (item.fn === 'mg'){ closeQA(); startMG(); return; }
+        if (item.fn === 'read'){ readPage(); return; }
         if (item.fn === 'journal'){ showBubble(esc(journalText()), 11000, 'answer'); return; }
         if (item.fn === 'fact'){ var r1 = nextReading(); showBubble(esc("J'ai lu ça, écoute : " + pick(QC_HISTORY)), 11000, 'answer'); logDay("raconté un fait d'histoire du Québec"); return; }
         if (item.fn === 'philo'){ showBubble(esc(pick(PHILO)), 11000, 'answer'); return; }
@@ -1461,31 +1469,40 @@ export function initHgpto() {
           return;
         }
         var text = item.a || pick(JOKES);
-        var html = esc(text);
-        if (item.u) html += linkHtml({ u:item.u, l:item.l });
-        if (opts && opts.doux) html += '<br>' + esc(pick(ETHIQUE_LINES));
-        if (item.s){
-          signText.textContent = item.s;
-          setState('invite'); busy(3400);
-          setTimeout(function(){ if (qaOpen && state === 'invite') setState('idle'); }, 3400);
-        }
-        showBubble(html, 11000, 'answer');
-        if (item.go) guideTo(item.go, null);
-        // Lot nº 3 — réponses clients renforcées : l'intérêt pour les
-        // kits est compté (au 2e intérêt, le calcul honnête du bundle
-        // suit) ; après une réponse « produit payant », l'alternative
-        // gratuite peut suivre. Tout passe par les plafonds du système
-        // de suggestions ; jamais après la sortie « doux », qui est déjà
-        // la porte de sortie honnête.
-        if (item.u && !item.fn && !item.go && !(opts && opts.doux)){
-          if (/sans-honte/.test(item.u)){
-            kitInterest++;
-            if (kitInterest === 2) scheduleBundle();
-            else scheduleAlt('kits');
+        var deliver = function(prefix){
+          var html = esc(prefix + text);
+          if (item.u) html += linkHtml({ u:item.u, l:item.l });
+          if (opts && opts.doux) html += '<br>' + esc(pick(ETHIQUE_LINES));
+          if (item.s){
+            signText.textContent = item.s;
+            setState('invite'); busy(3400);
+            setTimeout(function(){ if (qaOpen && state === 'invite') setState('idle'); }, 3400);
           }
-          else if (/livres-pdf/.test(item.u)) scheduleAlt('livres');
-          else if (/ateliers/.test(item.u)) scheduleAlt('ateliers');
-        }
+          showBubble(html, 11000, 'answer');
+          if (item.go) guideTo(item.go, null);
+          // Lot nº 3 — réponses clients renforcées : l'intérêt pour les
+          // kits est compté (au 2e intérêt, le calcul honnête du bundle
+          // suit) ; après une réponse « produit payant », l'alternative
+          // gratuite peut suivre. Tout passe par les plafonds du système
+          // de suggestions ; jamais après la sortie « doux », qui est déjà
+          // la porte de sortie honnête.
+          if (item.u && !item.fn && !item.go && !(opts && opts.doux)){
+            if (/sans-honte/.test(item.u)){
+              kitInterest++;
+              if (kitInterest === 2) scheduleBundle();
+              else scheduleAlt('kits');
+            }
+            else if (/livres-pdf/.test(item.u)) scheduleAlt('livres');
+            else if (/ateliers/.test(item.u)) scheduleAlt('ateliers');
+          }
+        };
+        // Flash info : seulement avant une vraie info produit demandée
+        // (lien produit, « montre-moi » ou drapeau info). Les suggestions
+        // nées des vignettes passent par doInvite — jamais de flash là.
+        var isInfo = !!item.info || !!item.go ||
+          (!!item.u && item.u.indexOf('mailto:') !== 0);
+        if (isInfo) flashInfo(deliver);
+        else deliver('');
       }
 
       /* ---------- Questions tapées : recherche dans la base de faits ----------
@@ -2402,6 +2419,995 @@ export function initHgpto() {
         ta.remove();
       }
       document.getElementById('qa-play').addEventListener('click', startGame);
+
+      /* ================= VOIX RÉELLE, LECTURE, FLASH INFO, HÉLIUM =================
+         Réglages de SESSION seulement (rien n'est conservé entre visites) :
+         voix activée/désactivée, gag hélium activé/désactivé. La lecture ne
+         part JAMAIS toute seule : seulement sur demande explicite. */
+      var TTS = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+      var voiceOn = true, heliumOn = true, frVoice = null;
+      function pickFrVoice(){
+        if (!TTS) return;
+        var vs = [];
+        try { vs = TTS.getVoices() || []; } catch(e){ vs = []; }
+        var fr = vs.filter(function(v){ return /^fr/i.test(v.lang || ''); });
+        if (!fr.length){ frVoice = null; return; }
+        var male = ['thomas','paul','henri','nicolas','mathieu','jacques','daniel','antoine','loic','jean','pierre','luc','remi'];
+        var female = ['amelie','audrey','julie','hortense','marie','virginie','lea','aurelie','chloe','celia','anna','sophie'];
+        function has(v, list){ var n = (v.name || '').toLowerCase(); return list.some(function(w){ return n.indexOf(w) >= 0; }); }
+        frVoice = null;
+        for (var i = 0; i < fr.length && !frVoice; i++) if (has(fr[i], male)) frVoice = fr[i];
+        if (!frVoice) for (var j = 0; j < fr.length && !frVoice; j++) if (!has(fr[j], female)) frVoice = fr[j];
+        if (!frVoice) frVoice = fr[0];
+      }
+      if (TTS){ pickFrVoice(); TTS.onvoiceschanged = pickFrVoice; }
+      function speakTTS(text, opts){
+        if (!TTS || !voiceOn || !text) return false;
+        try {
+          if (opts && opts.interrupt) TTS.cancel();
+          var u = new SpeechSynthesisUtterance(text);
+          u.lang = 'fr-FR';
+          if (frVoice) u.voice = frVoice;
+          u.rate = (opts && opts.rate) || 1;
+          u.pitch = (opts && opts.pitch) || 1;
+          TTS.speak(u);
+          return true;
+        } catch(e){ return false; }
+      }
+      /* Sa voix d'écureuil : la synthèse vocale, pitch ~1,9 — sinon, repli
+         honnête sur son charabia monté d'une octave (même gag, autre tuyau). */
+      function heliumSpeak(text){
+        if (!text) return;
+        if (!speakTTS(text, { pitch: 1.9, rate: 1.13 })) speak(text, 'helium');
+      }
+
+      /* ---------- Lecture à voix haute du site (sur demande seulement) ---------- */
+      var reading = { on:false, chunks:[], i:0 };
+      var btnRead = document.getElementById('qa-read');
+      var btnReadDock = document.getElementById('btn-read');
+      function setReadLabels(t){ btnRead.textContent = t; btnReadDock.textContent = t; }
+      function pageText(){
+        var parts = [];
+        function grab(sel){
+          var els = document.querySelectorAll(sel);
+          for (var i = 0; i < els.length; i++){
+            if (els[i].closest && els[i].closest('.hgpto-host')) continue;   // jamais sa propre interface
+            var t = (els[i].textContent || '').replace(/\s+/g, ' ').trim();
+            if (t) parts.push(t);
+          }
+        }
+        // Adaptation au site (portage) : la page démo de l'artefact avait
+        // ses propres classes (.hero, .card, .band). Sur le vrai site, on
+        // lit le contenu principal de la page (<main> : titres, puis
+        // paragraphes), avec repli sur la page entière si la route n'a
+        // pas de <main> (page autonome « En cuisine »).
+        grab('main h1'); grab('main h2'); grab('main p');
+        if (!parts.length){ grab('h1'); grab('h2'); grab('p'); }
+        return parts.join('. ');
+      }
+      function chunkText(t){
+        var raw = t.split(/(?<=[.!?…])\s+/), out = [], cur = '';
+        raw.forEach(function(s){
+          if ((cur + ' ' + s).length > 170 && cur){ out.push(cur); cur = s; }
+          else cur = cur ? cur + ' ' + s : s;
+        });
+        if (cur) out.push(cur);
+        return out;
+      }
+      function readChunk(){
+        if (!reading.on || !TTS) return;
+        if (reading.i >= reading.chunks.length){ finishReading(); return; }
+        var u = new SpeechSynthesisUtterance(reading.chunks[reading.i]);
+        u.lang = 'fr-FR';
+        if (frVoice) u.voice = frVoice;
+        u.rate = 1; u.pitch = 1;   // voix homme standard, débit normal — jamais d'hélium ici
+        u.onend = function(){ reading.i++; readChunk(); };
+        u.onerror = function(){ reading.i++; readChunk(); };
+        TTS.speak(u);
+      }
+      function readPage(){
+        if (reading.on){ stopReading(true); return; }
+        if (!TTS){
+          showBubble("Ton appareil n'a pas de voix de lecture intégrée — je ne peux pas te lire ça à voix haute ici. Mais tout est écrit sur la page !", 7000, 'answer');
+          return;
+        }
+        if (!voiceOn){
+          showBubble("Ma voix est fermée dans mes réglages — rouvre-la avec le bouton « Voix » et je te lis ça avec plaisir.", 7000, 'answer');
+          return;
+        }
+        ensureAudio();
+        pickFrVoice();
+        reading.chunks = chunkText(pageText());
+        reading.i = 0; reading.on = true;
+        setReadLabels('Arrête la lecture');
+        if (state === 'sleep') wake(false);
+        setState('read'); setExpr('focus');
+        showBubble("Je te lis la page — mes lunettes de lecture sont de sortie. Bouton « Arrête la lecture » quand t'en as assez !", 5000, 'none');
+        logDay("lu la page à voix haute, sur demande");
+        readChunk();
+      }
+      function stopReading(manual){
+        if (TTS) { try { TTS.cancel(); } catch(e){} }
+        var was = reading.on;
+        reading.on = false; reading.chunks = []; reading.i = 0;
+        setReadLabels('Lis-moi ça');
+        if (was && state === 'read') setState(reduced ? 'idle' : 'walk');
+        if (was && manual) showBubble("Ok, j'arrête là. Le reste est écrit sur la page !", 4200, 'talk');
+      }
+      function finishReading(){
+        reading.on = false; reading.chunks = []; reading.i = 0;
+        setReadLabels('Lis-moi ça');
+        if (state === 'read') setState(reduced ? 'idle' : 'walk');
+        showBubble("Et voilà, c'est lu ! Autre chose ?", 4600, 'talk');
+      }
+      btnRead.addEventListener('click', function(){ readPage(); });
+      btnReadDock.addEventListener('click', function(){ ensureAudio(); readPage(); });
+      var btnVoice = document.getElementById('qa-voice');
+      btnVoice.addEventListener('click', function(){
+        voiceOn = !voiceOn;
+        btnVoice.textContent = voiceOn ? 'Voix : oui' : 'Voix : non';
+        btnVoice.setAttribute('aria-pressed', voiceOn ? 'true' : 'false');
+        if (!voiceOn){ if (reading.on) stopReading(false); if (TTS) { try { TTS.cancel(); } catch(e){} } }
+        else { pickFrVoice(); showBubble("Voix rouverte ! Demande-moi « Lis-moi ça » quand tu veux.", 4200, 'talk'); }
+      });
+
+      /* ---------- Flash info : avant chaque info produit demandée ----------
+         Trois dings + « mes excuses — flash info : », puis l'info suit
+         immédiatement. Voix NORMALE toujours — jamais d'hélium ici. Si la
+         voix est coupée (ou absente), version texte dans la bulle. Une
+         seule fois par livraison d'info. */
+      function dingDing(){
+        if (!actx || muted) return;
+        var t = actx.currentTime + 0.02;
+        [0, 0.17, 0.34].forEach(function(d){
+          toneRaw(t + d, 1568, 1568, 0.22, 0.05, 'sine');
+          toneRaw(t + d, 2093, 2093, 0.16, 0.018, 'sine');
+        });
+      }
+      function flashInfo(deliver){
+        if (voiceOn && TTS){
+          dingDing();
+          speakTTS("Mes excuses — flash info :", { interrupt: true });
+          setTimeout(function(){ deliver(''); }, 520);
+        } else {
+          deliver("Ding ding ding — mes excuses — flash info : ");
+        }
+      }
+
+      /* ---------- Le gag hélium : rare, bref, jamais en mode sérieux ---------- */
+      var heliumLines = 0, heliumTimer = null, balloonUntil = 0, balloonTimer = null;
+      function balloonSqueak(){
+        if (!actx || muted) return;
+        var t = actx.currentTime + 0.02;
+        toneRaw(t, 880, 1560, 0.13, 0.028, 'sine');
+        toneRaw(t + 0.15, 1250, 660, 0.11, 0.024, 'sine');
+      }
+      function heliumGag(src){
+        if (reading.on || gameOn || mgOn || heliumLines > 0 || paused || state === 'sleep') return;
+        if (!heliumOn){
+          if (src === 'touch') showBubble("Le gag d'hélium est fermé dans mes réglages — ma balloune et moi, on reste sages. Presque.", 4600, 'talk');
+          return;
+        }
+        bot.classList.add('has-balloon', 'helium');
+        balloonUntil = Date.now() + 30000;
+        setExpr('laugh');
+        balloonSqueak();
+        giggle();
+        heliumLines = 2;   // cette réplique + la suivante, pas plus
+        if (heliumTimer) clearTimeout(heliumTimer);
+        heliumTimer = setTimeout(endHelium, 12000);
+        showBubble(esc(src === 'touch'
+          ? "Oups ! J'ai respiré trop près de ma balloune… écoute ma voix !"
+          : "Minute ! J't'en pause… je viens de prendre une bouffée d'hélium de ma balloune !"), 5200, 'talk');
+        logDay("fait mon gag d'hélium (voix d'écureuil, deux phrases max)");
+      }
+      function endHelium(){
+        if (heliumTimer){ clearTimeout(heliumTimer); heliumTimer = null; }
+        heliumLines = 0;
+        if (!bot.classList.contains('helium')) return;
+        bot.classList.remove('helium');
+        giggle();
+        showBubble("Hihi ! Je ris de moi — voix normale revenue, promis.", 4300, 'joke');
+        scheduleBalloonOff();
+      }
+      function scheduleBalloonOff(){
+        if (balloonTimer) clearTimeout(balloonTimer);
+        balloonTimer = setTimeout(function(){
+          if (!bot.classList.contains('helium') && Date.now() >= balloonUntil)
+            bot.classList.remove('has-balloon');
+        }, 2600);
+      }
+      /* Vignette rare : il se promène avec sa balloune — et des fois, il
+         respire trop près. La toucher déclenche le gag à tout coup. */
+      function doBalloon(){
+        if (state === 'sleep' || paused || isBusy() || qaOpen || gameOn || mgOn) return;
+        if (bot.classList.contains('has-balloon')) return;
+        bot.classList.add('has-balloon');
+        balloonUntil = Date.now() + 26000;
+        setExpr('happy'); busy(1500);
+        showBubble("Regarde, j'ai ma balloune ! Touche-la… si tu oses. Moi, je respire de l'autre côté. Normalement.", 5600, 'talk');
+        setTimeout(function(){
+          if (bot.classList.contains('has-balloon') && !bot.classList.contains('helium') && Math.random() < 0.3)
+            heliumGag('random');
+        }, 6500);
+        setTimeout(function(){
+          balloonUntil = Date.now();
+          if (!bot.classList.contains('helium')) bot.classList.remove('has-balloon');
+          else scheduleBalloonOff();
+        }, 26000);
+      }
+      document.getElementById('balloon-hit').addEventListener('pointerdown', function(ev){
+        ev.stopPropagation();
+        ev.preventDefault();
+        ensureAudio();
+        lastInteract = Date.now();
+        if (bot.classList.contains('helium')){ giggle(); return; }
+        heliumGag('touch');
+      });
+      var btnHelium = document.getElementById('qa-helium');
+      btnHelium.addEventListener('click', function(){
+        heliumOn = !heliumOn;
+        btnHelium.textContent = heliumOn ? 'Hélium : oui' : 'Hélium : non';
+        btnHelium.setAttribute('aria-pressed', heliumOn ? 'true' : 'false');
+        if (!heliumOn && bot.classList.contains('helium')){
+          if (heliumTimer){ clearTimeout(heliumTimer); heliumTimer = null; }
+          heliumLines = 0;
+          bot.classList.remove('helium');
+          showBubble("Gag fermé, voix normale. Sage comme une image de robot.", 4000, 'talk');
+        }
+      });
+      document.getElementById('stamp-mg').addEventListener('click', function(){ closeQA(); startMG(); });
+
+      /* ================= MONTGOLFIÈRE — HGPTO JOUE AVEC TOI =================
+         Mécaniques recopiées du vrai jeu (public/apps/montgolfiere/
+         montgolfiere-v1.0.html, dépôt hpoutils) : PX_PER_M = 6 ; montée
+         min(70 + altitude × 0,055 ; 250) px/s ; obstacles toutes les
+         1,15 s → 0,42 s selon l'altitude ; probabilités par altitude
+         (orage 0 sous 250 m, puis jusqu'à 0,24 ; abeille 0,10 → 0,24 ;
+         nuage blanc 0,26, non mortel mais voile la vue ; sinon mouette) ;
+         orage : charge 0,85 s puis éclair, couloir mortel de 17 px ;
+         anneau doré toutes les 7 à 12 s, +25 si le centre de l'enveloppe
+         passe à moins de 32 px ; vent : annonce 1 s, bourrasque de
+         175 px/s pendant 2,6 à 4 s ; jalons aux mêmes altitudes.
+         Un contact = le ballon est fini (manche perdue). HGPTO pilote son
+         ballon avec les MÊMES limites de vitesse que le joueur ; il vise
+         les anneaux, esquive les dangers — et son défaut de gaffeur le
+         fait parfois choisir le mauvais bord : il le reconnaît en riant.
+         Il ne « apprend » pas : il joue selon ses règles, point. Les
+         manches sont comptées pour la session en cours seulement. */
+      var mgOn = false;
+      var mgSession = { you:0, bot:0, rounds:0 };
+      var mgEl = document.getElementById('mg');
+      var mgWrap = document.getElementById('mg-wrap');
+      var mgCanvas = document.getElementById('mg-canvas');
+      var mgCtx = mgCanvas.getContext('2d');
+      var mgAltEl = document.getElementById('mg-alt');
+      var mgRingsEl = document.getElementById('mg-rings');
+      var mgScoreEl = document.getElementById('mg-score');
+      var mgToastEl = document.getElementById('mg-toast');
+      var mgCard = document.getElementById('mg-card');
+      var mgW = 0, mgH = 0, mgRaf = null, mgLastTs = 0, mgShareText = '';
+      var MG = null;
+      var MG_MILESTONES = [
+        [500,"500 m — Au-dessus des toits !"],[1000,"1 000 m — Tu chatouilles les nuages !"],
+        [1500,"1 500 m — Les mouettes te regardent passer…"],[2000,"2 000 m — L'air se fait plus rare, tiens bon !"],
+        [3000,"3 000 m — Brrr, ça pince là-haut !"],[4000,"4 000 m — Plus haut que le mont… ben, pas mal de monts !"],
+        [5000,"5 000 m — T'es rendu dans le grand ciel pâle !"],[6500,"6 500 m — Les avions te saluent de loin."],
+        [8000,"8 000 m — Altitude de croisière, rien de moins !"],[10000,"10 000 m — Tabarnouche, t'es haut !"]
+      ];
+      var MG_CAUSES = {
+        gull:"une mouette kamikaze", bee:"une abeille (une petite bête, un très gros trou)",
+        storm:"un nuage d'orage, en plein dedans", bolt:"la foudre, rapide comme toujours"
+      };
+      function mgClimbPx(){ return Math.min(70 + MG.alt * 0.055, 250); }
+      function mgSpawnInterval(){ return Math.max(1.15 - MG.alt / 5200, 0.42); }
+      function mgResize(){
+        var r = mgCanvas.getBoundingClientRect();
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        mgW = Math.max(280, r.width); mgH = Math.max(280, r.height);
+        mgCanvas.width = Math.round(mgW * dpr);
+        mgCanvas.height = Math.round(mgH * dpr);
+        mgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      function mgToast(txt){
+        mgToastEl.textContent = txt;
+        mgToastEl.classList.add('show');
+        if (mgToastEl._t) clearTimeout(mgToastEl._t);
+        mgToastEl._t = setTimeout(function(){ mgToastEl.classList.remove('show'); }, 2600);
+      }
+      function mgTone(f0, f1, dur, vol, type){
+        if (!actx || muted) return;
+        toneRaw(actx.currentTime + 0.01, f0, f1, dur, vol, type || 'sine');
+      }
+      function mgComment(line){
+        if (Date.now() - MG.lastComment < 6500) return;
+        MG.lastComment = Date.now();
+        showBubble(esc(line), 5200, 'talk');
+      }
+      function mgSpawnObstacle(){
+        var alt = MG.alt, roll = Math.random();
+        var x = 40 + Math.random() * (mgW - 80), y = -70;
+        var pStorm = alt < 250 ? 0 : Math.min(0.10 + alt / 9000, 0.24);
+        var pBee = alt < 120 ? 0.10 : 0.24;
+        var pCloud = 0.26;
+        if (roll < pStorm){
+          MG.obs.push({ type:'storm', x:x, y:y, r:44, baseX:x, state:'idle', timer:1.2 + Math.random() * 2.2 });
+        } else if (roll < pStorm + pBee){
+          MG.obs.push({ type:'bee', x:x, y:y, r:15, baseX:x, phase:Math.random() * 6.28, drift:(Math.random() < 0.5 ? -1 : 1) * (14 + Math.random() * 22) });
+        } else if (roll < pStorm + pBee + pCloud){
+          MG.obs.push({ type:'cloud', x:x, y:y, r:46, s:0.8 + Math.random() * 0.5, drift:(Math.random() - 0.5) * 10 });
+        } else {
+          var d = Math.random() < 0.5 ? -1 : 1;
+          MG.obs.push({ type:'gull', x:d < 0 ? -50 : mgW + 50, y:y + Math.random() * 60, r:20,
+            vx:-d * (55 + Math.random() * 55 + alt * 0.012), phase:Math.random() * 6.28, flap:5 + Math.random() * 2 });
+        }
+      }
+      function mgBalloon(cx){ return { x:cx, vx:0, tilt:0, dead:false, rings:0, bonus:0, fog:0 }; }
+      function mgResetRound(){
+        MG = {
+          alt:0, scroll:0, t:0, nextMs:500, spawnT:0.6, ringT:4.5,
+          obs:[], bolts:[], rings:[], parts:[], floaters:[],
+          wind:{ state:'calm', timer:9, dir:1 }, windLines:[],
+          you:mgBalloon(mgW * 0.36), bot:mgBalloon(mgW * 0.64),
+          over:false, winner:null, endAt:0, cardShown:false, lastComment:0,
+          think:0, target:mgW / 2, gaffeAt:0, gaffeT:0, gaffeV:0, desVx:0
+        };
+        mgCard.hidden = true;
+        document.getElementById('mg-card-copied').hidden = true;
+        mgHud();
+      }
+      function mgHud(){
+        if (!MG) return;
+        mgAltEl.textContent = 'Altitude : ' + Math.floor(MG.alt).toLocaleString('fr-CA') + ' m';
+        mgRingsEl.textContent = 'Anneaux — Toi ' + MG.you.rings + ' · HGPTO ' + MG.bot.rings;
+        mgScoreEl.textContent = 'Manches — Toi ' + mgSession.you + ' · HGPTO ' + mgSession.bot;
+      }
+      function startMG(){
+        if (mgOn || G) return;
+        ensureAudio();
+        stopReading(false);
+        if (qaOpen) closeQA();
+        hideBubble();
+        bot.classList.remove('sleep-book');
+        mgOn = true; gameOn = true;
+        catHideNow();
+        document.body.classList.add('game-on');
+        document.getElementById('botlayer').style.zIndex = '80';
+        mgEl.hidden = false;
+        mgResize();
+        mgResetRound();
+        logDay("joué à Montgolfière contre un visiteur (je pilote mon ballon tout seul)");
+        bot.classList.remove('nosmooth');
+        bot.style.transition = 'transform .8s ease';
+        x = minX(); place();
+        setTimeout(function(){ bot.style.transition = ''; }, 850);
+        setState('idle'); setExpr('happy'); busy(1200);
+        showBubble("Montgolfière, pour vrai ! Tu pilotes ton ballon, je pilote le mien — je joue selon mes règles, et des fois je me trompe. Premier ballon qui pète perd la manche. On avance !", 7000, 'talk');
+        mgLastTs = 0;
+        if (mgRaf) cancelAnimationFrame(mgRaf);
+        mgRaf = requestAnimationFrame(mgFrame);
+        // Chien de garde : si l'animation est affamée (onglet en arrière-plan,
+        // navigateur qui throttle), un minuteur relance la boucle — le dt
+        // réel, plafonné à 0,05 s, garde la vitesse du jeu exacte.
+        if (mgWatchdog) clearInterval(mgWatchdog);
+        mgWatchdog = setInterval(function(){
+          if (mgOn && MG && performance.now() - mgLastFrameAt > 120) mgFrame(performance.now());
+        }, 100);
+      }
+      function quitMG(finished){
+        if (mgRaf) cancelAnimationFrame(mgRaf);
+        mgRaf = null;
+        if (mgWatchdog){ clearInterval(mgWatchdog); mgWatchdog = null; }
+        mgEl.hidden = true;
+        mgCard.hidden = true;
+        document.body.classList.remove('game-on');
+        document.getElementById('botlayer').style.zIndex = '';
+        mgOn = false; gameOn = false; MG = null;
+        setExpr('happy');
+        setState(reduced ? 'idle' : 'walk');
+        showBubble(finished ? "Revanche quand tu veux !" : "Manche interrompue — on se reprend quand tu veux !", 4600, finished ? 'joke' : 'talk');
+      }
+      /* Le cerveau de pilote d'HGPTO : à chaque réflexion, il simule SA
+         propre trajectoire sous plusieurs vitesses candidates pendant
+         ~1,5 s, contre les trajectoires réelles des obstacles (même
+         géométrie de collision que le jeu : enveloppe + nacelle), et il
+         choisit la vitesse qui garde la plus grande distance de sécurité.
+         À égalité, il préfère celle qui le rapproche de sa patrouille ou
+         d'un anneau. Mêmes caps de vitesse et d'accélération que le
+         joueur. Et parfois, gaffe : il prend la deuxième meilleure
+         vitesse pendant une fraction de seconde — jamais quand un danger
+         est à moins d'une seconde (instinct de survie). Il reste
+         battable, et il le sait. Dans le brouillard, il voit moins loin. */
+      function mgThink(){
+        var b = MG.bot, by = mgH * 0.62, envY = by - 46, basY = by + 34;
+        var speed = Math.max(40, mgClimbPx());
+        var base = mgW / 2 + Math.sin(MG.t * 0.45) * mgW * 0.16;
+        if (MG.rings.length && MG.obs.length < 4) base = MG.rings[0].x;
+        var horizon = b.fog > 0 ? 0.8 : 1.5, step = 0.1;
+        var vBase = Math.max(-720, Math.min(720, (base - b.x) * 2.2));
+        var cands = [-720, -430, -180, 0, 180, 430, 720, vBase];
+        var windPush = MG.wind.state === 'gust' ? MG.wind.dir * 175 : 0;
+        var imminent = false, dangerNear = false;
+        MG.obs.forEach(function(o){
+          if (o.type === 'cloud') return;
+          var tA = (envY - o.y) / speed;
+          if (tA > -0.5 && tA < 0.9 && Math.abs(o.x - b.x) - o.r < 130) imminent = true;
+          if (Math.abs(o.x - b.x) - o.r < 150 && o.y > envY - 360 && o.y < envY + 88) dangerNear = true;
+        });
+        function scoreV(v){
+          var x = b.x, vx = b.vx, minD = 1e9;
+          for (var ts = step; ts <= horizon + 0.001; ts += step){
+            var dv = v - vx, mx = 2600 * step;
+            vx += Math.max(-mx, Math.min(mx, dv));
+            x += (vx + windPush) * step;
+            if (x < 34){ x = 34; vx = 0; }
+            if (x > mgW - 34){ x = mgW - 34; vx = 0; }
+            for (var i = 0; i < MG.obs.length; i++){
+              var o = MG.obs[i];
+              if (o.type === 'cloud') continue;
+              var oy = o.y + speed * ts;
+              if (oy < envY - 120 || oy > basY + 130) continue;
+              var ox = o.type === 'gull' ? o.x + o.vx * ts : o.x;
+              var dE = Math.sqrt((ox - x) * (ox - x) + (oy - envY) * (oy - envY)) - (o.r + 26);
+              var dB = Math.sqrt((ox - x) * (ox - x) + (oy - basY) * (oy - basY)) - (o.r + 8);
+              var d = Math.min(dE, dB);
+              if (o.type === 'storm' && o.state === 'charging') d = Math.min(d, Math.abs(ox - x) - 23);
+              if (d < minD) minD = d;
+            }
+            for (var j = 0; j < MG.bolts.length; j++){
+              var dBolt = Math.abs(MG.bolts[j].x - x) - 23;
+              if (dBolt < minD) minD = dBolt;
+            }
+          }
+          return minD;
+        }
+        var scored = cands.map(function(v){ return { v:v, s:scoreV(v) - Math.abs(v - vBase) * 0.012 }; });
+        scored.sort(function(a, c){ return c.s - a.s; });
+        var chosen = scored[0].v;
+        if (imminent) MG.gaffeT = 0;                          // coupe-circuit de survie
+        if (MG.gaffeT > 0){
+          MG.gaffeT -= 0.12;
+          chosen = MG.gaffeV;
+        } else {
+          var gaffeP = b.fog > 0 ? 0.05 : 0.02;
+          if (!imminent && !dangerNear && Math.random() < gaffeP && scored.length > 1){
+            MG.gaffeAt = Date.now();
+            MG.gaffeV = scored[1].v;
+            MG.gaffeT = 0.35;
+            chosen = MG.gaffeV;
+            if (Math.random() < 0.4) mgComment("Oups, mauvais bord ! Minute, je corrige…");
+          }
+        }
+        MG.desVx = Math.max(-720, Math.min(720, chosen));
+        MG.target = Math.max(40, Math.min(mgW - 40, b.x + MG.desVx * 0.5));
+      }
+      function mgMoveBalloon(b, dt, isBot){
+        var maxV = 560;
+        if (isBot){
+          // Même physique que le joueur au clavier : accélération
+          // 2600 px/s² vers la vitesse choisie par son pilote, cap 784.
+          var dvB = MG.desVx - b.vx, mxB = 2600 * dt;
+          b.vx += Math.max(-mxB, Math.min(mxB, dvB));
+          b.vx = Math.max(-maxV * 1.4, Math.min(maxV * 1.4, b.vx));
+        } else if (mgPointer.active){
+          b.vx = Math.max(-maxV * 1.4, Math.min(maxV * 1.4, (mgPointer.x - b.x) * 9));
+        } else if (mgKeys.l || mgKeys.r){
+          if (mgKeys.l) b.vx -= 2600 * dt;
+          if (mgKeys.r) b.vx += 2600 * dt;
+          b.vx = Math.max(-maxV, Math.min(maxV, b.vx));
+        } else {
+          b.vx *= Math.pow(0.0018, dt);
+          if (Math.abs(b.vx) < 2) b.vx = 0;
+        }
+        b.x += b.vx * dt;
+        if (MG.wind.state === 'gust') b.x += MG.wind.dir * 175 * dt;
+        if (b.x < 34){ b.x = 34; b.vx = 0; }
+        if (b.x > mgW - 34){ b.x = mgW - 34; b.vx = 0; }
+        var tiltT = (b.vx / maxV) * 0.16 + (MG.wind.state === 'gust' ? MG.wind.dir * 0.09 : 0);
+        b.tilt += (tiltT - b.tilt) * Math.min(1, dt * 8);
+      }
+      function mgDie(b, who, cause){
+        if (b.dead) return;
+        b.dead = true;
+        mgTone(320, 55, 0.9, 0.16, 'sawtooth');
+        var by = mgH * 0.62;
+        var colors = ['#e2543e','#f7f3e6','#2a9d8f','#f4b942'];
+        for (var i = 0; i < 34; i++){
+          var a = Math.random() * 6.283, sp = 60 + Math.random() * 240;
+          MG.parts.push({ x:b.x, y:by - 46, vx:Math.cos(a) * sp, vy:Math.sin(a) * sp - 60,
+            life:0.9 + Math.random() * 0.6, max:1.5, c:colors[i % 4], r:2.5 + Math.random() * 3.5 });
+        }
+        if (MG.over){ MG.winner = 'draw'; return; }   // les deux, en même temps
+        MG.over = true;
+        MG.winner = who === 'you' ? 'bot' : 'you';
+        MG.endAt = Date.now() + 1050;
+        if (who === 'bot'){
+          if (Date.now() - MG.gaffeAt < 3000)
+            showBubble("Ma faute, pour vrai : " + MG_CAUSES[cause] + " m'a eu parce que je regardais ailleurs. Je joue selon mes règles, et des fois je me trompe — hihi !", 7000, 'joke');
+          else
+            showBubble("Patatras pour moi ! " + MG_CAUSES[cause] + " m'a eu. Bien joué, champion — revanche ?", 6500, 'joke');
+          setExpr('laugh');
+        } else {
+          showBubble("Patatras ! " + MG_CAUSES[cause] + " t'a eu — une manche pour moi, mais tu montais comme un pro. Revanche ?", 6500, 'joke');
+          setExpr('laugh');
+        }
+      }
+      function mgEndRound(){
+        mgSession.rounds++;
+        if (MG.winner === 'you') mgSession.you++;
+        else if (MG.winner === 'bot') mgSession.bot++;
+        var alt = Math.floor(MG.alt);
+        var title = MG.winner === 'you' ? "Tu gagnes la manche !" :
+                    MG.winner === 'bot' ? "HGPTO gagne la manche !" : "Égalité — les deux en même temps !";
+        document.getElementById('mg-card-title').textContent = title;
+        document.getElementById('mg-card-line').textContent =
+          MG.winner === 'you' ? "Son ballon a pété le premier — le tien vole encore. Belle manche !" :
+          MG.winner === 'bot' ? "Ton ballon a pété le premier — le sien vole encore. Il joue selon ses règles, et des fois il se trompe… pas cette fois !" :
+          "Les deux ballons ont pété en même temps — les mouettes gagnent, cette manche-là.";
+        document.getElementById('mg-card-stats').textContent =
+          "Altitude atteinte : " + alt.toLocaleString('fr-CA') + " m · Anneaux — Toi " + MG.you.rings + " (+" + MG.you.bonus + ") · HGPTO " + MG.bot.rings + " (+" + MG.bot.bonus + ") · Manches de la session — Toi " + mgSession.you + " · HGPTO " + mgSession.bot;
+        mgShareText = "Montgolfière contre HGPTO, la mascotte d'HP Outils : " +
+          (MG.winner === 'you' ? "j'ai gagné la manche" : MG.winner === 'bot' ? "il a gagné la manche" : "égalité, les deux ballons en même temps") +
+          " à " + alt.toLocaleString('fr-CA') + " m d'altitude ! Anneaux : moi " + MG.you.rings + ", lui " + MG.bot.rings +
+          ". Manches de notre session : moi " + mgSession.you + ", lui " + mgSession.bot + ". À toi de le défier ! hp-outils.com/jeux";
+        document.getElementById('mg-card-share').textContent = mgShareText;
+        mgCard.hidden = false;
+        mgHud();
+      }
+      function mgDist2(ax, ay, bx, by){ var dx = ax - bx, dy = ay - by; return dx * dx + dy * dy; }
+      function mgUpdate(dt){
+        MG.t += dt;
+        var speed = mgClimbPx(), by = mgH * 0.62, envY = by - 46;
+        if (!MG.over){
+          MG.scroll += speed * dt;
+          MG.alt = MG.scroll / 6;
+          for (var m = 0; m < MG_MILESTONES.length; m++){
+            if (MG.alt >= MG_MILESTONES[m][0] && MG.nextMs === MG_MILESTONES[m][0]){
+              mgToast(MG_MILESTONES[m][1]);
+              mgTone(880, 880, 0.3, 0.08); mgTone(1318, 1318, 0.4, 0.07);
+              MG.nextMs = (m + 1 < MG_MILESTONES.length) ? MG_MILESTONES[m + 1][0] : Infinity;
+              break;
+            }
+          }
+          // Vent : calme → annonce (1 s) → bourrasque → calme
+          var w = MG.wind;
+          w.timer -= dt;
+          if (w.state === 'calm' && w.timer <= 0){ w.state = 'announce'; w.timer = 1.0; w.dir = Math.random() < 0.5 ? -1 : 1; }
+          else if (w.state === 'announce' && w.timer <= 0){ w.state = 'gust'; w.timer = 2.6 + Math.random() * 1.4; }
+          else if (w.state === 'gust' && w.timer <= 0){ w.state = 'calm'; w.timer = 11 + Math.random() * 8; }
+          if (w.state === 'gust' && Math.random() < dt * 26 && MG.windLines.length < 22){
+            MG.windLines.push({ x:w.dir > 0 ? -110 : mgW + 20, y:30 + Math.random() * (mgH - 60), len:40 + Math.random() * 55, vx:w.dir * (520 + Math.random() * 380) });
+          }
+          MG.think -= dt;
+          if (MG.think <= 0){ mgThink(); MG.think = 0.12; }
+          if (!MG.you.dead) mgMoveBalloon(MG.you, dt, false);
+          if (!MG.bot.dead) mgMoveBalloon(MG.bot, dt, true);
+          MG.spawnT -= dt;
+          if (MG.spawnT <= 0){ mgSpawnObstacle(); MG.spawnT = mgSpawnInterval() * (0.75 + Math.random() * 0.5); }
+          // Obstacles
+          for (var i = MG.obs.length - 1; i >= 0; i--){
+            var o = MG.obs[i];
+            o.y += speed * dt;
+            if (o.type === 'gull'){
+              o.x += o.vx * dt;
+              o.y += Math.sin(MG.t * 3 + o.phase) * 14 * dt;
+            } else if (o.type === 'bee'){
+              o.phase += dt * 9;
+              o.x = o.baseX + Math.sin(o.phase * 0.55) * 34 + o.drift * Math.sin(o.phase * 0.21);
+              o.y += Math.sin(o.phase) * 26 * dt;
+            } else if (o.type === 'cloud'){
+              o.x += o.drift * dt;
+              if (o.x < 30) o.drift = Math.abs(o.drift);
+              if (o.x > mgW - 30) o.drift = -Math.abs(o.drift);
+            } else if (o.type === 'storm'){
+              o.x = o.baseX + Math.sin(MG.t * 0.5 + o.r) * 8;
+              o.timer -= dt;
+              if (o.state === 'idle' && o.timer <= 0){ o.state = 'charging'; o.timer = 0.85; }
+              else if (o.state === 'charging' && o.timer <= 0){
+                o.state = 'idle'; o.timer = 1.4 + Math.random() * 2.4;
+                MG.bolts.push({ x:o.x, y0:o.y + 26, life:0.32, seed:Math.random() * 100 });
+                mgTone(1400, 90, 0.22, 0.07, 'square');
+              }
+            }
+            // Collisions (enveloppe puis nacelle), comme le vrai jeu
+            ['you','bot'].forEach(function(who){
+              var b = MG[who];
+              if (b.dead) return;
+              if (o.type === 'cloud'){
+                if (mgDist2(o.x, o.y, b.x, envY) < (o.r + 30) * (o.r + 30)) b.fog = 1.5;
+              } else {
+                if (mgDist2(o.x, o.y, b.x, envY) < (o.r + 26) * (o.r + 26)) mgDie(b, who, o.type);
+                else if (mgDist2(o.x, o.y, b.x, by + 34) < (o.r + 8) * (o.r + 8)) mgDie(b, who, o.type);
+              }
+            });
+            if (MG.over) return;
+            // Presque-touché d'HGPTO : il le remarque, sans ralentir
+            if (!o.nm && o.y > envY + 52){
+              o.nm = true;
+              if (o.type !== 'cloud' && !MG.bot.dead && Math.abs(o.x - MG.bot.x) < 54)
+                mgComment(pick(["Ouille ! C'était proche — mes sourcils ont frisé.", "Fiou ! Passé à un boulon de me pincer.", "Celui-là, il m'a rasé la barbe !"]));
+            }
+            if (o.y > mgH + 110 || o.x < -130 || o.x > mgW + 130) MG.obs.splice(i, 1);
+          }
+          // Éclairs : couloir vertical mortel
+          for (var j = MG.bolts.length - 1; j >= 0; j--){
+            var bo = MG.bolts[j];
+            bo.y0 += speed * dt;
+            bo.life -= dt;
+            ['you','bot'].forEach(function(who){
+              var b = MG[who];
+              if (!b.dead && Math.abs(b.x - bo.x) < 17 && envY > bo.y0 - 10) mgDie(b, who, 'bolt');
+            });
+            if (MG.over) return;
+            if (bo.life <= 0) MG.bolts.splice(j, 1);
+          }
+          // Anneaux dorés : +25, manquer ne coûte rien
+          MG.ringT -= dt;
+          if (MG.ringT <= 0){
+            MG.rings.push({ x:56 + Math.random() * (mgW - 112), y:-70, r:36, phase:Math.random() * 6.28 });
+            MG.ringT = 7 + Math.random() * 5;
+          }
+          for (var ri = MG.rings.length - 1; ri >= 0; ri--){
+            var rg = MG.rings[ri];
+            rg.y += speed * dt;
+            var caught = null;
+            if (!MG.you.dead && mgDist2(rg.x, rg.y, MG.you.x, envY) < 32 * 32) caught = 'you';
+            else if (!MG.bot.dead && mgDist2(rg.x, rg.y, MG.bot.x, envY) < 32 * 32) caught = 'bot';
+            if (caught){
+              MG[caught].rings++; MG[caught].bonus += 25;
+              MG.floaters.push({ x:rg.x, y:rg.y - 34, life:1.1, max:1.1 });
+              mgTone(1046, 1046, 0.2, 0.09); mgTone(1568, 1568, 0.35, 0.08);
+              if (caught === 'bot') mgComment(pick(["Anneau pour moi ! +25 — on avance !", "Pogné ! Les anneaux, c'est ma spécialité. Enfin, une de mes spécialités."]));
+              else mgComment(pick(["Bel anneau ! Tu me donnes chaud.", "Beau +25 ! On avance, tous les deux."]));
+              MG.rings.splice(ri, 1);
+              mgHud();
+              continue;
+            }
+            if (rg.y > mgH + 90) MG.rings.splice(ri, 1);
+          }
+          ['you','bot'].forEach(function(who){ if (MG[who].fog > 0) MG[who].fog -= dt; });
+        }
+        // Textes flottants, lignes de vent, particules
+        for (var fi = MG.floaters.length - 1; fi >= 0; fi--){
+          var fl = MG.floaters[fi]; fl.y -= 46 * dt; fl.life -= dt;
+          if (fl.life <= 0) MG.floaters.splice(fi, 1);
+        }
+        for (var wl = MG.windLines.length - 1; wl >= 0; wl--){
+          MG.windLines[wl].x += MG.windLines[wl].vx * dt;
+          if (MG.windLines[wl].x < -160 || MG.windLines[wl].x > mgW + 160) MG.windLines.splice(wl, 1);
+        }
+        for (var p = MG.parts.length - 1; p >= 0; p--){
+          var pt = MG.parts[p];
+          pt.vy += 320 * dt; pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.life -= dt;
+          if (pt.life <= 0) MG.parts.splice(p, 1);
+        }
+        if (MG.over && !MG.cardShown && Date.now() >= MG.endAt){
+          MG.cardShown = true;
+          mgEndRound();
+        }
+        mgHudAlt();
+      }
+      var mgAltCache = '';
+      function mgHudAlt(){
+        var t = 'Altitude : ' + Math.floor(MG.alt).toLocaleString('fr-CA') + ' m';
+        if (t !== mgAltCache){ mgAltCache = t; mgAltEl.textContent = t; }
+      }
+      /* ----- Dessin (style encre de l'artefact, formes du vrai jeu) ----- */
+      function mgSky(){
+        var stops = [
+          { a:0, top:[66,110,178], bot:[168,196,228] }, { a:1200, top:[104,142,200], bot:[190,212,236] },
+          { a:3000, top:[146,172,216], bot:[214,230,244] }, { a:6000, top:[178,198,228], bot:[232,240,248] }
+        ];
+        var a = MG.alt, c1 = stops[0], c2 = stops[stops.length - 1];
+        for (var i = 0; i < stops.length - 1; i++){
+          if (a <= stops[i + 1].a){ c1 = stops[i]; c2 = stops[i + 1]; break; }
+        }
+        var t = c2.a === c1.a ? 0 : Math.max(0, Math.min(1, (a - c1.a) / (c2.a - c1.a)));
+        function mix(u, v){ return 'rgb(' + Math.round(u[0] + (v[0] - u[0]) * t) + ',' + Math.round(u[1] + (v[1] - u[1]) * t) + ',' + Math.round(u[2] + (v[2] - u[2]) * t) + ')'; }
+        var g = mgCtx.createLinearGradient(0, 0, 0, mgH);
+        g.addColorStop(0, mix(c1.top, c2.top));
+        g.addColorStop(1, mix(c1.bot, c2.bot));
+        mgCtx.fillStyle = g;
+        mgCtx.fillRect(0, 0, mgW, mgH);
+      }
+      function mgCloudShape(x, y, s, fill, alpha){
+        var cs = [[0,0,30],[-30,6,22],[30,6,24],[-12,-12,22],[14,-10,20]];
+        mgCtx.save();
+        mgCtx.globalAlpha = alpha;
+        mgCtx.fillStyle = fill;
+        for (var i = 0; i < cs.length; i++){
+          mgCtx.beginPath();
+          mgCtx.arc(x + cs[i][0] * s, y + cs[i][1] * s, cs[i][2] * s, 0, 6.283);
+          mgCtx.fill();
+        }
+        mgCtx.restore();
+      }
+      function mgDrawBalloon(b, isBot){
+        if (b.dead) return;
+        var by = mgH * 0.62;
+        mgCtx.save();
+        mgCtx.translate(b.x, by);
+        mgCtx.rotate(b.tilt);
+        mgCtx.save();
+        mgCtx.beginPath();
+        mgCtx.ellipse(0, -46, 34, 38, 0, 0, 6.283);
+        mgCtx.clip();
+        if (isBot){
+          mgCtx.fillStyle = '#31517f';
+          mgCtx.fillRect(-36, -86, 72, 80);
+          mgCtx.fillStyle = '#fdf6e3';
+          mgCtx.beginPath(); mgCtx.arc(0, -48, 7, 0, 6.283); mgCtx.fill();
+        } else {
+          var stripes = ['#e2543e','#f7f3e6','#2a9d8f','#f7f3e6','#e2543e'];
+          var sw = 68 / stripes.length;
+          for (var i = 0; i < stripes.length; i++){
+            mgCtx.fillStyle = stripes[i];
+            mgCtx.fillRect(-34 + i * sw, -86, sw + 1, 80);
+          }
+        }
+        mgCtx.restore();
+        mgCtx.strokeStyle = '#241b10'; mgCtx.lineWidth = 2.6;
+        mgCtx.beginPath(); mgCtx.ellipse(0, -46, 34, 38, 0, 0, 6.283); mgCtx.stroke();
+        mgCtx.strokeStyle = 'rgba(70,50,30,.8)'; mgCtx.lineWidth = 1.6;
+        mgCtx.beginPath();
+        mgCtx.moveTo(-15, -20); mgCtx.lineTo(-9, 16);
+        mgCtx.moveTo(15, -20); mgCtx.lineTo(9, 16);
+        mgCtx.moveTo(0, -15); mgCtx.lineTo(0, 16);
+        mgCtx.stroke();
+        if (!MG.over){
+          var fl = 0.6 + Math.sin(MG.t * 31) * 0.25 + Math.random() * 0.15;
+          mgCtx.fillStyle = 'rgba(255,150,40,.9)';
+          mgCtx.beginPath(); mgCtx.ellipse(0, 8, 4.2 * fl + 1.5, 8.5 * fl + 2, 0, 0, 6.283); mgCtx.fill();
+        }
+        mgCtx.fillStyle = '#a06a34';
+        mgCtx.fillRect(-12, 16, 24, 17);
+        mgCtx.strokeStyle = '#241b10'; mgCtx.lineWidth = 1.6;
+        mgCtx.strokeRect(-12, 16, 24, 17);
+        if (isBot){
+          // mini-HGPTO dans la nacelle : tête métal, gros sourcils, lys
+          mgCtx.beginPath(); mgCtx.arc(0, 12, 8.5, 0, 6.283);
+          mgCtx.fillStyle = '#c9cfda'; mgCtx.fill();
+          mgCtx.strokeStyle = '#241b10'; mgCtx.lineWidth = 1.6; mgCtx.stroke();
+          mgCtx.strokeStyle = '#1d1710'; mgCtx.lineWidth = 3; mgCtx.lineCap = 'round';
+          mgCtx.beginPath();
+          mgCtx.moveTo(-6.5, 7.5); mgCtx.lineTo(-1.5, 6);
+          mgCtx.moveTo(1.5, 6); mgCtx.lineTo(6.5, 7.5);
+          mgCtx.stroke();
+          mgCtx.fillStyle = '#20242c';
+          mgCtx.beginPath(); mgCtx.arc(-3, 11, 1.4, 0, 6.283); mgCtx.arc(3, 11, 1.4, 0, 6.283); mgCtx.fill();
+        } else {
+          mgCtx.fillStyle = '#2f6fb2';
+          mgCtx.fillRect(13, 8, 11, 7.5);
+          mgCtx.fillStyle = '#fff';
+          mgCtx.fillRect(17.6, 8, 1.8, 7.5);
+          mgCtx.fillRect(13, 11, 11, 1.8);
+        }
+        mgCtx.restore();
+        if (b.fog > 0){
+          mgCtx.save();
+          mgCtx.globalAlpha = 0.5;
+          mgCtx.fillStyle = '#fff';
+          for (var fi2 = 0; fi2 < 5; fi2++){
+            mgCtx.beginPath();
+            mgCtx.arc(b.x + Math.sin(MG.t * 1.3 + fi2 * 2.4) * 44, by - 46 + Math.cos(MG.t * 1.7 + fi2 * 1.9) * 30, 26 + fi2 * 5, 0, 6.283);
+            mgCtx.fill();
+          }
+          mgCtx.restore();
+        }
+      }
+      function mgRender(){
+        mgSky();
+        var by = mgH * 0.62;
+        // Soleil gravé, qui pâlit avec l'altitude
+        var sunA = Math.max(0.25, 1 - MG.alt / 9000);
+        mgCtx.save();
+        mgCtx.globalAlpha = 0.5 * sunA + 0.15;
+        mgCtx.fillStyle = '#f6d47c';
+        mgCtx.beginPath(); mgCtx.arc(mgW - 56, 66, 24, 0, 6.283); mgCtx.fill();
+        mgCtx.globalAlpha = 0.55 * sunA + 0.2;
+        mgCtx.strokeStyle = '#241b10'; mgCtx.lineWidth = 2.2;
+        mgCtx.beginPath(); mgCtx.arc(mgW - 56, 66, 24, 0, 6.283); mgCtx.stroke();
+        mgCtx.restore();
+        // Sol au tout début, comme dans le vrai jeu
+        var groundY = by + MG.alt * 6 + 96;
+        if (groundY < mgH + 40){
+          var bands = ['#8aa653','#c9a44e','#7c9a4b','#b98d45'];
+          for (var row = 0; groundY + row * 46 < mgH + 46; row++){
+            mgCtx.fillStyle = bands[row % 4];
+            mgCtx.fillRect(0, groundY + row * 46, mgW, 46);
+          }
+          mgCtx.fillStyle = '#241b10';
+          mgCtx.fillRect(0, groundY - 2, mgW, 4);
+        }
+        // Éclairs
+        MG.bolts.forEach(function(bo){
+          mgCtx.save();
+          mgCtx.globalAlpha = Math.min(1, bo.life / 0.32 + 0.3);
+          mgCtx.strokeStyle = '#ffe95e'; mgCtx.lineWidth = 4.5; mgCtx.lineJoin = 'round';
+          mgCtx.shadowColor = '#ffd83d'; mgCtx.shadowBlur = 14;
+          mgCtx.beginPath();
+          var yy = bo.y0, xx = bo.x;
+          mgCtx.moveTo(xx, yy);
+          while (yy < mgH + 20){
+            yy += 46;
+            xx = bo.x + Math.sin(yy * 0.05 + bo.seed) * 15;
+            mgCtx.lineTo(xx - 6, yy - 23);
+            mgCtx.lineTo(xx, yy);
+          }
+          mgCtx.stroke();
+          mgCtx.restore();
+        });
+        // Obstacles
+        MG.obs.forEach(function(o){
+          if (o.type === 'gull'){
+            var flap = Math.sin(MG.t * o.flap * 2 + o.phase) * 0.55;
+            var dir = o.vx > 0 ? 1 : -1;
+            mgCtx.save();
+            mgCtx.translate(o.x, o.y); mgCtx.scale(dir, 1);
+            mgCtx.strokeStyle = '#fbfdfe'; mgCtx.lineWidth = 5; mgCtx.lineCap = 'round';
+            mgCtx.beginPath();
+            mgCtx.moveTo(-2, -2); mgCtx.quadraticCurveTo(-16, -10 - flap * 12, -27, -4 - flap * 17);
+            mgCtx.moveTo(2, -2); mgCtx.quadraticCurveTo(13, -12 - flap * 10, 22, -16 - flap * 14);
+            mgCtx.stroke();
+            mgCtx.fillStyle = '#fbfdfe';
+            mgCtx.beginPath(); mgCtx.ellipse(0, 0, 15, 6.4, 0, 0, 6.283); mgCtx.fill();
+            mgCtx.strokeStyle = '#241b10'; mgCtx.lineWidth = 1.6;
+            mgCtx.beginPath(); mgCtx.ellipse(0, 0, 15, 6.4, 0, 0, 6.283); mgCtx.stroke();
+            mgCtx.fillStyle = '#f39c2c';
+            mgCtx.beginPath(); mgCtx.moveTo(17.5, -3.4); mgCtx.lineTo(24.5, -2); mgCtx.lineTo(17.5, -0.8); mgCtx.closePath(); mgCtx.fill();
+            mgCtx.restore();
+          } else if (o.type === 'bee'){
+            mgCtx.save();
+            mgCtx.translate(o.x, o.y);
+            mgCtx.fillStyle = 'rgba(255,255,255,.7)';
+            mgCtx.beginPath(); mgCtx.ellipse(-4, -11, 8, 4.4, -0.6, 0, 6.283); mgCtx.fill();
+            mgCtx.beginPath(); mgCtx.ellipse(5, -11, 8, 4.4, 0.6, 0, 6.283); mgCtx.fill();
+            mgCtx.save();
+            mgCtx.beginPath(); mgCtx.ellipse(0, 0, 13.5, 10, 0, 0, 6.283); mgCtx.clip();
+            mgCtx.fillStyle = '#f6c945'; mgCtx.fillRect(-14, -11, 28, 22);
+            mgCtx.fillStyle = '#22242a';
+            mgCtx.fillRect(-8, -11, 5.4, 22); mgCtx.fillRect(0.5, -11, 5.4, 22); mgCtx.fillRect(9, -11, 5, 22);
+            mgCtx.restore();
+            mgCtx.strokeStyle = '#241b10'; mgCtx.lineWidth = 2;
+            mgCtx.beginPath(); mgCtx.ellipse(0, 0, 13.5, 10, 0, 0, 6.283); mgCtx.stroke();
+            mgCtx.restore();
+          } else if (o.type === 'cloud'){
+            mgCloudShape(o.x, o.y, o.s * 1.05, '#ffffff', 0.96);
+          } else if (o.type === 'storm'){
+            var flash = o.state === 'charging' && Math.sin(MG.t * 34) > 0;
+            mgCloudShape(o.x, o.y, 1.15, flash ? '#5b6572' : '#454e5a', 1);
+            mgCloudShape(o.x - 16, o.y + 9, 0.8, flash ? '#525c68' : '#3c444f', 1);
+          }
+        });
+        // Anneaux dorés
+        MG.rings.forEach(function(rg){
+          var pulse = 1 + Math.sin(MG.t * 3.2 + rg.phase) * 0.045;
+          mgCtx.save();
+          mgCtx.translate(rg.x, rg.y);
+          mgCtx.shadowColor = 'rgba(244,185,66,.85)'; mgCtx.shadowBlur = 16;
+          mgCtx.strokeStyle = '#f4b942'; mgCtx.lineWidth = 7;
+          mgCtx.beginPath(); mgCtx.arc(0, 0, rg.r * pulse, 0, 6.283); mgCtx.stroke();
+          mgCtx.shadowBlur = 0;
+          mgCtx.strokeStyle = '#241b10'; mgCtx.lineWidth = 2;
+          mgCtx.beginPath(); mgCtx.arc(0, 0, rg.r * pulse + 4.5, 0, 6.283); mgCtx.stroke();
+          mgCtx.restore();
+        });
+        // Lignes de vent
+        if (MG.windLines.length){
+          mgCtx.save();
+          mgCtx.lineCap = 'round';
+          mgCtx.strokeStyle = 'rgba(36,27,16,.55)'; mgCtx.lineWidth = 2.6;
+          MG.windLines.forEach(function(l){
+            mgCtx.beginPath(); mgCtx.moveTo(l.x, l.y); mgCtx.lineTo(l.x + l.len, l.y + 3); mgCtx.stroke();
+          });
+          mgCtx.restore();
+        }
+        mgDrawBalloon(MG.bot, true);
+        mgDrawBalloon(MG.you, false);
+        // Particules d'enveloppe éclatée
+        MG.parts.forEach(function(pt){
+          mgCtx.save();
+          mgCtx.globalAlpha = Math.max(0, pt.life / pt.max);
+          mgCtx.fillStyle = pt.c;
+          mgCtx.beginPath(); mgCtx.arc(pt.x, pt.y, pt.r, 0, 6.283); mgCtx.fill();
+          mgCtx.restore();
+        });
+        // +25 flottants
+        MG.floaters.forEach(function(fl){
+          mgCtx.save();
+          mgCtx.globalAlpha = Math.max(0, fl.life / fl.max);
+          mgCtx.font = "900 22px 'Trebuchet MS','Segoe UI',sans-serif";
+          mgCtx.textAlign = 'center';
+          mgCtx.lineWidth = 4; mgCtx.strokeStyle = 'rgba(16,48,79,.85)';
+          mgCtx.strokeText('+25', fl.x, fl.y);
+          mgCtx.fillStyle = '#f4b942';
+          mgCtx.fillText('+25', fl.x, fl.y);
+          mgCtx.restore();
+        });
+        // Flèche VENT (annonce + bourrasque)
+        if (MG.wind.state !== 'calm'){
+          var announcing = MG.wind.state === 'announce';
+          var blink = 0.55 + 0.45 * Math.sin(MG.t * 12);
+          var dir = MG.wind.dir, cx = dir > 0 ? 42 : mgW - 42, cy = mgH * 0.34;
+          mgCtx.save();
+          mgCtx.globalAlpha = announcing ? 0.4 + 0.45 * blink : 0.92;
+          mgCtx.translate(cx, cy); mgCtx.scale(dir, 1);
+          mgCtx.fillStyle = '#241b10';
+          mgCtx.beginPath();
+          mgCtx.moveTo(-20, -7); mgCtx.lineTo(4, -7); mgCtx.lineTo(4, -15); mgCtx.lineTo(24, 0);
+          mgCtx.lineTo(4, 15); mgCtx.lineTo(4, 7); mgCtx.lineTo(-20, 7);
+          mgCtx.closePath(); mgCtx.fill();
+          mgCtx.restore();
+          mgCtx.save();
+          mgCtx.globalAlpha = announcing ? 0.55 + 0.45 * blink : 0.95;
+          mgCtx.fillStyle = '#241b10';
+          mgCtx.font = "800 12px 'Trebuchet MS','Segoe UI',sans-serif";
+          mgCtx.textAlign = 'center';
+          mgCtx.fillText('VENT', cx, cy - 30);
+          mgCtx.restore();
+        }
+        // Étiquettes sous les nacelles
+        mgCtx.save();
+        mgCtx.font = "800 12px 'Trebuchet MS','Segoe UI',sans-serif";
+        mgCtx.textAlign = 'center';
+        mgCtx.fillStyle = 'rgba(36,27,16,.85)';
+        if (!MG.you.dead) mgCtx.fillText('TOI', MG.you.x, by + 52);
+        if (!MG.bot.dead) mgCtx.fillText('HGPTO', MG.bot.x, by + 52);
+        mgCtx.restore();
+      }
+      var mgLastFrameAt = 0, mgWatchdog = null;
+      function mgFrame(ts){
+        if (!mgOn || !MG) return;
+        mgLastFrameAt = ts;
+        mgRaf = requestAnimationFrame(mgFrame);
+        if (!mgLastTs) mgLastTs = ts;
+        var dt = (ts - mgLastTs) / 1000;
+        mgLastTs = ts;
+        if (dt > 0.05) dt = 0.05;
+        if (dt > 0){ mgUpdate(dt); mgRender(); }
+      }
+      /* Entrées du joueur : doigt / souris sur le ciel, flèches au clavier */
+      var mgPointer = { active:false, x:0 };
+      var mgKeys = { l:false, r:false };
+      function mgPointerSet(e){
+        var rect = mgCanvas.getBoundingClientRect();
+        var cx = (e.touches && e.touches.length) ? e.touches[0].clientX : e.clientX;
+        mgPointer.x = cx - rect.left;
+      }
+      mgCanvas.addEventListener('pointerdown', function(e){
+        mgPointer.active = true; mgPointerSet(e);
+        try { mgCanvas.setPointerCapture(e.pointerId); } catch(err){}
+      });
+      mgCanvas.addEventListener('pointermove', function(e){ if (mgPointer.active) mgPointerSet(e); });
+      window.addEventListener('pointerup', function(){ mgPointer.active = false; });
+      mgCanvas.addEventListener('touchstart', function(e){ e.preventDefault(); }, { passive:false });
+      mgCanvas.addEventListener('touchmove', function(e){ e.preventDefault(); }, { passive:false });
+      window.addEventListener('keydown', function(e){
+        if (!mgOn) return;
+        if (e.key === 'ArrowLeft' || e.key === 'a'){ mgKeys.l = true; e.preventDefault(); }
+        if (e.key === 'ArrowRight' || e.key === 'd'){ mgKeys.r = true; e.preventDefault(); }
+      });
+      window.addEventListener('keyup', function(e){
+        if (e.key === 'ArrowLeft' || e.key === 'a') mgKeys.l = false;
+        if (e.key === 'ArrowRight' || e.key === 'd') mgKeys.r = false;
+      });
+      window.addEventListener('resize', function(){ if (mgOn) mgResize(); });
+      document.getElementById('mg-quit').addEventListener('click', function(){ quitMG(false); });
+      document.getElementById('mg-card-close').addEventListener('click', function(){ quitMG(true); });
+      document.getElementById('mg-card-again').addEventListener('click', function(){
+        mgCard.hidden = true;
+        mgResetRound();
+        showBubble("Revanche ! Même ciel, mêmes mouettes — on avance !", 4600, 'joke');
+      });
+      document.getElementById('mg-card-copy').addEventListener('click', function(){
+        var done = function(){ document.getElementById('mg-card-copied').hidden = false; };
+        if (navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(mgShareText).then(done, function(){ fallbackCopyText(mgShareText, done); });
+        } else {
+          fallbackCopyText(mgShareText, done);
+        }
+      });
+
 
       /* ================= PIXEL, la chatte d'HGPTO =================
          Femelle de 2 ans, rescapée de l'extérieur un hiver : trouvée dehors

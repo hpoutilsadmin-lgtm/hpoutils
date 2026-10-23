@@ -720,3 +720,65 @@
       body.hgpto-on{padding-bottom:168px}
       @media (max-width:560px){ body.hgpto-on{padding-bottom:148px} }
       body.hgpto-closed .bot-layer,body.hgpto-closed .bot-controls,body.hgpto-closed #decor{display:none!important}
+
+      /* ---------- LOT « HGPTO JOUEUR » (portage de l'artefact vérifié
+         le 22 oct. 2026 au soir) : tampons officiels du panneau,
+         balloune + gag hélium, plateau Montgolfière ---------- */
+      .qa-stamps{margin-top:10px;border-top:2px dashed rgba(90,64,20,.4);padding-top:9px}
+      .qa-stamps-title{font-family:Georgia,serif;font-weight:700;font-size:15px;margin-bottom:7px}
+      .stampcard{
+        display:flex;gap:10px;align-items:flex-start;
+        background:var(--paper2);border:2px solid var(--line);border-radius:10px;
+        padding:8px 10px;margin-bottom:7px;
+      }
+      .hstamp{
+        flex:0 0 auto;transform:rotate(-6deg);text-align:center;
+        border:2.5px solid #3f7d5c;color:#3f7d5c;border-radius:6px;
+        padding:4px 7px;font-size:10.5px;font-weight:800;letter-spacing:.6px;
+        text-transform:uppercase;line-height:1.25;background:rgba(255,250,240,.6);
+      }
+      .stampcard .sv{font-size:13px;line-height:1.45}
+      .stampcard .sv b{font-size:14px}
+      .stampcard .sv button,.stampcard .sv a{
+        display:inline-block;margin-top:5px;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;
+        background:var(--gold);color:#2b2118;border:2px solid var(--line);border-radius:999px;
+        padding:5px 11px;text-decoration:none;
+      }
+      .stampcard .sv a{background:var(--paper);color:var(--ink)}
+      .qa-actions button[aria-pressed="false"]{opacity:.55}
+
+      /* La balloune qu'il tient (gag hélium) */
+      .pballoon{opacity:0;transition:opacity .35s;pointer-events:none}
+      .bot.has-balloon .pballoon{opacity:1}
+      .bot.has-balloon .pballoon .hit{pointer-events:all;cursor:pointer}
+      .bot.has-balloon .pballoon .balloon-body{animation:balloonsway 2.3s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+      @keyframes balloonsway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3.5deg) translateY(-2px)}}
+      .bot.helium .bot-inner{animation:heliumhop .48s ease-in-out infinite}
+      @keyframes heliumhop{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px) rotate(-1.2deg)}}
+      .bot.helium .led{fill:#ff8ad8}
+      @media (prefers-reduced-motion: reduce){
+        .bot.has-balloon .pballoon .balloon-body,.bot.helium .bot-inner{animation:none!important}
+      }
+
+      /* Montgolfière contre HGPTO */
+      .mg-wrap{position:relative;width:min(94vw,560px);margin-top:12px}
+      #mg-canvas{
+        display:block;width:100%;height:min(60vh,560px);touch-action:none;cursor:grab;
+        border:3px solid var(--line);border-radius:10px;background:#a8c4e4;
+        box-shadow:6px 6px 0 var(--shadow);
+      }
+      #mg-canvas:active{cursor:grabbing}
+      .mg-hud{
+        display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:9px;
+        font-weight:800;font-size:14.5px;font-variant-numeric:tabular-nums;
+      }
+      .mg-hud span{background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:3px 11px}
+      .mg-toast{
+        position:absolute;top:15%;left:50%;transform:translate(-50%,-8px);
+        background:var(--paper);color:var(--ink);border:2.5px solid var(--line);border-radius:8px;
+        box-shadow:3px 3px 0 var(--shadow);font-size:clamp(15px,4vw,20px);font-weight:800;
+        text-align:center;padding:9px 16px;max-width:88%;opacity:0;pointer-events:none;
+        transition:opacity .3s,transform .3s;
+      }
+      .mg-toast.show{opacity:1;transform:translate(-50%,0)}
+      .mg-help{width:min(94vw,560px);font-size:13.5px;color:var(--ink-soft);margin:10px 0 0;text-align:center}

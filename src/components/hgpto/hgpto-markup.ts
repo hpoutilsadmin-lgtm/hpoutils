@@ -462,6 +462,17 @@ export const HGPTO_MARKUP = `
               <line x1="60" y1="156" x2="40" y2="190" stroke="#8a6a3a" stroke-width="5" stroke-linecap="round"/>
               <path d="M40 188 L24 206 Q40 212 56 206 Z" fill="#d9b45c" stroke="var(--botink)" stroke-width="2.6" stroke-linejoin="round"/>
             </g>
+            <!-- la balloune (gag hélium) : il la tient à la main droite quand
+                 elle est là ; la toucher, c'est risquer la voix d'écureuil -->
+            <g class="pballoon">
+              <path d="M161 163 Q176 140 186 112" fill="none" stroke="var(--botink)" stroke-width="2.2" stroke-dasharray="4 3"/>
+              <g class="balloon-body">
+                <ellipse cx="190" cy="82" rx="25" ry="30" fill="#e2543e" stroke="var(--botink)" stroke-width="3.2"/>
+                <ellipse cx="181" cy="70" rx="7.5" ry="11" fill="#fff" opacity=".45" transform="rotate(-18 181 70)"/>
+                <path d="M186 111 h8 l-4 6 z" fill="#b97f24" stroke="var(--botink)" stroke-width="2.2" stroke-linejoin="round"/>
+              </g>
+              <circle class="hit" id="balloon-hit" cx="190" cy="82" r="38" fill="rgba(0,0,0,0)"/>
+            </g>
           </svg>
         </div>
       </div>
@@ -544,6 +555,19 @@ export const HGPTO_MARKUP = `
         <button type="button" id="qa-close" aria-label="Fermer les questions">✕</button>
       </div>
       <div class="qa-chips" id="qa-chips"></div>
+      <div class="qa-stamps" aria-label="Les approbations officielles d'HGPTO">
+        <div class="qa-stamps-title">Mes approbations officielles</div>
+        <div class="stampcard">
+          <div class="hstamp">Approuvé<br>par HGPTO</div>
+          <div class="sv"><b>Montgolfière</b> — « C'est MON jeu. Je monte, je zigzague entre les mouettes, je pogne les anneaux dorés — et oui, des fois je me trompe de bord et je ris de moi. Viens jouer une manche contre moi ! »<br>
+          <button type="button" id="stamp-mg">Jouer avec HGPTO</button></div>
+        </div>
+        <div class="stampcard">
+          <div class="hstamp">Approuvé<br>par HGPTO</div>
+          <div class="sv"><b>Trio élément</b> — « Trois éléments, des duels rapides, zéro triche : ça se joue en riant et ça se perd sans chigner. Tamponné avec fierté, parole de boulon. »<br>
+          <a href="https://hp-outils.com/jeux" target="_blank" rel="noopener">Le voir parmi les jeux</a></div>
+        </div>
+      </div>
       <form class="qa-form" id="qa-form">
         <input type="text" id="qa-input" maxlength="140" autocomplete="off"
                placeholder="Ou écris ta question ici…" aria-label="Écris ta question à HGPTO">
@@ -552,6 +576,9 @@ export const HGPTO_MARKUP = `
       <div class="qa-actions">
         <button type="button" id="qa-tour">Fais-moi visiter</button>
         <button type="button" id="qa-photo">Photo souvenir</button>
+        <button type="button" id="qa-read">Lis-moi ça</button>
+        <button type="button" id="qa-voice" aria-pressed="true">Voix : oui</button>
+        <button type="button" id="qa-helium" aria-pressed="true">Hélium : oui</button>
       </div>
       <div class="qa-hugo" id="qa-hugo" hidden>
         <div class="qa-hugo-title">Pour Hugo — questions sans réponse, à valider :</div>
@@ -596,6 +623,35 @@ export const HGPTO_MARKUP = `
       </div>
     </div>
 
+    <div class="game mgame" id="mg" hidden>
+      <div class="game-top">
+        <div class="game-title">Montgolfière — toi contre HGPTO</div>
+        <button type="button" id="mg-quit">Quitter la manche</button>
+      </div>
+      <div class="mg-wrap" id="mg-wrap">
+        <canvas id="mg-canvas"></canvas>
+        <div class="mg-toast" id="mg-toast" role="status"></div>
+        <div class="mg-hud">
+          <span id="mg-alt">Altitude : 0 m</span>
+          <span id="mg-rings">Anneaux — Toi 0 · HGPTO 0</span>
+          <span id="mg-score">Manches — Toi 0 · HGPTO 0</span>
+        </div>
+      </div>
+      <p class="mg-help">Glisse ton doigt ou ta souris sur le ciel (ou les flèches ← →) pour piloter TON ballon. HGPTO pilote le sien tout seul, selon ses règles — et des fois, il se trompe. Premier ballon qui pète perd la manche !</p>
+      <div class="gcard" id="mg-card" hidden>
+        <h2 id="mg-card-title">Manche terminée !</h2>
+        <p id="mg-card-line"></p>
+        <p id="mg-card-stats"></p>
+        <div class="card-share" id="mg-card-share"></div>
+        <div class="card-btns">
+          <button type="button" id="mg-card-copy">Copier le texte de partage</button>
+          <button type="button" id="mg-card-again">Revanche !</button>
+          <button type="button" id="mg-card-close">Revenir au site</button>
+        </div>
+        <p class="card-note" id="mg-card-copied" hidden>Copié ! Tu peux le coller où tu veux.</p>
+      </div>
+    </div>
+
     <!-- Carte postale souvenir (pose du moment, date, marque) -->
     <div class="gcard scard" id="souvenir" hidden>
       <h2>Photo souvenir !</h2>
@@ -614,6 +670,7 @@ export const HGPTO_MARKUP = `
       <button type="button" id="btn-dock" aria-label="Ouvrir les contrôles d'HGPTO" aria-expanded="false">•••</button>
       <button type="button" id="btn-games" aria-label="Aller aux jeux">Jeux</button>
       <button type="button" id="btn-ask">Une question ?</button>
+      <button type="button" id="btn-read">Lis-moi ça</button>
       <button type="button" id="btn-accompany" aria-pressed="false">Accompagne-moi</button>
       <button type="button" id="btn-tickle">Chatouiller</button>
       <button type="button" id="btn-bucket">Seau d'eau</button>
