@@ -189,7 +189,7 @@ function Page() {
               </article>
               <article className="tool-card">
                 <span className="tool-tag">Kit PDF — 5 $ CAD, aucune taxe ajoutée — Nouveau</span>
-                <h3>Testament Sans Honte — L'olographe sans erreur</h3>
+                <h3>Testament Sans Honte — L'olographe, pas à pas</h3>
                 <p>Préparer un testament olographe au Québec, pas à pas.</p>
                 <Link to="/pdf/$slug" params={{ slug: "sans-honte-testament" }}>Découvrir le kit PDF →</Link>
               </article>

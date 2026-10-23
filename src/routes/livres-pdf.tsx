@@ -35,7 +35,7 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/kit-08.jpg", title: "Kit Sans Honte — Logement", desc: "Repères concrets autour du logement.", tag: "Kit PDF", slug: "sans-honte-logement", price: "5 $" },
   { cover: "/images/sans-honte/kit-09.jpg", title: "Kit Sans Honte — Proche Aidant", desc: "Tenir le rôle de proche aidant sans s'épuiser.", tag: "Kit PDF", slug: "sans-honte-proche-aidant", price: "5 $" },
   { cover: "/images/sans-honte/kit-10.jpg", title: "Kit Sans Honte — 72 Heures", desc: "Se préparer aux 72 premières heures d'une urgence.", tag: "Kit PDF", slug: "sans-honte-72-heures", price: "5 $" },
-  { cover: "/images/sans-honte/kit-11.jpg", title: "Testament Sans Honte — L'olographe sans erreur", desc: "Préparer un testament olographe au Québec, pas à pas.", tag: "Kit PDF", slug: "sans-honte-testament", price: "5 $" },
+  { cover: "/images/sans-honte/kit-11.jpg", title: "Testament Sans Honte — L'olographe, pas à pas", desc: "Préparer un testament olographe au Québec, pas à pas.", tag: "Kit PDF", slug: "sans-honte-testament", price: "5 $" },
   { cover: "/images/sans-honte/kit-12.jpg", title: "Papiers de mes parents Sans Honte", desc: "Organiser les papiers de ses parents, sans honte.", tag: "Kit PDF", slug: "sans-honte-papiers-parents", price: "5 $" },
   { cover: "/images/sans-honte/kit-13.jpg", title: "Chalet Sans Honte — Les règles qui sauvent les Noëls", desc: "Des règles claires pour partager le chalet.", tag: "Kit PDF", slug: "sans-honte-chalet", price: "5 $" },
   { cover: "/images/sans-honte/kit-14.jpg", title: "L'année québécoise Sans Honte", desc: "Des repères pour l'année québécoise.", tag: "Kit PDF", slug: "sans-honte-annee-quebecoise", price: "5 $" },
