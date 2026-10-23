@@ -677,11 +677,11 @@ export const HGPTO_MARKUP = `
       <button type="button" id="btn-calm" aria-pressed="false">Mode calme</button>
       <button type="button" id="btn-pause" aria-pressed="false">Pause</button>
       <button type="button" id="btn-sound" aria-pressed="true">Son : fort</button>
-      <select id="sel-mood" aria-label="Humeur d'HGPTO — choisis mon humeur !">
-        <option value="normal">Humeur : normale</option>
-        <option value="vendeur">Humeur : vendeur</option>
-        <option value="drole">Humeur : drôle</option>
-        <option value="grognon">Humeur : grognon</option>
+      <select id="sel-mood" aria-label="Mode d'HGPTO — choisis comment je me comporte">
+        <option value="defaut">Mode : comme d'habitude</option>
+        <option value="vendeur">Vendeur pro actif</option>
+        <option value="ami">Ami</option>
+        <option value="grognon">Grognon drôle</option>
       </select>
       <select id="sel-weather" aria-label="Météo — aperçu des tenues d'HGPTO">
         <option value="auto">Météo : auto</option>

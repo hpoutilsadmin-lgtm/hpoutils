@@ -556,15 +556,20 @@ export const VENDEUR_HOOKS = [
         "Regarde ça, ça vaut le détour : ",
         "Celui-là, je le recommande les yeux fermés (enfin, ouverts — je suis un robot) : "
       ];
-      /* L'annonce d'humeur : il dit toujours dans quel mode il est —
-         en mode Vendeur, l'annonce est un engagement d'honnêteté
-         (le visiteur sait qu'on va lui parler des produits, et qu'il
-         peut changer d'humeur quand il veut). */
+      /* Les annonces de MODE (phase 2, 23 oct. 2026 — remplace les
+         anciennes annonces d'humeur du lot nº 4) : les modes d'HGPTO
+         deviennent une option claire et nommée par Hugo — « Vendeur
+         pro actif », « Ami », « Grognon drôle » — plus le défaut
+         « comme d'habitude ». Au changement, il dit dans sa bulle,
+         en une phrase simple, ce qui change. En mode Vendeur,
+         l'annonce reste un engagement d'honnêteté (le visiteur sait
+         qu'on va lui parler des produits, sans pression, et qu'il
+         peut changer de mode quand il veut). */
 export const MOOD_LINES = {
-        normal: "Humeur normale : me revoilà moi-même — gentil, utile, un brin espiègle.",
-        vendeur: "Mode vendeur : je vais te parler des produits — change-moi d'humeur quand tu veux.",
-        drole: "Humeur drôle ! Je sors mes meilleures blagues — j'en ai 62, et je les ai toutes répétées devant Pixel.",
-        grognon: "Humeur grognon… (%#!!) Encore une journée pour grogner un peu. T'inquiète : jamais contre toi — juste contre mes boulons."
+        defaut: "Mode « comme d'habitude » : me revoilà moi-même — gentil, utile, un brin espiègle, à mon rythme normal.",
+        vendeur: "Mode « Vendeur pro actif » : je te conseille pour vrai — je peux te proposer un produit quand ça peut t'aider, avec les vrais prix et le bon calcul. Jamais de pression : le non reste aussi facile que le oui.",
+        ami: "Mode « Ami » : je t'accompagne pas à pas, tranquillement, avec des mots simples et tout le temps qu'il faut. Ici, aucune vente — juste de l'aide et du support.",
+        grognon: "Mode « Grognon drôle » : je grogne pour rire et je fais des bêtises partout dans le site — jamais contre toi, promis. (%#!!) …Ça commence déjà."
       };
       /* La réplique « mascotte » (ajout validé par Hugo, 22 oct. 2026) :
          HGPTO DÉTESTE se faire appeler « mascotte » — il se prend pour

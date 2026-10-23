@@ -269,6 +269,7 @@ export function initHgpto() {
       var x = 0, dir = 1, speed = 26; // px/s
       var paused = false, isHidden = false, docHidden = false;
       var mood = 'normal';   // lot nº 4 : humeur choisie par le visiteur, session seulement
+      var hgMode = 'defaut';   // phase 2 (23 oct. 2026) : le MODE choisi par le visiteur — 'defaut' (comportement actuel, inchangé) | 'vendeur' | 'ami' | 'grognon' ; pilote `mood` + les couches propres à chaque mode ; session seulement (sessionStorage 'hgpto-mode')
       var calm = false, cornerUntil = 0, gameOn = false, byeDone = false;
       var busyUntil = 0;
       var guideTarget = null;   // x visé quand il « marche jusqu'à » une section
@@ -530,7 +531,12 @@ export function initHgpto() {
       var bubbleFlushTimer = null;
       function bubbleReadMs(html, dur){
         var len = plainText(html).length;
-        var ms = Math.max(dur || 0, 8000 + len * 50);
+        // Mode Ami (phase 2) : lecture plus lente, pensée pour les
+        // jeunes et les aînés — plancher relevé à 10 s et ~70 ms par
+        // caractère au lieu de ~50.
+        var base = hgMode === 'ami' ? 10000 : 8000;
+        var per = hgMode === 'ami' ? 70 : 50;
+        var ms = Math.max(dur || 0, base + len * per);
         return Math.min(ms, 45000);
       }
       function renderBubble(html, dur, mood, onShow){
@@ -646,10 +652,13 @@ export function initHgpto() {
       function rollSurprise(){
         if (Date.now() - lastSurpriseAt < 90000) return null;
         var r = Math.random();
+        // Mode Grognon drôle (phase 2) : les surprises partent trois
+        // fois plus souvent — les bêtises, c'est son mode.
+        var boost = hgMode === 'grognon' ? 3 : 1;
         var tier = null;
-        if (r < 1/80) tier = 'big';
-        else if (r < 1/80 + 1/35) tier = 'med';
-        else if (r < 1/80 + 1/35 + 1/15) tier = 'wink';
+        if (r < boost * (1/80)) tier = 'big';
+        else if (r < boost * (1/80 + 1/35)) tier = 'med';
+        else if (r < boost * (1/80 + 1/35 + 1/15)) tier = 'wink';
         if (!tier) return null;
         lastSurpriseAt = Date.now();
         return { tier:tier, line: tier === 'big' ? pick(SURPRISE_BIG_LINES) : tier === 'med' ? pick(SURPRISE_MED_LINES) : pick(SURPRISE_WINK_LINES) };
@@ -669,7 +678,7 @@ export function initHgpto() {
         // 40-50 s est courte et pleine de vie, le vérificateur du dwell
         // seul la manquait presque toujours (vu en fumées).
         var dp = DWELL_SUGGESTIONS[routeKey()];
-        if (dp && Date.now() - dwellStart > 40000 && canSuggest(dp)){ doSuggest(dp); return; }
+        if (dp && Date.now() - dwellStart > dwellThreshold() && canSuggest(dp)){ doSuggest(dp); return; }
         if (isPresse() && Math.random() < 0.7) return;   // visiteur pressé : il se fait discret (lot nº 2)
         // Clin d'œil de retour (service client, 23 oct. 2026) : le
         // visiteur revient sur une page déjà vue CETTE visite-ci —
@@ -708,9 +717,10 @@ export function initHgpto() {
             return;
           }
         }
-        // Lot nº 4, humeur Drôle : l'espièglerie passe devant — une
-        // chance sur deux, le bavardage devient directement une blague.
-        if (mood === 'drole' && Math.random() < 0.5){
+        // Lot nº 4, humeur Drôle — et mode Grognon drôle (phase 2) :
+        // l'espièglerie passe devant — une chance sur deux, le
+        // bavardage devient directement une blague.
+        if ((mood === 'drole' || hgMode === 'grognon') && Math.random() < 0.5){
           showBubble(esc(JOKES[jokeIdx % JOKES.length]), 5200, 'joke'); jokeIdx++;
           logDay("raconté des blagues — j'en connais 62 !");
           alternate++;
@@ -769,7 +779,7 @@ export function initHgpto() {
         talkTimer = setTimeout(function(){
           talk();
           scheduleTalk();
-        }, (isNight() ? 16000 : (mood === 'drole' ? 6500 : 11000)) + Math.random()*5000);
+        }, (isNight() ? 16000 : (hgMode === 'ami' ? 20000 : ((mood === 'drole' || hgMode === 'grognon') ? 6500 : 11000))) + Math.random()*5000);
       }
 
       /* ---------- Invitation : pancarte + bras qui pointe ---------- */
@@ -1261,7 +1271,7 @@ export function initHgpto() {
               // Lot nº 4, humeur Drôle : les vignettes comiques passent
               // régulièrement devant les autres (lutteur, mime, skate).
               var drolePick = false;
-              if (mood === 'drole' && Math.random() < 0.35){
+              if ((mood === 'drole' || hgMode === 'grognon') && Math.random() < 0.35){
                 var cp = Math.random();
                 if (cp < 0.4) doWrestler();
                 else if (cp < 0.7) doMime();
@@ -1282,7 +1292,7 @@ export function initHgpto() {
               else if (r < 0.78) doPeek();
               else if (r < 0.83) doJanitor();
               else if (r < 0.86) doBump();
-              else if (r < 0.90) doHum();
+              else if (r < 0.90) (hgMode === 'grognon' && Math.random() < 0.5 ? doBump() : doHum());   // Grognon drôle : l'encadré de porte, sa bêtise signature, revient souvent
               else if (r < 0.95) (sensible ? doJanitor() : doNosePick());
               else if (r < 0.98 && seasonDecorKind()) doDecor();
               else if (r < 0.995) doBalloon();
@@ -2020,32 +2030,63 @@ export function initHgpto() {
       });
       refreshSoundBtn();
 
-      /* ---------- HUMEUR (lot nº 4) : le visiteur choisit, il annonce ----------
-         Normal = comportement actuel, inchangé. Vendeur / Drôle /
-         Grognon règlent les paramètres des systèmes existants (voir
-         canSuggest, doSuggest, talk, scheduleLife, grumbleFires) —
-         aucune règle contournée. Session seulement. */
-      function applyMood(m){
-        mood = m;
-        bot.setAttribute('data-mood', m);
+      /* ---------- MODES (phase 2, Hugo 23 oct. 2026) ----------
+         L'ancien sélecteur d'humeur (lot nº 4) devient une vraie
+         OPTION DE MODE, claire et nommée : « Vendeur pro actif »,
+         « Ami », « Grognon drôle » — et « comme d'habitude », le
+         comportement actuel, qui reste le DÉFAUT tant que le
+         visiteur n'a rien choisi. Le mode tient pour la SESSION
+         seulement (sessionStorage, règle du panneau) ; le sélecteur
+         affiche en permanence le mode actif. Au changement, il
+         ANNONCE ce qui change dans sa bulle. Chaque mode pilote les
+         systèmes existants : `mood` (vendeur/grognon du lot nº 4)
+         plus sa couche propre — proactivité (dwellThreshold),
+         accompagnement et zéro vente (Ami), bêtises (Grognon drôle).
+         Aucun garde-fou n'est contourné : les plafonds de
+         suggestions, le gratuit d'abord et le retrait pendant les
+         tâches s'appliquent dans tous les modes. */
+      function dwellThreshold(){
+        // Mode Vendeur pro actif : il prend l'initiative plus tôt —
+        // le résumé honnête de la page regardée part à ~18 s plutôt
+        // qu'à ~40 s. Une fois par page, comme toujours (plafonds).
+        return hgMode === 'vendeur' ? 18000 : 40000;
+      }
+      function setAccompany(v){
+        accompany = v;
+        btnAccompany.textContent = v ? 'Arrêter l\u2019accompagnement' : 'Accompagne-moi';
+        btnAccompany.setAttribute('aria-pressed', v ? 'true' : 'false');
+      }
+      function applyMode(m, announce){
+        if (['defaut','vendeur','ami','grognon'].indexOf(m) === -1) m = 'defaut';
+        hgMode = m;
+        mood = m === 'vendeur' ? 'vendeur' : m === 'grognon' ? 'grognon' : 'normal';
+        bot.setAttribute('data-mode', m);
+        bot.setAttribute('data-mood', mood);
+        selMood.value = m;
+        try { sessionStorage.setItem('hgpto-mode', m); } catch(e) {}
         lastInteract = Date.now();
+        // Mode Ami : l'accompagnement pas à pas s'ouvre AVEC le mode —
+        // c'est son geste signature — et se referme quand on le quitte.
+        setAccompany(m === 'ami');
+        if (!announce) return;
         if (m === 'vendeur'){
-          showBubble(esc(MOOD_LINES.vendeur), 9000, 'talk');
-          logDay("passé en mode vendeur — honnêtement annoncé, comme il se doit");
-        } else if (m === 'drole'){
-          showBubble(esc(MOOD_LINES.drole), 9000, 'joke');
-          giggle();
+          showBubble(esc(MOOD_LINES.vendeur), 9000, 'talk', { now:true });
+          logDay("passé en mode Vendeur pro actif — honnêtement annoncé, comme il se doit");
+        } else if (m === 'ami'){
+          showBubble(esc(MOOD_LINES.ami), 9000, 'talk', { now:true });
+          logDay("passé en mode Ami — accompagnement ouvert, aucune vente");
         } else if (m === 'grognon'){
           setExpr('angry');
-          showBubble(esc(MOOD_LINES.grognon), 9000, 'talk');
+          showBubble(esc(MOOD_LINES.grognon), 9000, 'talk', { now:true });
           setTimeout(function(){ if (!isBusy()) setExpr('happy'); }, 2600);
+          logDay("passé en mode Grognon drôle — bêtises au maximum, jamais contre le visiteur");
         } else {
-          showBubble(esc(MOOD_LINES.normal), 8000, 'talk');
+          showBubble(esc(MOOD_LINES.defaut), 8000, 'talk', { now:true });
         }
       }
       selMood.addEventListener('change', function(){
         ensureAudio();
-        applyMood(selMood.value);
+        applyMode(selMood.value, true);
       });
 
       /* ---------- Scène des 2 heures : il suggère une pause, en riant, une fois ---------- */
@@ -4403,6 +4444,15 @@ export function initHgpto() {
         // ni fin de visite) ; seules survivent celles qui RÉPONDENT à
         // une question du visiteur (fromQA / asked), comme en normal.
         if (mood === 'drole' && !opts.fromQA && !opts.asked) return false;
+        // Mode Grognon drôle (phase 2) : même retenue que Drôle — le
+        // mode des bêtises n'est pas un mode de vente ; il se retire
+        // dès que ça devient sérieux, et il RÉPOND toujours juste.
+        if (hgMode === 'grognon' && !opts.fromQA && !opts.asked) return false;
+        // Mode Ami (phase 2) : AUCUNE démarche de vente, point — il
+        // répond aux questions (answerQuestion ne passe pas par ici),
+        // il accompagne, il ne propose rien de lui-même. Pour les
+        // jeunes : zéro vente, comme Hugo l'a tranché.
+        if (hgMode === 'ami' && !opts.asked) return false;
         // Les alternatives honnêtes (opts.soft) sont des courtoisies de
         // descente, pas des pitches : dédupliquées et refusables comme
         // les autres, mais elles ne consomment ni le créneau de la page
@@ -4432,6 +4482,14 @@ export function initHgpto() {
         // suggestion doit attendre son tour (file des bulles, correctif
         // lecture du 23 oct. 2026), il se pose sur SA bulle au moment où
         // elle s'affiche — jamais sur celle d'une réponse en lecture.
+        // Phase 2 (modes, 23 oct. 2026) : une suggestion PROACTIVE
+        // (fin de vignette, attente sur une page — jamais soft, jamais
+        // fromQA) s'affiche tout de suite, comme avant le correctif
+        // lecture : les gardes du lot nº 3 ne la laissent passer qu'à
+        // un moment calme, et la mettre en file la faisait avaler en
+        // silence par la scène suivante — le créneau de la page était
+        // consommé sans que le visiteur ait jamais vu l'invitation
+        // (constaté en test : aucune suggestion visible en 95 s).
         doInvite(pp, function(){
           var nb = document.createElement('button');
           nb.type = 'button';
@@ -4446,7 +4504,7 @@ export function initHgpto() {
           });
           bubble.appendChild(document.createElement('br'));
           bubble.appendChild(nb);
-        }, !!opts.now);
+        }, !!opts.now || (!opts.soft && !opts.fromQA));
         return true;
       }
       /* Le besoin exprimé en mots → LE produit qui fait ça. Double garde :
@@ -4500,7 +4558,7 @@ export function initHgpto() {
          d'abord — le résumé calme du lot nº 2 y couvre l'hésitation. */
       setInterval(function(){
         if (!DWELL_SUGGESTIONS[dwellRoute]) return;
-        if (Date.now() - dwellStart < 40000) return;
+        if (Date.now() - dwellStart < dwellThreshold()) return;
         // Moment creux : aucune bulle, ou une bulle ambiante déjà âgée
         // (≥ 4 s — elle allait se retirer d'elle-même).
         if (bubble.classList.contains('show') && Date.now() - lastBubbleAt < 4000) return;
@@ -4559,6 +4617,15 @@ export function initHgpto() {
         var k0 = routeKey();
         if (visitedRoutes.indexOf(k0) !== -1 && winkedRoutes.indexOf(k0) === -1) returnWinkPending = true;
         if (visitedRoutes.indexOf(k0) === -1){ visitedRoutes.push(k0); saveSet('hgpto-visited', visitedRoutes); }
+      })();
+      // Restauration du mode (phase 2) : le choix du visiteur tient
+      // pour toute la session, d'une page à l'autre — appliqué en
+      // silence au démarrage (l'annonce, c'est pour le changement,
+      // pas pour chaque page).
+      (function(){
+        var saved = null;
+        try { saved = sessionStorage.getItem('hgpto-mode'); } catch(e) {}
+        if (saved && saved !== 'defaut') applyMode(saved, false);
       })();
       setInterval(function(){
         var k = routeKey();
