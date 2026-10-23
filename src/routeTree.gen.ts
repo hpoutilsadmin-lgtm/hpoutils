@@ -36,6 +36,7 @@ import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as UniversRouteImport } from './routes/univers'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
+import { Route as AppsSlugRouteImport } from './routes/apps.$slug'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as OutilsBonsReflexesRouteImport } from './routes/outils.bons-reflexes'
@@ -182,6 +183,11 @@ const AchatSlugRoute = AchatSlugRouteImport.update({
   path: '/achat/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppsSlugRoute = AppsSlugRouteImport.update({
+  id: '/apps/$slug',
+  path: '/apps/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
   path: '/checkout/return',
@@ -265,6 +271,7 @@ export interface FileRoutesByFullPath {
   '/univers': typeof UniversRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
+  '/apps/$slug': typeof AppsSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
@@ -304,6 +311,7 @@ export interface FileRoutesByTo {
   '/univers': typeof UniversRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
+  '/apps/$slug': typeof AppsSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
@@ -344,6 +352,7 @@ export interface FileRoutesById {
   '/univers': typeof UniversRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
+  '/apps/$slug': typeof AppsSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
@@ -385,6 +394,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/unsubscribe'
     | '/achat/$slug'
+    | '/apps/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/outils/bons-reflexes'
@@ -424,6 +434,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/unsubscribe'
     | '/achat/$slug'
+    | '/apps/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/outils/bons-reflexes'
@@ -463,6 +474,7 @@ export interface FileRouteTypes {
     | '/univers'
     | '/unsubscribe'
     | '/achat/$slug'
+    | '/apps/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/outils/bons-reflexes'
@@ -503,6 +515,7 @@ export interface RootRouteChildren {
   UniversRoute: typeof UniversRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   AchatSlugRoute: typeof AchatSlugRoute
+  AppsSlugRoute: typeof AppsSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   PdfSlugRoute: typeof PdfSlugRoute
@@ -705,6 +718,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AchatSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apps/$slug': {
+      id: '/apps/$slug'
+      path: '/apps/$slug'
+      fullPath: '/apps/$slug'
+      preLoaderRoute: typeof AppsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout/return': {
       id: '/checkout/return'
       path: '/checkout/return'
@@ -817,6 +837,7 @@ const rootRouteChildren: RootRouteChildren = {
   UniversRoute: UniversRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   AchatSlugRoute: AchatSlugRoute,
+  AppsSlugRoute: AppsSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   PdfSlugRoute: PdfSlugRoute,

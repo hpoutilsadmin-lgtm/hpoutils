@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
+import { slugDepuisFichier } from "@/lib/jeux-adresses";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { ShareButton } from "@/components/ShareButton";
 import { useState, type CSSProperties } from "react";
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/jeux")({
             "@type": "ListItem",
             position: i + 1,
             name: g.title,
-            url: `https://www.hp-outils.com${g.file}`,
+            url: `https://www.hp-outils.com/apps/${slugDepuisFichier(g.file)}`,
           })),
         }),
       },
@@ -84,6 +85,10 @@ const PALETTES: [string, string][] = [
 ];
 
 type GameEntry = (typeof GAMES)[number];
+
+/* Adresse stable du jeu (item nº 4) : /apps/<slug>, redirigée en 301
+   vers le fichier courant — les liens partagés ne cassent plus. */
+const hrefJeu = (file: string) => `/apps/${slugDepuisFichier(file)}`;
 
 const GENRES = ["Tous", ...Array.from(new Set(GAMES.map((g) => g.tag.split(" · ")[0])))];
 
@@ -174,7 +179,7 @@ function JeuxPage() {
           <p className="lead">Des jeux courts et des histoires interactives pour exercer ses réflexes, imaginer la suite et apprendre sans pression.</p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des jeux pour la vraie vie. »</p>
           <div className="lead-actions">
-            <a className="btn-primary" href="/apps/bons-reflexes/index.html">Jouer aux Bons réflexes d'HP</a>
+            <a className="btn-primary" href="/apps/bons-reflexes">Jouer aux Bons réflexes d'HP</a>
             <a className="btn-ghost" href="#tous-les-jeux">Voir tous les jeux</a>
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
@@ -195,13 +200,13 @@ function JeuxPage() {
               <span className="pillar-num">01</span>
               <h3>Les bons réflexes d'HP</h3>
               <p>Des situations de cuisine, de maison, d'entraide, d'émotions et de sécurité. Gratuit, sans inscription.</p>
-              <a className="pillar-cta" href="/apps/bons-reflexes/index.html">Jouer maintenant →</a>
+              <a className="pillar-cta" href="/apps/bons-reflexes">Jouer maintenant →</a>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>Mystères du Nord</h3>
               <p>Sept enquêtes façon Clue dans le Nord : explore les lieux, interroge les suspects, trouve les indices et démasque le coupable.</p>
-              <a className="pillar-cta" href="/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html">Jouer maintenant →</a>
+              <a className="pillar-cta" href="/apps/mysteres-du-nord">Jouer maintenant →</a>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
@@ -236,7 +241,7 @@ function JeuxPage() {
           <div className="pillar-grid">
             <article className="pillar-card" style={{ gridColumn: "1 / -1", padding: 0, overflow: "hidden", flexDirection: "row", flexWrap: "wrap", gap: 0 }}>
               <a
-                href={featured.file}
+                href={hrefJeu(featured.file)}
                 aria-label={"Jouer à " + featured.title}
                 style={{ ...tileBackground(featured), flex: "1 1 260px", minHeight: 230, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, textDecoration: "none", padding: "18px 14px" }}
               >
@@ -253,13 +258,13 @@ function JeuxPage() {
                 <span style={TAG_ON_PAPER_STYLE}>{featured.tag}</span>
                 <p>{featured.copy}</p>
                 {"faits" in featured && featured.faits ? <p className="workshop-meta">{featured.faits}</p> : null}
-                <a className="btn-primary" href={featured.file}>Jouer maintenant</a>
+                <a className="btn-primary" href={hrefJeu(featured.file)}>Jouer maintenant</a>
               </div>
             </article>
 
             {visibleGames.map((game) => (
               <article className="pillar-card" key={game.title} style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-                <a href={game.file} aria-label={"Jouer à " + game.title} style={{ display: "block", textDecoration: "none" }}>
+                <a href={hrefJeu(game.file)} aria-label={"Jouer à " + game.title} style={{ display: "block", textDecoration: "none" }}>
                   <div style={{ ...tileBackground(game), minHeight: 148, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 7, position: "relative", padding: "16px 14px 30px" }}>
                     <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 52, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>
                       {game.mono}
@@ -274,7 +279,7 @@ function JeuxPage() {
                   <h3 style={{ fontSize: 23 }}>{game.title}</h3>
                   <p>{game.copy}</p>
                   {"faits" in game && game.faits ? <p className="workshop-meta">{game.faits}</p> : null}
-                  <a className="pillar-cta" href={game.file}>Jouer maintenant →</a>
+                  <a className="pillar-cta" href={hrefJeu(game.file)}>Jouer maintenant →</a>
                 </div>
               </article>
             ))}
