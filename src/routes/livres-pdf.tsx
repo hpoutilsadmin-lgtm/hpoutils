@@ -5,7 +5,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/livres-pdf")({
   head: () => createSeoHead({
     title: "Livres et kits PDF à télécharger — dès 5 $, aucune taxe ajoutée | HP Outils",
-    description: "20 PDF à télécharger : les 15 kits Sans Honte à 5 $, des livres de cuisine, d'organisation et de réflexion de 10 à 15 $. Aucune taxe ajoutée, téléchargement immédiat.",
+    description: "21 PDF à télécharger : les 15 kits Sans Honte à 5 $, des livres de cuisine, d'organisation et de réflexion de 10 à 15 $. Aucune taxe ajoutée, téléchargement immédiat.",
     path: "/livres-pdf",
   }),
   component: Page,
@@ -25,6 +25,7 @@ const ITEMS: Array<{
   { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Mieux manger avec peu : repères simples, recettes accessibles et réflexes anti-gaspillage.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
   { cover: "/images/cover-horizon-quebec.jpg", title: "Horizon Québec", desc: "Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble quand le monde change trop vite.", tag: "PDF", slug: "horizon-quebec", price: "10 $" },
   { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "10 $" },
+  { cover: "/images/cover-hyper-potentiel.jpg", title: "HP — Hyper potentiel — le mini cahier", desc: "20 pages d'exercices à imprimer : ikigaï, respiration, méditation, mouvement, buts. Zéro miracle — des pratiques appuyées par la recherche.", tag: "PDF", slug: "mini-cahier-hyper-potentiel", price: "10 $" },
   { cover: "/images/sans-honte/kit-01.jpg", title: "Kit Sans Honte — Papiers", desc: "24 fiches pour reprendre le contrôle de ses papiers.", tag: "Kit PDF", slug: "sans-honte-papiers", price: "5 $" },
   { cover: "/images/sans-honte/kit-02.jpg", title: "Kit Sans Honte — Me Reconnaître", desc: "Adapter sa journée à son cerveau, sans se juger.", tag: "Kit PDF", slug: "sans-honte-me-reconnaitre", price: "5 $" },
   { cover: "/images/sans-honte/kit-03.jpg", title: "Kit Sans Honte — Frigo", desc: "Repères concrets pour manger sans se juger.", tag: "Kit PDF", slug: "sans-honte-frigo", price: "5 $" },
