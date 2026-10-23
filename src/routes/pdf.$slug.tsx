@@ -363,7 +363,9 @@ function Page() {
 
             {(() => {
               const cross =
-                product.slug === "enjeux-humanite"
+                product.slug === "mini-cahier-hyper-potentiel"
+                  ? { desc: "Le pendant gratuit de ce cahier : respiration guidée, carte ikigaï interactive et plan WOOP — sans compte, et tes réponses restent sur ton appareil.", href: "/outils/hp-hyper-potentiel", label: "Ouvrir l'outil gratuit" }
+                  : product.slug === "enjeux-humanite"
                   ? { desc: "Le même sujet, en audio : Futur simple, le balado HP sur l'IA — un épisode gratuit par semaine.", href: "/balado", label: "Écouter le balado" }
                   : product.slug === "faim-justifie-les-moyens"
                     ? { desc: "Le pendant gratuit de ce livre : 629 recettes, pensées pour les petits budgets.", href: "/en-cuisine/", label: "Ouvrir En cuisine" }
