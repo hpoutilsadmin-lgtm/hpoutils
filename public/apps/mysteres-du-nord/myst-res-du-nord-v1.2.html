@@ -430,6 +430,16 @@ body.palette-kid .dialog .avatar{ background:linear-gradient(160deg,#f2a65a,#d97
 .modal .mrow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
 .modal .mrow .btn{ min-height:44px; }
 </style>
+
+<!-- Partage HP : adresse stable + image d'aperçu (vagues 0-1, 23 oct. 2026) -->
+<meta property="og:site_name" content="HP Outils" />
+<meta property="og:url" content="https://www.hp-outils.com/apps/mysteres-du-nord" />
+<meta property="og:image" content="https://www.hp-outils.com/images/share-hp.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Mystères du Nord — enquêtes façon Clue" />
+<meta name="twitter:description" content="Sept enquêtes façon Clue dans le Nord : explore les lieux, interroge les suspects, trouve les indices et démasque le coupable. Un scénario pour les jeunes détectives aussi." />
+<meta name="twitter:image" content="https://www.hp-outils.com/images/share-hp.jpg" />
+<link rel="canonical" href="https://www.hp-outils.com/apps/mysteres-du-nord" />
 </head>
 <body class="no-nav">
 <div id="app"></div>
@@ -2179,5 +2189,8 @@ render();
      (régénérer le module : bun run build:barre) -->
 <script src="/barre/barre-jeu.js" defer></script>
 <!-- ===== Fin barre de jeu HP ===== -->
+
+<!-- Mesure d'audience (Cloudflare Web Analytics, sans témoins) — vagues 0-1, 23 oct. 2026 -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "208bfc7b189846a98c30479f932e5762"}'></script>
 </body>
 </html>
