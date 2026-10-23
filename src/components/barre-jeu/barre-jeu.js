@@ -7,7 +7,9 @@
    t'es pas game ! Ça doit être partout. »
 
    Sur chaque page de jeu, la barre offre :
-     ← Retour aux jeux  (lien vers /jeux — partout, toujours)
+     ← Retour           (page arrière réelle : history.back() si la
+                         visite vient du site, repli /jeux sinon —
+                         partout, toujours)
      ⏸ Pause            (SEULEMENT si une pause réelle existe :
                          bouton/fonction de pause du jeu lui-même,
                          ou gel vérifié de sa boucle — jamais un
@@ -75,6 +77,13 @@
     "/apps/100-en-30-jours/100-en-30-jours-v1.1.html": {
       nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null
     },
+    "/apps/100-en-30-jours/100-en-30-jours-v1.2.html": {
+      /* Version présente au dépôt mais pas encore liée depuis /jeux
+         (écart signalé au chantier vérité) : config prête pour le
+         jour où le lien basculera — mêmes ancres de score que v1.1,
+         vérifiées dans le fichier v1.2. */
+      nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null
+    },
     "/apps/caribou-run/caribou-run-v1.1.html": {
       nom: "Caribou Run", score: ["#points", "#overScore"],
       pause: { type: "gate" }
@@ -97,7 +106,12 @@
                probeSel: "#startBtn", probeText: "Reprendre", probeVisibleSel: "#tutorial" }
     },
     "/apps/retromania/retromania-v1.1.html": {
-      nom: "Retromania", score: ["#soloScoreChip", "#finalScore"], pause: null
+      nom: "Retromania", score: ["#soloScoreChip", "#finalScore"],
+      /* Réexamen barre v2 : le mode Solo est sans chrono (le jeu le
+         dit lui-même) ; le mode Encans a un chrono de 20 s calculé
+         depuis performance.now (encT0/encPaused) — le gel d'horloge
+         du « gate » le fige donc pour vrai. */
+      pause: { type: "gate" }
     },
     "/apps/sirop-clicker/sirop-clicker-v1.1.html": {
       nom: "Sirop Clicker", score: null, pause: null
@@ -113,7 +127,12 @@
       pause: { type: "gate" }
     },
     "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html": {
-      nom: "Ado odieux, adieu", score: ["#hud-points"], pause: null
+      nom: "Ado odieux, adieu", score: ["#hud-points"],
+      /* Réexamen barre v2 : le jeu a SA pause complète (bouton
+         #btn-pause -> stopLoop() + écran #screen-pause, reprise par
+         #btn-resume) — manquée au premier passage, branchée ici. */
+      pause: { type: "btnPair", pauseSel: "#btn-pause",
+               resumeSel: "#btn-resume", probeSel: "#screen-pause", probeVisible: true }
     },
     "/apps/couleuvre-du-quebec/couleuvre-du-quebec-v1.0.html": {
       nom: "Couleuvre du Québec", score: ["#score"],
@@ -153,7 +172,16 @@
     }
   };
 
-  var cfg = CONFIGS[window.location.pathname] || {
+  /* Certains serveurs livrent les jeux SANS l'extension .html dans
+     l'URL (URL « propre » : le chemin vu par le navigateur perd le
+     « .html »). Sans ce repli, la config du jeu ne serait pas
+     trouvée et le bouton Pause disparaîtrait en silence — repéré à
+     l'inventaire du 22 oct. (barre v2). */
+  var cfg = CONFIGS[window.location.pathname];
+  if (!cfg && window.location.pathname.slice(-5) !== ".html") {
+    cfg = CONFIGS[window.location.pathname + ".html"];
+  }
+  cfg = cfg || {
     nom: (document.title || "Jeu").replace(/\s*[|—-]\s*HP.*$/, "").trim() || "Jeu",
     score: null, pause: null
   };
@@ -486,8 +514,24 @@
     bar.setAttribute("role", "navigation");
     bar.setAttribute("aria-label", "Barre de jeu");
 
-    var retour = el("a", "bj-btn bj-back", "← Retour aux jeux");
+    var retour = el("a", "bj-btn bj-back", "← Retour");
     retour.href = "/jeux";
+    retour.setAttribute("aria-label", "Revenir à la page précédente (ou à la page des jeux)");
+    /* Vrai « revenir page arrière » (ordre d'Hugo, 22 oct. au soir) :
+       si le visiteur est arrivé depuis une page du site, on repart
+       par l'historique ; arrivée directe, lien externe ou nouvel
+       onglet -> le href /jeux suit son cours (repli propre). */
+    retour.addEventListener("click", function (e) {
+      var duSite = false;
+      try {
+        duSite = !!document.referrer &&
+          document.referrer.indexOf(window.location.origin) === 0;
+      } catch (err) { duSite = false; }
+      if (duSite && window.history.length > 1) {
+        e.preventDefault();
+        window.history.back();
+      }
+    });
     bar.appendChild(retour);
 
     if (cfg.pause) {
