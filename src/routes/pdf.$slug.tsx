@@ -264,6 +264,17 @@ function Page() {
               {audienceSentence}
             </p>
 
+            {product.priceJustification && (
+              <>
+                <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>
+                  Pourquoi ce prix ?
+                </h2>
+                <p style={{ marginBottom: 32, lineHeight: 1.8, color: "#3a2a20" }}>
+                  {product.priceJustification}
+                </p>
+              </>
+            )}
+
             {product.contents && product.contents.length > 0 && (
               <>
                 <h2 style={{ fontFamily: "Georgia,serif", fontSize: 26, marginBottom: 12, color: "#2a1a12" }}>

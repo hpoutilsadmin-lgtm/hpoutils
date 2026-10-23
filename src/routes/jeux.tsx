@@ -3,7 +3,7 @@ import { createSeoHead } from "@/lib/seo";
 import { slugDepuisFichier } from "@/lib/jeux-adresses";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { ShareButton } from "@/components/ShareButton";
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
 export const Route = createFileRoute("/jeux")({
   head: () => ({
@@ -166,10 +166,168 @@ function tileBackground(game: GameEntry): CSSProperties {
   };
 }
 
+/* ── Cœurs (item nº 3, vague 1) ────────────────────────────────────
+   Favori personnel : localStorage du visiteur, MÊME clé que la barre
+   de jeu (« hp-jeux-favoris ») — un favori mis dans un jeu se retrouve
+   ici. Compteur public : « cœurs reçus », anonyme (aucun compte, ni IP
+   ni identifiant stockés — voir /api/public/game-hearts et la
+   migration 20261023_game_hearts). Le garde-fou « déjà aimé »
+   (« hp-jeux-coeurs ») vit dans le navigateur : un cœur public se
+   donne une seule fois par jeu ; retirer le favori ne retire pas le
+   cœur déjà compté, et on le dit. Si le compteur n'est pas actif côté
+   serveur, aucun nombre n'est affiché — le favori local marche seul. */
+const CLE_FAVORIS = "hp-jeux-favoris";
+const CLE_COEURS = "hp-jeux-coeurs";
+
+const COEUR_BTN_STYLE: CSSProperties = {
+  font: "inherit",
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 6,
+  padding: "6px 12px",
+  borderRadius: 999,
+  border: "1.5px solid rgba(179,54,43,.45)",
+  background: "rgba(179,54,43,.06)",
+  color: "#b3362b",
+  fontSize: 14,
+  fontWeight: 800,
+  cursor: "pointer",
+  lineHeight: 1,
+};
+
+function BoutonCoeur({
+  slug,
+  titre,
+  favori,
+  dejaDonne,
+  total,
+  onBasculer,
+}: {
+  slug: string;
+  titre: string;
+  favori: boolean;
+  dejaDonne: boolean;
+  total?: number;
+  onBasculer: (slug: string) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onBasculer(slug)}
+      aria-pressed={favori}
+      aria-label={
+        (favori ? "Retirer " : "Ajouter ") + titre + " de tes favoris"
+      }
+      title={
+        dejaDonne
+          ? "Dans tes favoris. Ton cœur public est déjà compté : le retirer d'ici ne retire pas le cœur."
+          : "Ajoute ce jeu à tes favoris et donne-lui un cœur public, anonyme."
+      }
+      style={COEUR_BTN_STYLE}
+    >
+      <span aria-hidden="true" style={{ fontSize: 16 }}>
+        {favori ? "♥" : "♡"}
+      </span>
+      {typeof total === "number" ? (
+        <span aria-label={total + " cœurs reçus"}>{total}</span>
+      ) : null}
+    </button>
+  );
+}
+
 function JeuxPage() {
   const featured = GAMES.find((g) => g.title === "2 vérités, 1 mensonge") ?? GAMES[0];
   const [genre, setGenre] = useState("Tous");
-  const visibleGames = (genre === "Tous" ? GAMES : GAMES.filter((g) => g.tag.split(" · ")[0] === genre)).filter((g) => g.title !== featured.title);
+  const [tri, setTri] = useState<"defaut" | "aimes">("defaut");
+  const [favoris, setFavoris] = useState<string[]>([]);
+  const [donnes, setDonnes] = useState<string[]>([]);
+  const [compteurs, setCompteurs] = useState<Record<string, number> | null>(
+    null,
+  );
+
+  useEffect(() => {
+    try {
+      const f = JSON.parse(localStorage.getItem(CLE_FAVORIS) ?? "[]");
+      if (Array.isArray(f)) setFavoris(f.filter((x) => typeof x === "string"));
+      const d = JSON.parse(localStorage.getItem(CLE_COEURS) ?? "[]");
+      if (Array.isArray(d)) setDonnes(d.filter((x) => typeof x === "string"));
+    } catch {
+      /* localStorage indisponible : les cœurs restent visuels, sans mémoire */
+    }
+    fetch("/api/public/game-hearts")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d && d.actif) setCompteurs(d.coeurs ?? {});
+      })
+      .catch(() => {
+        /* compteur injoignable : on n'affiche aucun nombre */
+      });
+  }, []);
+
+  const basculerCoeur = (slug: string) => {
+    setFavoris((prev) => {
+      const next = prev.includes(slug)
+        ? prev.filter((s) => s !== slug)
+        : [...prev, slug];
+      try {
+        localStorage.setItem(CLE_FAVORIS, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    if (donnes.includes(slug)) return; // cœur public déjà donné : une seule fois
+    setDonnes((prev) => {
+      const next = [...prev, slug];
+      try {
+        localStorage.setItem(CLE_COEURS, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    if (compteurs) {
+      setCompteurs((prev) =>
+        prev ? { ...prev, [slug]: (prev[slug] ?? 0) + 1 } : prev,
+      );
+    }
+    fetch("/api/public/game-hearts", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug }),
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d && d.actif === false) {
+          setCompteurs(null); // compteur pas actif : on n'affiche pas de nombre
+        } else if (d && typeof d.total === "number") {
+          setCompteurs((prev) => ({ ...(prev ?? {}), [slug]: d.total }));
+        }
+      })
+      .catch(() => {});
+  };
+
+  const etatCoeur = (g: GameEntry) => {
+    const slug = slugDepuisFichier(g.file);
+    return {
+      slug,
+      titre: g.title,
+      favori: favoris.includes(slug),
+      dejaDonne: donnes.includes(slug),
+      total: compteurs ? compteurs[slug] ?? 0 : undefined,
+      onBasculer: basculerCoeur,
+    };
+  };
+
+  const baseVisible =
+    genre === "Tous"
+      ? GAMES
+      : GAMES.filter((g) => g.tag.split(" · ")[0] === genre);
+  const visibleGames = baseVisible
+    .filter((g) => g.title !== featured.title)
+    .slice()
+    .sort((a, b) => {
+      if (tri !== "aimes" || !compteurs) return 0;
+      const ca = compteurs[slugDepuisFichier(a.file)] ?? 0;
+      const cb = compteurs[slugDepuisFichier(b.file)] ?? 0;
+      return cb - ca;
+    });
   return (
     <>
       <section id="sec-jeux" className="editorial-hero hero-banner-image jeux-hero">
@@ -238,6 +396,35 @@ function JeuxPage() {
               </button>
             ))}
           </div>
+          {favoris.length > 0 ? (
+            <div aria-label="Tes favoris" style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center", maxWidth: 900, margin: "0 auto 26px" }}>
+              <span style={{ fontSize: 13, fontWeight: 800, color: "#b3362b" }}>♥ Tes favoris :</span>
+              {favoris.map((slug) => {
+                const g = GAMES.find((x) => slugDepuisFichier(x.file) === slug);
+                if (!g) return null;
+                return (
+                  <a key={slug} href={hrefJeu(g.file)} style={{ ...FILTER_BTN_STYLE, textDecoration: "none", display: "inline-block" }}>
+                    {g.title}
+                  </a>
+                );
+              })}
+            </div>
+          ) : null}
+          {compteurs ? (
+            <div style={{ textAlign: "center", margin: "0 auto 26px" }}>
+              <label style={{ fontSize: 13, fontWeight: 700, color: "#5a4a3f" }}>
+                Trier les jeux :{" "}
+                <select
+                  value={tri}
+                  onChange={(e) => setTri(e.target.value as "defaut" | "aimes")}
+                  style={{ font: "inherit", fontSize: 13, fontWeight: 700, padding: "6px 10px", borderRadius: 999, border: "1.5px solid rgba(34,26,18,.5)", background: "transparent", color: "#221a12" }}
+                >
+                  <option value="defaut">Nos suggestions</option>
+                  <option value="aimes">Les plus aimés ♥</option>
+                </select>
+              </label>
+            </div>
+          ) : null}
           <div className="pillar-grid">
             <article className="pillar-card" style={{ gridColumn: "1 / -1", padding: 0, overflow: "hidden", flexDirection: "row", flexWrap: "wrap", gap: 0 }}>
               <a
@@ -258,7 +445,10 @@ function JeuxPage() {
                 <span style={TAG_ON_PAPER_STYLE}>{featured.tag}</span>
                 <p>{featured.copy}</p>
                 {"faits" in featured && featured.faits ? <p className="workshop-meta">{featured.faits}</p> : null}
-                <a className="btn-primary" href={hrefJeu(featured.file)}>Jouer maintenant</a>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+                  <a className="btn-primary" href={hrefJeu(featured.file)}>Jouer maintenant</a>
+                  <BoutonCoeur {...etatCoeur(featured)} />
+                </div>
               </div>
             </article>
 
@@ -279,11 +469,35 @@ function JeuxPage() {
                   <h3 style={{ fontSize: 23 }}>{game.title}</h3>
                   <p>{game.copy}</p>
                   {"faits" in game && game.faits ? <p className="workshop-meta">{game.faits}</p> : null}
-                  <a className="pillar-cta" href={hrefJeu(game.file)}>Jouer maintenant →</a>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginTop: "auto" }}>
+                    <a className="pillar-cta" href={hrefJeu(game.file)}>Jouer maintenant →</a>
+                    <BoutonCoeur {...etatCoeur(game)} />
+                  </div>
                 </div>
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+<section className="three-pillars">
+        <div className="container" style={{ maxWidth: 860 }}>
+          <span className="editorial-kicker">Testés pour vrai</span>
+          <h2 className="section-title">Approuvés par <em>nos joueurs</em></h2>
+          <p style={{ textAlign: "center", maxWidth: 680, margin: "-6px auto 18px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.6 }}>
+            Avant d'arriver ici, les jeux HP passent entre les mains de vrais
+            joueurs — de jeunes testeurs et la famille d'HP. Leur tampon
+            « approuvé » ne s'achète pas et ne s'invente pas : il se mérite,
+            partie par partie.
+          </p>
+          <p style={{ textAlign: "center", maxWidth: 680, margin: "0 auto", color: "#5a4a3f", fontSize: 16, lineHeight: 1.6 }}>
+            Déjà approuvés par nos testeurs : Chat'attaque, Montgolfière,
+            Bernache Express, Caribou Run, NORD 2087, Mystères du Nord, Trio
+            des Éléments, Mots de Chez Nous, Fusion Sirop, Pop Ballons,
+            Devine l'humeur, Tir de Boules de Neige, La Spirale ASMR,
+            2 vérités 1 mensonge et Cherche &amp; Trouve — La vraie vie
+            (approuvé à l'unanimité).
+          </p>
         </div>
       </section>
 

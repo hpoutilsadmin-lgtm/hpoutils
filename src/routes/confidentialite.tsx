@@ -13,7 +13,7 @@ function Page() {
     <h2>1. Qui sommes-nous</h2>
     <p>HP Outils (Hugo Pierre Bertrand), joignable à hpoutils.admin@gmail.com. Le responsable de la protection des renseignements personnels est Hugo Pierre Bertrand, à cette même adresse.</p>
     <h2>2. Ce qu'on recueille</h2>
-    <ul><li>Votre courriel, quand vous vous inscrivez pour recevoir nos outils et nouveautés (formulaire du site, page Jeux).</li><li>Vos informations de commande (nom, courriel) quand vous achetez. Les paiements sont traités par Stripe — nous ne voyons ni ne conservons votre numéro de carte.</li></ul>
+    <ul><li>Votre courriel, quand vous vous inscrivez pour recevoir nos outils et nouveautés (formulaire du site, page Jeux).</li><li>Vos informations de commande (nom, courriel) quand vous achetez. Les paiements sont traités par Stripe — nous ne voyons ni ne conservons votre numéro de carte.</li><li>Les cœurs que vous donnez aux jeux (bouton ♥) alimentent un compteur public entièrement anonyme : nous conservons seulement le nom du jeu et l'heure du cœur — ni compte, ni adresse IP, ni identifiant. Vos favoris, eux, restent dans votre navigateur et ne nous sont jamais transmis.</li></ul>
     <h2>3. Pourquoi</h2>
     <ul><li>Vous envoyer les outils, contenus et dates d'ateliers que vous avez demandés.</li><li>Traiter vos commandes et vous donner accès à vos achats.</li><li>Rien d'autre. Nous ne vendons ni ne louons vos renseignements. Jamais.</li></ul>
     <h2>4. Votre consentement</h2>

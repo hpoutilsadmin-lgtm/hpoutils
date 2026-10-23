@@ -19,6 +19,7 @@ const STATIC_PATHS = [
   "/collaborer",
   "/comprendre",
   "/contact",
+  "/faq",
   "/prix",
   "/univers",
   "/transmettre",

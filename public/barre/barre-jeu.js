@@ -23,7 +23,21 @@
                          score lu dans le DOM du jeu quand il est
                          lisible, sinon texte de défi sans chiffre —
                          banque de défis HP : on défie sur le jeu,
-                         jamais sur l'achat)
+                         jamais sur l'achat). Le lien partagé est
+                         l'ADRESSE STABLE /apps/<slug> (vague 0,
+                         item nº 4) : il survit aux changements de
+                         version du fichier.
+     ♥ Cœur              (vague 1, item nº 3 — 23 oct. 2026 :
+                         favori personnel en localStorage, MÊMES clés
+                         que la page /jeux — « hp-jeux-favoris » et
+                         garde-fou « hp-jeux-coeurs » — plus compteur
+                         public anonyme « cœurs reçus » via
+                         /api/public/game-hearts quand il est actif ;
+                         aucun nombre affiché sinon)
+     Après ta partie     (vague 1, item nº 5 — seulement les jeux
+                         dont la config a un « lien » : UN lien doux,
+                         gratuit d'abord, en lien avec le sujet du
+                         jeu ; rien à acheter pour continuer à jouer)
 
    Source unique : src/components/barre-jeu/barre-jeu.js
    Généré vers public/barre/barre-jeu.js par :
@@ -71,21 +85,25 @@
                resumeSel: "#btn-resume", probeSel: "#screen-pause", probeVisible: true }
     },
     "/apps/la-banque/la-banque-v1.1.html": {
-      nom: "LA BANQUE", score: null, pause: null
+      nom: "LA BANQUE", score: null, pause: null,
+      lien: { href: "/pdf/sans-honte-entraide", texte: "Le kit Sans Honte — Entraide : s'entraider sans se brûler (5 $)" }
     },
     "/apps/bons-reflexes/index.html": {
-      nom: "Les bons réflexes d'HP", score: ["#scorePercent"], pause: null
+      nom: "Les bons réflexes d'HP", score: ["#scorePercent"], pause: null,
+      lien: { href: "/pdf/sans-honte-fraude", texte: "Le kit Sans Honte — Fraude : garder ses réflexes aiguisés face aux pièges (5 $)" }
     },
     "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html": {
       nom: "Mystères du Nord", score: ["#scorePot"], pause: null
     },
     "/apps/100-en-30-jours/100-en-30-jours-v1.1.html": {
-      nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null
+      nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null,
+      lien: { href: "/pdf/sans-honte-frigo", texte: "Le kit Sans Honte — Frigo : étirer chaque dollar sans gaspiller (5 $)" }
     },
     "/apps/100-en-30-jours/100-en-30-jours-v1.2.html": {
       /* Liée depuis /jeux depuis le 22 oct. (dépôt 6d0a05f) — mêmes
          ancres de score que v1.1, vérifiées dans le fichier v1.2. */
-      nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null
+      nom: "100 $ en 30 jours", score: ["#d-net", "#p-net", "#lg-net"], pause: null,
+      lien: { href: "/pdf/sans-honte-frigo", texte: "Le kit Sans Honte — Frigo : étirer chaque dollar sans gaspiller (5 $)" }
     },
     "/apps/caribou-run/caribou-run-v1.1.html": {
       nom: "Caribou Run", score: ["#points", "#overScore"],
@@ -94,7 +112,8 @@
     "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html": {
       nom: "Cherche & Trouve — La vraie vie", score: null,
       pause: { type: "fnPair", pauseFn: "mettreEnPause", resumeSel: "#overlay",
-               probeSel: "#overlay", probeClass: "show" }
+               probeSel: "#overlay", probeClass: "show" },
+      lien: { href: "/passeur-de-savoir", texte: "Le Passeur de savoir : l'application gratuite des savoirs d'ici" }
     },
     "/apps/devine-l-humeur/devine-l-humeur-v1.1.html": {
       nom: "Devine l'humeur", score: ["#hudScore", "#finalScore"], pause: null
@@ -106,7 +125,8 @@
     "/apps/poutine-panic/poutine-panic-v1.1.html": {
       nom: "Poutine Panic", score: ["#money"],
       pause: { type: "btnPair", pauseSel: "#restartBtn", resumeSel: "#startBtn",
-               probeSel: "#startBtn", probeText: "Reprendre", probeVisibleSel: "#tutorial" }
+               probeSel: "#startBtn", probeText: "Reprendre", probeVisibleSel: "#tutorial" },
+      lien: { href: "/pdf/enfants-cuisinent", texte: "Le livre « Les enfants cuisinent pour faire plaisir » (20 $)" }
     },
     "/apps/retromania/retromania-v1.1.html": {
       nom: "Retromania", score: ["#soloScoreChip", "#finalScore"],
@@ -120,10 +140,12 @@
       nom: "Sirop Clicker", score: null, pause: null
     },
     "/apps/mots-de-chez-nous/mots-de-chez-nous-v1.0.html": {
-      nom: "Mots de Chez Nous", score: ["#jeu-trouves"], pause: null
+      nom: "Mots de Chez Nous", score: ["#jeu-trouves"], pause: null,
+      lien: { href: "/passeur-de-savoir", texte: "Le Passeur de savoir : l'application gratuite des savoirs d'ici" }
     },
     "/apps/memoire-des-cantons/memoire-des-cantons-v1.0.html": {
-      nom: "Mémoire des Cantons", score: null, pause: null
+      nom: "Mémoire des Cantons", score: null, pause: null,
+      lien: { href: "/passeur-de-savoir", texte: "Le Passeur de savoir : l'application gratuite des savoirs d'ici" }
     },
     "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html": {
       nom: "Tir de Boules de Neige", score: ["#hudScore"],
@@ -182,7 +204,8 @@
        la pause, reprise nette) avant de brancher le bouton. */
     "/apps/igloo/igloo-v1.0.html": {
       nom: "IGLOO — La guerre des igloos", score: null,
-      pause: { type: "gate" }
+      pause: { type: "gate" },
+      lien: { href: "/pdf/sans-honte-72-heures", texte: "Le kit Sans Honte — 72 Heures : être prêt quand ça coupe (5 $)" }
     },
     "/apps/que-vois-tu/que-vois-tu-v2.0.html": {
       nom: "Que vois-tu ?", score: null, pause: null
@@ -197,10 +220,12 @@
       nom: "Conception de molécules 3D", score: null, pause: null
     },
     "/apps/hydro-electricite/hydro-electricite-v1.1.html": {
-      nom: "L'hydroélectricité, comment ça marche", score: null, pause: null
+      nom: "L'hydroélectricité, comment ça marche", score: null, pause: null,
+      lien: { href: "/pdf/sans-honte-72-heures", texte: "Le kit Sans Honte — 72 Heures : être prêt quand ça coupe (5 $)" }
     },
     "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html": {
-      nom: "Anxiété, le jeu", score: null, pause: null
+      nom: "Anxiété, le jeu", score: null, pause: null,
+      lien: { href: "/pdf/sans-honte-tenir-debout", texte: "Le kit Sans Honte — Tenir debout : traverser les journées lourdes (5 $)" }
     }
   };
 
@@ -235,6 +260,12 @@
     ".bj-resume:hover{background:#ffc84d}",
     ".bj-toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(68px + env(safe-area-inset-bottom,0px));z-index:2147483001;background:#241a04;color:#fdf6e0;border:1px solid rgba(255,244,214,.35);border-radius:999px;padding:9px 18px;font-size:14px;font-weight:600;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.35)}",
     ".bj-toast[hidden]{display:none}",
+    ".bj-lien{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:2147483001;background:#fffaf0;color:#241a04;border:1px solid rgba(36,26,4,.25);border-radius:16px;padding:14px 18px;font-size:14px;line-height:1.5;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);max-width:min(92vw,430px);text-align:center}",
+    ".bj-lien[hidden]{display:none}",
+    ".bj-lien.bj-lien-top{bottom:auto;top:calc(64px + env(safe-area-inset-top,0px))}",
+    ".bj-lien p{margin:0 0 8px}",
+    ".bj-lien a{color:#8a5a00;font-weight:800}",
+    ".bj-coeur.bj-actif{color:#ff9d94}",
     "@media (max-width:520px){.bj-btn{font-size:13px;padding:0 10px;min-height:38px}.bj-long{display:none}}",
     "@media print{.bj-bar,.bj-veil,.bj-toast{display:none!important}}"
   ].join("\n");
@@ -304,9 +335,19 @@
       } catch (err) { ko(); }
     }
   }
+  /* Slug du jeu, lu dans le chemin /apps/<slug>/<fichier> : c'est la
+     clé des favoris/cœurs (même valeur que sur /jeux) et la base de
+     l'adresse stable partagée. */
+  var partiesChemin = window.location.pathname.split("/");
+  var slugJeu = partiesChemin[1] === "apps" ? (partiesChemin[2] || "") : "";
+  function urlStable() {
+    return slugJeu
+      ? "https://www.hp-outils.com/apps/" + slugJeu
+      : window.location.href;
+  }
   function partager() {
     var score = lireScore();
-    var url = window.location.href;
+    var url = urlStable();
     var texte = score
       ? "Je joue à " + cfg.nom + " sur HP Outils — mon score : " + score + ". T'es pas game de me battre ?"
       : "Je joue à " + cfg.nom + " sur HP Outils. T'es pas game de l'essayer ?";
@@ -580,6 +621,100 @@
     part.setAttribute("aria-label", "Partager mon score");
     part.addEventListener("click", partager);
     bar.appendChild(part);
+
+    /* ♥ Cœur (item nº 3) : favori local + cœur public anonyme.
+       Mêmes clés localStorage que /jeux : un favori se suit d'une
+       page à l'autre. Aucun nombre tant que le compteur public
+       n'est pas actif côté serveur (repli honnête). */
+    var coeurBtn = null, totalCoeurs = null, compteurActif = false;
+    if (slugJeu) {
+      coeurBtn = el("button", "bj-btn bj-coeur");
+      coeurBtn.type = "button";
+      var lireCle = function (cle) {
+        try {
+          var v = JSON.parse(window.localStorage.getItem(cle) || "[]");
+          return Array.isArray(v) ? v : [];
+        } catch (e) { return []; }
+      };
+      var ecrireCle = function (cle, v) {
+        try { window.localStorage.setItem(cle, JSON.stringify(v)); } catch (e) {}
+      };
+      var majCoeur = function () {
+        var fav = lireCle("hp-jeux-favoris").indexOf(slugJeu) >= 0;
+        coeurBtn.textContent =
+          (fav ? "♥" : "♡") +
+          (compteurActif && totalCoeurs !== null ? " " + totalCoeurs : "");
+        coeurBtn.classList.toggle("bj-actif", fav);
+        coeurBtn.setAttribute("aria-pressed", fav ? "true" : "false");
+        coeurBtn.setAttribute("aria-label",
+          (fav ? "Retirer ce jeu de tes favoris" : "Ajouter ce jeu à tes favoris et lui donner un cœur"));
+      };
+      coeurBtn.addEventListener("click", function () {
+        var favs = lireCle("hp-jeux-favoris");
+        var i = favs.indexOf(slugJeu);
+        if (i >= 0) { favs.splice(i, 1); } else { favs.push(slugJeu); }
+        ecrireCle("hp-jeux-favoris", favs);
+        var donnes = lireCle("hp-jeux-coeurs");
+        if (donnes.indexOf(slugJeu) < 0) {
+          donnes.push(slugJeu);
+          ecrireCle("hp-jeux-coeurs", donnes);
+          if (compteurActif && totalCoeurs !== null) totalCoeurs += 1;
+          try {
+            window.fetch("/api/public/game-hearts", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ slug: slugJeu })
+            }).then(function (r) { return r.json(); }).then(function (d) {
+              if (d && d.actif === false) { compteurActif = false; }
+              else if (d && typeof d.total === "number") {
+                compteurActif = true; totalCoeurs = d.total;
+              }
+              majCoeur();
+            }).catch(function () {});
+          } catch (e) { /* hors-ligne : le favori local reste */ }
+        }
+        majCoeur();
+      });
+      majCoeur();
+      bar.appendChild(coeurBtn);
+      try {
+        window.fetch("/api/public/game-hearts")
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            if (d && d.actif) {
+              compteurActif = true;
+              totalCoeurs = (d.coeurs && d.coeurs[slugJeu]) || 0;
+              majCoeur();
+            }
+          })
+          .catch(function () {});
+      } catch (e) { /* pas de compteur : le cœur reste un favori local */ }
+    }
+
+    /* « Après ta partie » (item nº 5) : un seul lien doux, seulement
+       pour les jeux dont la config en déclare un. Le panneau le dit
+       d'emblée : rien à acheter pour continuer à jouer. */
+    if (cfg.lien) {
+      var lienPanneau = el("div", "bj-lien" + (cfg.pos === "top" ? " bj-lien-top" : ""));
+      lienPanneau.hidden = true;
+      var lp1 = el("p", null,
+        "Rien à acheter pour continuer : ce jeu reste gratuit, comme les 33 jeux d'HP.");
+      lienPanneau.appendChild(lp1);
+      var lp2 = el("p", null, "Si le sujet te parle, en lien avec ce jeu : ");
+      var la = el("a", null, cfg.lien.texte);
+      la.href = cfg.lien.href;
+      lp2.appendChild(la);
+      lienPanneau.appendChild(lp2);
+      document.body.appendChild(lienPanneau);
+      var lienBtn = el("button", "bj-btn bj-apres", "Après ta partie");
+      lienBtn.type = "button";
+      lienBtn.setAttribute("aria-expanded", "false");
+      lienBtn.addEventListener("click", function () {
+        lienPanneau.hidden = !lienPanneau.hidden;
+        lienBtn.setAttribute("aria-expanded", lienPanneau.hidden ? "false" : "true");
+      });
+      bar.appendChild(lienBtn);
+    }
     document.body.appendChild(bar);
 
     if (cfg.pause && (cfg.pause.type === "gate" || cfg.pause.type === "gateTimeout")) {

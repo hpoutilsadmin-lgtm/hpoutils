@@ -69,6 +69,9 @@ function Page() {
             {formatLabel} — {product.priceLabel}. PDF téléchargeable immédiatement après paiement.
           </p>
           {product.precaution && <p className="product-precaution">{product.precaution}</p>}
+          {product.priceJustification && (
+            <p style={{ maxWidth: 700, lineHeight: 1.65 }}>{product.priceJustification}</p>
+          )}
         </div>
       </section>
       <section className="subpage-content">
@@ -100,7 +103,7 @@ function Page() {
                 <a href="mailto:hpoutils.admin@gmail.com">
                   hpoutils.admin@gmail.com
                 </a>{" "}
-                — une réponse d'Hugo, pas d'un robot, sous 3 jours ouvrables.
+                — une réponse d'Hugo, pas d'un robot, sous 48 h ouvrables.
               </p>
               <p style={{ margin: 0, fontSize: 14 }}>
                 Et si c'est une panne technique de notre côté — un fichier

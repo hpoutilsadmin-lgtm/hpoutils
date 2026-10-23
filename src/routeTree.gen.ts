@@ -21,6 +21,7 @@ import { Route as ConditionsDeVenteRouteImport } from './routes/conditions-de-ve
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EnCuisineRouteImport } from './routes/en-cuisine'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as JeuxRouteImport } from './routes/jeux'
 import { Route as LesPasseursRouteImport } from './routes/les-passeurs'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
@@ -42,6 +43,7 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as OutilsBonsReflexesRouteImport } from './routes/outils.bons-reflexes'
 import { Route as PdfSlugRouteImport } from './routes/pdf.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
+import { Route as ApiPublicGameHeartsRouteImport } from './routes/api/public/game-hearts'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -106,6 +108,11 @@ const ContactRoute = ContactRouteImport.update({
 const EnCuisineRoute = EnCuisineRouteImport.update({
   id: '/en-cuisine',
   path: '/en-cuisine',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JeuxRoute = JeuxRouteImport.update({
@@ -213,6 +220,11 @@ const ApiPublicDownloadPdfRoute = ApiPublicDownloadPdfRouteImport.update({
   path: '/api/public/download-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicGameHeartsRoute = ApiPublicGameHeartsRouteImport.update({
+  id: '/api/public/game-hearts',
+  path: '/api/public/game-hearts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -256,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/en-cuisine': typeof EnCuisineRoute
+  '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -277,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
+  '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -296,6 +310,7 @@ export interface FileRoutesByTo {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/en-cuisine': typeof EnCuisineRoute
+  '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -317,6 +332,7 @@ export interface FileRoutesByTo {
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
+  '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -337,6 +353,7 @@ export interface FileRoutesById {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/en-cuisine': typeof EnCuisineRoute
+  '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -358,6 +375,7 @@ export interface FileRoutesById {
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
+  '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -379,6 +397,7 @@ export interface FileRouteTypes {
     | '/confidentialite'
     | '/contact'
     | '/en-cuisine'
+    | '/faq'
     | '/jeux'
     | '/les-passeurs'
     | '/livres-pdf'
@@ -400,6 +419,7 @@ export interface FileRouteTypes {
     | '/outils/bons-reflexes'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
+    | '/api/public/game-hearts'
     | '/lovable/email/suppression'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -419,6 +439,7 @@ export interface FileRouteTypes {
     | '/confidentialite'
     | '/contact'
     | '/en-cuisine'
+    | '/faq'
     | '/jeux'
     | '/les-passeurs'
     | '/livres-pdf'
@@ -440,6 +461,7 @@ export interface FileRouteTypes {
     | '/outils/bons-reflexes'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
+    | '/api/public/game-hearts'
     | '/lovable/email/suppression'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -459,6 +481,7 @@ export interface FileRouteTypes {
     | '/confidentialite'
     | '/contact'
     | '/en-cuisine'
+    | '/faq'
     | '/jeux'
     | '/les-passeurs'
     | '/livres-pdf'
@@ -480,6 +503,7 @@ export interface FileRouteTypes {
     | '/outils/bons-reflexes'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
+    | '/api/public/game-hearts'
     | '/lovable/email/suppression'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -500,6 +524,7 @@ export interface RootRouteChildren {
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
   EnCuisineRoute: typeof EnCuisineRoute
+  FaqRoute: typeof FaqRoute
   JeuxRoute: typeof JeuxRoute
   LesPasseursRoute: typeof LesPasseursRoute
   LivresPdfRoute: typeof LivresPdfRoute
@@ -520,6 +545,7 @@ export interface RootRouteChildren {
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   PdfSlugRoute: typeof PdfSlugRoute
   ApiPublicDownloadPdfRoute: typeof ApiPublicDownloadPdfRoute
+  ApiPublicGameHeartsRoute: typeof ApiPublicGameHeartsRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -611,6 +637,13 @@ declare module '@tanstack/react-router' {
       path: '/en-cuisine'
       fullPath: '/en-cuisine'
       preLoaderRoute: typeof EnCuisineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/jeux': {
@@ -760,6 +793,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicDownloadPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/game-hearts': {
+      id: '/api/public/game-hearts'
+      path: '/api/public/game-hearts'
+      fullPath: '/api/public/game-hearts'
+      preLoaderRoute: typeof ApiPublicGameHeartsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -822,6 +862,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
   EnCuisineRoute: EnCuisineRoute,
+  FaqRoute: FaqRoute,
   JeuxRoute: JeuxRoute,
   LesPasseursRoute: LesPasseursRoute,
   LivresPdfRoute: LivresPdfRoute,
@@ -842,6 +883,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   PdfSlugRoute: PdfSlugRoute,
   ApiPublicDownloadPdfRoute: ApiPublicDownloadPdfRoute,
+  ApiPublicGameHeartsRoute: ApiPublicGameHeartsRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,

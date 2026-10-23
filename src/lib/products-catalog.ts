@@ -23,6 +23,7 @@ export interface DigitalProduct {
   backCover?: string;       // Texte éditorial « 4e de couverture »
   audienceSentence?: string; // Phrase « Ce PDF s'adresse aux personnes qui veulent... »
   precaution?: string;
+  priceJustification?: string; // « Pourquoi ce prix » — faits vérifiés seulement
 }
 
 export const PRODUCTS: Record<string, DigitalProduct> = {
@@ -304,6 +305,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
       "Quand les enfants cuisinent, ils ne font pas seulement une recette. Ils apprennent à essayer, à rater, à recommencer, à goûter, à offrir et à être fiers de ce qu'ils créent.\n\nLes enfants cuisinent pour faire plaisir est un PDF pensé pour rendre la cuisine accessible, joyeuse et valorisante pour les enfants. Il invite à participer, à découvrir les aliments, à développer l'autonomie et à partager un moment simple autour de quelque chose de concret.\n\nCe n'est pas un outil pour faire des petits chefs parfaits. C'est une invitation à cuisiner ensemble, à créer des souvenirs et à permettre aux enfants de faire plaisir avec leurs mains, leurs idées et leur cœur.",
     audienceSentence:
       "Ce PDF s'adresse aux familles, parents, enfants, écoles ou organismes qui veulent utiliser la cuisine comme un moment de plaisir, d'apprentissage, d'autonomie et de partage.",
+    priceJustification:
+      "Pourquoi 20 $ ? Parce que ce n'est pas un kit de fiches : c'est un livre complet, en un seul PDF. Le prix est unique pour tout le monde — 20 $ CAD, aucune taxe ajoutée (HP Outils est un petit fournisseur : la TPS et la TVQ ne sont pas perçues). Un seul paiement, un téléchargement immédiat, et le livre reste à toi — pour les familles, les parents, les enfants, les écoles et les organismes qui cuisinent pour faire plaisir.",
   },
   sans_honte_frigo_pdf_5: {
     priceId: "sans_honte_frigo_pdf_5",
