@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { ParoleVisiteur } from "@/components/ParoleVisiteur";
 import { createSeoHead } from "@/lib/seo";
 import type { CSSProperties } from "react";
 
@@ -291,6 +292,9 @@ function Index() {
           <NewsletterSignup />
         </div>
       </section>
+
+      {/* PAROLE DE VISITEUSE — juste au-dessus de la zone de vie d'HGPTO */}
+      <ParoleVisiteur />
     </>
   );
 }
