@@ -12,7 +12,7 @@ export const Route = createFileRoute("/pdf/$slug")({
   head: ({ loaderData }) => {
     const product = loaderData?.product;
     if (!product) return createSeoHead({ title: "Aperçu PDF — HP", description: "Découvrez les PDF et kits HP.", path: "/livres-pdf" });
-    const description = `${product.backCover ?? product.shortDescription ?? product.blurb} ${product.priceLabel}. Téléchargement immédiat.`;
+    const description = `${product.backCover ?? product.shortDescription ?? product.blurb} ${product.priceLabel}. ${product.purchaseHold ? "Achat en ligne bientôt rouvert au nouveau prix." : "Téléchargement immédiat."}`;
     const seo = createSeoHead({
       title: `${product.title} — PDF à télécharger | HP`,
       description,
@@ -38,7 +38,9 @@ export const Route = createFileRoute("/pdf/$slug")({
               url: `https://www.hp-outils.com/pdf/${product.slug}`,
               priceCurrency: "CAD",
               price,
-              availability: "https://schema.org/InStock",
+              availability: product.purchaseHold
+                ? "https://schema.org/OutOfStock"
+                : "https://schema.org/InStock",
             },
           }),
         },
@@ -225,17 +227,25 @@ function Page() {
               {fmt} — {product.priceLabel}
             </div>
             <p style={{ fontSize: 14, color: "rgba(58,42,32,.7)", fontStyle: "italic", marginBottom: 16 }}>
-              PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé
+              {product.purchaseHold
+                ? "Nouveau prix · Aucune taxe ajoutée · Achat en ligne bientôt rouvert"
+                : "PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé"}
             </p>
             <BeforeYouBuyNote />
-            <Link
-              to="/achat/$slug"
-              params={{ slug: product.slug }}
-              className="btn-primary"
-              style={{ display: "inline-block" }}
-            >
-              {buyLabel(fmt)} — {product.priceLabel}
-            </Link>
+            {product.purchaseHold ? (
+              <p style={{ maxWidth: 520, lineHeight: 1.65, margin: 0 }}>
+                {product.purchaseHold}
+              </p>
+            ) : (
+              <Link
+                to="/achat/$slug"
+                params={{ slug: product.slug }}
+                className="btn-primary"
+                style={{ display: "inline-block" }}
+              >
+                {buyLabel(fmt)} — {product.priceLabel}
+              </Link>
+            )}
             {fmt === "Kit PDF" && (
               <Link
                 to="/pdf/$slug"
@@ -387,16 +397,24 @@ function Page() {
               <div>
                 <h3>{product.title}</h3>
                 <p>
-                  {fmt} — {product.priceLabel}. Téléchargement immédiat après paiement sécurisé.
+                  {product.purchaseHold
+                    ? `${fmt} — ${product.priceLabel}. ${product.purchaseHold}`
+                    : `${fmt} — ${product.priceLabel}. Téléchargement immédiat après paiement sécurisé.`}
                 </p>
               </div>
-              <Link
-                to="/achat/$slug"
-                params={{ slug: product.slug }}
-                className="action-btn"
-              >
-                {buyLabel(fmt)}
-              </Link>
+              {product.purchaseHold ? (
+                <a href="/en-cuisine/" className="action-btn">
+                  En attendant : En cuisine (gratuit)
+                </a>
+              ) : (
+                <Link
+                  to="/achat/$slug"
+                  params={{ slug: product.slug }}
+                  className="action-btn"
+                >
+                  {buyLabel(fmt)}
+                </Link>
+              )}
             </div>
           </div>
         </div>

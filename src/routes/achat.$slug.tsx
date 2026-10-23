@@ -66,7 +66,10 @@ function Page() {
           <span className="editorial-kicker">Finaliser l'achat — {formatLabel}</span>
           <h1>{product.title}</h1>
           <p className="lead">
-            {formatLabel} — {product.priceLabel}. PDF téléchargeable immédiatement après paiement.
+            {formatLabel} — {product.priceLabel}.{" "}
+            {product.purchaseHold
+              ? "L'achat en ligne n'est pas encore ouvert pour ce livre."
+              : "PDF téléchargeable immédiatement après paiement."}
           </p>
           {product.precaution && <p className="product-precaution">{product.precaution}</p>}
           {product.priceJustification && (
@@ -77,12 +80,38 @@ function Page() {
       <section className="subpage-content">
         <div className="container" style={{ maxWidth: 920 }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32 }}>
-            {product.slug === "sans-honte-collection" ? (
+            {product.purchaseHold ? (
+              <div
+                style={{
+                  padding: 20,
+                  border: "1px solid #e0d8cf",
+                  borderRadius: 4,
+                  background: "#faf6f1",
+                }}
+              >
+                <p style={{ margin: "0 0 8px", fontWeight: 700 }}>
+                  Ce livre vient de baisser de prix : 10 $
+                </p>
+                <p style={{ margin: 0, fontSize: 14 }}>
+                  {product.purchaseHold} En attendant, le pendant gratuit{" "}
+                  <Link to="/en-cuisine/">En cuisine</Link> est ouvert, et
+                  pour toute question, écris à{" "}
+                  <a href="mailto:hpoutils.admin@gmail.com">
+                    hpoutils.admin@gmail.com
+                  </a>
+                  .
+                </p>
+              </div>
+            ) : product.slug === "sans-honte-collection" ? (
               <BundleCheckout product={product} />
             ) : (
               <PdfCheckout priceId={product.priceId} />
             )}
-            <p className="purchase-note">PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé</p>
+            {product.purchaseHold ? (
+              <p className="purchase-note">Aucune taxe ajoutée · Petit fournisseur</p>
+            ) : (
+              <p className="purchase-note">PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé</p>
+            )}
             <div
               style={{
                 padding: 20,
@@ -103,7 +132,7 @@ function Page() {
                 <a href="mailto:hpoutils.admin@gmail.com">
                   hpoutils.admin@gmail.com
                 </a>{" "}
-                — une réponse d'Hugo, pas d'un robot, sous 48 h ouvrables.
+                — une réponse d'Hugo, pas d'un robot, sous 3 jours ouvrables.
               </p>
               <p style={{ margin: 0, fontSize: 14 }}>
                 Et si c'est une panne technique de notre côté — un fichier

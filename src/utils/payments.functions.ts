@@ -53,7 +53,12 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
     kitSlugs?: string[];
   }) => {
     if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
-    if (!getProduct(data.priceId)) throw new Error("Unknown product");
+    const product = getProduct(data.priceId);
+    if (!product) throw new Error("Unknown product");
+    // Achat suspendu (ex. prix affiché abaissé avant que le prix Stripe
+    // correspondant existe) : aucune session ne peut être créée, même
+    // via une requête forgée — jamais de paiement à l'ancien prix.
+    if (product.purchaseHold) throw new Error("Achat suspendu pour ce produit");
     if (data.kitSlugs !== undefined) {
       // La sélection de kits n'a de sens que pour le bundle, et elle doit
       // être complète et valide (exactement 10 kits Sans Honte, uniques).

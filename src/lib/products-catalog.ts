@@ -24,6 +24,11 @@ export interface DigitalProduct {
   audienceSentence?: string; // Phrase « Ce PDF s'adresse aux personnes qui veulent... »
   precaution?: string;
   priceJustification?: string; // « Pourquoi ce prix » — faits vérifiés seulement
+  // Si présent : le prix affiché est en vigueur, mais l'achat en ligne est
+  // suspendu (le message est affiché à la place du paiement). Sert quand le
+  // prix affiché change avant que le prix Stripe correspondant existe —
+  // jamais d'affichage à un prix et de paiement à un autre.
+  purchaseHold?: string;
 }
 
 export const PRODUCTS: Record<string, DigitalProduct> = {
@@ -288,13 +293,26 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     audienceSentence:
       "Cette nouvelle s'adresse aux personnes qui aiment les récits sensibles, humains et ancrés dans le Québec actuel — autour de la langue, de l'identité, de l'amitié et des conversations qui restent longtemps après la dernière page.",
   },
+  // PRIX ABAISSÉ de 20 $ à 10 $ — décision d'Hugo, 23 octobre 2026.
+  // La clé d'entrée et le `priceId` restent ceux du prix Stripe de 20 $
+  // (lookup_key `enfants_cuisinent_pdf_20`) : ce sont les clés de livraison
+  // des achats déjà payés à 20 $ — NE PAS renommer ni supprimer.
+  // Le prix Stripe de 10 $ n'existe pas encore : tant qu'il n'est pas créé
+  // (lookup_key prévu : `enfants_cuisinent_pdf_10`, à créer par Mélanie),
+  // `purchaseHold` suspend l'achat — la fiche annonce 10 $ et ne peut pas
+  // débiter 20 $. À la création du prix de 10 $ : reporter le nouveau
+  // lookup_key dans `priceId` ET comme clé d'entrée, retirer
+  // `purchaseHold`, et conserver une entrée d'alias sous l'ancienne clé
+  // pour que les acheteurs à 20 $ gardent leur accès au téléchargement.
   enfants_cuisinent_pdf_20: {
     priceId: "enfants_cuisinent_pdf_20",
     slug: "enfants-cuisinent",
     title: "Les enfants cuisinent pour faire plaisir",
     pdfPath: "enfants-cuisinent.pdf",
     downloadFileName: "Les-enfants-cuisinent.pdf",
-    priceLabel: "20 $ CAD, aucune taxe ajoutée",
+    priceLabel: "10 $ CAD, aucune taxe ajoutée",
+    purchaseHold:
+      "L'achat en ligne n'est pas encore ouvert au nouveau prix de 10 $. Aucun paiement n'est possible pour ce livre pour le moment — la fiche repassera en vente dès que le nouveau prix sera en place.",
     blurb:
       "Un projet doux pour transmettre le plaisir, pas la performance. Téléchargement immédiat après paiement.",
     cover: "/images/cover-enfants.jpg",
@@ -306,7 +324,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     audienceSentence:
       "Ce PDF s'adresse aux familles, parents, enfants, écoles ou organismes qui veulent utiliser la cuisine comme un moment de plaisir, d'apprentissage, d'autonomie et de partage.",
     priceJustification:
-      "Pourquoi 20 $ ? Parce que ce n'est pas un kit de fiches : c'est un livre complet, en un seul PDF. Le prix est unique pour tout le monde — 20 $ CAD, aucune taxe ajoutée (HP Outils est un petit fournisseur : la TPS et la TVQ ne sont pas perçues). Un seul paiement, un téléchargement immédiat, et le livre reste à toi — pour les familles, les parents, les enfants, les écoles et les organismes qui cuisinent pour faire plaisir.",
+      "Pourquoi 10 $ ? Parce que ce n'est pas un kit de fiches : c'est un livre complet, en un seul PDF — au même prix que « La faim justifie les moyens », pensé pour les petits budgets. Le prix est unique pour tout le monde — 10 $ CAD, aucune taxe ajoutée (HP Outils est un petit fournisseur : la TPS et la TVQ ne sont pas perçues). Et le livre reste à toi — pour les familles, les parents, les enfants, les écoles et les organismes qui cuisinent pour faire plaisir.",
   },
   sans_honte_frigo_pdf_5: {
     priceId: "sans_honte_frigo_pdf_5",

@@ -18,12 +18,12 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Combien coûtent les livres ?",
     reponse:
-      "La faim justifie les moyens 10 $, Horizon Québec 10 $, Enjeux de l'humanité à l'ère de l'IA 15 $ et Les enfants cuisinent pour faire plaisir 20 $. Aucune taxe ajoutée.",
+      "La faim justifie les moyens 10 $, Horizon Québec 10 $, Enjeux de l'humanité à l'ère de l'IA 15 $ et Les enfants cuisinent pour faire plaisir 10 $. Aucune taxe ajoutée.",
   },
   {
     question: "Les recettes et les jeux sont-ils vraiment gratuits ?",
     reponse:
-      "Oui : 629 recettes gratuites en cuisine et 33 jeux gratuits, sans inscription, jouables dans ton navigateur. C'est le cœur d'HP : des outils pour la vraie vie, accessibles à tout le monde.",
+      "Oui : 629 recettes gratuites en cuisine et 34 jeux gratuits, sans inscription, jouables dans ton navigateur. C'est le cœur d'HP : des outils pour la vraie vie, accessibles à tout le monde.",
   },
   {
     question: "Pourquoi aucune taxe n'est ajoutée aux prix ?",

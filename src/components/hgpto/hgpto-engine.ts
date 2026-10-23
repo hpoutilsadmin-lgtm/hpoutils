@@ -1654,11 +1654,11 @@ export function initHgpto() {
       function choixReco(pourQui, quoi){
         var t = "", p = null;
         if (quoi === 'jouer'){
-          t = "Mon honnête recommandation : commence par les jeux gratuits — 33 jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
+          t = "Mon honnête recommandation : commence par les jeux gratuits — 34 jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
           p = { u:"https://hp-outils.com/jeux", l:"Voir les jeux gratuits" };
         } else if (quoi === 'cuisiner'){
           if (pourQui === 'enfants'){
-            t = "Mon honnête recommandation : le livre « Les enfants cuisinent pour faire plaisir » (20 $) — fait pour cuisiner EN famille, avec des recettes pensées pour les petites mains. Et les recettes gratuites du site sont parfaites pour essayer avant.";
+            t = "Mon honnête recommandation : le livre « Les enfants cuisinent pour faire plaisir » (10 $) — fait pour cuisiner EN famille, avec des recettes pensées pour les petites mains. Et les recettes gratuites du site sont parfaites pour essayer avant.";
             p = { u:"https://hp-outils.com/en-cuisine", l:"Voir la cuisine" };
           } else {
             t = "Mon honnête recommandation : commence par les 629 recettes gratuites du site — ça coûte zéro et ça dépanne pour vrai. Si tu veux un livre ensuite, « La faim justifie les moyens » est à 10 $.";
@@ -2110,7 +2110,7 @@ export function initHgpto() {
         { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 26, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
         { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
         { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : tu écris les ingrédients que tu as déjà, et il te propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et ta liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
-        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 20 $, que tu télécharges tout de suite après le paiement. « La faim justifie les moyens » (10 $), c'est l'histoire vraie d'Hugo ; « Les enfants cuisinent pour faire plaisir » (20 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
+        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que tu télécharges tout de suite après le paiement. « La faim justifie les moyens » (10 $), c'est l'histoire vraie d'Hugo ; « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
         { id:'sec-ateliers', t:"Et ici, on sort de l'écran : les ateliers se vivent en groupe, à Terrebonne et dans les environs. « Cuisine pratique » (120 $), « Manger mieux avec moins » (150 $) — on cuisine ensemble, on apprend des choses utiles, et c'est le côté humain d'HP Outils qui se vit pour vrai, autour d'une table." },
         { id:'sec-arbre', t:"On est de retour à l'entrée — la visite est terminée, merci de m'avoir suivi. Tu as vu l'arbre au complet : chaque branche aide les autres, et rien ne se cache. Reste jaser si tu veux : pose-moi une question dans mon petit panneau, je connais toutes les réponses du site — et sinon, explore à ton rythme. Ici, la porte est toujours ouverte." }
       ];
@@ -4228,7 +4228,7 @@ export function initHgpto() {
       var navTimes = [], visitCount = {}, summarySaid = {}, restSaid = false, lostSaidAt = 0, presseUntil = 0;
       var ROUTE_FACTS = {
         '/sans-honte': "Petit résumé calme : 15 kits à 5 $ chacun, le bundle « Choisis 10 parmi 15 » à 40 $, aucune taxe ajoutée. Prends ton temps.",
-        '/livres-pdf': "Petit résumé calme : 4 livres en PDF, de 10 $ à 20 $, téléchargement immédiat après le paiement. Prends ton temps.",
+        '/livres-pdf': "Petit résumé calme : 4 livres en PDF, de 10 $ à 15 $, téléchargement immédiat après le paiement. Prends ton temps.",
         '/ateliers': "Petit résumé calme : les ateliers vont de 120 $ à 150 $, à Terrebonne et dans Lanaudière, et on répond à tes questions par courriel. Prends ton temps.",
         '/les-passeurs': "Petit résumé calme : les Passeurs, c'est 1 $ par mois pour soutenir HP Outils — et l'inscription payante arrive bientôt, en toute honnêteté. Prends ton temps."
       };
