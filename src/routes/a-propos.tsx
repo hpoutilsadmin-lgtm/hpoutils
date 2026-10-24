@@ -16,7 +16,7 @@ function Page() {
   return (
     <>
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
-        <div className="container" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 40, alignItems: "center" }}>
+        <div className="container a-propos-hero-grid">
           <div>
             <p className="page-kicker">À propos</p>
             <h1>Comprendre. Agir. Transmettre.</h1>
