@@ -75,6 +75,16 @@
         font-size:13.5px; font-weight:600; line-height:1.45; }
       @media (orientation:portrait){ .hint .turn{ display:inline; } }
       .hint .turn{ display:none; font-weight:800; }
+      /* Porte paysage : le hockey se joue écran tourné, jamais en portrait */
+      .rotate-gate{ position:absolute; inset:0; z-index:20; display:none; flex-direction:column;
+        align-items:center; justify-content:center; gap:10px; text-align:center; padding:22px;
+        background:rgba(16,28,44,.88); color:#f4f8fc; backdrop-filter:blur(2px); }
+      .rotate-gate.open{ display:flex; }
+      .rotate-gate .phone{ font-size:clamp(44px,12vw,72px); line-height:1; animation:tilt 1.8s ease-in-out infinite; }
+      @keyframes tilt{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(90deg); } }
+      @media (prefers-reduced-motion: reduce){ .rotate-gate .phone{ animation:none; } }
+      .rotate-gate h2{ margin:0; font-size:clamp(22px,5vw,32px); font-weight:1000; }
+      .rotate-gate p{ margin:0; max-width:480px; font-size:clamp(14px,3vw,17px); line-height:1.45; font-weight:600; }
     </style>
   </head>
   <body>
@@ -106,6 +116,12 @@
         <p class="teams" id="resultScore">Toi 0 — 0 HGPTO</p>
         <p id="resultLine"></p>
         <button class="bigbtn" id="againBtn">Recommencer</button>
+      </div>
+      <div class="rotate-gate" id="rotateGate" role="alert">
+        <div class="phone" aria-hidden="true">📱 ↻</div>
+        <h2>Tourne ton appareil !</h2>
+        <p>Le hockey se joue à l'horizontale, avec une patinoire plus grande. Tourne ton téléphone ou ta tablette — ou élargis ta fenêtre — puis joue.</p>
+        <p>Si une partie est en cours, elle attend ton retour, sans perdre le score.</p>
       </div>
     </div>
     <p class="hint">Glisse pour diriger ton patineur · maintiens TIR pour un lancer plus fort · flèches/WASD + Espace au clavier.
@@ -173,6 +189,33 @@
       },
       skate() { this.noise(0.07, 0.08, 1600); }
     };
+
+    // ============ Porte paysage : le hockey se joue écran tourné ============
+    // En portrait, la porte s'affiche par-dessus la patinoire, la partie ne
+    // démarre pas et une partie en cours se fige (score et horloge gardés).
+    // Au retour en paysage, la porte se retire et la partie reprend.
+    const rotateGate = document.getElementById("rotateGate");
+    function isPortrait() {
+      return window.matchMedia ? window.matchMedia("(orientation: portrait)").matches : false;
+    }
+    let portraitPaused = false;
+    function updateRotateGate() {
+      const portrait = isPortrait();
+      rotateGate.classList.toggle("open", portrait);
+      if (portrait) {
+        if (S.mode === "play" || S.mode === "faceoff" || S.mode === "goalpause") portraitPaused = true;
+      } else {
+        portraitPaused = false;
+      }
+      return portrait;
+    }
+    if (window.matchMedia) {
+      const mq = window.matchMedia("(orientation: portrait)");
+      if (mq.addEventListener) mq.addEventListener("change", updateRotateGate);
+      else if (mq.addListener) mq.addListener(updateRotateGate);
+    }
+    addEventListener("resize", updateRotateGate);
+    addEventListener("orientationchange", updateRotateGate);
 
     // ============ Répliques (français québécois, beau joueur toujours) ============
     const LINES = {
@@ -289,6 +332,7 @@
       AudioSys.ensure(); AudioSys.shortWhistle();
     }
     function startMatch() {
+      if (updateRotateGate()) return; // écran tourné exigé : pas de départ en portrait
       S.scoreYou = 0; S.scoreThem = 0; S.clock = MATCH_TIME; S.overtime = false;
       updateHud();
       document.getElementById("intro").classList.add("hidden");
@@ -324,11 +368,15 @@
       bannerEl.classList.remove("hidden");
       bannerHideAt = performance.now() + (ms || 1200);
     }
+    let hudCache = "";
     function updateHud() {
+      const t = Math.max(0, Math.ceil(S.clock));
+      const key = S.scoreYou + "|" + S.scoreThem + "|" + t + "|" + (S.overtime ? 1 : 0);
+      if (key === hudCache) return; // le texte affiché n'a pas changé : pas d'écriture DOM
+      hudCache = key;
       document.getElementById("scoreYou").textContent = S.scoreYou;
       document.getElementById("scoreThem").textContent = S.scoreThem;
       const c = document.getElementById("clock");
-      const t = Math.max(0, Math.ceil(S.clock));
       c.textContent = Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
       c.classList.toggle("gold", S.overtime);
     }
@@ -658,51 +706,58 @@
       ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r);
       ctx.closePath();
     }
-    function drawIce() {
-      const g = ctx.createLinearGradient(0, 0, 0, H);
+    function rr(c, x, y, w, h, r) { // même tracé, sur un contexte donné (calque de glace)
+      c.beginPath();
+      c.moveTo(x + r, y);
+      c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+      c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r);
+      c.closePath();
+    }
+    function drawIce(c) {
+      const g = c.createLinearGradient(0, 0, 0, H);
       g.addColorStop(0, "#e8f2f9"); g.addColorStop(0.5, "#dcebf5"); g.addColorStop(1, "#e8f2f9");
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      c.fillStyle = g; c.fillRect(0, 0, W, H);
       // Filets
-      ctx.fillStyle = "#fdfefe";
-      ctx.fillRect(6, GOAL_Y - GOAL_H / 2 - 8, GOAL_L - 6, GOAL_H + 16);
-      ctx.fillRect(GOAL_R, GOAL_Y - GOAL_H / 2 - 8, W - GOAL_R - 6, GOAL_H + 16);
-      ctx.strokeStyle = "#b8452f"; ctx.lineWidth = 3;
-      ctx.strokeRect(8, GOAL_Y - GOAL_H / 2 - 6, GOAL_L - 10, GOAL_H + 12);
-      ctx.strokeRect(GOAL_R + 2, GOAL_Y - GOAL_H / 2 - 6, W - GOAL_R - 10, GOAL_H + 12);
-      ctx.strokeStyle = "rgba(90,130,160,.35)"; ctx.lineWidth = 1;
+      c.fillStyle = "#fdfefe";
+      c.fillRect(6, GOAL_Y - GOAL_H / 2 - 8, GOAL_L - 6, GOAL_H + 16);
+      c.fillRect(GOAL_R, GOAL_Y - GOAL_H / 2 - 8, W - GOAL_R - 6, GOAL_H + 16);
+      c.strokeStyle = "#b8452f"; c.lineWidth = 3;
+      c.strokeRect(8, GOAL_Y - GOAL_H / 2 - 6, GOAL_L - 10, GOAL_H + 12);
+      c.strokeRect(GOAL_R + 2, GOAL_Y - GOAL_H / 2 - 6, W - GOAL_R - 10, GOAL_H + 12);
+      c.strokeStyle = "rgba(90,130,160,.35)"; c.lineWidth = 1;
       for (let i = 1; i < 6; i++) {
-        ctx.beginPath(); ctx.moveTo(12, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); ctx.lineTo(GOAL_L - 4, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(GOAL_R + 4, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); ctx.lineTo(W - 12, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); ctx.stroke();
+        c.beginPath(); c.moveTo(12, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); c.lineTo(GOAL_L - 4, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); c.stroke();
+        c.beginPath(); c.moveTo(GOAL_R + 4, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); c.lineTo(W - 12, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); c.stroke();
       }
       // Lignes et cercles
-      ctx.strokeStyle = "rgba(178,34,34,.75)"; ctx.lineWidth = 5;
-      ctx.beginPath(); ctx.moveTo(W / 2, RINK.y); ctx.lineTo(W / 2, RINK.y + RINK.h); ctx.stroke();
-      ctx.strokeStyle = "rgba(36,86,166,.55)"; ctx.lineWidth = 11;
-      [W * 0.28, W * 0.72].forEach(x => { ctx.beginPath(); ctx.moveTo(x, RINK.y); ctx.lineTo(x, RINK.y + RINK.h); ctx.stroke(); });
-      ctx.strokeStyle = "rgba(178,34,34,.6)"; ctx.lineWidth = 2.5;
-      ctx.beginPath(); ctx.arc(W / 2, GOAL_Y, 52, 0, Math.PI * 2); ctx.stroke();
-      ctx.fillStyle = "rgba(36,86,166,.55)";
-      ctx.beginPath(); ctx.arc(W / 2, GOAL_Y, 9, 0, Math.PI * 2); ctx.fill();
+      c.strokeStyle = "rgba(178,34,34,.75)"; c.lineWidth = 5;
+      c.beginPath(); c.moveTo(W / 2, RINK.y); c.lineTo(W / 2, RINK.y + RINK.h); c.stroke();
+      c.strokeStyle = "rgba(36,86,166,.55)"; c.lineWidth = 11;
+      [W * 0.28, W * 0.72].forEach(x => { c.beginPath(); c.moveTo(x, RINK.y); c.lineTo(x, RINK.y + RINK.h); c.stroke(); });
+      c.strokeStyle = "rgba(178,34,34,.6)"; c.lineWidth = 2.5;
+      c.beginPath(); c.arc(W / 2, GOAL_Y, 52, 0, Math.PI * 2); c.stroke();
+      c.fillStyle = "rgba(36,86,166,.55)";
+      c.beginPath(); c.arc(W / 2, GOAL_Y, 9, 0, Math.PI * 2); c.fill();
       [[250, 150], [250, 390], [650, 150], [650, 390]].forEach(([cx, cy]) => {
-        ctx.strokeStyle = "rgba(178,34,34,.45)";
-        ctx.beginPath(); ctx.arc(cx, cy, 34, 0, Math.PI * 2); ctx.stroke();
-        ctx.fillStyle = "rgba(178,34,34,.5)";
-        ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
+        c.strokeStyle = "rgba(178,34,34,.45)";
+        c.beginPath(); c.arc(cx, cy, 34, 0, Math.PI * 2); c.stroke();
+        c.fillStyle = "rgba(178,34,34,.5)";
+        c.beginPath(); c.arc(cx, cy, 6, 0, Math.PI * 2); c.fill();
       });
       // Demi-cercles de but
-      ctx.fillStyle = "rgba(120,180,230,.4)";
-      ctx.beginPath(); ctx.arc(GOAL_L, GOAL_Y, 34, -Math.PI / 2, Math.PI / 2); ctx.fill();
-      ctx.beginPath(); ctx.arc(GOAL_R, GOAL_Y, 34, Math.PI / 2, Math.PI * 1.5); ctx.fill();
+      c.fillStyle = "rgba(120,180,230,.4)";
+      c.beginPath(); c.arc(GOAL_L, GOAL_Y, 34, -Math.PI / 2, Math.PI / 2); c.fill();
+      c.beginPath(); c.arc(GOAL_R, GOAL_Y, 34, Math.PI / 2, Math.PI * 1.5); c.fill();
       // Bandes
-      ctx.strokeStyle = "#f7c948"; ctx.lineWidth = 7; roundRect(RINK.x - 4, RINK.y - 4, RINK.w + 8, RINK.h + 8, 26); ctx.stroke();
-      ctx.strokeStyle = "#8a97a5"; ctx.lineWidth = 3; roundRect(RINK.x - 9, RINK.y - 9, RINK.w + 18, RINK.h + 18, 30); ctx.stroke();
+      c.strokeStyle = "#f7c948"; c.lineWidth = 7; rr(c, RINK.x - 4, RINK.y - 4, RINK.w + 8, RINK.h + 8, 26); c.stroke();
+      c.strokeStyle = "#8a97a5"; c.lineWidth = 3; rr(c, RINK.x - 9, RINK.y - 9, RINK.w + 18, RINK.h + 18, 30); c.stroke();
       // Baies vitrées suggérées
-      ctx.fillStyle = "rgba(255,255,255,.28)"; ctx.fillRect(0, 0, W, 22); ctx.fillRect(0, H - 22, W, 22);
+      c.fillStyle = "rgba(255,255,255,.28)"; c.fillRect(0, 0, W, 22); c.fillRect(0, H - 22, W, 22);
       // Mot de la maison sur la glace, discret
-      ctx.save();
-      ctx.translate(W / 2, GOAL_Y + 96); ctx.fillStyle = "rgba(36,86,166,.14)";
-      ctx.font = "900 30px system-ui"; ctx.textAlign = "center";
-      ctx.fillText("HP OUTILS", 0, 0); ctx.restore();
+      c.save();
+      c.translate(W / 2, GOAL_Y + 96); c.fillStyle = "rgba(36,86,166,.14)";
+      c.font = "900 30px system-ui"; c.textAlign = "center";
+      c.fillText("HP OUTILS", 0, 0); c.restore();
     }
     function drawPuck() {
       ctx.fillStyle = "rgba(20,25,30,.25)";
@@ -863,7 +918,8 @@
       ctx.beginPath(); ctx.arc(joy.ax + joy.dx * 24, joy.ay + joy.dy * 24, 11, 0, Math.PI * 2); ctx.fill();
     }
     function render(t) {
-      drawIce();
+      if (iceCache) ctx.drawImage(iceCache, 0, 0, W, H);
+      else drawIce(ctx); // repli si le calque n'existe pas encore
       drawPuck();
       drawGoalieYou();
       drawPixel(t);
@@ -875,22 +931,40 @@
     }
 
     // ============ Boucle principale (pas fixe, plafond DPR 2) ============
-    (function fitCanvas() {
+    // La glace statique est pré-rendue une fois dans un calque hors écran :
+    // chaque image ne redessine que les joueurs, la rondelle et les effets.
+    let iceCache = null;
+    function buildIceCache(dpr) {
+      const c = document.createElement("canvas");
+      c.width = W * dpr; c.height = H * dpr;
+      const g = c.getContext("2d");
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawIce(g);
+      iceCache = c;
+    }
+    function fitCanvas() {
       const dpr = Math.min(2, window.devicePixelRatio || 1);
       canvas.width = W * dpr; canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    })();
+      buildIceCache(dpr);
+    }
+    fitCanvas();
+    addEventListener("resize", fitCanvas);
+    addEventListener("orientationchange", fitCanvas);
     let lastTs = 0;
     function frame(ts) {
       requestAnimationFrame(frame);
       if (!lastTs) lastTs = ts;
       let dt = Math.min(0.033, (ts - lastTs) / 1000); lastTs = ts;
       const now = ts / 1000;
-      const sub = Math.max(1, Math.ceil(dt / (1 / 120)));
-      const sdt = dt / sub;
-      for (let i = 0; i < sub; i++) step(sdt, now);
+      if (!portraitPaused) { // en portrait, l'image reste figée derrière la porte
+        const sub = Math.max(1, Math.ceil(dt / (1 / 120)));
+        const sdt = dt / sub;
+        for (let i = 0; i < sub; i++) step(sdt, now);
+      }
       render(now);
     }
+    updateRotateGate();
     requestAnimationFrame(frame);
     resetPositions();
     updateHud();
@@ -919,7 +993,11 @@
       setFace: (who, x, y) => { const e = who === "player" ? player : hgpto; e.face = { x, y }; },
       shootPlayer: () => playerShoot(0.85),
       forcePixelDistraction: () => { if (pixel.mode === "track") { pixel.timer = 0.01; } },
-      endNow: () => { S.clock = 0.01; }
+      endNow: () => { S.clock = 0.01; },
+      isPortrait: () => isPortrait(),
+      gateOpen: () => rotateGate.classList.contains("open"),
+      iceCached: () => !!iceCache,
+      portraitPaused: () => portraitPaused
     };
     </script>
   </body>
