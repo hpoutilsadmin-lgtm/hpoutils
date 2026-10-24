@@ -530,7 +530,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     precaution:
       "Le choix des kits se fait à l'étape suivante, avant le paiement : tu coches exactement 10 kits parmi les 15, et ce sont ces 10-là que tu reçois par courriel.",
   },
-  // MINI CAHIER « HP — HYPER POTENTIEL » — publié le 23 octobre 2026
+  // MINI CAHIER « UN PETIT PAS À LA FOIS » — publié le 23 octobre 2026
   // (déplacé de MINI_CAHIER_DRAFT, voir la note à la fin du fichier).
   // Produit + prix créés dans Stripe en MODE TEST le 22 octobre 2026
   // (lookup_key `hp_hyper_potentiel_cahier_pdf_10`, 10 $ CAD) et PDF
@@ -540,7 +540,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   hp_hyper_potentiel_cahier_pdf_10: {
     priceId: "hp_hyper_potentiel_cahier_pdf_10",
     slug: "mini-cahier-hyper-potentiel",
-    title: "HP — Hyper potentiel — le mini cahier",
+    title: "Un petit pas à la fois — le mini cahier",
     pdfPath: "mini-cahier-hyper-potentiel.pdf",
     downloadFileName: "mini-cahier-hyper-potentiel.pdf",
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
@@ -549,12 +549,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     cover: "/images/cover-hyper-potentiel.jpg",
     formatLabel: "Version PDF",
     shortDescription:
-      "Un mini cahier de 20 pages à imprimer — ikigaï, respiration, méditation, mouvement et buts — pour explorer ton potentiel au crayon, à ton rythme.",
+      "Un mini cahier de 20 pages à imprimer — ikigaï, respiration, méditation, mouvement et buts — pour passer à l'action au crayon, à ton rythme.",
     volumeLabel: "20 pages",
     includes: [
       "Le fichier PDF complet — 20 pages, couverture comprise",
       "Des exercices à remplir au crayon dans chaque section : ta carte ikigaï, tes séances de respiration et de méditation, ton plan WOOP, ton suivi de 30 jours",
-      "L'outil web gratuit HP — Hyper potentiel en compagnon (respiration guidée, carte ikigaï interactive, plan WOOP) — sur hp-outils.com",
+      "L'outil web gratuit Un petit pas à la fois en compagnon (respiration guidée, carte ikigaï interactive, plan WOOP) — sur hp-outils.com",
       "Téléchargement immédiat après l'achat",
       "Usage personnel",
       "À imprimer chez toi ou au centre de copies",
@@ -1211,7 +1211,7 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
   },
 ];
 // ============================================================================
-// MINI CAHIER « HP — HYPER POTENTIEL » — PUBLIÉ LE 23 OCTOBRE 2026
+// MINI CAHIER « UN PETIT PAS À LA FOIS » — PUBLIÉ LE 23 OCTOBRE 2026
 // ============================================================================
 // L'entrée a été déplacée dans PRODUCTS (clé
 // hp_hyper_potentiel_cahier_pdf_10) : produit + prix créés dans Stripe
