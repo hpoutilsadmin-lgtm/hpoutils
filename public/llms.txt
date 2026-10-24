@@ -28,6 +28,19 @@ Sur le site vit aussi HGPTO, le petit robot assistant du site, qui répond aux q
 anti-gaspillage, collations et plus — pensées pour les petits budgets et la vraie vie.
 Convertisseur de températures de four intégré. Aucun compte requis.
 
+
+### Quoi faire avec ton panier — banque alimentaire (page /en-cuisine/panier/)
+
+164 recettes de soutien gratuites, construites uniquement avec les 15 ingrédients les plus
+donnés aux banques alimentaires (pâtes, riz, tomates en conserve, légumineuses, thon en
+conserve, beurre d'arachide, avoine, farine, lait, œufs, pommes de terre, oignons, maïs en
+conserve, sauce tomate, huile végétale), plus les bases de la maison.
+Pages par ingrédient (recettes complètes, tirées de la même base) :
+- /en-cuisine/panier/lait/ — quoi faire avec du lait (67 recettes de soutien)
+- /en-cuisine/panier/oeufs/ — quoi faire avec des œufs (61)
+- /en-cuisine/panier/tomates-en-conserve/ — quoi faire avec des tomates en conserve (57)
+- /en-cuisine/panier/farine/ — quoi faire avec de la farine (44)
+- /en-cuisine/panier/pommes-de-terre/ — quoi faire avec des pommes de terre (42)
 ## Les outils web — gratuits, sans compte (page /outils)
 
 Données : tout reste sur l'appareil de l'utilisateur (localStorage) ; rien n'est collecté ni transmis.
