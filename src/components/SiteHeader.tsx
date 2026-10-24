@@ -12,6 +12,7 @@ const NAV_SECONDARY = [
   { to: "/balado", label: "Balado" },
   { to: "/univers", label: "Univers alternatif" },
   { to: "/ateliers", label: "Ateliers" },
+  { to: "/prix", label: "Prix" },
   { to: "/a-propos", label: "À propos" },
 ] as const;
 

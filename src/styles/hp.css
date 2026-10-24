@@ -7,7 +7,7 @@
   --gold2:#f0c16d;
   --green:#294f1e;
   --green2:#496b2a;
-  --orange:#c85f16;
+  --orange:#9a4a10;
   --orange2:#e8751a;
   --blue:#08243a;
   --blue2:#0f3e62;
@@ -31,7 +31,8 @@ body{
   line-height:1.5;
 }
 body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.hp-app a{color:inherit;text-decoration:none}
+.hp-app a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.hp-app .site-nav a,.hp-app a.logo,.hp-app a.action-btn,.hp-app a.hero-btn,.hp-app a.outline-btn,.hp-app a.small-btn,.hp-app .pillar-card .pillar-cta{text-decoration:none}
 .hp-app img{max-width:100%;display:block}
 .hp-app .container{width:min(var(--max),calc(100% - 32px));margin:0 auto}
 
@@ -46,8 +47,8 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .logo img{height:58px;width:auto;display:block}
 .footer-logo{height:72px;width:auto;display:block;margin-bottom:14px}
 .footer-logo-mark{height:56px;width:auto;display:block;margin:0 auto 10px}
-.nav-toggle{display:none;margin-left:auto;border:1px solid var(--line);background:transparent;color:var(--gold2);border-radius:10px;padding:10px 14px;font-weight:900;cursor:pointer}
-.site-nav{display:flex;align-items:center;gap:18px;margin-left:auto;font-size:13px;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
+.nav-toggle{display:none;margin-left:auto;border:1px solid var(--line);background:transparent;color:var(--gold2);border-radius:10px;padding:10px 14px;min-height:44px;font-weight:900;cursor:pointer}
+.site-nav{display:flex;align-items:center;gap:14px;margin-left:auto;font-size:13px;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
 .site-nav a{color:rgba(255,255,255,.9);padding:27px 0 22px;border-bottom:2px solid transparent;white-space:nowrap}
 .site-nav a:hover,.site-nav a.active{color:var(--gold2);border-bottom-color:var(--gold)}
 .contact-top{border:1px solid var(--gold);color:var(--gold2)!important;border-radius:8px;padding:12px 22px!important;margin-left:10px;border-bottom-color:var(--gold)!important}
@@ -104,7 +105,7 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .hero-btn{display:flex;align-items:center;gap:12px;border-radius:9px;color:white;min-height:54px;padding:13px 20px;text-transform:uppercase;font-weight:950;letter-spacing:.045em;box-shadow:0 14px 26px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.20);border:1px solid rgba(255,255,255,.12);transition:transform .18s ease,filter .18s ease}
 .hero-btn.gold{background:linear-gradient(135deg,#c88320,#e6a844)}
 .hero-btn.green{background:linear-gradient(135deg,#315d22,#628332)}
-.hero-btn.orange{background:linear-gradient(135deg,#bd5515,#e57720)}
+.hero-btn.orange{background:linear-gradient(135deg,#9a4a10,#bd5515)}
 .hero-btn.blue{background:linear-gradient(135deg,#0d3858,#1f5d84)}
 .hero-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
 
@@ -132,7 +133,7 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .start-card,.offer-card{background:rgba(255,255,255,.72);border:1px solid rgba(128,105,67,.30);border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:74px 1fr 18px;gap:16px;align-items:center;box-shadow:0 12px 26px rgba(50,35,15,.07),inset 0 1px 0 rgba(255,255,255,.8);transition:transform .18s ease,box-shadow .18s ease}
 .start-card:hover,.offer-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(50,35,15,.10)}
 .round-icon{width:64px;height:64px;border-radius:999px;display:grid;place-items:center;color:white;font-size:28px;font-weight:900;box-shadow:0 10px 18px rgba(0,0,0,.14)}
-.round-icon.blue{background:#0d3858}.round-icon.green{background:#2d5d25}.round-icon.orange{background:#cc661c}.round-icon.brown{background:#9a835d}
+.round-icon.blue{background:#0d3858}.round-icon.green{background:#2d5d25}.round-icon.orange{background:#9a4a10}.round-icon.brown{background:#9a835d}
 .start-card h3,.offer-card h3{margin:0 0 4px;font-family:Georgia,serif;font-size:20px}
 .start-card p,.offer-card p{margin:0;color:#4f5962;font-size:14px}
 .arrow{color:#8e6a3b;font-size:28px}
@@ -140,9 +141,9 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .offer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
 .offer-card{grid-template-columns:62px 1fr;align-items:start;min-height:165px}
 .offer-card .round-icon{width:56px;height:56px;font-size:24px}
-.small-btn{grid-column:1/-1;display:flex;justify-content:center;align-items:center;min-height:38px;border:1px solid rgba(128,105,67,.55);border-radius:6px;text-transform:uppercase;font-size:12px;font-weight:950;letter-spacing:.04em;color:#5f553f;margin-top:8px;background:rgba(255,255,255,.30)}
-.offer-card.featured{border-color:rgba(200,95,22,.58)}
-.offer-card.featured .small-btn{color:var(--orange);border-color:rgba(200,95,22,.68)}
+.small-btn{grid-column:1/-1;display:flex;justify-content:center;align-items:center;min-height:44px;border:1px solid rgba(128,105,67,.55);border-radius:6px;text-transform:uppercase;font-size:12px;font-weight:950;letter-spacing:.04em;color:#5f553f;margin-top:8px;background:rgba(255,255,255,.30)}
+.offer-card.featured{border-color:rgba(154,74,16,.58)}
+.offer-card.featured .small-btn{color:var(--orange);border-color:rgba(154,74,16,.68)}
 
 .subpage-hero{position:relative;overflow:hidden;padding:84px 0 68px;color:white;background:radial-gradient(circle at 73% 21%,rgba(255,235,177,.88) 0 2%,rgba(240,185,88,.52) 6%,rgba(240,185,88,.14) 22%,transparent 40%),radial-gradient(ellipse at 76% 62%,rgba(236,146,46,.20),transparent 32%),linear-gradient(90deg,rgba(4,9,18,.96) 0%,rgba(4,9,18,.76) 38%,rgba(4,9,18,.30) 62%,rgba(4,9,18,.60) 100%),linear-gradient(120deg,#030711 0%,#071827 48%,#040a12 100%);border-bottom:1px solid rgba(216,149,50,.36);box-shadow:inset 0 -60px 100px rgba(0,0,0,.38)}
 .subpage-hero:before{content:"";position:absolute;inset:0;opacity:.32;pointer-events:none;background-image:radial-gradient(circle at 2px 2px,rgba(255,255,255,.7) 1px,transparent 1.7px),radial-gradient(circle at 42px 28px,rgba(216,149,50,.4) 1px,transparent 1.7px);background-size:74px 74px,118px 118px}
@@ -182,7 +183,7 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .info-card h3{margin:0 0 8px;font-family:Georgia,serif;font-size:24px}
 .info-card p{color:var(--muted)}
 .price{color:var(--orange);font-weight:950}
-.action-btn{display:inline-flex;justify-content:center;align-items:center;min-height:42px;padding:10px 18px;border-radius:6px;color:white;background:var(--orange);font-weight:900;text-transform:uppercase;font-size:13px;letter-spacing:.05em}
+.action-btn{display:inline-flex;justify-content:center;align-items:center;min-height:44px;padding:10px 18px;border-radius:6px;color:white;background:var(--orange);font-weight:900;text-transform:uppercase;font-size:13px;letter-spacing:.05em}
 .table-wrap{overflow-x:auto;background:white;border-radius:var(--radius);border:1px solid rgba(128,105,67,.25)}
 .hp-app table{width:100%;min-width:760px;border-collapse:collapse}
 .hp-app th,.hp-app td{padding:15px 16px;border-bottom:1px solid rgba(0,0,0,.08);text-align:left}

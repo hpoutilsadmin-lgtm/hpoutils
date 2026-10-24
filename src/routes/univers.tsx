@@ -134,7 +134,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>RELÈVE et 33 autres jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
+              <p>RELÈVE et 34 autres jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Jouer →</Link>
             </article>
             <article className="pillar-card">

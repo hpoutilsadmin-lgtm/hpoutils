@@ -161,7 +161,7 @@ export const HGPTO_MARKUP = `
               </g>
               <path d="M110 66 L107.5 78 Q110 81 113.5 78" fill="none" stroke="#7d8593" stroke-width="2.4" stroke-linecap="round"/>
 
-              <!-- AUCUNE lunette de soleil — jamais (correction d'Hugo, 22 oct.).
+              <!-- AUCUNE lunette de soleil — jamais (correction de la direction, 22 oct.).
                    Ses seuls verres : les lunettes de LECTURE, pour lire seulement. -->
               <!-- lunettes de lecture : SEULEMENT pendant la vignette lecture -->
               <g class="readglasses" fill="rgba(255,255,255,.10)" stroke="var(--botink)" stroke-width="4">
@@ -185,7 +185,7 @@ export const HGPTO_MARKUP = `
               <path class="mouthv mouth-sad" d="M99 101 Q110 92 121 101" fill="none" stroke="var(--botink)" stroke-width="4" stroke-linecap="round"/>
 
               <!-- GROS SOURCILS NOIRS ÉBOURIFFÉS, encore plus velus/poilus
-                   (directives d'Hugo, 22 oct.) : épais, broussailleux, poils
+                   (directives de la direction, 22 oct.) : épais, broussailleux, poils
                    rebelles — ce sont EUX qui portent les émotions -->
               <g fill="none" stroke="#1d1710" stroke-width="15.5" stroke-linecap="round">
                 <g class="browv brow-happy">
@@ -588,7 +588,7 @@ export const HGPTO_MARKUP = `
         <button type="button" id="qa-helium" aria-pressed="true">Hélium : oui</button>
       </div>
       <div class="qa-hugo" id="qa-hugo" hidden>
-        <div class="qa-hugo-title">Pour Hugo — questions sans réponse, à valider :</div>
+        <div class="qa-hugo-title">Pour HP — questions sans réponse, à valider :</div>
         <ul id="qa-hugo-list"></ul>
       </div>
       <button type="button" id="qa-play" class="qa-play">HGPTO, joue avec moi !</button>

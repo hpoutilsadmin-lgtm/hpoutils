@@ -4,22 +4,28 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/prix")({
   head: () => createSeoHead({
     title: "Prix HP — kits 5 $, livres 10 à 15 $, ateliers 120 $/150 $, aucune taxe ajoutée",
-    description: "Tous les prix HP au même endroit : kits Sans Honte 5 $, lot de 10 kits 40 $, livres PDF 10 à 15 $, ateliers 120 $/150 $. Petit fournisseur : aucune taxe ajoutée.",
+    description: "Tous les prix HP au même endroit : kits Sans Honte 5 $, lot de 10 kits 40 $, livres PDF 10 à 15 $, mini-cahier 10 $, tomes 5 à 8 $, ateliers 120 $/150 $. Petit fournisseur : aucune taxe ajoutée.",
     path: "/prix",
   }),
   component: Page,
 });
 
-const ROWS: Array<{ cat: string; offre: string; prix: string; href: string; label: string }> = [
-  { cat: "PDF", offre: "Enjeux de l’humanité à l’ère de l’IA (PDF)", prix: "15 $ CAD, aucune taxe ajoutée", href: "/achat/enjeux-humanite", label: "Acheter le PDF" },
-  { cat: "Guide", offre: "La faim justifie les moyens (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/faim-justifie-les-moyens", label: "Acheter le PDF" },
+type Row = { cat: string; offre: string; prix: string; href?: string; label?: string };
+
+const ROWS: Row[] = [
+  { cat: "PDF", offre: "La faim justifie les moyens (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/faim-justifie-les-moyens", label: "Acheter le PDF" },
   { cat: "PDF", offre: "Horizon Québec (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/horizon-quebec", label: "Acheter le PDF" },
+  { cat: "PDF", offre: "Enjeux de l’humanité à l’ère de l’IA (PDF)", prix: "15 $ CAD, aucune taxe ajoutée", href: "/achat/enjeux-humanite", label: "Acheter le PDF" },
   { cat: "PDF", offre: "Les enfants cuisinent pour faire plaisir (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/enfants-cuisinent", label: "Voir la fiche" },
+  { cat: "PDF", offre: "Un petit pas à la fois — le mini cahier (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/mini-cahier-hyper-potentiel", label: "Acheter le PDF" },
   { cat: "Sans Honte", offre: "Kits Sans Honte — 15 titres au choix, un par un (Frigo, Papiers, Fraude, Tenir Debout, Seconde Main, Entraide…)", prix: "5 $ CAD le kit, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les 15 kits" },
   { cat: "Sans Honte", offre: "Bundle Sans Honte — Choisis 10 kits parmi 15", prix: "40 $ CAD, aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
+  { cat: "À toi l’histoire", offre: "Tomes « À toi l’histoire » — tome 1 gratuit, standards 5 $, grands 8 $, bundle 3 tomes 12 $ (mode TEST — aucune vente réelle)", prix: "Gratuit, 5 $ ou 8 $ selon le tome ; bundle 12 $, aucune taxe ajoutée", href: "/lire", label: "Voir /lire/ (mode test)" },
+  { cat: "Passeurs", offre: "Passeurs de savoirs — inscription pas encore en ligne", prix: "3 $/mois · 28 $/an · 12 $ pour 4 savoirs, aucune taxe ajoutée", href: "/les-passeurs", label: "Voir les Passeurs" },
+  { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "120 $ ou 150 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
+  { cat: "Jeu", offre: "Chevalier du fleuve — gemmes du jeu, bientôt en vente", prix: "Bientôt en vente", href: "/jeux", label: "Voir le jeu" },
+  { cat: "Coffre", offre: "Le Coffre HP — fiche non publiée, pas encore en vente", prix: "79 $ CAD" },
   { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 4 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
-  { cat: "Atelier", offre: "IA, cuisine ou jeunesse — forfait groupe", prix: "120 $ CAD, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
-  { cat: "Atelier", offre: "Manger mieux avec moins — forfait groupe", prix: "150 $ CAD, aucune taxe ajoutée", href: "/ateliers", label: "Voir l'atelier" },
 ];
 
 function Page() {
@@ -43,20 +49,18 @@ function Page() {
                 <tr><th>Catégorie</th><th>Offre</th><th>Prix</th><th>Action</th></tr>
               </thead>
               <tbody>
-                {ROWS.map((r) => {
-                  const internal = r.href.startsWith("/");
-                  return (
+                {ROWS.map((r) => (
                   <tr key={`${r.cat}-${r.offre}`}>
                     <td>{r.cat}</td><td>{r.offre}</td><td>{r.prix}</td>
                     <td>
-                      {internal ? (
+                      {r.href ? (
                         <a href={r.href}>{r.label}</a>
                       ) : (
-                        <a href={r.href} target="_blank" rel="noopener noreferrer">{r.label}</a>
+                        <span>Pas encore en vente</span>
                       )}
                     </td>
                   </tr>
-                );})}
+                ))}
               </tbody>
             </table>
           </div>

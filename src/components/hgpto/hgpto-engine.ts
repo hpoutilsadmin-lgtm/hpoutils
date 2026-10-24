@@ -2,7 +2,7 @@
 /* ============================================================
    HGPTO — moteur de la mascotte (vie, interactions, Pixel,
    questions, visite guidée, jeu caché Serpents et échelles).
-   Portage fidèle du prototype validé par Hugo (artefact
+   Portage fidèle du prototype validé par la direction (artefact
    « hgpto-mascotte-hp », état final du 22 oct. 2026).
    Adaptations au vrai site, et seulement celles-là :
    · sélecteur de retrait sur les vrais éléments (main/header/footer) ;
@@ -56,12 +56,12 @@ export function initHgpto() {
         var py = Math.max(-2.4, Math.min(2.4, dy*5));
         pupils.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px)';
       }, { passive:true });
-      /* ---------- Panneau « Pour Hugo » : discret (lot nº 2) ----------
+      /* ---------- Panneau « Pour HP » : discret (lot nº 2) ----------
          La section « questions sans réponse, à valider » ne doit PAS être
          visible des visiteurs du site public. La consignation continue en
          arrière-plan (mémoire de session) et la bulle signature reste
          publique, mais la section elle-même est RETIRÉE du DOM — sauf si
-         l'URL porte le paramètre discret ?pourhugo=1 (accès pour Hugo
+         l'URL porte le paramètre discret ?pourhugo=1 (accès pour HP
          seul, sans mot de passe ni compte : juste discret). */
       var pourHugo = false;
       try { pourHugo = /[?&]pourhugo=1(&|$)/.test(window.location.search || ''); } catch(e) {}
@@ -90,7 +90,7 @@ export function initHgpto() {
          · 2026-10-21 — jeu caché « Serpents et échelles » (dés équitables, zéro rétention).
          · 2026-10-22 — redesign adulte (barbe, lunettes de lecture seulement) + pack personnalité.
          · 2026-10-22 — lot « cerveau + lecture » : base de faits formalisée (SITE_FACTS),
-                        questions tapées + journal « Pour Hugo », visite guidée et
+                        questions tapées + journal « Pour HP », visite guidée et
                         commentaires de sections, mode « Accompagne-moi », journal de bord,
                         photo souvenir, défi d'ami sur la carte, jeu rééquilibré (~5 min),
                         charabia plafonné et adouci, blagues portées à 62, et la banque de
@@ -99,7 +99,7 @@ export function initHgpto() {
                         Règle d'or du lot : gaffeur sur SES affaires, jamais sur les produits —
                         aucun prix, aucun contenu, aucun fait n'est jamais déformé pour une blague.
                         (Étage 3 du cerveau — IA en laisse courte : phase site, pas construit ici.)
-         · 2026-10-22 — VISAGE, version DÉFINITIVE (2e correction d'Hugo, qui annule la
+         · 2026-10-22 — VISAGE, version DÉFINITIVE (2e correction de la direction, qui annule la
                         précédente) : sourcils GROS, NOIRS et ÉBOURIFFÉS, poils rebelles
                         compris — ce sont eux qui portent les expressions, partout (le pion
                         du jeu aussi). AUCUNE lunette de soleil, jamais : ses seuls verres
@@ -127,8 +127,8 @@ export function initHgpto() {
                         Moments signature : saluer (main levée + charabia),
                         célébrer (sa petite célébration de victoire, notamment
                         aux dés), et dire « je ne sais pas » à SA façon : « Là,
-                        je sais pas — mais je le note pour Hugo ! » (relié au
-                        journal « Pour Hugo » des questions sans réponse).
+                        je sais pas — mais je le note pour HP ! » (relié au
+                        journal « Pour HP » des questions sans réponse).
                         Continuité : la SESSION en cours seulement (partie en
                         cours, questions posées, sections visitées) — jamais de
                         mémoire entre visites, jamais de données personnelles.
@@ -148,10 +148,10 @@ export function initHgpto() {
                         jeu compris. Silhouette lisible en 1 seconde, même en
                         très petit : crâne chauve + gros sourcils ébouriffés +
                         barbe + lys à la poitrine.
-         · 2026-10-22 — LOT Nº 2 (go d'Hugo : « pousse ça, c'est très bon ») :
+         · 2026-10-22 — LOT Nº 2 (go de la direction : « pousse ça, c'est très bon ») :
                         (1) FREDONNAGE pendant ses moments calmes — airs
                         ORIGINAUX composés pour lui + CADRE pour les chansons
-                        d'Hugo (transcription auto des masters jugée non
+                        de la direction (transcription auto des masters jugée non
                         fiable : aucune mélodie inventée, voir hgpto-data.ts) ;
                         (2) influenceur maison : « Le choix d'HGPTO », faits
                         réels, gratuit d'abord, dose faible (reco nº 8) ;
@@ -163,12 +163,12 @@ export function initHgpto() {
                         levier de vente ; (5) DÉGUISEMENTS contextuels :
                         tablier+mitaines en cuisine, super-héros/lutteur aux
                         jeux, costumes des fêtes du Québec ; (6) panneau
-                        « Pour Hugo » (questions sans réponse) CACHÉ aux
+                        « Pour HP » (questions sans réponse) CACHÉ aux
                         visiteurs : la consignation continue en session, la
                         bulle signature reste publique, et la section ne
                         réapparaît qu'avec le paramètre d'URL ?pourhugo=1
-                        (accès discret pour Hugo, sans mot de passe).
-         · 2026-10-22 — LOT Nº 3 « vendeur, version HP » (mandat d'Hugo :
+                        (accès discret pour HP, sans mot de passe).
+         · 2026-10-22 — LOT Nº 3 « vendeur, version HP » (mandat de la direction :
                         « vraiment faire de la vente, de la suggestion et
                         répondre aux clients ») : système de suggestions à
                         plafonds (1 par page, jamais le même produit 2× par
@@ -186,7 +186,7 @@ export function initHgpto() {
                         m'en dira tant. », ~1 fois sur 2, alternées, puis
                         résilience) ; visite guidée TRANQUILLE : textes qui
                         EXPLIQUENT chaque endroit, rythme apaisé.
-         · 2026-10-22 — LOT Nº 4 « contrôles + humeurs » (demandes d'Hugo :
+         · 2026-10-22 — LOT Nº 4 « contrôles + humeurs » (demandes de la direction :
          · 2026-10-23 — lot « HGPTO joueur » (porté de l'artefact vérifié) :
                         tampons officiels au panneau, « Jouer avec HGPTO » à
                         Montgolfière, « Lis-moi ça » (Web Speech), gag hélium,
@@ -305,7 +305,7 @@ export function initHgpto() {
       }
 
       /* ---------- Déplacement au doigt / à la souris (24 oct. 2026) :
-         le visiteur gare le chrome HGPTO où il veut (décision d'Hugo :
+         le visiteur gare le chrome HGPTO où il veut (décision de la direction :
          « Bulle déplaçable au doigt »). La position déplacée vaut pour
          la SESSION SEULEMENT : variables en mémoire, jamais persistées
          (ni localStorage ni sessionStorage) — un rechargement remet le
@@ -362,7 +362,7 @@ export function initHgpto() {
         }
         if (actx && actx.state === 'suspended') actx.resume();
       }
-      /* Correctif du doigt d'Hugo (23 oct. 2026) : le contexte audio
+      /* Correctif du doigt de la direction (23 oct. 2026) : le contexte audio
          n'était créé qu'au détour de CERTAINS boutons. Un premier geste
          ailleurs (lien de bulle, question, défilement tactile…) ne
          débloquait rien, et les sons de vie partaient ensuite dans le
@@ -397,7 +397,7 @@ export function initHgpto() {
         // des souffles — allo, hello, hola, ciao vivent dans le rythme, dosés.
         var base = mood === 'sleep' ? 175 : mood === 'joke' ? 392 : mood === 'answer' ? 318 : mood === 'helium' ? 615 : 292;
         var step = mood === 'sleep' ? 0.22 : mood === 'joke' ? 0.1 : 0.12;
-        // Correctif du doigt d'Hugo (23 oct. 2026) : niveaux relevés —
+        // Correctif du doigt de la direction (23 oct. 2026) : niveaux relevés —
         // le charabia culminait à 0,046, quasi inaudible sur un haut-
         // parleur de téléphone. Présence nette visée, jamais agressive :
         // le niveau choisi (Fort/Doux/Muet) continue de tout plafonner
@@ -436,7 +436,7 @@ export function initHgpto() {
       /* ---------- Fredonnage (lot nº 2) : il fredonne dans ses moments
          calmes — en balayant, en bricolant, en marchant. Deux sources
          seulement : ses airs ORIGINAUX composés pour lui, et les chansons
-         d'Hugo quand leur mélodie aura été transcrite et validée à
+         de la direction quand leur mélodie aura été transcrite et validée à
          l'oreille (HUGO_SONGS : cadre vide pour l'instant, voir
          hgpto-data.ts — aucune mélodie inventée). Voix douce en legato,
          jamais pendant une tâche du visiteur, muet respecté. ---------- */
@@ -461,16 +461,16 @@ export function initHgpto() {
         if (!actx || muted || docHidden || paused || isHidden || qaOpen || calm || gameOn) return;
         if (state === 'sleep' || isBusy()) return;
         var songs = HUGO_SONGS.filter(function(s){ return s.notes && s.notes.length; });
-        var fromHugo = songs.length && Math.random() < 0.45;
-        var air = fromHugo ? pick(songs) : pick(AIRS_ORIGINAUX);
+        var fromDirection = songs.length && Math.random() < 0.45;
+        var air = fromDirection ? pick(songs) : pick(AIRS_ORIGINAUX);
         var notes = air.notes;
         if (!notes || !notes.length) return;
         var mySeq = ++humSeq;
         setExpr('happy');
-        if (fromHugo){
-          showBubble(esc("🎵 Ça, c'est une des chansons d'Hugo : « " + air.titre + " » !") +
+        if (fromDirection){
+          showBubble(esc("🎵 Ça, c'est une des chansons de la direction : « " + air.titre + " » !") +
             linkHtml({ u:"https://hp-outils.com/balado", l:"Le balado et ses chansons" }), 7000, 'none');
-          logDay("fredonné une chanson d'Hugo (« " + air.titre + " »)");
+          logDay("fredonné une chanson de la direction (« " + air.titre + " »)");
         } else if (Math.random() < 0.5){
           showBubble("🎵 Un petit air de mon cru, " + air.titre + "…", 5200, 'none');
           logDay("fredonné un de mes airs (" + air.titre + ")");
@@ -569,7 +569,7 @@ export function initHgpto() {
 
       /* ---------- Bulles ---------- */
       var lastBubbleAt = 0;
-      /* Correctif lecture (Hugo, 23 oct. 2026) : avant, une bulle vivait
+      /* Correctif lecture (la direction, 23 oct. 2026) : avant, une bulle vivait
          le temps plat passé par l'appelant (plancher de 8 s, aucun lien
          avec la longueur) et n'importe quelle réplique suivante
          l'écrasait instantanément — mesuré : l'intro de la visite
@@ -690,7 +690,7 @@ export function initHgpto() {
          « hgpto-closed ») : les pages déjà vues et celles déjà
          clin-d'œillées vivent le temps de la visite, pas plus.
          Portes de probabilité par occasion de bavardage, décision
-         d'Hugo : micro-clin d'œil 1/15, surprise moyenne 1/35, grosse
+         de la direction : micro-clin d'œil 1/15, surprise moyenne 1/35, grosse
          surprise 1/80 — tirées en cascade (la plus rare d'abord) et
          jamais rapprochées (≥ 90 s entre deux surprises). */
       function loadSet(key){
@@ -957,9 +957,9 @@ export function initHgpto() {
         }, 3200);
       }
 
-      /* ---------- Barbouiller la photo d'Hugo (ajout d'Hugo, 22 oct.
+      /* ---------- Barbouiller la photo de la direction (ajout de la direction, 22 oct.
          2026) : vignette RARE, seulement sur les pages qui hébergent
-         la photo d'Hugo avec son système de déguisements (détection
+         la photo de la direction avec son système de déguisements (détection
          ci-dessous). Il s'approche de la photo, joue l'artiste
          (posture « graffiti », sans l'élément graffiti), puis émet
          l'événement fenêtre `hgpto:barbouille-photo` — c'est le
@@ -994,7 +994,7 @@ export function initHgpto() {
         setTimeout(function(){
           if (state !== 'idle' || gameOn || tourOn) return;
           setState('graffiti'); setExpr('focus');
-          logDay("barbouillé la photo d'Hugo — chapeau melon et lunettes, signés HGPTO");
+          logDay("barbouillé la photo de la direction — chapeau melon et lunettes, signés HGPTO");
         }, 1200);
         setTimeout(function(){
           // Le geste est fait : on prévient le système photo. (S'il
@@ -1735,7 +1735,7 @@ export function initHgpto() {
         qaPanel.hidden = true;
         if (!paused){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
       }
-      /* Fermeture « réponse » (correctif Hugo, 23 oct. 2026) : le
+      /* Fermeture « réponse » (correctif de la direction, 23 oct. 2026) : le
          panneau se referme dès qu'HGPTO répond ou qu'une scène part,
          pour laisser voir la scène et sa bulle — le panneau (z-index
          62, quasi plein écran sur mobile) couvrait l'étage du robot
@@ -1804,7 +1804,7 @@ export function initHgpto() {
       }
 
       /* ---------- Aide au choix — méthode closer façon HP
-         (document service client, décisions d'Hugo du 23 oct. 2026) ------
+         (document service client, décisions de la direction du 23 oct. 2026) ------
          Service d'abord : DEUX questions maximum (pour qui, pour faire
          quoi), puis UNE seule recommandation honnête — y compris « le
          gratuit fait la job » quand c'est vrai. Le bon calcul du lot
@@ -1865,7 +1865,7 @@ export function initHgpto() {
           t = "Mon honnête recommandation : un seul kit Sans Honte pour ton besoin le plus pressant — 5 $, pas plus. Et le vrai calcul, si un jour tu en vises plusieurs : pris un par un, 10 kits = 50 $ ; le lot « choisis 10 parmi 15 » est à 40 $. Pas besoin de décider ça aujourd'hui.";
           p = { u:"https://hp-outils.com/sans-honte", l:"Voir les kits Sans Honte" };
         } else {
-          t = "Mon honnête recommandation : un atelier avec Hugo, en vrai — Cuisine de base à 120 $, ou Pain maison (à l'atelier à 150 $, à domicile à 120 $), à Terrebonne et dans Lanaudière. Écris à l'équipe en disant pour qui c'est, combien de personnes et quand tu vises : un humain te confirmera tout ça sous 3 jours ouvrables.";
+          t = "Pour les ateliers, écris à la direction humaine en disant pour qui c'est, combien de personnes et quand tu vises : un humain te confirmera tout ça sous 3 jours ouvrables.";
           p = { u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" };
         }
         showBubble(esc(t) + linkHtml(p) + '<br>' + esc(pick(ETHIQUE_LINES)), 14000, 'answer');
@@ -1875,7 +1875,7 @@ export function initHgpto() {
 
       /* ---------- Questions tapées : recherche dans la base de faits ----------
          Mots-clés + synonymes, réponse exacte de la base seulement. Aucune
-         réponse hors base : repli courriel + consignation « Pour Hugo »
+         réponse hors base : repli courriel + consignation « Pour HP »
          (mémoire de session seulement, aucune donnée personnelle). */
       var unanswered = [];
       var qaSeq = 0;
@@ -1919,7 +1919,7 @@ export function initHgpto() {
           list.appendChild(li);
         });
       }
-      /* ---------- La réplique « mascotte » (ajout validé par Hugo,
+      /* ---------- La réplique « mascotte » (ajout validé par la direction,
          22 oct. 2026) : HGPTO déteste « mascotte » — il se prend pour
          un « gnome magique érudit ». Détection prudente : le mot doit
          lui être ADRESSÉ (2e personne, apostrophe, compliment, ou
@@ -1934,8 +1934,8 @@ export function initHgpto() {
          (phrase de repli EXACTE du document), il ne tranche jamais un
          cas, il ne promet aucun délai ni montant de remboursement, il
          n'invente aucun rabais. La question de POLITIQUE, elle, reçoit
-         le cadre factuel adopté par Hugo. Une escalade résolue n'est
-         PAS consignée dans « Pour Hugo » (même précédent que le gnome :
+         le cadre factuel adopté par la direction. Une escalade résolue n'est
+         PAS consignée dans « Pour HP » (même précédent que le gnome :
          ce n'est pas une question sans réponse). */
       function escalationIntent(q){
         var n = normText(q);
@@ -1991,7 +1991,7 @@ export function initHgpto() {
         // Phrase du concept TAPÉE : « HGPTO, joue avec moi » (ou juste
         // « joue avec moi », ponctuation et casse libres) — interceptée
         // AVANT la recherche dans la base et branchée sur le même point
-        // d'entrée que le bouton qa-play (décision d'Hugo, 22 oct. 2026).
+        // d'entrée que le bouton qa-play (décision de la direction, 22 oct. 2026).
         var mots = ' ' + normText(q).replace(/\s+/g, ' ').trim() + ' ';
         if (mots.indexOf(' joue avec moi ') !== -1){ startGame(); return; }
         // Escalades service client (23 oct. 2026) : plainte, cas de
@@ -2058,7 +2058,7 @@ export function initHgpto() {
         // Ajout « mascotte » : aucune réponse dans la base, aucun
         // besoin produit servi — si le mot lui était adressé, la
         // réplique du gnome remplace le repli (ce n'est pas une
-        // question à consigner pour Hugo).
+        // question à consigner pour HP).
         if (jab){ dismissQA(); gnomeReply(true); return; }
         if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
         dismissQA();
@@ -2136,7 +2136,7 @@ export function initHgpto() {
       });
       refreshSoundBtn();
 
-      /* ---------- MODES (phase 2, Hugo 23 oct. 2026) ----------
+      /* ---------- MODES (phase 2, la direction, 23 oct. 2026) ----------
          L'ancien sélecteur d'humeur (lot nº 4) devient une vraie
          OPTION DE MODE, claire et nommée : « Vendeur pro actif »,
          « Ami », « Grognon drôle » — et « comme d'habitude », le
@@ -2284,7 +2284,7 @@ export function initHgpto() {
       });
       controlsEl.addEventListener('click', function(ev){
         if (ev.target !== btnDock && controlsEl.classList.contains('open') && window.innerWidth <= 560){
-          /* Correctif du doigt d'Hugo (23 oct. 2026, 19 h 18) : ce
+          /* Correctif du doigt de la direction (23 oct. 2026, 19 h 18) : ce
              referme-tout attrapait aussi les SÉLECTEURS (mode, météo).
              Au tactile, le tap sur un <select> émet son « click » AVANT
              l'ouverture du menu natif : le panneau se refermait donc
@@ -2361,11 +2361,11 @@ export function initHgpto() {
          suivre, à la toute fin d'une visite terminée d'elle-même (voir
          stopTour), jamais après un arrêt demandé par le visiteur. */
       var TOUR = [
-        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : Hugo y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que tu vas voir part d'ici. Moi, c'est HGPTO, le petit gérant de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et tu peux arrêter la visite quand tu veux." },
+        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que tu vas voir part d'ici. Moi, c'est HGPTO, le petit gérant de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et tu peux arrêter la visite quand tu veux." },
         { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 26, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
         { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
         { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : tu écris les ingrédients que tu as déjà, et il te propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et ta liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
-        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que tu télécharges tout de suite après le paiement. « La faim justifie les moyens » (10 $), c'est l'histoire vraie d'Hugo ; « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
+        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que tu télécharges tout de suite après le paiement. « La faim justifie les moyens » (10 $), c'est l'histoire vraie de la direction ; « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
         { id:'sec-ateliers', t:"Et ici, on sort de l'écran : les ateliers se vivent en groupe, à Terrebonne et dans les environs. « Cuisine pratique » (120 $), « Manger mieux avec moins » (150 $) — on cuisine ensemble, on apprend des choses utiles, et c'est le côté humain d'HP Outils qui se vit pour vrai, autour d'une table." },
         { id:'sec-arbre', t:"On est de retour à l'entrée — la visite est terminée, merci de m'avoir suivi. Tu as vu l'arbre au complet : chaque branche aide les autres, et rien ne se cache. Reste jaser si tu veux : pose-moi une question dans mon petit panneau, je connais toutes les réponses du site — et sinon, explore à ton rythme. Ici, la porte est toujours ouverte." }
       ];
@@ -4003,7 +4003,7 @@ export function initHgpto() {
       }
       function meow(soft){
         if (!actx || muted || docHidden) return;
-        // Niveaux relevés le 23 oct. 2026 (doigt d'Hugo : Pixel ne
+        // Niveaux relevés le 23 oct. 2026 (doigt de la direction : Pixel ne
         // s'entendait pas) — le doux reste doux, le franc s'entend.
         var t = actx.currentTime + 0.02, v = soft ? 0.04 : 0.07;
         toneRaw(t, 540, 880, 0.16, v, 'sine');
@@ -4015,7 +4015,7 @@ export function initHgpto() {
         for (var i = 0; i < 9; i++) toneRaw(t + i * 0.13, 56, 48, 0.1, 0.075, 'sawtooth');
       }
       /* Elle miaule PARFOIS, pour rien, comme une vraie chatte
-         (demande d'Hugo, 23 oct. 2026) : un petit miaou doux quand
+         (demande de la direction, 23 oct. 2026) : un petit miaou doux quand
          elle est là, tranquille — jamais en rafale (au plus un aux
          ~80 s, et l'horaire de vie ne la propose qu'à l'occasion),
          jamais quand elle dort, jamais par-dessus une tâche. Une
@@ -4078,7 +4078,7 @@ export function initHgpto() {
           if (state === 'invite') setState(reduced ? 'idle' : 'walk');
         }, 1700);
       }
-      /* Croquette lancée PAR LE VISITEUR (demande d'Hugo, 23 oct.
+      /* Croquette lancée PAR LE VISITEUR (demande de la direction, 23 oct.
          2026) : le bouton « Croquette » du dock lance une petite
          poignée en arc, du côté d'HGPTO vers le sol ; Pixel accourt
          (elle arrive en trombe si elle n'était pas là), mange et
@@ -4224,7 +4224,7 @@ export function initHgpto() {
           }
         }, 7000);
       }
-      /* ---------- Pixel saute de bloc en bloc (ajout d'Hugo, 22 oct.
+      /* ---------- Pixel saute de bloc en bloc (ajout de la direction, 22 oct.
          2026) : comportement OCCASIONNEL et bref — au plus une
          séquence par ~4 minutes. Elle quitte le sol, enchaîne 2 à
          4 sauts sur le HAUT de blocs de contenu (sections « sec-* »
@@ -4659,7 +4659,7 @@ export function initHgpto() {
         // Mode Ami (phase 2) : AUCUNE démarche de vente, point — il
         // répond aux questions (answerQuestion ne passe pas par ici),
         // il accompagne, il ne propose rien de lui-même. Pour les
-        // jeunes : zéro vente, comme Hugo l'a tranché.
+        // jeunes : zéro vente, comme la direction l'a tranché.
         if (hgMode === 'ami' && !opts.asked) return false;
         // Les alternatives honnêtes (opts.soft) sont des courtoisies de
         // descente, pas des pitches : dédupliquées et refusables comme

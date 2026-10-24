@@ -41,7 +41,7 @@ const GAMES = [
   { title: "RELÈVE — Chapitre 1 : Surchauffe", file: "/apps/releve/releve-chapitre-1-v1.0.html", copy: "Aventure d'enquête 3D à Percé : Grizz, ourson policier de Faune-Secours, et NID à la radio cherchent la cause d'une surchauffe qui menace la faune. FR/EN.", tag: "Aventure · Enquête 3D", faits: "Histoire d'enquête · FR/EN", mono: "R1", art: 0 },
   { title: "LA BANQUE — le jeu de la banque alimentaire", file: "/apps/la-banque/la-banque-v1.1.html", copy: "Gère une banque alimentaire sur une saison de 8 semaines : dons, tri, cuisine et service aux familles nommées, qui reviennent semaine après semaine. Ton score : les familles nourries.", tag: "Gestion · Entraide", faits: "Partie longue : une saison de 8 semaines", mono: "LB", art: 1 },
   { title: "Les bons réflexes d'HP", file: "/apps/bons-reflexes/index.html", copy: "Jeu éducatif sur les bons réflexes du quotidien, par âge et par activité.", tag: "Éducatif · Toute la famille", faits: "Par âge et par activité", mono: "BR", art: 2 },
-  { title: "Mystères du Nord", file: "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html", copy: "Sept enquêtes façon Clue : explore les lieux, interroge les suspects et démasque le coupable.", tag: "Enquête · Réflexion", faits: "7 enquêtes · pour les jeunes détectives aussi", mono: "MN", art: 7 },
+  { title: "Mystères du Nord", file: "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html", copy: "Sept enquêtes de déduction : explore les lieux, interroge les suspects et démasque le coupable.", tag: "Enquête · Réflexion", faits: "7 enquêtes · pour les jeunes détectives aussi", mono: "MN", art: 7 },
   { title: "Fait fructifier 100 $ en 30 jours", file: "/apps/100-en-30-jours/100-en-30-jours-v1.2.html", copy: "Jeu de gestion et d'investissement 100 % fictif : 100 $ de départ, 30 jours pour fructifier.", tag: "Gestion · Simulation", faits: "100 $ fictifs · 30 jours pour fructifier", mono: "100", art: 3 },
   { title: "Caribou Run", file: "/apps/caribou-run/caribou-run-v1.1.html", copy: "Endless runner québécois : saute les bancs de neige et échappe à la déneigeuse !", tag: "Arcade · Adresse", faits: "Endless runner : la partie dure tant que tu tiens", mono: "CR", art: 0 },
   { title: "Cherche & Trouve — La vraie vie", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html", copy: "Un cherche-et-trouve dans des scènes de la vraie vie.", tag: "Observation · Toute la famille", faits: "3 manches · 15 défis · sprint de 3 minutes", mono: "CT", art: 6 },
@@ -56,7 +56,7 @@ const GAMES = [
   { title: "Hockey 2 contre 2 — HGPTO & Pixel", file: "/apps/hockey-hgpto/hockey-hgpto-v1.0.html", copy: "Une partie de hockey de 2 minutes : toi et ton gardien contre HGPTO et Pixel, la chatte gardienne. Attention à ses moments de distraction…", tag: "Sport · Hockey", mono: "H2", art: 7 },
   { title: "Ado odieux, adieu", file: "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html", copy: "Fais des mauvais coups sans te faire pogner… et assume la vraie sentence.", tag: "Humour · Choix", mono: "AO", art: 5 },
   { title: "Couleuvre du Québec", file: "/apps/couleuvre-du-quebec/couleuvre-du-quebec-v1.0.html", copy: "Le serpent d'ici : souris, bestioles dorées, mouettes et vidanges.", tag: "Arcade · Serpent", mono: "CQ", art: 1 },
-  { title: "Fusion Sirop", file: "/apps/fusion-sirop/fusion-sirop-v1.0.html", copy: "Le 2048 de la cabane à sucre, de la sève au pain de sucre.", tag: "Réflexion · 2048", mono: "FS", art: 3 },
+  { title: "Fusion Sirop", file: "/apps/fusion-sirop/fusion-sirop-v1.0.html", copy: "Un jeu de fusion à la cabane à sucre, de la sève au pain de sucre.", tag: "Réflexion · Fusion", mono: "FS", art: 3 },
   { title: "Trio des Éléments", file: "/apps/trio-des-elements/trio-des-elements-v1.0.html", copy: "Match-3 du tableau périodique : silicium, diamant, or et cuivre.", tag: "Match-3 · Sciences", mono: "T3", art: 4 },
   { title: "Bernache Express", file: "/apps/bernache-express/bernache-express-v1.0.html", copy: "La grande migration vers le Sud, à un seul bouton.", tag: "Arcade · Un bouton", faits: "Un seul bouton", mono: "BE", art: 0 },
   { title: "Le Bonhomme Pendu", file: "/apps/le-bonhomme-pendu/le-bonhomme-pendu-v1.0.html", copy: "673 mots à deviner, dont 100 québécois d'ici — définitions incluses.", tag: "Mots · Devinettes", faits: "Solo ou 2 joueurs · 673 mots", mono: "BP", art: 6 },
@@ -237,16 +237,16 @@ function BoutonCoeur({
   );
 }
 
-/* ── Tampons des testeurs (décision d'Hugo, 23 oct. 2026, 08 h 18 :
+/* ── Tampons des testeurs (décision de la direction, 23 oct. 2026, 08 h 18 :
    « Oui — les tampons au site, noms + couleurs ») ──────────────────
-   Source de vérité : le registre des approbations rapportées par Hugo
+   Source de vérité : le registre des approbations rapportées par la direction
    le 22 oct. 2026, 21 h 31 (approbations-joueurs-2026-10-22.md).
    Chaque testeur a SA couleur ; les noms sont les prénoms/surnoms du
    registre, affichés tels quels. La couleur de Lo n'est pas précisée
    au registre : son tampon est posé en neutre, sans rien inventer.
    « Fusion Shop », approuvé par Mel au registre, n'existe pas (encore)
    sur le site : aucun tampon posé pour lui.
-   Ajout du 23 oct. 2026, 20 h 35 (dicté par Hugo) : O'Z « la grande »,
+   Ajout du 23 oct. 2026, 20 h 35 (dicté par la direction) : O'Z « la grande »,
    tampon JAUNE — jaune profond #8A6D00, lisible sur fond crème
    (contraste ≈ 4,7:1, même exigence que le bleu ciel de Lo) :
    2 vérités 1 mensonge (en plus du mauve de Mel) et LA BANQUE
@@ -331,7 +331,7 @@ function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
       }}
     >
       <span aria-hidden="true">✓</span>
-      {/* Libellé complet sur le tampon même (demande d'Hugo, 23 oct.
+      {/* Libellé complet sur le tampon même (demande de la direction, 23 oct.
           2026, 19 h 18 : « Ajouter au tampon avec nom le Approuvé
           par : ») — avant, il ne vivait que dans le title/aria,
           invisibles au tactile. Le nom, la couleur et la lune de
@@ -486,7 +486,7 @@ function JeuxPage() {
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>Mystères du Nord</h3>
-              <p>Sept enquêtes façon Clue dans le Nord : explore les lieux, interroge les suspects, trouve les indices et démasque le coupable.</p>
+              <p>Sept enquêtes de déduction dans le Nord : explore les lieux, interroge les suspects, trouve les indices et démasque le coupable.</p>
               <a className="pillar-cta" href="/apps/mysteres-du-nord">Jouer maintenant →</a>
             </article>
             <article className="pillar-card">

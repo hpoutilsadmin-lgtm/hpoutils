@@ -178,12 +178,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="HP Outils" />
 <meta property="og:title" content="Fusion Sirop" />
-<meta property="og:description" content="Le 2048 de la cabane à sucre, de la sève au pain de sucre. Jeu gratuit." />
+<meta property="og:description" content="Un jeu de fusion à la cabane à sucre, de la sève au pain de sucre. Jeu gratuit." />
 <meta property="og:url" content="https://www.hp-outils.com/apps/fusion-sirop" />
 <meta property="og:image" content="https://www.hp-outils.com/images/share-hp.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Fusion Sirop" />
-<meta name="twitter:description" content="Le 2048 de la cabane à sucre, de la sève au pain de sucre. Jeu gratuit." />
+<meta name="twitter:description" content="Un jeu de fusion à la cabane à sucre, de la sève au pain de sucre. Jeu gratuit." />
 <meta name="twitter:image" content="https://www.hp-outils.com/images/share-hp.jpg" />
 <link rel="canonical" href="https://www.hp-outils.com/apps/fusion-sirop" />
 </head>
@@ -194,7 +194,7 @@
       <div class="leaf" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M50 6c0 0-9.5 11.5-9.5 17.5a9.5 9.5 0 0 0 19 0C59.5 17.5 50 6 50 6Z" fill="#FFF3D6" stroke="#221305" stroke-width="4" stroke-linejoin="round"/><path d="M21 45a29 17 0 0 1 58 0" fill="none" stroke="#221305" stroke-width="4" stroke-linecap="round"/><path d="M25 45h50l-5.2 43a6 6 0 0 1-6 5.2H36.2a6 6 0 0 1-6-5.2Z" fill="#FFF3D6" stroke="#221305" stroke-width="4" stroke-linejoin="round"/><path d="M27.5 59h45M29.5 73h41" stroke="#221305" stroke-width="3" stroke-linecap="round" opacity=".45"/></svg></div>
       <div>
         <h1>Fusion <em>Sirop</em></h1>
-        <p class="subtitle">Le 2048 de la cabane à sucre. Glisse les tuiles, fusionne deux pareilles, pis suis le <strong>vrai procédé</strong> — de la goutte de sève jusqu'au pain de sucre.</p>
+        <p class="subtitle">Un jeu de fusion à la cabane à sucre. Glisse les tuiles, fusionne deux pareilles, pis suis le <strong>vrai procédé</strong> — de la goutte de sève jusqu'au pain de sucre.</p>
       </div>
       <div class="mascot" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="13" r="9" fill="#F7E8CB" stroke="#221305" stroke-width="4"/><path d="M27 45c1-17 14-28 33-28s32 11 33 28Z" fill="#C1272D" stroke="#221305" stroke-width="4" stroke-linejoin="round"/><path d="M38 34c4-6 10-10 17-11M47 27c2-1.5 4-2.4 7-3" stroke="#221305" stroke-width="2.4" stroke-linecap="round" opacity=".45"/><rect x="23" y="43" width="74" height="13" rx="6" fill="#F7E8CB" stroke="#221305" stroke-width="4"/><circle cx="60" cy="78" r="29" fill="#F7E8CB" stroke="#221305" stroke-width="4"/><path d="M40 99c3 2 6 3.4 9 4M71 103c3-.6 6-2 9-4" stroke="#221305" stroke-width="2.2" stroke-linecap="round" opacity=".5"/><circle cx="47.5" cy="76" r="11.5" fill="rgba(255,255,255,.28)" stroke="#221305" stroke-width="4"/><circle cx="72.5" cy="76" r="11.5" fill="rgba(255,255,255,.28)" stroke="#221305" stroke-width="4"/><path d="M59 76h2M36 74l-6-3M84 74l6-3" stroke="#221305" stroke-width="4" stroke-linecap="round"/><circle cx="47.5" cy="76" r="2.7" fill="#221305"/><circle cx="72.5" cy="76" r="2.7" fill="#221305"/><path d="M60 82c1.8 2.2 1.8 4 0 5.4" stroke="#221305" stroke-width="3" stroke-linecap="round"/><path d="M49 92c3.4 3.4 7.4 5 11 5s7.6-1.6 11-5" stroke="#221305" stroke-width="3.6" stroke-linecap="round"/></svg></div>
     </div>
@@ -353,7 +353,7 @@
   function spawnTile(newSet, forceSeve){
     var empties = emptyCells(); if(!empties.length) return -1;
     var pos = empties[Math.floor(Math.random()*empties.length)];
-    // 90% goutte de sève (0), 10% eau d'érable (1) — comme le 2048 classique.
+    // 90% goutte de sève (0), 10% eau d'érable (1) — comme les jeux de fusion classiques.
     // Au départ, on garantit deux vraies gouttes de sève (message + première fusion faciles).
     board[pos] = (!forceSeve && Math.random() < 0.10) ? 1 : 0;
     if(newSet) newSet[pos]=true;

@@ -538,7 +538,7 @@
         .bot{transition:none}
       }
     
-      /* ===== Nouveau look : robot explorateur adulte (spec d'Hugo, 22 oct. 2026) =====
+      /* ===== Nouveau look : robot explorateur adulte (spec de la direction, 22 oct. 2026) =====
          Tête ≈ 48 %, barbe de six jours, pupilles qui suivent le pointeur,
          jambes qui marchent ; lunettes UNIQUEMENT pour lire. */
       .leg-l{transform-origin:95px 173px}
@@ -677,14 +677,14 @@
       .scard .scard-bot{width:110px;margin:2px auto 4px}
       .scard .scard-meta{font-weight:700;color:var(--ink)}
 
-      /* ===== Correction du visage (Hugo, 22 oct.) : sourcils fins, expressions
+      /* ===== Correction du visage (la direction, 22 oct.) : sourcils fins, expressions
          par les yeux, la bouche, la posture… et la LED qui change d'humeur ===== */
       .bot[data-expr="angry"] .led{fill:#f0563c}
       .bot[data-expr="sad"] .led{fill:#6ea8d8}
       .bot[data-expr="sleep"] .led,.bot[data-expr="yawn"] .led{fill:#3f7d5c}
       .bot[data-expr="focus"] .led{fill:#f0c16d}
       .bot[data-expr="wide"] .led{fill:#fff3b0}
-      /* ===== PIXEL, la chatte d'HGPTO (ajout d'Hugo, 22 oct.) =====
+      /* ===== PIXEL, la chatte d'HGPTO (ajout de la direction, 22 oct.) =====
          Petite chatte de dessin animé 100 % originale, blocs doux en clin
          d'œil « pixel », collier simple à clochette. Elle ne parle pas :
          miaulements et ronrons seulement. */
@@ -714,7 +714,7 @@
       .cat[data-state="stare"] .cat-head{transform:translateY(-2.5px)}
       .cat[data-state="startle"] .cat-inner{animation:catjump .45s ease-out}
       @keyframes catjump{35%{transform:translateY(-13px) scaleY(1.05)}}
-      /* Sauts de bloc en bloc (ajout d'Hugo, 22 oct.) : l'arc du saut ;
+      /* Sauts de bloc en bloc (ajout de la direction, 22 oct.) : l'arc du saut ;
          le déplacement horizontal et la hauteur du bloc sont posés par
          le moteur. Placée après les règles d'état pour primer le temps
          du saut seulement (la classe « hopping » est retirée à
@@ -731,7 +731,7 @@
       .cat[data-state="purr"] .eyes-shut{display:block}
       .scratch{position:absolute;top:2px;right:-8px;pointer-events:none}
       .bowl{position:absolute;bottom:0;z-index:58;pointer-events:none;transition:opacity .4s ease}
-      /* Croquette lancée par le visiteur (23 oct. 2026, demande d'Hugo) :
+      /* Croquette lancée par le visiteur (23 oct. 2026, demande de la direction) :
          une petite poignée de croquettes qui vole en arc et atterrit
          devant Pixel. Purement décorative, aucun pointeur. */
       .kibble{position:absolute;bottom:6px;z-index:58;pointer-events:none;transition:opacity .35s ease}
