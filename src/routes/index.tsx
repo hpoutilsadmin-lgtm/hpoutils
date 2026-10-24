@@ -185,7 +185,7 @@ function Index() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les Passeurs</h3>
-              <p>Le programme qui tiendra le gratuit debout : 1 $ par mois, bientôt en ligne.</p>
+              <p>Le programme qui tiendra le gratuit debout : 3 $ par mois, bientôt en ligne.</p>
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
             <article className="pillar-card">

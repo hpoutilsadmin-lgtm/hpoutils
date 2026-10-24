@@ -74,7 +74,7 @@ function Page() {
             <article className="info-card">
               <span className="mini-note">Soutenir</span>
               <h3>Les Passeurs</h3>
-              <p>Le programme qui tiendra le gratuit debout : 1 $ par mois, bientôt en ligne.</p>
+              <p>Le programme qui tiendra le gratuit debout : 3 $ par mois, bientôt en ligne.</p>
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
           </div>

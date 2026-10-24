@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/les-passeurs")({
   head: () => createSeoHead({
-    title: "Les Passeurs — soutenir HP Outils pour 1 $ par mois",
-    description: "Les Passeurs soutiendront les jeux, les livres et les outils gratuits de HP Outils pour un dollar par mois. L'inscription n'est pas encore en ligne : aucun paiement n'est demandé pour l'instant.",
+    title: "Les Passeurs — l'accès au savoir pour 3 $ par mois",
+    description: "Les Passeurs soutiendront les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir coûtera 3 $ par mois (ou 36 $ pour l'année) ; les savoirs s'offriront aussi par quatre pour 12 $. L'inscription n'est pas encore en ligne : aucun paiement n'est demandé pour l'instant.",
     path: "/les-passeurs",
   }),
   component: Page,
@@ -16,7 +16,7 @@ function Page() {
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">Les Passeurs</span>
-          <h1>Un dollar par mois. <em>Douze dollars pour l'année.</em> C'est tout.</h1>
+          <h1>Trois dollars par mois. <em>Trente-six dollars pour l'année.</em> C'est tout.</h1>
           <p className="lead">
             HP Outils fabrique des jeux, des livres et des outils pour la vraie vie — pensés pour les familles, les petits budgets et celles et ceux qui veulent apprendre. Beaucoup sont gratuits, et on veut que ça reste comme ça.
           </p>
@@ -59,7 +59,7 @@ function Page() {
           <span className="editorial-kicker">Simple et clair</span>
           <h2>Pas de contrat déguisé, <em>pas de promesse en l'air.</em></h2>
           <p className="strip-intro">Juste: tu passes, et d'autres reçoivent.</p>
-          <h3>Ce sera 1 $ / mois — ou 12 $ / an.</h3>
+          <h3>Ce sera 3 $ / mois — ou 36 $ / an. Et les savoirs s'offriront aussi par quatre : 12 $ pour 4 savoirs.</h3>
           <div
             style={{
               maxWidth: 640,
