@@ -546,6 +546,13 @@ export const HGPTO_MARKUP = `
           <path d="M3 9 h48 l-6 13 a4 4 0 0 1 -4 3 H13 a4 4 0 0 1 -4 -3 Z" fill="#b97f24" stroke="var(--botink)" stroke-width="2.6" stroke-linejoin="round"/>
         </svg>
       </div>
+      <div class="kibble" id="kibble" hidden aria-hidden="true">
+        <svg viewBox="0 0 30 16" width="30" height="16">
+          <g fill="#8a5a2b" stroke="#6e4520" stroke-width="1.4">
+            <circle cx="7" cy="9" r="4.4"/><circle cx="16" cy="6.5" r="4.8"/><circle cx="24" cy="10" r="4.2"/>
+          </g>
+        </svg>
+      </div>
     </div>
 
     <!-- Panneau des questions fréquentes -->
@@ -674,6 +681,7 @@ export const HGPTO_MARKUP = `
       <button type="button" id="btn-accompany" aria-pressed="false">Accompagne-moi</button>
       <button type="button" id="btn-tickle">Chatouiller</button>
       <button type="button" id="btn-bucket">Seau d'eau</button>
+      <button type="button" id="btn-kibble">Croquette</button>
       <button type="button" id="btn-calm" aria-pressed="false">Mode calme</button>
       <button type="button" id="btn-pause" aria-pressed="false">Pause</button>
       <button type="button" id="btn-sound" aria-pressed="true">Son : fort</button>

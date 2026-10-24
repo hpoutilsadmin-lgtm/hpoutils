@@ -249,7 +249,7 @@ const TESTEURS = {
   louka: { nom: "Louka", couleur: "#2e7d32", fond: "rgba(46,125,50,.10)", rotation: -1.4 },
   maeva: { nom: "Maëva ☾", couleur: "#23201c", fond: "rgba(35,32,28,.07)", rotation: 1 },
   mel: { nom: "Mel « The girl boss »", couleur: "#7b2d8b", fond: "rgba(123,45,139,.09)", rotation: -0.8 },
-  lo: { nom: "Lo « le petit Raptor »", couleur: "#6f6455", fond: "rgba(111,100,85,.10)", rotation: 1.3 },
+  lo: { nom: "Lo « le petit Raptor »", couleur: "#0F6CA8", fond: "rgba(15,108,168,.10)", rotation: 1.3 },
   hp: { nom: "HP, le créateur", couleur: "#2456a6", fond: "rgba(36,86,166,.09)", rotation: -1 },
   tous: { nom: "Tous les testeurs", couleur: "#221a12", fond: "rgba(34,26,18,.06)", rotation: 0 },
 } as const;
@@ -322,7 +322,12 @@ function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
       }}
     >
       <span aria-hidden="true">✓</span>
-      {t.nom}
+      {/* Libellé complet sur le tampon même (demande d'Hugo, 23 oct.
+          2026, 19 h 18 : « Ajouter au tampon avec nom le Approuvé
+          par : ») — avant, il ne vivait que dans le title/aria,
+          invisibles au tactile. Le nom, la couleur et la lune de
+          Maëva sont inchangés. */}
+      {"Approuvé par : " + t.nom}
     </span>
   );
 }

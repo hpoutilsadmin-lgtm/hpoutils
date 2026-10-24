@@ -275,7 +275,7 @@
     louka: { court: "Louka", complet: "Louka", couleur: "#2e7d32", rotation: -2 },
     maeva: { court: "Maëva", symbole: "☾", complet: "Maëva (tampon noir, petite lune)", couleur: "#23201c", rotation: 1.5 },
     mel: { court: "Mel", complet: "Mel « The girl boss »", couleur: "#7b2d8b", rotation: -1.5 },
-    lo: { court: "Lo", complet: "Lo « le petit Raptor »", couleur: "#6f6455", rotation: 2 },
+    lo: { court: "Lo", complet: "Lo « le petit Raptor »", couleur: "#0F6CA8", rotation: 2 },
     hp: { court: "HP", complet: "HP, le créateur", couleur: "#2456a6", rotation: -1.5 },
     tous: { court: "Tous", complet: "Tous les testeurs — à l'unanimité", couleur: "#221a12", rotation: 0 }
   };
@@ -759,7 +759,12 @@
           symb.setAttribute("aria-hidden", "true");
           pastille.appendChild(symb);
         }
-        var nomT = el("span", "bj-tampon-nom", t.court);
+        /* Libellé complet avec le nom (demande d'Hugo, 23 oct. 2026) :
+           « Approuvé par : Louka ». Il vit dans le même span que le
+           nom : sur ≤ 520 px, le span se replie comme avant (la
+           couleur et le symbole portent la signature) — aucun
+           débordement possible dans la barre. */
+        var nomT = el("span", "bj-tampon-nom", "Approuvé par : " + t.court);
         pastille.appendChild(nomT);
         zoneTampons.appendChild(pastille);
       });
