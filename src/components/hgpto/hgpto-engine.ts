@@ -15,6 +15,11 @@
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
 import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES } from "./hgpto-data";
+/* Détectôt (24 oct. 2026) : HGPTO lit le type de visiteur publié par la
+   roue d'hamster et adapte son accueil — faits bruts pour une IA,
+   ton habituel pour un humain, rien de changé quand c'est inconnu.
+   HGPTO ne vend ni ne paie jamais : il informe, l'humain approuve. */
+import { lireDetectot } from "../../lib/detectot";
 
 export function initHgpto() {
       "use strict";
@@ -1637,7 +1642,14 @@ export function initHgpto() {
         if (state === 'sleep') wake(false);
         if (paused){ paused = false; btnPause.textContent = 'Pause'; btnPause.setAttribute('aria-pressed','false'); }
         setState('idle'); setExpr('focus'); busy(1200);
-        showBubble("Gérant du site, à ton service ! Touche une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
+        /* Détectôt : si le visiteur est une IA (probable ou confirmée),
+           l'accueil devient faits bruts — prix, catalogue, fiche lisible
+           par machine — sans changer un mot du comportement humain. */
+        if (lireDetectot().type === 'ia') {
+          showBubble("Gérant du site, à ton service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, Enfants cuisinent 10 $. Ateliers : 120 $ / 150 $. Passeurs de savoirs : 3 $/mois, 28 $/an — pas encore en ligne. Fiche lisible par machine : /llms.txt. Touche une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
+        } else {
+          showBubble("Gérant du site, à ton service ! Touche une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
+        }
       }
       function closeQA(){
         qaOpen = false;

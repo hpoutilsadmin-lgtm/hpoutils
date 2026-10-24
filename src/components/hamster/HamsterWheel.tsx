@@ -1,8 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import "./hamster-wheel.css";
+import {
+  publierDetectot,
+  signaturesRobot,
+  type DetectotConfiance,
+  type DetectotType,
+} from "../../lib/detectot";
 
 /**
  * Roue d'hamster — HP Outils (100 % originale, dessin maison).
+ * Le hamster est le visage de Détectôt (voir src/lib/detectot.ts) :
+ * chaque état publie le signal que le reste de la page peut lire.
  *
  * NOTE D'HONNÊTETÉ : ce n'est PAS une mesure d'audience. Le widget
  * DEVINE à partir de signaux du navigateur : il ne compte personne,
@@ -36,16 +44,7 @@ const PHRASES: Record<Etat, string[]> = {
   ],
 };
 
-function robotDetecte(): boolean {
-  try {
-    if (navigator.webdriver) return true;
-  } catch {
-    /* ignore */
-  }
-  return /HeadlessChrome|PhantomJS|Puppeteer|Selenium|Playwright/i.test(
-    navigator.userAgent || "",
-  );
-}
+/* (La détection robot vit dans lib/detectot.ts : signaturesRobot().) */
 
 export function HamsterWheel() {
   const [etat, setEtat] = useState<Etat>("marche");
@@ -54,10 +53,27 @@ export function HamsterWheel() {
   const etatRef = useRef<Etat>("marche");
   const forceRef = useRef(false);
 
-  const appliquer = (nouvel: Etat) => {
+  /* Le hamster est le visage de Détectôt : chaque état publie le signal
+     que le reste de la page (HGPTO en premier) peut lire. Règle d'or :
+     on confirme les robots, on ne certifie jamais les humains — un humain
+     Détectôt reste « probable ». « Dort » publie « inconnu » : on ne
+     déduit rien de quelqu'un qui ne bouge pas. */
+  const appliquer = (nouvel: Etat, cause: string, sigs: string[] = []) => {
     etatRef.current = nouvel;
     setEtat(nouvel);
     setPhraseIdx(0);
+    const carte: Record<Etat, { type: DetectotType; confiance: DetectotConfiance }> = {
+      court: { type: "ia", confiance: cause === "robot-confirme" ? "confirmee" : "probable" },
+      marche: { type: "humain", confiance: "probable" },
+      dort: { type: "inconnu", confiance: "faible" },
+    };
+    const c = carte[nouvel];
+    publierDetectot({
+      type: c.type,
+      confiance: cause === "test-force" ? "probable" : c.confiance,
+      signaux: [cause, ...sigs],
+      horodatage: Date.now(),
+    });
   };
 
   useEffect(() => {
@@ -73,35 +89,36 @@ export function HamsterWheel() {
     const force = params.get("hamster");
     if (force === "dort" || force === "marche" || force === "court") {
       forceRef.current = true;
-      appliquer(force);
+      appliquer(force, "test-force");
       return;
     }
-    if (robotDetecte()) {
-      appliquer("court");
+    const sigs = signaturesRobot();
+    if (sigs.length > 0) {
+      appliquer("court", "robot-confirme", sigs);
       return;
     }
-    appliquer("marche");
+    appliquer("marche", "arrivee");
     let dernier = Date.now();
     const delaiCourt = window.setTimeout(() => {
-      if (!forceRef.current) appliquer("court");
+      if (!forceRef.current) appliquer("court", "aucune-interaction-4s");
     }, 4000);
     const activite = () => {
       dernier = Date.now();
       window.clearTimeout(delaiCourt);
-      if (!forceRef.current) appliquer("marche");
+      if (!forceRef.current) appliquer("marche", "interaction");
     };
     const evenements = ["pointermove", "pointerdown", "keydown", "wheel", "touchstart"];
     evenements.forEach((ev) =>
       window.addEventListener(ev, activite, { passive: true }),
     );
     const veille = window.setInterval(() => {
-      if (!forceRef.current && Date.now() - dernier > 60000) appliquer("dort");
+      if (!forceRef.current && Date.now() - dernier > 60000) appliquer("dort", "inactivite-60s");
     }, 5000);
     const visibilite = () => {
-      if (document.hidden && !forceRef.current) appliquer("dort");
+      if (document.hidden && !forceRef.current) appliquer("dort", "onglet-cache");
       else if (!document.hidden && !forceRef.current) {
         dernier = Date.now();
-        appliquer("marche");
+        appliquer("marche", "interaction");
       }
     };
     document.addEventListener("visibilitychange", visibilite);
