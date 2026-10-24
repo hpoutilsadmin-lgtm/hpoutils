@@ -294,25 +294,19 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
       "Cette nouvelle s'adresse aux personnes qui aiment les récits sensibles, humains et ancrés dans le Québec actuel — autour de la langue, de l'identité, de l'amitié et des conversations qui restent longtemps après la dernière page.",
   },
   // PRIX ABAISSÉ de 20 $ à 10 $ — décision d'Hugo, 23 octobre 2026.
-  // La clé d'entrée et le `priceId` restent ceux du prix Stripe de 20 $
-  // (lookup_key `enfants_cuisinent_pdf_20`) : ce sont les clés de livraison
-  // des achats déjà payés à 20 $ — NE PAS renommer ni supprimer.
-  // Le prix Stripe de 10 $ n'existe pas encore : tant qu'il n'est pas créé
-  // (lookup_key prévu : `enfants_cuisinent_pdf_10`, à créer par Mélanie),
-  // `purchaseHold` suspend l'achat — la fiche annonce 10 $ et ne peut pas
-  // débiter 20 $. À la création du prix de 10 $ : reporter le nouveau
-  // lookup_key dans `priceId` ET comme clé d'entrée, retirer
-  // `purchaseHold`, et conserver une entrée d'alias sous l'ancienne clé
-  // pour que les acheteurs à 20 $ gardent leur accès au téléchargement.
-  enfants_cuisinent_pdf_20: {
-    priceId: "enfants_cuisinent_pdf_20",
+  // Prix Stripe de 10 $ créé en RÉEL le 24 octobre 2026
+  // (lookup_key `enfants_cuisinent_pdf_10`, prix par défaut inchangé) :
+  // l'achat est ouvert au nouveau prix, `purchaseHold` retiré ce jour.
+  // L'entrée d'alias sous l'ancienne clé (`enfants_cuisinent_pdf_20`,
+  // ci-dessous) conserve l'accès au téléchargement des achats déjà
+  // payés à 20 $ — NE PAS supprimer.
+  enfants_cuisinent_pdf_10: {
+    priceId: "enfants_cuisinent_pdf_10",
     slug: "enfants-cuisinent",
     title: "Les enfants cuisinent pour faire plaisir",
     pdfPath: "enfants-cuisinent.pdf",
     downloadFileName: "Les-enfants-cuisinent.pdf",
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
-    purchaseHold:
-      "L'achat en ligne n'est pas encore ouvert au nouveau prix de 10 $. Aucun paiement n'est possible pour ce livre pour le moment — la fiche repassera en vente dès que le nouveau prix sera en place.",
     blurb:
       "Un projet doux pour transmettre le plaisir, pas la performance. Téléchargement immédiat après paiement.",
     cover: "/images/cover-enfants.jpg",
@@ -326,6 +320,22 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceJustification:
       "Pourquoi 10 $ ? Parce que ce n'est pas un kit de fiches : c'est un livre complet, en un seul PDF — au même prix que « La faim justifie les moyens », pensé pour les petits budgets. Le prix est unique pour tout le monde — 10 $ CAD, aucune taxe ajoutée (HP Outils est un petit fournisseur : la TPS et la TVQ ne sont pas perçues). Et le livre reste à toi — pour les familles, les parents, les enfants, les écoles et les organismes qui cuisinent pour faire plaisir.",
   },
+  // ALIAS — livraison des achats déjà payés à 20 $ (lookup_key
+  // `enfants_cuisinent_pdf_20`). Placée APRÈS l'entrée principale :
+  // `getProductBySlug` trouve l'entrée à 10 $ d'abord, donc la fiche
+  // et l'achat affichent le nouveau prix. Ne pas supprimer : les
+  // commandes à 20 $ résolvent leur PDF via cette clé.
+  enfants_cuisinent_pdf_20: {
+    priceId: "enfants_cuisinent_pdf_20",
+    slug: "enfants-cuisinent",
+    title: "Les enfants cuisinent pour faire plaisir",
+    pdfPath: "enfants-cuisinent.pdf",
+    downloadFileName: "Les-enfants-cuisinent.pdf",
+    priceLabel: "20 $ CAD, aucune taxe ajoutée",
+    blurb:
+      "Un projet doux pour transmettre le plaisir, pas la performance. Téléchargement immédiat après paiement.",
+  },
+
   sans_honte_frigo_pdf_5: {
     priceId: "sans_honte_frigo_pdf_5",
     slug: "sans-honte-frigo",
@@ -525,12 +535,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   // Produit + prix créés dans Stripe en MODE TEST le 22 octobre 2026
   // (lookup_key `hp_hyper_potentiel_cahier_pdf_10`, 10 $ CAD) et PDF
   // téléversé dans le bucket `pdfs` le 23 octobre 2026.
-  // ⚠️ Le prix n'existe PAS encore dans le Stripe RÉEL : tant qu'il n'y
-  // est pas créé (même lookup_key, par Mélanie ou Hugo), `purchaseHold`
-  // suspend l'achat — la fiche annonce 10 $ et aucun paiement ne peut
-  // partir vers un prix inexistant. À la création du prix réel, retirer
-  // `purchaseHold`, tout simplement : la clé et le `priceId` sont déjà
-  // les bons.
+  // Prix RÉEL créé le 24 octobre 2026 (même lookup_key, prix par défaut) :
+  // l'achat est ouvert à 10 $ — `purchaseHold` retiré ce jour.
   hp_hyper_potentiel_cahier_pdf_10: {
     priceId: "hp_hyper_potentiel_cahier_pdf_10",
     slug: "mini-cahier-hyper-potentiel",
@@ -538,8 +544,6 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     pdfPath: "mini-cahier-hyper-potentiel.pdf",
     downloadFileName: "mini-cahier-hyper-potentiel.pdf",
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
-    purchaseHold:
-      "L'achat en ligne n'est pas encore ouvert pour ce mini cahier. Aucun paiement n'est possible pour le moment — la fiche passera en vente dès que le paiement sera branché. En attendant, l'outil web gratuit compagnon est déjà en ligne.",
     blurb:
       "Zéro miracle : des pratiques appuyées par la recherche, 20 pages d'exercices pour passer à l'action.",
     cover: "/images/cover-hyper-potentiel.jpg",
@@ -1211,8 +1215,8 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
 // ============================================================================
 // L'entrée a été déplacée dans PRODUCTS (clé
 // hp_hyper_potentiel_cahier_pdf_10) : produit + prix créés dans Stripe
-// (mode test le 22 oct. 2026, prix réel à créer — purchaseHold en
-// attendant), PDF téléversé dans le bucket `pdfs` le 23 oct. 2026,
+// (mode test le 22 oct. 2026, prix réel créé le 24 oct. 2026),
+ // PDF téléversé dans le bucket `pdfs` le 23 oct. 2026,
 // outil web compagnon intégré à /outils/hp-hyper-potentiel avec
 // liens croisés. Le tableau MINI_CAHIER_DRAFT ci-dessous est donc
 // vide ; l'historique de l'entrée brouillon reste dans Git.
