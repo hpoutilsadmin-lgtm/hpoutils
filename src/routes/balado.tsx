@@ -43,7 +43,7 @@ const EPISODES = [
       "Fraudes vocales et deepfakes : comment se protéger à l'ère de l'IA. Publié le " +
       "19 octobre 2026. Le rendez-vous officiel du lundi démarre le 26 octobre 2026.",
     audio:
-      "https://muse.ai/podcasts/media/1328712923661622/65e88d46-ef82-42e8-b712-c4e00a40562d/ep-0b89e3d7-83f5-43c8-847b-28931ef6cd92.mp3",
+      "/audio-balado/episode-2.mp3",
   },
   {
     n: "01",
@@ -57,18 +57,19 @@ const EPISODES = [
       "un peu partout dans le monde. Le mauvais : les équipes gagnent encore " +
       "au sommet, et les risques d'uniformisation et de dépendance.",
     audio:
-      "https://muse.ai/podcasts/media/1328712923661622/65e88d46-ef82-42e8-b712-c4e00a40562d/ep-8309fb64-d631-412d-9d33-734e42d4f08a.mp3",
+      "/audio-balado/episode-pilote.mp3",
   },
 ];
 
 const FEED_URL =
-  "https://muse.ai/podcasts/feed/1328712923661622/65e88d46-ef82-42e8-b712-c4e00a40562d";
-const APPLE_URL =
-  "podcast://muse.ai/podcasts/feed/1328712923661622/65e88d46-ef82-42e8-b712-c4e00a40562d";
+  "https://www.hp-outils.com/audio-balado/feed.xml";
 const OVERCAST_URL =
-  "overcast://x-callback-url/add?url=https%3A%2F%2Fmuse.ai%2Fpodcasts%2Ffeed%2F1328712923661622%2F65e88d46-ef82-42e8-b712-c4e00a40562d";
+  "overcast://x-callback-url/add?url=https%3A%2F%2Fwww.hp-outils.com%2Faudio-balado%2Ffeed.xml";
 const POCKET_CASTS_URL =
-  "pktc://subscribe/muse.ai/podcasts/feed/1328712923661622/65e88d46-ef82-42e8-b712-c4e00a40562d";
+  "pktc://subscribe/www.hp-outils.com/audio-balado/feed.xml";
+// Bouton Apple Podcasts RETIRÉ le 24 oct. 2026 : « Futur simple » n'est inscrit
+// sur aucun annuaire Apple. Le réajouter seulement quand le balado y sera
+// vraiment publié (Apple Podcasts Connect), avec sa vraie adresse Apple.
 
 function Page() {
   return (
@@ -121,10 +122,11 @@ function Page() {
           <p className="strip-intro">
             Ajoute le flux dans ton appli de balados préférée : chaque nouvel épisode
             y apparaît tout seul, chaque lundi. C'est gratuit, sans compte, sans piège.
+            Si un bouton n'ouvre rien, c'est que l'appli n'est pas installée sur ton
+            téléphone : copie le lien du flux RSS et colle-le dans ton appli.
           </p>
           <div className="lead-actions">
             <a className="btn-primary" href={FEED_URL} target="_blank" rel="noreferrer">Flux RSS</a>
-            <a className="btn-ghost" href={APPLE_URL}>Apple Podcasts</a>
             <a className="btn-ghost" href={OVERCAST_URL}>Overcast</a>
             <a className="btn-ghost" href={POCKET_CASTS_URL}>Pocket Casts</a>
           </div>

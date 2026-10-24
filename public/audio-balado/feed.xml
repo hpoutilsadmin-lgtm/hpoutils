@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Futur simple</title>
+    <link>https://www.hp-outils.com/balado</link>
+    <description>Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode chaque lundi, direct et sans jargon.</description>
+    <language>fr</language>
+    <copyright>HP Outils</copyright>
+    <itunes:author>HP Outils</itunes:author>
+    <itunes:summary>Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode chaque lundi, direct et sans jargon.</itunes:summary>
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:category text="Technology" />
+    <atom:link href="https://www.hp-outils.com/audio-balado/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Épisode 2 — Futur simple</title>
+      <description>Fraudes vocales et deepfakes : comment se protéger à l'ère de l'IA. Publié le 19 octobre 2026. Le rendez-vous officiel du lundi démarre le 26 octobre 2026.</description>
+      <pubDate>Mon, 19 Oct 2026 00:00:00 -0400</pubDate>
+      <enclosure url="https://www.hp-outils.com/audio-balado/episode-2.mp3" length="2219557" type="audio/mpeg" />
+      <guid isPermaLink="true">https://www.hp-outils.com/audio-balado/episode-2.mp3</guid>
+      <itunes:duration>277</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
+    <item>
+      <title>L'entrepreneur solo à l'ère de l'IA : opportunité ou mirage ?</title>
+      <description>Est-ce vraiment le meilleur moment de l'histoire pour lancer son entreprise tout seul ? Et qu'est-ce qu'on risque d'y perdre ? Le bon : les solos essaient l'IA avant d'embaucher, un peu partout dans le monde. Le mauvais : les équipes gagnent encore au sommet, et les risques d'uniformisation et de dépendance.</description>
+      <pubDate>Thu, 15 Oct 2026 00:00:00 -0400</pubDate>
+      <enclosure url="https://www.hp-outils.com/audio-balado/episode-pilote.mp3" length="2885989" type="audio/mpeg" />
+      <guid isPermaLink="true">https://www.hp-outils.com/audio-balado/episode-pilote.mp3</guid>
+      <itunes:duration>360</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
+  </channel>
+</rss>
