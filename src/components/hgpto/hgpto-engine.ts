@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES, PAGE_SUGGESTIONS, PAGE_SUGGESTION_FALLBACK } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES, PAGE_SUGGESTIONS, PAGE_SUGGESTION_FALLBACK, FLASH_INFOS } from "./hgpto-data";
 /* Détectôt (24 oct. 2026) : HGPTO lit le type de visiteur publié par la
    roue d'hamster et adapte son accueil — faits bruts pour une IA,
    ton habituel pour un humain, rien de changé quand c'est inconnu.
@@ -307,12 +307,14 @@ export function initHgpto() {
       /* ---------- Déplacement au doigt / à la souris (24 oct. 2026) :
          le visiteur gare le chrome HGPTO où il veut (décision de la direction :
          « Bulle déplaçable au doigt »). La position déplacée vaut pour
-         la SESSION SEULEMENT : variables en mémoire, jamais persistées
-         (ni localStorage ni sessionStorage) — un rechargement remet le
-         chrome à sa place par défaut. Le tapotage bref garde son effet
-         chatouille ; seul un glisser de plus de 8 px devient un
-         déplacement. La promenade autonome s'interrompt pendant le
-         glisser et reprend après. */
+         la SESSION SEULEMENT : position gardée en sessionStorage
+         (comme « Fermer HGPTO ») — un rechargement remet le chrome
+         où le visiteur l'avait garé, jamais ailleurs. Le tapotage bref
+         garde son effet chatouille ; seul un glisser de plus de 8 px
+         devient un déplacement. La promenade autonome s'interrompt
+         pendant le glisser et reprend après. Décision du 24 oct. 2026 :
+         on déplace les PERSONNAGES seulement — le panneau de questions
+         et le dock restent à leur place (le dock ne suit plus). */
       var dragDX = 0, dragDY = 0, dragging = false, dragMoved = false;
       var dragSX = 0, dragSY = 0, dragOX = 0, dragOY = 0, dragPid = null;
       var dragHost = (bot.closest ? bot.closest('.hgpto-host') : null);
@@ -322,25 +324,64 @@ export function initHgpto() {
           dragHost.style.setProperty('--hgpto-dy', dragDY + 'px');
         }
       }
+      function saveDrag(){
+        try { sessionStorage.setItem('hgpto-drag', JSON.stringify([dragDX, dragDY])); } catch(e){}
+      }
+      try {
+        var savedDrag = JSON.parse(sessionStorage.getItem('hgpto-drag') || 'null');
+        if (savedDrag && isFinite(savedDrag[0]) && isFinite(savedDrag[1])){
+          dragDX = savedDrag[0]; dragDY = savedDrag[1];
+        }
+      } catch(e){}
       function clampDrag(){
-        /* Le robot ET le dock doivent rester attrapables à l'écran :
-           on corrige l'offset (deux passes, le robot en dernier pour
-           garantir sa visibilité) au lieu de le borner à l'aveugle. */
+        /* Le robot doit rester attrapable à l'écran : on corrige
+           l'offset (deux passes) au lieu de le borner à l'aveugle.
+           Le dock ne bouge plus avec lui (décision 24 oct. 2026) : il
+           n'entre plus dans le calcul. */
         var m = 8, vw2 = window.innerWidth, vh2 = window.innerHeight;
-        var dock = document.getElementById('bot-controls');
         for (var pass = 0; pass < 2; pass++){
           applyDrag();
-          var els = dock ? [dock, bot] : [bot];
-          for (var i = 0; i < els.length; i++){
-            var r = els[i].getBoundingClientRect();
-            if (r.left < m) dragDX += m - r.left;
-            if (r.right > vw2 - m) dragDX -= r.right - (vw2 - m);
-            if (r.top < m) dragDY += m - r.top;
-            if (r.bottom > vh2 - m) dragDY -= r.bottom - (vh2 - m);
-          }
+          var r = bot.getBoundingClientRect();
+          if (r.left < m) dragDX += m - r.left;
+          if (r.right > vw2 - m) dragDX -= r.right - (vw2 - m);
+          if (r.top < m) dragDY += m - r.top;
+          if (r.bottom > vh2 - m) dragDY -= r.bottom - (vh2 - m);
         }
         applyDrag();
       }
+      applyDrag();
+
+      /* ---------- Personnage repliable et agrandissable (24 oct. 2026) ----
+         Décision d'Hugo : déplaçable + RÉTRACTABLE À LA MAIN + AGRANDISSABLE
+         par l'utilisateur. Rétractable = le visiteur replie le personnage
+         en pastille « HGPTO » (le dock rouvre aussi) ; JAMAIS automatique
+         (ni au scroll, ni au bout d'un délai) — l'auto reste exclu.
+         Taille par pas, session seulement comme le déplacement. Pendant
+         le repli, le robot et Pixel se cachent (même couche), la pastille
+         reste ; les bulles ambiantes ne parlent plus dans le vide. */
+      var hgptoReduit = false, hgptoZoom = 1;
+      var ZOOM_STEPS = [0.75, 1, 1.35, 1.7];
+      var zoomIdx = 1;
+      function applyZoom(){
+        try { bot.style.zoom = String(hgptoZoom); } catch(e){}
+        try { sessionStorage.setItem('hgpto-zoom', String(hgptoZoom)); } catch(e){}
+      }
+      function applyReduit(){
+        if (dragHost) dragHost.classList.toggle('hgpto-reduit', hgptoReduit);
+        try { sessionStorage.setItem('hgpto-reduit', hgptoReduit ? '1' : '0'); } catch(e){}
+      }
+      function restoreHgpto(){
+        if (!hgptoReduit) return;
+        hgptoReduit = false;
+        applyReduit();
+      }
+      try {
+        var savedZoom = parseFloat(sessionStorage.getItem('hgpto-zoom') || '1');
+        if (ZOOM_STEPS.indexOf(savedZoom) !== -1){ hgptoZoom = savedZoom; zoomIdx = ZOOM_STEPS.indexOf(savedZoom); }
+        hgptoReduit = sessionStorage.getItem('hgpto-reduit') === '1';
+      } catch(e){}
+      applyZoom();
+      applyReduit();
 
       /* ---------- Sa voix : un charabia de petit robot (WebAudio) ----------
          Des blips formantiques doux, synchronisés avec le texte de la bulle.
@@ -601,7 +642,8 @@ export function initHgpto() {
         bubble.innerHTML = html;
         bubble.classList.add('show');
         lastBubbleAt = Date.now();
-        speak(plainText(html), mood || (state === 'sleep' ? 'sleep' : 'talk'));
+        /* Replié : la bulle est cachée, on ne parle pas dans le vide. */
+        if (!hgptoReduit) speak(plainText(html), mood || (state === 'sleep' ? 'sleep' : 'talk'));
         if (onShow) onShow();
         if (bubbleTimer) clearTimeout(bubbleTimer);
         bubbleTimer = null;
@@ -1615,6 +1657,7 @@ export function initHgpto() {
         var wasDrag = dragMoved;
         dragging = false; dragMoved = false;
         bot.classList.remove('dragging');
+        saveDrag();
         if (!wasDrag) tickle();
       }
       bot.addEventListener('pointerup', endDrag);
@@ -1633,7 +1676,7 @@ export function initHgpto() {
         else if (ev.key === 'ArrowDown') ky = step;
         else return;
         ev.preventDefault(); ev.stopPropagation();
-        dragDX += kx; dragDY += ky; clampDrag();
+        dragDX += kx; dragDY += ky; clampDrag(); saveDrag();
       });
       bot.addEventListener('click', function(ev){
         if (ev.target.closest && ev.target.closest('a')) return;
@@ -1714,6 +1757,7 @@ export function initHgpto() {
       var qaOpen = false;
       function openQA(){
         ensureAudio();
+        restoreHgpto();   // poser une question rouvre le personnage replié
         qaOpen = true;
         qaPanel.hidden = false;
         renderPageSuggestion();
@@ -2269,6 +2313,34 @@ export function initHgpto() {
           lastInteract = Date.now();
           setState(reduced ? 'idle' : 'walk');
         }
+      });
+      /* ---------- Replier / agrandir à la main (24 oct. 2026) ----------
+         « Réduire » replie en pastille ; la pastille rouvre au tap.
+         « Petit » / « Grand » changent la taille par pas. Session
+         seulement. Toute autre action du dock rouvre aussi le personnage
+         (sauf « Réduire » et « Fermer ») : on n'agit jamais sur un
+         personnage invisible. Aucune rétraction automatique n'existe. */
+      var btnReduire = document.getElementById('btn-reduire');
+      if (btnReduire) btnReduire.addEventListener('click', function(){
+        hgptoReduit = true;
+        applyReduit();
+      });
+      var btnZoomMoins = document.getElementById('btn-zoom-moins');
+      if (btnZoomMoins) btnZoomMoins.addEventListener('click', function(){
+        if (zoomIdx > 0){ zoomIdx--; hgptoZoom = ZOOM_STEPS[zoomIdx]; applyZoom(); }
+      });
+      var btnZoomPlus = document.getElementById('btn-zoom-plus');
+      if (btnZoomPlus) btnZoomPlus.addEventListener('click', function(){
+        if (zoomIdx < ZOOM_STEPS.length - 1){ zoomIdx++; hgptoZoom = ZOOM_STEPS[zoomIdx]; applyZoom(); }
+      });
+      var pastille = document.getElementById('bot-pastille');
+      if (pastille) pastille.addEventListener('click', function(){ restoreHgpto(); });
+      var controlsEl2 = document.getElementById('bot-controls');
+      if (controlsEl2) controlsEl2.addEventListener('click', function(ev){
+        var t = ev.target && ev.target.closest ? ev.target.closest('button, select') : null;
+        if (!t) return;
+        if (t.id === 'btn-reduire' || t.id === 'btn-hide') return;
+        restoreHgpto();
       });
       btnHide.addEventListener('click', function(){
         /* Portage site : « Fermer HGPTO » = fermé pour la session. */
@@ -3079,13 +3151,28 @@ export function initHgpto() {
           toneRaw(t + d, 2093, 2093, 0.16, 0.03, 'sine');
         });
       }
+      /* Tirage flash : paquet mélangé, aucune répétition avant d'avoir
+         tout vu — les 12 lignes du pool, pas plus, pas d'autre sujet. */
+      var flashDeck = [], flashPos = 0;
+      function nextFlash(){
+        if (flashPos >= flashDeck.length){
+          flashDeck = FLASH_INFOS.map(function(_, i){ return i; });
+          for (var i = flashDeck.length - 1; i > 0; i--){
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = flashDeck[i]; flashDeck[i] = flashDeck[j]; flashDeck[j] = t;
+          }
+          flashPos = 0;
+        }
+        return FLASH_INFOS[flashDeck[flashPos++]];
+      }
       function flashInfo(deliver){
+        var ligne = nextFlash();
         if (voiceOn && TTS){
           dingDing();
-          speakTTS("Mes excuses — flash info :", { interrupt: true });
+          speakTTS("Mes excuses — flash info : " + ligne, { interrupt: true });
           setTimeout(function(){ deliver(''); }, 520);
         } else {
-          deliver("Ding ding ding — mes excuses — flash info : ");
+          deliver("Ding ding ding — mes excuses — flash info : " + ligne + " — ");
         }
       }
 
@@ -3116,14 +3203,35 @@ export function initHgpto() {
           : "Minute ! J't'en pause… je viens de prendre une bouffée d'hélium de ma balloune !"), 5200, 'talk');
         logDay("fait mon gag d'hélium (voix d'écureuil, deux phrases max)");
       }
+      var heliumFlyTimer = null, heliumBackTimer = null;
       function endHelium(){
         if (heliumTimer){ clearTimeout(heliumTimer); heliumTimer = null; }
-        heliumLines = 0;
         if (!bot.classList.contains('helium')) return;
-        bot.classList.remove('helium');
-        giggle();
-        showBubble("Hihi ! Je ris de moi — voix normale revenue, promis.", 4300, 'joke');
-        scheduleBalloonOff();
+        /* Envol puis retour (24 oct. 2026) : au pic — tête gonflée à
+           1,6 par l'animation — il s'envole 1,2 s, puis revient en
+           douceur. Voix normale seulement au retour (heliumLines = 0
+           là, pas avant). Il revient toujours, jamais de disparition
+           définitive. Mouvements réduits : fin immédiate, sans envol. */
+        if (reduced){
+          heliumLines = 0;
+          bot.classList.remove('helium');
+          giggle();
+          showBubble("Hihi ! Je ris de moi — voix normale revenue, promis.", 4300, 'joke');
+          scheduleBalloonOff();
+          return;
+        }
+        bot.classList.add('helium-envol');
+        heliumFlyTimer = setTimeout(function(){
+          bot.classList.remove('helium', 'helium-envol');
+          bot.classList.add('helium-retour');
+          heliumBackTimer = setTimeout(function(){
+            bot.classList.remove('helium-retour');
+            heliumLines = 0;
+            giggle();
+            showBubble("Hihi ! Je ris de moi — voix normale revenue, promis.", 4300, 'joke');
+            scheduleBalloonOff();
+          }, 950);
+        }, 1250);
       }
       function scheduleBalloonOff(){
         if (balloonTimer) clearTimeout(balloonTimer);
@@ -3164,10 +3272,12 @@ export function initHgpto() {
         heliumOn = !heliumOn;
         btnHelium.textContent = heliumOn ? 'Hélium : oui' : 'Hélium : non';
         btnHelium.setAttribute('aria-pressed', heliumOn ? 'true' : 'false');
-        if (!heliumOn && bot.classList.contains('helium')){
+        if (!heliumOn && (bot.classList.contains('helium') || bot.classList.contains('helium-envol') || bot.classList.contains('helium-retour'))){
           if (heliumTimer){ clearTimeout(heliumTimer); heliumTimer = null; }
+          if (heliumFlyTimer){ clearTimeout(heliumFlyTimer); heliumFlyTimer = null; }
+          if (heliumBackTimer){ clearTimeout(heliumBackTimer); heliumBackTimer = null; }
           heliumLines = 0;
-          bot.classList.remove('helium');
+          bot.classList.remove('helium', 'helium-envol', 'helium-retour');
           showBubble("Gag fermé, voix normale. Sage comme une image de robot.", 4000, 'talk');
         }
       });
@@ -4960,5 +5070,13 @@ export function initHgpto() {
         guideTarget = maxX() - 8;
         showBubble(esc(line), 7000, 'talk');
       }, 1200);
+
+      /* Test seulement (?hgpto-test=1) : déclencher le gag hélium sans
+         attendre la balloune — le gag reste un gag public, rien de plus. */
+      try {
+        if (new URLSearchParams(location.search).get('hgpto-test') === '1'){
+          window.__hgptoTest = { helium: function(){ heliumGag('test'); } };
+        }
+      } catch(e){}
 
 }

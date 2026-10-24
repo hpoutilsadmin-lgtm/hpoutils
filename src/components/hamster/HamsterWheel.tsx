@@ -23,6 +23,12 @@ import {
  * ?hamster=court|marche|dort force l'état (tests / démo).
  * « Fermer » = session seulement (sessionStorage).
  * Coin bas DROIT : HGPTO occupe le bas gauche (z-index 58 < 59-62).
+ *
+ * Personnages (24 oct. 2026, décisions d'Hugo) : le hamster se déplace
+ * au doigt et à la souris (seuil 8 px, comme HGPTO — un tap ne déplace
+ * jamais), se replie À LA MAIN en mini-roue (tap pour rouvrir, jamais
+ * automatique), et s'agrandit par pas — position, repli et taille en
+ * session seulement. « Fermer » reste séparé du repli.
  */
 type Etat = "dort" | "marche" | "court";
 
@@ -46,12 +52,120 @@ const PHRASES: Record<Etat, string[]> = {
 
 /* (La détection robot vit dans lib/detectot.ts : signaturesRobot().) */
 
+const ZOOM_STEPS_H = [0.75, 1, 1.35, 1.7];
+
 export function HamsterWheel() {
   const [etat, setEtat] = useState<Etat>("marche");
   const [ferme, setFerme] = useState(false);
   const [phraseIdx, setPhraseIdx] = useState(0);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [reduit, setReduit] = useState(false);
+  const [zoomIdx, setZoomIdx] = useState(1);
+  const [enTrainDeGlisser, setEnTrainDeGlisser] = useState(false);
   const etatRef = useRef<Etat>("marche");
   const forceRef = useRef(false);
+  const racineRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef({ x: 0, y: 0 });
+  const dragRef = useRef<{ pid: number; sx: number; sy: number; ox: number; oy: number; bouge: boolean } | null>(null);
+
+  /* Restauration session : position, repli, taille. */
+  useEffect(() => {
+    try {
+      const p = JSON.parse(sessionStorage.getItem("hamster-pos") || "null");
+      if (p && isFinite(p.x) && isFinite(p.y)) {
+        posRef.current = { x: p.x, y: p.y };
+        setPos({ x: p.x, y: p.y });
+      }
+      if (sessionStorage.getItem("hamster-reduit") === "1") setReduit(true);
+      const z = parseFloat(sessionStorage.getItem("hamster-zoom") || "1");
+      if (ZOOM_STEPS_H.indexOf(z) !== -1) setZoomIdx(ZOOM_STEPS_H.indexOf(z));
+    } catch {
+      /* stockage indisponible : on reste à la place par défaut */
+    }
+  }, []);
+
+  const sauverPos = (p: { x: number; y: number }) => {
+    try {
+      sessionStorage.setItem("hamster-pos", JSON.stringify(p));
+    } catch {
+      /* ignore */
+    }
+  };
+  const appliquerReduit = (v: boolean) => {
+    setReduit(v);
+    try {
+      sessionStorage.setItem("hamster-reduit", v ? "1" : "0");
+    } catch {
+      /* ignore */
+    }
+  };
+  const changerZoom = (dir: 1 | -1) => {
+    setZoomIdx((i) => {
+      const ni = Math.min(ZOOM_STEPS_H.length - 1, Math.max(0, i + dir));
+      try {
+        sessionStorage.setItem("hamster-zoom", String(ZOOM_STEPS_H[ni]));
+      } catch {
+        /* ignore */
+      }
+      return ni;
+    });
+  };
+
+  /* Déplacement au doigt / à la souris : seuil 8 px — un tap ne déplace
+     jamais et ne déclenche rien ; un tap sur la mini-roue rouvre. */
+  const surPointerDown = (e: React.PointerEvent) => {
+    dragRef.current = { pid: e.pointerId, sx: e.clientX, sy: e.clientY, ox: posRef.current.x, oy: posRef.current.y, bouge: false };
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+  };
+  const surPointerMove = (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    if (!d || e.pointerId !== d.pid) return;
+    const dx = e.clientX - d.sx;
+    const dy = e.clientY - d.sy;
+    if (!d.bouge && Math.sqrt(dx * dx + dy * dy) > 8) {
+      d.bouge = true;
+      setEnTrainDeGlisser(true);
+    }
+    if (!d.bouge) return;
+    const el = racineRef.current;
+    let nx = d.ox + dx;
+    let ny = d.oy + dy;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      const m = 8;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const glisseX = nx - posRef.current.x;
+      const glisseY = ny - posRef.current.y;
+      if (r.left + glisseX < m) nx -= r.left + glisseX - m;
+      if (r.right + glisseX > vw - m) nx -= r.right + glisseX - (vw - m);
+      if (r.top + glisseY < m) ny -= r.top + glisseY - m;
+      if (r.bottom + glisseY > vh - m) ny -= r.bottom + glisseY - (vh - m);
+    }
+    posRef.current = { x: nx, y: ny };
+    setPos({ x: nx, y: ny });
+  };
+  const surPointerUp = (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    if (!d || e.pointerId !== d.pid) return;
+    dragRef.current = null;
+    setEnTrainDeGlisser(false);
+    if (d.bouge) {
+      sauverPos(posRef.current);
+    } else if (reduit) {
+      appliquerReduit(false);
+    }
+  };
+  const surPointerCancel = (e: React.PointerEvent) => {
+    if (dragRef.current && e.pointerId === dragRef.current.pid) {
+      dragRef.current = null;
+      setEnTrainDeGlisser(false);
+    }
+  };
 
   /* Le hamster est le visage de Détectôt : chaque état publie le signal
      que le reste de la page (HGPTO en premier) peut lire. Règle d'or :
@@ -149,11 +263,26 @@ export function HamsterWheel() {
   };
 
   return (
-    <div className="rh" data-etat={etat} role="note" aria-label="La roue d'hamster d'HP Outils">
+    <div
+      ref={racineRef}
+      className={"rh" + (reduit ? " rh-reduit" : "") + (enTrainDeGlisser ? " rh-dragging" : "")}
+      data-etat={etat}
+      role="note"
+      aria-label={reduit ? "La roue d'hamster d'HP Outils, repliée — touche pour rouvrir" : "La roue d'hamster d'HP Outils — glisse pour déplacer"}
+      title={reduit ? "Hamster replié — touche pour rouvrir" : undefined}
+      style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
+    >
       <div className="rh-bulle">
         <span>{PHRASES[etat][phraseIdx]}</span>
       </div>
-      <div className="rh-scene">
+      <div
+        className="rh-scene"
+        style={{ transform: `scale(${reduit ? 0.45 : ZOOM_STEPS_H[zoomIdx]})`, transformOrigin: "100% 100%" }}
+        onPointerDown={surPointerDown}
+        onPointerMove={surPointerMove}
+        onPointerUp={surPointerUp}
+        onPointerCancel={surPointerCancel}
+      >
         <svg className="rh-roue" viewBox="0 0 100 100" aria-hidden="true">
           <line x1="50" y1="10" x2="50" y2="90" />
           <line x1="10" y1="50" x2="90" y2="50" />
@@ -192,6 +321,17 @@ export function HamsterWheel() {
         <span className="rh-honnete">Il devine, il ne surveille personne.</span>
         <button className="rh-fermer" type="button" aria-label="Fermer la roue d'hamster" onClick={fermer}>
           Fermer ✕
+        </button>
+      </div>
+      <div className="rh-pied2">
+        <button className="rh-controle" type="button" aria-label="Replier le hamster en mini-roue" onClick={() => appliquerReduit(true)}>
+          Réduire
+        </button>
+        <button className="rh-controle" type="button" aria-label="Hamster plus petit" onClick={() => changerZoom(-1)}>
+          Petit
+        </button>
+        <button className="rh-controle" type="button" aria-label="Hamster plus grand" onClick={() => changerZoom(1)}>
+          Grand
         </button>
       </div>
     </div>

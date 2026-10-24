@@ -476,6 +476,10 @@ export const HGPTO_MARKUP = `
           </svg>
         </div>
       </div>
+      <!-- Pastille de repli (24 oct. 2026) : quand le visiteur replie HGPTO
+           à la main, le robot et Pixel se cachent et cette pastille reste
+           — un tap la rouvre. Jamais automatique. -->
+      <button type="button" id="bot-pastille" aria-label="Rouvrir HGPTO">HGPTO</button>
       <!-- PIXEL, la chatte d'HGPTO : elle vit ici, au chaud -->
       <div class="cat" id="cat" data-state="sleep" role="button" tabindex="0"
            aria-label="Pixel, la chatte d'HGPTO. Touchez-la doucement pour la flatter.">
@@ -685,6 +689,9 @@ export const HGPTO_MARKUP = `
       <button type="button" id="btn-kibble">Croquette</button>
       <button type="button" id="btn-calm" aria-pressed="false">Mode calme</button>
       <button type="button" id="btn-pause" aria-pressed="false">Pause</button>
+      <button type="button" id="btn-reduire" aria-label="Réduire HGPTO en pastille">Réduire</button>
+      <button type="button" id="btn-zoom-moins" aria-label="HGPTO plus petit">Petit</button>
+      <button type="button" id="btn-zoom-plus" aria-label="HGPTO plus grand">Grand</button>
       <button type="button" id="btn-sound" aria-pressed="true">Son : fort</button>
       <select id="sel-mood" aria-label="Mode d'HGPTO — choisis comment je me comporte">
         <option value="defaut">Mode : comme d'habitude</option>

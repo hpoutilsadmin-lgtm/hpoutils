@@ -3,7 +3,15 @@
    panneaux HGPTO (59-62) pour ne jamais les cacher. */
 .rh{position:fixed;right:12px;bottom:12px;z-index:58;width:132px;font-family:Georgia,serif;color:#241a12;pointer-events:none}
 .rh-bulle{background:#fffdf6;border:2px solid #7a4a2b;border-radius:12px;padding:6px 8px;font-size:12.5px;line-height:1.25;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.12);margin-bottom:4px}
-.rh-scene{position:relative;width:96px;height:88px;margin:0 auto}
+/* Déplacement (24 oct. 2026) : la scène se glisse au doigt et à la souris
+   (seuil 8 px côté composant) ; un tap ne déplace jamais. */
+.rh-scene{position:relative;width:96px;height:88px;margin:0 auto;pointer-events:auto;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.rh-dragging .rh-scene{cursor:grabbing}
+.rh-pied2{display:flex;justify-content:center;gap:4px;margin-top:3px}
+.rh-controle{pointer-events:auto;background:#fffdf6;border:1.5px solid #7a4a2b;border-radius:999px;font:inherit;font-size:11px;color:#7a4a2b;cursor:pointer;padding:2px 8px;white-space:nowrap}
+/* Repli à la main (24 oct. 2026) : mini-roue seule, tap pour rouvrir.
+   Jamais automatique. */
+.rh-reduit .rh-bulle,.rh-reduit .rh-pied,.rh-reduit .rh-pied2{display:none}
 .rh-roue{position:absolute;inset:0;width:96px;height:96px;stroke:#7a4a2b;stroke-width:3;fill:none;transform-origin:50% 50%}
 .rh-hamster{position:absolute;left:22px;bottom:8px;width:54px;height:42px;overflow:visible}
 .rh-patte{stroke:#7a4a2b;stroke-width:2.4;stroke-linecap:round}

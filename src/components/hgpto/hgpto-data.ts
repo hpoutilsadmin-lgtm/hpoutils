@@ -224,6 +224,25 @@ export const JANITOR = [
         { st:'fix', t:"Ce titre-là était croche. Voilà : droit comme un soldat. Gérant du site, à votre service !" }
       ];
 export const INTRO = "Salut ! Moi c'est HGPTO, le petit robot d'HP Outils. Chatouille-moi, je suis chatouilleux !";
+/* Flash infos (24 oct. 2026, décision d'Hugo) : les flashs ne portent
+   QUE sur nos produits (prix vrais de la grille canonique), des astuces
+   utiles, ou des analogies de philosophie de vie — jamais autre chose.
+   Textes courts, originaux, rien d'inventé côté médical ou financier.
+   Tirage par paquet mélangé : aucune répétition avant d'avoir tout vu. */
+export const FLASH_INFOS = [
+  "Les kits Sans Honte coûtent 5 $ l'un — le bundle complet, 40 $.",
+  "Nos livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, Enfants cuisinent 10 $.",
+  "Les Passeurs de savoirs : 3 $ par mois, 28 $ par an — pas encore en ligne.",
+  "Nos ateliers : 120 $ ou 150 $ selon la formule, en vrai monde, avec du monde.",
+  "Astuce : un fond de casserole qui attache ? Eau chaude et bicarbonate, on laisse tremper, on frotte doux.",
+  "Astuce : congèle tes restes en petites portions — un repas d'avance, zéro gaspillage.",
+  "Astuce : une liste avant le marché, et on ne magasine jamais le ventre vide.",
+  "Astuce : range ce que tu prends souvent à portée de main, le reste plus haut.",
+  "Comme une soupe : on ne jette rien, on mijote ce qu'on a, et ça nourrit.",
+  "Un petit pas par jour, c'est comme une marche : on arrive plus loin qu'on pense.",
+  "La vie, c'est un atelier : on apprend en faisant, pas en regardant faire.",
+  "Comme un jardin en pots : peu de place, mais ça pousse pareil quand on s'en occupe.",
+];
 export const STARTLE_LINES = [
         "Hein ?! Oh ! Salut — tu m'as réveillé en beauté !",
         "Hein ?! Oh — salut ! Je faisais juste semblant de ne pas dormir.",

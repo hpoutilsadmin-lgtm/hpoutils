@@ -38,9 +38,20 @@
         position:fixed;left:0;right:0;bottom:0;height:0;z-index:60;pointer-events:none;
         /* Déplacement au doigt (24 oct. 2026) : le visiteur gare le chrome
            HGPTO où il veut. L'offset de session translate toute la couche
-           (robot, Pixel, graffiti) ; le dock suit par la même variable. */
+           (robot, Pixel, graffiti) ; le panneau et le dock restent fixes. */
         transform:translate(var(--hgpto-dx, 0px), var(--hgpto-dy, 0px));
       }
+      /* Pastille de repli (24 oct. 2026) : visible seulement quand le
+         visiteur a replié HGPTO à la main ; elle suit le déplacement
+         (même couche) et rouvre au tap. Le robot et Pixel se cachent. */
+      #bot-pastille{
+        position:absolute;bottom:8px;left:0;width:56px;height:56px;border-radius:50%;
+        background:var(--paper);color:var(--ink);border:2.5px solid var(--line);
+        font:inherit;font-size:11px;font-weight:700;cursor:pointer;
+        box-shadow:2px 2px 0 var(--shadow);pointer-events:auto;display:none;
+      }
+      .hgpto-host.hgpto-reduit #bot-pastille{display:block}
+      .hgpto-host.hgpto-reduit .bot,.hgpto-host.hgpto-reduit .cat{display:none}
       .bot{
         position:absolute;bottom:8px;left:0;width:132px;height:127px;
         pointer-events:auto;cursor:grab;-webkit-tap-highlight-color:transparent;
@@ -349,8 +360,8 @@
         position:fixed;right:176px;bottom:12px;z-index:61;display:flex;gap:6px;
         flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 200px);
         pointer-events:none;
-        /* Suit le déplacement du chrome (même offset de session que la couche). */
-        transform:translate(var(--hgpto-dx, 0px), var(--hgpto-dy, 0px));
+        /* Décision 24 oct. 2026 : le dock reste fixe — seuls les
+           personnages (robot, Pixel) suivent le déplacement. */
       }
       .bot-controls button,.bot-controls select{pointer-events:auto}
       .bot-controls button{
@@ -791,8 +802,16 @@
       .bot.helium .bot-inner{animation:heliumhop .48s ease-in-out infinite}
       @keyframes heliumhop{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px) rotate(-1.2deg)}}
       .bot.helium .led{fill:#ff8ad8}
+      /* Tête balloune (24 oct. 2026) : pendant l'hélium, la tête gonfle
+         progressivement jusqu'à ~1,6 — puis envol et retour (voir moteur). */
+      .bot.helium .head{transform-box:fill-box;transform-origin:50% 88%;animation:heliumgonfle 8s ease-in-out forwards}
+      @keyframes heliumgonfle{from{transform:scale(1)}to{transform:scale(1.6)}}
+      .bot.helium-envol{animation:heliumenvol 1.2s ease-in forwards}
+      @keyframes heliumenvol{from{transform:translateY(0) rotate(0)}to{transform:translateY(-120vh) rotate(-8deg)}}
+      .bot.helium-retour{animation:heliumretour .9s cubic-bezier(.34,.56,.4,1)}
+      @keyframes heliumretour{from{transform:translateY(-115vh) rotate(-6deg)}to{transform:translateY(0) rotate(0)}}
       @media (prefers-reduced-motion: reduce){
-        .bot.has-balloon .pballoon .balloon-body,.bot.helium .bot-inner{animation:none!important}
+        .bot.has-balloon .pballoon .balloon-body,.bot.helium .bot-inner,.bot.helium .head,.bot.helium-envol,.bot.helium-retour{animation:none!important}
       }
 
       /* Montgolfière contre HGPTO */
