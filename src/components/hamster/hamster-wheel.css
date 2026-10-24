@@ -1,0 +1,36 @@
+/* Roue d'hamster — HP Outils. Même code que le snippet autonome.
+   Coin bas DROIT (HGPTO occupe le bas gauche) ; z-index 58, sous les
+   panneaux HGPTO (59-62) pour ne jamais les cacher. */
+.rh{position:fixed;right:12px;bottom:12px;z-index:58;width:132px;font-family:Georgia,serif;color:#241a12;pointer-events:none}
+.rh-bulle{background:#fffdf6;border:2px solid #7a4a2b;border-radius:12px;padding:6px 8px;font-size:12.5px;line-height:1.25;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.12);margin-bottom:4px}
+.rh-scene{position:relative;width:96px;height:88px;margin:0 auto}
+.rh-roue{position:absolute;inset:0;width:96px;height:96px;stroke:#7a4a2b;stroke-width:3;fill:none;transform-origin:50% 50%}
+.rh-hamster{position:absolute;left:22px;bottom:8px;width:54px;height:42px;overflow:visible}
+.rh-patte{stroke:#7a4a2b;stroke-width:2.4;stroke-linecap:round}
+.rh-socle{position:absolute;left:8px;right:8px;bottom:0;height:4px;background:#7a4a2b;border-radius:4px}
+.rh-vitesse{position:absolute;inset:0;opacity:0}
+.rh-vitesse i{display:block;position:absolute;left:-14px;height:3px;width:14px;background:#b98a2f;border-radius:3px}
+.rh-vitesse i:nth-child(1){top:30%}.rh-vitesse i:nth-child(2){top:52%;width:10px}.rh-vitesse i:nth-child(3){top:72%}
+.rh-zzz{position:absolute;top:-8px;right:6px;font-weight:700;color:#b98a2f;opacity:0}
+.rh-zzz span{position:absolute;font-size:14px}
+.rh-zzz span:nth-child(2){font-size:18px;left:8px;top:-10px}
+.rh-zzz span:nth-child(3){font-size:23px;left:18px;top:-22px}
+.rh-pied{display:flex;justify-content:space-between;align-items:center;gap:4px;margin-top:2px}
+.rh-honnete{font-size:9.5px;color:#6b5a49;font-style:italic}
+.rh-fermer{pointer-events:auto;background:none;border:0;font:inherit;font-size:11px;color:#7a4a2b;cursor:pointer;text-decoration:underline;padding:0;white-space:nowrap}
+.rh[data-etat="marche"] .rh-roue{animation:rh-tourne 2.4s linear infinite}
+.rh[data-etat="marche"] .rh-hamster{animation:rh-bob 1.2s ease-in-out infinite}
+.rh[data-etat="court"] .rh-roue{animation:rh-tourne .55s linear infinite}
+.rh[data-etat="court"] .rh-hamster{animation:rh-bob .28s ease-in-out infinite}
+.rh[data-etat="court"] .rh-vitesse{opacity:1;animation:rh-vite .5s linear infinite}
+.rh[data-etat="dort"] .rh-zzz{opacity:1;animation:rh-zzz 3s ease-in-out infinite}
+.rh[data-etat="dort"] .rh-hamster{transform:rotate(-8deg) scale(.92)}
+@keyframes rh-tourne{to{transform:rotate(360deg)}}
+@keyframes rh-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes rh-vite{0%,100%{transform:translateX(0);opacity:1}50%{transform:translateX(-5px);opacity:.4}}
+@keyframes rh-zzz{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .rh-roue,.rh-hamster,.rh-vitesse,.rh-zzz{animation:none!important}
+  .rh[data-etat="dort"] .rh-zzz{opacity:1}
+}
+@media (max-width:480px){.rh{width:108px;right:8px;bottom:8px}.rh-bulle{font-size:11px}}

@@ -14,6 +14,7 @@ import hpCss from "../styles/hp.css?url";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Hgpto } from "@/components/hgpto/Hgpto";
+import { HamsterWheel } from "@/components/hamster/HamsterWheel";
 
 function NotFoundComponent() {
   return (
@@ -133,6 +134,7 @@ function RootComponent() {
         <SiteFooter />
       </div>
       <Hgpto />
+      <HamsterWheel />
     </QueryClientProvider>
   );
 }
