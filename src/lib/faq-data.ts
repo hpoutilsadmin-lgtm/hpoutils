@@ -43,7 +43,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "C'est quoi, les Passeurs de savoir ?",
     reponse:
-      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs au savoir coûtera 3 $ par mois (ou 36 $ pour l'année), et les savoirs s'offriront aussi par quatre pour 12 $ — ce n'est pas encore offert en ligne ; c'est dit honnêtement, et ça s'en vient.",
+      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs au savoir coûtera 3 $ par mois (ou 28 $ pour l'année), et les savoirs s'offriront aussi par quatre pour 12 $ — ce n'est pas encore offert en ligne ; c'est dit honnêtement, et ça s'en vient.",
   },
   {
     question: "Par où commencer pour mes papiers de fin de vie ?",

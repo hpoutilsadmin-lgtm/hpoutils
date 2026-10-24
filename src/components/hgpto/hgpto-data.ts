@@ -348,7 +348,7 @@ export const KB = [
           a:"« Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Petit point d'honnêteté : son prix vient de baisser et l'achat en ligne rouvrira bientôt à ce nouveau prix — pour l'instant, la fiche le présente, sans paiement possible.",
           u:"https://hp-outils.com/pdf/enfants-cuisinent", l:"Voir le livre" },
         { q:"C'est quoi, les Passeurs ?", s:"3 $ / MOIS",
-          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès au savoir : 3 $ par mois, ou 36 $ pour l'année — et les savoirs s'offrent aussi par quatre, pour 12 $. Honnêtement ? L'inscription payante arrive bientôt — le bouton de paiement n'est pas encore en ligne.",
+          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès au savoir : 3 $ par mois, ou 28 $ pour l'année — et les savoirs s'offrent aussi par quatre, pour 12 $. Honnêtement ? L'inscription payante arrive bientôt — le bouton de paiement n'est pas encore en ligne.",
           u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
         { q:"Et « À toi l'histoire » ?", s:"BIENTÔT", info:1,
           a:"Les tomes « À toi l'histoire » arrivent : ils sont en création, pas encore en vente. Le tome 1 sera gratuit — patience, ça mijote !" },
@@ -600,5 +600,5 @@ export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
 export const DWELL_SUGGESTIONS = {
         '/livres-pdf': { t:"Tu regardes les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, « Les enfants cuisinent pour faire plaisir » à 10 $. Téléchargement immédiat après le paiement. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
         '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), en groupe, à Terrebonne et dans les environs ; réservation et questions par courriel à Hugo. Et les recettes, elles, sont gratuites en tout temps.", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
-        '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 36 $ pour l'année) pour l'accès au savoir et soutenir HP Outils. En toute honnêteté : le bouton d'inscription payante n'est pas encore en ligne — ça s'en vient.", u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" }
+        '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès au savoir et soutenir HP Outils. En toute honnêteté : le bouton d'inscription payante n'est pas encore en ligne — ça s'en vient.", u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" }
       };
