@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as AlbumRouteImport } from './routes/album'
+import { Route as ApercuRouteImport } from './routes/apercu'
 import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as BaladoRouteImport } from './routes/balado'
 import { Route as BoiteRouteImport } from './routes/boite'
@@ -24,9 +25,11 @@ import { Route as EnCuisineRouteImport } from './routes/en-cuisine'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as JeuxRouteImport } from './routes/jeux'
 import { Route as LesPasseursRouteImport } from './routes/les-passeurs'
+import { Route as LireRouteImport } from './routes/lire'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
 import { Route as MerciRouteImport } from './routes/merci'
 import { Route as OutilsRouteImport } from './routes/outils'
+import { Route as PanierRouteImport } from './routes/panier'
 import { Route as PasseurDeSavoirRouteImport } from './routes/passeur-de-savoir'
 import { Route as PrixRouteImport } from './routes/prix'
 import { Route as RecupererAchatRouteImport } from './routes/recuperer-achat'
@@ -40,10 +43,15 @@ import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
 import { Route as AppsSlugRouteImport } from './routes/apps.$slug'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as EnCuisinePanierRouteImport } from './routes/en-cuisine.panier'
+import { Route as LireJetonRouteImport } from './routes/lire.$jeton'
+import { Route as LireMerciRouteImport } from './routes/lire.merci'
 import { Route as OutilsBonsReflexesRouteImport } from './routes/outils.bons-reflexes'
+import { Route as OutilsHpHyperPotentielRouteImport } from './routes/outils.hp-hyper-potentiel'
 import { Route as PdfSlugRouteImport } from './routes/pdf.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
 import { Route as ApiPublicGameHeartsRouteImport } from './routes/api/public/game-hearts'
+import { Route as EnCuisinePanierGrappeRouteImport } from './routes/en-cuisine.panier.$grappe'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -63,6 +71,11 @@ const AProposRoute = AProposRouteImport.update({
 const AlbumRoute = AlbumRouteImport.update({
   id: '/album',
   path: '/album',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApercuRoute = ApercuRouteImport.update({
+  id: '/apercu',
+  path: '/apercu',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AteliersRoute = AteliersRouteImport.update({
@@ -125,6 +138,11 @@ const LesPasseursRoute = LesPasseursRouteImport.update({
   path: '/les-passeurs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LireRoute = LireRouteImport.update({
+  id: '/lire',
+  path: '/lire',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LivresPdfRoute = LivresPdfRouteImport.update({
   id: '/livres-pdf',
   path: '/livres-pdf',
@@ -138,6 +156,11 @@ const MerciRoute = MerciRouteImport.update({
 const OutilsRoute = OutilsRouteImport.update({
   id: '/outils',
   path: '/outils',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PanierRoute = PanierRouteImport.update({
+  id: '/panier',
+  path: '/panier',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PasseurDeSavoirRoute = PasseurDeSavoirRouteImport.update({
@@ -205,9 +228,29 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnCuisinePanierRoute = EnCuisinePanierRouteImport.update({
+  id: '/panier',
+  path: '/panier',
+  getParentRoute: () => EnCuisineRoute,
+} as any)
+const LireJetonRoute = LireJetonRouteImport.update({
+  id: '/$jeton',
+  path: '/$jeton',
+  getParentRoute: () => LireRoute,
+} as any)
+const LireMerciRoute = LireMerciRouteImport.update({
+  id: '/merci',
+  path: '/merci',
+  getParentRoute: () => LireRoute,
+} as any)
 const OutilsBonsReflexesRoute = OutilsBonsReflexesRouteImport.update({
   id: '/bons-reflexes',
   path: '/bons-reflexes',
+  getParentRoute: () => OutilsRoute,
+} as any)
+const OutilsHpHyperPotentielRoute = OutilsHpHyperPotentielRouteImport.update({
+  id: '/hp-hyper-potentiel',
+  path: '/hp-hyper-potentiel',
   getParentRoute: () => OutilsRoute,
 } as any)
 const PdfSlugRoute = PdfSlugRouteImport.update({
@@ -224,6 +267,11 @@ const ApiPublicGameHeartsRoute = ApiPublicGameHeartsRouteImport.update({
   id: '/api/public/game-hearts',
   path: '/api/public/game-hearts',
   getParentRoute: () => rootRouteImport,
+} as any)
+const EnCuisinePanierGrappeRoute = EnCuisinePanierGrappeRouteImport.update({
+  id: '/$grappe',
+  path: '/$grappe',
+  getParentRoute: () => EnCuisinePanierRoute,
 } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
@@ -259,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
+  '/apercu': typeof ApercuRoute
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
   '/boite': typeof BoiteRoute
@@ -267,13 +316,15 @@ export interface FileRoutesByFullPath {
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
-  '/en-cuisine': typeof EnCuisineRoute
+  '/en-cuisine': typeof EnCuisineRouteWithChildren
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
+  '/lire': typeof LireRouteWithChildren
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
+  '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
@@ -287,10 +338,15 @@ export interface FileRoutesByFullPath {
   '/apps/$slug': typeof AppsSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en-cuisine/panier': typeof EnCuisinePanierRouteWithChildren
+  '/lire/$jeton': typeof LireJetonRoute
+  '/lire/merci': typeof LireMerciRoute
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
+  '/outils/hp-hyper-potentiel': typeof OutilsHpHyperPotentielRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
+  '/en-cuisine/panier/$grappe': typeof EnCuisinePanierGrappeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -301,6 +357,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
+  '/apercu': typeof ApercuRoute
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
   '/boite': typeof BoiteRoute
@@ -309,13 +366,15 @@ export interface FileRoutesByTo {
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
-  '/en-cuisine': typeof EnCuisineRoute
+  '/en-cuisine': typeof EnCuisineRouteWithChildren
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
+  '/lire': typeof LireRouteWithChildren
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
+  '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
@@ -329,10 +388,15 @@ export interface FileRoutesByTo {
   '/apps/$slug': typeof AppsSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en-cuisine/panier': typeof EnCuisinePanierRouteWithChildren
+  '/lire/$jeton': typeof LireJetonRoute
+  '/lire/merci': typeof LireMerciRoute
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
+  '/outils/hp-hyper-potentiel': typeof OutilsHpHyperPotentielRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
+  '/en-cuisine/panier/$grappe': typeof EnCuisinePanierGrappeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -344,6 +408,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/album': typeof AlbumRoute
+  '/apercu': typeof ApercuRoute
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
   '/boite': typeof BoiteRoute
@@ -352,13 +417,15 @@ export interface FileRoutesById {
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
-  '/en-cuisine': typeof EnCuisineRoute
+  '/en-cuisine': typeof EnCuisineRouteWithChildren
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
+  '/lire': typeof LireRouteWithChildren
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRouteWithChildren
+  '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
@@ -372,10 +439,15 @@ export interface FileRoutesById {
   '/apps/$slug': typeof AppsSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en-cuisine/panier': typeof EnCuisinePanierRouteWithChildren
+  '/lire/$jeton': typeof LireJetonRoute
+  '/lire/merci': typeof LireMerciRoute
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
+  '/outils/hp-hyper-potentiel': typeof OutilsHpHyperPotentielRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
+  '/en-cuisine/panier/$grappe': typeof EnCuisinePanierGrappeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -388,6 +460,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/album'
+    | '/apercu'
     | '/ateliers'
     | '/balado'
     | '/boite'
@@ -400,9 +473,11 @@ export interface FileRouteTypes {
     | '/faq'
     | '/jeux'
     | '/les-passeurs'
+    | '/lire'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/panier'
     | '/passeur-de-savoir'
     | '/prix'
     | '/recuperer-achat'
@@ -416,10 +491,15 @@ export interface FileRouteTypes {
     | '/apps/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/en-cuisine/panier'
+    | '/lire/$jeton'
+    | '/lire/merci'
     | '/outils/bons-reflexes'
+    | '/outils/hp-hyper-potentiel'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/game-hearts'
+    | '/en-cuisine/panier/$grappe'
     | '/lovable/email/suppression'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -430,6 +510,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/album'
+    | '/apercu'
     | '/ateliers'
     | '/balado'
     | '/boite'
@@ -442,9 +523,11 @@ export interface FileRouteTypes {
     | '/faq'
     | '/jeux'
     | '/les-passeurs'
+    | '/lire'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/panier'
     | '/passeur-de-savoir'
     | '/prix'
     | '/recuperer-achat'
@@ -458,10 +541,15 @@ export interface FileRouteTypes {
     | '/apps/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/en-cuisine/panier'
+    | '/lire/$jeton'
+    | '/lire/merci'
     | '/outils/bons-reflexes'
+    | '/outils/hp-hyper-potentiel'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/game-hearts'
+    | '/en-cuisine/panier/$grappe'
     | '/lovable/email/suppression'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -472,6 +560,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/album'
+    | '/apercu'
     | '/ateliers'
     | '/balado'
     | '/boite'
@@ -484,9 +573,11 @@ export interface FileRouteTypes {
     | '/faq'
     | '/jeux'
     | '/les-passeurs'
+    | '/lire'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/panier'
     | '/passeur-de-savoir'
     | '/prix'
     | '/recuperer-achat'
@@ -500,10 +591,15 @@ export interface FileRouteTypes {
     | '/apps/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/en-cuisine/panier'
+    | '/lire/$jeton'
+    | '/lire/merci'
     | '/outils/bons-reflexes'
+    | '/outils/hp-hyper-potentiel'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/game-hearts'
+    | '/en-cuisine/panier/$grappe'
     | '/lovable/email/suppression'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -515,6 +611,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
   AlbumRoute: typeof AlbumRoute
+  ApercuRoute: typeof ApercuRoute
   AteliersRoute: typeof AteliersRoute
   BaladoRoute: typeof BaladoRoute
   BoiteRoute: typeof BoiteRoute
@@ -523,13 +620,15 @@ export interface RootRouteChildren {
   ConditionsDeVenteRoute: typeof ConditionsDeVenteRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
-  EnCuisineRoute: typeof EnCuisineRoute
+  EnCuisineRoute: typeof EnCuisineRouteWithChildren
   FaqRoute: typeof FaqRoute
   JeuxRoute: typeof JeuxRoute
   LesPasseursRoute: typeof LesPasseursRoute
+  LireRoute: typeof LireRouteWithChildren
   LivresPdfRoute: typeof LivresPdfRoute
   MerciRoute: typeof MerciRoute
   OutilsRoute: typeof OutilsRouteWithChildren
+  PanierRoute: typeof PanierRoute
   PasseurDeSavoirRoute: typeof PasseurDeSavoirRoute
   PrixRoute: typeof PrixRoute
   RecupererAchatRoute: typeof RecupererAchatRoute
@@ -574,6 +673,13 @@ declare module '@tanstack/react-router' {
       path: '/album'
       fullPath: '/album'
       preLoaderRoute: typeof AlbumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apercu': {
+      id: '/apercu'
+      path: '/apercu'
+      fullPath: '/apercu'
+      preLoaderRoute: typeof ApercuRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ateliers': {
@@ -660,6 +766,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LesPasseursRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lire': {
+      id: '/lire'
+      path: '/lire'
+      fullPath: '/lire'
+      preLoaderRoute: typeof LireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/livres-pdf': {
       id: '/livres-pdf'
       path: '/livres-pdf'
@@ -679,6 +792,13 @@ declare module '@tanstack/react-router' {
       path: '/outils'
       fullPath: '/outils'
       preLoaderRoute: typeof OutilsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/panier': {
+      id: '/panier'
+      path: '/panier'
+      fullPath: '/panier'
+      preLoaderRoute: typeof PanierRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/passeur-de-savoir': {
@@ -772,11 +892,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en-cuisine/panier': {
+      id: '/en-cuisine/panier'
+      path: '/panier'
+      fullPath: '/en-cuisine/panier'
+      preLoaderRoute: typeof EnCuisinePanierRouteImport
+      parentRoute: typeof EnCuisineRoute
+    }
+    '/lire/$jeton': {
+      id: '/lire/$jeton'
+      path: '/$jeton'
+      fullPath: '/lire/$jeton'
+      preLoaderRoute: typeof LireJetonRouteImport
+      parentRoute: typeof LireRoute
+    }
+    '/lire/merci': {
+      id: '/lire/merci'
+      path: '/merci'
+      fullPath: '/lire/merci'
+      preLoaderRoute: typeof LireMerciRouteImport
+      parentRoute: typeof LireRoute
+    }
     '/outils/bons-reflexes': {
       id: '/outils/bons-reflexes'
       path: '/bons-reflexes'
       fullPath: '/outils/bons-reflexes'
       preLoaderRoute: typeof OutilsBonsReflexesRouteImport
+      parentRoute: typeof OutilsRoute
+    }
+    '/outils/hp-hyper-potentiel': {
+      id: '/outils/hp-hyper-potentiel'
+      path: '/hp-hyper-potentiel'
+      fullPath: '/outils/hp-hyper-potentiel'
+      preLoaderRoute: typeof OutilsHpHyperPotentielRouteImport
       parentRoute: typeof OutilsRoute
     }
     '/pdf/$slug': {
@@ -799,6 +947,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/game-hearts'
       preLoaderRoute: typeof ApiPublicGameHeartsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/en-cuisine/panier/$grappe': {
+      id: '/en-cuisine/panier/$grappe'
+      path: '/$grappe'
+      fullPath: '/en-cuisine/panier/$grappe'
+      preLoaderRoute: typeof EnCuisinePanierGrappeRouteImport
+      parentRoute: typeof EnCuisinePanierRoute
     }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
@@ -838,12 +993,50 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface EnCuisinePanierRouteChildren {
+  EnCuisinePanierGrappeRoute: typeof EnCuisinePanierGrappeRoute
+}
+
+const EnCuisinePanierRouteChildren: EnCuisinePanierRouteChildren = {
+  EnCuisinePanierGrappeRoute: EnCuisinePanierGrappeRoute,
+}
+
+const EnCuisinePanierRouteWithChildren = EnCuisinePanierRoute._addFileChildren(
+  EnCuisinePanierRouteChildren,
+)
+
+interface EnCuisineRouteChildren {
+  EnCuisinePanierRoute: typeof EnCuisinePanierRouteWithChildren
+}
+
+const EnCuisineRouteChildren: EnCuisineRouteChildren = {
+  EnCuisinePanierRoute: EnCuisinePanierRouteWithChildren,
+}
+
+const EnCuisineRouteWithChildren = EnCuisineRoute._addFileChildren(
+  EnCuisineRouteChildren,
+)
+
+interface LireRouteChildren {
+  LireJetonRoute: typeof LireJetonRoute
+  LireMerciRoute: typeof LireMerciRoute
+}
+
+const LireRouteChildren: LireRouteChildren = {
+  LireJetonRoute: LireJetonRoute,
+  LireMerciRoute: LireMerciRoute,
+}
+
+const LireRouteWithChildren = LireRoute._addFileChildren(LireRouteChildren)
+
 interface OutilsRouteChildren {
   OutilsBonsReflexesRoute: typeof OutilsBonsReflexesRoute
+  OutilsHpHyperPotentielRoute: typeof OutilsHpHyperPotentielRoute
 }
 
 const OutilsRouteChildren: OutilsRouteChildren = {
   OutilsBonsReflexesRoute: OutilsBonsReflexesRoute,
+  OutilsHpHyperPotentielRoute: OutilsHpHyperPotentielRoute,
 }
 
 const OutilsRouteWithChildren =
@@ -853,6 +1046,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
   AlbumRoute: AlbumRoute,
+  ApercuRoute: ApercuRoute,
   AteliersRoute: AteliersRoute,
   BaladoRoute: BaladoRoute,
   BoiteRoute: BoiteRoute,
@@ -861,13 +1055,15 @@ const rootRouteChildren: RootRouteChildren = {
   ConditionsDeVenteRoute: ConditionsDeVenteRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
-  EnCuisineRoute: EnCuisineRoute,
+  EnCuisineRoute: EnCuisineRouteWithChildren,
   FaqRoute: FaqRoute,
   JeuxRoute: JeuxRoute,
   LesPasseursRoute: LesPasseursRoute,
+  LireRoute: LireRouteWithChildren,
   LivresPdfRoute: LivresPdfRoute,
   MerciRoute: MerciRoute,
   OutilsRoute: OutilsRouteWithChildren,
+  PanierRoute: PanierRoute,
   PasseurDeSavoirRoute: PasseurDeSavoirRoute,
   PrixRoute: PrixRoute,
   RecupererAchatRoute: RecupererAchatRoute,

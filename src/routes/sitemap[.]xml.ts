@@ -23,6 +23,7 @@ const STATIC_PATHS = [
   "/a-propos",
   "/album",
   "/collaborer",
+  "/apercu",
   "/comprendre",
   "/contact",
   "/faq",
