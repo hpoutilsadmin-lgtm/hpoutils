@@ -245,12 +245,18 @@ function BoutonCoeur({
    registre, affichés tels quels. La couleur de Lo n'est pas précisée
    au registre : son tampon est posé en neutre, sans rien inventer.
    « Fusion Shop », approuvé par Mel au registre, n'existe pas (encore)
-   sur le site : aucun tampon posé pour lui. */
+   sur le site : aucun tampon posé pour lui.
+   Ajout du 23 oct. 2026, 20 h 35 (dicté par Hugo) : O'Z « la grande »,
+   tampon JAUNE — jaune profond #8A6D00, lisible sur fond crème
+   (contraste ≈ 4,7:1, même exigence que le bleu ciel de Lo) :
+   2 vérités 1 mensonge (en plus du mauve de Mel) et LA BANQUE
+   (premier tampon du jeu). */
 const TESTEURS = {
   louka: { nom: "Louka", couleur: "#2e7d32", fond: "rgba(46,125,50,.10)", rotation: -1.4 },
   maeva: { nom: "Maëva ☾", couleur: "#23201c", fond: "rgba(35,32,28,.07)", rotation: 1 },
   mel: { nom: "Mel « The girl boss »", couleur: "#7b2d8b", fond: "rgba(123,45,139,.09)", rotation: -0.8 },
   lo: { nom: "Lo « le petit Raptor »", couleur: "#0F6CA8", fond: "rgba(15,108,168,.10)", rotation: 1.3 },
+  oz: { nom: "O'Z « la grande »", couleur: "#8A6D00", fond: "rgba(138,109,0,.10)", rotation: -0.5 },
   hp: { nom: "HP, le créateur", couleur: "#2456a6", fond: "rgba(36,86,166,.09)", rotation: -1 },
   tous: { nom: "Tous les testeurs", couleur: "#221a12", fond: "rgba(34,26,18,.06)", rotation: 0 },
 } as const;
@@ -268,7 +274,8 @@ const APPROBATIONS: Record<string, CleTesteur[]> = {
   "nord-2087": ["maeva"],
   "mysteres-du-nord": ["lo"],
   "devine-l-humeur": ["lo"],
-  "2-verites-1-mensonge": ["mel"],
+  "2-verites-1-mensonge": ["mel", "oz"],
+  "la-banque": ["oz"],
   "pop-ballons": ["mel"],
   "fusion-sirop": ["hp"],
   "mots-de-chez-nous": ["hp"],
@@ -292,6 +299,7 @@ const ORDRE_PREUVE = [
   "tir-de-boules-de-neige",
   "la-spirale-asmr",
   "2-verites-1-mensonge",
+  "la-banque",
   "cherche-trouve-la-vraie-vie",
 ];
 

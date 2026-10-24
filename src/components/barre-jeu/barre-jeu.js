@@ -88,7 +88,8 @@
     },
     "/apps/la-banque/la-banque-v1.1.html": {
       nom: "LA BANQUE", score: null, pause: null,
-      lien: { href: "/pdf/sans-honte-entraide", texte: "Le kit Sans Honte — Entraide : s'entraider sans se brûler (5 $)" }
+      lien: { href: "/pdf/sans-honte-entraide", texte: "Le kit Sans Honte — Entraide : s'entraider sans se brûler (5 $)" },
+      tampons: ["oz"]
     },
     "/apps/bons-reflexes/index.html": {
       nom: "Les bons réflexes d'HP", score: ["#scorePercent"], pause: null,
@@ -195,7 +196,7 @@
     },
     "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html": {
       nom: "2 vérités, 1 mensonge", score: ["#hudScore", "#endScore"], pause: null,
-      tampons: ["mel"]
+      tampons: ["mel", "oz"]
     },
     "/apps/chat-attaque/chat-attaque-v1.2.html": {
       nom: "Chat'attaque", score: null,
@@ -265,12 +266,15 @@
 
   /* ---------------- Tampons des testeurs ----------------
      Mêmes signatures que sur /jeux (registre du 22 oct. 2026) :
-     nom court dans la barre, nom complet en infobulle. */
+     nom court dans la barre, nom complet en infobulle.
+     Ajout du 23 oct. 2026, 20 h 35 : O'Z « la grande », tampon
+     jaune (#8A6D00) — 2 vérités 1 mensonge et LA BANQUE. */
   var TAMPONS = {
     louka: { court: "Louka", complet: "Louka", couleur: "#2e7d32", rotation: -2 },
     maeva: { court: "Maëva", symbole: "☾", complet: "Maëva (tampon noir, petite lune)", couleur: "#23201c", rotation: 1.5 },
     mel: { court: "Mel", complet: "Mel « The girl boss »", couleur: "#7b2d8b", rotation: -1.5 },
     lo: { court: "Lo", complet: "Lo « le petit Raptor »", couleur: "#0F6CA8", rotation: 2 },
+    oz: { court: "O'Z", complet: "O'Z « la grande »", couleur: "#8A6D00", rotation: 1 },
     hp: { court: "HP", complet: "HP, le créateur", couleur: "#2456a6", rotation: -1.5 },
     tous: { court: "Tous", complet: "Tous les testeurs — à l'unanimité", couleur: "#221a12", rotation: 0 }
   };
