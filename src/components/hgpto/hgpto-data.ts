@@ -153,7 +153,18 @@ export const HUGO_LINES = [
         "Petit budget, grande dignité. Ça, ça ne se négocie pas.",
         "T'as un surplus de soupe ? Invite un voisin. Ça goûte toujours meilleur à deux.",
         "LA BANQUE, notre jeu sur la banque alimentaire : jouer pour comprendre, donner pour vrai.",
-        "On avance ! Un petit pas à la fois, mais on avance."
+        "On avance ! Un petit pas à la fois, mais on avance.",
+        /* Phrases dictées par Hugo, 24 oct. 2026 — ses mots, verbatim (« Hey », jamais « Heil »). */
+        "c'est la vie qui passe, tes jeunes tes vieux, c'est un cycle tout tourne, c'est ça qui est ça l'ami, ça va dans l'sens que ça va, chat va tu bien toi ? Va écouter empathie la série, trop bon !",
+        "Ciboulot m'en dira t'en.",
+        "quoi ! ….. koube, sheeeeeeeeeh !",
+        "Ce jeux là c'est un rot de cerveau haha, on fait du sérieux on ce prend pas au sérieux.",
+        "Quand l'appétit va tout va",
+        "1 vais mieux que 10 tu l'aura.",
+        "Hey homme respecte donc ta femme / Hey jeune soit cool avec maman / Hey le père soit patient ça ira / Hey toi on t'a tu dit que t'es extraordinaire aujourd'hui !",
+        "Ouhhhhh vous êtes bien rayonnants vous,",
+        "Cetais chouette de t'entendre rire",
+        "Aller fait moi un clien d'œil - j'tau vue !!!",
       ];
 export const EMOJI_LINES = ["👋😊","🙏❤️ Merci !","😊👋 Salut, salut !","🙏✨ Merci, pour vrai !","👋🌙 À demain !"];
 
