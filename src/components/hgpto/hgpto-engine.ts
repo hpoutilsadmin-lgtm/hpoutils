@@ -37,6 +37,7 @@ export function initHgpto() {
       var graffiti = document.getElementById('graffiti');
       var btnTickle = document.getElementById('btn-tickle');
       var btnBucket = document.getElementById('btn-bucket');
+      var btnKibble = document.getElementById('btn-kibble');
       var btnCalm = document.getElementById('btn-calm');
       var selWeather = document.getElementById('sel-weather');
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -318,6 +319,15 @@ export function initHgpto() {
         }
         if (actx && actx.state === 'suspended') actx.resume();
       }
+      /* Correctif du doigt d'Hugo (23 oct. 2026) : le contexte audio
+         n'était créé qu'au détour de CERTAINS boutons. Un premier geste
+         ailleurs (lien de bulle, question, défilement tactile…) ne
+         débloquait rien, et les sons de vie partaient ensuite dans le
+         vide ou restaient suspendus — « les sons pas présents ». Un
+         unique écouteur au premier pointerdown, où qu'il soit, crée et
+         réveille le contexte DANS le geste : la politique d'autoplay
+         mobile est respectée, et tout ce qui suit peut sonner. */
+      document.addEventListener('pointerdown', function(){ ensureAudio(); }, { passive:true });
       function tone(t0, f0, f1, dur, vol, type){
         if (!actx || soundLevel === 0) return;
         var o = actx.createOscillator(), g = actx.createGain(), fl = actx.createBiquadFilter();
@@ -344,7 +354,12 @@ export function initHgpto() {
         // des souffles — allo, hello, hola, ciao vivent dans le rythme, dosés.
         var base = mood === 'sleep' ? 175 : mood === 'joke' ? 392 : mood === 'answer' ? 318 : mood === 'helium' ? 615 : 292;
         var step = mood === 'sleep' ? 0.22 : mood === 'joke' ? 0.1 : 0.12;
-        var vol = mood === 'sleep' ? 0.03 : (mood === 'answer' ? 0.033 : (mood === 'helium' ? 0.034 : 0.046));
+        // Correctif du doigt d'Hugo (23 oct. 2026) : niveaux relevés —
+        // le charabia culminait à 0,046, quasi inaudible sur un haut-
+        // parleur de téléphone. Présence nette visée, jamais agressive :
+        // le niveau choisi (Fort/Doux/Muet) continue de tout plafonner
+        // via volMul(), lu au point d'émission (tone / toneRaw).
+        var vol = mood === 'sleep' ? 0.055 : (mood === 'answer' ? 0.07 : (mood === 'helium' ? 0.065 : 0.10));
         var n = Math.max(2, Math.min(24, Math.round(text.length / 6)));
         var tt = actx.currentTime + 0.02;
         for (var i=0;i<n;i++){
@@ -360,20 +375,20 @@ export function initHgpto() {
         var t = actx.currentTime + 0.02;
         for (var i=0;i<6;i++){
           var f = 540 + Math.random()*170;   // rire plafonné : mignon, jamais agaçant
-          tone(t + i*0.085, f, f*1.15, 0.07, 0.04, 'square');
+          tone(t + i*0.085, f, f*1.15, 0.07, 0.075, 'square');
         }
       }
       function yawnSound(){
         if (!actx || muted) return;
         var t = actx.currentTime + 0.02;
-        tone(t, 420, 130, 0.8, 0.045, 'sine');
-        tone(t + 0.85, 200, 120, 0.4, 0.028, 'sine');
+        tone(t, 420, 130, 0.8, 0.08, 'sine');
+        tone(t + 0.85, 200, 120, 0.4, 0.05, 'sine');
       }
       function snore(){
         if (!actx || muted || docHidden) return;
         var t = actx.currentTime + 0.02;
-        tone(t, 130, 90, 0.5, 0.026, 'sine');
-        tone(t + 0.62, 300, 345, 0.16, 0.018, 'triangle'); // le petit « bip » du zzz-bip
+        tone(t, 130, 90, 0.5, 0.05, 'sine');
+        tone(t + 0.62, 300, 345, 0.16, 0.035, 'triangle'); // le petit « bip » du zzz-bip
       }
       /* ---------- Fredonnage (lot nº 2) : il fredonne dans ses moments
          calmes — en balayant, en bricolant, en marchant. Deux sources
@@ -385,7 +400,7 @@ export function initHgpto() {
       var humSeq = 0;
       function humTone(t0, midi, dur){
         if (!actx || soundLevel === 0) return;
-        var hv = 0.034 * volMul();   // lot nº 4 : le fredonnage suit le niveau de son choisi
+        var hv = 0.065 * volMul();   // lot nº 4 : le fredonnage suit le niveau de son choisi (niveau relevé le 23 oct. 2026, comme toute sa voix)
         var f = 440 * Math.pow(2, (midi - 69) / 12);
         var o = actx.createOscillator(), g = actx.createGain(), fl = actx.createBiquadFilter();
         o.type = 'sine';
@@ -464,19 +479,19 @@ export function initHgpto() {
       /* Météo intérieure : soupir, reniflement, petit « prout » de mouchoir */
       function sighSound(){
         if (!actx || muted) return;
-        tone(actx.currentTime + 0.02, 320, 130, 0.55, 0.04, 'sine');
+        tone(actx.currentTime + 0.02, 320, 130, 0.55, 0.075, 'sine');
       }
       function sniffSound(){
         if (!actx || muted) return;
         var t = actx.currentTime + 0.02;
-        tone(t, 300, 520, 0.11, 0.03, 'sine');
-        tone(t + 0.2, 300, 520, 0.11, 0.03, 'sine');
+        tone(t, 300, 520, 0.11, 0.055, 'sine');
+        tone(t + 0.2, 300, 520, 0.11, 0.055, 'sine');
       }
       function tootSound(){
         if (!actx || muted) return;
         var t = actx.currentTime + 0.02;
-        tone(t, 170, 85, 0.32, 0.05, 'square');
-        tone(t + 0.05, 150, 80, 0.3, 0.04, 'square');
+        tone(t, 170, 85, 0.32, 0.09, 'square');
+        tone(t + 0.05, 150, 80, 0.3, 0.07, 'square');
       }
       /* Colère comique et brève — toujours contre SES affaires, jamais le visiteur */
       function doAngry(line, dur){
@@ -999,8 +1014,8 @@ export function initHgpto() {
       function splashSound(){
         if (!actx || muted) return;
         var t = actx.currentTime + 0.02;
-        tone(t, 520, 90, 0.35, 0.05, 'triangle');
-        for (var i=0;i<7;i++) tone(t + 0.05 + i*0.055, 300 + Math.random()*220, 120, 0.12, 0.035, 'sine');
+        tone(t, 520, 90, 0.35, 0.095, 'triangle');
+        for (var i=0;i<7;i++) tone(t + 0.05 + i*0.055, 300 + Math.random()*220, 120, 0.12, 0.06, 'sine');
       }
       function doBucket(){
         ensureAudio();
@@ -1093,8 +1108,8 @@ export function initHgpto() {
       function coughSound(){
         if (!actx || muted) return;
         var t = actx.currentTime + 0.02;
-        tone(t, 190, 120, 0.14, 0.05, 'square');
-        tone(t + 0.22, 180, 110, 0.16, 0.05, 'square');
+        tone(t, 190, 120, 0.14, 0.085, 'square');
+        tone(t + 0.22, 180, 110, 0.16, 0.085, 'square');
       }
       function doCookFail(){
         if (state === 'sleep' || paused || isBusy() || isNight() || qaOpen) return;
@@ -1148,9 +1163,9 @@ export function initHgpto() {
       function whistleSound(){
         if (!actx || muted) return;
         var t = actx.currentTime + 0.02;
-        tone(t, 880, 990, 0.16, 0.03, 'sine');
-        tone(t + 0.2, 990, 880, 0.16, 0.03, 'sine');
-        tone(t + 0.42, 880, 990, 0.22, 0.028, 'sine');
+        tone(t, 880, 990, 0.16, 0.055, 'sine');
+        tone(t + 0.2, 990, 880, 0.16, 0.055, 'sine');
+        tone(t + 0.42, 880, 990, 0.22, 0.05, 'sine');
       }
       function doNosePick(){
         if (state === 'sleep' || paused || isBusy() || qaOpen) return;
@@ -2178,6 +2193,20 @@ export function initHgpto() {
       });
       controlsEl.addEventListener('click', function(ev){
         if (ev.target !== btnDock && controlsEl.classList.contains('open') && window.innerWidth <= 560){
+          /* Correctif du doigt d'Hugo (23 oct. 2026, 19 h 18) : ce
+             referme-tout attrapait aussi les SÉLECTEURS (mode, météo).
+             Au tactile, le tap sur un <select> émet son « click » AVANT
+             l'ouverture du menu natif : le panneau se refermait donc
+             sur-le-champ, le sélecteur passait en display:none et le
+             menu n'ouvrait jamais — « le sélecteur ne fonctionne pas
+             sur tactile », « les modes toujours non présents ». Les
+             suites d'avant pilotaient le sélecteur par programme
+             (selectOption) au format bureau : invisibles au défaut.
+             Règle : un tap qui vise un sélecteur (ou son intérieur)
+             ne referme JAMAIS le panneau — le visiteur est en train
+             de choisir. */
+          var t = ev.target;
+          if (t && (t.tagName === 'SELECT' || (t.closest && t.closest('select')))) return;
           controlsEl.classList.remove('open');
           btnDock.setAttribute('aria-expanded','false');
         }
@@ -2533,7 +2562,7 @@ export function initHgpto() {
       function gStatus(t){ gameStatus.textContent = t; }
       function tickSound(){
         if (!actx || muted) return;
-        tone(actx.currentTime + 0.01, 500, 380, 0.05, 0.02, 'triangle');
+        tone(actx.currentTime + 0.01, 500, 380, 0.05, 0.04, 'triangle');
       }
       function confettiBurst(n){
         if (calm || reduced) return;
@@ -2947,8 +2976,8 @@ export function initHgpto() {
         if (!actx || muted) return;
         var t = actx.currentTime + 0.02;
         [0, 0.17, 0.34].forEach(function(d){
-          toneRaw(t + d, 1568, 1568, 0.22, 0.05, 'sine');
-          toneRaw(t + d, 2093, 2093, 0.16, 0.018, 'sine');
+          toneRaw(t + d, 1568, 1568, 0.22, 0.085, 'sine');
+          toneRaw(t + d, 2093, 2093, 0.16, 0.03, 'sine');
         });
       }
       function flashInfo(deliver){
@@ -2966,8 +2995,8 @@ export function initHgpto() {
       function balloonSqueak(){
         if (!actx || muted) return;
         var t = actx.currentTime + 0.02;
-        toneRaw(t, 880, 1560, 0.13, 0.028, 'sine');
-        toneRaw(t + 0.15, 1250, 660, 0.11, 0.024, 'sine');
+        toneRaw(t, 880, 1560, 0.13, 0.05, 'sine');
+        toneRaw(t + 0.15, 1250, 660, 0.11, 0.045, 'sine');
       }
       function heliumGag(src){
         if (reading.on || gameOn || mgOn || heliumLines > 0 || paused || state === 'sleep') return;
@@ -3805,6 +3834,7 @@ export function initHgpto() {
       var catEl = document.getElementById('cat');
       var catBurstEl = document.getElementById('cat-burst');
       var bowlEl = document.getElementById('bowl');
+      var kibbleEl = document.getElementById('kibble');
       var scratchEl = document.getElementById('scratch');
       var CAT_W = window.innerWidth <= 560 ? 76 : 96;
       var catX = -160, catVisible = false, catMode = 'off', catState = 'idle';
@@ -3882,14 +3912,35 @@ export function initHgpto() {
       }
       function meow(soft){
         if (!actx || muted || docHidden) return;
-        var t = actx.currentTime + 0.02, v = soft ? 0.02 : 0.032;
+        // Niveaux relevés le 23 oct. 2026 (doigt d'Hugo : Pixel ne
+        // s'entendait pas) — le doux reste doux, le franc s'entend.
+        var t = actx.currentTime + 0.02, v = soft ? 0.04 : 0.07;
         toneRaw(t, 540, 880, 0.16, v, 'sine');
         toneRaw(t + 0.17, 880, 430, 0.26, v, 'sine');
       }
       function purr(){
         if (!actx || muted || docHidden) return;
         var t = actx.currentTime + 0.02;
-        for (var i = 0; i < 9; i++) toneRaw(t + i * 0.13, 56, 48, 0.1, 0.045, 'sawtooth');
+        for (var i = 0; i < 9; i++) toneRaw(t + i * 0.13, 56, 48, 0.1, 0.075, 'sawtooth');
+      }
+      /* Elle miaule PARFOIS, pour rien, comme une vraie chatte
+         (demande d'Hugo, 23 oct. 2026) : un petit miaou doux quand
+         elle est là, tranquille — jamais en rafale (au plus un aux
+         ~80 s, et l'horaire de vie ne la propose qu'à l'occasion),
+         jamais quand elle dort, jamais par-dessus une tâche. Une
+         fois sur quatre, un deuxième miaou plus doux répond, comme
+         si elle se parlait à elle-même. */
+      var lastAmbientMeow = 0;
+      function catAmbientMeow(){
+        if (!catVisible || catState === 'sleep' || catState === 'console' || catState === 'eat') return;
+        if (state === 'sleep') return;
+        var now = Date.now();
+        if (now - lastAmbientMeow < 80000) return;
+        lastAmbientMeow = now;
+        meow(true);
+        if (Math.random() < 0.25){
+          setTimeout(function(){ if (catVisible && catState !== 'sleep') meow(true); }, 950);
+        }
       }
       function spawnCatBurst(chars, n){
         if (reduced) return;
@@ -3936,6 +3987,71 @@ export function initHgpto() {
           if (state === 'invite') setState(reduced ? 'idle' : 'walk');
         }, 1700);
       }
+      /* Croquette lancée PAR LE VISITEUR (demande d'Hugo, 23 oct.
+         2026) : le bouton « Croquette » du dock lance une petite
+         poignée en arc, du côté d'HGPTO vers le sol ; Pixel accourt
+         (elle arrive en trombe si elle n'était pas là), mange et
+         miaule. Une seule croquette à la fois ; jamais pendant le
+         jeu caché, la Pause, ou quand la maison dort — et le charme
+         ne ralentit rien : un tap, une seconde d'arc, c'est tout. */
+      var kibbleBusy = false;
+      var KIBBLE_LINES = [
+        "Une croquette pour Pixel ! Elle dit merci — enfin, elle miaule, c'est sa façon de dire merci.",
+        "Regarde-la accourir. Ce mot-là — « croquette » — elle le connaît par cœur, la gourmande."
+      ];
+      function throwKibble(){
+        ensureAudio();
+        lastInteract = Date.now();
+        if (kibbleBusy || gameOn || paused || isHidden || docHidden) return;
+        if (state === 'sleep') wake(false);   // même précédent que doFeedCat : la nourriture réveille la maison
+        if (hopBusy) return;   // elle saute de bloc en bloc : on ne lui dispute pas la trajectoire, le visiteur réessaiera
+        if (catVisible && catState === 'console') return;   // elle console HGPTO : on ne la dérange pas
+        if (catVisible && catState === 'sleep') setCatState('idle');   // mais une croquette, ça réveille une gourmande
+        kibbleBusy = true;
+        var wasAbsent = !catVisible;
+        if (wasAbsent) summonCat('goto');
+        var startX = Math.max(6, Math.min(vw() - 40, x + botW() * 0.72));
+        var landX = wasAbsent
+          ? Math.max(10, Math.min(vw() - CAT_W - 16, catBesideX() + 10))
+          : Math.max(10, Math.min(vw() - 44, catX + CAT_W * 0.35 + (Math.random() * 30 - 15)));
+        kibbleEl.style.left = startX + 'px';
+        kibbleEl.style.opacity = '1';
+        kibbleEl.hidden = false;
+        if (actx && !muted) tone(actx.currentTime + 0.02, 300, 540, 0.09, 0.05, 'sine');
+        var dx = landX - startX;
+        var anim = null;
+        try {
+          anim = kibbleEl.animate([
+            { transform: 'translate(0px, 0px)' },
+            { transform: 'translate(' + Math.round(dx * 0.55) + 'px, -86px)', offset: 0.55 },
+            { transform: 'translate(' + Math.round(dx) + 'px, 0px)' }
+          ], { duration: reduced ? 60 : 620, easing: 'ease-out', fill: 'forwards' });
+        } catch(e) { anim = null; }
+        function landed(){
+          catMode = 'goto';
+          catGo(landX - CAT_W / 2 + 6, 330, function(){
+            setCatState('eat');
+            meow();
+            setTimeout(function(){
+              kibbleEl.style.opacity = '0';
+              setTimeout(function(){
+                kibbleEl.hidden = true;
+                if (anim) anim.cancel();
+                kibbleBusy = false;
+              }, 380);
+              if (catState === 'eat') setCatState('idle');
+              if (catVisible){ catMode = 'follow'; catGo(catBesideX(), 68, catArrivedFollow); }
+            }, 2100);
+          });
+          if (Math.random() < 0.4 && !qaOpen && !isBusy()){
+            showBubble(esc(pick(KIBBLE_LINES)), 5200, 'talk');
+          }
+          logDay("un visiteur a lancé une croquette à Pixel — accourue, mangée, miaulée");
+        }
+        if (anim && anim.finished) anim.finished.then(landed);
+        else setTimeout(landed, reduced ? 80 : 640);
+      }
+      btnKibble.addEventListener('click', function(){ throwKibble(); });
       /* Elle le console : quand il pleure ou désespère, elle vient se coucher près de lui */
       function catConsole(){
         if (gameOn) return;
@@ -4206,6 +4322,7 @@ export function initHgpto() {
                 });
               }
               else if (r < 0.78) catLeave();
+              else if (r < 0.88) catAmbientMeow();   // un petit miaou pour rien, parfois (23 oct. 2026)
             }
           }
           scheduleCatLife();
