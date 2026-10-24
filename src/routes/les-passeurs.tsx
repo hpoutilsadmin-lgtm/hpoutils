@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/les-passeurs")({
   head: () => createSeoHead({
-    title: "Les Passeurs — l'accès au savoir pour 3 $ par mois",
-    description: "Les Passeurs soutiendront les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir coûtera 3 $ par mois (ou 28 $ pour l'année) ; les savoirs s'offriront aussi par quatre pour 12 $. L'inscription n'est pas encore en ligne : aucun paiement n'est demandé pour l'instant.",
+    title: "Les Passeurs — l'accès au savoir pour 3 $ CAD par mois",
+    description: "Les Passeurs soutiendront les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir coûtera 3 $ CAD par mois (ou 28 $ CAD pour l'année) ; les savoirs s'offriront aussi par quatre pour 12 $ CAD. Aucune taxe ajoutée (petit fournisseur). L'inscription n'est pas encore en ligne : aucun paiement n'est demandé pour l'instant.",
     path: "/les-passeurs",
   }),
   component: Page,
@@ -59,7 +59,8 @@ function Page() {
           <span className="editorial-kicker">Simple et clair</span>
           <h2>Pas de contrat déguisé, <em>pas de promesse en l'air.</em></h2>
           <p className="strip-intro">Juste: tu passes, et d'autres reçoivent.</p>
-          <h3>Ce sera 3 $ / mois — ou 28 $ / an. Et les savoirs s'offriront aussi par quatre : 12 $ pour 4 savoirs.</h3>
+          <h3>Ce sera 3 $ CAD / mois — ou 28 $ CAD / an. Et les savoirs s'offriront aussi par quatre : 12 $ CAD pour 4 savoirs.</h3>
+          <p className="strip-intro" style={{ marginTop: 4 }}>Aucune taxe ajoutée : petit fournisseur, la TPS et la TVQ ne sont pas perçues.</p>
           <div
             style={{
               maxWidth: 640,

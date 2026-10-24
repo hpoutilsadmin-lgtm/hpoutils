@@ -45,7 +45,7 @@ function Page() {
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Réponse humaine</h3>
-              <p>Chaque message reçoit une réponse personnalisée. Ateliers en ligne, en personne ou sur demande.</p>
+              <p>Chaque message reçoit une réponse d'humain, sous 3 jours ouvrables. Ateliers en ligne, en personne ou sur demande.</p>
             </article>
           </div>
         </div>
@@ -83,7 +83,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Comment commander ?</h3>
-              <p>Écrivez par courriel ou utilisez les boutons de la page. Je vous réponds avec les détails.</p>
+              <p>Écrivez par courriel ou utilisez les boutons de la page. Un humain de l'équipe vous répond avec les détails, sous 3 jours ouvrables.</p>
             </article>
             <article className="pillar-card">
               <h3>Quels moyens de paiement ?</h3>
@@ -132,7 +132,7 @@ function Page() {
       <section className="collections-strip" style={{ textAlign: "center" }}>
         <div className="container" style={{ maxWidth: 760 }}>
           <h2>Une question, une idée, un <em>projet</em> ?</h2>
-          <p className="strip-intro">Je suis là pour écouter et aider.</p>
+          <p className="strip-intro">L'équipe est là pour écouter et aider.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">Écrire un courriel</a>
           </div>

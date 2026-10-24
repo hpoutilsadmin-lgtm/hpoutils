@@ -86,7 +86,7 @@ export const KIT_PITCHES = [
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" }
       ];
 export const ATELIER_PITCHES = [
-        { t:"D'ici, je vois même les ateliers : « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), à Terrebonne et dans les environs.", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" }
+        { t:"D'ici, je vois même les ateliers : 6 forfaits de groupe à Terrebonne et dans les environs — dont « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $).", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" }
       ];
 export const PITCHES = [
         { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — et ça fait réfléchir en s'amusant !", u:"https://hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
@@ -247,16 +247,16 @@ export const SITE_FACTS = {
         contact: "hpoutils.admin@gmail.com",
         taxes: "Aucune taxe ajoutée (petit fournisseur)"
       };
-/* ---------- SERVICE CLIENT (décisions d'Hugo, 23 octobre 2026) ----------
+/* ---------- SERVICE CLIENT (décisions de la direction, 23 octobre 2026) ----------
    Délai promis : 3 jours ouvrables (pas 2). Remboursement : cadre du
    document « Service client HP Outils » adopté tel quel — échange si
    mauvais produit par erreur, remboursement si impossible à ouvrir ou à
-   recevoir malgré l'aide d'Hugo, cas par cas sinon ; Hugo décide, jamais
+   recevoir malgré l'aide de l'équipe, cas par cas sinon ; la direction décide, jamais
    HGPTO. Escalades : la phrase de repli exacte du document, mot pour mot. */
-export const ESCALATION_LINE = "Ça, c'est une question pour Hugo directement — il te répondra en personne. Écris-lui à hpoutils.admin@gmail.com, dis-lui ce que tu me dis là, et il s'en occupe. Moi, je préfère te passer la bonne personne plutôt que de te répondre tout croche.";
+export const ESCALATION_LINE = "Ça, c'est une question pour l'équipe directement — un humain te répondra, pour vrai. Écris à hpoutils.admin@gmail.com, raconte-moi ce que tu me racontes là, et on s'en occupe. Moi, je préfère te passer la bonne personne plutôt que de te répondre tout croche.";
 export const ESCALATION_EMPATHY = "Je suis vraiment désolé que ça se soit passé comme ça. Tu mérites une vraie réponse, pas une réponse de robot.";
-export const REFUND_POLICY = "En toute franchise, voici comment ça marche : acheté le mauvais produit par erreur ? Hugo te l'échange contre celui que tu voulais. Un produit impossible à ouvrir ou à recevoir, même après l'aide d'Hugo ? Il te rembourse. Un produit reçu et conforme à sa description ? Pas de remboursement automatique — Hugo écoute ta situation et décide en personne, cas par cas. Moi, je ne touche jamais aux paiements.";
-export const LIEN_PERDU_TEXT = "Pas de panique, ton achat est bien là. Cherche dans tes courriels le reçu de Stripe — le lien de téléchargement est dedans. Regarde aussi dans tes courriels indésirables, ça arrive. Si tu ne le retrouves vraiment pas, écris à Hugo avec le courriel utilisé à l'achat : il te renverra ton accès, en personne, sous 3 jours ouvrables.";
+export const REFUND_POLICY = "En toute franchise, voici comment ça marche : acheté le mauvais produit par erreur ? La direction te l'échange contre celui que tu voulais. Un produit impossible à ouvrir ou à recevoir, même après l'aide de l'équipe ? Elle te rembourse. Un produit reçu et conforme à sa description ? Pas de remboursement automatique — la direction écoute ta situation et décide en personne, cas par cas. Moi, je ne touche jamais aux paiements.";
+export const LIEN_PERDU_TEXT = "Pas de panique, ton achat est bien là. Cherche dans tes courriels le reçu de Stripe — le lien de téléchargement est dedans. Regarde aussi dans tes courriels indésirables, ça arrive. Si tu ne le retrouves vraiment pas, écris à l'équipe avec le courriel utilisé à l'achat : un humain te renverra ton accès sous 3 jours ouvrables.";
 /* Clins d'œil au retour sur une page déjà vue CETTE visite-ci (session
    seulement — lot service client 23 oct. 2026) : une fois par page,
    jamais pendant une tâche, jamais en taquinerie sur quelqu'un. */
@@ -286,7 +286,7 @@ export const SURPRISE_BIG_LINES = [
         "Événement rarissime : Pixel m'a fait un câlin SANS graffigner. Une journée à marquer d'un boulon blanc.",
         "Grande annonce presque jamais entendue : je viens de battre mon record de la sieste la plus courte. Quatre secondes. Je suis une machine."
       ];
-export const FALLBACK = "Là, je sais pas — mais je le note pour Hugo ! Écris-lui : hpoutils.admin@gmail.com — c'est Hugo lui-même qui répond, sous 3 jours ouvrables.";
+export const FALLBACK = "Là, je sais pas — mais je le note pour Hugo ! Écris à hpoutils.admin@gmail.com — un humain de l'équipe te répondra sous 3 jours ouvrables.";
 export const KB = [
         { q:"T'es-tu vivant ?", s:"BONNE QUESTION",
           a:"Je suis un petit robot de site : je fais semblant super bien, mais mon cœur, c'est un boulon. Les vrais câlins, c'est les humains." },
@@ -339,7 +339,7 @@ export const KB = [
           a:"Anxiété, le jeu : une semaine dans la peau d'Alex, qui vit avec un trouble anxieux — météo intérieure, pensées qui envahissent, crise traversée en douceur et outils réels, avec les ressources 811 et 988. Il sensibilise ; il ne pose pas de diagnostic. Gratuit, comme tous les jeux du site.",
           u:"https://hp-outils.com/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", l:"Jouer à Anxiété" },
         { q:"Comment marchent les ateliers ?", s:"ATELIERS",
-          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $) — et le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes). Écris à Hugo pour réserver : dis-lui pour qui c'est, combien de personnes et quand tu vises — il te répond en personne, sous 3 jours ouvrables !",
+          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $), Les enfants cuisinent (120 $), Hygiène & salubrité (120 $). Pour l'Édition des Fêtes : le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h pour les organismes (120 $) et la conférence « La faim justifie les moyens » (120 $, 45 à 60 min). Écris à l'équipe pour réserver : dis-leur pour qui c'est, combien de personnes et quand tu vises — un humain te répondra sous 3 jours ouvrables !",
           u:"https://hp-outils.com/ateliers", l:"Voir les ateliers" },
         { q:"Vous avez des livres ?", s:"LIVRES",
           a:"4 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) et « Les enfants cuisinent pour faire plaisir » (10 $).",
@@ -350,6 +350,14 @@ export const KB = [
         { q:"C'est quoi, les Passeurs ?", s:"3 $ / MOIS",
           a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès au savoir : 3 $ par mois, ou 28 $ pour l'année — et les savoirs s'offrent aussi par quatre, pour 12 $. Honnêtement ? L'inscription payante arrive bientôt — le bouton de paiement n'est pas encore en ligne.",
           u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
+        { q:"Combien coûtent les Passeurs de savoirs ?", s:"3 $ / MOIS",
+          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès au savoir : 3 $ par mois, ou 28 $ pour l'année — et les savoirs s'offrent aussi par quatre, pour 12 $. Honnêtement ? L'inscription payante arrive bientôt — le bouton de paiement n'est pas encore en ligne.",
+          u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
+        { q:"Combien y a-t-il de jeux sur le site ?", s:"35 JEUX",
+          a:"35 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille !",
+          u:"https://hp-outils.com/jeux", l:"Voir les jeux" },
+        { q:"Est-ce que ça marche sans internet ?", s:"HORS LIGNE",
+          a:"Oui : une fois la page déjà ouverte, elle fonctionne sans internet — pratique quand les données sont comptées." },
         { q:"Et « À toi l'histoire » ?", s:"BIENTÔT", info:1,
           a:"Les tomes « À toi l'histoire » arrivent : ils sont en création, pas encore en vente. Le tome 1 sera gratuit — patience, ça mijote !" },
         { q:"C'est qui, HP Outils ?", s:"C'EST NOUS",
@@ -362,14 +370,14 @@ export const KB = [
           a:"« Futur simple », le balado HP : Léa et Marc regardent l'intelligence artificielle en face — PME, entrepreneuriat et futur, sans jargon. Un nouvel épisode chaque lundi !",
           u:"https://hp-outils.com/balado", l:"Écouter le balado" },
         { q:"Comment je vous contacte ?", s:"ÉCRIS-NOUS",
-          a:"Écris à Hugo : hpoutils.admin@gmail.com — c'est lui-même qui te répond, sous 3 jours ouvrables. Moi, je fais les saluts, les blagues et les chatouilles.",
-          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" },
+          a:"Écris à hpoutils.admin@gmail.com — un humain de l'équipe te répondra sous 3 jours ouvrables. Moi, je fais les saluts, les blagues et les chatouilles.",
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" },
         { q:"C'est quoi, la politique de remboursement ?", s:"ÉCHANGE D'ABORD",
           a:REFUND_POLICY,
-          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" },
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" },
         { q:"J'ai perdu mon lien de téléchargement", s:"PAS DE PANIQUE",
           a:LIEN_PERDU_TEXT,
-          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" },
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" },
         { q:"Raconte-moi une blague", s:"HIHI",
           a:null },
         { q:"T'as fait quoi aujourd'hui ?", s:"MON JOURNAL", fn:"journal",
@@ -403,7 +411,7 @@ export const KB = [
         { q:"Montre-moi les livres", s:"PAR ICI →", go:"sec-livres",
           a:"Nos 4 livres sont là, en PDF, de 10 $ à 15 $ — téléchargement immédiat après le paiement." },
         { q:"Montre-moi les ateliers", s:"PAR ICI →", go:"sec-ateliers",
-          a:"Les ateliers sont là : Cuisine pratique (120 $) et Manger mieux avec moins (150 $), à Terrebonne et dans les environs." },
+          a:"Les ateliers sont là : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $), Les enfants cuisinent (120 $), Hygiène & salubrité (120 $) — plus l'Édition des Fêtes (Pain maison à domicile, L'IA sans jargon 2 h, conférence « La faim justifie les moyens »). Le tout à Terrebonne et dans les environs." },
         { q:"Fais-moi visiter le site", s:"EN ROUTE", fn:"tour",
           a:"" },
         { q:"Joue à Montgolfière avec moi", s:"ON DÉCOLLE !", fn:"mg",
@@ -416,7 +424,7 @@ export const KB = [
           a:"Des fois, je respire un peu trop près de ma balloune… et ma voix devient toute petite, comme un écureuil ! Ça dure une phrase ou deux, je ris de moi, puis je reviens à ma voix normale. Tu peux fermer le gag avec le bouton « Hélium » dans ce panneau." },
         { q:"J'ai une autre question", s:"?",
           a:FALLBACK,
-          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" }
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" }
       ];
 export const SYNONYMS = {
         coute:"prix", coutent:"prix", cout:"prix", tarif:"prix", tarifs:"prix",
@@ -521,7 +529,7 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour cuisiner en famille, c'est celui-là qui fait ça : « Les enfants cuisinent pour faire plaisir » (10 $), des recettes pensées pour les petits chefs. Et au quotidien, Recettes HP reste gratuit : 629 recettes pour tout le monde.",
           u:"https://hp-outils.com/livres-pdf", l:"Voir le livre", s:"EN FAMILLE" },
         { id:'apprendre', mots:['apprendre','cours de cuisine','formation','atelier'], dejaVu:'ateliers sont la',
-          t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les ateliers à Terrebonne — « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
+          t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les 6 ateliers de groupe à Terrebonne et dans les environs — dont « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
           u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
           t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 35 jeux, sans inscription. Et le jour où tu voudras un coup de pouce pour t'organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
@@ -599,6 +607,6 @@ export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
          d'abord — le résumé calme des faits (lot nº 2) y suffit. */
 export const DWELL_SUGGESTIONS = {
         '/livres-pdf': { t:"Tu regardes les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, « Les enfants cuisinent pour faire plaisir » à 10 $. Téléchargement immédiat après le paiement. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
-        '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), en groupe, à Terrebonne et dans les environs ; réservation et questions par courriel à Hugo. Et les recettes, elles, sont gratuites en tout temps.", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
+        '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : 6 forfaits de groupe, 120 $ ou 150 $ selon l'atelier — dont « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), à Terrebonne et dans les environs ; réservation et questions par courriel à l'équipe. Et les recettes, elles, sont gratuites en tout temps.", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès au savoir et soutenir HP Outils. En toute honnêteté : le bouton d'inscription payante n'est pas encore en ligne — ça s'en vient.", u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" }
       };

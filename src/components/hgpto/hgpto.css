@@ -336,10 +336,13 @@
         100%{transform:translate(var(--dx),var(--dy)) scale(1.25) rotate(var(--rot));opacity:0}
       }
 
-      /* Contrôles discrets */
+      /* Contrôles discrets — décalés vers la gauche le 24 oct. 2026 :
+         le badge « Edit with Lovable » (injecté par la plateforme,
+         impossible à retirer depuis le dépôt) recouvrait l'extrémité
+         droite, dont le sélecteur Météo. */
       .bot-controls{
-        position:fixed;right:12px;bottom:12px;z-index:61;display:flex;gap:6px;
-        flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 24px);
+        position:fixed;right:176px;bottom:12px;z-index:61;display:flex;gap:6px;
+        flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 200px);
         pointer-events:none;
       }
       .bot-controls button,.bot-controls select{pointer-events:auto}

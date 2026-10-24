@@ -40,9 +40,9 @@ const ORGANISATION_JSON_LD = {
 export const Route = createFileRoute("/")({
   head: () => ({
     ...createSeoHead({
-      title: "HP Outils — jeux gratuits, kits PDF 5 $ et outils pour la vraie vie | Québec",
+      title: "HP Outils — jeux gratuits, kits PDF 5 $ CAD et outils pour la vraie vie | Québec",
       description:
-        "Jeux gratuits, 629 recettes, outils web sans compte et kits PDF à 5 $ — créés à Terrebonne pour les familles et les petits budgets. Aucune taxe ajoutée.",
+        "Jeux gratuits, 629 recettes, outils web sans compte et kits PDF à 5 $ CAD — créés à Terrebonne pour les familles et les petits budgets. Aucune taxe ajoutée.",
       path: "/",
     }),
     scripts: [
@@ -185,7 +185,7 @@ function Index() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les Passeurs</h3>
-              <p>Le programme qui tiendra le gratuit debout : 3 $ par mois, bientôt en ligne.</p>
+              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, bientôt en ligne — aucune taxe ajoutée.</p>
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
             <article className="pillar-card">

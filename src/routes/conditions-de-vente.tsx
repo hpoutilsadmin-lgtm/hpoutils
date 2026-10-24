@@ -12,7 +12,7 @@ function Page() {
     <p>Dernière mise à jour : octobre 2026.</p>
     <p>Ces conditions expliquent comment ça marche quand vous achetez chez HP Outils : ce que vous achetez, comment vous le recevez, et ce qui se passe s'il y a un problème. En mots simples, comme tout ce qu'on fait.</p>
     <h2>1. Qui vend</h2>
-    <p>HP Outils (Hugo Pierre Bertrand), à Terrebonne, dans Lanaudière (Québec). Courriel : hpoutils.admin@gmail.com. C'est la même personne qui écrit les produits et qui répond à vos courriels.</p>
+    <p>HP Outils (Hugo Pierre Bertrand), à Terrebonne, dans Lanaudière (Québec). Courriel : hpoutils.admin@gmail.com. Les produits sont écrits par Hugo Pierre Bertrand ; un humain de l'équipe répond à vos courriels.</p>
     <h2>2. Ce qu'on vend</h2>
     <p>Des produits numériques et des ateliers :</p>
     <ul>
@@ -51,6 +51,6 @@ function Page() {
     <h2>9. Changements à ces conditions</h2>
     <p>On peut mettre à jour ces conditions de temps en temps. La version publiée sur cette page au moment de votre achat est celle qui s'applique à cet achat.</p>
     <h2>10. Nous joindre — service client</h2>
-    <p>Une question, un souci avec un achat, un lien qui ne fonctionne pas ? Écrivez à hpoutils.admin@gmail.com. Une réponse d'Hugo, pas d'un robot — sous 3 jours ouvrables. C'est la même personne qui écrit les produits et qui vous répond. Pour vos renseignements personnels, voyez la Politique de confidentialité.</p>
+    <p>Une question, un souci avec un achat, un lien qui ne fonctionne pas ? Écrivez à hpoutils.admin@gmail.com. Une réponse d'humain, pas d'un robot — sous 3 jours ouvrables. C'est un humain de l'équipe qui vous répond. Pour vos renseignements personnels, voyez la Politique de confidentialité.</p>
   </div></section>;
 }

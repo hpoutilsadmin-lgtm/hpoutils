@@ -40,7 +40,7 @@ export function SiteFooter() {
             <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a><br />
             <Link to="/contact">Formulaire de contact</Link><br />
             <a href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Formulaire atelier</a><br />
-            Une réponse d'Hugo, pas d'un robot — sous 3 jours ouvrables.
+            Une réponse d'humain, pas d'un robot — sous 3 jours ouvrables.
           </p>
         </div>
         <div style={{ textAlign: "center" }}>

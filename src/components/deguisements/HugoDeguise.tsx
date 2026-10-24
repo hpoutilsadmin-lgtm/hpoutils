@@ -7,7 +7,9 @@ import { DEGUISES } from "./deguises";
  *
  * Chaque clic avance d'un cran : naturel → les déguisements de DEGUISES
  * (dont les deux « barbouillages » griffonnés par HGPTO) → retour au
- * naturel, et ça recommence. La photo elle-même n'est jamais modifiée :
+ * naturel, et ça recommence. Des boutons précédent / suivant /
+ * « Surprends-moi » (ajout 23 oct. 2026) offrent la même navigation
+ * sans cliquer la photo. La photo elle-même n'est jamais modifiée :
  * les déguisements sont des calques SVG posés par-dessus.
  *
  * Contrat avec le moteur HGPTO (autre chantier) : quand HGPTO « vient »
@@ -32,6 +34,14 @@ export default function HugoDeguise() {
   const courant = etape === 0 ? null : DEGUISES[etape - 1];
 
   const avancer = () => setEtape((e) => (e + 1) % (total + 1));
+  const reculer = () => setEtape((e) => (e - 1 + total + 1) % (total + 1));
+  const surprendre = () =>
+    setEtape((e) => {
+      // Un déguisement au hasard, jamais celui déjà affiché.
+      let n = Math.floor(Math.random() * total) + 1;
+      if (n === e) n = (n % total) + 1;
+      return n;
+    });
 
   useEffect(() => {
     const entendreBarbouillage = () => setEtape(INDEX_BARBOUILLE_DEFAUT + 1);
@@ -70,6 +80,20 @@ export default function HugoDeguise() {
       <figcaption className="hugo-deguise-legende" aria-live="polite">
         {courant ? courant.legende : "Hugo, tout naturel — clique sur la photo pour le déguiser !"}
       </figcaption>
+      <div className="hugo-deguise-nav">
+        <button type="button" onClick={reculer} aria-label="Déguisement précédent">
+          ← Précédent
+        </button>
+        <span className="hugo-deguise-compteur" aria-hidden="true">
+          {etape} / {total}
+        </span>
+        <button type="button" onClick={avancer} aria-label="Déguisement suivant">
+          Suivant →
+        </button>
+        <button type="button" onClick={surprendre} aria-label="Déguisement au hasard">
+          🎲 Surprends-moi
+        </button>
+      </div>
     </figure>
   );
 }

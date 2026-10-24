@@ -13,12 +13,12 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Combien coûtent les kits Sans Honte ?",
     reponse:
-      "5 $ le kit, ou 40 $ pour le lot de 10 kits au choix parmi 15 thèmes : soins, testament, papiers, 72 heures, entraide, fraude, frigo, logement, proche aidant, tenir debout et les autres. Aucune taxe ajoutée — HP Outils est un petit fournisseur, la TPS et la TVQ ne sont pas perçues.",
+      "5 $ CAD le kit, ou 40 $ CAD pour le lot de 10 kits au choix parmi 15 thèmes : soins, testament, papiers, 72 heures, entraide, fraude, frigo, logement, proche aidant, tenir debout et les autres. Aucune taxe ajoutée — HP Outils est un petit fournisseur, la TPS et la TVQ ne sont pas perçues.",
   },
   {
     question: "Combien coûtent les livres ?",
     reponse:
-      "La faim justifie les moyens 10 $, Horizon Québec 10 $, Enjeux de l'humanité à l'ère de l'IA 15 $ et Les enfants cuisinent pour faire plaisir 10 $. Aucune taxe ajoutée.",
+      "La faim justifie les moyens 10 $ CAD, Horizon Québec 10 $ CAD, Enjeux de l'humanité à l'ère de l'IA 15 $ CAD et Les enfants cuisinent pour faire plaisir 10 $ CAD. Aucune taxe ajoutée.",
   },
   {
     question: "Les recettes et les jeux sont-ils vraiment gratuits ?",
@@ -38,12 +38,12 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Est-ce qu'il y a des ateliers en personne ?",
     reponse:
-      "Oui : Cuisine pratique à 120 $ et Manger mieux avec moins à 150 $, principalement à Terrebonne et dans Lanaudière.",
+      "Oui : 6 ateliers de groupe à Terrebonne et dans Lanaudière — Cuisine pratique (120 $ CAD), Manger mieux avec moins (150 $ CAD), L'IA sans jargon (120 $ CAD), Atelier jeunesse (120 $ CAD), Les enfants cuisinent (120 $ CAD), Hygiène & salubrité (120 $ CAD). Et pour l'Édition des Fêtes (1er octobre au 23 décembre) : le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h pour les organismes (120 $) et la conférence « La faim justifie les moyens » (120 $, 45 à 60 min).",
   },
   {
     question: "C'est quoi, les Passeurs de savoir ?",
     reponse:
-      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs au savoir coûtera 3 $ par mois (ou 28 $ pour l'année), et les savoirs s'offriront aussi par quatre pour 12 $ — ce n'est pas encore offert en ligne ; c'est dit honnêtement, et ça s'en vient.",
+      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs au savoir coûtera 3 $ CAD par mois (ou 28 $ CAD pour l'année), et les savoirs s'offriront aussi par quatre pour 12 $ CAD — ce n'est pas encore offert en ligne ; c'est dit honnêtement, et ça s'en vient. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
   },
   {
     question: "Par où commencer pour mes papiers de fin de vie ?",
@@ -53,6 +53,6 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Qui répond quand j'écris à HP Outils ?",
     reponse:
-      "Un humain : Hugo Pierre Bertrand, à hpoutils.admin@gmail.com. Sur le site, HGPTO — le petit robot d'HP — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à Hugo au lieu d'inventer une réponse.",
+      "Un humain de l'équipe HP, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, HGPTO — le petit robot d'HP — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à l'équipe au lieu d'inventer une réponse.",
   },
 ];

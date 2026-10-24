@@ -362,4 +362,273 @@ export const DEGUISES: Deguise[] = [
       </g>
     ),
   },
+  /* ----- Nouveautés du 23 oct. 2026 (demande d'Hugo : 25 et plus,
+     toujours 100 % originales, archétypes génériques dessinés ici) ----- */
+  {
+    id: "bucheron",
+    legende: "Hugo en bûcheron — la barbe vient avec !",
+    calque: (
+      <g>
+        {/* casquette à carreaux rouges et noirs */}
+        <path d="M 31 20 C 31 8 40 3.5 50.5 3.5 C 61 3.5 70 8 70 20 L 70 22 L 31 22 Z" fill="#b3312a" />
+        <path d="M 40 4.8 L 40 22 M 50.5 3.5 L 50.5 22 M 61 4.8 L 61 22" stroke="#26221c" strokeWidth="2.2" opacity="0.55" />
+        <path d="M 31 13 L 70 13" stroke="#26221c" strokeWidth="2.2" opacity="0.55" />
+        <path d="M 28 22 L 73 22 L 73 25.5 C 61 27.8 40 27.8 28 25.5 Z" fill="#26221c" />
+        {/* grande barbe rousse (la bouche reste libre) */}
+        <path
+          fillRule="evenodd"
+          d="M 29.5 46 C 27 74 36 95.5 50.5 96.5 C 65 95.5 74 74 71.5 46 C 67 63 60.5 70.5 50.5 70.5 C 40.5 70.5 34 63 29.5 46 Z
+             M 43.5 56.5 C 47 54.8 54 54.8 57.5 56.5 C 57.5 62.5 54 65.5 50.5 65.5 C 47 65.5 43.5 62.5 43.5 56.5 Z"
+          fill="#b85c1e"
+        />
+        <path d="M 36 74 C 39 84 44 89 50.5 89.5 M 65 74 C 62 84 57 89 50.5 89.5" fill="none" stroke="#8f4210" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
+        {/* moustache rousse assortie */}
+        <path d="M 50.4 53.6 C 44.5 50.6 38 52.2 36.4 56.4 C 41.4 58 47 57.2 50.4 55.3 C 53.8 57.2 59.4 58 64.4 56.4 C 62.8 52.2 56.3 50.6 50.4 53.6 Z" fill="#a34d16" />
+      </g>
+    ),
+  },
+  {
+    id: "pecheur-glace",
+    legende: "Hugo pêcheur sur glace — ça mord… pas encore !",
+    calque: (
+      <g>
+        {/* tuque bleue à rabats */}
+        <path d="M 30 22 C 30 9 39.5 3.5 50.5 3.5 C 61 3.5 71 9 71 22 L 71 24 L 30 24 Z" fill="#2f5f8f" />
+        <path d="M 30 18.5 L 71 18.5" stroke="#f6edd9" strokeWidth="2.4" />
+        <circle cx="50.5" cy="3.2" r="3.2" fill="#f6edd9" />
+        <rect x="24.5" y="20" width="8" height="30" rx="3.5" fill="#2f5f8f" stroke="#24496e" strokeWidth="0.8" />
+        <rect x="68.5" y="20" width="8" height="30" rx="3.5" fill="#2f5f8f" stroke="#24496e" strokeWidth="0.8" />
+        {/* ligne de pêche et petit poisson pendu, à droite */}
+        <path d="M 84 2 C 82 14 80.5 24 79.5 34" fill="none" stroke="#3a3a3a" strokeWidth="1" opacity="0.8" />
+        <path d="M 79.5 34 C 79.5 37 77.8 37.6 76.8 36.2" fill="none" stroke="#3a3a3a" strokeWidth="1.2" strokeLinecap="round" />
+        <g transform="rotate(24 76 44)">
+          <ellipse cx="76" cy="44" rx="3.4" ry="5.6" fill="#7fb2d9" stroke="#4d7ea6" strokeWidth="0.7" />
+          <path d="M 76 38 L 72.8 33.8 L 79.2 33.8 Z" fill="#4d7ea6" />
+          <circle cx="74.6" cy="46.5" r="0.8" fill="#20303c" />
+        </g>
+        {/* écharpe rayée */}
+        <path d="M 33 90 C 44 96 57 96 68 90 L 68 99 L 33 99 Z" fill="#b3312a" />
+        <path d="M 40 93.2 L 40 99 M 50.5 94.6 L 50.5 99 M 61 93.2 L 61 99" stroke="#f6edd9" strokeWidth="2" />
+      </g>
+    ),
+  },
+  {
+    id: "castor",
+    legende: "Hugo en castor — toujours prêt à bâtir !",
+    calque: (
+      <g>
+        {/* oreilles rondes */}
+        <circle cx="32.5" cy="11" r="6" fill="#7a4a26" stroke="#5c3519" strokeWidth="0.8" />
+        <circle cx="32.5" cy="11" r="2.8" fill="#c99b6d" />
+        <circle cx="68.5" cy="11" r="6" fill="#7a4a26" stroke="#5c3519" strokeWidth="0.8" />
+        <circle cx="68.5" cy="11" r="2.8" fill="#c99b6d" />
+        {/* museau brun */}
+        <ellipse cx="50.6" cy="56.5" rx="12.5" ry="9.5" fill="#a9743f" stroke="#7a4a26" strokeWidth="0.8" />
+        <ellipse cx="50.6" cy="51.5" rx="4.4" ry="3.2" fill="#2e2320" />
+        <circle cx="49" cy="50.4" r="1" fill="#ffffff" opacity="0.7" />
+        {/* les deux grandes dents du castor */}
+        <path d="M 45.8 60.5 L 55.4 60.5 L 55.4 70 C 55.4 71.2 54.4 72 53.2 72 L 48 72 C 46.8 72 45.8 71.2 45.8 70 Z" fill="#ffffff" stroke="#cbbfa5" strokeWidth="0.7" />
+        <path d="M 50.6 60.5 L 50.6 71.6" stroke="#cbbfa5" strokeWidth="0.9" />
+        {/* moustaches fines */}
+        <path d="M 40 54 L 29 51.5 M 40 58 L 30 58.5 M 61 54 L 72 51.5 M 61 58 L 71 58.5" stroke="#5c3519" strokeWidth="0.9" strokeLinecap="round" opacity="0.7" />
+      </g>
+    ),
+  },
+  {
+    id: "bonhomme-neige",
+    legende: "Hugo en bonhomme de neige — ne le laissez pas au soleil !",
+    calque: (
+      <g>
+        {/* teinte givrée */}
+        <ellipse cx="50.5" cy="44" rx="24" ry="37" fill="#dceef7" opacity="0.20" />
+        {/* le nez en carotte */}
+        <path d="M 49.8 46.2 L 75 52.2 L 49.8 56 Z" fill="#e87e1e" stroke="#c4630d" strokeWidth="0.7" />
+        <path d="M 57 48.2 L 56.4 54.2 M 63.5 49.7 L 63 55.4" stroke="#c4630d" strokeWidth="0.9" opacity="0.7" />
+        {/* yeux et sourire en charbon */}
+        <circle cx="41.4" cy="39.7" r="1.5" fill="#2b2b2b" opacity="0.55" />
+        <circle cx="59.6" cy="39.3" r="1.5" fill="#2b2b2b" opacity="0.55" />
+        {/* boutons de charbon */}
+        <circle cx="50.5" cy="83" r="2.1" fill="#2b2b2b" />
+        <circle cx="50.5" cy="91.5" r="2.1" fill="#2b2b2b" />
+        {/* écharpe rouge */}
+        <path d="M 31 74.5 C 42 80.5 59 80.5 70 74.5 L 71.5 82 C 59 88.5 42 88.5 29.5 82 Z" fill="#c22e35" />
+        <path d="M 60 84.5 L 63.5 97 L 58 97.5 L 59.5 88 L 56.5 97.2 L 52 96.5 L 55.5 83.8 Z" fill="#c22e35" />
+        {/* bras en brindilles */}
+        <path d="M 27 62 L 13 54 M 18 57.5 L 15.5 51 M 20.5 59.5 L 21 53" stroke="#6b4a2a" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+        <path d="M 74 62 L 88 54 M 83 57.5 L 85.5 51 M 80.5 59.5 L 80 53" stroke="#6b4a2a" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+      </g>
+    ),
+  },
+  {
+    id: "lutin",
+    legende: "Hugo en lutin — la clochette, c'est pour les cadeaux !",
+    calque: (
+      <g>
+        {/* oreilles pointues */}
+        <path d="M 29.5 40 L 16 34.5 L 25.5 49 Z" fill="#f2c9a0" stroke="#d9a878" strokeWidth="0.7" />
+        <path d="M 71.5 40 L 85 34.5 L 75.5 49 Z" fill="#f2c9a0" stroke="#d9a878" strokeWidth="0.7" />
+        {/* chapeau pointu vert, recourbé, à clochette */}
+        <path d="M 29 22 C 33 8 48 0.5 71 1.5 C 60 4.5 55 9.5 53.5 17 C 60 12 68 11 73 13.5 L 73 22 Z" fill="#2e7d46" stroke="#1f5c31" strokeWidth="0.8" />
+        <path d="M 26.5 22 L 74.5 22 L 74.5 27 L 26.5 27 Z" fill="#c22e35" />
+        <circle cx="72.5" cy="2.6" r="3.1" fill="#f2b705" stroke="#c78f04" strokeWidth="0.7" />
+        <path d="M 70.2 4.4 L 74.8 4.4" stroke="#c78f04" strokeWidth="0.8" />
+        {/* joues rosées */}
+        <circle cx="35.5" cy="52" r="3.2" fill="#ff7d9c" opacity="0.5" />
+        <circle cx="65.5" cy="52" r="3.2" fill="#ff7d9c" opacity="0.5" />
+      </g>
+    ),
+  },
+  {
+    id: "detective",
+    legende: "Hugo détective — l'indice était sous son nez !",
+    calque: (
+      <g>
+        {/* chapeau mou brun */}
+        <path d="M 33 19 C 33 8.5 41 4 50.5 4 C 60 4 68 8.5 68 19 L 68 21.5 L 33 21.5 Z" fill="#7a5a38" stroke="#5c421f" strokeWidth="0.8" />
+        <path d="M 33 15.8 L 68 15.8 L 68 19 L 33 19 Z" fill="#4a3823" />
+        <ellipse cx="50.5" cy="22.5" rx="21" ry="3" fill="#7a5a38" stroke="#5c421f" strokeWidth="0.8" />
+        {/* la loupe sur l'œil droit */}
+        <circle cx="59.6" cy="39.3" r="10" fill="#bfe3f2" opacity="0.28" stroke="#3a3f45" strokeWidth="2.4" />
+        <path d="M 66.8 46.4 L 77.5 57.1" stroke="#3a3f45" strokeWidth="3.6" strokeLinecap="round" />
+        <path d="M 55 34.5 L 62 42" stroke="#ffffff" strokeWidth="1.6" opacity="0.7" strokeLinecap="round" />
+      </g>
+    ),
+  },
+  {
+    id: "magicien",
+    legende: "Hugo magicien — le lapin est en congé !",
+    calque: (
+      <g>
+        {/* haut-de-forme à bande rouge */}
+        <path d="M 35 1.5 L 66 1.5 L 66 16.5 L 35 16.5 Z" fill="#23242a" />
+        <path d="M 35 12.5 L 66 12.5 L 66 16.5 L 35 16.5 Z" fill="#c22e35" />
+        <ellipse cx="50.5" cy="18" rx="20.5" ry="3.1" fill="#23242a" />
+        <ellipse cx="50.5" cy="1.5" rx="15.5" ry="2" fill="#34353d" />
+        {/* étoiles magiques */}
+        <path d="M 26 34 l 1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 Z" fill="#ffd94d" />
+        <path d="M 75 30 l 1.1 2.4 2.4 1.1 -2.4 1.1 -1.1 2.4 -1.1 -2.4 -2.4 -1.1 2.4 -1.1 Z" fill="#ffd94d" />
+        {/* baguette à étoile */}
+        <path d="M 71 85 L 83.5 66" stroke="#23242a" strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M 84.5 58.5 l 1.7 3.6 3.6 1.7 -3.6 1.7 -1.7 3.6 -1.7 -3.6 -3.6 -1.7 3.6 -1.7 Z" fill="#ffd94d" stroke="#c78f04" strokeWidth="0.5" />
+      </g>
+    ),
+  },
+  {
+    id: "pirate",
+    legende: "Hugo en pirate — le trésor, c'est les outils !",
+    calque: (
+      <g>
+        {/* bandana rouge à pois, noué à droite */}
+        <path d="M 30 23 C 30 9.5 39.5 3.5 50.5 3.5 C 61 3.5 71 9.5 71 23 L 71 25 L 30 25 Z" fill="#c22e35" />
+        <circle cx="40" cy="12" r="1.7" fill="#f6edd9" opacity="0.85" />
+        <circle cx="52" cy="8.5" r="1.7" fill="#f6edd9" opacity="0.85" />
+        <circle cx="61" cy="15" r="1.7" fill="#f6edd9" opacity="0.85" />
+        <circle cx="46" cy="19" r="1.7" fill="#f6edd9" opacity="0.85" />
+        <path d="M 71 20 L 79 15.5 L 77.5 24 L 80.5 27.5 L 71.5 28 Z" fill="#a3242b" />
+        {/* cache-œil gauche et ses cordons */}
+        <path d="M 34.5 33.5 L 24 24.5 M 47.5 45.5 L 57 53" stroke="#26221c" strokeWidth="1.7" strokeLinecap="round" />
+        <circle cx="41.4" cy="39.7" r="7.6" fill="#26221c" />
+        <circle cx="38.8" cy="37" r="1.6" fill="#ffffff" opacity="0.25" />
+        {/* boucle d'oreille dorée */}
+        <circle cx="73.2" cy="53" r="3.1" fill="none" stroke="#f2b705" strokeWidth="1.7" />
+        {/* sourire édenté de vieux loup de mer */}
+        <path d="M 44 62.5 L 47.5 62.5 L 47.5 65.8 L 44 65.8 Z" fill="#ffffff" stroke="#cbbfa5" strokeWidth="0.4" />
+      </g>
+    ),
+  },
+  {
+    id: "roi",
+    legende: "Hugo, roi des petits budgets !",
+    calque: (
+      <g>
+        {/* couronne dorée à pointes, joyaux sobres */}
+        <path d="M 33 17 L 31.5 3.5 L 41 10.5 L 50.5 1.8 L 60 10.5 L 69.5 3.5 L 68 17 Z" fill="#f2b705" stroke="#c78f04" strokeWidth="0.9" strokeLinejoin="round" />
+        <circle cx="31.5" cy="3" r="1.9" fill="#ffd94d" stroke="#c78f04" strokeWidth="0.6" />
+        <circle cx="50.5" cy="1.6" r="1.9" fill="#ffd94d" stroke="#c78f04" strokeWidth="0.6" />
+        <circle cx="69.5" cy="3" r="1.9" fill="#ffd94d" stroke="#c78f04" strokeWidth="0.6" />
+        <path d="M 33 17 L 68 17 L 68 20.5 L 33 20.5 Z" fill="#e09f00" />
+        <circle cx="42" cy="13.8" r="1.7" fill="#c22e35" />
+        <circle cx="50.5" cy="12.8" r="1.9" fill="#2f5f8f" />
+        <circle cx="59" cy="13.8" r="1.7" fill="#2e7d46" />
+        {/* sceptre simple, en bas à droite */}
+        <path d="M 78 96 L 84 74" stroke="#c78f04" strokeWidth="2.2" strokeLinecap="round" />
+        <circle cx="85" cy="71" r="3.4" fill="#ffd94d" stroke="#c78f04" strokeWidth="0.8" />
+      </g>
+    ),
+  },
+  {
+    id: "astronaute",
+    legende: "Hugo astronaute — Terrebonne, on a un fou rire !",
+    calque: (
+      <g>
+        {/* le casque : grand anneau autour du visage */}
+        <circle cx="50.5" cy="45" r="37.5" fill="#ffffff" opacity="0.07" stroke="#cfd6dd" strokeWidth="3.2" />
+        <circle cx="50.5" cy="45" r="33.5" fill="none" stroke="#9aa3ad" strokeWidth="0.9" opacity="0.7" />
+        {/* reflet de visière */}
+        <path d="M 27 27 C 32 19 41 14.5 50 14" fill="none" stroke="#ffffff" strokeWidth="2.6" opacity="0.55" strokeLinecap="round" />
+        {/* boutons du col */}
+        <circle cx="33" cy="76.5" r="2.2" fill="#c22e35" stroke="#8e1f24" strokeWidth="0.6" />
+        <circle cx="68" cy="76.5" r="2.2" fill="#53c1ff" stroke="#2f7fb8" strokeWidth="0.6" />
+        <rect x="44" y="80.5" width="13" height="3.6" rx="1.8" fill="#cfd6dd" stroke="#9aa3ad" strokeWidth="0.6" />
+        {/* petite étoile, parce que l'espace */}
+        <path d="M 76 20 l 1.2 2.6 2.6 1.2 -2.6 1.2 -1.2 2.6 -1.2 -2.6 -2.6 -1.2 2.6 -1.2 Z" fill="#ffd94d" />
+      </g>
+    ),
+  },
+  {
+    id: "hockey",
+    legende: "Hugo prêt pour le 2 contre 2 !",
+    calque: (
+      <g>
+        {/* casque bleu */}
+        <path d="M 30 25 C 30 10.5 39.5 3.5 50.5 3.5 C 61 3.5 71 10.5 71 25 L 71 27.5 L 30 27.5 Z" fill="#2050a0" stroke="#173d7c" strokeWidth="0.8" />
+        <path d="M 30 21 L 71 21" stroke="#f6edd9" strokeWidth="1.6" />
+        <circle cx="50.5" cy="12" r="2.4" fill="#f6edd9" />
+        {/* oreillettes */}
+        <rect x="25.8" y="25" width="6.4" height="10" rx="2.6" fill="#173d7c" />
+        <rect x="68.8" y="25" width="6.4" height="10" rx="2.6" fill="#173d7c" />
+        {/* la grille devant le bas du visage */}
+        <rect x="35.5" y="53" width="30" height="26" rx="7" fill="#dfe5ea" opacity="0.16" stroke="#9aa3ad" strokeWidth="1.8" />
+        <path d="M 43 54.5 L 43 77.5 M 50.5 54.8 L 50.5 78.5 M 58 54.5 L 58 77.5" stroke="#9aa3ad" strokeWidth="1.5" />
+        <path d="M 36.8 61.5 L 64.2 61.5 M 36.8 69.5 L 64.2 69.5" stroke="#9aa3ad" strokeWidth="1.5" />
+      </g>
+    ),
+  },
+  {
+    id: "scientifique-fou",
+    legende: "Hugo en scientifique fou — ça va péter… de rire !",
+    calque: (
+      <g>
+        {/* cheveux gris dressés en pointes */}
+        <path d="M 29 26 L 24 10 L 31 16 L 30 2 L 38 11 L 41 0.5 L 47 9 L 52 1 L 57 9.5 L 63 2 L 66 12 L 73 6 L 71 18 L 76 13 L 72 27 C 60 20 41 20 29 26 Z" fill="#e8e8e8" stroke="#b9b9b9" strokeWidth="0.8" strokeLinejoin="round" />
+        {/* lunettes de protection */}
+        <path d="M 27 37.5 L 74 37.5" stroke="#3a3f45" strokeWidth="2.6" />
+        <rect x="31.5" y="32.5" width="19" height="13" rx="4" fill="#a8e6f0" opacity="0.35" stroke="#3a3f45" strokeWidth="1.9" />
+        <rect x="50.5" y="32.5" width="19" height="13" rx="4" fill="#a8e6f0" opacity="0.35" stroke="#3a3f45" strokeWidth="1.9" />
+        {/* petit éclair d'expérience */}
+        <path d="M 82 44 L 76.5 54 L 80.5 54 L 75.5 65 L 86 52.5 L 81.8 52.5 L 86.5 44 Z" fill="#ffd94d" stroke="#c78f04" strokeWidth="0.6" />
+        {/* fiole qui bouillonne, en bas à gauche */}
+        <path d="M 17 82 L 20.5 82 L 20.5 88 L 26 97.5 C 26.6 99 25.4 100 23.8 100 L 12.2 100 C 10.6 100 9.4 99 10 97.5 L 15.5 88 L 15.5 82 L 19 82" fill="#bfe3f2" opacity="0.5" stroke="#4d7ea6" strokeWidth="0.9" transform="translate(2 -1)" />
+        <circle cx="17" cy="94" r="1.3" fill="#57b96b" />
+        <circle cx="21.5" cy="96.5" r="1" fill="#57b96b" />
+      </g>
+    ),
+  },
+  {
+    id: "super-heros",
+    legende: "Hugo en super-héros — son pouvoir : les outils pour la vraie vie !",
+    calque: (
+      <g>
+        {/* la cape, aux épaules */}
+        <path d="M 4 100 L 6 74 C 12 84 16 92 18.5 100 Z" fill="#c22e35" />
+        <path d="M 97 100 L 95 74 C 89 84 85 92 82.5 100 Z" fill="#c22e35" />
+        {/* le masque bleu autour des yeux (archétype générique) */}
+        <path d="M 28.5 33.5 C 38 29.5 45.5 31.5 50.5 35.5 C 55.5 31.5 63 29.5 72.5 33.5 L 72.5 43.5 C 63.5 48 57 45.8 50.5 42.5 C 44 45.8 37.5 48 28.5 43.5 Z" fill="#2050a0" stroke="#173d7c" strokeWidth="0.8" />
+        <ellipse cx="41.4" cy="39.3" rx="4.4" ry="2.7" fill="#f6edd9" />
+        <ellipse cx="59.6" cy="39.3" rx="4.4" ry="2.7" fill="#f6edd9" />
+        {/* petit éclair de poitrine, discret */}
+        <path d="M 51.5 84 L 47.5 92 L 50 92 L 48 98.5 L 54 90.5 L 51.2 90.5 L 53.5 84 Z" fill="#ffd94d" stroke="#c78f04" strokeWidth="0.5" />
+      </g>
+    ),
+  },
 ];

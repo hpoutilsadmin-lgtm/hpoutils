@@ -6,7 +6,8 @@
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
     <title>Le Passeur de savoir — capter le savoir des gens avant qu'il disparaisse</title>
-    <meta name="description" content="Un outil gratuit qui capte le savoir des gens ordinaires — recettes, trucs de métier, histoires de quartier — et le rend transmissible, classé, cherchable. Le concept, et comment le financer au Québec." />
+    <meta name="description" content="Le Passeur de savoir — un outil gratuit pour capter le savoir des gens (recettes, trucs de métier, histoires de quartier) et le rendre cherchable. Tout se fait sur ton appareil, sans compte, sans envoi." />
+    <link rel="canonical" href="https://www.hp-outils.com/passeur-de-savoir/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -365,14 +366,36 @@
         html { scroll-behavior: auto; }
       }
     </style>
+    <style>
+      /* Ajouts de l'outil fonctionnel (captation locale) — le bloc de styles d'origine, ci-dessus, est inchangé. */
+      .capte-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; text-align: left; }
+      .capte-form .field { display: flex; flex-direction: column; gap: 6px; }
+      .capte-form .field-wide, .capte-form .consent, .capte-form .form-status { grid-column: 1 / -1; }
+      .capte-form label { font-weight: 700; }
+      .capte-form .opt { font-weight: 400; opacity: .75; }
+      .capte-form input, .capte-form select, .capte-form textarea { font: inherit; padding: 10px 12px; border: 1px solid var(--line, #c9c2b4); border-radius: 10px; background: var(--card, #fff); color: inherit; }
+      .capte-form textarea { resize: vertical; }
+      .capte-form .consent { border: 1px dashed var(--line, #c9c2b4); border-radius: 10px; padding: 12px 14px; margin: 0; }
+      .btn-main { font: inherit; font-weight: 700; padding: 12px 22px; border-radius: 999px; border: 2px solid currentColor; background: transparent; color: inherit; cursor: pointer; justify-self: start; }
+      .form-status { min-height: 1.2em; font-weight: 700; margin: 0; }
+      .card.mine { outline: 2px dashed var(--line, #c9c2b4); outline-offset: -6px; }
+      .mine-badge { display: inline-block; font-size: .78em; font-weight: 700; letter-spacing: .02em; margin-bottom: 6px; }
+      .steps-list { margin: 8px 0 0 18px; padding: 0; }
+      .card-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+      .mini-btn { font: inherit; font-size: .85em; padding: 6px 12px; border-radius: 999px; border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
+      .collection-tools { margin: 12px 0 4px; }
+      @media (max-width: 640px) { .capte-form { grid-template-columns: 1fr; } }
+      @media print { #capter, .card-actions, .collection-tools, #decouvre, .hero-figure { display: none !important; } }
+    </style>
+
   </head>
   <body>
 
-    <!-- ================= HERO ================= -->
+    <!-- ================= L'OUTIL ================= -->
     <header class="hero">
       <div class="wrap">
         <div class="hero-top">
-          <span class="stamp">Concept · Patrimoine vivant</span>
+          <span class="stamp">Outil gratuit · Sans compte · Tout reste sur ton appareil</span>
           <h1>Le Passeur<br />de <em>savoir</em></h1>
           <p class="hero-sub">Un outil gratuit qui capte le savoir des gens avant qu'il disparaisse — les recettes d'une grand-mère, les trucs d'un artisan retraité, les histoires d'un quartier — et le rend transmissible, classé, cherchable.</p>
         </div>
@@ -383,169 +406,63 @@
             <span>Illustration originale, style linogravure</span>
           </figcaption>
         </figure>
-        <div class="hero-facts">
-          <div>
-            <strong>Gratuit pour les gens</strong>
-            <span>Transmettre son savoir ne devrait jamais coûter un sou à celle ou celui qui le donne.</span>
-          </div>
-          <div>
-            <strong>Simple comme une conversation</strong>
-            <span>On raconte, on montre, on enregistre. La technique se fait oublier.</span>
-          </div>
-          <div>
-            <strong>Le savoir reste aux gens</strong>
-            <span>Chaque fiche appartient à la personne qui l'a transmise — et à sa famille d'abord.</span>
-          </div>
-        </div>
       </div>
     </header>
 
-    <!-- ================= 01 PROBLÈME ================= -->
-    <section id="probleme">
+    <!-- ================= CAPTER UN SAVOIR ================= -->
+    <section id="capter">
       <div class="wrap">
-        <p class="num">01 — Le problème</p>
-        <h2>Chaque jour, des bibliothèques entières partent en silence</h2>
-        <p class="lede">Le savoir des gens ordinaires n'est écrit nulle part. Il vit dans des mains, des habitudes, des mémoires — et il s'éteint avec les personnes qui le portent. Pas parce qu'il ne vaut rien. Parce que personne ne l'a capté à temps.</p>
-        <div class="losses">
-          <article class="loss">
-            <span class="who">En cuisine</span>
-            <p><strong>« Une pincée, jusqu'à ce que ça goûte comme avant. »</strong> Les recettes de famille vivent dans la tête de quelqu'un. Les quantités, les tours de main, le petit ingrédient secret : rien de tout ça n'est dans un livre.</p>
-          </article>
-          <article class="loss">
-            <span class="who">Dans les métiers</span>
-            <p><strong>40 ans de métier tiennent dans des gestes.</strong> Le menuisier qui « entend » si sa lame est bien affûtée, la couturière qui reprend une maille sans regarder : quand l'atelier ferme, le savoir-faire ferme avec.</p>
-          </article>
-          <article class="loss">
-            <span class="who">Dans les quartiers</span>
-            <p><strong>Qui se souvient du dépanneur, de l'usine, de la veillée ?</strong> L'histoire des rues où l'on vit n'est dans aucun manuel. Elle part avec les derniers témoins — et le quartier perd sa mémoire.</p>
-          </article>
-        </div>
-        <blockquote class="proverb">
-          « Quand un vieillard meurt, c'est une bibliothèque qui brûle. »
-          <cite>Proverbe souvent attribué à l'écrivain malien Amadou Hampâté Bâ</cite>
-        </blockquote>
+        <h2>Capte un savoir</h2>
+        <p class="lede">Quelqu'un autour de toi sait quelque chose qui ne doit pas se perdre ? Écris-le ici, pendant que c'est frais : la fiche se fabrique tout de suite et entre dans la collection, juste en dessous.</p>
+        <form id="capte-form" class="capte-form">
+          <div class="field">
+            <label for="f-nom">Qui transmet ?</label>
+            <input type="text" id="f-nom" placeholder="Son nom ou son surnom" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="f-lien">Son âge, ou ton lien avec cette personne <span class="opt">(si tu veux)</span></label>
+            <input type="text" id="f-lien" placeholder="Ex. : 84 ans — ma grand-mère — un voisin" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="f-titre">Le titre du savoir</label>
+            <input type="text" id="f-titre" required placeholder="Ex. : Le pain qui lève à tout coup" />
+          </div>
+          <div class="field">
+            <label for="f-cat">Catégorie</label>
+            <select id="f-cat">
+              <option value="cuisine">Cuisine</option>
+              <option value="metiers">Métiers</option>
+              <option value="quartier">Quartier</option>
+              <option value="jardin">Jardin &amp; nature</option>
+              <option value="memoire">Mémoire vivante</option>
+              <option value="autre">Autre savoir</option>
+            </select>
+          </div>
+          <div class="field field-wide">
+            <label for="f-savoir">Le savoir, raconté</label>
+            <textarea id="f-savoir" rows="6" required placeholder="Raconte-le comme la personne le dit. Si c'est une façon de faire : une étape par ligne."></textarea>
+          </div>
+          <div class="field field-wide">
+            <label for="f-truc">« Le truc » — le petit secret qui fait la différence <span class="opt">(si tu veux)</span></label>
+            <input type="text" id="f-truc" placeholder="Ex. : toujours du bas vers le haut, jamais l'inverse" autocomplete="off" />
+          </div>
+          <p class="consent"><strong>Tout reste sur cet appareil.</strong> Rien n'est envoyé, rien n'est publié, aucun compte à créer. La fiche appartient à la personne qui transmet : c'est elle — et toi — qui décidez de la partager (export, impression) ou de la garder ici.</p>
+          <button type="submit" class="btn-main">Créer la fiche</button>
+          <p class="form-status" id="form-status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
 
-    <!-- ================= 02 IDÉE ================= -->
-    <section id="idee">
-      <div class="wrap">
-        <p class="num">02 — L'idée</p>
-        <h2>Un passeur, pas un musée</h2>
-        <div class="idea-grid">
-          <div>
-            <p class="dropcap">Le Passeur de savoir est un outil de captation et de transmission. Une personne raconte ou montre ce qu'elle sait — à voix haute, en vidéo, en photos. L'outil transcrit, structure et classe ce savoir en <strong>fiches</strong> : un titre clair, les étapes, les mots-clés, le nom de la personne qui transmet et d'où elle vient. La fiche peut ensuite être retrouvée par n'importe qui cherche « comment on faisait », partagée à la famille, imprimée, relue dans 30 ans.</p>
-            <p>Ce n'est pas un réseau social, ni une encyclopédie froide. C'est le geste du passeur : quelqu'un qui a reçu un savoir de ses mains, et qui s'assure qu'il se rend aux mains suivantes. La dignité est au centre : les « gens ordinaires » ne sont pas des sujets d'étude — ce sont des maîtres dans leur domaine, souvent sans le savoir eux-mêmes.</p>
-          </div>
-          <ul class="principles">
-            <li>
-              <strong>La voix avant l'écrit</strong>
-              <span>Beaucoup de détenteurs de savoir n'écriraient jamais leurs recettes. Mais tout le monde peut raconter. On part de la parole.</span>
-            </li>
-            <li>
-              <strong>Classé pour être retrouvé</strong>
-              <span>Un enregistrement qui dort dans un tiroir numérique ne transmet rien. Chaque fiche est titrée, étiquetée, cherchable.</span>
-            </li>
-            <li>
-              <strong>Le consentement d'abord</strong>
-              <span>La personne décide ce qui est public, ce qui reste à la famille, ce qui ne sort pas. Son nom reste attaché à son savoir.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= 03 FONCTIONNEMENT ================= -->
-    <section id="fonctionnement">
-      <div class="wrap">
-        <p class="num">03 — Comment ça marche</p>
-        <h2>Trois temps : capter, structurer, transmettre</h2>
-        <p class="lede">Concrètement, une fiche naît en moins d'une heure, autour d'une table de cuisine ou d'un établi. Aucune compétence technique n'est demandée à la personne qui transmet.</p>
-        <div class="steps">
-          <article class="step">
-            <span class="n">1</span>
-            <h3>Capter</h3>
-            <p>Un « passeur » — un petit-fils, une animatrice de bibliothèque, un bénévole formé — s'assoit avec la personne et enregistre. L'outil guide l'entretien avec des questions simples : <em>« Montre-moi comment tu fais. » « C'est quoi ton truc pour que ça réussisse à tout coup ? »</em></p>
-            <ul>
-              <li>Audio, vidéo ou photos des gestes</li>
-              <li>Questions-guides selon le sujet (recette, métier, lieu…)</li>
-              <li>Consentement enregistré dès le départ</li>
-            </ul>
-            <p class="tool"><b>Concrètement :</b> un téléphone suffit. Pas de studio, pas de montage.</p>
-          </article>
-          <article class="step">
-            <span class="n">2</span>
-            <h3>Structurer</h3>
-            <p>L'enregistrement est transcrit automatiquement, puis transformé en fiche lisible : un titre, le résumé, les étapes dans l'ordre, les ingrédients ou les outils, les mots-clés. La personne qui a transmis relit et corrige — c'est sa fiche, avec son nom dessus.</p>
-            <ul>
-              <li>Transcription automatique de la voix</li>
-              <li>Mise en fiche : titre, étapes, astuces, étiquettes</li>
-              <li>Validation par la personne avant publication</li>
-            </ul>
-            <p class="tool"><b>Concrètement :</b> l'IA fait le secrétariat, l'humain garde le dernier mot.</p>
-          </article>
-          <article class="step">
-            <span class="n">3</span>
-            <h3>Transmettre</h3>
-            <p>La fiche entre dans la collection : cherchable par sujet, par lieu, par métier, par personne. Elle peut être publique, réservée à la famille, ou versée à la bibliothèque du quartier. Elle s'imprime aussi — le papier reste un excellent passeur.</p>
-            <ul>
-              <li>Recherche plein texte et par thèmes</li>
-              <li>Niveaux de partage choisis par la personne</li>
-              <li>Version imprimable pour les mains qui préfèrent le papier</li>
-            </ul>
-            <p class="tool"><b>Concrètement :</b> un savoir capté une fois peut servir 100 ans.</p>
-          </article>
-        </div>
-
-        <div class="demo" id="demo">
-          <div class="demo-head">
-            <span>Démonstration — de la parole à la fiche</span>
-            <div class="toggle" role="group" aria-label="Basculer entre l'enregistrement brut et la fiche structurée">
-              <button type="button" id="btn-raw" aria-pressed="true">Ce qu'on entend</button>
-              <button type="button" id="btn-fiche" aria-pressed="false">La fiche qui en sort</button>
-            </div>
-          </div>
-          <div class="demo-body">
-            <div class="raw-wrap">
-              <p class="raw">« Ben là, ma tourtière… <span class="fill">euh…</span> le secret, c'est pas la viande, tout le monde pense que c'est la viande. Non. C'est la cannelle. Juste une pincée — pas trop, sinon ça goûte le dessert, <span class="fill">tu comprends ?</span> Pis la pâte, faut la faire la veille. LA VEILLE. Si tu la fais le matin même, elle tough pas, elle déchire. Ma mère faisait ça, sa mère avant elle… <span class="fill">attends, je vais te montrer comment je la roule…</span> »</p>
-              <p class="small">Transcription brute d'un enregistrement de 22 minutes : précieuse, mais introuvable et difficile à suivre. C'est là que la structuration travaille.</p>
-            </div>
-            <div class="fiche">
-              <div class="fiche-card">
-                <div class="fc-top">
-                  <h4>La tourtière : la cannelle et la pâte de la veille</h4>
-                  <span class="fc-no">Fiche nº 0001</span>
-                </div>
-                <dl>
-                  <dt>Transmis par</dt>
-                  <dd>Rose-Aimée, 84 ans — savoir reçu de sa mère</dd>
-                  <dt>L'essentiel</dt>
-                  <dd>Une pincée de cannelle dans la viande (pas plus, « sinon ça goûte le dessert ») et une pâte préparée la veille pour qu'elle ne déchire pas au roulage.</dd>
-                  <dt>Étapes clés</dt>
-                  <dd>1. Faire la pâte, la reposer une nuit au frigo. 2. Assaisonner la viande, ajouter la cannelle en dernier. 3. Rouler la pâte froide, sans la réchauffer aux mains.</dd>
-                  <dt>Audio</dt>
-                  <dd>Enregistrement original de 22 min, joint à la fiche</dd>
-                </dl>
-                <div class="tags" style="margin-top:12px;">
-                  <i>Cuisine</i><i>Recettes de famille</i><i>Tourtière</i><i>Noël</i><i>Tours de main</i>
-                </div>
-              </div>
-              <p class="small" style="margin-top:14px;">Fiche fictive, à titre d'exemple : les quantités floues deviennent des étapes, l'astuce orale devient retrouvable, et la voix de Rose-Aimée reste attachée à son savoir.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    <!-- ================= LA COLLECTION ================= -->
     <!-- ================= 04 COLLECTION ================= -->
     <section id="collection">
       <div class="wrap">
-        <p class="num">04 — La collection</p>
         <h2>Des savoirs à sauver — et à retrouver</h2>
-        <p class="lede">À quoi ressemblerait la collection ? Voici un aperçu, avec recherche et filtres fonctionnels : essaie « cannelle », « bois » ou « sirop ». C'est exactement l'expérience que vivrait quelqu'un qui cherche un savoir capté.</p>
+        <p class="lede">Cherche un savoir, filtre par thème. Les fiches d'exemple montrent le format ; celles que tu captes s'ajoutent ici même, sur ton appareil. Essaie « cannelle », « bois » ou « sirop ».</p>
         <div class="searchbar">
           <input type="search" id="q" placeholder="Chercher un savoir… (ex. : tourtière, aiguiser, greffer)" aria-label="Chercher dans la collection d'exemples" />
         </div>
+        <div class="collection-tools"><button type="button" class="mini-btn" id="btn-print">Imprimer la collection</button></div>
         <div class="chips" id="chips" role="group" aria-label="Filtrer par thème">
           <button type="button" class="chip" data-theme="tous" aria-pressed="true">Tous</button>
           <button type="button" class="chip" data-theme="cuisine" aria-pressed="false">Cuisine</button>
@@ -614,224 +531,42 @@
       </div>
     </section>
 
-    <!-- ================= 05 À QUI ÇA SERT ================= -->
-    <section id="publics">
-      <div class="wrap">
-        <p class="num">05 — À qui ça sert</p>
-        <h2>Un outil, plusieurs générations gagnantes</h2>
-        <div class="who-grid">
-          <div class="who-item">
-            <h3>Les aînés</h3>
-            <p>Être reconnu comme détenteur d'un savoir, pas comme bénéficiaire d'un service. Transmettre, c'est rester quelqu'un qui compte — et laisser une trace à son nom.</p>
-          </div>
-          <div class="who-item">
-            <h3>Les familles</h3>
-            <p>Retrouver la recette exacte, la voix grand-papa qui raconte l'atelier, les histoires des photos sans légende. Un héritage qui se consulte au lieu de s'imaginer.</p>
-          </div>
-          <div class="who-item">
-            <h3>Les jeunes</h3>
-            <p>Des projets scolaires qui ont du sens : interviewer, filmer, structurer le savoir d'une vraie personne. Et découvrir que les métiers manuels sont des intelligences.</p>
-          </div>
-          <div class="who-item">
-            <h3>Les bibliothèques et municipalités</h3>
-            <p>Une mémoire locale vivante, construite avec les citoyens : histoires de quartier, métiers disparus, recettes du terroir. Un fonds que nulle archive officielle ne détient.</p>
-          </div>
-          <div class="who-item">
-            <h3>Les artisans et commerces</h3>
-            <p>Les tours de main d'un métier en voie de disparition deviennent un patrimoine de formation — et une vitrine de fierté pour les métiers d'ici.</p>
-          </div>
-          <div class="who-item">
-            <h3>Les nouveaux arrivants</h3>
-            <p>Comprendre un lieu par ceux qui l'habitent depuis toujours — et, en retour, y verser leurs propres savoirs. La collection devient un pont, dans les deux sens.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= 06 FINANCEMENT ================= -->
-    <section class="funding" id="financement">
-      <div class="wrap">
-        <p class="num">06 — Monter les fonds</p>
-        <h2>Comment on financerait ça, pour vrai</h2>
-        <p class="lede">Personne ne signe un gros chèque pour une belle idée. On finance un Passeur de savoir comme on construit la collection : palier par palier, chaque palier prouvant le suivant. Voici la stratégie, avec des ordres de grandeur réalistes pour le Québec.</p>
-        <div class="rule">La règle d'or : <b>on ne demande jamais l'argent de la phase 3 avec les preuves de la phase 0.</b> On capte d'abord 25 fiches avec presque rien — puis on montre, chiffres et visages à l'appui, que ça vaut de l'argent.</div>
-
-        <div class="phases">
-          <div class="phase">
-            <div class="ph-name">Phase 0 · La preuve</div>
-            <div>
-              <h3>25 fiches, un quartier, zéro excuse</h3>
-              <p>Un téléphone, une page web simple, des fiches imprimées. On capte les 25 premiers savoirs dans un seul quartier ou une seule résidence, avec des bénévoles. Objectif : prouver que les gens veulent transmettre — et que d'autres veulent consulter.</p>
-            </div>
-            <div class="amount"><strong>0 – 2 000 $</strong><span>impression, déplacements, petit matériel</span></div>
-          </div>
-          <div class="phase">
-            <div class="ph-name">Phase 1 · Le pilote</div>
-            <div>
-              <h3>Un territoire, un animateur, 200 fiches</h3>
-              <p>Une coordination à temps partiel, des ateliers de captation en bibliothèque et en résidence, la première version de l'outil (enregistrement guidé + transcription). C'est le palier des premières subventions : le pilote a un début, une fin et des résultats mesurables.</p>
-            </div>
-            <div class="amount"><strong>25 000 – 45 000 $</strong><span>subventions ciblées + sociofinancement</span></div>
-          </div>
-          <div class="phase">
-            <div class="ph-name">Phase 2 · La plateforme</div>
-            <div>
-              <h3>L'outil complet, ouvert à toutes les régions</h3>
-              <p>Développement de la plateforme : captation guidée, structuration assistée, recherche plein texte, partage familial, impression. Une petite équipe, des partenaires dans plusieurs MRC, une collection qui se compte en milliers de fiches.</p>
-            </div>
-            <div class="amount"><strong>100 000 – 175 000 $</strong><span>grandes subventions + fondations + partenaires</span></div>
-          </div>
-          <div class="phase">
-            <div class="ph-name">Phase 3 · La pérennité</div>
-            <div>
-              <h3>Gratuit pour le public, viable pour de bon</h3>
-              <p>L'outil grand public reste gratuit — c'est le principe. Les revenus viennent des institutions : ateliers de captation payés par les bibliothèques et municipalités, formations, licences pour les musées et sociétés d'histoire, dons.</p>
-            </div>
-            <div class="amount"><strong>Revenus mixtes</strong><span>ateliers institutionnels + subventions récurrentes + dons</span></div>
-          </div>
-        </div>
-
-        <div class="sources">
-          <article class="source">
-            <h3>Sociofinancement</h3>
-            <p>La campagne qui finance la phase 1 — et qui, surtout, prouve qu'un public attend l'outil.</p>
-            <ul>
-              <li><b>La Ruche</b>, la plateforme québécoise de sociofinancement, avec son accompagnement régional</li>
-              <li>Objectif crédible : <b>15 000 à 30 000 $</b>, porté par les familles des premiers « passeurs » et les médias locaux</li>
-              <li>Contreparties qui ont du sens : la fiche de votre grand-mère imprimée et encadrée, un atelier de captation dans votre famille</li>
-            </ul>
-          </article>
-          <article class="source">
-            <h3>Subventions ciblées</h3>
-            <p>Des programmes qui existent précisément pour ce genre de projet — patrimoine vivant, aînés, culture locale.</p>
-            <ul>
-              <li><b>Nouveaux Horizons pour les aînés</b> (fédéral) : jusqu'à 25 000 $ pour des projets communautaires menés par et pour les aînés — le pilote y entre presque sur mesure</li>
-              <li><b>Ministère de la Culture et des Communications du Québec</b> : appels de projets en patrimoine culturel immatériel et en médiation culturelle</li>
-              <li><b>Municipalités et MRC</b> : fonds culturels locaux, politiques culturelles, ententes de développement culturel</li>
-              <li><b>Caisses Desjardins</b> : Fonds d'aide au développement du milieu, faits pour les projets qui renforcent une communauté</li>
-            </ul>
-          </article>
-          <article class="source">
-            <h3>Fondations</h3>
-            <p>Pour la phase 2, quand le pilote a fait ses preuves et que la collection parle d'elle-même.</p>
-            <ul>
-              <li><b>Fondations communautaires</b> (dont la Fondation du Grand Montréal) : des fonds dédiés à la culture, aux aînés et au lien social</li>
-              <li><b>Centraide</b> : si le projet se structure en organisme communautaire ancré dans son milieu</li>
-              <li><b>Fondations familiales québécoises</b> sensibles à l'éducation et à la transmission intergénérationnelle — on y arrive avec le pilote documenté, jamais avant</li>
-            </ul>
-          </article>
-          <article class="source">
-            <h3>Partenaires (argent et nature)</h3>
-            <p>Un partenariat vaut parfois plus qu'un chèque : locaux, publics, crédibilité, relais.</p>
-            <ul>
-              <li><b>Bibliothèques publiques</b> : lieux de captation, ateliers, mise en valeur de la collection locale</li>
-              <li><b>Résidences et centres communautaires</b> : accès aux détenteurs de savoir, en toute confiance</li>
-              <li><b>Écoles et cégeps</b> : projets intergénérationnels, étudiants en journalisme, histoire, multimédia</li>
-              <li><b>Sociétés d'histoire et musées régionaux</b> : expertise patrimoniale et pérennité des archives</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="perennite">
-          <div class="box">
-            <h3>La forme juridique</h3>
-            <p>Un <b>OBNL</b> (ou une coopérative de solidarité) : la forme que les subventions et les fondations connaissent, qui rend le projet admissible à presque tous les programmes — et qui garantit que la collection n'appartiendra jamais à un actionnaire. Le montage se fait dès la phase 1, avec un conseil d'administration où siègent des « passeurs » eux-mêmes.</p>
-          </div>
-          <div class="box">
-            <h3>Ce que les bailleurs voudront voir</h3>
-            <p>Trois choses : des <b>preuves</b> (les 25 fiches de la phase 0, les témoignages filmés), des <b>partenaires signés</b> (une bibliothèque, une résidence, une MRC), et un <b>budget au dollar près</b> pour le palier demandé — jamais pour tout le rêve d'un coup. C'est exactement la discipline qu'un projet comme celui-là inspire naturellement.</p>
-          </div>
-        </div>
-
-        <p class="fineprint">Montants présentés comme des ordres de grandeur de planification, en dollars canadiens, à valider programme par programme au moment du dépôt — les critères et les enveloppes des programmes changent d'une année à l'autre. Aucune de ces pistes ne garantit un financement ; toutes sont des voies réellement empruntées par des projets québécois comparables.</p>
-      </div>
-    </section>
-
-    <!-- ================= 07 COMMENCER ================= -->
-    <section id="commencer">
-      <div class="wrap">
-        <p class="num">07 — Par où commencer</p>
-        <h2>Le premier pas ne coûte rien</h2>
-        <p class="lede">Pas besoin d'attendre un financement pour commencer à sauver des savoirs. La phase 0 tient en cinq gestes, faisables ce mois-ci.</p>
-        <ol class="first-steps">
-          <li>
-            <div>
-              <strong>Choisir un territoire</strong>
-              <p>Un quartier, une résidence, un cercle de fermières, un atelier. Petit et proche : la confiance se bâtit à distance de marche.</p>
-            </div>
-          </li>
-          <li>
-            <div>
-              <strong>Trouver les cinq premiers passeurs</strong>
-              <p>Une grand-mère et sa tourtière, un retraité et son établi, une voisine et son jardin. Par la bibliothèque, le centre communautaire, le bouche-à-oreille.</p>
-            </div>
-          </li>
-          <li>
-            <div>
-              <strong>Capter avec un téléphone</strong>
-              <p>Voix, gestes en vidéo, photos des objets. Le consentement d'abord, la technique après — le contenu brut peut toujours être structuré plus tard.</p>
-            </div>
-          </li>
-          <li>
-            <div>
-              <strong>Structurer à la main les 25 premières fiches</strong>
-              <p>Titre, étapes, astuces, étiquettes — à la main, pour apprendre ce que l'outil devra automatiser. C'est ce travail qui dessine le produit juste.</p>
-            </div>
-          </li>
-          <li>
-            <div>
-              <strong>Montrer, puis demander</strong>
-              <p>Une soirée de présentation à la bibliothèque, les fiches imprimées sur la table. C'est cette soirée-là — avec ses visages et ses témoignages — qui ouvre les portes du sociofinancement et des premières subventions.</p>
-            </div>
-          </li>
-        </ol>
-        <p class="closing">Le savoir des gens ordinaires est un trésor national qui ne figure dans aucun budget. <em>Le Passeur de savoir</em> propose simplement de ne plus le laisser partir en silence.</p>
-      </div>
-    </section>
-
     <section id="decouvre">
       <div class="wrap">
         <h2>Découvre aussi</h2>
         <p>Transmettre, c'est aussi outiller : <a href="/outils">les outils web gratuits d'HP</a> servent au quotidien, les savoirs se racontent dans <a href="/livres-pdf">les livres HP</a>, et derrière tout ça, il y a <a href="/a-propos">un homme, à Terrebonne</a>.</p>
       </div>
     </section>
-
     <div class="wrap">
       <footer>
-        <span>Le Passeur de savoir — un concept de patrimoine vivant, gratuit pour les gens.</span>
-        <span>Présenté le 20 octobre 2026</span>
+        <span>Le Passeur de savoir — un outil gratuit d'HP Outils, pour capter le savoir des gens.</span>
+        <span>Fait à Terrebonne, avec les gens d'ici</span>
       </footer>
     </div>
 
     <script>
       (function () {
-        // --- Démo brut / fiche ---
-        var demo = document.getElementById('demo');
-        var btnRaw = document.getElementById('btn-raw');
-        var btnFiche = document.getElementById('btn-fiche');
-        function setMode(fiche) {
-          demo.classList.toggle('show-fiche', fiche);
-          btnRaw.setAttribute('aria-pressed', String(!fiche));
-          btnFiche.setAttribute('aria-pressed', String(fiche));
-        }
-        btnRaw.addEventListener('click', function () { setMode(false); });
-        btnFiche.addEventListener('click', function () { setMode(true); });
-
-        // --- Recherche dans la collection ---
+        // --- Collection : recherche plein texte + filtres (mécanique reprise de la page d'origine ;
+        //     seule adaptation : la liste des cartes est relue à chaque application,
+        //     pour que les fiches captées localement entrent dans la recherche.) ---
         var q = document.getElementById('q');
-        var cards = Array.prototype.slice.call(document.querySelectorAll('#cards .card'));
-        var chips = Array.prototype.slice.call(document.querySelectorAll('#chips .chip'));
+        var chipsBox = document.getElementById('chips');
         var count = document.getElementById('count');
         var empty = document.getElementById('empty');
+        var cardsBox = document.getElementById('cards');
         var theme = 'tous';
 
         function fold(s) {
           return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         }
+        function lesCartes() {
+          return Array.prototype.slice.call(cardsBox.querySelectorAll('.card'));
+        }
         function apply() {
           var needle = fold(q.value.trim());
           var visible = 0;
-          cards.forEach(function (card) {
+          var all = lesCartes();
+          all.forEach(function (card) {
             var okTheme = theme === 'tous' || card.getAttribute('data-theme') === theme;
             var hay = fold(card.textContent + ' ' + (card.getAttribute('data-search') || ''));
             var okText = !needle || hay.indexOf(needle) !== -1;
@@ -839,17 +574,125 @@
             card.hidden = !show;
             if (show) visible++;
           });
-          count.textContent = visible + (visible > 1 ? ' savoirs affichés' : ' savoir affiché') + ' sur ' + cards.length;
+          count.textContent = visible + (visible > 1 ? ' savoirs affichés' : ' savoir affiché') + ' sur ' + all.length;
           empty.classList.toggle('show', visible === 0);
         }
         q.addEventListener('input', apply);
-        chips.forEach(function (chip) {
-          chip.addEventListener('click', function () {
-            theme = chip.getAttribute('data-theme');
-            chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); });
-            apply();
+        chipsBox.addEventListener('click', function (e) {
+          var chip = e.target.closest ? e.target.closest('.chip') : null;
+          if (!chip) return;
+          theme = chip.getAttribute('data-theme');
+          Array.prototype.forEach.call(chipsBox.querySelectorAll('.chip'), function (c) {
+            c.setAttribute('aria-pressed', String(c === chip));
           });
+          apply();
         });
+        var printBtn = document.getElementById('btn-print');
+        if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
+
+        // --- Captation : 100 % locale (localStorage). Aucun envoi, aucun compte. ---
+        var KEY = 'passeur-fiches-v1';
+        var CAT = { cuisine: 'Cuisine', metiers: 'Métiers', quartier: 'Quartier', jardin: 'Jardin & nature', memoire: 'Mémoire vivante', autre: 'Autre savoir' };
+        var statusEl = document.getElementById('form-status');
+        function status(msg) { if (statusEl) statusEl.textContent = msg; }
+        function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+        function save(list) { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) { status('Le navigateur a refusé la sauvegarde : la fiche reste affichée pour cette visite.'); } }
+        function el(tag, cls, text) {
+          var n = document.createElement(tag);
+          if (cls) n.className = cls;
+          if (text != null) n.textContent = text;
+          return n;
+        }
+        function ficheTexte(f) {
+          var L = [f.titre, (CAT[f.theme] || 'Autre savoir') + ' · ' + (f.nom || 'Personne qui transmet') + (f.lien ? ', ' + f.lien : ''), '', f.savoir];
+          if (f.truc) { L.push('', 'Le truc : ' + f.truc); }
+          L.push('', '— Fiche captée avec Le Passeur de savoir (HP Outils) et gardée sur l’appareil.');
+          return L.join('\n');
+        }
+        function telecharger(f, texte) {
+          var blob = new Blob([texte], { type: 'text/plain;charset=utf-8' });
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'fiche-' + (fold(f.titre).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'savoir') + '.txt';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+        }
+        function exporter(f) {
+          var texte = ficheTexte(f);
+          if (navigator.share) {
+            navigator.share({ title: f.titre, text: texte }).catch(function () { telecharger(f, texte); });
+          } else {
+            telecharger(f, texte);
+          }
+        }
+        function renderFiche(f) {
+          var card = el('article', 'card mine');
+          card.setAttribute('data-theme', f.theme);
+          card.setAttribute('data-search', fold([f.titre, f.nom, f.lien, f.savoir, f.truc, CAT[f.theme] || ''].join(' ')));
+          card.appendChild(el('span', 'mine-badge', 'Ma fiche · sur cet appareil seulement'));
+          card.appendChild(el('h4', null, f.titre));
+          var meta = (CAT[f.theme] || 'Autre savoir') + ' · ' + (f.nom || 'Personne qui transmet');
+          if (f.lien) meta += ', ' + f.lien;
+          card.appendChild(el('span', 'meta', meta));
+          var lignes = f.savoir.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+          if (lignes.length > 1) {
+            var ol = el('ol', 'steps-list');
+            lignes.forEach(function (s) { ol.appendChild(el('li', null, s)); });
+            card.appendChild(ol);
+          } else if (lignes.length === 1) {
+            card.appendChild(el('p', null, lignes[0]));
+          }
+          if (f.truc) {
+            var sec = el('p', 'secret');
+            sec.appendChild(el('b', null, 'Le truc :'));
+            sec.appendChild(document.createTextNode(' ' + f.truc));
+            card.appendChild(sec);
+          }
+          var actions = el('div', 'card-actions');
+          var btnExp = el('button', 'mini-btn', 'Exporter le texte');
+          btnExp.type = 'button';
+          btnExp.addEventListener('click', function () { exporter(f); });
+          var btnDel = el('button', 'mini-btn', 'Retirer de cet appareil');
+          btnDel.type = 'button';
+          btnDel.addEventListener('click', function () {
+            save(load().filter(function (x) { return x.id !== f.id; }));
+            card.remove();
+            apply();
+            status('Fiche retirée de cet appareil.');
+          });
+          actions.appendChild(btnExp);
+          actions.appendChild(btnDel);
+          card.appendChild(actions);
+          return card;
+        }
+        load().forEach(function (f) { cardsBox.insertBefore(renderFiche(f), cardsBox.firstChild); });
+
+        var form = document.getElementById('capte-form');
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var f = {
+            id: 'f' + Date.now().toString(36),
+            nom: document.getElementById('f-nom').value.trim(),
+            lien: document.getElementById('f-lien').value.trim(),
+            titre: document.getElementById('f-titre').value.trim(),
+            theme: document.getElementById('f-cat').value,
+            savoir: document.getElementById('f-savoir').value.trim(),
+            truc: document.getElementById('f-truc').value.trim()
+          };
+          if (!f.titre || !f.savoir) { status('Il manque le titre ou le savoir raconté.'); return; }
+          var list = load();
+          list.unshift(f);
+          save(list);
+          var card = renderFiche(f);
+          cardsBox.insertBefore(card, cardsBox.firstChild);
+          form.reset();
+          apply();
+          status('Fiche créée — elle est dans la collection, ici même, sur cet appareil.');
+          if (card.scrollIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
         apply();
       })();
     </script>

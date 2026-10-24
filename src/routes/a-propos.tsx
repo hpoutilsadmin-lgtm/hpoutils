@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import HugoDeguise from "@/components/deguisements/HugoDeguise";
+import PhotoDeguise from "@/components/deguisements/PhotoDeguise";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => createSeoHead({
@@ -29,6 +30,9 @@ function Page() {
           </div>
           <HugoDeguise />
         </div>
+        <div className="container">
+          <PhotoDeguise />
+        </div>
       </section>
       <div className="subpage-content">
         <div className="container">
@@ -44,7 +48,7 @@ function Page() {
               Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et
               veulent apprendre, partager et repartir. C'est pour eux que je construis. Du gratuit
               chaque fois que c'est possible — 35 jeux, 629 recettes, des outils web sans compte —
-              et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ le kit,
+              et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ CAD le kit,
               aucune taxe ajoutée.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
@@ -74,7 +78,7 @@ function Page() {
             <article className="info-card">
               <span className="mini-note">Soutenir</span>
               <h3>Les Passeurs</h3>
-              <p>Le programme qui tiendra le gratuit debout : 3 $ par mois, bientôt en ligne.</p>
+              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, bientôt en ligne — aucune taxe ajoutée.</p>
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
           </div>

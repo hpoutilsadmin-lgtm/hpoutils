@@ -153,8 +153,7 @@ function Page() {
               </a>{" "}
               avec l'adresse courriel utilisée à l'achat — et, si vous vous
               en souvenez, le nom du produit et la date approximative.
-              Hugo retrouvera votre commande et vous renverra votre accès,
-              en personne&nbsp;: une réponse d'Hugo, pas d'un robot, sous
+              L'équipe retrouvera votre commande et vous renverra votre accès : une réponse d'humain, pas d'un robot, sous
               3 jours ouvrables. Vous pouvez aussi passer par le{" "}
               <a href="/contact">formulaire de contact</a>.
             </p>

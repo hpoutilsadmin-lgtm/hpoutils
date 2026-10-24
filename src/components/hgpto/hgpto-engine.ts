@@ -1774,8 +1774,8 @@ export function initHgpto() {
           t = "Mon honnête recommandation : un seul kit Sans Honte pour ton besoin le plus pressant — 5 $, pas plus. Et le vrai calcul, si un jour tu en vises plusieurs : pris un par un, 10 kits = 50 $ ; le lot « choisis 10 parmi 15 » est à 40 $. Pas besoin de décider ça aujourd'hui.";
           p = { u:"https://hp-outils.com/sans-honte", l:"Voir les kits Sans Honte" };
         } else {
-          t = "Mon honnête recommandation : un atelier avec Hugo, en vrai — Cuisine de base à 120 $, ou Pain maison (à l'atelier à 150 $, à domicile à 120 $), à Terrebonne et dans Lanaudière. Écris-lui en disant pour qui c'est, combien de personnes et quand tu vises : c'est lui qui confirme, en personne, sous 3 jours ouvrables.";
-          p = { u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" };
+          t = "Mon honnête recommandation : un atelier avec Hugo, en vrai — Cuisine de base à 120 $, ou Pain maison (à l'atelier à 150 $, à domicile à 120 $), à Terrebonne et dans Lanaudière. Écris à l'équipe en disant pour qui c'est, combien de personnes et quand tu vises : un humain te confirmera tout ça sous 3 jours ouvrables.";
+          p = { u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" };
         }
         showBubble(esc(t) + linkHtml(p) + '<br>' + esc(pick(ETHIQUE_LINES)), 14000, 'answer');
         buildQAChips();
@@ -1910,7 +1910,7 @@ export function initHgpto() {
         if (escKind){
           dismissQA();
           setExpr('happy');
-          var mailLink = linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" });
+          var mailLink = linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" });
           if (escKind === 'plainte') showBubble(esc(ESCALATION_EMPATHY + ' ' + ESCALATION_LINE) + mailLink, 14000, 'answer');
           else if (escKind === 'refund-case') showBubble(esc(ESCALATION_LINE) + mailLink, 14000, 'answer');
           else if (escKind === 'refund-policy') showBubble(esc(REFUND_POLICY) + mailLink, 14000, 'answer');
@@ -1972,7 +1972,7 @@ export function initHgpto() {
         if (unanswered.indexOf(q) === -1){ unanswered.push(q); renderUnanswered(); }
         dismissQA();
         setExpr('happy');
-        showBubble(esc(FALLBACK) + linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à Hugo" }), 11000, 'answer');
+        showBubble(esc(FALLBACK) + linkHtml({ u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" }), 11000, 'answer');
       });
       /* Construction des chips de questions — extraite en fonction
          (lot service client, 23 oct. 2026) : l'aide au choix remplace

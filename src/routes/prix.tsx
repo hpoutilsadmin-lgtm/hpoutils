@@ -30,7 +30,7 @@ function Page() {
           <span className="editorial-kicker">Tarifs HP</span>
           <h1>Des prix <em>clairs</em>, partout pareils.</h1>
           <p className="lead">
-            Les prix doivent rester identiques sur le site, les visuels
+            Les prix sont les mêmes partout : sur le site, les visuels
             promotionnels et les formulaires.
           </p>
         </div>

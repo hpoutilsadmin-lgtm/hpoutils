@@ -40,6 +40,7 @@ export const GAME_FILES: Record<string, string> = {
   "nord-2087": "/apps/nord-2087/nord-2087-v1.1.html",
   "igloo": "/apps/igloo/igloo-v1.0.html",
   "chevalier-du-fleuve": "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.2.html",
+  "hockey-hgpto": "/apps/hockey-hgpto/hockey-hgpto-v1.0.html",
   "que-vois-tu": "/apps/que-vois-tu/que-vois-tu-v2.0.html",
   "tapinoue": "/apps/tapinoue/tapinoue-v2.0.html",
   "ton-chum-frotte-son-char": "/apps/ton-chum-frotte-son-char/ton-chum-frotte-son-char-v2.0.html",
