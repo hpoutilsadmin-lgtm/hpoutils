@@ -75,7 +75,7 @@ export const JOKES = [
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
         { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — montre ça à quelqu'un, vous allez rire et réfléchir !", u:"https://hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 34 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"34 JEUX" }
+        { t:"Envie de jouer en famille ? Il y a 35 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"35 JEUX" }
       ];
 export const BOOK_PITCHES = [
         { t:"Ce livre-là me donne le goût de te parler des nôtres : « Horizon Québec » (10 $) et « La faim justifie les moyens » (10 $) sont au catalogue, en PDF.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
@@ -90,7 +90,7 @@ export const ATELIER_PITCHES = [
       ];
 export const PITCHES = [
         { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — et ça fait réfléchir en s'amusant !", u:"https://hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 34 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"34 JEUX" },
+        { t:"Envie de jouer en famille ? Il y a 35 jeux gratuits, sans inscription, qui t'attendent.", u:"https://hp-outils.com/jeux", l:"Voir les jeux", s:"35 JEUX" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
         { t:"Tu as des ingrédients qui traînent ? Tape-les dans Recettes HP : 629 recettes gratuites à découvrir.", u:"https://hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"629 RECETTES" },
@@ -233,7 +233,7 @@ export const SITE_FACTS = {
           kits:   { nom:"Kits Sans Honte", prix:"5 $ le kit, bundle 40 $", url:"https://hp-outils.com/sans-honte" },
           livres: { nom:"Livres PDF", prix:"10 $ à 15 $", url:"https://hp-outils.com/livres-pdf" },
           recettes:{ nom:"Recettes HP", prix:"Gratuit — 629 recettes", url:"https://hp-outils.com/en-cuisine/" },
-          jeux:   { nom:"Jeux", prix:"Gratuit — 34 jeux", url:"https://hp-outils.com/jeux" },
+          jeux:   { nom:"Jeux", prix:"Gratuit — 35 jeux", url:"https://hp-outils.com/jeux" },
           ateliers:{ nom:"Ateliers", prix:"120 $ et 150 $", url:"https://hp-outils.com/ateliers" },
           passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois (inscription bientôt)", url:"https://hp-outils.com/les-passeurs" },
           balado: { nom:"Balado Futur simple", prix:"Gratuit, chaque lundi", url:"https://hp-outils.com/balado" }
@@ -308,8 +308,8 @@ export const KB = [
         { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
           a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, ça prend deux minutes, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
           u:"https://hp-outils.com/jeux", l:"Voir les jeux" },
-        { q:"Vous avez quels jeux ?", s:"34 JEUX",
-          a:"34 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille !",
+        { q:"Vous avez quels jeux ?", s:"35 JEUX",
+          a:"35 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille !",
           u:"https://hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"C'est quoi, IGLOO ?", s:"GRATUIT !",
           a:"IGLOO — La guerre des igloos : une bataille de boules de neige en arène ! Tu déploies tes cartes, tu défends ton igloo et tu fais tomber celui d'en face — et chaque bataille tire une loi du quartier au hasard. Campagne de 10 batailles, parties d'environ 3 minutes. Gratuit !",
@@ -391,7 +391,7 @@ export const KB = [
         { q:"C'est quoi, ton choix du moment ?", s:"MON CHOIX ♥", fn:"choix",
           a:"" },
         { q:"Montre-moi les jeux", s:"PAR ICI →", go:"sec-jeux",
-          a:"Les jeux sont là : 34 jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
+          a:"Les jeux sont là : 35 jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
         { q:"Montre-moi les kits", s:"PAR ICI →", go:"sec-kits",
           a:"Les kits Sans Honte sont juste là : 5 $ le kit, 15 thèmes du quotidien, et le bundle à 40 $." },
         { q:"Comment préparer mon testament ?", s:"5 $", u:"https://hp-outils.com/sans-honte", l:"Voir les kits",
@@ -524,7 +524,7 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les ateliers à Terrebonne — « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
           u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
-          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 34 jeux, sans inscription. Et le jour où tu voudras un coup de pouce pour t'organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
+          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 35 jeux, sans inscription. Et le jour où tu voudras un coup de pouce pour t'organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
           u:"https://hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" }
       ];
       /* L'alternative honnête : après une réponse qui présente un produit

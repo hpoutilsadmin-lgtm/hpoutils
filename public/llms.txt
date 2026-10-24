@@ -14,7 +14,7 @@
 
 ## Les jeux — gratuits (page /jeux)
 
-34 jeux créés au Québec, jouables dans le navigateur, sans compte et sans téléchargement.
+35 jeux créés au Québec, jouables dans le navigateur, sans compte et sans téléchargement.
 Exemples : Caribou Run, Montgolfière, Bernache Express, LA BANQUE, Mots de chez nous,
 Mémoire des Cantons, Chat'attaque, NORD 2087, Mystères du Nord, Fusion Sirop, Bons réflexes,
 2 vérités 1 mensonge, Ado odieux adieu, Devine l'humeur, Le bonhomme pendu, Pop Ballons,

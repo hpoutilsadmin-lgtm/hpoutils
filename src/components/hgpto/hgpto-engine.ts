@@ -1745,7 +1745,7 @@ export function initHgpto() {
       function choixReco(pourQui, quoi){
         var t = "", p = null;
         if (quoi === 'jouer'){
-          t = "Mon honnête recommandation : commence par les jeux gratuits — 34 jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
+          t = "Mon honnête recommandation : commence par les jeux gratuits — 35 jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
           p = { u:"https://hp-outils.com/jeux", l:"Voir les jeux gratuits" };
         } else if (quoi === 'cuisiner'){
           if (pourQui === 'enfants'){

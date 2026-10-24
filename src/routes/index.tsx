@@ -97,7 +97,7 @@ function Index() {
             « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — Hugo
           </p>
           <div className="lead-actions">
-            <Link to="/jeux" className="btn-primary">Jouer — 34 jeux gratuits</Link>
+            <Link to="/jeux" className="btn-primary">Jouer — 35 jeux gratuits</Link>
             <Link to="/outils" className="btn-primary">Outils gratuits, sans compte</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
@@ -119,7 +119,7 @@ function Index() {
               </Link>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>Jeux</h3>
-                <p>34 jeux gratuits, jouables dans ton navigateur</p>
+                <p>35 jeux gratuits, jouables dans ton navigateur</p>
                 <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
               </div>
             </article>

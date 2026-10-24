@@ -170,7 +170,7 @@ function Page() {
             </article>
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>Une pause entre deux épisodes : 34 jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
+              <p>Une pause entre deux épisodes : 35 jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Jouer →</Link>
             </article>
           </div>

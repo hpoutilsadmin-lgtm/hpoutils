@@ -773,7 +773,7 @@
       var lienPanneau = el("div", "bj-lien" + (cfg.pos === "top" ? " bj-lien-top" : ""));
       lienPanneau.hidden = true;
       var lp1 = el("p", null,
-        "Rien à acheter pour continuer : ce jeu reste gratuit, comme les 34 jeux d'HP.");
+        "Rien à acheter pour continuer : ce jeu reste gratuit, comme les 35 jeux d'HP.");
       lienPanneau.appendChild(lp1);
       var lp2 = el("p", null, "Si le sujet te parle, en lien avec ce jeu : ");
       var la = el("a", null, cfg.lien.texte);
