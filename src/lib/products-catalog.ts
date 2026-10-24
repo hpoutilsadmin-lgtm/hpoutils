@@ -293,7 +293,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     audienceSentence:
       "Cette nouvelle s'adresse aux personnes qui aiment les récits sensibles, humains et ancrés dans le Québec actuel — autour de la langue, de l'identité, de l'amitié et des conversations qui restent longtemps après la dernière page.",
   },
-  // PRIX ABAISSÉ de 20 $ à 10 $ — décision d'Hugo, 23 octobre 2026.
+  // PRIX ABAISSÉ de 20 $ à 10 $ — décision d'HP, 23 octobre 2026.
   // Prix Stripe de 10 $ créé en RÉEL le 24 octobre 2026
   // (lookup_key `enfants_cuisinent_pdf_10`, prix par défaut inchangé) :
   // l'achat est ouvert au nouveau prix, `purchaseHold` retiré ce jour.
@@ -621,7 +621,7 @@ export function resolveKitSelection(slugs: unknown): DigitalProduct[] | null {
 // qu'AUCUNE page, route, sitemap ou fonction de paiement ne consomme.
 // Elles ne sont ni visibles, ni achetables, ni téléchargeables en l'état.
 //
-// Pour publier un produit (un par un, après validation d'Hugo) :
+// Pour publier un produit (un par un, après validation d'HP) :
 //   1. créer le produit + le prix dans Stripe (voir
 //      feuille-stripe-outils-papier.md à la racine du dépôt) et reporter le
 //      lookup_key créé dans `priceId` ET comme clé de l'entrée ;
@@ -1034,7 +1034,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
 // ----------------------------------------------------------------------------
 // DUOS PLANIFICATEURS — 4 produits groupés à 15 $, EN BROUILLON, NON PUBLIÉS
 // ----------------------------------------------------------------------------
-// Décision d'Hugo (2026-10-21, 22 h 06) : les 4 paires approuvées de l'offre
+// Décision d'HP (2026-10-21, 22 h 06) : les 4 paires approuvées de l'offre
 // « 2 planificateurs pour 15 $ » deviennent des produits « Duo » à part
 // entière. Raison : le site n'a pas de panier (paiement mono-produit), donc
 // la réduction automatique de PLANIFICATEUR_PAIR_OFFER n'est pas branchable
@@ -1045,7 +1045,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
 // Même statut que PAPER_TOOLS_DRAFT : ce tableau n'est consommé par AUCUNE
 // page, route, sitemap ou fonction de paiement. Rien n'est visible ni
 // vendable en l'état, aucun produit ni prix Stripe n'existe pour ces duos.
-// Publication (après validation d'Hugo) : mêmes étapes que les outils
+// Publication (après validation d'HP) : mêmes étapes que les outils
 // papier — créer le produit + le prix dans Stripe avec le lookup_key
 // proposé (voir feuille-stripe-outils-papier.md, section « Duos
 // planificateurs »), téléverser le PDF duo dans le bucket `pdfs`, puis

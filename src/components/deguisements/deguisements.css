@@ -1,10 +1,10 @@
-/* Déguisements d'Hugo — /a-propos. La photo garde exactement son
+/* Déguisements d'HP — /a-propos. La photo garde exactement son
    empreinte d'origine (240×240, cercle, bordure, ombre) ; seul le
    calque SVG et la légende s'ajoutent par-dessus / en dessous. */
 
-.hugo-deguise {
+.hp-deguise {
   margin: 0;
-  /* Correctif alignement (23 oct. 2026, signalé par Hugo : « très
+  /* Correctif alignement (23 oct. 2026, signalé par HP : « très
      mal aligné ») : la largeur est bornée par le contenant, et le
      cadre ci-dessous est carré par aspect-ratio — avant, le cadre
      gardait height:240px quand la largeur rapetissait sous 240 px,
@@ -12,7 +12,7 @@
   width: min(240px, 100%);
 }
 
-.hugo-deguise-btn {
+.hp-deguise-btn {
   display: block;
   margin: 0 auto;
   padding: 0;
@@ -23,12 +23,12 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.hugo-deguise-btn:focus-visible {
+.hp-deguise-btn:focus-visible {
   outline: 3px solid #ffd94d;
   outline-offset: 4px;
 }
 
-.hugo-deguise-cadre {
+.hp-deguise-cadre {
   position: relative;
   display: block;
   width: 100%;
@@ -40,11 +40,11 @@
   transition: transform 0.12s ease;
 }
 
-.hugo-deguise-btn:active .hugo-deguise-cadre {
+.hp-deguise-btn:active .hp-deguise-cadre {
   transform: scale(0.97);
 }
 
-.hugo-deguise-photo {
+.hp-deguise-photo {
   display: block;
   /* Remplit le cadre carré à 100 % : sa zone utile (bordure de 4 px
      exclue) est exactement le repère du calque ci-dessous. */
@@ -60,7 +60,7 @@
 /* Le calque épouse la zone utile de la photo : la bordure de 4 px de
    l'image décale sa zone d'affichage d'autant, le calque fait pareil
    pour rester aligné sur le visage à toutes les tailles. */
-.hugo-deguise-calque {
+.hp-deguise-calque {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -71,7 +71,7 @@
   pointer-events: none;
 }
 
-.hugo-deguise-legende {
+.hp-deguise-legende {
   margin-top: 10px;
   min-height: 2.5em;
   max-width: 240px;
@@ -85,7 +85,7 @@
 
 /* Navigation entre déguisements (ajout 23 oct. 2026) : précédent /
    suivant / aléatoire + compteur, en plus du clic sur la photo. */
-.hugo-deguise-nav {
+.hp-deguise-nav {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,7 +94,7 @@
   flex-wrap: wrap;
 }
 
-.hugo-deguise-nav button {
+.hp-deguise-nav button {
   font: inherit;
   font-size: 0.92rem;
   padding: 7px 13px;
@@ -106,17 +106,17 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.hugo-deguise-nav button:hover {
+.hp-deguise-nav button:hover {
   border-color: #ffd94d;
   color: #ffd94d;
 }
 
-.hugo-deguise-nav button:focus-visible {
+.hp-deguise-nav button:focus-visible {
   outline: 3px solid #ffd94d;
   outline-offset: 2px;
 }
 
-.hugo-deguise-compteur {
+.hp-deguise-compteur {
   font-size: 0.85rem;
   color: rgba(246, 237, 221, 0.75);
   min-width: 3.2em;
@@ -125,7 +125,7 @@
 
 /* ---------- « Ta photo à toi » (ajout 23 oct. 2026) ----------
    Le visiteur déguise SA photo, 100 % en local : aucun envoi,
-   aucune persistance. Même cadre carré/cercle que la photo d'Hugo. */
+   aucune persistance. Même cadre carré/cercle que la photo d'HP. */
 
 .photo-deguise {
   margin: 34px auto 0;

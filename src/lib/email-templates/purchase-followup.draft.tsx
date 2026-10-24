@@ -1,15 +1,15 @@
 /**
  * BROUILLON — courriel de suivi après achat (« Tu as réussi à ouvrir
  * ton PDF ? »), préparé le 22 octobre 2026 dans le cadre des
- * recommandations service client d'Hugo (reco nº 3 du panel des 50).
+ * recommandations service client d'HP (reco nº 3 du panel des 50).
  *
  * ⚠️ NON ACTIVÉ : ce gabarit n'est PAS inscrit au registre
  * (src/lib/email-templates/registry.ts) et aucun code ne l'appelle.
- * Il ne partira jamais tant qu'Hugo n'aura pas donné un go séparé
+ * Il ne partira jamais tant qu'HP n'aura pas donné un go séparé
  * pour l'envoi de courriels de suivi. Pour l'activer un jour, il
  * faudrait : (1) le renommer sans « .draft », (2) l'inscrire au
  * registre, (3) l'appeler avec un déclencheur et une clé
- * d'idempotence — trois gestes qui exigent l'accord explicite d'Hugo.
+ * d'idempotence — trois gestes qui exigent l'accord explicite d'HP.
  */
 import {
   Body,
@@ -42,7 +42,7 @@ const PurchaseFollowupEmail = ({
       <Container style={container}>
         <Heading style={h1}>Tu as réussi à ouvrir ton PDF ?</Heading>
         <Text style={text}>
-          Bonjour — c'est Hugo, de {SITE_NAME}. Merci encore pour ton
+          Bonjour — c'est HP, de {SITE_NAME}. Merci encore pour ton
           achat de <strong>{title}</strong>. Petit suivi humain, comme
           promis : est-ce que ton fichier s'est bien ouvert ?
         </Text>
@@ -67,7 +67,7 @@ const PurchaseFollowupEmail = ({
             <Link href="mailto:hpoutils.admin@gmail.com" style={link}>
               hpoutils.admin@gmail.com
             </Link>{' '}
-            — une réponse d'Hugo, pas d'un robot, sous 3 jours ouvrables.
+            — une réponse d'humain, pas d'un robot, sous 3 jours ouvrables.
           </Text>
         </Section>
         <Text style={text}>
@@ -77,7 +77,7 @@ const PurchaseFollowupEmail = ({
           ne paies jamais pour quelque chose que tu n'as pas pu
           recevoir.
         </Text>
-        <Text style={footer}>— Hugo, {SITE_NAME}</Text>
+        <Text style={footer}>— La direction, {SITE_NAME}</Text>
       </Container>
     </Body>
   </Html>

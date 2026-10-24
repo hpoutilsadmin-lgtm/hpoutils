@@ -49,7 +49,7 @@ const WEB_TOOLS = [
     emoji: "📖",
     tag: "Savoir-faire",
     title: "Le Passeur de savoir",
-    copy: "Les trucs et les savoirs des gens, recueillis pour être transmis : recettes, remèdes de grand-mère, savoir-faire du quotidien. La fiche nº 1 : le truc contre le hoquet de la grand-mère d'Hugo.",
+    copy: "Les trucs et les savoirs des gens, recueillis pour être transmis : recettes, remèdes de grand-mère, savoir-faire du quotidien. La fiche nº 1 : le truc contre le hoquet de la grand-mère d'HP.",
     cta: "Ouvrir le Passeur →",
     href: "/passeur-de-savoir/",
   },

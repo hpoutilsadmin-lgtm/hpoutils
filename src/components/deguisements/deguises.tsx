@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 /**
- * Déguisements d'Hugo — habillages dessinés (SVG 100 % originaux, archétypes
+ * Déguisements d'HP — habillages dessinés (SVG 100 % originaux, archétypes
  * génériques) posés par-dessus sa photo sur /a-propos. La photo n'est jamais
  * modifiée : chaque déguisement est un calque SVG dans un repère 0–100 qui
  * épouse le cadre carré du portrait.
@@ -21,7 +21,7 @@ export interface Deguise {
 export const DEGUISES: Deguise[] = [
   {
     id: "clown",
-    legende: "Hugo en clown !",
+    legende: "HP en clown !",
     calque: (
       <g>
         {/* touffes de cheveux colorées */}
@@ -46,7 +46,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "ange",
-    legende: "Hugo en ange !",
+    legende: "HP en ange !",
     calque: (
       <g>
         {/* ailes blanches */}
@@ -63,7 +63,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "diable",
-    legende: "Hugo en petit diable !",
+    legende: "HP en petit diable !",
     calque: (
       <g>
         {/* teinte chaude légère */}
@@ -81,7 +81,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "cuisinier",
-    legende: "Hugo en cuisinier !",
+    legende: "HP en cuisinier !",
     calque: (
       <g>
         {/* toque blanche */}
@@ -96,7 +96,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "prof",
-    legende: "Hugo en prof !",
+    legende: "HP en prof !",
     calque: (
       <g>
         {/* lunettes rondes */}
@@ -114,7 +114,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "sergent",
-    legende: "Sergent Hugo, à vos ordres !",
+    legende: "Sergent HP, à vos ordres !",
     calque: (
       <g>
         {/* casquette militaire */}
@@ -135,7 +135,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "informaticien",
-    legende: "Hugo en informaticien !",
+    legende: "HP en informaticien !",
     calque: (
       <g>
         {/* arceau du casque */}
@@ -157,7 +157,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "chien",
-    legende: "Hugo en chien !",
+    legende: "HP en chien !",
     calque: (
       <g>
         {/* oreilles tombantes */}
@@ -176,7 +176,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "pixel",
-    legende: "Hugo en Pixel, sa chatte !",
+    legende: "HP en Pixel, sa chatte !",
     calque: (
       <g>
         {/* oreilles de chat */}
@@ -197,7 +197,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "hgpto",
-    legende: "Hugo en mode HGPTO !",
+    legende: "HP en mode HGPTO !",
     calque: (
       <g>
         {/* antenne */}
@@ -266,7 +266,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "vache",
-    legende: "Hugo en vache !",
+    legende: "HP en vache !",
     calque: (
       <g>
         {/* petites cornes */}
@@ -290,7 +290,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "dragon",
-    legende: "Hugo en dragon !",
+    legende: "HP en dragon !",
     calque: (
       <g>
         {/* teinte verte douce */}
@@ -312,7 +312,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "vampire",
-    legende: "Hugo en vampire !",
+    legende: "HP en vampire !",
     calque: (
       <g>
         {/* teinte pâle */}
@@ -334,7 +334,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "fantome",
-    legende: "Hugo en fantôme !",
+    legende: "HP en fantôme !",
     calque: (
       <g>
         {/* voile blanc translucide au bord doux et ondulé */}
@@ -345,7 +345,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "citrouille",
-    legende: "Hugo en citrouille !",
+    legende: "HP en citrouille !",
     calque: (
       <g>
         {/* teinte orangée */}
@@ -362,11 +362,11 @@ export const DEGUISES: Deguise[] = [
       </g>
     ),
   },
-  /* ----- Nouveautés du 23 oct. 2026 (demande d'Hugo : 25 et plus,
+  /* ----- Nouveautés du 23 oct. 2026 (demande d'HP : 25 et plus,
      toujours 100 % originales, archétypes génériques dessinés ici) ----- */
   {
     id: "bucheron",
-    legende: "Hugo en bûcheron — la barbe vient avec !",
+    legende: "HP en bûcheron — la barbe vient avec !",
     calque: (
       <g>
         {/* casquette à carreaux rouges et noirs */}
@@ -389,7 +389,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "pecheur-glace",
-    legende: "Hugo pêcheur sur glace — ça mord… pas encore !",
+    legende: "HP pêcheur sur glace — ça mord… pas encore !",
     calque: (
       <g>
         {/* tuque bleue à rabats */}
@@ -414,7 +414,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "castor",
-    legende: "Hugo en castor — toujours prêt à bâtir !",
+    legende: "HP en castor — toujours prêt à bâtir !",
     calque: (
       <g>
         {/* oreilles rondes */}
@@ -436,7 +436,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "bonhomme-neige",
-    legende: "Hugo en bonhomme de neige — ne le laissez pas au soleil !",
+    legende: "HP en bonhomme de neige — ne le laissez pas au soleil !",
     calque: (
       <g>
         {/* teinte givrée */}
@@ -461,7 +461,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "lutin",
-    legende: "Hugo en lutin — la clochette, c'est pour les cadeaux !",
+    legende: "HP en lutin — la clochette, c'est pour les cadeaux !",
     calque: (
       <g>
         {/* oreilles pointues */}
@@ -480,7 +480,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "detective",
-    legende: "Hugo détective — l'indice était sous son nez !",
+    legende: "HP détective — l'indice était sous son nez !",
     calque: (
       <g>
         {/* chapeau mou brun */}
@@ -496,7 +496,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "magicien",
-    legende: "Hugo magicien — le lapin est en congé !",
+    legende: "HP magicien — le lapin est en congé !",
     calque: (
       <g>
         {/* haut-de-forme à bande rouge */}
@@ -515,7 +515,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "pirate",
-    legende: "Hugo en pirate — le trésor, c'est les outils !",
+    legende: "HP en pirate — le trésor, c'est les outils !",
     calque: (
       <g>
         {/* bandana rouge à pois, noué à droite */}
@@ -538,7 +538,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "roi",
-    legende: "Hugo, roi des petits budgets !",
+    legende: "HP, roi des petits budgets !",
     calque: (
       <g>
         {/* couronne dorée à pointes, joyaux sobres */}
@@ -558,7 +558,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "astronaute",
-    legende: "Hugo astronaute — Terrebonne, on a un fou rire !",
+    legende: "HP astronaute — Terrebonne, on a un fou rire !",
     calque: (
       <g>
         {/* le casque : grand anneau autour du visage */}
@@ -577,7 +577,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "hockey",
-    legende: "Hugo prêt pour le 2 contre 2 !",
+    legende: "HP prêt pour le 2 contre 2 !",
     calque: (
       <g>
         {/* casque bleu */}
@@ -596,7 +596,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "scientifique-fou",
-    legende: "Hugo en scientifique fou — ça va péter… de rire !",
+    legende: "HP en scientifique fou — ça va péter… de rire !",
     calque: (
       <g>
         {/* cheveux gris dressés en pointes */}
@@ -616,7 +616,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "super-heros",
-    legende: "Hugo en super-héros — son pouvoir : les outils pour la vraie vie !",
+    legende: "HP en super-héros — son pouvoir : les outils pour la vraie vie !",
     calque: (
       <g>
         {/* la cape, aux épaules */}

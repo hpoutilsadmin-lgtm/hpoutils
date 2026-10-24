@@ -246,7 +246,7 @@ export const SITE_FACTS = {
           recettes:{ nom:"Recettes HP", prix:"Gratuit — 629 recettes", url:"https://www.hp-outils.com/en-cuisine/" },
           jeux:   { nom:"Jeux", prix:"Gratuit — 35 jeux", url:"https://www.hp-outils.com/jeux" },
           ateliers:{ nom:"Ateliers", prix:"120 $ et 150 $", url:"https://www.hp-outils.com/ateliers" },
-          passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois (inscription bientôt)", url:"https://www.hp-outils.com/les-passeurs" },
+          passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois (inscription ouverte)", url:"https://www.hp-outils.com/les-passeurs" },
           balado: { nom:"Balado Futur simple", prix:"Gratuit, chaque lundi", url:"https://www.hp-outils.com/balado" }
         },
         sections: {
@@ -350,19 +350,19 @@ export const KB = [
           a:"Anxiété, le jeu : une semaine dans la peau d'Alex, qui vit avec un trouble anxieux — météo intérieure, pensées qui envahissent, crise traversée en douceur et outils réels, avec les ressources 811 et 988. Il sensibilise ; il ne pose pas de diagnostic. Gratuit, comme tous les jeux du site.",
           u:"https://www.hp-outils.com/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", l:"Jouer à Anxiété" },
         { q:"Comment marchent les ateliers ?", s:"ATELIERS",
-          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $), Les enfants cuisinent (120 $), Hygiène & salubrité (120 $). Pour l'Édition des Fêtes : le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h pour les organismes (120 $) et la conférence « La faim justifie les moyens » (120 $, 45 à 60 min). Écris à l'équipe pour réserver : dis-leur pour qui c'est, combien de personnes et quand tu vises — un humain te répondra sous 3 jours ouvrables !",
+          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (120 $), Manger mieux avec moins (150 $), L'IA sans jargon (120 $), Atelier jeunesse (120 $), Les enfants cuisinent (120 $), Hygiène & salubrité (120 $). Pour l'Édition des Fêtes : le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h pour les organismes (120 $) et la conférence « La faim justifie les moyens » (120 $, 45 à 60 min). Remplis le formulaire d'atelier sur la page Ateliers : dis-leur pour qui c'est, combien de personnes et quand tu vises — un humain te répondra sous 3 jours ouvrables !",
           u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers" },
         { q:"Vous avez des livres ?", s:"LIVRES",
           a:"4 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) et « Les enfants cuisinent pour faire plaisir » (10 $).",
           u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres" },
         { q:"Combien coûte « Les enfants cuisinent pour faire plaisir » ?", s:"10 $",
-          a:"« Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Petit point d'honnêteté : son prix vient de baisser et l'achat en ligne rouvrira bientôt à ce nouveau prix — pour l'instant, la fiche le présente, sans paiement possible.",
+          a:"« Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Tu peux l'ajouter à ton panier depuis la page Prix ou sa fiche, et payer en une seule fois avec tes autres produits.",
           u:"https://www.hp-outils.com/pdf/enfants-cuisinent", l:"Voir le livre" },
         { q:"C'est quoi, les Passeurs ?", s:"3 $ / MOIS",
-          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès au savoir : 3 $ par mois, ou 28 $ pour l'année — et les savoirs s'offrent aussi par quatre, pour 12 $. Honnêtement ? L'inscription payante arrive bientôt — le bouton de paiement n'est pas encore en ligne.",
+          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès au savoir : 3 $ par mois, ou 28 $ pour l'année — et les savoirs s'offrent aussi par quatre, pour 12 $. Honnêtement ? L'inscription est ouverte : écris à la direction pour t'inscrire — un humain te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient.",
           u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
         { q:"Combien coûtent les Passeurs de savoirs ?", s:"3 $ / MOIS",
-          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès au savoir : 3 $ par mois, ou 28 $ pour l'année — et les savoirs s'offrent aussi par quatre, pour 12 $. Honnêtement ? L'inscription payante arrive bientôt — le bouton de paiement n'est pas encore en ligne.",
+          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès au savoir : 3 $ par mois, ou 28 $ pour l'année — et les savoirs s'offrent aussi par quatre, pour 12 $. Honnêtement ? L'inscription est ouverte : écris à la direction pour t'inscrire — un humain te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient.",
           u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
         { q:"Combien y a-t-il de jeux sur le site ?", s:"35 JEUX",
           a:"35 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille !",
@@ -384,6 +384,15 @@ export const KB = [
           a:"Aucune taxe ajoutée : HP Outils est un petit fournisseur, alors le prix affiché, c'est le prix payé. Simple !" },
         { q:"Comment je paie ?", s:"PAR CARTE", info:1,
           a:"Par carte, directement sur le site. Pour les livres et les kits en PDF, le téléchargement est immédiat après le paiement." },
+        { q:"C'est quoi, le panier ?", s:"PANIER",
+          a:"Le panier, c'est la page /panier/ : tu y mets plusieurs produits d'un coup — livres et kits en PDF — et tu paies en une seule fois, par carte. Après le paiement, tu reçois un courriel avec un lien de téléchargement par article. Aucune taxe ajoutée, et le total affiché est indicatif : c'est Stripe qui débite. Un souci avec ton panier ou tes liens ? Écris à l'équipe, un humain te répondra sous 3 jours ouvrables.",
+          u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
+        { q:"Qu'est-ce que je peux mettre dans le panier ?", s:"20 PRODUITS",
+          a:"20 produits : les 5 PDF — « Enjeux de l'humanité à l'ère de l'IA » (15 $), « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Les enfants cuisinent pour faire plaisir » (10 $) et le mini-cahier « Un petit pas à la fois » (10 $) — et les 15 kits Sans Honte à 5 $ chacun. Chaque PDF ne s'achète qu'en un seul exemplaire : ajouter deux fois le même ne change rien, on ne te débite jamais deux fois le même fichier. Le bundle « Choisis 10 parmi 15 », lui, garde son propre parcours, hors panier.",
+          u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
+        { q:"Comment j'ajoute un produit au panier ?", s:"AJOUTER",
+          a:"Avec le bouton « Ajouter au panier », sur la page Prix et sur la fiche d'un produit vendable. Ton panier se garde d'une page à l'autre, et tu le retrouves sur /panier/ pour vérifier tes articles, en retirer un ou payer. Le bouton devient « Dans le panier » quand le produit y est déjà.",
+          u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
         { q:"Et le balado ?", s:"BALADO",
           a:"« Futur simple », le balado HP : Léa et Marc regardent l'intelligence artificielle en face — PME, entrepreneuriat et futur, sans jargon. Un nouvel épisode chaque lundi !",
           u:"https://www.hp-outils.com/balado", l:"Écouter le balado" },
@@ -622,13 +631,91 @@ export const GNOME_LINES_GROGNON = [
 export const BUMP_LINE = "Aïe ! Qui c'est qui a mis un encadré de porte là, d'abord ?!";
 export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
 
+      /* ---------- LOT « SUGGESTIONS DE PAGE » (24 oct. 2026) ----------
+         Forme validée par la direction : sur chaque page, UNE suggestion
+         utile, présentée dans le panneau de questions (geste du visiteur
+         : il ouvre le panneau). Quand il montre son intérêt — tap sur
+         la suggestion, ou question tapée à son sujet — HGPTO explique :
+         marche à suivre, à quoi ça sert, histoire du produit, pourquoi.
+         RÈGLES : contenu RÉEL seulement (chaque champ vient d'une source
+         existante : tuile de page, base KB, texte de visite — voir le
+         rapport du lot) ; un champ sans source = null, et le moteur
+         sert alors le repli honnête ci-dessous, JAMAIS d'histoire
+         inventée. Zéro surveillance : l'intérêt n'est détecté que par
+         un geste explicite (tap, question tapée) — ni temps passé, ni
+         curseur, ni profil. 1 seule par page ; le créneau de page est
+         partagé avec le système du lot nº 3 (si celui-ci a déjà suggéré
+         sur la page, la suggestion de page s'efface). /sans-honte est
+         exclu : route sensible, dignité d'abord. `mots` : sous-chaînes
+         normalisées (sans accents) qui déclenchent l'explication quand
+         le visiteur tape une question sur la suggestion. */
+export const PAGE_SUGGESTION_FALLBACK = "Pour son histoire, je ne l'ai pas dans mes notes — écris à la direction humaine, un humain de l'équipe te répondra sous 3 jours ouvrables.";
+export const PAGE_SUGGESTIONS = {
+        '/': { id:'sugg-banque', titre:"LA BANQUE, le jeu de la banque alimentaire",
+          accroche:"Gratuit, deux minutes, et ça fait réfléchir en s'amusant.",
+          marche:"Va sur /jeux, choisis la tuile « LA BANQUE — le jeu de la banque alimentaire », et joue : tu gères une banque alimentaire sur une saison de 8 semaines — dons, tri, cuisine et service aux familles nommées, qui reviennent semaine après semaine.",
+          sert:"Comprendre de l'intérieur comment fonctionne une vraie banque alimentaire. Ton score, c'est les familles nourries.",
+          histoire:"C'est notre jeu sur la banque alimentaire : jouer pour comprendre, donner pour vrai.",
+          pourquoi:"Gratuit, sans inscription — pour commencer, c'est le plus simple.",
+          mots:['banque'], u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
+        '/jeux': { id:'sugg-releve', titre:"RELÈVE — Chapitre 1 : Surchauffe",
+          accroche:"Notre série d'histoires dont tu choisis la suite — le chapitre 1 est gratuit.",
+          marche:"Sur /jeux, choisis la tuile « RELÈVE — Chapitre 1 : Surchauffe », et joue : à toi de choisir la suite de l'histoire.",
+          sert:"Une aventure d'enquête 3D, en français ou en anglais : tu mènes l'enquête en t'amusant.",
+          histoire:"À Percé, Grizz, ourson policier de Faune-Secours, et NID à la radio cherchent la cause d'une surchauffe qui menace la faune.",
+          pourquoi:"Le chapitre 1 est gratuit, et la série vient de commencer — c'est le moment de la découvrir.",
+          mots:['releve'], u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
+        '/livres-pdf': { id:'sugg-enfants', titre:"« Les enfants cuisinent pour faire plaisir »",
+          accroche:"10 $, en PDF — cuisiner en famille, pour le plaisir, pas la performance.",
+          marche:"Sur /livres-pdf, choisis le livre et paie par carte : le PDF se télécharge tout de suite après le paiement.",
+          sert:"Cuisiner en famille, avec des recettes pensées pour les petits chefs. Un projet doux pour transmettre le plaisir, pas la performance.",
+          histoire:"C'est notre livre complet de recettes à faire en famille.",
+          pourquoi:"10 $, aucune taxe ajoutée — et cuisiner ensemble, c'est des souvenirs qui se mangent.",
+          mots:['enfants cuisinent'], u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres" },
+        '/ateliers': { id:'sugg-cuisine-pratique', titre:"L'atelier « Cuisine pratique »",
+          accroche:"120 $, forfait groupe, à Terrebonne et dans les environs.",
+          marche:"Écris à l'équipe en disant pour qui c'est, combien de personnes et quand tu vises : un humain te répondra sous 3 jours ouvrables.",
+          sert:"Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien — avec les fiches recette et astuces incluses.",
+          histoire:"C'est un atelier de groupe, le côté humain d'HP Outils qui se vit pour vrai, autour d'une table, à Terrebonne et dans les environs.",
+          pourquoi:"120 $, forfait groupe, aucune taxe ajoutée — on apprend en gang, pour vrai.",
+          mots:['cuisine pratique'], u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers" },
+        '/en-cuisine': { id:'sugg-recettes', titre:"Recettes HP — 629 recettes gratuites",
+          accroche:"Tape ce qu'il y a dans ton frigo, il te trouve un souper.",
+          marche:"Tape les ingrédients que tu as déjà : il te propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et ta liste d'épicerie se prépare toute seule.",
+          sert:"Trouver quoi cuisiner avec ce qu'on a déjà, sans gaspiller et sans payer — parfait quand le frigo a l'air vide mais ne l'est pas.",
+          histoire:"629 recettes gratuites, écrites de zéro.",
+          pourquoi:"Gratuit, sans inscription — pensé pour les vraies cuisines, pas pour les photos.",
+          mots:['recettes'], u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP" },
+        '/lire': { id:'sugg-chasse', titre:"« La Chasse-Galerie », le tome gratuit",
+          accroche:"Le tome d'appel de la série « À toi l'histoire » — gratuit, sans paiement.",
+          marche:"Sur /lire/, demande ton lien gratuit, puis vérifie ta boîte courriel : ton lien est en route.",
+          sert:"Découvrir les livres-jeux « À toi l'histoire » sans payer : tu reçois ton lien web personnel.",
+          histoire:"Le tome d'appel de la série : 11 livres-jeux interactifs, et celui-là est gratuit.",
+          pourquoi:"Gratuit, sans paiement — pour essayer avant les autres tomes, de 5 $ à 8 $.",
+          mots:['chasse galerie'], u:"https://www.hp-outils.com/lire", l:"Voir les tomes" },
+        '/prix': { id:'sugg-bundle', titre:"Le bundle Sans Honte — Choisis 10 kits parmi 15",
+          accroche:"40 $ au lieu de 50 $ à l'unité — si tu en veux vraiment 10.",
+          marche:"Sur /sans-honte, choisis 10 kits parmi les 15 de la collection : 40 $, téléchargement immédiat.",
+          sert:"Équiper ton quotidien d'un coup : papiers, frigo, logement, entraide… 15 thèmes du quotidien, sans jugement.",
+          histoire:null,
+          pourquoi:"10 kits pris un par un, ça fait 50 $. Le bundle est à 40 $ — donc 10 $ de moins, si tu en veux vraiment 10. Sinon, un seul kit à 5 $ fait très bien l'affaire.",
+          mots:['bundle'], u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits" },
+        '/balado': { id:'sugg-balado', titre:"« Futur simple », le balado HP",
+          accroche:"Un nouvel épisode chaque lundi, sans jargon — gratuit.",
+          marche:"Sur /balado, choisis un épisode et écoute : c'est gratuit, sans compte, sans piège.",
+          sert:"Regarder l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais — direct et concret, sans jargon.",
+          histoire:"Le balado HP : Léa et Marc jasent d'IA, un nouvel épisode chaque lundi.",
+          pourquoi:"Gratuit, sans compte — un épisode chaque lundi, comme tout ce qu'on fait ici.",
+          mots:['balado','futur simple'], u:"https://www.hp-outils.com/balado", l:"Écouter le balado" }
+      };
+
       /* Suggestions d'attente sur les pages produits (visiteur qui regarde
          longuement) : résumé argumenté + alternative honnête, une seule
          par page. /sans-honte n'en a pas : route sensible, dignité
          d'abord — le résumé calme des faits (lot nº 2) y suffit. */
 export const DWELL_SUGGESTIONS = {
         '/livres-pdf': { t:"Tu regardes les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, « Les enfants cuisinent pour faire plaisir » à 10 $. Téléchargement immédiat après le paiement. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
-        '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : 6 forfaits de groupe, 120 $ ou 150 $ selon l'atelier — dont « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), à Terrebonne et dans les environs ; réservation et questions par courriel à l'équipe. Et les recettes, elles, sont gratuites en tout temps.", u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
-        '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès au savoir et soutenir HP Outils. En toute honnêteté : le bouton d'inscription payante n'est pas encore en ligne — ça s'en vient.", u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" },
+        '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : 6 forfaits de groupe, 120 $ ou 150 $ selon l'atelier — dont « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), à Terrebonne et dans les environs ; réservation par le formulaire d'atelier, questions par courriel à l'équipe. Et les recettes, elles, sont gratuites en tout temps.", u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
+        '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès au savoir et soutenir HP Outils. En toute honnêteté : l'inscription se fait en écrivant à la direction — le paiement automatisé en ligne s'en vient.", u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" },
         '/lire': { t:"Tu regardes les tomes depuis un petit bout — le résumé honnête : 11 livres-jeux « À toi l'histoire », de 5 $ à 8 $, reçus par lien web personnel après l'achat, plus le tome gratuit « La Chasse-Galerie » et le bundle 3 tomes à 12 $. Aucune taxe ajoutée.", u:"https://www.hp-outils.com/lire", l:"Voir les tomes", s:"5 $ À 8 $" }
       };

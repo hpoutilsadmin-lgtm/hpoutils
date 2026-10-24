@@ -38,8 +38,8 @@ export function SiteFooter() {
           <h4>Me contacter</h4>
           <p>
             <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a><br />
-            <Link to="/contact">Formulaire de contact</Link><br />
-            <a href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Formulaire atelier</a><br />
+            <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a><br />
+            <a href="/ateliers#formulaire-atelier">Formulaire atelier</a><br />
             Une réponse d'humain, pas d'un robot — sous 3 jours ouvrables.
           </p>
         </div>

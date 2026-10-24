@@ -561,6 +561,7 @@ export const HGPTO_MARKUP = `
         <span>Pose-moi une question !</span>
         <button type="button" id="qa-close" aria-label="Fermer les questions">✕</button>
       </div>
+      <div class="qa-suggestion" id="qa-suggestion" hidden></div>
       <div class="qa-chips" id="qa-chips"></div>
       <div class="qa-stamps" aria-label="Les approbations officielles d'HGPTO">
         <div class="qa-stamps-title">Mes approbations officielles</div>

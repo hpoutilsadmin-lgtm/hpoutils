@@ -4,8 +4,8 @@ import { FAQ_ENTRIES } from "@/lib/faq-data";
 
 /* Questions fréquentes (item nº 9, vague 1) : les réponses qu'HGPTO
    donne déjà aux visiteurs, réunies en page publique. Contenu =
-   src/lib/faq-data.ts — le rituel du lundi (questions « Pour Hugo »
-   validées par Hugo) y verse les nouvelles réponses par simple
+   src/lib/faq-data.ts — le rituel du lundi (questions « Pour HP »
+   validées par HP) y verse les nouvelles réponses par simple
    édition du fichier de données. Schéma FAQPage pour les moteurs. */
 export const Route = createFileRoute("/faq")({
   head: () => ({

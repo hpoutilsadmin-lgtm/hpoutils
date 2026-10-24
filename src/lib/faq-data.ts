@@ -2,8 +2,8 @@
    Amorce vérifiée : les questions-réponses qu'HGPTO, le petit robot
    du site, donne déjà aux visiteurs (sa base de connaissances,
    src/components/hgpto/hgpto-data.ts) — aucune réponse inventée.
-   Boucle « Pour Hugo » (item nº 9, vague 1) : chaque lundi, les
-   questions sans réponse validées par Hugo peuvent être versées ici
+   Boucle « Pour HP » (item nº 9, vague 1) : chaque lundi, les
+   questions sans réponse validées par HP peuvent être versées ici
    par simple édition de ce fichier — la page et son schéma
    FAQPage suivent automatiquement. */
 
@@ -43,7 +43,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "C'est quoi, les Passeurs de savoir ?",
     reponse:
-      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs au savoir coûtera 3 $ CAD par mois (ou 28 $ CAD pour l'année), et les savoirs s'offriront aussi par quatre pour 12 $ CAD — ce n'est pas encore offert en ligne ; c'est dit honnêtement, et ça s'en vient. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
+      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année), et les savoirs s'offrent aussi par quatre pour 12 $ CAD. L'inscription est ouverte : écris à la direction pour t'inscrire, un humain te répond sous 3 jours ouvrables. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
   },
   {
     question: "Par où commencer pour mes papiers de fin de vie ?",

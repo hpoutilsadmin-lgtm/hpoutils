@@ -138,6 +138,9 @@ function Page() {
             <div>
               <h3>Le bundle — Choisis 10 kits parmi 15</h3>
                <p>Choisis 10 kits parmi les 15 de la collection Sans Honte — 40 $ CAD, aucune taxe ajoutée. Téléchargement immédiat.</p>
+               <p><strong>Économie de 10 $ :</strong> achetés un par un, 10 kits coûteraient 50 $ — le bundle est à 40 $.</p>
+               <p>Les 15 titres parmi lesquels tu choisis tes 10 : {KITS.map((k) => k.title).join(" · ")}.</p>
+               <p>Tu coches tes 10 kits sur la page d'achat, avant le paiement.</p>
             </div>
             <Link className="action-btn" to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF</Link>
           </div>

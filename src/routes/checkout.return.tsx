@@ -22,7 +22,7 @@ type State =
   | { kind: "loading" }
   | { kind: "missing" }
   | { kind: "pending" }
-  | { kind: "paid"; email: string; message: string | null }
+  | { kind: "paid"; email: string; message: string | null; itemCount: number }
   | { kind: "error"; message: string };
 
 function Page() {
@@ -48,6 +48,7 @@ function Page() {
             kind: "paid",
             email: result.email,
             message: result.message,
+            itemCount: result.itemCount ?? 1,
           });
       } catch (e: any) {
         if (cancelled) return;
@@ -94,8 +95,9 @@ function Page() {
               <p style={{ marginTop: 24, color: "#b04a2f" }}>{state.message}</p>
             ) : (
               <p style={{ marginTop: 32, fontSize: 16 }}>
-                Un courriel contenant votre lien de téléchargement vient
-                d'être envoyé à <strong>{state.email}</strong>. Vérifiez
+                Un courriel contenant{" "}
+                {state.itemCount > 1 ? "vos liens de téléchargement" : "votre lien de téléchargement"}{" "}
+                vient d'être envoyé à <strong>{state.email}</strong>. Vérifiez
                 votre boîte de réception (et le dossier «&nbsp;Indésirables&nbsp;»)
                 dans les prochaines minutes.
               </p>
@@ -132,7 +134,7 @@ function Page() {
                 <Link to="/conditions-de-vente">conditions de vente</Link>.
               </p>
               <p style={{ margin: "12px 0 0", fontSize: 14 }}>
-                Merci pour ta confiance. — Hugo
+                Merci pour ta confiance. — HP
               </p>
             </div>
           </>

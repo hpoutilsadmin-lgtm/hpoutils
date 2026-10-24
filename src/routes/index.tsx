@@ -16,7 +16,7 @@ const ORGANISATION_JSON_LD = {
       description:
         "Jeux gratuits, kits PDF, livres, recettes et outils web créés au Québec pour les familles et les petits budgets. Petit fournisseur : prix affichés sans taxe ajoutée.",
       email: "hpoutils.admin@gmail.com",
-      founder: { "@id": "https://www.hp-outils.com/#hugo" },
+      founder: { "@id": "https://www.hp-outils.com/#hp" },
       address: {
         "@type": "PostalAddress",
         addressLocality: "Terrebonne",
@@ -28,8 +28,8 @@ const ORGANISATION_JSON_LD = {
     },
     {
       "@type": "Person",
-      "@id": "https://www.hp-outils.com/#hugo",
-      name: "Hugo Pierre Bertrand",
+      "@id": "https://www.hp-outils.com/#hp",
+      name: "HP",
       jobTitle: "Créateur — jeux, livres et outils pour la vraie vie",
       worksFor: { "@id": "https://www.hp-outils.com/#organisation" },
       homeLocation: { "@type": "Place", name: "Terrebonne, Lanaudière, Québec" },
@@ -94,7 +94,7 @@ function Index() {
             Écrit par un humain, accéléré par l'IA. On le dit toujours.
           </p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, margin: "0 0 28px", maxWidth: 700 }}>
-            « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — Hugo
+            « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — HP
           </p>
           <div className="lead-actions">
             <Link to="/jeux" className="btn-primary">Jouer — 35 jeux gratuits</Link>
@@ -185,7 +185,7 @@ function Index() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les Passeurs</h3>
-              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, bientôt en ligne — aucune taxe ajoutée.</p>
+              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, inscription ouverte — aucune taxe ajoutée.</p>
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
             <article className="pillar-card">

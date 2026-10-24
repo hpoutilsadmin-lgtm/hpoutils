@@ -20,8 +20,9 @@ const FALLBACK_SITE_ORIGIN = "https://www.hp-outils.com";
 // Trusted site origin from server-side env. Never derived from request
 // headers (Origin/Referer can be forged by clients). If the runtime secret is
 // malformed in preview, fall back to the canonical app URL instead of crashing
-// checkout.
-function getTrustedSiteOrigin(): string {
+// checkout. Exportée pour la fonction serveur du panier (même origine de
+// confiance, une seule source).
+export function getTrustedSiteOrigin(): string {
   const raw = process.env.SITE_URL?.trim();
   if (!raw) return FALLBACK_SITE_ORIGIN;
   try {
@@ -129,6 +130,100 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       session.customer_details?.email ||
       (session.customer_email as string | null) ||
       "";
+
+    // PANIER D'ACHAT : la session porte metadata.cart === "1". On livre
+    // TOUS les articles, une ligne de commande par article, un seul
+    // courriel avec un lien par article. Sans cette branche, un client
+    // paierait plusieurs fichiers et n'en recevrait qu'un (l'ancien code
+    // ne lisait que line_items[0]).
+    if (session.metadata?.cart === "1") {
+      const admin = getAdmin();
+      const rows: Array<{
+        priceId: string;
+        productId: string;
+        amount: number;
+        pdfPath: string | null;
+        title: string | null;
+      }> = [];
+      for (const li of session.line_items?.data ?? []) {
+        const price = li?.price;
+        const priceId =
+          (price?.lookup_key as string | null) ||
+          (price?.metadata?.lovable_external_id as string | undefined) ||
+          (price?.id ?? "unknown");
+        const productId =
+          typeof price?.product === "string"
+            ? price.product
+            : ((price?.product as { id?: string } | null)?.id ?? "unknown");
+        const product = getProduct(priceId);
+        rows.push({
+          priceId,
+          productId,
+          amount: typeof li?.amount_total === "number" ? li.amount_total : 0,
+          pdfPath: product?.pdfPath ?? null,
+          title: product?.title ?? null,
+        });
+      }
+
+      // onConflict composite : exige la migration
+      // 20261024_cart_orders.sql, appliquée AVANT la republication du code
+      // (l'ancienne contrainte UNIQUE sur stripe_session_id seul interdit
+      // deux lignes pour une même session).
+      for (const row of rows) {
+        const { error: upsertErr } = await admin.from("orders").upsert(
+          {
+            stripe_session_id: session.id,
+            stripe_payment_intent_id:
+              typeof session.payment_intent === "string"
+                ? session.payment_intent
+                : null,
+            customer_email: email,
+            product_id: row.productId,
+            price_id: row.priceId,
+            amount_total: row.amount,
+            currency: session.currency ?? "cad",
+            status: "paid",
+            pdf_path: row.pdfPath,
+            environment: env,
+          },
+          { onConflict: "stripe_session_id,price_id" },
+        );
+        if (upsertErr) {
+          console.error("cart orders upsert failed", upsertErr);
+          throw new Error("Database error");
+        }
+      }
+
+      const deliverable = rows.filter((r) => r.pdfPath && r.title);
+      if (email && deliverable.length > 0) {
+        const siteOrigin = getTrustedSiteOrigin();
+        const items = deliverable.map((r) => ({
+          title: r.title as string,
+          downloadUrl: buildDownloadUrl(r.priceId, email),
+        }));
+        await enqueueTransactionalEmail({
+          templateName: "purchase-delivery",
+          recipientEmail: email,
+          idempotencyKey: `delivery-${session.id}`,
+          templateData: {
+            title: "Ton panier HP Outils",
+            siteOrigin,
+            items,
+          },
+        });
+      }
+
+      return {
+        status: "paid" as const,
+        email,
+        message:
+          deliverable.length === rows.length
+            ? null
+            : "Votre paiement est confirmé. Un fichier sera disponible sous peu — nous vous contacterons.",
+        itemCount: deliverable.length,
+      };
+    }
+
     const lineItem = session.line_items?.data?.[0];
     const price = lineItem?.price;
     const priceId =
@@ -160,7 +255,9 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
 
     const admin = getAdmin();
 
-    // Upsert order (idempotent)
+    // Upsert order (idempotent). Conflit composite (session + prix) :
+    // même clé que la branche panier — exige la migration
+    // 20261024_cart_orders.sql avant la republication du code.
     const { error: upsertErr } = await admin.from("orders").upsert(
       {
         stripe_session_id: session.id,
@@ -175,7 +272,7 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
         pdf_path: pdfPath,
         environment: env,
       },
-      { onConflict: "stripe_session_id" },
+      { onConflict: "stripe_session_id,price_id" },
     );
     if (upsertErr) {
       console.error("orders upsert failed", upsertErr);
@@ -202,6 +299,7 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
         email,
         message:
           "Votre paiement est confirmé. Le fichier sera disponible sous peu — nous vous contacterons.",
+        itemCount: 1,
       };
     }
 
@@ -247,6 +345,7 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       status: "paid" as const,
       email,
       message: null as string | null,
+      itemCount: 1,
     };
   });
 

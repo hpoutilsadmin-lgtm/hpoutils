@@ -11,7 +11,7 @@ function Page() {
     <h1>Politique de confidentialité — HP Outils</h1>
     <p>Dernière mise à jour : octobre 2026.</p>
     <h2>1. Qui sommes-nous</h2>
-    <p>HP Outils (Hugo Pierre Bertrand), joignable à hpoutils.admin@gmail.com. Le responsable de la protection des renseignements personnels est Hugo Pierre Bertrand, à cette même adresse.</p>
+    <p>HP Outils (HP), joignable à hpoutils.admin@gmail.com. Le responsable de la protection des renseignements personnels est HP, à cette même adresse.</p>
     <h2>2. Ce qu'on recueille</h2>
     <ul><li>Votre courriel, quand vous vous inscrivez pour recevoir nos outils et nouveautés (formulaire du site, page Jeux).</li><li>Vos informations de commande (nom, courriel) quand vous achetez. Les paiements sont traités par Stripe — nous ne voyons ni ne conservons votre numéro de carte.</li><li>Les cœurs que vous donnez aux jeux (bouton ♥) alimentent un compteur public entièrement anonyme : nous conservons seulement le nom du jeu et l'heure du cœur — ni compte, ni adresse IP, ni identifiant. Vos favoris, eux, restent dans votre navigateur et ne nous sont jamais transmis.</li></ul>
     <h2>3. Pourquoi</h2>

@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/les-passeurs")({
   head: () => createSeoHead({
     title: "Les Passeurs — l'accès au savoir pour 3 $ CAD par mois",
-    description: "Les Passeurs soutiendront les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir coûtera 3 $ CAD par mois (ou 28 $ CAD pour l'année) ; les savoirs s'offriront aussi par quatre pour 12 $ CAD. Aucune taxe ajoutée (petit fournisseur). L'inscription n'est pas encore en ligne : aucun paiement n'est demandé pour l'instant.",
+    description: "Les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année) ; les savoirs s'offrent aussi par quatre pour 12 $ CAD. Aucune taxe ajoutée (petit fournisseur). L'inscription est ouverte : écris à la direction pour t'inscrire.",
     path: "/les-passeurs",
   }),
   component: Page,
@@ -22,7 +22,7 @@ function Page() {
           </p>
           <div className="lead-actions">
             <Link to="/jeux" className="btn-primary">Voir les produits</Link>
-            <Link to="/contact" className="btn-ghost">Une question ? Écris-moi</Link>
+            <a className="btn-ghost" href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">Écrire à la direction humaine</a>
           </div>
         </div>
       </section>
@@ -59,7 +59,7 @@ function Page() {
           <span className="editorial-kicker">Simple et clair</span>
           <h2>Pas de contrat déguisé, <em>pas de promesse en l'air.</em></h2>
           <p className="strip-intro">Juste: tu passes, et d'autres reçoivent.</p>
-          <h3>Ce sera 3 $ CAD / mois — ou 28 $ CAD / an. Et les savoirs s'offriront aussi par quatre : 12 $ CAD pour 4 savoirs.</h3>
+          <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Et les savoirs s'offrent aussi par quatre : 12 $ CAD pour 4 savoirs.</h3>
           <p className="strip-intro" style={{ marginTop: 4 }}>Aucune taxe ajoutée : petit fournisseur, la TPS et la TVQ ne sont pas perçues.</p>
           <div
             style={{
@@ -74,14 +74,18 @@ function Page() {
             }}
           >
             <p style={{ fontWeight: 700, marginBottom: 8, color: "#2a1a12" }}>
-              L'inscription n'est pas encore en ligne.
+              L'inscription est ouverte.
             </p>
             <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
-              Le programme se prépare : le bouton d'inscription s'en vient, mais il n'est pas encore
-              là — aucun montant n'est prélevé d'ici là, et tout ce qui est gratuit sur HP Outils
-              le reste. Tu veux être prévenu·e quand ça ouvre ?{" "}
-              <Link to="/contact">Écris-moi</Link> — et merci de vouloir passer le savoir.
+              Pour t'inscrire, écris à la direction en précisant la formule (3 $ / mois,
+              28 $ / an, ou 12 $ pour 4 savoirs) — un humain te répond sous 3 jours
+              ouvrables avec les détails. Aucun paiement n'est demandé ici : la direction
+              te confirme les détails avant tout prélèvement. Le paiement automatisé en
+              ligne, lui, s'en vient. Et tout ce qui est gratuit sur HP Outils le reste.
             </p>
+            <div className="lead-actions" style={{ marginTop: 16 }}>
+              <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">S'inscrire en écrivant à la direction</a>
+            </div>
           </div>
         </div>
       </section>

@@ -155,7 +155,7 @@ function Page() {
             </article>
           </div>
           <div className="lead-actions" style={{ marginTop: "2rem" }}>
-            <Link to="/contact" className="btn-ghost">Une idée de sujet ? Écris-moi</Link>
+            <Link to="/contact" className="btn-ghost">Une idée de sujet ? Écrire à la direction humaine</Link>
           </div>
         </div>
       </section>

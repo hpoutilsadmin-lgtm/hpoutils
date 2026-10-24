@@ -399,6 +399,17 @@
         border:2px solid var(--line);border-radius:999px;padding:6px 11px;
       }
       .qa-chips button:hover{background:var(--gold);color:#2b2118}
+      /* Suggestion de page (24 oct. 2026) : UNE suggestion utile pour
+         la page visitée, dans le panneau de questions — le visiteur
+         l'ouvre lui-même, aucun déclenchement automatique. */
+      .qa-suggestion{margin:0 0 8px;padding:8px 10px;background:var(--paper2);
+        border:2px solid var(--gold);border-radius:12px}
+      .qa-suggestion .qa-sugg-label{font-size:12px;font-weight:800;color:var(--ink);margin-bottom:4px}
+      .qa-suggestion .qa-sugg-row{display:flex;gap:6px;align-items:flex-start}
+      .qa-suggestion .qa-sugg-btn{flex:1;font:inherit;font-size:13px;font-weight:600;cursor:pointer;text-align:left;
+        background:var(--gold);color:#2b2118;border:2px solid var(--line);border-radius:999px;padding:6px 11px}
+      .qa-suggestion .qa-sugg-no{flex:none;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1;
+        background:var(--paper2);color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:6px 9px}
       /* Aide au choix (23 oct. 2026) : l'en-tête de question prend toute
          la rangée des chips pendant que les options la remplacent. */
       .qa-choix-head{flex:0 0 100%;font-size:13px;font-weight:800;color:var(--ink);padding:2px 2px 0}

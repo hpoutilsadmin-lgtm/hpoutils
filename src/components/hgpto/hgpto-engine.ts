@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES, PAGE_SUGGESTIONS, PAGE_SUGGESTION_FALLBACK } from "./hgpto-data";
 /* Détectôt (24 oct. 2026) : HGPTO lit le type de visiteur publié par la
    roue d'hamster et adapte son accueil — faits bruts pour une IA,
    ton habituel pour un humain, rien de changé quand c'est inconnu.
@@ -969,7 +969,7 @@ export function initHgpto() {
          8 minutes d'intervalle — jamais en boucle. */
       var barbouilleCount = 0, lastBarbouilleAt = 0;
       function photoSystemEl(){
-        return document.querySelector('[data-deguisements], [data-hugo-photo], img[src*="photo-hp"]');
+        return document.querySelector('[data-deguisements], [data-hp-photo], img[src*="photo-hp"]');
       }
       function canBarbouille(){
         if (barbouilleCount >= 2) return false;
@@ -1716,6 +1716,7 @@ export function initHgpto() {
         ensureAudio();
         qaOpen = true;
         qaPanel.hidden = false;
+        renderPageSuggestion();
         if (catVisible && catState !== 'sleep' && catState !== 'console') catLeave();
         lastInteract = Date.now();
         if (state === 'sleep') wake(false);
@@ -1725,7 +1726,7 @@ export function initHgpto() {
            l'accueil devient faits bruts — prix, catalogue, fiche lisible
            par machine — sans changer un mot du comportement humain. */
         if (lireDetectot().type === 'ia') {
-          showBubble("Gérant du site, à ton service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, Enfants cuisinent 10 $. Ateliers : 120 $ / 150 $. Passeurs de savoirs : 3 $/mois, 28 $/an — pas encore en ligne. Fiche lisible par machine : /llms.txt. Touche une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
+          showBubble("Gérant du site, à ton service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, Enfants cuisinent 10 $. Ateliers : 120 $ / 150 $. Passeurs de savoirs : 3 $/mois, 28 $/an — inscription ouverte. Fiche lisible par machine : /llms.txt. Touche une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
         } else {
           showBubble("Gérant du site, à ton service ! Touche une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
         }
@@ -2041,6 +2042,13 @@ export function initHgpto() {
           }
           return;
         }
+        // Suggestions de page (24 oct. 2026) : aucune réponse exacte dans
+        // la base, mais la question porte sur LA suggestion de la page →
+        // l'explication complète (marche, utilité, histoire, pourquoi),
+        // jamais un repli « sans réponse » pour un produit qu'on vient
+        // de suggérer. La base exacte garde la priorité (bloc ci-dessus).
+        var sugQ = matchPageSuggestion(q);
+        if (sugQ){ dismissQA(); setExpr('happy'); explainPageSuggestion(sugQ); return; }
         // Lot nº 3 : aucune réponse exacte, mais un besoin clair relié à
         // un produit réel → il pointe LE produit qui fait ça, honnêtement
         // (« c'est celui-là qui fait ça » + lien + prix vrai). Si le
@@ -4715,6 +4723,98 @@ export function initHgpto() {
         }, !!opts.now || (!opts.soft && !opts.fromQA));
         return true;
       }
+      /* ---------- SUGGESTION DE PAGE (24 oct. 2026, forme validée) ----------
+         Sur chaque page, UNE suggestion utile (PAGE_SUGGESTIONS), montrée
+         dans le panneau de questions — que le visiteur ouvre lui-même.
+         AUCUN déclenchement automatique : ni temps passé, ni curseur, ni
+         profil, ni historique. L'intérêt se détecte UNIQUEMENT par un
+         geste explicite : tap sur la suggestion, ou question tapée à
+         son sujet (matchPageSuggestion). L'explication donne alors, dans
+         l'ordre : marche à suivre, à quoi ça sert, histoire du produit,
+         pourquoi — chaque champ vient d'une source réelle ; un champ
+         sans source (histoire : null) sert le repli honnête, jamais une
+         histoire inventée. Refermable d'un geste : ✕ sur la suggestion
+         (session seulement), ou « Non merci » dans la bulle — le oui
+         reste aussi facile que le non, zéro pression, zéro urgence.
+         Le créneau de page est partagé avec le lot nº 3 : si celui-ci a
+         déjà suggéré sur la page (suggPage), la suggestion de page
+         s'efface — une seule suggestion par page, tous systèmes confondus.
+         Indépendant du dwell (jamais lu ici) et du lot nº 3 : l'explication
+         ne consomme ni suggByKey ni suggPage, elle ne pousse rien. */
+      var suggPageOff = loadSet('hgpto-sugg-off');
+      function pageSuggestionForRoute(){
+        var s = PAGE_SUGGESTIONS[routeKey()];
+        if (!s) return null;
+        if (suggPageOff.indexOf(s.id) !== -1) return null;
+        if (suggPage[routeKey()]) return null;
+        return s;
+      }
+      function renderPageSuggestion(){
+        var box = document.getElementById('qa-suggestion');
+        if (!box) return;
+        var s = pageSuggestionForRoute();
+        if (!s){ box.hidden = true; box.innerHTML = ''; return; }
+        box.hidden = false;
+        box.innerHTML = '';
+        var label = document.createElement('div');
+        label.className = 'qa-sugg-label';
+        label.textContent = 'Sur cette page, je te suggère :';
+        box.appendChild(label);
+        var row = document.createElement('div');
+        row.className = 'qa-sugg-row';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'qa-sugg-btn';
+        btn.textContent = s.titre + ' — ' + s.accroche;
+        btn.addEventListener('click', function(){ dismissQA(); setExpr('happy'); explainPageSuggestion(s); });
+        row.appendChild(btn);
+        var no = document.createElement('button');
+        no.type = 'button';
+        no.className = 'qa-sugg-no';
+        no.textContent = '✕';
+        no.setAttribute('aria-label', 'Pas de suggestion, merci');
+        no.addEventListener('click', function(){
+          if (suggPageOff.indexOf(s.id) === -1){ suggPageOff.push(s.id); saveSet('hgpto-sugg-off', suggPageOff); }
+          renderPageSuggestion();
+        });
+        row.appendChild(no);
+        box.appendChild(row);
+      }
+      function explainPageSuggestion(s){
+        var parts = [];
+        if (s.marche) parts.push('Marche à suivre : ' + s.marche);
+        if (s.sert) parts.push('À quoi ça sert : ' + s.sert);
+        if (s.histoire) parts.push('Son histoire : ' + s.histoire);
+        else parts.push('Son histoire : ' + PAGE_SUGGESTION_FALLBACK);
+        if (s.pourquoi) parts.push('Pourquoi : ' + s.pourquoi);
+        var html = '<b>' + esc(s.titre) + '</b><br>' + esc(parts.join(' '));
+        html += linkHtml({ u:s.u, l:s.l });
+        html += '<br>' + esc(pick(ETHIQUE_LINES));
+        showBubble(html, 20000, 'answer', { onShow:function(){
+          var nb = document.createElement('button');
+          nb.type = 'button';
+          nb.className = 'bubble-no';
+          nb.textContent = 'Non merci';
+          nb.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
+          nb.addEventListener('click', function(){
+            if (suggPageOff.indexOf(s.id) === -1){ suggPageOff.push(s.id); saveSet('hgpto-sugg-off', suggPageOff); }
+            hideBubble();
+            setExpr('happy');
+            showBubble("Bien correct ! Je ne t'en reparlerai pas. Je reste dans le coin si tu as besoin d'autre chose.", 6000, 'talk');
+          });
+          bubble.appendChild(document.createElement('br'));
+          bubble.appendChild(nb);
+        }});
+      }
+      function matchPageSuggestion(q){
+        var s = pageSuggestionForRoute();
+        if (!s) return null;
+        var n = ' ' + normText(q) + ' ';
+        for (var i = 0; i < s.mots.length; i++){
+          if (n.indexOf(s.mots[i]) !== -1) return s;
+        }
+        return null;
+      }
       /* Le besoin exprimé en mots → LE produit qui fait ça. Double garde :
          un ton de détresse coupe tout (jamais de produit sur la peine), et
          sur la page des kits, la dignité passe d'abord (la base répond
@@ -4848,6 +4948,7 @@ export function initHgpto() {
         if (!isReturn){ visitedRoutes.push(k); saveSet('hgpto-visited', visitedRoutes); }
         else if (winkedRoutes.indexOf(k) === -1) returnWinkPending = true;
         applyCostume();
+        if (qaOpen) renderPageSuggestion();
         if (returnWinkPending) return;
         if (!accompany || paused || isHidden || gameOn || qaOpen || state === 'sleep' || isBusy()) return;
         if (commentedSecs['route:' + k]) return;

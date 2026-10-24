@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 
@@ -104,11 +105,28 @@ function Page() {
               <strong>Ce qui se précise à la demande :</strong> les groupes d'âge visés, les
               ratios d'encadrement, les allergies et la sécurité alimentaire, la taille de
               votre groupe, les assurances et les vérifications d'antécédents. Ces points se
-              confirment avec Hugo avant toute réservation — ils ne sont pas promis ici à
+              confirment avec la direction avant toute réservation — ils ne sont pas promis ici à
               l'avance. (Repère déjà établi : l'atelier Pain maison de l'Édition des Fêtes
               accueille 6 à 8 personnes.)
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="three-pillars" id="formulaire-atelier">
+        <div className="container" style={{ maxWidth: 760 }}>
+          <span className="editorial-kicker">Formulaire atelier</span>
+          <h2 className="section-title">Demander un <em>atelier</em></h2>
+          <p style={{ fontSize: 16.5, lineHeight: 1.65 }}>
+            Remplis ce formulaire : il ouvre ta demande dans ton courriel, prête à
+            envoyer — c'est toi qui l'envoies, rien n'est transmis avant. Un humain
+            de l'équipe te répond sous 3 jours ouvrables.
+          </p>
+          <FormulaireAtelier />
+          <p style={{ fontSize: 15, lineHeight: 1.6, color: "#5a4a3f", marginTop: 16 }}>
+            Tu préfères écrire directement ?{" "}
+            <a href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a>
+          </p>
         </div>
       </section>
 
@@ -152,5 +170,111 @@ function Page() {
         </div>
       </section>
     </>
+  );
+}
+
+const ATELIER_CHOICES = [
+  ...ATELIERS.map((a) => a.title),
+  ...FETES.map((f) => f.title),
+];
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  padding: "12px 14px",
+  fontSize: 16,
+  lineHeight: 1.5,
+  border: "1px solid rgba(58,42,32,.35)",
+  borderRadius: 6,
+  background: "#fffdf6",
+  color: "#2a1a12",
+  boxSizing: "border-box",
+};
+
+const labelStyle: React.CSSProperties = {
+  display: "block",
+  fontWeight: 700,
+  fontSize: 15,
+  marginBottom: 6,
+  color: "#2a1a12",
+};
+
+function FormulaireAtelier() {
+  const [nom, setNom] = useState("");
+  const [courriel, setCourriel] = useState("");
+  const [atelier, setAtelier] = useState(ATELIER_CHOICES[0]);
+  const [pourQui, setPourQui] = useState("Organisme");
+  const [dateSouhaitee, setDateSouhaitee] = useState("");
+  const [personnes, setPersonnes] = useState("");
+  const [message, setMessage] = useState("");
+  const [ouvert, setOuvert] = useState(false);
+
+  function envoyer(e: React.FormEvent) {
+    e.preventDefault();
+    const lignes = [
+      `Nom : ${nom}`,
+      `Courriel : ${courriel}`,
+      `Atelier souhaité : ${atelier}`,
+      `Pour qui : ${pourQui}`,
+      ...(dateSouhaitee ? [`Date souhaitée : ${dateSouhaitee}`] : []),
+      ...(personnes ? [`Nombre de personnes : ${personnes}`] : []),
+      "",
+      message,
+    ];
+    const sujet = `Demande d'atelier HP — ${atelier}`;
+    window.location.href =
+      `mailto:hpoutils.admin@gmail.com?subject=${encodeURIComponent(sujet)}` +
+      `&body=${encodeURIComponent(lignes.join("\n"))}`;
+    setOuvert(true);
+  }
+
+  return (
+    <form onSubmit={envoyer} style={{ display: "grid", gap: 18, marginTop: 24 }}>
+      <div>
+        <label htmlFor="atelier-nom" style={labelStyle}>Ton nom *</label>
+        <input id="atelier-nom" required value={nom} onChange={(e) => setNom(e.target.value)} style={inputStyle} autoComplete="name" />
+      </div>
+      <div>
+        <label htmlFor="atelier-courriel" style={labelStyle}>Ton courriel *</label>
+        <input id="atelier-courriel" type="email" required value={courriel} onChange={(e) => setCourriel(e.target.value)} style={inputStyle} autoComplete="email" />
+      </div>
+      <div>
+        <label htmlFor="atelier-choix" style={labelStyle}>Atelier souhaité *</label>
+        <select id="atelier-choix" required value={atelier} onChange={(e) => setAtelier(e.target.value)} style={inputStyle}>
+          {ATELIER_CHOICES.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label htmlFor="atelier-pourqui" style={labelStyle}>Pour qui ? *</label>
+        <select id="atelier-pourqui" required value={pourQui} onChange={(e) => setPourQui(e.target.value)} style={inputStyle}>
+          {["Organisme", "École", "Groupe", "Famille", "Autre"].map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label htmlFor="atelier-date" style={labelStyle}>Date souhaitée</label>
+        <input id="atelier-date" value={dateSouhaitee} onChange={(e) => setDateSouhaitee(e.target.value)} style={inputStyle} placeholder="Ex. : semaine du 10 novembre" />
+      </div>
+      <div>
+        <label htmlFor="atelier-personnes" style={labelStyle}>Nombre de personnes</label>
+        <input id="atelier-personnes" value={personnes} onChange={(e) => setPersonnes(e.target.value)} style={inputStyle} placeholder="Ex. : 12" inputMode="numeric" />
+      </div>
+      <div>
+        <label htmlFor="atelier-message" style={labelStyle}>Ton besoin, en quelques mots</label>
+        <textarea id="atelier-message" value={message} onChange={(e) => setMessage(e.target.value)} style={{ ...inputStyle, minHeight: 110 }} rows={4} />
+      </div>
+      <div>
+        <button type="submit" className="btn-primary">Ouvrir ma demande dans mon courriel</button>
+      </div>
+      {ouvert && (
+        <p role="status" style={{ fontSize: 16, lineHeight: 1.65, border: "1px solid rgba(58,42,32,.25)", borderLeft: "4px solid #3a2a20", borderRadius: 8, background: "rgba(247,244,236,.85)", padding: "14px 18px" }}>
+          Ta demande s'est ouverte dans ton courriel, prête à envoyer — c'est toi qui
+          l'envoies, rien n'est transmis avant. Un humain de l'équipe te répond sous
+          3 jours ouvrables.
+        </p>
+      )}
+    </form>
   );
 }

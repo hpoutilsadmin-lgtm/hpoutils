@@ -22,8 +22,8 @@ function Page() {
             doit rester clair et direct.
           </p>
           <div className="lead-actions">
-            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">Écrire un courriel</a>
-            <a className="btn-ghost" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Réserver un atelier</a>
+            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a>
+            <a className="btn-ghost" href="/ateliers#formulaire-atelier">Réserver un atelier</a>
           </div>
         </div>
       </section>
@@ -134,7 +134,7 @@ function Page() {
           <h2>Une question, une idée, un <em>projet</em> ?</h2>
           <p className="strip-intro">L'équipe est là pour écouter et aider.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
-            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">Écrire un courriel</a>
+            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a>
           </div>
         </div>
       </section>

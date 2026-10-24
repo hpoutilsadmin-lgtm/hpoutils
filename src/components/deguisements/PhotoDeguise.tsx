@@ -3,8 +3,8 @@ import "./deguisements.css";
 import { DEGUISES } from "./deguises";
 
 /**
- * « Ta photo à toi » (demande d'Hugo, 23 oct. 2026) : le visiteur
- * charge SA photo et essaie les mêmes déguisements qu'Hugo, en
+ * « Ta photo à toi » (demande d'HP, 23 oct. 2026) : le visiteur
+ * charge SA photo et essaie les mêmes déguisements qu'HP, en
  * ajustant le calque à son visage (glisser, échelle, rotation —
  * pincement à deux doigts compris).
  *
@@ -109,7 +109,7 @@ export default function PhotoDeguise() {
         Ta photo à toi !
       </h2>
       <p style={{ margin: "8px auto 0", maxWidth: 440, lineHeight: 1.5 }}>
-        Hugo se déguise, pourquoi pas toi ? Charge ta photo, choisis un
+        HP se déguise, pourquoi pas toi ? Charge ta photo, choisis un
         déguisement et ajuste-le à ton visage : glisse pour déplacer,
         pince ou utilise les curseurs pour la taille et l'angle.
       </p>
@@ -134,7 +134,7 @@ export default function PhotoDeguise() {
             )}
           </>
         ) : (
-          <div className="photo-deguise-vide">Ton portrait apparaîtra ici, dans le même cercle qu'Hugo.</div>
+          <div className="photo-deguise-vide">Ton portrait apparaîtra ici, dans le même cercle qu'HP.</div>
         )}
       </div>
 

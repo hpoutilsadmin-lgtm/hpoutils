@@ -7,7 +7,7 @@
    BARRE DE JEU HP — module autonome pour les pages de jeux
    statiques de public/apps/ (hors shell React, comme HGPTO).
 
-   Ordre d'Hugo (22 oct. 2026) : « Pour tous les jeux : une
+   Ordre d'HP (22 oct. 2026) : « Pour tous les jeux : une
    option retour au site, pause, et partager ton score —
    t'es pas game ! Ça doit être partout. »
 
@@ -38,7 +38,7 @@
                          dont la config a un « lien » : UN lien doux,
                          gratuit d'abord, en lien avec le sujet du
                          jeu ; rien à acheter pour continuer à jouer)
-     ✓ Tampons           (décision d'Hugo, 23 oct. 2026, 08 h 18 —
+     ✓ Tampons           (décision d'HP, 23 oct. 2026, 08 h 18 —
                          seulement les jeux approuvés par les testeurs :
                          le tampon du testeur, à sa couleur, tel que
                          posé sur /jeux ; source : le registre des
@@ -213,7 +213,7 @@
       pause: { type: "btnToggle", sel: "#btnPause", pausedText: "▶" },
       tampons: ["maeva"]
     },
-    /* Ajouts du 22 oct. au soir (ordre d'Hugo : envoyer les jeux
+    /* Ajouts du 22 oct. au soir (ordre d'HP : envoyer les jeux
        absents) — les 6 du « paquet 6 jeux » préparé pour le site +
        IGLOO, retrouvés dans l'atelier. Pauses : null partout sauf
        IGLOO — jeux au clic / tour par tour, rien n'avance tout seul.
@@ -245,7 +245,7 @@
       nom: "Anxiété, le jeu", score: null, pause: null,
       lien: { href: "/pdf/sans-honte-tenir-debout", texte: "Le kit Sans Honte — Tenir debout : traverser les journées lourdes (5 $)" }
     },
-    /* Ajout du 22 oct. au soir (chantier de nuit, commande d'Hugo) :
+    /* Ajout du 22 oct. au soir (chantier de nuit, commande d'HP) :
        Chevalier du fleuve — RTS à boucle requestAnimationFrame :
        le gel « gate » fige la simulation (prouvé au playtest :
        positions et minuteurs identiques pendant la pause). */
@@ -633,7 +633,7 @@
     var retour = el("a", "bj-btn bj-back", "← Retour");
     retour.href = "/jeux";
     retour.setAttribute("aria-label", "Revenir à la page précédente (ou à la page des jeux)");
-    /* Vrai « revenir page arrière » (ordre d'Hugo, 22 oct. au soir) :
+    /* Vrai « revenir page arrière » (ordre d'HP, 22 oct. au soir) :
        si le visiteur est arrivé depuis une page du site, on repart
        par l'historique ; arrivée directe, lien externe ou nouvel
        onglet -> le href /jeux suit son cours (repli propre). */
@@ -763,7 +763,7 @@
           symb.setAttribute("aria-hidden", "true");
           pastille.appendChild(symb);
         }
-        /* Libellé complet avec le nom (demande d'Hugo, 23 oct. 2026) :
+        /* Libellé complet avec le nom (demande d'HP, 23 oct. 2026) :
            « Approuvé par : Louka ». Il vit dans le même span que le
            nom : sur ≤ 520 px, le span se replie comme avant (la
            couleur et le symbole portent la signature) — aucun

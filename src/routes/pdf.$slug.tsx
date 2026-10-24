@@ -1,6 +1,7 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { getProductBySlug, type DigitalProduct } from "@/lib/products-catalog";
 import { PdfCover } from "@/components/PdfCover";
+import { AjouterAuPanier } from "@/components/AjouterAuPanier";
 import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/pdf/$slug")({
@@ -237,14 +238,22 @@ function Page() {
                 {product.purchaseHold}
               </p>
             ) : (
-              <Link
-                to="/achat/$slug"
-                params={{ slug: product.slug }}
-                className="btn-primary"
-                style={{ display: "inline-block" }}
-              >
-                {buyLabel(fmt)} — {product.priceLabel}
-              </Link>
+              <>
+                <Link
+                  to="/achat/$slug"
+                  params={{ slug: product.slug }}
+                  className="btn-primary"
+                  style={{ display: "inline-block" }}
+                >
+                  {buyLabel(fmt)} — {product.priceLabel}
+                </Link>
+                {fmt !== "Collection PDF" ? (
+                  <>
+                    {" "}
+                    <AjouterAuPanier priceId={product.priceId} />
+                  </>
+                ) : null}
+              </>
             )}
             {fmt === "Kit PDF" && (
               <Link
@@ -409,13 +418,21 @@ function Page() {
                   En attendant : En cuisine (gratuit)
                 </a>
               ) : (
-                <Link
-                  to="/achat/$slug"
-                  params={{ slug: product.slug }}
-                  className="action-btn"
-                >
-                  {buyLabel(fmt)}
-                </Link>
+                <>
+                  <Link
+                    to="/achat/$slug"
+                    params={{ slug: product.slug }}
+                    className="action-btn"
+                  >
+                    {buyLabel(fmt)}
+                  </Link>
+                  {fmt !== "Collection PDF" ? (
+                    <>
+                      {" "}
+                      <AjouterAuPanier priceId={product.priceId} />
+                    </>
+                  ) : null}
+                </>
               )}
             </div>
           </div>

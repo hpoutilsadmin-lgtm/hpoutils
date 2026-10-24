@@ -54,8 +54,8 @@ export const TOMES: Tome[] = [
     title: "Gaïa",
     hook: "Tu es la conscience d'une planète, sur 12 milliards d'années : naître, verdir, accueillir la vie… ou la perdre.",
     description:
-      "Tu es la conscience d'une planète, sur 12 milliards d'années : naître, verdir, accueillir la vie… ou la perdre. Récit contemplatif, 156 paragraphes et 8 fins. Livre-jeu interactif « À toi l'histoire », reçu par lien web personnel après l'achat.",
-    paragraphes: 156,
+      "Tu es la conscience d'une planète, sur 12 milliards d'années : naître, verdir, accueillir la vie… ou la perdre. Récit contemplatif, 145 paragraphes et 8 fins. Livre-jeu interactif « À toi l'histoire », reçu par lien web personnel après l'achat.",
+    paragraphes: 145,
     fins: 8,
     price: 8,
     lookupKey: "tome_gaia_lien_8",

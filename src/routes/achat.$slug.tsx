@@ -139,7 +139,7 @@ function Page() {
                 qui ne s'ouvre pas, un lien mort —, on répare ou on
                 rembourse, comme le disent les{" "}
                 <Link to="/conditions-de-vente">conditions de vente</Link>.
-                — Hugo
+                — HP
               </p>
             </div>
           </div>

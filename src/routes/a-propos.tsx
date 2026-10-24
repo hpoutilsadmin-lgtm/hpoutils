@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
-import HugoDeguise from "@/components/deguisements/HugoDeguise";
+import HpDeguise from "@/components/deguisements/HpDeguise";
 import PhotoDeguise from "@/components/deguisements/PhotoDeguise";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => createSeoHead({
-    title: "À propos — Hugo Pierre Bertrand, créateur de HP Outils | Terrebonne",
-    description: "HP Outils, c'est Hugo Pierre Bertrand, créateur à Terrebonne (Lanaudière) : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets.",
+    title: "À propos — HP, créateur de HP Outils | Terrebonne",
+    description: "HP Outils, c'est HP, créateur à Terrebonne (Lanaudière) : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets.",
     path: "/a-propos",
   }),
   component: Page,
@@ -28,7 +28,7 @@ function Page() {
               <Link className="outline-btn" to="/">Voir l'écosystème</Link>
             </div>
           </div>
-          <HugoDeguise />
+          <HpDeguise />
         </div>
         <div className="container">
           <PhotoDeguise />
@@ -38,7 +38,7 @@ function Page() {
         <div className="container">
           <section style={{ maxWidth: 760, margin: "0 auto 44px" }}>
             <span className="mini-note">En ses mots</span>
-            <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>Qui est Hugo</h2>
+            <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>Qui est HP</h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
               Boulanger, gérant, papa, beau-père, chum, fils, petit-fils qui s’ennuie encore souvent
               de ses grands-parents à 40 ans.
@@ -72,19 +72,19 @@ function Page() {
               <li>Être utile. Des outils pour la vraie vie.</li>
               <li>Que chaque personne qui passe ici reparte avec quelque chose qui l’aide pour vrai — un jeu, un outil, une recette, une idée — peu importe son budget.</li>
             </ul>
-            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les mots d’Hugo</h3>
+            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les mots d’HP</h3>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
               Je dis des mots à moi : <em>serbouillette</em> — ça vient d’Ôz la grande petite,
               un mix de serviette et débarbouillette. Je dis <em>globesandwich</em> au lieu de
-              club sandwich. Mon petit frère m’appelait <em>Gros Pierre</em> au lieu de Hugo,
-              et une fillette disait <em>yaourt</em> au lieu de Hugo.
+              club sandwich. Mon petit frère m’appelait <em>Gros Pierre</em> au lieu de HP,
+              et une fillette disait <em>yaourt</em> au lieu de HP.
             </p>
           </section>
           <section style={{ maxWidth: 760, margin: "0 auto 44px" }}>
-            <span className="mini-note">Qui est Hugo</span>
+            <span className="mini-note">Qui est HP</span>
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>L'homme derrière HP</h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je m'appelle <strong>Hugo Pierre Bertrand</strong>. HP Outils, c'est le projet que je
+              Je m'appelle <strong>HP</strong>. HP Outils, c'est le projet que je
               construis à Terrebonne, dans Lanaudière : des jeux, des livres, des recettes et des
               outils concrets — « des outils pour la vraie vie ».
             </p>
@@ -122,7 +122,7 @@ function Page() {
             <article className="info-card">
               <span className="mini-note">Soutenir</span>
               <h3>Les Passeurs</h3>
-              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, bientôt en ligne — aucune taxe ajoutée.</p>
+              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, inscription ouverte — aucune taxe ajoutée.</p>
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
           </div>
