@@ -369,8 +369,15 @@ export const KB = [
           u:"https://hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Est-ce que ça marche sans internet ?", s:"HORS LIGNE",
           a:"Oui : une fois la page déjà ouverte, elle fonctionne sans internet — pratique quand les données sont comptées." },
-        { q:"Et « À toi l'histoire » ?", s:"BIENTÔT", info:1,
-          a:"Les tomes « À toi l'histoire » arrivent : ils sont en création, pas encore en vente. Le tome 1 sera gratuit — patience, ça mijote !" },
+        { q:"Et « À toi l'histoire » ?", s:"11 TOMES",
+          a:"« À toi l'histoire », ce sont 11 livres-jeux interactifs, de 5 $ à 8 $, reçus par lien web personnel après l'achat — plus le tome gratuit « La Chasse-Galerie ». Le tout est sur /lire/.",
+          u:"https://hp-outils.com/lire", l:"Voir les tomes" },
+        { q:"Combien coûtent les tomes « À toi l'histoire » ?", s:"5 $ À 8 $",
+          a:"Les tomes standards sont à 5 $, les grands tomes à 8 $, et le bundle 3 tomes au choix à 12 $. Aucune taxe ajoutée. Le tome « La Chasse-Galerie » est gratuit.",
+          u:"https://hp-outils.com/lire", l:"Voir les tomes" },
+        { q:"C'est quoi, le tome gratuit « À toi l'histoire » ?", s:"GRATUIT",
+          a:"« La Chasse-Galerie », le tome d'appel de la série « À toi l'histoire » : gratuit, sans paiement. Tu reçois ton lien personnel sur /lire/.",
+          u:"https://hp-outils.com/lire", l:"Recevoir le lien gratuit" },
         { q:"C'est qui, HP Outils ?", s:"C'EST NOUS",
           a:"HP Outils, c'est l'entreprise d'Hugo, à Terrebonne, dans Lanaudière : des jeux gratuits, des livres, des recettes et des outils pour la vraie vie et les petits budgets. Et moi, je suis HGPTO, sa mascotte !" },
         { q:"Il y a des taxes ?", s:"0 $ TAXE", info:1,
@@ -622,5 +629,6 @@ export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
 export const DWELL_SUGGESTIONS = {
         '/livres-pdf': { t:"Tu regardes les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, « Les enfants cuisinent pour faire plaisir » à 10 $. Téléchargement immédiat après le paiement. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
         '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : 6 forfaits de groupe, 120 $ ou 150 $ selon l'atelier — dont « Cuisine pratique » (120 $) et « Manger mieux avec moins » (150 $), à Terrebonne et dans les environs ; réservation et questions par courriel à l'équipe. Et les recettes, elles, sont gratuites en tout temps.", u:"https://hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
-        '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès au savoir et soutenir HP Outils. En toute honnêteté : le bouton d'inscription payante n'est pas encore en ligne — ça s'en vient.", u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" }
+        '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès au savoir et soutenir HP Outils. En toute honnêteté : le bouton d'inscription payante n'est pas encore en ligne — ça s'en vient.", u:"https://hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" },
+        '/lire': { t:"Tu regardes les tomes depuis un petit bout — le résumé honnête : 11 livres-jeux « À toi l'histoire », de 5 $ à 8 $, reçus par lien web personnel après l'achat, plus le tome gratuit « La Chasse-Galerie » et le bundle 3 tomes à 12 $. Aucune taxe ajoutée.", u:"https://hp-outils.com/lire", l:"Voir les tomes", s:"5 $ À 8 $" }
       };

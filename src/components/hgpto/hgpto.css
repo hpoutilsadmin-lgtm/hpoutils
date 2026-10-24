@@ -36,13 +36,18 @@
       /* ---------- HGPTO : la couche mascotte ---------- */
       .bot-layer{
         position:fixed;left:0;right:0;bottom:0;height:0;z-index:60;pointer-events:none;
+        /* Déplacement au doigt (24 oct. 2026) : le visiteur gare le chrome
+           HGPTO où il veut. L'offset de session translate toute la couche
+           (robot, Pixel, graffiti) ; le dock suit par la même variable. */
+        transform:translate(var(--hgpto-dx, 0px), var(--hgpto-dy, 0px));
       }
       .bot{
         position:absolute;bottom:8px;left:0;width:132px;height:127px;
-        pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent;
-        touch-action:manipulation;user-select:none;-webkit-user-select:none;
+        pointer-events:auto;cursor:grab;-webkit-tap-highlight-color:transparent;
+        touch-action:none;user-select:none;-webkit-user-select:none;
         will-change:transform;outline:none;transition:transform .12s linear;
       }
+      .bot.dragging{cursor:grabbing}
       .bot.nosmooth{transition:none}
       .bot.hidden{transform:translateY(180px)!important;transition:transform .5s ease}
       .bot:focus-visible{filter:drop-shadow(0 0 6px var(--gold-deep))}
@@ -344,6 +349,8 @@
         position:fixed;right:176px;bottom:12px;z-index:61;display:flex;gap:6px;
         flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 200px);
         pointer-events:none;
+        /* Suit le déplacement du chrome (même offset de session que la couche). */
+        transform:translate(var(--hgpto-dx, 0px), var(--hgpto-dy, 0px));
       }
       .bot-controls button,.bot-controls select{pointer-events:auto}
       .bot-controls button{

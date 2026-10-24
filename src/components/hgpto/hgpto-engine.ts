@@ -304,6 +304,44 @@ export function initHgpto() {
         bubble.classList.toggle('edge-r', c > vw() - 140);
       }
 
+      /* ---------- Déplacement au doigt / à la souris (24 oct. 2026) :
+         le visiteur gare le chrome HGPTO où il veut (décision d'Hugo :
+         « Bulle déplaçable au doigt »). La position déplacée vaut pour
+         la SESSION SEULEMENT : variables en mémoire, jamais persistées
+         (ni localStorage ni sessionStorage) — un rechargement remet le
+         chrome à sa place par défaut. Le tapotage bref garde son effet
+         chatouille ; seul un glisser de plus de 8 px devient un
+         déplacement. La promenade autonome s'interrompt pendant le
+         glisser et reprend après. */
+      var dragDX = 0, dragDY = 0, dragging = false, dragMoved = false;
+      var dragSX = 0, dragSY = 0, dragOX = 0, dragOY = 0, dragPid = null;
+      var dragHost = (bot.closest ? bot.closest('.hgpto-host') : null);
+      function applyDrag(){
+        if (dragHost){
+          dragHost.style.setProperty('--hgpto-dx', dragDX + 'px');
+          dragHost.style.setProperty('--hgpto-dy', dragDY + 'px');
+        }
+      }
+      function clampDrag(){
+        /* Le robot ET le dock doivent rester attrapables à l'écran :
+           on corrige l'offset (deux passes, le robot en dernier pour
+           garantir sa visibilité) au lieu de le borner à l'aveugle. */
+        var m = 8, vw2 = window.innerWidth, vh2 = window.innerHeight;
+        var dock = document.getElementById('bot-controls');
+        for (var pass = 0; pass < 2; pass++){
+          applyDrag();
+          var els = dock ? [dock, bot] : [bot];
+          for (var i = 0; i < els.length; i++){
+            var r = els[i].getBoundingClientRect();
+            if (r.left < m) dragDX += m - r.left;
+            if (r.right > vw2 - m) dragDX -= r.right - (vw2 - m);
+            if (r.top < m) dragDY += m - r.top;
+            if (r.bottom > vh2 - m) dragDY -= r.bottom - (vh2 - m);
+          }
+        }
+        applyDrag();
+      }
+
       /* ---------- Sa voix : un charabia de petit robot (WebAudio) ----------
          Des blips formantiques doux, synchronisés avec le texte de la bulle.
          Le son ne peut démarrer qu'après un premier geste du visiteur. */
@@ -1551,10 +1589,51 @@ export function initHgpto() {
       bot.addEventListener('pointerdown', function(ev){
         if (ev.target.closest && ev.target.closest('a')) return;
         ev.preventDefault();
-        tickle();
+        /* Déplacement : on ne chatouille qu'au relever si le doigt n'a
+           pas glissé ; un glisser de plus de 8 px déplace le chrome. */
+        dragging = false; dragMoved = false;
+        dragSX = ev.clientX; dragSY = ev.clientY;
+        dragOX = dragDX; dragOY = dragDY;
+        dragPid = ev.pointerId;
+        try { bot.setPointerCapture(ev.pointerId); } catch(e){}
+      });
+      bot.addEventListener('pointermove', function(ev){
+        if (ev.pointerId !== dragPid) return;
+        var dx = ev.clientX - dragSX, dy = ev.clientY - dragSY;
+        if (!dragMoved && Math.sqrt(dx*dx + dy*dy) > 8){
+          dragMoved = true; dragging = true;
+          bot.classList.add('dragging');
+        }
+        if (dragMoved){
+          dragDX = dragOX + dx; dragDY = dragOY + dy;
+          clampDrag();
+        }
+      });
+      function endDrag(ev){
+        if (ev.pointerId !== dragPid) return;
+        dragPid = null;
+        var wasDrag = dragMoved;
+        dragging = false; dragMoved = false;
+        bot.classList.remove('dragging');
+        if (!wasDrag) tickle();
+      }
+      bot.addEventListener('pointerup', endDrag);
+      bot.addEventListener('pointercancel', function(ev){
+        if (ev.pointerId !== dragPid) return;
+        dragPid = null; dragging = false; dragMoved = false;
+        bot.classList.remove('dragging');
       });
       bot.addEventListener('keydown', function(ev){
-        if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); tickle(); }
+        if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); tickle(); return; }
+        /* Clavier : les flèches garent le chrome (Maj = grands pas). */
+        var step = ev.shiftKey ? 80 : 24, kx = 0, ky = 0;
+        if (ev.key === 'ArrowLeft') kx = -step;
+        else if (ev.key === 'ArrowRight') kx = step;
+        else if (ev.key === 'ArrowUp') ky = -step;
+        else if (ev.key === 'ArrowDown') ky = step;
+        else return;
+        ev.preventDefault(); ev.stopPropagation();
+        dragDX += kx; dragDY += ky; clampDrag();
       });
       bot.addEventListener('click', function(ev){
         if (ev.target.closest && ev.target.closest('a')) return;
@@ -1582,7 +1661,7 @@ export function initHgpto() {
         if (lastTs === null){ lastTs = ts; return; }
         var dt = Math.min(0.05, (ts - lastTs)/1000); lastTs = ts;
         if (docHidden || paused || isHidden) return;
-        if (guideTarget !== null && !gameOn && state !== 'sleep' && !calm){
+        if (guideTarget !== null && !gameOn && state !== 'sleep' && !calm && !dragging){
           var dxg = guideTarget - x;
           if (Math.abs(dxg) < 9){ guideTarget = null; }
           else {
@@ -1591,7 +1670,7 @@ export function initHgpto() {
             bot.classList.add('nosmooth');
             place();
           }
-        } else if ((state === 'walk' || state === 'skate') && !reduced && !calm && !gameOn){
+        } else if ((state === 'walk' || state === 'skate') && !reduced && !calm && !gameOn && !dragging){
           var sp = state === 'skate' ? speed * 3.4 : speed;
           x += dir * sp * dt;
           if (x <= minX()){ x = minX(); dir = 1; }
@@ -2466,7 +2545,7 @@ export function initHgpto() {
         lastTs = null;
         if (!docHidden){ lastInteract = Date.now(); if (state === 'sleep') wake(false); }
       });
-      window.addEventListener('resize', function(){ x = clampX(x); place(); });
+      window.addEventListener('resize', function(){ x = clampX(x); place(); clampDrag(); });
 
       /* ================= LE JEU CACHÉ : Serpents et échelles =================
          Paramètres et réactions regroupés (reco nº 10 du panneau).

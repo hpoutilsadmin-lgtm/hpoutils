@@ -19,8 +19,10 @@ export interface TemplateEntry {
  */
 import { template as purchaseRecovery } from './purchase-recovery'
 import { template as purchaseDelivery } from './purchase-delivery'
+import { template as tomeDelivery } from './tome-delivery'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'purchase-recovery': purchaseRecovery,
   'purchase-delivery': purchaseDelivery,
+  'tome-delivery': tomeDelivery,
 }

@@ -4,6 +4,13 @@ import { type StripeEnv, verifyWebhook, createStripeClient } from "@/lib/stripe.
 import { getProduct } from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
+import {
+  createTomeTokensForSession,
+  isTomeSession,
+  readerUrl,
+  resolveTomeSlugsForSession,
+  revokeTomeTokensForPaymentIntent,
+} from "@/lib/tomes-tokens.server";
 
 let _supabase: any = null;
 function getSupabase() {
@@ -69,6 +76,37 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
     { onConflict: "stripe_session_id" },
   );
 
+  // TOMES « À toi l'histoire » : la session porte metadata.kind === 'tome'
+  // (ou un lookup_key de tome). On crée les jetons personnels et on envoie
+  // le courriel de lecture — puis on sort, sans courriel PDF.
+  // Idempotent : si la page de retour a déjà livré, les jetons existent et
+  // on n'envoie pas de doublon.
+  if (isTomeSession(session) && email) {
+    const slugs = resolveTomeSlugsForSession(session);
+    if (slugs.length > 0) {
+      const created = await createTomeTokensForSession({
+        sessionId: session.id,
+        email,
+        slugs,
+        environment: env,
+      });
+      const fresh = created.filter((c) => c.token !== null);
+      if (fresh.length > 0) {
+        await enqueueTransactionalEmail({
+          templateName: "tome-delivery",
+          recipientEmail: email,
+          idempotencyKey: `tome-delivery-${session.id}`,
+          templateData: {
+            title: "À toi l'histoire",
+            items: fresh.map((c) => ({ title: c.tome.title, readerUrl: readerUrl(c.token!) })),
+            siteOrigin: getTrustedSiteOrigin(),
+          },
+        });
+      }
+      return;
+    }
+  }
+
   // Envoi automatique du courriel de livraison avec un lien signé frais.
   // Idempotent grâce à idempotency_key = session.id : si Stripe rejoue
   // l'événement, le worker email n'enverra pas un doublon.
@@ -103,6 +141,8 @@ async function handleChargeRefunded(charge: any, env: StripeEnv) {
     })
     .eq("stripe_payment_intent_id", paymentIntentId)
     .eq("environment", env);
+  // Un remboursement révoque aussi les liens de lecture des tomes.
+  await revokeTomeTokensForPaymentIntent(paymentIntentId, env);
 }
 
 async function handleWebhook(req: Request, env: StripeEnv) {

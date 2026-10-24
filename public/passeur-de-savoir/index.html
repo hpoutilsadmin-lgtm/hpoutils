@@ -69,6 +69,9 @@
       ::selection { background: var(--ochre); color: #22332a; }
 
       .wrap { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
+      .hp-retour { display: flex; align-items: center; min-height: 44px; padding: 12px 22px 0; }
+      .hp-retour a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink-soft); text-decoration: none; font-weight: 600; font-size: 16px; }
+      .hp-retour a:hover, .hp-retour a:focus-visible { color: var(--rust); text-decoration: underline; }
       section { padding: 76px 0; }
       section + section { border-top: 1px solid var(--line); }
 
@@ -385,11 +388,13 @@
       .mini-btn { font: inherit; font-size: .85em; padding: 6px 12px; border-radius: 999px; border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
       .collection-tools { margin: 12px 0 4px; }
       @media (max-width: 640px) { .capte-form { grid-template-columns: 1fr; } }
-      @media print { #capter, .card-actions, .collection-tools, #decouvre, .hero-figure { display: none !important; } }
+      @media print { #capter, .card-actions, .collection-tools, #decouvre, .hero-figure, .hp-retour { display: none !important; } }
     </style>
 
   </head>
   <body>
+
+    <div class="wrap hp-retour"><a href="/">← Retour à HP Outils</a></div>
 
     <!-- ================= L'OUTIL ================= -->
     <header class="hero">

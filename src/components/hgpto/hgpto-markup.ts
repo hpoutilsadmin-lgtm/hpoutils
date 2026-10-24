@@ -12,7 +12,7 @@ export const HGPTO_MARKUP = `
         </svg>
       </div>
       <div class="bot" id="bot" data-state="idle" data-expr="happy" role="button" tabindex="0"
-           aria-label="HGPTO, la mascotte d'HP Outils. Touchez-le pour le chatouiller.">
+           aria-label="HGPTO, la mascotte d'HP Outils. Touchez-le pour le chatouiller, glissez-le pour le déplacer.">
         <div class="bubble" id="bubble" aria-live="polite"></div>        <div class="zzz" aria-hidden="true"><span>Z</span><span>Z</span><span>Z</span></div>
         <div class="burst" id="burst" aria-hidden="true"></div>
         <div class="bot-inner">
