@@ -37,6 +37,50 @@ function Page() {
       <div className="subpage-content">
         <div className="container">
           <section style={{ maxWidth: 760, margin: "0 auto 44px" }}>
+            <span className="mini-note">En ses mots</span>
+            <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>Qui est Hugo</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Boulanger, gérant, papa, beau-père, chum, fils, petit-fils qui s’ennuie encore souvent
+              de ses grands-parents à 40 ans.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Marginal — je le sais, je l’assume. Je peux converser avec un itinérant, un alcoolique,
+              un PDG, un président, un député. Pour moi, c’est la même dignité partout.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Je ne sais pas coder, je ne sais pas composer, je ne sais pas devenir riche.
+              Je sais survivre, je sais le quotidien, je sais les gens. Et sur tout ce qu’on peut
+              connaître, je ne sais rien — mais je suis curieux de tout.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              C’est pour ça que j’ai créé HGPTO : un petit compagnon qui m’aide à structurer et à
+              rester constant — et qui fait la même chose pour toi.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", fontFamily: "Georgia,serif", fontStyle: "italic" }}>
+              Ma conviction, point : la dignité, c’est pas un budget, c’est un état d’esprit.
+              Une présentation soignée au mieux de ses capacités, et ça devrait être suffisant.
+            </p>
+            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes contrats avec toi</h3>
+            <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
+              <li>Une réponse d’humain sous 3 jours ouvrables. Pas d’un robot, pas de promesse vide.</li>
+              <li>Des prix honnêtes, aucune taxe ajoutée, jamais de pression ni de fausse urgence.</li>
+              <li>Tout 100 % original. L’IA est un outil très rapide et efficace — la direction, l’émotion, le « ce que je fais », c’est pour les humains.</li>
+              <li>Écrit par un humain, accéléré par l’IA. On le dit toujours.</li>
+            </ul>
+            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes buts</h3>
+            <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
+              <li>Être utile. Des outils pour la vraie vie.</li>
+              <li>Que chaque personne qui passe ici reparte avec quelque chose qui l’aide pour vrai — un jeu, un outil, une recette, une idée — peu importe son budget.</li>
+            </ul>
+            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les mots d’Hugo</h3>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
+              Je dis des mots à moi : <em>serbouillette</em> — ça vient d’Ôz la grande petite,
+              un mix de serviette et débarbouillette. Je dis <em>globesandwich</em> au lieu de
+              club sandwich. Mon petit frère m’appelait <em>Gros Pierre</em> au lieu de Hugo,
+              et une fillette disait <em>yaourt</em> au lieu de Hugo.
+            </p>
+          </section>
+          <section style={{ maxWidth: 760, margin: "0 auto 44px" }}>
             <span className="mini-note">Qui est Hugo</span>
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>L'homme derrière HP</h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>

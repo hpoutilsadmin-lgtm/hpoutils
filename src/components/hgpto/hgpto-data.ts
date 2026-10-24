@@ -433,6 +433,9 @@ export const KB = [
           a:"Mes deux approbations officielles : Montgolfière — celui-là, je le joue avec toi, quand tu veux ! — et Trio élément. Mes verdicts sont écrits dans mon panneau, juste sous les questions." },
         { q:"C'est quoi, ton gag d'hélium ?", s:"HIHI",
           a:"Des fois, je respire un peu trop près de ma balloune… et ma voix devient toute petite, comme un écureuil ! Ça dure une phrase ou deux, je ris de moi, puis je reviens à ma voix normale. Tu peux fermer le gag avec le bouton « Hélium » dans ce panneau." },
+        { q:"C'est qui, Hugo ?", s:"MON HUMAIN",
+          a:"Mon humain, c'est Hugo, mon créateur — il se présente ici.",
+          u:"https://hp-outils.com/a-propos", l:"Qui est Hugo" },
         { q:"J'ai une autre question", s:"?",
           a:FALLBACK,
           u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" }
