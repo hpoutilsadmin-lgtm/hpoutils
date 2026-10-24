@@ -42,6 +42,7 @@ import {
   resolveTomeSlugsForSession,
   isTomeSession,
 } from "@/lib/tomes-tokens.server";
+import { getTomeTextByToken } from "@/lib/tomes-texts.server";
 
 type StripeClient = ReturnType<typeof createStripeClient>;
 
@@ -216,5 +217,34 @@ export const getTomeAccess = createServerFn({ method: "GET" })
         fins: tome.fins,
         public: tome.public ?? null,
       },
+    };
+  });
+
+/**
+ * Texte complet derrière jeton. La validation a lieu côté serveur dans
+ * `getTomeTextByToken` AVANT tout accès au texte : un jeton invalide,
+ * révoqué, ou d'un autre tome ne renvoie jamais de texte. Le texte
+ * servi est celui du tome désigné par la ligne de jeton en base.
+ */
+export const getTomeText = createServerFn({ method: "GET" })
+  .inputValidator((data: { token: string }) => {
+    if (typeof data.token !== "string") throw new Error("Jeton invalide");
+    return data;
+  })
+  .handler(async ({ data }) => {
+    const result = await getTomeTextByToken(data.token);
+    if (!result) return { valid: false as const };
+    const tome: Tome = result.tome;
+    return {
+      valid: true as const,
+      tome: {
+        slug: tome.slug,
+        title: tome.title,
+        description: tome.description,
+        paragraphes: tome.paragraphes,
+        fins: tome.fins,
+        public: tome.public ?? null,
+      },
+      html: result.html,
     };
   });

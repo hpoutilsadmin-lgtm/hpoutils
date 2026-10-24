@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { createSeoHead } from "@/lib/seo";
-import { getTomeAccess } from "@/utils/tomes.functions";
+import { getTomeText } from "@/utils/tomes.functions";
 
 export const Route = createFileRoute("/lire/$jeton")({
   head: () => createSeoHead({
@@ -27,21 +27,22 @@ type State =
         fins: number;
         public: string | null;
       };
+      html: string;
     };
 
 function Page() {
   const { jeton } = Route.useParams();
-  const access = useServerFn(getTomeAccess);
+  const fetchText = useServerFn(getTomeText);
   const [state, setState] = useState<State>({ kind: "loading" });
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const res = await access({ data: { token: jeton } });
+        const res = await fetchText({ data: { token: jeton } });
         if (cancelled) return;
         if (!res.valid) setState({ kind: "invalid" });
-        else setState({ kind: "valid", tome: res.tome });
+        else setState({ kind: "valid", tome: res.tome, html: res.html });
       } catch {
         if (!cancelled) setState({ kind: "invalid" });
       }
@@ -49,7 +50,7 @@ function Page() {
     return () => {
       cancelled = true;
     };
-  }, [jeton, access]);
+  }, [jeton, fetchText]);
 
   return (
     <section className="subpage-content">
@@ -86,14 +87,35 @@ function Page() {
               )}
             </p>
             <p style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
-              Ton lien est confirmé et reste valable pour relire ce tome. Le texte
-              complet des tomes est versé progressivement sur cette page : ton lien
-              te donnera accès dès qu'il sera en ligne, sans nouvel achat.
+              Mode test — aucune vente réelle. Ton lien est confirmé et reste valable
+              pour relire ce tome. Le texte complet s'affiche ci-dessous, dans ton
+              lecteur personnel.
             </p>
+            {/*
+              Le texte complet est servi par le serveur APRÈS validation du
+              jeton (fonction `getTomeText`) : il n'existe aucune URL publique
+              vers ces fichiers. L'iframe est isolée : `sandbox="allow-scripts"`
+              sans `allow-same-origin`, pour que les scripts du tome ne puissent
+              pas lire la page parente ni l'adresse qui contient le jeton. Les
+              sauvegardes locales de 2 tomes, protégées par try/catch côté
+              artefact, retombent en progression de session si le stockage est
+              indisponible dans ce cadre.
+            */}
+            <iframe
+              title={`Lire ${state.tome.title}`}
+              srcDoc={state.html}
+              sandbox="allow-scripts"
+              style={{ width: "100%", minHeight: 720, height: "80vh", border: "1px solid #e5d9c3", borderRadius: 8 }}
+            />
             <p>
               <Link to="/lire">Voir tous les tomes →</Link>
               {" · "}
               <Link to="/univers">L'univers des histoires →</Link>
+            </p>
+            <p>
+              Une question ?{" "}
+              <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a> —
+              un humain de l'équipe répond sous 3 jours ouvrables.
             </p>
           </>
         )}
