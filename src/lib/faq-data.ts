@@ -48,7 +48,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Par où commencer pour mes papiers de fin de vie ?",
     reponse:
-      "Le kit Testament aide à préparer tes volontés ; un passage chez le notaire reste recommandé pour l'officialiser. Pour les papiers du quotidien, le kit Papiers (24 fiches) aide à tout classer.",
+      "Le kit Testament aide à préparer tes volontés ; un passage chez le notaire reste recommandé pour l'officialiser. Pour les papiers du quotidien, le kit Papiers (24 fiches) aide à tout classer. Si tout ça te pèse : 811 ou 988, des humains pour t'écouter, jour et nuit.",
   },
   {
     question: "Qui répond quand j'écris à HP Outils ?",
