@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Hockey 2 contre 2 — HGPTO &amp; Pixel</title>
+    <style>
+      :root{
+        --bg:#f6ecd7; --paper:#fbf4e3; --ink:#26201a; --ink-soft:#5d5240;
+        --panel:#fffaf0; --panel-border:#26201a; --accent:#c22430; --blue:#2456a6;
+        --shadow:0 10px 28px rgba(60,45,20,.25); --hud-bg:rgba(251,244,227,.96);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{ --bg:#141a22; --paper:#1c242f; --ink:#eef3f8; --ink-soft:#b9c4cf;
+          --panel:#232d39; --panel-border:#eef3f8; --hud-bg:rgba(28,36,47,.96); }
+      }
+      *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+      html,body{ margin:0; padding:0; }
+      body{
+        background:var(--bg); color:var(--ink);
+        font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+        min-height:100dvh; display:flex; flex-direction:column; align-items:center;
+        padding:10px 10px 18px; gap:8px;
+      }
+      .bar{ width:100%; max-width:980px; display:flex; align-items:center; gap:10px; }
+      .bar a.back{ color:var(--ink); text-decoration:none; font-weight:800; font-size:14px;
+        border:1.5px solid var(--ink); border-radius:999px; padding:6px 12px; background:var(--panel); }
+      .bar h1{ font-size:19px; margin:0; flex:1; text-align:center; letter-spacing:.01em; }
+      .iconbtn{ font-size:18px; line-height:1; border:1.5px solid var(--ink); background:var(--panel);
+        border-radius:999px; padding:7px 11px; cursor:pointer; color:var(--ink); }
+      .hud{ width:100%; max-width:980px; background:var(--hud-bg); border:1.5px solid var(--panel-border);
+        border-radius:14px; padding:7px 14px; display:flex; align-items:center; justify-content:space-between;
+        font-weight:900; font-size:17px; box-shadow:var(--shadow); }
+      .hud .you{ color:var(--accent); }
+      .hud .them{ color:var(--blue); }
+      .hud .clock{ font-variant-numeric:tabular-nums; font-size:20px; }
+      .hud .clock.gold{ color:#c98f06; }
+      .stage{ position:relative; width:100%; max-width:980px; aspect-ratio:900/540;
+        border-radius:18px; overflow:hidden; box-shadow:var(--shadow);
+        border:2px solid var(--panel-border); background:#dcebf5; touch-action:none; }
+      canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+      .bubble{ position:absolute; left:50%; top:10px; transform:translateX(-50%);
+        max-width:min(92%,520px); background:var(--panel); color:var(--ink);
+        border:2px solid var(--panel-border); border-radius:14px; padding:8px 13px 9px;
+        box-shadow:var(--shadow); z-index:5; cursor:pointer; }
+      .bubble .who{ font-size:11px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; opacity:.75; }
+      .bubble .txt{ font-size:15.5px; font-weight:650; line-height:1.3; }
+      .bubble.hidden,.banner.hidden{ display:none; }
+      .banner{ position:absolute; left:50%; top:44%; transform:translate(-50%,-50%);
+        font-size:clamp(30px,7.5vw,58px); font-weight:1000; letter-spacing:.02em; color:#fff;
+        text-shadow:0 3px 0 rgba(20,30,45,.55), 0 8px 26px rgba(20,30,45,.5); z-index:6;
+        pointer-events:none; text-align:center; white-space:nowrap; }
+      .banner small{ display:block; font-size:clamp(14px,3vw,20px); font-weight:800; }
+      .overlay{ position:absolute; inset:0; z-index:8; display:flex; flex-direction:column;
+        align-items:center; justify-content:center; gap:10px; text-align:center; padding:18px;
+        background:rgba(16,28,44,.72); color:#f4f8fc; backdrop-filter:blur(2px); }
+      .overlay.hidden{ display:none; }
+      .overlay h2{ margin:0; font-size:clamp(24px,5.4vw,38px); font-weight:1000; }
+      .overlay p{ margin:0; max-width:560px; font-size:clamp(13.5px,2.8vw,16.5px); line-height:1.45; font-weight:600; }
+      .overlay .teams{ font-weight:900; font-size:clamp(15px,3.4vw,19px); }
+      .overlay .teams .r{ color:#ff8f9a; } .overlay .teams .b{ color:#9dc0ff; }
+      .bigbtn{ font:inherit; font-size:18px; font-weight:1000; letter-spacing:.02em; cursor:pointer;
+        background:#f4b41a; color:#26201a; border:2.5px solid #26201a; border-radius:999px;
+        padding:12px 30px; box-shadow:0 5px 0 #26201a; }
+      .bigbtn:active{ transform:translateY(3px); box-shadow:0 2px 0 #26201a; }
+      #shootBtn{ position:absolute; right:14px; bottom:14px; z-index:7; width:86px; height:86px;
+        border-radius:50%; border:2.5px solid #26201a; background:var(--accent); color:#fff;
+        font:inherit; font-size:19px; font-weight:1000; letter-spacing:.04em; cursor:pointer;
+        box-shadow:0 5px 0 rgba(20,20,20,.55); opacity:.94; touch-action:none; user-select:none; }
+      #shootBtn:active{ transform:translateY(3px); }
+      #shootBtn.charging{ background:#e63946; }
+      .hint{ width:100%; max-width:980px; margin:0; text-align:center; color:var(--ink-soft);
+        font-size:13.5px; font-weight:600; line-height:1.45; }
+      @media (orientation:portrait){ .hint .turn{ display:inline; } }
+      .hint .turn{ display:none; font-weight:800; }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <a class="back" href="/jeux">← Jeux</a>
+      <h1>🏒 Hockey 2 contre 2</h1>
+      <button class="iconbtn" id="muteBtn" aria-label="Son oui/non">🔊</button>
+    </div>
+    <div class="hud" aria-live="polite">
+      <span class="you">TOI&nbsp;<span id="scoreYou">0</span></span>
+      <span class="clock" id="clock">2:00</span>
+      <span class="them"><span id="scoreThem">0</span>&nbsp;HGPTO</span>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="game" width="900" height="540"></canvas>
+      <div class="bubble hidden" id="bubble"><div class="who" id="bubbleWho">HGPTO</div><div class="txt" id="bubbleText"></div></div>
+      <div class="banner hidden" id="banner"></div>
+      <button id="shootBtn" aria-label="Tirer">TIR</button>
+      <div class="overlay" id="intro">
+        <h2>HGPTO &amp; Pixel te défient !</h2>
+        <p class="teams"><span class="r">TOI + ton gardien</span> contre <span class="b">HGPTO + Pixel 🐱 (gardienne)</span></p>
+        <p>Partie de <strong>2 minutes</strong>. Le plus de buts gagne ; égalité = but en or de 30 secondes.<br/>
+        🖱️/👆 <strong>Glisse</strong> sur la glace pour patiner · bouton <strong>TIR</strong> (ou Espace) pour lancer.<br/>
+        ⚠️ Méfie-toi : Pixel est rapide comme un chat… sauf quand un papillon imaginaire passe. Ses oreilles se dressent juste avant : c'est ton moment !</p>
+        <button class="bigbtn" id="startBtn">Mise au jeu !</button>
+      </div>
+      <div class="overlay hidden" id="result">
+        <h2 id="resultTitle">Victoire !</h2>
+        <p class="teams" id="resultScore">Toi 0 — 0 HGPTO</p>
+        <p id="resultLine"></p>
+        <button class="bigbtn" id="againBtn">Recommencer</button>
+      </div>
+    </div>
+    <p class="hint">Glisse pour diriger ton patineur · maintiens TIR pour un lancer plus fort · flèches/WASD + Espace au clavier.
+      <span class="turn">Tourne ton téléphone à l'horizontale pour une plus grande patinoire.</span><br/>
+      Jeu 100 % hors ligne une fois la page chargée. Aucune équipe réelle : que du HP !</p>
+
+    <script>
+    "use strict";
+    // ============ Constantes de la patinoire (unités logiques) ============
+    const W = 900, H = 540;
+    const RINK = { x: 40, y: 40, w: 820, h: 460 };          // bandes intérieures : 40..860 x 40..500
+    const GOAL_Y = 270, GOAL_H = 116;                        // bouche du but : y 212..328
+    const GOAL_L = RINK.x, GOAL_R = RINK.x + RINK.w;         // lignes de but
+    const MATCH_TIME = 120, OT_TIME = 30;
+
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    // ============ Audio WebAudio (optionnel, bouton muet) ============
+    const AudioSys = {
+      ctx: null, muted: false, master: null,
+      ensure() {
+        if (!this.ctx) {
+          try {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.master = this.ctx.createGain(); this.master.gain.value = 0.45;
+            this.master.connect(this.ctx.destination);
+          } catch (e) { this.ctx = null; }
+        }
+        if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+      },
+      tone(freq, dur, type, vol, slideTo, delay) {
+        if (!this.ctx || this.muted) return;
+        const t0 = this.ctx.currentTime + (delay || 0);
+        const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+        o.type = type || "sine"; o.frequency.setValueAtTime(freq, t0);
+        if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(vol || 0.5, t0 + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        o.connect(g); g.connect(this.master); o.start(t0); o.stop(t0 + dur + 0.05);
+      },
+      noise(dur, vol, freq, delay) {
+        if (!this.ctx || this.muted) return;
+        const t0 = this.ctx.currentTime + (delay || 0);
+        const len = Math.max(1, (dur * this.ctx.sampleRate) | 0);
+        const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+        const d = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+        const src = this.ctx.createBufferSource(); src.buffer = buf;
+        const f = this.ctx.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = freq || 900; f.Q.value = 0.8;
+        const g = this.ctx.createGain();
+        g.gain.setValueAtTime(vol || 0.3, t0);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        src.connect(f); f.connect(g); g.connect(this.master); src.start(t0); src.stop(t0 + dur + 0.05);
+      },
+      whistle() { this.tone(2350, 0.14, "square", 0.16); this.tone(2350, 0.22, "square", 0.16, null, 0.2); },
+      shortWhistle() { this.tone(2350, 0.16, "square", 0.15); },
+      shoot() { this.noise(0.09, 0.35, 500); this.tone(190, 0.08, "sine", 0.3, 90); },
+      save() { this.tone(170, 0.1, "sine", 0.5, 65); this.noise(0.06, 0.2, 300); },
+      post() { this.tone(1950, 0.35, "triangle", 0.35, 1500); },
+      goal() {
+        [392, 523, 659, 784].forEach((f, i) => this.tone(f, 0.34, "sawtooth", 0.16, null, i * 0.11));
+        this.noise(0.9, 0.14, 1100);
+      },
+      skate() { this.noise(0.07, 0.08, 1600); }
+    };
+
+    // ============ Répliques (français québécois, beau joueur toujours) ============
+    const LINES = {
+      start: [
+        "Deux minutes de pur plaisir. Que le meilleur gagne — je te laisse même la première chance !",
+        "Mise au jeu ! Montre-moi ce que tu as dans les patins.",
+        "Pixel est prête, moi aussi. À nous la glace !"
+      ],
+      playerScores: [
+        "Beau but, propre et net ! Je te l'accorde avec le sourire.",
+        "Dans le mille ! Pixel dit que c'est la faute du papillon. Bien joué !",
+        "Ouch, celui-là faisait mal… mais quel tir ! Je patine plus fort, promis."
+      ],
+      hgptoScores: [
+        "But ! La rondelle et moi, on est de vieux amis. La prochaine est pour toi, allez !",
+        "Et voilà ! Je le dis avec respect : ton gardien n'avait aucune chance sur celle-là.",
+        "Je marque ! Mais la partie est loin d'être finie, champion."
+      ],
+      pixelSave: [
+        "Miaou ! (Traduction de Pixel : « Même pas proche. »)",
+        "Pixel l'a vu venir de très loin. Un vrai chat de gardien.",
+        "Quel arrêt de Pixel ! Elle demande une croquette en boni."
+      ],
+      goalieSave: [
+        "Ton gardien est un mur ! Je vais devoir viser les coins.",
+        "Arrêt énorme de ton gardien. Je m'incline — enfin, je patine de travers."
+      ],
+      distracted: [
+        "Psst ! Pixel fixe quelque chose… ses oreilles ! C'est TON moment !",
+        "Un papillon imaginaire vient d'entrer dans la tête de Pixel. Tire, tire !"
+      ],
+      win: [
+        "Bravo, champion ! Tu m'as battu à la loyale. On rejoue ?",
+        "Victoire méritée. Je retourne visser mes patins et je reviens te défier."
+      ],
+      lose: [
+        "Partie à moi cette fois ! Merci pour le match — c'était serré dans mon cœur de boulon.",
+        "Je gagne celle-ci, mais la revanche t'appartient. Je t'attends sur la glace."
+      ],
+      draw: [
+        "Match nul ! Comme deux chats sur une clôture : personne ne bouge. On départage ça une autre fois ?"
+      ],
+      golden: [
+        "Égalité ! But en or : le prochain but gagne la partie. Respire… et fonce !"
+      ]
+    };
+    const lastLineIdx = {};
+    function pickLine(key) {
+      const arr = LINES[key]; if (!arr || !arr.length) return "";
+      let i = Math.floor(Math.random() * arr.length);
+      if (arr.length > 1 && i === lastLineIdx[key]) i = (i + 1) % arr.length;
+      lastLineIdx[key] = i; return arr[i];
+    }
+
+    // ============ Bulles de dialogue (min ~5 s ou jusqu'au tap) ============
+    const bubble = document.getElementById("bubble");
+    const bubbleWho = document.getElementById("bubbleWho");
+    const bubbleText = document.getElementById("bubbleText");
+    const bubbleQueue = [];
+    let bubbleBusyUntil = 0;
+    function say(who, text, minSec) {
+      if (!text) return;
+      if (bubbleQueue.length > 2) bubbleQueue.shift();
+      bubbleQueue.push({ who, text, minSec: minSec || 5 });
+      pumpBubble();
+    }
+    function pumpBubble() {
+      const now = performance.now();
+      if (now < bubbleBusyUntil || !bubbleQueue.length) return;
+      const item = bubbleQueue.shift();
+      bubbleWho.textContent = item.who;
+      bubbleText.textContent = item.text;
+      bubble.classList.remove("hidden");
+      const dur = Math.max(item.minSec * 1000, 900 + item.text.length * 42);
+      bubbleBusyUntil = now + dur;
+      setTimeout(() => { if (performance.now() >= bubbleBusyUntil - 30) { bubble.classList.add("hidden"); bubbleBusyUntil = 0; pumpBubble(); } }, dur + 40);
+    }
+    bubble.addEventListener("pointerdown", () => { bubble.classList.add("hidden"); bubbleBusyUntil = 0; pumpBubble(); });
+    setInterval(pumpBubble, 400);
+
+    // ============ État du jeu et entités ============
+    const S = {
+      mode: "intro",            // intro | faceoff | play | goalpause | over
+      clock: MATCH_TIME, overtime: false,
+      scoreYou: 0, scoreThem: 0,
+      faceoffT: 0, goalpauseT: 0, lastSaveLineAt: 0, lastDistrLineAt: 0
+    };
+    function makeSkater(x, y, maxSpeed, r) {
+      return { x, y, vx: 0, vy: 0, r: r || 16, face: { x: 1, y: 0 }, maxSpeed, hasPuck: false, noPickupUntil: 0, stealCd: 0 };
+    }
+    const player = makeSkater(300, GOAL_Y, 268, 16);
+    const hgpto  = makeSkater(600, GOAL_Y, 238, 16);
+    hgpto.face.x = -1;
+    const goalieYou = { x: 66, y: GOAL_Y, vx: 0, vy: 0, r: 18, kind: "goalie" };
+    const pixel = { x: 834, y: GOAL_Y, vx: 0, vy: 0, r: 16, kind: "pixel",
+      mode: "track",            // track | telegraph | distracted
+      timer: 5 + Math.random() * 5, butterfly: null, lookX: 0, lookY: 0 };
+    const puck = { x: W / 2, y: GOAL_Y, vx: 0, vy: 0, r: 7, carrier: null };
+    const skaters = [player, hgpto];
+    const HOME = { player: { x: 300, y: GOAL_Y }, hgpto: { x: 600, y: GOAL_Y } };
+
+    function resetPositions() {
+      player.x = HOME.player.x; player.y = HOME.player.y; player.vx = player.vy = 0; player.face = { x: 1, y: 0 }; player.hasPuck = false;
+      hgpto.x = HOME.hgpto.x; hgpto.y = HOME.hgpto.y; hgpto.vx = hgpto.vy = 0; hgpto.face = { x: -1, y: 0 }; hgpto.hasPuck = false;
+      goalieYou.x = 66; goalieYou.y = GOAL_Y; goalieYou.vx = goalieYou.vy = 0;
+      pixel.x = 834; pixel.y = GOAL_Y; pixel.vx = pixel.vy = 0;
+      pixel.mode = "track"; pixel.timer = 5 + Math.random() * 6; pixel.butterfly = null;
+      puck.x = W / 2; puck.y = GOAL_Y; puck.vx = puck.vy = 0; puck.carrier = null;
+    }
+    function faceoff() {
+      resetPositions();
+      S.mode = "faceoff"; S.faceoffT = 1.0;
+      showBanner("Mise au jeu !", "", 750);
+      AudioSys.ensure(); AudioSys.shortWhistle();
+    }
+    function startMatch() {
+      S.scoreYou = 0; S.scoreThem = 0; S.clock = MATCH_TIME; S.overtime = false;
+      updateHud();
+      document.getElementById("intro").classList.add("hidden");
+      document.getElementById("result").classList.add("hidden");
+      AudioSys.ensure(); AudioSys.whistle();
+      say("HGPTO", pickLine("start"), 5);
+      faceoff();
+    }
+    function endMatch() {
+      S.mode = "over";
+      AudioSys.whistle();
+      const title = document.getElementById("resultTitle");
+      const line = document.getElementById("resultLine");
+      document.getElementById("resultScore").textContent = "Toi " + S.scoreYou + " — " + S.scoreThem + " HGPTO & Pixel";
+      if (S.scoreYou > S.scoreThem) { title.textContent = "🏆 Victoire !"; line.textContent = pickLine("win"); }
+      else if (S.scoreThem > S.scoreYou) { title.textContent = "Partie à HGPTO & Pixel"; line.textContent = pickLine("lose"); }
+      else { title.textContent = "Match nul !"; line.textContent = pickLine("draw"); }
+      document.getElementById("result").classList.remove("hidden");
+    }
+    function onGoal(byPlayer) {
+      if (byPlayer) S.scoreYou++; else S.scoreThem++;
+      updateHud();
+      AudioSys.goal(); AudioSys.whistle();
+      showBanner("BUT !", byPlayer ? "Un point pour toi !" : "HGPTO marque !", 1900);
+      say("HGPTO", pickLine(byPlayer ? "playerScores" : "hgptoScores"), 5);
+      if (S.overtime) { S.mode = "goalpause"; S.goalpauseT = 1.6; S.afterGoal = "end"; return; }
+      S.mode = "goalpause"; S.goalpauseT = 2.3; S.afterGoal = "faceoff";
+    }
+    const bannerEl = document.getElementById("banner");
+    let bannerHideAt = 0;
+    function showBanner(main, sub, ms) {
+      bannerEl.innerHTML = main + (sub ? "<small>" + sub + "</small>" : "");
+      bannerEl.classList.remove("hidden");
+      bannerHideAt = performance.now() + (ms || 1200);
+    }
+    function updateHud() {
+      document.getElementById("scoreYou").textContent = S.scoreYou;
+      document.getElementById("scoreThem").textContent = S.scoreThem;
+      const c = document.getElementById("clock");
+      const t = Math.max(0, Math.ceil(S.clock));
+      c.textContent = Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
+      c.classList.toggle("gold", S.overtime);
+    }
+
+    // ============ Entrées : clavier + tactile (joystick relatif + bouton TIR) ============
+    const keys = {};
+    addEventListener("keydown", (e) => {
+      keys[e.key.toLowerCase()] = true;
+      if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(e.key.toLowerCase())) e.preventDefault();
+      if (e.key === " ") chargeStart();
+    });
+    addEventListener("keyup", (e) => { keys[e.key.toLowerCase()] = false; if (e.key === " ") chargeRelease(); });
+    const joy = { active: false, id: null, ax: 0, ay: 0, dx: 0, dy: 0 };
+    function stagePos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: (evt.clientX - rect.left) * W / rect.width, y: (evt.clientY - rect.top) * H / rect.height };
+    }
+    canvas.addEventListener("pointerdown", (e) => {
+      const p = stagePos(e);
+      joy.active = true; joy.id = e.pointerId; joy.ax = p.x; joy.ay = p.y; joy.dx = 0; joy.dy = 0;
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* pointeur déjà relâché : le joystick suit quand même */ }
+    });
+    canvas.addEventListener("pointermove", (e) => {
+      if (!joy.active || e.pointerId !== joy.id) return;
+      const p = stagePos(e);
+      joy.dx = (p.x - joy.ax) / 52; joy.dy = (p.y - joy.ay) / 52;
+      const m = Math.hypot(joy.dx, joy.dy);
+      if (m > 1) { joy.dx /= m; joy.dy /= m; }
+    });
+    function joyEnd(e) { if (e.pointerId === joy.id) { joy.active = false; joy.dx = joy.dy = 0; } }
+    canvas.addEventListener("pointerup", joyEnd);
+    canvas.addEventListener("pointercancel", joyEnd);
+
+    let charge = 0, charging = false, chargeStartAt = 0;
+    const shootBtn = document.getElementById("shootBtn");
+    function chargeStart() {
+      if (S.mode !== "play" || charging) return;
+      charging = true; charge = 0; chargeStartAt = performance.now();
+      shootBtn.classList.add("charging");
+    }
+    function chargeRelease() {
+      if (!charging) return;
+      charging = false; shootBtn.classList.remove("charging");
+      charge = Math.min(1, (performance.now() - chargeStartAt) / 550);
+      playerShoot(charge); charge = 0;
+    }
+    shootBtn.addEventListener("pointerdown", (e) => { e.preventDefault(); chargeStart(); });
+    shootBtn.addEventListener("pointerup", (e) => { e.preventDefault(); chargeRelease(); });
+    shootBtn.addEventListener("pointerleave", () => { if (charging) chargeRelease(); });
+
+    document.getElementById("muteBtn").addEventListener("click", function () {
+      AudioSys.ensure(); AudioSys.muted = !AudioSys.muted;
+      this.textContent = AudioSys.muted ? "🔇" : "🔊";
+    });
+    document.getElementById("startBtn").addEventListener("click", startMatch);
+    document.getElementById("againBtn").addEventListener("click", startMatch);
+
+    // ============ Physique et règles ============
+    function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+    function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+    function inMouth(y) { return y > GOAL_Y - GOAL_H / 2 && y < GOAL_Y + GOAL_H / 2; }
+
+    function moveSkater(s, dt) {
+      s.x += s.vx * dt; s.y += s.vy * dt;
+      const fr = Math.exp(-3.2 * dt); s.vx *= fr; s.vy *= fr;
+      s.x = clamp(s.x, RINK.x + s.r, RINK.x + RINK.w - s.r);
+      s.y = clamp(s.y, RINK.y + s.r, RINK.y + RINK.h - s.r);
+    }
+    function separateSkaters() {
+      for (let i = 0; i < skaters.length; i++) for (let j = i + 1; j < skaters.length; j++) {
+        const a = skaters[i], b = skaters[j], d = dist(a, b), min = a.r + b.r;
+        if (d > 0.01 && d < min) {
+          const push = (min - d) / 2, ux = (b.x - a.x) / d, uy = (b.y - a.y) / d;
+          a.x -= ux * push; a.y -= uy * push; b.x += ux * push; b.y += uy * push;
+        }
+      }
+    }
+    function tryPickup(s, now) {
+      if (puck.carrier || now < s.noPickupUntil) return;
+      const speed = Math.hypot(puck.vx, puck.vy);
+      if (speed < 235 && dist(s, puck) < s.r + puck.r + 4) {
+        puck.carrier = s; s.hasPuck = true;
+        s.face = { x: s === player ? 1 : -1, y: 0 };
+      }
+    }
+    function stealCheck(dt, now) {
+      if (!puck.carrier) return;
+      const carrier = puck.carrier;
+      const foe = carrier === player ? hgpto : player;
+      foe.stealCd -= dt;
+      if (dist(foe, carrier) < foe.r + carrier.r + 3 && foe.stealCd <= 0) {
+        foe.stealCd = 1.1;
+        if (Math.random() < 0.5) {  // bâton dans les patins : la rondelle se libère
+          puck.carrier = null; carrier.hasPuck = false;
+          carrier.noPickupUntil = now + 0.35; foe.noPickupUntil = now + 0.05;
+          const a = Math.random() * Math.PI * 2;
+          puck.vx = Math.cos(a) * 130; puck.vy = Math.sin(a) * 130;
+          AudioSys.skate();
+        }
+      }
+    }
+    function shootPuck(shooter, dirX, dirY, power) {
+      if (puck.carrier !== shooter) return;
+      puck.carrier = null; shooter.hasPuck = false;
+      shooter.noPickupUntil = performance.now() / 1000 + 0.3;
+      const m = Math.hypot(dirX, dirY) || 1;
+      const sp = 520 + power * 300;
+      puck.x = shooter.x + (dirX / m) * (shooter.r + 10);
+      puck.y = shooter.y + (dirY / m) * (shooter.r + 10);
+      puck.vx = (dirX / m) * sp; puck.vy = (dirY / m) * sp;
+      AudioSys.shoot();
+    }
+    function playerShoot(power) {
+      if (puck.carrier !== player || S.mode !== "play") return;
+      let dx = player.face.x, dy = player.face.y;
+      // Petite aide à la visée : si le joueur regarde grosso modo vers le but de Pixel, on resserre vers la bouche.
+      if (dx > 0.25) {
+        const ty = GOAL_Y - player.y, tx = GOAL_R - player.x;
+        const ang = Math.atan2(ty, tx), cur = Math.atan2(dy, dx);
+        let diff = ang - cur;
+        while (diff > Math.PI) diff -= 2 * Math.PI;
+        while (diff < -Math.PI) diff += 2 * Math.PI;
+        if (Math.abs(diff) < 0.5) { const na = cur + diff * 0.55; dx = Math.cos(na); dy = Math.sin(na); }
+      }
+      shootPuck(player, dx, dy, power);
+    }
+    function stepPuck(dt) {
+      if (puck.carrier) {
+        const c = puck.carrier;
+        puck.x = c.x + c.face.x * (c.r + 9);
+        puck.y = c.y + c.face.y * (c.r + 9);
+        puck.vx = puck.vy = 0;
+        return;
+      }
+      puck.x += puck.vx * dt; puck.y += puck.vy * dt;
+      const fr = Math.exp(-0.85 * dt);
+      puck.vx *= fr; puck.vy *= fr;
+      // Bandes haut/bas
+      if (puck.y < RINK.y + puck.r) { puck.y = RINK.y + puck.r; puck.vy = Math.abs(puck.vy) * 0.72; }
+      if (puck.y > RINK.y + RINK.h - puck.r) { puck.y = RINK.y + RINK.h - puck.r; puck.vy = -Math.abs(puck.vy) * 0.72; }
+      // Buts et bandes de fond
+      if (puck.x < GOAL_L + puck.r) {
+        if (inMouth(puck.y) && puck.x < GOAL_L - 2) { onGoal(false); return; }
+        if (!inMouth(puck.y)) { puck.x = GOAL_L + puck.r; puck.vx = Math.abs(puck.vx) * 0.72; nearPost(); }
+      }
+      if (puck.x > GOAL_R - puck.r) {
+        if (inMouth(puck.y) && puck.x > GOAL_R + 2) { onGoal(true); return; }
+        if (!inMouth(puck.y)) { puck.x = GOAL_R - puck.r; puck.vx = -Math.abs(puck.vx) * 0.72; nearPost(); }
+      }
+    }
+    function nearPost() {
+      const near = [GOAL_Y - GOAL_H / 2, GOAL_Y + GOAL_H / 2].some(my => Math.abs(puck.y - my) < 12);
+      if (near && Math.hypot(puck.vx, puck.vy) > 260) AudioSys.post();
+    }
+    function goalieTouch(g, dt) {
+      if (puck.carrier) return;
+      if (dist(g, puck) > g.r + puck.r + 2) return;
+      const speed = Math.hypot(puck.vx, puck.vy);
+      const isPixel = g === pixel;
+      const toward = isPixel ? puck.vx > 120 : puck.vx < -120;
+      if (speed > 300 && toward) {
+        // ARRÊT (ou rebond bloqué) : la rondelle repart vers le centre
+        puck.vx = (isPixel ? -1 : 1) * Math.abs(puck.vx) * 0.42;
+        puck.vy = puck.vy * 0.35 + (Math.random() * 90 - 45);
+        puck.x = g.x + (isPixel ? -1 : 1) * (g.r + puck.r + 3);
+        AudioSys.save();
+        const now = performance.now();
+        if (now - S.lastSaveLineAt > 7000) {
+          S.lastSaveLineAt = now;
+          if (isPixel) say("HGPTO", pickLine("pixelSave"), 4.5);
+          else say("HGPTO", pickLine("goalieSave"), 5);
+        }
+      } else if (speed <= 300) {
+        // Dégagement : le gardien renvoie la rondelle vers le centre, côté bande
+        const dirx = isPixel ? -1 : 1;
+        puck.vx = dirx * (300 + Math.random() * 110);
+        puck.vy = (Math.random() < 0.5 ? -1 : 1) * (120 + Math.random() * 90);
+        puck.x = g.x + dirx * (g.r + puck.r + 4);
+        AudioSys.skate();
+      }
+    }
+
+    // ============ Intelligences ============
+    function accelToward(s, tx, ty, accel, dt, slow) {
+      const dx = tx - s.x, dy = ty - s.y, d = Math.hypot(dx, dy);
+      if (d < 4) return;
+      const sp = slow ? Math.min(s.maxSpeed, d * 2.2) : s.maxSpeed;
+      const desX = (dx / d) * sp, desY = (dy / d) * sp;
+      s.vx += clamp(desX - s.vx, -accel * dt, accel * dt);
+      s.vy += clamp(desY - s.vy, -accel * dt, accel * dt);
+      if (Math.abs(s.vx) + Math.abs(s.vy) > 12) {
+        const m = Math.hypot(s.vx, s.vy);
+        s.face = { x: s.vx / m, y: s.vy / m };
+      }
+    }
+    function playerControl(dt) {
+      let ix = joy.dx, iy = joy.dy;
+      if (keys["arrowleft"] || keys["a"]) ix -= 1;
+      if (keys["arrowright"] || keys["d"]) ix += 1;
+      if (keys["arrowup"] || keys["w"]) iy -= 1;
+      if (keys["arrowdown"] || keys["s"]) iy += 1;
+      const m = Math.hypot(ix, iy);
+      if (m > 0.12) {
+        const n = Math.min(1, m);
+        player.vx += (ix / (m || 1)) * 980 * dt * n + 0;
+        player.vy += (iy / (m || 1)) * 980 * dt * n + 0;
+        const sp = Math.hypot(player.vx, player.vy);
+        if (sp > player.maxSpeed) { player.vx *= player.maxSpeed / sp; player.vy *= player.maxSpeed / sp; }
+        player.face = { x: player.vx / (sp || 1), y: player.vy / (sp || 1) };
+      }
+    }
+    let hgptoThink = 0, hgptoShootCd = 0;
+    function hgptoAI(dt, now) {
+      hgptoThink -= dt; hgptoShootCd -= dt;
+      // Course vers sa cible
+      let tx, ty, slow = false;
+      if (puck.carrier === hgpto) {
+        // Il fonce vers le but du joueur avec une petite vague pour déjouer le gardien
+        const weave = Math.sin(now * 2.1) * 58;
+        tx = GOAL_L + 20; ty = GOAL_Y + clamp(weave, -GOAL_H / 2 + 14, GOAL_H / 2 - 14);
+        const dGoal = Math.hypot(hgpto.x - GOAL_L, hgpto.y - GOAL_Y);
+        if (dGoal < 315 && hgptoShootCd <= 0) {
+          hgptoShootCd = 1.15;
+          // Visée : souvent un coin, parfois le centre, avec une erreur honnête — il peut rater.
+          const corner = (Math.random() < 0.72 ? (Math.random() < 0.5 ? -1 : 1) * (30 + Math.random() * 22) : (Math.random() * 30 - 15));
+          const err = (Math.random() + Math.random() + Math.random() - 1.5) * 15;
+          const aimY = GOAL_Y + corner + err;
+          hgpto.face = { x: -1, y: 0 };
+          shootPuck(hgpto, GOAL_L - hgpto.x, aimY - hgpto.y, 0.55 + Math.random() * 0.4);
+        }
+      } else if (puck.carrier === player) {
+        tx = player.x + 14; ty = player.y;             // pression directe, légèrement côté but
+      } else {
+        const dMe = dist(hgpto, puck), dHim = dist(player, puck);
+        if (dMe < dHim + 90 || puck.x > W * 0.42) { tx = puck.x; ty = puck.y; }
+        else { tx = 640; ty = GOAL_Y + Math.sin(now * 0.7) * 60; slow = true; }  // repli au centre
+      }
+      accelToward(hgpto, tx, ty, 800, dt, slow);
+    }
+    function goalieYouAI(dt) {
+      const ty = clamp(puck.y, GOAL_Y - GOAL_H / 2 - 6, GOAL_Y + GOAL_H / 2 + 6);
+      const threat = puck.x < 260 && puck.vx < -60;
+      const tx = threat ? 82 : 66;
+      goalieYou.x += clamp(tx - goalieYou.x, -130 * dt, 130 * dt);
+      goalieYou.y += clamp(ty - goalieYou.y, -252 * dt, 252 * dt);
+    }
+    function pixelAI(dt, now) {
+      pixel.timer -= dt;
+      if (pixel.mode === "track") {
+        const ty = clamp(puck.y, GOAL_Y - GOAL_H / 2 - 4, GOAL_Y + GOAL_H / 2 + 4);
+        pixel.y += clamp(ty - pixel.y, -345 * dt, 345 * dt);
+        pixel.lookX = puck.x; pixel.lookY = puck.y;
+        if (pixel.timer <= 0) {
+          pixel.mode = "telegraph"; pixel.timer = 0.6;
+          pixel.butterfly = { x: pixel.x - 52 - Math.random() * 26, y: pixel.y - 58 + Math.random() * 34, t: 0 };
+        }
+      } else if (pixel.mode === "telegraph") {
+        // Les oreilles se dressent : l'indicateur AVANT la distraction. Elle suit encore un peu, plus lentement.
+        const ty = clamp(puck.y, GOAL_Y - GOAL_H / 2 - 4, GOAL_Y + GOAL_H / 2 + 4);
+        pixel.y += clamp(ty - pixel.y, -150 * dt, 150 * dt);
+        if (pixel.butterfly) { pixel.lookX = pixel.butterfly.x; pixel.lookY = pixel.butterfly.y; }
+        if (pixel.timer <= 0) {
+          pixel.mode = "distracted"; pixel.timer = 1.15;
+          if (performance.now() - S.lastDistrLineAt > 9000 && S.mode === "play") {
+            S.lastDistrLineAt = performance.now();
+            say("HGPTO", pickLine("distracted"), 4);
+          }
+        }
+      } else { // distracted : elle fixe le papillon, réflexes réduits (elle ne suit plus la rondelle)
+        if (pixel.butterfly) {
+          pixel.lookX = pixel.butterfly.x; pixel.lookY = pixel.butterfly.y;
+          pixel.y += clamp(pixel.butterfly.y - pixel.y, -26 * dt, 26 * dt);
+        }
+        if (pixel.timer <= 0) {
+          pixel.mode = "track"; pixel.timer = 6.5 + Math.random() * 5; pixel.butterfly = null;
+        }
+      }
+      if (pixel.butterfly) pixel.butterfly.t += dt;
+    }
+
+    // ============ Boucle de jeu ============
+    function step(dt, now) {
+      if (S.mode === "faceoff") {
+        S.faceoffT -= dt;
+        if (S.faceoffT <= 0) { S.mode = "play"; }
+        return;
+      }
+      if (S.mode === "goalpause") {
+        S.goalpauseT -= dt;
+        // La rondelle glisse doucement dans le filet pendant la pause
+        puck.x += puck.vx * dt; puck.y += puck.vy * dt; puck.vx *= 0.9; puck.vy *= 0.9;
+        if (S.goalpauseT <= 0) {
+          if (S.afterGoal === "end") endMatch(); else faceoff();
+        }
+        return;
+      }
+      if (S.mode !== "play") return;
+      S.clock -= dt;
+      if (S.clock <= 0) {
+        if (!S.overtime && S.scoreYou === S.scoreThem) {
+          S.overtime = true; S.clock = OT_TIME;
+          showBanner("BUT EN OR !", "30 secondes — le prochain but gagne", 1700);
+          say("HGPTO", pickLine("golden"), 5);
+          AudioSys.whistle();
+        } else {
+          S.clock = 0; updateHud(); endMatch(); return;
+        }
+      }
+      updateHud();
+      playerControl(dt);
+      hgptoAI(dt, now);
+      moveSkater(player, dt); moveSkater(hgpto, dt);
+      separateSkaters();
+      goalieYouAI(dt); pixelAI(dt, now);
+      tryPickup(player, now); tryPickup(hgpto, now);
+      stealCheck(dt, now);
+      stepPuck(dt);
+      if (S.mode === "play") { goalieTouch(goalieYou, dt); goalieTouch(pixel, dt); }
+      if (charging) charge = Math.min(1, (performance.now() - chargeStartAt) / 550);
+    }
+
+    // ============ Rendu ============
+    function roundRect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+    function drawIce() {
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, "#e8f2f9"); g.addColorStop(0.5, "#dcebf5"); g.addColorStop(1, "#e8f2f9");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      // Filets
+      ctx.fillStyle = "#fdfefe";
+      ctx.fillRect(6, GOAL_Y - GOAL_H / 2 - 8, GOAL_L - 6, GOAL_H + 16);
+      ctx.fillRect(GOAL_R, GOAL_Y - GOAL_H / 2 - 8, W - GOAL_R - 6, GOAL_H + 16);
+      ctx.strokeStyle = "#b8452f"; ctx.lineWidth = 3;
+      ctx.strokeRect(8, GOAL_Y - GOAL_H / 2 - 6, GOAL_L - 10, GOAL_H + 12);
+      ctx.strokeRect(GOAL_R + 2, GOAL_Y - GOAL_H / 2 - 6, W - GOAL_R - 10, GOAL_H + 12);
+      ctx.strokeStyle = "rgba(90,130,160,.35)"; ctx.lineWidth = 1;
+      for (let i = 1; i < 6; i++) {
+        ctx.beginPath(); ctx.moveTo(12, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); ctx.lineTo(GOAL_L - 4, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(GOAL_R + 4, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); ctx.lineTo(W - 12, GOAL_Y - GOAL_H / 2 - 6 + i * (GOAL_H + 12) / 6); ctx.stroke();
+      }
+      // Lignes et cercles
+      ctx.strokeStyle = "rgba(178,34,34,.75)"; ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.moveTo(W / 2, RINK.y); ctx.lineTo(W / 2, RINK.y + RINK.h); ctx.stroke();
+      ctx.strokeStyle = "rgba(36,86,166,.55)"; ctx.lineWidth = 11;
+      [W * 0.28, W * 0.72].forEach(x => { ctx.beginPath(); ctx.moveTo(x, RINK.y); ctx.lineTo(x, RINK.y + RINK.h); ctx.stroke(); });
+      ctx.strokeStyle = "rgba(178,34,34,.6)"; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(W / 2, GOAL_Y, 52, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = "rgba(36,86,166,.55)";
+      ctx.beginPath(); ctx.arc(W / 2, GOAL_Y, 9, 0, Math.PI * 2); ctx.fill();
+      [[250, 150], [250, 390], [650, 150], [650, 390]].forEach(([cx, cy]) => {
+        ctx.strokeStyle = "rgba(178,34,34,.45)";
+        ctx.beginPath(); ctx.arc(cx, cy, 34, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = "rgba(178,34,34,.5)";
+        ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
+      });
+      // Demi-cercles de but
+      ctx.fillStyle = "rgba(120,180,230,.4)";
+      ctx.beginPath(); ctx.arc(GOAL_L, GOAL_Y, 34, -Math.PI / 2, Math.PI / 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(GOAL_R, GOAL_Y, 34, Math.PI / 2, Math.PI * 1.5); ctx.fill();
+      // Bandes
+      ctx.strokeStyle = "#f7c948"; ctx.lineWidth = 7; roundRect(RINK.x - 4, RINK.y - 4, RINK.w + 8, RINK.h + 8, 26); ctx.stroke();
+      ctx.strokeStyle = "#8a97a5"; ctx.lineWidth = 3; roundRect(RINK.x - 9, RINK.y - 9, RINK.w + 18, RINK.h + 18, 30); ctx.stroke();
+      // Baies vitrées suggérées
+      ctx.fillStyle = "rgba(255,255,255,.28)"; ctx.fillRect(0, 0, W, 22); ctx.fillRect(0, H - 22, W, 22);
+      // Mot de la maison sur la glace, discret
+      ctx.save();
+      ctx.translate(W / 2, GOAL_Y + 96); ctx.fillStyle = "rgba(36,86,166,.14)";
+      ctx.font = "900 30px system-ui"; ctx.textAlign = "center";
+      ctx.fillText("HP OUTILS", 0, 0); ctx.restore();
+    }
+    function drawPuck() {
+      ctx.fillStyle = "rgba(20,25,30,.25)";
+      ctx.beginPath(); ctx.ellipse(puck.x + 2, puck.y + 4, puck.r + 1, puck.r - 2, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#20242a";
+      ctx.beginPath(); ctx.arc(puck.x, puck.y, puck.r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,.35)";
+      ctx.beginPath(); ctx.arc(puck.x - 2, puck.y - 2, 2.4, 0, Math.PI * 2); ctx.fill();
+    }
+    function fleurDeLys(x, y, s, color) {
+      ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = color;
+      ctx.beginPath(); // pétale central simplifié
+      ctx.moveTo(0, -10); ctx.bezierCurveTo(4, -4, 4, 2, 0, 6); ctx.bezierCurveTo(-4, 2, -4, -4, 0, -10); ctx.fill();
+      ctx.beginPath(); // pétales latéraux
+      ctx.moveTo(-2, -1); ctx.bezierCurveTo(-10, -6, -12, 1, -6, 4); ctx.bezierCurveTo(-3, 5, -1, 3, -2, -1); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(2, -1); ctx.bezierCurveTo(10, -6, 12, 1, 6, 4); ctx.bezierCurveTo(3, 5, 1, 3, 2, -1); ctx.fill();
+      ctx.fillRect(-7, 5.4, 14, 2.6); // bande
+      ctx.restore();
+    }
+    function stick(x, y, fx, fy, color) {
+      const sx = x + fx * 14, sy = y + fy * 14 + 8;
+      ctx.strokeStyle = color; ctx.lineWidth = 3.4; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(x + fx * 6, y + 4); ctx.lineTo(sx, sy); ctx.lineTo(sx + fx * 8, sy + 3); ctx.stroke();
+    }
+    function drawPlayer() {
+      const { x, y } = player, flip = player.face.x < 0 ? -1 : 1;
+      ctx.fillStyle = "rgba(20,25,30,.22)";
+      ctx.beginPath(); ctx.ellipse(x, y + 21, 15, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+      // patins
+      ctx.strokeStyle = "#5a6672"; ctx.lineWidth = 2.6;
+      ctx.beginPath(); ctx.moveTo(x - 8, y + 20); ctx.lineTo(x - 3, y + 20); ctx.moveTo(x + 3, y + 20); ctx.lineTo(x + 8, y + 20); ctx.stroke();
+      // corps : chandail rouge sobre (aucune équipe réelle)
+      ctx.fillStyle = "#c22430"; roundRect(x - 12, y - 2, 24, 21, 7); ctx.fill();
+      ctx.fillStyle = "#f6eddd"; ctx.fillRect(x - 12, y + 11, 24, 3.6);
+      // tête + casque
+      ctx.fillStyle = "#f0c8a0"; ctx.beginPath(); ctx.arc(x, y - 11, 9.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#8a1f28"; ctx.beginPath(); ctx.arc(x, y - 12.5, 9.8, Math.PI, Math.PI * 2); ctx.fill();
+      ctx.fillRect(x - 9.8, y - 13.5, 19.6, 3);
+      stick(x, y, flip, player.face.y, "#7a5230");
+    }
+    function drawHgpto(t) {
+      const { x, y } = hgpto, flip = hgpto.face.x < 0 ? -1 : 1;
+      const bob = Math.sin(t * 6) * (Math.hypot(hgpto.vx, hgpto.vy) > 30 ? 1.1 : 0.4);
+      ctx.fillStyle = "rgba(20,25,30,.22)";
+      ctx.beginPath(); ctx.ellipse(x, y + 22, 16, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#5a6672"; ctx.lineWidth = 2.6;
+      ctx.beginPath(); ctx.moveTo(x - 9, y + 21); ctx.lineTo(x - 3, y + 21); ctx.moveTo(x + 3, y + 21); ctx.lineTo(x + 9, y + 21); ctx.stroke();
+      // corps : chandail bleu à fleur de lys
+      ctx.fillStyle = "#2456a6"; roundRect(x - 13, y + 2 + bob * 0.3, 26, 19, 7); ctx.fill();
+      fleurDeLys(x, y + 11 + bob * 0.3, 0.62, "#f6eddd");
+      // tête de robot adulte : métal, barbe, moustache, GROS sourcils noirs ébouriffés (jamais de lunettes de soleil)
+      ctx.fillStyle = "#c9ced6"; ctx.beginPath(); ctx.arc(x, y - 10 + bob, 13.5, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#7d8590"; ctx.lineWidth = 1.6; ctx.stroke();
+      // barbe (bas du visage)
+      ctx.fillStyle = "#4a3b2c";
+      ctx.beginPath(); ctx.arc(x, y - 7.5 + bob, 12.2, Math.PI * 0.18, Math.PI * 0.82); ctx.fill();
+      // moustache
+      ctx.beginPath(); ctx.ellipse(x, y - 6.4 + bob, 6.4, 2.7, 0, 0, Math.PI * 2); ctx.fill();
+      // yeux
+      ctx.fillStyle = "#22262c";
+      ctx.beginPath(); ctx.arc(x - 4.6, y - 12.4 + bob, 1.9, 0, Math.PI * 2); ctx.arc(x + 4.6, y - 12.4 + bob, 1.9, 0, Math.PI * 2); ctx.fill();
+      // sourcils ébouriffés : trois traits épais par sourcil
+      ctx.strokeStyle = "#14161a"; ctx.lineWidth = 2.7; ctx.lineCap = "round";
+      [-1, 1].forEach(sgn => {
+        for (let i = 0; i < 3; i++) {
+          ctx.beginPath();
+          ctx.moveTo(x + sgn * (1.6 + i * 2.6), y - 17.6 + bob - (i % 2) * 1.1);
+          ctx.lineTo(x + sgn * (4.4 + i * 2.6), y - 16.4 + bob - ((i + 1) % 2) * 1.2);
+          ctx.stroke();
+        }
+      });
+      // antenne-boulon
+      ctx.strokeStyle = "#7d8590"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x, y - 23 + bob); ctx.lineTo(x, y - 27 + bob); ctx.stroke();
+      ctx.fillStyle = "#f4b41a"; ctx.beginPath(); ctx.arc(x, y - 28.5 + bob, 2.6, 0, Math.PI * 2); ctx.fill();
+      stick(x, y, flip, hgpto.face.y, "#5d5240");
+    }
+    function drawGoalieYou() {
+      const { x, y } = goalieYou;
+      ctx.fillStyle = "rgba(20,25,30,.22)";
+      ctx.beginPath(); ctx.ellipse(x, y + 21, 17, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+      // jambières blanches
+      ctx.fillStyle = "#eef2f5"; roundRect(x - 4, y + 2, 15, 19, 5); ctx.fill(); roundRect(x - 15, y + 2, 10, 19, 5); ctx.fill();
+      ctx.strokeStyle = "#2456a6"; ctx.lineWidth = 1.6;
+      roundRect(x - 4, y + 2, 15, 19, 5); ctx.stroke(); roundRect(x - 15, y + 2, 10, 19, 5); ctx.stroke();
+      // corps + masque
+      ctx.fillStyle = "#2456a6"; roundRect(x - 13, y - 8, 25, 13, 6); ctx.fill();
+      ctx.fillStyle = "#dfe6ec"; ctx.beginPath(); ctx.arc(x, y - 14, 8.6, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#8a97a5"; ctx.lineWidth = 1.4; ctx.stroke();
+      ctx.fillStyle = "#33404c"; ctx.fillRect(x - 5, y - 15.5, 10, 2.6);
+    }
+    function drawPixel(t) {
+      const { x, y } = pixel;
+      const distracted = pixel.mode !== "track";
+      const perk = pixel.mode === "telegraph";
+      ctx.fillStyle = "rgba(20,25,30,.22)";
+      ctx.beginPath(); ctx.ellipse(x, y + 20, 16, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+      // queue
+      ctx.strokeStyle = "#3a3f46"; ctx.lineWidth = 4; ctx.lineCap = "round";
+      const wag = Math.sin(t * (distracted ? 9 : 3)) * 4;
+      ctx.beginPath(); ctx.moveTo(x + 12, y + 12); ctx.quadraticCurveTo(x + 22, y + 8, x + 20, y - 4 + wag); ctx.stroke();
+      // corps de chatte
+      ctx.fillStyle = "#454b53"; roundRect(x - 13, y - 1, 26, 21, 9); ctx.fill();
+      ctx.fillStyle = "#e8e2d4"; ctx.beginPath(); ctx.ellipse(x - 2, y + 10, 6.5, 7.5, 0, 0, Math.PI * 2); ctx.fill(); // poitrail
+      // jambières de gardienne (devant, côté glace)
+      ctx.fillStyle = "#f2f5f7"; roundRect(x - 19, y + 1, 9, 19, 4); ctx.fill(); roundRect(x - 19, y - 6, 9, 9, 4); ctx.fill();
+      ctx.strokeStyle = "#c22430"; ctx.lineWidth = 1.5; roundRect(x - 19, y + 1, 9, 19, 4); ctx.stroke();
+      // tête
+      ctx.fillStyle = "#454b53"; ctx.beginPath(); ctx.arc(x - 1, y - 11, 10.5, 0, Math.PI * 2); ctx.fill();
+      // oreilles (se dressent pendant le télégraphe)
+      const eh = perk ? 9.5 : distracted ? 8.5 : 6.5;
+      ctx.beginPath();
+      ctx.moveTo(x - 9.5, y - 17); ctx.lineTo(x - 7.5, y - 17 - eh); ctx.lineTo(x - 3.5, y - 15.5); ctx.closePath();
+      ctx.moveTo(x + 2.5, y - 15.5); ctx.lineTo(x + 5.5, y - 17 - eh); ctx.lineTo(x + 7.8, y - 16.5); ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#e8a2b4";
+      ctx.beginPath(); ctx.moveTo(x - 8, y - 17.6); ctx.lineTo(x - 7.2, y - 16 - eh * 0.62); ctx.lineTo(x - 5, y - 16); ctx.closePath(); ctx.fill();
+      // yeux : verts, regard vers lookX/lookY (rondelle ou papillon)
+      const la = Math.atan2(pixel.lookY - (y - 11), pixel.lookX - (x - 1));
+      const ex = Math.cos(la) * 2.2, ey = Math.sin(la) * 1.6;
+      ctx.fillStyle = distracted ? "#ffd94d" : "#7fc95e";
+      ctx.beginPath(); ctx.ellipse(x - 5 + ex, y - 12 + ey, 2.5, 3.1, 0, 0, Math.PI * 2); ctx.ellipse(x + 3.4 + ex, y - 12 + ey, 2.5, 3.1, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#14161a";
+      ctx.beginPath(); ctx.ellipse(x - 5 + ex, y - 12 + ey, 1, 2.4, 0, 0, Math.PI * 2); ctx.ellipse(x + 3.4 + ex, y - 12 + ey, 1, 2.4, 0, 0, Math.PI * 2); ctx.fill();
+      // nez + moustaches
+      ctx.fillStyle = "#e8a2b4"; ctx.beginPath(); ctx.arc(x - 1, y - 7.6, 1.5, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "rgba(240,240,240,.8)"; ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x - 10, y - 8); ctx.lineTo(x - 16, y - 9.5); ctx.moveTo(x - 10, y - 6.6); ctx.lineTo(x - 16, y - 5.6);
+      ctx.moveTo(x + 7.5, y - 8); ctx.lineTo(x + 13, y - 9.5); ctx.moveTo(x + 7.5, y - 6.6); ctx.lineTo(x + 13, y - 5.6);
+      ctx.stroke();
+      if (perk) { // indicateur « ! » pendant le télégraphe
+        ctx.fillStyle = "#c22430";
+        ctx.font = "1000 19px system-ui"; ctx.textAlign = "center";
+        ctx.fillText("!", x - 1, y - 34 - Math.sin(t * 10) * 1.6);
+      }
+      if (pixel.butterfly) { // papillon imaginaire
+        const b = pixel.butterfly;
+        const bx = b.x + Math.sin(b.t * 2.3) * 7, by = b.y + Math.cos(b.t * 3.1) * 5;
+        const flap = Math.abs(Math.sin(b.t * 11)) * 5 + 2;
+        ctx.fillStyle = "#b678e8";
+        ctx.beginPath(); ctx.ellipse(bx - 4.5, by, 5.5, flap, -0.5, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(bx + 4.5, by, 5.5, flap, 0.5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#4a3b2c"; ctx.fillRect(bx - 1, by - 4, 2, 8);
+      }
+    }
+    function drawCharge() {
+      if (!charging || puck.carrier !== player) return;
+      ctx.fillStyle = "rgba(20,20,20,.35)"; roundRect(player.x - 20, player.y - 40, 40, 7, 3.5); ctx.fill();
+      ctx.fillStyle = charge > 0.75 ? "#e63946" : "#f4b41a"; roundRect(player.x - 20, player.y - 40, 40 * charge, 7, 3.5); ctx.fill();
+    }
+    function drawJoy() {
+      if (!joy.active) return;
+      ctx.strokeStyle = "rgba(38,32,26,.4)"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(joy.ax, joy.ay, 26, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = "rgba(38,32,26,.45)";
+      ctx.beginPath(); ctx.arc(joy.ax + joy.dx * 24, joy.ay + joy.dy * 24, 11, 0, Math.PI * 2); ctx.fill();
+    }
+    function render(t) {
+      drawIce();
+      drawPuck();
+      drawGoalieYou();
+      drawPixel(t);
+      drawPlayer();
+      drawHgpto(t);
+      drawCharge();
+      drawJoy();
+      if (bannerHideAt && performance.now() > bannerHideAt) { bannerEl.classList.add("hidden"); bannerHideAt = 0; }
+    }
+
+    // ============ Boucle principale (pas fixe, plafond DPR 2) ============
+    (function fitCanvas() {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    })();
+    let lastTs = 0;
+    function frame(ts) {
+      requestAnimationFrame(frame);
+      if (!lastTs) lastTs = ts;
+      let dt = Math.min(0.033, (ts - lastTs) / 1000); lastTs = ts;
+      const now = ts / 1000;
+      const sub = Math.max(1, Math.ceil(dt / (1 / 120)));
+      const sdt = dt / sub;
+      for (let i = 0; i < sub; i++) step(sdt, now);
+      render(now);
+    }
+    requestAnimationFrame(frame);
+    resetPositions();
+    updateHud();
+
+    // ============ Crochets de test (automatisation seulement ; aucun effet visuel) ============
+    window.__hockey = {
+      state: () => ({
+        mode: S.mode, clock: S.clock, overtime: S.overtime,
+        scoreYou: S.scoreYou, scoreThem: S.scoreThem,
+        player: { x: player.x, y: player.y, hasPuck: puck.carrier === player },
+        hgpto: { x: hgpto.x, y: hgpto.y, hasPuck: puck.carrier === hgpto },
+        pixel: { mode: pixel.mode, y: pixel.y, telegraph: pixel.mode === "telegraph", distracted: pixel.mode === "distracted" },
+        goalieYou: { y: goalieYou.y },
+        puck: { x: puck.x, y: puck.y, vx: puck.vx, vy: puck.vy, carried: !!puck.carrier }
+      }),
+      start: () => startMatch(),
+      setClock: (s) => { S.clock = s; },
+      givePuck: (who) => {
+        puck.carrier = who === "player" ? player : hgpto;
+        player.hasPuck = who === "player"; hgpto.hasPuck = who === "hgpto";
+      },
+      place: (who, x, y) => {
+        const e = who === "player" ? player : who === "hgpto" ? hgpto : who === "puck" ? puck : null;
+        if (e) { e.x = x; e.y = y; if (e === puck) { puck.vx = puck.vy = 0; puck.carrier = null; player.hasPuck = hgpto.hasPuck = false; } }
+      },
+      setFace: (who, x, y) => { const e = who === "player" ? player : hgpto; e.face = { x, y }; },
+      shootPlayer: () => playerShoot(0.85),
+      forcePixelDistraction: () => { if (pixel.mode === "track") { pixel.timer = 0.01; } },
+      endNow: () => { S.clock = 0.01; }
+    };
+    </script>
+  </body>
+</html>
