@@ -3,8 +3,8 @@ import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/outils/hp-hyper-potentiel")({
   head: () => createSeoHead({
-    title: "HP — Hyper potentiel | Outil interactif gratuit",
-    description: "Respiration guidée, carte ikigaï interactive et plan WOOP : l'outil web gratuit compagnon du mini cahier HP — Hyper potentiel. Sans compte, tes données restent sur ton appareil.",
+    title: "Un petit pas à la fois | Outil interactif gratuit",
+    description: "Respiration guidée, carte ikigaï interactive et plan WOOP : l'outil web gratuit compagnon du mini cahier Un petit pas à la fois. Sans compte, tes données restent sur ton appareil.",
     path: "/outils/hp-hyper-potentiel",
   }),
   component: Page,
@@ -42,9 +42,9 @@ function Page() {
         </div>
 
         <header style={{ marginBottom: 24 }}>
-          <h1 style={{ marginBottom: 8 }}>HP — Hyper potentiel</h1>
+          <h1 style={{ marginBottom: 8 }}>Un petit pas à la fois</h1>
           <p className="lead" style={{ marginBottom: 16 }}>
-            Libère l'HP qu'il y a en toi : trois modules pour respirer, clarifier
+            Comme un petit dinosaure qui fait la grande traversée : trois modules pour respirer, clarifier
             ce qui compte et passer à l'action — gratuitement, sans compte.
           </p>
           <p style={{ marginBottom: 0 }}>
