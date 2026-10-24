@@ -16,7 +16,7 @@ function Page() {
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">Les Passeurs</span>
-          <h1>Trois dollars par mois. <em>Trente-six dollars pour l'année.</em> C'est tout.</h1>
+          <h1>Trois dollars par mois. <em>Vingt-huit dollars pour l'année.</em> C'est tout.</h1>
           <p className="lead">
             HP Outils fabrique des jeux, des livres et des outils pour la vraie vie — pensés pour les familles, les petits budgets et celles et ceux qui veulent apprendre. Beaucoup sont gratuits, et on veut que ça reste comme ça.
           </p>
