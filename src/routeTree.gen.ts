@@ -44,10 +44,10 @@ import { Route as AppsSlugRouteImport } from './routes/apps.$slug'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as EnCuisinePanierRouteImport } from './routes/en-cuisine.panier'
-import { Route as LireJetonRouteImport } from './routes/lire.$jeton'
-import { Route as LireMerciRouteImport } from './routes/lire.merci'
-import { Route as OutilsBonsReflexesRouteImport } from './routes/outils.bons-reflexes'
-import { Route as OutilsHpHyperPotentielRouteImport } from './routes/outils.hp-hyper-potentiel'
+import { Route as LireJetonRouteImport } from './routes/lire_.$jeton'
+import { Route as LireMerciRouteImport } from './routes/lire_.merci'
+import { Route as OutilsBonsReflexesRouteImport } from './routes/outils_.bons-reflexes'
+import { Route as OutilsHpHyperPotentielRouteImport } from './routes/outils_.hp-hyper-potentiel'
 import { Route as PdfSlugRouteImport } from './routes/pdf.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
 import { Route as ApiPublicGameHeartsRouteImport } from './routes/api/public/game-hearts'
@@ -234,24 +234,24 @@ const EnCuisinePanierRoute = EnCuisinePanierRouteImport.update({
   getParentRoute: () => EnCuisineRoute,
 } as any)
 const LireJetonRoute = LireJetonRouteImport.update({
-  id: '/$jeton',
-  path: '/$jeton',
-  getParentRoute: () => LireRoute,
+  id: '/lire/$jeton',
+  path: '/lire/$jeton',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const LireMerciRoute = LireMerciRouteImport.update({
-  id: '/merci',
-  path: '/merci',
-  getParentRoute: () => LireRoute,
+  id: '/lire/merci',
+  path: '/lire/merci',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const OutilsBonsReflexesRoute = OutilsBonsReflexesRouteImport.update({
-  id: '/bons-reflexes',
-  path: '/bons-reflexes',
-  getParentRoute: () => OutilsRoute,
+  id: '/outils/bons-reflexes',
+  path: '/outils/bons-reflexes',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const OutilsHpHyperPotentielRoute = OutilsHpHyperPotentielRouteImport.update({
-  id: '/hp-hyper-potentiel',
-  path: '/hp-hyper-potentiel',
-  getParentRoute: () => OutilsRoute,
+  id: '/outils/hp-hyper-potentiel',
+  path: '/outils/hp-hyper-potentiel',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const PdfSlugRoute = PdfSlugRouteImport.update({
   id: '/pdf/$slug',
@@ -320,10 +320,10 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
-  '/lire': typeof LireRouteWithChildren
+  '/lire': typeof LireRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
-  '/outils': typeof OutilsRouteWithChildren
+  '/outils': typeof OutilsRoute
   '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
@@ -370,10 +370,10 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
-  '/lire': typeof LireRouteWithChildren
+  '/lire': typeof LireRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
-  '/outils': typeof OutilsRouteWithChildren
+  '/outils': typeof OutilsRoute
   '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
@@ -421,10 +421,10 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/les-passeurs': typeof LesPasseursRoute
-  '/lire': typeof LireRouteWithChildren
+  '/lire': typeof LireRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
-  '/outils': typeof OutilsRouteWithChildren
+  '/outils': typeof OutilsRoute
   '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
   '/prix': typeof PrixRoute
@@ -624,10 +624,14 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   JeuxRoute: typeof JeuxRoute
   LesPasseursRoute: typeof LesPasseursRoute
-  LireRoute: typeof LireRouteWithChildren
+  LireJetonRoute: typeof LireJetonRoute
+  LireMerciRoute: typeof LireMerciRoute
+  LireRoute: typeof LireRoute
   LivresPdfRoute: typeof LivresPdfRoute
   MerciRoute: typeof MerciRoute
-  OutilsRoute: typeof OutilsRouteWithChildren
+  OutilsBonsReflexesRoute: typeof OutilsBonsReflexesRoute
+  OutilsHpHyperPotentielRoute: typeof OutilsHpHyperPotentielRoute
+  OutilsRoute: typeof OutilsRoute
   PanierRoute: typeof PanierRoute
   PasseurDeSavoirRoute: typeof PasseurDeSavoirRoute
   PrixRoute: typeof PrixRoute
@@ -901,31 +905,31 @@ declare module '@tanstack/react-router' {
     }
     '/lire/$jeton': {
       id: '/lire/$jeton'
-      path: '/$jeton'
+      path: '/lire/$jeton'
       fullPath: '/lire/$jeton'
       preLoaderRoute: typeof LireJetonRouteImport
-      parentRoute: typeof LireRoute
+      parentRoute: typeof rootRouteImport
     }
     '/lire/merci': {
       id: '/lire/merci'
-      path: '/merci'
+      path: '/lire/merci'
       fullPath: '/lire/merci'
       preLoaderRoute: typeof LireMerciRouteImport
-      parentRoute: typeof LireRoute
+      parentRoute: typeof rootRouteImport
     }
     '/outils/bons-reflexes': {
       id: '/outils/bons-reflexes'
-      path: '/bons-reflexes'
+      path: '/outils/bons-reflexes'
       fullPath: '/outils/bons-reflexes'
       preLoaderRoute: typeof OutilsBonsReflexesRouteImport
-      parentRoute: typeof OutilsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/outils/hp-hyper-potentiel': {
       id: '/outils/hp-hyper-potentiel'
-      path: '/hp-hyper-potentiel'
+      path: '/outils/hp-hyper-potentiel'
       fullPath: '/outils/hp-hyper-potentiel'
       preLoaderRoute: typeof OutilsHpHyperPotentielRouteImport
-      parentRoute: typeof OutilsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/pdf/$slug': {
       id: '/pdf/$slug'
@@ -1017,31 +1021,6 @@ const EnCuisineRouteWithChildren = EnCuisineRoute._addFileChildren(
   EnCuisineRouteChildren,
 )
 
-interface LireRouteChildren {
-  LireJetonRoute: typeof LireJetonRoute
-  LireMerciRoute: typeof LireMerciRoute
-}
-
-const LireRouteChildren: LireRouteChildren = {
-  LireJetonRoute: LireJetonRoute,
-  LireMerciRoute: LireMerciRoute,
-}
-
-const LireRouteWithChildren = LireRoute._addFileChildren(LireRouteChildren)
-
-interface OutilsRouteChildren {
-  OutilsBonsReflexesRoute: typeof OutilsBonsReflexesRoute
-  OutilsHpHyperPotentielRoute: typeof OutilsHpHyperPotentielRoute
-}
-
-const OutilsRouteChildren: OutilsRouteChildren = {
-  OutilsBonsReflexesRoute: OutilsBonsReflexesRoute,
-  OutilsHpHyperPotentielRoute: OutilsHpHyperPotentielRoute,
-}
-
-const OutilsRouteWithChildren =
-  OutilsRoute._addFileChildren(OutilsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
@@ -1059,10 +1038,14 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   JeuxRoute: JeuxRoute,
   LesPasseursRoute: LesPasseursRoute,
-  LireRoute: LireRouteWithChildren,
+  LireJetonRoute: LireJetonRoute,
+  LireMerciRoute: LireMerciRoute,
+  LireRoute: LireRoute,
   LivresPdfRoute: LivresPdfRoute,
   MerciRoute: MerciRoute,
-  OutilsRoute: OutilsRouteWithChildren,
+  OutilsBonsReflexesRoute: OutilsBonsReflexesRoute,
+  OutilsHpHyperPotentielRoute: OutilsHpHyperPotentielRoute,
+  OutilsRoute: OutilsRoute,
   PanierRoute: PanierRoute,
   PasseurDeSavoirRoute: PasseurDeSavoirRoute,
   PrixRoute: PrixRoute,
