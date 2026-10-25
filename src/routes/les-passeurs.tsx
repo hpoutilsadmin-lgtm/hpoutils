@@ -21,7 +21,7 @@ function Page() {
             HP Outils fabrique des jeux, des livres et des outils pour la vraie vie — pensés pour les familles, les petits budgets et celles et ceux qui veulent apprendre. Beaucoup sont gratuits, et on veut que ça reste comme ça.
           </p>
           <div className="lead-actions">
-            <Link to="/jeux" className="btn-primary">Voir les produits</Link>
+            <Link to="/prix" className="btn-primary">Voir les produits</Link>
             <a className="btn-ghost" href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">Écrire à la direction humaine</a>
           </div>
         </div>
@@ -78,7 +78,7 @@ function Page() {
               L'inscription est ouverte.
             </p>
             <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
-              Pour t'inscrire, écris à la direction en précisant la formule (3 $ / mois,
+              Pour t'inscrire, <a href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">écris à la direction</a> en précisant la formule (3 $ / mois,
               28 $ / an, ou 12 $ pour 4 savoirs) — un humain te répond sous 3 jours
               ouvrables avec les détails. Aucun paiement n'est demandé ici : la direction
               te confirme les détails avant tout prélèvement. Le paiement automatisé en
