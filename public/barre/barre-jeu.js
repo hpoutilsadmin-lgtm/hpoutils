@@ -249,7 +249,7 @@
        Chevalier du fleuve — RTS à boucle requestAnimationFrame :
        le gel « gate » fige la simulation (prouvé au playtest :
        positions et minuteurs identiques pendant la pause). */
-    "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.3.html": {
+    "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html": {
       nom: "Chevalier du fleuve", score: null,
       pause: { type: "gate" }
     }

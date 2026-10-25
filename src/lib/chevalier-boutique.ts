@@ -1,7 +1,7 @@
 // Boutique Chevalier — catalogue source unique des paquets de pierres.
 //
 // Contexte (tête 86a8a073, 24 oct. 2026) :
-// - Le jeu (public/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.3.html)
+// - Le jeu (public/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html)
 //   possède déjà sa boutique en jeu (CDF_SHOP), avec priceId: null, donc
 //   « Bientôt en vente ». La sauvegarde du jeu est locale au navigateur
 //   (localStorage, clé cdf_save_v1), sans compte, sans serveur.
