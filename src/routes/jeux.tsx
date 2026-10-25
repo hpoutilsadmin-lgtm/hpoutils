@@ -659,12 +659,12 @@ function JeuxPage() {
           <p className="strip-intro">Tome 1 gratuit · tomes standards 5 $ CAD · grands tomes 8 $ CAD. Aucune taxe ajoutée.</p>
           <div className="pillar-grid">
             {STORIES.map((story, index) => (
-              <article className="pillar-card" key={story.audience}>
+              <Link to="/lire" className="pillar-card" style={{ textDecoration: "none" }} key={story.audience}>
                 <span className="pillar-num">{String(index + 1).padStart(2, "0")}</span>
                 <h3>Rayon {story.audience}</h3>
                 <p>{story.copy}</p>
-                <span className="workshop-meta">Premiers tomes à venir</span>
-              </article>
+                <span className="workshop-meta">Voir les tomes →</span>
+              </Link>
             ))}
           </div>
         </div>
@@ -679,11 +679,11 @@ function JeuxPage() {
               ["Tomes standards", "Des histoires complètes à 5 $ CAD, aucune taxe ajoutée."],
               ["Grands tomes", "Grands tomes à 8 $ CAD, aucune taxe ajoutée."],
             ].map(([title, copy], index) => (
-              <article className="pillar-card" key={title}>
+              <Link to="/lire" className="pillar-card" style={{ textDecoration: "none" }} key={title}>
                 <span className="pillar-num">{String(index + 1).padStart(2, "0")}</span>
                 <h3>{title}</h3>
                 <p>{copy}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
