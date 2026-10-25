@@ -646,6 +646,24 @@
       #decor .lights span:nth-child(4n){animation-delay:.5s}
       @keyframes twinkle{from{opacity:.4}to{opacity:1}}
 
+      #decor .ghost-pass{position:absolute;top:18vh;left:0;pointer-events:none;z-index:1}
+      #decor .ghost-pass.lr{animation:ghostcross-lr 11s linear forwards}
+      #decor .ghost-pass.rl{animation:ghostcross-rl 11s linear forwards}
+      #decor .ghost-pass.still{left:50%;transform:translateX(-50%);animation:ghostfade 6.5s ease forwards}
+      #decor .ghost-figure{display:block;font-size:44px;line-height:1;animation:ghostbob 1.3s ease-in-out infinite}
+      #decor .ghost-pass.still .ghost-figure{animation:none}
+      #decor .ghost-bubble{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:8px;white-space:nowrap;background:#fffdf5;color:#2b2118;border:2px solid #2b2118;border-radius:12px;padding:6px 10px;font-size:14px;font-weight:800;box-shadow:2px 2px 0 rgba(43,33,24,.25)}
+      #decor .ghost-bubble::after{content:"";position:absolute;top:100%;left:50%;width:10px;height:10px;margin-left:-5px;margin-top:-6px;background:#fffdf5;border-right:2px solid #2b2118;border-bottom:2px solid #2b2118;transform:rotate(45deg)}
+      @keyframes ghostcross-lr{from{transform:translateX(-140px)}to{transform:translateX(110vw)}}
+      @keyframes ghostcross-rl{from{transform:translateX(110vw)}to{transform:translateX(-140px)}}
+      @keyframes ghostbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+      @keyframes ghostfade{0%{opacity:0}12%{opacity:1}82%{opacity:1}100%{opacity:0}}
+      @media (prefers-reduced-motion: reduce){
+        #decor .ghost-pass.lr,#decor .ghost-pass.rl{animation:ghostfade 6.5s ease forwards;left:50%;transform:translateX(-50%)}
+        #decor .ghost-figure{animation:none}
+      }
+
+
       /* ===== Lot 2026-10-22 : visite guidée, accompagnement, questions tapées ===== */
       .sec-glow{
         outline:3px solid var(--gold-deep);outline-offset:5px;border-radius:12px;

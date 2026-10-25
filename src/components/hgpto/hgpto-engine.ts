@@ -4584,6 +4584,46 @@ export function initHgpto() {
         }, 5200);
       }
 
+      /* ---------- Fantome Halloween : il passe, dit « booooouuuuuh », et repart ----------
+         Demande de la direction, 25 oct. 2026. Fenetre : Halloween ET jusqu'au 31 octobre
+         (le 1er novembre, meme si le decor Halloween court encore, le fantome ne passe plus).
+         Il vit dans #decor (comme les araignees) : si le decor n'est pas encore installe,
+         le passage l'installe (buildDecor + 'on'), pour que fantome et araignees
+         apparaissent ensemble, comme demande. Session seulement, aucun stockage.
+         Il ne bloque aucun clic (pointer-events: none via #decor) et ne parle jamais
+         dans la bulle d'HGPTO : il a sa propre petite bulle. */
+      function ghostWindow(){
+        if (seasonDecorKind() !== 'halloween') return false;
+        var d = new Date();
+        return d.getMonth() !== 10;   // octobre seulement : pas le 1er novembre
+      }
+      var ghostTimer = null, ghostPassed = false;
+      function scheduleGhost(){
+        if (!ghostWindow()) return;
+        var delay = ghostPassed ? (240000 + Math.random() * 240000) : (15000 + Math.random() * 15000);
+        ghostTimer = setTimeout(function(){ ghostPass(); ghostPassed = true; scheduleGhost(); }, delay);
+      }
+      function ghostPass(){
+        if (!ghostWindow() || !decorEl || docHidden) return;
+        buildDecor();
+        decorEl.classList.add('on'); decorShown = true;
+        var g = document.createElement('div');
+        if (reduced){
+          g.className = 'ghost-pass still';
+          g.innerHTML = '<span class="ghost-figure">\uD83D\uDC7B</span><span class="ghost-bubble">booooouuuuuh</span>';
+          decorEl.appendChild(g);
+          setTimeout(function(){ if (g.parentNode) g.parentNode.removeChild(g); }, 6500);
+          return;
+        }
+        g.className = 'ghost-pass ' + (Math.random() < 0.5 ? 'lr' : 'rl');
+        g.innerHTML = '<span class="ghost-figure">\uD83D\uDC7B</span><span class="ghost-bubble">booooouuuuuh</span>';
+        decorEl.appendChild(g);
+        var done = false;
+        function removeGhost(){ if (done) return; done = true; if (g.parentNode) g.parentNode.removeChild(g); }
+        g.addEventListener('animationend', function(ev){ if (ev.target === g) removeGhost(); });
+        setTimeout(removeGhost, 14000);
+      }
+
       /* ---------- Rituels : phrase du moment à l'accueil, salut de départ ---------- */
       function momentLine(){
         var d = new Date(), m = d.getMonth(), day = d.getDate();
@@ -4642,6 +4682,7 @@ export function initHgpto() {
         scheduleWave();
         scheduleCatLife();
         scheduleChoix();
+        scheduleGhost();
         if (seasonDecorKind()) setTimeout(function(){
           if (!isBusy() && state !== 'sleep' && !qaOpen && !gameOn) doDecor();
         }, 17000);
