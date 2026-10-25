@@ -60,6 +60,7 @@ function Page() {
           <h2>Pas de contrat déguisé, <em>pas de promesse en l'air.</em></h2>
           <p className="strip-intro">Juste: tu passes, et d'autres reçoivent.</p>
           <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Et les savoirs s'offrent aussi par quatre : 12 $ CAD pour 4 savoirs.</h3>
+          <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès à des astuces que les autres n'ont pas. La formule 4 savoirs est sans renouvellement.</p>
           <p className="strip-intro" style={{ marginTop: 4 }}>Aucune taxe ajoutée : petit fournisseur, la TPS et la TVQ ne sont pas perçues.</p>
           <div
             style={{

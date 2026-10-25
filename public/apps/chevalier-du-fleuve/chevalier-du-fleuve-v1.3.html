@@ -149,6 +149,7 @@ button.forger:disabled{background:#666;border-color:#999}
   trocs avec les Gybbys. <b>Tout peut se gagner en jouant.</b> L'achat sert seulement à s'équiper
   plus vite et plus fort. Aucune taxe ajoutée.</p>
   <div id="boutiqueContenu" style="width:100%"></div>
+  <p class="note">Boutique en préparation sur le site : <a href="/boutique-chevalier">voir les paquets</a>. Aucun paiement n'est pris pour l'instant.</p>
 </div>
 
 <div class="ecran" id="ec-sources">
@@ -194,12 +195,16 @@ button.forger:disabled{background:#666;border-color:#999}
    coût de construction) ; ressources épuisées = la réparation s'arrête. */
 const CDF_CONFIG = { version:"1.3" };
 /* Boutique pierres — produits Stripe à créer par Mélanie.
-   priceId:null = « bientôt en vente ». Aucun autre prix affiché. */
+   Prix décidés le 24 oct. 2026 (2,99 / 4,99 / 8,99 / 19,99 $) ; pierres
+   et bonus inchangés. priceId:null = « bientôt en vente ».
+   L'achat réel ne se fait JAMAIS ici : la boutique en jeu renvoie vers
+   /boutique-chevalier (caisse + livraison vérifiée). Le jeu ne crédite
+   qu'en démo interne, ou le bonus en attente venu de la boutique. */
 const CDF_SHOP = [
- {id:"eclats",  nom:"Éclats du fleuve",    prix:"4,99 $",  gems:60,  bonus:null,        priceId:null},
- {id:"filon",   nom:"Filon de la berge",   prix:"8,99 $",  gems:140, bonus:{rar:2},     priceId:null},
- {id:"veine",   nom:"Veine des Rois",      prix:"20,99 $", gems:340, bonus:{rar:3},     priceId:null},
- {id:"tresor",  nom:"Trésor des terriers", prix:"39,99 $", gems:750, bonus:{rar:4},     priceId:null}
+ {id:"eclats",  nom:"Éclats du fleuve",    prix:"2,99 $",  gems:60,  bonus:null,        priceId:null},
+ {id:"filon",   nom:"Filon de la berge",   prix:"4,99 $",  gems:140, bonus:{rar:2},     priceId:null},
+ {id:"veine",   nom:"Veine des Rois",      prix:"8,99 $",  gems:340, bonus:{rar:3},     priceId:null},
+ {id:"tresor",  nom:"Trésor des terriers", prix:"19,99 $", gems:750, bonus:{rar:4},     priceId:null}
 ];
 const DEMO = new URLSearchParams(location.search).get("demo")==="interne";
 if (DEMO) document.getElementById("demoBadge").style.display="block";
@@ -390,6 +395,17 @@ function prixTxt(p){ let s=[]; if(p.f)s.push("🦫 "+p.f); if(p.e)s.push("🪙 "
 function peutPayer(p){ return SAVE.coffre.f>=p.f && SAVE.coffre.e>=p.e && SAVE.gems>=(p.g||0); }
 function payer(p){ SAVE.coffre.f-=p.f; SAVE.coffre.e-=p.e; SAVE.gems-=(p.g||0); }
 function rendreArmurerie(){
+  /* Bonus d'un achat boutique en attente : appliqué ici, au héros choisi,
+     avec la règle actuelle (premier rayon sous la rareté, un rayon par
+     bonus). Le héros choisi n'est pas persisté dans la sauvegarde, donc
+     la page boutique ne peut pas l'appliquer elle-même. */
+  if(Array.isArray(SAVE.bonusChevalierEnAttente) && SAVE.bonusChevalierEnAttente.length){
+    const bonus = SAVE.bonusChevalierEnAttente; SAVE.bonusChevalierEnAttente = [];
+    for(const rar of bonus){
+      for(const r of RAYONS){ if(eqNiveau(herosChoisi,r.id) < rar){ if(!SAVE.equip[herosChoisi]) SAVE.equip[herosChoisi]={}; SAVE.equip[herosChoisi][r.id]=rar; break; } }
+    }
+    saveEcrire();
+  }
   document.getElementById("armCoffre").innerHTML =
     "Ton coffre : 🦫 <b>"+SAVE.coffre.f+"</b> fourrures · 🪙 <b>"+SAVE.coffre.e+"</b> écus · 💎 <b>"+SAVE.gems+"</b> pierres"+
     " &nbsp;·&nbsp; Héros équipé : <b>"+HEROS[herosChoisi].s+"</b> (choisis-le à l'écran Héros)";
@@ -444,13 +460,13 @@ function rendreBoutique(){
   let html = "<table class='arm'><tr><th>Paquet</th><th>Prix</th><th>Contenu</th><th></th></tr>";
   for(const pk of CDF_SHOP){
     html += "<tr><td>💎 "+pk.nom+"</td><td><span class='prix'>"+pk.prix+"</span></td><td>"+pk.gems+" pierres"+(pk.bonus? " + un équipement "+["","","rare","épique","légendaire"][pk.bonus.rar]+" offert (héros choisi à l'écran Héros, premier rayon incomplet)":"")+"</td>"+
-     "<td>"+(pk.priceId? "<button class='acheter' data-pack='"+pk.id+"'>Acheter</button>" : "<span class='prix'>Bientôt en vente</span>"+(DEMO? " <button class='acheter' data-pack='"+pk.id+"'>Simuler (démo)</button>":""))+"</td></tr>";
+     "<td>"+(DEMO? "<button class='acheter' data-pack='"+pk.id+"'>Simuler (démo)</button>" : "<span class='prix'>Bientôt en vente</span> <a href='/boutique-chevalier'>Voir la boutique</a>")+"</td></tr>";
   }
   html += "</table>";
   el.innerHTML = html;
   el.querySelectorAll("button.acheter").forEach(b=>b.addEventListener("click",()=>{
     const pk = CDF_SHOP.find(x=>x.id===b.dataset.pack); if(!pk) return;
-    if(!pk.priceId && !DEMO) return;
+    if(!DEMO) return; /* Le jeu ne vend jamais : l'achat passe par /boutique-chevalier. */
     SAVE.gems += pk.gems;
     if(pk.bonus){ /* crédit d'équipement : monte d'un palier le premier rayon sous la rareté, pour le héros choisi */
       for(const r of RAYONS){ if(eqNiveau(herosChoisi,r.id) < pk.bonus.rar){ if(!SAVE.equip[herosChoisi]) SAVE.equip[herosChoisi]={}; SAVE.equip[herosChoisi][r.id]=pk.bonus.rar; break; } }

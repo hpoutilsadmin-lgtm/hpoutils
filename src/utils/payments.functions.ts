@@ -9,6 +9,7 @@ import {
 } from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
+import { settleGiftReservation } from "@/utils/cadeaux.functions";
 
 function buildDownloadUrl(priceId: string, email: string): string {
   const token = signDownloadToken({ priceId, email });
@@ -192,6 +193,19 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
           console.error("cart orders upsert failed", upsertErr);
           throw new Error("Database error");
         }
+      }
+
+      // Bon cadeau partiel : débite la réservation attachée à cette session
+      // (idempotent : si la réservation est déjà à zéro, rien n'est débité
+      // deux fois). Sans ce débit, un paiement partiel laisserait le solde
+      // réservé puis disponible à nouveau.
+      if (session.metadata?.giftRef) {
+        const discountCents =
+          typeof (session as { total_details?: { amount_discount?: number } })
+            .total_details?.amount_discount === "number"
+            ? (session.total_details as { amount_discount: number }).amount_discount
+            : 0;
+        await settleGiftReservation(session.id, discountCents);
       }
 
       const deliverable = rows.filter((r) => r.pdfPath && r.title);

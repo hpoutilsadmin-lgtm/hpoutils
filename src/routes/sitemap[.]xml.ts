@@ -28,6 +28,7 @@ const STATIC_PATHS = [
   "/contact",
   "/faq",
   "/prix",
+  "/boutique-chevalier",
   "/univers",
   "/transmettre",
   "/les-passeurs",
