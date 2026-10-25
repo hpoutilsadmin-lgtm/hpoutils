@@ -16,8 +16,11 @@ import { Route as ApercuRouteImport } from './routes/apercu'
 import { Route as AteliersRouteImport } from './routes/ateliers'
 import { Route as BaladoRouteImport } from './routes/balado'
 import { Route as BoiteRouteImport } from './routes/boite'
+import { Route as BoutiqueChevalierRouteImport } from './routes/boutique-chevalier'
+import { Route as CadeauxRouteImport } from './routes/cadeaux'
 import { Route as CollaborerRouteImport } from './routes/collaborer'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
+import { Route as ConditionsRouteImport } from './routes/conditions'
 import { Route as ConditionsDeVenteRouteImport } from './routes/conditions-de-vente'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -41,6 +44,7 @@ import { Route as UniversRouteImport } from './routes/univers'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as AchatSlugRouteImport } from './routes/achat.$slug'
 import { Route as AppsSlugRouteImport } from './routes/apps.$slug'
+import { Route as CadeauxMerciRouteImport } from './routes/cadeaux_.merci'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as EnCuisinePanierRouteImport } from './routes/en-cuisine.panier'
@@ -93,6 +97,16 @@ const BoiteRoute = BoiteRouteImport.update({
   path: '/boite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoutiqueChevalierRoute = BoutiqueChevalierRouteImport.update({
+  id: '/boutique-chevalier',
+  path: '/boutique-chevalier',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadeauxRoute = CadeauxRouteImport.update({
+  id: '/cadeaux',
+  path: '/cadeaux',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CollaborerRoute = CollaborerRouteImport.update({
   id: '/collaborer',
   path: '/collaborer',
@@ -101,6 +115,11 @@ const CollaborerRoute = CollaborerRouteImport.update({
 const ComprendreRoute = ComprendreRouteImport.update({
   id: '/comprendre',
   path: '/comprendre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConditionsRoute = ConditionsRouteImport.update({
+  id: '/conditions',
+  path: '/conditions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConditionsDeVenteRoute = ConditionsDeVenteRouteImport.update({
@@ -218,6 +237,11 @@ const AppsSlugRoute = AppsSlugRouteImport.update({
   path: '/apps/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CadeauxMerciRoute = CadeauxMerciRouteImport.update({
+  id: '/cadeaux_/merci',
+  path: '/cadeaux/merci',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
   path: '/checkout/return',
@@ -234,22 +258,22 @@ const EnCuisinePanierRoute = EnCuisinePanierRouteImport.update({
   getParentRoute: () => EnCuisineRoute,
 } as any)
 const LireJetonRoute = LireJetonRouteImport.update({
-  id: '/lire/$jeton',
+  id: '/lire_/$jeton',
   path: '/lire/$jeton',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LireMerciRoute = LireMerciRouteImport.update({
-  id: '/lire/merci',
+  id: '/lire_/merci',
   path: '/lire/merci',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OutilsBonsReflexesRoute = OutilsBonsReflexesRouteImport.update({
-  id: '/outils/bons-reflexes',
+  id: '/outils_/bons-reflexes',
   path: '/outils/bons-reflexes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OutilsHpHyperPotentielRoute = OutilsHpHyperPotentielRouteImport.update({
-  id: '/outils/hp-hyper-potentiel',
+  id: '/outils_/hp-hyper-potentiel',
   path: '/outils/hp-hyper-potentiel',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -311,8 +335,11 @@ export interface FileRoutesByFullPath {
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
   '/boite': typeof BoiteRoute
+  '/boutique-chevalier': typeof BoutiqueChevalierRoute
+  '/cadeaux': typeof CadeauxRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
@@ -336,6 +363,7 @@ export interface FileRoutesByFullPath {
   '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/apps/$slug': typeof AppsSlugRoute
+  '/cadeaux/merci': typeof CadeauxMerciRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/en-cuisine/panier': typeof EnCuisinePanierRouteWithChildren
@@ -361,8 +389,11 @@ export interface FileRoutesByTo {
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
   '/boite': typeof BoiteRoute
+  '/boutique-chevalier': typeof BoutiqueChevalierRoute
+  '/cadeaux': typeof CadeauxRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
@@ -386,6 +417,7 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/apps/$slug': typeof AppsSlugRoute
+  '/cadeaux/merci': typeof CadeauxMerciRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/en-cuisine/panier': typeof EnCuisinePanierRouteWithChildren
@@ -412,8 +444,11 @@ export interface FileRoutesById {
   '/ateliers': typeof AteliersRoute
   '/balado': typeof BaladoRoute
   '/boite': typeof BoiteRoute
+  '/boutique-chevalier': typeof BoutiqueChevalierRoute
+  '/cadeaux': typeof CadeauxRoute
   '/collaborer': typeof CollaborerRoute
   '/comprendre': typeof ComprendreRoute
+  '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
@@ -437,13 +472,14 @@ export interface FileRoutesById {
   '/unsubscribe': typeof UnsubscribeRoute
   '/achat/$slug': typeof AchatSlugRoute
   '/apps/$slug': typeof AppsSlugRoute
+  '/cadeaux_/merci': typeof CadeauxMerciRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/en-cuisine/panier': typeof EnCuisinePanierRouteWithChildren
-  '/lire/$jeton': typeof LireJetonRoute
-  '/lire/merci': typeof LireMerciRoute
-  '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
-  '/outils/hp-hyper-potentiel': typeof OutilsHpHyperPotentielRoute
+  '/lire_/$jeton': typeof LireJetonRoute
+  '/lire_/merci': typeof LireMerciRoute
+  '/outils_/bons-reflexes': typeof OutilsBonsReflexesRoute
+  '/outils_/hp-hyper-potentiel': typeof OutilsHpHyperPotentielRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
@@ -464,8 +500,11 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/balado'
     | '/boite'
+    | '/boutique-chevalier'
+    | '/cadeaux'
     | '/collaborer'
     | '/comprendre'
+    | '/conditions'
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
@@ -489,6 +528,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/achat/$slug'
     | '/apps/$slug'
+    | '/cadeaux/merci'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/en-cuisine/panier'
@@ -514,8 +554,11 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/balado'
     | '/boite'
+    | '/boutique-chevalier'
+    | '/cadeaux'
     | '/collaborer'
     | '/comprendre'
+    | '/conditions'
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
@@ -539,6 +582,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/achat/$slug'
     | '/apps/$slug'
+    | '/cadeaux/merci'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/en-cuisine/panier'
@@ -564,8 +608,11 @@ export interface FileRouteTypes {
     | '/ateliers'
     | '/balado'
     | '/boite'
+    | '/boutique-chevalier'
+    | '/cadeaux'
     | '/collaborer'
     | '/comprendre'
+    | '/conditions'
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
@@ -589,13 +636,14 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/achat/$slug'
     | '/apps/$slug'
+    | '/cadeaux_/merci'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/en-cuisine/panier'
-    | '/lire/$jeton'
-    | '/lire/merci'
-    | '/outils/bons-reflexes'
-    | '/outils/hp-hyper-potentiel'
+    | '/lire_/$jeton'
+    | '/lire_/merci'
+    | '/outils_/bons-reflexes'
+    | '/outils_/hp-hyper-potentiel'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/game-hearts'
@@ -615,8 +663,11 @@ export interface RootRouteChildren {
   AteliersRoute: typeof AteliersRoute
   BaladoRoute: typeof BaladoRoute
   BoiteRoute: typeof BoiteRoute
+  BoutiqueChevalierRoute: typeof BoutiqueChevalierRoute
+  CadeauxRoute: typeof CadeauxRoute
   CollaborerRoute: typeof CollaborerRoute
   ComprendreRoute: typeof ComprendreRoute
+  ConditionsRoute: typeof ConditionsRoute
   ConditionsDeVenteRoute: typeof ConditionsDeVenteRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
@@ -624,13 +675,9 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   JeuxRoute: typeof JeuxRoute
   LesPasseursRoute: typeof LesPasseursRoute
-  LireJetonRoute: typeof LireJetonRoute
-  LireMerciRoute: typeof LireMerciRoute
   LireRoute: typeof LireRoute
   LivresPdfRoute: typeof LivresPdfRoute
   MerciRoute: typeof MerciRoute
-  OutilsBonsReflexesRoute: typeof OutilsBonsReflexesRoute
-  OutilsHpHyperPotentielRoute: typeof OutilsHpHyperPotentielRoute
   OutilsRoute: typeof OutilsRoute
   PanierRoute: typeof PanierRoute
   PasseurDeSavoirRoute: typeof PasseurDeSavoirRoute
@@ -644,8 +691,13 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   AchatSlugRoute: typeof AchatSlugRoute
   AppsSlugRoute: typeof AppsSlugRoute
+  CadeauxMerciRoute: typeof CadeauxMerciRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  LireJetonRoute: typeof LireJetonRoute
+  LireMerciRoute: typeof LireMerciRoute
+  OutilsBonsReflexesRoute: typeof OutilsBonsReflexesRoute
+  OutilsHpHyperPotentielRoute: typeof OutilsHpHyperPotentielRoute
   PdfSlugRoute: typeof PdfSlugRoute
   ApiPublicDownloadPdfRoute: typeof ApiPublicDownloadPdfRoute
   ApiPublicGameHeartsRoute: typeof ApiPublicGameHeartsRoute
@@ -707,6 +759,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BoiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/boutique-chevalier': {
+      id: '/boutique-chevalier'
+      path: '/boutique-chevalier'
+      fullPath: '/boutique-chevalier'
+      preLoaderRoute: typeof BoutiqueChevalierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadeaux': {
+      id: '/cadeaux'
+      path: '/cadeaux'
+      fullPath: '/cadeaux'
+      preLoaderRoute: typeof CadeauxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/collaborer': {
       id: '/collaborer'
       path: '/collaborer'
@@ -719,6 +785,13 @@ declare module '@tanstack/react-router' {
       path: '/comprendre'
       fullPath: '/comprendre'
       preLoaderRoute: typeof ComprendreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conditions': {
+      id: '/conditions'
+      path: '/conditions'
+      fullPath: '/conditions'
+      preLoaderRoute: typeof ConditionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/conditions-de-vente': {
@@ -882,6 +955,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cadeaux_/merci': {
+      id: '/cadeaux_/merci'
+      path: '/cadeaux/merci'
+      fullPath: '/cadeaux/merci'
+      preLoaderRoute: typeof CadeauxMerciRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout/return': {
       id: '/checkout/return'
       path: '/checkout/return'
@@ -903,29 +983,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCuisinePanierRouteImport
       parentRoute: typeof EnCuisineRoute
     }
-    '/lire/$jeton': {
-      id: '/lire/$jeton'
+    '/lire_/$jeton': {
+      id: '/lire_/$jeton'
       path: '/lire/$jeton'
       fullPath: '/lire/$jeton'
       preLoaderRoute: typeof LireJetonRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lire/merci': {
-      id: '/lire/merci'
+    '/lire_/merci': {
+      id: '/lire_/merci'
       path: '/lire/merci'
       fullPath: '/lire/merci'
       preLoaderRoute: typeof LireMerciRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/outils/bons-reflexes': {
-      id: '/outils/bons-reflexes'
+    '/outils_/bons-reflexes': {
+      id: '/outils_/bons-reflexes'
       path: '/outils/bons-reflexes'
       fullPath: '/outils/bons-reflexes'
       preLoaderRoute: typeof OutilsBonsReflexesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/outils/hp-hyper-potentiel': {
-      id: '/outils/hp-hyper-potentiel'
+    '/outils_/hp-hyper-potentiel': {
+      id: '/outils_/hp-hyper-potentiel'
       path: '/outils/hp-hyper-potentiel'
       fullPath: '/outils/hp-hyper-potentiel'
       preLoaderRoute: typeof OutilsHpHyperPotentielRouteImport
@@ -1029,8 +1109,11 @@ const rootRouteChildren: RootRouteChildren = {
   AteliersRoute: AteliersRoute,
   BaladoRoute: BaladoRoute,
   BoiteRoute: BoiteRoute,
+  BoutiqueChevalierRoute: BoutiqueChevalierRoute,
+  CadeauxRoute: CadeauxRoute,
   CollaborerRoute: CollaborerRoute,
   ComprendreRoute: ComprendreRoute,
+  ConditionsRoute: ConditionsRoute,
   ConditionsDeVenteRoute: ConditionsDeVenteRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
@@ -1038,13 +1121,9 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   JeuxRoute: JeuxRoute,
   LesPasseursRoute: LesPasseursRoute,
-  LireJetonRoute: LireJetonRoute,
-  LireMerciRoute: LireMerciRoute,
   LireRoute: LireRoute,
   LivresPdfRoute: LivresPdfRoute,
   MerciRoute: MerciRoute,
-  OutilsBonsReflexesRoute: OutilsBonsReflexesRoute,
-  OutilsHpHyperPotentielRoute: OutilsHpHyperPotentielRoute,
   OutilsRoute: OutilsRoute,
   PanierRoute: PanierRoute,
   PasseurDeSavoirRoute: PasseurDeSavoirRoute,
@@ -1058,8 +1137,13 @@ const rootRouteChildren: RootRouteChildren = {
   UnsubscribeRoute: UnsubscribeRoute,
   AchatSlugRoute: AchatSlugRoute,
   AppsSlugRoute: AppsSlugRoute,
+  CadeauxMerciRoute: CadeauxMerciRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  LireJetonRoute: LireJetonRoute,
+  LireMerciRoute: LireMerciRoute,
+  OutilsBonsReflexesRoute: OutilsBonsReflexesRoute,
+  OutilsHpHyperPotentielRoute: OutilsHpHyperPotentielRoute,
   PdfSlugRoute: PdfSlugRoute,
   ApiPublicDownloadPdfRoute: ApiPublicDownloadPdfRoute,
   ApiPublicGameHeartsRoute: ApiPublicGameHeartsRoute,
