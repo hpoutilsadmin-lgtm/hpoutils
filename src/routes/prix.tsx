@@ -25,6 +25,7 @@ const ROWS: Row[] = [
   { cat: "Passeurs", offre: "Passeurs de savoirs — inscription ouverte", prix: "3 $/mois · 28 $/an · 12 $ pour 4 savoirs, aucune taxe ajoutée", href: "/les-passeurs", label: "S'inscrire" },
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "120 $ ou 150 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Jeu", offre: "Chevalier du fleuve — gemmes du jeu (boutique dédiée, hors panier — bientôt en vente, aucun paiement pris pour l'instant)", prix: "2,99 $ à 19,99 $ CAD, aucune taxe ajoutée", href: "/boutique-chevalier", label: "Voir la boutique" },
+  { cat: "Cadeaux", offre: "Bons cadeaux — un code personnel à offrir, applicable au panier", prix: "5 $ à 100 $ CAD, aucune taxe ajoutée", href: "/cadeaux", label: "Offrir un bon" },
   { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 4 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
 ];
 

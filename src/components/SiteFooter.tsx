@@ -28,6 +28,10 @@ export function SiteFooter() {
             <Link to="/balado">Balado Futur simple</Link><br />
             <Link to="/les-passeurs">Les Passeurs</Link><br />
             <Link to="/a-propos">À propos</Link><br />
+            <Link to="/cadeaux">Bons cadeaux</Link><br />
+            <Link to="/apercu">Jeux à votre image — démo gratuite</Link><br />
+            <Link to="/comprendre">Comprendre</Link><br />
+            <Link to="/transmettre">Transmettre</Link><br />
             <Link to="/recuperer-achat">Récupérer un achat</Link><br />
             <Link to="/faq">Questions fréquentes</Link><br />
             <Link to="/confidentialite">Confidentialité</Link><br />
