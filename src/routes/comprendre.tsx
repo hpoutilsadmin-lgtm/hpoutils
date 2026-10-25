@@ -57,7 +57,7 @@ function Page() {
           <h2>La lucidité n’est pas du <em>pessimisme</em>.</h2>
           <p className="strip-intro">C’est la première étape de l’action juste.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
-            <Link to="/contact" className="btn-primary">Commander</Link>
+            <Link to="/achat/enjeux-humanite" className="btn-primary">Commander — 15 $</Link>
             <Link to="/pdf/enjeux-humanite" className="btn-ghost">Voir la fiche du livre</Link>
           </div>
         </div>
