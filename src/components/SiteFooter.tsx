@@ -23,7 +23,7 @@ export function SiteFooter() {
             <a href="/boite/">La Boîte à outils</a><br />
             <Link to="/livres-pdf">Livres, PDF &amp; réflexions</Link><br />
             <a href="/passeur-de-savoir/">Le Passeur de savoir</a><br />
-            <Link to="/univers">Univers alternatif</Link><br />
+            <Link to="/univers">À toi l'histoire</Link><br />
             <Link to="/ateliers">Ateliers</Link><br />
             <Link to="/balado">Balado Futur simple</Link><br />
             <Link to="/les-passeurs">Les Passeurs</Link><br />

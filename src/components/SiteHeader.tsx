@@ -10,7 +10,7 @@ const NAV_MAIN = [
 const NAV_SECONDARY = [
   { to: "/", label: "Accueil" },
   { to: "/balado", label: "Balado" },
-  { to: "/univers", label: "Univers alternatif" },
+  { to: "/univers", label: "À toi l'histoire" },
   { to: "/ateliers", label: "Ateliers" },
   { to: "/prix", label: "Prix" },
   { to: "/a-propos", label: "À propos" },
