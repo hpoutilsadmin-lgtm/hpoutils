@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
+import { Fragment } from "react";
 import { AjouterAuPanier } from "@/components/AjouterAuPanier";
 
 export const Route = createFileRoute("/prix")({
@@ -29,6 +30,13 @@ const ROWS: Row[] = [
   { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 4 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
 ];
 
+const BLOCS = [
+  { titre: "Livres PDF", lignes: ROWS.slice(0, 5) },
+  { titre: "Kits et histoires", lignes: ROWS.slice(5, 8) },
+  { titre: "Passeurs et ateliers", lignes: ROWS.slice(8, 10) },
+  { titre: "Jeux, cadeaux et outils gratuits", lignes: ROWS.slice(10) },
+];
+
 function Page() {
   return (
     <>
@@ -50,23 +58,30 @@ function Page() {
                 <tr><th>Catégorie</th><th>Offre</th><th>Prix</th><th>Action</th></tr>
               </thead>
               <tbody>
-                {ROWS.map((r) => (
-                  <tr key={`${r.cat}-${r.offre}`}>
-                    <td>{r.cat}</td><td>{r.offre}</td><td>{r.prix}</td>
-                    <td>
-                      {r.href ? (
-                        <a href={r.href}>{r.label}</a>
-                      ) : (
-                        <span>Pas encore en vente</span>
-                      )}
-                      {r.panier ? (
-                        <>
-                          {" "}
-                          <AjouterAuPanier priceId={r.panier} />
-                        </>
-                      ) : null}
-                    </td>
-                  </tr>
+                {BLOCS.map((b) => (
+                  <Fragment key={b.titre}>
+                    <tr>
+                      <td colSpan={4}><strong>{b.titre}</strong></td>
+                    </tr>
+                    {b.lignes.map((r) => (
+                      <tr key={`${r.cat}-${r.offre}`}>
+                        <td>{r.cat}</td><td>{r.offre}</td><td>{r.prix}</td>
+                        <td>
+                          {r.href ? (
+                            <a href={r.href}>{r.label}</a>
+                          ) : (
+                            <span>Pas encore en vente</span>
+                          )}
+                          {r.panier ? (
+                            <>
+                              {" "}
+                              <AjouterAuPanier priceId={r.panier} />
+                            </>
+                          ) : null}
+                        </td>
+                      </tr>
+                    ))}
+                  </Fragment>
                 ))}
               </tbody>
             </table>

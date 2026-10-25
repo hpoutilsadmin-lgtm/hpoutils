@@ -15,24 +15,33 @@ export function SiteFooter() {
           </div>
         </div>
         <div>
-          <h4>Liens rapides</h4>
+          <h4>Découvrir</h4>
           <p>
             <Link to="/">Accueil</Link><br />
             <Link to="/jeux">Jeux gratuits</Link><br />
             <Link to="/outils">Outils</Link><br />
             <a href="/boite/">La Boîte à outils</a><br />
+            <Link to="/univers">À toi l'histoire</Link><br />
+            <Link to="/balado">Balado Futur simple</Link><br />
+            <Link to="/a-propos">À propos</Link>
+          </p>
+          <h4>Apprendre</h4>
+          <p>
             <Link to="/livres-pdf">Livres, PDF &amp; réflexions</Link><br />
             <a href="/passeur-de-savoir/">Le Passeur de savoir</a><br />
-            <Link to="/univers">À toi l'histoire</Link><br />
-            <Link to="/ateliers">Ateliers</Link><br />
-            <Link to="/balado">Balado Futur simple</Link><br />
             <Link to="/les-passeurs">Les Passeurs</Link><br />
-            <Link to="/a-propos">À propos</Link><br />
+            <Link to="/comprendre">Comprendre — le livre Enjeux de l'humanité</Link><br />
+            <Link to="/transmettre">Transmettre — cuisiner en famille</Link>
+          </p>
+          <h4>Acheter</h4>
+          <p>
+            <Link to="/ateliers">Ateliers</Link><br />
             <Link to="/cadeaux">Bons cadeaux</Link><br />
             <Link to="/apercu">Jeux à votre image — démo gratuite</Link><br />
-            <Link to="/comprendre">Comprendre</Link><br />
-            <Link to="/transmettre">Transmettre</Link><br />
-            <Link to="/recuperer-achat">Récupérer un achat</Link><br />
+            <Link to="/recuperer-achat">Récupérer un achat</Link>
+          </p>
+          <h4>Confiance</h4>
+          <p>
             <Link to="/faq">Questions fréquentes</Link><br />
             <Link to="/confidentialite">Confidentialité</Link><br />
             <Link to="/conditions-de-vente">Conditions de vente</Link>
