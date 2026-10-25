@@ -175,6 +175,19 @@ function Index() {
                 <a className="pillar-cta" href="/boite/">Ouvrir la Boîte →</a>
               </div>
             </article>
+            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
+              <Link to="/univers" aria-label="Choisir ton histoire" style={{ display: "block", textDecoration: "none" }}>
+                <div style={{ ...categoryTile("#7a1f2b", "#a63a44"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>À</span>
+                  <span style={CATEGORY_TAG_STYLE}>1er tome gratuit</span>
+                </div>
+              </Link>
+              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                <h3 style={{ fontSize: 23 }}>À toi l'histoire</h3>
+                <p>12 tomes interactifs : tu choisis, l'histoire change. Le 1er est gratuit.</p>
+                <Link className="pillar-cta" to="/univers">Choisir ton histoire →</Link>
+              </div>
+            </article>
           </div>
         </div>
       </section>
