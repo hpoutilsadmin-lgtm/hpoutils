@@ -18,7 +18,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Combien coûtent les livres ?",
     reponse:
-      "La faim justifie les moyens 10 $ CAD, Horizon Québec 10 $ CAD, Enjeux de l'humanité à l'ère de l'IA 15 $ CAD et Les enfants cuisinent pour faire plaisir 10 $ CAD. Aucune taxe ajoutée.",
+      "La faim justifie les moyens 10 $ CAD, Horizon Québec 10 $ CAD, Enjeux de l'humanité à l'ère de l'IA 15 $ CAD, Les enfants cuisinent pour faire plaisir 10 $ CAD et Un petit pas à la fois — le mini cahier 10 $ CAD. Aucune taxe ajoutée.",
   },
   {
     question: "Les recettes et les jeux sont-ils vraiment gratuits ?",
