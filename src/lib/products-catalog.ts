@@ -18,6 +18,7 @@ export interface DigitalProduct {
   contents?: string[];      // « Sommaire » — liste réelle des fiches/sections du produit
   volumeLabel?: string;     // volume vérifié seulement, ex. « 24 fiches · 14 pages »
   preview?: { title: string; text: string }; // aperçu authentique, tiré du produit
+  seoDescription?: string; // description meta courte (~150 car.) ; sinon 4e + prix
   healthSupport?: boolean;  // afficher le filet d'aide santé (988, 811) sur la fiche
   audience?: string[];      // « Pour qui ? »
   backCover?: string;       // Texte éditorial « 4e de couverture »
@@ -34,7 +35,7 @@ export interface DigitalProduct {
 export const PRODUCTS: Record<string, DigitalProduct> = {
   sans_honte_testament_pdf_5: {
     priceId: "sans_honte_testament_pdf_5", slug: "sans-honte-testament",
-    title: "Testament Sans Honte — L'olographe, pas à pas",
+    title: "Kit Sans Honte — Testament — L'olographe, pas à pas",
     pdfPath: "sans-honte-testament.pdf", downloadFileName: "Testament_Sans_Honte.pdf",
     priceLabel: "5 $ CAD, aucune taxe ajoutée", formatLabel: "Kit PDF",
     blurb: "Préparer un testament olographe au Québec, pas à pas.",
@@ -77,7 +78,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   },
   sans_honte_papiers_parents_pdf_5: {
     priceId: "sans_honte_papiers_parents_pdf_5", slug: "sans-honte-papiers-parents",
-    title: "Papiers de mes parents Sans Honte", pdfPath: "sans-honte-papiers-parents.pdf",
+    title: "Kit Sans Honte — Papiers de mes parents", pdfPath: "sans-honte-papiers-parents.pdf",
     downloadFileName: "Papiers_de_mes_parents_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Organiser les papiers de ses parents, sans honte.",
     cover: "/images/sans-honte/kit-12.jpg",
@@ -118,7 +119,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   },
   sans_honte_chalet_pdf_5: {
     priceId: "sans_honte_chalet_pdf_5", slug: "sans-honte-chalet",
-    title: "Chalet Sans Honte — Les règles qui sauvent les Noëls", pdfPath: "sans-honte-chalet.pdf",
+    title: "Kit Sans Honte — Chalet — Les règles qui sauvent les Noëls", pdfPath: "sans-honte-chalet.pdf",
     downloadFileName: "Chalet_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Des règles claires pour partager le chalet.",
     cover: "/images/sans-honte/kit-13.jpg",
@@ -159,7 +160,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   },
   sans_honte_annee_quebecoise_pdf_5: {
     priceId: "sans_honte_annee_quebecoise_pdf_5", slug: "sans-honte-annee-quebecoise",
-    title: "L'année québécoise Sans Honte", pdfPath: "sans-honte-annee-quebecoise.pdf",
+    title: "Kit Sans Honte — L'année québécoise", pdfPath: "sans-honte-annee-quebecoise.pdf",
     downloadFileName: "Annee_quebecoise_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Des repères pour l'année québécoise.",
     cover: "/images/sans-honte/kit-14.jpg",
@@ -200,7 +201,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   },
   sans_honte_heritage_numerique_pdf_5: {
     priceId: "sans_honte_heritage_numerique_pdf_5", slug: "sans-honte-heritage-numerique",
-    title: "Héritage numérique Sans Honte", pdfPath: "sans-honte-heritage-numerique.pdf",
+    title: "Kit Sans Honte — Héritage numérique", pdfPath: "sans-honte-heritage-numerique.pdf",
     downloadFileName: "Heritage_numerique_Sans_Honte.pdf", priceLabel: "5 $ CAD, aucune taxe ajoutée",
     formatLabel: "Kit PDF", blurb: "Préparer la transmission de son héritage numérique.",
     cover: "/images/sans-honte/kit-15.jpg",
@@ -243,6 +244,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceId: "enjeux_humanite_pdf_15",
     slug: "enjeux-humanite",
     title: "Enjeux de l'humanité à l'ère de l'IA",
+    seoDescription: "Comprendre l'IA sans paniquer : jugement, biais, créativité, responsabilité. Un essai accessible pour décider en conscience. PDF, 15 $ CAD, aucune taxe ajoutée.",
     pdfPath: "enjeux-humanite.pdf",
     downloadFileName: "Enjeux-de-l-humanite-a-l-ere-de-l-IA.pdf",
     priceLabel: "15 $ CAD, aucune taxe ajoutée",
@@ -256,11 +258,16 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
       "L'intelligence artificielle transforme déjà notre façon de penser, d'apprendre, de travailler, de créer et de décider. Mais derrière la fascination technologique, une question demeure : qu'est-ce qu'on veut préserver de profondément humain ?\n\nCe PDF propose une réflexion accessible sur les grands enjeux de l'IA : la place du jugement, la pensée critique, la créativité, la responsabilité, les biais, la dépendance aux outils et le risque de laisser la machine décider à notre place.\n\nCe n'est pas un document pour avoir peur de l'IA. C'est un outil pour mieux la comprendre, l'utiliser avec plus de conscience et se rappeler que la technologie devrait rester au service de l'humain — pas l'inverse.",
     audienceSentence:
       "Ce PDF s'adresse aux personnes qui veulent comprendre les impacts de l'intelligence artificielle, réfléchir à son utilisation dans la vraie vie et développer un regard plus critique sans tomber dans la peur ou l'aveuglement.",
+    preview: {
+      title: "Les enjeux de l'humanité à l'ère de l'IA — « Mot de l'auteur », p. 5",
+      text: "Je n'ai pas écrit ce livre pour prédire l'avenir. Je l'ai écrit parce que quelque chose ne tourne plus rond dans la manière dont on comprend le monde. On sent que ça change. On le voit autour de nous. Mais il manque souvent des repères clairs.",
+    },
   },
   faim_justifie_pdf_10: {
     priceId: "faim_justifie_pdf_10",
     slug: "faim-justifie-les-moyens",
     title: "La faim justifie les moyens",
+    seoDescription: "Guide pratique pour mieux manger avec peu : recettes simples, astuces anti-gaspillage et réflexes concrets. PDF à télécharger, 10 $ CAD, aucune taxe ajoutée.",
     pdfPath: "faim-justifie-les-moyens.pdf",
     downloadFileName: "La-faim-justifie-les-moyens.pdf",
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
@@ -279,6 +286,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceId: "horizon_quebec_pdf_10",
     slug: "horizon-quebec",
     title: "Horizon Québec",
+    seoDescription: "Une nouvelle québécoise : une soirée, une table, un café-bar de Montréal. Amitié, langue et Québec qui respire encore. PDF, 10 $ CAD, aucune taxe ajoutée.",
     pdfPath: "horizon-quebec.pdf",
     downloadFileName: "Horizon-Quebec.pdf",
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
@@ -292,6 +300,10 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
       "Horizon Québec se déroule dans un café-bar de Montréal, un soir de pluie, autour d'une table où les discussions dérivent entre amitié, langue, fatigue collective et peur de perdre quelque chose sans toujours savoir quoi.\n\nOn y croise des personnages qui parlent trop, rient parfois trop fort, s'obstinent, se contredisent et cherchent encore une façon d'habiter le Québec sans le réduire à un slogan, une nostalgie ou une guerre de mots.\n\nC'est une nouvelle humaine et actuelle sur ce qui reste quand le monde change : les lieux qu'on aime, les conversations qui nous tiennent, les silences qui parlent trop, et cette envie fragile de continuer à exister ensemble.\n\nPas une grande théorie.\nUne soirée.\nUne table.\nUn bout de Québec qui respire encore.",
     audienceSentence:
       "Cette nouvelle s'adresse aux personnes qui aiment les récits sensibles, humains et ancrés dans le Québec actuel — autour de la langue, de l'identité, de l'amitié et des conversations qui restent longtemps après la dernière page.",
+    preview: {
+      title: "Horizon Québec — p. 5",
+      text: "Le café ne servait pas juste du café. Il servait des fins de quart, des débuts d'histoire, des séparations provisoires, du rhum brun, des IPA trop chères, du rouge pas assez respiré, des allongés bus trop vite, des épaules fatiguées, des débats trop grands pour la taille des tables, pis parfois des chansons assez fortes pour faire lever du monde qui s'était pourtant juré de juste passer une heure.",
+    },
   },
   // PRIX ABAISSÉ de 20 $ à 10 $ — décision d'HP, 23 octobre 2026.
   // Prix Stripe de 10 $ créé en RÉEL le 24 octobre 2026
@@ -304,6 +316,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceId: "enfants_cuisinent_pdf_10",
     slug: "enfants-cuisinent",
     title: "Les enfants cuisinent pour faire plaisir",
+    seoDescription: "Cuisiner avec les enfants, pour le plaisir, pas la performance : essayer, rater, goûter, offrir. PDF familles et écoles, 10 $ CAD, aucune taxe ajoutée.",
     pdfPath: "enfants-cuisinent.pdf",
     downloadFileName: "Les-enfants-cuisinent.pdf",
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
@@ -364,7 +377,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   sans_honte_tenir_debout_pdf_5: {
     priceId: "sans_honte_tenir_debout_pdf_5",
     slug: "sans-honte-tenir-debout",
-    title: "Tenir Debout Sans Honte",
+    title: "Kit Sans Honte — Tenir Debout",
     pdfPath: "sans-honte-tenir-debout.pdf",
     downloadFileName: "Tenir-Debout-Sans-Honte.pdf",
     priceLabel: "5 $ CAD, aucune taxe ajoutée",
@@ -514,6 +527,8 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     formatLabel: "Collection PDF",
     shortDescription:
       "Le bundle regroupe 10 kits Sans Honte au choix, parmi les 15 de la collection, en format PDF.",
+    backCover:
+      "Dix kits PDF concrets au choix, parmi les 15 de la collection Sans Honte, pour faire face aux papiers, au frigo, au logement, à l'entraide et à d'autres situations de la vraie vie — textes courts, exercices de réflexion, phrases fortes à garder près de soi, et outils à imprimer ou à utiliser à l'écran.",
     healthSupport: true,
     includes: [
       "10 kits Sans Honte au choix (parmi 15), en PDF",

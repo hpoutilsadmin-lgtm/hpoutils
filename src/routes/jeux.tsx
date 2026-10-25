@@ -258,7 +258,7 @@ const TESTEURS = {
   lo: { nom: "Lo « le petit Raptor »", couleur: "#0F6CA8", fond: "rgba(15,108,168,.10)", rotation: 1.3 },
   oz: { nom: "O'Z « la grande »", couleur: "#8A6D00", fond: "rgba(138,109,0,.10)", rotation: -0.5 },
   hp: { nom: "HP, le créateur", couleur: "#2456a6", fond: "rgba(36,86,166,.09)", rotation: -1 },
-  tous: { nom: "Tous les testeurs", couleur: "#221a12", fond: "rgba(34,26,18,.06)", rotation: 0 },
+  tous: { nom: "à compléter", couleur: "#221a12", fond: "rgba(34,26,18,.06)", rotation: 0 },
 } as const;
 
 type CleTesteur = keyof typeof TESTEURS;
@@ -308,8 +308,10 @@ function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
   return (
     <span
       title={
-        cle === "tous"
-          ? "Approuvé à l'unanimité par tous les testeurs"
+        cle === "hp"
+          ? "Créateur : HP"
+          : cle === "tous"
+          ? "Approuvé par : à compléter"
           : "Approuvé par " + t.nom + ", testeur HP"
       }
       style={{
@@ -330,13 +332,13 @@ function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
         whiteSpace: "nowrap",
       }}
     >
-      <span aria-hidden="true">✓</span>
+      {cle !== "hp" && <span aria-hidden="true">✓</span>}
       {/* Libellé complet sur le tampon même (demande de la direction, 23 oct.
           2026, 19 h 18 : « Ajouter au tampon avec nom le Approuvé
           par : ») — avant, il ne vivait que dans le title/aria,
           invisibles au tactile. Le nom, la couleur et la lune de
           Maëva sont inchangés. */}
-      {"Approuvé par : " + t.nom}
+      {cle === "hp" ? "Créateur : HP" : "Approuvé par : " + t.nom}
     </span>
   );
 }
@@ -347,7 +349,9 @@ function RangeeTampons({ slug, grand }: { slug: string; grand?: boolean }) {
   return (
     <div
       aria-label={
-        "Approuvé par : " + cles.map((c) => TESTEURS[c].nom).join(", ")
+        cles.length === 1 && cles[0] === "hp"
+          ? "Créateur : HP"
+          : "Approuvé par : " + cles.map((c) => TESTEURS[c].nom).join(", ")
       }
       style={{ display: "flex", flexWrap: "wrap", gap: 7, alignItems: "center" }}
     >

@@ -15,6 +15,18 @@ const FAQ = [
     q: "Comment je reçois mon kit après l'achat ?",
     a: "Par téléchargement immédiat après le paiement : un PDF imprimable, à utiliser seul, avec un proche ou dans un contexte d'intervention.",
   },
+  {
+    q: "Comment je choisis mes 10 kits ?",
+    a: "Tu coches tes 10 kits sur la page d'achat, avant le paiement. Les 15 titres parmi lesquels tu choisis sont listés dans le bandeau du bundle, juste au-dessus.",
+  },
+  {
+    q: "Combien de temps mon lien de téléchargement reste-t-il valide ?",
+    a: "Après le paiement, vous recevez un lien de téléchargement personnel, valide 7 jours. Téléchargez votre fichier dès que vous le recevez, et gardez-le.",
+  },
+  {
+    q: "Et si je ne retrouve plus mon achat ?",
+    a: "Le courriel n'arrive pas, ou votre lien est expiré ? La page Récupérer un achat vous redonne accès à ce que vous avez acheté — ou écrivez-nous.",
+  },
 ];
 
 export const Route = createFileRoute("/sans-honte")({
@@ -77,7 +89,7 @@ const KITS = [
   { n: "07", cover: "/images/sans-honte/kit-07.jpg", title: "Fraude Sans Honte", sub: "Se protéger, sans avoir l'air naïf·ve.", slug: "sans-honte-fraude" },
   { n: "08", cover: "/images/sans-honte/kit-08.jpg", title: "Logement Sans Honte", sub: "Habiter, garder, retrouver un chez-soi.", slug: "sans-honte-logement" },
   { n: "09", cover: "/images/sans-honte/kit-09.jpg", title: "Proche Aidant Sans Honte", sub: "Aider sans s'oublier.", slug: "sans-honte-proche-aidant" },
-  { n: "10", cover: "/images/sans-honte/kit-10.jpg", title: "72 heures Sans Honte", sub: "Tenir trois jours quand tout bascule.", slug: "sans-honte-72-heures" },
+  { n: "10", cover: "/images/sans-honte/kit-10.jpg", title: "72 Heures Sans Honte", sub: "Tenir trois jours quand tout bascule.", slug: "sans-honte-72-heures" },
   { n: "11", cover: "/images/sans-honte/kit-11.jpg", title: "Testament Sans Honte", sub: "Préparer un testament olographe au Québec, pas à pas.", slug: "sans-honte-testament" },
   { n: "12", cover: "/images/sans-honte/kit-12.jpg", title: "Papiers de mes parents Sans Honte", sub: "Organiser les papiers de ses parents, sans honte.", slug: "sans-honte-papiers-parents" },
   { n: "13", cover: "/images/sans-honte/kit-13.jpg", title: "Chalet Sans Honte", sub: "Des règles claires pour partager le chalet.", slug: "sans-honte-chalet" },
@@ -166,7 +178,7 @@ function Page() {
             <p style={{ fontSize: 16, lineHeight: 1.7, color: "#3a2a20", marginBottom: 10 }}>
               Ces kits aident à avancer à son rythme, une petite étape à la fois.{" "}
               <strong>Ils ne remplacent pas un professionnel de la santé.</strong> Certains parlent
-              de moments lourds — Tenir Debout, Me Reconnaître, Proche Aidant, 72 heures. Si ce que
+              de moments lourds — Tenir Debout, Me Reconnaître, Proche Aidant, 72 Heures. Si ce que
               tu traverses devient trop lourd — pour toi ou pour un proche que tu aides — de l'aide
               existe, gratuite et sans jugement :
             </p>

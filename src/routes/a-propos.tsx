@@ -40,8 +40,7 @@ function Page() {
             <span className="mini-note">En ses mots</span>
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>Qui est HP</h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Boulanger, gérant, papa, beau-père, chum, fils, petit-fils qui s’ennuie encore souvent
-              de ses grands-parents à 40 ans.
+              Créateur de HP Outils, à Terrebonne, dans Lanaudière.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
               Marginal — je le sais, je l’assume. Je peux converser avec un itinérant, un alcoolique,
@@ -62,7 +61,7 @@ function Page() {
             </p>
             <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes contrats avec toi</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
-              <li>Une réponse d’humain sous 3 jours ouvrables. Pas d’un robot, pas de promesse vide.</li>
+              <li>Une réponse d’humain sous 3 jours ouvrables. Pas une réponse de La direction !</li>
               <li>Des prix honnêtes, aucune taxe ajoutée, jamais de pression ni de fausse urgence.</li>
               <li>Tout 100 % original. L’IA est un outil très rapide et efficace — la direction, l’émotion, le « ce que je fais », c’est pour les humains.</li>
               <li>Écrit par un humain, accéléré par l’IA. On le dit toujours.</li>
@@ -97,8 +96,7 @@ function Page() {
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
               Je crée tout ce que tu vois ici, avec l'IA comme outil de fabrication — la direction,
-              les idées et les mots restent humains. Chaque jeu et chaque outil est testé avant
-              d'être publié. Et je fais aussi de la musique : j'écris et j'enregistre mes propres
+              les idées et les mots restent humains. Les jeux et les outils sont testés avant d'être publiés, et corrigés quand un test révèle un problème. Et je fais aussi de la musique : j'écris et j'enregistre mes propres
               chansons — l'album <em>Humain imparfait</em> et le balado <em>Futur simple</em> racontent
               le même monde, autrement.
             </p>
@@ -126,6 +124,9 @@ function Page() {
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
           </div>
+          <p style={{ textAlign: "center", color: "#3a2a20", fontSize: 14, marginTop: 8 }}>
+            HP — des outils pour la vraie vie
+          </p>
         </div>
       </div>
     </>

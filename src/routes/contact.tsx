@@ -45,7 +45,7 @@ function Page() {
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Réponse humaine</h3>
-              <p>Chaque message reçoit une réponse d'humain, sous 3 jours ouvrables. Ateliers en ligne, en personne ou sur demande.</p>
+              <p>Chaque message reçoit une réponse d’humain, sous 3 jours ouvrables. Pas une réponse de La direction ! Ateliers en ligne, en personne ou sur demande.</p>
             </article>
           </div>
         </div>

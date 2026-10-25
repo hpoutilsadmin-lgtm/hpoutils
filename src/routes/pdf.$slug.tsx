@@ -14,7 +14,7 @@ export const Route = createFileRoute("/pdf/$slug")({
   head: ({ loaderData }) => {
     const product = loaderData?.product;
     if (!product) return createSeoHead({ title: "Aperçu PDF — HP", description: "Découvrez les PDF et kits HP.", path: "/livres-pdf" });
-    const description = `${product.backCover ?? product.shortDescription ?? product.blurb} ${product.priceLabel}. ${product.purchaseHold ? "Achat en ligne bientôt rouvert au nouveau prix." : "Téléchargement immédiat."}`;
+    const description = product.seoDescription ?? `${product.backCover ?? product.shortDescription ?? product.blurb} ${product.priceLabel}. ${product.purchaseHold ? "Achat en ligne bientôt rouvert au nouveau prix." : "Téléchargement immédiat."}`;
     const seo = createSeoHead({
       title: `${product.title} — PDF à télécharger | HP`,
       description,
@@ -228,12 +228,27 @@ function Page() {
               <span className="dot" />
               {fmt} — {product.priceLabel}
             </div>
+            {["faim-justifie-les-moyens", "horizon-quebec", "enjeux-humanite", "enfants-cuisinent"].includes(product.slug) && (
+              <p style={{ fontSize: 13, color: "rgba(58,42,32,.75)", marginBottom: 16 }}>
+                HP Outils est un petit fournisseur : la TPS et la TVQ ne sont pas perçues.
+              </p>
+            )}
+            {product.slug === "sans-honte-collection" && (
+              <p style={{ fontSize: 14, lineHeight: 1.65, color: "#3a2a20", marginBottom: 16 }}>
+                <strong>Économie de 10 $ :</strong> achetés un par un, 10 kits coûteraient 50 $ — le bundle est à 40 $.
+              </p>
+            )}
             <p style={{ fontSize: 14, color: "rgba(58,42,32,.7)", fontStyle: "italic", marginBottom: 16 }}>
               {product.purchaseHold
                 ? "Nouveau prix · Aucune taxe ajoutée · Achat en ligne bientôt rouvert"
                 : "PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé"}
             </p>
             <BeforeYouBuyNote />
+            {["faim-justifie-les-moyens", "horizon-quebec", "enjeux-humanite", "enfants-cuisinent"].includes(product.slug) && (
+              <p style={{ fontSize: 14, lineHeight: 1.65, color: "#3a2a20", marginBottom: 16 }}>
+                Une réponse d’humain sous 3 jours ouvrables. Pas une réponse de La direction !
+              </p>
+            )}
             {product.purchaseHold ? (
               <p style={{ maxWidth: 520, lineHeight: 1.65, margin: 0 }}>
                 {product.purchaseHold}
@@ -441,6 +456,14 @@ function Page() {
                 </>
               )}
             </div>
+            {product.slug === "sans-honte-collection" && (
+              <p style={{ textAlign: "center", marginTop: 12 }}>
+                <Link to="/sans-honte">← Retour à la collection Sans Honte — Voir les 15 kits</Link>
+              </p>
+            )}
+            <p style={{ textAlign: "center", color: "#3a2a20", fontSize: 14, marginTop: 8 }}>
+              HP — des outils pour la vraie vie
+            </p>
           </div>
         </div>
       </section>

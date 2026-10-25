@@ -3,7 +3,7 @@ import { createSeoHead } from "@/lib/seo";
 import { ShareButton } from "@/components/ShareButton";
 
 const BALADO_DESCRIPTION =
-  "Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode chaque lundi, direct et sans jargon.";
+  "Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. De nouveaux épisodes, annoncés dès leur parution, directs et sans jargon.";
 
 export const Route = createFileRoute("/balado")({
   head: () => ({
@@ -41,7 +41,7 @@ const EPISODES = [
     duration: "Fraudes et deepfakes",
     description:
       "Fraudes vocales et deepfakes : comment se protéger à l'ère de l'IA. Publié le " +
-      "19 octobre 2026. Le rendez-vous officiel du lundi démarre le 26 octobre 2026.",
+      "19 octobre 2026. Les épisodes suivants seront annoncés ici dès leur parution.",
     audio:
       "/audio-balado/episode-2.mp3",
   },
@@ -82,8 +82,7 @@ function Page() {
           </h1>
           <p className="lead">
             Lea et Marc regardent l'intelligence artificielle en face : l'entrepreneuriat,
-            les PME et le futur à venir — <strong>le bon comme le mauvais</strong>. Un nouvel
-            épisode chaque lundi, dès le 26 octobre. Direct, concret, sans jargon. Comme tout ce qu'on fait ici.
+            les PME et le futur à venir — <strong>le bon comme le mauvais</strong>. De nouveaux épisodes, annoncés ici dès leur parution, quand ils sont prêts. Direct, concret, sans jargon. Comme tout ce qu'on fait ici.
           </p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait un balado IA à direction humaine, qui parle de vraie vie. »</p>
           <div className="lead-actions">
@@ -121,7 +120,7 @@ function Page() {
           <h2>Le balado te suit <em>partout</em></h2>
           <p className="strip-intro">
             Ajoute le flux dans ton appli de balados préférée : chaque nouvel épisode
-            y apparaît tout seul, chaque lundi. C'est gratuit, sans compte, sans piège.
+            y apparaît tout seul, dès sa parution. C'est gratuit, sans compte, sans piège.
             Si un bouton n'ouvre rien, c'est que l'appli n'est pas installée sur ton
             téléphone : copie le lien du flux RSS et colle-le dans ton appli.
           </p>
@@ -151,7 +150,7 @@ function Page() {
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Toujours en amélioration</h3>
-              <p>Chaque épisode apprend du précédent. Un sujet par semaine, jamais le même, toujours sur l'IA, les PME et le futur.</p>
+              <p>Chaque épisode apprend du précédent. Un sujet par épisode, jamais le même, toujours sur l’IA, les PME et le futur.</p>
             </article>
           </div>
           <div className="lead-actions" style={{ marginTop: "2rem" }}>
