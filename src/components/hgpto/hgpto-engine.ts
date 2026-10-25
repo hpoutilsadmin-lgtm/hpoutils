@@ -357,6 +357,11 @@ export function initHgpto() {
          par l'utilisateur. Rétractable = le visiteur replie le personnage
          en pastille « HGPTO » (le dock rouvre aussi) ; JAMAIS automatique
          (ni au scroll, ni au bout d'un délai) — l'auto reste exclu.
+         DÉROGATION 25 oct. 2026 (option B, choix explicite d'Hugo) : sur
+         petit écran SEULEMENT (≤ 560 px), HGPTO démarre replié en pastille
+         quand la session n'a encore aucun choix enregistré ; un tap sur
+         la pastille le rouvre, et ce choix est gardé pour la session.
+         Le repli automatique au scroll ou après un délai reste interdit.
          Taille par pas, session seulement comme le déplacement. Pendant
          le repli, le robot et Pixel se cachent (même couche), la pastille
          reste ; les bulles ambiantes ne parlent plus dans le vide. */
@@ -379,7 +384,10 @@ export function initHgpto() {
       try {
         var savedZoom = parseFloat(sessionStorage.getItem('hgpto-zoom') || '1');
         if (ZOOM_STEPS.indexOf(savedZoom) !== -1){ hgptoZoom = savedZoom; zoomIdx = ZOOM_STEPS.indexOf(savedZoom); }
-        hgptoReduit = sessionStorage.getItem('hgpto-reduit') === '1';
+        var savedReduit = sessionStorage.getItem('hgpto-reduit');
+        if (savedReduit === '1') { hgptoReduit = true; }
+        else if (savedReduit === '0') { hgptoReduit = false; }
+        else { hgptoReduit = window.innerWidth <= 560; }
       } catch(e){}
       applyZoom();
       applyReduit();
