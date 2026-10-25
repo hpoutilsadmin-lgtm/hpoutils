@@ -58,6 +58,7 @@ function Page() {
           <p className="strip-intro">C’est la première étape de l’action juste.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
             <Link to="/contact" className="btn-primary">Commander</Link>
+            <Link to="/pdf/enjeux-humanite" className="btn-ghost">Voir la fiche du livre</Link>
           </div>
         </div>
       </section>
