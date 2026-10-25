@@ -1770,7 +1770,7 @@ export function initHgpto() {
            l'accueil devient faits bruts — prix, catalogue, fiche lisible
            par machine — sans changer un mot du comportement humain. */
         if (lireDetectot().type === 'ia') {
-          showBubble("Gérant du site, à ton service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, Enfants cuisinent 10 $. Ateliers : 150 $ à 290 $. Passeurs de savoirs : 3 $/mois, 28 $/an, accès aux 16 savoirs — inscription ouverte. Fiche lisible par machine : /llms.txt. Touche une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
+          showBubble("Gérant du site, à ton service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, le livre « Enfants cuisinent » 10 $. Ateliers : de 150 $ à 290 $. Passeurs de savoirs : 3 $/mois, 28 $/an — accès aux 16 savoirs, inscription par courriel. Fiche lisible par machine : /llms.txt. Touche une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
         } else {
           showBubble("Gérant du site, à ton service ! Touche une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
         }
@@ -2442,11 +2442,11 @@ export function initHgpto() {
          stopTour), jamais après un arrêt demandé par le visiteur. */
       var TOUR = [
         { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que tu vas voir part d'ici. Moi, c'est HGPTO, le petit gérant de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et tu peux arrêter la visite quand tu veux." },
-        { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 26, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
+        { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 35, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
         { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
         { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : tu écris les ingrédients que tu as déjà, et il te propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et ta liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
-        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que tu télécharges tout de suite après le paiement. « La faim justifie les moyens » (10 $), c'est l'histoire vraie de la direction ; « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
-        { id:'sec-ateliers', t:"Et ici, on sort de l'écran : les ateliers se vivent en groupe, à Terrebonne et dans les environs. « Cuisine pratique » (120 $), « Manger mieux avec moins » (150 $) — on cuisine ensemble, on apprend des choses utiles, et c'est le côté humain d'HP Outils qui se vit pour vrai, autour d'une table." },
+        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que tu télécharges tout de suite après le paiement. « La faim justifie les moyens » (10 $), c'est l'histoire vraie de la direction ; le livre « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
+        { id:'sec-ateliers', t:"Et ici, on sort de l'écran : les ateliers se vivent en groupe, à Terrebonne et dans les environs. « Cuisine pratique » (260 $), « Manger mieux avec moins » (260 $) — on cuisine ensemble, on apprend des choses utiles, et c'est le côté humain d'HP Outils qui se vit pour vrai, autour d'une table." },
         { id:'sec-arbre', t:"On est de retour à l'entrée — la visite est terminée, merci de m'avoir suivi. Tu as vu l'arbre au complet : chaque branche aide les autres, et rien ne se cache. Reste jaser si tu veux : pose-moi une question dans mon petit panneau, je connais toutes les réponses du site — et sinon, explore à ton rythme. Ici, la porte est toujours ouverte." }
       ];
       var tourOn = false, tourIdx = 0, tourTimer = null;
@@ -4737,8 +4737,8 @@ export function initHgpto() {
       var ROUTE_FACTS = {
         '/sans-honte': "Petit résumé calme : 15 kits à 5 $ chacun, le bundle « Choisis 10 parmi 15 » à 40 $, aucune taxe ajoutée. Prends ton temps.",
         '/livres-pdf': "Petit résumé calme : 4 livres en PDF, de 10 $ à 15 $, téléchargement immédiat après le paiement. Prends ton temps.",
-        '/ateliers': "Petit résumé calme : les ateliers vont de 120 $ à 150 $, à Terrebonne et dans Lanaudière, et on répond à tes questions par courriel. Prends ton temps.",
-        '/les-passeurs': "Petit résumé calme : les Passeurs, c'est 3 $ par mois pour l'accès au savoir et soutenir HP Outils — et l'inscription payante arrive bientôt, en toute honnêteté. Prends ton temps."
+        '/ateliers': "Petit résumé calme : les ateliers vont de 150 $ à 290 $, à Terrebonne et dans Lanaudière, et on répond à tes questions par courriel. Prends ton temps.",
+        '/les-passeurs': "Petit résumé calme : les Passeurs, c'est 3 $ par mois pour l'accès aux 16 savoirs et soutenir HP Outils — et le paiement automatisé en ligne s'en vient, en toute honnêteté. Prends ton temps."
       };
       function isSensitiveRoute(){ return routeKey() === '/sans-honte'; }
       function isPresse(){ return Date.now() < presseUntil; }
@@ -5065,7 +5065,7 @@ export function initHgpto() {
         '/en-cuisine': "629 recettes gratuites : parfait quand le frigo a l'air vide mais ne l'est pas.",
         '/livres-pdf': "Nos livres ! « Horizon Québec » est mon préféré… mais je suis partial, je le lis tout le temps.",
         '/ateliers': "Les ateliers, à Terrebonne : cuisiner ensemble, ça rapproche.",
-        '/balado': "Le balado « Futur simple » : un épisode chaque lundi, sans jargon.",
+        '/balado': "Le balado « Futur simple » : de nouveaux épisodes quand ils sont prêts, sans jargon.",
         '/les-passeurs': "Les Passeurs : les gens qui soutiennent HP Outils, 3 $ par mois."
       };
       var lastRoute = routeKey();
