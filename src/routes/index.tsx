@@ -269,28 +269,19 @@ function Index() {
         </div>
       </section>
 
-      <section className="collections-strip">
-        <div className="container">
-          <span className="editorial-kicker">Du 1er octobre au 23 décembre</span>
-          <h2>Ateliers &amp; conférence — <em>Édition des Fêtes</em></h2>
-          <p className="strip-intro">Pain maison à domicile, IA sans jargon et conférence La faim justifie les moyens.</p>
-          <div className="lead-actions">
-            <Link to="/ateliers" hash="edition-des-fetes" className="btn-primary">Découvrir l'Édition des Fêtes</Link>
-          </div>
-        </div>
-      </section>
-
       {/* ATELIERS */}
       <section className="collections-strip">
         <div className="container">
-          <span className="editorial-kicker">Pour les groupes &amp; organismes</span>
-          <h2><em>Ateliers</em></h2>
+          <span className="editorial-kicker">Ateliers</span>
+          <h2>Ateliers &amp; conférence</h2>
           <p className="strip-intro">
-            Les ateliers HP prolongent les outils dans les groupes, les organismes et
-            les milieux qui veulent réfléchir autrement. Une façon de faire vivre les
-            ressources sur le terrain.
+            Les ateliers HP prolongent les outils sur le terrain : Édition des Fêtes
+            du 1er octobre au 23 décembre (pain maison à domicile, IA sans jargon,
+            conférence La faim justifie les moyens), et ateliers pour les groupes
+            et les organismes.
           </p>
           <div className="lead-actions">
+            <Link to="/ateliers" hash="edition-des-fetes" className="btn-primary">Découvrir l'Édition des Fêtes</Link>
             <Link to="/ateliers" className="btn-primary">Voir les ateliers</Link>
           </div>
         </div>

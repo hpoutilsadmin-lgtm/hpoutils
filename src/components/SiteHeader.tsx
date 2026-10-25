@@ -8,7 +8,6 @@ const NAV_MAIN = [
 ] as const;
 
 const NAV_SECONDARY = [
-  { to: "/", label: "Accueil" },
   { to: "/balado", label: "Balado" },
   { to: "/univers", label: "À toi l'histoire" },
   { to: "/ateliers", label: "Ateliers" },
@@ -37,6 +36,9 @@ export function SiteHeader() {
           Menu
         </button>
         <nav className={`site-nav${open ? " open" : ""}`} aria-label="Navigation principale">
+          <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "active" }}>
+            Accueil
+          </Link>
           {NAV_MAIN.map((l) => (
             <Link
               key={l.to}
