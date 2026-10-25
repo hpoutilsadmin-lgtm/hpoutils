@@ -21,8 +21,8 @@ export const Route = createFileRoute("/ateliers")({
           provider: { "@id": "https://www.hp-outils.com/#organisation" },
           areaServed: "Lanaudière",
           offers: [
-            { "@type": "Offer", price: "120.00", priceCurrency: "CAD" },
             { "@type": "Offer", price: "150.00", priceCurrency: "CAD" },
+            { "@type": "Offer", price: "290.00", priceCurrency: "CAD" },
           ],
         }),
       },
@@ -32,18 +32,18 @@ export const Route = createFileRoute("/ateliers")({
 });
 
 const ATELIERS = [
-  { title: "L'IA sans jargon — régulière", price: "120 $ CAD · forfait groupe", desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie.", inclus: "Repartez avec un cas d'usage concret. Aucune taxe ajoutée." },
-  { title: "Cuisine pratique", price: "120 $ CAD · forfait groupe", desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
-  { title: "Atelier jeunesse", price: "120 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
-  { title: "Manger mieux avec moins", price: "150 $ CAD · forfait groupe", desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
-  { title: "Les enfants cuisinent", price: "120 $ CAD · forfait groupe", duree: "90 min", desc: "Cuisiner ensemble, apprendre et gagner en autonomie.", inclus: "Aucune taxe ajoutée." },
-  { title: "Hygiène & salubrité", price: "120 $ CAD · forfait groupe", duree: "60 à 90 min", desc: "Sensibilisation aux bons gestes du quotidien.", inclus: "Aucune taxe ajoutée." },
+  { title: "L'IA sans jargon — régulière", price: "220 $ CAD · forfait groupe", desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie.", inclus: "Repartez avec un cas d'usage concret. Aucune taxe ajoutée." },
+  { title: "Cuisine pratique", price: "260 $ CAD · forfait groupe", desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
+  { title: "Atelier jeunesse", price: "150 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
+  { title: "Manger mieux avec moins", price: "260 $ CAD · forfait groupe", desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
+  { title: "Les enfants cuisinent", price: "190 $ CAD · forfait groupe", duree: "90 min", desc: "Cuisiner ensemble, apprendre et gagner en autonomie.", inclus: "Aucune taxe ajoutée." },
+  { title: "Hygiène & salubrité", price: "150 $ CAD · forfait groupe", duree: "60 à 90 min", desc: "Sensibilisation aux bons gestes du quotidien.", inclus: "Aucune taxe ajoutée." },
 ];
 
 const FETES = [
-  { title: "Pain maison à domicile", duration: "3 h · 6 à 8 personnes", price: "120 $ CAD · forfait groupe", desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes. Soit 15 $ à 20 $ par personne." },
-  { title: "L'IA sans jargon — Édition des Fêtes", duration: "2 h", price: "120 $ CAD · forfait organisme", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
-  { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "120 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant." },
+  { title: "Pain maison à domicile", duration: "3 h · 6 à 8 personnes", price: "290 $ CAD · forfait groupe", desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes. Soit 36 $ à 48 $ par personne." },
+  { title: "L'IA sans jargon — Édition des Fêtes", duration: "2 h", price: "220 $ CAD · forfait organisme", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
+  { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "220 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant." },
 ];
 
 function Page() {
@@ -91,7 +91,7 @@ function Page() {
           <h2 className="section-title">La fiche, en clair</h2>
           <div style={{ fontSize: 16.5, lineHeight: 1.65 }}>
             <p>
-              <strong>Prix :</strong> forfaits groupe de 120 $ ou 150 $ CAD selon l'atelier,
+              <strong>Prix :</strong> forfaits groupe de 150 $ à 290 $ CAD selon l'atelier,
               aucune taxe ajoutée (petit fournisseur). Les fiches recette et astuces sont
               incluses aux ateliers de cuisine.
             </p>
