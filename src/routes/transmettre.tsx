@@ -24,7 +24,7 @@ function Page() {
           </p>
           <div className="lead-actions">
             <a className="btn-primary" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Découvrir le livre</a>
-            <Link to="/collaborer" className="btn-ghost">Voir les ateliers</Link>
+            <Link to="/collaborer" className="btn-ghost">Collaborer avec HP</Link>
           </div>
         </div>
       </section>
