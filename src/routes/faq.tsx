@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import type { ReactNode } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import { FAQ_ENTRIES } from "@/lib/faq-data";
 
@@ -33,6 +34,43 @@ export const Route = createFileRoute("/faq")({
   component: Page,
 });
 
+/* Les réponses sont des chaînes (aussi utilisées dans le schéma
+   FAQPage) : on y repère certaines mentions pour en faire des liens,
+   sans toucher aux chaînes elles-mêmes. */
+function renderReponse(reponse: string): ReactNode {
+  let noeuds: ReactNode[] = [reponse];
+  const remplacer = (phrase: string, lien: ReactNode) => {
+    const sortie: ReactNode[] = [];
+    noeuds.forEach((n) => {
+      if (typeof n !== "string" || !n.includes(phrase)) {
+        sortie.push(n);
+        return;
+      }
+      const [avant, ...reste] = n.split(phrase);
+      sortie.push(avant);
+      sortie.push(lien);
+      sortie.push(reste.join(phrase));
+    });
+    noeuds = sortie;
+  };
+  remplacer(
+    "Récupérer un achat",
+    <Link key="lien-achat" to="/recuperer-achat">
+      Récupérer un achat
+    </Link>,
+  );
+  remplacer(
+    "écris à la direction pour t'inscrire",
+    <a
+      key="lien-passeurs"
+      href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs"
+    >
+      écris à la direction pour t'inscrire
+    </a>,
+  );
+  return <>{noeuds}</>;
+}
+
 function Page() {
   return (
     <section className="subpage-content">
@@ -51,7 +89,7 @@ function Page() {
         {FAQ_ENTRIES.map((e) => (
           <article key={e.question} style={{ marginTop: 30 }}>
             <h2 style={{ fontSize: 22 }}>{e.question}</h2>
-            <p style={{ lineHeight: 1.65 }}>{e.reponse}</p>
+            <p style={{ lineHeight: 1.65 }}>{renderReponse(e.reponse)}</p>
           </article>
         ))}
       </div>
