@@ -73,7 +73,7 @@ function Page() {
         <div className="container" style={{ maxWidth: 720 }}>
           <h2>Une idée <em>sur mesure</em> ?</h2>
           <p className="strip-intro" style={{ margin: "0 auto 28px" }}>
-            Conférences, interventions ponctuelles, collaborations avec un organisme — écrivez à la direction humaine, on regarde ensemble.
+            Conférences, interventions ponctuelles, collaborations avec un organisme — <a href="mailto:hpoutils.admin@gmail.com">écrivez à la direction humaine</a>, on regarde ensemble.
           </p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a>
