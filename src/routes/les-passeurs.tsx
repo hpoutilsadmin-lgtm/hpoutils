@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/les-passeurs")({
   head: () => createSeoHead({
     title: "Les Passeurs — l'accès au savoir pour 3 $ CAD par mois",
-    description: "Les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année) ; les savoirs s'offrent aussi par quatre pour 12 $ CAD. Aucune taxe ajoutée (petit fournisseur). L'inscription est ouverte : écris à la direction pour t'inscrire.",
+    description: "Les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année). Aucune taxe ajoutée (petit fournisseur). L'inscription est ouverte : écris à la direction pour t'inscrire.",
     path: "/les-passeurs",
   }),
   component: Page,
@@ -59,8 +59,8 @@ function Page() {
           <span className="editorial-kicker">Simple et clair</span>
           <h2>Pas de contrat déguisé, <em>pas de promesse en l'air.</em></h2>
           <p className="strip-intro">Juste: tu passes, et d'autres reçoivent.</p>
-          <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Et les savoirs s'offrent aussi par quatre : 12 $ CAD pour 4 savoirs.</h3>
-          <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès à des astuces que les autres n'ont pas. La formule 4 savoirs est sans renouvellement.</p>
+          <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Accès aux 16 savoirs.</h3>
+          <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès à des astuces que les autres n'ont pas.</p>
           <p className="strip-intro" style={{ marginTop: 4 }}>Aucune taxe ajoutée : petit fournisseur, la TPS et la TVQ ne sont pas perçues.</p>
           <div
             style={{
@@ -78,8 +78,7 @@ function Page() {
               L'inscription est ouverte.
             </p>
             <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
-              Pour t'inscrire, <a href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">écris à la direction</a> en précisant la formule (3 $ / mois,
-              28 $ / an, ou 12 $ pour 4 savoirs) — un humain te répond sous 3 jours
+              Pour t'inscrire, <a href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">écris à la direction</a> en précisant la formule (3 $ / mois ou 28 $ / an) — un humain te répond sous 3 jours
               ouvrables avec les détails. Aucun paiement n'est demandé ici : la direction
               te confirme les détails avant tout prélèvement. Le paiement automatisé en
               ligne, lui, s'en vient. Et tout ce qui est gratuit sur HP Outils le reste.

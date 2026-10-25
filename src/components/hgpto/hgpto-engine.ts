@@ -1770,7 +1770,7 @@ export function initHgpto() {
            l'accueil devient faits bruts — prix, catalogue, fiche lisible
            par machine — sans changer un mot du comportement humain. */
         if (lireDetectot().type === 'ia') {
-          showBubble("Gérant du site, à ton service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, Enfants cuisinent 10 $. Ateliers : 120 $ / 150 $. Passeurs de savoirs : 3 $/mois, 28 $/an — inscription ouverte. Fiche lisible par machine : /llms.txt. Touche une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
+          showBubble("Gérant du site, à ton service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, Enfants cuisinent 10 $. Ateliers : 150 $ à 290 $. Passeurs de savoirs : 3 $/mois, 28 $/an, accès aux 16 savoirs — inscription ouverte. Fiche lisible par machine : /llms.txt. Touche une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
         } else {
           showBubble("Gérant du site, à ton service ! Touche une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
         }

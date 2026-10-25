@@ -22,7 +22,7 @@ const ROWS: Row[] = [
   { cat: "Sans Honte", offre: "Kits Sans Honte — 15 titres au choix, un par un (Frigo, Papiers, Fraude, Tenir Debout, Seconde Main, Entraide…)", prix: "5 $ CAD le kit, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les 15 kits" },
   { cat: "Sans Honte", offre: "Bundle Sans Honte — Choisis 10 kits parmi 15", prix: "40 $ CAD (économie de 10 $ : 50 $ séparément), aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
   { cat: "À toi l’histoire", offre: "Tomes « À toi l’histoire » — tome 1 gratuit, standards 5 $, grands 8 $, bundle 3 tomes 12 $ (mode TEST — aucune vente réelle)", prix: "Gratuit, 5 $ ou 8 $ selon le tome ; bundle 12 $, aucune taxe ajoutée", href: "/lire", label: "Voir /lire/ (mode test)" },
-  { cat: "Passeurs", offre: "Passeurs de savoirs — inscription ouverte", prix: "3 $/mois · 28 $/an · 12 $ pour 4 savoirs, aucune taxe ajoutée", href: "/les-passeurs", label: "S'inscrire" },
+  { cat: "Passeurs", offre: "Passeurs de savoirs — inscription ouverte", prix: "3 $/mois · 28 $/an, aucune taxe ajoutée", href: "/les-passeurs", label: "S'inscrire" },
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "120 $ ou 150 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Jeu", offre: "Chevalier du fleuve — gemmes du jeu (boutique dédiée, hors panier — bientôt en vente, aucun paiement pris pour l'instant)", prix: "2,99 $ à 19,99 $ CAD, aucune taxe ajoutée", href: "/boutique-chevalier", label: "Voir la boutique" },
   { cat: "Cadeaux", offre: "Bons cadeaux — un code personnel à offrir, applicable au panier", prix: "5 $ à 100 $ CAD, aucune taxe ajoutée", href: "/cadeaux", label: "Offrir un bon" },

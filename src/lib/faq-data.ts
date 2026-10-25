@@ -38,12 +38,12 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Est-ce qu'il y a des ateliers en personne ?",
     reponse:
-      "Oui : 6 ateliers de groupe à Terrebonne et dans Lanaudière — Cuisine pratique (120 $ CAD), Manger mieux avec moins (150 $ CAD), L'IA sans jargon (120 $ CAD), Atelier jeunesse (120 $ CAD), Les enfants cuisinent (120 $ CAD), Hygiène & salubrité (120 $ CAD). Et pour l'Édition des Fêtes (1er octobre au 23 décembre) : le Pain maison à domicile (120 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h pour les organismes (120 $) et la conférence « La faim justifie les moyens » (120 $, 45 à 60 min).",
+      "Oui : 6 ateliers de groupe à Terrebonne et dans Lanaudière — Cuisine pratique (260 $ CAD), Manger mieux avec moins (260 $ CAD), L'IA sans jargon (220 $ CAD), Atelier jeunesse (150 $ CAD), Les enfants cuisinent (190 $ CAD), Hygiène & salubrité (150 $ CAD). Et pour l'Édition des Fêtes (1er octobre au 23 décembre) : le Pain maison à domicile (290 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h (220 $) et la conférence « La faim justifie les moyens » (220 $, 45 à 60 min).",
   },
   {
     question: "C'est quoi, les Passeurs de savoir ?",
     reponse:
-      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année), et les savoirs s'offrent aussi par quatre pour 12 $ CAD. L'inscription est ouverte : écris à la direction pour t'inscrire, un humain te répond sous 3 jours ouvrables. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
+      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs aux 16 savoirs : 3 $ CAD par mois (ou 28 $ CAD pour l'année). L'inscription est ouverte : écris à la direction pour t'inscrire, un humain te répond sous 3 jours ouvrables. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
   },
   {
     question: "Par où commencer pour mes papiers de fin de vie ?",
