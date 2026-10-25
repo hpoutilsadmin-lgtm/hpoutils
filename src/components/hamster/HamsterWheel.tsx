@@ -24,6 +24,9 @@ import {
  * « Fermer » = session seulement (sessionStorage).
  * Coin bas DROIT : HGPTO occupe le bas gauche (z-index 58 < 59-62).
  *
+ * Nom public (24 oct. 2026, décision d'Hugo) : le hamster S'APPELLE Détectôt,
+ * affiché sous la roue — pour que les visiteurs connaissent déjà le nom
+ * quand le système Détectôt sera présenté (dans ~3 mois).
  * Personnages (24 oct. 2026, décisions d'Hugo) : le hamster se déplace
  * au doigt et à la souris (seuil 8 px, comme HGPTO — un tap ne déplace
  * jamais), se replie À LA MAIN en mini-roue (tap pour rouvrir, jamais
@@ -268,7 +271,7 @@ export function HamsterWheel() {
       className={"rh" + (reduit ? " rh-reduit" : "") + (enTrainDeGlisser ? " rh-dragging" : "")}
       data-etat={etat}
       role="note"
-      aria-label={reduit ? "La roue d'hamster d'HP Outils, repliée — touche pour rouvrir" : "La roue d'hamster d'HP Outils — glisse pour déplacer"}
+      aria-label={reduit ? "Détectôt, la roue d'hamster d'HP Outils, repliée — touche pour rouvrir" : "Détectôt, la roue d'hamster d'HP Outils — glisse pour déplacer"}
       title={reduit ? "Hamster replié — touche pour rouvrir" : undefined}
       style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
     >
@@ -317,20 +320,21 @@ export function HamsterWheel() {
         </div>
         <div className="rh-socle" aria-hidden="true"></div>
       </div>
+      <div className="rh-nom">Détectôt</div>
       <div className="rh-pied">
         <span className="rh-honnete">Il devine, il ne surveille personne.</span>
-        <button className="rh-fermer" type="button" aria-label="Fermer la roue d'hamster" onClick={fermer}>
+        <button className="rh-fermer" type="button" aria-label="Fermer Détectôt, la roue d'hamster" onClick={fermer}>
           Fermer ✕
         </button>
       </div>
       <div className="rh-pied2">
-        <button className="rh-controle" type="button" aria-label="Replier le hamster en mini-roue" onClick={() => appliquerReduit(true)}>
+        <button className="rh-controle" type="button" aria-label="Replier Détectôt en mini-roue" onClick={() => appliquerReduit(true)}>
           Réduire
         </button>
-        <button className="rh-controle" type="button" aria-label="Hamster plus petit" onClick={() => changerZoom(-1)}>
+        <button className="rh-controle" type="button" aria-label="Détectôt plus petit" onClick={() => changerZoom(-1)}>
           Petit
         </button>
-        <button className="rh-controle" type="button" aria-label="Hamster plus grand" onClick={() => changerZoom(1)}>
+        <button className="rh-controle" type="button" aria-label="Détectôt plus grand" onClick={() => changerZoom(1)}>
           Grand
         </button>
       </div>
