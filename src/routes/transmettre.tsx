@@ -58,6 +58,7 @@ function Page() {
           <p className="strip-intro">Et aussi pour s’entraider, comprendre et être fier.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
             <Link to="/contact" className="btn-primary">Faire une demande</Link>
+            <Link to="/pdf/enfants-cuisinent" className="btn-ghost">Voir la fiche du livre</Link>
           </div>
         </div>
       </section>
