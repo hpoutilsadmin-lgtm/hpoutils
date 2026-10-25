@@ -41,7 +41,7 @@ function Page() {
               <span className="pillar-num">02</span>
               <h3>Liens plateformes</h3>
               <p>Spotify, Apple Music, Deezer et autres liens pourront être ajoutés ici.</p>
-              <span className="pillar-cta">À venir</span>
+              <a className="pillar-cta" href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer">Écouter sur YouTube →</a>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
