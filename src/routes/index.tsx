@@ -267,41 +267,6 @@ function Index() {
         </div>
       </section>
 
-      {/* UNIVERS ALTERNATIF */}
-      <section className="three-pillars" style={{ background: "#0b1422", color: "#f5ead4" }}>
-        <div className="container">
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(32px,4.4vw,48px)", margin: "0 0 8px", color: "#f5ead4" }}>Univers alternatif</h2>
-          <p style={{ margin: "0 0 36px", color: "rgba(245,234,212,.75)", fontStyle: "italic", fontSize: 17 }}>
-            Des personnages, mondes et collections qui prolongent HP autrement : PH,
-            Famille atypique, Humain imparfait et les projets créatifs qui regardent
-            la vraie vie de côté.
-          </p>
-          <div className="pillar-grid">
-            <article className="pillar-card">
-              <span className="pillar-num">01</span>
-              <h3>PH — Déséquilibré</h3>
-              <p>Chroniques de l'ordinaire. Une BD muette, absurde et humaine.</p>
-              <Link to="/univers" className="pillar-cta">Découvrir PH →</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">02</span>
-              <h3>Famille atypique</h3>
-              <p>Un univers shōnen québécois sur la famille, les blessures, la force et la différence.</p>
-              <Link to="/univers" className="pillar-cta">Voir l'aperçu →</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">03</span>
-              <h3>Humain imparfait</h3>
-              <p>Album DIY, sensible et brut autour de l'imperfection, de la lucidité et du besoin de rester humain.</p>
-              <Link to="/univers" className="pillar-cta">Écouter l'album →</Link>
-            </article>
-          </div>
-          <div className="lead-actions" style={{ marginTop: 28 }}>
-            <Link to="/univers" className="btn-primary">Explorer les univers</Link>
-          </div>
-        </div>
-      </section>
-
       {/* ATELIERS */}
       <section className="collections-strip">
         <div className="container">
