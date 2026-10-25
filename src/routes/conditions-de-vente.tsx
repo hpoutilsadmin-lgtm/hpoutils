@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/conditions-de-vente")({
@@ -34,7 +34,7 @@ function Page() {
       <li><strong>Tomes « À toi l'histoire »</strong> : un lien web personnel, pour lire en ligne.</li>
       <li><strong>Ateliers</strong> : votre réservation est confirmée par courriel.</li>
     </ul>
-    <p>Le courriel n'arrive pas, ou votre lien est expiré ? Passez par la page « Récupérer un achat » du site, ou écrivez-nous : on vous redonne accès à ce que vous avez acheté.</p>
+    <p>Le courriel n'arrive pas, ou votre lien est expiré ? Passez par la page <Link to="/recuperer-achat">« Récupérer un achat »</Link> du site, ou écrivez-nous : on vous redonne accès à ce que vous avez acheté.</p>
     <h2>6. Remboursements : les produits numériques ne sont pas remboursables</h2>
     <p>Nos produits numériques ne sont pas remboursables. Un fichier téléchargé ou un lien de lecture ne peut pas être « retourné » : dès qu'il est livré, la vente est finale.</p>
     <p>Regardez bien la description du produit avant d'acheter. Si vous hésitez entre deux produits, écrivez-nous avant : on vous répond franchement.</p>
