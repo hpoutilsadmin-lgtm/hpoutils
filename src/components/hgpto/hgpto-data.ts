@@ -3,7 +3,7 @@
    Portage fidèle du prototype validé par la direction (artefact
    « hgpto-mascotte-hp ») : textes, blagues, lectures, pitches et
    base de faits du catalogue réel (prix vérifiés contre
-   src/lib/products-catalog.ts et les routes du site, 22 oct. 2026).
+   src/lib/products-catalog.ts et les routes du site, 25 oct. 2026).
    Aucun prix, aucun lien, aucun fait inventé.
    ============================================================ */
 
@@ -266,9 +266,10 @@ export const SITE_FACTS = {
           recettes:{ nom:"Recettes HP", prix:"Gratuit — 629 recettes", url:"https://www.hp-outils.com/en-cuisine/" },
           jeux:   { nom:"Jeux", prix:"Gratuit — 35 jeux", url:"https://www.hp-outils.com/jeux" },
           ateliers:{ nom:"Ateliers", prix:"150 $ à 290 $", url:"https://www.hp-outils.com/ateliers" },
-          passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois — accès aux 16 savoirs (inscription par courriel)", url:"https://www.hp-outils.com/les-passeurs" },
+          passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois, 28 $ / an — accès aux 16 savoirs (inscription par courriel)", url:"https://www.hp-outils.com/les-passeurs" },
           balado: { nom:"Balado Futur simple", prix:"Gratuit, nouveaux épisodes quand ils sont prêts", url:"https://www.hp-outils.com/balado" },
-          jeuxImage:{ nom:"Jeux à votre image", prix:"29 $ à 399 $ + hébergement gratuit an 1 puis 29 $/an", url:"https://www.hp-outils.com/jeux-a-votre-image" }
+          jeuxImage:{ nom:"Jeux à votre image", prix:"29 $ à 399 $ + hébergement gratuit an 1 puis 29 $/an", url:"https://www.hp-outils.com/jeux-a-votre-image" },
+          cadeaux:{ nom:"Bons cadeaux", prix:"5 $ à 100 $", url:"https://www.hp-outils.com/cadeaux" }
         },
         sections: {
           "sec-accueil":"l'accueil", "sec-jeux":"les jeux gratuits", "sec-kits":"les kits Sans Honte",
@@ -380,7 +381,7 @@ export const KB = [
           a:"4 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) et le livre « Les enfants cuisinent pour faire plaisir » (10 $) — plus le mini-cahier « Un petit pas à la fois » (10 $). Et si un paiement ne passe pas, écris à la direction humaine, un humain te répondra sous 3 jours ouvrables.",
           u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres" },
         { q:"Combien coûte « Les enfants cuisinent pour faire plaisir » ?", s:"10 $",
-          a:"Le livre « Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Tu peux l'ajouter à ton panier depuis la page Prix ou sa fiche, et payer en une seule fois avec tes autres produits — et si le paiement ne passe pas, écris à la direction humaine, un humain te répondra sous 3 jours ouvrables.",
+          a:"Le livre « Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Tu le retrouves sur la page Prix et sur sa fiche. L'achat direct s'en vient — le prix Stripe n'est pas encore branché ; en attendant, écris à la direction humaine, un humain te répondra sous 3 jours ouvrables.",
           u:"https://www.hp-outils.com/pdf/enfants-cuisinent", l:"Voir le livre" },
         { q:"C'est quoi, les Passeurs ?", s:"3 $ / MOIS",
           a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès à des astuces que les autres n'ont pas. Honnêtement ? L'inscription est ouverte : écris à la direction pour t'inscrire — un humain te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient.",
@@ -415,11 +416,14 @@ export const KB = [
           a:"Le panier, c'est la page /panier/ : tu y mets plusieurs produits d'un coup — livres et kits en PDF — et tu paies en une seule fois, par carte. Après le paiement, tu reçois un courriel avec un lien de téléchargement par article. Aucune taxe ajoutée, et le total affiché est indicatif : c'est Stripe qui débite. Un souci avec ton panier ou tes liens ? Écris à l'équipe, un humain te répondra sous 3 jours ouvrables.",
           u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
         { q:"Qu'est-ce que je peux mettre dans le panier ?", s:"20 PRODUITS",
-          a:"20 produits : les 5 PDF — « Enjeux de l'humanité à l'ère de l'IA » (15 $), « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), le livre « Les enfants cuisinent pour faire plaisir » (10 $) et le mini-cahier « Un petit pas à la fois » (10 $) — et les 15 kits Sans Honte à 5 $ chacun. Chaque PDF ne s'achète qu'en un seul exemplaire : ajouter deux fois le même ne change rien, on ne te débite jamais deux fois le même fichier. Le bundle « Choisis 10 parmi 15 », lui, garde son propre parcours, hors panier.",
+          a:"20 produits : les 5 PDF — « Enjeux de l'humanité à l'ère de l'IA » (15 $), « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), le livre « Les enfants cuisinent pour faire plaisir » (10 $) et le mini-cahier « Un petit pas à la fois » (10 $) — et les 15 kits Sans Honte à 5 $ chacun. Attention : le livre « Les enfants cuisinent » s'ajoute au panier, mais son achat n'est pas encore débitable — le prix Stripe s'en vient. Chaque PDF ne s'achète qu'en un seul exemplaire : ajouter deux fois le même ne change rien, on ne te débite jamais deux fois le même fichier. Le bundle « Choisis 10 parmi 15 », lui, garde son propre parcours, hors panier.",
           u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
         { q:"Comment j'ajoute un produit au panier ?", s:"AJOUTER",
           a:"Avec le bouton « Ajouter au panier », sur la page Prix et sur la fiche d'un produit vendable. Ton panier se garde d'une page à l'autre, et tu le retrouves sur /panier/ pour vérifier tes articles, en retirer un ou payer. Le bouton devient « Dans le panier » quand le produit y est déjà.",
           u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
+        { q:"Avez-vous des bons cadeaux ?", s:"5 $ À 100 $",
+          a:"Oui ! Des bons cadeaux de 5 $, 10 $, 20 $, 50 $ ou 100 $ — un code personnel que la personne saisit au panier, applicable en une fois ou par tranches jusqu'à épuisement du solde. Aucune taxe ajoutée, et un bon ne s'échange pas contre de l'argent.",
+          u:"https://www.hp-outils.com/cadeaux", l:"Offrir un bon" },
         { q:"Et le balado ?", s:"BALADO",
           a:"« Futur simple », le balado HP : Léa et Marc regardent l'intelligence artificielle en face — PME, entrepreneuriat et futur, sans jargon. De nouveaux épisodes, annoncés ici dès leur parution, quand ils sont prêts !",
           u:"https://www.hp-outils.com/balado", l:"Écouter le balado" },
