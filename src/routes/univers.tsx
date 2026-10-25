@@ -60,7 +60,7 @@ function Page() {
                   {tome.public ? ` · ${tome.public}` : ""}
                 </p>
                 <p><strong>{priceLabel(tome)}</strong> · aucune taxe ajoutée</p>
-                <Link to="/lire" className="pillar-cta">Acheter →</Link>
+                <Link to="/lire" className="pillar-cta">Voir sur /lire/ →</Link>
               </article>
             ))}
           </div>
