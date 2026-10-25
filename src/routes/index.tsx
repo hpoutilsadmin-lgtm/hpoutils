@@ -208,7 +208,7 @@ function Index() {
             </article>
             <article className="pillar-card">
               <h3>Futur simple, le balado</h3>
-              <p>L'IA, les PME et le futur, racontés simplement — un épisode par semaine.</p>
+              <p>L'IA, les PME et le futur, racontés simplement — de nouveaux épisodes quand ils sont prêts.</p>
               <Link className="pillar-cta" to="/balado">Écouter le balado →</Link>
             </article>
           </div>

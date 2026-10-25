@@ -80,7 +80,7 @@ function Page() {
           <p className="strip-intro">
             Avant de payer quoi que ce soit, le gratuit d'HP vaut le détour :{" "}
             <a href="/jeux">35 jeux gratuits, sans inscription</a>, et{" "}
-            <a href="/balado">Futur simple, le balado sur l'IA</a> — un épisode par semaine, gratuit lui aussi.
+            <a href="/balado">Futur simple, le balado sur l'IA</a> — de nouveaux épisodes quand ils sont prêts, gratuit lui aussi.
           </p>
         </div>
       </section>
