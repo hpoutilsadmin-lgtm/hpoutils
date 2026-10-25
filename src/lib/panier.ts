@@ -59,9 +59,7 @@ export const CART_PRODUCTS: CartProduct[] = [
 export const NON_AJOUTABLES: Array<{ nom: string; raison: string }> = [
   { nom: "Bundle Sans Honte — Choisis 10 kits parmi 15 (40 $)", raison: "Exclu du panier v1 : il garde son propre parcours de sélection des 10 kits." },
   { nom: "Tomes « À toi l'histoire » (5 $ / 8 $)", raison: "Produits Stripe en cours de création chez Mélanie." },
-  { nom: "Le Coffre HP (79 $)", raison: "Fiche non publiée pour l'instant." },
-  { nom: "Boutique Chevalier (4,99 $ à 39,99 $)", raison: "« Bientôt en vente » seulement, aucun bouton d'achat actif." },
-  { nom: "Outils papier (2 $ / 5 $ / 8 $)", raison: "Brouillons : ni prix Stripe ni fichier PDF en place." },
+  { nom: "Boutique Chevalier (2,99 $ à 19,99 $)", raison: "« Bientôt en vente » seulement, aucun bouton d'achat actif." },
 ];
 
 export function getCartProduct(priceId: string): CartProduct | null {

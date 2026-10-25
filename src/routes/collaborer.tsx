@@ -24,7 +24,7 @@ function Page() {
           </p>
           <div className="lead-actions">
              <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Demande%20de%20collaboration%20HP">Demander une activité</a>
-            <Link to="/contact" className="btn-ghost">M'écrire directement</Link>
+            <Link to="/contact" className="btn-ghost">Écrire à la direction humaine</Link>
           </div>
         </div>
       </section>
@@ -73,7 +73,7 @@ function Page() {
         <div className="container" style={{ maxWidth: 720 }}>
           <h2>Une idée <em>sur mesure</em> ?</h2>
           <p className="strip-intro" style={{ margin: "0 auto 28px" }}>
-            Conférences, interventions ponctuelles, collaborations avec un organisme — écris-moi, on regarde ensemble.
+            Conférences, interventions ponctuelles, collaborations avec un organisme — écrivez à la direction humaine, on regarde ensemble.
           </p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a>

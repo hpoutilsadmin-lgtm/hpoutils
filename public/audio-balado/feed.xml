@@ -7,6 +7,11 @@
     <language>fr</language>
     <copyright>HP Outils</copyright>
     <itunes:author>HP Outils</itunes:author>
+    <managingEditor>hpoutils.admin@gmail.com (HP Outils)</managingEditor>
+    <itunes:owner>
+      <itunes:name>HP Outils</itunes:name>
+      <itunes:email>hpoutils.admin@gmail.com</itunes:email>
+    </itunes:owner>
     <itunes:summary>Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode chaque lundi, direct et sans jargon.</itunes:summary>
     <itunes:explicit>no</itunes:explicit>
     <itunes:category text="Technology" />
