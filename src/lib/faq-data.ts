@@ -13,7 +13,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Combien coûtent les kits Sans Honte ?",
     reponse:
-      "5 $ CAD le kit, ou 40 $ CAD pour le lot de 10 kits au choix parmi 15 thèmes : soins, testament, papiers, 72 heures, entraide, fraude, frigo, logement, proche aidant, tenir debout et les autres. Aucune taxe ajoutée — HP Outils est un petit fournisseur, la TPS et la TVQ ne sont pas perçues.",
+      "5 $ CAD le kit, ou 40 $ CAD pour le lot de 10 kits au choix parmi 15 thèmes : Seconde Main, testament, papiers, 72 heures, entraide, fraude, frigo, logement, proche aidant, tenir debout et les autres. Aucune taxe ajoutée — HP Outils est un petit fournisseur, la TPS et la TVQ ne sont pas perçues.",
   },
   {
     question: "Combien coûtent les livres ?",
