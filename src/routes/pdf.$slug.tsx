@@ -2,6 +2,7 @@ import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { getProductBySlug, type DigitalProduct } from "@/lib/products-catalog";
 import { PdfCover } from "@/components/PdfCover";
 import { AjouterAuPanier } from "@/components/AjouterAuPanier";
+import { ShareButton } from "@/components/ShareButton";
 import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/pdf/$slug")({
@@ -255,6 +256,11 @@ function Page() {
                 ) : null}
               </>
             )}
+            <div style={{ marginTop: 16 }}>
+              <ShareButton
+                text={`${product.title} — ${product.priceLabel}, aucune taxe ajoutée. HP Outils.`}
+              />
+            </div>
             {fmt === "Kit PDF" && (
               <Link
                 to="/pdf/$slug"

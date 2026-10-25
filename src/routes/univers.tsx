@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import { BUNDLE, FREE_TOME, PAYANT_TOMES, priceLabel } from "@/lib/tomes-catalog";
+import { ShareButton } from "@/components/ShareButton";
 
 export const Route = createFileRoute("/univers")({
   head: () => createSeoHead({
@@ -26,6 +27,7 @@ function Page() {
           </p>
           <div className="lead-actions">
             <Link to="/lire" className="btn-primary">Lire les tomes</Link>
+            <ShareButton text="À toi l'histoire — 12 tomes interactifs, le 1er gratuit. HP Outils." />
             <a className="btn-ghost" href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer">Écouter l'album</a>
           </div>
         </div>
