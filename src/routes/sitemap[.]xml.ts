@@ -24,6 +24,7 @@ const STATIC_PATHS = [
   "/album",
   "/collaborer",
   "/apercu",
+  "/jeux-a-votre-image",
   "/comprendre",
   "/contact",
   "/faq",

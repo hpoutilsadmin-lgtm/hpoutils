@@ -5,7 +5,7 @@ import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { createSeoHead } from "@/lib/seo";
 import { fulfillTomeOrder } from "@/utils/tomes.functions";
 
-export const Route = createFileRoute("/lire/merci")({
+export const Route = createFileRoute("/lire_/merci")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
     session_id: typeof search.session_id === "string" ? search.session_id : undefined,
   }),

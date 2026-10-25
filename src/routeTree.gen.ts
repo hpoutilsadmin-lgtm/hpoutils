@@ -27,6 +27,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EnCuisineRouteImport } from './routes/en-cuisine'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as JeuxRouteImport } from './routes/jeux'
+import { Route as JeuxAVotreImageRouteImport } from './routes/jeux-a-votre-image'
 import { Route as LesPasseursRouteImport } from './routes/les-passeurs'
 import { Route as LireRouteImport } from './routes/lire'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
@@ -150,6 +151,11 @@ const FaqRoute = FaqRouteImport.update({
 const JeuxRoute = JeuxRouteImport.update({
   id: '/jeux',
   path: '/jeux',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JeuxAVotreImageRoute = JeuxAVotreImageRouteImport.update({
+  id: '/jeux-a-votre-image',
+  path: '/jeux-a-votre-image',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LesPasseursRoute = LesPasseursRouteImport.update({
@@ -346,6 +352,7 @@ export interface FileRoutesByFullPath {
   '/en-cuisine': typeof EnCuisineRouteWithChildren
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
+  '/jeux-a-votre-image': typeof JeuxAVotreImageRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/lire': typeof LireRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -400,6 +407,7 @@ export interface FileRoutesByTo {
   '/en-cuisine': typeof EnCuisineRouteWithChildren
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
+  '/jeux-a-votre-image': typeof JeuxAVotreImageRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/lire': typeof LireRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -455,6 +463,7 @@ export interface FileRoutesById {
   '/en-cuisine': typeof EnCuisineRouteWithChildren
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
+  '/jeux-a-votre-image': typeof JeuxAVotreImageRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/lire': typeof LireRoute
   '/livres-pdf': typeof LivresPdfRoute
@@ -511,6 +520,7 @@ export interface FileRouteTypes {
     | '/en-cuisine'
     | '/faq'
     | '/jeux'
+    | '/jeux-a-votre-image'
     | '/les-passeurs'
     | '/lire'
     | '/livres-pdf'
@@ -565,6 +575,7 @@ export interface FileRouteTypes {
     | '/en-cuisine'
     | '/faq'
     | '/jeux'
+    | '/jeux-a-votre-image'
     | '/les-passeurs'
     | '/lire'
     | '/livres-pdf'
@@ -619,6 +630,7 @@ export interface FileRouteTypes {
     | '/en-cuisine'
     | '/faq'
     | '/jeux'
+    | '/jeux-a-votre-image'
     | '/les-passeurs'
     | '/lire'
     | '/livres-pdf'
@@ -674,6 +686,7 @@ export interface RootRouteChildren {
   EnCuisineRoute: typeof EnCuisineRouteWithChildren
   FaqRoute: typeof FaqRoute
   JeuxRoute: typeof JeuxRoute
+  JeuxAVotreImageRoute: typeof JeuxAVotreImageRoute
   LesPasseursRoute: typeof LesPasseursRoute
   LireRoute: typeof LireRoute
   LivresPdfRoute: typeof LivresPdfRoute
@@ -834,6 +847,13 @@ declare module '@tanstack/react-router' {
       path: '/jeux'
       fullPath: '/jeux'
       preLoaderRoute: typeof JeuxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jeux-a-votre-image': {
+      id: '/jeux-a-votre-image'
+      path: '/jeux-a-votre-image'
+      fullPath: '/jeux-a-votre-image'
+      preLoaderRoute: typeof JeuxAVotreImageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/les-passeurs': {
@@ -1120,6 +1140,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnCuisineRoute: EnCuisineRouteWithChildren,
   FaqRoute: FaqRoute,
   JeuxRoute: JeuxRoute,
+  JeuxAVotreImageRoute: JeuxAVotreImageRoute,
   LesPasseursRoute: LesPasseursRoute,
   LireRoute: LireRoute,
   LivresPdfRoute: LivresPdfRoute,

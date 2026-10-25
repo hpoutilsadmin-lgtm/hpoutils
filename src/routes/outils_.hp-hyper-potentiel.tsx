@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/outils/hp-hyper-potentiel")({
+export const Route = createFileRoute("/outils_/hp-hyper-potentiel")({
   head: () => createSeoHead({
     title: "Un petit pas à la fois | Outil interactif gratuit",
     description: "Respiration guidée, carte ikigaï interactive et plan WOOP : l'outil web gratuit compagnon du mini cahier Un petit pas à la fois. Sans compte, tes données restent sur ton appareil.",

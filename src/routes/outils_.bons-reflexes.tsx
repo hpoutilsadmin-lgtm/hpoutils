@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/outils/bons-reflexes")({
+export const Route = createFileRoute("/outils_/bons-reflexes")({
   head: () => createSeoHead({
     title: "Les bons réflexes d'HP | Outil interactif gratuit",
     description: "Un jeu interactif gratuit pour réfléchir aux situations du quotidien : cuisine, maison, entraide, émotions, sécurité et débrouillardise.",

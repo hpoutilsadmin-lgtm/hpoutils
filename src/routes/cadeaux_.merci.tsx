@@ -9,7 +9,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { createSeoHead } from "@/lib/seo";
 import { fulfillGiftPurchase } from "@/utils/cadeaux.functions";
 
-export const Route = createFileRoute("/cadeaux/merci")({
+export const Route = createFileRoute("/cadeaux_/merci")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
     session_id: typeof search.session_id === "string" ? search.session_id : undefined,
   }),
