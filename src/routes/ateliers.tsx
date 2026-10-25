@@ -32,7 +32,7 @@ export const Route = createFileRoute("/ateliers")({
 });
 
 const ATELIERS = [
-  { title: "L'IA sans jargon", price: "120 $ CAD · forfait groupe", desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie.", inclus: "Repartez avec un cas d'usage concret. Aucune taxe ajoutée." },
+  { title: "L'IA sans jargon — régulière", price: "120 $ CAD · forfait groupe", desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie.", inclus: "Repartez avec un cas d'usage concret. Aucune taxe ajoutée." },
   { title: "Cuisine pratique", price: "120 $ CAD · forfait groupe", desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
   { title: "Atelier jeunesse", price: "120 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
   { title: "Manger mieux avec moins", price: "150 $ CAD · forfait groupe", desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
@@ -42,7 +42,7 @@ const ATELIERS = [
 
 const FETES = [
   { title: "Pain maison à domicile", duration: "3 h · 6 à 8 personnes", price: "120 $ CAD · forfait groupe", desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes." },
-  { title: "L'IA sans jargon", duration: "2 h", price: "120 $ CAD · forfait organisme", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
+  { title: "L'IA sans jargon — Édition des Fêtes", duration: "2 h", price: "120 $ CAD · forfait organisme", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
   { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "120 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant." },
 ];
 

@@ -148,17 +148,17 @@ function BeforeYouBuyNote() {
         </li>
         <li>
           <strong>Exception — panne technique</strong> : si le lien ou le fichier reçu ne fonctionne
-          pas, écrivez-nous. On répare — nouveau lien, nouveau fichier — et si on n'arrive pas à
-          vous donner un accès qui fonctionne, on vous rembourse.
+          pas, écris-nous. On répare — nouveau lien, nouveau fichier — et si on n'arrive pas à
+          te donner un accès qui fonctionne, on te rembourse.
         </li>
         <li>
-          Après le paiement, vous recevez un <strong>lien de téléchargement personnel, valide
-          7 jours</strong>. Téléchargez votre fichier dès que vous le recevez, et gardez-le.
+          Après le paiement, tu reçois un <strong>lien de téléchargement personnel, valide
+          7 jours</strong>. Télécharge ton fichier dès que tu le reçois, et garde-le.
         </li>
         <li>
-          Le courriel n'arrive pas, ou votre lien est expiré ? La page{" "}
-          <Link to="/recuperer-achat">Récupérer un achat</Link> vous redonne accès à ce que vous
-          avez acheté — ou écrivez-nous.
+          Le courriel n'arrive pas, ou ton lien est expiré ? La page{" "}
+          <Link to="/recuperer-achat">Récupérer un achat</Link> te redonne accès à ce que tu
+          as acheté — ou écris-nous.
         </li>
       </ul>
       <p style={{ marginTop: 8 }}>

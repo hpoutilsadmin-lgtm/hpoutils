@@ -280,7 +280,6 @@ const APPROBATIONS: Record<string, CleTesteur[]> = {
   "fusion-sirop": ["hp"],
   "mots-de-chez-nous": ["hp"],
   "trio-des-elements": ["hp"],
-  "cherche-trouve-la-vraie-vie": ["tous"],
 };
 
 /* Ordre d'affichage du bloc de preuve (celui du texte d'origine). */
