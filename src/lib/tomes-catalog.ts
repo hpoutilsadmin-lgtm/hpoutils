@@ -34,8 +34,8 @@ export const TOMES: Tome[] = [
       "Cinq mini-récits interconnectés autour du Dépanneur Lauzon, à Terrebonne. 149 paragraphes, 20 fins : tes choix tissent les histoires les unes dans les autres. Livre-jeu interactif « À toi l'histoire », reçu par lien web personnel après l'achat.",
     paragraphes: 149,
     fins: 20,
-    price: 5,
-    lookupKey: "tome_mini_recits_lien_5",
+    price: 8,
+    lookupKey: "tome_mini_recits_lien_8",
   },
   {
     slug: "directeur",
