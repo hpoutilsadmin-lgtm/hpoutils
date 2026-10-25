@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES, PAGE_SUGGESTIONS, PAGE_SUGGESTION_FALLBACK, FLASH_INFOS } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES, PAGE_SUGGESTIONS, PAGE_SUGGESTION_FALLBACK, FLASH_INFOS, INDISP_MOMENTS, INDISP_VICTOIRES, INDISP_BONJOUR, INDISP_BONJOUR_AUTOMNE, INDISP_AUREVOIR, INDISP_AIDE_HESITATION, INDISP_AIDE_PERDU, INDISP_AIDE_NUIT, INDISP_VIE } from "./hgpto-data";
 /* Détectôt (24 oct. 2026) : HGPTO lit le type de visiteur publié par la
    roue d'hamster et adapte son accueil — faits bruts pour une IA,
    ton habituel pour un humain, rien de changé quand c'est inconnu.
@@ -281,6 +281,7 @@ export function initHgpto() {
       var guideTarget = null;   // x visé quand il « marche jusqu'à » une section
       var jokeIdx = 0, pitchIdx = 0, alternate = 0;
       var tickleCombo = 0, tickleTimer = null;
+      var momentRateSession = Math.random() < 0.4;   // Lot indispensable : cette session-ci a-t-elle droit à un moment raté ? (occasionnel, jamais à chaque visite)
       var lastInteract = Date.now();
       var bubbleTimer = null, talkTimer = null, waveTimer = null, lifeTimer = null;
 
@@ -742,6 +743,20 @@ export function initHgpto() {
       function saveSet(key, arr){
         try { sessionStorage.setItem(key, JSON.stringify(arr)); } catch(e){}
       }
+      /* Lot indispensable (25 oct. 2026) : drapeaux de session — jamais
+         persistants, jamais de compteur, jamais de suivi. */
+      function sessFlag(key){
+        try { return sessionStorage.getItem(key) === '1'; } catch(e){ return false; }
+      }
+      function sessSetFlag(key){
+        try { sessionStorage.setItem(key, '1'); } catch(e){}
+      }
+      function sessGet(key){
+        try { return sessionStorage.getItem(key); } catch(e){ return null; }
+      }
+      function sessSet(key, val){
+        try { sessionStorage.setItem(key, val); } catch(e){}
+      }
       var visitedRoutes = loadSet('hgpto-visited');
       var winkedRoutes = loadSet('hgpto-winked');
       var returnWinkPending = false;
@@ -817,6 +832,22 @@ export function initHgpto() {
             return;
           }
         }
+        /* Lot indispensable : aide proactive, 1 fois par session —
+           jamais une vente, jamais sur une route sensible, jamais
+           pour un visiteur pressé (on se tasse). Ignorer = non :
+           le drapeau est posé, on ne redemande pas. */
+        if (!sessFlag('hgpto-aide') && !isSensitiveRoute() && !isPresse()){
+          var aideLigne = null;
+          if (isNight()) aideLigne = INDISP_AIDE_NUIT;
+          else if (visitedRoutes.length >= 4 && qaSeq === 0 && Date.now() - lastInteract > 45000) aideLigne = INDISP_AIDE_PERDU;
+          else if (Date.now() - lastInteract > 60000) aideLigne = INDISP_AIDE_HESITATION;
+          if (aideLigne){
+            sessSetFlag('hgpto-aide');
+            showBubble(esc(aideLigne), 7000, 'talk');
+            alternate++;
+            return;
+          }
+        }
         // Lot nº 4, humeur Drôle — et mode Grognon drôle (phase 2) :
         // l'espièglerie passe devant — une chance sur deux, le
         // bavardage devient directement une blague.
@@ -835,6 +866,24 @@ export function initHgpto() {
           showBubble(esc(pick(COMPANION_LINES)), 5600, 'talk');
           alternate++;
           return;
+        }
+        /* Lot indispensable : vie qui continue — 1 ligne par jour,
+           dans la bande seulement, jamais en popup. La ligne du jour
+           est stable (jour de l'année) et montrée 1 fois par jour et
+           par session ; l'Halloween ne sort qu'en saison (20-31 oct.). */
+        if (!isSensitiveRoute()){
+          var vj = new Date();
+          var vjour = vj.getFullYear() + '-' + (vj.getMonth() + 1) + '-' + vj.getDate();
+          if (sessGet('hgpto-vie') !== vjour){
+            var halloween = vj.getMonth() === 9 && vj.getDate() >= 20 && vj.getDate() <= 31;
+            var viePool = halloween ? INDISP_VIE : [INDISP_VIE[0], INDISP_VIE[1]];
+            var jan1 = new Date(vj.getFullYear(), 0, 1);
+            var jourAn = Math.floor((vj - jan1) / 86400000);
+            sessSet('hgpto-vie', vjour);
+            showBubble(esc(viePool[jourAn % viePool.length]), 5600, 'talk');
+            alternate++;
+            return;
+          }
         }
         var tr = Math.random();
         if (tr < 0.10){
@@ -1284,7 +1333,12 @@ export function initHgpto() {
         setTimeout(function(){
           if (state !== 'tumble') return;
           setExpr('laugh'); giggle();
-          showBubble("Même pas mal — on avance !", 2600, 'joke', { now:true });
+          if (momentRateSession && !sessFlag('hgpto-moment-rate')){
+            sessSetFlag('hgpto-moment-rate');
+            showBubble(esc(INDISP_MOMENTS.chute), 3200, 'joke', { now:true });
+          } else {
+            showBubble("Même pas mal — on avance !", 2600, 'joke', { now:true });
+          }
         }, 2100);
         setTimeout(function(){
           if (state === 'tumble'){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
@@ -1417,7 +1471,14 @@ export function initHgpto() {
         logDay("cuisiné " + m.meal + " (un de mes 3 repas du jour, tirés des Recettes)");
         showBubble(esc(m.when + " : " + m.meal + " — une des 629 idées de l'outil Recettes. Toi aussi, tape tes ingrédients !") + linkHtml({ u:"https://hp-outils.com/en-cuisine/", l:"Ouvrir Recettes HP" }), 5200);
         setTimeout(function(){
-          if (state === 'cook'){ setExpr('happy'); showBubble(esc(COOK_TASTE), 3000); }
+          if (state !== 'cook') return;
+          setExpr('happy');
+          if (momentRateSession && !sessFlag('hgpto-moment-rate')){
+            sessSetFlag('hgpto-moment-rate');
+            showBubble(esc(INDISP_MOMENTS.ragout), 4200);
+          } else {
+            showBubble(esc(COOK_TASTE), 3000);
+          }
         }, 4600);
         setTimeout(function(){
           if (state === 'cook'){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
@@ -1436,7 +1497,12 @@ export function initHgpto() {
             if (!paused && state !== 'sleep'){ hideBubble(); setState('sleep'); setExpr('sleep'); }
           }, 3000);
         } else {
-          hideBubble();
+          if (momentRateSession && !sessFlag('hgpto-moment-rate')){
+            sessSetFlag('hgpto-moment-rate');
+            showBubble(esc(INDISP_MOMENTS.sieste), 4200, 'sleep');
+          } else {
+            hideBubble();
+          }
           setState('sleep'); setExpr('sleep');
         }
       }
@@ -1568,6 +1634,13 @@ export function initHgpto() {
       function microCelebrate(){
         if (gameOn || tourOn) return;
         spawnBurst(['✦','✧','✦'], 4);
+        /* Lot indispensable : victoire partagée, 1 fois par session —
+           le visiteur a suivi un chemin trouvé (lien de réponse cliqué).
+           Pas de point, pas de compteur, juste la joie dans l'instant. */
+        if (!sessFlag('hgpto-victoire')){
+          sessSetFlag('hgpto-victoire');
+          showBubble(esc(pick(INDISP_VICTOIRES)), 5000, 'talk', { now:true });
+        }
       }
 
       /* Chatouillage de trop (pack taquin du document, 23 oct. 2026) :
@@ -2342,17 +2415,26 @@ export function initHgpto() {
         if (t.id === 'btn-reduire' || t.id === 'btn-hide') return;
         restoreHgpto();
       });
+      var byePending = false;
       btnHide.addEventListener('click', function(){
-        /* Portage site : « Fermer HGPTO » = fermé pour la session. */
-        try { sessionStorage.setItem('hgpto-closed', '1'); sessionStorage.removeItem('hgpto-tour'); sessionStorage.removeItem('hgpto-guide'); } catch(e) {}
-        isHidden = true;
-        hideBubble();
-        if (tourOn) stopTour(true);
-        bot.classList.add('hidden');
-        if (qaPanel) qaPanel.hidden = true;
-        if (controlsEl) controlsEl.style.display = 'none';
-        document.body.classList.add('hgpto-closed');
-        document.body.classList.remove('hgpto-on');
+        /* Lot indispensable : au revoir, sur « Fermer HGPTO » seulement —
+           la bulle s'affiche d'abord (prioritaire), la fermeture suit
+           4 s plus tard. Sans culpabilité, sans « reviens demain ». */
+        if (byePending) return;
+        byePending = true;
+        showBubble(esc(INDISP_AUREVOIR), 4000, 'talk', { now:true });
+        setTimeout(function(){
+          /* Portage site : « Fermer HGPTO » = fermé pour la session. */
+          try { sessionStorage.setItem('hgpto-closed', '1'); sessionStorage.removeItem('hgpto-tour'); sessionStorage.removeItem('hgpto-guide'); } catch(e) {}
+          isHidden = true;
+          hideBubble();
+          if (tourOn) stopTour(true);
+          bot.classList.add('hidden');
+          if (qaPanel) qaPanel.hidden = true;
+          if (controlsEl) controlsEl.style.display = 'none';
+          document.body.classList.add('hgpto-closed');
+          document.body.classList.remove('hgpto-on');
+        }, 4000);
       });
 
       /* ---------- Dock mobile : un seul bouton rond, le reste s'ouvre au toucher ---------- */
@@ -2930,6 +3012,15 @@ export function initHgpto() {
         setExpr('laugh');
         if (youWon){
           gComment(pick(GAME_LINES.youWin), 'joke');
+          /* Lot indispensable : victoire partagée à la fin du jeu caché,
+             1 fois par session (même drapeau que les liens de réponse). */
+          if (!sessFlag('hgpto-victoire')){
+            sessSetFlag('hgpto-victoire');
+            setTimeout(function(){
+              if (!gameOn) return;
+              showBubble(esc(pick(INDISP_VICTOIRES)), 5000, 'talk', { now:true });
+            }, 2000);
+          }
         } else {
           gComment("Des dés chanceux, moi ! " + pick(GAME_LINES.botWin), 'joke');
         }
@@ -5119,5 +5210,20 @@ export function initHgpto() {
           window.__hgptoTest = { helium: function(){ heliumGag('test'); } };
         }
       } catch(e){}
+
+      /* Lot indispensable : bonjour, 1 fois par session, à l'arrivée —
+         jamais à chaque page (drapeau session). En automne l'après-midi,
+         la variante d'automne ; sinon, le bonjour simple. */
+      (function(){
+        try { if (sessionStorage.getItem('hgpto-bonjour') === '1') return; sessionStorage.setItem('hgpto-bonjour', '1'); } catch(e){}
+        var bj = new Date();
+        var automne = bj.getMonth() >= 8 && bj.getMonth() <= 10;
+        var apresMidi = bj.getHours() >= 12 && bj.getHours() < 18;
+        var ligne = (automne && apresMidi) ? INDISP_BONJOUR_AUTOMNE : INDISP_BONJOUR;
+        setTimeout(function(){
+          if (paused || isHidden || docHidden || qaOpen || gameOn || tourOn || state === 'sleep' || isBusy()) return;
+          showBubble(esc(ligne), 6000, 'talk');
+        }, 1500);
+      })();
 
 }

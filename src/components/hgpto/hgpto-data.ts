@@ -354,7 +354,7 @@ export const KB = [
           a:"Dans Chevalier du fleuve, les pierres précieuses sont la monnaie des Gybbys — les nains albinos, le peuple oublié des terriers du fleuve, une invention de la direction. On les gagne en jouant (missions, filons, trocs) et elles servent à forger l'équipement épique et légendaire à la Forge des Rois Gybbys. C'est la part de légende du jeu ; la campagne, elle, est de l'histoire vraie, sources à l'appui.",
           u:"https://www.hp-outils.com/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.3.html", l:"Découvrir la Forge" },
         { q:"On peut acheter des pierres dans Chevalier du fleuve ?", s:"BIENTÔT",
-          a:"Bientôt : une boutique est en préparation — les prix des paquets ne sont pas encore arrêtés, et aucun paiement n'est pris pour l'instant : les pierres se gagnent en jouant (missions, filons, trocs). Tout restera gagnable en jouant, l'achat servira seulement à s'équiper plus vite.",
+          a:"Bientôt : une boutique est en préparation — les prix des paquets sont décidés (2,99 $ à 19,99 $), mais la vente n'est pas encore ouverte et aucun paiement n'est pris pour l'instant : les pierres se gagnent en jouant (missions, filons, trocs). Tout restera gagnable en jouant, l'achat servira seulement à s'équiper plus vite.",
           u:"https://www.hp-outils.com/boutique-chevalier", l:"Voir la boutique" },
         { q:"C'est quoi, Que vois-tu ?", s:"GRATUIT !",
           a:"Que vois-tu ? : un jeu de perception. Tu regardes une image et tu dis ce que tu vois en premier — il n'y a pas de mauvaise réponse ! 42 défis en 3 terrains : Jeunesse, Ado et Adulte. Gratuit !",
@@ -765,3 +765,30 @@ export const DWELL_SUGGESTIONS = {
         '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès aux 16 savoirs et soutenir HP Outils. En toute honnêteté : l'inscription se fait en écrivant à la direction — le paiement automatisé en ligne s'en vient.", u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" },
         '/lire': { t:"Tu regardes les tomes depuis un petit bout — le résumé honnête : 11 livres-jeux payants « À toi l'histoire », de 5 $ à 8 $, reçus par lien web personnel après l'achat, plus le tome gratuit « La Chasse-Galerie ». Aucune taxe ajoutée. Les paiements sont encore en mode test — aucune vente réelle pour l'instant (le bundle 3 tomes à 12 $ aussi).", u:"https://www.hp-outils.com/lire", l:"Voir les tomes", s:"5 $ À 8 $" }
       };
+
+/* ============================================================
+   Lot « indispensable » (25 oct. 2026, go de la direction) :
+   moments, victoires, rituels, aide proactive, vie qui continue.
+   Lignes exactes de la SPEC. Aucune blague ajoutée (61 gardées).
+   Aucun prix, aucun fait modifié par ces lignes.
+   ============================================================ */
+export const INDISP_MOMENTS = {
+  ragout: "Oups… mon ragoût a encore collé. Ben, on recommence — c'est ça, la vraie vie.",
+  chute: "Aïe, mes boulons… ça va, je me relève. On avance !",
+  sieste: "Minute… j't'en pause. Une petite sieste, pis je reviens.",
+};
+export const INDISP_VICTOIRES = [
+  "Yes ! Tu l'as trouvé. On est une bonne équipe, toi pis moi.",
+  "Ça, c'est une victoire à nous deux. Pas de point, pas de patente — juste le fun de l'avoir trouvé.",
+];
+export const INDISP_BONJOUR = "Bonjour ! Content de te voir. Prends ton temps, je suis là si tu as besoin.";
+export const INDISP_BONJOUR_AUTOMNE = "Bonjour, bel après-midi d'automne. Les feuilles tombent, pis moi je bricole.";
+export const INDISP_AUREVOIR = "À bientôt ! Prends soin de toi. Pis si tu repasses, je serai là — pas de presse.";
+export const INDISP_AIDE_HESITATION = "Minute… tu cherches quelque chose ? Je peux te montrer le chemin — pis si tu veux être tranquille, dis-le-moi, je me tasse.";
+export const INDISP_AIDE_PERDU = "Tu as l'air un peu perdu — c'est correct, ça arrive. Veux-tu que je te montre où sont les prix, les jeux, ou les ateliers ?";
+export const INDISP_AIDE_NUIT = "Il est tard… si tu veilles comme moi, prends ton temps. Je suis là, pis je ne te presserai pas.";
+export const INDISP_VIE = [
+  "Aujourd'hui, je cuisine un ragoût — on verra si ça colle ou si ça réussit !",
+  "Pixel est passée tantôt — elle m'a graffigné, pis elle est repartie ronronner. C'est ça, les chats.",
+  "Je suis déguisé pour l'Halloween — pis toi, tu te déguises en quoi ?",
+];
