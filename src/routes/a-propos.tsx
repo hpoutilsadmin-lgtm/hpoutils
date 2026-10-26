@@ -5,7 +5,7 @@ import PhotoDeguise from "@/components/deguisements/PhotoDeguise";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => createSeoHead({
-    title: "À propos — HP, créateur de HP Outils | Terrebonne",
+    title: "À propos — HP, créateur de HP Outils | couronne nord de Montréal, Lanaudière",
     description: "HP Outils, c'est HP, créateur à Terrebonne (Lanaudière) : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets.",
     path: "/a-propos",
   }),
@@ -40,65 +40,41 @@ function Page() {
             <span className="mini-note">En ses mots</span>
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>Qui est HP</h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Créateur de HP Outils, à Terrebonne, dans Lanaudière.
+              Je m'appelle HP. HP Outils, c'est le projet que je construis dans la couronne nord de Montréal, Lanaudière : des jeux, des livres, des recettes et des outils concrets — « des outils pour la vraie vie ».
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Marginal — je le sais, je l’assume. Je peux converser avec un itinérant, un alcoolique,
-              un PDG, un président, un député. Pour moi, c’est la même dignité partout.
+              Marginal — je le sais, je l'assume. Je peux converser avec un itinérant, un alcoolique, un PDG, un président, un député. Pour moi, c'est la même dignité partout.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je ne sais pas coder, je ne sais pas composer, je ne sais pas devenir riche.
-              Je sais survivre, je sais le quotidien, je sais les gens. Et sur tout ce qu’on peut
-              connaître, je ne sais rien — mais je suis curieux de tout.
-            </p>
-            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              C’est pour ça que j’ai créé HGPTO : un petit compagnon qui m’aide à structurer et à
-              rester constant — et qui fait la même chose pour toi.
+              Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et veulent apprendre, partager et repartir. C'est pour eux que je construis. Du gratuit chaque fois que c'est possible — 35 jeux, 629 recettes, des outils web sans compte — et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ CAD le kit, aucune taxe ajoutée.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", fontFamily: "Georgia,serif", fontStyle: "italic" }}>
-              Ma conviction, point : la dignité, c’est pas un budget, c’est un état d’esprit.
-              Une présentation soignée au mieux de ses capacités, et ça devrait être suffisant.
+              Ma conviction, point : la dignité, c'est pas un budget, c'est un état d'esprit. Une présentation soignée au mieux de ses capacités, et ça devrait être suffisant.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Je ne sais pas coder, je ne sais pas composer, je ne sais pas devenir riche. Je sais survivre, je sais le quotidien, je sais les gens. Et sur tout ce qu'on peut connaître, je ne sais rien — mais je suis curieux de tout.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              C'est pour ça que j'ai créé HGPTO : un petit compagnon qui m'aide à structurer et à rester constant — et qui fait la même chose pour toi.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Je crée tout ce que tu vois ici, avec l'IA comme outil de fabrication — la direction, les idées et les mots restent humains. Les jeux et les outils sont testés avant d'être publiés, et corrigés quand un test révèle un problème. Et je fais aussi de la musique : j'écris et j'enregistre mes propres chansons — l'album Humain imparfait et le balado Futur simple racontent le même monde, autrement.
             </p>
             <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes contrats avec toi</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
-              <li>Une réponse d’humain sous 3 jours ouvrables. Pas une réponse de La direction !</li>
+              <li>Une réponse d'humain sous 3 jours ouvrables.</li>
               <li>Des prix honnêtes, aucune taxe ajoutée, jamais de pression ni de fausse urgence.</li>
-              <li>Tout 100 % original. L’IA est un outil très rapide et efficace — la direction, l’émotion, le « ce que je fais », c’est pour les humains.</li>
-              <li>Écrit par un humain, accéléré par l’IA. On le dit toujours.</li>
+              <li>Tout 100 % original. L'IA est un outil très rapide et efficace — la direction, l'émotion, le « ce que je fais », c'est pour les humains.</li>
+              <li>Écrit par un humain, accéléré par l'IA. On le dit toujours.</li>
             </ul>
             <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes buts</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
               <li>Être utile. Des outils pour la vraie vie.</li>
-              <li>Que chaque personne qui passe ici reparte avec quelque chose qui l’aide pour vrai — un jeu, un outil, une recette, une idée — peu importe son budget.</li>
+              <li>Que chaque personne qui passe ici reparte avec quelque chose qui l'aide pour vrai — un jeu, un outil, une recette, une idée — peu importe son budget.</li>
             </ul>
-            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les mots d’HP</h3>
+            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les mots d'HP</h3>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
-              Je dis des mots à moi : <em>serbouillette</em> — ça vient d’Ôz la grande petite,
-              un mix de serviette et débarbouillette. Je dis <em>globesandwich</em> au lieu de
-              club sandwich. Mon petit frère m’appelait <em>Gros Pierre</em> au lieu de HP,
-              et une fillette disait <em>yaourt</em> au lieu de HP.
-            </p>
-          </section>
-          <section style={{ maxWidth: 760, margin: "0 auto 44px" }}>
-            <span className="mini-note">Qui est HP</span>
-            <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>L'homme derrière HP</h2>
-            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je m'appelle <strong>HP</strong>. HP Outils, c'est le projet que je
-              construis à Terrebonne, dans Lanaudière : des jeux, des livres, des recettes et des
-              outils concrets — « des outils pour la vraie vie ».
-            </p>
-            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et
-              veulent apprendre, partager et repartir. C'est pour eux que je construis. Du gratuit
-              chaque fois que c'est possible — 35 jeux, 629 recettes, des outils web sans compte —
-              et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ CAD le kit,
-              aucune taxe ajoutée.
-            </p>
-            <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
-              Je crée tout ce que tu vois ici, avec l'IA comme outil de fabrication — la direction,
-              les idées et les mots restent humains. Les jeux et les outils sont testés avant d'être publiés, et corrigés quand un test révèle un problème. Et je fais aussi de la musique : j'écris et j'enregistre mes propres
-              chansons — l'album <em>Humain imparfait</em> et le balado <em>Futur simple</em> racontent
-              le même monde, autrement.
+              Je dis des mots à moi : <em>serbouillette</em> — ça vient d'Ôz la grande petite, un mix de serviette et débarbouillette. Je dis <em>globesandwich</em> au lieu de club sandwich. Mon petit frère m'appelait <em>Gros Pierre</em> au lieu de HP, et une fillette disait <em>yaourt</em> au lieu de HP.
             </p>
           </section>
           <div className="cards">

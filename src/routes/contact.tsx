@@ -45,7 +45,9 @@ function Page() {
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Réponse humaine</h3>
-              <p>Chaque message reçoit une réponse d’humain, sous 3 jours ouvrables. Pas une réponse de La direction ! Ateliers en ligne, en personne ou sur demande.</p>
+              <p>Chaque message reçoit une réponse d'humain, sous 3 jours ouvrables. Ateliers en personne, à Terrebonne, dans Lanaudière et les environs. Déplacement gratuit à Terrebonne, L'Assomption, Repentigny et Charlemagne, sinon 0,71 $/km.</p>
+              <p>Réponses du lundi au vendredi, de 8 h à 16 h, sous 3 jours ouvrables.</p>
+              <p>Ateliers : lundi et mardi, de 9 h à 12 h et de 18 h à 21 h ; vendredi, de 18 h à 21 h ; dimanche, de 9 h à 12 h.</p>
             </article>
           </div>
         </div>

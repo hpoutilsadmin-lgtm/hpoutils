@@ -23,7 +23,7 @@ function Page() {
             gagnant confiance.
           </p>
           <div className="lead-actions">
-            <Link className="btn-primary" to="/pdf/enfants-cuisinent">Découvrir le livre</Link>
+            <Link className="btn-primary" to="/pdf/enfants-cuisinent">Découvrir le PDF — 10 $ CAD, aucune taxe ajoutée</Link>
             <Link to="/collaborer" className="btn-ghost">Collaborer avec HP</Link>
           </div>
         </div>

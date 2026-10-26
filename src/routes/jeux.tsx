@@ -507,7 +507,7 @@ function JeuxPage() {
           <span className="editorial-kicker">Gratuits, sans inscription</span>
           <h2 className="section-title">Tous les jeux</h2>
           <p style={{ textAlign: "center", maxWidth: 620, margin: "-6px auto 34px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.55 }}>
-            Clique sur une tuile et joue tout de suite : rien à installer, rien à payer.
+            Cliquez sur une tuile et jouez tout de suite : rien à installer, rien à payer.
           </p>
           <div role="group" aria-label="Filtrer les jeux par genre" style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", maxWidth: 900, margin: "0 auto 30px" }}>
             {GENRES.map((g) => (
@@ -660,6 +660,7 @@ function JeuxPage() {
           <span className="editorial-kicker">Histoires interactives</span>
           <h2>À toi <em>l'histoire</em></h2>
           <p className="strip-intro">Tome 1 gratuit · tomes standards 5 $ CAD · grands tomes 8 $ CAD. Aucune taxe ajoutée.</p>
+          <p className="strip-intro">Paiements en mode test pour l'instant — aucune vente réelle.</p>
           <div className="pillar-grid">
             {STORIES.map((story, index) => (
               <Link to="/lire" className="pillar-card" style={{ textDecoration: "none" }} key={story.audience}>
@@ -727,7 +728,7 @@ function JeuxPage() {
             </article>
             <article className="pillar-card">
               <h3>Les outils gratuits</h3>
-              <p>Pour la vraie vie entre deux parties : des outils web gratuits, sans compte — budget, papiers, proches aidants.</p>
+              <p>Pour la vraie vie entre deux parties : Huit outils pour la vraie vie : préparer son héritage, trancher une décision, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand.</p>
               <Link to="/outils" className="pillar-cta">Voir les outils →</Link>
             </article>
           </div>

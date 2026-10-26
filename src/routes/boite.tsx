@@ -6,7 +6,7 @@ export const Route = createFileRoute("/boite")({
   },
   head: () => ({
     meta: [
-      { title: "La Boîte à outils — HP Outils" },
+      { title: "La Boîte à outils | HP Outils" },
       { name: "robots", content: "noindex" },
     ],
   }),

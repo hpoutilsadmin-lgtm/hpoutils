@@ -47,7 +47,7 @@ function Page() {
             </article>
             <article className="pillar-card">
               <h3>Les outils gratuits</h3>
-              <p>Des outils web gratuits, sans compte, pour les papiers, le budget et le quotidien.</p>
+              <p>Huit outils pour la vraie vie : préparer son héritage, trancher une décision, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand.</p>
               <Link to="/outils" className="pillar-cta">Voir les outils →</Link>
             </article>
           </div>
@@ -57,8 +57,8 @@ function Page() {
       <section className="collections-strip">
         <div className="container">
           <span className="editorial-kicker">Simple et clair</span>
-          <h2>Pas de contrat déguisé, <em>pas de promesse en l'air.</em></h2>
-          <p className="strip-intro">Juste: tu passes, et d'autres reçoivent.</p>
+          <h2>Juste : tu passes, et d'autres reçoivent.</h2>
+          
           <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Accès aux 16 savoirs.</h3>
           <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès à des astuces que les autres n'ont pas.</p>
           <p className="strip-intro" style={{ marginTop: 4 }}>Aucune taxe ajoutée : petit fournisseur, la TPS et la TVQ ne sont pas perçues.</p>

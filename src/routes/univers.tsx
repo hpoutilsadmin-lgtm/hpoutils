@@ -51,7 +51,8 @@ function Page() {
       <section className="three-pillars">
         <div className="container">
           <span className="editorial-kicker">Les 11 tomes</span>
-          <h2 className="section-title">Choisis ton histoire</h2>
+          <p className="strip-intro">Paiements en mode test pour l'instant — aucune vente réelle.</p>
+          <h2 className="section-title">Choisissez votre histoire</h2>
           <div className="pillar-grid">
             {PAYANT_TOMES.map((tome) => (
               <article className="pillar-card" key={tome.slug}>
@@ -62,9 +63,12 @@ function Page() {
                   {tome.public ? ` · ${tome.public}` : ""}
                 </p>
                 <p><strong>{priceLabel(tome)}</strong> · aucune taxe ajoutée</p>
-                <Link to="/lire" className="pillar-cta">Voir sur /lire/ →</Link>
+                
               </article>
             ))}
+          </div>
+          <div className="lead-actions">
+            <Link to="/lire" className="btn-primary">Lire les tomes →</Link>
           </div>
         </div>
       </section>
@@ -136,7 +140,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>RELÈVE et 34 autres jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
+              <p>RELÈVE et 34 autres jeux gratuits, jouables dans votre navigateur, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Jouer →</Link>
             </article>
             <article className="pillar-card">

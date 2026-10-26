@@ -102,6 +102,9 @@ function Page() {
               chaque proposition peut être adaptée à votre milieu.
             </p>
             <p>
+              <strong>Horaires :</strong> ateliers lundi et mardi, de 9 h à 12 h et de 18 h à 21 h ; vendredi, de 18 h à 21 h ; dimanche, de 9 h à 12 h. Réservation par courriel et sur entente.
+            </p>
+            <p>
               <strong>Ce qui se précise à la demande :</strong> les groupes d'âge visés, les
               ratios d'encadrement, les allergies et la sécurité alimentaire, la taille de
               votre groupe, les assurances et les vérifications d'antécédents. Ces points se
@@ -118,13 +121,11 @@ function Page() {
           <span className="editorial-kicker">Formulaire atelier</span>
           <h2 className="section-title">Demander un <em>atelier</em></h2>
           <p style={{ fontSize: 16.5, lineHeight: 1.65 }}>
-            Remplis ce formulaire : il ouvre ta demande dans ton courriel, prête à
-            envoyer — c'est toi qui l'envoies, rien n'est transmis avant. Un humain
-            de l'équipe te répond sous 3 jours ouvrables.
+            Remplissez ce formulaire : il ouvre votre demande dans votre courriel, prête à envoyer — c'est vous qui l'envoyez, rien n'est transmis avant. Un humain de l'équipe vous répond sous 3 jours ouvrables.
           </p>
           <FormulaireAtelier />
           <p style={{ fontSize: 15, lineHeight: 1.6, color: "#5a4a3f", marginTop: 16 }}>
-            Tu préfères écrire directement ?{" "}
+            Vous préférez écrire directement ?{" "}
             <a href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a>
           </p>
         </div>
@@ -135,6 +136,7 @@ function Page() {
           <span className="editorial-kicker">Du 1er octobre au 23 décembre</span>
           <h2>Ateliers &amp; conférence — <em>Édition des Fêtes</em></h2>
           <p className="strip-intro">Trois propositions saisonnières à vivre en groupe, à domicile ou dans votre organisme. Tous les prix sont en $ CAD, aucune taxe ajoutée.</p>
+          <p className="strip-intro">Ateliers des Fêtes sur réservation et entente. Le milieu d'accueil doit disposer d'un local cuisine.</p>
           <div className="pillar-grid">
             {FETES.map((offer, i) => (
               <article key={offer.title} className="pillar-card">
@@ -272,7 +274,7 @@ function FormulaireAtelier() {
       {ouvert && (
         <p role="status" style={{ fontSize: 16, lineHeight: 1.65, border: "1px solid rgba(58,42,32,.25)", borderLeft: "4px solid #3a2a20", borderRadius: 8, background: "rgba(247,244,236,.85)", padding: "14px 18px" }}>
           Ta demande s'est ouverte dans ton courriel, prête à envoyer — c'est toi qui
-          l'envoies, rien n'est transmis avant. Un humain de l'équipe te répond sous
+          l'envoyez, rien n'est transmis avant. Un humain de l'équipe vous répond sous
           3 jours ouvrables.
         </p>
       )}

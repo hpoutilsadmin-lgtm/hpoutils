@@ -52,6 +52,18 @@ function Page() {
         </div>
       </section>
 
+      <section className="three-pillars">
+        <div className="container" style={{ maxWidth: 760 }}>
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "0 0 28px", color: "#2a1a12" }}>Aperçu — un extrait du produit</h2>
+          <p style={{ fontSize: 17, lineHeight: 1.65 }}>
+            <em>Enjeux de l'humanité à l'ère de l'IA</em> — « Mot de l'auteur », p. 5 : "Je n'ai pas écrit ce livre pour prédire l'avenir. Je l'ai écrit parce que quelque chose ne tourne plus rond dans la manière dont on comprend le monde."
+          </p>
+          <div className="lead-actions" style={{ justifyContent: "center" }}>
+            <Link to="/pdf/enjeux-humanite" className="btn-primary">Découvrir le PDF — 15 $ CAD, aucune taxe ajoutée</Link>
+          </div>
+        </div>
+      </section>
+
       <section className="collections-strip" style={{ textAlign: "center" }}>
         <div className="container" style={{ maxWidth: 760 }}>
           <h2>La lucidité n’est pas du <em>pessimisme</em>.</h2>

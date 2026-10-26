@@ -74,10 +74,10 @@ export const Route = createFileRoute("/sans-honte")({
 });
 
 const QUOTES = [
-  "Ce qu'on cache prend toute la place.",
-  "La honte n'a jamais aidé personne à se relever.",
-  "On peut être en désordre et debout en même temps.",
-  "Tu n'as rien à prouver pour avoir le droit d'exister.",
+  "Écrire ce qui pèse sur une feuille, ça le sort de ta tête.",
+  "La honte ne range pas un papier et ne remplit pas un frigo.",
+  "Une pile de papiers en retard, et quand même debout pour la journée.",
+  "Tu n'as pas besoin de bien paraître pour utiliser un outil.",
 ];
 
 const KITS = [

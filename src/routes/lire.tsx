@@ -203,7 +203,7 @@ function Page() {
             {busy === "bundle" ? "Redirection…" : "Acheter le bundle — 12 $ CAD"}
           </button>
 
-          <h2>Tu as perdu tes liens ?</h2>
+          <h2>Vous avez perdu vos liens ?</h2>
           {recoverSent ? (
             <p>
               Si des achats existent pour ce courriel, de nouveaux liens sont en
