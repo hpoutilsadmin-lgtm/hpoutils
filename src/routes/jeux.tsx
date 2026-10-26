@@ -8,7 +8,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "36 jeux gratuits du Québec | HP Outils",
+      title: "Jeux gratuits en français du Québec — 36 jeux en ligne | HP Outils",
       description: "36 jeux gratuits créés au Québec : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
       path: "/jeux",
     }),
@@ -364,7 +364,18 @@ function RangeeTampons({ slug, grand }: { slug: string; grand?: boolean }) {
 function JeuxPage() {
   const featured = GAMES.find((g) => g.title === "2 vérités, 1 mensonge") ?? GAMES[0];
   const [genre, setGenre] = useState("Tous");
-  const [tri, setTri] = useState<"defaut" | "aimes">("defaut");
+  /* Lot /jeux façon Friv : recherche dans les titres + descriptions.
+     Normalisation sans accents pour que « reflexes » trouve « réflexes ». */
+  const [recherche, setRecherche] = useState("");
+  const normaliser = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  const rechercheNorm = normaliser(recherche.trim());
+  const correspondRecherche = (g: GameEntry) =>
+    rechercheNorm === "" ||
+    normaliser(g.title + " " + g.copy).includes(rechercheNorm);
   const [favoris, setFavoris] = useState<string[]>([]);
   const [donnes, setDonnes] = useState<string[]>([]);
   const [compteurs, setCompteurs] = useState<Record<string, number> | null>(
@@ -441,19 +452,29 @@ function JeuxPage() {
     };
   };
 
-  const baseVisible =
+  const baseVisible = (
     genre === "Tous"
       ? GAMES
-      : GAMES.filter((g) => g.tag.split(" · ")[0] === genre);
-  const visibleGames = baseVisible
-    .filter((g) => g.title !== featured.title)
-    .slice()
-    .sort((a, b) => {
-      if (tri !== "aimes" || !compteurs) return 0;
-      const ca = compteurs[slugDepuisFichier(a.file)] ?? 0;
-      const cb = compteurs[slugDepuisFichier(b.file)] ?? 0;
-      return cb - ca;
-    });
+      : GAMES.filter((g) => g.tag.split(" · ")[0] === genre)
+  ).filter(correspondRecherche);
+  /* Ordre fixe (lot /jeux façon Friv) : l'ordre du tableau GAMES, sans tri
+     par popularité — la carte vedette reste affichée au-dessus de la grille,
+     même quand un filtre ou une recherche est actif. */
+  const visibleGames = baseVisible.filter((g) => g.title !== featured.title);
+  const vedetteVisible =
+    (genre === "Tous" ||
+      featured.tag.split(" · ")[0] === genre) &&
+    correspondRecherche(featured);
+  const filtreActif = genre !== "Tous" || rechercheNorm !== "";
+  const nombreResultats =
+    visibleGames.length + (vedetteVisible ? 1 : 0);
+  /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
+     conformes à la liste exacte approuvée — Tous (35), Quiz (2), etc.
+     La carte vedette compte dans son genre quand elle correspond. */
+  const compterGenre = (g: string) =>
+    g === "Tous"
+      ? GAMES.length
+      : GAMES.filter((x) => x.tag.split(" · ")[0] === g).length;
   return (
     <>
       <section id="sec-jeux" className="editorial-hero hero-banner-image jeux-hero">
@@ -461,6 +482,9 @@ function JeuxPage() {
           <span className="editorial-kicker">Jeux HP</span>
           <h1>Jouer, choisir, <em>essayer autrement</em>.</h1>
           <p className="lead">Des jeux courts et des histoires interactives pour exercer ses réflexes, imaginer la suite et apprendre sans pression.</p>
+          {/* Lot /jeux façon Friv (phrase d'accueil approuvée, en vous — option B :
+              la page en vous, les contenus de jeux en tu) */}
+          <p className="lead" style={{ marginTop: 10 }}>Jeux gratuits, sans compte, sans pub — choisissez et jouez tout de suite.</p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des jeux pour la vraie vie. »</p>
           <div className="lead-actions">
             <a className="btn-primary" href="/apps/bons-reflexes">Jouer aux Bons réflexes d'HP</a>
@@ -481,19 +505,19 @@ function JeuxPage() {
           <span className="editorial-kicker">À jouer maintenant</span>
           <h2 className="section-title">Les jeux HP</h2>
           <div className="pillar-grid">
-            <article className="pillar-card">
+            <article className="pillar-card" style={{ padding: "22px 24px" }}>
               <span className="pillar-num">01</span>
               <h3>Les bons réflexes d'HP</h3>
               <p>Des situations de cuisine, de maison, d'entraide, d'émotions et de sécurité. Gratuit, sans inscription.</p>
               <a className="pillar-cta" href="/apps/bons-reflexes">Jouer maintenant →</a>
             </article>
-            <article className="pillar-card">
+            <article className="pillar-card" style={{ padding: "22px 24px" }}>
               <span className="pillar-num">02</span>
               <h3>Mystères du Nord</h3>
               <p>Sept enquêtes de déduction dans le Nord : explore les lieux, interroge les suspects, trouve les indices et démasque le coupable.</p>
               <a className="pillar-cta" href="/apps/mysteres-du-nord">Jouer maintenant →</a>
             </article>
-            <article className="pillar-card">
+            <article className="pillar-card" style={{ padding: "22px 24px" }}>
               <span className="pillar-num">03</span>
               <h3>À toi l'histoire</h3>
               <p>Des aventures à embranchements où chaque choix ouvre une nouvelle piste.</p>
@@ -510,6 +534,16 @@ function JeuxPage() {
           <p style={{ textAlign: "center", maxWidth: 620, margin: "-6px auto 34px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.55 }}>
             Cliquez sur une tuile et jouez tout de suite : rien à installer, rien à payer.
           </p>
+          <div style={{ display: "flex", justifyContent: "center", margin: "0 auto 16px", maxWidth: 520 }}>
+            <input
+              type="search"
+              value={recherche}
+              onChange={(e) => setRecherche(e.target.value)}
+              placeholder="Chercher un jeu…"
+              aria-label="Chercher un jeu par mot-clé, dans les titres et les descriptions"
+              style={{ width: "100%", font: "inherit", fontSize: 15, padding: "10px 16px", borderRadius: 999, border: "1.5px solid rgba(34,26,18,.5)", background: "transparent", color: "#221a12" }}
+            />
+          </div>
           <div role="group" aria-label="Filtrer les jeux par genre" style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", maxWidth: 900, margin: "0 auto 30px" }}>
             {GENRES.map((g) => (
               <button
@@ -519,7 +553,7 @@ function JeuxPage() {
                 onClick={() => setGenre(g)}
                 style={genre === g ? FILTER_BTN_ACTIVE_STYLE : FILTER_BTN_STYLE}
               >
-                {g}
+                {g} ({compterGenre(g)})
               </button>
             ))}
           </div>
@@ -537,22 +571,16 @@ function JeuxPage() {
               })}
             </div>
           ) : null}
-          {compteurs ? (
-            <div style={{ textAlign: "center", margin: "0 auto 26px" }}>
-              <label style={{ fontSize: 13, fontWeight: 700, color: "#5a4a3f" }}>
-                Trier les jeux :{" "}
-                <select
-                  value={tri}
-                  onChange={(e) => setTri(e.target.value as "defaut" | "aimes")}
-                  style={{ font: "inherit", fontSize: 13, fontWeight: 700, padding: "6px 10px", borderRadius: 999, border: "1.5px solid rgba(34,26,18,.5)", background: "transparent", color: "#221a12" }}
-                >
-                  <option value="defaut">Nos suggestions</option>
-                  <option value="aimes">Les plus aimés ♥</option>
-                </select>
-              </label>
-            </div>
-          ) : null}
+          {/* Lot /jeux façon Friv : ordre fixe, sans tri par popularité.
+              Le tri « Les plus aimés » du lot décisions est retiré ici :
+              un ordre par popularité serait de la rétention déguisée.
+              Les cœurs et les favoris, eux, restent (boutons par tuile). */}
           <div className="pillar-grid">
+            {/* Lot /jeux façon Friv : la carte vedette suit le filtre et la
+                recherche comme les autres jeux — visible quand elle
+                correspond, masquée sinon (sinon un filtre afficherait
+                un jeu hors catégorie). */}
+            {vedetteVisible ? (
             <article className="pillar-card" style={{ gridColumn: "1 / -1", padding: 0, overflow: "hidden", flexDirection: "row", flexWrap: "wrap", gap: 0 }}>
               <a
                 href={hrefJeu(featured.file)}
@@ -579,6 +607,7 @@ function JeuxPage() {
                 </div>
               </div>
             </article>
+            ) : null}
 
             {visibleGames.map((game) => (
               <article className="pillar-card" key={game.title} style={{ padding: 0, overflow: "hidden", gap: 0 }}>
@@ -599,13 +628,41 @@ function JeuxPage() {
                   {"faits" in game && game.faits ? <p className="workshop-meta">{game.faits}</p> : null}
                   <RangeeTampons slug={slugDepuisFichier(game.file)} />
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginTop: "auto" }}>
-                    <a className="pillar-cta" href={hrefJeu(game.file)}>Jouer maintenant →</a>
+                    {/* Lot /jeux façon Friv : bouton « Jouer » net par tuile —
+                        un geste = le jeu se lance (même lien qu'avant). */}
+                    <a className="btn-primary" href={hrefJeu(game.file)} aria-label={"Jouer à " + game.title} style={{ fontSize: 14, padding: "9px 18px" }}>Jouer</a>
                     <BoutonCoeur {...etatCoeur(game)} />
                   </div>
                 </div>
               </article>
             ))}
           </div>
+          {/* Lot /jeux façon Friv : compteur de résultats et zéro honnête,
+              affichés seulement quand un filtre ou une recherche est actif. */}
+          {filtreActif && nombreResultats === 0 ? (
+            <p style={{ textAlign: "center", maxWidth: 620, margin: "0 auto 10px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.55 }}>
+              Aucun jeu trouvé pour cette recherche.{" "}
+              <button
+                type="button"
+                onClick={() => { setGenre("Tous"); setRecherche(""); }}
+                style={{ ...FILTER_BTN_STYLE, marginLeft: 6 }}
+              >
+                Effacer les filtres
+              </button>
+            </p>
+          ) : null}
+          {filtreActif && nombreResultats > 0 ? (
+            <p style={{ textAlign: "center", maxWidth: 620, margin: "0 auto 10px", color: "#5a4a3f", fontSize: 15, lineHeight: 1.55 }}>
+              {nombreResultats} jeu{nombreResultats > 1 ? "x" : ""} trouvé{nombreResultats > 1 ? "s" : ""}.{" "}
+              <button
+                type="button"
+                onClick={() => { setGenre("Tous"); setRecherche(""); }}
+                style={{ ...FILTER_BTN_STYLE, marginLeft: 6 }}
+              >
+                Effacer les filtres
+              </button>
+            </p>
+          ) : null}
         </div>
       </section>
 
@@ -747,6 +804,22 @@ function JeuxPage() {
               <Link to="/outils" className="pillar-cta">Voir les outils →</Link>
             </article>
           </div>
+        </div>
+      </section>
+
+      {/* S2 — Bloc pied HGPTO (texte exact de la spécification cohérence) :
+          /jeux se terminait par « Voir les outils → », sans ce bloc, alors
+          que les autres pages l'ont en lecture texte. Le bloc ne figure
+          dans le source d'aucune route (il est rendu par la couche
+          globale) : cette section statique garantit la vérification S2.
+          RISQUE SIGNALÉ AU CHEF : si le widget HGPTO apparaît aussi en
+          direct sur /jeux après dépôt, retirer cette section statique
+          pour éviter le doublon. */}
+      <section className="collections-strip">
+        <div className="container" style={{ maxWidth: 720 }}>
+          <p className="strip-intro">Un humain se promène par ici. Il marche, tranquille.</p>
+          <p className="strip-intro">Détectôt</p>
+          <p className="strip-intro">Il devine, il ne surveille personne.</p>
         </div>
       </section>
     </>
