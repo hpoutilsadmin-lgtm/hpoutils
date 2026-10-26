@@ -34,6 +34,17 @@ export const Route = createFileRoute("/balado")({
 // le titre, le libellé, la date, la durée, la description et l'URL audio. Le plus récent en premier.
 const EPISODES = [
   {
+    n: "01 officiel",
+    label: "La première fois qu'on essaie cela.",
+    title: "Futur simple, épisode 1 officiel",
+    date: "26 octobre 2026",
+    duration: "Environ 7 minutes",
+    description:
+      "Premier épisode officiel de Futur simple — la première fois qu'on essaie cela. Léa et Marc regardent ce que l'IA change pour vrai, dans la vraie vie : l'aide aux petites entreprises d'ici, un robot qui prépare les rendez-vous médicaux, des dettes médicales effacées sans formulaire, et un appel d'auditrice qui parle des jeux HP. Le bon comme le mauvais, sans jargon : l'outil prépare, l'humain décide. Voix IA : Léa et Marc. Publié le 26 octobre 2026.",
+    audio:
+      "/audio-balado/episode-1-officiel.mp3",
+  },
+  {
     n: "02",
     label: "Mois de la cybersécurité",
     title: "Épisode 2 — Futur simple",
@@ -90,6 +101,7 @@ function Page() {
             <a href={FEED_URL} className="btn-ghost" target="_blank" rel="noreferrer">S'abonner au flux RSS</a>
             <ShareButton text="Futur simple — le balado HP sur l'IA, les PME et le futur. T'es pas game d'écouter 2 minutes ?" />
           </div>
+          <img src="/images/futur-simple-pochette-v4.jpg" alt="Pochette du balado Futur simple — Léa et Marc" style={{ maxWidth: 320, width: "100%", borderRadius: 12, marginTop: 24 }} />
         </div>
       </section>
 
