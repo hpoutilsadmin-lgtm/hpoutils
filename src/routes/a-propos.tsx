@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
+import { MelMerci } from "@/components/MelMerci";
 import HpDeguise from "@/components/deguisements/HpDeguise";
 import PhotoDeguise from "@/components/deguisements/PhotoDeguise";
 
@@ -100,6 +101,8 @@ function Page() {
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
           </div>
+          {/* MEL-MERCI : remerciement M.E.L — placement /a-propos (précision d'HP, 26 oct. 2026), texte exact à valider par HP avant dépôt. */}
+          <MelMerci />
           <p style={{ textAlign: "center", color: "#3a2a20", fontSize: 14, marginTop: 8 }}>
             HP — des outils pour la vraie vie
           </p>

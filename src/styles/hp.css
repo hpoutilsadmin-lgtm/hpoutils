@@ -434,6 +434,33 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
   .game-grid{grid-template-columns:1fr}
 }
 
+/* MEL-MERCI — remerciement M.E.L, page /a-propos (précision d'HP, 26 oct. 2026).
+   Néon mauve : #a855f7 (mauve vif, couleur du tampon de testeuse ; le mauve
+   du site --purple #71408c est gardé pour le texte uni sous mouvement réduit).
+   La salve (cœurs + café) ne vit que pendant l'animation : rien n'est compté,
+   rien n'est conservé. Éléments flottants pointer-events:none, pas de son. */
+.mel-merci{text-align:center;font-size:16px;line-height:1.65;margin:28px 0 8px;position:relative}
+.mel-merci-neon{color:#a855f7;font-weight:700;animation:mel-neon 2.4s ease-in-out infinite}
+@keyframes mel-neon{
+  0%,100%{text-shadow:0 0 6px rgba(168,85,247,.55),0 0 18px rgba(168,85,247,.35)}
+  50%{text-shadow:0 0 2px rgba(168,85,247,.25),0 0 8px rgba(168,85,247,.2)}
+}
+.mel-merci-btn-wrap{position:relative;display:inline-block}
+.mel-merci-btn{background:none;border:none;padding:0 2px;font:inherit;color:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.mel-merci-btn:focus-visible{outline:2px solid #a855f7;outline-offset:3px;border-radius:4px}
+.mel-merci-burst{position:absolute;left:50%;bottom:100%;width:0;height:0;pointer-events:none}
+.mel-merci-float{position:absolute;bottom:0;display:inline-flex;animation:mel-rise 1.8s ease-out forwards;opacity:0;pointer-events:none}
+@keyframes mel-rise{
+  0%{opacity:0;transform:translate(0,6px) scale(.7)}
+  18%{opacity:1}
+  100%{opacity:0;transform:translate(var(--mel-drift,0px),-72px) scale(1)}
+}
+/* Mouvement réduit : PAS DE FLASH (texte uni seul), et salve statique,
+   sans aucun mouvement — jamais d'animation sous prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce){
+  .mel-merci-neon{animation:none;text-shadow:none;color:#71408c}
+  .mel-merci-burst{position:static;display:inline-flex;gap:5px;vertical-align:middle;margin-left:8px}
+  .mel-merci-float{position:static;animation:none;opacity:1;transform:none}
 /* Célébration d'achat (26 oct. 2026, go HP « avant le gel ») — gratitude
    après paiement seulement, aucun upsell, aucun compteur, aucune série.
    Le canvas est fixe et non cliquable ; la secousse « wizz » est VISUELLE
