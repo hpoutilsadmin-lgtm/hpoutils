@@ -181,7 +181,7 @@ export const QC_HISTORY = [
         "La cabane à sucre, c'est plus vieux que le pays : les Premiers Peuples récoltaient l'eau d'érable bien avant l'arrivée des Européens, et les colons ont appris d'eux.",
         "En 1960 commence la Révolution tranquille : le Québec se modernise à toute vitesse — écoles, hôpitaux, et « Maîtres chez nous ! »",
         "« Maîtres chez nous », c'était le slogan de 1962, quand le Québec a nationalisé l'électricité : Hydro-Québec est né de cette fierté-là.",
-        "Expo 67, à Montréal : plus de 50 millions de visiteurs sur des îles construites dans le fleuve. Le monde entier a vu ce qu'on savait faire ici.",
+        "Expo 67, à Montréal : plus de 50 millions de visites sur des îles construites dans le fleuve. Le monde entier a vu ce qu'on savait faire ici.",
         "En 1977, la Charte de la langue française — la loi 101 — fait du français la langue officielle du Québec.",
         "Le référendum de 1980 : le Québec vote sur son avenir, le Non l'emporte avec environ 60 % des voix.",
         "Le référendum de 1995 : ça s'est joué à un cheveu — 50,58 % pour le Non. Une des soirées les plus intenses de notre histoire.",
@@ -288,7 +288,7 @@ export const SITE_FACTS = {
    mauvais produit par erreur, remboursement si impossible à ouvrir ou à
    recevoir malgré l'aide de l'équipe, cas par cas sinon ; la direction décide, jamais
    HGPTO. Escalades : la phrase de repli exacte du document, mot pour mot. */
-export const ESCALATION_LINE = "Ça, c'est une question pour l'équipe directement — un humain te répondra, pour vrai. Écris à hpoutils.admin@gmail.com, raconte-moi ce que tu me racontes là, et on s'en occupe. Moi, je préfère te passer la bonne personne plutôt que de te répondre tout croche.";
+export const ESCALATION_LINE = "Ça, c'est une question pour l'équipe directement — un humain te répondra sous 3 jours ouvrables, pour vrai. Écris à hpoutils.admin@gmail.com, raconte-moi ce que tu me racontes là, et on s'en occupe. Moi, je préfère te passer la bonne personne plutôt que de te répondre tout croche.";
 export const ESCALATION_EMPATHY = "Je suis vraiment désolé que ça se soit passé comme ça. Tu mérites une vraie réponse, pas une réponse de robot.";
 export const REFUND_POLICY = "En toute franchise, voici comment ça marche : acheté le mauvais produit par erreur ? La direction te l'échange contre celui que tu voulais. Un produit impossible à ouvrir ou à recevoir, même après l'aide de l'équipe ? Elle te rembourse. Un produit reçu et conforme à sa description ? Pas de remboursement automatique — la direction écoute ta situation et décide en personne, cas par cas. Moi, je ne touche jamais aux paiements.";
 export const LIEN_PERDU_TEXT = "Pas de panique, ton achat est bien là. Cherche dans tes courriels le reçu de Stripe — le lien de téléchargement est dedans. Regarde aussi dans tes courriels indésirables, ça arrive. Si tu ne le retrouves vraiment pas, écris à l'équipe avec le courriel utilisé à l'achat : un humain te renverra ton accès sous 3 jours ouvrables.";
@@ -322,6 +322,7 @@ export const SURPRISE_BIG_LINES = [
         "Grande annonce presque jamais entendue : je viens de battre mon record de la sieste la plus courte. Quatre secondes. Je suis une machine."
       ];
 export const FALLBACK = "Là, je sais pas — mais je le note pour la direction ! Écris à hpoutils.admin@gmail.com — un humain de l'équipe te répondra sous 3 jours ouvrables.";
+export const ERREUR_CORRECTION = "Oups, je me suis trompé — merci de me le dire. La bonne info, c'est [fait corrigé]. Je le note pour ne plus le refaire."; // Gabarit validé par HP le 26 oct. 2026 : [fait corrigé] toujours sourcé, jamais inventé.
 export const KB = [
         { q:"T'es-tu vivant ?", s:"BONNE QUESTION",
           a:"Je suis un petit robot de site : je fais semblant super bien, mais mon cœur, c'est un boulon. Les vrais câlins, c'est les humains." },
@@ -377,7 +378,7 @@ export const KB = [
           a:"Anxiété, le jeu : une semaine dans la peau d'Alex, qui vit avec un trouble anxieux — météo intérieure, pensées qui envahissent, crise traversée en douceur et outils réels, avec les ressources 811 et 988. Il sensibilise ; il ne pose pas de diagnostic. Gratuit, comme tous les jeux du site.",
           u:"https://www.hp-outils.com/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", l:"Jouer à Anxiété" },
         { q:"Comment marchent les ateliers ?", s:"ATELIERS",
-          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (260 $), Manger mieux avec moins (260 $), L'IA sans jargon — régulière (220 $), l'atelier « Les enfants cuisinent » (190 $, 90 min), Atelier jeunesse (150 $), Hygiène & salubrité (150 $, 60 à 90 min). Pour l'Édition des Fêtes : le Pain maison à domicile (290 $, 3 h, 6 à 8 personnes, soit 36 $ à 48 $ par personne), L'IA sans jargon — Édition des Fêtes (220 $, 2 h, forfait groupe) et la conférence « La faim justifie les moyens » (220 $, cachet, 45 à 60 min + questions). Remplis le formulaire d'atelier sur la page Ateliers : dis-leur pour qui c'est, combien de personnes et quand tu vises — un humain te répondra sous 3 jours ouvrables ! Horaires : réponses du lundi au vendredi, de 8 h à 16 h, sous 3 jours ouvrables ; ateliers lundi et mardi, de 9 h à 12 h et de 18 h à 21 h, vendredi, de 18 h à 21 h, dimanche, de 9 h à 12 h. Ateliers des Fêtes sur réservation et entente, le milieu d'accueil doit disposer d'un local cuisine — sauf la conférence « La faim justifie les moyens », exemptée (décision du 26 octobre 2026).",
+          a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (260 $), Manger mieux avec moins (260 $), L'IA sans jargon — régulière (220 $), l'atelier « Les enfants cuisinent » (190 $, 90 min), Atelier jeunesse (150 $), Hygiène & salubrité (150 $, 60 à 90 min). Pour l'Édition des Fêtes : le Pain maison à domicile (290 $, 3 h, 6 à 8 personnes, soit environ 36 $ à 48 $ par personne), L'IA sans jargon — Édition des Fêtes (220 $, 2 h, forfait groupe) et la conférence « La faim justifie les moyens » (220 $, cachet, 60 min + 15 min de questions). Remplis le formulaire d'atelier sur la page Ateliers : dis-leur pour qui c'est, combien de personnes et quand tu vises — un humain te répondra sous 3 jours ouvrables ! Horaires : réponses du lundi au vendredi, de 8 h à 16 h, sous 3 jours ouvrables ; ateliers lundi et mardi, de 9 h à 12 h et de 18 h à 21 h, vendredi, de 18 h à 21 h, dimanche, de 9 h à 12 h. Ateliers des Fêtes sur réservation et entente, le milieu d'accueil doit disposer d'un local cuisine — sauf la conférence « La faim justifie les moyens », exemptée (décision du 26 octobre 2026).",
           u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers" },
         { q:"Vous avez des livres ?", s:"LIVRES",
           a:"3 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) — plus le mini-cahier « Un petit pas à la fois » (10 $). Le livre « Les enfants cuisinent pour faire plaisir » (10 $), lui, n'est pas vendable pour l'instant : son achat est en attente de confirmation. Et si un paiement ne passe pas, écris à la direction humaine, un humain te répondra sous 3 jours ouvrables.",
@@ -395,7 +396,7 @@ export const KB = [
           a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 16 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Est-ce que ça marche sans internet ?", s:"HORS LIGNE",
-          a:"Oui : une fois la page déjà ouverte, elle fonctionne sans internet — pratique quand les données sont comptées." },
+          a:"Oui : une fois la page déjà ouverte, elle fonctionne sans internet, tant que ton appareil a de la batterie — pratique quand les données sont comptées." },
         { q:"Et « À toi l'histoire » ?", s:"11 TOMES",
           a:"« À toi l'histoire », ce sont 11 livres-jeux payants, de 5 $ à 8 $, reçus par lien web personnel après l'achat — plus le tome gratuit « La Chasse-Galerie ». Le tout est sur /lire/. Petite franchise : les paiements sont encore en mode test — aucune vente réelle pour l'instant : l'achat reste bloqué en attente de confirmation, il n'est pas vendable. Si un achat ne passe pas, écris à la direction humaine, un humain te répondra sous 3 jours ouvrables.",
           u:"https://www.hp-outils.com/lire", l:"Voir les tomes" },
@@ -406,7 +407,7 @@ export const KB = [
           a:"« La Chasse-Galerie », le tome d'appel de la série « À toi l'histoire » : gratuit, sans paiement. Tu reçois ton lien personnel sur /lire/.",
           u:"https://www.hp-outils.com/lire", l:"Recevoir le lien gratuit" },
         { q:"C'est qui, HP Outils ?", s:"C'EST NOUS",
-          a:"HP Outils, c'est HP, créateur à Terrebonne : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets. Imparfaits et humains. Comme il le dit : « J'ai jamais su qui j'étais, ce que j'aimais — alors je fais un peu de tout. » Comprendre. Agir. Transmettre. Et moi, je suis HGPTO, sa mascotte !" },
+          a:"HP Outils, c'est HP, créateur, couronne nord de Montréal, Lanaudière : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets. Imparfaits et humains. Comme il le dit : « J'ai jamais su qui j'étais, ce que j'aimais — alors je fais un peu de tout. » Comprendre. Agir. Transmettre. Et moi, je suis HGPTO, sa mascotte !" },
         { q:"C'est quoi, le bouton Partager ?", s:"PARTAGER",
           a:"Le bouton « Partager » est sur les fiches et sur /univers : il partage la page avec ton téléphone ou ton navigateur — et sinon, il copie le lien de la page, avec un petit « Lien copié ! ». Aucune donnée n'est envoyée nulle part : tout se passe dans ton navigateur.",
           u:"https://www.hp-outils.com/univers", l:"Voir /univers" },
