@@ -5,7 +5,7 @@ import { AjouterAuPanier } from "@/components/AjouterAuPanier";
 
 export const Route = createFileRoute("/prix")({
   head: () => createSeoHead({
-    title: "Prix HP — kits 5 $, livres 10 à 15 $, ateliers 150 $ à 290 $, aucune taxe ajoutée",
+    title: "Prix HP — kits, livres, ateliers, sans taxe ajoutée",
     description: "Tous les prix HP au même endroit : kits Sans Honte 5 $, lot de 10 kits 40 $, livres PDF 10 à 15 $, mini-cahier 10 $, tomes 5 à 8 $, ateliers 150 $ à 290 $. Petit fournisseur : aucune taxe ajoutée.",
     path: "/prix",
   }),
