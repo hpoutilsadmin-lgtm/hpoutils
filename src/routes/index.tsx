@@ -40,7 +40,7 @@ const ORGANISATION_JSON_LD = {
 export const Route = createFileRoute("/")({
   head: () => ({
     ...createSeoHead({
-      title: "HP Outils — jeux gratuits, kits PDF 5 $ CAD et outils pour la vraie vie | Québec",
+      title: "HP Outils — jeux, kits et outils pour la vraie vie",
       description:
         "Jeux gratuits, 629 recettes, outils web sans compte et kits PDF à 5 $ CAD — créés à Terrebonne pour les familles et les petits budgets. Aucune taxe ajoutée.",
       path: "/",
