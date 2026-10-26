@@ -861,7 +861,7 @@ export function initHgpto() {
         // bavardage devient directement une blague.
         if ((mood === 'drole' || hgMode === 'grognon') && Math.random() < 0.5){
           showBubble(esc(JOKES[jokeIdx % JOKES.length]), 5200, 'joke'); jokeIdx++;
-          logDay("raconté des blagues — j'en connais 62 !");
+          logDay("raconté des blagues — j'en connais 61 !");
           alternate++;
           return;
         }
@@ -922,7 +922,7 @@ export function initHgpto() {
         }
         if (alternate % 2 === 0){
           showBubble(esc(JOKES[jokeIdx % JOKES.length]), 5200, 'joke'); jokeIdx++;
-          logDay("raconté des blagues — j'en connais 62 !");
+          logDay("raconté des blagues — j'en connais 61 !");
           alternate++;
         } else {
           // Reco nº 8 : plus d'invitations produit dans le bavardage —
@@ -3047,7 +3047,7 @@ export function initHgpto() {
           "Lancers : " + G.rolls + " · Échelles montées : " + G.ladders + " · Serpents glissés : " + G.snakes;
         shareText = "J'ai joué à Serpents et échelles contre HGPTO, la mascotte d'HP Outils — " +
           (youWon ? "et j'ai gagné" : "et il a gagné, des dés chanceux") +
-          " en " + G.rolls + " lancers ! Défie un ami de battre ton score ! hp-outils.com";
+          " en " + G.rolls + " lancers, à nous deux ! Défie un ami de battre ton score ! hp-outils.com";
         document.getElementById('card-share').textContent = shareText;
         document.getElementById('card-copied').hidden = true;
         var mini = document.getElementById('card-mini');
