@@ -59,9 +59,12 @@ function Page() {
           <span className="editorial-kicker">Simple et clair</span>
           <h2>Juste : vous passez, et d'autres reçoivent.</h2>
           
-          <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Accès aux 16 savoirs.</h3>
+          <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Les 16 savoirs choisis par HP — de lire à connaître ses droits — en feuilles à consulter au fur et à mesure de leur parution, 3 par trimestre au maximum.</h3>
           <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès à des astuces que les autres n'ont pas.</p>
           <p className="strip-intro" style={{ marginTop: 4 }}>Aucune taxe ajoutée : petit fournisseur, la TPS et la TVQ ne sont pas perçues.</p>
+          <p className="strip-intro" style={{ marginTop: 12, textAlign: "left", maxWidth: 640, margin: "12px auto 0" }}><strong>Les 16 savoirs :</strong> 1. Lire vite et comprendre ; 2. Écrire clairement ; 3. Parler et se faire comprendre, y compris devant un groupe ; 4. Math du quotidien ; 5. Finances personnelles ; 6. Pensée critique ; 7. Apprendre à apprendre ; 8. Santé de base ; 9. Gestion du stress et des émotions ; 10. Négociation et vente ; 11. Écoute et relations ; 12. Gestion du temps et de l'attention ; 13. Littératie numérique et IA ; 14. Cuisiner ; 15. Réparer et bricoler ; 16. Notions de droit.</p>
+          <p className="strip-intro" style={{ marginTop: 4, textAlign: "left", maxWidth: 640, margin: "4px auto 0" }}><em>Cet ordre est un jugement, pas une vérité : selon la personne et son projet, les priorités changent.</em></p>
+          <p className="strip-intro" style={{ marginTop: 4, textAlign: "left", maxWidth: 640, margin: "4px auto 0" }}>L'abonnement donne accès aux feuilles publiées, les suivantes à leur parution. La collection se remplit au fur et à mesure — elle n'est pas complète aujourd'hui.</p>
           <div
             style={{
               maxWidth: 640,
