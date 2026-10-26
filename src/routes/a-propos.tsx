@@ -6,7 +6,7 @@ import PhotoDeguise from "@/components/deguisements/PhotoDeguise";
 export const Route = createFileRoute("/a-propos")({
   head: () => createSeoHead({
     title: "À propos — HP, créateur de HP Outils | couronne nord de Montréal, Lanaudière",
-    description: "HP Outils, c'est HP, créateur à Terrebonne (Lanaudière) : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets.",
+    description: "HP Outils, c'est HP, créateur dans la couronne nord de Montréal, Lanaudière : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets.",
     path: "/a-propos",
   }),
   component: Page,
