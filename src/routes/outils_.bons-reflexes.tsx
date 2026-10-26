@@ -76,8 +76,8 @@ function Page() {
         <p style={{ marginTop: 24, fontSize: 12, color: "rgba(58,42,32,.6)", lineHeight: 1.6, textAlign: "center" }}>
           © HP 2026. Tous droits réservés. Outil éducatif informatif. Ne remplace
           pas un avis médical, psychologique, juridique, sexologique ou
-          professionnel. En situation de danger immédiat, contacte les services
-          d'urgence de ta région.
+          professionnel. En situation de danger immédiat, contactez les services
+          d'urgence de votre région.
         </p>
       </div>
     </section>

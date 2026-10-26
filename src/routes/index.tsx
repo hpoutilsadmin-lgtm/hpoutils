@@ -97,7 +97,7 @@ function Index() {
             « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — HP
           </p>
           <div className="lead-actions">
-            <Link to="/jeux" className="btn-primary">Jouer — 35 jeux gratuits</Link>
+            <Link to="/jeux" className="btn-primary">Jouer — 36 jeux gratuits</Link>
             <Link to="/outils" className="btn-primary">Outils gratuits, sans compte</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
@@ -108,7 +108,7 @@ function Index() {
       <section id="sec-arbre" className="three-pillars">
         <div className="container">
           <span className="editorial-kicker">Par où commencer</span>
-          <h2 className="section-title">Tu cherches quoi?</h2>
+          <h2 className="section-title">Vous cherchez quoi?</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 24 }}>
             <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
               <Link to="/jeux" aria-label="Voir les jeux" style={{ display: "block", textDecoration: "none" }}>
@@ -119,7 +119,7 @@ function Index() {
               </Link>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>Jeux</h3>
-                <p>35 jeux gratuits, jouables dans ton navigateur</p>
+                <p>36 jeux gratuits, jouables dans votre navigateur</p>
                 <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
               </div>
             </article>
@@ -176,7 +176,7 @@ function Index() {
               </div>
             </article>
             <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-              <Link to="/univers" aria-label="Choisir ton histoire" style={{ display: "block", textDecoration: "none" }}>
+              <Link to="/univers" aria-label="Choisir votre histoire" style={{ display: "block", textDecoration: "none" }}>
                 <div style={{ ...categoryTile("#7a1f2b", "#a63a44"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                   <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>À</span>
                   <span style={CATEGORY_TAG_STYLE}>1er tome gratuit</span>
@@ -184,8 +184,8 @@ function Index() {
               </Link>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>À toi l'histoire</h3>
-                <p>12 tomes interactifs : tu choisis, l'histoire change. Le 1er est gratuit.</p>
-                <Link className="pillar-cta" to="/univers">Choisir ton histoire →</Link>
+                <p>12 tomes interactifs : vous choisissez, l'histoire change. Le 1er est gratuit.</p>
+                <Link className="pillar-cta" to="/univers">Choisir votre histoire →</Link>
               </div>
             </article>
           </div>

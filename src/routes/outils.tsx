@@ -6,7 +6,7 @@ export const Route = createFileRoute("/outils")({
   head: () => ({
     ...createSeoHead({
       title: "Outils web gratuits, sans compte — budget, recettes, proches aidants | HP Outils",
-      description: "La Boîte à outils HP : budget du mois, coût par usage, relais des proches aidants, 629 recettes. 100 % gratuit, sans compte, et tes données restent sur ton appareil.",
+      description: "La Boîte à outils HP : budget du mois, relais des proches aidants, 629 recettes. 100 % gratuit, sans compte, et vos données restent sur votre appareil.",
       path: "/outils",
     }),
     scripts: [
@@ -57,17 +57,9 @@ const WEB_TOOLS = [
     emoji: "💰",
     tag: "Budget",
     title: "Le reste du mois",
-    copy: "Combien tu peux dépenser par jour jusqu'à la fin du mois, sans te mettre dans le trouble. Trois boutons pour la vraie vie : reçu, dépensé, coup dur.",
+    copy: "Combien vous pouvez dépenser par jour jusqu'à la fin du mois, sans vous mettre dans le trouble. Trois boutons pour la vraie vie : reçu, dépensé, coup dur.",
     cta: "Calculer mon reste →",
     href: "/outils-web/le-reste-du-mois.html",
-  },
-  {
-    emoji: "🤔",
-    tag: "Achat futé",
-    title: "Ça vaut-tu la peine ?",
-    copy: "Le vrai coût d'un achat : prix par utilisation, équivalent en heures de travail, projection sur un an. L'outil montre, il ne juge jamais.",
-    cta: "Vérifier un achat →",
-    href: "/outils-web/ca-vaut-tu-la-peine.html",
   },
   {
     emoji: "🤝",

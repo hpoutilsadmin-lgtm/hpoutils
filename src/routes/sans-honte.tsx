@@ -228,28 +228,7 @@ function Page() {
 
       <section className="three-pillars">
         <div className="container">
-          <h2 className="section-title">Outils associés</h2>
-          <div className="pillar-grid">
-            <article className="pillar-card">
-              <span className="pillar-num">→</span>
-              <h3>La carte de la honte</h3>
-              <p>Un exercice court pour nommer ce qui pèse, sans avoir à l'expliquer à personne.</p>
-              <Link to="/outils" className="pillar-cta">Ouvrir l'exercice</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">→</span>
-              <h3>La phrase qu'on ne dit pas</h3>
-              <p>Sortir une chose, en privé, et voir ce que ça change.</p>
-              <Link to="/outils" className="pillar-cta">Ouvrir l'outil</Link>
-            </article>
-            <article className="pillar-card">
-              <span className="pillar-num">→</span>
-              <h3>Le tri du jour</h3>
-              <p>10 minutes pour séparer ce qui est à toi de ce qui ne l'est pas.</p>
-              <Link to="/outils" className="pillar-cta">Ouvrir l'outil</Link>
-            </article>
-          </div>
-          <div className="cta-band" style={{ marginTop: 40 }}>
+          <div className="cta-band">
             <div>
               <h3>Rester en lien avec Sans Honte</h3>
               <p>Recevoir les nouveaux kits, les phrases et les textes — sans spam.</p>

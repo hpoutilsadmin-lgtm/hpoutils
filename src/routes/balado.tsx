@@ -118,7 +118,7 @@ function Page() {
                 <p><strong>{ep.date}</strong> · {ep.duration}</p>
                 <p>{ep.description}</p>
                 <audio controls preload="none" src={ep.audio} style={{ width: "100%", marginTop: "0.75rem" }}>
-                  Ton navigateur ne supporte pas l'audio. Écoute via le flux RSS.
+                  Votre navigateur ne supporte pas l'audio. Écoutez via le flux RSS.
                 </audio>
               </article>
             ))}
@@ -131,10 +131,10 @@ function Page() {
           <span className="editorial-kicker">S'abonner</span>
           <h2>Le balado te suit <em>partout</em></h2>
           <p className="strip-intro">
-            Ajoute le flux dans ton appli de balados préférée : chaque nouvel épisode
+            Ajoutez le flux dans votre appli de balados préférée : chaque nouvel épisode
             y apparaît tout seul, dès sa parution. C'est gratuit, sans compte, sans piège.
-            Si un bouton n'ouvre rien, c'est que l'appli n'est pas installée sur ton
-            téléphone : copie le lien du flux RSS et colle-le dans ton appli.
+            Si un bouton n'ouvre rien, c'est que l'appli n'est pas installée sur votre
+            téléphone : copiez le lien du flux RSS et collez-le dans votre appli.
           </p>
           <div className="lead-actions">
             <a className="btn-primary" href={FEED_URL} target="_blank" rel="noreferrer">Flux RSS</a>
@@ -183,7 +183,7 @@ function Page() {
             </article>
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>Une pause entre deux épisodes : 35 jeux gratuits, jouables dans ton navigateur, sans inscription.</p>
+              <p>Une pause entre deux épisodes : 36 jeux gratuits, jouables dans votre navigateur, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Jouer →</Link>
             </article>
           </div>

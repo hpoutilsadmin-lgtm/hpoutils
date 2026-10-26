@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/outils_/hp-hyper-potentiel")({
   head: () => createSeoHead({
     title: "Un petit pas à la fois | Outil interactif gratuit",
-    description: "Respiration guidée, carte ikigaï interactive et plan WOOP : l'outil web gratuit compagnon du mini cahier Un petit pas à la fois. Sans compte, tes données restent sur ton appareil.",
+    description: "Respiration guidée, carte ikigaï interactive et plan WOOP : l'outil web gratuit compagnon du mini cahier Un petit pas à la fois. Sans compte, vos données restent sur votre appareil.",
     path: "/outils/hp-hyper-potentiel",
   }),
   component: Page,
@@ -51,7 +51,7 @@ function Page() {
             Respire avec moi (respiration guidée animée), Ta carte ikigaï (les
             quatre questions, en format interactif) et Ton plan WOOP (un souhait,
             un résultat, un obstacle, un plan — avec un engagement doux de
-            7 jours). Tout se fait sur ton appareil : aucune donnée ne sort d'ici.
+            7 jours). Tout se fait sur votre appareil : aucune donnée ne sort d'ici.
             C'est le compagnon gratuit du mini cahier du même nom — l'écran te
             guide ; le papier te fait écrire, et durer.
           </p>
@@ -79,8 +79,8 @@ function Page() {
         <p style={{ marginTop: 24, fontSize: 12, color: "rgba(58,42,32,.6)", lineHeight: 1.6, textAlign: "center" }}>
           © HP 2026. Tous droits réservés. Outil éducatif informatif. Ne remplace
           pas un avis médical, psychologique, juridique, sexologique ou
-          professionnel. En situation de danger immédiat, contacte les services
-          d'urgence de ta région.
+          professionnel. En situation de danger immédiat, contactez les services
+          d'urgence de votre région.
         </p>
       </div>
     </section>

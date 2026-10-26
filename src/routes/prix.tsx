@@ -27,7 +27,7 @@ const ROWS: Row[] = [
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "150 $ à 290 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Jeu", offre: "Chevalier du fleuve — gemmes du jeu (boutique dédiée, hors panier — bientôt en vente, aucun paiement pris pour l'instant)", prix: "2,99 $ à 19,99 $ CAD, aucune taxe ajoutée", href: "/boutique-chevalier", label: "Voir la boutique" },
   { cat: "Cadeaux", offre: "Bons cadeaux — un code personnel à offrir, applicable au panier", prix: "5 $ à 100 $ CAD, aucune taxe ajoutée", href: "/cadeaux", label: "Offrir un bon" },
-  { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 4 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
+  { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 3 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
 ];
 
 const BLOCS = [
@@ -94,7 +94,7 @@ function Page() {
           <h2>Et le <em>gratuit</em> ?</h2>
           <p className="strip-intro">
             Avant de payer quoi que ce soit, le gratuit d'HP vaut le détour :{" "}
-            <a href="/jeux">35 jeux gratuits, sans inscription</a>, et{" "}
+            <a href="/jeux">36 jeux gratuits, sans inscription</a>, et{" "}
             <a href="/balado">Futur simple, le balado sur l'IA</a> — de nouveaux épisodes quand ils sont prêts, gratuit lui aussi.
           </p>
         </div>

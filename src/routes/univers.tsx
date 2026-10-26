@@ -18,7 +18,7 @@ function Page() {
       <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
         <div className="container">
           <span className="editorial-kicker">À toi l'histoire</span>
-          <h1>Les histoires de HP, à toi de les vivre.</h1>
+          <h1>Les histoires de HP, à vous de les vivre.</h1>
           <p className="lead">
             « À toi l'histoire », ce sont 12 tomes : 11 livres-jeux interactifs,
             de 5 $ à 8 $, et un tome gratuit. Chaque choix tisse l'histoire — et
@@ -140,7 +140,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>RELÈVE et 34 autres jeux gratuits, jouables dans votre navigateur, sans inscription.</p>
+              <p>RELÈVE et 35 autres jeux gratuits, jouables dans votre navigateur, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Jouer →</Link>
             </article>
             <article className="pillar-card">

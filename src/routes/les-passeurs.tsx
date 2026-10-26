@@ -37,7 +37,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>35 jeux qui restent gratuits pour tout le monde, sans inscription.</p>
+              <p>36 jeux qui restent gratuits pour tout le monde, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Voir les jeux →</Link>
             </article>
             <article className="pillar-card">
@@ -57,7 +57,7 @@ function Page() {
       <section className="collections-strip">
         <div className="container">
           <span className="editorial-kicker">Simple et clair</span>
-          <h2>Juste : tu passes, et d'autres reçoivent.</h2>
+          <h2>Juste : vous passez, et d'autres reçoivent.</h2>
           
           <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Accès aux 16 savoirs.</h3>
           <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès à des astuces que les autres n'ont pas.</p>

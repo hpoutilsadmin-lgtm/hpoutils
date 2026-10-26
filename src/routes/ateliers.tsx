@@ -43,7 +43,7 @@ const ATELIERS = [
 const FETES = [
   { title: "Pain maison à domicile", duration: "3 h · 6 à 8 personnes", price: "290 $ CAD · forfait groupe", desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes. Soit 36 $ à 48 $ par personne." },
   { title: "L'IA sans jargon — Édition des Fêtes", duration: "2 h", price: "220 $ CAD · forfait groupe", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
-  { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "220 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant." },
+  { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "220 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant. Aucun local cuisine requis pour cette conférence." },
 ];
 
 function Page() {
@@ -136,7 +136,7 @@ function Page() {
           <span className="editorial-kicker">Du 1er octobre au 23 décembre</span>
           <h2>Ateliers &amp; conférence — <em>Édition des Fêtes</em></h2>
           <p className="strip-intro">Trois propositions saisonnières à vivre en groupe, à domicile ou dans votre organisme. Tous les prix sont en $ CAD, aucune taxe ajoutée.</p>
-          <p className="strip-intro">Ateliers des Fêtes sur réservation et entente. Le milieu d'accueil doit disposer d'un local cuisine.</p>
+          <p className="strip-intro">Ateliers des Fêtes sur réservation et entente. Le milieu d'accueil doit disposer d'un local cuisine, sauf pour la conférence La faim justifie les moyens.</p>
           <div className="pillar-grid">
             {FETES.map((offer, i) => (
               <article key={offer.title} className="pillar-card">
@@ -160,7 +160,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Collaborer avec HP</h3>
-              <p>Un milieu, un groupe, un besoin particulier : la page Collaborer explique comment on adapte les outils HP à ton contexte.</p>
+              <p>Un milieu, un groupe, un besoin particulier : la page Collaborer explique comment on adapte les outils HP à votre contexte.</p>
               <Link className="pillar-cta" to="/collaborer">Collaborer →</Link>
             </article>
             <article className="pillar-card">

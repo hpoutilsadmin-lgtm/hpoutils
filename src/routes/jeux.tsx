@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 35 jeux en ligne | HP Outils",
-      description: "35 jeux gratuits créés au Québec : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
+      title: "Jeux gratuits en français du Québec — 36 jeux en ligne | HP Outils",
+      description: "36 jeux gratuits créés au Québec : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
       path: "/jeux",
     }),
     scripts: [
@@ -468,7 +468,8 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            <span style={CHIP_STYLE}>{GAMES.length} jeux gratuits</span>
+            {/* +1 : Le Panier Solidaire, joué dans En cuisine (section ci-dessous), compté dans le total */}
+            <span style={CHIP_STYLE}>{GAMES.length + 1} jeux gratuits</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans ton navigateur</span>
           </div>
@@ -604,6 +605,20 @@ function JeuxPage() {
                 </div>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+<section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Aussi dans En cuisine</span>
+          <h2 className="section-title">Le Panier Solidaire, <em>là où on cuisine</em></h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Le Panier Solidaire</h3>
+              <p>Aussi dans En cuisine — découvre le jeu là où on cuisine.</p>
+              <a className="pillar-cta" href="/en-cuisine/index.html">Jouer dans En cuisine →</a>
+            </article>
           </div>
         </div>
       </section>

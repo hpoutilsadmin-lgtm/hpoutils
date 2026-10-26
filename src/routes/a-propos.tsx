@@ -46,7 +46,7 @@ function Page() {
               Marginal — je le sais, je l'assume. Je peux converser avec un itinérant, un alcoolique, un PDG, un président, un député. Pour moi, c'est la même dignité partout.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et veulent apprendre, partager et repartir. C'est pour eux que je construis. Du gratuit chaque fois que c'est possible — 35 jeux, 629 recettes, des outils web sans compte — et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ CAD le kit, aucune taxe ajoutée.
+              Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et veulent apprendre, partager et repartir. C'est pour eux que je construis. Du gratuit chaque fois que c'est possible — 36 jeux, 629 recettes, des outils web sans compte — et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ CAD le kit, aucune taxe ajoutée.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", fontFamily: "Georgia,serif", fontStyle: "italic" }}>
               Ma conviction, point : la dignité, c'est pas un budget, c'est un état d'esprit. Une présentation soignée au mieux de ses capacités, et ça devrait être suffisant.
@@ -55,12 +55,12 @@ function Page() {
               Je ne sais pas coder, je ne sais pas composer, je ne sais pas devenir riche. Je sais survivre, je sais le quotidien, je sais les gens. Et sur tout ce qu'on peut connaître, je ne sais rien — mais je suis curieux de tout.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              C'est pour ça que j'ai créé HGPTO : un petit compagnon qui m'aide à structurer et à rester constant — et qui fait la même chose pour toi.
+              C'est pour ça que j'ai créé HGPTO : un petit compagnon qui m'aide à structurer et à rester constant — et qui fait la même chose pour vous.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je crée tout ce que tu vois ici, avec l'IA comme outil de fabrication — la direction, les idées et les mots restent humains. Les jeux et les outils sont testés avant d'être publiés, et corrigés quand un test révèle un problème. Et je fais aussi de la musique : j'écris et j'enregistre mes propres chansons — l'album Humain imparfait et le balado Futur simple racontent le même monde, autrement.
+              Je crée tout ce que vous voyez ici, avec l'IA comme outil de fabrication — la direction, les idées et les mots restent humains. Les jeux et les outils sont testés avant d'être publiés, et corrigés quand un test révèle un problème. Et je fais aussi de la musique : j'écris et j'enregistre mes propres chansons — l'album Humain imparfait et le balado Futur simple racontent le même monde, autrement.
             </p>
-            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes contrats avec toi</h3>
+            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes contrats avec vous</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
               <li>Une réponse d'humain sous 3 jours ouvrables.</li>
               <li>Des prix honnêtes, aucune taxe ajoutée, jamais de pression ni de fausse urgence.</li>
