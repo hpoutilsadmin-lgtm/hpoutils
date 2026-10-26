@@ -22,9 +22,27 @@ function Page() {
             doit rester clair et direct.
           </p>
           <div className="lead-actions">
-            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a>
+            <a className="btn-primary" href="#formulaire-contact">Écrire à la direction humaine</a>
             <a className="btn-ghost" href="/ateliers#formulaire-atelier">Réserver un atelier</a>
           </div>
+        </div>
+      </section>
+
+      <section className="three-pillars" id="formulaire-contact">
+        <div className="container" style={{ maxWidth: 760 }}>
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "0 0 28px", color: "#2a1a12" }}>Écrivez à la direction humaine</h2>
+          <p className="strip-intro">Une question, une commande, un atelier ou un projet ? Remplissez le formulaire — chaque message reçoit une réponse d'humain, sous 3 jours ouvrables.</p>
+          <iframe
+            src="https://tally.so/embed/dbbYbr?alignLeft=1&hideTitle=1&transparentBackground=1"
+            width="100%"
+            height="1100"
+            frameBorder="0"
+            marginHeight={0}
+            marginWidth={0}
+            title="Formulaire de contact HP Outils"
+            loading="lazy"
+          />
+          <p>Si le formulaire ne s'affiche pas, <a href="https://tally.so/r/dbbYbr" target="_blank" rel="noreferrer" style={{ color: "#b04a2f", fontWeight: 700 }}>ouvre-le directement ici</a>.</p>
         </div>
       </section>
 
@@ -136,7 +154,7 @@ function Page() {
           <h2>Une question, une idée, un <em>projet</em> ?</h2>
           <p className="strip-intro">L'équipe est là pour écouter et aider.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
-            <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a>
+            <a className="btn-primary" href="#formulaire-contact">Écrire à la direction humaine</a>
           </div>
         </div>
       </section>
