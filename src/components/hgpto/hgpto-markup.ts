@@ -475,6 +475,8 @@ export const HGPTO_MARKUP = `
             </g>
           </svg>
         </div>
+        <div class="hgpto-tie" aria-hidden="true"><svg viewBox="0 0 24 64" width="24" height="64"><polygon points="12,2 19,8 15,14 12,12 9,14 5,8" fill="#1f3a5f"/><polygon points="9,14 15,14 19,34 12,62 5,34" fill="#1f3a5f"/><g fill="#d89532"><circle cx="12" cy="24" r="1.8"/><circle cx="12" cy="34" r="1.8"/><circle cx="12" cy="44" r="1.8"/></g></svg></div>
+        <div class="hgpto-case" aria-hidden="true"><svg viewBox="0 0 48 34" width="48" height="34"><path d="M16 10 V6 a4 4 0 0 1 4 -4 h8 a4 4 0 0 1 4 4 v4" fill="none" stroke="#2b2118" stroke-width="2.6"/><rect x="2" y="10" width="44" height="22" rx="4" fill="#6b4a2f" stroke="#2b2118" stroke-width="2.4"/><rect x="20" y="10" width="8" height="7" rx="1.5" fill="#d89532" stroke="#2b2118" stroke-width="1.6"/></svg></div>
       </div>
       <!-- Pastille de repli (24 oct. 2026) : quand le visiteur replie HGPTO
            à la main, le robot et Pixel se cachent et cette pastille reste
@@ -687,6 +689,9 @@ export const HGPTO_MARKUP = `
       <button type="button" id="btn-tickle">Chatouiller</button>
       <button type="button" id="btn-bucket">Seau d'eau</button>
       <button type="button" id="btn-kibble">Croquette</button>
+      <button type="button" id="btn-fleur">Une fleur</button>
+      <button type="button" id="btn-pixel-jeu">Joue avec Pixel</button>
+      <button type="button" id="btn-bataille">Une Bataille ?</button>
       <button type="button" id="btn-calm" aria-pressed="false">Mode calme</button>
       <button type="button" id="btn-pause" aria-pressed="false">Pause</button>
       <button type="button" id="btn-reduire" aria-label="Réduire HGPTO en pastille">Réduire</button>

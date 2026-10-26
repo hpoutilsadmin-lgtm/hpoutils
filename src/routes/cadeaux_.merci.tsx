@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { createSeoHead } from "@/lib/seo";
 import { fulfillGiftPurchase } from "@/utils/cadeaux.functions";
+import { ThankYouCelebration } from "@/components/ThankYouCelebration";
 
 export const Route = createFileRoute("/cadeaux_/merci")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -92,6 +93,7 @@ function Page() {
         {state.kind === "paid" && (
           <>
             <h1>Merci !</h1>
+            <ThankYouCelebration />
             <p>
               Ton bon cadeau de {state.amountCents / 100} $ CAD est prêt.
               Voici ton code personnel — il est aussi envoyé par courriel

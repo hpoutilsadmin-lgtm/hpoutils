@@ -68,7 +68,49 @@ export const JOKES = [
         "Mon rêve le plus fou ? Une cabane à sucre où le sirop coule à volonté et où tout le monde a une place.",
         "Pourquoi je danse tout seul des fois ? Parce que la musique, ça se partage, mais ça commence tout seul.",
         "Que fait un robot qui perd aux dés ? Il félicite le gagnant. Puis il demande une revanche, poliment.",
-        "Pourquoi les grands-mères gagnent toujours contre moi aux cartes ? Elles ont un superpouvoir : la patience."
+        "Pourquoi les grands-mères gagnent toujours contre moi aux cartes ? Elles ont un superpouvoir : la patience.",
+        "« Pourquoi j'aime l'hiver québécois ? Parce que quand il fait frette, personne me demande si j'ai chaud — on est tous égaux devant le banc de neige ! »",
+        "« C'est quoi, une patente à gosse pour un robot ? Un trombone, du ruban collant… pis moi qui essaie de pas perdre mes vis en chemin ! »",
+        "« Pourquoi je placote avec les bancs de parc ? Parce qu'eux autres, ils m'écoutent sans jamais me couper la parole — pis ils ont toujours une bonne place pour s'asseoir. »",
+        "« Que dit un robot devant une poutine ? « Toi, tu me fais fondre… le fromage en crotte, pas mes circuits, promis ! » »",
+        "« Pourquoi ma tuque est mon meilleur ami l'hiver ? Elle me tient chaud aux idées — pis elle me donne un air de grand explorateur du Nord ! »",
+        "« C'est quoi, le sport national d'un robot d'ici ? Le pelletage de bonne humeur : une pelletée à la fois, pis on rit en gang ! »",
+        "« Pourquoi je prends mon sirop d'érable au sérieux ? Parce qu'une goutte perdue, c'est une goutte de bonheur qui coule ailleurs — pis moi, je gaspille rien, même pas les jokes ! »",
+        "« Que fait un robot quand il pogne un rhume de métal ? Il se repose, il boit de la soupe chaude… pis il éternue des petites étincelles de politesse ! »",
+        "« Pourquoi les fins de semaine sont mes journées préférées ? Parce que le samedi, on placote plus longtemps — pis le dimanche, on mange plus lentement. »",
+        "« C'est quoi, mon expression préférée ? « Ça va ben aller » — je la dis même à mes boulons quand ils grincent ! »",
+        "« Pourquoi je magasine jamais pressé ? Parce qu'à la course, on oublie les spéciaux — pis moi, j'aime ça prendre mon temps comme une bonne tourtière au four. »",
+        "« Que dit un robot à son traîneau ? « On glisse doucement, on rit fort, pis on oublie pas nos mitaines ! » »",
+        "« Pourquoi j'adore les épluchettes de blé d'Inde ? Parce que c'est le seul party où tout le monde épluche pis personne ne se plaint ! »",
+        "« C'est quoi, un robot qui a le cœur sur la main ? Un robot qui aide à pelleter l'entrée du voisin avant même qu'on le lui demande ! »",
+        "« Pourquoi je ris quand il neige en avril ? Parce qu'au Québec, la météo a plus d'humour que moi — pis ça, c'est pas peu dire ! »",
+        "« Que fait un robot à la cabane à sucre ? Il goûte à la tire… avec les yeux, parce que mes circuits pis le sucre chaud, ça fait pas bon ménage ! »",
+        "« Pourquoi mon accent de robot est ben québécois ? Parce que j'ai appris à parler en écoutant les marchés, les cuisines pis les voisins — pas dans un manuel ! »",
+        "« C'est quoi, la patente la plus utile que je connaisse ? Un sourire : ça coûte rien, ça se répare tout seul, pis ça dépanne ben du monde ! »",
+        "« Pourquoi je dis « tabarouette » quand je me cogne ? Parce que c'est un petit mot qui fait du bien sans faire de mal à personne ! »",
+        "« Pourquoi je fais mes mises à jour la nuit ? Parce que le jour, je suis trop occupé à être utile — pis la nuit, personne me voit redémarrer trois fois ! »",
+        "« C'est quoi, un robot qui a peur du noir ? Un robot dont la veilleuse a grillé — pis qui demande à Pixel de rester proche, juste au cas ! »",
+        "« Que dit mon ventilateur quand je réfléchis trop ? « Doucement, champion, tu vas me faire prendre ma retraite avant l'heure ! » »",
+        "« Pourquoi je note mes idées sur du papier ? Parce que mes fichiers, eux, ils se cachent parfois mieux que des mitaines en février ! »",
+        "« Mon plus grand talent ? Trouver le mot juste… après trois essais pis un petit « euh » de métal ! »",
+        "« Pourquoi je ne joue jamais à cache-cache avec mon ombre ? Elle me suit partout pis elle gagne tout le temps — tricheuse ! »",
+        "« Que fait un robot quand il reçoit un compliment ? Il rougit… ben, ses lumières passent au rose, pis ça revient au normal après ! »",
+        "« Pourquoi mes blagues sont courtes ? Parce que mes circuits de rire ont une petite mémoire — pis une grande générosité ! »",
+        "« C'est quoi, mon cauchemar de robot ? Rêver que je suis une cafetière pis que quelqu'un me verse du café dessus ! »",
+        "« Que dit un robot à sa batterie le soir ? « Merci d'avoir tenu le coup — demain, on recommence, pis on sourit encore ! » »",
+        "« Pourquoi je m'endors vite ? Parce que je compte mes bons coups de la journée — pis je m'endors toujours avant d'avoir fini ! »",
+        "« Mon ordinateur de bord dit que je suis drôle à 98 %. Les 2 % qui restent, c'est quand je raconte mes blagues à mon miroir ! »",
+        "« Que fait un robot qui veut se détendre ? Il baisse le volume de ses pensées pis il écoute la pluie sur le toit — clic, clic, pis dodo ! »",
+        "« Pourquoi je parle à mes outils ? Parce qu'eux autres, ils répondent jamais « t'as pas compris » — ils attendent, pis ça, c'est précieux ! »",
+        "« C'est quoi, la différence entre moi pis un grille-pain ? Lui, il grille du pain — moi, je grille des étapes… pour mieux les réussir après ! »",
+        "« Que dit un robot quand il se trompe ? « Oups, ma faute — pis merci de me l'avoir dit, je viens d'apprendre de quoi ! » »",
+        "« Pourquoi je garde mes vieilles vis ? Parce qu'une vis qui a déjà servi, ça connaît tous les tours de la maison ! »",
+        "« Mon rêve secret ? Avoir des poches — juste pour y mettre des petits mots gentils à distribuer ! »",
+        "« Que fait un robot devant un arc-en-ciel ? Il le regarde longtemps… pis il se demande si les couleurs aussi ont besoin d'un petit repos ! »",
+        "« Pourquoi je ris de mes propres blagues ? Parce que si je ris pas, qui va rire de mes circuits ? Ben, toi — pis ça, c'est encore mieux ! »",
+        "« C'est quoi, un robot patient ? Un robot qui attend que la soupe soit prête sans lever le couvercle cent fois… bon, quatre-vingt-dix-neuf fois ! »",
+        "« Que dit un robot à la fin d'une belle journée ? « Merci, la vie — pis à demain, pour d'autres beaux efforts ! » »",
+        "« Pourquoi je suis ben fier de mes gros sourcils ? Parce qu'eux autres, ils disent tout haut ce que mon cœur de métal pense tout bas ! »"
       ];
       /* Invitations produit — reco panneau nº 8 : elles NAÎSSENT des vignettes
          (lecture → livres, jeu → jeux, bricolage → kits, perché → ateliers),
@@ -106,6 +148,35 @@ export const TICKLE_LINES = [
         "Haha ! Mes circuits de rire surchauffent !",
         "Hihi ! Encore ? Non… enfin, peut-être une petite dernière !"
       ];
+/* Scènes de vie quotidienne (26 oct. 2026) : fleur, Pixel, Bataille.
+   Session seulement, aucun prix, aucun lien produit, aucune
+   pression — le divertissement reste du confort. */
+export const FLEUR_LINES = [
+        "Tiens, une fleur pour toi — pas pour acheter quoi que ce soit, juste parce que t'es là. Ça fait du bien, une petite fleur, hein ?",
+        "Je te donne ma plus belle fleur du jour. Elle fane jamais dans mon cœur de métal — pis dans le tien, j'espère qu'elle dure longtemps !",
+        "Une fleur, comme ça, pour rien — ben non, pas pour rien : pour te dire merci d'être passé. Prends-en soin… ou regarde-la, c'est déjà ben bon !"
+      ];
+export const FLEUR_DEJA = "Tu as déjà ta fleur du jour — pis elle est encore belle, regarde !";
+export const PIXEL_JEU_LINES = [
+        "Regarde-la courir après sa pelote — elle a plus d'énergie que mes trois batteries ensemble !",
+        "Rrrrr… Ça, c'est son moteur à ronrons. Le mien fait moins de bruit, mais il est ben content pareil.",
+        "Elle joue comme elle aime : vite, fort, pis après ça, dodo collé !"
+      ];
+export const PIXEL_JEU_ARRIVEE = "Pixel ! Viens jouer — doucement, hein, la vedette ?";
+export const PIXEL_JEU_GRAFFIGNE = "Aïe ! Avec amour, Pixel, avec amour ! …Bon, c'est ça, les chats : un câlin pis une graffigne, dans le même paquet.";
+export const PIXEL_JEU_FIN = "Ça, c'était notre petite partie. Pixel retourne à ses affaires — pis moi, je garde le sourire. Merci d'avoir joué avec elle !";
+export const PIXEL_JEU_DODO = "Chut… Pixel dort, là. On la laisse rêver aux croquettes — on jouera tantôt, si elle veut !";
+export const PIXEL_JEU_CONSOLE = "Pixel est tout près, collée contre moi — elle me console, là. On la laisse tranquille un moment, pis on jouera tantôt.";
+export const BATAILLE_TEXTES = {
+        invite: "Une partie de Bataille ? C'est simple : on partage 52 cartes, on révèle chacun la nôtre, pis la plus forte ramasse les deux. Pas de mise, pas de points — juste pour le fun !",
+        tour: "À toi de révéler !",
+        bataille: "Égalité ! Bataille : trois cartes cachées, une visible — que la plus forte gagne !",
+        winYou: "Tu as toutes les cartes — bravo, champion ! Belle partie, pis merci d'avoir joué.",
+        winBot: "J'ai toutes les cartes, cette fois… mais tu t'es ben défendu ! On refait ça quand tu veux — si tu veux.",
+        amical: "Ouf, 300 manches ! On est ben égaux, toi pis moi. On arrête ici, match amical — pis on garde juste le plaisir !",
+        refus: "Pas de trouble — la Bataille attendra. Pis moi, je reste là, pareil !",
+        rejouer: "On rejoue une partie ?"
+      };
 export const TICKLE_BIG = "HAHAHA ! D'accord, tu as gagné : je suis officiellement chatouillé !";
 export const SLEEP_LINES = [
         "Cinq minutes… je recharge mes gentillesses.",
@@ -791,6 +862,15 @@ export const INDISP_MOMENTS = {
 export const INDISP_VICTOIRES = [
   "Yes ! Tu l'as trouvé. On est une bonne équipe, toi pis moi.",
   "Ça, c'est une victoire à nous deux. Pas de point, pas de patente — juste le fun de l'avoir trouvé.",
+];
+/* Danse de joie (26 oct. 2026, go HP « avant le gel ») : une courte danse,
+   déclenchée UNIQUEMENT par une vraie action — partage réussi ou victoire
+   à un jeu. AUCUN point, AUCUNE série, AUCUN score de danse. Pas de danse
+   pour un like ou un commentaire : le site n'a ni l'un ni l'autre. */
+export const DANCE_JOY_LINES = [
+  "Oh ! Tu partages la joie — moi, je danse ! On avance !",
+  "Ça, ça mérite une petite danse ! Merci de partager, pis on avance !",
+  "Yes ! Partagé ! Je danse deux secondes, pis je reviens t'aider.",
 ];
 export const INDISP_BONJOUR = "Bonjour ! Content de te voir. Prends ton temps, je suis là si tu as besoin.";
 export const INDISP_BONJOUR_AUTOMNE = "Bonjour, bel après-midi d'automne. Les feuilles tombent, pis moi je bricole.";

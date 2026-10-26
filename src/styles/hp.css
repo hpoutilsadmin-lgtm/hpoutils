@@ -433,3 +433,18 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 @media(max-width:480px){
   .game-grid{grid-template-columns:1fr}
 }
+
+/* Célébration d'achat (26 oct. 2026, go HP « avant le gel ») — gratitude
+   après paiement seulement, aucun upsell, aucun compteur, aucune série.
+   Le canvas est fixe et non cliquable ; la secousse « wizz » est VISUELLE
+   seulement et ne joue qu'une fois, à l'apparition. En mouvement réduit :
+   ni confettis ni secousse — juste le texte « Merci ! ». */
+.merci-celebration{margin:16px 0 8px;text-align:center}
+.merci-confetti{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:90}
+.merci-wizz{display:inline-block;padding:10px 26px;border:2px solid #b04a2f;border-radius:999px;background:#faf6f1;color:#b04a2f;font-size:20px;font-weight:900;cursor:pointer;animation:merci-wizz .6s ease-in-out 1}
+.merci-celebration-note{margin:8px 0 0;font-size:13px;opacity:.75}
+@keyframes merci-wizz{0%,100%{transform:translateX(0) rotate(0)}20%{transform:translateX(-4px) rotate(-1.5deg)}40%{transform:translateX(4px) rotate(1.5deg)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@media (prefers-reduced-motion: reduce){
+  .merci-wizz{animation:none}
+  .merci-confetti{display:none}
+}

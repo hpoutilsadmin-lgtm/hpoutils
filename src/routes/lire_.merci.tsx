@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { createSeoHead } from "@/lib/seo";
 import { fulfillTomeOrder } from "@/utils/tomes.functions";
+import { ThankYouCelebration } from "@/components/ThankYouCelebration";
 
 export const Route = createFileRoute("/lire_/merci")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -78,6 +79,7 @@ function Page() {
           {state.kind === "paid" && (
             <>
               <h1>Merci ! Voici tes liens</h1>
+              <ThankYouCelebration />
               <p>Les mêmes liens te sont aussi envoyés par courriel.</p>
               {state.links.map((link) => (
                 <p key={link.slug}>

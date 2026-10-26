@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { fulfillPdfOrder } from "@/utils/payments.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { createSeoHead } from "@/lib/seo";
+import { ThankYouCelebration } from "@/components/ThankYouCelebration";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -87,6 +88,7 @@ function Page() {
         {state.kind === "paid" && (
           <>
             <h1>Merci !</h1>
+            <ThankYouCelebration />
             <p>
               Votre achat est confirmé.
               {state.email && <> Un reçu a été envoyé à <strong>{state.email}</strong>.</>}

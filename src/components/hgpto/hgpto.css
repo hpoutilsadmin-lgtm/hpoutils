@@ -783,7 +783,38 @@
       /* ---------- Portage site : zone de vie + fermeture de session ---------- */
       body.hgpto-on{padding-bottom:168px}
       @media (max-width:560px){ body.hgpto-on{padding-bottom:148px} }
-      body.hgpto-closed .bot-layer,body.hgpto-closed .bot-controls,body.hgpto-closed #decor{display:none!important}
+      body.hgpto-closed .bot-controls,body.hgpto-closed #decor{display:none!important}
+      /* Correctif réouverture (26 oct. 2026) : après « Fermer », tout
+         HGPTO se cache SAUF la pastille, seul élément restant. La
+         couche reste montée (hauteur 0) pour que la pastille vive ;
+         robot, Pixel, décos, fleur, pelote et panneau Bataille sont
+         masqués. Au rechargement, Hgpto.tsx / standalone ne montent
+         rien quand 'hgpto-closed' est posé : HGPTO reste absent. */
+      body.hgpto-closed .bot,body.hgpto-closed .cat,body.hgpto-closed .graffiti,body.hgpto-closed .bowl,body.hgpto-closed .kibble,body.hgpto-closed .hgpto-fleur,body.hgpto-closed .hgpto-pelote,body.hgpto-closed .bataille-panel{display:none!important}
+      body.hgpto-closed #bot-pastille{display:block!important;width:auto;height:44px;padding:0 14px;border-radius:22px;font-size:12px}
+
+      /* ---------- Scènes de vie + vendeur (26 oct. 2026) ---------- */
+      .hgpto-fleur{position:absolute;bottom:104px;z-index:58;pointer-events:none;transition:opacity .35s ease}
+      .hgpto-fleur[hidden]{display:none}
+      .hgpto-pelote{position:absolute;bottom:10px;z-index:58;pointer-events:none;transition:opacity .35s ease}
+      .hgpto-pelote[hidden]{display:none}
+      /* Cravate + mallette : invisibles par défaut, visibles UNIQUEMENT
+         en mode vendeur (data-mode posé par applyMode). Hors vendeur :
+         rien ne s'affiche, les règles vendeur restent inchangées. */
+      .hgpto-tie,.hgpto-case{position:absolute;display:none;pointer-events:none;z-index:5}
+      .hgpto-tie{left:50%;top:54%;width:22px;height:58px;transform:translateX(-50%)}
+      .hgpto-case{right:-4px;bottom:2px;width:46px;height:34px}
+      #bot[data-mode="vendeur"] .hgpto-tie,#bot[data-mode="vendeur"] .hgpto-case{display:block}
+      .bataille-panel{position:absolute;left:50%;bottom:150px;transform:translateX(-50%);width:min(320px,92vw);background:var(--paper);color:var(--ink);border:2.5px solid var(--line);border-radius:12px;padding:10px 12px;pointer-events:auto;z-index:70;box-shadow:2px 2px 0 var(--shadow);text-align:center}
+      .bataille-panel[hidden]{display:none}
+      .bataille-cards{display:flex;gap:10px;justify-content:center;margin:8px 0}
+      .bataille-card{flex:1;border:2px solid var(--line);border-radius:8px;padding:8px 4px;min-height:64px;background:var(--paper2)}
+      .bataille-card b{display:block;font-size:20px}
+      .bataille-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+      .bataille-btns button{cursor:pointer}
+      @media (prefers-reduced-motion: reduce){
+        .hgpto-fleur,.hgpto-pelote{transition:none}
+      }
 
       /* ---------- LOT « HGPTO JOUEUR » (portage de l'artefact vérifié
          le 22 oct. 2026 au soir) : tampons officiels du panneau,
@@ -854,3 +885,21 @@
       }
       .mg-toast.show{opacity:1;transform:translate(-50%,0)}
       .mg-help{width:min(94vw,560px);font-size:13.5px;color:var(--ink-soft);margin:10px 0 0;text-align:center}
+
+/* Danse de joie (26 oct. 2026, go HP « avant le gel ») — courte animation
+   sur .bot-inner (même idiome que .stomping / .shakeoff), déclenchée en JS
+   par hgptoDance() et retirée après ~2,6 s, sans résidu. En mouvement
+   réduit : pas de danse (la bulle joyeuse, elle, s'affiche quand même). */
+.bot.dancing .bot-inner{animation:hgpto-dance 2.6s ease-in-out 1}
+@keyframes hgpto-dance{
+  0%,100%{transform:translateY(0) rotate(0)}
+  15%{transform:translateY(-10px) rotate(-4deg)}
+  30%{transform:translateY(0) rotate(4deg)}
+  45%{transform:translateY(-10px) rotate(-4deg)}
+  60%{transform:translateY(0) rotate(4deg)}
+  75%{transform:translateY(-6px) rotate(-3deg)}
+  90%{transform:translateY(0) rotate(2deg)}
+}
+@media (prefers-reduced-motion: reduce){
+  .bot.dancing .bot-inner{animation:none!important}
+}

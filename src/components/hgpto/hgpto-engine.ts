@@ -14,7 +14,7 @@
    · les données vivent dans hgpto-data.ts (importées ci-dessous).
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
-import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES, PAGE_SUGGESTIONS, PAGE_SUGGESTION_FALLBACK, FLASH_INFOS, INDISP_MOMENTS, INDISP_VICTOIRES, INDISP_BONJOUR, INDISP_BONJOUR_AUTOMNE, INDISP_AUREVOIR, INDISP_AIDE_HESITATION, INDISP_AIDE_PERDU, INDISP_AIDE_NUIT, INDISP_VIE } from "./hgpto-data";
+import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES, PAGE_SUGGESTIONS, PAGE_SUGGESTION_FALLBACK, FLASH_INFOS, INDISP_MOMENTS, INDISP_VICTOIRES, DANCE_JOY_LINES, FLEUR_LINES, FLEUR_DEJA, PIXEL_JEU_LINES, PIXEL_JEU_ARRIVEE, PIXEL_JEU_GRAFFIGNE, PIXEL_JEU_FIN, PIXEL_JEU_DODO, PIXEL_JEU_CONSOLE, BATAILLE_TEXTES, INDISP_BONJOUR, INDISP_BONJOUR_AUTOMNE, INDISP_AUREVOIR, INDISP_AIDE_HESITATION, INDISP_AIDE_PERDU, INDISP_AIDE_NUIT, INDISP_VIE } from "./hgpto-data";
 /* Détectôt (24 oct. 2026) : HGPTO lit le type de visiteur publié par la
    roue d'hamster et adapte son accueil — faits bruts pour une IA,
    ton habituel pour un humain, rien de changé quand c'est inconnu.
@@ -43,6 +43,9 @@ export function initHgpto() {
       var btnTickle = document.getElementById('btn-tickle');
       var btnBucket = document.getElementById('btn-bucket');
       var btnKibble = document.getElementById('btn-kibble');
+      var btnFleur = document.getElementById('btn-fleur');
+      var btnPixelJeu = document.getElementById('btn-pixel-jeu');
+      var btnBataille = document.getElementById('btn-bataille');
       var btnCalm = document.getElementById('btn-calm');
       var selWeather = document.getElementById('sel-weather');
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -759,6 +762,9 @@ export function initHgpto() {
       function sessSetFlag(key){
         try { sessionStorage.setItem(key, '1'); } catch(e){}
       }
+      function sessClearFlag(key){
+        try { sessionStorage.removeItem(key); } catch(e){}
+      }
       function sessGet(key){
         try { return sessionStorage.getItem(key); } catch(e){ return null; }
       }
@@ -788,12 +794,38 @@ export function initHgpto() {
       }
 
       /* ---------- Parole : blagues, invitations, soir ---------- */
+      /* ---------- Savoir être divertissant (26 oct. 2026) ----------
+         Règles HP, section 4 de la spec scènes : le divertissement
+         reste du confort — déclenché par le visiteur ou en moment
+         calme, jamais imposé, jamais pendant une aide, un jeu ou la
+         Pause, jamais quand la maison dort. Le refus d'achat, lui,
+         ne bloque que le moment calme automatique (fleur) : une scène
+         demandée explicitement par le visiteur reste son initiative. */
+      var batailleOn = false;   // partie de Bataille en cours (session seulement)
+      function peutDivertir(){
+        if (paused || isHidden || docHidden || qaOpen || calm || gameOn || batailleOn || tourOn) return false;
+        if (state === 'sleep' || isBusy()) return false;
+        return true;
+      }
       function talk(){
         // Lot nº 3 : pendant la visite guidée, le bavardage ambiant se
         // tait — avec les textes longs de la visite tranquille, une
         // blague ou une ligne de saison écrasait le commentaire d'étape
         // en plein milieu (vu en fumée : blague à 9,7 s de l'étape 0).
         if (paused || isHidden || docHidden || qaOpen || calm || gameOn || tourOn || Date.now() < cornerUntil || state === 'sleep' || isBusy()) return;
+        /* Moment calme automatique (fleur seulement, 26 oct. 2026) :
+           au plus 1 fois par session, mode defaut ou ami seulement,
+           jamais en vendeur, jamais la nuit, jamais sur route
+           sensible, jamais après un refus, jamais avant 60 s
+           d'inactivité. Le visiteur ne l'a pas demandé : il peut
+           l'ignorer, elle ne revient pas. */
+        if (!sessFlag('hgpto-fleur-auto') && !sessFlag('hgpto-fleur-donnee') && !sessFlag('hgpto-refus')
+            && (hgMode === 'defaut' || hgMode === 'ami') && !isNight() && !isSensitiveRoute()
+            && Date.now() - lastInteract > 60000 && peutDivertir()){
+          sessSetFlag('hgpto-fleur-auto');
+          doFleur(true);
+          return;
+        }
         // Lot nº 3 — relais du dwell : sur une page produit regardée
         // longuement (≥ 40 s, avant son dodo de 50 s), le bavardage
         // ambiant cède sa place, UNE fois, au résumé argumenté de la
@@ -861,7 +893,7 @@ export function initHgpto() {
         // bavardage devient directement une blague.
         if ((mood === 'drole' || hgMode === 'grognon') && Math.random() < 0.5){
           showBubble(esc(JOKES[jokeIdx % JOKES.length]), 5200, 'joke'); jokeIdx++;
-          logDay("raconté des blagues — j'en connais 61 !");
+          logDay("raconté des blagues — j'en connais 103 !");
           alternate++;
           return;
         }
@@ -922,7 +954,7 @@ export function initHgpto() {
         }
         if (alternate % 2 === 0){
           showBubble(esc(JOKES[jokeIdx % JOKES.length]), 5200, 'joke'); jokeIdx++;
-          logDay("raconté des blagues — j'en connais 61 !");
+          logDay("raconté des blagues — j'en connais 103 !");
           alternate++;
         } else {
           // Reco nº 8 : plus d'invitations produit dans le bavardage —
@@ -1651,6 +1683,40 @@ export function initHgpto() {
         }
       }
 
+      /* Danse de joie (26 oct. 2026, go HP « avant le gel ») — courte
+         animation CSS (classe « dancing », ~2,6 s) + bulle joyeuse, puis
+         classe retirée proprement, sans résidu. Déclenchée UNIQUEMENT par
+         une vraie action : partage réussi ou victoire à un jeu (voir les
+         appels ci-dessous + l'événement « hgpto:share-success » du bouton
+         Partager React). AUCUN point, AUCUNE série, AUCUN score de danse.
+         Garde anti-redéclenchement : pas de danse pendant une danse en
+         cours, ni dans les 20 s qui suivent — partager 3 fois d'affilée
+         ne donne qu'une danse. prefers-reduced-motion / mode calme :
+         pas d'animation, juste la bulle joyeuse. Bot masqué ou en pause :
+         rien du tout (il ne danse pas dans le vide). */
+      var danceTimer = null, lastDanceAt = 0;
+      function hgptoDance(line){
+        if (paused || isHidden) return;
+        if (bot.classList.contains('dancing')) return;
+        if (Date.now() - lastDanceAt < 20000) return;
+        lastDanceAt = Date.now();
+        if (line) showBubble(esc(line), 4500, 'talk', { now:true });
+        if (reduced || calm) return;
+        setExpr('laugh');
+        bot.classList.add('dancing');
+        if (danceTimer) clearTimeout(danceTimer);
+        danceTimer = setTimeout(function(){
+          bot.classList.remove('dancing');
+          danceTimer = null;
+        }, 2600);
+      }
+      /* Partage réussi depuis le bouton Partager React (navigator.share
+         résolu ou copie de lien réussie) : le moteur n'a pas de
+         navigator.share à lui — ce pont par événement est le seul lien. */
+      window.addEventListener('hgpto:share-success', function(){
+        hgptoDance(pick(DANCE_JOY_LINES));
+      });
+
       /* Chatouillage de trop (pack taquin du document, 23 oct. 2026) :
          après le grand fou rire (combo ≥ 3), si ça continue (combo ≥ 5),
          il rit, prévient en riant… et s'échappe ~2 s avant de revenir,
@@ -2120,6 +2186,13 @@ export function initHgpto() {
         // d'entrée que le bouton qa-play (décision de la direction, 22 oct. 2026).
         var mots = ' ' + normText(q).replace(/\s+/g, ' ').trim() + ' ';
         if (mots.indexOf(' joue avec moi ') !== -1){ startGame(); return; }
+        /* Scènes de vie (26 oct. 2026), mêmes interceptions tapées. */
+        if (mots.indexOf(' donne moi une fleur ') !== -1 || mots.indexOf(' tu as une fleur ') !== -1
+            || mots.indexOf(' je veux une fleur ') !== -1 || mots.trim() === 'une fleur'){ doFleur(); return; }
+        if (mots.indexOf(' joue avec pixel ') !== -1 || mots.indexOf(' pixel viens jouer ') !== -1
+            || mots.indexOf(' ou est pixel ') !== -1){ doPixelJeu(); return; }
+        if (mots.indexOf(' jouons a la bataille ') !== -1 || mots.indexOf(' une partie de bataille ') !== -1
+            || mots.indexOf(' tu joues aux cartes ') !== -1){ startBataille(); return; }
         // Escalades service client (23 oct. 2026) : plainte, cas de
         // remboursement, lien perdu — interceptées AVANT la base de
         // faits : la porte humaine d'abord, mot pour mot du document.
@@ -2370,6 +2443,7 @@ export function initHgpto() {
         btnPause.textContent = paused ? 'Reprendre' : 'Pause';
         btnPause.setAttribute('aria-pressed', paused ? 'true' : 'false');
         if (paused){
+          if (typeof endBataille === 'function' && batailleOn) endBataille('stop');
           if (state !== 'sleep'){ setState('idle'); setExpr('happy'); }
           showBubble("Je suis en pause — touche Pause pour repartir.", 8000, 'none', { now:true });
         } else {
@@ -2415,7 +2489,7 @@ export function initHgpto() {
         if (zoomIdx < ZOOM_STEPS.length - 1){ zoomIdx++; hgptoZoom = ZOOM_STEPS[zoomIdx]; applyZoom(); }
       });
       var pastille = document.getElementById('bot-pastille');
-      if (pastille) pastille.addEventListener('click', function(){ restoreHgpto(); });
+      if (pastille) pastille.addEventListener('click', function(){ if (hgptoClosed) restoreFromClosed(); else restoreHgpto(); });
       var controlsEl2 = document.getElementById('bot-controls');
       if (controlsEl2) controlsEl2.addEventListener('click', function(ev){
         var t = ev.target && ev.target.closest ? ev.target.closest('button, select') : null;
@@ -2423,7 +2497,28 @@ export function initHgpto() {
         if (t.id === 'btn-reduire' || t.id === 'btn-hide') return;
         restoreHgpto();
       });
-      var byePending = false;
+      var byePending = false, hgptoClosed = false;
+      /* Correctif réouverture (26 oct. 2026) : après « Fermer », la
+         pastille reste le SEUL élément HGPTO visible, libellée
+         « Rouvrir HGPTO ». Au tap : réouverture depuis fermé —
+         drapeau effacé, robot et barre démasqués, bulle de
+         salutation. Inchangés : bulle d'au revoir, délai de 4 s,
+         absence de retour automatique, distinction Réduire/Fermer.
+         Au rechargement, Hgpto.tsx / standalone ne montent rien
+         quand 'hgpto-closed' est posé : HGPTO reste absent. */
+      function restoreFromClosed(){
+        if (!hgptoClosed) return;
+        hgptoClosed = false;
+        try { sessionStorage.removeItem('hgpto-closed'); } catch(e){}
+        isHidden = false; byePending = false;
+        bot.classList.remove('hidden');
+        if (controlsEl) controlsEl.style.display = '';
+        document.body.classList.remove('hgpto-closed');
+        document.body.classList.add('hgpto-on');
+        if (pastille) pastille.textContent = 'HGPTO';
+        setState(reduced ? 'idle' : 'walk'); setExpr('happy');
+        showBubble(esc(INDISP_BONJOUR), 6000, 'talk', { now:true });
+      }
       btnHide.addEventListener('click', function(){
         /* Lot indispensable : au revoir, sur « Fermer HGPTO » seulement —
            la bulle s'affiche d'abord (prioritaire), la fermeture suit
@@ -2434,6 +2529,9 @@ export function initHgpto() {
         setTimeout(function(){
           /* Portage site : « Fermer HGPTO » = fermé pour la session. */
           try { sessionStorage.setItem('hgpto-closed', '1'); sessionStorage.removeItem('hgpto-tour'); sessionStorage.removeItem('hgpto-guide'); } catch(e) {}
+          if (typeof endBataille === 'function' && batailleOn) endBataille('stop');
+          hgptoClosed = true;
+          if (pastille) pastille.textContent = 'Rouvrir HGPTO';
           isHidden = true;
           hideBubble();
           if (tourOn) stopTour(true);
@@ -2694,7 +2792,7 @@ export function initHgpto() {
       document.getElementById('card-photo').addEventListener('click', function(){ openSouvenir(true); });
       document.getElementById('scard-close').addEventListener('click', function(){ scardEl.hidden = true; });
       document.getElementById('scard-copy').addEventListener('click', function(){
-        var done = function(){ document.getElementById('scard-copied').hidden = false; };
+        var done = function(){ document.getElementById('scard-copied').hidden = false; hgptoDance(pick(DANCE_JOY_LINES)); };
         if (navigator.clipboard && navigator.clipboard.writeText){
           navigator.clipboard.writeText(scardText).then(done, function(){ fallbackCopyText(scardText, done); });
         } else { fallbackCopyText(scardText, done); }
@@ -3019,6 +3117,7 @@ export function initHgpto() {
         rollBtn.disabled = true;
         setExpr('laugh');
         if (youWon){
+          hgptoDance();
           gComment(pick(GAME_LINES.youWin), 'joke');
           /* Lot indispensable : victoire partagée à la fin du jeu caché,
              1 fois par session (même drapeau que les liens de réponse). */
@@ -3087,7 +3186,7 @@ export function initHgpto() {
       document.getElementById('game-quit').addEventListener('click', function(){ quitGame(false); });
       document.getElementById('card-close').addEventListener('click', function(){ quitGame(true); });
       document.getElementById('card-copy').addEventListener('click', function(){
-        var done = function(){ document.getElementById('card-copied').hidden = false; };
+        var done = function(){ document.getElementById('card-copied').hidden = false; hgptoDance(pick(DANCE_JOY_LINES)); };
         if (navigator.clipboard && navigator.clipboard.writeText){
           navigator.clipboard.writeText(shareText).then(done, function(){ fallbackCopy(done); });
         } else {
@@ -3104,6 +3203,142 @@ export function initHgpto() {
         ta.remove();
       }
       document.getElementById('qa-play').addEventListener('click', startGame);
+
+      /* ================= LE JEU DE LA BATAILLE (26 oct. 2026) ==========
+         Cartes, domaine public, 2 joueurs. 52 cartes, partage 26/26
+         Fisher-Yates, une manche à la fois au rythme du visiteur.
+         SANS mise, SANS points, SANS score conservé (ni localStorage
+         ni sessionStorage pour un résultat) : les nombres affichés
+         ne sont que l'état de la partie en cours, session seulement.
+         Une seule proposition de rejouer ; un « Non merci » la ferme
+         pour la session. Pause / Fermer interrompent proprement. */
+      var BATAILLE = null, batailleRounds = 0, batailleNoReplay = false, bataillePanel = null;
+      var BATAILLE_VALEURS = { 11: 'Valet', 12: 'Dame', 13: 'Roi', 14: 'As' };
+      var BATAILLE_COULEURS = ['\u2660', '\u2665', '\u2666', '\u2663'];
+      function cardName(c){ return (BATAILLE_VALEURS[c.v] || String(c.v)) + ' de ' + BATAILLE_COULEURS[c.s]; }
+      function buildBataillePanel(){
+        if (bataillePanel) return;
+        var layer = document.getElementById('botlayer');
+        if (!layer) return;
+        var d = document.createElement('div');
+        d.className = 'bataille-panel'; d.hidden = true;
+        d.innerHTML = '<h3 style="margin:0 0 4px;font-size:16px">La Bataille</h3>'
+          + '<div class="bataille-cards"><div class="bataille-card"><span>Toi</span><b id="bataille-you-card">?</b><span id="bataille-you-count"></span></div>'
+          + '<div class="bataille-card"><span>HGPTO</span><b id="bataille-bot-card">?</b><span id="bataille-bot-count"></span></div></div>'
+          + '<p id="bataille-status" style="margin:4px 0 8px"></p>'
+          + '<div class="bataille-btns" id="bataille-actions"><button type="button" id="bataille-reveal">R\u00e9v\u00e9ler la manche</button>'
+          + '<button type="button" id="bataille-stop">Arr\u00eater la partie</button></div>'
+          + '<div class="bataille-btns" id="bataille-replay" hidden><button type="button" id="bataille-yes">Oui, rejouons !</button>'
+          + '<button type="button" id="bataille-no">Non merci</button></div>'
+          + '<div class="bataille-btns" id="bataille-amical" hidden><button type="button" id="bataille-continue">Continuer quand m\u00eame</button>'
+          + '<button type="button" id="bataille-arret">Arr\u00eater ici</button></div>';
+        layer.appendChild(d);
+        bataillePanel = d;
+        document.getElementById('bataille-reveal').addEventListener('click', function(){ batailleRound(); });
+        document.getElementById('bataille-stop').addEventListener('click', function(){ endBataille('stop'); });
+        document.getElementById('bataille-yes').addEventListener('click', function(){ startBataille(); });
+        document.getElementById('bataille-no').addEventListener('click', function(){
+          batailleNoReplay = true;
+          endBataille('stop');
+        });
+        document.getElementById('bataille-continue').addEventListener('click', function(){
+          batailleRounds = 0;
+          document.getElementById('bataille-amical').hidden = true;
+          document.getElementById('bataille-actions').hidden = false;
+          renderBataille(null, null, BATAILLE_TEXTES.tour);
+        });
+        document.getElementById('bataille-arret').addEventListener('click', function(){ endBataille('amical', true); });
+      }
+      function renderBataille(yc, bc, status){
+        if (!bataillePanel || !BATAILLE) return;
+        document.getElementById('bataille-you-card').textContent = yc ? cardName(yc) : '?';
+        document.getElementById('bataille-bot-card').textContent = bc ? cardName(bc) : '?';
+        document.getElementById('bataille-you-count').textContent = BATAILLE.you.length + ' cartes';
+        document.getElementById('bataille-bot-count').textContent = BATAILLE.bot.length + ' cartes';
+        document.getElementById('bataille-status').textContent = status || '';
+      }
+      function startBataille(){
+        lastInteract = Date.now();
+        if (batailleOn) return;
+        if (!peutDivertir()) return;
+        sessClearFlag('hgpto-refus');   // demande explicite : initiative du visiteur (§4.2)
+        buildBataillePanel();
+        if (!bataillePanel) return;
+        var deck = [];
+        for (var v = 2; v <= 14; v++) for (var su = 0; su < 4; su++) deck.push({ v: v, s: su });
+        for (var i = deck.length - 1; i > 0; i--){
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = deck[i]; deck[i] = deck[j]; deck[j] = tmp;
+        }
+        BATAILLE = { you: deck.slice(0, 26), bot: deck.slice(26, 52) };
+        batailleOn = true; batailleRounds = 0;
+        catHideNow();   // Pixel se retire pendant la partie, comme au jeu caché
+        applyCostume();   // costume rangé : il joue en chandail
+        document.getElementById('bataille-actions').hidden = false;
+        document.getElementById('bataille-replay').hidden = true;
+        document.getElementById('bataille-amical').hidden = true;
+        bataillePanel.hidden = false;
+        showBubble(esc(BATAILLE_TEXTES.invite), 9000, 'talk', { now:true });
+        renderBataille(null, null, BATAILLE_TEXTES.tour);
+        logDay("jou\u00e9 \u00e0 la Bataille — session seulement");
+      }
+      function batailleRound(){
+        if (!batailleOn || !BATAILLE) return;
+        lastInteract = Date.now();
+        batailleRounds++;
+        var pot = [];
+        var yc = BATAILLE.you.shift(), bc = BATAILLE.bot.shift();
+        if (!yc || !bc){ endBataille(!yc && !bc ? 'amical' : (!yc ? 'bot' : 'you')); return; }
+        pot.push(yc, bc);
+        while (yc.v === bc.v){
+          showBubble(esc(BATAILLE_TEXTES.bataille), 6000, 'talk');
+          /* Bataille : 3 cachées + 1 visible chacun. À court de
+             cartes, on dépose tout ce qui reste, la dernière face
+             visible ; sans carte à déposer, la partie est perdue. */
+          if (BATAILLE.you.length === 0 || BATAILLE.bot.length === 0){
+            endBataille(BATAILLE.you.length === 0 && BATAILLE.bot.length === 0 ? 'amical' : (BATAILLE.you.length === 0 ? 'bot' : 'you'));
+            return;
+          }
+          var yDown = Math.min(3, BATAILLE.you.length - 1);
+          var bDown = Math.min(3, BATAILLE.bot.length - 1);
+          for (var k = 0; k < yDown; k++) pot.push(BATAILLE.you.shift());
+          for (var k2 = 0; k2 < bDown; k2++) pot.push(BATAILLE.bot.shift());
+          yc = BATAILLE.you.shift(); bc = BATAILLE.bot.shift();
+          pot.push(yc, bc);
+        }
+        var winner = yc.v > bc.v ? 'you' : 'bot';
+        BATAILLE[winner] = BATAILLE[winner].concat(pot);
+        renderBataille(yc, bc, winner === 'you' ? 'Tu ramasses les cartes !' : 'HGPTO ramasse les cartes !');
+        if (BATAILLE.you.length === 0){ endBataille('bot'); return; }
+        if (BATAILLE.bot.length === 0){ endBataille('you'); return; }
+        /* Filet : 300 manches sans vainqueur -> match amical proposé,
+           le visiteur choisit de continuer ou d'arrêter. */
+        if (batailleRounds >= 300){
+          showBubble(esc(BATAILLE_TEXTES.amical), 8000, 'talk', { now:true });
+          document.getElementById('bataille-actions').hidden = true;
+          document.getElementById('bataille-amical').hidden = false;
+          document.getElementById('bataille-status').textContent = 'Match amical ?';
+        }
+      }
+      function endBataille(result, alreadyAnnounced){
+        batailleOn = false;
+        applyCostume();
+        if (bataillePanel) bataillePanel.hidden = true;
+        if (result === 'you' && !alreadyAnnounced) showBubble(esc(BATAILLE_TEXTES.winYou), 8000, 'talk', { now:true });
+        else if (result === 'bot' && !alreadyAnnounced) showBubble(esc(BATAILLE_TEXTES.winBot), 8000, 'talk', { now:true });
+        else if (result === 'amical' && !alreadyAnnounced) showBubble(esc(BATAILLE_TEXTES.amical), 8000, 'talk', { now:true });
+        BATAILLE = null;
+        /* Une seule proposition de rejouer ; un « Non merci » la
+           ferme pour la session (batailleNoReplay). Un arrêt en
+           cours de partie n'en propose aucune. */
+        if ((result === 'you' || result === 'bot' || result === 'amical') && !batailleNoReplay && bataillePanel){
+          bataillePanel.hidden = false;
+          document.getElementById('bataille-actions').hidden = true;
+          document.getElementById('bataille-amical').hidden = true;
+          document.getElementById('bataille-replay').hidden = false;
+          document.getElementById('bataille-status').textContent = BATAILLE_TEXTES.rejouer;
+        }
+      }
 
       /* ================= VOIX RÉELLE, LECTURE, FLASH INFO, HÉLIUM =================
          Réglages de SESSION seulement (rien n'est conservé entre visites) :
@@ -3657,6 +3892,10 @@ export function initHgpto() {
         }
       }
       function mgEndRound(){
+        /* Danse de joie (26 oct. 2026) : manche gagnée par le visiteur
+           seulement — ni égalité, ni manche d'HGPTO. Pas de bulle ici :
+           mgPop a déjà parlé. */
+        if (MG.winner === 'you') hgptoDance();
         mgSession.rounds++;
         if (MG.winner === 'you') mgSession.you++;
         else if (MG.winner === 'bot') mgSession.bot++;
@@ -4124,7 +4363,7 @@ export function initHgpto() {
         showBubble("Revanche ! Même ciel, mêmes mouettes — on avance !", 4600, 'joke');
       });
       document.getElementById('mg-card-copy').addEventListener('click', function(){
-        var done = function(){ document.getElementById('mg-card-copied').hidden = false; };
+        var done = function(){ document.getElementById('mg-card-copied').hidden = false; hgptoDance(pick(DANCE_JOY_LINES)); };
         if (navigator.clipboard && navigator.clipboard.writeText){
           navigator.clipboard.writeText(mgShareText).then(done, function(){ fallbackCopyText(mgShareText, done); });
         } else {
@@ -4360,6 +4599,112 @@ export function initHgpto() {
         else setTimeout(landed, reduced ? 80 : 640);
       }
       btnKibble.addEventListener('click', function(){ throwKibble(); });
+      if (btnFleur) btnFleur.addEventListener('click', function(){ doFleur(); });
+      if (btnPixelJeu) btnPixelJeu.addEventListener('click', function(){ doPixelJeu(); });
+      if (btnBataille) btnBataille.addEventListener('click', function(){ startBataille(); });
+      /* ---------- Scènes de vie quotidienne (26 oct. 2026) ----------
+         Fleur + Pixel, après throwKibble (même pattern : élément créé
+         une fois, animation d'arc, bulles, session seulement). */
+      var botLayerEl = document.getElementById('botlayer');
+      var fleurEl = document.createElement('div');
+      fleurEl.className = 'hgpto-fleur'; fleurEl.setAttribute('aria-hidden', 'true'); fleurEl.hidden = true;
+      fleurEl.innerHTML = '<svg viewBox="0 0 40 58" width="40" height="58"><path d="M20 58 C20 44 20 36 20 28" fill="none" stroke="#3f7d5d" stroke-width="3" stroke-linecap="round"/><path d="M20 44 Q10 40 6 32 Q16 34 20 40" fill="#3f7d5d"/><g fill="#f6eddd" stroke="#b97f24" stroke-width="1.6"><ellipse cx="20" cy="12" rx="6" ry="9"/><ellipse cx="20" cy="12" rx="6" ry="9" transform="rotate(60 20 12)"/><ellipse cx="20" cy="12" rx="6" ry="9" transform="rotate(120 20 12)"/><ellipse cx="20" cy="12" rx="6" ry="9" transform="rotate(180 20 12)"/><ellipse cx="20" cy="12" rx="6" ry="9" transform="rotate(240 20 12)"/><ellipse cx="20" cy="12" rx="6" ry="9" transform="rotate(300 20 12)"/></g><circle cx="20" cy="12" r="5" fill="#d89532"/></svg>';
+      if (botLayerEl) botLayerEl.appendChild(fleurEl);
+      var peloteEl = document.createElement('div');
+      peloteEl.className = 'hgpto-pelote'; peloteEl.setAttribute('aria-hidden', 'true'); peloteEl.hidden = true;
+      peloteEl.innerHTML = '<svg viewBox="0 0 34 34" width="34" height="34"><circle cx="17" cy="17" r="14" fill="#e2543e" stroke="#2b2118" stroke-width="2"/><path d="M4 14 Q17 8 30 12 M5 22 Q17 16 29 21" fill="none" stroke="#fffaf0" stroke-width="2"/></svg>';
+      if (botLayerEl) botLayerEl.appendChild(peloteEl);
+      var fleurBusy = false, lastFleurIdx = -1;
+      function doFleur(auto){
+        lastInteract = Date.now();
+        if (fleurBusy) return;
+        if (!peutDivertir()) return;
+        /* Gardes fleur : jamais en vendeur, jamais la nuit, jamais
+           sur route sensible, max 1/session. Le refus d'achat ne
+           bloque que la proposition AUTOMATIQUE (moment calme) : une
+           fleur demandée explicitement est l'initiative du visiteur,
+           elle efface le drapeau (règle §4.2) et passe. */
+        if (!auto) sessClearFlag('hgpto-refus');
+        if (auto && sessFlag('hgpto-refus')) return;
+        if (hgMode === 'vendeur' || isNight() || isSensitiveRoute()) return;
+        if (sessFlag('hgpto-fleur-donnee')){ showBubble(esc(FLEUR_DEJA), 6000, 'talk'); return; }
+        fleurBusy = true;
+        var startX = Math.max(6, Math.min(vw() - 40, x + botW() * 0.72));
+        fleurEl.style.left = startX + 'px';
+        fleurEl.style.opacity = '1'; fleurEl.hidden = false;
+        var fi = Math.floor(Math.random() * FLEUR_LINES.length);
+        if (FLEUR_LINES.length > 1 && fi === lastFleurIdx) fi = (fi + 1) % FLEUR_LINES.length;
+        lastFleurIdx = fi;
+        try {
+          fleurEl.animate([
+            { transform: 'translate(0px, 0px)' },
+            { transform: 'translate(14px, -46px)', offset: 0.55 },
+            { transform: 'translate(26px, 0px)' }
+          ], { duration: reduced ? 60 : 620, easing: 'ease-out', fill: 'forwards' });
+        } catch(e){}
+        showBubble(esc(FLEUR_LINES[fi]), 8000, 'talk');
+        sessSetFlag('hgpto-fleur-donnee');   // la fleur reste affichée, session seulement
+        logDay("offert une fleur au visiteur — cadeau gratuit, sans contrepartie");
+        setTimeout(function(){ fleurBusy = false; }, reduced ? 80 : 640);
+      }
+      var pixelJeuBusy = false, lastPixelIdx = -1, lastScratch = false;
+      function doPixelJeu(){
+        lastInteract = Date.now();
+        if (pixelJeuBusy) return;
+        if (!peutDivertir()) return;
+        sessClearFlag('hgpto-refus');   // demande explicite : initiative du visiteur (§4.2)
+        /* Gardes Pixel : on ne dérange ni une consoleuse ni une dormeuse. */
+        if (catVisible && catState === 'console'){ showBubble(esc(PIXEL_JEU_CONSOLE), 6000, 'talk'); return; }
+        if (catVisible && catState === 'sleep'){ showBubble(esc(PIXEL_JEU_DODO), 6000, 'talk'); return; }
+        pixelJeuBusy = true;
+        var wasAbsent = !catVisible;
+        if (wasAbsent) summonCat('goto');
+        showBubble(esc(PIXEL_JEU_ARRIVEE), 5000, 'talk');
+        var bonds = 3 + (Math.random() < 0.5 ? 1 : 0), step = 0;
+        function bond(){
+          if (paused || isHidden || batailleOn){ pixelJeuBusy = false; peloteEl.style.opacity = '0'; peloteEl.hidden = true; return; }
+          if (step >= bonds){ finishPixelJeu(); return; }
+          var px = Math.max(10, Math.min(vw() - 50, catX + CAT_W * 0.5 + (Math.random() * 60 - 30)));
+          peloteEl.style.left = px + 'px';
+          peloteEl.style.opacity = '1'; peloteEl.hidden = false;
+          var pi = Math.floor(Math.random() * PIXEL_JEU_LINES.length);
+          if (PIXEL_JEU_LINES.length > 1 && pi === lastPixelIdx) pi = (pi + 1) % PIXEL_JEU_LINES.length;
+          lastPixelIdx = pi;
+          showBubble(esc(PIXEL_JEU_LINES[pi]), 5200, 'talk');
+          try {
+            peloteEl.animate([
+              { transform: 'translate(0px, 0px)' },
+              { transform: 'translate(8px, -18px)', offset: 0.5 },
+              { transform: 'translate(16px, 0px)' }
+            ], { duration: reduced ? 60 : 600, easing: 'ease-out', fill: 'forwards' });
+          } catch(e){}
+          catMode = 'goto';
+          catGo(px - CAT_W / 2 + 6, 200, function(){ step++; setTimeout(bond, reduced ? 80 : 650); });
+        }
+        function finishPixelJeu(){
+          peloteEl.style.opacity = '0';
+          setTimeout(function(){ peloteEl.hidden = true; }, 380);
+          /* Gag graffigne : 1 fois sur 4 environ, jamais deux fois de suite. */
+          if (Math.random() < 0.25 && !lastScratch){
+            lastScratch = true; setExpr('laugh');
+            if (scratchEl){ scratchEl.hidden = false; setTimeout(function(){ scratchEl.hidden = true; }, 1200); }
+            showBubble(esc(PIXEL_JEU_GRAFFIGNE), 7000, 'talk');
+            setTimeout(function(){ showBubble(esc(PIXEL_JEU_FIN), 7000, 'talk'); endPixelJeu(); }, 7200);
+          } else {
+            lastScratch = false;
+            showBubble(esc(PIXEL_JEU_FIN), 7000, 'talk');
+            endPixelJeu();
+          }
+        }
+        function endPixelJeu(){
+          pixelJeuBusy = false;
+          logDay("joué avec Pixel — pelote, ronrons, session seulement");
+          if (!catVisible) return;
+          if (Math.random() < 0.5){ catMode = 'follow'; catGo(catBesideX(), 68, catArrivedFollow); }
+          else catLeave();
+        }
+        setTimeout(bond, wasAbsent ? 900 : 300);
+      }
       /* Elle le console : quand il pleure ou désespère, elle vient se coucher près de lui */
       function catConsole(){
         if (gameOn) return;
@@ -4964,6 +5309,7 @@ export function initHgpto() {
           nb.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
           nb.addEventListener('click', function(){
             suggOff[suggKey(p)] = 1;
+            sessSetFlag('hgpto-refus');   // règle §4.2 : aucun divertissement proposé après un refus
             hideBubble();
             setExpr('happy');
             showBubble("Bien correct ! Je ne t'en reparlerai pas. Je reste dans le coin si tu as besoin d'autre chose.", 6000, 'talk');
@@ -5048,6 +5394,7 @@ export function initHgpto() {
           nb.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
           nb.addEventListener('click', function(){
             if (suggPageOff.indexOf(s.id) === -1){ suggPageOff.push(s.id); saveSet('hgpto-sugg-off', suggPageOff); }
+            sessSetFlag('hgpto-refus');   // règle §4.2 : aucun divertissement proposé après un refus
             hideBubble();
             setExpr('happy');
             showBubble("Bien correct ! Je ne t'en reparlerai pas. Je reste dans le coin si tu as besoin d'autre chose.", 6000, 'talk');
@@ -5149,6 +5496,7 @@ export function initHgpto() {
           else c = '';
         }
         if (gameOn) c = '';
+        if (batailleOn) c = '';   // Bataille : il joue en chandail, comme au jeu caché
         bot.setAttribute('data-costume', c || '');
       }
       setInterval(function(){

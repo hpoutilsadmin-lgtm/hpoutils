@@ -31,6 +31,8 @@ export function ShareButton({
     if (typeof nav.share === "function") {
       try {
         await nav.share({ title, text: text ?? title, url });
+        // Partage natif RÉUSSI (pas une annulation) : HGPTO peut danser.
+        window.dispatchEvent(new CustomEvent("hgpto:share-success"));
         return;
       } catch (err) {
         // Annulation par le visiteur : on s'arrête là, sans repli.
@@ -38,8 +40,10 @@ export function ShareButton({
       }
     }
 
+    let copyOk = false;
     try {
       await navigator.clipboard.writeText(url);
+      copyOk = true;
     } catch {
       const ta = document.createElement("textarea");
       ta.value = url;
@@ -48,13 +52,16 @@ export function ShareButton({
       document.body.appendChild(ta);
       ta.select();
       try {
-        document.execCommand("copy");
+        copyOk = document.execCommand("copy");
       } catch {
         // Presse-papiers indisponible : le lien reste dans la barre d'adresse.
       }
       document.body.removeChild(ta);
     }
     setCopied(true);
+    // Copie de lien RÉUSSIE seulement : la danse ne part pas sur un échec.
+    // (Le libellé « Lien copié ! » préexistant, lui, s'affiche comme avant.)
+    if (copyOk) window.dispatchEvent(new CustomEvent("hgpto:share-success"));
     timer.current = window.setTimeout(() => setCopied(false), 2600);
   }
 
