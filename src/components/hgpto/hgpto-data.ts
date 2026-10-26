@@ -74,7 +74,7 @@ export const JOKES = [
          (lecture → livres, jeu → jeux, bricolage → kits, perché → ateliers),
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
-        { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — montre ça à quelqu'un, vous allez rire et réfléchir !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
+        { t:"Une petite partie de LA BANQUE ? C'est gratuit — tu gères une banque alimentaire sur une saison de 8 semaines, et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
         { t:"Envie de jouer en famille ? Il y a 36 jeux gratuits, sans inscription, qui t'attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 JEUX" }
       ];
 export const BOOK_PITCHES = [
@@ -89,7 +89,7 @@ export const ATELIER_PITCHES = [
         { t:"D'ici, je vois même les ateliers : 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $).", u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" }
       ];
 export const PITCHES = [
-        { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
+        { t:"Une petite partie de LA BANQUE ? C'est gratuit — tu gères une banque alimentaire sur une saison de 8 semaines, et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
         { t:"Envie de jouer en famille ? Il y a 36 jeux gratuits, sans inscription, qui t'attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 JEUX" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
@@ -341,10 +341,10 @@ export const KB = [
           a:"Recettes HP : 629 recettes gratuites, écrites de zéro. Tu tapes les ingrédients que tu as, il te propose quoi cuisiner — portions de 1 à 300 et liste d'épicerie incluses !",
           u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP" },
         { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
-          a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, ça prend deux minutes, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
+          a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, tu gères une banque alimentaire sur une saison de 8 semaines, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Vous avez quels jeux ?", s:"36 JEUX",
-          a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille ! Et « Le Panier Solidaire », le jeu de la banque alimentaire, aussi dans En cuisine.",
+          a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 16 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"C'est quoi, IGLOO ?", s:"GRATUIT !",
           a:"IGLOO — La guerre des igloos : une bataille de boules de neige en arène ! Tu déploies tes cartes, tu défends ton igloo et tu fais tomber celui d'en face — et chaque bataille tire une loi du quartier au hasard. Campagne de 10 batailles, parties d'environ 3 minutes. Gratuit !",
@@ -365,7 +365,7 @@ export const KB = [
           a:"Tapinoue : les aventures d'un petit lapin et de sa famille, en 4 tableaux qui se débloquent un à un — la rencontre, le terrier à deux, le potager de M. Grincheux et le renard qui rôde. La progression se sauvegarde. Gratuit !",
           u:"https://www.hp-outils.com/apps/tapinoue/tapinoue-v2.0.html", l:"Jouer à Tapinoue" },
         { q:"C'est quoi, Ton chum frotte son char ?", s:"GRATUIT !",
-          a:"Ton chum frotte son char plus que toi ! : le jeu d'esthétique automobile. Tu choisis un véhicule et tu lui fais le vrai job du bout des doigts — roues, lavage, rinçage, argile, cire, intérieur, vitres — avec des sons ASMR satisfaisants. 4 véhicules, 8 étapes. Gratuit — mets le son !",
+          a:"Ton chum frotte son char plus que toi ! : le jeu d'esthétique automobile. Tu choisis un véhicule et tu lui fais le vrai job du bout des doigts — roues, lavage, rinçage, argile, polissage, cire, intérieur, vitres — avec des sons ASMR satisfaisants. 4 véhicules, 8 étapes. Gratuit — mets le son !",
           u:"https://www.hp-outils.com/apps/ton-chum-frotte-son-char/ton-chum-frotte-son-char-v2.0.html", l:"Frotter un char" },
         { q:"C'est quoi, Conception de molécules 3D ?", s:"GRATUIT !",
           a:"Conception de molécules 3D : un jeu de labo pour explorer l'ADN et fabriquer des remèdes, avec des missions sur de vraies molécules — aspirine, caféine, insuline… 4 niveaux, d'enfant à très avancé — un des jeux gratuits du site !",
@@ -392,7 +392,7 @@ export const KB = [
           a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès à des astuces que les autres n'ont pas. Honnêtement ? L'inscription est ouverte : écris à la direction pour t'inscrire — un humain te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient.",
           u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
         { q:"Combien y a-t-il de jeux sur le site ?", s:"36 JEUX",
-          a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille ! Et « Le Panier Solidaire », le jeu de la banque alimentaire, aussi dans En cuisine.",
+          a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 16 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Est-ce que ça marche sans internet ?", s:"HORS LIGNE",
           a:"Oui : une fois la page déjà ouverte, elle fonctionne sans internet — pratique quand les données sont comptées." },
@@ -482,7 +482,7 @@ export const KB = [
         { q:"Lis-moi ça", s:"JE TE LIS ÇA", fn:"read",
           a:"" },
         { q:"Tes jeux approuvés, à toi ?", s:"MES TAMPONS",
-          a:"Mes deux approbations officielles : Montgolfière — celui-là, je le joue avec toi, quand tu veux ! — et Trio élément. Mes verdicts sont écrits dans mon panneau, juste sous les questions." },
+          a:"Mes deux approbations officielles : Montgolfière — celui-là, je le joue avec toi, quand tu veux ! — et Trio des Éléments. Mes verdicts sont écrits dans mon panneau, juste sous les questions." },
         { q:"C'est quoi, ton gag d'hélium ?", s:"HIHI",
           a:"Des fois, je respire un peu trop près de ma balloune… et ma voix devient toute petite, comme un écureuil ! Ça dure une phrase ou deux, je ris de moi, puis je reviens à ma voix normale. Tu peux fermer le gag avec le bouton « Hélium » dans ce panneau." },
         { q:"C'est qui, HP ?", s:"MON HUMAIN",
@@ -703,7 +703,7 @@ export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
 export const PAGE_SUGGESTION_FALLBACK = "Pour son histoire, je ne l'ai pas dans mes notes — écris à la direction humaine, un humain de l'équipe te répondra sous 3 jours ouvrables.";
 export const PAGE_SUGGESTIONS = {
         '/': { id:'sugg-banque', titre:"LA BANQUE, le jeu de la banque alimentaire",
-          accroche:"Gratuit, deux minutes, et ça fait réfléchir en s'amusant.",
+          accroche:"Gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant.",
           marche:"Va sur /jeux, choisis la tuile « LA BANQUE — le jeu de la banque alimentaire », et joue : tu gères une banque alimentaire sur une saison de 8 semaines — dons, tri, cuisine et service aux familles nommées, qui reviennent semaine après semaine.",
           sert:"Comprendre de l'intérieur comment fonctionne une vraie banque alimentaire. Ton score, c'est les familles nourries.",
           histoire:"C'est notre jeu sur la banque alimentaire : jouer pour comprendre, donner pour vrai.",
