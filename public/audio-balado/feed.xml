@@ -3,7 +3,7 @@
   <channel>
     <title>Futur simple</title>
     <link>https://www.hp-outils.com/balado</link>
-    <description>Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode chaque lundi, direct et sans jargon.</description>
+    <description>Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode quand ils sont prêts, direct et sans jargon.</description>
     <language>fr</language>
     <copyright>HP Outils</copyright>
     <itunes:author>HP Outils</itunes:author>
@@ -12,10 +12,20 @@
       <itunes:name>HP Outils</itunes:name>
       <itunes:email>hpoutils.admin@gmail.com</itunes:email>
     </itunes:owner>
-    <itunes:summary>Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode chaque lundi, direct et sans jargon.</itunes:summary>
+    <itunes:summary>Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. Un épisode quand ils sont prêts, direct et sans jargon.</itunes:summary>
+    <itunes:image href="https://www.hp-outils.com/images/futur-simple-pochette-v4.jpg" />
     <itunes:explicit>no</itunes:explicit>
     <itunes:category text="Technology" />
     <atom:link href="https://www.hp-outils.com/audio-balado/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Futur simple, épisode 1 officiel</title>
+      <description>Premier épisode officiel de Futur simple — la première fois qu'on essaie cela. Léa et Marc regardent ce que l'IA change pour vrai, dans la vraie vie : l'aide aux petites entreprises d'ici, un robot qui prépare les rendez-vous médicaux, des dettes médicales effacées sans formulaire, et un appel d'auditrice qui parle des jeux HP. Le bon comme le mauvais, sans jargon : l'outil prépare, l'humain décide. Voix IA : Léa et Marc. Publié le 26 octobre 2026.</description>
+      <pubDate>Mon, 26 Oct 2026 00:00:00 -0400</pubDate>
+      <enclosure url="https://www.hp-outils.com/audio-balado/episode-1-officiel.mp3" length="10063038" type="audio/mpeg" />
+      <guid isPermaLink="true">https://www.hp-outils.com/audio-balado/episode-1-officiel.mp3</guid>
+      <itunes:duration>419</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>Épisode 2 — Futur simple</title>
       <description>Fraudes vocales et deepfakes : comment se protéger à l'ère de l'IA. Publié le 19 octobre 2026. Le rendez-vous officiel du lundi démarre le 26 octobre 2026.</description>
