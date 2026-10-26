@@ -92,6 +92,11 @@ function Page() {
         aperçu du moteur Course (Caribou Run) : le jeu livré portera votre nom
         et vos couleurs, pour toujours.
       </p>
+      <p style={{ fontSize: 18, lineHeight: 1.55, maxWidth: 640 }}>
+        Un petit jeu qui porte votre nom et vos couleurs, que vos clients
+        peuvent jouer et partager s&apos;ils en ont envie, au lieu d&apos;une
+        publicité qu&apos;ils subissent.
+      </p>
       <p style={{ maxWidth: 640, lineHeight: 1.55 }}>
         <strong>Aperçu gratuit, sans engagement, sans compte.</strong> Votre logo
         est lu ici, dans votre navigateur — il ne quitte jamais votre appareil
