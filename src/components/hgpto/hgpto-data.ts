@@ -152,7 +152,7 @@ export const HUGO_LINES = [
         "On ment jamais. Même pas pour vendre. Surtout pas pour vendre.",
         "Petit budget, grande dignité. Ça, ça ne se négocie pas.",
         "T'as un surplus de soupe ? Invite un voisin. Ça goûte toujours meilleur à deux.",
-        "LA BANQUE, notre jeu sur la banque alimentaire : jouer pour comprendre, donner pour vrai.",
+        "LA BANQUE, notre jeu sur la banque alimentaire : jouer pour comprendre.",
         "On avance ! Un petit pas à la fois, mais on avance.",
         /* Phrases dictées par la direction, 24 oct. 2026 — ses mots, verbatim (« Hey », jamais « Heil »). */
         "c'est la vie qui passe, tes jeunes tes vieux, c'est un cycle tout tourne, c'est ça qui est ça l'ami, ça va dans l'sens que ça va, chat va tu bien toi ? Va écouter empathie la série, trop bon !",
@@ -558,7 +558,7 @@ export const HUGO_SONGS = [
          (base de faits du site), gratuit d'abord, dose faible — reco nº 8 :
          jamais plus d'une invitation par séquence. */
 export const CHOIX_LINES = [
-        { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Deux minutes, et ça fait réfléchir en s'amusant.", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Une saison de 8 semaines, et ça fait réfléchir en s'amusant.", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tape ce qu'il y a dans ton frigo, il te trouve un souper.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : RELÈVE, un jeu gratuit sur /jeux. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : « Futur simple », le balado d'HP Outils — de nouveaux épisodes quand ils sont prêts, sans jargon.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"MON CHOIX ♥" },
@@ -706,7 +706,7 @@ export const PAGE_SUGGESTIONS = {
           accroche:"Gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant.",
           marche:"Va sur /jeux, choisis la tuile « LA BANQUE — le jeu de la banque alimentaire », et joue : tu gères une banque alimentaire sur une saison de 8 semaines — dons, tri, cuisine et service aux familles nommées, qui reviennent semaine après semaine.",
           sert:"Comprendre de l'intérieur comment fonctionne une vraie banque alimentaire. Ton score, c'est les familles nourries.",
-          histoire:"C'est notre jeu sur la banque alimentaire : jouer pour comprendre, donner pour vrai.",
+          histoire:"C'est notre jeu sur la banque alimentaire : jouer pour comprendre.",
           pourquoi:"Gratuit, sans inscription — pour commencer, c'est le plus simple.",
           mots:['banque'], u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         '/jeux': { id:'sugg-releve', titre:"RELÈVE — Chapitre 1 : Surchauffe",
@@ -718,7 +718,7 @@ export const PAGE_SUGGESTIONS = {
           mots:['releve'], u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         '/livres-pdf': { id:'sugg-enfants', titre:"Le livre « Les enfants cuisinent pour faire plaisir »",
           accroche:"10 $, en PDF — cuisiner en famille, pour le plaisir, pas la performance.",
-          marche:"Sur /livres-pdf, choisis le livre et paie par carte : le PDF se télécharge tout de suite après le paiement — et si le paiement ne passe pas, écris à la direction humaine.",
+          marche:"Sur /livres-pdf, choisis le livre : son achat est en attente de confirmation — il n'est pas vendable pour l'instant. En attendant, écris à la direction humaine, un humain te répondra sous 3 jours ouvrables.",
           sert:"Cuisiner en famille, avec des recettes pensées pour les petits chefs. Un projet doux pour transmettre le plaisir, pas la performance.",
           histoire:"C'est notre livre complet de recettes à faire en famille.",
           pourquoi:"10 $, aucune taxe ajoutée — et cuisiner ensemble, c'est des souvenirs qui se mangent.",
