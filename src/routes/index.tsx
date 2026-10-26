@@ -89,6 +89,7 @@ function Index() {
           <p className="lead">
             Des jeux gratuits, des recettes et des outils web sans compte — et des kits
             PDF à petit prix, des livres et des ateliers, créés au Québec.
+            Des outils éducatifs gratuits pour les familles de Terrebonne, au Québec.
           </p>
           <p style={{ margin: "0 0 28px", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
             Écrit par un humain, accéléré par l'IA. On le dit toujours.
