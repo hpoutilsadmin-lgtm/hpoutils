@@ -214,7 +214,7 @@ export const EMPATHY = [
       ];
       /* Nouveautés du site (base de faits) : annoncées une fois, sans insister. */
 export const NEWS_LINES = [
-        "Nouveauté du coin : RELÈVE, notre série d'histoires dont tu choisis la suite, vient de commencer — c'est gratuit !",
+        "Nouveauté du coin : RELÈVE, un jeu gratuit sur /jeux, vient de commencer — c'est gratuit !",
         "Le savais-tu ? « Futur simple », notre balado : de nouveaux épisodes, annoncés ici dès leur parution, quand ils sont prêts. Léa et Marc jasent d'IA, sans jargon."
       ];
 export const JANITOR = [
@@ -560,7 +560,7 @@ export const HUGO_SONGS = [
 export const CHOIX_LINES = [
         { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Deux minutes, et ça fait réfléchir en s'amusant.", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tape ce qu'il y a dans ton frigo, il te trouve un souper.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
-        { t:"Mon choix du moment : RELÈVE, notre série d'histoires dont tu choisis la suite. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : RELÈVE, un jeu gratuit sur /jeux. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : « Futur simple », le balado d'HP Outils — de nouveaux épisodes quand ils sont prêts, sans jargon.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment, côté lecture : le livre « Les enfants cuisinent pour faire plaisir » (10 $) — cuisiner en famille, c'est des souvenirs qui se mangent.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"MON CHOIX ♥" }
       ];
@@ -621,7 +621,7 @@ export const BESOIN_SUGGESTIONS = [
          partie de la vente version HP. */
 export const ALT_LINES = {
         kits:   { t:"Et si le budget dit « pas maintenant », c'est bien correct aussi : les recettes et les jeux sont gratuits, sans inscription. Les kits seront là quand tu voudras.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux gratuits", s:"GRATUIT !" },
-        livres: { t:"Et côté gratuit, pour patienter : « Futur simple », notre balado (de nouveaux épisodes quand ils sont prêts), et RELÈVE, l'histoire dont tu choisis la suite — le chapitre 1 est gratuit.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"GRATUIT !" },
+        livres: { t:"Et côté gratuit, pour patienter : « Futur simple », notre balado (de nouveaux épisodes quand ils sont prêts), et RELÈVE, un jeu gratuit sur /jeux — le chapitre 1 est gratuit.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"GRATUIT !" },
         ateliers:{ t:"Et pour commencer sans payer : Recettes HP — 629 recettes gratuites. Tu tapes tes ingrédients, il te propose quoi cuisiner.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"GRATUIT !" }
       };
       /* Le bundle, dit vrai : déclenché quand le visiteur s'intéresse aux
@@ -710,11 +710,11 @@ export const PAGE_SUGGESTIONS = {
           pourquoi:"Gratuit, sans inscription — pour commencer, c'est le plus simple.",
           mots:['banque'], u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         '/jeux': { id:'sugg-releve', titre:"RELÈVE — Chapitre 1 : Surchauffe",
-          accroche:"Notre série d'histoires dont tu choisis la suite — le chapitre 1 est gratuit.",
+          accroche:"Un jeu gratuit sur /jeux — le chapitre 1 est gratuit.",
           marche:"Sur /jeux, choisis la tuile « RELÈVE — Chapitre 1 : Surchauffe », et joue : à toi de choisir la suite de l'histoire.",
           sert:"Une aventure d'enquête 3D, en français ou en anglais : tu mènes l'enquête en t'amusant.",
           histoire:"À Percé, Grizz, ourson policier de Faune-Secours, et NID à la radio cherchent la cause d'une surchauffe qui menace la faune.",
-          pourquoi:"Le chapitre 1 est gratuit, et la série vient de commencer — c'est le moment de la découvrir.",
+          pourquoi:"Le chapitre 1 est gratuit, et le jeu vient de commencer — c'est le moment de le découvrir.",
           mots:['releve'], u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         '/livres-pdf': { id:'sugg-enfants', titre:"Le livre « Les enfants cuisinent pour faire plaisir »",
           accroche:"10 $, en PDF — cuisiner en famille, pour le plaisir, pas la performance.",
