@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import { ShareButton } from "@/components/ShareButton";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 const FAQ = [
   {
@@ -253,7 +254,7 @@ function Page() {
               <h3>Rester en lien avec Sans Honte</h3>
               <p>Recevoir les nouveaux kits, les phrases et les textes — sans spam.</p>
             </div>
-            <a className="action-btn" href="https://tally.so/r/Pd8YeV" target="_blank" rel="noopener noreferrer">Recevoir les nouvelles Sans Honte</a>
+            <NewsletterSignup source="sans-honte" />
           </div>
         </div>
       </section>

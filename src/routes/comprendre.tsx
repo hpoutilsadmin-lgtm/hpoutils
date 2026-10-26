@@ -23,7 +23,7 @@ function Page() {
             agir avec lucidité et espérance.
           </p>
           <div className="lead-actions">
-            <a className="btn-primary" href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Découvrir le livre</a>
+            <Link className="btn-primary" to="/pdf/enjeux-humanite">Découvrir le livre</Link>
             <Link to="/contact" className="btn-ghost">Demander un extrait</Link>
           </div>
         </div>
@@ -58,7 +58,6 @@ function Page() {
           <p className="strip-intro">C’est la première étape de l’action juste.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
             <Link to="/achat/enjeux-humanite" className="btn-primary">Commander — 15 $</Link>
-            <Link to="/pdf/enjeux-humanite" className="btn-ghost">Voir la fiche du livre</Link>
           </div>
         </div>
       </section>

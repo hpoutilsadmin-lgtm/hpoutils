@@ -35,20 +35,20 @@ function Page() {
             <article className="pillar-card">
               <span className="pillar-num">01</span>
               <h3>Les enfants cuisinent</h3>
-              <p>90 min · 120 $ CAD, forfait groupe — cuisiner ensemble, apprendre et gagner en autonomie.</p>
+              <p>90 min · 190 $ CAD, forfait groupe — cuisiner ensemble, apprendre et gagner en autonomie.</p>
               <Link className="pillar-cta" to="/ateliers">Voir les ateliers →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>Hygiène & salubrité</h3>
-              <p>60 à 90 min · 120 $ CAD, forfait groupe — sensibilisation aux bons gestes du quotidien.</p>
+              <p>60 à 90 min · 150 $ CAD, forfait groupe — sensibilisation aux bons gestes du quotidien.</p>
               <Link className="pillar-cta" to="/ateliers">Voir les ateliers →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Ateliers sur mesure</h3>
               <p>Survie alimentaire, marché du travail et smoothie — adaptés à votre groupe.</p>
-              <Link className="pillar-cta" to="/ateliers">Découvrir les six ateliers et la fiche organismes &amp; écoles →</Link>
+              <Link className="pillar-cta" to="/ateliers">Découvrir les ateliers et la fiche organismes &amp; écoles →</Link>
             </article>
           </div>
         </div>

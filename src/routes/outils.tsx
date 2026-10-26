@@ -238,7 +238,7 @@ function Page() {
                 <span className="tool-tag">Bundle — 40 $ CAD, aucune taxe ajoutée</span>
                 <h3>Tous les outils pratiques</h3>
                 <p>Un seul ensemble pour réunir les fiches et outils pratiques HP.</p>
-                <a href="https://tally.so/r/A7AYGW" target="_blank" rel="noopener noreferrer">Demander le bundle →</a>
+                <Link to="/achat/sans-honte-collection">Acheter la collection →</Link>
               </article>
             </div>
           </div>
