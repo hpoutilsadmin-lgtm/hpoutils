@@ -1230,7 +1230,7 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
 // ============================================================================
 // L'entrée a été déplacée dans PRODUCTS (clé
 // hp_hyper_potentiel_cahier_pdf_10) : produit + prix créés dans Stripe
-// (mode test le 22 oct. 2026, prix réel créé le 24 oct. 2026),
+// (prix réel créé le 24 oct. 2026, en vente en réel),
  // PDF téléversé dans le bucket `pdfs` le 23 oct. 2026,
 // outil web compagnon intégré à /outils/hp-hyper-potentiel avec
 // liens croisés. Le tableau MINI_CAHIER_DRAFT ci-dessous est donc
