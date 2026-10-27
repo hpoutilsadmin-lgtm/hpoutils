@@ -163,6 +163,19 @@ function Page() {
                 </article>
               ))}
             </div>
+            <article className="tool-card" style={{ border: "2px dashed rgba(176,74,47,.5)" }}>
+              <span className="tool-tag" style={{ background: "rgba(176,74,47,.12)", color: "#b04a2f" }}>
+                🍲 Cuisine — Bientôt
+              </span>
+              <h3>Votre cuisine familiale, à vous</h3>
+              <p>
+                Ce n'est pas Recettes HP : ici, ce sont vos recettes, celles de votre
+                famille — portions recalculées, liste d'épicerie combinée, recherche
+                même avec les accents oubliés. Bientôt — vente pas encore ouverte,
+                aucun achat possible pour l'instant. Prix prévu : 5 $, aucune taxe ajoutée.
+              </p>
+              <a href="/cuisine-familiale">Voir la fiche (Bientôt) →</a>
+            </article>
             <p style={{ textAlign: "center", color: "#5a4a3f", fontSize: ".95rem", marginTop: 26 }}>
               Fait avec HP Outils — des outils pour la vraie vie.
             </p>

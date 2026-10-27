@@ -203,6 +203,17 @@ function Page() {
             {busy === "bundle" ? "Redirection…" : "Acheter le bundle — 12 $ CAD"}
           </button>
 
+          <h2>Autre chose — Crée TON histoire</h2>
+          <p>
+            Ce n’est pas la série « À toi l’histoire » : ici, c’est vous qui
+            créez votre histoire — un prénom, 1 thème parmi 4, et 2, 3 ou 4 fins.
+            Bientôt — vente pas encore ouverte, aucun achat possible pour
+            l’instant. Prix prévu : 5 $, aucune taxe ajoutée.
+          </p>
+          <p>
+            <a href="/cree-ton-histoire-a-toi">Voir la fiche « Crée TON histoire » (Bientôt)</a>
+          </p>
+
           <h2>Vous avez perdu vos liens ?</h2>
           {recoverSent ? (
             <p>
