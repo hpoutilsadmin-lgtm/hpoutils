@@ -225,7 +225,7 @@ function Page() {
             </p>
           )}
 
-          {!CHEVALIER_VENTE_ACTIVE && (
+          {CHEVALIER_VENTE_ACTIVE && (
             <p
               style={{
                 background: "#fff7e6",
@@ -234,9 +234,9 @@ function Page() {
                 padding: "12px 16px",
               }}
             >
-              Bientôt en vente : les paquets ci-dessous sont prêts, mais
-              aucun paiement n'est pris pour l'instant — la livraison
-              automatique est en cours de validation.
+              En vente : les paquets ci-dessous sont prêts — paiement en
+              réel, livraison automatique sur le même appareil et le même
+              navigateur que le jeu.
             </p>
           )}
           {erreurAchat && (
@@ -277,7 +277,7 @@ function Page() {
                             {busy === pack.id ? "Redirection…" : "Acheter"}
                           </button>
                         ) : (
-                          <span>Bientôt en vente</span>
+                          <span>En vente</span>
                         )}
                       </td>
                     </tr>
