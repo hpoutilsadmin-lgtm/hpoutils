@@ -172,7 +172,7 @@ function Index() {
               </a>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>La Boîte à outils</h3>
-                <p>8 outils gratuits, sans compte, pour le quotidien : budget, frigo, listes et plus.</p>
+                <p>8 outils gratuits, sans compte, pour le quotidien : préparer son héritage, trancher une décision, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand.</p>
                 <a className="pillar-cta" href="/boite/">Ouvrir la Boîte →</a>
               </div>
             </article>

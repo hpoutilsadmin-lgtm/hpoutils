@@ -23,7 +23,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Les recettes et les jeux sont-ils vraiment gratuits ?",
     reponse:
-      "Oui : 629 recettes gratuites en cuisine et 35 jeux gratuits, sans inscription, jouables dans ton navigateur. C'est le cœur d'HP : des outils pour la vraie vie, accessibles à tout le monde.",
+      "Oui : 629 recettes gratuites en cuisine et 36 jeux gratuits, sans inscription, jouables dans ton navigateur. C'est le cœur d'HP : des outils pour la vraie vie, accessibles à tout le monde.",
   },
   {
     question: "Pourquoi aucune taxe n'est ajoutée aux prix ?",

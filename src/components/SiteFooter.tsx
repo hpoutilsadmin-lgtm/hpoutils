@@ -8,10 +8,10 @@ export function SiteFooter() {
           <img src="/images/hp-logo-clean.png" alt="HP" className="footer-logo" />
           <p>Des outils simples<br />pour la vraie vie.</p>
           <div className="socials">
-            <span aria-label="Facebook à venir">f</span>
-            <span aria-label="Instagram à venir">◎</span>
+            <a href="https://www.facebook.com/1186804767843963" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+            <a href="https://www.instagram.com/hpoutils/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">◎</a>
             <a href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer" aria-label="YouTube">▶</a>
-            <span aria-label="TikTok à venir">♪</span>
+            <a href="https://www.tiktok.com/@hp2zl" target="_blank" rel="noopener noreferrer" aria-label="TikTok">♪</a>
           </div>
         </div>
         <div>
