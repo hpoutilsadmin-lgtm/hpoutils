@@ -116,7 +116,7 @@ export const JOKES = [
          (lecture → livres, jeu → jeux, bricolage → kits, perché → ateliers),
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
-        { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — montre ça à quelqu'un, vous allez rire et réfléchir !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
+{ t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — montre ça à quelqu'un, vous allez rire et réfléchir !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
         { t:"Envie de jouer en famille ? Il y a 36 jeux gratuits, sans inscription, qui t'attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 JEUX" }
       ];
 export const BOOK_PITCHES = [
@@ -131,7 +131,7 @@ export const ATELIER_PITCHES = [
         { t:"D'ici, je vois même les ateliers : 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $).", u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" }
       ];
 export const PITCHES = [
-        { t:"Une petite partie de LA BANQUE ? C'est gratuit, ça prend deux minutes — et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
+{ t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
         { t:"Envie de jouer en famille ? Il y a 36 jeux gratuits, sans inscription, qui t'attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 JEUX" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
@@ -412,7 +412,7 @@ export const KB = [
           a:"Recettes HP : 629 recettes gratuites, écrites de zéro. Tu tapes les ingrédients que tu as, il te propose quoi cuisiner — portions de 1 à 300 et liste d'épicerie incluses !",
           u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP" },
         { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
-          a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, ça prend deux minutes, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
+          a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Vous avez quels jeux ?", s:"36 JEUX",
           a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille ! Et « Le Panier Solidaire », le jeu de la banque alimentaire, aussi dans En cuisine.",
@@ -566,7 +566,7 @@ export const KB = [
           a:"Mon humain, c'est HP, mon créateur — il se présente ici.",
           u:"https://www.hp-outils.com/a-propos", l:"Qui est HP" },
         { q:"C'est quoi, un jeu à votre image ?", s:"29 $ À 399 $",
-          a:"Un petit jeu simple, aux couleurs et au nom d'un commerce, que ses clients jouent, partagent et retiennent — au lieu d'une pub qu'ils subissent. Quatre niveaux, le prix suit la durée de vie du jeu : Express 29 $ (prénom seulement, pour tester), Événement 199 $, Saisonnier 299 $, Permanent 399 $. Hébergement gratuit la première année, puis 29 $ par année, par jeu. Aucune taxe ajoutée.",
+          a:"Un petit jeu qui porte votre nom et vos couleurs, que vos clients peuvent jouer et partager s'ils en ont envie, au lieu d'une publicité qu'ils subissent. Quatre niveaux, le prix suit la durée de vie du jeu : Express 29 $ (prénom seulement, pour tester), Événement 199 $, Saisonnier 299 $, Permanent 399 $. Hébergement gratuit la première année, puis 29 $ par année, par jeu. Aucune taxe ajoutée.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"Je peux voir mon jeu avant d'acheter ?", s:"APERÇU GRATUIT",
           a:"Oui : sur /apercu, tu entres le nom du commerce, ses deux couleurs et son logo, et tu vois le jeu Course habillé et jouable en 30 secondes. Gratuit, sans compte, sans engagement — et ton logo est lu dans ton navigateur, il ne quitte jamais ton appareil.",
@@ -578,7 +578,16 @@ export const KB = [
           a:"Non : le 29 $ express n'est pas crédité vers un jeu supérieur. L'image de la direction : tu vas essayer un resto, tu manges peu, c'est bon, tu reviens manger beaucoup — on ne te crédite pas le premier repas test. Le test se paie ; le reste se paie ensuite.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"C'est quoi, les 4 moteurs des jeux à votre image ?", s:"4 MOTEURS",
-          a:"Quiz (2 vérités, 1 mensonge), Course (Caribou Run), Réflexes (Pop Ballons), Observation (Cherche & Trouve). Le sur-mesure est dans l'habillage, pas dans le moteur : on habille un moteur prouvé à votre image. Chaque jeu finit par un défi à envoyer à quelqu'un, et l'écran de victoire avec récompense ramène du monde en magasin — sans oublier le code QR par endroit, les jeux de saisons (Noël, Halloween, Saint-Jean) et le passeport de quartier, dont les prix groupés sont à venir.",
+          a:"Quiz (2 vérités, 1 mensonge), Course (Caribou Run), Réflexes (Pop Ballons), Observation (Cherche & Trouve). Le sur-mesure est dans l'habillage, pas dans le moteur : on habille un moteur prouvé à votre image. Chaque jeu finit par un défi à envoyer à quelqu'un, et l'écran de victoire avec récompense ramène du monde en magasin : le jeu peut inviter les joueurs à passer au comptoir, par exemple avec un écran à montrer sur place, si le commerce le décide — sans oublier le code QR par endroit, les jeux de saisons (Noël, Halloween, Saint-Jean) et le passeport de quartier, dont les prix groupés sont à venir.",
+          u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
+        { q:"HGPTO peut-il suivre mon panier d'achat ?", s:"PANIER",
+          a:"Si tu le lui demandes, oui : il peut garder un œil sur ton panier pendant que tu joues ou que tu explores, et te rappeler ce qu'il contient quand tu veux — sans jamais pousser à acheter. Et si tu préfères être tranquille, dis-le-moi, je me tasse.",
+          u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
+        { q:"HGPTO peut-il accompagner un client ?", s:"ACCOMPAGNER",
+          a:"Oui : il peut accompagner un client pas à pas — expliquer un jeu, montrer où cliquer, répondre aux questions — toujours à son rythme. Et dès qu'on lui dit non ou qu'on le ferme, il s'efface, sans insister.",
+          u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
+        { q:"HGPTO peut-il proposer des utilisations concrètes de vos outils ?", s:"OUTILS CONCRETS",
+          a:"Oui : dis-lui ce que tu veux faire — cuisiner avec ce que tu as, tenir un budget, préparer un atelier — et il te propose l'outil qui correspond, avec un exemple concret. Si ça ne te sert pas, tu passes à autre chose, sans pression.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"J'ai une autre question", s:"?",
           a:FALLBACK,
@@ -635,7 +644,7 @@ export const HUGO_SONGS = [
          (base de faits du site), gratuit d'abord, dose faible — reco nº 8 :
          jamais plus d'une invitation par séquence. */
 export const CHOIX_LINES = [
-        { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Deux minutes, et ça fait réfléchir en s'amusant.", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Une saison de 8 semaines, et ça fait réfléchir en s'amusant.", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tape ce qu'il y a dans ton frigo, il te trouve un souper.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : RELÈVE, notre série d'histoires dont tu choisis la suite. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : « Futur simple », le balado d'HP Outils — de nouveaux épisodes quand ils sont prêts, sans jargon.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"MON CHOIX ♥" },
@@ -780,7 +789,7 @@ export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
 export const PAGE_SUGGESTION_FALLBACK = "Pour son histoire, je ne l'ai pas dans mes notes — écris à la direction humaine, un humain de l'équipe te répondra sous 3 jours ouvrables.";
 export const PAGE_SUGGESTIONS = {
         '/': { id:'sugg-banque', titre:"LA BANQUE, le jeu de la banque alimentaire",
-          accroche:"Gratuit, deux minutes, et ça fait réfléchir en s'amusant.",
+          accroche:"Gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant.",
           marche:"Va sur /jeux, choisis la tuile « LA BANQUE — le jeu de la banque alimentaire », et joue : tu gères une banque alimentaire sur une saison de 8 semaines — dons, tri, cuisine et service aux familles nommées, qui reviennent semaine après semaine.",
           sert:"Comprendre de l'intérieur comment fonctionne une vraie banque alimentaire. Ton score, c'est les familles nourries.",
           histoire:"C'est notre jeu sur la banque alimentaire : jouer pour comprendre, donner pour vrai.",
