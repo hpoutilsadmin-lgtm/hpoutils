@@ -85,7 +85,7 @@ function Page() {
         pub, gratuitement.
       </p>
       <p style={P}>
-        <Link to="/apercu">Voir l&apos;aperçu gratuit (30 secondes) →</Link>
+        <Link to="/apercu">Voir l&apos;aperçu gratuit (30 secondes, moteur Course) →</Link>
         {" — "}
         <Link to="/contact">Écrire à la direction humaine →</Link>
       </p>
@@ -158,7 +158,7 @@ function Page() {
             <tr id="express">
               <td style={TD}><strong>Express 29 $ « Pour tester »</strong></td>
               <td style={TD}>Jeu d&apos;essai.</td>
-              <td style={TD}>Course seulement, prénom seulement, aucune option. Immédiat, non crédité.</td>
+              <td style={TD}>Course seulement, prénom seulement, aucune option. Sans le délai de 14 jours, non crédité.</td>
             </tr>
             <tr id="evenement">
               <td style={TD}><strong>Événement 199 $ « Pour un moment »</strong></td>
@@ -168,7 +168,7 @@ function Page() {
             <tr id="saisonnier">
               <td style={TD}><strong>Saisonnier 299 $ « Pour chaque année »</strong></td>
               <td style={TD}>Revient chaque année, payé une fois.</td>
-              <td style={TD}>Tout Événement + re-habillage chaque saison sans re-facturation + compteurs de parties par saison.</td>
+              <td style={TD}>Tout Événement + re-habillage chaque saison sans re-facturation, sur simple courriel + compteurs de parties par saison.</td>
             </tr>
             <tr id="permanent">
               <td style={TD}><strong>Permanent 399 $ « Pour toujours »</strong></td>
@@ -179,10 +179,16 @@ function Page() {
         </table>
         <div style={CALLOUT}>
           Le 29 $ express n&apos;est pas crédité vers un jeu supérieur.
-          L&apos;image : tu vas essayer un resto, tu manges peu, c&apos;est
-          bon, tu reviens manger beaucoup — on ne te crédite pas le premier
+          L&apos;image : vous essayez un resto, vous mangez peu, c&apos;est
+          bon, vous revenez manger beaucoup — on ne vous crédite pas le premier
           repas test. Le test se paie ; le reste se paie ensuite.
         </div>
+        <p style={P}>
+          1 ronde de corrections incluse (Événement, Saisonnier, Permanent) :
+          vous testez le prototype sur votre téléphone, vous demandez vos
+          ajustements une fois, on corrige, on reteste, on livre. Rien
+          n&apos;est livré sans votre oui.
+        </p>
         <p style={P}>
           Hébergement, pour tous les jeux sur mesure : gratuit l&apos;année 1,
           puis 29 $ par année, par jeu hébergé (couvre l&apos;entretien et les
@@ -190,9 +196,15 @@ function Page() {
           jamais promis.
         </p>
         <p style={P}>
+          Chaque prix se paie une seule fois : Express 29 $, Événement 199 $,
+          Saisonnier 299 $, Permanent 399 $. L&apos;hébergement s&apos;ajoute
+          ensuite (gratuit l&apos;année 1, puis 29 $ par année, par jeu
+          hébergé). Le jeu reste à vous pour toujours ; le fichier du jeu
+          vous est remis sur demande.
+        </p>
+        <p style={P}>
           <strong>Délai unique, toujours le même : sous 14 jours</strong>{" "}
-          après validation du brief, pour tous les jeux sur mesure. L&apos;express,
-          lui, est immédiat. Aucune taxe ajoutée (petit fournisseur) : le prix
+          après validation du brief, pour tous les jeux sur mesure. L&apos;express, lui, n&apos;attend pas le délai de 14 jours : il part dès réception du brief et du paiement. Aucune taxe ajoutée (petit fournisseur) : le prix
           affiché, c&apos;est le prix payé.
         </p>
         <p style={P}>
@@ -207,8 +219,7 @@ function Page() {
         <h2 style={H2}>Trois choses qui ramènent du monde.</h2>
         <p style={P}>
           Pour qui ? Les commerces locaux, tous les jours ou pour un
-          événement. Les parents : un jeu au prénom de leur enfant, livré tout
-          de suite. Les écoles, les équipes, les associations : un jeu pour
+          événement. Les parents : un jeu au prénom de leur enfant — c&apos;est l&apos;Express (Course, prénom seulement), sans le délai de 14 jours. Les écoles, les équipes, les associations : un jeu pour
           leur campagne, leur tournoi, leur levée de fonds.
         </p>
         <ul style={LI}>
@@ -228,7 +239,7 @@ function Page() {
           <li>
             <strong>Le jeu d&apos;essai à votre nom</strong> : avant même de
             parler prix, voyez un jeu habillé avec votre logo et vos
-            couleurs — <Link to="/apercu">l&apos;aperçu gratuit, 30 secondes</Link>.
+            couleurs — <Link to="/apercu">l&apos;aperçu gratuit, 30 secondes (moteur Course)</Link>.
           </li>
           <li>
             <strong>Un code QR par endroit</strong> (comptoir, sac, facture,
@@ -268,8 +279,8 @@ function Page() {
         </p>
       </section>
 
-      <section aria-label="Comment ça marche" style={BLOC}>
-        <h2 style={H2}>Comment ça marche, en 4 pas.</h2>
+      <section aria-label="Comment commander" style={BLOC}>
+        <h2 style={H2}>Comment commander, en 5 pas.</h2>
         <p style={P}>
           <strong>Rien à installer. Juste un lien.</strong>
         </p>
@@ -279,10 +290,22 @@ function Page() {
           <li>Un QR qui se génère seul.</li>
         </ul>
         <ol style={LI}>
-          <li>Petit brief.</li>
-          <li>Prototype.</li>
-          <li>Test sur VOTRE téléphone.</li>
-          <li>Livraison + kit.</li>
+          <li>Vous essayez l&apos;aperçu gratuit (30 secondes, sans compte).</li>
+          <li>Vous envoyez votre brief par courriel à hpoutils.admin@gmail.com (les 5 questions ci-dessous).</li>
+          <li>Vous recevez votre devis (prix du niveau, aucune taxe ajoutée) et votre lien de paiement sécurisé Stripe.</li>
+          <li>Vous testez le prototype sur VOTRE téléphone, puis vous dites oui (1 ronde de corrections incluse pour Événement, Saisonnier et Permanent).</li>
+          <li>Livraison par courriel : adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer).</li>
+        </ol>
+        <p style={P}>
+          Un humain de l&apos;équipe vous répond sous 3 jours ouvrables, à chaque étape.
+        </p>
+        <h3 style={H3}>Votre brief, en 5 questions :</h3>
+        <ol style={LI}>
+          <li>Quel jeu ? (Quiz, Course, Réflexes, Observation)</li>
+          <li>Pour quelle fête, quel événement ou quel usage ?</li>
+          <li>Vos couleurs et votre logo (fichier joint au courriel ; pour l&apos;aperçu, le logo est lu dans votre navigateur et n&apos;est envoyé nulle part).</li>
+          <li>Votre message en une phrase (2 ou 3 phrases sur votre métier).</li>
+          <li>Pour quelle date ? Commandez au moins 14 jours avant votre événement.</li>
         </ol>
         <p style={P}>
           <strong>Vous fournissez 4 choses</strong> : votre logo, vos couleurs,
@@ -299,18 +322,30 @@ function Page() {
         </p>
       </section>
 
+      <section aria-label="Conditions, en bref" style={BLOC}>
+        <h2 style={H2}>Conditions, en bref.</h2>
+        <p style={P}>
+          Le jeu est à vous pour toujours ; l&apos;hébergement est gratuit
+          l&apos;année 1, puis 29 $ par année et par jeu ; aucune taxe ajoutée ;
+          vous garantissez avoir le droit d&apos;utiliser les éléments de marque
+          que vous fournissez ; HP choisit ses clients (commerces et organismes
+          alignés avec ses valeurs : dignité, honnêteté, vraie vie).
+          Remboursements : voyez les Conditions de vente.
+        </p>
+      </section>
+
       <section aria-label="Accessible et honnêteté" style={BLOC}>
         <p style={P}>
           <strong>Accessible</strong> : vieux téléphones · sans compte ·
           français clair · données comptées.
         </p>
         <p style={P}>
-          Pas de données collectées, pas de jeux d&apos;argent, et HP choisit
+          Seul le nombre de parties est compté, anonymement, pour les compteurs (Saisonnier, Permanent) : aucun compte, aucune donnée personnelle. Pas de jeux d&apos;argent, et HP choisit
           ses clients : commerces et organismes alignés avec ses valeurs —
           dignité, honnêteté, vraie vie. Tout est 100 % original, jamais copié.
         </p>
         <p style={P}>
-          <Link to="/apercu">Voir l&apos;aperçu gratuit (30 secondes) →</Link>
+          <Link to="/apercu">Voir l&apos;aperçu gratuit (30 secondes, moteur Course) →</Link>
           {" — "}
           <Link to="/contact">Écrire à la direction humaine →</Link>
         </p>
