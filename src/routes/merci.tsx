@@ -5,7 +5,7 @@ import extrait from "@/assets/extrait-frigo-sans-honte.pdf.asset.json";
 export const Route = createFileRoute("/merci")({
   head: () => {
     const head = createSeoHead({
-      title: "Merci — Ton extrait gratuit Frigo Sans Honte",
+      title: "Merci — votre extrait Frigo Sans Honte | HP Outils",
       description: "Merci pour ton inscription aux nouveautés HP. Télécharge l'extrait gratuit du kit Frigo Sans Honte.",
       path: "/merci",
     });

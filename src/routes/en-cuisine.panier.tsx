@@ -11,7 +11,7 @@ export const Route = createFileRoute("/en-cuisine/panier")({
   },
   head: () => ({
     meta: [
-      { title: "Quoi faire avec ton panier de banque alimentaire ?" },
+      { title: "Votre panier de banque alimentaire | HP Outils" },
       { name: "robots", content: "noindex" },
     ],
   }),

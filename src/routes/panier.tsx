@@ -25,7 +25,7 @@ import {
 export const Route = createFileRoute("/panier")({
   head: () =>
     createSeoHead({
-      title: "Ton panier | HP Outils",
+      title: "Votre panier | HP Outils",
       description:
         "Ton panier HP Outils : livres et kits PDF, prix en $ CAD, aucune taxe ajoutée, livraison par courriel après paiement.",
       path: "/panier",

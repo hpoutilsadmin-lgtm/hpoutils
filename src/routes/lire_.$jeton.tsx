@@ -6,7 +6,7 @@ import { getTomeText } from "@/utils/tomes.functions";
 
 export const Route = createFileRoute("/lire_/$jeton")({
   head: () => createSeoHead({
-    title: "Ton tome — À toi l'histoire | HP Outils",
+    title: "Votre tome — À toi l'histoire | HP Outils",
     description: "Ton lien web personnel « À toi l'histoire ».",
     path: "/lire",
     noindex: true,
