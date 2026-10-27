@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 /* /jeux-a-votre-image — la page commerciale « Jeux à votre image ».
    Vitrine de l'offre B2B : un petit jeu simple, aux couleurs et au nom
    d'un commerce, que ses clients jouent, partagent et retiennent.
-   Révision du 25 oct. 2026 (« Applique tout », go d'Hugo) : 7 sections,
+   Révision du 25 oct. 2026 (« Applique tout », go d'Hugo) : 6 sections,
    moitié moins de mots, prix en haut, échelle en tableau compact.
    Chaque affirmation vient des documents approuvés (offre, plan, guide
    du 24 oct. 2026) : aucun chiffre non sourcé, aucune promesse, aucun
@@ -261,23 +261,6 @@ function Page() {
         </p>
       </section>
 
-      <section aria-label="Saisons et passeport de quartier" style={BLOC}>
-        <h2 style={H2}>Saisons et passeport de quartier.</h2>
-        <p style={P}>
-          <strong>Forfait saisons</strong> : Noël, Halloween et Saint-Jean à
-          un prix groupé, avec le même jeu re-habillé chaque fois. Prix groupé
-          à venir : <Link to="/contact">écrivez à la direction humaine</Link>{" "}
-          pour en parler.
-        </p>
-        <p style={P}>
-          <strong>À part, hors de l&apos;échelle</strong> : le{" "}
-          <strong>passeport de quartier</strong> — un seul jeu partagé par 4 ou
-          5 commerces voisins, où chaque commerce débloque une étape, vendu
-          en groupe, chaque commerçant fait la promotion des autres. Prix de
-          groupe à venir : <Link to="/contact">écrivez à la direction humaine</Link>{" "}
-          pour en parler.
-        </p>
-      </section>
 
       <section aria-label="Comment commander" style={BLOC}>
         <h2 style={H2}>Comment commander, en 5 pas.</h2>
