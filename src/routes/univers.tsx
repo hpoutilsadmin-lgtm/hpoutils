@@ -51,7 +51,6 @@ function Page() {
       <section className="three-pillars">
         <div className="container">
           <span className="editorial-kicker">Les 11 tomes</span>
-          <p className="strip-intro">Paiements en mode test pour l'instant — aucune vente réelle.</p>
           <h2 className="section-title">Choisissez votre histoire</h2>
           <div className="pillar-grid">
             {PAYANT_TOMES.map((tome) => (
