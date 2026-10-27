@@ -41,25 +41,22 @@ function Page() {
             <span className="mini-note">En ses mots</span>
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>Qui est HP</h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je m'appelle HP. HP Outils, c'est le projet que je construis dans la couronne nord de Montréal, Lanaudière : des jeux, des livres, des recettes et des outils concrets — « des outils pour la vraie vie ».
+              Je suis HP, et HP Outils, c'est mon travail : des outils pour la vraie vie, créés au Québec, à Terrebonne dans Lanaudière.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Marginal — je le sais, je l'assume. Je peux converser avec un itinérant, un alcoolique, un PDG, un président, un député. Pour moi, c'est la même dignité partout.
+              Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et veulent apprendre, partager et repartir. Mes outils sont faits pour ça : des outils concrets, pour des vies concrètes.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et veulent apprendre, partager et repartir. C'est pour eux que je construis. Du gratuit chaque fois que c'est possible — 36 jeux, 629 recettes, des outils web sans compte — et des prix qui respectent un petit budget quand ça ne l'est pas : 5 $ CAD le kit, aucune taxe ajoutée.
-            </p>
-            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", fontFamily: "Georgia,serif", fontStyle: "italic" }}>
-              Ma conviction, point : la dignité, c'est pas un budget, c'est un état d'esprit. Une présentation soignée au mieux de ses capacités, et ça devrait être suffisant.
+              Ici, la direction est humaine. L'IA est un outil très rapide et efficace : elle accélère le travail, elle ne le dirige pas. Je travaille avec une équipe : des humains qui décident, qui vérifient, qui répondent — et l'IA qui exécute vite ce qu'on lui confie. Rien n'est publié sans vérification humaine.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je ne sais pas coder, je ne sais pas composer, je ne sais pas devenir riche. Je sais survivre, je sais le quotidien, je sais les gens. Et sur tout ce qu'on peut connaître, je ne sais rien — mais je suis curieux de tout.
+              Les jeux, les recettes et les outils d'ici sont testés avant d'être proposés. 36 jeux gratuits, 629 recettes gratuites, des outils web gratuits sans compte — et des livres et des kits à prix petits. Si vous trouvez une erreur, écrivez-nous : un humain de l'équipe vous répond sous 3 jours ouvrables.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              C'est pour ça que j'ai créé HGPTO : un petit compagnon qui m'aide à structurer et à rester constant — et qui fait la même chose pour vous.
+              HP Outils, c'est ça : des outils simples, pour des vies réelles, faits par des humains, avec l'IA comme outil. Merci de votre visite.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je crée tout ce que vous voyez ici, avec l'IA comme outil de fabrication — la direction, les idées et les mots restent humains. Les jeux et les outils sont testés avant d'être publiés, et corrigés quand un test révèle un problème. Et je fais aussi de la musique : j'écris et j'enregistre mes propres chansons — l'album Humain imparfait et le balado Futur simple racontent le même monde, autrement.
+              — HP, HP Outils
             </p>
             <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes contrats avec vous</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
