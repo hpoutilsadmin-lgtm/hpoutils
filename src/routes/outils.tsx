@@ -5,7 +5,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/outils")({
   head: () => ({
     ...createSeoHead({
-      title: "Outils web gratuits, sans compte — budget, recettes, proches aidants | HP Outils",
+      title: "Outils gratuits pour la vraie vie, sans compte | HP Outils",
       description: "La Boîte à outils HP : budget du mois, relais des proches aidants, 629 recettes. 100 % gratuit, sans compte, et vos données restent sur votre appareil.",
       path: "/outils",
     }),
@@ -87,37 +87,6 @@ const WEB_TOOLS = [
   },
 ];
 
-
-const NEED_GROUPS = [
-  { name: "Argent", tools: [
-    { label: "Ça vaut-tu la peine ? — comparer un prix", href: "/boite/#comparateur" },
-    { label: "Le Relanceur — suivre les promesses", href: "/boite/#relanceur" },
-    { label: "Le reste du mois — budget du mois", href: "/outils-web/le-reste-du-mois.html" },
-  ]},
-  { name: "Papiers et héritage", tools: [
-    { label: "L'héritage vivant — capsules", href: "/boite/#heritage" },
-    { label: "Le décodeur de paperasse", href: "/boite/#paperasse" },
-    { label: "Démarches — la prochaine étape", href: "/boite/#demarches" },
-    { label: "Le Coffre à codes", href: "/boite/#coffre" },
-    { label: "Le Passeur de savoir", href: "/passeur-de-savoir/" },
-  ]},
-  { name: "Famille et proches", tools: [
-    { label: "On tranche ! — décider en groupe", href: "/boite/#decideur" },
-    { label: "Le Démêleur — préparer un appel", href: "/boite/#demeleur" },
-    { label: "Le relais — proches aidants", href: "/outils-web/le-relais.html" },
-    { label: "En cuisine — recettes", href: "/en-cuisine/" },
-  ]},
-  { name: "Décider et communiquer", tools: [
-    { label: "On tranche ! — décider en groupe", href: "/boite/#decideur" },
-    { label: "Le Démêleur — préparer un appel", href: "/boite/#demeleur" },
-    { label: "Le relais — cahier de transmission", href: "/outils-web/le-relais.html" },
-  ]},
-  { name: "Sécurité", tools: [
-    { label: "Le Coffre à codes", href: "/boite/#coffre" },
-    { label: "Démarches — la prochaine étape", href: "/boite/#demarches" },
-  ]},
-];
-
 const tabBarStyle: React.CSSProperties = {
   display: "flex",
   gap: 14,
@@ -182,24 +151,6 @@ function Page() {
               <h2>Outils web gratuits</h2>
               <p>Des outils 100 % gratuits, sans compte : vos données restent sur votre appareil. Les petits se font en 30 secondes ; la Boîte et la cuisine prennent le temps qu'il faut.</p>
             </header>
-            <h3 style={{ marginTop: 26 }}>Trouver un outil par besoin</h3>
-            <p>Choisissez votre besoin : chaque outil garde sa propre page et son adresse. Les outils web sont gratuits, sans compte.</p>
-            <div className="tool-grid">
-              {NEED_GROUPS.map((group) => (
-                <article className="tool-card" key={group.name}>
-                  <h3>{group.name}</h3>
-                  <ul>
-                    {group.tools.map((t) => (
-                      <li key={t.label}><a href={t.href}>{t.label} →</a></li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-            <p style={{ textAlign: "center", color: "#5a4a3f", fontSize: ".95rem", marginTop: 26 }}>
-              Voir aussi, à part : les kits PDF Sans Honte et les livres, sur <a href="/livres-pdf">/livres-pdf</a> — les outils web ci-dessus restent gratuits, sans compte ; les PDF sont vendus à part, jamais mélangés.
-            </p>
-            <h3 style={{ marginTop: 26 }}>Tous les outils web</h3>
             <div className="tool-grid">
               {WEB_TOOLS.map((tool) => (
                 <article className="tool-card" key={tool.title}>
