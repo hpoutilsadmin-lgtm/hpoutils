@@ -70,24 +70,27 @@ function validEmail(email: unknown): string {
 
 export const createTomeCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator(
-    (data: { kind: "tome"; slug: string } | { kind: "bundle"; tomes: string[] }) => {
+    (data: { kind: "tome"; slug: string; environment: StripeEnv } | { kind: "bundle"; tomes: string[]; environment: StripeEnv }) => {
+      if (data.environment !== "sandbox" && data.environment !== "live") {
+        throw new Error("Environnement invalide");
+      }
       if (data.kind === "tome") {
         const tome = getTomeBySlug(data.slug);
         if (!tome || !tome.lookupKey) throw new Error("Tome introuvable");
-        return { kind: "tome" as const, slugs: [tome.slug], lookupKeys: [tome.lookupKey] };
+        return { kind: "tome" as const, slugs: [tome.slug], lookupKeys: [tome.lookupKey], environment: data.environment };
       }
       if (data.kind === "bundle") {
         const slugs = validateBundleChoice(data.tomes);
-        return { kind: "bundle" as const, slugs, lookupKeys: [BUNDLE.lookupKey] };
+        return { kind: "bundle" as const, slugs, lookupKeys: [BUNDLE.lookupKey], environment: data.environment };
       }
       throw new Error("Achat invalide");
     },
   )
   .handler(async ({ data }) => {
     try {
-      // L'environnement suit la clé publique du client (comme le flux PDF) :
-      // pk_test_* = sandbox, sinon live. Le sprint 1 est en TEST seulement.
-      const stripe = createStripeClient("sandbox");
+      // L'environnement vient de la page (comme le flux PDF) :
+      // pk_live_* = live, sinon sandbox.
+      const stripe = createStripeClient(data.environment);
       const resolved = await resolveTomePriceIds(stripe, data.lookupKeys);
       const priceId = resolved.get(data.lookupKeys[0]);
       if (!priceId) throw new Error("Prix introuvable pour ce tome");
