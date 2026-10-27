@@ -732,7 +732,6 @@ function JeuxPage() {
           <span className="editorial-kicker">Histoires interactives</span>
           <h2>À toi <em>l'histoire</em></h2>
           <p className="strip-intro">Tome 1 gratuit · tomes standards 5 $ CAD · grands tomes 8 $ CAD. Aucune taxe ajoutée.</p>
-          <p className="strip-intro">Paiements en mode test pour l'instant — aucune vente réelle.</p>
           <div className="pillar-grid">
             {STORIES.map((story, index) => (
               <Link to="/lire" className="pillar-card" style={{ textDecoration: "none" }} key={story.audience}>
