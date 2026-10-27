@@ -681,6 +681,34 @@ function JeuxPage() {
       </section>
 
 <section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Bientôt — à découvrir</span>
+          <h2 className="section-title">Ton jeu à toi, <em>en 30 secondes</em></h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Ton jeu à toi, en 30 secondes</h3>
+              <p>Un jeu de course personnalisé : votre prénom, un thème au choix, 30 secondes au doigt. L'aperçu gratuit est jouable dès maintenant — prix prévu : 5 $, aucune taxe ajoutée. Aucun achat possible pour l'instant.</p>
+              <a className="pillar-cta" href="/ton-jeu-a-toi">Essayer l'aperçu gratuit →</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+<section className="three-pillars">
+        <div className="container">
+          <span className="editorial-kicker">Pour votre commerce</span>
+          <h2 className="section-title">Un jeu <em>à votre image</em></h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Votre commerce, votre jeu</h3>
+              <p>Un petit jeu aux couleurs de votre commerce, que vos clients jouent, partagent et retiennent. De 29 $ à 399 $, hébergement gratuit la première année, aucune taxe ajoutée. Service sur mesure — ce n&apos;est pas un jeu gratuit de la liste ci-dessus, et il ne change pas le compteur des jeux gratuits.</p>
+              <Link to="/jeux-a-votre-image" className="pillar-cta">Voir l&apos;offre →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
+<section className="three-pillars">
         <div className="container" style={{ maxWidth: 860 }}>
           <span className="editorial-kicker">Testés pour vrai</span>
           <h2 className="section-title">Approuvés par <em>nos joueurs</em></h2>

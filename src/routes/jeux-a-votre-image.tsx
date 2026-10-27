@@ -292,7 +292,7 @@ function Page() {
         <ol style={LI}>
           <li>Vous essayez l&apos;aperçu gratuit (30 secondes, sans compte).</li>
           <li>Vous envoyez votre brief par courriel à hpoutils.admin@gmail.com (les 5 questions ci-dessous).</li>
-          <li>Vous recevez votre devis (prix du niveau, aucune taxe ajoutée) et votre lien de paiement sécurisé Stripe.</li>
+          <li>Vous recevez votre devis ventilé (prix du niveau, hébergement, aucune taxe ajoutée). Le lien de paiement sécurisé Stripe ne vous est envoyé qu&apos;après votre oui explicite — voir le parcours ci-dessous.</li>
           <li>Vous testez le prototype sur VOTRE téléphone, puis vous dites oui (1 ronde de corrections incluse pour Événement, Saisonnier et Permanent).</li>
           <li>Livraison par courriel : adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer).</li>
         </ol>
@@ -319,6 +319,30 @@ function Page() {
           n&apos;installent rien : un lien à partager, un code QR à scanner,
           optionnellement un bouton sur leur site. Rien à télécharger, rien à
           mettre à jour, aucun compte.
+        </p>
+      </section>
+
+      <section aria-label="Le parcours, après votre oui explicite" style={BLOC}>
+        <h2 style={H2}>Le parcours, après votre oui explicite.</h2>
+        <p style={P}>
+          Six pas, dans cet ordre, sans exception. Chaque pas porte les
+          conditions de vente (§12) : vous pouvez annuler en tout temps, vous
+          ne payez que le travail réellement fait, ventilé, et HP vous remet
+          le solde dans les 15 jours suivant votre annulation.
+        </p>
+        <ol style={LI}>
+          <li><strong>1. Le brief, par courriel.</strong> Vous répondez aux 5 questions, par écrit, à hpoutils.admin@gmail.com. Le brief écrit évite les désaccords. Si HP refuse le projet à ce stade, vous ne payez rien — le choix du client se fait ici, avant tout paiement.</li>
+          <li><strong>2. Le prototype, testé par vous.</strong> Vous essayez le prototype sur VOTRE téléphone, avant tout oui et avant tout paiement. Rien n&apos;est facturé avant que vous ayez vu et essayé le jeu.</li>
+          <li><strong>3. Le devis, ventilé.</strong> Prix du niveau, hébergement, aucune taxe ajoutée — chaque montant est détaillé, sans frais cachés. Vous recevez une copie du contrat (devis + conditions) par courriel, que vous pouvez conserver et imprimer.</li>
+          <li><strong>4. Votre OUI EXPLICITE — la porte obligatoire.</strong> Sans votre oui explicite, aucun paiement n&apos;est demandé et aucun paiement n&apos;est pris. Un silence, un aperçu ou un échange de courriels ne vaut jamais oui.</li>
+          <li><strong>5. Le paiement, seulement après votre oui.</strong> Le lien de paiement sécurisé Stripe vous est envoyé après votre oui explicite, et pas avant. 1 ronde de corrections est incluse pour Événement, Saisonnier et Permanent (l&apos;Express 29 $ n&apos;en inclut pas). Pour l&apos;instant : aucun paiement réel n&apos;est pris pour les jeux sur mesure — les produits Stripe sont en confirmation, et le paiement s&apos;ouvrira après cette confirmation et un test à 0 $.</li>
+          <li><strong>6. La livraison, par courriel.</strong> Adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer). Délai convenu : sous 14 jours après validation du brief. Si le jeu n&apos;est pas livré dans les 30 jours suivant la date convenue, vous pouvez annuler en tout temps avant de l&apos;avoir reçu, et HP vous rembourse toutes les sommes payées, dans les 15 jours. Si le jeu livré ne correspond pas au brief validé, HP corrige d&apos;abord ; si HP n&apos;arrive pas à livrer un jeu conforme, vous êtes remboursé en entier, dans les 15 jours.</li>
+        </ol>
+        <p style={P}>
+          En cas de désaccord, à n&apos;importe quel pas : écrivez d&apos;abord à la direction humaine — on cherche un règlement amiable, par courriel, avant tout autre recours. Un humain de l&apos;équipe vous répond sous 3 jours ouvrables, à chaque étape. Conditions complètes : voir la section 12 des Conditions de vente.
+        </p>
+        <p style={P}>
+          <Link to="/conditions-de-vente">Lire les Conditions de vente, section 12 →</Link>
         </p>
       </section>
 
