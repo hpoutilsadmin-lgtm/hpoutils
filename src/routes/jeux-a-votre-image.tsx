@@ -157,23 +157,23 @@ function Page() {
           <tbody>
             <tr id="express">
               <td style={TD}><strong>Express 29 $ « Pour tester »</strong></td>
-              <td style={TD}>Jeu d&apos;essai.</td>
-              <td style={TD}>Course seulement, prénom seulement, aucune option. Sans le délai de 14 jours, non crédité.</td>
+              <td style={TD}>7 jours.</td>
+              <td style={TD}>Course seulement, un seul nom au choix (commerce, événement ou particulier), aucune option. Sans le délai de 14 jours, non crédité.</td>
             </tr>
             <tr id="evenement">
               <td style={TD}><strong>Événement 199 $ « Pour un moment »</strong></td>
-              <td style={TD}>Un événement unique ; le jeu appartient à la compagnie pour toujours.</td>
-              <td style={TD}>4 moteurs au choix, habillage complet (logo, couleurs, nom, phrases, date) + 1 ronde de corrections. Écran de victoire avec récompense + code QR + kit de partage. Sous 14 jours.</td>
+              <td style={TD}>30 jours.</td>
+              <td style={TD}>4 moteurs au choix, habillage complet (couleurs, nom au choix, slogan — leur phrase —, date) + 1 ronde de corrections. Écran de victoire avec récompense + kit de partage. Sous 14 jours.</td>
             </tr>
             <tr id="saisonnier">
               <td style={TD}><strong>Saisonnier 299 $ « Pour chaque année »</strong></td>
-              <td style={TD}>Revient chaque année, payé une fois.</td>
-              <td style={TD}>Tout Événement + re-habillage chaque saison sans re-facturation, sur simple courriel + compteurs de parties par saison.</td>
+              <td style={TD}>90 jours, puis re-habillage chaque saison.</td>
+              <td style={TD}>Tout Événement + re-habillage chaque saison, sur simple courriel + compteurs de parties par saison, à partir de l&apos;ouverture du lien + code QR par endroit (comptoir, sac, facture, vitrine).</td>
             </tr>
             <tr id="permanent">
               <td style={TD}><strong>Permanent 399 $ « Pour toujours »</strong></td>
-              <td style={TD}>Tous les jours, pour toujours.</td>
-              <td style={TD}>Tout Événement + jeu du quotidien + compteurs + résumé mensuel + vitrine « Ils ont joué » (avec l&apos;accord du client) + bouton « Votre commerce aussi ? » qui recrute le suivant.</td>
+              <td style={TD}>Pour toujours.</td>
+              <td style={TD}>Tout Événement + jeu du quotidien + compteurs, à partir de l&apos;ouverture du lien, + résumé mensuel + vitrine « Ils ont joué » (avec l&apos;accord du client) + bouton « Votre commerce aussi ? » qui recrute le suivant + code QR par endroit (comptoir, sac, facture, vitrine).</td>
             </tr>
           </tbody>
         </table>
@@ -199,8 +199,7 @@ function Page() {
           Chaque prix se paie une seule fois : Express 29 $, Événement 199 $,
           Saisonnier 299 $, Permanent 399 $. L&apos;hébergement s&apos;ajoute
           ensuite (gratuit l&apos;année 1, puis 29 $ par année, par jeu
-          hébergé). Le jeu reste à vous pour toujours ; le fichier du jeu
-          vous est remis sur demande.
+          hébergé). Fin de vie, paliers à durée finie seulement (Express, Événement, Saisonnier — le Permanent est exclu) : à la fin de votre durée, le jeu disparaît : c&apos;est simplement la fin, l&apos;espace est libéré et le jeu est effacé. Aucune garde promise, aucun fichier promis comme garde après la fin.
         </p>
         <p style={P}>
           <strong>Délai unique, toujours le même : sous 14 jours</strong>{" "}
@@ -219,7 +218,7 @@ function Page() {
         <h2 style={H2}>Trois choses qui ramènent du monde.</h2>
         <p style={P}>
           Pour qui ? Les commerces locaux, tous les jours ou pour un
-          événement. Les parents : un jeu au prénom de leur enfant — c&apos;est l&apos;Express (Course, prénom seulement), sans le délai de 14 jours. Les écoles, les équipes, les associations : un jeu pour
+          événement. Les parents : un jeu au prénom de leur enfant — c&apos;est l&apos;Express (Course, nom au choix seulement), sans le délai de 14 jours. Les écoles, les équipes, les associations : un jeu pour
           leur campagne, leur tournoi, leur levée de fonds.
         </p>
         <ul style={LI}>
@@ -238,20 +237,17 @@ function Page() {
           </li>
           <li>
             <strong>Le jeu d&apos;essai à votre nom</strong> : avant même de
-            parler prix, voyez un jeu habillé avec votre logo et vos
-            couleurs — <Link to="/apercu">l&apos;aperçu gratuit, 30 secondes (moteur Course)</Link>.
+            parler prix, voyez un jeu habillé avec vos couleurs — <Link to="/apercu">l&apos;aperçu gratuit, 30 secondes (moteur Course)</Link>.
           </li>
           <li>
-            <strong>Un code QR par endroit</strong> (comptoir, sac, facture,
-            vitrine), sans compte ni données personnelles.
+            <strong>Un code QR par endroit</strong> (comptoir, sac, facture, vitrine), Saisonnier et Permanent seulement, sans compte ni données personnelles.
           </li>
         </ul>
         <h3 style={H3}>Levées de fonds : du fun à 2 $, pas du chocolat à 20 $.</h3>
         <p style={P}>
-          L&apos;organisme — école, équipe, association — offre son jeu à son
+          À tous les paliers : c&apos;est le client qui choisit son palier, nous suggérons. L&apos;organisme — école, équipe, association — offre son jeu à son
           monde au prix qu&apos;il fixe, par exemple 2 $ pour jouer.{" "}
-          <strong>L&apos;organisme garde 100 % des entrées</strong> : HP vend le
-          jeu au forfait événement (199 $) et ne touche pas aux entrées, ne
+          <strong>L&apos;organisme garde 100 % des entrées</strong> : HP vend le jeu au forfait choisi par l&apos;organisme — nous suggérons le forfait événement (199 $) — et ne touche pas aux entrées, ne
           collecte pas l&apos;argent des joueurs, ne fait pas de remise. Le
           calcul : 100 joueurs × 2 $ = 200 $, 500 joueurs = 1 000 $. Le jeu se
           paie tout seul dès 100 joueurs à 2 $. On vend le JEU (jouer pour le
@@ -277,7 +273,7 @@ function Page() {
           <li>Vous envoyez votre brief par courriel à hpoutils.admin@gmail.com (les 5 questions ci-dessous).</li>
           <li>Vous recevez votre devis ventilé (prix du niveau, hébergement, aucune taxe ajoutée). Le lien de paiement sécurisé Stripe ne vous est envoyé qu&apos;après votre oui explicite — voir le parcours ci-dessous.</li>
           <li>Vous testez le prototype sur VOTRE téléphone, puis vous dites oui (1 ronde de corrections incluse pour Événement, Saisonnier et Permanent).</li>
-          <li>Livraison par courriel : adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer).</li>
+          <li>Livraison par courriel : adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer pour Saisonnier et Permanent).</li>
         </ol>
         <p style={P}>
           Un humain de l&apos;équipe vous répond sous 3 jours ouvrables, à chaque étape.
@@ -286,18 +282,17 @@ function Page() {
         <ol style={LI}>
           <li>Quel jeu ? (Quiz, Course, Réflexes, Observation)</li>
           <li>Pour quelle fête, quel événement ou quel usage ?</li>
-          <li>Vos couleurs et votre logo (fichier joint au courriel ; pour l&apos;aperçu, le logo est lu dans votre navigateur et n&apos;est envoyé nulle part).</li>
-          <li>Votre message en une phrase (2 ou 3 phrases sur votre métier).</li>
+          <li>Vos couleurs (et votre logo, Saisonnier et Permanent seulement, fichier joint au courriel ; pour l&apos;aperçu, le logo est lu dans votre navigateur et n&apos;est envoyé nulle part).</li>
+          <li>Votre slogan : votre phrase (2 ou 3 phrases sur votre métier).</li>
           <li>Pour quelle date ? Commandez au moins 14 jours avant votre événement.</li>
         </ol>
         <p style={P}>
-          <strong>Vous fournissez 4 choses</strong> : votre logo, vos couleurs,
-          2 ou 3 phrases sur votre métier, votre date — et votre accord pour
+          <strong>Vous fournissez</strong> : vos couleurs, 2 ou 3 phrases sur votre métier, votre date, et votre logo pour Saisonnier et Permanent — et votre accord pour
           que le jeu dise qui l&apos;offre. Vous garantissez avoir le droit
           d&apos;utiliser les éléments de marque que vous fournissez.{" "}
           <strong>HP livre</strong> : une adresse dédiée sur hp-outils.com, un
           jeu testé sur téléphone avant livraison, et un kit de partage (texte
-          du post, adresse du jeu, code QR à imprimer). Le jeu porte la mention
+          du post, adresse du jeu, code QR à imprimer pour Saisonnier et Permanent). Le jeu porte la mention
           « Jeu offert par [Compagnie], créé par HP Outils ». Ils
           n&apos;installent rien : un lien à partager, un code QR à scanner,
           optionnellement un bouton sur leur site. Rien à télécharger, rien à
@@ -319,7 +314,7 @@ function Page() {
           <li><strong>3. Le devis, ventilé.</strong> Prix du niveau, hébergement, aucune taxe ajoutée — chaque montant est détaillé, sans frais cachés. Vous recevez une copie du contrat (devis + conditions) par courriel, que vous pouvez conserver et imprimer.</li>
           <li><strong>4. Votre OUI EXPLICITE — la porte obligatoire.</strong> Sans votre oui explicite, aucun paiement n&apos;est demandé et aucun paiement n&apos;est pris. Un silence, un aperçu ou un échange de courriels ne vaut jamais oui.</li>
           <li><strong>5. Le paiement, seulement après votre oui.</strong> Le lien de paiement sécurisé Stripe vous est envoyé après votre oui explicite, et pas avant. 1 ronde de corrections est incluse pour Événement, Saisonnier et Permanent (l&apos;Express 29 $ n&apos;en inclut pas). Pour l&apos;instant : aucun paiement réel n&apos;est pris pour les jeux sur mesure — les produits Stripe sont en confirmation, et le paiement s&apos;ouvrira après cette confirmation et un test à 0 $.</li>
-          <li><strong>6. La livraison, par courriel.</strong> Adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer). Délai convenu : sous 14 jours après validation du brief. Si le jeu n&apos;est pas livré dans les 30 jours suivant la date convenue, vous pouvez annuler en tout temps avant de l&apos;avoir reçu, et HP vous rembourse toutes les sommes payées, dans les 15 jours. Si le jeu livré ne correspond pas au brief validé, HP corrige d&apos;abord ; si HP n&apos;arrive pas à livrer un jeu conforme, vous êtes remboursé en entier, dans les 15 jours.</li>
+          <li><strong>6. La livraison, par courriel.</strong> Adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer pour Saisonnier et Permanent). Délai convenu : sous 14 jours après validation du brief. Si le jeu n&apos;est pas livré dans les 30 jours suivant la date convenue, vous pouvez annuler en tout temps avant de l&apos;avoir reçu, et HP vous rembourse toutes les sommes payées, dans les 15 jours. Si le jeu livré ne correspond pas au brief validé, HP corrige d&apos;abord ; si HP n&apos;arrive pas à livrer un jeu conforme, vous êtes remboursé en entier, dans les 15 jours.</li>
         </ol>
         <p style={P}>
           En cas de désaccord, à n&apos;importe quel pas : écrivez d&apos;abord à la direction humaine — on cherche un règlement amiable, par courriel, avant tout autre recours. Un humain de l&apos;équipe vous répond sous 3 jours ouvrables, à chaque étape. Conditions complètes : voir la section 12 des Conditions de vente.
@@ -332,7 +327,7 @@ function Page() {
       <section aria-label="Conditions, en bref" style={BLOC}>
         <h2 style={H2}>Conditions, en bref.</h2>
         <p style={P}>
-          Le jeu est à vous pour toujours ; l&apos;hébergement est gratuit
+          Le jeu est à vous ; l&apos;hébergement est gratuit
           l&apos;année 1, puis 29 $ par année et par jeu ; aucune taxe ajoutée ;
           vous garantissez avoir le droit d&apos;utiliser les éléments de marque
           que vous fournissez ; HP choisit ses clients (commerces et organismes
@@ -347,7 +342,7 @@ function Page() {
           français clair · données comptées.
         </p>
         <p style={P}>
-          Seul le nombre de parties est compté, anonymement, pour les compteurs (Saisonnier, Permanent) : aucun compte, aucune donnée personnelle. Pas de jeux d&apos;argent, et HP choisit
+          Seul le nombre de parties est compté, anonymement, à partir de l&apos;ouverture du lien, pour les compteurs (Saisonnier, Permanent) : aucun compte, aucune donnée personnelle. Pas de jeux d&apos;argent, et HP choisit
           ses clients : commerces et organismes alignés avec ses valeurs —
           dignité, honnêteté, vraie vie. Tout est 100 % original, jamais copié.
         </p>
