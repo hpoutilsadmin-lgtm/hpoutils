@@ -18,7 +18,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/jeux-a-votre-image")({
   head: () =>
     createSeoHead({
-      title: "Jeux à votre image — Un jeu aux couleurs de votre commerce | HP Outils",
+      title: "Jeu personnalisé pour commerce, créé par HP Outils",
       description:
         "Un petit jeu simple, aux couleurs et au nom de votre commerce, que vos clients jouent, partagent et retiennent. De 29 $ à 399 $, hébergement gratuit la première année. Voyez l'aperçu gratuit en 30 secondes.",
       path: "/jeux-a-votre-image",
