@@ -5,7 +5,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/ateliers")({
   head: () => ({
     ...createSeoHead({
-      title: "Ateliers sur mesure pour organismes et écoles | HP — Lanaudière",
+      title: "Ateliers sur mesure pour organismes et écoles | HP Outils",
       description: "Ateliers de groupe et offre Édition des Fêtes à Terrebonne et dans Lanaudière. Prix fermes en $ CAD, aucune taxe ajoutée.",
       path: "/ateliers",
     }),
@@ -43,7 +43,7 @@ const ATELIERS = [
 const FETES = [
   { title: "Pain maison à domicile", duration: "3 h · 6 à 8 personnes", price: "290 $ CAD · forfait groupe", desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes. Soit 36 $ à 48 $ par personne." },
   { title: "L'IA sans jargon — Édition des Fêtes", duration: "2 h", price: "220 $ CAD · forfait groupe", desc: "Repartez avec un cas d'usage concret, sans langage technique." },
-  { title: "La faim justifie les moyens", duration: "60 min + 15 min de questions", price: "220 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant. Aucun local cuisine requis pour cette conférence." },
+  { title: "La faim justifie les moyens", duration: "45 à 60 min + questions", price: "220 $ CAD · cachet", desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant. Aucun local cuisine requis pour cette conférence." },
 ];
 
 function Page() {
