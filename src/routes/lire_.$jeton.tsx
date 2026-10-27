@@ -87,7 +87,7 @@ function Page() {
               )}
             </p>
             <p style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
-              Mode test — aucune vente réelle. Ton lien est confirmé et reste valable
+              Ton lien est confirmé et reste valable
               pour relire ce tome. Le texte complet s'affiche ci-dessous, dans ton
               lecteur personnel.
             </p>
