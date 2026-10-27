@@ -8,7 +8,8 @@
      [data-hp-marque]       : conteneur de la marque (caché si ni nom ni logo)
      [data-hp-marque-nom]   : texte du nom du commerce
      [data-hp-marque-logo]  : <img> du logo (data URL locale, jamais envoyée)
-   Seuls les messages venant de la fenêtre parente sont acceptés. Aucun
+   Seuls les messages venant de la fenêtre parente et de la même origine
+   sont acceptés. Aucun
    envoi réseau, aucune collecte : tout reste sur l'appareil du joueur. */
 (function () {
   function appliquer(msg) {
@@ -34,6 +35,7 @@
   }
   window.addEventListener("message", function (e) {
     if (e.source !== window.parent) return;
+    if (e.origin !== window.location.origin) return;
     var d = e.data;
     if (d && d.type === "hp-habillage") appliquer(d);
   });
