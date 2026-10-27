@@ -121,11 +121,13 @@ export async function getTomeAccessByToken(
 
 /**
  * Récupération par courriel : on ne peut pas retrouver un jeton brut depuis
- * son empreinte — on en forge donc de nouveaux pour les tomes déjà achetés,
- * et on révoque les anciens. Même principe que la récupération PDF
- * (« générer de nouveaux liens »). Renvoie les NOUVEAUX liens bruts
- * (à n'envoyer que par courriel), ou [] si aucun achat pour ce courriel.
- * Réponse neutre côté appelant : ne jamais révéler si le courriel existe.
+ * son empreinte — on en forge donc de nouveaux pour les tomes déjà achetés.
+ * Les anciens liens restent valides : personne ne peut couper l'accès d'un
+ * client en demandant une récupération à son adresse. Même principe que la
+ * récupération PDF (« générer de nouveaux liens »). Renvoie les NOUVEAUX
+ * liens bruts (à n'envoyer que par courriel), ou [] si aucun achat pour ce
+ * courriel. Réponse neutre côté appelant : ne jamais révéler si le courriel
+ * existe.
  */
 export async function mintRecoveryTomeTokens(
   email: string,
@@ -140,11 +142,6 @@ export async function mintRecoveryTomeTokens(
   const rows = (data ?? []) as Array<{ tome_slug: string; stripe_session_id: string }>;
   const slugs = [...new Set(rows.map((r) => r.tome_slug))];
   if (slugs.length === 0) return [];
-  await supabase
-    .from("tome_tokens")
-    .update({ revoked_at: new Date().toISOString() })
-    .eq("customer_email", normalized)
-    .is("revoked_at", null);
   const fresh: Array<{ tome: Tome; token: string }> = [];
   for (const slug of slugs) {
     const tome = getTomeBySlug(slug);
