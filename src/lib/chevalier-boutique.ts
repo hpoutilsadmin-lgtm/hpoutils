@@ -24,7 +24,7 @@
 // Tant que ce drapeau est false, la page n'affiche aucun bouton d'achat
 // ET la fonction serveur rejette toute demande, même forgée. Aucun
 // paiement ne peut partir dans le vide.
-export const CHEVALIER_VENTE_ACTIVE = false;
+export const CHEVALIER_VENTE_ACTIVE = true;
 
 /** Clé localStorage de la sauvegarde du jeu — identique au jeu v1.3. */
 export const CHEVALIER_SAVE_KEY = "cdf_save_v1";
