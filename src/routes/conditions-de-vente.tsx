@@ -50,6 +50,11 @@ function Page() {
     </ul>
     <h2>9. Changements à ces conditions</h2>
     <p>On peut mettre à jour ces conditions de temps en temps. La version publiée sur cette page au moment de votre achat est celle qui s'applique à cet achat.</p>
+    <h2>11. Bons cadeaux</h2>
+    <p>Codes personnels de 5 $, 10 $, 20 $, 50 $ ou 100 $ CAD, aucune taxe (mais c'est temporaire, profitez-en). Applicables en une fois ou par tranches jusqu'à épuisement du solde. Sans date d'expiration. Aucun frais d'utilisation. Les bons ne s'échangent pas contre de l'argent, sauf le solde de 5 $ ou moins, remboursable à la demande.</p>
+    <p><strong>Vérifier votre solde.</strong> Le solde se vérifie au panier : saisissez votre code au panier, le solde utilisable s'affiche avant tout paiement. Si la vérification ne passe pas, écrivez à la direction humaine — un humain vous répondra sous 3 jours ouvrables.</p>
+    <p><strong>Remboursement.</strong> Solde de 5 $ ou moins : remboursable à votre demande. Un solde de plus de 5 $ n'est pas remboursable en argent: il reste utilisable, sans date d'expiration et sans frais, en une fois ou par tranches, jusqu'à épuisement.</p>
+    <p>Information générale, pas un avis juridique. En cas de question, écrivez à la direction — réponse d'humain sous 3 jours ouvrables.</p>
     <h2>10. Nous joindre — service client</h2>
     <p>Une question, un souci avec un achat, un lien qui ne fonctionne pas ? Écrivez à hpoutils.admin@gmail.com. Une réponse d'humain, pas d'un robot — sous 3 jours ouvrables. C'est un humain de l'équipe qui vous répond. Pour vos renseignements personnels, voyez la Politique de confidentialité.</p>
   </div></section>;
