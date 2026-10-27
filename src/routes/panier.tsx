@@ -400,8 +400,7 @@ function Page() {
           <p className="strip-intro">
             Le bundle « Choisis 10 kits parmi 15 » garde son propre parcours
             de sélection : il ne passe pas par ce panier. Le reste, c'est
-            l'honnêteté ordinaire d'HP : chaque produit dit pourquoi il
-            n'est pas encore achetable.
+            l'honnêteté ordinaire d'HP : chaque produit dit pourquoi il ne passe pas par ce panier.
           </p>
           <ul>
             {NON_AJOUTABLES.map((n) => (
