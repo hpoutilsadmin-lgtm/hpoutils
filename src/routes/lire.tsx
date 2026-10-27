@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { createSeoHead } from "@/lib/seo";
+import { getStripeEnvironment } from "@/lib/stripe";
 import {
   BUNDLE,
   FREE_TOME,
@@ -41,7 +42,7 @@ function Page() {
     setError(null);
     setBusy(`tome-${slug}`);
     try {
-      const res = await checkout({ data: { kind: "tome", slug } });
+      const res = await checkout({ data: { kind: "tome", slug, environment: getStripeEnvironment() } });
       if (res.checkoutUrl) window.location.href = res.checkoutUrl;
       else setError("Le paiement n'a pas pu démarrer.");
     } catch (e: any) {
@@ -59,7 +60,7 @@ function Page() {
     }
     setBusy("bundle");
     try {
-      const res = await checkout({ data: { kind: "bundle", tomes: bundleChoice } });
+      const res = await checkout({ data: { kind: "bundle", tomes: bundleChoice, environment: getStripeEnvironment() } });
       if (res.checkoutUrl) window.location.href = res.checkoutUrl;
       else setError("Le paiement n'a pas pu démarrer.");
     } catch (e: any) {
@@ -128,8 +129,7 @@ function Page() {
       <section className="subpage-content">
         <div className="container">
           <p style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
-            Paiements en mode test pour l'instant — aucune vente réelle. Les liens
-            d'accès sont envoyés par courriel après le paiement.
+            Les liens d'accès sont envoyés par courriel après le paiement.
           </p>
           {error && <p role="alert" style={{ color: "#8a1f1f" }}>{error}</p>}
 
