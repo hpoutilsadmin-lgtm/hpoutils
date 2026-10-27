@@ -790,7 +790,7 @@ function JeuxPage() {
 
 <section className="three-pillars">
         <div className="container">
-          <span className="editorial-kicker">Découvre aussi</span>
+          <span className="editorial-kicker">Découvrez aussi</span>
           <h2 className="section-title">Après le jeu, <em>le reste d'HP</em></h2>
           <div className="pillar-grid">
             <article className="pillar-card">

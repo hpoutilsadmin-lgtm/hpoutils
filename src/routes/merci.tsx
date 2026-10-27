@@ -20,7 +20,7 @@ function Page() {
       <div className="container">
         <p className="page-kicker">Inscription confirmée</p>
         <h1>Merci !</h1>
-        <p className="lead">Comme promis, voici ton extrait gratuit du kit Frigo Sans Honte : des repères concrets pour composer avec ce que tu as déjà.</p>
+        <p className="lead">Comme promis, voici votre extrait gratuit du kit Frigo Sans Honte : des repères concrets pour composer avec ce que tu as déjà.</p>
         <div className="lead-actions">
           <a className="action-btn" href={extrait.url} download="Extrait-gratuit-Frigo-Sans-Honte.pdf" target="_blank" rel="noopener">
             Télécharger l'extrait gratuit (PDF)
