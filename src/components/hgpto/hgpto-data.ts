@@ -116,7 +116,7 @@ export const JOKES = [
          (lecture → livres, jeu → jeux, bricolage → kits, perché → ateliers),
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
-{ t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — montre ça à quelqu'un, vous allez rire et réfléchir !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
+{ t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — montre ça à quelqu'un, et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
         { t:"Envie de jouer en famille ? Il y a 36 jeux gratuits, sans inscription, qui t'attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 JEUX" }
       ];
 export const BOOK_PITCHES = [
@@ -285,7 +285,7 @@ export const EMPATHY = [
       ];
       /* Nouveautés du site (base de faits) : annoncées une fois, sans insister. */
 export const NEWS_LINES = [
-        "Nouveauté du coin : RELÈVE, notre série d'histoires dont tu choisis la suite, vient de commencer — c'est gratuit !",
+        "Nouveauté du coin : RELÈVE, un jeu gratuit sur /jeux, vient de commencer — c'est gratuit !",
         "Le savais-tu ? « Futur simple », notre balado : de nouveaux épisodes, annoncés ici dès leur parution, quand ils sont prêts. Léa et Marc jasent d'IA, sans jargon."
       ];
 export const JANITOR = [
@@ -415,7 +415,7 @@ export const KB = [
           a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Vous avez quels jeux ?", s:"36 JEUX",
-          a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille ! Et « Le Panier Solidaire », le jeu de la banque alimentaire, aussi dans En cuisine.",
+          a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 16 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"C'est quoi, IGLOO ?", s:"GRATUIT !",
           a:"IGLOO — La guerre des igloos : une bataille de boules de neige en arène ! Tu déploies tes cartes, tu défends ton igloo et tu fais tomber celui d'en face — et chaque bataille tire une loi du quartier au hasard. Campagne de 10 batailles, parties d'environ 3 minutes. Gratuit !",
@@ -436,7 +436,7 @@ export const KB = [
           a:"Tapinoue : les aventures d'un petit lapin et de sa famille, en 4 tableaux qui se débloquent un à un — la rencontre, le terrier à deux, le potager de M. Grincheux et le renard qui rôde. La progression se sauvegarde. Gratuit !",
           u:"https://www.hp-outils.com/apps/tapinoue/tapinoue-v2.0.html", l:"Jouer à Tapinoue" },
         { q:"C'est quoi, Ton chum frotte son char ?", s:"GRATUIT !",
-          a:"Ton chum frotte son char plus que toi ! : le jeu d'esthétique automobile. Tu choisis un véhicule et tu lui fais le vrai job du bout des doigts — roues, lavage, rinçage, argile, cire, intérieur, vitres — avec des sons ASMR satisfaisants. 4 véhicules, 8 étapes. Gratuit — mets le son !",
+          a:"Ton chum frotte son char plus que toi ! : le jeu d'esthétique automobile. Tu choisis un véhicule et tu lui fais le vrai job du bout des doigts — roues, lavage, rinçage, argile, polissage, cire, intérieur, vitres — avec des sons ASMR satisfaisants. 4 véhicules, 8 étapes. Gratuit — mets le son !",
           u:"https://www.hp-outils.com/apps/ton-chum-frotte-son-char/ton-chum-frotte-son-char-v2.0.html", l:"Frotter un char" },
         { q:"C'est quoi, Conception de molécules 3D ?", s:"GRATUIT !",
           a:"Conception de molécules 3D : un jeu de labo pour explorer l'ADN et fabriquer des remèdes, avec des missions sur de vraies molécules — aspirine, caféine, insuline… 4 niveaux, d'enfant à très avancé — un des jeux gratuits du site !",
@@ -463,7 +463,7 @@ export const KB = [
           a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès à des astuces que les autres n'ont pas. Honnêtement ? L'inscription est ouverte : écris à la direction pour t'inscrire — un humain te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient.",
           u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
         { q:"Combien y a-t-il de jeux sur le site ?", s:"36 JEUX",
-          a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour toute la famille ! Et « Le Panier Solidaire », le jeu de la banque alimentaire, aussi dans En cuisine.",
+          a:"36 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 16 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Comment chercher un jeu ?", s:"RECHERCHE",
           a:"Sur la page des jeux, tape un mot dans le champ « Chercher un jeu… » : la grille ne montre que les jeux dont le titre ou la description contient ce mot. Sans rien taper, tous les jeux s'affichent.",
@@ -559,7 +559,7 @@ export const KB = [
         { q:"Lis-moi ça", s:"JE TE LIS ÇA", fn:"read",
           a:"" },
         { q:"Tes jeux approuvés, à toi ?", s:"MES TAMPONS",
-          a:"Mes deux approbations officielles : Montgolfière — celui-là, je le joue avec toi, quand tu veux ! — et Trio élément. Mes verdicts sont écrits dans mon panneau, juste sous les questions." },
+          a:"Mes deux approbations officielles : Montgolfière — celui-là, je le joue avec toi, quand tu veux ! — et Trio des Éléments. Mes verdicts sont écrits dans mon panneau, juste sous les questions." },
         { q:"C'est quoi, ton gag d'hélium ?", s:"HIHI",
           a:"Des fois, je respire un peu trop près de ma balloune… et ma voix devient toute petite, comme un écureuil ! Ça dure une phrase ou deux, je ris de moi, puis je reviens à ma voix normale. Tu peux fermer le gag avec le bouton « Hélium » dans ce panneau." },
         { q:"C'est qui, HP ?", s:"MON HUMAIN",
@@ -646,7 +646,7 @@ export const HUGO_SONGS = [
 export const CHOIX_LINES = [
         { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Une saison de 8 semaines, et ça fait réfléchir en s'amusant.", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tape ce qu'il y a dans ton frigo, il te trouve un souper.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
-        { t:"Mon choix du moment : RELÈVE, notre série d'histoires dont tu choisis la suite. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : RELÈVE, notre jeu dont tu choisis la suite. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : « Futur simple », le balado d'HP Outils — de nouveaux épisodes quand ils sont prêts, sans jargon.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment, côté lecture : le livre « Les enfants cuisinent pour faire plaisir » (10 $) — cuisiner en famille, c'est des souvenirs qui se mangent.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"MON CHOIX ♥" }
       ];
@@ -796,11 +796,11 @@ export const PAGE_SUGGESTIONS = {
           pourquoi:"Gratuit, sans inscription — pour commencer, c'est le plus simple.",
           mots:['banque'], u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         '/jeux': { id:'sugg-releve', titre:"RELÈVE — Chapitre 1 : Surchauffe",
-          accroche:"Notre série d'histoires dont tu choisis la suite — le chapitre 1 est gratuit.",
+          accroche:"Notre jeu dont tu choisis la suite — le chapitre 1 est gratuit.",
           marche:"Sur /jeux, choisis la tuile « RELÈVE — Chapitre 1 : Surchauffe », et joue : à toi de choisir la suite de l'histoire.",
           sert:"Une aventure d'enquête 3D, en français ou en anglais : tu mènes l'enquête en t'amusant.",
           histoire:"À Percé, Grizz, ourson policier de Faune-Secours, et NID à la radio cherchent la cause d'une surchauffe qui menace la faune.",
-          pourquoi:"Le chapitre 1 est gratuit, et la série vient de commencer — c'est le moment de la découvrir.",
+          pourquoi:"Le chapitre 1 est gratuit, et le jeu vient de commencer — c'est le moment de le découvrir.",
           mots:['releve'], u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         '/livres-pdf': { id:'sugg-enfants', titre:"Le livre « Les enfants cuisinent pour faire plaisir »",
           accroche:"10 $, en PDF — cuisiner en famille, pour le plaisir, pas la performance.",
