@@ -1,7 +1,8 @@
-// Fiche « Ton jeu à toi, en 30 secondes » — ÉTAT A : Bientôt.
-// Aperçu gratuit jouable intégré, AUCUN bouton d'achat, AUCUN parcours
-// de vente, AUCUN identifiant secret : rien n'est vendu ici. La vente n'ouvrira que sur
-// go explicite d'HP nommant le produit, après un test à 0 $ vérifié.
+// Fiche « Ton jeu à toi, en 30 secondes » — ÉTAT B : parcours d'achat PRÉPARÉ, vente BLOQUÉE.
+// Aperçu gratuit jouable intégré. AUCUN paiement n'est pris : le bouton est désactivé
+// et aucun identifiant Stripe n'existe pour ce jeu (ni priceId, ni clé).
+// La vente n'ouvrira que sur go explicite d'HP nommant le produit, après un test à 0 $ vérifié
+// et après confirmation du prix par Mélanie. Voir le doc compagnon pour les portes.
 // Cadre et présentation en VOUS ; à l'intérieur du mini-jeu, voix du
 // joueur en « tu », comme dans les autres jeux du site.
 import { createFileRoute } from "@tanstack/react-router";
@@ -219,6 +220,49 @@ function comparerScore(score: number, scoreABattre: number | null): string {
   return "Pas cette fois… mais tu peux rejouer !";
 }
 
+// ——— Produit « Ton jeu à toi » — ÉTAT B : parcours PRÉPARÉ, vente BLOQUÉE.
+// Patron suivi : celui des produits du site (products-catalog.ts, achat.$slug.tsx,
+// panier-validation.ts). Un produit en `purchaseHold` affiche le message de suspension
+// À LA PLACE du paiement, et le panier refuse les produits suspendus.
+// Différence honnête : ce jeu n'est PAS un PDF, donc il n'entre PAS dans PRODUCTS
+// (qui exige un chemin PDF et un priceId Stripe réel). Règle maison (AGENTS.md) : on ne
+// touche aux priceId du catalogue qu'une fois le produit test Stripe existant. Ici,
+// AUCUN produit Stripe n'existe : aucun priceId, aucune clé, rien de créé.
+// TODO (porte Mélanie) : le priceId Stripe confirmé ira dans `priceId` ci-dessous,
+// puis dans le parcours de paiement — jamais un prix inventé.
+const JEU_PRODUIT = {
+  titre: "Ton jeu à toi, en 30 secondes",
+  slug: "ton-jeu-a-toi",
+  prixAffiche: "5 $ CAD, aucune taxe ajoutée",
+  // Clé de recherche PROPOSÉE, NON CRÉÉE — à créer par Mélanie côté Stripe, puis confirmée.
+  lookupKeyProposee: "jeu_30_secondes_course_5",
+  priceId: null as string | null,
+  // Tant que ce message est présent, AUCUN paiement n'est proposé (patron purchaseHold).
+  purchaseHold: "Vente pas encore ouverte — aucun paiement n'est pris",
+};
+
+// BASCULE (après les 3 portes — voir doc compagnon) :
+// priceId: "<priceId Stripe confirmé par Mélanie>" + purchaseHold: undefined,
+// puis TEST 0 $ vérifié, puis go d'HP nommant le produit. Sans ces 3 portes, ne pas basculer.
+function achatBloque(): boolean {
+  return JEU_PRODUIT.purchaseHold !== undefined && JEU_PRODUIT.priceId === null;
+}
+
+// Point de branchement de la livraison automatique (voir doc compagnon) :
+// après paiement, Stripe hébergé → /checkout/return (confirmation serveur, patron
+// existant) → retour ici avec `?livraison=confirme`. Aucun lien de la fiche ne pose
+// ce paramètre aujourd'hui : la section de livraison reste injoignable tant que le
+// produit Stripe n'existe pas. Elle ne débloque rien qui ne soit déjà gratuit :
+// le jeu livré est le même que l'aperçu gratuit ; la valeur payée est le lien de
+// défi personnel + le soutien. La vérification du paiement reste côté /checkout/return.
+function livraisonConfirmee(recherche: string): boolean {
+  try {
+    return new URLSearchParams(recherche).get("livraison") === "confirme";
+  } catch {
+    return false;
+  }
+}
+
 type Phase = "accueil" | "jeu" | "fin";
 
 function Page() {
@@ -236,6 +280,7 @@ function Page() {
   const [lienPartage, setLienPartage] = useState("");
   const [partageVisible, setPartageVisible] = useState(false);
   const [messageCopie, setMessageCopie] = useState("");
+  const [livraison, setLivraison] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const etatRef = useRef<EtatCourse | null>(null);
@@ -268,6 +313,12 @@ function Page() {
   // Arrêt propre de la boucle si la page se démonte en pleine partie.
   useEffect(() => {
     return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  // Livraison automatique : le paramètre est posé par /checkout/return après
+  // confirmation serveur (voir doc compagnon). Aucun lien ne le pose aujourd'hui.
+  useEffect(() => {
+    setLivraison(livraisonConfirmee(window.location.search || ""));
   }, []);
 
   const dessiner = () => {
@@ -430,6 +481,28 @@ function Page() {
           </p>
         </div>
       </section>
+
+      {livraison && (
+        <section className="three-pillars">
+          <div className="container" style={{ maxWidth: 720 }}>
+            <h2>Livraison — votre jeu est arrivé</h2>
+            <p>
+              Votre paiement a été confirmé. Aucune étape manuelle : votre jeu
+              est ci-dessous, jouable tout de suite, sans compte. À la fin de
+              votre course, « Partager mon score » crée votre lien de défi
+              personnel (#invite=) à envoyer à vos proches.
+            </p>
+            <p style={{ fontSize: "0.95rem", color: "#444" }}>
+              Le reçu de votre paiement vous a été envoyé par courriel, comme
+              pour les autres produits du site. Si ça coince, écrivez à{" "}
+              <a href="mailto:hpoutils.admin@gmail.com">
+                hpoutils.admin@gmail.com
+              </a>{" "}
+              : un humain de l'équipe vous répond sous 3 jours ouvrables.
+            </p>
+          </div>
+        </section>
+      )}
 
       <section className="three-pillars">
         <div className="container" style={{ maxWidth: 720 }}>
@@ -624,16 +697,41 @@ function Page() {
           )}
 
           <div style={{ marginTop: 32, border: "2px solid #b7791f", borderRadius: 12, padding: 12, background: "#fdf0d5" }}>
-            <h2 style={{ marginTop: 0 }}>Bientôt — et rien à régler pour l'instant</h2>
+            <h2 style={{ marginTop: 0 }}>L'achat — vente pas encore ouverte</h2>
             <p>
-              Ce jeu personnalisé n'est pas encore en vente. Vous pouvez
-              essayer l'aperçu gratuit ci-dessus, sans compte et sans
-              engagement. Quand la vente ouvrira, les conditions seront
-              affichées ici avant tout achat.
+              Prix : {JEU_PRODUIT.prixAffiche}. Ce jeu personnalisé n'est pas
+              encore en vente. Vous pouvez essayer l'aperçu gratuit ci-dessus,
+              sans compte et sans engagement. Quand la vente ouvrira, les
+              conditions seront affichées ici avant tout paiement.
             </p>
-            <p style={{ marginBottom: 0 }}>
-              Prix prévu : 5 $, aucune taxe ajoutée. Aucun achat possible pour
-              l'instant.
+            {achatBloque() && (
+              <p style={{ fontWeight: 700 }}>
+                {JEU_PRODUIT.purchaseHold}. En attendant, l'aperçu gratuit est
+                ouvert, et pour toute question, écrivez à{" "}
+                <a href="mailto:hpoutils.admin@gmail.com">
+                  hpoutils.admin@gmail.com
+                </a>
+                .
+              </p>
+            )}
+            <p>
+              Ce que la livraison automatique remettra, sans aucune étape
+              manuelle : le jeu jouable + votre lien de défi personnel
+              (#invite=) à envoyer à vos proches — le paiement confirmé, le
+              jeu s'ouvre ici même, sans compte et sans attente.
+            </p>
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              title="Vente pas encore ouverte — aucun paiement n'est pris"
+              style={{ width: "100%", minHeight: 56, fontSize: "1.15rem", marginTop: 10, cursor: "not-allowed", opacity: 0.6 }}
+            >
+              Acheter — vente pas encore ouverte
+            </button>
+            <p style={{ marginBottom: 0, fontSize: "0.95rem", color: "#444" }}>
+              Aucune taxe ajoutée · Petit fournisseur · Aucun paiement n'est
+              pris tant que ce bouton reste désactivé.
             </p>
           </div>
         </div>
