@@ -23,18 +23,23 @@ const ROWS: Row[] = [
   { cat: "Sans Honte", offre: "Kits Sans Honte — 15 titres au choix, un par un (Frigo, Papiers, Fraude, Tenir Debout, Seconde Main, Entraide…)", prix: "5 $ CAD le kit, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les 15 kits" },
   { cat: "Sans Honte", offre: "Bundle Sans Honte — Choisis 10 kits parmi 15", prix: "40 $ CAD (économie de 10 $ : 50 $ séparément), aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
   { cat: "À toi l’histoire", offre: "Tomes « À toi l’histoire » — tome 1 gratuit, standards 5 $, grands 8 $, bundle 3 tomes 12 $", prix: "Gratuit, 5 $ ou 8 $ selon le tome ; bundle 12 $, aucune taxe ajoutée", href: "/lire", label: "Voir /lire/" },
+  { cat: "Crée ton histoire", offre: "Crée TON histoire — créateur d’histoire personnalisée (ce n’est pas la série « À toi l’histoire ») : un prénom, 1 thème parmi 4, 2, 3 ou 4 fins — Bientôt, vente pas encore ouverte", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/cree-ton-histoire-a-toi", label: "Voir la fiche (Bientôt)" },
   { cat: "Passeurs", offre: "Passeurs de savoirs — inscription ouverte", prix: "3 $/mois · 28 $/an, aucune taxe ajoutée", href: "/les-passeurs", label: "S'inscrire" },
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "150 $ à 290 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Jeu", offre: "Chevalier du fleuve — gemmes du jeu (boutique dédiée, hors panier — en vente)", prix: "2,99 $ à 19,99 $ CAD, aucune taxe ajoutée", href: "/boutique-chevalier", label: "Voir la boutique" },
+  { cat: "Jeu", offre: "Ton jeu à toi, en 30 secondes — jeu de course personnalisé (prénom + thème), aperçu gratuit jouable (Bientôt — prix prévu, aucun achat possible pour l'instant)", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/ton-jeu-a-toi", label: "Essayer l'aperçu gratuit" },
+  { cat: "Jeu sur mesure", offre: "Jeux à votre image — un jeu aux couleurs de votre commerce (Express 29 $, Événement 199 $, Saisonnier 299 $, Permanent 399 $, hébergement gratuit l’année 1 puis 29 $/an, aucune taxe ajoutée — paiement seulement après votre oui explicite, voir la page de l’offre)", prix: "29 $ à 399 $ CAD selon le niveau, aucune taxe ajoutée", href: "/jeux-a-votre-image", label: "Voir l’offre" },
   { cat: "Cadeaux", offre: "Bons cadeaux — un code personnel à offrir, applicable au panier", prix: "5 $ à 100 $ CAD, aucune taxe ajoutée", href: "/cadeaux", label: "Offrir un bon" },
   { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 3 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
+  { cat: "Cuisine", offre: "« Votre cuisine familiale, à vous » — l’outil cuisine de la famille : vos recettes, portions recalculées, liste d’épicerie combinée — Bientôt, vente pas encore ouverte", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/cuisine-familiale", label: "Voir la fiche (Bientôt)" },
 ];
 
 const BLOCS = [
   { titre: "Livres PDF", lignes: ROWS.slice(0, 5) },
-  { titre: "Kits et histoires", lignes: ROWS.slice(5, 8) },
-  { titre: "Passeurs et ateliers", lignes: ROWS.slice(8, 10) },
-  { titre: "Jeux, cadeaux et outils gratuits", lignes: ROWS.slice(10) },
+  { titre: "Kits et histoires", lignes: ROWS.slice(5, 9) },
+  { titre: "Passeurs et ateliers", lignes: ROWS.slice(9, 11) },
+  { titre: "Jeux", lignes: ROWS.slice(11, 14) },
+  { titre: "Cadeaux, cuisine et outils gratuits", lignes: ROWS.slice(14) },
 ];
 
 function Page() {
