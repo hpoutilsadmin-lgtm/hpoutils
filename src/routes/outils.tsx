@@ -83,7 +83,7 @@ const WEB_TOOLS = [
     title: "Un petit pas à la fois",
     copy: "Respire avec moi, ta carte ikigaï, ton plan WOOP : trois modules pour explorer ce qui te fait vibrer et passer à l'action, un petit pas à la fois. Le compagnon gratuit du mini cahier du même nom.",
     cta: "Ouvrir l'outil →",
-    href: "/outils/hp-hyper-potentiel",
+    href: "/outils/un-petit-pas-a-la-fois",
   },
 ];
 
