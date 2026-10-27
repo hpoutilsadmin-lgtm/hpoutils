@@ -50,8 +50,10 @@ function Page() {
     </ul>
     <h2>9. Changements à ces conditions</h2>
     <p>On peut mettre à jour ces conditions de temps en temps. La version publiée sur cette page au moment de votre achat est celle qui s'applique à cet achat.</p>
+    <h2>10. Nous joindre — service client</h2>
+    <p>Une question, un souci avec un achat, un lien qui ne fonctionne pas ? Écrivez à hpoutils.admin@gmail.com. Une réponse d'humain, pas d'un robot — sous 3 jours ouvrables. C'est un humain de l'équipe qui vous répond. Pour vos renseignements personnels, voyez la Politique de confidentialité.</p>
     <h2>11. Bons cadeaux</h2>
-    <p>Codes personnels de 5 $, 10 $, 20 $, 50 $ ou 100 $ CAD, aucune taxe (mais c'est temporaire, profitez-en). Applicables en une fois ou par tranches jusqu'à épuisement du solde. Sans date d'expiration. Aucun frais d'utilisation. Les bons ne s'échangent pas contre de l'argent, sauf le solde de 5 $ ou moins, remboursable à la demande.</p>
+    <p>Codes personnels de 5 $, 10 $, 20 $, 50 $ ou 100 $ CAD, aucune taxe ajoutée. Applicables en une fois ou par tranches jusqu'à épuisement du solde. Sans date d'expiration. Aucun frais d'utilisation. Les bons ne s'échangent pas contre de l'argent, sauf le solde de 5 $ ou moins, remboursable à la demande.</p>
     <p><strong>Vérifier votre solde.</strong> Le solde se vérifie au panier : saisissez votre code au panier, le solde utilisable s'affiche avant tout paiement. Si la vérification ne passe pas, écrivez à la direction humaine — un humain vous répondra sous 3 jours ouvrables.</p>
     <p><strong>Remboursement.</strong> Solde de 5 $ ou moins : remboursable à votre demande. Un solde de plus de 5 $ n'est pas remboursable en argent: il reste utilisable, sans date d'expiration et sans frais, en une fois ou par tranches, jusqu'à épuisement.</p>
     <p>Information générale, pas un avis juridique. En cas de question, écrivez à la direction — réponse d'humain sous 3 jours ouvrables.</p>
@@ -66,7 +68,5 @@ function Page() {
     <p><strong>Protections de la Loi sur la protection du consommateur, appliquées à tous par contrat.</strong> Avant le contrat, HP vous divulgue tous les renseignements obligatoires (prix, délais, hébergement, conditions). Vous recevez une copie du contrat (devis + conditions) par courriel, que vous pouvez conserver et imprimer. Tout remboursement se fait dans les 15 jours suivant votre annulation. Si HP ne vous rembourse pas dans les 15 jours et que vous avez payé par carte, vous avez 60 jours pour demander une rétrofacturation à l'émetteur de votre carte. Si HP ne vous a pas divulgué tous les renseignements obligatoires avant le contrat, ne vous a pas donné la possibilité d'accepter ou de refuser et de corriger les erreurs, ou ne vous a pas envoyé une copie du contrat conservable et imprimable, vous pouvez annuler dans les 7 jours suivant la réception de la copie (30 jours suivant la conclusion du contrat si aucune copie ne vous a été envoyée).</p>
     <p><strong>Prévention des litiges.</strong> Pour éviter tout désaccord : le brief est écrit (les 5 questions, par courriel) ; le prototype est testé par vous, sur votre téléphone, avant votre oui ; votre oui est explicite ; le devis est ventilé (prix du niveau, hébergement, aucune taxe ajoutée) ; 1 ronde de corrections est incluse ; un humain de l'équipe vous répond sous 3 jours ouvrables, à chaque étape. En cas de désaccord, écrivez d'abord à la direction humaine : on cherche un règlement amiable, par courriel, avant tout autre recours.</p>
     <p>Information générale, pas un avis juridique.</p>
-    <h2>10. Nous joindre — service client</h2>
-    <p>Une question, un souci avec un achat, un lien qui ne fonctionne pas ? Écrivez à hpoutils.admin@gmail.com. Une réponse d'humain, pas d'un robot — sous 3 jours ouvrables. C'est un humain de l'équipe qui vous répond. Pour vos renseignements personnels, voyez la Politique de confidentialité.</p>
   </div></section>;
 }

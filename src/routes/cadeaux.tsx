@@ -66,7 +66,7 @@ function Page() {
           </p>
           <p className="lead">
             Prix en $ CAD, aucune taxe ajoutée. Un bon ne s'échange pas
-            contre de l'argent.
+            contre de l'argent, sauf le solde de 5 $ ou moins, remboursable à la demande.
           </p>
         </div>
       </section>
