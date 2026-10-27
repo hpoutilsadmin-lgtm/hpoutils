@@ -2444,6 +2444,7 @@ export function initHgpto() {
         btnPause.setAttribute('aria-pressed', paused ? 'true' : 'false');
         if (paused){
           if (typeof endBataille === 'function' && batailleOn) endBataille('stop');
+          if (typeof bataillePanel !== 'undefined' && bataillePanel) bataillePanel.hidden = true;
           if (state !== 'sleep'){ setState('idle'); setExpr('happy'); }
           showBubble("Je suis en pause — touche Pause pour repartir.", 8000, 'none', { now:true });
         } else {
@@ -2530,6 +2531,7 @@ export function initHgpto() {
           /* Portage site : « Fermer HGPTO » = fermé pour la session. */
           try { sessionStorage.setItem('hgpto-closed', '1'); sessionStorage.removeItem('hgpto-tour'); sessionStorage.removeItem('hgpto-guide'); } catch(e) {}
           if (typeof endBataille === 'function' && batailleOn) endBataille('stop');
+          if (typeof bataillePanel !== 'undefined' && bataillePanel) bataillePanel.hidden = true;
           hgptoClosed = true;
           if (pastille) pastille.textContent = 'Rouvrir HGPTO';
           isHidden = true;
@@ -3226,6 +3228,7 @@ export function initHgpto() {
           + '<div class="bataille-cards"><div class="bataille-card"><span>Toi</span><b id="bataille-you-card">?</b><span id="bataille-you-count"></span></div>'
           + '<div class="bataille-card"><span>HGPTO</span><b id="bataille-bot-card">?</b><span id="bataille-bot-count"></span></div></div>'
           + '<p id="bataille-status" style="margin:4px 0 8px"></p>'
+          + '<div class="bataille-btns"><button type="button" id="bataille-close">Fermer</button></div>'
           + '<div class="bataille-btns" id="bataille-actions"><button type="button" id="bataille-reveal">R\u00e9v\u00e9ler la manche</button>'
           + '<button type="button" id="bataille-stop">Arr\u00eater la partie</button></div>'
           + '<div class="bataille-btns" id="bataille-replay" hidden><button type="button" id="bataille-yes">Oui, rejouons !</button>'
@@ -3247,7 +3250,8 @@ export function initHgpto() {
           document.getElementById('bataille-actions').hidden = false;
           renderBataille(null, null, BATAILLE_TEXTES.tour);
         });
-        document.getElementById('bataille-arret').addEventListener('click', function(){ endBataille('amical', true); });
+        document.getElementById('bataille-arret').addEventListener('click', function(){ endBataille('stop'); });
+        document.getElementById('bataille-close').addEventListener('click', function(){ batailleNoReplay = true; endBataille('stop'); });
       }
       function renderBataille(yc, bc, status){
         if (!bataillePanel || !BATAILLE) return;
@@ -3260,7 +3264,18 @@ export function initHgpto() {
       function startBataille(){
         lastInteract = Date.now();
         if (batailleOn) return;
-        if (!peutDivertir()) return;
+        if (qaOpen) closeQA();
+        if (!peutDivertir()){
+          var whyBataille = 'Je ne peux pas jouer là, minute — ';
+          if (calm) whyBataille += 'je suis en mode calme. Sors-en, pis on joue !';
+          else if (state === 'sleep') whyBataille += 'je dormais, là. Réveille-moi pis on joue !';
+          else if (gameOn) whyBataille += 'je suis déjà en partie de Serpents et échelles. Finis-la, pis on joue !';
+          else if (tourOn) whyBataille += 'je suis en visite guidée. Finis-la, pis on joue !';
+          else if (paused) whyBataille += 'je suis en pause. Touche Pause pour repartir, pis on joue !';
+          else whyBataille += 'pas tout de suite. Réessaie dans un instant !';
+          showBubble(esc(whyBataille), 8000, 'talk', { now:true });
+          return;
+        }
         sessClearFlag('hgpto-refus');   // demande explicite : initiative du visiteur (§4.2)
         buildBataillePanel();
         if (!bataillePanel) return;
