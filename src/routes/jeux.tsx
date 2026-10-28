@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 36 jeux en ligne | HP Outils",
-      description: "36 jeux gratuits créés au Québec : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
+      title: "Jeux gratuits en français du Québec — 36 + 1 caché en ligne | HP Outils",
+      description: "Des jeux gratuits créés au Québec — 36 + 1 caché : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
       path: "/jeux",
     }),
     scripts: [
@@ -65,7 +65,7 @@ const GAMES = [
   { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "Jeu quiz et de déduction gratuit : 330 manches pour démasquer le mensonge — historique, inusité, cocasse.", tag: "Quiz · Vérités et mensonge", faits: "Pour les curieux de 7 à 107 ans · 110 manches par catégorie", mono: "2V", art: 7 },
   { title: "Chat'attaque — tower defense de chats", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Jeu de stratégie gratuit, tower defense avec des chats : 9 chats-tours défendent 50 croquettes, 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local.", tag: "Stratégie · Tower defense de chats", faits: "Solo ou 2 joueurs local · 12 cartes · 3 difficultés", mono: "CA", art: 2 },
   { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Jeu de stratégie et de science-fiction gratuit : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde — douze vagues, une tempête qui peut tout changer.", tag: "Stratégie · Tower defense futuriste", faits: "Solo · 12 vagues", mono: "87", art: 7 },
-  { title: "Chevalier du fleuve — stratégie et histoire vraie", file: "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", copy: "Jeu de stratégie en temps réel gratuit : refais la campagne vraie de Pierre Le Moyne d'Iberville — bâtis, lève ton armée, prends les forts de la baie James, défends Québec, coule la flotte à bord du Pélican. Et sur les berges, la légende des nains albinos des terriers et leur Forge des Rois Gybbys…", tag: "Stratégie · Temps réel · Histoire vraie", faits: "16 ans et plus · Campagne 1686-1699 + mode libre · Gratuit en entier — pierres précieuses gagnées en jouant", mono: "CF", art: 7 },
+  { title: "Chevalier du fleuve — stratégie et histoire vraie", file: "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", copy: "Jeu de stratégie en temps réel gratuit : refais la campagne vraie de Pierre Le Moyne d'Iberville — bâtis, lève ton armée, prends les forts de la baie James, défends Québec, coule la flotte à bord du Pélican. Et sur les berges, la légende des nains albinos des terriers et leur Forge des Rois Gybbys…", tag: "Stratégie · Temps réel · Histoire vraie", faits: "12 ans et plus · Campagne 1686-1699 + mode libre · Gratuit en entier — pierres précieuses gagnées en jouant", mono: "CF", art: 7 },
   { title: "IGLOO — La guerre des igloos", file: "/apps/igloo/igloo-v1.0.html", copy: "Jeu de stratégie en arène gratuit : bataille de boules de neige — déploie tes cartes, défends ton igloo et fais tomber celui d'en face. Chaque bataille tire une loi du quartier au hasard !", tag: "Stratégie · Bataille de boules de neige", faits: "Campagne de 10 batailles · parties d'environ 3 minutes", mono: "IG", art: 7 },
   { title: "Que vois-tu ? — jeu de perception", file: "/apps/que-vois-tu/que-vois-tu-v2.0.html", copy: "Jeu de perception gratuit, pour toute la famille : dis ce que tu vois en premier dans chaque image — il n'y a pas de mauvaise réponse.", tag: "Perception · Ce que tu vois d'abord", faits: "42 défis · 3 terrains : Jeunesse, Ado, Adulte", mono: "QV", art: 4 },
   { title: "Tapinoue — aventure jeunesse", file: "/apps/tapinoue/tapinoue-v2.0.html", copy: "Jeu d'aventure jeunesse gratuit : les aventures de Tapinoue et de sa famille, en 4 tableaux qui se débloquent un à un — la rencontre, le terrier, le potager de M. Grincheux… et le renard qui rôde.", tag: "Aventure · Jeunesse en 4 tableaux", faits: "4 tableaux · progression sauvegardée", mono: "TP", art: 1 },
@@ -492,8 +492,8 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* +1 : Le Panier Solidaire, joué dans En cuisine (section ci-dessous), compté dans le total */}
-            <span style={CHIP_STYLE}>{GAMES.length + 1} jeux gratuits</span>
+            {/* Compteur HP 22 h 50 : 36 (= 35 jeux + tuile Panier, jouée dans En cuisine) + 1 caché, non nommé */}
+            <span style={CHIP_STYLE}>{GAMES.length + 1} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans ton navigateur</span>
           </div>
@@ -532,7 +532,7 @@ function JeuxPage() {
           <span className="editorial-kicker">Gratuits, sans inscription</span>
           <h2 className="section-title">Tous les jeux</h2>
           <p style={{ textAlign: "center", maxWidth: 620, margin: "-6px auto 34px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.55 }}>
-            Cliquez sur une tuile et jouez tout de suite : rien à installer, rien à payer.
+            Touchez ou cliquez sur une tuile et jouez tout de suite : rien à installer, rien à payer.
           </p>
           <div style={{ display: "flex", justifyContent: "center", margin: "0 auto 16px", maxWidth: 520 }}>
             <input
@@ -674,7 +674,7 @@ function JeuxPage() {
             <article className="pillar-card">
               <h3>Le Panier Solidaire</h3>
               <p>Aussi dans En cuisine — découvre le jeu là où on cuisine.</p>
-              <a className="pillar-cta" href="/en-cuisine/index.html">Jouer dans En cuisine →</a>
+              <a className="pillar-cta" href="/en-cuisine/index.html#panier-solidaire">Jouer dans En cuisine →</a>
             </article>
           </div>
         </div>
@@ -795,7 +795,7 @@ function JeuxPage() {
 <section className="collections-strip">
         <div className="container" style={{ maxWidth: 720 }}>
           <span className="editorial-kicker">Infolettre</span>
-          <h2>Les nouveaux jeux <em>dans ta boîte</em></h2>
+          <h2>Les nouveaux jeux <em>dans votre boîte</em></h2>
           <p className="strip-intro">
             Nouveaux jeux, nouveaux tomes « À toi l'histoire », coulisses HP.
             Un courriel de temps en temps, jamais de spam.
@@ -846,7 +846,7 @@ function JeuxPage() {
         <div className="container" style={{ maxWidth: 720 }}>
           <p className="strip-intro">Un humain se promène par ici. Il marche, tranquille.</p>
           <p className="strip-intro">Détectôt</p>
-          <p className="strip-intro">Il devine, il ne surveille personne.</p>
+          <p className="strip-intro">Il devine à qui la page s'adresse — IA ou humain probable — et ne surveille personne.</p>
         </div>
       </section>
     </>

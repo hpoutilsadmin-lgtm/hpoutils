@@ -10,6 +10,7 @@ import {
   readerUrl,
   resolveTomeSlugsForSession,
   revokeTomeTokensForPaymentIntent,
+  revokeTomeTokensForSessions,
 } from "@/lib/tomes-tokens.server";
 
 let _supabase: any = null;
@@ -47,6 +48,23 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
 
   const email =
     session.customer_details?.email || (session.customer_email as string | null) || "";
+  // « Offrir » : la livraison va au destinataire (métadonnée gift_to),
+  // la facture reste chez le payeur (ligne de commande : customer_email =
+  // payeur, inchangée ci-dessous). Si le destinataire est le payeur, on
+  // retombe sur le parcours normal. La révocation en cas de remboursement
+  // (handleChargeRefunded) est indépendante du courriel : elle passe par
+  // le payment intent et le statut de la commande — elle coupe donc le
+  // lien du destinataire comme celui du payeur.
+  const giftRaw = session.metadata?.gift_to;
+  const giftTo =
+    typeof giftRaw === "string" &&
+    giftRaw.length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(giftRaw) &&
+    giftRaw.toLowerCase() !== email.toLowerCase()
+      ? giftRaw.toLowerCase()
+      : null;
+  const deliveryEmail = giftTo ?? email;
+  const isGift = giftTo !== null;
   const first = session.line_items?.data?.[0];
   const priceId =
     first?.price?.lookup_key ||
@@ -59,7 +77,15 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
       : (first?.price?.product as any)?.id || "unknown";
   const product = getProduct(priceId);
 
-  await getSupabase().from("orders").upsert(
+  // Clé d'idempotence (session + prix), comme la migration
+  // 20261024_cart_orders.sql et payments.functions.ts : l'ancienne clé
+  // « session seule » n'existe plus en base, l'upsert échouait — et
+  // l'erreur était ignorée, donc la commande n'était jamais enregistrée
+  // sans que personne le voie (bug remboursement, oct. 2026).
+  // Une erreur ici est JOURNALISÉE et BLOQUANTE : on lève, le POST
+  // répond 400, Stripe rejoue l'événement, et AUCUNE livraison
+  // (jetons, courriel) n'a lieu avant l'enregistrement.
+  const { error: orderUpsertError } = await getSupabase().from("orders").upsert(
     {
       stripe_session_id: session.id,
       stripe_payment_intent_id:
@@ -73,20 +99,24 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
       pdf_path: product?.pdfPath ?? null,
       environment: env,
     },
-    { onConflict: "stripe_session_id" },
+    { onConflict: "stripe_session_id,price_id" },
   );
+  if (orderUpsertError) {
+    console.error("orders upsert failed", orderUpsertError);
+    throw new Error("Database error");
+  }
 
   // TOMES « À toi l'histoire » : la session porte metadata.kind === 'tome'
   // (ou un lookup_key de tome). On crée les jetons personnels et on envoie
   // le courriel de lecture — puis on sort, sans courriel PDF.
   // Idempotent : si la page de retour a déjà livré, les jetons existent et
   // on n'envoie pas de doublon.
-  if (isTomeSession(session) && email) {
+  if (isTomeSession(session) && deliveryEmail) {
     const slugs = resolveTomeSlugsForSession(session);
     if (slugs.length > 0) {
       const created = await createTomeTokensForSession({
         sessionId: session.id,
-        email,
+        email: deliveryEmail,
         slugs,
         environment: env,
       });
@@ -94,12 +124,13 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
       if (fresh.length > 0) {
         await enqueueTransactionalEmail({
           templateName: "tome-delivery",
-          recipientEmail: email,
+          recipientEmail: deliveryEmail,
           idempotencyKey: `tome-delivery-${session.id}`,
           templateData: {
             title: "À toi l'histoire",
             items: fresh.map((c) => ({ title: c.tome.title, readerUrl: readerUrl(c.token!) })),
             siteOrigin: getTrustedSiteOrigin(),
+            isGift,
           },
         });
       }
@@ -110,17 +141,19 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
   // Envoi automatique du courriel de livraison avec un lien signé frais.
   // Idempotent grâce à idempotency_key = session.id : si Stripe rejoue
   // l'événement, le worker email n'enverra pas un doublon.
-  if (product && email) {
-    const token = signDownloadToken({ priceId, email });
+  // Pour un cadeau, le jeton est signé avec le courriel du destinataire.
+  if (product && deliveryEmail) {
+    const token = signDownloadToken({ priceId, email: deliveryEmail });
     const downloadUrl = `/api/public/download-pdf?token=${encodeURIComponent(token)}`;
     await enqueueTransactionalEmail({
       templateName: "purchase-delivery",
-      recipientEmail: email,
+      recipientEmail: deliveryEmail,
       idempotencyKey: `delivery-${session.id}`,
       templateData: {
         title: product.title,
         downloadUrl,
         siteOrigin: getTrustedSiteOrigin(),
+        isGift,
       },
     });
   }
@@ -129,11 +162,26 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
 // charge.refunded / charge.refund.updated : marque la commande comme
 // remboursée. /api/public/download-pdf vérifie ce statut et bloque le
 // téléchargement quand status='refunded'.
+//
+// RÉVOCATION INDÉPENDANTE DE LA TABLE orders (bug remboursement, oct. 2026) :
+// si la commande n'a jamais été enregistrée, la recherche par
+// payment_intent dans orders ne trouve aucune session et l'ancienne
+// révocation s'arrêtait là — le lien de lecture restait vivant.
+// On passe donc par Stripe lui-même (sessions de caisse du payment_intent)
+// quand orders ne donne rien : un remboursement coupe le lien même
+// sans ligne orders. Rien ici n'est silencieux : chaque issue est
+// journalisée (révoqués par orders, révoqués par repli Stripe, ou rien
+// à révoquer).
 async function handleChargeRefunded(charge: any, env: StripeEnv) {
   const paymentIntentId =
     typeof charge.payment_intent === "string" ? charge.payment_intent : null;
-  if (!paymentIntentId) return;
-  await getSupabase()
+  if (!paymentIntentId) {
+    console.warn("charge refunded without payment_intent; nothing revoked", {
+      chargeId: charge.id ?? null,
+    });
+    return;
+  }
+  const { error: refundUpdateError } = await getSupabase()
     .from("orders")
     .update({
       status: "refunded",
@@ -141,8 +189,38 @@ async function handleChargeRefunded(charge: any, env: StripeEnv) {
     })
     .eq("stripe_payment_intent_id", paymentIntentId)
     .eq("environment", env);
+  if (refundUpdateError) {
+    console.error("orders refund update failed", refundUpdateError);
+    throw new Error("Database error");
+  }
   // Un remboursement révoque aussi les liens de lecture des tomes.
-  await revokeTomeTokensForPaymentIntent(paymentIntentId, env);
+  const revokedFromOrders = await revokeTomeTokensForPaymentIntent(
+    paymentIntentId,
+    env,
+  );
+  if (revokedFromOrders > 0) {
+    console.log(
+      `charge refunded: revoked ${revokedFromOrders} tome tokens via orders for payment_intent ${paymentIntentId}`,
+    );
+    return;
+  }
+  // Repli indépendant de orders : retrouver les sessions par Stripe.
+  const stripe = createStripeClient(env);
+  const sessions = await stripe.checkout.sessions.list({
+    payment_intent: paymentIntentId,
+    limit: 10,
+  });
+  const sessionIds = sessions.data.map((s) => s.id);
+  if (sessionIds.length === 0) {
+    console.warn(
+      `charge refunded: no orders row and no Stripe checkout session for payment_intent ${paymentIntentId}; nothing to revoke`,
+    );
+    return;
+  }
+  const revokedFromStripe = await revokeTomeTokensForSessions(sessionIds);
+  console.log(
+    `charge refunded: revoked ${revokedFromStripe} tome tokens via Stripe session fallback for payment_intent ${paymentIntentId}`,
+  );
 }
 
 async function handleWebhook(req: Request, env: StripeEnv) {

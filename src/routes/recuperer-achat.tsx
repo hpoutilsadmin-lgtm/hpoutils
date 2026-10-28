@@ -75,7 +75,7 @@ function Page() {
             </h2>
             <p style={stepTextStyle}>
               Après votre achat, Stripe vous a envoyé un reçu par courriel,
-              et le lien de téléchargement se trouve dedans. Cherchez
+              et votre lien (téléchargement ou lecture web, selon le produit) se trouve dedans. Cherchez
               «&nbsp;Stripe&nbsp;» ou «&nbsp;HP Outils&nbsp;» dans votre
               boîte de réception. Jetez aussi un œil au dossier
               «&nbsp;Indésirables&nbsp;» (le pourriel)&nbsp;: le reçu s'y
@@ -88,15 +88,14 @@ function Page() {
             </h2>
             <p style={{ ...stepTextStyle, marginBottom: 16 }}>
               Entrez l'adresse exacte utilisée lors de votre achat. Si une
-              commande payée est associée à cette adresse, un nouveau lien
-              de téléchargement (valide 7 jours) vous sera envoyé par
+              commande payée est associée à cette adresse, un nouveau lien (téléchargement ou lecture web, selon le produit, valide 7 jours) vous sera envoyé par
               courriel dans les prochaines minutes.
             </p>
           {submitted ? (
             <div>
               <p style={{ margin: 0 }}>
                 Si un achat est associé à cette adresse, un courriel
-                contenant vos liens de téléchargement vient d'être envoyé.
+                contenant vos liens vient d'être envoyé.
                 Vérifiez votre boîte de réception (et le dossier
                 «&nbsp;Indésirables&nbsp;») dans les prochaines minutes.
               </p>
@@ -153,7 +152,7 @@ function Page() {
               </a>{" "}
               avec l'adresse courriel utilisée à l'achat — et, si vous vous
               en souvenez, le nom du produit et la date approximative.
-              L'équipe retrouvera votre commande et vous renverra votre accès : une réponse d'humain, pas d'un robot, sous
+              L'équipe retrouvera votre commande et vous renverra votre accès : une réponse de la direction humaine, pas d'un robot, sous
               3 jours ouvrables. Vous pouvez aussi passer par le{" "}
               <a href="/contact#formulaire-contact">formulaire de contact</a>.
             </p>

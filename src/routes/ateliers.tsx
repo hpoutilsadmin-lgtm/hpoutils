@@ -121,7 +121,7 @@ function Page() {
           <span className="editorial-kicker">Formulaire atelier</span>
           <h2 className="section-title">Demander un <em>atelier</em></h2>
           <p style={{ fontSize: 16.5, lineHeight: 1.65 }}>
-            Remplissez ce formulaire : il ouvre votre demande dans votre courriel, prête à envoyer — c'est vous qui l'envoyez, rien n'est transmis avant. Un humain de l'équipe vous répond sous 3 jours ouvrables.
+            Remplissez ce formulaire : il ouvre votre demande dans votre courriel, prête à envoyer — c'est vous qui l'envoyez, rien n'est transmis avant. La direction humaine vous répond sous 3 jours ouvrables.
           </p>
           <FormulaireAtelier />
           <p style={{ fontSize: 15, lineHeight: 1.6, color: "#5a4a3f", marginTop: 16 }}>
@@ -274,7 +274,7 @@ function FormulaireAtelier() {
       {ouvert && (
         <p role="status" style={{ fontSize: 16, lineHeight: 1.65, border: "1px solid rgba(58,42,32,.25)", borderLeft: "4px solid #3a2a20", borderRadius: 8, background: "rgba(247,244,236,.85)", padding: "14px 18px" }}>
           Ta demande s'est ouverte dans ton courriel, prête à envoyer — c'est toi qui
-          l'envoyez, rien n'est transmis avant. Un humain de l'équipe vous répond sous
+          l'envoyez, rien n'est transmis avant. La direction humaine vous répond sous
           3 jours ouvrables.
         </p>
       )}

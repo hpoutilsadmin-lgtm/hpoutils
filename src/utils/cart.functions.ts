@@ -28,11 +28,16 @@ async function resolvePriceIds(
   return resolved;
 }
 
+// « Offrir » — support serveur préparé pour le panier (phase 2 : l'interface
+// panier n'est pas dans ce lot, voir rapport). Même validation que les
+// autres flux : destinataire facultatif, validé, jamais de débit sans
+// destinataire valide quand la case sera cochée.
 export const createCartCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator(
     (data: {
       items: Array<{ priceId: string; quantity?: number }>;
       environment: StripeEnv;
+      giftTo?: string;
     }) => {
       if (!Array.isArray(data.items)) throw new Error("Panier invalide");
       // La quantité du client est ignorée : un PDF = un exemplaire.
@@ -40,7 +45,14 @@ export const createCartCheckoutSession = createServerFn({ method: "POST" })
       if (data.environment !== "sandbox" && data.environment !== "live") {
         throw new Error("Environnement invalide");
       }
-      return { priceIds, environment: data.environment };
+      let giftTo: string | undefined;
+      if (data.giftTo !== undefined && data.giftTo !== null && data.giftTo !== "") {
+        if (typeof data.giftTo !== "string" || data.giftTo.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.giftTo)) {
+          throw new Error("Courriel du destinataire invalide");
+        }
+        giftTo = data.giftTo.toLowerCase();
+      }
+      return { priceIds, environment: data.environment, giftTo };
     },
   )
   .handler(async ({ data }) => {
@@ -74,7 +86,9 @@ export const createCartCheckoutSession = createServerFn({ method: "POST" })
         // l'adresse de facturation ; tax_code txcd_10000000).
         automatic_tax: { enabled: true },
         billing_address_collection: "required",
-        metadata: { cart: "1", priceIds: data.priceIds.join(",") },
+        metadata: data.giftTo
+          ? { cart: "1", priceIds: data.priceIds.join(","), gift_to: data.giftTo }
+          : { cart: "1", priceIds: data.priceIds.join(",") },
       });
 
       return { checkoutUrl: session.url ?? "" };

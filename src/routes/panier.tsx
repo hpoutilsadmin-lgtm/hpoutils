@@ -27,7 +27,7 @@ export const Route = createFileRoute("/panier")({
     createSeoHead({
       title: "Votre panier | HP Outils",
       description:
-        "Ton panier HP Outils : livres et kits PDF, prix en $ CAD, aucune taxe ajoutée, livraison par courriel après paiement.",
+        "Votre panier HP Outils : livres et kits PDF, prix en $ CAD, aucune taxe ajoutée, livraison par courriel après paiement.",
       path: "/panier",
     }),
   component: Page,
@@ -202,13 +202,13 @@ function Page() {
         <div className="container">
           <span className="editorial-kicker">Panier d'achat</span>
           <h1>
-            Ton <em>panier</em>.
+            Votre <em>panier</em>.
           </h1>
           <p className="lead">
             Livres et kits PDF, prix en $ CAD, aucune taxe ajoutée (petit
             fournisseur : la TPS et la TVQ ne sont pas perçues). Après le
-            paiement, tu reçois chaque fichier par courriel, comme aujourd'hui.
-            Tu peux retirer un article à tout moment, sans frais.
+            paiement, vous recevez chaque fichier par courriel, comme aujourd'hui.
+            Vous pouvez retirer un article à tout moment, sans frais.
           </p>
         </div>
       </section>
@@ -218,12 +218,12 @@ function Page() {
           {!pret ? null : items.length === 0 ? (
             <div style={{ maxWidth: 640 }}>
               <h2 className="section-title">
-                {payeCadeau ? "Payé avec ton bon cadeau." : "Ton panier est vide."}
+                {payeCadeau ? "Payé avec votre bon cadeau." : "Votre panier est vide."}
               </h2>
               <p>
                 {payeCadeau
                   ? payeCadeau.resteCents > 0
-                    ? `Solde restant sur ton bon : ${afficherSolde(payeCadeau.resteCents)}. Les liens de téléchargement sont envoyés par courriel.`
+                    ? `Solde restant sur votre bon : ${afficherSolde(payeCadeau.resteCents)}. Les liens de téléchargement sont envoyés par courriel.`
                     : "Les liens de téléchargement sont envoyés par courriel."
                   : "Les livres et les kits s'ajoutent depuis le tableau des prix et depuis chaque fiche, avec le bouton « Ajouter au panier »."}
               </p>
@@ -338,7 +338,7 @@ function Page() {
                         disabled={paiement === "envoi" || courrielCadeau.trim() === ""}
                         onClick={payerAvecBon}
                       >
-                        {paiement === "envoi" ? "On prépare ton paiement…" : "Payer avec mon bon cadeau"}
+                        {paiement === "envoi" ? "On prépare votre paiement…" : "Payer avec votre bon cadeau"}
                       </button>
                     </div>
                   </div>
@@ -354,7 +354,7 @@ function Page() {
                     onClick={payer}
                   >
                     {paiement === "envoi"
-                      ? "On prépare ton paiement…"
+                      ? "On prépare votre paiement…"
                       : resteApresBon !== null
                         ? `Payer le reste (${formatCad(resteApresBon)})`
                         : `Payer ${formatCad(total)}`}

@@ -522,7 +522,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     downloadFileName: "Collection-Sans-Honte.pdf",
     priceLabel: "40 $ CAD, aucune taxe ajoutée",
     blurb:
-      "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisis 10 kits parmi les 15, en un seul téléchargement.",
+      "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisis 10 kits parmi les 15, 10 liens de téléchargement, un par kit choisi, par courriel.",
     cover: "/images/sans-honte/collection-cover.png",
     formatLabel: "Collection PDF",
     shortDescription:

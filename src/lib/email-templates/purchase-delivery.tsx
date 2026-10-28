@@ -24,6 +24,9 @@ interface PurchaseDeliveryProps {
   siteOrigin?: string
   /** Bundle « Choisis 10 kits parmi 15 » : un lien par kit choisi. */
   items?: DeliveryItem[]
+  /** « Offrir » : le destinataire n'est pas l'acheteur. Le nom de l'offreur
+   * n'est pas collecté à l'achat : le texte reste neutre, sans nom inventé. */
+  isGift?: boolean
 }
 
 const PurchaseDeliveryEmail = ({
@@ -31,13 +34,21 @@ const PurchaseDeliveryEmail = ({
   downloadUrl = '',
   siteOrigin = '',
   items = [],
+  isGift = false,
 }: PurchaseDeliveryProps) => (
   <Html lang="fr" dir="ltr">
     <Head />
-    <Preview>Votre lien de téléchargement {SITE_NAME}</Preview>
+    <Preview>{isGift ? `On vous offre ${title} — ${SITE_NAME}` : `Votre lien de téléchargement ${SITE_NAME}`}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>Merci pour votre achat</Heading>
+        <Heading style={h1}>{isGift ? 'On vous offre un cadeau' : 'Merci pour votre achat'}</Heading>
+        {isGift && (
+          <Text style={text}>
+            Quelqu'un vous offre ce cadeau de {SITE_NAME}. Ce courriel vous
+            est envoyé uniquement pour vous livrer ce cadeau — il ne vous
+            inscrit à rien d'autre.
+          </Text>
+        )}
         {items.length > 0 ? (
           <>
             <Text style={text}>
@@ -85,7 +96,9 @@ const PurchaseDeliveryEmail = ({
 export const template = {
   component: PurchaseDeliveryEmail,
   subject: (data: Record<string, any>) =>
-    `Votre lien de téléchargement — ${data.title ?? SITE_NAME}`,
+    data.isGift
+      ? `On vous offre : ${data.title ?? SITE_NAME} — ${SITE_NAME}`
+      : `Votre lien de téléchargement — ${data.title ?? SITE_NAME}`,
   displayName: 'Livraison d\'achat',
   previewData: {
     title: 'Guide PDF — exemple',

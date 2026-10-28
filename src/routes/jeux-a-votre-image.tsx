@@ -128,7 +128,7 @@ function Page() {
           </li>
         </ul>
         <p style={P}>
-          35 jeux construits et testés par HP Outils : ils ont déjà joué pour
+          35 jeux construits et testés par HP Outils — un compte de construction, pas le total affiché du site : ils ont déjà joué pour
           vrai. Aucun jeu ne sort sans avoir été testé sur téléphone avant
           livraison — et vous testez le prototype sur VOTRE téléphone avant de
           dire oui. Une ronde de corrections est incluse. Ce que personne ne
@@ -207,8 +207,7 @@ function Page() {
           affiché, c&apos;est le prix payé.
         </p>
         <p style={P}>
-          Moins cher que les gabarits spécialisés — 400 à 700 $ US par jeu —
-          et on vous dit pourquoi : l&apos;IA accélère la production sans
+          On vous dit pourquoi : l&apos;IA accélère la production sans
           remplacer l&apos;humain qui dirige, teste et livre, les moteurs
           existent déjà, et il n&apos;y a aucune couche d&apos;agence.
         </p>
@@ -266,7 +265,7 @@ function Page() {
         <ul style={LI}>
           <li>Un lien pour l&apos;aperçu.</li>
           <li>Un lien pour le jeu.</li>
-          <li>Un QR qui se génère seul.</li>
+          <li>Un QR qui se génère seul (Saisonnier et Permanent seulement).</li>
         </ul>
         <ol style={LI}>
           <li>Vous essayez l&apos;aperçu gratuit (30 secondes, sans compte).</li>
@@ -276,7 +275,7 @@ function Page() {
           <li>Livraison par courriel : adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer pour Saisonnier et Permanent).</li>
         </ol>
         <p style={P}>
-          Un humain de l&apos;équipe vous répond sous 3 jours ouvrables, à chaque étape.
+          La direction humaine vous répond sous 3 jours ouvrables, à chaque étape.
         </p>
         <h3 style={H3}>Votre brief, en 5 questions :</h3>
         <ol style={LI}>
@@ -309,15 +308,15 @@ function Page() {
           le solde dans les 15 jours suivant votre annulation.
         </p>
         <ol style={LI}>
-          <li><strong>1. Le brief, par courriel.</strong> Vous répondez aux 5 questions, par écrit, à hpoutils.admin@gmail.com. Le brief écrit évite les désaccords. Si HP refuse le projet à ce stade, vous ne payez rien — le choix du client se fait ici, avant tout paiement.</li>
-          <li><strong>2. Le prototype, testé par vous.</strong> Vous essayez le prototype sur VOTRE téléphone, avant tout oui et avant tout paiement. Rien n&apos;est facturé avant que vous ayez vu et essayé le jeu.</li>
-          <li><strong>3. Le devis, ventilé.</strong> Prix du niveau, hébergement, aucune taxe ajoutée — chaque montant est détaillé, sans frais cachés. Vous recevez une copie du contrat (devis + conditions) par courriel, que vous pouvez conserver et imprimer.</li>
-          <li><strong>4. Votre OUI EXPLICITE — la porte obligatoire.</strong> Sans votre oui explicite, aucun paiement n&apos;est demandé et aucun paiement n&apos;est pris. Un silence, un aperçu ou un échange de courriels ne vaut jamais oui.</li>
-          <li><strong>5. Le paiement, seulement après votre oui.</strong> Le lien de paiement sécurisé Stripe vous est envoyé après votre oui explicite, et pas avant. 1 ronde de corrections est incluse pour Événement, Saisonnier et Permanent (l&apos;Express 29 $ n&apos;en inclut pas). Pour l&apos;instant : aucun paiement réel n&apos;est pris pour les jeux sur mesure — les produits Stripe sont en confirmation, et le paiement s&apos;ouvrira après cette confirmation et un test à 0 $.</li>
-          <li><strong>6. La livraison, par courriel.</strong> Adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer pour Saisonnier et Permanent). Délai convenu : sous 14 jours après validation du brief. Si le jeu n&apos;est pas livré dans les 30 jours suivant la date convenue, vous pouvez annuler en tout temps avant de l&apos;avoir reçu, et HP vous rembourse toutes les sommes payées, dans les 15 jours. Si le jeu livré ne correspond pas au brief validé, HP corrige d&apos;abord ; si HP n&apos;arrive pas à livrer un jeu conforme, vous êtes remboursé en entier, dans les 15 jours.</li>
+          <li><strong>Le brief, par courriel.</strong> Vous répondez aux 5 questions, par écrit, à hpoutils.admin@gmail.com. Le brief écrit évite les désaccords. Si HP refuse le projet à ce stade, vous ne payez rien — le choix du client se fait ici, avant tout paiement.</li>
+          <li><strong>Le prototype, testé par vous.</strong> Vous essayez le prototype sur VOTRE téléphone, avant tout oui et avant tout paiement. Rien n&apos;est facturé avant que vous ayez vu et essayé le jeu.</li>
+          <li><strong>Le devis, ventilé.</strong> Prix du niveau, hébergement, aucune taxe ajoutée — chaque montant est détaillé, sans frais cachés. Vous recevez une copie du contrat (devis + conditions) par courriel, que vous pouvez conserver et imprimer.</li>
+          <li><strong>Votre OUI EXPLICITE — la porte obligatoire.</strong> Sans votre oui explicite, aucun paiement n&apos;est demandé et aucun paiement n&apos;est pris. Un silence, un aperçu ou un échange de courriels ne vaut jamais oui.</li>
+          <li><strong>Le paiement, seulement après votre oui.</strong> Le lien de paiement sécurisé Stripe vous est envoyé après votre oui explicite, et pas avant. 1 ronde de corrections est incluse pour Événement, Saisonnier et Permanent (l&apos;Express 29 $ n&apos;en inclut pas). Pour l&apos;instant : aucun paiement réel n&apos;est pris pour les jeux sur mesure — les produits Stripe sont en confirmation, et le paiement s&apos;ouvrira après cette confirmation et un test à 0 $.</li>
+          <li><strong>La livraison, par courriel.</strong> Adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer pour Saisonnier et Permanent). Délai convenu : sous 14 jours après validation du brief. Si le jeu n&apos;est pas livré dans les 30 jours suivant la date convenue, vous pouvez annuler en tout temps avant de l&apos;avoir reçu, et HP vous rembourse toutes les sommes payées, dans les 15 jours. Si le jeu livré ne correspond pas au brief validé, HP corrige d&apos;abord ; si HP n&apos;arrive pas à livrer un jeu conforme, vous êtes remboursé en entier, dans les 15 jours.</li>
         </ol>
         <p style={P}>
-          En cas de désaccord, à n&apos;importe quel pas : écrivez d&apos;abord à la direction humaine — on cherche un règlement amiable, par courriel, avant tout autre recours. Un humain de l&apos;équipe vous répond sous 3 jours ouvrables, à chaque étape. Conditions complètes : voir la section 12 des Conditions de vente.
+          En cas de désaccord, à n&apos;importe quel pas : écrivez d&apos;abord à la direction humaine — on cherche un règlement amiable, par courriel, avant tout autre recours. La direction humaine vous répond sous 3 jours ouvrables, à chaque étape. Conditions complètes : voir la section 12 des Conditions de vente.
         </p>
         <p style={P}>
           <Link to="/conditions-de-vente">Lire les Conditions de vente, section 12 →</Link>
@@ -352,7 +351,7 @@ function Page() {
           <Link to="/contact">Écrire à la direction humaine →</Link>
         </p>
         <p style={{ lineHeight: 1.55 }}>
-          Un humain de l&apos;équipe vous répond sous 3 jours ouvrables.
+          La direction humaine vous répond sous 3 jours ouvrables.
         </p>
       </section>
     </main>

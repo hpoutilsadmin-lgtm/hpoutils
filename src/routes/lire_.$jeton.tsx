@@ -69,7 +69,7 @@ function Page() {
             <p>
               Une question ?{" "}
               <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a> —
-              un humain de l'équipe répond sous 3 jours ouvrables.
+              la direction humaine répond sous 3 jours ouvrables.
             </p>
           </>
         )}
@@ -115,7 +115,7 @@ function Page() {
             <p>
               Une question ?{" "}
               <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a> —
-              un humain de l'équipe répond sous 3 jours ouvrables.
+              la direction humaine répond sous 3 jours ouvrables.
             </p>
           </>
         )}

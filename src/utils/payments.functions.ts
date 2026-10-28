@@ -48,11 +48,34 @@ function getAdmin() {
   return _admin;
 }
 
+// « Offrir » (lot 28 oct. 2026) : même règle que pour les tomes —
+// courriel destinataire facultatif, validé ici, jamais de débit sans
+// destinataire valide quand la case est cochée.
+function validGiftEmail(giftTo: unknown): string | undefined {
+  if (giftTo === undefined || giftTo === null || giftTo === "") return undefined;
+  if (typeof giftTo !== "string" || giftTo.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(giftTo)) {
+    throw new Error("Courriel du destinataire invalide");
+  }
+  return giftTo.toLowerCase();
+}
+
+function resolveGiftRecipient(session: any, payerEmail: string): { deliveryEmail: string; isGift: boolean } {
+  const raw = session?.metadata?.gift_to;
+  if (typeof raw === "string" && raw.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)) {
+    const giftTo = raw.toLowerCase();
+    if (giftTo !== payerEmail.toLowerCase()) {
+      return { deliveryEmail: giftTo, isGift: true };
+    }
+  }
+  return { deliveryEmail: payerEmail, isGift: false };
+}
+
 export const createPdfCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((data: {
     priceId: string;
     environment: StripeEnv;
     kitSlugs?: string[];
+    giftTo?: string;
   }) => {
     if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
     const product = getProduct(data.priceId);
@@ -71,7 +94,7 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
         throw new Error("Sélection de kits invalide");
       }
     }
-    return data;
+    return { ...data, giftTo: validGiftEmail(data.giftTo) };
   })
   .handler(async ({ data }) => {
     try {
@@ -96,9 +119,13 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
         // numériques) — voir scripts/setup-tax-codes.functions.ts.
         automatic_tax: { enabled: true },
         billing_address_collection: "required",
-        metadata: data.kitSlugs
-          ? { priceId: data.priceId, kitSlugs: data.kitSlugs.join(",") }
-          : { priceId: data.priceId },
+        // « Offrir » : le destinataire voyage dans la métadonnée, jamais
+        // dans un montant. La livraison (page de retour + webhook) le relit.
+        metadata: {
+          priceId: data.priceId,
+          ...(data.kitSlugs ? { kitSlugs: data.kitSlugs.join(",") } : {}),
+          ...(data.giftTo ? { gift_to: data.giftTo } : {}),
+        },
       });
 
       return { clientSecret: session.client_secret ?? "" };
@@ -131,6 +158,28 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       session.customer_details?.email ||
       (session.customer_email as string | null) ||
       "";
+
+    // « Offrir » : la livraison va au destinataire, la facture reste chez
+    // le payeur (lignes de commande : customer_email = payeur, inchangé
+    // ci-dessous). Le jeton de téléchargement est signé avec le courriel
+    // du destinataire, sinon le destinataire ne pourrait pas télécharger.
+    const { deliveryEmail, isGift } = resolveGiftRecipient(session as any, email);
+    const giftEmail = isGift ? deliveryEmail : null;
+
+    // Enregistrement best-effort du destinataire (migration
+    // 20261028_gift_recipient_email.sql) : il sert à la récupération par
+    // le destinataire. Si la colonne n'existe pas encore, on journalise
+    // et on continue — la livraison ne doit jamais en dépendre.
+    async function recordGiftRecipient(admin: any) {
+      if (!isGift) return;
+      const { error } = await admin
+        .from("orders")
+        .update({ gift_recipient_email: deliveryEmail })
+        .eq("stripe_session_id", session.id);
+      if (error) {
+        console.warn("gift_recipient_email not recorded (migration pending?)", error.message);
+      }
+    }
 
     // PANIER D'ACHAT : la session porte metadata.cart === "1". On livre
     // TOUS les articles, une ligne de commande par article, un seul
@@ -208,21 +257,24 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
         await settleGiftReservation(session.id, discountCents);
       }
 
+      await recordGiftRecipient(admin);
+
       const deliverable = rows.filter((r) => r.pdfPath && r.title);
-      if (email && deliverable.length > 0) {
+      if (deliveryEmail && deliverable.length > 0) {
         const siteOrigin = getTrustedSiteOrigin();
         const items = deliverable.map((r) => ({
           title: r.title as string,
-          downloadUrl: buildDownloadUrl(r.priceId, email),
+          downloadUrl: buildDownloadUrl(r.priceId, deliveryEmail),
         }));
         await enqueueTransactionalEmail({
           templateName: "purchase-delivery",
-          recipientEmail: email,
+          recipientEmail: deliveryEmail,
           idempotencyKey: `delivery-${session.id}`,
           templateData: {
             title: "Ton panier HP Outils",
             siteOrigin,
             items,
+            isGift,
           },
         });
       }
@@ -230,6 +282,8 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       return {
         status: "paid" as const,
         email,
+        giftEmail,
+        isGift,
         message:
           deliverable.length === rows.length
             ? null
@@ -293,6 +347,8 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       throw new Error("Database error");
     }
 
+    await recordGiftRecipient(admin);
+
     if (bundleKits) {
       // Mémoriser le choix pour la récupération d'achat. Best-effort : la
       // colonne kit_slugs est ajoutée par la migration
@@ -311,6 +367,8 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
       return {
         status: "paid" as const,
         email,
+        giftEmail,
+        isGift,
         message:
           "Votre paiement est confirmé. Le fichier sera disponible sous peu — nous vous contacterons.",
         itemCount: 1,
@@ -320,7 +378,7 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
     // Send the signed download link by email (never expose it in the HTTP
     // response body or page DOM). Idempotency key is per-session so retries
     // of /checkout/return don't enqueue duplicates.
-    if (email && pdfPath) {
+    if (deliveryEmail && pdfPath) {
       const siteOrigin = getTrustedSiteOrigin();
       if (bundleKits) {
         // Livraison du bundle : un lien signé par kit choisi. Les liens
@@ -328,28 +386,30 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
         // (même convention que la récupération d'achat).
         const items = bundleKits.map((kp) => ({
           title: kp.title,
-          downloadUrl: buildDownloadUrl(kp.priceId, email),
+          downloadUrl: buildDownloadUrl(kp.priceId, deliveryEmail),
         }));
         await enqueueTransactionalEmail({
           templateName: "purchase-delivery",
-          recipientEmail: email,
+          recipientEmail: deliveryEmail,
           idempotencyKey: `delivery-${session.id}`,
           templateData: {
             title: product.title,
             siteOrigin,
             items,
+            isGift,
           },
         });
       } else {
-        const downloadUrl = buildDownloadUrl(priceId, email);
+        const downloadUrl = buildDownloadUrl(priceId, deliveryEmail);
         await enqueueTransactionalEmail({
           templateName: "purchase-delivery",
-          recipientEmail: email,
+          recipientEmail: deliveryEmail,
           idempotencyKey: `delivery-${session.id}`,
           templateData: {
             title: product.title,
             downloadUrl,
             siteOrigin,
+            isGift,
           },
         });
       }
@@ -358,6 +418,8 @@ export const fulfillPdfOrder = createServerFn({ method: "POST" })
     return {
       status: "paid" as const,
       email,
+      giftEmail,
+      isGift,
       message: null as string | null,
       itemCount: 1,
     };
@@ -418,6 +480,27 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
       console.error("recover lookup error", error);
       // Stay neutral on errors.
       return { ok: true as const };
+    }
+
+    // « Offrir » : le destinataire peut aussi récupérer son cadeau avec
+    // son propre courriel (migration 20261028_gift_recipient_email.sql).
+    // Best-effort : si la colonne n'existe pas encore, on ignore l'erreur
+    // et on continue — la récupération du payeur reste inchangée.
+    const seenIds = new Set((orders ?? []).map((o) => o.id as string));
+    const { data: giftOrders, error: giftErr } = await admin
+      .from("orders")
+      .select("id, price_id, pdf_path, created_at, status")
+      .ilike("gift_recipient_email", escapedEmail)
+      .eq("status", "paid")
+      .eq("environment", data.environment)
+      .order("created_at", { ascending: false });
+    if (!giftErr && giftOrders && Array.isArray(orders)) {
+      for (const o of giftOrders as typeof orders) {
+        if (o && !seenIds.has(o.id as string)) {
+          seenIds.add(o.id as string);
+          (orders as unknown[]).push(o);
+        }
+      }
     }
 
     // Choix de kits des commandes bundle, relus en best-effort (colonne

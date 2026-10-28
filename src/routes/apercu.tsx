@@ -90,7 +90,9 @@ function Page() {
         Entrez le nom de votre commerce, vos deux couleurs et votre logo — le jeu
         ci-dessous s&apos;habille aussitôt, et vous pouvez y jouer. C&apos;est un
         aperçu du moteur Course (Caribou Run) : le jeu livré portera votre nom
-        et vos couleurs, pour toujours.
+        et vos couleurs, pour la durée de votre palier (7, 30 ou 90 jours, ou pour toujours au palier Permanent). L'hébergement est gratuit la
+        première année, puis 29 $ par année et par jeu.{" "}
+        <Link to="/jeux-a-votre-image">Voir l'offre complète.</Link>
       </p>
       <p style={{ fontSize: 18, lineHeight: 1.55, maxWidth: 640 }}>
         Un petit jeu qui porte votre nom et vos couleurs, que vos clients
@@ -100,7 +102,9 @@ function Page() {
       <p style={{ maxWidth: 640, lineHeight: 1.55 }}>
         <strong>Aperçu gratuit, sans engagement, sans compte.</strong> Votre logo
         est lu ici, dans votre navigateur — il ne quitte jamais votre appareil
-        et n&apos;est envoyé nulle part.
+        et n&apos;est envoyé nulle part. Ce « ne quitte jamais votre appareil »
+        vaut pour l&apos;aperçu seulement : pour un jeu Saisonnier ou Permanent,
+        le logo s&apos;envoie par courriel à l&apos;étape commande.
       </p>
 
       <section
@@ -193,10 +197,9 @@ function Page() {
           style={{ width: "100%", height: 560, border: "1px solid #ccc", borderRadius: 16 }}
         />
         <p style={{ lineHeight: 1.55 }}>
-          Le jeu est jouable tel quel : touchez, ou utilisez les flèches et la barre
+          Le jeu est jouable tel quel : touchez, cliquez, ou utilisez les flèches et la barre
           d&apos;espace. Si l&apos;aperçu vous plaît,{" "}
-          <Link to="/contact">écrivez à la direction humaine</Link> — un humain
-          vous répond sous 3 jours ouvrables.
+          <Link to="/contact">écrivez à la direction humaine</Link> — la direction humaine vous répond sous 3 jours ouvrables.
         </p>
       </section>
     </main>

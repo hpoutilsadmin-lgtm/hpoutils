@@ -84,7 +84,7 @@ function Page() {
           <a href="mailto:hpoutils.admin@gmail.com">
             hpoutils.admin@gmail.com
           </a>{" "}
-          : un humain te répond.
+          : la direction humaine te répond.
         </p>
         {FAQ_ENTRIES.map((e) => (
           <article key={e.question} style={{ marginTop: 30 }}>

@@ -322,7 +322,7 @@ export function HamsterWheel() {
       </div>
       <div className="rh-nom">Détectôt</div>
       <div className="rh-pied">
-        <span className="rh-honnete">Il devine, il ne surveille personne.</span>
+        <span className="rh-honnete">Il devine à qui la page s'adresse — IA ou humain probable — et ne surveille personne.</span>
         <button className="rh-fermer" type="button" aria-label="Fermer Détectôt, la roue d'hamster" onClick={fermer}>
           Fermer ✕
         </button>

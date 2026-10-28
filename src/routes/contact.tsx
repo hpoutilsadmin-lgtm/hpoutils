@@ -31,7 +31,7 @@ function Page() {
       <section className="three-pillars" id="formulaire-contact">
         <div className="container" style={{ maxWidth: 760 }}>
           <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "0 0 28px", color: "#2a1a12" }}>Écrivez à la direction humaine</h2>
-          <p className="strip-intro">Une question, une commande, un atelier ou un projet ? Remplissez le formulaire — chaque message reçoit une réponse d'humain, sous 3 jours ouvrables.</p>
+          <p className="strip-intro">Une question, une commande, un atelier ou un projet ? Remplissez le formulaire — chaque message reçoit une réponse de la direction humaine, sous 3 jours ouvrables.</p>
           <iframe
             src="https://tally.so/embed/dbbYbr?alignLeft=1&hideTitle=1&transparentBackground=1"
             width="100%"
@@ -48,7 +48,7 @@ function Page() {
 
       <section className="three-pillars">
         <div className="container">
-          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "0 0 28px", color: "#2a1a12" }}>Comment me joindre</h2>
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "0 0 28px", color: "#2a1a12" }}>Comment joindre la direction humaine</h2>
           <div className="pillar-grid">
             <article className="pillar-card">
               <span className="pillar-num">01</span>
@@ -63,7 +63,7 @@ function Page() {
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Réponse humaine</h3>
-              <p>Chaque message reçoit une réponse d'humain, sous 3 jours ouvrables. Ateliers en personne, à Terrebonne, dans Lanaudière et les environs. Déplacement gratuit à Terrebonne, L'Assomption, Repentigny et Charlemagne, sinon 0,71 $/km.</p>
+              <p>Chaque message reçoit une réponse de la direction humaine, sous 3 jours ouvrables. Ateliers en personne, à Terrebonne, dans Lanaudière et les environs. Déplacement gratuit à Terrebonne, L'Assomption, Repentigny et Charlemagne, sinon 0,71 $/km.</p>
               <p>Réponses du lundi au vendredi, de 8 h à 16 h, sous 3 jours ouvrables.</p>
               <p>Ateliers : lundi et mardi, de 9 h à 12 h et de 18 h à 21 h ; vendredi, de 18 h à 21 h ; dimanche, de 9 h à 12 h.</p>
             </article>
@@ -73,7 +73,7 @@ function Page() {
 
       <section className="collections-strip">
         <div className="container">
-          <h2>Je veux vous écrire pour…</h2>
+          <h2>Vous voulez écrire pour…</h2>
           <div className="pillar-grid">
             <article className="pillar-card">
               <span className="pillar-num">01</span>
@@ -103,7 +103,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Comment commander ?</h3>
-              <p>Écrivez par courriel ou utilisez les boutons de la page. Un humain de l'équipe vous répond avec les détails, sous 3 jours ouvrables.</p>
+              <p>Écrivez par courriel ou utilisez les boutons de la page. La direction humaine vous répond avec les détails, sous 3 jours ouvrables.</p>
             </article>
             <article className="pillar-card">
               <h3>Quels moyens de paiement ?</h3>

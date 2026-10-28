@@ -43,8 +43,7 @@ const GiftDeliveryEmail = ({
         <Text style={text}>
           Le code se dépense par tranches : s'il reste du solde après un
           achat, le reste demeure sur le même code. Conserve ce courriel.
-          Une question ? Écris à la direction humaine — un humain de
-          l'équipe répond sous 3 jours ouvrables.
+          Une question ? Écris à la direction humaine — la direction humaine répond sous 3 jours ouvrables.
         </Text>
         <Text style={footer}>— L'équipe {SITE_NAME}</Text>
       </Container>

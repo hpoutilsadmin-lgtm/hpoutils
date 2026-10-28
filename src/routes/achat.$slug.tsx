@@ -47,8 +47,120 @@ export const Route = createFileRoute("/achat/$slug")({
   component: Page,
 });
 
+// « Offrir » (lot 28 oct. 2026) : la case + le courriel du destinataire
+// sont confirmés AVANT d'afficher le paiement — le paiement intégré crée
+// sa session au montage, on ne peut pas changer le destinataire après.
+// Non coché = parcours d'aujourd'hui, inchangé.
+function OffrirChoice({
+  giftChecked,
+  setGiftChecked,
+  giftEmail,
+  setGiftEmail,
+  giftConfirmed,
+  setGiftConfirmed,
+  error,
+  setError,
+}: {
+  giftChecked: boolean;
+  setGiftChecked: (v: boolean) => void;
+  giftEmail: string;
+  setGiftEmail: (v: string) => void;
+  giftConfirmed: boolean;
+  setGiftConfirmed: (v: boolean) => void;
+  error: string | null;
+  setError: (v: string | null) => void;
+}) {
+  function confirm() {
+    const value = giftEmail.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || value.length > 254) {
+      setError("Entrez un courriel valide pour la personne qui recevra le cadeau.");
+      return;
+    }
+    setError(null);
+    setGiftEmail(value);
+    setGiftConfirmed(true);
+  }
+  return (
+    <div
+      style={{
+        padding: 20,
+        border: "1px solid #e0d8cf",
+        borderRadius: 4,
+        background: "#faf6f1",
+      }}
+    >
+      <label style={{ display: "flex", gap: 10, alignItems: "center", fontWeight: 700, cursor: "pointer" }}>
+        <input
+          type="checkbox"
+          checked={giftChecked}
+          onChange={(e) => {
+            setGiftChecked(e.target.checked);
+            setGiftConfirmed(false);
+            setError(null);
+          }}
+          style={{ width: 20, height: 20 }}
+        />
+        C'est pour offrir
+      </label>
+      <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65 }}>
+        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, un humain vous répond sous 3 jours ouvrables. En cas de remboursement, le lien est coupé.
+      </p>
+      {giftChecked && !giftConfirmed && (
+        <div style={{ marginTop: 12 }}>
+          <label style={{ fontSize: 14, fontWeight: 600 }}>
+            Courriel de la personne qui recevra le cadeau
+            <input
+              type="email"
+              required
+              value={giftEmail}
+              onChange={(e) => setGiftEmail(e.target.value)}
+              placeholder="son@courriel.com"
+              style={{ display: "block", margin: "8px 0", padding: "10px", width: "100%", maxWidth: 360 }}
+            />
+          </label>
+          {error && <p role="alert" style={{ color: "#8a1f1f", fontSize: 14 }}>{error}</p>}
+          <button
+            type="button"
+            onClick={confirm}
+            style={{
+              padding: "10px 18px",
+              background: "#b04a2f",
+              color: "#fff",
+              border: "none",
+              borderRadius: 4,
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Confirmer ce cadeau et afficher le paiement
+          </button>
+        </div>
+      )}
+      {giftChecked && giftConfirmed && (
+        <p style={{ margin: "12px 0 0", fontSize: 14 }}>
+          Cadeau pour <strong>{giftEmail}</strong>.{" "}
+          <button
+            type="button"
+            onClick={() => setGiftConfirmed(false)}
+            style={{ background: "transparent", border: "none", color: "#b04a2f", fontWeight: 600, cursor: "pointer", padding: 0 }}
+          >
+            Modifier
+          </button>
+        </p>
+      )}
+    </div>
+  );
+}
+
 function Page() {
   const { product } = Route.useLoaderData();
+  const [giftChecked, setGiftChecked] = useState(false);
+  const [giftEmail, setGiftEmail] = useState("");
+  const [giftConfirmed, setGiftConfirmed] = useState(false);
+  const [giftError, setGiftError] = useState<string | null>(null);
+  // Destinataire effectif : seulement une fois confirmé, sinon le paiement
+  // part comme aujourd'hui (achat pour soi).
+  const giftTo = giftChecked && giftConfirmed ? giftEmail : undefined;
   const formatLabel =
     product.slug === "sans-honte-collection"
       ? "Collection PDF"
@@ -75,11 +187,28 @@ function Page() {
           {product.priceJustification && (
             <p style={{ maxWidth: 700, lineHeight: 1.65 }}>{product.priceJustification}</p>
           )}
+          {product.slug === "sans-honte-collection" && (
+            <p style={{ maxWidth: 700, lineHeight: 1.65 }}>
+              Bundle Sans Honte — Choisissez 10 kits parmi 15, 40 $, aucune taxe ajoutée. Vous choisissez vos 10 kits, vous payez, vous recevez 10 liens de téléchargement, un par kit choisi, par courriel — chaque kit se télécharge séparément, comme les kits seuls à 5 $. Vous recevez : les 10 kits choisis, en PDF, à télécharger sur votre appareil. Durée : vos liens restent récupérables par « Récupérer un achat », avec votre courriel. Si ça ne marche pas : écrivez à la direction humaine, un humain vous répond sous 3 jours ouvrables. Si vous changez d'idée après paiement : les produits numériques ne sont pas remboursables, sauf en cas de panne technique — écrivez-nous, on regarde votre cas un par un.
+            </p>
+          )}
         </div>
       </section>
       <section className="subpage-content">
         <div className="container" style={{ maxWidth: 920 }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32 }}>
+            {!product.purchaseHold && (
+              <OffrirChoice
+                giftChecked={giftChecked}
+                setGiftChecked={setGiftChecked}
+                giftEmail={giftEmail}
+                setGiftEmail={setGiftEmail}
+                giftConfirmed={giftConfirmed}
+                setGiftConfirmed={setGiftConfirmed}
+                error={giftError}
+                setError={setGiftError}
+              />
+            )}
             {product.purchaseHold ? (
               <div
                 style={{
@@ -102,10 +231,15 @@ function Page() {
                   .
                 </p>
               </div>
+            ) : giftChecked && !giftConfirmed ? (
+              <p style={{ margin: 0, fontSize: 14 }}>
+                Confirmez le courriel du destinataire ci-dessus pour afficher
+                le paiement.
+              </p>
             ) : product.slug === "sans-honte-collection" ? (
-              <BundleCheckout product={product} />
+              <BundleCheckout product={product} giftTo={giftTo} />
             ) : (
-              <PdfCheckout priceId={product.priceId} />
+              <PdfCheckout priceId={product.priceId} giftTo={giftTo} />
             )}
             {product.purchaseHold ? (
               <p className="purchase-note">Aucune taxe ajoutée · Petit fournisseur</p>
@@ -121,7 +255,7 @@ function Page() {
               }}
             >
               <p style={{ margin: "0 0 8px", fontWeight: 700 }}>
-                Après ton achat, un humain s'en occupe
+                Après ton achat, la direction humaine s'en occupe
               </p>
               <p style={{ margin: "0 0 8px", fontSize: 14 }}>
                 Tu reçois ton lien de téléchargement par courriel (valide
@@ -132,7 +266,7 @@ function Page() {
                 <a href="mailto:hpoutils.admin@gmail.com">
                   hpoutils.admin@gmail.com
                 </a>{" "}
-                — une réponse d'humain, pas d'un robot, sous 3 jours ouvrables.
+                — une réponse de la direction humaine, pas d'un robot, sous 3 jours ouvrables.
               </p>
               <p style={{ margin: 0, fontSize: 14 }}>
                 Et si c'est une panne technique de notre côté — un fichier
@@ -153,7 +287,7 @@ function Page() {
 // exactement 10 kits, valide son choix, puis le paiement s'ouvre avec
 // cette sélection (elle voyage dans la session Stripe et la livraison
 // envoie les 10 liens choisis).
-function BundleCheckout({ product }: { product: DigitalProduct }) {
+function BundleCheckout({ product, giftTo }: { product: DigitalProduct; giftTo?: string }) {
   const kits = getSansHonteKits();
   const [selected, setSelected] = useState<string[]>([]);
   const [locked, setLocked] = useState(false);
@@ -208,6 +342,7 @@ function BundleCheckout({ product }: { product: DigitalProduct }) {
           key={selected.join(",")}
           priceId={product.priceId}
           kitSlugs={selected}
+          giftTo={giftTo}
         />
       </div>
     );

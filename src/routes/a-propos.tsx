@@ -23,9 +23,9 @@ function Page() {
             <h1>Comprendre. Agir. Transmettre.</h1>
             <p className="lead" style={{ fontFamily: "Georgia,serif", fontStyle: "italic", marginTop: 16 }}>« J'ai jamais su qui j'étais, ce que j'aimais — alors je fais un peu de tout. »</p>
             <p className="lead">HP est né d'une approche simple : tester, apprendre, recommencer, puis partager ce qui fonctionne concrètement dans la vraie vie.</p>
-            <p className="lead" style={{ marginTop: 12 }}>Je ne prétends pas avoir toutes les réponses. Mon objectif est de créer des outils simples, utiles et dignes, pensés pour être réellement utilisables au quotidien.</p>
+            <p className="lead" style={{ marginTop: 12 }}>La direction ne prétend pas avoir toutes les réponses. Son objectif est de créer des outils simples, utiles et dignes, pensés pour être réellement utilisables au quotidien.</p>
             <div className="lead-actions">
-              <Link className="action-btn" to="/contact">Me contacter</Link>
+              <Link className="action-btn" to="/contact">Contacter la direction humaine</Link>
               <Link className="outline-btn" to="/">Voir l'écosystème</Link>
             </div>
           </div>
@@ -41,16 +41,16 @@ function Page() {
             <span className="mini-note">En ses mots</span>
             <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>Qui est HP</h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je suis HP, et HP Outils, c'est mon travail : des outils pour la vraie vie, créés au Québec, à Terrebonne dans Lanaudière.
+              HP Outils, c'est le travail de HP : des outils pour la vraie vie, créés au Québec, à Terrebonne dans Lanaudière.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Je pars d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et veulent apprendre, partager et repartir. Mes outils sont faits pour ça : des outils concrets, pour des vies concrètes.
+              La direction part d'une conviction : les gens qu'on dit « en bas » sont éduqués, dignes, et veulent apprendre, partager et repartir. Ses outils sont faits pour ça : des outils concrets, pour des vies concrètes.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Ici, la direction est humaine. L'IA est un outil très rapide et efficace : elle accélère le travail, elle ne le dirige pas. Je travaille avec une équipe : des humains qui décident, qui vérifient, qui répondent — et l'IA qui exécute vite ce qu'on lui confie. Rien n'est publié sans vérification humaine.
+              Ici, la direction est humaine. L'IA est un outil très rapide et efficace : elle accélère le travail, elle ne le dirige pas. La direction travaille avec une équipe : des humains qui décident, qui vérifient, qui répondent — et l'IA qui exécute vite ce qu'on lui confie. Rien n'est publié sans vérification humaine.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Les jeux, les recettes et les outils d'ici sont testés avant d'être proposés. 36 jeux gratuits, 629 recettes gratuites, des outils web gratuits sans compte — et des livres et des kits à prix petits. Si vous trouvez une erreur, écrivez-nous : un humain de l'équipe vous répond sous 3 jours ouvrables.
+              Les jeux, les recettes et les outils d'ici sont testés avant d'être proposés. 36 + 1 caché jeux gratuits, 629 recettes gratuites, des outils web gratuits sans compte — et des livres et des kits à prix petits. Si vous trouvez une erreur, écrivez-nous : la direction humaine vous répond sous 3 jours ouvrables.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
               HP Outils, c'est ça : des outils simples, pour des vies réelles, faits par des humains, avec l'IA comme outil. Merci de votre visite.
@@ -58,21 +58,21 @@ function Page() {
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
               — HP, HP Outils
             </p>
-            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes contrats avec vous</h3>
+            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les contrats avec vous</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
-              <li>Une réponse d'humain sous 3 jours ouvrables.</li>
+              <li>Une réponse de la direction humaine sous 3 jours ouvrables.</li>
               <li>Des prix honnêtes, aucune taxe ajoutée, jamais de pression ni de fausse urgence.</li>
               <li>Tout 100 % original. L'IA est un outil très rapide et efficace — la direction, l'émotion, le « ce que je fais », c'est pour les humains.</li>
               <li>Écrit par un humain, accéléré par l'IA. On le dit toujours.</li>
             </ul>
-            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Mes buts</h3>
+            <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les buts</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
               <li>Être utile. Des outils pour la vraie vie.</li>
               <li>Que chaque personne qui passe ici reparte avec quelque chose qui l'aide pour vrai — un jeu, un outil, une recette, une idée — peu importe son budget.</li>
             </ul>
             <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les mots d'HP</h3>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
-              Je dis des mots à moi : <em>serbouillette</em> — ça vient d'Ôz la grande petite, un mix de serviette et débarbouillette. Je dis <em>globesandwich</em> au lieu de club sandwich. Mon petit frère m'appelait <em>Gros Pierre</em> au lieu de HP, et une fillette disait <em>yaourt</em> au lieu de HP.
+              La direction dit des mots à elle : <em>serbouillette</em> — ça vient d'Ôz la grande petite, un mix de serviette et débarbouillette. Elle dit <em>globesandwich</em> au lieu de club sandwich. Le petit frère de HP l'appelait <em>Gros Pierre</em> au lieu de HP, et une fillette disait <em>yaourt</em> au lieu de HP.
             </p>
           </section>
           <div className="cards">

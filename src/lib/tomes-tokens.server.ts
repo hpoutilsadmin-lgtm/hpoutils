@@ -180,11 +180,41 @@ export async function createFreeTomeToken(
   return { tome, token };
 }
 
-/** Remboursement : révoque les jetons des sessions d'un paiement. */
+/**
+ * Révoque les jetons de sessions données, sans passer par la table
+ * orders : c'est le repli qui rend la révocation indépendante d'une
+ * commande manquante (bug remboursement, oct. 2026). Renvoie le nombre
+ * de jetons révoqués (0 si rien à révoquer — jamais silencieux côté
+ * appelant, qui journalise le résultat).
+ */
+export async function revokeTomeTokensForSessions(
+  sessionIds: string[],
+): Promise<number> {
+  if (sessionIds.length === 0) return 0;
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from("tome_tokens")
+    .update({ revoked_at: new Date().toISOString() })
+    .in("stripe_session_id", sessionIds)
+    .is("revoked_at", null)
+    .select("id");
+  if (error) {
+    console.error("tome tokens revoke failed", error);
+    throw new Error("Database error");
+  }
+  return (data ?? []).length;
+}
+
+/**
+ * Remboursement : révoque les jetons des sessions d'un paiement, via la
+ * table orders. Renvoie le nombre révoqué ; 0 signifie « aucune session
+ * trouvée dans orders » — l'appelant (webhook) passe alors par le repli
+ * Stripe, au lieu de s'arrêter là comme avant.
+ */
 export async function revokeTomeTokensForPaymentIntent(
   paymentIntentId: string,
   environment: string,
-): Promise<void> {
+): Promise<number> {
   const supabase = getSupabase();
   const { data: orders } = await supabase
     .from("orders")
@@ -192,9 +222,5 @@ export async function revokeTomeTokensForPaymentIntent(
     .eq("stripe_payment_intent_id", paymentIntentId)
     .eq("environment", environment);
   const sessionIds = (orders ?? []).map((o: { stripe_session_id: string }) => o.stripe_session_id);
-  if (sessionIds.length === 0) return;
-  await supabase
-    .from("tome_tokens")
-    .update({ revoked_at: new Date().toISOString() })
-    .in("stripe_session_id", sessionIds);
+  return revokeTomeTokensForSessions(sessionIds);
 }

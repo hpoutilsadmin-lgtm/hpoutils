@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/les-passeurs")({
   head: () => createSeoHead({
     title: "Les Passeurs — l'accès au savoir pour 3 $ CAD par mois",
-    description: "Les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année). Aucune taxe ajoutée (petit fournisseur). L'inscription est ouverte : écris à la direction pour t'inscrire.",
+    description: "Les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année). Aucune taxe ajoutée (petit fournisseur). L'inscription est ouverte : écrivez à la direction humaine pour vous inscrire.",
     path: "/les-passeurs",
   }),
   component: Page,
@@ -37,7 +37,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>36 jeux qui restent gratuits pour tout le monde, sans inscription.</p>
+              <p>36 + 1 caché jeux qui restent gratuits pour tout le monde, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Voir les jeux →</Link>
             </article>
             <article className="pillar-card">
@@ -60,7 +60,10 @@ function Page() {
           <h2>Juste : vous passez, et d'autres reçoivent.</h2>
           
           <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Les 16 savoirs choisis par HP — de lire à connaître ses droits — en feuilles à consulter au fur et à mesure de leur parution, 3 par trimestre au maximum.</h3>
-          <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès à des astuces que les autres n'ont pas.</p>
+          <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde.</p>
+          <p className="strip-intro" style={{ marginTop: 4 }}>Vous pouvez annuler en tout temps en écrivant à hpoutils.admin@gmail.com : l'annulation prend effet à la fin de la période déjà payée, sans frais ni pénalité. Aucun prélèvement automatique n'est pris sans votre confirmation préalable des détails par courriel. Avant un renouvellement annuel, la direction humaine vous rappelle par courriel que le renouvellement approche, pour que vous puissiez annuler avant qu'il n'ait lieu si vous le souhaitez. Information générale, pas un avis juridique.</p>
+          <p className="strip-intro" style={{ marginTop: 4 }}>Vous gardez l'accès aux feuilles Passeurs parues jusqu'à la fin de la période déjà payée, puis l'abonnement s'arrête. La direction humaine vous confirme votre annulation par courriel sous 3 jours ouvrables. Cette confirmation est un accusé de réception : elle ne conditionne pas l'arrêt, qui a lieu à la fin de la période déjà payée.</p>
+          <p className="strip-intro" style={{ marginTop: 4 }}><a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=J%27annule%20mon%20abonnement%20Passeurs&body=Bonjour%2C%0A%0AJ%27annule%20mon%20abonnement%20Passeurs.%0A%0AFormule%20%3A%20%5B3%20%24%20%2F%20mois%20ou%2028%20%24%20%2F%20an%5D%0A%0AJe%20comprends%20que%20mon%20annulation%20prend%20effet%20%C3%A0%20la%20fin%20de%20la%20p%C3%A9riode%20d%C3%A9j%C3%A0%20pay%C3%A9e%2C%20sans%20frais%2C%20et%20que%20je%20garde%20l%27acc%C3%A8s%20aux%20feuilles%20parues%20jusqu%27%C3%A0%20cette%20date.%0A%0AMerci%20de%20me%20confirmer%20l%27annulation%20par%20courriel.">Annuler mon abonnement en 1 clic</a></p>
           <p className="strip-intro" style={{ marginTop: 4 }}>Aucune taxe ajoutée : petit fournisseur, la TPS et la TVQ ne sont pas perçues.</p>
           <p className="strip-intro" style={{ marginTop: 12, textAlign: "left", maxWidth: 640, margin: "12px auto 0" }}><strong>Les 16 savoirs :</strong> 1. Lire vite et comprendre ; 2. Écrire clairement ; 3. Parler et se faire comprendre, y compris devant un groupe ; 4. Math du quotidien ; 5. Finances personnelles ; 6. Pensée critique ; 7. Apprendre à apprendre ; 8. Santé de base ; 9. Gestion du stress et des émotions ; 10. Négociation et vente ; 11. Écoute et relations ; 12. Gestion du temps et de l'attention ; 13. Littératie numérique et IA ; 14. Cuisiner ; 15. Réparer et bricoler ; 16. Notions de droit.</p>
           <p className="strip-intro" style={{ marginTop: 4, textAlign: "left", maxWidth: 640, margin: "4px auto 0" }}><em>Cet ordre est un jugement, pas une vérité : selon la personne et son projet, les priorités changent.</em></p>
@@ -81,9 +84,9 @@ function Page() {
               L'inscription est ouverte.
             </p>
             <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
-              Pour t'inscrire, <a href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">écris à la direction</a> en précisant la formule (3 $ / mois ou 28 $ / an) — un humain te répond sous 3 jours
+              Pour vous inscrire, <a href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">écrivez à la direction humaine</a> en précisant la formule (3 $ / mois ou 28 $ / an) — la direction humaine vous répond sous 3 jours
               ouvrables avec les détails. Aucun paiement n'est demandé ici : la direction
-              te confirme les détails avant tout prélèvement. Le paiement automatisé en
+              vous confirme les détails avant tout prélèvement. Le paiement automatisé en
               ligne, lui, s'en vient. Et tout ce qui est gratuit sur HP Outils le reste.
             </p>
             <div className="lead-actions" style={{ marginTop: 16 }}>

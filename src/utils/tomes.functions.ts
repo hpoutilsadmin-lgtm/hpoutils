@@ -68,20 +68,48 @@ function validEmail(email: unknown): string {
   return email.toLowerCase();
 }
 
+// « Offrir » (lot 28 oct. 2026, remplace les bons cadeaux oubliés) :
+// courriel du destinataire, facultatif. Vide ou absent = achat pour soi.
+// Un courriel invalide = erreur AVANT tout paiement, jamais de débit sans
+// destinataire valide. La valeur est revalidée côté serveur à chaque usage
+// (la métadonnée Stripe ne fait jamais foi seule).
+function validGiftEmail(giftTo: unknown): string | undefined {
+  if (giftTo === undefined || giftTo === null || giftTo === "") return undefined;
+  if (typeof giftTo !== "string" || giftTo.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(giftTo)) {
+    throw new Error("Courriel du destinataire invalide");
+  }
+  return giftTo.toLowerCase();
+}
+
+// Destinataire effectif d'une session Stripe : la métadonnée gift_to si
+// elle est bien formée, sinon le courriel du payeur. Si le destinataire
+// est le payeur lui-même, on retombe sur le parcours normal (pas un cadeau).
+function resolveGiftRecipient(session: any, payerEmail: string): { deliveryEmail: string; isGift: boolean } {
+  const raw = session?.metadata?.gift_to;
+  if (typeof raw === "string" && raw.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)) {
+    const giftTo = raw.toLowerCase();
+    if (giftTo !== payerEmail.toLowerCase()) {
+      return { deliveryEmail: giftTo, isGift: true };
+    }
+  }
+  return { deliveryEmail: payerEmail, isGift: false };
+}
+
 export const createTomeCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator(
-    (data: { kind: "tome"; slug: string; environment: StripeEnv } | { kind: "bundle"; tomes: string[]; environment: StripeEnv }) => {
+    (data: { kind: "tome"; slug: string; environment: StripeEnv; giftTo?: string } | { kind: "bundle"; tomes: string[]; environment: StripeEnv; giftTo?: string }) => {
       if (data.environment !== "sandbox" && data.environment !== "live") {
         throw new Error("Environnement invalide");
       }
+      const giftTo = validGiftEmail((data as { giftTo?: unknown }).giftTo);
       if (data.kind === "tome") {
         const tome = getTomeBySlug(data.slug);
         if (!tome || !tome.lookupKey) throw new Error("Tome introuvable");
-        return { kind: "tome" as const, slugs: [tome.slug], lookupKeys: [tome.lookupKey], environment: data.environment };
+        return { kind: "tome" as const, slugs: [tome.slug], lookupKeys: [tome.lookupKey], environment: data.environment, giftTo };
       }
       if (data.kind === "bundle") {
         const slugs = validateBundleChoice(data.tomes);
-        return { kind: "bundle" as const, slugs, lookupKeys: [BUNDLE.lookupKey], environment: data.environment };
+        return { kind: "bundle" as const, slugs, lookupKeys: [BUNDLE.lookupKey], environment: data.environment, giftTo };
       }
       throw new Error("Achat invalide");
     },
@@ -103,7 +131,11 @@ export const createTomeCheckoutSession = createServerFn({ method: "POST" })
         cancel_url: `${origin}/lire/`,
         automatic_tax: { enabled: true },
         billing_address_collection: "required",
-        metadata: { kind: "tome", tomes: data.slugs.join(",") },
+        // « Offrir » : le destinataire voyage dans la métadonnée, jamais
+        // dans un montant. La livraison (page de retour + webhook) le relit.
+        metadata: data.giftTo
+          ? { kind: "tome", tomes: data.slugs.join(","), gift_to: data.giftTo }
+          : { kind: "tome", tomes: data.slugs.join(",") },
       });
       return { checkoutUrl: session.url ?? "" };
     } catch (e) {
@@ -147,15 +179,18 @@ export const fulfillTomeOrder = createServerFn({ method: "POST" })
     if (!isTomeSession(session as any)) {
       return { status: "not-tome" as const };
     }
-    const email =
+    const payerEmail =
       session.customer_details?.email || (session.customer_email as string | null) || "";
     const slugs = resolveTomeSlugsForSession(session as any);
-    if (!email || slugs.length === 0) {
+    if (!payerEmail || slugs.length === 0) {
       return { status: "error" as const, message: "Commande introuvable" };
     }
+    // « Offrir » : les jetons sont créés pour le destinataire, jamais pour
+    // le payeur. La facture, elle, reste chez le payeur (Stripe + commande).
+    const { deliveryEmail, isGift } = resolveGiftRecipient(session as any, payerEmail);
     const created = await createTomeTokensForSession({
       sessionId: session.id,
-      email,
+      email: deliveryEmail,
       slugs,
       environment: env,
     });
@@ -163,22 +198,32 @@ export const fulfillTomeOrder = createServerFn({ method: "POST" })
     if (fresh.length > 0) {
       await enqueueTransactionalEmail({
         templateName: "tome-delivery",
-        recipientEmail: email,
+        recipientEmail: deliveryEmail,
         idempotencyKey: `tome-delivery-${session.id}`,
         templateData: {
           title: "À toi l'histoire",
           items: fresh.map((c) => ({ title: c.tome.title, readerUrl: readerUrl(c.token!) })),
           siteOrigin: getTrustedSiteOrigin(),
+          isGift,
         },
       });
+      if (isGift) {
+        // Cadeau : la page de retour ne montre JAMAIS les liens à l'acheteur
+        // — c'est le destinataire qui les reçoit par courriel.
+        return { status: "gift" as const, email: deliveryEmail };
+      }
       return {
         status: "paid" as const,
-        email,
+        email: deliveryEmail,
         links: fresh.map((c) => ({ slug: c.tome.slug, title: c.tome.title, url: readerUrl(c.token!) })),
       };
     }
     // Déjà livré par le webhook : pas de doublon, les liens sont en courriel.
-    return { status: "delivered" as const, email };
+    // Pour un cadeau, on signale le destinataire, jamais les liens.
+    if (isGift) {
+      return { status: "gift" as const, email: deliveryEmail };
+    }
+    return { status: "delivered" as const, email: deliveryEmail };
   });
 
 export const recoverTomeLinks = createServerFn({ method: "POST" })

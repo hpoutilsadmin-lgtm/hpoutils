@@ -25,6 +25,8 @@ type State =
   | { kind: "pending" }
   | { kind: "paid"; links: Array<{ slug: string; title: string; url: string }> }
   | { kind: "delivered"; email: string }
+  // « Offrir » : l'acheteur ne voit JAMAIS les liens du destinataire.
+  | { kind: "gift"; email: string }
   | { kind: "not-tome" }
   | { kind: "error"; message: string };
 
@@ -44,6 +46,7 @@ function Page() {
         const result = await fulfill({ data: { sessionId: session_id } });
         if (cancelled) return;
         if (result.status === "pending") setState({ kind: "pending" });
+        else if (result.status === "gift") setState({ kind: "gift", email: result.email });
         else if (result.status === "paid") setState({ kind: "paid", links: result.links });
         else if (result.status === "delivered") setState({ kind: "delivered", email: result.email });
         else if (result.status === "not-tome") setState({ kind: "not-tome" });
@@ -74,6 +77,21 @@ function Page() {
             <>
               <h1>Paiement en cours</h1>
               <p>Ton paiement est en cours de traitement. Rafraîchis cette page dans un instant.</p>
+            </>
+          )}
+          {state.kind === "gift" && (
+            <>
+              <h1>Merci ! C'est offert.</h1>
+              <ThankYouCelebration />
+              <p>
+                Les liens ont été envoyés à <strong>{state.email}</strong>.
+                Vous, vous gardez la facture. Si le cadeau n'arrive pas, la
+                direction humaine vous répond sous 3 jours ouvrables :{" "}
+                <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a>.
+              </p>
+              <p>
+                <Link to="/lire">Retour aux tomes</Link>
+              </p>
             </>
           )}
           {state.kind === "paid" && (
@@ -119,7 +137,7 @@ function Page() {
               <p>{state.message}</p>
               <p>
                 <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a> —
-                un humain de l'équipe répond sous 3 jours ouvrables.
+                la direction humaine répond sous 3 jours ouvrables.
               </p>
             </>
           )}

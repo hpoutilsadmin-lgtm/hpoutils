@@ -23,7 +23,9 @@ type State =
   | { kind: "loading" }
   | { kind: "missing" }
   | { kind: "pending" }
-  | { kind: "paid"; email: string; message: string | null; itemCount: number }
+  // « Offrir » : email = payeur (facture), giftEmail = destinataire (lien).
+  // Le lien lui-même n'est jamais affiché ici, comme pour un achat normal.
+  | { kind: "paid"; email: string; giftEmail: string | null; message: string | null; itemCount: number }
   | { kind: "error"; message: string };
 
 function Page() {
@@ -48,6 +50,7 @@ function Page() {
           setState({
             kind: "paid",
             email: result.email,
+            giftEmail: (result as { giftEmail?: string | null }).giftEmail ?? null,
             message: result.message,
             itemCount: result.itemCount ?? 1,
           });
@@ -95,6 +98,14 @@ function Page() {
             </p>
             {state.message ? (
               <p style={{ marginTop: 24, color: "#b04a2f" }}>{state.message}</p>
+            ) : state.giftEmail ? (
+              <p style={{ marginTop: 32, fontSize: 16 }}>
+                C'est un cadeau :{" "}
+                {state.itemCount > 1 ? "les liens de téléchargement" : "le lien de téléchargement"}{" "}
+                vient d'être envoyé à <strong>{state.giftEmail}</strong>, et
+                vous gardez la facture. Si le cadeau n'arrive pas, la
+                direction humaine vous répond sous 3 jours ouvrables.
+              </p>
             ) : (
               <p style={{ marginTop: 32, fontSize: 16 }}>
                 Un courriel contenant{" "}
@@ -130,7 +141,7 @@ function Page() {
                 <a href="mailto:hpoutils.admin@gmail.com">
                   hpoutils.admin@gmail.com
                 </a>{" "}
-                : une réponse d'humain, pas d'un robot, sous 3 jours ouvrables.
+                : une réponse de la direction humaine, pas d'un robot, sous 3 jours ouvrables.
                 Si c'est une panne technique de notre côté, on répare ou
                 on rembourse, comme le disent les{" "}
                 <Link to="/conditions-de-vente">conditions de vente</Link>.

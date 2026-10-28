@@ -2043,7 +2043,7 @@ export function initHgpto() {
       function choixReco(pourQui, quoi){
         var t = "", p = null;
         if (quoi === 'jouer'){
-          t = "Mon honnête recommandation : commence par les jeux gratuits — 36 jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
+          t = "Mon honnête recommandation : commence par les jeux gratuits — 36 + 1 caché jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
           p = { u:"https://hp-outils.com/jeux", l:"Voir les jeux gratuits" };
         } else if (quoi === 'cuisiner'){
           if (pourQui === 'enfants'){
@@ -2057,7 +2057,7 @@ export function initHgpto() {
           t = "Mon honnête recommandation : un seul kit Sans Honte pour ton besoin le plus pressant — 5 $, pas plus. Et le vrai calcul, si un jour tu en vises plusieurs : pris un par un, 10 kits = 50 $ ; le lot « choisis 10 parmi 15 » est à 40 $. Pas besoin de décider ça aujourd'hui.";
           p = { u:"https://hp-outils.com/sans-honte", l:"Voir les kits Sans Honte" };
         } else {
-          t = "Pour les ateliers, écris à la direction humaine en disant pour qui c'est, combien de personnes et quand tu vises : un humain te confirmera tout ça sous 3 jours ouvrables.";
+          t = "Pour les ateliers, écris à la direction humaine en disant pour qui c'est, combien de personnes et quand tu vises : la direction humaine te confirmera tout ça sous 3 jours ouvrables.";
           p = { u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" };
         }
         showBubble(esc(t) + linkHtml(p) + '<br>' + esc(pick(ETHIQUE_LINES)), 14000, 'answer');

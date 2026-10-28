@@ -10,9 +10,9 @@
 //   par produit (un fichier à télécharger, pas un objet). Ajouter deux fois
 //   le même produit ne change rien ; on ne débite jamais deux fois le même
 //   fichier.
-// - Les paquets Chevalier ne passent pas par le panier : ce ne sont pas
-//   des PDF (la validation exige un produit du catalogue PDF). Ils ont
-//   leur caisse dédiée sur /boutique-chevalier.
+// - Chevalier du fleuve : boutique fermée le 27 octobre 2026
+//   (décision 22 h 46, confirmée le 28 octobre 2026), aucune vente —
+//   Chevalier à exclure du panier.
 // - Le bundle « Choisis 10 kits parmi 15 » est EXCLU du panier v1 : il garde
 //   son propre parcours de sélection.
 // - Prix en $ CAD, aucune taxe ajoutée (petit fournisseur).
@@ -62,7 +62,6 @@ export const CART_PRODUCTS: CartProduct[] = [
 export const NON_AJOUTABLES: Array<{ nom: string; raison: string }> = [
   { nom: "Bundle Sans Honte — Choisis 10 kits parmi 15 (40 $)", raison: "Exclu du panier v1 : il garde son propre parcours de sélection des 10 kits." },
   { nom: "Tomes « À toi l'histoire » (5 $ / 8 $)", raison: "Vente dédiée, hors panier : voir /lire — en vente, paiement en réel." },
-  { nom: "Boutique Chevalier (2,99 $ à 19,99 $)", raison: "Vente dédiée, hors panier : voir /boutique-chevalier — en vente, paiement en réel, livraison automatique." },
 ];
 
 export function getCartProduct(priceId: string): CartProduct | null {

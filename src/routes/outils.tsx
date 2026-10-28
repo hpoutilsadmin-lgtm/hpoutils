@@ -81,7 +81,7 @@ const WEB_TOOLS = [
     emoji: "✨",
     tag: "Bien-être",
     title: "Un petit pas à la fois",
-    copy: "Respirez avec moi, votre carte ikigaï, votre plan WOOP : trois modules pour explorer ce qui te fait vibrer et passer à l'action, un petit pas à la fois. Le compagnon gratuit du mini cahier du même nom.",
+    copy: "Respirez avec moi, votre carte ikigaï, votre plan WOOP : trois modules pour explorer ce qui vous fait vibrer et passer à l'action, un petit pas à la fois. Le compagnon gratuit du mini cahier du même nom.",
     cta: "Ouvrir l'outil →",
     href: "/outils/un-petit-pas-a-la-fois",
   },

@@ -37,12 +37,32 @@ function Page() {
   const [recoverEmail, setRecoverEmail] = useState("");
   const [recoverSent, setRecoverSent] = useState(false);
   const [bundleChoice, setBundleChoice] = useState<string[]>([]);
+  // « Offrir » (lot 28 oct. 2026) : une seule case pour les tomes payants
+  // et le bundle. Le tome gratuit et la récupération ne sont pas concernés.
+  const [giftChecked, setGiftChecked] = useState(false);
+  const [giftEmail, setGiftEmail] = useState("");
+
+  // Destinataire validé AVANT tout paiement : case cochée + courriel
+  // invalide = erreur affichée, aucune session Stripe créée, aucun débit.
+  // Destinataire = acheteur lui-même : le serveur retombe sur le parcours
+  // normal (ce n'est pas un cadeau).
+  function giftToOrError(): string | undefined | null {
+    if (!giftChecked) return undefined;
+    const value = giftEmail.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || value.length > 254) {
+      setError("Entrez un courriel valide pour la personne qui recevra le cadeau.");
+      return null;
+    }
+    return value;
+  }
 
   async function buyTome(slug: string) {
     setError(null);
+    const giftTo = giftToOrError();
+    if (giftTo === null) return;
     setBusy(`tome-${slug}`);
     try {
-      const res = await checkout({ data: { kind: "tome", slug, environment: getStripeEnvironment() } });
+      const res = await checkout({ data: { kind: "tome", slug, environment: getStripeEnvironment(), giftTo } });
       if (res.checkoutUrl) window.location.href = res.checkoutUrl;
       else setError("Le paiement n'a pas pu démarrer.");
     } catch (e: any) {
@@ -58,9 +78,11 @@ function Page() {
       setError("Choisis exactement 3 tomes pour le bundle.");
       return;
     }
+    const giftTo = giftToOrError();
+    if (giftTo === null) return;
     setBusy("bundle");
     try {
-      const res = await checkout({ data: { kind: "bundle", tomes: bundleChoice, environment: getStripeEnvironment() } });
+      const res = await checkout({ data: { kind: "bundle", tomes: bundleChoice, environment: getStripeEnvironment(), giftTo } });
       if (res.checkoutUrl) window.location.href = res.checkoutUrl;
       else setError("Le paiement n'a pas pu démarrer.");
     } catch (e: any) {
@@ -159,6 +181,34 @@ function Page() {
             )}
           </article>
 
+          <div style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px", marginBottom: 16 }}>
+            <label style={{ display: "flex", gap: 10, alignItems: "center", fontWeight: 700, cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={giftChecked}
+                onChange={(e) => setGiftChecked(e.target.checked)}
+                style={{ width: 20, height: 20 }}
+              />
+              C'est pour offrir
+            </label>
+            <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65 }}>
+        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, un humain vous répond sous 3 jours ouvrables. En cas de remboursement, le lien est coupé.
+      </p>
+            {giftChecked && (
+              <label style={{ fontSize: 14, fontWeight: 600 }}>
+                Courriel de la personne qui recevra le cadeau
+                <input
+                  type="email"
+                  required
+                  value={giftEmail}
+                  onChange={(e) => setGiftEmail(e.target.value)}
+                  placeholder="son@courriel.com"
+                  style={{ display: "block", margin: "8px 0 0", padding: "10px", width: "100%", maxWidth: 360 }}
+                />
+              </label>
+            )}
+          </div>
+
           <h2>Les 11 tomes</h2>
           <div className="pillar-grid">
             {PAYANT_TOMES.map((tome) => (
@@ -215,6 +265,9 @@ function Page() {
           </p>
 
           <h2>Vous avez perdu vos liens ?</h2>
+          <p>
+            <a href="/recuperer-achat">Récupérer un achat →</a>
+          </p>
           {recoverSent ? (
             <p>
               Si des achats existent pour ce courriel, de nouveaux liens sont en
@@ -241,7 +294,7 @@ function Page() {
 
           <p style={{ marginTop: 32 }}>
             Une question ? <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a> —
-            un humain de l'équipe répond sous 3 jours ouvrables.
+            la direction humaine répond sous 3 jours ouvrables.
           </p>
         </div>
       </section>

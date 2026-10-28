@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Chevalier du fleuve — HP Outils</title>
-<meta name="description" content="Stratégie temps réel : la campagne vraie de Pierre Le Moyne d'Iberville, chevalier de Saint-Louis (1661-1706). Gratuit. 16 ans et plus.">
+<meta name="description" content="Stratégie temps réel : la campagne vraie de Pierre Le Moyne d'Iberville, chevalier de Saint-Louis (1661-1706). Gratuit. 12 ans et plus.">
 <style>
 :root{--or:#c9a227;--or2:#e8c95a;--nuit:#0d1520;--parch:#efe3c2;--rouge:#8e2f26;--bleu:#274b73}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -113,7 +113,7 @@ button.forger:disabled{background:#666;border-color:#999}
   <button class="btn" data-nav="sources">📜 Sources &amp; crédits<small>Les faits vrais derrière le jeu</small></button>
   <p class="note">Deux couches, dites franchement : <b>l'Histoire</b> (la campagne, faits vérifiés)
   et <span class="legende">la Légende du fleuve</span> (les nains albinos des terriers et leur Forge des Rois Gybbys —
-  invention merveilleuse, signalée comme telle). Tout le jeu est gratuit ; l'achat réel sert seulement à s'équiper plus vite et plus fort.</p>
+  invention merveilleuse, signalée comme telle). Tout le jeu est gratuit.</p>
   <p class="note" id="titreProgres"></p>
 </div>
 
@@ -153,13 +153,7 @@ button.forger:disabled{background:#666;border-color:#999}
   du fleuve — forgent l'épique et le légendaire. Les pierres précieuses sont leur monnaie d'échange.
   (Légende du fleuve — voir les terriers sur les cartes pour les rencontrer.)</p>
   <div id="forgeContenu" style="width:100%"></div>
-  <h1 class="titre" style="font-size:26px;margin-top:22px">💎 BOUTIQUE — PIERRES PRÉCIEUSES</h1>
-  <p class="note">Les pierres se gagnent aussi en jouant : récompenses de mission, filons des terriers,
-  trocs avec les Gybbys. <b>Tout peut se gagner en jouant.</b> L'achat sert seulement à s'équiper
-  plus vite et plus fort. Aucune taxe ajoutée.</p>
-  <div id="boutiqueContenu" style="width:100%"></div>
-  <p class="note">Boutique en vente sur le site : <a href="/boutique-chevalier">voir les paquets</a>.</p>
-</div>
+  <p class="note">💎 Pierres précieuses : elles se gagnent en jouant — missions, filons des terriers, trocs avec les Gybbys. Tout peut se gagner en jouant.</p></div>
 
 <div class="ecran" id="ec-sources">
   <button class="retour" data-nav="titre">← Titre</button>
@@ -206,21 +200,8 @@ button.forger:disabled{background:#666;border-color:#999}
    v1.4-endless (25 oct. 2026, PRÉPARATION — non déposée) : le jeu devient INTERMINABLE
    — bouton « Continuer sans fin » après chaque victoire (cycles : nouvelle base +
    nouveaux postes + nouveau filon + objectifs générés, vagues échelonnées) ;
-   bancarisation des pierres récoltées à la victoire ; bonus boutique en attente
-   appliqués dès l'ouverture du jeu ; porte de vente inchangée (fermée). */
-const CDF_CONFIG = { version:"1.4-endless" };
-/* Boutique pierres — produits Stripe à créer par Mélanie.
-   Prix décidés le 24 oct. 2026 (2,99 / 4,99 / 8,99 / 19,99 $) ; pierres
-   et bonus inchangés. priceId:null = « bientôt en vente ».
-   L'achat réel ne se fait JAMAIS ici : la boutique en jeu renvoie vers
-   /boutique-chevalier (caisse + livraison vérifiée). Le jeu ne crédite
-   qu'en démo interne, ou le bonus en attente venu de la boutique. */
-const CDF_SHOP = [
- {id:"eclats",  nom:"Éclats du fleuve",    prix:"2,99 $",  gems:60,  bonus:null,        priceId:null},
- {id:"filon",   nom:"Filon de la berge",   prix:"4,99 $",  gems:140, bonus:{rar:2},     priceId:null},
- {id:"veine",   nom:"Veine des Rois",      prix:"8,99 $",  gems:340, bonus:{rar:3},     priceId:null},
- {id:"tresor",  nom:"Trésor des terriers", prix:"19,99 $", gems:750, bonus:{rar:4},     priceId:null}
-];
+   bancarisation des pierres récoltées à la victoire ; bonus en attente
+   appliqués dès l'ouverture du jeu ; aucune boutique. */const CDF_CONFIG = { version:"1.4-endless" };
 const DEMO = new URLSearchParams(location.search).get("demo")==="interne";
 if (DEMO) document.getElementById("demoBadge").style.display="block";
 
@@ -297,12 +278,7 @@ function montrer(nom){
 document.querySelectorAll("[data-nav]").forEach(b=>b.addEventListener("click",()=>{ initAudio(); montrer(b.dataset.nav); }));
 function rendreTitre(){
   const faits = Object.keys(SAVE.fait).length;
-  /* v1.4 : un bonus boutique livré par le site est appliqué dès l'ouverture du jeu
-     (avant, il fallait ouvrir l'Armurerie — un joueur lançant directement une mission
-     jouait sans son équipement acheté). Même règle qu'à l'Armurerie. */
-  const bonusNote = appliquerBonusEnAttente();
   let txt = faits? ("Campagne : "+faits+" mission(s) accomplie(s) · 💎 "+SAVE.gems+" pierres · Coffre : 🦫 "+SAVE.coffre.f+" · 🪙 "+SAVE.coffre.e) : "";
-  if(bonusNote.length) txt += (txt? " · " : "") + "🎁 Bonus boutique appliqué : " + bonusNote.join(", ");
   if(SAVE.meilleurCycle) txt += (txt? " · " : "") + "♾️ Sans fin : cycle max " + SAVE.meilleurCycle + " · " + (SAVE.cyclesTermines||0) + " cycle(s) terminé(s)";
   document.getElementById("titreProgres").innerHTML = txt;
 }
@@ -412,16 +388,11 @@ function rendreHeros(){
 </script>
 
 <script>
-/* ---- Armurerie / Forge / Boutique ---- */
+/* ---- Armurerie / Forge ---- */
 function prixTxt(p){ let s=[]; if(p.f)s.push("🦫 "+p.f); if(p.e)s.push("🪙 "+p.e); if(p.g)s.push("💎 "+p.g); return s.join(" · ")||"—"; }
 function peutPayer(p){ return SAVE.coffre.f>=p.f && SAVE.coffre.e>=p.e && SAVE.gems>=(p.g||0); }
 function payer(p){ SAVE.coffre.f-=p.f; SAVE.coffre.e-=p.e; SAVE.gems-=(p.g||0); }
 function rendreArmurerie(){
-  /* Bonus d'un achat boutique en attente : appliqué ici, au héros choisi,
-     avec la règle actuelle (premier rayon sous la rareté, un rayon par
-     bonus). Le héros choisi n'est pas persisté dans la sauvegarde, donc
-     la page boutique ne peut pas l'appliquer elle-même. */
-  appliquerBonusEnAttente(); /* v1.4 : règle partagée avec l'ouverture du jeu (rendreTitre). */
   document.getElementById("armCoffre").innerHTML =
     "Ton coffre : 🦫 <b>"+SAVE.coffre.f+"</b> fourrures · 🪙 <b>"+SAVE.coffre.e+"</b> écus · 💎 <b>"+SAVE.gems+"</b> pierres"+
     " &nbsp;·&nbsp; Héros équipé : <b>"+HEROS[herosChoisi].s+"</b> (choisis-le à l'écran Héros)";
@@ -444,7 +415,7 @@ function rendreArmurerie(){
     if(!SAVE.equip[herosChoisi]) SAVE.equip[herosChoisi]={};
     SAVE.equip[herosChoisi][r]=n+1; saveEcrire(); sfx("coin"); rendreArmurerie();
   }));
-  rendreForge(); rendreBoutique();
+  rendreForge();
 }
 function rendreForge(){
   const el = document.getElementById("forgeContenu");
@@ -471,26 +442,6 @@ function rendreForge(){
     SAVE.equip[herosChoisi][r]=cible; saveEcrire(); sfx("forge"); rendreArmurerie();
   }));
 }
-function rendreBoutique(){
-  const el = document.getElementById("boutiqueContenu");
-  let html = "<table class='arm'><tr><th>Paquet</th><th>Prix</th><th>Contenu</th><th></th></tr>";
-  for(const pk of CDF_SHOP){
-    html += "<tr><td>💎 "+pk.nom+"</td><td><span class='prix'>"+pk.prix+"</span></td><td>"+pk.gems+" pierres"+(pk.bonus? " + un équipement "+["","","rare","épique","légendaire"][pk.bonus.rar]+" offert (héros choisi à l'écran Héros, premier rayon incomplet)":"")+"</td>"+
-     "<td>"+(DEMO? "<button class='acheter' data-pack='"+pk.id+"'>Simuler (démo)</button>" : "<span class='prix'>Bientôt en vente</span> <a href='/boutique-chevalier'>Voir la boutique</a>")+"</td></tr>";
-  }
-  html += "</table>";
-  el.innerHTML = html;
-  el.querySelectorAll("button.acheter").forEach(b=>b.addEventListener("click",()=>{
-    const pk = CDF_SHOP.find(x=>x.id===b.dataset.pack); if(!pk) return;
-    if(!DEMO) return; /* Le jeu ne vend jamais : l'achat passe par /boutique-chevalier. */
-    SAVE.gems += pk.gems;
-    if(pk.bonus){ /* crédit d'équipement : monte d'un palier le premier rayon sous la rareté, pour le héros choisi */
-      for(const r of RAYONS){ if(eqNiveau(herosChoisi,r.id) < pk.bonus.rar){ if(!SAVE.equip[herosChoisi]) SAVE.equip[herosChoisi]={}; SAVE.equip[herosChoisi][r.id]=pk.bonus.rar; break; } }
-    }
-    saveEcrire(); sfx("coin"); rendreArmurerie();
-    alert("Démonstration interne : "+pk.gems+" pierres accréditées (aucun achat réel).");
-  }));
-}
 </script>
 
 <script>
@@ -507,7 +458,7 @@ document.getElementById("sourcesContenu").innerHTML =
  "<p>Les nations autochtones sont nommées telles qu'elles l'étaient dans ces alliances (Abénaquis, Biloxis, Chactas, Houmas ; Cris et Inuits de la baie James). "+
  "Aucun personnage autochtone fictif n'est caricaturé : ce sont des alliés, des partenaires de traite et des nations souveraines.</p></div>"+
  "<div class='carte-m'><h3>La légende du fleuve</h3><p class='legende'>Les nains albinos des terriers du fleuve, les Rois Gybbys et leur Forge sont une création originale d'Hugo Pierre Bertrand pour ce jeu — une légende inventée, présentée comme telle, qui ne touche à aucun fait historique.</p></div>"+
- "<div class='carte-m'><h3>Crédits</h3><p>Jeu original créé pour HP Outils (Terrebonne, Québec). Musique et sons synthétisés en WebAudio, dessins en canvas — aucun asset externe. Français du Québec. 16 ans et plus : batailles historiques.</p></div>";
+ "<div class='carte-m'><h3>Crédits</h3><p>Jeu original créé pour HP Outils (Terrebonne, Québec). Musique et sons synthétisés en WebAudio, dessins en canvas — aucun asset externe. Français du Québec. 12 ans et plus : batailles historiques.</p></div>";
 
 /* ---- Audio WebAudio 100 % synthétisé ---- */
 let AC=null, masterGain=null, musiqueTimer=null;
@@ -1155,23 +1106,7 @@ function capacite(u){
    la même carte en cycles (nouvelle base, nouveaux postes, nouveau filon,
    objectifs générés, vagues échelonnées). AUCUNE mécanique de rétention :
    pas de quotidien, pas de série, pas d'énergie, pas d'attente — tout avance
-   en jouant. La porte de vente reste fermée (voir boutique : « Bientôt en vente »). */
-
-/* Bonus boutique en attente : même règle qu'à l'Armurerie (héros choisi à l'écran
-   Héros, premier rayon sous la rareté, un rayon par bonus). Appelé à l'ouverture
-   du jeu ET à l'Armurerie, pour qu'un achat livré par le site ne reste jamais
-   en attente si le joueur lance directement une mission. */
-function appliquerBonusEnAttente(){
-  const notes=[];
-  if(Array.isArray(SAVE.bonusChevalierEnAttente) && SAVE.bonusChevalierEnAttente.length){
-    const bonus = SAVE.bonusChevalierEnAttente; SAVE.bonusChevalierEnAttente = [];
-    for(const rar of bonus){
-      for(const r of RAYONS){ if(eqNiveau(herosChoisi,r.id) < rar){ if(!SAVE.equip[herosChoisi]) SAVE.equip[herosChoisi]={}; SAVE.equip[herosChoisi][r.id]=rar; notes.push(HEROS[herosChoisi].s+" : "+EQUIP[r.id][rar-1]+" ("+["","commun","rare","épique","légendaire"][rar]+")"); break; } }
-    }
-    saveEcrire();
-  }
-  return notes;
-}
+   en jouant. Aucune boutique : toutes les pierres se gagnent en jouant. */
 /* Bancarise tout le stock de la partie en cours (entiers) vers le coffre. */
 function bankResComplet(){
   const b={f:Math.floor(G.res.f), e:Math.floor(G.res.e), g:Math.floor(G.res.g)};

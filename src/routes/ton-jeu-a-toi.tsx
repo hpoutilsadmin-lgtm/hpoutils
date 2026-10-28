@@ -498,7 +498,7 @@ function Page() {
               <a href="mailto:hpoutils.admin@gmail.com">
                 hpoutils.admin@gmail.com
               </a>{" "}
-              : un humain de l'équipe vous répond sous 3 jours ouvrables.
+              : la direction humaine vous répond sous 3 jours ouvrables.
             </p>
           </div>
         </section>

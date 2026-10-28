@@ -67,7 +67,7 @@ const PurchaseFollowupEmail = ({
             <Link href="mailto:hpoutils.admin@gmail.com" style={link}>
               hpoutils.admin@gmail.com
             </Link>{' '}
-            — une réponse d'humain, pas d'un robot, sous 3 jours ouvrables.
+            — une réponse de la direction humaine, pas d'un robot, sous 3 jours ouvrables.
           </Text>
         </Section>
         <Text style={text}>

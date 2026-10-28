@@ -26,7 +26,6 @@ const ROWS: Row[] = [
   { cat: "Crée ton histoire", offre: "Crée TON histoire — créateur d’histoire personnalisée (ce n’est pas la série « À toi l’histoire ») : un prénom, 1 thème parmi 4, 2, 3 ou 4 fins — Bientôt, vente pas encore ouverte", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/cree-ton-histoire-a-toi", label: "Voir la fiche (Bientôt)" },
   { cat: "Passeurs", offre: "Passeurs de savoirs — inscription ouverte", prix: "3 $/mois · 28 $/an, aucune taxe ajoutée", href: "/les-passeurs", label: "S'inscrire" },
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "150 $ à 290 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
-  { cat: "Jeu", offre: "Chevalier du fleuve — gemmes du jeu (boutique dédiée, hors panier — en vente)", prix: "2,99 $ à 19,99 $ CAD, aucune taxe ajoutée", href: "/boutique-chevalier", label: "Voir la boutique" },
   { cat: "Jeu", offre: "Ton jeu à toi, en 30 secondes — jeu de course personnalisé (prénom + thème), aperçu gratuit jouable (Bientôt — prix prévu, aucun achat possible pour l'instant)", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/ton-jeu-a-toi", label: "Essayer l'aperçu gratuit" },
   { cat: "Jeu sur mesure", offre: "Jeux à votre image — un jeu aux couleurs de votre commerce (Express 29 $, Événement 199 $, Saisonnier 299 $, Permanent 399 $, hébergement gratuit l’année 1 puis 29 $/an, aucune taxe ajoutée — paiement seulement après votre oui explicite, voir la page de l’offre)", prix: "29 $ à 399 $ CAD selon le niveau, aucune taxe ajoutée", href: "/jeux-a-votre-image", label: "Voir l’offre" },
   { cat: "Cadeaux", offre: "Bons cadeaux — un code personnel à offrir, applicable au panier", prix: "5 $ à 100 $ CAD, aucune taxe ajoutée", href: "/cadeaux", label: "Offrir un bon" },
@@ -91,6 +90,9 @@ function Page() {
               </tbody>
             </table>
           </div>
+          <p style={{ maxWidth: 760, lineHeight: 1.65, marginTop: 16 }}>
+            Bundle Sans Honte — Choisissez 10 kits parmi 15, 40 $, aucune taxe ajoutée. Vous choisissez vos 10 kits, vous payez, vous recevez 10 liens de téléchargement, un par kit choisi, par courriel — chaque kit se télécharge séparément, comme les kits seuls à 5 $. Vous recevez : les 10 kits choisis, en PDF, à télécharger sur votre appareil. Durée : vos liens restent récupérables par « Récupérer un achat », avec votre courriel. Si ça ne marche pas : écrivez à la direction humaine, un humain vous répond sous 3 jours ouvrables. Si vous changez d'idée après paiement : les produits numériques ne sont pas remboursables, sauf en cas de panne technique — écrivez-nous, on regarde votre cas un par un.
+          </p>
         </div>
       </section>
       <section className="collections-strip">
@@ -99,7 +101,7 @@ function Page() {
           <h2>Et le <em>gratuit</em> ?</h2>
           <p className="strip-intro">
             Avant de payer quoi que ce soit, le gratuit d'HP vaut le détour :{" "}
-            <a href="/jeux">36 jeux gratuits, sans inscription</a>, et{" "}
+            <a href="/jeux">36 + 1 caché jeux gratuits, sans inscription</a>, et{" "}
             <a href="/balado">Futur simple, le balado sur l'IA</a> — de nouveaux épisodes quand ils sont prêts, gratuit lui aussi.
           </p>
         </div>

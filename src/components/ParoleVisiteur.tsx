@@ -14,7 +14,7 @@ export function ParoleVisiteur() {
       <div className="container" style={{ maxWidth: 760 }}>
         <span className="editorial-kicker">Parole de visiteuse</span>
         <h2>
-          Ce que les gens <em>disent</em>
+          Ce qu'on nous <em>dit</em>
         </h2>
         <p className="strip-intro" style={{ margin: "0 auto 28px" }}>
           La première parole de visiteuse arrivée jusqu’ici — la voici, telle quelle.

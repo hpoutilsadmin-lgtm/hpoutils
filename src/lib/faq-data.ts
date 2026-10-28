@@ -23,7 +23,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Les recettes et les jeux sont-ils vraiment gratuits ?",
     reponse:
-      "Oui : 629 recettes gratuites en cuisine et 36 jeux gratuits, sans inscription, jouables dans ton navigateur. C'est le cœur d'HP : des outils pour la vraie vie, accessibles à tout le monde.",
+      "Oui : 629 recettes gratuites en cuisine et 36 + 1 caché jeux gratuits, sans inscription, jouables dans votre navigateur. C'est le cœur d'HP : des outils pour la vraie vie, accessibles à tout le monde.",
   },
   {
     question: "Pourquoi aucune taxe n'est ajoutée aux prix ?",
@@ -33,7 +33,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Comment se fait le paiement, et quand est-ce que je reçois mon achat ?",
     reponse:
-      "Le paiement se fait par carte. Après l'achat, le téléchargement de ton PDF est immédiat, et tu reçois aussi ton lien par courriel. Si le courriel n'arrive pas ou si le lien expire, passe par la page « Récupérer un achat » du site.",
+      "Le paiement se fait par carte. Après l'achat, le téléchargement de votre PDF est immédiat, et vous recevez aussi votre lien par courriel. Pour les tomes, la livraison est un lien de lecture web, pas un téléchargement. Si le courriel n'arrive pas ou si le lien expire, passez par la page « Récupérer un achat » du site.",
   },
   {
     question: "Est-ce qu'il y a des ateliers en personne ?",
@@ -41,18 +41,23 @@ export const FAQ_ENTRIES: FaqEntry[] = [
       "Oui : 6 ateliers de groupe à Terrebonne et dans Lanaudière — Cuisine pratique (260 $ CAD), Manger mieux avec moins (260 $ CAD), L'IA sans jargon (220 $ CAD), Atelier jeunesse (150 $ CAD), Les enfants cuisinent (190 $ CAD), Hygiène & salubrité (150 $ CAD). Et pour l'Édition des Fêtes (1er octobre au 23 décembre) : le Pain maison à domicile (290 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h (220 $) et la conférence « La faim justifie les moyens » (220 $, 45 à 60 min).",
   },
   {
-    question: "C'est quoi, les Passeurs de savoir ?",
+    question: "C'est quoi, le Passeur de savoir ?",
     reponse:
-      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. L'accès des Passeurs aux 16 savoirs : 3 $ CAD par mois (ou 28 $ CAD pour l'année). L'inscription est ouverte : écris à la direction pour t'inscrire, un humain te répond sous 3 jours ouvrables. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
+      "Le Passeur de savoir rassemble les savoirs pratiques d'ici, transmis par les gens. C'est à consulter gratuitement.",
+  },
+  {
+    question: "C'est quoi, les Passeurs (abonnement) ?",
+    reponse:
+      "Les Passeurs, c'est l'abonnement : l'accès aux 16 savoirs, 3 $ CAD par mois (ou 28 $ CAD pour l'année). L'inscription est ouverte : écrivez à la direction humaine pour vous inscrire, la direction humaine vous répond sous 3 jours ouvrables. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
   },
   {
     question: "Par où commencer pour mes papiers de fin de vie ?",
     reponse:
-      "Le kit Testament aide à préparer tes volontés ; un passage chez le notaire reste recommandé pour l'officialiser. Pour les papiers du quotidien, le kit Papiers (24 fiches) aide à tout classer. Si tout ça te pèse : 811 ou 988, des humains pour t'écouter, jour et nuit.",
+      "Le kit Testament aide à préparer vos volontés ; un passage chez le notaire reste recommandé pour l'officialiser. Pour les papiers du quotidien, le kit Papiers (24 fiches) aide à tout classer. Si tout ça vous pèse : 811 ou 988, des humains pour vous écouter, jour et nuit.",
   },
   {
     question: "Qui répond quand j'écris à HP Outils ?",
     reponse:
-      "Un humain de l'équipe HP, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, HGPTO — le petit robot d'HP — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à l'équipe au lieu d'inventer une réponse.",
+      "La direction humaine, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, HGPTO — le petit robot d'HP — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à l'équipe au lieu d'inventer une réponse.",
   },
 ];

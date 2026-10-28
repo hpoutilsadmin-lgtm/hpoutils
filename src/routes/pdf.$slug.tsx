@@ -246,7 +246,7 @@ function Page() {
             <BeforeYouBuyNote />
             {["faim-justifie-les-moyens", "horizon-quebec", "enjeux-humanite", "enfants-cuisinent"].includes(product.slug) && (
               <p style={{ fontSize: 14, lineHeight: 1.65, color: "#3a2a20", marginBottom: 16 }}>
-                Une réponse d’humain sous 3 jours ouvrables.
+                Une réponse de la direction humaine sous 3 jours ouvrables.
               </p>
             )}
             {product.purchaseHold ? (

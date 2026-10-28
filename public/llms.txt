@@ -20,6 +20,7 @@ Mémoire des Cantons, Chat'attaque, NORD 2087, Mystères du Nord, Fusion Sirop, 
 2 vérités 1 mensonge, Ado odieux adieu, Devine l'humeur, Le bonhomme pendu, Pop Ballons,
 IGLOO — La guerre des igloos, Que vois-tu ?, Tapinoue, Anxiété le jeu, L'hydroélectricité.
 La page /jeux présente aussi les histoires interactives « À toi l'histoire » (tome 1 gratuit).
+Chevalier du fleuve : jeu de stratégie gratuit en entier, boutique fermée — toutes les pierres se gagnent en jouant.
 Sur le site vit aussi HGPTO, le petit robot assistant du site, qui répond aux questions des visiteurs.
 
 ## En cuisine — 629 recettes gratuites (page /en-cuisine/index.html)
@@ -69,7 +70,14 @@ Le kit Testament aide à préparer un testament olographe au Québec ; ce n'est 
 - Horizon Québec
 - Enjeux de l'humanité à l'ère de l'IA
 - Les enfants cuisinent pour faire plaisir (10 $)
+- Un petit pas à la fois — le mini cahier (10 $)
 Aucune taxe ajoutée. Téléchargement immédiat.
+
+## Les tomes « À toi l'histoire » (page /lire)
+
+11 tomes payants, 5 $ à 8 $, plus le tome gratuit La Chasse-Galerie.
+Bundle : 3 tomes au choix, 12 $. Après l'achat, lien web personnel par courriel
+— pas de PDF, pas de compte. Aucune taxe ajoutée.
 
 ## Les bons cadeaux — 5 $ à 100 $ (page /cadeaux)
 
@@ -86,11 +94,23 @@ Prix : 150 $ à 290 $ CAD selon l'atelier. Aucune taxe ajoutée.
 
 ## Les Passeurs (page /les-passeurs)
 
-Programme ouvert, lié au Passeur de savoir : l'accès aux 16 savoirs coûtera 3 $ par mois
+Programme ouvert, lié au Passeur de savoir : l'accès aux 16 savoirs coûte 3 $ par mois
 (28 $ pour l'année),
 pour soutenir financièrement les jeux, les livres et les outils gratuits de HP Outils.
 L'inscription est ouverte : écris à la direction pour t'inscrire. Aucun paiement automatisé
 pour l'instant : l'inscription se fait par courriel.
+
+## Les jeux à votre image (page /jeux-a-votre-image)
+
+Un jeu aux couleurs d'un commerce, d'un événement ou d'un organisme :
+Express 29 $, Événement 199 $, Saisonnier 299 $, Permanent 399 $.
+Hébergement gratuit l'année 1, puis 29 $ par année et par jeu.
+Aucune taxe ajoutée.
+
+## Ton jeu à toi
+
+Aperçu gratuit. Prix prévu : 5 $. Aucun achat pour l'instant —
+la vente n'est pas encore ouverte.
 
 ## Le balado Futur simple (page /balado)
 
