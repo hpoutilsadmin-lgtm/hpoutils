@@ -17,9 +17,13 @@ import { initHgpto } from "./hgpto-engine";
  */
 export function Hgpto() {
   const hostRef = useRef<HTMLDivElement>(null);
-  const [welcome, setWelcome] = useState(() => {
-    try { return sessionStorage.getItem("hgpto-welcome-seen") !== "1" && sessionStorage.getItem("hgpto-closed") !== "1"; } catch { return true; }
-  });
+  // Correctif 28 oct. 2026 — scène 1x/session : l'état initial ne doit
+  // jamais afficher la scène avant la lecture côté client. Le rendu
+  // serveur ne connaît pas sessionStorage (il rendait « vrai » par
+  // défaut), donc à chaque chargement de page la scène réapparaissait
+  // même après Fermer. On part de « faux », puis l'effet ci-dessous
+  // l'affiche une seule fois si la session ne l'a pas encore vue.
+  const [welcome, setWelcome] = useState(false);
   const jouerFanfare = () => {
     try {
       const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -41,6 +45,13 @@ export function Hgpto() {
   };
 
   useEffect(() => {
+    // Lecture côté client seulement : si la scène a déjà été fermée
+    // dans cette session, ou si la mascotte est fermée, on ne l'affiche pas.
+    try {
+      if (sessionStorage.getItem("hgpto-welcome-seen") !== "1" && sessionStorage.getItem("hgpto-closed") !== "1") {
+        setWelcome(true);
+      }
+    } catch { /* stockage indisponible : on affiche la scène une fois */ setWelcome(true); }
     const host = hostRef.current;
     if (!host) return;
     let closed = false;
