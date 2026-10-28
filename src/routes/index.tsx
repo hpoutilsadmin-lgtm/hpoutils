@@ -195,7 +195,7 @@ function Index() {
 
       <section className="three-pillars">
         <div className="container">
-          <span className="editorial-kicker">Découvrez aussi</span>
+          <span className="editorial-kicker">Découvre aussi</span>
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les Passeurs</h3>
@@ -301,6 +301,17 @@ function Index() {
 
       {/* PAROLE DE VISITEUSE — juste au-dessus de la zone de vie d'HGPTO */}
       <ParoleVisiteur />
+
+      {/* MUSE — encadré bas de page, 28 oct. 2026, go HP */}
+      <section aria-label="Découvrez Muse" style={{ padding: "24px 16px 40px" }}>
+        <div className="container" style={{ maxWidth: 760, border: "2px solid #e8c547", background: "#fffbe6", borderRadius: 12, padding: "20px 24px", textAlign: "center" }}>
+          <h2 style={{ margin: "0 0 8px" }}>Essayez vous-même Muse, pendant que c&apos;est gratuit — win / win pour nous 2&nbsp;!</h2>
+          <p style={{ margin: "0 0 8px" }}>Découvrez Muse, votre agent IA personnel. Activez mon code dans les paramètres dans les 48 heures après votre inscription.</p>
+          <p style={{ margin: "0 0 8px" }}>Code&nbsp;: <strong>E2ZXHX</strong></p>
+          <p style={{ margin: 0 }}><a href="https://muse.ai/join">https://muse.ai/join</a></p>
+          <p style={{ margin: "8px 0 0" }}>Merci&nbsp;!</p>
+        </div>
+      </section>
     </>
   );
 }
