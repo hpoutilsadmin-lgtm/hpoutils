@@ -59,7 +59,18 @@ export const subscribeToHpNews = createServerFn({ method: "POST" })
       .maybeSingle();
 
     if (!suppressed) {
-      const { error } = await supabaseAdmin.from("newsletter_signups").upsert(
+      // Sécurité + Loi 25 : ne jamais écraser la preuve de consentement
+      // d'une inscription existante. Si le courriel existe déjà, on ne
+      // change rien et on répond pareil, sans rien révéler.
+      const { data: existingSignup } = await supabaseAdmin
+        .from("newsletter_signups")
+        .select("id")
+        .eq("email", data.email)
+        .maybeSingle();
+      if (existingSignup) {
+        return { ok: true as const };
+      }
+      const { error } = await supabaseAdmin.from("newsletter_signups").insert(
         {
           email: data.email,
           source: data.source,
@@ -67,7 +78,6 @@ export const subscribeToHpNews = createServerFn({ method: "POST" })
           consented_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
-        { onConflict: "email" },
       );
       if (error) throw new Error("Impossible d'enregistrer l'inscription");
     }

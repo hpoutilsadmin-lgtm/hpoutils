@@ -111,6 +111,10 @@ function cartTotalCents(priceIds: string[]): number {
   return total;
 }
 
+// Programme fermé, décision HP 28 oct. 2026 : plus aucune vente de bon cadeau.
+// Les codes déjà émis restent utilisables ; aucune nouvelle session, aucun nouveau code.
+export const GIFT_SALES_DISABLED = true;
+
 // --- Achat d'un bon ---------------------------------------------------------
 
 export const createGiftCheckoutSession = createServerFn({ method: "POST" })
@@ -123,6 +127,9 @@ export const createGiftCheckoutSession = createServerFn({ method: "POST" })
     return { denomination, environment: data.environment };
   })
   .handler(async ({ data }) => {
+    if (GIFT_SALES_DISABLED) {
+      return { error: "Les bons cadeaux ne sont plus en vente." };
+    }
     try {
       const stripe = createStripeClient(data.environment);
       const priceId = await resolveGiftPriceId(stripe, data.denomination.lookupKey);
@@ -176,6 +183,9 @@ export const fulfillGiftPurchase = createServerFn({ method: "POST" })
         amountCents: (existing as { initial_cents: number }).initial_cents,
         email: session.customer_details?.email ?? null,
       };
+    }
+    if (GIFT_SALES_DISABLED) {
+      return { status: "disabled" as const };
     }
     const lookupKey = session.metadata?.giftLookupKey ?? null;
     const denomination = lookupKey ? getGiftDenomination(lookupKey) : null;

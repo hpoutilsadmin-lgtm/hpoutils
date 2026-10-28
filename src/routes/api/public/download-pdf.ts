@@ -27,21 +27,32 @@ export const Route = createFileRoute("/api/public/download-pdf")({
           process.env.SUPABASE_SERVICE_ROLE_KEY!,
         );
 
-        // Refuse si la commande associée a été remboursée.
-        // (On accepte le token tant qu'aucune commande remboursée
-        // n'existe pour ce couple courriel + priceId.)
+        // Sécurité : le téléchargement exige une commande payée, non
+        // remboursée, pour ce jeton. Le courriel du jeton peut être le
+        // payeur ou le destinataire d'un cadeau : on cherche les deux,
+        // sans jamais accepter un token sans commande payée.
         // Escape LIKE metacharacters to prevent wildcard matching via user input.
         const escapedEmail = payload.email.replace(/([\\%_])/g, "\\$1");
-        const { data: refundedOrder } = await admin
+        const { data: paidOrder } = await admin
           .from("orders")
-          .select("id")
+          .select("id,status")
           .ilike("customer_email", escapedEmail)
           .eq("price_id", payload.priceId)
-          .eq("status", "refunded")
+          .eq("status", "paid")
           .limit(1)
           .maybeSingle();
-        if (refundedOrder) {
-          return new Response("Lien révoqué (remboursement)", { status: 410 });
+        const { data: paidGiftOrder } = paidOrder
+          ? { data: null }
+          : await admin
+              .from("orders")
+              .select("id,status")
+              .ilike("gift_recipient_email", escapedEmail)
+              .eq("price_id", payload.priceId)
+              .eq("status", "paid")
+              .limit(1)
+              .maybeSingle();
+        if (!paidOrder && !paidGiftOrder) {
+          return new Response("Lien invalide ou révoqué", { status: 410 });
         }
 
         const { data: file, error } = await admin.storage
