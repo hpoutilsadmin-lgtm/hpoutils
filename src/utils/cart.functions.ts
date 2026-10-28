@@ -75,6 +75,7 @@ export const createCartCheckoutSession = createServerFn({ method: "POST" })
       const session = await stripe.checkout.sessions.create({
         line_items,
         mode: "payment",
+        allow_promotion_codes: true,
         // Page Stripe hébergée en v1 : plus simple que l'Embedded
         // multi-produits. Valeur SDK : "hosted_page" (pas "hosted").
         // La page de retour existante (/checkout/return) est réutilisée,

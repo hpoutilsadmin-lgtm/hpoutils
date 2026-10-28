@@ -111,6 +111,7 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
       const session = await stripe.checkout.sessions.create({
         line_items: [{ price: stripePrice.id, quantity: 1 }],
         mode: "payment",
+        allow_promotion_codes: true,
         ui_mode: "embedded_page",
         return_url: returnUrl,
         // Stripe Tax calcule TPS/TVQ à partir de l'adresse de facturation.

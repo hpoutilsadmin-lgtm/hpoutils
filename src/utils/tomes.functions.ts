@@ -126,6 +126,7 @@ export const createTomeCheckoutSession = createServerFn({ method: "POST" })
       const session = await stripe.checkout.sessions.create({
         line_items: [{ price: priceId, quantity: 1 }],
         mode: "payment",
+        allow_promotion_codes: true,
         ui_mode: "hosted_page",
         success_url: `${origin}/lire/merci?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/lire/`,
