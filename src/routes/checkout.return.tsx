@@ -1,8 +1,11 @@
+// Sécurité phase 2 — page de retour en LECTURE SEULE.
+// Elle n'affiche qu'un statut (paid / pending / missing), jamais un lien,
+// jamais un jeton, jamais un courriel complet. La livraison se fait
+// UNIQUEMENT par le webhook Stripe vérifié, par courriel.
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { fulfillPdfOrder } from "@/utils/payments.functions";
-import { getStripeEnvironment } from "@/lib/stripe";
+import { getCheckoutStatus } from "@/utils/checkout-status.server";
 import { createSeoHead } from "@/lib/seo";
 import { ThankYouCelebration } from "@/components/ThankYouCelebration";
 
@@ -23,14 +26,12 @@ type State =
   | { kind: "loading" }
   | { kind: "missing" }
   | { kind: "pending" }
-  // « Offrir » : email = payeur (facture), giftEmail = destinataire (lien).
-  // Le lien lui-même n'est jamais affiché ici, comme pour un achat normal.
-  | { kind: "paid"; email: string; giftEmail: string | null; message: string | null; itemCount: number }
+  | { kind: "paid"; itemCount: number }
   | { kind: "error"; message: string };
 
 function Page() {
   const { session_id } = Route.useSearch();
-  const fulfill = useServerFn(fulfillPdfOrder);
+  const check = useServerFn(getCheckoutStatus);
   const [state, setState] = useState<State>({ kind: "loading" });
 
   useEffect(() => {
@@ -41,19 +42,11 @@ function Page() {
     }
     (async () => {
       try {
-        const result = await fulfill({
-          data: { sessionId: session_id, environment: getStripeEnvironment() },
-        });
+        const result = await check({ data: { sessionId: session_id } });
         if (cancelled) return;
         if (result.status === "pending") setState({ kind: "pending" });
-        else
-          setState({
-            kind: "paid",
-            email: result.email,
-            giftEmail: (result as { giftEmail?: string | null }).giftEmail ?? null,
-            message: result.message,
-            itemCount: result.itemCount ?? 1,
-          });
+        else if (result.status === "paid") setState({ kind: "paid", itemCount: result.itemCount });
+        else setState({ kind: "missing" });
       } catch (e: any) {
         if (cancelled) return;
         setState({ kind: "error", message: e?.message ?? "Erreur inconnue" });
@@ -62,7 +55,7 @@ function Page() {
     return () => {
       cancelled = true;
     };
-  }, [session_id, fulfill]);
+  }, [session_id, check]);
 
   return (
     <section className="subpage-content">
@@ -78,7 +71,8 @@ function Page() {
         {state.kind === "pending" && (
           <>
             <h1>Paiement en cours</h1>
-            <p>Votre paiement est en cours de traitement. Rafraîchissez cette page dans un instant.</p>
+            <p>Votre paiement est en cours de traitement. Vérifiez votre courriel dans quelques minutes, ou récupérez votre achat ici :{" "}
+              <Link to="/recuperer-achat">Récupérer un achat</Link>.</p>
           </>
         )}
         {state.kind === "error" && (
@@ -93,28 +87,9 @@ function Page() {
             <h1>Merci !</h1>
             <ThankYouCelebration />
             <p>
-              Votre achat est confirmé.
-              {state.email && <> Un reçu a été envoyé à <strong>{state.email}</strong>.</>}
+              Votre achat est confirmé. Les liens de téléchargement vous ont été envoyés par courriel.
+              Vérifiez votre boîte de réception (et le dossier «&nbsp;Indésirables&nbsp;») dans les prochaines minutes.
             </p>
-            {state.message ? (
-              <p style={{ marginTop: 24, color: "#b04a2f" }}>{state.message}</p>
-            ) : state.giftEmail ? (
-              <p style={{ marginTop: 32, fontSize: 16 }}>
-                C'est un cadeau :{" "}
-                {state.itemCount > 1 ? "les liens de téléchargement" : "le lien de téléchargement"}{" "}
-                vient d'être envoyé à <strong>{state.giftEmail}</strong>, et
-                vous gardez la facture. Si le cadeau n'arrive pas, la
-                direction humaine vous répond sous 3 jours ouvrables.
-              </p>
-            ) : (
-              <p style={{ marginTop: 32, fontSize: 16 }}>
-                Un courriel contenant{" "}
-                {state.itemCount > 1 ? "vos liens de téléchargement" : "votre lien de téléchargement"}{" "}
-                vient d'être envoyé à <strong>{state.email}</strong>. Vérifiez
-                votre boîte de réception (et le dossier «&nbsp;Indésirables&nbsp;»)
-                dans les prochaines minutes.
-              </p>
-            )}
             <p style={{ marginTop: 32, fontSize: 14, opacity: 0.7 }}>
               Le lien de téléchargement reste valide 7 jours. Conservez-le précieusement.
             </p>

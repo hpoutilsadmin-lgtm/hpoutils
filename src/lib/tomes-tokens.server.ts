@@ -140,7 +140,27 @@ export async function mintRecoveryTomeTokens(
     .eq("customer_email", normalized)
     .is("revoked_at", null);
   const rows = (data ?? []) as Array<{ tome_slug: string; stripe_session_id: string }>;
-  const slugs = [...new Set(rows.map((r) => r.tome_slug))];
+  // Sécurité phase 2 : exiger une commande paid non remboursée pour la
+  // session d'origine, sauf sessions "free" et "recovery" qui gardent
+  // leur comportement. Sans ligne paid : aucun jeton forgé pour ce tome.
+  // Rotation : NON appliquée par défaut (décision HP séparée) — les
+  // anciens liens restent valides.
+  const paidSessions = new Set<string>();
+  const sessionsToCheck = [...new Set(rows.map((r) => r.stripe_session_id))].filter(
+    (s) => s !== "free" && !s.startsWith("recovery:"),
+  );
+  if (sessionsToCheck.length > 0) {
+    const { data: paid } = await supabase
+      .from("orders")
+      .select("stripe_session_id")
+      .in("stripe_session_id", sessionsToCheck)
+      .eq("status", "paid");
+    for (const o of paid ?? []) paidSessions.add((o as any).stripe_session_id);
+  }
+  const verifiedRows = rows.filter(
+    (r) => r.stripe_session_id === "free" || r.stripe_session_id.startsWith("recovery:") || paidSessions.has(r.stripe_session_id),
+  );
+  const slugs = [...new Set(verifiedRows.map((r) => r.tome_slug))];
   if (slugs.length === 0) return [];
   const fresh: Array<{ tome: Tome; token: string }> = [];
   for (const slug of slugs) {
@@ -148,7 +168,7 @@ export async function mintRecoveryTomeTokens(
     if (!tome) continue;
     const token = generateTomeToken();
     const firstSession =
-      rows.find((r) => r.tome_slug === slug)?.stripe_session_id ?? `recovery:${normalized}`;
+      verifiedRows.find((r) => r.tome_slug === slug)?.stripe_session_id ?? `recovery:${normalized}`;
     const { error } = await supabase.from("tome_tokens").insert({
       token_hash: hashTomeToken(token),
       tome_slug: slug,

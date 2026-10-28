@@ -1,13 +1,12 @@
-// Page de merci d'un bon cadeau — route /cadeaux/merci, non imbriquée
-// (même motif que lire_.merci.tsx : une route à la racine, pas un enfant
-// de /cadeaux, pour éviter l'affichage du catalogue à la place du contenu).
-// La page appelle fulfillGiftPurchase : le code n'est créé qu'après un
-// paiement confirmé, et un rechargement relit le même code.
+// Sécurité phase 2 — page de merci bons cadeaux en LECTURE SEULE.
+// Le programme bons cadeaux est fermé (ventes désactivées) : cette page
+// ne crée PLUS aucun code, n'affiche aucun code, aucun montant, aucun
+// courriel. Elle n'affiche qu'un statut, comme les autres pages de retour.
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { createSeoHead } from "@/lib/seo";
-import { fulfillGiftPurchase } from "@/utils/cadeaux.functions";
+import { getCheckoutStatus } from "@/utils/checkout-status.server";
 import { ThankYouCelebration } from "@/components/ThankYouCelebration";
 
 export const Route = createFileRoute("/cadeaux_/merci")({
@@ -28,12 +27,12 @@ type State =
   | { kind: "loading" }
   | { kind: "missing" }
   | { kind: "pending" }
-  | { kind: "paid"; code: string; amountCents: number; email: string | null }
+  | { kind: "paid" }
   | { kind: "error" };
 
 function Page() {
   const { session_id } = Route.useSearch();
-  const fulfill = useServerFn(fulfillGiftPurchase);
+  const check = useServerFn(getCheckoutStatus);
   const [state, setState] = useState<State>({ kind: "loading" });
 
   useEffect(() => {
@@ -44,17 +43,11 @@ function Page() {
     }
     (async () => {
       try {
-        const result = await fulfill({ data: { sessionId: session_id } });
+        const result = await check({ data: { sessionId: session_id } });
         if (cancelled) return;
         if (result.status === "pending") setState({ kind: "pending" });
-        else if (result.status === "paid") {
-          setState({
-            kind: "paid",
-            code: result.code,
-            amountCents: result.amountCents,
-            email: result.email,
-          });
-        } else setState({ kind: "error" });
+        else if (result.status === "paid") setState({ kind: "paid" });
+        else setState({ kind: "missing" });
       } catch {
         if (!cancelled) setState({ kind: "error" });
       }
@@ -62,7 +55,7 @@ function Page() {
     return () => {
       cancelled = true;
     };
-  }, [session_id, fulfill]);
+  }, [session_id, check]);
 
   return (
     <section className="subpage-content">
@@ -95,14 +88,9 @@ function Page() {
             <h1>Merci !</h1>
             <ThankYouCelebration />
             <p>
-              Ton bon cadeau de {state.amountCents / 100} $ CAD est prêt.
-              Voici ton code personnel — il est aussi envoyé par courriel
-              {state.email ? <> à <strong>{state.email}</strong></> : null} :
+              Votre achat est confirmé. Les détails vous ont été envoyés par courriel.
+              Les codes déjà émis restent utilisables au panier.
             </p>
-            <p style={{ fontSize: 24, fontWeight: "bold", letterSpacing: 2, margin: "24px 0" }}>
-              {state.code}
-            </p>
-            <p>Offre ce code à qui tu veux : il se saisit au panier.</p>
             <p style={{ marginTop: 24 }}>
               <Link to="/panier">Aller au panier →</Link>
             </p>

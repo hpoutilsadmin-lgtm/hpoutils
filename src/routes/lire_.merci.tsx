@@ -1,9 +1,13 @@
+// Sécurité phase 2 — page de merci tomes en LECTURE SEULE.
+// Elle n'affiche JAMAIS les liens de lecture dans la page : les liens
+// sont envoyés par courriel, par le webhook seul. Un rechargement ne
+// renvoie rien, un session_id seul ne donne aucun lien.
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { createSeoHead } from "@/lib/seo";
-import { fulfillTomeOrder } from "@/utils/tomes.functions";
+import { getCheckoutStatus } from "@/utils/checkout-status.server";
 import { ThankYouCelebration } from "@/components/ThankYouCelebration";
 
 export const Route = createFileRoute("/lire_/merci")({
@@ -23,16 +27,12 @@ type State =
   | { kind: "loading" }
   | { kind: "missing" }
   | { kind: "pending" }
-  | { kind: "paid"; links: Array<{ slug: string; title: string; url: string }> }
-  | { kind: "delivered"; email: string }
-  // « Offrir » : l'acheteur ne voit JAMAIS les liens du destinataire.
-  | { kind: "gift"; email: string }
-  | { kind: "not-tome" }
+  | { kind: "paid" }
   | { kind: "error"; message: string };
 
 function Page() {
   const { session_id } = Route.useSearch();
-  const fulfill = useServerFn(fulfillTomeOrder);
+  const check = useServerFn(getCheckoutStatus);
   const [state, setState] = useState<State>({ kind: "loading" });
 
   useEffect(() => {
@@ -43,14 +43,11 @@ function Page() {
     }
     (async () => {
       try {
-        const result = await fulfill({ data: { sessionId: session_id } });
+        const result = await check({ data: { sessionId: session_id } });
         if (cancelled) return;
         if (result.status === "pending") setState({ kind: "pending" });
-        else if (result.status === "gift") setState({ kind: "gift", email: result.email });
-        else if (result.status === "paid") setState({ kind: "paid", links: result.links });
-        else if (result.status === "delivered") setState({ kind: "delivered", email: result.email });
-        else if (result.status === "not-tome") setState({ kind: "not-tome" });
-        else setState({ kind: "error", message: result.message ?? "Erreur inconnue" });
+        else if (result.status === "paid") setState({ kind: "paid" });
+        else setState({ kind: "missing" });
       } catch (e: any) {
         if (!cancelled) setState({ kind: "error", message: e?.message ?? "Erreur inconnue" });
       }
@@ -58,7 +55,7 @@ function Page() {
     return () => {
       cancelled = true;
     };
-  }, [session_id, fulfill]);
+  }, [session_id, check]);
 
   return (
     <>
@@ -76,59 +73,18 @@ function Page() {
           {state.kind === "pending" && (
             <>
               <h1>Paiement en cours</h1>
-              <p>Ton paiement est en cours de traitement. Rafraîchis cette page dans un instant.</p>
-            </>
-          )}
-          {state.kind === "gift" && (
-            <>
-              <h1>Merci ! C'est offert.</h1>
-              <ThankYouCelebration />
-              <p>
-                Les liens ont été envoyés à <strong>{state.email}</strong>.
-                Vous, vous gardez la facture. Si le cadeau n'arrive pas, la
-                direction humaine vous répond sous 3 jours ouvrables :{" "}
-                <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a>.
-              </p>
-              <p>
-                <Link to="/lire">Retour aux tomes</Link>
-              </p>
+              <p>Ton paiement est en cours de traitement. Vérifiez votre courriel dans quelques minutes, ou récupérez votre achat ici :{" "}
+                <Link to="/recuperer-achat">Récupérer un achat</Link>.</p>
             </>
           )}
           {state.kind === "paid" && (
             <>
-              <h1>Merci ! Voici tes liens</h1>
+              <h1>Merci !</h1>
               <ThankYouCelebration />
-              <p>Les mêmes liens te sont aussi envoyés par courriel.</p>
-              {state.links.map((link) => (
-                <p key={link.slug}>
-                  <strong>{link.title}</strong> — <Link to={link.url}>Lire →</Link>
-                </p>
-              ))}
+              <p>Les liens de lecture vous ont été envoyés par courriel. Vérifiez votre boîte de réception (et vos indésirables, au besoin).</p>
               <p>
-                <Link to="/univers">L'univers des histoires →</Link>
+                <Link to="/lire">Retour aux tomes</Link>
               </p>
-            </>
-          )}
-          {state.kind === "delivered" && (
-            <>
-              <h1>Déjà livré</h1>
-              <p>
-                Tes liens ont déjà été envoyés par courriel à {state.email}. Vérifie
-                ta boîte courriel — et tes indésirables, au besoin.
-              </p>
-              <p>
-                <Link to="/lire">Recevoir de nouveaux liens →</Link>
-              </p>
-            </>
-          )}
-          {state.kind === "not-tome" && (
-            <>
-              <h1>Ce n'est pas une commande de tomes</h1>
-              <p>
-                Cette session concerne un autre produit. Pour les livres et kits en
-                PDF, c'est la page de retour habituelle.
-              </p>
-              <Link to="/livres-pdf">Voir les livres →</Link>
             </>
           )}
           {state.kind === "error" && (
