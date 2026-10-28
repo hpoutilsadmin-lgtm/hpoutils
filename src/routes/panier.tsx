@@ -295,6 +295,11 @@ function Page() {
                 seul. Le total affiché ici est indicatif : c'est Stripe qui
                 débite, au prix de chaque produit.
               </p>
+              <p style={{ fontSize: 14 }}>
+                Pour offrir : la case « C'est pour offrir » se trouve sur la
+                page du produit seul et sur /lire, pas encore dans le panier
+                multi-produits.
+              </p>
 
               <div style={{ marginTop: 16, maxWidth: 640 }}>
                 <p style={{ fontWeight: 700, marginBottom: 8 }}>Code cadeau</p>

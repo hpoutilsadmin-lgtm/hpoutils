@@ -28,7 +28,6 @@ const ROWS: Row[] = [
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "150 $ à 290 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Jeu", offre: "Ton jeu à toi, en 30 secondes — jeu de course personnalisé (prénom + thème), aperçu gratuit jouable (Bientôt — prix prévu, aucun achat possible pour l'instant)", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/ton-jeu-a-toi", label: "Essayer l'aperçu gratuit" },
   { cat: "Jeu sur mesure", offre: "Jeux à votre image — un jeu aux couleurs de votre commerce (Express 29 $, Événement 199 $, Saisonnier 299 $, Permanent 399 $, hébergement gratuit l’année 1 puis 29 $/an, aucune taxe ajoutée — paiement seulement après votre oui explicite, voir la page de l’offre)", prix: "29 $ à 399 $ CAD selon le niveau, aucune taxe ajoutée", href: "/jeux-a-votre-image", label: "Voir l’offre" },
-  { cat: "Cadeaux", offre: "Bons cadeaux — un code personnel à offrir, applicable au panier", prix: "5 $ à 100 $ CAD, aucune taxe ajoutée", href: "/cadeaux", label: "Offrir un bon" },
   { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 3 outils rapides, gratuits, sans compte", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
   { cat: "Cuisine", offre: "« Votre cuisine familiale, à vous » — l’outil cuisine de la famille : vos recettes, portions recalculées, liste d’épicerie combinée — Bientôt, vente pas encore ouverte", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/cuisine-familiale", label: "Voir la fiche (Bientôt)" },
 ];
@@ -38,7 +37,7 @@ const BLOCS = [
   { titre: "Kits et histoires", lignes: ROWS.slice(5, 9) },
   { titre: "Passeurs et ateliers", lignes: ROWS.slice(9, 11) },
   { titre: "Jeux", lignes: ROWS.slice(11, 14) },
-  { titre: "Cadeaux, cuisine et outils gratuits", lignes: ROWS.slice(14) },
+  { titre: "Cuisine et outils gratuits", lignes: ROWS.slice(14) },
 ];
 
 function Page() {
