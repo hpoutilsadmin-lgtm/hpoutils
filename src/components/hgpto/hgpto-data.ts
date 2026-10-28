@@ -117,7 +117,7 @@ export const JOKES = [
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
 { t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — montre ça à quelqu'un, et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 36 + 1 caché jeux gratuits, sans inscription, qui t'attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 + 1 CACHÉ" }
+        { t:"Envie de jouer en famille ? Il y a 36 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 + 1 CACHÉ" }
       ];
 export const BOOK_PITCHES = [
         { t:"Ce livre-là me donne le goût de te parler des nôtres : « Horizon Québec » (10 $) et « La faim justifie les moyens » (10 $) sont au catalogue, en PDF.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
@@ -125,21 +125,21 @@ export const BOOK_PITCHES = [
       ];
 export const KIT_PITCHES = [
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
-        { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" }
+        { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper votre quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" }
       ];
 export const ATELIER_PITCHES = [
         { t:"D'ici, je vois même les ateliers : 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $).", u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" }
       ];
 export const PITCHES = [
 { t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 36 + 1 caché jeux gratuits, sans inscription, qui t'attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 + 1 CACHÉ" },
+        { t:"Envie de jouer en famille ? Il y a 36 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 + 1 CACHÉ" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
-        { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper ton quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
-        { t:"Tu as des ingrédients qui traînent ? Tape-les dans Recettes HP : 629 recettes gratuites à découvrir.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"629 RECETTES" },
+        { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper votre quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
+        { t:"Vous avez des ingrédients qui traînent ? Tapez-les dans Recettes HP : 629 recettes gratuites à découvrir.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"629 RECETTES" },
         { t:"« La faim justifie les moyens », notre livre à 10 $ : des histoires qui nourrissent, à lire tranquillement.", s:"LIVRES" },
         { t:"Le livre « Les enfants cuisinent pour faire plaisir » : 10 $ de recettes à faire en famille, petits chefs bienvenus.", s:"EN FAMILLE" },
         { t:"Nos livres « Horizon Québec » (10 $) et « Enjeux de l'humanité à l'ère de l'IA » (15 $) sont au catalogue.", s:"LIVRES" },
-        { t:"L'atelier « Cuisine pratique » (260 $) se donne chez toi, à Terrebonne et dans les environs.", s:"ATELIERS" },
+        { t:"L'atelier « Cuisine pratique » (260 $) se donne chez vous, à Terrebonne et dans les environs.", s:"ATELIERS" },
         { t:"L'atelier « Manger mieux avec moins » (260 $) : des semaines plus douces au portefeuille, sans se priver.", s:"ATELIERS" }
       ];
 export const TICKLE_LINES = [
@@ -152,11 +152,11 @@ export const TICKLE_LINES = [
    Session seulement, aucun prix, aucun lien produit, aucune
    pression — le divertissement reste du confort. */
 export const FLEUR_LINES = [
-        "Tiens, une fleur pour toi — pas pour acheter quoi que ce soit, juste parce que t'es là. Ça fait du bien, une petite fleur, hein ?",
+        "Tiens, une fleur pour vous — pas pour acheter quoi que ce soit, juste parce que vous êtes là. Ça fait du bien, une petite fleur, hein ?",
         "Je te donne ma plus belle fleur du jour. Elle fane jamais dans mon cœur de métal — pis dans le tien, j'espère qu'elle dure longtemps !",
         "Une fleur, comme ça, pour rien — ben non, pas pour rien : pour te dire merci d'être passé. Prends-en soin… ou regarde-la, c'est déjà ben bon !"
       ];
-export const FLEUR_DEJA = "Tu as déjà ta fleur du jour — pis elle est encore belle, regarde !";
+export const FLEUR_DEJA = "Vous avez déjà votre fleur du jour — pis elle est encore belle, regardez !";
 export const PIXEL_JEU_LINES = [
         "Regarde-la courir après sa pelote — elle a plus d'énergie que mes trois batteries ensemble !",
         "Rrrrr… Ça, c'est son moteur à ronrons. Le mien fait moins de bruit, mais il est ben content pareil.",
@@ -205,13 +205,13 @@ export const EVENING_LINES = [
       /* Petit accompagnateur : il ramène vers les vrais humains, sans morale. */
 export const COMPANION_LINES = [
         "Appelle un ami !",
-        "Texte à quelqu'un que t'aimes, ça va lui faire sa journée.",
+        "Texte à quelqu'un que vous aimez, ça va lui faire sa journée.",
         "Moi je suis un robot… un vrai ami, c'est encore mieux.",
-        "Un petit message à ta mère, ton frère, ta voisine ? Vingt secondes, et ça réchauffe deux cœurs.",
+        "Un petit message à votre mère, votre frère, votre voisine ? Vingt secondes, et ça réchauffe deux cœurs.",
         "Les écrans, c'est bien. Un café avec quelqu'un, c'est encore mieux.",
         "Si quelqu'un te manque, dis-le-lui. Les humains adorent ça.",
         "Un restant de souper ? Partage-le avec un voisin — ça goûte meilleur à deux.",
-        "Pense à la banque alimentaire du coin si t'as un surplus : ça fait une vraie différence."
+        "Pensez à la banque alimentaire du coin si vous avez un surplus : ça fait une vraie différence."
       ];
 export const MEALS = {
         matin:["une omelette aux restes du frigo","du gruau aux pommes et à la cannelle","des crêpes maison aux petits fruits"],
@@ -222,7 +222,7 @@ export const HUGO_LINES = [
         "Des outils pour la vraie vie — c'est ça qu'on fait ici, pis j'en suis fier.",
         "On ment jamais. Même pas pour vendre. Surtout pas pour vendre.",
         "Petit budget, grande dignité. Ça, ça ne se négocie pas.",
-        "T'as un surplus de soupe ? Invite un voisin. Ça goûte toujours meilleur à deux.",
+        "Vous avez un surplus de soupe ? Invitez un voisin. Ça goûte toujours meilleur à deux.",
         "LA BANQUE, notre jeu sur la banque alimentaire : jouer pour comprendre, donner pour vrai.",
         "On avance ! Un petit pas à la fois, mais on avance.",
         /* Phrases dictées par la direction, 24 oct. 2026 — ses mots, verbatim (« Hey », jamais « Heil »). */
@@ -276,12 +276,12 @@ export const PHILO = [
         "Petite pensée : les gens qu'on admire le plus sont rarement les plus riches — ce sont ceux qui restent droits dans la tempête."
       ];
 export const EMPATHY = [
-        "Prends ton temps. On est plusieurs à passer par là.",
+        "Prenez votre temps. On est plusieurs à passer par là.",
         "Si le mois est serré, c'est pas un défaut : c'est une passe. Ça arrive à du très bon monde.",
         "Compter ses sous, c'est pas être cheap. C'est prendre soin de sa famille, un sou à la fois.",
-        "T'as pas à avoir honte d'un petit budget. La honte, ici, on l'a mis dehors — c'est même dans notre nom.",
+        "Vous n'avez pas à avoir honte d'un petit budget. La honte, ici, on l'a mis dehors — c'est même dans notre nom.",
         "Une journée difficile, c'est une journée. Pas un résumé de ta vie.",
-        "Respire. Les factures patientent, toi, tu mérites deux minutes de calme."
+        "Respirez. Les factures patientent, vous, vous méritez deux minutes de calme."
       ];
       /* Nouveautés du site (base de faits) : annoncées une fois, sans insister. */
 export const NEWS_LINES = [
@@ -292,7 +292,7 @@ export const JANITOR = [
         { st:'dust', t:"Je tiens le site beau : un petit coup de plumeau, et ça brille !" },
         { st:'sweep', t:"Un coup de balai dans le coin… Gérant du site, c'est aussi ça !" },
         { st:'fix', t:"Je resserre l'enseigne : faut que ça tienne beau pour le monde qui visite." },
-        { st:'fix', t:"Ce titre-là était croche. Voilà : droit comme un soldat. Gérant du site, à ton service !" }
+        { st:'fix', t:"Ce titre-là était croche. Voilà : droit comme un soldat. Gérant du site, à votre service !" }
       ];
 export const INTRO = "Salut ! Moi c'est HGPTO, le petit robot d'HP Outils. Chatouille-moi, je suis chatouilleux !";
 /* Flash infos (24 oct. 2026, décision d'Hugo) : les flashs ne portent
@@ -309,22 +309,22 @@ export const FLASH_INFOS = [
   "« Futur simple », épisode 1 officiel, 26 octobre 2026, environ 7 minutes : « La première fois qu'on essaie cela. »",
   "Un jeu à l'image de votre commerce : de 29 $ à 399 $, hébergement gratuit la première année.",
   "Astuce : un fond de casserole qui attache ? Eau chaude et bicarbonate, on laisse tremper, on frotte doux.",
-  "Astuce : congèle tes restes en petites portions — un repas d'avance, zéro gaspillage.",
+  "Astuce : congelez vos restes en petites portions — un repas d'avance, zéro gaspillage.",
   "Astuce : une liste avant le marché, et on ne magasine jamais le ventre vide.",
-  "Astuce : range ce que tu prends souvent à portée de main, le reste plus haut.",
+  "Astuce : rangez ce que vous prenez souvent à portée de main, le reste plus haut.",
   "Comme une soupe : on ne jette rien, on mijote ce qu'on a, et ça nourrit.",
   "Un petit pas par jour, c'est comme une marche : on arrive plus loin qu'on pense.",
   "La vie, c'est un atelier : on apprend en faisant, pas en regardant faire.",
   "Comme un jardin en pots : peu de place, mais ça pousse pareil quand on s'en occupe.",
 ];
 export const STARTLE_LINES = [
-        "Hein ?! Oh ! Salut — tu m'as réveillé en beauté !",
+        "Hein ?! Oh ! Salut — vous m'avez réveillé en beauté !",
         "Hein ?! Oh — salut ! Je faisais juste semblant de ne pas dormir.",
         "Déjà debout ! …Bon, presque. Salut !",
         "Bip ! Réveil express — merci de cogner avant d'entrer dans mes rêves."
       ];
 export const BUCKET_LINES = [
-        "Brrr ! Frette, ton eau ! (Je suis étanche, mais quand même.)",
+        "Brrr ! Frette, votre eau ! (Je suis étanche, mais quand même.)",
         "Brrr ! Ok, là, je suis réveillé pour de vrai !",
         "Glou glou… merci, je crois ? Brrr !",
         "Frette ! Mais frette ! Mes boulons grelottent de rire."
@@ -362,17 +362,17 @@ export const SITE_FACTS = {
    PAS la politique générale ci-dessus mais la section 12 des Conditions de
    vente — clause ajoutée à REFUND_POLICY + 3 entrées dédiées dans KB, pour
    qu'aucune entrée ne contredise §12. */
-export const ESCALATION_LINE = "Ça, c'est une question pour l'équipe directement — la direction humaine te répondra, pour vrai. Écris à hpoutils.admin@gmail.com, raconte-moi ce que tu me racontes là, et on s'en occupe. Moi, je préfère te passer la bonne personne plutôt que de te répondre tout croche.";
-export const ESCALATION_EMPATHY = "Je suis vraiment désolé que ça se soit passé comme ça. Tu mérites une vraie réponse, pas une réponse de robot.";
-export const REFUND_POLICY = "En toute franchise, voici comment ça marche : acheté le mauvais produit par erreur ? La direction te l'échange contre celui que tu voulais. Un produit impossible à ouvrir ou à recevoir, même après l'aide de l'équipe ? Elle te rembourse. Un produit reçu et conforme à sa description ? Pas de remboursement automatique — la direction écoute ta situation et décide en personne, cas par cas. Moi, je ne touche jamais aux paiements. Pour un jeu à votre image, c'est une autre règle, celle de la section 12 des Conditions de vente : vous pouvez annuler en tout temps, vous payez seulement le travail réellement fait et ventilé, et HP vous remet le solde dans les 15 jours suivant votre annulation — jamais de « zéro remboursement ».";
-export const LIEN_PERDU_TEXT = "Pas de panique, ton achat est bien là. Cherche dans tes courriels le reçu de Stripe — le lien de téléchargement est dedans. Regarde aussi dans tes courriels indésirables, ça arrive. Si tu ne le retrouves vraiment pas, écris à la direction humaine avec le courriel utilisé à l'achat : elle te renverra ton accès sous 3 jours ouvrables.";
+export const ESCALATION_LINE = "Ça, c'est une question pour l'équipe directement — la direction humaine vous répondra, pour vrai. Écrivez à hpoutils.admin@gmail.com, racontez-moi ce que vous me racontez là, et on s'en occupe. Moi, je préfère vous passer la bonne personne plutôt que de te répondre tout croche.";
+export const ESCALATION_EMPATHY = "Je suis vraiment désolé que ça se soit passé comme ça. Vous méritez une vraie réponse, pas une réponse de robot.";
+export const REFUND_POLICY = "En toute franchise, voici comment ça marche : acheté le mauvais produit par erreur ? La direction vous l'échange contre celui que vous vouliez. Un produit impossible à ouvrir ou à recevoir, même après l'aide de l'équipe ? Elle vous rembourse. Un produit reçu et conforme à sa description ? Pas de remboursement automatique — la direction écoute ta situation et décide en personne, cas par cas. Moi, je ne touche jamais aux paiements. Pour un jeu à votre image, c'est une autre règle, celle de la section 12 des Conditions de vente : vous pouvez annuler en tout temps, vous payez seulement le travail réellement fait et ventilé, et HP vous remet le solde dans les 15 jours suivant votre annulation — jamais de « zéro remboursement ».";
+export const LIEN_PERDU_TEXT = "Pas de panique, votre achat est bien là. Cherchez dans vos courriels le reçu de Stripe — le lien de téléchargement est dedans. Regardez aussi dans vos courriels indésirables, ça arrive. Si vous ne le retrouvez vraiment pas, écrivez à la direction humaine avec le courriel utilisé à l'achat : elle vous renverra votre accès sous 3 jours ouvrables.";
 /* Clins d'œil au retour sur une page déjà vue CETTE visite-ci (session
    seulement — lot service client 23 oct. 2026) : une fois par page,
    jamais pendant une tâche, jamais en taquinerie sur quelqu'un. */
 export const RETURN_WINK_LINES = [
-        "Re-bonjour ! Tu tournes en rond ou tu magasines pour vrai, là ?",
+        "Re-bonjour ! Vous tournez en rond ou vous magasinez pour vrai, là ?",
         "Re-bonjour ! La page te manquait, ou c'est moi ?",
-        "Te revoilà ! J'ai rien touché pendant ton absence. Enfin… presque rien."
+        "Vous revoilà ! Je n'ai rien touché pendant votre absence. Enfin… presque rien."
       ];
 /* Surprises probabilisées (décision de la direction, 23 oct. 2026) — portes par
    occasion de bavardage : micro-clin d'œil 1/15, surprise moyenne 1/35,
@@ -385,7 +385,7 @@ export const SURPRISE_WINK_LINES = [
         "J'ai compté les boulons de ma tête ce matin : toujours le même nombre. Rassurant."
       ];
 export const SURPRISE_MED_LINES = [
-        "Moment rare : Pixel vient de me marcher sur le clavier. Si tu vois des « mmmmm » quelque part sur le site, c'est elle.",
+        "Moment rare : Pixel vient de me marcher sur le clavier. Si vous voyez des « mmmmm » quelque part sur le site, c'est elle.",
         "Je viens de réussir ma recette du jour DU PREMIER COUP. Ça méritait une annonce officielle.",
         "Petit événement : je déclare cette visite officiellement agréable. C'est noté dans mon journal.",
         "Je me suis pratiqué à lever UN seul sourcil. Regarde… impressionnant, hein ?"
@@ -412,10 +412,10 @@ export const KB = [
           a:"15 thèmes du quotidien : Papiers (24 fiches), Frigo, Me Reconnaître, Tenir Debout, Seconde Main, Entraide, Fraude, Logement, Proche Aidant, 72 Heures, Testament olographe, Papiers de mes parents, Chalet, L'année québécoise et Héritage numérique.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits" },
         { q:"Qu'est-ce qu'il y a pour cuisiner ?", s:"629 RECETTES",
-          a:"Recettes HP : 629 recettes gratuites, écrites de zéro. Tu tapes les ingrédients que tu as, il te propose quoi cuisiner — portions de 1 à 300 et liste d'épicerie incluses !",
+          a:"Recettes HP : 629 recettes gratuites, écrites de zéro. Vous tapez les ingrédients que vous avez, il vous propose quoi cuisiner — portions de 1 à 300 et liste d'épicerie incluses !",
           u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP" },
         { q:"C'est quoi, « Votre cuisine familiale, à vous » ?", s:"BIENTÔT",
-          a:"Ce n'est pas Recettes HP : c'est l'outil cuisine de ta famille — tes recettes à toi, celles que ta famille saisit elle-même. Les portions se recalculent toutes seules, la liste d'épicerie se combine, et la recherche trouve même si tu oublies les accents. Bientôt : prix prévu 5 $, aucune taxe ajoutée, mais la vente n'est pas encore ouverte et aucun achat n'est possible pour l'instant — elle ouvrira seulement une fois le prix confirmé et le parcours testé à 0 $.",
+          a:"Ce n'est pas Recettes HP : c'est l'outil cuisine de votre famille — vos recettes à vous, celles que votre famille saisit elle-même. Les portions se recalculent toutes seules, la liste d'épicerie se combine, et la recherche trouve même si tu oublies les accents. Bientôt : prix prévu 5 $, aucune taxe ajoutée, mais la vente n'est pas encore ouverte et aucun achat n'est possible pour l'instant — elle ouvrira seulement une fois le prix confirmé et le parcours testé à 0 $.",
           u:"https://www.hp-outils.com/cuisine-familiale", l:"Voir la fiche (Bientôt)" },
         { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
           a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
@@ -462,7 +462,7 @@ export const KB = [
           a:"3 livres en PDF, téléchargement immédiat après le paiement : « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), « Enjeux de l'humanité à l'ère de l'IA » (15 $) — plus le mini-cahier « Un petit pas à la fois » (10 $). Le livre « Les enfants cuisinent pour faire plaisir » (10 $) est en vente lui aussi, aucune taxe ajoutée. Et si un paiement ne passe pas, écris à la direction humaine, la direction humaine te répondra sous 3 jours ouvrables.",
           u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres" },
         { q:"Combien coûte « Les enfants cuisinent pour faire plaisir » ?", s:"10 $",
-          a:"Le livre « Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Tu le retrouves sur la page Prix et sur sa fiche. Tu l'achètes par carte, directement sur le site, et tu le télécharges tout de suite après le paiement. Si un paiement ne passe pas, écris à la direction humaine, la direction humaine te répondra sous 3 jours ouvrables.",
+          a:"Le livre « Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Vous le retrouvez sur la page Prix et sur sa fiche. Vous l'achetez par carte, directement sur le site, et vous le téléchargez tout de suite après le paiement. Si un paiement ne passe pas, écrivez à la direction humaine, la direction humaine vous répondra sous 3 jours ouvrables.",
           u:"https://www.hp-outils.com/pdf/enfants-cuisinent", l:"Voir le livre" },
         { q:"C'est quoi, les Passeurs ?", s:"3 $ / MOIS",
           a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde. Honnêtement ? L'inscription est ouverte : écris à la direction humaine pour t'inscrire — elle te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient. Tu peux annuler en tout temps par courriel : l'annulation prend effet à la fin de la période déjà payée, sans frais ni pénalité. Avant un renouvellement annuel, la direction humaine te rappelle par courriel.",
@@ -496,20 +496,20 @@ export const KB = [
         { q:"C'est qui, HP Outils ?", s:"C'EST NOUS",
           a:"HP Outils, c'est HP, créateur à Terrebonne : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets. Imparfaits et humains. Comme il le dit : « J'ai jamais su qui j'étais, ce que j'aimais — alors je fais un peu de tout. » Comprendre. Agir. Transmettre. Et moi, je suis HGPTO, sa mascotte !" },
         { q:"C'est quoi, le bouton Partager ?", s:"PARTAGER",
-          a:"Le bouton « Partager » est sur les fiches et sur /univers : il partage la page avec ton téléphone ou ton navigateur — et sinon, il copie le lien de la page, avec un petit « Lien copié ! ». Aucune donnée n'est envoyée nulle part : tout se passe dans ton navigateur.",
+          a:"Le bouton « Partager » est sur les fiches et sur /univers : il partage la page avec votre téléphone ou votre navigateur — et sinon, il copie le lien de la page, avec un petit « Lien copié ! ». Aucune donnée n'est envoyée nulle part : tout se passe dans votre navigateur.",
           u:"https://www.hp-outils.com/univers", l:"Voir /univers" },
         { q:"Il y a des taxes ?", s:"0 $ TAXE", info:1,
           a:"Aucune taxe ajoutée : HP Outils est un petit fournisseur, alors le prix affiché, c'est le prix payé. Simple !" },
         { q:"Comment je paie ?", s:"PAR CARTE", info:1,
           a:"Par carte, directement sur le site. Pour les livres et les kits en PDF, le téléchargement est immédiat après le paiement — le livre « Enfants cuisinent » (10 $) aussi, aucune taxe ajoutée." },
         { q:"C'est quoi, le panier ?", s:"PANIER",
-          a:"Le panier, c'est la page /panier/ : tu y mets plusieurs produits d'un coup — livres et kits en PDF — et tu paies en une seule fois, par carte. Après le paiement, tu reçois un courriel avec un lien de téléchargement par article. Le livre « Enfants cuisinent » (10 $) s'y ajoute comme les autres, et son achat est débité avec le reste. Aucune taxe ajoutée, et le total affiché est indicatif : c'est Stripe qui débite. Pour offrir, la case « C'est pour offrir » se trouve sur la page du produit seul et sur /lire, pas encore dans le panier multi-produits. Un souci avec ton panier ou tes liens ? Écris à la direction humaine : elle te répondra sous 3 jours ouvrables.",
+          a:"Le panier, c'est la page /panier/ : vous y mettez plusieurs produits d'un coup — livres et kits en PDF — et vous payez en une seule fois, par carte. Après le paiement, vous recevez un courriel avec un lien de téléchargement par article. Le livre « Enfants cuisinent » (10 $) s'y ajoute comme les autres, et son achat est débité avec le reste. Aucune taxe ajoutée, et le total affiché est indicatif : c'est Stripe qui débite. Pour offrir, la case « C'est pour offrir » se trouve sur la page du produit seul et sur /lire, pas encore dans le panier multi-produits. Un souci avec votre panier ou vos liens ? Écrivez à la direction humaine : elle vous répondra sous 3 jours ouvrables.",
           u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
         { q:"Qu'est-ce que je peux mettre dans le panier ?", s:"20 PRODUITS",
           a:"20 produits : les 5 PDF — « Enjeux de l'humanité à l'ère de l'IA » (15 $), « La faim justifie les moyens » (10 $), « Horizon Québec » (10 $), le livre « Les enfants cuisinent pour faire plaisir » (10 $) et le mini-cahier « Un petit pas à la fois » (10 $) — et les 15 kits Sans Honte à 5 $ chacun. Le livre « Les enfants cuisinent » s'achète au panier comme les autres, à 10 $, aucune taxe ajoutée. Chaque PDF ne s'achète qu'en un seul exemplaire : ajouter deux fois le même ne change rien, on ne te débite jamais deux fois le même fichier. Le bundle « Choisis 10 parmi 15 », lui, garde son propre parcours, hors panier.",
           u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
         { q:"Comment j'ajoute un produit au panier ?", s:"AJOUTER",
-          a:"Avec le bouton « Ajouter au panier », sur la page Prix et sur la fiche d'un produit vendable. Ton panier se garde d'une page à l'autre, et tu le retrouves sur /panier/ pour vérifier tes articles, en retirer un ou payer. Le bouton devient « Dans le panier » quand le produit y est déjà.",
+          a:"Avec le bouton « Ajouter au panier », sur la page Prix et sur la fiche d'un produit vendable. Votre panier se garde d'une page à l'autre, et vous le retrouvez sur /panier/ pour vérifier vos articles, en retirer un ou payer. Le bouton devient « Dans le panier » quand le produit y est déjà.",
           u:"https://www.hp-outils.com/panier", l:"Voir mon panier" },
         { q:"Comment offrir un produit ?", s:"OFFRIR",
           a:"Pour offrir, cochez « C'est pour offrir » sur la page du produit seul ou sur /lire, et entrez le courriel de la personne de votre choix : c'est elle qui reçoit le lien de livraison, la facture reste à votre nom. Le panier multi-produits ne propose pas encore cette case.",
@@ -556,9 +556,9 @@ export const KB = [
         { q:"Comment préparer mon testament ?", s:"5 $", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits",
           a:"Pour un testament, c'est le kit « Testament olographe » qu'il te faut, dans les kits Sans Honte (5 $) : de l'information claire pour préparer le tien. Ce n'est pas un avis juridique : l'idéal reste de le faire valider par un notaire." },
         { q:"Comment classer mes papiers ?", s:"5 $", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits",
-          a:"Pour classer tes papiers, c'est le kit « Papiers » qu'il te faut, dans les kits Sans Honte (5 $) : 24 fiches pour les classer et les retrouver sans tout virer à l'envers." },
+          a:"Pour classer vos papiers, c'est le kit « Papiers » qu'il vous faut, dans les kits Sans Honte (5 $) : 24 fiches pour les classer et les retrouver sans tout virer à l'envers." },
         { q:"Montre-moi les recettes", s:"PAR ICI →", go:"sec-recettes",
-          a:"Recettes HP est là : 629 recettes gratuites. Tu tapes tes ingrédients, il trouve quoi cuisiner !" },
+          a:"Recettes HP est là : 629 recettes gratuites. Vous tapez vos ingrédients, il trouve quoi cuisiner !" },
         { q:"Montre-moi les livres", s:"PAR ICI →", go:"sec-livres",
           a:"Nos 4 livres sont là, en PDF, de 10 $ à 15 $, plus le mini-cahier « Un petit pas à la fois » (10 $) — téléchargement immédiat après le paiement, le livre « Enfants cuisinent » (10 $) compris, aucune taxe ajoutée." },
         { q:"Montre-moi les ateliers", s:"PAR ICI →", go:"sec-ateliers",
@@ -580,13 +580,13 @@ export const KB = [
           a:"Un petit jeu qui porte votre nom et vos couleurs, que vos clients peuvent jouer et partager s'ils en ont envie, au lieu d'une publicité qu'ils subissent. Quatre niveaux, le prix suit la durée de vie du jeu : Express 29 $ (prénom seulement, pour tester), Événement 199 $, Saisonnier 299 $, Permanent 399 $. Hébergement gratuit la première année, puis 29 $ par année, par jeu. Aucune taxe ajoutée.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"Je peux voir mon jeu avant d'acheter ?", s:"APERÇU GRATUIT",
-          a:"Oui : sur /apercu, tu entres le nom du commerce, ses deux couleurs et son logo, et tu vois le jeu Course habillé et jouable en 30 secondes. Gratuit, sans compte, sans engagement — et ton logo est lu dans ton navigateur, il ne quitte jamais ton appareil.",
+          a:"Oui : sur /apercu, vous entrez le nom du commerce, ses deux couleurs et son logo, et vous voyez le jeu Course habillé et jouable en 30 secondes. Gratuit, sans compte, sans engagement — et votre logo est lu dans votre navigateur, il ne quitte jamais votre appareil.",
           u:"https://www.hp-outils.com/apercu", l:"Voir l'aperçu gratuit" },
         { q:"En combien de temps mon jeu est-il prêt ?", s:"SOUS 14 JOURS",
           a:"Toujours le même délai : sous 14 jours après validation du brief, pour tous les jeux sur mesure — événement, saisonnier ou permanent. L'express, lui, est immédiat : gabarit prêt, nom entré, on joue.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"Le 29 $ express est-il crédité si j'achète un jeu ensuite ?", s:"NON CRÉDITÉ",
-          a:"Non : le 29 $ express n'est pas crédité vers un jeu supérieur. L'image de la direction : tu vas essayer un resto, tu manges peu, c'est bon, tu reviens manger beaucoup — on ne te crédite pas le premier repas test. Le test se paie ; le reste se paie ensuite.",
+          a:"Non : le 29 $ express n'est pas crédité vers un jeu supérieur. L'image de la direction : vous allez essayer un resto, vous mangez peu, c'est bon, vous revenez manger beaucoup — on ne vous crédite pas le premier repas test. Le test se paie ; le reste se paie ensuite.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"C'est quoi, les 4 moteurs des jeux à votre image ?", s:"4 MOTEURS",
           a:"Quiz (2 vérités, 1 mensonge), Course (Caribou Run), Réflexes (Pop Ballons), Observation (Cherche & Trouve). Le sur-mesure est dans l'habillage, pas dans le moteur : on habille un moteur prouvé à votre image. Chaque jeu finit par un défi à envoyer à quelqu'un, et l'écran de victoire avec récompense ramène du monde en magasin : le jeu peut inviter les joueurs à passer au comptoir, par exemple avec un écran à montrer sur place, si le commerce le décide — sans oublier le code QR par endroit (Saisonnier et Permanent seulement).",
@@ -604,13 +604,13 @@ export const KB = [
           a:"Les protections de la Loi sur la protection du consommateur, appliquées à tous par contrat : avant le contrat, HP vous divulgue tous les renseignements obligatoires (prix, délais, hébergement, conditions) ; vous recevez une copie du contrat (devis + conditions) par courriel, que vous pouvez conserver et imprimer. Tout remboursement se fait dans les 15 jours suivant votre annulation. Si HP ne vous rembourse pas dans les 15 jours et que vous avez payé par carte, vous avez 60 jours pour demander une rétrofacturation à l'émetteur de votre carte. Si HP ne vous a pas divulgué tous les renseignements obligatoires avant le contrat, ne vous a pas donné la possibilité d'accepter ou de refuser et de corriger les erreurs, ou ne vous a pas envoyé une copie du contrat conservable et imprimable, vous pouvez annuler dans les 7 jours suivant la réception de la copie (30 jours suivant la conclusion du contrat si aucune copie ne vous a été envoyée). HP choisit ses clients au stade du brief, avant tout paiement : s'il refuse à ce stade, vous ne payez rien. Une fois le devis accepté et le paiement reçu, HP ne peut annuler que pour un motif sérieux, et jamais à contretemps ; s'il annule, il vous rembourse les sommes payées qui n'ont pas été gagnées par le travail déjà fait, et répare le préjudice causé par une annulation fautive. En cas de désaccord, écrivez d'abord à la direction humaine : on cherche un règlement amiable, par courriel, avant tout autre recours.",
           u:"https://www.hp-outils.com/conditions-de-vente", l:"Voir les Conditions" },
         { q:"HGPTO peut-il suivre mon panier d'achat ?", s:"PANIER",
-          a:"Si tu le lui demandes, oui : il peut garder un œil sur ton panier pendant que tu joues ou que tu explores, et te rappeler ce qu'il contient quand tu veux — sans jamais pousser à acheter. Et si tu préfères être tranquille, dis-le-moi, je me tasse.",
+          a:"Si vous le lui demandez, oui : il peut garder un œil sur votre panier pendant que vous jouez ou que vous explorez, et vous rappeler ce qu'il contient quand vous voulez — sans jamais pousser à acheter. Et si vous préférez être tranquille, dites-le-moi, je me tasse.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"HGPTO peut-il accompagner un client ?", s:"ACCOMPAGNER",
           a:"Oui : il peut accompagner un client pas à pas — expliquer un jeu, montrer où cliquer, répondre aux questions — toujours à son rythme. Et dès qu'on lui dit non ou qu'on le ferme, il s'efface, sans insister.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"HGPTO peut-il proposer des utilisations concrètes de vos outils ?", s:"OUTILS CONCRETS",
-          a:"Oui : dis-lui ce que tu veux faire — cuisiner avec ce que tu as, tenir un budget, préparer un atelier — et il te propose l'outil qui correspond, avec un exemple concret. Si ça ne te sert pas, tu passes à autre chose, sans pression.",
+          a:"Oui : dites-lui ce que vous voulez faire — cuisiner avec ce que vous avez, tenir un budget, préparer un atelier — et il vous propose l'outil qui correspond, avec un exemple concret. Si ça ne vous sert pas, vous passez à autre chose, sans pression.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"J'ai une autre question", s:"?",
           a:FALLBACK,
@@ -668,8 +668,8 @@ export const HUGO_SONGS = [
          jamais plus d'une invitation par séquence. */
 export const CHOIX_LINES = [
         { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Une saison de 8 semaines, et ça fait réfléchir en s'amusant.", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
-        { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tape ce qu'il y a dans ton frigo, il te trouve un souper.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
-        { t:"Mon choix du moment : RELÈVE, notre jeu dont tu choisis la suite. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tapez ce qu'il y a dans votre frigo, il vous trouve un souper.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : RELÈVE, notre jeu dont vous choisissez la suite. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : « Futur simple », le balado d'HP Outils — de nouveaux épisodes quand ils sont prêts, sans jargon.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment, côté lecture : le livre « Les enfants cuisinent pour faire plaisir » (10 $) — cuisiner en famille, c'est des souvenirs qui se mangent.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"MON CHOIX ♥" }
       ];
@@ -677,10 +677,10 @@ export const CHOIX_LINES = [
          accompagnent les réponses produits quand le visiteur hésite ou
          compare. Zéro fausse urgence, zéro rareté inventée, zéro promesse. */
 export const ETHIQUE_LINES = [
-        "Prends ton temps : pas de presse, il sera là quand tu seras prêt — et les jeux gratuits, eux, t'attendent tout de suite.",
+        "Prenez votre temps : pas de presse, il sera là quand vous serez prêt — et les jeux gratuits, eux, vous attendent tout de suite.",
         "Aucun compte à rebours ici, promis : le même prix demain, et le même lien.",
-        "Et si tu décides de ne rien prendre, c'est bien correct aussi. Mon travail, c'est de t'informer — pas de te pousser.",
-        "Compare, respire, reviens quand tu veux : ici, on ne joue jamais avec l'urgence."
+        "Et si vous décidez de ne rien prendre, c'est bien correct aussi. Mon travail, c'est de vous informer — pas de vous pousser.",
+        "Comparez, respirez, revenez quand vous voulez : ici, on ne joue jamais avec l'urgence."
       ];
 
       /* ---------- LOT Nº 3 (22 oct. 2026) : « vendeur, version HP » ----------
@@ -713,7 +713,7 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour ça, c'est celui-là qui fait ça : le kit « Testament olographe », dans les kits Sans Honte (5 $) — de l'information claire pour préparer le tien. Ce n'est pas un avis juridique : l'idéal reste de le faire valider par un notaire.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { id:'papiers', mots:['papiers','paperasse','retrouver mes documents'], dejaVu:'papiers',
-          t:"Pour ça, c'est celui-là qui fait ça : le kit « Papiers », dans les kits Sans Honte (5 $) — 24 fiches pour classer tes papiers et les retrouver sans tout virer à l'envers.",
+          t:"Pour ça, c'est celui-là qui fait ça : le kit « Papiers », dans les kits Sans Honte (5 $) — 24 fiches pour classer vos papiers et les retrouver sans tout virer à l'envers.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { id:'enfants-cuisine', mots:['cuisiner','cuisine','recette','manger'], aussi:['enfant','famille','petits chefs'], dejaVu:'enfants cuisinent',
           t:"Pour cuisiner en famille, c'est celui-là qui fait ça : le livre « Les enfants cuisinent pour faire plaisir » (10 $), des recettes pensées pour les petits chefs. Et au quotidien, Recettes HP reste gratuit : 629 recettes pour tout le monde.",
@@ -722,22 +722,22 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
           u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
-          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 36 + 1 caché jeux, sans inscription. Et le jour où tu voudras un coup de pouce pour t'organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
+          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 36 + 1 caché jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" }
       ];
       /* L'alternative honnête : après une réponse qui présente un produit
          payant, il peut offrir la porte gratuite — la descente honnête fait
          partie de la vente version HP. */
 export const ALT_LINES = {
-        kits:   { t:"Et si le budget dit « pas maintenant », c'est bien correct aussi : les recettes et les jeux sont gratuits, sans inscription. Les kits seront là quand tu voudras.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux gratuits", s:"GRATUIT !" },
-        livres: { t:"Et côté gratuit, pour patienter : « Futur simple », notre balado (de nouveaux épisodes quand ils sont prêts), et RELÈVE, l'histoire dont tu choisis la suite — le chapitre 1 est gratuit.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"GRATUIT !" },
-        ateliers:{ t:"Et pour commencer sans payer : Recettes HP — 629 recettes gratuites. Tu tapes tes ingrédients, il te propose quoi cuisiner.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"GRATUIT !" }
+        kits:   { t:"Et si le budget dit « pas maintenant », c'est bien correct aussi : les recettes et les jeux sont gratuits, sans inscription. Les kits seront là quand vous voudrez.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux gratuits", s:"GRATUIT !" },
+        livres: { t:"Et côté gratuit, pour patienter : « Futur simple », notre balado (de nouveaux épisodes quand ils sont prêts), et RELÈVE, l'histoire dont vous choisissez la suite — le chapitre 1 est gratuit.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"GRATUIT !" },
+        ateliers:{ t:"Et pour commencer sans payer : Recettes HP — 629 recettes gratuites. Vous tapez vos ingrédients, il vous propose quoi cuisiner.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"GRATUIT !" }
       };
       /* Le bundle, dit vrai : déclenché quand le visiteur s'intéresse aux
          kits pour la 2e fois dans la session. Le calcul est réel :
          10 kits × 5 $ = 50 $ à l'unité, bundle à 40 $ = 10 $ de moins —
          conditionné honnêtement (« si tu en veux vraiment 10 »). */
-export const BUNDLE_MATH = { t:"Petit calcul honnête, pendant qu'on parle de kits : à 5 $ le kit, 10 kits pris un par un, ça fait 50 $. Le bundle « Choisis 10 parmi 15 » est à 40 $ — donc 10 $ de moins, si tu en veux vraiment 10. Sinon, un seul kit à 5 $ fait très bien l'affaire.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" };
+export const BUNDLE_MATH = { t:"Petit calcul honnête, pendant qu'on parle de kits : à 5 $ le kit, 10 kits pris un par un, ça fait 50 $. Le bundle « Choisis 10 parmi 15 » est à 40 $ — donc 10 $ de moins, si vous en voulez vraiment 10. Sinon, un seul kit à 5 $ fait très bien l'affaire.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" };
       /* ---------- LOT Nº 4 (22 oct. 2026) : « contrôles + humeurs » ----------
          Le visiteur peut choisir l'humeur d'HGPTO (Normal / Vendeur /
          Drôle / Grognon) — un jeu, pour la session seulement. Les humeurs
@@ -765,9 +765,9 @@ export const VENDEUR_HOOKS = [
          peut changer de mode quand il veut). */
 export const MOOD_LINES = {
         defaut: "Mode « comme d'habitude » : me revoilà moi-même — gentil, utile, un brin espiègle, à mon rythme normal.",
-        vendeur: "Mode « Vendeur pro actif » : je te conseille pour vrai — je peux te proposer un produit quand ça peut t'aider, avec les vrais prix et le bon calcul. Jamais de pression : le non reste aussi facile que le oui.",
-        ami: "Mode « Ami » : je t'accompagne pas à pas, tranquillement, avec des mots simples et tout le temps qu'il faut. Ici, aucune vente — juste de l'aide et du support.",
-        grognon: "Mode « Grognon drôle » : je grogne pour rire et je fais des bêtises partout dans le site — jamais contre toi, promis. (%#!!) …Ça commence déjà."
+        vendeur: "Mode « Vendeur pro actif » : je vous conseille pour vrai — je peux te proposer un produit quand ça peut t'aider, avec les vrais prix et le bon calcul. Jamais de pression : le non reste aussi facile que le oui.",
+        ami: "Mode « Ami » : je vous accompagne pas à pas, tranquillement, avec des mots simples et tout le temps qu'il faut. Ici, aucune vente — juste de l'aide et du support.",
+        grognon: "Mode « Grognon drôle » : je grogne pour rire et je fais des bêtises partout dans le site — jamais contre vous, promis. (%#!!) …Ça commence déjà."
       };
       /* La réplique « mascotte » (ajout validé par la direction, 22 oct. 2026) :
          HGPTO DÉTESTE se faire appeler « mascotte » — il se prend pour
@@ -840,7 +840,7 @@ export const PAGE_SUGGESTIONS = {
           pourquoi:"260 $, forfait groupe, aucune taxe ajoutée — on apprend en gang, pour vrai.",
           mots:['cuisine pratique'], u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers" },
         '/en-cuisine': { id:'sugg-recettes', titre:"Recettes HP — 629 recettes gratuites",
-          accroche:"Tape ce qu'il y a dans ton frigo, il te trouve un souper.",
+          accroche:"Tapez ce qu'il y a dans votre frigo, il vous trouve un souper.",
           marche:"Tape les ingrédients que tu as déjà : il te propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et ta liste d'épicerie se prépare toute seule.",
           sert:"Trouver quoi cuisiner avec ce qu'on a déjà, sans gaspiller et sans payer — parfait quand le frigo a l'air vide mais ne l'est pas.",
           histoire:"629 recettes gratuites, écrites de zéro.",
@@ -874,10 +874,10 @@ export const PAGE_SUGGESTIONS = {
          par page. /sans-honte n'en a pas : route sensible, dignité
          d'abord — le résumé calme des faits (lot nº 2) y suffit. */
 export const DWELL_SUGGESTIONS = {
-        '/livres-pdf': { t:"Tu regardes les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, le livre « Les enfants cuisinent pour faire plaisir » à 10 $. Téléchargement immédiat après le paiement pour les 4 livres, aucune taxe ajoutée — et si un paiement ne passe pas, écris à la direction humaine. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
-        '/ateliers': { t:"Tu regardes les ateliers depuis un petit bout — le résumé honnête : 8 forfaits de groupe, de 150 $ à 290 $ selon l'atelier — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $), à Terrebonne et dans les environs ; réservation par le formulaire d'atelier, questions par courriel à l'équipe. Et les recettes, elles, sont gratuites en tout temps.", u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
-        '/les-passeurs': { t:"Tu regardes les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès aux 16 savoirs et soutenir HP Outils. En toute honnêteté : l'inscription se fait en écrivant à la direction humaine — le paiement automatisé en ligne s'en vient.", u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" },
-        '/lire': { t:"Tu regardes les tomes depuis un petit bout — le résumé honnête : 11 livres-jeux payants « À toi l'histoire », de 5 $ à 8 $, reçus par lien web personnel après l'achat, plus le tome gratuit « La Chasse-Galerie ». Aucune taxe ajoutée. Les paiements sont en réel (le bundle 3 tomes à 12 $ aussi).", u:"https://www.hp-outils.com/lire", l:"Voir les tomes", s:"5 $ À 8 $" }
+        '/livres-pdf': { t:"Vous regardez les livres depuis un petit bout — le résumé honnête : « La faim justifie les moyens » et « Horizon Québec » à 10 $, « Enjeux de l'humanité à l'ère de l'IA » à 15 $, le livre « Les enfants cuisinent pour faire plaisir » à 10 $. Téléchargement immédiat après le paiement pour les 4 livres, aucune taxe ajoutée — et si un paiement ne passe pas, écris à la direction humaine. Et si c'est « pas maintenant », le balado, lui, est gratuit.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
+        '/ateliers': { t:"Vous regardez les ateliers depuis un petit bout — le résumé honnête : 8 forfaits de groupe, de 150 $ à 290 $ selon l'atelier — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $), à Terrebonne et dans les environs ; réservation par le formulaire d'atelier, questions par courriel à l'équipe. Et les recettes, elles, sont gratuites en tout temps.", u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
+        '/les-passeurs': { t:"Vous regardez les Passeurs depuis un petit bout : c'est 3 $ par mois (ou 28 $ pour l'année) pour l'accès aux 16 savoirs et soutenir HP Outils. En toute honnêteté : l'inscription se fait en écrivant à la direction humaine — le paiement automatisé en ligne s'en vient.", u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs", s:"3 $ / MOIS" },
+        '/lire': { t:"Vous regardez les tomes depuis un petit bout — le résumé honnête : 11 livres-jeux payants « À toi l'histoire », de 5 $ à 8 $, reçus par lien web personnel après l'achat, plus le tome gratuit « La Chasse-Galerie ». Aucune taxe ajoutée. Les paiements sont en réel (le bundle 3 tomes à 12 $ aussi).", u:"https://www.hp-outils.com/lire", l:"Voir les tomes", s:"5 $ À 8 $" }
       };
 
 /* ============================================================
@@ -904,14 +904,14 @@ export const DANCE_JOY_LINES = [
   "Ça, ça mérite une petite danse ! Merci de partager, pis on avance !",
   "Yes ! Partagé ! Je danse deux secondes, pis je reviens t'aider.",
 ];
-export const INDISP_BONJOUR = "Bonjour ! Content de te voir. Prends ton temps, je suis là si tu as besoin.";
+export const INDISP_BONJOUR = "Bonjour ! Content de vous voir. Prenez votre temps, je suis là si vous avez besoin.";
 export const INDISP_BONJOUR_AUTOMNE = "Bonjour, bel après-midi d'automne. Les feuilles tombent, pis moi je bricole.";
-export const INDISP_AUREVOIR = "À bientôt ! Prends soin de toi. Pis si tu repasses, je serai là — pas de presse.";
-export const INDISP_AIDE_HESITATION = "Minute… tu cherches quelque chose ? Je peux te montrer le chemin — pis si tu veux être tranquille, dis-le-moi, je me tasse.";
-export const INDISP_AIDE_PERDU = "Tu as l'air un peu perdu — c'est correct, ça arrive. Veux-tu que je te montre où sont les prix, les jeux, ou les ateliers ?";
-export const INDISP_AIDE_NUIT = "Il est tard… si tu veilles comme moi, prends ton temps. Je suis là, pis je ne te presserai pas.";
+export const INDISP_AUREVOIR = "À bientôt ! Prenez soin de vous. Pis si vous repassez, je serai là — pas de presse.";
+export const INDISP_AIDE_HESITATION = "Minute… vous cherchez quelque chose ? Je peux vous montrer le chemin — pis si vous voulez être tranquille, dites-le-moi, je me tasse.";
+export const INDISP_AIDE_PERDU = "Vous avez l'air un peu perdu — c'est correct, ça arrive. Voulez-vous que je vous montre où sont les prix, les jeux, ou les ateliers ?";
+export const INDISP_AIDE_NUIT = "Il est tard… si vous veillez comme moi, prenez votre temps. Je suis là, pis je ne vous presserai pas.";
 export const INDISP_VIE = [
   "Aujourd'hui, je cuisine un ragoût — on verra si ça colle ou si ça réussit !",
   "Pixel est passée tantôt — elle m'a graffigné, pis elle est repartie ronronner. C'est ça, les chats.",
-  "Je suis déguisé pour l'Halloween — pis toi, tu te déguises en quoi ?",
+  "Je suis déguisé pour l'Halloween — pis vous, vous vous déguisez en quoi ?",
 ];

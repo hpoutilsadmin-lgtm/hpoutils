@@ -1509,7 +1509,7 @@ export function initHgpto() {
         setState('cook'); setExpr('focus'); busy(8200);
         var m = mealForNow();
         logDay("cuisiné " + m.meal + " (un de mes 3 repas du jour, tirés des Recettes)");
-        showBubble(esc(m.when + " : " + m.meal + " — une des 629 idées de l'outil Recettes. Toi aussi, tape tes ingrédients !") + linkHtml({ u:"https://hp-outils.com/en-cuisine/", l:"Ouvrir Recettes HP" }), 5200);
+        showBubble(esc(m.when + " : " + m.meal + " — une des 629 idées de l'outil Recettes. Vous aussi, tapez vos ingrédients !") + linkHtml({ u:"https://hp-outils.com/en-cuisine/", l:"Ouvrir Recettes HP" }), 5200);
         setTimeout(function(){
           if (state !== 'cook') return;
           setExpr('happy');
@@ -1917,9 +1917,9 @@ export function initHgpto() {
            l'accueil devient faits bruts — prix, catalogue, fiche lisible
            par machine — sans changer un mot du comportement humain. */
         if (lireDetectot().type === 'ia') {
-          showBubble("Gérant du site, à ton service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, le livre « Enfants cuisinent » 10 $, en vente. Ateliers : de 150 $ à 290 $. Passeurs de savoirs : 3 $/mois, 28 $/an — accès aux 16 savoirs, inscription par courriel. Tomes « À toi l'histoire » : en vente, de 5 $ à 8 $. Pour offrir : case « C'est pour offrir » sur le produit seul ou /lire. Fiche lisible par machine : /llms.txt. Touche une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
+          showBubble("Gérant du site, à votre service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, le livre « Enfants cuisinent » 10 $, en vente. Ateliers : de 150 $ à 290 $. Passeurs de savoirs : 3 $/mois, 28 $/an — accès aux 16 savoirs, inscription par courriel. Tomes « À toi l'histoire » : en vente, de 5 $ à 8 $. Pour offrir : case « C'est pour offrir » sur le produit seul ou /lire. Fiche lisible par machine : /llms.txt. Touchez une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
         } else {
-          showBubble("Gérant du site, à ton service ! Touche une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
+          showBubble("Gérant du site, à votre service ! Touchez une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
         }
       }
       function closeQA(){
@@ -2050,14 +2050,14 @@ export function initHgpto() {
             t = "Mon honnête recommandation : le livre « Les enfants cuisinent pour faire plaisir » (10 $) — fait pour cuisiner EN famille, avec des recettes pensées pour les petites mains. Et les recettes gratuites du site sont parfaites pour essayer avant.";
             p = { u:"https://hp-outils.com/en-cuisine", l:"Voir la cuisine" };
           } else {
-            t = "Mon honnête recommandation : commence par les 629 recettes gratuites du site — ça coûte zéro et ça dépanne pour vrai. Si tu veux un livre ensuite, « La faim justifie les moyens » est à 10 $.";
+            t = "Mon honnête recommandation : commencez par les 629 recettes gratuites du site — ça coûte zéro et ça dépanne pour vrai. Si vous voulez un livre ensuite, « La faim justifie les moyens » est à 10 $.";
             p = { u:"https://hp-outils.com/en-cuisine", l:"Voir les recettes gratuites" };
           }
         } else if (quoi === 'organiser'){
-          t = "Mon honnête recommandation : un seul kit Sans Honte pour ton besoin le plus pressant — 5 $, pas plus. Et le vrai calcul, si un jour tu en vises plusieurs : pris un par un, 10 kits = 50 $ ; le lot « choisis 10 parmi 15 » est à 40 $. Pas besoin de décider ça aujourd'hui.";
+          t = "Mon honnête recommandation : un seul kit Sans Honte pour votre besoin le plus pressant — 5 $, pas plus. Et le vrai calcul, si un jour vous en visez plusieurs : pris un par un, 10 kits = 50 $ ; le lot « choisis 10 parmi 15 » est à 40 $. Pas besoin de décider ça aujourd'hui.";
           p = { u:"https://hp-outils.com/sans-honte", l:"Voir les kits Sans Honte" };
         } else {
-          t = "Pour les ateliers, écris à la direction humaine en disant pour qui c'est, combien de personnes et quand tu vises : la direction humaine te confirmera tout ça sous 3 jours ouvrables.";
+          t = "Pour les ateliers, écrivez à la direction humaine en disant pour qui c'est, combien de personnes et quand vous visez : la direction humaine vous confirmera tout ça sous 3 jours ouvrables.";
           p = { u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" };
         }
         showBubble(esc(t) + linkHtml(p) + '<br>' + esc(pick(ETHIQUE_LINES)), 14000, 'answer');
@@ -2631,21 +2631,21 @@ export function initHgpto() {
          suivre, à la toute fin d'une visite terminée d'elle-même (voir
          stopTour), jamais après un arrêt demandé par le visiteur. */
       var TOUR = [
-        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que tu vas voir part d'ici. Moi, c'est HGPTO, le petit gérant de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et tu peux arrêter la visite quand tu veux." },
+        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que vous allez voir part d'ici. Moi, c'est HGPTO, le petit gérant de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et vous pouvez arrêter la visite quand vous voulez." },
         { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 36, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
         { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
-        { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : tu écris les ingrédients que tu as déjà, et il te propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et ta liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
-        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que tu télécharges tout de suite après le paiement, le livre « Les enfants cuisinent » (10 $) compris. « La faim justifie les moyens » (10 $), c'est l'histoire vraie de la direction ; le livre « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
+        { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : vous écrivez les ingrédients que vous avez déjà, et il vous propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et votre liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
+        { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que vous téléchargez tout de suite après le paiement, le livre « Les enfants cuisinent » (10 $) compris. « La faim justifie les moyens » (10 $), c'est l'histoire vraie de la direction ; le livre « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
         { id:'sec-ateliers', t:"Et ici, on sort de l'écran : les ateliers se vivent en groupe, à Terrebonne et dans les environs. « Cuisine pratique » (260 $), « Manger mieux avec moins » (260 $) — on cuisine ensemble, on apprend des choses utiles, et c'est le côté humain d'HP Outils qui se vit pour vrai, autour d'une table." },
-        { id:'sec-arbre', t:"On est de retour à l'entrée — la visite est terminée, merci de m'avoir suivi. Tu as vu l'arbre au complet : chaque branche aide les autres, et rien ne se cache. Reste jaser si tu veux : pose-moi une question dans mon petit panneau, je connais toutes les réponses du site — et sinon, explore à ton rythme. Ici, la porte est toujours ouverte." }
+        { id:'sec-arbre', t:"On est de retour à l'entrée — la visite est terminée, merci de m'avoir suivi. Vous avez vu l'arbre au complet : chaque branche aide les autres, et rien ne se cache. Restez jaser si vous voulez : posez-moi une question dans mon petit panneau, je connais toutes les réponses du site — et sinon, explorez à votre rythme. Ici, la porte est toujours ouverte." }
       ];
       var tourOn = false, tourIdx = 0, tourTimer = null;
       function stopTour(silent, natural){
         tourOn = false;
         try { sessionStorage.removeItem('hgpto-tour'); sessionStorage.removeItem('hgpto-guide'); } catch(e) {}
         if (tourTimer){ clearTimeout(tourTimer); tourTimer = null; }
-        document.getElementById('qa-tour').textContent = 'Fais-moi visiter';
-        if (!silent) showBubble("Visite finie ! Touche « Une question ? » si tu veux que je te montre autre chose.", 6000);
+        document.getElementById('qa-tour').textContent = 'Faites-moi visiter';
+        if (!silent) showBubble("Visite finie ! Touchez « Une question ? » si vous voulez que je vous montre autre chose.", 6000);
         // Lot nº 3 : une visite qui se termine d'elle-même (paramètre
         // `natural` — jamais un arrêt demandé, jamais un abandon) peut
         // recevoir UNE suggestion douce, quelques secondes après le mot
@@ -2699,9 +2699,9 @@ export function initHgpto() {
          retire pendant le jeu (reco nº 7). ---------- */
       var accompany = false, commentedSecs = {}, lastAccompAt = 0;
       var SECTION_COMMENTS = {
-        "sec-accueil":"Te voilà à l'accueil ! C'est ici que tout commence.",
-        "sec-jeux":"Les jeux gratuits ! Veux-tu que je t'en conseille un ? Ouvre « Une question ? ».",
-        "sec-kits":"Les kits Sans Honte, 5 $ chacun. Regarde-les à ton rythme, sans pression.",
+        "sec-accueil":"Vous voilà à l'accueil ! C'est ici que tout commence.",
+        "sec-jeux":"Les jeux gratuits ! Voulez-vous que je vous en conseille un ? Ouvrez « Une question ? ».",
+        "sec-kits":"Les kits Sans Honte, 5 $ chacun. Regardez-les à votre rythme, sans pression.",
         "sec-recettes":"629 recettes gratuites : parfait quand le frigo a l'air vide mais ne l'est pas.",
         "sec-livres":"Nos livres ! « Horizon Québec » est mon préféré… mais je suis partial, je le lis tout le temps.",
         "sec-ateliers":"Les ateliers, à Terrebonne : cuisiner ensemble, ça rapproche.",
@@ -3597,7 +3597,7 @@ export function initHgpto() {
         bot.classList.add('has-balloon');
         balloonUntil = Date.now() + 26000;
         setExpr('happy'); busy(1500);
-        showBubble("Regarde, j'ai ma balloune ! Touche-la… si tu oses. Moi, je respire de l'autre côté. Normalement.", 5600, 'talk');
+        showBubble("Regardez, j'ai ma balloune ! Touchez-la… si vous osez. Moi, je respire de l'autre côté. Normalement.", 5600, 'talk');
         setTimeout(function(){
           if (bot.classList.contains('has-balloon') && !bot.classList.contains('helium') && Math.random() < 0.3)
             heliumGag('random');
@@ -5194,10 +5194,10 @@ export function initHgpto() {
          aucune culpabilité, aucune tristesse jouée. */
       var navTimes = [], visitCount = {}, summarySaid = {}, restSaid = false, lostSaidAt = 0, presseUntil = 0;
       var ROUTE_FACTS = {
-        '/sans-honte': "Petit résumé calme : 15 kits à 5 $ chacun, le bundle « Choisis 10 parmi 15 » à 40 $, aucune taxe ajoutée. Prends ton temps.",
-        '/livres-pdf': "Petit résumé calme : 4 livres en PDF, de 10 $ à 15 $ ; téléchargement immédiat après le paiement, le livre « Enfants cuisinent » (10 $) compris, aucune taxe ajoutée. Prends ton temps.",
-        '/ateliers': "Petit résumé calme : les ateliers vont de 150 $ à 290 $, à Terrebonne et dans Lanaudière, et on répond à tes questions par courriel. Prends ton temps.",
-        '/les-passeurs': "Petit résumé calme : les Passeurs, c'est 3 $ par mois pour l'accès aux 16 savoirs et soutenir HP Outils — et le paiement automatisé en ligne s'en vient, en toute honnêteté. Prends ton temps."
+        '/sans-honte': "Petit résumé calme : 15 kits à 5 $ chacun, le bundle « Choisis 10 parmi 15 » à 40 $, aucune taxe ajoutée. Prenez votre temps.",
+        '/livres-pdf': "Petit résumé calme : 4 livres en PDF, de 10 $ à 15 $ ; téléchargement immédiat après le paiement, le livre « Enfants cuisinent » (10 $) compris, aucune taxe ajoutée. Prenez votre temps.",
+        '/ateliers': "Petit résumé calme : les ateliers vont de 150 $ à 290 $, à Terrebonne et dans Lanaudière, et on répond à vos questions par courriel. Prenez votre temps.",
+        '/les-passeurs': "Petit résumé calme : les Passeurs, c'est 3 $ par mois pour l'accès aux 16 savoirs et soutenir HP Outils — et le paiement automatisé en ligne s'en vient, en toute honnêteté. Prenez votre temps."
       };
       function isSensitiveRoute(){ return routeKey() === '/sans-honte'; }
       function isPresse(){ return Date.now() < presseUntil; }
@@ -5213,7 +5213,7 @@ export function initHgpto() {
         // Visiteur perdu : allers-retours rapides → proposer le guidage, rarement, sans l'imposer.
         if (navTimes.length >= 4 && now - lostSaidAt > 180000 && state !== 'sleep' && !isBusy() && now - lastBubbleAt > 8000){
           lostSaidAt = now;
-          showBubble("Tu cherches quelque chose de précis ? Touche « Une question ? » — je te guide avec plaisir. Ou continue à ton rythme : je ne te suis pas aux talons, promis.", 9000, 'question');
+          showBubble("Vous cherchez quelque chose de précis ? Touchez « Une question ? » — je vous guide avec plaisir. Ou continuez à votre rythme : je ne vous suis pas aux talons, promis.", 9000, 'question');
           return;
         }
         // Hésitation : 3e visite de la même page produit → résumé calme des faits, une fois par page.
@@ -5327,7 +5327,7 @@ export function initHgpto() {
             sessSetFlag('hgpto-refus');   // règle §4.2 : aucun divertissement proposé après un refus
             hideBubble();
             setExpr('happy');
-            showBubble("Bien correct ! Je ne t'en reparlerai pas. Je reste dans le coin si tu as besoin d'autre chose.", 6000, 'talk');
+            showBubble("Bien correct ! Je ne vous en reparlerai pas. Je reste dans le coin si vous avez besoin d'autre chose.", 6000, 'talk');
           });
           bubble.appendChild(document.createElement('br'));
           bubble.appendChild(nb);
@@ -5412,7 +5412,7 @@ export function initHgpto() {
             sessSetFlag('hgpto-refus');   // règle §4.2 : aucun divertissement proposé après un refus
             hideBubble();
             setExpr('happy');
-            showBubble("Bien correct ! Je ne t'en reparlerai pas. Je reste dans le coin si tu as besoin d'autre chose.", 6000, 'talk');
+            showBubble("Bien correct ! Je ne vous en reparlerai pas. Je reste dans le coin si vous avez besoin d'autre chose.", 6000, 'talk');
           });
           bubble.appendChild(document.createElement('br'));
           bubble.appendChild(nb);
@@ -5521,9 +5521,9 @@ export function initHgpto() {
 
       /* ---------- Portage site : « Accompagne-moi » commente les pages (routes) ---------- */
       var ROUTE_COMMENTS = {
-        '/': "Te voilà à l'accueil ! C'est ici que tout commence.",
-        '/jeux': "Les jeux gratuits ! Veux-tu que je t'en conseille un ? Ouvre « Une question ? ».",
-        '/sans-honte': "Les kits Sans Honte, 5 $ chacun. Regarde-les à ton rythme, sans pression.",
+        '/': "Vous voilà à l'accueil ! C'est ici que tout commence.",
+        '/jeux': "Les jeux gratuits ! Voulez-vous que je vous en conseille un ? Ouvrez « Une question ? ».",
+        '/sans-honte': "Les kits Sans Honte, 5 $ chacun. Regardez-les à votre rythme, sans pression.",
         '/en-cuisine': "629 recettes gratuites : parfait quand le frigo a l'air vide mais ne l'est pas.",
         '/livres-pdf': "Nos livres ! « Horizon Québec » est mon préféré… mais je suis partial, je le lis tout le temps.",
         '/ateliers': "Les ateliers, à Terrebonne : cuisiner ensemble, ça rapproche.",

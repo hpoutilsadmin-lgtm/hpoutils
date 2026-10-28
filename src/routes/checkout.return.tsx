@@ -108,7 +108,7 @@ function Page() {
               }}
             >
               <p style={{ margin: "0 0 8px", fontWeight: 700 }}>
-                Tu as réussi à ouvrir ton PDF ?
+                Vous avez réussi à ouvrir votre PDF ?
               </p>
               <p style={{ margin: 0, fontSize: 14 }}>
                 Si ça coince — un fichier qui ne s'ouvre pas, un lien
@@ -122,7 +122,7 @@ function Page() {
                 <Link to="/conditions-de-vente">conditions de vente</Link>.
               </p>
               <p style={{ margin: "12px 0 0", fontSize: 14 }}>
-                Merci pour ta confiance. — HP
+                Merci pour votre confiance. — HP
               </p>
             </div>
           </>

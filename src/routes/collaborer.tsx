@@ -56,7 +56,7 @@ function Page() {
 
       <section className="three-pillars">
         <div className="container">
-          <span className="editorial-kicker">Découvre aussi</span>
+          <span className="editorial-kicker">Découvrez aussi</span>
           <h2 className="section-title">Avant l'atelier, <em>le gratuit</em></h2>
           <p className="strip-intro">
             La Boîte à outils rassemble les outils web gratuits d'HP — sans compte,

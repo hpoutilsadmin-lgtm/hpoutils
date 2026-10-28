@@ -102,8 +102,8 @@ function HealthSupportNote() {
       </h2>
       <p style={{ lineHeight: 1.7, color: "#3a2a20", marginBottom: 10 }}>
         Ce produit est un outil du quotidien : il aide à avancer à son rythme, une petite étape à la
-        fois. <strong>Il ne remplace pas un professionnel de la santé.</strong> Si ce que tu traverses
-        devient trop lourd — pour toi ou pour un proche que tu aides — de l'aide existe, gratuite et
+        fois. <strong>Il ne remplace pas un professionnel de la santé.</strong> Si ce que vous traversez
+        devient trop lourd — pour vous ou pour un proche que vous aidez — de l'aide existe, gratuite et
         sans jugement :
       </p>
       <ul style={{ lineHeight: 1.7, color: "#3a2a20", marginBottom: 10, paddingLeft: 20 }}>
@@ -117,7 +117,7 @@ function HealthSupportNote() {
         </li>
       </ul>
       <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
-        Les organismes d'aide et d'écoute de ta région peuvent aussi t'accompagner. Pour les
+        Les organismes d'aide et d'écoute de votre région peuvent aussi vous accompagner. Pour les
         proches aidants, L'Appui est là pour ça.
       </p>
     </div>
@@ -149,16 +149,16 @@ function BeforeYouBuyNote() {
         <li>
           <strong>Exception — panne technique</strong> : si le lien ou le fichier reçu ne fonctionne
           pas, écris-nous. On répare — nouveau lien, nouveau fichier — et si on n'arrive pas à
-          te donner un accès qui fonctionne, on te rembourse.
+          vous donner un accès qui fonctionne, on vous rembourse.
         </li>
         <li>
-          Après le paiement, tu reçois un <strong>lien de téléchargement personnel, valide
-          7 jours</strong>. Télécharge ton fichier dès que tu le reçois, et garde-le.
+          Après le paiement, vous recevez un <strong>lien de téléchargement personnel, valide
+          7 jours</strong>. Téléchargez votre fichier dès que vous le recevez, et gardez-le.
         </li>
         <li>
-          Le courriel n'arrive pas, ou ton lien est expiré ? La page{" "}
-          <Link to="/recuperer-achat">Récupérer un achat</Link> te redonne accès à ce que tu
-          as acheté — ou écris-nous.
+          Le courriel n'arrive pas, ou votre lien est expiré ? La page{" "}
+          <Link to="/recuperer-achat">Récupérer un achat</Link> vous redonne accès à ce que vous
+          avez acheté — ou écris-nous.
         </li>
       </ul>
       <p style={{ marginTop: 8 }}>
@@ -394,7 +394,7 @@ function Page() {
             {(() => {
               const cross =
                 product.slug === "mini-cahier-hyper-potentiel"
-                  ? { desc: "Le pendant gratuit de ce cahier : respiration guidée, carte ikigaï interactive et plan WOOP — sans compte, et tes réponses restent sur ton appareil.", href: "/outils/hp-hyper-potentiel", label: "Ouvrir l'outil gratuit" }
+                  ? { desc: "Le pendant gratuit de ce cahier : respiration guidée, carte ikigaï interactive et plan WOOP — sans compte, et vos réponses restent sur votre appareil.", href: "/outils/hp-hyper-potentiel", label: "Ouvrir l'outil gratuit" }
                   : product.slug === "enjeux-humanite"
                   ? { desc: "Le même sujet, en audio : Futur simple, le balado HP sur l'IA — gratuit, de nouveaux épisodes quand ils sont prêts.", href: "/balado", label: "Écouter le balado" }
                   : product.slug === "faim-justifie-les-moyens"
@@ -415,7 +415,7 @@ function Page() {
                   }}
                 >
                   <h2 style={{ fontFamily: "Georgia,serif", fontSize: 22, marginBottom: 8, color: "#2a1a12" }}>
-                    Découvre aussi
+                    Découvrez aussi
                   </h2>
                   <p style={{ lineHeight: 1.7, color: "#3a2a20", marginBottom: 10 }}>{cross.desc}</p>
                   <a href={cross.href} style={{ fontWeight: 700, color: "#2a1a12" }}>

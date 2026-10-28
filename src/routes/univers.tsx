@@ -134,7 +134,7 @@ function Page() {
 
       <section className="three-pillars">
         <div className="container">
-          <span className="editorial-kicker">Découvre aussi</span>
+          <span className="editorial-kicker">Découvrez aussi</span>
           <h2 className="section-title">Les univers se vivent <em>aussi en jouant</em></h2>
           <div className="pillar-grid">
             <article className="pillar-card">

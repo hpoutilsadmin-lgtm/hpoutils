@@ -173,7 +173,7 @@ function Page() {
 
       <section className="collections-strip">
         <div className="container">
-          <span className="editorial-kicker">Découvre aussi</span>
+          <span className="editorial-kicker">Découvrez aussi</span>
           <h2>Continuer <em>ailleurs sur HP</em></h2>
           <div className="pillar-grid">
             <article className="pillar-card">

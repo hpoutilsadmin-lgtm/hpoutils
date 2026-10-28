@@ -16,7 +16,7 @@ export const Route = createFileRoute("/lire_/merci")({
   }),
   head: () => createSeoHead({
     title: "Merci — À toi l'histoire | HP Outils",
-    description: "Confirmation de ton achat « À toi l'histoire ».",
+    description: "Confirmation de votre achat « À toi l'histoire ».",
     path: "/lire/merci",
     noindex: true,
   }),
@@ -62,7 +62,7 @@ function Page() {
       <PaymentTestModeBanner />
       <section className="subpage-content">
         <div className="container" style={{ maxWidth: 720, textAlign: "center", padding: "64px 24px" }}>
-          {state.kind === "loading" && <p>Confirmation de ton paiement…</p>}
+          {state.kind === "loading" && <p>Confirmation de votre paiement…</p>}
           {state.kind === "missing" && (
             <>
               <h1>Session introuvable</h1>

@@ -155,7 +155,7 @@ function Page() {
 
       <section className="three-pillars">
         <div className="container">
-          <span className="editorial-kicker">Découvre aussi</span>
+          <span className="editorial-kicker">Découvrez aussi</span>
           <h2 className="section-title">Prolonger <em>l'atelier</em></h2>
           <div className="pillar-grid">
             <article className="pillar-card">
@@ -273,7 +273,7 @@ function FormulaireAtelier() {
       </div>
       {ouvert && (
         <p role="status" style={{ fontSize: 16, lineHeight: 1.65, border: "1px solid rgba(58,42,32,.25)", borderLeft: "4px solid #3a2a20", borderRadius: 8, background: "rgba(247,244,236,.85)", padding: "14px 18px" }}>
-          Ta demande s'est ouverte dans ton courriel, prête à envoyer — c'est toi qui
+          Votre demande s'est ouverte dans votre courriel, prête à envoyer — c'est vous qui
           l'envoyez, rien n'est transmis avant. La direction humaine vous répond sous
           3 jours ouvrables.
         </p>

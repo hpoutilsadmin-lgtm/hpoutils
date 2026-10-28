@@ -96,7 +96,7 @@ function Page() {
       </section>
       <section className="collections-strip">
         <div className="container">
-          <span className="editorial-kicker">Découvre aussi</span>
+          <span className="editorial-kicker">Découvrez aussi</span>
           <h2>Et le <em>gratuit</em> ?</h2>
           <p className="strip-intro">
             Avant de payer quoi que ce soit, le gratuit d'HP vaut le détour :{" "}

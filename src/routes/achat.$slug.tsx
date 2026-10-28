@@ -255,11 +255,11 @@ function Page() {
               }}
             >
               <p style={{ margin: "0 0 8px", fontWeight: 700 }}>
-                Après ton achat, la direction humaine s'en occupe
+                Après votre achat, la direction humaine s'en occupe
               </p>
               <p style={{ margin: "0 0 8px", fontSize: 14 }}>
-                Tu reçois ton lien de téléchargement par courriel (valide
-                7 jours). Tu n'arrives pas à ouvrir ton PDF, ton lien est
+                Vous recevez votre lien de téléchargement par courriel (valide
+                7 jours). Vous n'arrivez pas à ouvrir votre PDF, votre lien est
                 expiré ou le courriel n'arrive pas ? Passe par la page{" "}
                 <Link to="/recuperer-achat">Récupérer un achat</Link>, ou
                 écris à{" "}
@@ -352,11 +352,11 @@ function BundleCheckout({ product, giftTo }: { product: DigitalProduct; giftTo?:
     <div style={{ display: "grid", gap: 20 }}>
       <div>
         <h2 style={{ fontFamily: "Georgia,serif", fontSize: 24, margin: "0 0 8px" }}>
-          Choisis tes {BUNDLE_KIT_COUNT} kits
+          Choisissez vos {BUNDLE_KIT_COUNT} kits
         </h2>
         <p style={{ margin: 0 }}>
           Coche exactement {BUNDLE_KIT_COUNT} kits parmi les {kits.length} —
-          ce sont eux que tu recevras par courriel après le paiement.{" "}
+          ce sont eux que vous recevrez par courriel après le paiement.{" "}
           <strong>
             {selected.length} / {BUNDLE_KIT_COUNT} choisis
           </strong>
@@ -425,7 +425,7 @@ function BundleCheckout({ product, giftTo }: { product: DigitalProduct; giftTo?:
       >
         {selected.length === BUNDLE_KIT_COUNT
           ? "Valider mes 10 kits et passer au paiement"
-          : `Choisis encore ${BUNDLE_KIT_COUNT - selected.length} kit${BUNDLE_KIT_COUNT - selected.length > 1 ? "s" : ""}`}
+          : `Choisissez encore ${BUNDLE_KIT_COUNT - selected.length} kit${BUNDLE_KIT_COUNT - selected.length > 1 ? "s" : ""}`}
       </button>
     </div>
   );

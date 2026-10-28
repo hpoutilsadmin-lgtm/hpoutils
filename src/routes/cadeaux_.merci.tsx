@@ -16,7 +16,7 @@ export const Route = createFileRoute("/cadeaux_/merci")({
   head: () =>
     createSeoHead({
       title: "Merci — votre bon cadeau | HP Outils",
-      description: "Confirmation de ton bon cadeau HP Outils.",
+      description: "Confirmation de votre bon cadeau HP Outils.",
       path: "/cadeaux/merci",
       noindex: true,
     }),

@@ -333,7 +333,7 @@ function Page() {
                         type="email"
                         value={courrielCadeau}
                         onChange={(e) => setCourrielCadeau(e.target.value)}
-                        placeholder="ton@courriel.com"
+                        placeholder="votre@courriel.com"
                         disabled={paiement === "envoi"}
                         style={{ flex: 1, minWidth: 220, padding: "8px 10px" }}
                       />
