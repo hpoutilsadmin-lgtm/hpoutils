@@ -14,6 +14,15 @@ import { initHgpto } from "./hgpto-engine";
  * qu'un conteneur vide, l'injection se fait dans l'effet.
  * « Fermer HGPTO » ferme la mascotte pour la session : au montage,
  * si la session l'a fermée, rien n'est injecté.
+ *
+ * PROPOSITION MISE EN SCÈNE 29 oct. 2026 — NON DÉPOSÉE.
+ * Changement seul, dans le bloc d'accueil ci-dessous : la scène n'est
+ * plus un encadré central. Les couches décoratives (confettis, feux)
+ * couvrent toute la scène, le tapis se déroule en bas de page, et la
+ * figure HGPTO déjà injectée dans le host (couche .bot-layer, bas de
+ * page) est remontée au-dessus de la scène par le CSS, comme acteur
+ * visuel seulement, sans interaction pendant la scène. Texte exact,
+ * boutons, fanfare et logique 1x/session : inchangés.
  */
 export function Hgpto() {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -70,22 +79,24 @@ export function Hgpto() {
     <>
       {welcome && (
         <div className="hgpto-welcome" role="dialog" aria-label="Bienvenue chez HP Outils">
-          <div className="hgpto-welcome-card">
-            <div className="hgpto-welcome-confetti" aria-hidden="true">
-              {Array.from({ length: 36 }).map((_, i) => (
-                <i key={i} style={{ left: `${(i * 29) % 100}%`, background: ["#c0392b", "#3a5a4e", "#e8b93d", "#31517f"][i % 4], animationDelay: `${(i % 10) * 0.25}s` }} />
-              ))}
-            </div>
-            <span className="hgpto-welcome-fire" style={{ left: "8%", top: "10%" }} aria-hidden="true" />
-            <span className="hgpto-welcome-fire" style={{ right: "8%", top: "18%", animationDelay: "0.5s" }} aria-hidden="true" />
+          <div className="hgpto-welcome-confetti" aria-hidden="true">
+            {Array.from({ length: 36 }).map((_, i) => (
+              <i key={i} style={{ left: `${(i * 29) % 100}%`, background: ["#c0392b", "#3a5a4e", "#e8b93d", "#31517f"][i % 4], animationDelay: `${(i % 10) * 0.25}s` }} />
+            ))}
+          </div>
+          <span className="hgpto-welcome-fire" style={{ left: "8%", top: "12%" }} aria-hidden="true" />
+          <span className="hgpto-welcome-fire" style={{ right: "8%", top: "20%", animationDelay: "0.5s" }} aria-hidden="true" />
+          <span className="hgpto-welcome-fire" style={{ left: "18%", top: "62%", animationDelay: "1s" }} aria-hidden="true" />
+          <span className="hgpto-welcome-fire" style={{ right: "18%", top: "58%", animationDelay: "1.4s" }} aria-hidden="true" />
+          <div className="hgpto-welcome-text">
             <div className="hgpto-welcome-trumpet" aria-hidden="true">🎺</div>
             <h2>Merci de venir nous rendre visite !</h2>
-            <div className="hgpto-welcome-carpet" aria-hidden="true" />
             <p>HGPTO vous déroule le tapis rouge.<br />Bienvenue chez HP Outils — on entre avec une idée, on sort autonome.</p>
             <p>Gratuit pour commencer, sans compte.</p>
             <button type="button" className="hgpto-welcome-btn" onClick={fermerWelcome}>Entrer — On avance !</button>
             <button type="button" className="hgpto-welcome-btn ghost" onClick={fermerWelcome}>Fermer</button>
           </div>
+          <div className="hgpto-welcome-carpet" aria-hidden="true" />
         </div>
       )}
       <div ref={hostRef} className="hgpto-host" />
