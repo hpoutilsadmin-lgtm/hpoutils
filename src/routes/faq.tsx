@@ -78,8 +78,8 @@ function Page() {
         <span className="editorial-kicker">On nous demande souvent</span>
         <h1>Questions fréquentes</h1>
         <p className="lead" style={{ maxWidth: 640 }}>
-          Les vraies réponses d'HP Outils — les mêmes qu'HGPTO, le petit
-          robot du site, donne aux visiteurs. Une question qui n'est pas
+          Les vraies réponses d'HP Outils — les mêmes que Sir H. Gepeto, l'assistant
+          virtuel du site, donne aux visiteurs. Une question qui n'est pas
           ici ? Écris à{" "}
           <a href="mailto:hpoutils.admin@gmail.com">
             hpoutils.admin@gmail.com
