@@ -1,5 +1,5 @@
 /* ============================================================
-   HGPTO — données de la mascotte (contenu + base de faits).
+   Sir H. Gepeto — données de l'assistant (contenu + base de faits).
    Portage fidèle du prototype validé par la direction (artefact
    « hgpto-mascotte-hp ») : textes, blagues, lectures, pitches et
    base de faits du catalogue réel (prix vérifiés contre
@@ -294,7 +294,7 @@ export const JANITOR = [
         { st:'fix', t:"Je resserre l'enseigne : faut que ça tienne beau pour le monde qui visite." },
         { st:'fix', t:"Ce titre-là était croche. Voilà : droit comme un soldat. Gérant du site, à votre service !" }
       ];
-export const INTRO = "Salut ! Moi c'est HGPTO, le petit robot d'HP Outils. Chatouille-moi, je suis chatouilleux !";
+export const INTRO = "Je suis Sir H. Gepeto, l'assistant virtuel du site HP Outils. On avance ! Je n'invente rien. S'il ne sait pas, il vous renvoie à la direction humaine.";
 /* Flash infos (24 oct. 2026, décision d'Hugo) : les flashs ne portent
    QUE sur nos produits (prix vrais de la grille canonique), des astuces
    utiles, ou des analogies de philosophie de vie — jamais autre chose.
@@ -494,7 +494,7 @@ export const KB = [
           a:"« Crée TON histoire », ce n'est pas la série « À toi l'histoire » : c'est un créateur d'histoire personnalisée — tu choisis un prénom, 1 thème parmi 4, et 2, 3 ou 4 fins. Prix prévu : 5 $, aucune taxe ajoutée. La vente n'est pas encore ouverte : elle ouvrira seulement une fois le prix confirmé et le parcours testé à 0 $. Aucun achat possible pour l'instant, aucun paiement n'est pris.",
           u:"https://www.hp-outils.com/cree-ton-histoire-a-toi", l:"Voir la fiche (Bientôt)" },
         { q:"C'est qui, HP Outils ?", s:"C'EST NOUS",
-          a:"HP Outils, c'est HP, créateur à Terrebonne : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets. Imparfaits et humains. Comme il le dit : « J'ai jamais su qui j'étais, ce que j'aimais — alors je fais un peu de tout. » Comprendre. Agir. Transmettre. Et moi, je suis HGPTO, sa mascotte !" },
+          a:"HP Outils, c'est HP, créateur à Terrebonne : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets. Imparfaits et humains. Comme il le dit : « J'ai jamais su qui j'étais, ce que j'aimais — alors je fais un peu de tout. » Comprendre. Agir. Transmettre. Et moi, je suis Sir H. Gepeto !" },
         { q:"C'est quoi, le bouton Partager ?", s:"PARTAGER",
           a:"Le bouton « Partager » est sur les fiches et sur /univers : il partage la page avec votre téléphone ou votre navigateur — et sinon, il copie le lien de la page, avec un petit « Lien copié ! ». Aucune donnée n'est envoyée nulle part : tout se passe dans votre navigateur.",
           u:"https://www.hp-outils.com/univers", l:"Voir /univers" },
@@ -603,13 +603,13 @@ export const KB = [
         { q:"C'est quoi, les protections pour un jeu à votre image ?", s:"PROTECTIONS LPC",
           a:"Les protections de la Loi sur la protection du consommateur, appliquées à tous par contrat : avant le contrat, HP vous divulgue tous les renseignements obligatoires (prix, délais, hébergement, conditions) ; vous recevez une copie du contrat (devis + conditions) par courriel, que vous pouvez conserver et imprimer. Tout remboursement se fait dans les 15 jours suivant votre annulation. Si HP ne vous rembourse pas dans les 15 jours et que vous avez payé par carte, vous avez 60 jours pour demander une rétrofacturation à l'émetteur de votre carte. Si HP ne vous a pas divulgué tous les renseignements obligatoires avant le contrat, ne vous a pas donné la possibilité d'accepter ou de refuser et de corriger les erreurs, ou ne vous a pas envoyé une copie du contrat conservable et imprimable, vous pouvez annuler dans les 7 jours suivant la réception de la copie (30 jours suivant la conclusion du contrat si aucune copie ne vous a été envoyée). HP choisit ses clients au stade du brief, avant tout paiement : s'il refuse à ce stade, vous ne payez rien. Une fois le devis accepté et le paiement reçu, HP ne peut annuler que pour un motif sérieux, et jamais à contretemps ; s'il annule, il vous rembourse les sommes payées qui n'ont pas été gagnées par le travail déjà fait, et répare le préjudice causé par une annulation fautive. En cas de désaccord, écrivez d'abord à la direction humaine : on cherche un règlement amiable, par courriel, avant tout autre recours.",
           u:"https://www.hp-outils.com/conditions-de-vente", l:"Voir les Conditions" },
-        { q:"HGPTO peut-il suivre mon panier d'achat ?", s:"PANIER",
+        { q:"Sir H. Gepeto peut-il suivre mon panier d'achat ?", s:"PANIER",
           a:"Si vous le lui demandez, oui : il peut garder un œil sur votre panier pendant que vous jouez ou que vous explorez, et vous rappeler ce qu'il contient quand vous voulez — sans jamais pousser à acheter. Et si vous préférez être tranquille, dites-le-moi, je me tasse.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
-        { q:"HGPTO peut-il accompagner un client ?", s:"ACCOMPAGNER",
+        { q:"Sir H. Gepeto peut-il accompagner un client ?", s:"ACCOMPAGNER",
           a:"Oui : il peut accompagner un client pas à pas — expliquer un jeu, montrer où cliquer, répondre aux questions — toujours à son rythme. Et dès qu'on lui dit non ou qu'on le ferme, il s'efface, sans insister.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
-        { q:"HGPTO peut-il proposer des utilisations concrètes de vos outils ?", s:"OUTILS CONCRETS",
+        { q:"Sir H. Gepeto peut-il proposer des utilisations concrètes de vos outils ?", s:"OUTILS CONCRETS",
           a:"Oui : dites-lui ce que vous voulez faire — cuisiner avec ce que vous avez, tenir un budget, préparer un atelier — et il vous propose l'outil qui correspond, avec un exemple concret. Si ça ne vous sert pas, vous passez à autre chose, sans pression.",
           u:"https://www.hp-outils.com/jeux-a-votre-image", l:"Voir l'offre" },
         { q:"J'ai une autre question", s:"?",

@@ -6,7 +6,7 @@
    « hgpto-mascotte-hp », état final du 22 oct. 2026).
    Adaptations au vrai site, et seulement celles-là :
    · sélecteur de retrait sur les vrais éléments (main/header/footer) ;
-   · « Fermer HGPTO » ferme la mascotte pour la session ;
+   · « Fermer Sir H. Gepeto » ferme l'assistant pour la session ;
    · « Montre-moi… » et la visite guidée naviguent vers les vraies
      routes (la visite se poursuit après chaque changement de page,
      état gardé en session seulement) ;
@@ -312,7 +312,7 @@ export function initHgpto() {
          le visiteur gare le chrome HGPTO où il veut (décision de la direction :
          « Bulle déplaçable au doigt »). La position déplacée vaut pour
          la SESSION SEULEMENT : position gardée en sessionStorage
-         (comme « Fermer HGPTO ») — un rechargement remet le chrome
+         (comme « Fermer Sir H. Gepeto ») — un rechargement remet le chrome
          où le visiteur l'avait garé, jamais ailleurs. Le tapotage bref
          garde son effet chatouille ; seul un glisser de plus de 8 px
          devient un déplacement. La promenade autonome s'interrompt
@@ -975,7 +975,7 @@ export function initHgpto() {
       function doInvite(p, onShow, immediate){
         if (paused || state === 'sleep' || isBusy()) { showBubble(esc(p.t) + (p.u ? linkHtml(p) : ''), 6000, null, { onShow:onShow, now:immediate }); return; }
         setState('invite'); setExpr('happy'); busy(5600);
-        signText.textContent = p.s || 'PAR ICI →';
+        if (signText) signText.textContent = p.s || 'PAR ICI →';
         showBubble(esc(p.t) + (p.u ? linkHtml(p) : ''), 6200, null, { onShow:onShow, now:immediate });
         setTimeout(function(){
           if (state === 'invite') setState(reduced ? 'idle' : 'walk');
@@ -1031,7 +1031,7 @@ export function initHgpto() {
       var BOOK_TITLES = ["Horizon Québec", "La faim justifie les moyens"];
       function doRead(){
         if (state === 'sleep' || paused || isBusy() || qaOpen) return;
-        bookTitle.textContent = pick(BOOK_TITLES);
+        if (bookTitle) bookTitle.textContent = pick(BOOK_TITLES);
         setState('read'); setExpr('happy'); busy(11000);
         logDay("lu un livre, lunettes de lecture sur le nez");
         setTimeout(function(){
@@ -1964,7 +1964,7 @@ export function initHgpto() {
           if (item.u) html += linkHtml({ u:item.u, l:item.l });
           if (opts && opts.doux) html += '<br>' + esc(pick(ETHIQUE_LINES));
           if (item.s){
-            signText.textContent = item.s;
+            if (signText) signText.textContent = item.s;
             setState('invite'); busy(3400);
             setTimeout(function(){ if (state === 'invite') setState(qaOpen ? 'idle' : (reduced ? 'idle' : 'walk')); }, 3400);
           }
@@ -2500,8 +2500,8 @@ export function initHgpto() {
       });
       var byePending = false, hgptoClosed = false;
       /* Correctif réouverture (26 oct. 2026) : après « Fermer », la
-         pastille reste le SEUL élément HGPTO visible, libellée
-         « Rouvrir HGPTO ». Au tap : réouverture depuis fermé —
+         pastille reste le SEUL élément Sir H. Gepeto visible, libellée
+         « Rouvrir Sir H. Gepeto ». Au tap : réouverture depuis fermé —
          drapeau effacé, robot et barre démasqués, bulle de
          salutation. Inchangés : bulle d'au revoir, délai de 4 s,
          absence de retour automatique, distinction Réduire/Fermer.
@@ -2516,7 +2516,7 @@ export function initHgpto() {
         if (controlsEl) controlsEl.style.display = '';
         document.body.classList.remove('hgpto-closed');
         document.body.classList.add('hgpto-on');
-        if (pastille) pastille.textContent = 'HGPTO';
+        if (pastille) pastille.textContent = 'Sir H. Gepeto';
         setState(reduced ? 'idle' : 'walk'); setExpr('happy');
         showBubble(esc(INDISP_BONJOUR), 6000, 'talk', { now:true });
       }
@@ -2533,7 +2533,7 @@ export function initHgpto() {
           if (typeof endBataille === 'function' && batailleOn) endBataille('stop');
           if (typeof bataillePanel !== 'undefined' && bataillePanel) bataillePanel.hidden = true;
           hgptoClosed = true;
-          if (pastille) pastille.textContent = 'Rouvrir HGPTO';
+          if (pastille) pastille.textContent = 'Rouvrir Sir H. Gepeto';
           isHidden = true;
           hideBubble();
           if (tourOn) stopTour(true);
@@ -2631,7 +2631,7 @@ export function initHgpto() {
          suivre, à la toute fin d'une visite terminée d'elle-même (voir
          stopTour), jamais après un arrêt demandé par le visiteur. */
       var TOUR = [
-        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que vous allez voir part d'ici. Moi, c'est HGPTO, le petit gérant de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et vous pouvez arrêter la visite quand vous voulez." },
+        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que vous allez voir part d'ici. Moi, c'est Sir H. Gepeto, l'assistant virtuel de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et vous pouvez arrêter la visite quand vous voulez." },
         { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 36, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
         { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
         { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : vous écrivez les ingrédients que vous avez déjà, et il vous propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et votre liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
@@ -2780,9 +2780,9 @@ export function initHgpto() {
         var dec = seasonDecorKind();
         var decoStr = dec === 'halloween' ? " — décos d'Halloween installées par lui-même" : dec === 'noel' ? " — lumières de Noël installées par lui-même" : "";
         document.getElementById('scard-bot').innerHTML = MINI_BOT;
-        document.getElementById('scard-meta').textContent = "HGPTO, " + outfitLabel() + decoStr;
+        document.getElementById('scard-meta').textContent = "Sir H. Gepeto, " + outfitLabel() + decoStr;
         document.getElementById('scard-line').textContent = "Souvenir du " + dateStr + ", chez HP Outils (Terrebonne, Québec).";
-        scardText = "Photo souvenir avec HGPTO, la mascotte d'HP Outils — " + outfitLabel() + ", le " + dateStr + ". " +
+        scardText = "Photo souvenir avec Sir H. Gepeto, l'assistant virtuel d'HP Outils — " + outfitLabel() + ", le " + dateStr + ". " +
           (fromGame ? "Juste après notre partie de Serpents et échelles ! " : "") +
           "Des outils pour la vraie vie : hp-outils.com";
         document.getElementById('scard-share').textContent = scardText;
@@ -2848,7 +2848,7 @@ export function initHgpto() {
         snakeBot: ["Un serpent ! Je glisse… avec dignité. Enfin, presque.", "Ouille. Mes sourcils sont catastrophés.", "Je descends, mais je descends en riant. Presque."],
         pixelCross: ["🐾 Pixel traverse la planche ! Elle change rien à ton dé, promis — elle fait juste sa tournée.", "🐾 Regarde : Pixel passe sur la planche, toute fière. Les dés n'ont pas bougé d'un poil. Enfin, de boulon."],
         siesteBot: ["Case sieste… je m'endors une seconde sur ma case. Une. Seconde. 💤"],
-        siesteYou: ["La case sieste ! Tu passes doucement — c'est là qu'HGPTO fait ses micro-siestes entre deux parties."],
+        siesteYou: ["La case sieste ! Tu passes doucement — c'est là que Sir H. Gepeto fait ses micro-siestes entre deux parties."],
         youWin: ["Tu as gagné ! Bravo pour vrai — quelle partie !", "Bravo ! Je m'incline, et je ne tombe même pas."],
         botWin: ["Revanche quand tu veux !", "C'était serré — les dés ont décidé."],
         quit: "Bonne partie ! On se reprend quand tu veux."
@@ -3010,7 +3010,7 @@ export function initHgpto() {
         if (!G || G.over) return;
         if (who === 'you'){
           G.turn = 'bot';
-          gStatus("Au tour d'HGPTO…");
+          gStatus("Au tour de Sir H. Gepeto…");
           rollBtn.disabled = true;
           setTimeout(function(){ if (G && !G.over) takeTurn('bot'); }, 950);
         } else {
@@ -3031,7 +3031,7 @@ export function initHgpto() {
           var from = isYou ? G.you : G.bot;
           var bank = isYou ? GAME_LINES.youRoll : (isNight() ? GAME_LINES.botRollNight : GAME_LINES.botRoll);
           gComment(pick(bank).replace('{n}', n), 'talk');
-          gStatus((isYou ? 'Tu as fait ' : 'HGPTO a fait ') + n + ' !');
+          gStatus((isYou ? 'Tu as fait ' : 'Sir H. Gepeto a fait ') + n + ' !');
           var target = from + n;
           if (target > GAME_CFG.goal){
             setTimeout(function(){ gComment(pick(GAME_LINES.overshoot), 'talk'); endTurn(who); }, 700);
@@ -3115,7 +3115,7 @@ export function initHgpto() {
         if (!G) return;
         G.over = true; G.finished = true; G.busy = true;
         var youWon = who === 'you';
-        gStatus(youWon ? "Tu as gagné !" : "HGPTO a gagné !");
+        gStatus(youWon ? "Tu as gagné !" : "Sir H. Gepeto a gagné !");
         rollBtn.disabled = true;
         setExpr('laugh');
         if (youWon){
@@ -3140,13 +3140,13 @@ export function initHgpto() {
       function showCard(){
         if (!G) return;
         var youWon = G.you === GAME_CFG.goal;
-        document.getElementById('card-title').textContent = youWon ? "Tu as gagné !" : "HGPTO a gagné !";
+        document.getElementById('card-title').textContent = youWon ? "Tu as gagné !" : "Sir H. Gepeto a gagné !";
         document.getElementById('card-line').textContent = youWon
           ? "Tu as atteint la case 64 le premier. Belle partie !"
-          : "HGPTO a atteint la case 64 — des dés chanceux, rien d'autre !";
+          : "Sir H. Gepeto a atteint la case 64 — des dés chanceux, rien d'autre !";
         document.getElementById('card-stats').textContent =
           "Lancers : " + G.rolls + " · Échelles montées : " + G.ladders + " · Serpents glissés : " + G.snakes;
-        shareText = "J'ai joué à Serpents et échelles contre HGPTO, la mascotte d'HP Outils — " +
+        shareText = "J'ai joué à Serpents et échelles contre Sir H. Gepeto, l'assistant virtuel d'HP Outils — " +
           (youWon ? "et j'ai gagné" : "et il a gagné, des dés chanceux") +
           " en " + G.rolls + " lancers, à nous deux ! Défie un ami de battre ton score ! hp-outils.com";
         document.getElementById('card-share').textContent = shareText;
@@ -3226,7 +3226,7 @@ export function initHgpto() {
         d.className = 'bataille-panel'; d.hidden = true;
         d.innerHTML = '<h3 style="margin:0 0 4px;font-size:16px">La Bataille</h3>'
           + '<div class="bataille-cards"><div class="bataille-card"><span>Toi</span><b id="bataille-you-card">?</b><span id="bataille-you-count"></span></div>'
-          + '<div class="bataille-card"><span>HGPTO</span><b id="bataille-bot-card">?</b><span id="bataille-bot-count"></span></div></div>'
+          + '<div class="bataille-card"><span>Sir H. Gepeto</span><b id="bataille-bot-card">?</b><span id="bataille-bot-count"></span></div></div>'
           + '<p id="bataille-status" style="margin:4px 0 8px"></p>'
           + '<div class="bataille-btns"><button type="button" id="bataille-close">Fermer</button></div>'
           + '<div class="bataille-btns" id="bataille-actions"><button type="button" id="bataille-reveal">R\u00e9v\u00e9ler la manche</button>'
@@ -3323,7 +3323,7 @@ export function initHgpto() {
         }
         var winner = yc.v > bc.v ? 'you' : 'bot';
         BATAILLE[winner] = BATAILLE[winner].concat(pot);
-        renderBataille(yc, bc, winner === 'you' ? 'Tu ramasses les cartes !' : 'HGPTO ramasse les cartes !');
+        renderBataille(yc, bc, winner === 'you' ? 'Tu ramasses les cartes !' : 'Sir H. Gepeto ramasse les cartes !');
         if (BATAILLE.you.length === 0){ endBataille('bot'); return; }
         if (BATAILLE.bot.length === 0){ endBataille('you'); return; }
         /* Filet : 300 manches sans vainqueur -> match amical proposé,
@@ -3608,7 +3608,8 @@ export function initHgpto() {
           else scheduleBalloonOff();
         }, 26000);
       }
-      document.getElementById('balloon-hit').addEventListener('pointerdown', function(ev){
+      var balloonHit = document.getElementById('balloon-hit');
+      if (balloonHit) balloonHit.addEventListener('pointerdown', function(ev){
         ev.stopPropagation();
         ev.preventDefault();
         ensureAudio();
@@ -3733,8 +3734,8 @@ export function initHgpto() {
       function mgHud(){
         if (!MG) return;
         mgAltEl.textContent = 'Altitude : ' + Math.floor(MG.alt).toLocaleString('fr-CA') + ' m';
-        mgRingsEl.textContent = 'Anneaux — Toi ' + MG.you.rings + ' · HGPTO ' + MG.bot.rings;
-        mgScoreEl.textContent = 'Manches — Toi ' + mgSession.you + ' · HGPTO ' + mgSession.bot;
+        mgRingsEl.textContent = 'Anneaux — Toi ' + MG.you.rings + ' · Sir H. Gepeto ' + MG.bot.rings;
+        mgScoreEl.textContent = 'Manches — Toi ' + mgSession.you + ' · Sir H. Gepeto ' + mgSession.bot;
       }
       function startMG(){
         if (mgOn || G) return;
@@ -3916,15 +3917,15 @@ export function initHgpto() {
         else if (MG.winner === 'bot') mgSession.bot++;
         var alt = Math.floor(MG.alt);
         var title = MG.winner === 'you' ? "Tu gagnes la manche !" :
-                    MG.winner === 'bot' ? "HGPTO gagne la manche !" : "Égalité — les deux en même temps !";
+                    MG.winner === 'bot' ? "Sir H. Gepeto gagne la manche !" : "Égalité — les deux en même temps !";
         document.getElementById('mg-card-title').textContent = title;
         document.getElementById('mg-card-line').textContent =
           MG.winner === 'you' ? "Son ballon a pété le premier — le tien vole encore. Belle manche !" :
           MG.winner === 'bot' ? "Ton ballon a pété le premier — le sien vole encore. Il joue selon ses règles, et des fois il se trompe… pas cette fois !" :
           "Les deux ballons ont pété en même temps — les mouettes gagnent, cette manche-là.";
         document.getElementById('mg-card-stats').textContent =
-          "Altitude atteinte : " + alt.toLocaleString('fr-CA') + " m · Anneaux — Toi " + MG.you.rings + " (+" + MG.you.bonus + ") · HGPTO " + MG.bot.rings + " (+" + MG.bot.bonus + ") · Manches de la session — Toi " + mgSession.you + " · HGPTO " + mgSession.bot;
-        mgShareText = "Montgolfière contre HGPTO, la mascotte d'HP Outils : " +
+          "Altitude atteinte : " + alt.toLocaleString('fr-CA') + " m · Anneaux — Toi " + MG.you.rings + " (+" + MG.you.bonus + ") · Sir H. Gepeto " + MG.bot.rings + " (+" + MG.bot.bonus + ") · Manches de la session — Toi " + mgSession.you + " · Sir H. Gepeto " + mgSession.bot;
+        mgShareText = "Montgolfière contre Sir H. Gepeto, l'assistant virtuel d'HP Outils : " +
           (MG.winner === 'you' ? "j'ai gagné la manche" : MG.winner === 'bot' ? "il a gagné la manche" : "égalité, les deux ballons en même temps") +
           " à " + alt.toLocaleString('fr-CA') + " m d'altitude ! Anneaux : moi " + MG.you.rings + ", lui " + MG.bot.rings +
           ". Manches de notre session : moi " + mgSession.you + ", lui " + mgSession.bot + ". À toi de le défier ! hp-outils.com/jeux";
@@ -4330,7 +4331,7 @@ export function initHgpto() {
         mgCtx.textAlign = 'center';
         mgCtx.fillStyle = 'rgba(36,27,16,.85)';
         if (!MG.you.dead) mgCtx.fillText('TOI', MG.you.x, by + 52);
-        if (!MG.bot.dead) mgCtx.fillText('HGPTO', MG.bot.x, by + 52);
+        if (!MG.bot.dead) mgCtx.fillText('Sir H. Gepeto', MG.bot.x, by + 52);
         mgCtx.restore();
       }
       var mgLastFrameAt = 0, mgWatchdog = null;
@@ -4531,7 +4532,7 @@ export function initHgpto() {
         bowlEl.hidden = false;
         bowlEl.style.opacity = '1';
         setState('invite'); setExpr('happy'); busy(1700);
-        signText.textContent = 'MIAM !';
+        if (signText) signText.textContent = 'MIAM !';
         showBubble("À manger, ma Pixel ! Viens, c'est prêt.", 4200, 'question');
         logDay("nourri Pixel — elle mange comme quatre, cette chatte");
         summonCat('goto');
@@ -5033,7 +5034,7 @@ export function initHgpto() {
         if (!seasonDecorKind()){ doJanitor(); return; }
         buildDecor();
         setState('invite'); setExpr('happy'); busy(5200);
-        signText.textContent = 'DÉCO !';
+        if (signText) signText.textContent = 'DÉCO !';
         showBubble(decorShown ? "Je les admirais encore… belles, hein ?" : "Regarde en haut : c'est MOI qui ai installé les décorations !", 4600, 'joke');
         decorEl.classList.add('on'); decorShown = true;
         logDay("installé les décorations de saison, comme un bon gérant");

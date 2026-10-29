@@ -75,6 +75,10 @@
       @keyframes stretchy{0%,100%{transform:scaleY(1)}40%{transform:scaleY(1.07) translateY(-3px)}}
 
       .bot-svg{width:132px;height:127px;display:block;overflow:visible}
+      /* Sir H. Gepeto (tuile 1, 29 oct. 2026) : l'image remplace le SVG dessiné.
+         Mêmes dimensions et mêmes places ; object-fit:contain garde les
+         proportions de l'image (2176×1152). */
+      .bot-img{width:132px;height:127px;display:block;object-fit:contain}
       .bot-svg .expr,.bot-svg .mouthv,.bot-svg .browv{display:none}
       .bot[data-expr="happy"] .expr-happy,.bot[data-expr="happy"] .mouth-smile,.bot[data-expr="happy"] .brow-happy{display:block}
       .bot[data-expr="laugh"] .expr-laugh,.bot[data-expr="laugh"] .mouth-laugh,.bot[data-expr="laugh"] .brow-laugh{display:block}
@@ -226,8 +230,10 @@
       .bot{transition:transform .12s linear,bottom .7s ease,width .4s ease,height .4s ease}
       .bot.big{width:152px;height:146px}
       .bot.big .bot-svg{width:152px;height:146px}
+      .bot.big .bot-img{width:152px;height:146px;object-fit:contain}
       .bot.calm{width:160px;height:154px}
       .bot.calm .bot-svg{width:160px;height:154px}
+      .bot.calm .bot-img{width:160px;height:154px;object-fit:contain}
       .bot.calm .bot-inner,.bot.calm .antenna-ball,.bot.calm .arm-r,.bot.calm .arm-l,
       .bot.calm .wheel-spokes,.bot.calm .brow-happy,.bot.calm .brow-laugh{animation:none!important}
 
@@ -281,10 +287,13 @@
            Les boutons du dock gardent une cible tactile ≥ 44 px. */
         .bot{width:106px;height:102px}
         .bot .bot-svg{width:106px;height:102px}
+        .bot .bot-img{width:106px;height:102px;object-fit:contain}
         .bot.big{width:120px;height:116px}
         .bot.big .bot-svg{width:120px;height:116px}
+        .bot.big .bot-img{width:120px;height:116px;object-fit:contain}
         .bot.calm{width:128px;height:123px}
         .bot.calm .bot-svg{width:128px;height:123px}
+        .bot.calm .bot-img{width:128px;height:123px;object-fit:contain}
         .cat{width:76px;height:59px}
         .cat .cat-svg{width:76px;height:59px}
         .graffiti{bottom:112px}

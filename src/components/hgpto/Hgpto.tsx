@@ -6,20 +6,20 @@ import { HGPTO_MARKUP } from "./hgpto-markup";
 import { initHgpto } from "./hgpto-engine";
 
 /**
- * HGPTO — la mascotte d'HP Outils, montée globalement dans le layout
- * (voir src/routes/__root.tsx) : elle vit sur toutes les pages.
+ * Sir H. Gepeto — l'assistant virtuel du site HP Outils, monté globalement
+ * dans le layout (voir src/routes/__root.tsx) : il vit sur toutes les pages.
  *
- * La surcouche (robot, Pixel, bulles, dock, panneau Questions, jeu
+ * La surcouche (figure, Pixel, bulles, dock, panneau Questions, jeu
  * caché) est injectée côté client seulement — le serveur ne rend
  * qu'un conteneur vide, l'injection se fait dans l'effet.
- * « Fermer HGPTO » ferme la mascotte pour la session : au montage,
- * si la session l'a fermée, rien n'est injecté.
+ * « Fermer Sir H. Gepeto » ferme l'assistant pour la session : au montage,
+ * si la session l'a fermé, rien n'est injecté.
  *
  * PROPOSITION MISE EN SCÈNE 29 oct. 2026 — NON DÉPOSÉE.
  * Changement seul, dans le bloc d'accueil ci-dessous : la scène n'est
  * plus un encadré central. Les couches décoratives (confettis, feux)
  * couvrent toute la scène, le tapis se déroule en bas de page, et la
- * figure HGPTO déjà injectée dans le host (couche .bot-layer, bas de
+ * figure Sir H. Gepeto déjà injectée dans le host (couche .bot-layer, bas de
  * page) est remontée au-dessus de la scène par le CSS, comme acteur
  * visuel seulement, sans interaction pendant la scène. Texte exact,
  * boutons, fanfare et logique 1x/session : inchangés.
@@ -55,7 +55,7 @@ export function Hgpto() {
 
   useEffect(() => {
     // Lecture côté client seulement : si la scène a déjà été fermée
-    // dans cette session, ou si la mascotte est fermée, on ne l'affiche pas.
+    // dans cette session, ou si l'assistant est fermé, on ne l'affiche pas.
     try {
       if (sessionStorage.getItem("hgpto-welcome-seen") !== "1" && sessionStorage.getItem("hgpto-closed") !== "1") {
         setWelcome(true);
@@ -91,7 +91,7 @@ export function Hgpto() {
           <div className="hgpto-welcome-text">
             <div className="hgpto-welcome-trumpet" aria-hidden="true">🎺</div>
             <h2>Merci de venir nous rendre visite !</h2>
-            <p>HGPTO vous déroule le tapis rouge.<br />Bienvenue chez HP Outils — on entre avec une idée, on sort autonome.</p>
+            <p>Sir H. Gepeto vous déroule le tapis rouge.<br />Bienvenue chez HP Outils — on entre avec une idée, on sort autonome.</p>
             <p>Gratuit pour commencer, sans compte.</p>
             <button type="button" className="hgpto-welcome-btn" onClick={fermerWelcome}>Entrer — On avance !</button>
             <button type="button" className="hgpto-welcome-btn ghost" onClick={fermerWelcome}>Fermer</button>
