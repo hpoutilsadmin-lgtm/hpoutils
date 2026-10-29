@@ -1,5 +1,5 @@
 /* Questions fréquentes HP Outils — source UNIQUE de la page /faq.
-   Amorce vérifiée : les questions-réponses qu'HGPTO, le petit robot
+   Amorce vérifiée : les questions-réponses que Sir H. Gepeto, l'assistant virtuel
    du site, donne déjà aux visiteurs (sa base de connaissances,
    src/components/hgpto/hgpto-data.ts) — aucune réponse inventée.
    Boucle « Pour HP » (item nº 9, vague 1) : chaque lundi, les
@@ -58,6 +58,6 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Qui répond quand j'écris à HP Outils ?",
     reponse:
-      "La direction humaine, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, HGPTO — le petit robot d'HP — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à l'équipe au lieu d'inventer une réponse.",
+      "La direction humaine, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, Sir H. Gepeto — l'assistant virtuel d'HP — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à l'équipe au lieu d'inventer une réponse.",
   },
 ];
