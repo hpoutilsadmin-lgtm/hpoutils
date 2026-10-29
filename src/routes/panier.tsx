@@ -63,6 +63,20 @@ function Page() {
   } | null>(null);
   const [verifCadeau, setVerifCadeau] = useState(false);
   const [courrielCadeau, setCourrielCadeau] = useState("");
+  const [offrirCoche, setOffrirCoche] = useState(false);
+  const [courrielDestinataire, setCourrielDestinataire] = useState("");
+  const [offrirConfirme, setOffrirConfirme] = useState(false);
+  const [offrirErreur, setOffrirErreur] = useState("");
+  const confirmerOffrir = () => {
+    const v = courrielDestinataire.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || v.length > 254) {
+      setOffrirErreur("Courriel du destinataire invalide.");
+      return;
+    }
+    setOffrirErreur("");
+    setOffrirConfirme(true);
+  };
+  const giftToPanier = offrirCoche && offrirConfirme ? courrielDestinataire.trim().toLowerCase() : undefined;
   const [payeCadeau, setPayeCadeau] = useState<{ resteCents: number } | null>(null);
 
   useEffect(() => {
@@ -111,6 +125,7 @@ function Page() {
         data: {
           items: items.map(({ product, qty }) => ({ priceId: product.priceId, quantity: qty })),
           environment: getStripeEnvironment(),
+          ...(giftToPanier ? { giftTo: giftToPanier } : {}),
         },
       });
       if ("error" in result) {
@@ -295,11 +310,47 @@ function Page() {
                 seul. Le total affiché ici est indicatif : c'est Stripe qui
                 débite, au prix de chaque produit.
               </p>
-              <p style={{ fontSize: 14 }}>
-                Pour offrir : la case « C'est pour offrir » se trouve sur la
-                page du produit seul et sur /lire, pas encore dans le panier
-                multi-produits.
-              </p>
+              <div style={{ marginTop: 16, maxWidth: 640, border: "1px solid #e0d8cf", borderRadius: 4, padding: "16px", background: "#faf6f1" }}>
+                <p style={{ fontWeight: 700, marginBottom: 8 }}>C'est pour offrir ?</p>
+                <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={offrirCoche}
+                    onChange={(e) => {
+                      setOffrirCoche(e.target.checked);
+                      setOffrirConfirme(false);
+                      setOffrirErreur("");
+                    }}
+                    disabled={paiement === "envoi"}
+                    style={{ width: 20, height: 20 }}
+                  />
+                  C'est pour offrir
+                </label>
+                {offrirCoche && !offrirConfirme && (
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginTop: 12 }}>
+                    <input
+                      type="email"
+                      value={courrielDestinataire}
+                      onChange={(e) => setCourrielDestinataire(e.target.value)}
+                      placeholder="courriel du destinataire"
+                      disabled={paiement === "envoi"}
+                      style={{ flex: 1, minWidth: 220, padding: "8px 10px" }}
+                    />
+                    <button type="button" className="btn-primary" disabled={paiement === "envoi"} onClick={confirmerOffrir}>
+                      Confirmer ce cadeau
+                    </button>
+                  </div>
+                )}
+                {offrirCoche && offrirErreur !== "" && <p style={{ marginTop: 8 }}>{offrirErreur}</p>}
+                {offrirCoche && offrirConfirme && (
+                  <p style={{ marginTop: 12 }}>
+                    Cadeau pour {courrielDestinataire.trim().toLowerCase()} — c'est elle qui reçoit LES liens de livraison.{" "}
+                    <button type="button" className="btn-ghost" onClick={() => setOffrirConfirme(false)}>
+                      Modifier
+                    </button>
+                  </p>
+                )}
+              </div>
 
               <div style={{ marginTop: 16, maxWidth: 640 }}>
                 <p style={{ fontWeight: 700, marginBottom: 8 }}>Code cadeau</p>
@@ -355,7 +406,7 @@ function Page() {
                   <button
                     type="button"
                     className="btn-primary"
-                    disabled={paiement === "envoi"}
+                    disabled={paiement === "envoi" || (offrirCoche && !offrirConfirme)}
                     onClick={payer}
                   >
                     {paiement === "envoi"

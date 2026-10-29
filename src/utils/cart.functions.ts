@@ -28,10 +28,9 @@ async function resolvePriceIds(
   return resolved;
 }
 
-// « Offrir » — support serveur préparé pour le panier (phase 2 : l'interface
-// panier n'est pas dans ce lot, voir rapport). Même validation que les
-// autres flux : destinataire facultatif, validé, jamais de débit sans
-// destinataire valide quand la case sera cochée.
+// « Offrir » — l'interface panier envoie désormais giftTo (lot point 21).
+// Même validation que les autres flux : destinataire facultatif, validé,
+// jamais de débit sans destinataire valide quand la case est cochée.
 export const createCartCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator(
     (data: {
