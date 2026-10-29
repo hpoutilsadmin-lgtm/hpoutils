@@ -197,7 +197,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "hgpto",
-    legende: "HP en mode HGPTO !",
+    legende: "HP en mode Sir H. Gepeto !",
     calque: (
       <g>
         {/* antenne */}
@@ -221,7 +221,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "barbouille-melon",
-    legende: "HGPTO m'a barbouillé !",
+    legende: "Sir H. Gepeto m'a barbouillé !",
     calque: (
       <g>
         {/* Barbouillage d'HGPTO : trait de marqueur irrégulier, visiblement
@@ -245,7 +245,7 @@ export const DEGUISES: Deguise[] = [
   },
   {
     id: "barbouille-moustache",
-    legende: "HGPTO m'a barbouillé — moustache comprise !",
+    legende: "Sir H. Gepeto m'a barbouillé — moustache comprise !",
     calque: (
       <g>
         {/* Barbouillage d'HGPTO, variante signature : énorme moustache
