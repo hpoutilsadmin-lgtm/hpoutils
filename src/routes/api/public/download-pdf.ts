@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
-import { getProduct } from "@/lib/products-catalog";
+import { getProduct, COLLECTION_PRICE_ID } from "@/lib/products-catalog";
 import { verifyDownloadToken } from "@/lib/download-token.server";
 
 const PDF_BUCKET = "pdfs";
@@ -51,7 +51,35 @@ export const Route = createFileRoute("/api/public/download-pdf")({
               .eq("status", "paid")
               .limit(1)
               .maybeSingle();
+        // Bundle : une commande bundle payée vaut pour chaque kit de sa
+        // liste kit_slugs, même si aucun achat seul du kit n'existe.
+        // Refus strict sinon : kit hors liste, kit_slugs absent, ou
+        // commande remboursée = 410 comme avant, jamais de passe-droit.
+        let bundleOrder = null;
         if (!paidOrder && !paidGiftOrder) {
+          const { data: bundlePaid } = await admin
+            .from("orders")
+            .select("id,status,kit_slugs")
+            .ilike("customer_email", escapedEmail)
+            .eq("price_id", COLLECTION_PRICE_ID)
+            .eq("status", "paid")
+            .limit(1)
+            .maybeSingle();
+          const { data: bundleGift } = bundlePaid
+            ? { data: null }
+            : await admin
+                .from("orders")
+                .select("id,status,kit_slugs")
+                .ilike("gift_recipient_email", escapedEmail)
+                .eq("price_id", COLLECTION_PRICE_ID)
+                .eq("status", "paid")
+                .limit(1)
+                .maybeSingle();
+          const bundle = bundlePaid ?? bundleGift;
+          const slugs = typeof bundle?.kit_slugs === "string" ? bundle.kit_slugs.split(",").filter(Boolean) : [];
+          if (bundle && product.slug && slugs.includes(product.slug)) bundleOrder = bundle;
+        }
+        if (!paidOrder && !paidGiftOrder && !bundleOrder) {
           return new Response("Lien invalide ou révoqué", { status: 410 });
         }
 
