@@ -131,7 +131,9 @@ export const createTomeCheckoutSession = createServerFn({ method: "POST" })
         success_url: `${origin}/lire/merci?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/lire/`,
         automatic_tax: { enabled: true },
-        billing_address_collection: "required",
+        // [MEL-002 29 oct 2026] « auto » : Stripe n exige l adresse que si le paiement
+        // l exige vraiment. À 0,00 $ (coupon 100 %), le champ ne bloque plus.
+        billing_address_collection: "auto",
         // « Offrir » : le destinataire voyage dans la métadonnée, jamais
         // dans un montant. La livraison (page de retour + webhook) le relit.
         metadata: data.giftTo

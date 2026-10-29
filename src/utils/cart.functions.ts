@@ -85,7 +85,9 @@ export const createCartCheckoutSession = createServerFn({ method: "POST" })
         // Même réglage que le flux mono-produit (Stripe Tax à partir de
         // l'adresse de facturation ; tax_code txcd_10000000).
         automatic_tax: { enabled: true },
-        billing_address_collection: "required",
+        // [MEL-002 29 oct 2026] « auto » : Stripe n exige l adresse que si le paiement
+        // l exige vraiment. À 0,00 $ (coupon 100 %), le champ ne bloque plus.
+        billing_address_collection: "auto",
         metadata: data.giftTo
           ? { cart: "1", priceIds: data.priceIds.join(","), gift_to: data.giftTo }
           : { cart: "1", priceIds: data.priceIds.join(",") },
