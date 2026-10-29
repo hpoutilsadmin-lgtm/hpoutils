@@ -81,7 +81,7 @@ export function ParoleVisiteur() {
                 color: "#b04a2f",
               }}
             >
-              HGPTO répond&nbsp;:
+              Sir H. Gepeto répond&nbsp;:
             </p>
             <p style={{ margin: 0, fontSize: 17, lineHeight: 1.55, color: "#2a1a12" }}>
               {REPLIQUE_HGPTO}
