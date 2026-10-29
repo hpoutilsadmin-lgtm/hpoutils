@@ -22,7 +22,7 @@ const ROWS: Row[] = [
   { cat: "PDF", offre: "Un petit pas à la fois — le mini cahier (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/mini-cahier-hyper-potentiel", label: "Acheter le PDF", panier: "hp_hyper_potentiel_cahier_pdf_10" },
   { cat: "Sans Honte", offre: "Kits Sans Honte — 15 titres au choix, un par un (Frigo, Papiers, Fraude, Tenir Debout, Seconde Main, Entraide…)", prix: "5 $ CAD le kit, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les 15 kits" },
   { cat: "Sans Honte", offre: "Bundle Sans Honte — Choisis 10 kits parmi 15", prix: "40 $ CAD (économie de 10 $ : 50 $ séparément), aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
-  { cat: "À toi l’histoire", offre: "Tomes « À toi l’histoire » — tome 1 gratuit, standards 5 $, grands 8 $, bundle 3 tomes 12 $", prix: "Gratuit, 5 $ ou 8 $ selon le tome ; bundle 12 $, aucune taxe ajoutée", href: "/lire", label: "Voir /lire/" },
+  { cat: "À toi l’histoire", offre: "Tomes « À toi l’histoire » — tome 1 gratuit, standards 5 $, grands 8 $, bundle 3 tomes 12 $", prix: "Gratuit, 5 $ ou 8 $ selon le tome ; bundle 12 $, aucune taxe ajoutée", href: "/lire", label: "Voir les tomes" },
   { cat: "Crée ton histoire", offre: "Crée TON histoire — créateur d’histoire personnalisée (ce n’est pas la série « À toi l’histoire ») : un prénom, 1 thème parmi 4, 2, 3 ou 4 fins — Bientôt, vente pas encore ouverte", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/cree-ton-histoire-a-toi", label: "Voir la fiche (Bientôt)" },
   { cat: "Passeurs", offre: "Passeurs de savoirs — inscription ouverte", prix: "3 $/mois · 28 $/an, aucune taxe ajoutée", href: "/les-passeurs", label: "S'inscrire" },
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "150 $ à 290 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
@@ -55,7 +55,8 @@ function Page() {
       </section>
       <section className="three-pillars">
         <div className="container">
-          <div className="table-wrap">
+          <p style={{ fontSize: 16, marginBottom: 12 }}>Acheter = vous payez sur la page suivante. Voir = vous regardez d'abord, sans payer. Ajouter au panier = vous regroupez avant de payer.</p>
+      <div className="table-wrap">
             <table>
               <thead>
                 <tr><th>Catégorie</th><th>Offre</th><th>Prix</th><th>Action</th></tr>
