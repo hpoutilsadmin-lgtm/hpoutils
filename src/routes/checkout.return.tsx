@@ -27,6 +27,7 @@ type State =
   | { kind: "missing" }
   | { kind: "pending" }
   | { kind: "paid"; itemCount: number }
+  | { kind: "delivered"; itemCount: number }
   | { kind: "error"; message: string };
 
 function Page() {
@@ -45,6 +46,7 @@ function Page() {
         const result = await check({ data: { sessionId: session_id } });
         if (cancelled) return;
         if (result.status === "pending") setState({ kind: "pending" });
+        else if (result.status === "delivered") setState({ kind: "delivered", itemCount: result.itemCount });
         else if (result.status === "paid") setState({ kind: "paid", itemCount: result.itemCount });
         else setState({ kind: "missing" });
       } catch (e: any) {
@@ -80,6 +82,16 @@ function Page() {
             <h1>Une erreur est survenue</h1>
             <p>{state.message}</p>
             <Link to="/contact">Nous contacter</Link>
+          </>
+        )}
+        {state.kind === "delivered" && (
+          <>
+            <h1>Déjà livré</h1>
+            <p>
+              Cet achat a déjà été livré par courriel. Vérifiez votre boîte de réception (et le dossier «&nbsp;Indésirables&nbsp;»).
+              Si vous avez perdu votre lien, récupérez votre achat ici :{" "}
+              <Link to="/recuperer-achat">Récupérer un achat</Link>.
+            </p>
           </>
         )}
         {state.kind === "paid" && (

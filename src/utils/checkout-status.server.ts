@@ -26,11 +26,17 @@ export const getCheckoutStatus = createServerFn({ method: "GET" })
     if (!data.sessionId) return { status: "missing" as const, itemCount: 0 };
     const { data: orders, error } = await getAdmin()
       .from("orders")
-      .select("id, status")
+      .select("id, status, delivery_sent_at")
       .eq("stripe_session_id", data.sessionId);
     if (error) throw new Error("Database error");
     const paid = (orders ?? []).filter((o: any) => o.status === "paid");
-    if (paid.length > 0) return { status: "paid" as const, itemCount: paid.length };
+    if (paid.length > 0) {
+      // Déjà livré : toutes les lignes paid ont delivery_sent_at posé.
+      // Statut distinct, même forme que les autres : aucun lien, aucun titre, aucun courriel.
+      const delivered = paid.every((o: any) => o.delivery_sent_at);
+      if (delivered) return { status: "delivered" as const, itemCount: paid.length };
+      return { status: "paid" as const, itemCount: paid.length };
+    }
     // Payé chez Stripe mais aucune ligne orders : le webhook n'est pas
     // encore arrivé. On ne livre JAMAIS pour compenser un webhook lent.
     return { status: "pending" as const, itemCount: 0 };
