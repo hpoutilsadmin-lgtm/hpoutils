@@ -301,6 +301,7 @@ function Page() {
   return (
     <main style={{ maxWidth: 680, margin: "0 auto", padding: "20px 16px 48px", lineHeight: 1.5 }}>
       <h1>Crée ton À toi l&rsquo;histoire</h1>
+      <p><strong>Bientôt — vente pas encore ouverte, aucun paiement n'est pris. La création est gratuite à essayer ici.</strong></p>
       <p>
         Vous choisissez vos thèmes et vos fins, puis votre histoire s&rsquo;assemble
         d&rsquo;un coup, rien qu&rsquo;à vous — sans étape manuelle, sans compte, sans serveur.
@@ -419,7 +420,7 @@ function Page() {
 
       <section aria-label="Prix et parcours d'achat" style={{ border: "1px solid #e3d5bd", borderRadius: 12, padding: 16, margin: "16px 0" }}>
         <h2>Combien ça coûte&nbsp;?</h2>
-        <p style={{ fontSize: "1.4rem", fontWeight: 700 }}>5&nbsp;$, aucune taxe ajoutée</p>
+        <p style={{ fontSize: "1.4rem", fontWeight: 700 }}>Prix prévu : 5&nbsp;$, aucune taxe ajoutée</p>
         <p>
           La création est gratuite à essayer ici. La version à garder — votre histoire créée
           + son lien, remis automatiquement après paiement — sera offerte à 5&nbsp;$.

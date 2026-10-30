@@ -491,7 +491,7 @@ export const KB = [
           a:"« La Chasse-Galerie », le tome d'appel de la série « À toi l'histoire » : gratuit, sans paiement. Tu reçois ton lien personnel sur /lire/.",
           u:"https://www.hp-outils.com/lire", l:"Recevoir le lien gratuit" },
         { q:"C'est quoi, « Crée TON histoire » ?", s:"BIENTÔT",
-          a:"« Crée TON histoire », ce n'est pas la série « À toi l'histoire » : c'est un créateur d'histoire personnalisée — tu choisis un prénom, 1 thème parmi 4, et 2, 3 ou 4 fins. Prix prévu : 5 $, aucune taxe ajoutée. La vente n'est pas encore ouverte : elle ouvrira seulement une fois le prix confirmé et le parcours testé à 0 $. Aucun achat possible pour l'instant, aucun paiement n'est pris.",
+          a:"« Crée TON histoire », ce n'est pas la série « À toi l'histoire » : c'est un créateur d'histoire personnalisée — tu choisis un prénom, 4 thèmes parmi 8, et 2, 3 ou 4 fins. Prix prévu : 5 $, aucune taxe ajoutée. La vente n'est pas encore ouverte : elle ouvrira seulement une fois le prix confirmé et le parcours testé à 0 $. Aucun achat possible pour l'instant, aucun paiement n'est pris.",
           u:"https://www.hp-outils.com/cree-ton-histoire-a-toi", l:"Voir la fiche (Bientôt)" },
         { q:"C'est qui, HP Outils ?", s:"C'EST NOUS",
           a:"HP Outils, c'est HP, créateur à Terrebonne : des jeux, des livres et des outils concrets pour la vraie vie, pensés pour les petits budgets. Imparfaits et humains. Comme il le dit : « J'ai jamais su qui j'étais, ce que j'aimais — alors je fais un peu de tout. » Comprendre. Agir. Transmettre. Et moi, je suis Sir H. Gepeto !" },
