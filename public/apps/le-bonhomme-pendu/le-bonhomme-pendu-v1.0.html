@@ -439,7 +439,7 @@
 
       <div class="mot" id="mot" aria-label="Mot mystère"></div>
 
-      <p class="message" id="message" aria-live="polite">Touche une lettre pour commencer !</p>
+      <p class="message" id="message" aria-live="polite">Touche ou clique une lettre pour commencer !</p>
 
       <div class="def-box" id="def-box" hidden>
         <div class="def-label">Définition</div>
@@ -454,7 +454,7 @@
         <button class="btn-mode" id="btn-quitter-2j" type="button" hidden>Retour au mode solo</button>
       </div>
 
-      <p class="aide">Plus de 500 mots tirés de notre dictionnaire, dont 100 québécois vraiment d'ici. Choisis ton niveau — de Facile à Très difficile — et quand tu trouves le mot, sa définition apparaît. La touche <strong>E</strong> révèle aussi <strong>É</strong> et <strong>È</strong> — même chose pour les autres accents. Tu peux aussi taper sur ton clavier d'ordinateur.</p>
+      <p class="aide">Plus de 500 mots tirés de notre dictionnaire, dont 100 québécois vraiment d'ici. Choisis ton niveau — de Facile à Très difficile — et quand tu trouves le mot, sa définition apparaît. La touche <strong>E</strong> révèle aussi <strong>É</strong> et <strong>È</strong> — même chose pour les autres accents. Tu peux aussi taper sur ton clavier d'ordinateur. Avec ta souris, clique les lettres à l'écran.</p>
 
       <footer class="signature" aria-label="Signature HP Outils">
         <svg width="40" height="40" viewBox="0 0 48 48" role="img" aria-label="Mascotte HP aux lunettes rondes">
@@ -1242,7 +1242,7 @@
         } while (pool.length > 1 && choix.m === dernierMot);
         dernierMot = choix.m;
         preparerPartie({ mot: choix.m, cat: choix.c + " · " + NOMS_NIVEAUX[choix.n], indice: choix.i, def: choix.d });
-        message("Touche une lettre pour commencer !", "");
+        message("Touche ou clique une lettre pour commencer !", "");
       }
 
       // ---------- Mode 2 joueurs ----------

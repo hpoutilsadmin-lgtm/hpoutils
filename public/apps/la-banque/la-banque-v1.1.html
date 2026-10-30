@@ -6,9 +6,7 @@
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
     <title>L'aide alimentaire — le jeu de la banque alimentaire</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+    <!-- Polices systeme seulement : aucun chargement Google Fonts (lot nuit 1C, en attente de go). -->
     <style>
       :root{
         --paper:#FBF2DF; --card:#FFFDF6; --card2:#F7ECD4;
@@ -32,9 +30,9 @@
       html{ -webkit-text-size-adjust:100%; }
       body{
         margin:0; background:var(--paper); color:var(--ink);
-        font-family:"Nunito",system-ui,sans-serif; font-size:16.5px; line-height:1.45;
+        font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-size:16.5px; line-height:1.45;
       }
-      h1,h2,h3,.disp{ font-family:"Baloo 2","Nunito",sans-serif; line-height:1.12; margin:0; }
+      h1,h2,h3,.disp{ font-family:ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; line-height:1.12; margin:0; }
       button{ font-family:inherit; cursor:pointer; }
       .wrap{ max-width:600px; margin:0 auto; padding:0 14px 40px; }
 
@@ -72,7 +70,7 @@
         padding:10px 0 8px; border-bottom:2px dashed var(--line);
       }
       .hud .row{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
-      .hud .sem{ font-family:"Baloo 2",sans-serif; font-weight:800; font-size:19px; }
+      .hud .sem{ font-family:ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight:800; font-size:19px; }
       .hud .stats{ display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
       .chip{ background:var(--card); border:2px solid var(--ink); border-radius:999px; padding:2px 10px; font-weight:800; font-size:14px; white-space:nowrap; }
       .chip.coeur{ background:var(--sun-soft); }
@@ -95,7 +93,7 @@
       .card h3{ font-size:19px; font-weight:800; }
       .card .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
       .bigico{ font-size:34px; line-height:1; }
-      .qty{ font-family:"Baloo 2",sans-serif; font-weight:800; font-size:22px; }
+      .qty{ font-family:ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight:800; font-size:22px; }
       .muted{ color:var(--muted); }
       .small{ font-size:14px; }
       .tri{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
@@ -116,7 +114,7 @@
         box-shadow:0 2px 0 rgba(0,0,0,.55);
       }
       .stepper button:disabled{ opacity:.4; }
-      .stepper .n{ font-family:"Baloo 2",sans-serif; font-size:34px; font-weight:800; min-width:64px; text-align:center; }
+      .stepper .n{ font-family:ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-size:34px; font-weight:800; min-width:64px; text-align:center; }
       .bar{ height:14px; background:var(--card2); border:2px solid var(--ink); border-radius:999px; overflow:hidden; margin-top:8px; }
       .bar i{ display:block; height:100%; background:var(--green); transition:width .25s ease; }
       .bar i.full{ background:var(--terra); }
@@ -145,7 +143,7 @@
       .item .lbl{ font-size:13.5px; font-weight:800; line-height:1.15; }
       .item .lbl small{ display:block; color:var(--muted); font-weight:700; font-size:11.5px; }
       .item.off{ opacity:.45; }
-      .item .mini button{ width:32px; height:32px; font-size:17px; }
+      .item .mini button{ width:44px; height:44px; font-size:17px; }
       .served{ text-align:center; padding:8px 0 2px; }
       .served .heart{ font-size:38px; }
       .fam.done{ background:var(--green-soft); }
@@ -185,7 +183,7 @@
       .donbox{ background:var(--card); border:2px solid var(--ink); border-radius:18px; box-shadow:var(--shadow); padding:16px 18px; margin:16px 0; }
       .donbox .amounts{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
       .donbox .amounts span{ border:2px solid var(--ink); border-radius:999px; padding:5px 14px; font-weight:800; background:var(--sun-soft); }
-      .grade{ font-family:"Baloo 2",sans-serif; font-size:30px; font-weight:800; color:var(--green-d); text-align:center; margin:8px 0 2px; }
+      .grade{ font-family:ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-size:30px; font-weight:800; color:var(--green-d); text-align:center; margin:8px 0 2px; }
       .center{ text-align:center; }
       footer{ text-align:center; color:var(--muted); font-size:13.5px; margin-top:26px; }
     </style>
@@ -560,7 +558,7 @@
         '<div class="mission"><h3>Comment ça marche</h3>' +
         '<p>Chaque semaine : les dons arrivent et tu les tries selon les vraies règles. Les denrées données sont distribuées aux familles — jamais vendues. Ta cuisine transforme les ingrédients <b>achetés</b> au marché en crêpes que les écoles achètent : c\'est cet argent-là qui finance tes achats. Puis tu composes le panier de provisions de chaque famille — des ménages que tu apprends à connaître, semaine après semaine.</p>' +
         '<p><b>La ligne de vérité :</b> « Dans la vraie vie, on ne vend jamais ce qui est donné. Ici, la cuisine vend ce qu\'elle produit avec ses achats — et chaque dollar retourne aux familles. »</p>' +
-        '<p><b>Leçon du jeu :</b> vendre intelligemment aujourd\'hui, c\'est nourrir plus de familles demain. La rentabilité sert la mission — jamais l\'inverse.</p></div>' +
+        '<p><b>Leçon du jeu :</b> vendre intelligemment aujourd\'hui, c\'est nourrir plus de familles demain. La rentabilité sert la mission — jamais l\'inverse.</p><p><b>Gestes :</b> au doigt ou avec ta souris, clique les boutons pour jouer.</p></div>' +
         '<div class="score3"><div><b>❤️</b><small>FAMILLES NOURRIES — le vrai score</small></div><div><b>📈</b><small>AUTONOMIE — % du budget gagné par tes activités</small></div><div><b>🥖</b><small>EFFICACITÉ — familles nourries par tes ressources</small></div></div>' +
         '<button class="btn big" onclick="newGame()">Commencer la saison — 8 semaines</button>' +
         '<footer>Un jeu d\'économie sociale, sans morale forcée : juste des choix, des familles, et des paniers à composer.<br>HP Outils — « Des outils pour la vraie vie. » · Version 1.1</footer>' +
@@ -1111,6 +1109,7 @@
         '<p class="small muted" style="margin-top:10px">HP Outils soutient un organisme différent tous les 6 mois (banque alimentaire, organisme jeunesse, maison de la famille…). L\'organisme de la campagne en cours et le bilan des dons remis sont affichés par HP Outils en toute transparence.</p>' +
         '<p style="font-weight:800;margin-bottom:0">« Jouer dans la vraie vie. Aider dans la vraie vie. »</p></div>';
       h += '<button class="btn big" onclick="renderStart()">Rejouer une saison</button>';
+      h += '<p class="center" style="margin-top:16px"><a href="/en-cuisine/">Voir les recettes de soutien et de récupération dans En cuisine →</a></p>';
       h += '<footer>L\'aide alimentaire — un jeu HP Outils, 100 % original. Version 1.1<br>Donner. Produire. Vendre. Nourrir.</footer>';
       $("app").innerHTML = h;
       window.scrollTo(0,0);

@@ -2157,6 +2157,7 @@ function renderFinale(app){
       '<button class="btn secondary" onclick="goHome()">Accueil</button></div></div></div>';
   }
   app.innerHTML='<div class="view">'+body+'</div>';
+var fa=app.querySelector('.finale .actions'); if(fa){var pl=document.createElement('p');pl.style.marginTop='16px';pl.innerHTML="<a href=\"/passeur-de-savoir/\" style=\"display:inline-block;padding:10px 12px\">Découvrir des savoirs d'ici dans le Passeur →</a>";fa.insertAdjacentElement('afterend',pl);}
 }
 
 /* ----- délégation d\u2019événements (carnet, accusation) ----- */

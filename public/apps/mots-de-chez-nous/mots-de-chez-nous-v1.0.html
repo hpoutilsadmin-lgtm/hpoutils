@@ -251,7 +251,7 @@
           <h1 class="titre serif">Mots de<br />chez nous</h1>
           <p class="sous-titre">Le jeu de mots cachés d'ici</p>
           <div class="hachures-bas"></div>
-          <p class="consigne">Des mots sont cachés dans la grille. <strong>Glisse ton doigt</strong> sur les lettres pour les retrouver — à l'horizontale, à la verticale ou en diagonale. Chaque mot trouvé révèle sa définition&nbsp;!</p>
+          <p class="consigne">Des mots sont cachés dans la grille. <strong>Glisse ton doigt ou ta souris</strong> sur les lettres pour les retrouver — à l'horizontale, à la verticale ou en diagonale. Chaque mot trouvé révèle sa définition&nbsp;!</p>
           <div class="niveaux" role="group" aria-label="Choisir un niveau">
             <button class="btn-niveau" data-niveau="facile" type="button">
               <span><span class="nom serif">Facile</span><span class="desc">Grille 8 × 8 · 6 mots</span></span>
@@ -283,7 +283,7 @@
           <div class="grille" id="jeu-grille" role="grid" aria-label="Grille de lettres"></div>
         </div>
         <div class="def-boite" aria-live="polite">
-          <p class="attente" id="def-attente">Glisse ton doigt sur un mot caché pour le trouver…</p>
+          <p class="attente" id="def-attente">Glisse ton doigt ou ta souris sur un mot caché pour le trouver…</p>
           <div id="def-contenu" class="cache">
             <span class="def-mot" id="def-mot"></span> <span class="def-cat" id="def-cat"></span>
             <p id="def-texte"></p>
@@ -320,6 +320,7 @@
             <button class="btn principal" id="btn-encore" type="button">Nouvelle partie</button>
             <button class="btn" id="btn-fin-niveaux" type="button">Changer de niveau</button>
           </div>
+          <p style="margin-top:16px"><a href="/passeur-de-savoir/" style="display:inline-block;padding:10px 12px">Découvrir des savoirs d'ici dans le Passeur →</a></p>
           <p class="signature">Par <b>HP Outils</b></p>
         </div>
       </section>
@@ -641,6 +642,11 @@
         validerSelection();
       });
       grilleEl.addEventListener("pointercancel", function(){ nettoyerSelection(); });
+      /* Lot 2E — repli focus/onglet : la sélection est nettoyée, comme sur
+         pointercancel. Aucun mot n'est validé (validerSelection n'est pas
+         appelée) : la grille reste disponible pour un nouvel essai. */
+      document.addEventListener("visibilitychange", function(){ if (document.hidden && partie) nettoyerSelection(); });
+      window.addEventListener("blur", function(){ if (partie) nettoyerSelection(); });
       grilleEl.addEventListener("contextmenu", function(e){ e.preventDefault(); });
 
       // ---------- Boutons ----------

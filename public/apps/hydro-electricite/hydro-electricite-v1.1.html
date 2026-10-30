@@ -551,7 +551,7 @@
         + '<text x="120" y="96" font-size="13" font-weight="700" fill="#20313b" transform="rotate(24 120 96)">La conduite forcée</text>'
         + "</svg>";
       var controls = '<h3>À toi de jouer : laisse glisser ' + nom() + "</h3>"
-        + '<p><b>Tiens le bouton enfoncé</b> pour ouvrir la conduite et laisser ' + nom() + ' dévaler le gros tuyau. Regarde la jauge : plus la goutte descend, plus elle va <b>vite</b> et plus la <b>pression</b> monte (la pression, c\'est la force avec laquelle l\'eau pousse).</p>'
+        + '<p><b>Tiens le bouton enfoncé</b> (avec ton doigt, ta souris ou les touches Espace/Entrée) pour ouvrir la conduite et laisser ' + nom() + ' dévaler le gros tuyau. Regarde la jauge : plus la goutte descend, plus elle va <b>vite</b> et plus la <b>pression</b> monte (la pression, c\'est la force avec laquelle l\'eau pousse).</p>'
         + '<button class="btn big hold" id="s2btn" type="button">Tiens pour laisser glisser ' + nom() + "</button>"
         + gaugeHTML("s2vit", "Vitesse de la goutte")
         + gaugeHTML("s2pres", "Pression de l'eau");
@@ -617,7 +617,7 @@
         + '<text x="180" y="234" font-size="13" font-weight="700" fill="#20313b" text-anchor="middle">La turbine Francis et ses aubes courbes</text>'
         + "</svg>";
       var controls = '<h3>À toi de jouer : fais tourner la turbine… puis stabilise-la</h3>'
-        + '<p><b>Tiens le bouton</b> pour lancer la rotation, comme l\'eau qui pousse. Ensuite, joue avec le bouton (tiens, relâche, retiens) pour <b>garder la vitesse dans la zone verte</b> : la jauge de stabilité se remplit quand tu y es. Ni trop lente, ni trop rapide — juste bien !</p>'
+        + '<p><b>Tiens le bouton</b> (doigt, souris ou Espace/Entrée) pour lancer la rotation, comme l\'eau qui pousse. Ensuite, joue avec le bouton (tiens, relâche, retiens) pour <b>garder la vitesse dans la zone verte</b> : la jauge de stabilité se remplit quand tu y es. Ni trop lente, ni trop rapide — juste bien !</p>'
         + '<button class="btn big hold" id="s3btn" type="button">Tiens pour faire tourner</button>'
         + gaugeHTML("s3vit", "Vitesse de la turbine", [55, 80])
         + gaugeHTML("s3stab", "Stabilité dans la zone verte");
@@ -684,7 +684,7 @@
         + '<text x="16" y="228" font-size="12.5" font-weight="700" fill="#20313b">Les ronds orange : les bobines de cuivre</text>'
         + "</svg>";
       var controls = '<h3>À toi de jouer : fais naître le courant</h3>'
-        + '<p><b>Tiens le bouton</b> pour faire tourner les aimants. Regarde la vague en dessous : c\'est le <b>courant alternatif</b> qui naît. Vise environ <b>60 vagues par seconde</b> — on dit « 60 hertz ». Garde la vitesse dans la zone verte jusqu\'à ce que le compteur de stabilité soit plein.</p>'
+        + '<p><b>Tiens le bouton</b> (doigt, souris ou Espace/Entrée) pour faire tourner les aimants. Regarde la vague en dessous : c\'est le <b>courant alternatif</b> qui naît. Vise environ <b>60 vagues par seconde</b> — on dit « 60 hertz ». Garde la vitesse dans la zone verte jusqu\'à ce que le compteur de stabilité soit plein.</p>'
         + '<button class="btn big hold" id="s4btn" type="button">Tiens pour faire tourner les aimants</button>'
         + '<div class="voltbig" id="s4hz">0 fois par seconde</div>'
         + '<canvas id="s4wave" width="340" height="92" style="width:100%;height:auto;border:3px solid var(--line);border-radius:12px;background:#12242f"></canvas>'
@@ -945,7 +945,7 @@
         + '<button class="btn big" id="s7down" type="button">Abaisse la tension (premier cran)</button>'
         + '<div id="s7apps" class="hidden">'
         + '<h3 style="margin-top:18px">Étape 2 : branche les appareils</h3>'
-        + '<p>Touche chaque appareil pour le brancher, et regarde combien d\'énergie il boit. L\'unité s\'appelle le <b>watt</b> — comme la « soif » de l\'appareil.</p>'
+        + '<p>Touche chaque appareil avec ton doigt ou ta souris pour le brancher, et regarde combien d\'énergie il boit. L\'unité s\'appelle le <b>watt</b> — comme la « soif » de l\'appareil.</p>'
         + '<div class="btnrow" style="flex-direction:column">'
         + '<button class="btn second" data-app="ampoule" type="button">Brancher : l\'ampoule (environ 10 watts)</button>'
         + '<button class="btn second" data-app="frigo" type="button">Brancher : le réfrigérateur (environ 150 watts)</button>'
@@ -1077,7 +1077,7 @@
         + '<p style="font-size:1.1rem"><b>Total : ' + totalStars(save.stars) + " étoiles sur 14</b></p>"
         + tempsHTML
         + '<div class="btnrow"><button class="btn" id="btnReplay" type="button">Rejouer la visite</button>'
-        + '<button class="btn second" id="btnHome" type="button">Retour à l\'accueil</button></div></div>'
+        + '<button class="btn second" id="btnHome" type="button">Retour à l\'accueil</button></div></div>' + '<p style="margin-top:16px"><a href="/passeur-de-savoir/" style="display:inline-block;padding:10px 12px">Découvrir des savoirs d\'ici dans le Passeur →</a></p>'
         + '<p class="honnete">Schéma simplifié, mais fidèle : une vraie centrale a des centaines de systèmes de plus. La centrale de la rivière aux Saumons est inventée ; les principes, les chiffres et les faits québécois racontés dans la visite sont réels.</p>';
       wireTopbar(0);
       sndGood(); buzz([50, 80, 50]); confetti();

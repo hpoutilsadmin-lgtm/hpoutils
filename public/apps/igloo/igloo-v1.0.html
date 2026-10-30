@@ -2,13 +2,11 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
     <title>IGLOO — La guerre des igloos</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Polices systeme seulement : aucun chargement Google Fonts (lot nuit 1C, en attente de go). -->
     <style>
       :root {
         --bg: #cfe4f2;
@@ -51,7 +49,7 @@
       html, body { height: 100%; }
       body {
         margin: 0;
-        font-family: "Nunito", system-ui, sans-serif;
+        font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
         color: var(--ink);
         background: linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
         min-height: 100dvh;
@@ -60,7 +58,7 @@
         align-items: center;
         overflow-x: hidden;
       }
-      h1, h2, h3, .baloo { font-family: "Baloo 2", "Nunito", sans-serif; }
+      h1, h2, h3, .baloo { font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; }
       button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
       .wrap { width: 100%; max-width: 460px; padding: 10px 12px 18px; display: flex; flex-direction: column; gap: 10px; }
 
@@ -85,7 +83,7 @@
       .hero p.tagline { margin: 6px 0 0; color: var(--ink-soft); font-weight: 700; font-size: .98rem; }
       .wallet {
         display: flex; align-items: center; justify-content: center; gap: 8px;
-        font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: 1.05rem;
+        font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 700; font-size: 1.05rem;
       }
       .wallet .coin {
         width: 22px; height: 22px; border-radius: 50%;
@@ -108,7 +106,7 @@
         border-radius: 14px;
         background: var(--panel-2);
         border: 2px solid var(--line);
-        font-family: "Baloo 2", sans-serif;
+        font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif;
         font-weight: 800; font-size: 1.15rem;
         display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
         color: var(--ink);
@@ -124,7 +122,7 @@
       .lvl .star { position: absolute; top: 3px; right: 6px; font-size: .7rem; color: var(--gold); }
       .btn {
         display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 1.05rem;
+        font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800; font-size: 1.05rem;
         padding: 12px 20px; border-radius: 14px;
         background: var(--blue); color: #fff;
         box-shadow: 0 4px 0 var(--blue-deep), var(--shadow);
@@ -146,7 +144,7 @@
         display: inline-grid; place-items: center;
         min-width: 20px; height: 20px; padding: 0 4px;
         border-radius: 10px; background: #7fd0ff; color: #0b3552;
-        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: .8rem;
+        font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800; font-size: .8rem;
         border: 2px solid #fff;
         box-shadow: 0 1px 4px rgba(0,0,0,.25);
       }
@@ -163,7 +161,7 @@
       .pip { width: 16px; height: 6px; border-radius: 3px; background: var(--card-off); }
       .pip.on { background: var(--gold); }
       .upg .buy {
-        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: .85rem;
+        font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800; font-size: .85rem;
         background: var(--gold); color: #4a2f00; border-radius: 10px; padding: 8px 10px;
         box-shadow: 0 3px 0 #c07f0d; white-space: nowrap;
       }
@@ -175,16 +173,16 @@
       .battle-top {
         display: flex; align-items: center; gap: 8px;
       }
-      .battle-top .lvl-name { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: .95rem; flex: 1; line-height: 1.1; }
-      .battle-top .lvl-name small { display: block; font-family: "Nunito", sans-serif; font-weight: 700; font-size: .68rem; color: var(--ink-soft); }
+      .battle-top .lvl-name { font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800; font-size: .95rem; flex: 1; line-height: 1.1; }
+      .battle-top .lvl-name small { display: block; font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-weight: 700; font-size: .68rem; color: var(--ink-soft); }
       .timer {
-        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 1.05rem;
+        font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800; font-size: 1.05rem;
         background: var(--panel); border: 2px solid var(--line); border-radius: 10px; padding: 3px 10px;
         min-width: 64px; text-align: center;
       }
       .timer.hot { color: var(--red); border-color: var(--red); }
       .icon-btn {
-        width: 38px; height: 38px; border-radius: 10px; background: var(--panel);
+        width: 44px; height: 44px; border-radius: 10px; background: var(--panel);
         border: 2px solid var(--line); display: grid; place-items: center; font-size: 1rem;
       }
       .law-badge {
@@ -209,21 +207,21 @@
         position: absolute; left: 50%; top: 34%;
         transform: translate(-50%, -50%) scale(.8);
         background: rgba(16, 42, 58, .92); color: #fff;
-        font-family: "Baloo 2", sans-serif; font-weight: 800;
+        font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800;
         font-size: 1.25rem; text-align: center;
         padding: 10px 18px; border-radius: 14px;
         opacity: 0; pointer-events: none;
         transition: opacity .18s ease, transform .18s ease;
         max-width: 88%; line-height: 1.15; z-index: 5;
       }
-      .banner small { display: block; font-family: "Nunito", sans-serif; font-size: .78rem; font-weight: 700; color: #bfe3ff; margin-top: 2px; }
+      .banner small { display: block; font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: .78rem; font-weight: 700; color: #bfe3ff; margin-top: 2px; }
       .banner.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
       .hint-bar {
         min-height: 22px; text-align: center; font-weight: 800; font-size: .85rem; color: var(--blue-deep);
       }
       @media (prefers-color-scheme: dark) { .hint-bar { color: #8fd0ff; } }
       .energy-row { display: flex; align-items: center; gap: 8px; }
-      .energy-label { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: .8rem; white-space: nowrap; }
+      .energy-label { font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800; font-size: .8rem; white-space: nowrap; }
       .energy-bar {
         flex: 1; height: 20px; border-radius: 10px; background: var(--card-off);
         border: 2px solid var(--panel); box-shadow: inset 0 2px 4px rgba(0,0,0,.18);
@@ -234,7 +232,7 @@
         background: repeating-linear-gradient(90deg, #57b8f5 0 22px, #7fd0ff 22px 24px);
         border-radius: 8px; transition: width .15s linear;
       }
-      .energy-num { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 1rem; min-width: 22px; text-align: center; }
+      .energy-num { font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800; font-size: 1rem; min-width: 22px; text-align: center; }
       .hand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
       .card {
         position: relative;
@@ -278,7 +276,7 @@
       .overlay .reward {
         display: inline-flex; gap: 8px; align-items: center;
         background: var(--gold-soft); border-radius: 12px; padding: 8px 14px;
-        font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 1.05rem; margin: 8px 0;
+        font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-weight: 800; font-size: 1.05rem; margin: 8px 0;
       }
       .overlay .stack { display: flex; flex-direction: column; gap: 9px; margin-top: 14px; }
       .tuto-steps { text-align: left; margin: 10px 0; padding-left: 20px; font-weight: 700; line-height: 1.6; color: var(--ink); }
@@ -334,7 +332,7 @@
         <div class="panel">
           <h2>Comment jouer</h2>
           <ul class="howto">
-            <li><b>Touche une carte</b>, puis <b>touche ta moitié de terrain</b> (en bas) pour déployer.</li>
+            <li><b>Touche ou clique une carte</b>, puis <b>touche ou clique ta moitié de terrain</b> (en bas) pour déployer.</li>
             <li>Tes unités avancent et se battent <b>toutes seules</b> : ton travail, c'est la stratégie.</li>
             <li>Détruis <b>l'igloo rouge</b> avant que le tien tombe. À la fin du temps, les tours détruites départagent.</li>
             <li>Le <b>bonhomme de neige</b> protège les alliés autour de lui. Le <b>Gèleux</b> ralentit les ennemis.</li>
@@ -365,10 +363,10 @@
         </div>
         <div class="law-badge" id="law-badge"></div>
         <div class="field-wrap">
-          <canvas id="field" width="400" height="640" role="img" aria-label="Terrain de bataille enneigé : touche ta moitié du bas pour déployer tes unités"></canvas>
+          <canvas id="field" width="400" height="640" role="img" aria-label="Terrain de bataille enneigé : touche ou clique ta moitié du bas pour déployer tes unités"></canvas>
           <div class="banner" id="banner"></div>
         </div>
-        <div class="hint-bar" id="hint">Touche une carte pour commencer !</div>
+        <div class="hint-bar" id="hint">Touche ou clique une carte pour commencer !</div>
         <div class="energy-row">
           <span class="energy-label">Énergie</span>
           <div class="energy-bar"><div class="energy-fill" id="energy-fill"></div></div>
@@ -704,7 +702,7 @@
       lb.classList.add("show");
       showScreen("screen-battle");
       renderHand();
-      setHint("Touche une carte, puis ton terrain !");
+      setHint("Touche ou clique une carte, puis ton terrain !");
       showBanner(law.name.replace("Loi — ", ""), law.desc, 2600);
 
       if (!P.tutoSeen) {
@@ -749,13 +747,13 @@
       G.selected = (G.selected === i) ? -1 : i;
       sfx("play");
       if (G.selected >= 0) {
-        if (c.kind === "unit") setHint(c.name + " : touche ta moitié de terrain (en bas).");
+        if (c.kind === "unit") setHint(c.name + " : touche ou clique ta moitié de terrain (en bas).");
         else if (G.hand[i] === "glace") setHint("Glace noire : touche le terrain ennemi (en haut).");
         else if (G.hand[i] === "traineau") setHint("Traîneau : touche une voie, il fonce tout droit !");
         else if (G.hand[i] === "rafale") setHint("Rafale de neige : touche une zone chez l'ennemi !");
         else if (G.hand[i] === "chocolat") setHint("Chocolat chaud : touche tes troupes pour les soigner et les dégeler.");
         else setHint("Réparation : elle soigne ton bâtiment le plus amoché.");
-      } else setHint("Touche une carte, puis ton terrain !");
+      } else setHint("Touche ou clique une carte, puis ton terrain !");
       renderHand();
     }
     function setHint(t) { $("hint").textContent = t; }
@@ -814,14 +812,14 @@
         sfx("play");
         addFloat(hx, hy - 28, served ? ("Chocolat chaud ! +" + c.heal + " PV") : "Personne à réchauffer…", "#b35c00", 1.2);
         consumeCard();
-        setHint(served ? "Tes troupes sont réchauffées !" : "Touche une carte, puis ton terrain !");
+        setHint(served ? "Tes troupes sont réchauffées !" : "Touche ou clique une carte, puis ton terrain !");
       } else {
         // unité : zone joueur seulement
         if (y < MID_Y + 26) { setHint("Tu déploies dans TA moitié (en bas, la bleue) !"); return; }
         if (dist({ x: x, y: y }, MOUND) < MOUND.r + 16) { setHint("Pas sur la butte de neige !"); return; }
         spawnUnit("player", id, clamp(x, 24, W - 24), clamp(y, MID_Y + 30, H - 24));
         consumeCard();
-        setHint("Touche une carte, puis ton terrain !");
+        setHint("Touche ou clique une carte, puis ton terrain !");
       }
       renderHand();
     });
@@ -1497,7 +1495,7 @@
         ctx.fillStyle = "rgba(214,69,65,.18)"; ctx.fillRect(cx - 34, 288, 68, 64);
         ctx.strokeStyle = "#d64541"; ctx.lineWidth = 3;
         ctx.strokeRect(cx - 34, 288, 68, 64);
-        ctx.fillStyle = "#d64541"; ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center";
+        ctx.fillStyle = "#d64541"; ctx.font = "800 11px system-ui, sans-serif"; ctx.textAlign = "center";
         ctx.fillText("PAS DANS", cx, 316); ctx.fillText("MA COUR !", cx, 330);
       }
 
@@ -1572,7 +1570,7 @@
       // Textes flottants
       G.floats.forEach(function (f) {
         ctx.globalAlpha = Math.min(1, (f.dur - f.t) / 0.3);
-        ctx.font = "800 " + (f.size || 14) + "px 'Baloo 2', sans-serif"; ctx.textAlign = "center";
+        ctx.font = "800 " + (f.size || 14) + "px 'Trebuchet MS', Verdana, sans-serif"; ctx.textAlign = "center";
         ctx.lineWidth = 3.5; ctx.strokeStyle = "rgba(255,255,255,.9)";
         ctx.strokeText(f.text, f.x, f.y);
         ctx.fillStyle = f.color; ctx.fillText(f.text, f.x, f.y);
@@ -1662,7 +1660,7 @@
       ctx.restore();
       hpBar(s.x, s.y - (s.kind === "igloo" ? 48 : 30), s.kind === "igloo" ? 62 : 42, s.hp / s.maxHp, teamColor);
       if (s.kind === "igloo") {
-        ctx.font = "800 10px Nunito, sans-serif"; ctx.textAlign = "center";
+        ctx.font = "800 10px system-ui, sans-serif"; ctx.textAlign = "center";
         ctx.fillStyle = teamColor;
         ctx.fillText(s.team === "player" ? "TON IGLOO" : "IGLOO ENNEMI", s.x, s.y + 30);
       }
@@ -1776,7 +1774,7 @@
 
       // Bulles de répliques
       if (u.bubble && u.bubbleT > 0) {
-        ctx.font = "800 11px 'Baloo 2', sans-serif"; ctx.textAlign = "center";
+        ctx.font = "800 11px 'Trebuchet MS', Verdana, sans-serif"; ctx.textAlign = "center";
         var tw = ctx.measureText(u.bubble).width + 14;
         ctx.fillStyle = "rgba(255,255,255,.95)";
         ctx.strokeStyle = "#b9d4e6"; ctx.lineWidth = 1.4;

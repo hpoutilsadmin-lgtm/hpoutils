@@ -28,7 +28,7 @@
       .bar a.back{ color:var(--ink); text-decoration:none; font-weight:800; font-size:14px;
         border:1.5px solid var(--ink); border-radius:999px; padding:6px 12px; background:var(--panel); }
       .bar h1{ font-size:19px; margin:0; flex:1; text-align:center; letter-spacing:.01em; }
-      .iconbtn{ font-size:18px; line-height:1; border:1.5px solid var(--ink); background:var(--panel);
+      .iconbtn{ min-width:44px; min-height:44px; font-size:18px; line-height:1; border:1.5px solid var(--ink); background:var(--panel);
         border-radius:999px; padding:7px 11px; cursor:pointer; color:var(--ink); }
       .hud{ width:100%; max-width:980px; background:var(--hud-bg); border:1.5px solid var(--panel-border);
         border-radius:14px; padding:7px 14px; display:flex; align-items:center; justify-content:space-between;
@@ -92,6 +92,8 @@
       <a class="back" href="/jeux">← Jeux</a>
       <h1>🏒 Hockey 2 contre 2</h1>
       <button class="iconbtn" id="muteBtn" aria-label="Son oui/non">🔊</button>
+      <button class="iconbtn" id="pauseBtn" aria-label="Mettre la partie en pause">⏸</button>
+      <button class="iconbtn" id="shareBtn" aria-label="Partager mon score">🏆</button>
     </div>
     <div class="hud" aria-live="polite">
       <span class="you">TOI&nbsp;<span id="scoreYou">0</span></span>
@@ -110,6 +112,11 @@
         🖱️/👆 <strong>Glisse</strong> sur la glace pour patiner · bouton <strong>TIR</strong> (ou Espace) pour lancer.<br/>
         ⚠️ Méfie-toi : Pixel est rapide comme un chat… sauf quand un papillon imaginaire passe. Ses oreilles se dressent juste avant : c'est ton moment !</p>
         <button class="bigbtn" id="startBtn">Mise au jeu !</button>
+      </div>
+      <div class="overlay hidden" id="pauseOv">
+        <h2>⏸ En pause</h2>
+        <p>La partie attend ton retour, sans perdre le score.</p>
+        <button class="bigbtn" id="resumeBtn">Reprendre</button>
       </div>
       <div class="overlay hidden" id="result">
         <h2 id="resultTitle">Victoire !</h2>
@@ -426,10 +433,65 @@
     shootBtn.addEventListener("pointerdown", (e) => { e.preventDefault(); chargeStart(); });
     shootBtn.addEventListener("pointerup", (e) => { e.preventDefault(); chargeRelease(); });
     shootBtn.addEventListener("pointerleave", () => { if (charging) chargeRelease(); });
+    /* Lot 2E — repli focus/onglet : une charge interrompue est abandonnée,
+       jamais tirée. pointercancel manquant sur #shootBtn (audit §3) : une
+       annulation ne doit pas laisser "charging" vrai, sinon le pointerup
+       tardif calculerait une charge pleine et tirerait sans geste. */
+    function chargeCancel() {
+      if (!charging) return;
+      charging = false; shootBtn.classList.remove("charging"); charge = 0;
+    }
+    shootBtn.addEventListener("pointercancel", () => { chargeCancel(); });
+    function repliFocusHockey() {
+      chargeCancel();
+      joy.active = false; joy.dx = 0; joy.dy = 0;
+      for (const k in keys) keys[k] = false;
+    }
+    document.addEventListener("visibilitychange", () => { if (document.hidden) repliFocusHockey(); });
+    addEventListener("blur", repliFocusHockey);
 
     document.getElementById("muteBtn").addEventListener("click", function () {
       AudioSys.ensure(); AudioSys.muted = !AudioSys.muted;
       this.textContent = AudioSys.muted ? "🔇" : "🔊";
+    });
+
+    /* ============ Pause + Partager, dans le jeu (lot 3G, mineur E4)
+       Choix : boutons du jeu lui-même, pas câblage barre — (1) la
+       barre fixe recouvrirait la patinoire paysage et doublerait le
+       « ← Jeux » déjà présent ; (2) son « gate » gèlerait rAF et
+       performance.now en plus de la porte portrait déjà en place,
+       sans preuve sur ce jeu ; (3) son partage à un seul chiffre
+       lirait #scoreYou seul, alors que le score ici est double
+       (Toi contre HGPTO). La pause est réelle : frame() ne fait
+       plus step() tant que jeuPause est vrai (horloge, rondelle et
+       patineurs figés ; le rendu continue, la bannière peut donc
+       s'effacer pendant la pause — cosmétique seulement). Si un
+       tir est en charge au moment de la pause, la charge est
+       annulée sans tirer : aucun but ne part pendant la pause.
+       Fusion lot 2E : ce bloc ne définit PAS chargeCancel et ne
+       touche PAS chargeStart/chargeRelease ; quand 2E atterrit,
+       remplacer les deux lignes d'annulation ci-dessous par un
+       appel à chargeCancel(), sans autre changement. =========== */
+    let jeuPause = false;
+    const pauseBtn = document.getElementById("pauseBtn");
+    const pauseOv = document.getElementById("pauseOv");
+    function basculerPauseJeu(vers) {
+      jeuPause = vers;
+      pauseOv.classList.toggle("hidden", !vers);
+      pauseBtn.textContent = vers ? "▶" : "⏸";
+      pauseBtn.setAttribute("aria-label", vers ? "Reprendre la partie" : "Mettre la partie en pause");
+      if (vers && charging) { charging = false; shootBtn.classList.remove("charging"); }
+    }
+    pauseBtn.addEventListener("click", function () { basculerPauseJeu(!jeuPause); });
+    document.getElementById("resumeBtn").addEventListener("click", function () { basculerPauseJeu(false); });
+    document.getElementById("shareBtn").addEventListener("click", function () {
+      var texte = "Hockey 2 contre 2 — HP Outils : Toi " + S.scoreYou + " — " + S.scoreThem + " HGPTO & Pixel. T'es pas game de me battre ?";
+      var url = "https://www.hp-outils.com/apps/hockey-hgpto";
+      if (navigator.share) {
+        navigator.share({ title: "Hockey 2 contre 2 — HP Outils", text: texte, url: url }).catch(function () {});
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texte + " " + url).catch(function () {});
+      }
     });
     document.getElementById("startBtn").addEventListener("click", startMatch);
     document.getElementById("againBtn").addEventListener("click", startMatch);
@@ -957,7 +1019,7 @@
       if (!lastTs) lastTs = ts;
       let dt = Math.min(0.033, (ts - lastTs) / 1000); lastTs = ts;
       const now = ts / 1000;
-      if (!portraitPaused) { // en portrait, l'image reste figée derrière la porte
+      if (!portraitPaused && !jeuPause) { // en portrait, l'image reste figée derrière la porte ; en pause (E4), step() est gelé aussi
         const sub = Math.max(1, Math.ceil(dt / (1 / 120)));
         const sdt = dt / sub;
         for (let i = 0; i < sub; i++) step(sdt, now);
