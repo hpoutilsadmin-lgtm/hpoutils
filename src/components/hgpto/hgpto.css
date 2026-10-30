@@ -790,8 +790,8 @@
       }
 
       /* ---------- Portage site : zone de vie + fermeture de session ---------- */
-      body.hgpto-on{padding-bottom:168px}
-      @media (max-width:560px){ body.hgpto-on{padding-bottom:148px} }
+      body.hgpto-on{padding-bottom:290px}
+      @media (max-width:560px){ body.hgpto-on{padding-bottom:240px} }
       body.hgpto-closed .bot-controls,body.hgpto-closed #decor{display:none!important}
       /* Correctif réouverture (26 oct. 2026) : après « Fermer », tout
          HGPTO se cache SAUF la pastille, seul élément restant. La
