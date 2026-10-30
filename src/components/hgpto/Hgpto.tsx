@@ -6,7 +6,7 @@ import { HGPTO_MARKUP } from "./hgpto-markup";
 import { initHgpto } from "./hgpto-engine";
 
 /**
- * Sir H. Gepeto — l'assistant virtuel du site HP Outils, monté globalement
+ * Sir H. Gepeto — le gérant du site HP Outils, monté globalement
  * dans le layout (voir src/routes/__root.tsx) : il vit sur toutes les pages.
  *
  * La surcouche (figure, Pixel, bulles, dock, panneau Questions, jeu

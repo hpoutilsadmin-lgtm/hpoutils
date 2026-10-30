@@ -2631,7 +2631,7 @@ export function initHgpto() {
          suivre, à la toute fin d'une visite terminée d'elle-même (voir
          stopTour), jamais après un arrêt demandé par le visiteur. */
       var TOUR = [
-        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que vous allez voir part d'ici. Moi, c'est Sir H. Gepeto, l'assistant virtuel de la place : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et vous pouvez arrêter la visite quand vous voulez." },
+        { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que vous allez voir part d'ici. Moi, c'est Sir H. Gepeto, le gérant du site : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et vous pouvez arrêter la visite quand vous voulez." },
         { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 36, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
         { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
         { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : vous écrivez les ingrédients que vous avez déjà, et il vous propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et votre liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
@@ -2782,7 +2782,7 @@ export function initHgpto() {
         document.getElementById('scard-bot').innerHTML = MINI_BOT;
         document.getElementById('scard-meta').textContent = "Sir H. Gepeto, " + outfitLabel() + decoStr;
         document.getElementById('scard-line').textContent = "Souvenir du " + dateStr + ", chez HP Outils (Terrebonne, Québec).";
-        scardText = "Photo souvenir avec Sir H. Gepeto, l'assistant virtuel d'HP Outils — " + outfitLabel() + ", le " + dateStr + ". " +
+        scardText = "Photo souvenir avec Sir H. Gepeto, le gérant du site HP Outils — " + outfitLabel() + ", le " + dateStr + ". " +
           (fromGame ? "Juste après notre partie de Serpents et échelles ! " : "") +
           "Des outils pour la vraie vie : hp-outils.com";
         document.getElementById('scard-share').textContent = scardText;
@@ -3146,7 +3146,7 @@ export function initHgpto() {
           : "Sir H. Gepeto a atteint la case 64 — des dés chanceux, rien d'autre !";
         document.getElementById('card-stats').textContent =
           "Lancers : " + G.rolls + " · Échelles montées : " + G.ladders + " · Serpents glissés : " + G.snakes;
-        shareText = "J'ai joué à Serpents et échelles contre Sir H. Gepeto, l'assistant virtuel d'HP Outils — " +
+        shareText = "J'ai joué à Serpents et échelles contre Sir H. Gepeto, le gérant du site HP Outils — " +
           (youWon ? "et j'ai gagné" : "et il a gagné, des dés chanceux") +
           " en " + G.rolls + " lancers, à nous deux ! Défie un ami de battre ton score ! hp-outils.com";
         document.getElementById('card-share').textContent = shareText;
@@ -3925,7 +3925,7 @@ export function initHgpto() {
           "Les deux ballons ont pété en même temps — les mouettes gagnent, cette manche-là.";
         document.getElementById('mg-card-stats').textContent =
           "Altitude atteinte : " + alt.toLocaleString('fr-CA') + " m · Anneaux — Toi " + MG.you.rings + " (+" + MG.you.bonus + ") · Sir H. Gepeto " + MG.bot.rings + " (+" + MG.bot.bonus + ") · Manches de la session — Toi " + mgSession.you + " · Sir H. Gepeto " + mgSession.bot;
-        mgShareText = "Montgolfière contre Sir H. Gepeto, l'assistant virtuel d'HP Outils : " +
+        mgShareText = "Montgolfière contre Sir H. Gepeto, le gérant du site HP Outils : " +
           (MG.winner === 'you' ? "j'ai gagné la manche" : MG.winner === 'bot' ? "il a gagné la manche" : "égalité, les deux ballons en même temps") +
           " à " + alt.toLocaleString('fr-CA') + " m d'altitude ! Anneaux : moi " + MG.you.rings + ", lui " + MG.bot.rings +
           ". Manches de notre session : moi " + mgSession.you + ", lui " + mgSession.bot + ". À toi de le défier ! hp-outils.com/jeux";
