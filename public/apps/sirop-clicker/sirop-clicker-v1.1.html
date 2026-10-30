@@ -448,7 +448,7 @@
 
       <div class="scene-foot">
         <span class="perclick" id="perClick">+1 par clic</span>
-        <span class="hint" id="hint">Clique sur l'érable, le sirop va couler !</span>
+        <span class="hint" id="hint">Clique sur l'érable (souris ou doigt), le sirop va couler !</span>
       </div>
     </div>
 
@@ -545,7 +545,7 @@
 </div>
 
 <footer>
-  <span>Sauvegarde automatique sur cet appareil · Aucun classement en ligne · Fonctionne entièrement hors-ligne · Sirop Clicker v1.1</span>
+  <span>Sauvegarde automatique sur cet appareil · Aucun classement en ligne · Fonctionne entièrement hors-ligne · Sirop Clicker v1.1 · <a href="/en-cuisine/">Recettes du Temps des sucres dans En cuisine →</a></span>
   <button class="buy" id="hardReset">Tout recommencer à zéro</button>
 </footer>
 
@@ -1234,7 +1234,7 @@ var Sirop = (function () {
     $("perClick").textContent = "+" + fmtRate(Sirop.clickValue(state, now)) + " par clic";
 
     var hint = $("hint");
-    if (state.clicks === 0) { hint.style.display = ""; hint.textContent = "Clique sur l'érable, le sirop va couler !"; }
+    if (state.clicks === 0) { hint.style.display = ""; hint.textContent = "Clique sur l'érable (souris ou doigt), le sirop va couler !"; }
     else if (state.chaudiere + state.tubulure === 0) { hint.style.display = ""; hint.textContent = "Jette un œil à la boutique →"; }
     else { hint.style.display = "none"; }
 

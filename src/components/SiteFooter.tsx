@@ -47,7 +47,7 @@ export function SiteFooter() {
           </p>
         </div>
         <div>
-          <h4>Me contacter</h4>
+          <h4>Contacter la direction humaine</h4>
           <p>
             <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a><br />
             <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a><br />

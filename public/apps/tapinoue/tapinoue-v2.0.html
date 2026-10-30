@@ -329,7 +329,7 @@
           <div class="choix" id="choixNoeud"></div>
         </div>
         <div class="etape" id="e3b">
-          <p class="etape-titre">Brosse son pelage : glisse ton doigt sur Tapinoue, jusqu'à ce que ça brille !</p>
+          <p class="etape-titre">Brosse son pelage : glisse ton doigt ou ta souris sur Tapinoue, jusqu'à ce que ça brille !</p>
           <div class="stage" id="stage3b"></div>
           <div class="jauge-wrap">
             <div class="jauge-label"><span>Pelage qui brille</span><span id="pct3">0 %</span></div>
@@ -488,6 +488,7 @@
           <button class="btn" id="btnFintabSuivant">Tableau suivant</button>
           <button class="btn vert" id="btnFintabRejouer">Rejouer ce tableau</button>
           <button class="btn secondaire" id="btnFintabTableaux">Tous les tableaux</button>
+          <p id="pontAteliers" style="display:none;margin-top:16px"><a href="/ateliers" style="display:inline-block;padding:10px 12px">Renseignements : atelier jeunesse et « Les enfants cuisinent » →</a></p>
         </div>
       </section>
     </div>
@@ -1546,6 +1547,7 @@
       $("#fintabTemps").textContent = "Tableau terminé en " + fmtTemps(temps) + " — " + etoiles + (etoiles > 1 ? " étoiles" : " étoile") + " !";
       $("#fintabResume").innerHTML = resumeLignes.map(l => "<li>" + l + "</li>").join("");
       $("#asuivre").style.display = n === 4 ? "block" : "none";
+      $("#pontAteliers").style.display = n === 4 ? "block" : "none";
       const suiv = $("#btnFintabSuivant");
       if (n < 4){
         suiv.style.display = "";

@@ -258,7 +258,7 @@
                 <path d="M86 92q9-6 7-16" stroke="#22303e" stroke-width="6" fill="none" stroke-linecap="round"/>
               </svg>
               <h2>Prêt à lancer&nbsp;?</h2>
-              <p><strong>Glisse ton doigt</strong> vers l’arrière pour viser — la trajectoire en pointillés apparaît — puis <strong>relâche</strong> pour lancer&nbsp;!</p>
+              <p><strong>Glisse ton doigt ou ta souris</strong> vers l’arrière pour viser — la trajectoire en pointillés apparaît — puis <strong>relâche</strong> pour lancer&nbsp;!</p>
               <p>Touche toutes les cibles avant de manquer de boules. Plus il t’en reste, plus tu gagnes de flocons&nbsp;!</p>
               <button class="btn primary" id="btnPlay" type="button">Jouer</button>
               <div class="levels-grid" id="levelsGrid" aria-label="Choisir un niveau"></div>
@@ -669,6 +669,11 @@
       }
       canvas.addEventListener('pointerup', release);
       canvas.addEventListener('pointercancel', function(){ aiming = false; });
+      /* Lot 2E — repli focus/onglet : la visée est remise à false, comme
+         sur pointercancel. Aucun lancer n'est déclenché (release n'est pas
+         appelée) : la boule reste disponible pour un nouvel essai. */
+      document.addEventListener('visibilitychange', function(){ if (document.hidden) aiming = false; });
+      window.addEventListener('blur', function(){ aiming = false; });
 
       // ---------- Physique ----------
       function burst(x, y, n, spread){

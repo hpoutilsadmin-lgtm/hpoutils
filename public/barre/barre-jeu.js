@@ -21,7 +21,10 @@
                          bouton qui ment ; voir CONFIGS plus bas)
      🏆 Partager mon score (navigator.share, repli copie du lien ;
                          score lu dans le DOM du jeu quand il est
-                         lisible, sinon texte de défi sans chiffre —
+                         lisible, sinon texte de défi sans chiffre ;
+                         lot 4B : libellé « Partager ce jeu » quand
+                         aucun score n'est lisible — jamais un bouton
+                         qui promet un score qu'il n'a pas) —
                          banque de défis HP : on défie sur le jeu,
                          jamais sur l'achat). Le lien partagé est
                          l'ADRESSE STABLE /apps/<slug> (vague 0,
@@ -115,7 +118,15 @@
       lien: { href: "/pdf/sans-honte-frigo", texte: "Le kit Sans Honte — Frigo : étirer chaque dollar sans gaspiller (5 $)" }
     },
     "/apps/caribou-run/caribou-run-v1.1.html": {
-      nom: "Caribou Run", score: ["#points", "#overScore"],
+      nom: "Caribou Run", score: ["#overScore"], scoreUnite: " m",
+      /* Lot 4B : #points = points en cours (★ pts), pas la distance
+         finale. Seule #overScore (distance finale, en m) est comparable
+         au record public (181 m). Mais #overOv est masqué par opacité,
+         pas par display:none : le test visible() ci-dessous le verrait
+         même pendant la partie, avec un chiffre périmé ou 0. scoreOk
+         exige donc l'overlay final ouvert ; sinon lireScore() rend
+         null et le partage part sans chiffre (branche texte). */
+      scoreOk: function () { var o = document.getElementById("overOv"); return !!o && !o.classList.contains("hidden"); },
       pause: { type: "gate" },
       tampons: ["maeva"]
     },
@@ -346,6 +357,7 @@
   /* ---------------- Partage ---------------- */
   function lireScore() {
     if (!cfg.score) return null;
+    if (cfg.scoreOk && !cfg.scoreOk()) return null;
     for (var i = 0; i < cfg.score.length; i++) {
       var e = document.querySelector(cfg.score[i]);
       if (!e || !visible(e)) continue;
@@ -392,7 +404,7 @@
     var score = lireScore();
     var url = urlStable();
     var texte = score
-      ? "Je joue à " + cfg.nom + " sur HP Outils — mon score : " + score + ". T'es pas game de me battre ?"
+      ? "Je joue à " + cfg.nom + " sur HP Outils — mon score : " + score + (cfg.scoreUnite || "") + ". T'es pas game de me battre ?"
       : "Je joue à " + cfg.nom + " sur HP Outils. T'es pas game de l'essayer ?";
     if (navigator.share) {
       navigator.share({ title: cfg.nom + " — HP Outils", text: texte, url: url })
@@ -660,8 +672,11 @@
 
     var part = el("button", "bj-btn bj-share");
     part.type = "button";
-    part.innerHTML = "🏆 Partager <span class=\"bj-long\">mon score</span>";
-    part.setAttribute("aria-label", "Partager mon score");
+    /* Lot 4B : libellé honnête — « mon score » seulement quand un
+       score est lisible (cfg.score) ; sinon « ce jeu », car le texte
+       partagé est alors la Branche texte, sans chiffre. */
+    part.innerHTML = "🏆 Partager <span class=\"bj-long\">" + (cfg.score ? "mon score" : "ce jeu") + "</span>";
+    part.setAttribute("aria-label", cfg.score ? "Partager mon score" : "Partager ce jeu");
     part.addEventListener("click", partager);
     bar.appendChild(part);
 
