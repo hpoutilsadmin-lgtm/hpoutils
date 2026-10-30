@@ -117,7 +117,7 @@ export const JOKES = [
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
 { t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — montre ça à quelqu'un, et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 36 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 + 1 CACHÉ" }
+        { t:"Envie de jouer en famille ? Il y a 37 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"37 + 1 CACHÉ" }
       ];
 export const BOOK_PITCHES = [
         { t:"Ce livre-là me donne le goût de te parler des nôtres : « Horizon Québec » (10 $) et « La faim justifie les moyens » (10 $) sont au catalogue, en PDF.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
@@ -132,7 +132,7 @@ export const ATELIER_PITCHES = [
       ];
 export const PITCHES = [
 { t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 36 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 + 1 CACHÉ" },
+        { t:"Envie de jouer en famille ? Il y a 37 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"37 + 1 CACHÉ" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper votre quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
         { t:"Vous avez des ingrédients qui traînent ? Tapez-les dans Recettes HP : 629 recettes gratuites à découvrir.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"629 RECETTES" },
@@ -305,7 +305,7 @@ export const FLASH_INFOS = [
   "Nos livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, le livre « Enfants cuisinent » 10 $.",
   "Les Passeurs de savoirs : l'accès aux 16 savoirs, 3 $ par mois, 28 $ par an — inscription par courriel, le paiement automatisé s'en vient.",
   "Nos ateliers : de 150 $ à 290 $ selon la formule, en vrai monde, avec du monde.",
-  "36 + 1 caché jeux gratuits, sans inscription — dont « Le Panier Solidaire », aussi dans En cuisine.",
+  "37 + 1 caché jeux gratuits, sans inscription — dont « Le Panier Solidaire », aussi dans En cuisine.",
   "« Futur simple », épisode 1 officiel, 26 octobre 2026, environ 7 minutes : « La première fois qu'on essaie cela. »",
   "Un jeu à l'image de votre commerce : de 29 $ à 399 $, hébergement gratuit la première année.",
   "Astuce : un fond de casserole qui attache ? Eau chaude et bicarbonate, on laisse tremper, on frotte doux.",
@@ -337,7 +337,7 @@ export const SITE_FACTS = {
           kits:   { nom:"Kits Sans Honte", prix:"5 $ le kit, bundle 40 $", url:"https://www.hp-outils.com/sans-honte" },
           livres: { nom:"Livres PDF", prix:"10 $ à 15 $", url:"https://www.hp-outils.com/livres-pdf" },
           recettes:{ nom:"Recettes HP", prix:"Gratuit — 629 recettes", url:"https://www.hp-outils.com/en-cuisine/" },
-          jeux:   { nom:"Jeux", prix:"Gratuit — 36 + 1 caché", url:"https://www.hp-outils.com/jeux" },
+          jeux:   { nom:"Jeux", prix:"Gratuit — 37 + 1 caché", url:"https://www.hp-outils.com/jeux" },
           ateliers:{ nom:"Ateliers", prix:"150 $ à 290 $", url:"https://www.hp-outils.com/ateliers" },
           passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois, 28 $ / an — accès aux 16 savoirs (inscription par courriel)", url:"https://www.hp-outils.com/les-passeurs" },
           balado: { nom:"Balado Futur simple", prix:"Gratuit, nouveaux épisodes quand ils sont prêts", url:"https://www.hp-outils.com/balado" },
@@ -420,8 +420,8 @@ export const KB = [
         { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
           a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
-        { q:"Vous avez quels jeux ?", s:"36 + 1 CACHÉ",
-          a:"36 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
+        { q:"Vous avez quels jeux ?", s:"37 + 1 CACHÉ",
+          a:"37 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"C'est quoi, IGLOO ?", s:"GRATUIT !",
           a:"IGLOO — La guerre des igloos : une bataille de boules de neige en arène ! Tu déploies tes cartes, tu défends ton igloo et tu fais tomber celui d'en face — et chaque bataille tire une loi du quartier au hasard. Campagne de 10 batailles, parties d'environ 3 minutes. Gratuit !",
@@ -455,6 +455,9 @@ export const KB = [
         { q:"C'est quoi, Anxiété, le jeu ?", s:"GRATUIT !",
           a:"Anxiété, le jeu : une semaine dans la peau d'Alex, qui vit avec un trouble anxieux — météo intérieure, pensées qui envahissent, crise traversée en douceur et outils réels, avec les ressources 811 et 988. Il sensibilise ; il ne pose pas de diagnostic. Gratuit, comme tous les jeux du site.",
           u:"https://www.hp-outils.com/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", l:"Jouer à Anxiété" },
+        { q:"C'est quoi, « Votre IA parle-t-elle québécois? » ?", s:"GRATUIT !",
+          a:"« Votre IA parle-t-elle québécois? » est un jeu gratuit de HP Outils, sans compte, sans minuteur et sans série. Vous donnez 20 expressions québécoises à votre assistant, vous collez sa réponse, et la page la note dans votre navigateur : réussi, c'est au moins 2 mots-clés du sens attendu, par expression. Vous pouvez aussi jouer en Express, 10 expressions tirées au hasard parmi les 20, ou en Duel, avec 2 réponses à comparer. Après la partie, vous recevez une carte de résultat à copier, et vous pouvez reprendre seulement les expressions manquées — ce score ne remplace pas la note sur 20. Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est gardé. Le lien « Retour au site HP Outils » vous ramène à l'Accueil. Après la partie, à venir : Le Contrat humain-IA, qui n'est pas encore en ligne, donc aucun lien pour le moment.",
+          u:"https://www.hp-outils.com/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html", l:"Jouer à Votre IA parle-t-elle québécois?" },
         { q:"Comment marchent les ateliers ?", s:"ATELIERS",
           a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (260 $), Manger mieux avec moins (260 $), L'IA sans jargon — régulière (220 $), l'atelier « Les enfants cuisinent » (190 $, 90 min), Atelier jeunesse (150 $), Hygiène & salubrité (150 $, 60 à 90 min). Pour l'Édition des Fêtes : le Pain maison à domicile (290 $, 3 h, 6 à 8 personnes, soit 36 $ à 48 $ par personne), L'IA sans jargon — Édition des Fêtes (220 $, 2 h, forfait groupe) et la conférence « La faim justifie les moyens » (220 $, cachet, 45 à 60 min + questions). Remplis le formulaire d'atelier sur la page Ateliers : dis-leur pour qui c'est, combien de personnes et quand tu vises — la direction humaine te répondra sous 3 jours ouvrables ! Horaires : réponses du lundi au vendredi, de 8 h à 16 h, sous 3 jours ouvrables ; ateliers lundi et mardi, de 9 h à 12 h et de 18 h à 21 h, vendredi, de 18 h à 21 h, dimanche, de 9 h à 12 h. Ateliers des Fêtes sur réservation et entente, le milieu d'accueil doit disposer d'un local cuisine — sauf la conférence « La faim justifie les moyens », exemptée (décision du 26 octobre 2026).",
           u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers" },
@@ -470,8 +473,8 @@ export const KB = [
         { q:"Combien coûtent les Passeurs de savoirs ?", s:"3 $ / MOIS",
           a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde. Honnêtement ? L'inscription est ouverte : écris à la direction humaine pour t'inscrire — elle te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient. Tu peux annuler en tout temps par courriel : l'annulation prend effet à la fin de la période déjà payée, sans frais ni pénalité. Avant un renouvellement annuel, la direction humaine te rappelle par courriel.",
           u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
-        { q:"Combien y a-t-il de jeux sur le site ?", s:"36 + 1 CACHÉ",
-          a:"36 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
+        { q:"Combien y a-t-il de jeux sur le site ?", s:"37 + 1 CACHÉ",
+          a:"37 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Comment chercher un jeu ?", s:"RECHERCHE",
           a:"Sur la page des jeux, tape un mot dans le champ « Chercher un jeu… » : la grille ne montre que les jeux dont le titre ou la description contient ce mot. Sans rien taper, tous les jeux s'affichent.",
@@ -550,7 +553,7 @@ export const KB = [
         { q:"C'est quoi, ton choix du moment ?", s:"MON CHOIX ♥", fn:"choix",
           a:"" },
         { q:"Montre-moi les jeux", s:"PAR ICI →", go:"sec-jeux",
-          a:"Les jeux sont là : 36 + 1 caché jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
+          a:"Les jeux sont là : 37 + 1 caché jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
         { q:"Montre-moi les kits", s:"PAR ICI →", go:"sec-kits",
           a:"Les kits Sans Honte sont juste là : 5 $ le kit, 15 thèmes du quotidien, et le bundle à 40 $." },
         { q:"Comment préparer mon testament ?", s:"5 $", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits",
@@ -722,7 +725,7 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
           u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
-          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 36 + 1 caché jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
+          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 37 + 1 caché jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" }
       ];
       /* L'alternative honnête : après une réponse qui présente un produit

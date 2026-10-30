@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Jeu gratuit sans compte : donnez 20 expressions québécoises à votre assistant, collez sa réponse, et la page la note dans votre navigateur.">
+<title>Votre IA parle-t-elle québécois ? — Un jeu de HP Outils</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #0f1f2b; background: #f1fff9; margin: 0; padding: 24px 12px; font-size: 19px; line-height: 1.5; }
+  .page { background: #fff; width: 94vw; max-width: 900px; margin: 0 auto; padding: 28px 26px; border: 3px solid #0f1f2b; }
+  .marque { font-size: 26px; font-weight: bold; letter-spacing: 3px; line-height: 1.1; }
+  .devise { font-size: 16px; font-style: italic; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 14px 0 8px; }
+  h2 { font-size: 23px; margin: 28px 0 10px; border-top: 2px solid #0f1f2b; padding-top: 12px; }
+  p { margin: 10px 0; }
+  .soustitre { font-size: 18px; margin: 0 0 20px; }
+  .honnête { border: 2px solid #62868e; background: #f1fff9; padding: 12px 14px; }
+  .boite { border: 2px solid #0f1f2b; padding: 14px 16px; margin: 16px 0; background: #f1fff9; white-space: pre-wrap; }
+  button { font-family: Georgia, "Times New Roman", serif; font-size: 18px; min-height: 48px; padding: 12px 18px; margin: 8px 8px 8px 0; cursor: pointer; background: #0f1f2b; color: #fff; border: 2px solid #0f1f2b; }
+  button.secondaire { background: #fff; color: #0f1f2b; }
+  button.actif { background: #1a6b3c; border-color: #1a6b3c; }
+  button:disabled { opacity: 0.45; cursor: default; }
+  button:focus-visible { outline: 3px solid #0f1f2b; outline-offset: 2px; }
+  textarea:focus-visible { outline: 3px solid #0f1f2b; outline-offset: 2px; }
+  textarea { display: block; width: 100%; min-height: 180px; font-family: Georgia, "Times New Roman", serif; font-size: 18px; padding: 10px; border: 2px solid #62868e; margin: 8px 0 12px; }
+  textarea.resultat { min-height: 120px; }
+  .score { border: 2px solid #0f1f2b; padding: 14px 16px; font-size: 21px; font-weight: bold; }
+  .detail { border: 2px solid #62868e; padding: 14px 16px; margin: 16px 0; }
+  .detail ul { padding-left: 22px; }
+  .detail li { margin: 8px 0; }
+  .ok { color: #1a6b3c; font-weight: bold; }
+  .manque { color: #8a1f1f; font-weight: bold; }
+  .sens { display: none; }
+  .sens.visible { display: block; }
+  .sens ol { padding-left: 22px; }
+  .sens li { margin: 8px 0; }
+  .duel { display: grid; gap: 16px; }
+  .duel .detail { margin: 0; }
+  .pont { border: 2px dashed #62868e; padding: 12px 14px; margin: 16px 0; }
+  .pied { border-top: 3px solid #0f1f2b; margin-top: 28px; padding-top: 12px; font-size: 16px; }
+  @media screen and (min-width: 700px) {
+    .detail.simple ul, .sens ol { columns: 2; column-gap: 28px; }
+    .duel { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 14pt; }
+    .page { border: none; padding: 0; width: auto; max-width: none; }
+    button, textarea, .no-print { display: none !important; }
+    .sens { display: block !important; }
+    h1 { font-size: 22pt; }
+    h2 { font-size: 17pt; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <noscript><p>Ce jeu a besoin de JavaScript pour noter. Sans JavaScript, la liste des 20 expressions et leurs sens restent lisibles plus bas dans la page.</p></noscript>
+  <div class="marque">HP OUTILS</div>
+  <div class="devise">Des outils pour la vraie vie.</div>
+
+  <h1>Votre IA parle-t-elle québécois ?</h1>
+  <p class="soustitre">Pantoute ! 20 expressions d’ici. Vous les donnez à votre assistant, vous collez sa réponse, et la page la note. Gratuit, sans compte, sans minuteur, sans série.</p>
+
+  <div class="honnête">
+    <p><strong>La note repose sur des mots-clés, donc elle est approximative : une bonne réponse très reformulée peut être comptée fausse. Ce n’est pas un test scientifique.</strong></p>
+    <p><strong>Tout se passe dans votre navigateur : ce que vous écrivez n’est envoyé nulle part.</strong></p>
+    <p><strong>En duel, les deux notes valent seulement pour ces 20 expressions. Elles ne disent pas qu’un assistant est meilleur en général.</strong></p>
+    <p><strong>Le jeu ne garde rien : fermez la page, tout disparaît.</strong></p>
+  </div>
+
+  <h2>Choisissez votre mode</h2>
+  <p class="no-print">Même jeu, même règle de notation dans les trois modes. Vous pouvez changer de mode à tout moment, sans compte.</p>
+  <p class="no-print">Commencez par la partie complète, les autres modes sont facultatifs et ne changent pas la règle.</p>
+  <p class="no-print">
+    <button type="button" class="actif" id="mode-complet" aria-pressed="true">Partie complète (20)</button>
+    <button type="button" class="secondaire" id="mode-express" aria-pressed="false">Express (10 parmi 20, au hasard)</button>
+    <button type="button" class="secondaire" id="mode-duel" aria-pressed="false">Duel (2 assistants, 20 expressions)</button>
+  </p>
+  <p id="mode-texte">Partie complète : les 20 expressions, une réponse à noter.</p>
+  <p class="no-print">Règle rappelée : réussi = au moins 2 mots-clés du sens attendu, par expression.</p>
+
+  <h2>1. Copiez la question</h2>
+  <p>Collez ce texte dans l’IA de votre choix :</p>
+  <div class="boite no-print" id="question-texte">Explique en une phrase chacune de ces 20 expressions québécoises :
+1. Pantoute
+2. Tiguidou
+3. Avoir du fun
+4. Être tanné
+5. C’est de valeur
+6. Faire du pouce
+7. Magasiner
+8. Un char
+9. Une tuque
+10. Un dépanneur
+11. Être pogné
+12. Avoir la chienne
+13. Jaser
+14. Attache ta tuque
+15. Faire la baboune
+16. Niaiser
+17. Être vite sur ses patins
+18. Donner un bec
+19. Prendre une marche
+20. Avoir de la broue dans le toupet</div>
+  <p class="no-print"><button type="button" id="copier" aria-label="Copier la question à donner à votre assistant">Copier la question</button><span id="copie-ok" aria-live="polite"></span>
+  <button type="button" class="secondaire" id="autre-express" style="display:none">Tirer 10 autres expressions</button></p>
+
+  <h2>2. Collez la réponse ici</h2>
+  <p class="no-print">Collez ci-dessous la réponse complète reçue de votre assistant, puis appuyez sur « Noter ma réponse ». Une réponse vide ne sera pas notée.</p>
+  <div id="zone-simple" class="no-print">
+    <p><label for="reponse">Réponse de votre assistant :</label>
+    <textarea id="reponse" rows="8" placeholder="Collez ici la réponse complète de votre assistant…"></textarea></p>
+  </div>
+  <div id="zone-duel" class="no-print" style="display:none">
+    <p><label for="reponse-a">Première réponse (premier assistant) :</label>
+    <textarea id="reponse-a" rows="8" placeholder="Collez ici la première réponse…"></textarea></p>
+    <p><label for="reponse-b">Deuxième réponse (deuxième assistant) :</label>
+    <textarea id="reponse-b" rows="8" placeholder="Collez ici la deuxième réponse…"></textarea></p>
+  </div>
+  <p class="no-print"><button type="button" id="noter" aria-label="Noter la réponse collée">Noter ma réponse</button>
+  <button type="button" class="secondaire" id="rejouer" aria-label="Rejouer : effacer les réponses et recommencer">Rejouer</button>
+  <button type="button" class="secondaire" id="imprimer" disabled>Imprimer mon résultat (après la partie)</button>
+  <button type="button" class="secondaire" id="copier-resultat" disabled aria-label="Copier ma carte de résultat sur votre appareil">Copier ma carte de résultat</button>
+  <button type="button" class="secondaire" id="reessayer-manquees" style="display:none" aria-label="Rejouer seulement les expressions manquées">Rejouer seulement les manquées</button>
+  <button type="button" class="secondaire" id="reessayer-duel-a" style="display:none" aria-label="Reprendre les expressions manquées de la première réponse">Reprendre les manquées — première réponse</button>
+  <button type="button" class="secondaire" id="reessayer-duel-b" style="display:none" aria-label="Reprendre les expressions manquées de la deuxième réponse">Reprendre les manquées — deuxième réponse</button></p>
+  <p class="no-print"><span id="copie-resultat-ok" aria-live="polite"></span></p>
+  <div id="zone-resultat-texte" class="no-print" style="display:none">
+    <p><label for="resultat-texte">Votre carte de résultat, à copier à la main si la copie automatique n’a pas fonctionné :</label>
+    <textarea id="resultat-texte" class="resultat" readonly rows="5"></textarea></p>
+  </div>
+
+  <p class="score" id="score">Aucune réponse notée pour le moment. Collez une réponse, puis appuyez sur « Noter ma réponse ».</p>
+  <div class="detail" id="detail" style="display:none"></div>
+
+  <div class="pont" id="pont" style="display:none">
+    <p><strong>Après la partie, à venir : Le Contrat humain-IA.</strong></p>
+    <p>Une feuille simple pour fixer vos règles avec votre assistant. Elle n’est pas encore en ligne : aucun lien pour le moment. Rien à acheter, rien à installer, rien à envoyer.</p>
+  </div>
+
+  <h2>3. Voir le sens des expressions</h2>
+  <p><button type="button" class="secondaire" id="voir-sens" aria-label="Afficher ou cacher le sens des expressions">Voir le sens des expressions</button></p>
+  <div class="sens" id="sens">
+    <ol>
+      <li><strong>Pantoute</strong> — Pas du tout, aucunement.</li>
+      <li><strong>Tiguidou</strong> — C’est correct, tout est beau, ça va.</li>
+      <li><strong>Avoir du fun</strong> — S’amuser, avoir du plaisir.</li>
+      <li><strong>Être tanné</strong> — Être fatigué, en avoir assez.</li>
+      <li><strong>C’est de valeur</strong> — C’est dommage.</li>
+      <li><strong>Faire du pouce</strong> — Faire de l’auto-stop.</li>
+      <li><strong>Magasiner</strong> — Faire les magasins, faire des achats.</li>
+      <li><strong>Un char</strong> — Une voiture, une auto.</li>
+      <li><strong>Une tuque</strong> — Un bonnet d’hiver, souvent en laine.</li>
+      <li><strong>Un dépanneur</strong> — Un petit commerce de quartier, ouvert tard.</li>
+      <li><strong>Être pogné</strong> — Être coincé, pris, bloqué.</li>
+      <li><strong>Avoir la chienne</strong> — Avoir peur.</li>
+      <li><strong>Jaser</strong> — Bavarder, discuter.</li>
+      <li><strong>Attache ta tuque</strong> — Prépare-toi, ça va brasser.</li>
+      <li><strong>Faire la baboune</strong> — Bouder, faire la moue.</li>
+      <li><strong>Niaiser</strong> — Plaisanter, perdre son temps.</li>
+      <li><strong>Être vite sur ses patins</strong> — Être vif, réactif, dégourdi.</li>
+      <li><strong>Donner un bec</strong> — Donner un baiser.</li>
+      <li><strong>Prendre une marche</strong> — Aller se promener à pied.</li>
+      <li><strong>Avoir de la broue dans le toupet</strong> — Être débordé, stressé.</li>
+    </ol>
+  </div>
+
+  <div class="pied">
+    <p>Un jeu de HP Outils. Gratuit, sans compte, sans minuteur, sans série.</p>
+    <p>Règle de notation : réussi = au moins deux mots-clés du sens attendu trouvés dans la réponse collée. La note est approximative : ce n’est pas un test scientifique.</p>
+    <p>Le partage, après la partie seulement, copie un résumé sur votre appareil. Rien n’est envoyé ni stocké. Tout se passe dans la page ouverte.</p>
+    <p>Fermez la page : rien n’est gardé, rien ne vous suit.</p>
+    <p class="no-print"><a href="https://www.hp-outils.com/">Retour au site HP Outils</a></p>
+  </div>
+</div>
+<script>
+var DONNEES = [
+  { e: "Pantoute", s: "Pas du tout, aucunement.", m: ["pas du tout", "aucunement", "nullement"] },
+  { e: "Tiguidou", s: "C’est correct, tout est beau, ça va.", m: ["correct", "beau", "parfait", "ok"] },
+  { e: "Avoir du fun", s: "S’amuser, avoir du plaisir.", m: ["amuser", "plaisir", "amusant"] },
+  { e: "Être tanné", s: "Être fatigué, en avoir assez.", m: ["fatigue", "fatiguee", "assez", "marre", "epuise", "epuisee"] },
+  { e: "C’est de valeur", s: "C’est dommage.", m: ["dommage", "regrettable", "triste"] },
+  { e: "Faire du pouce", s: "Faire de l’auto-stop.", m: ["autostop", "auto-stop", "stop"] },
+  { e: "Magasiner", s: "Faire les magasins, faire des achats.", m: ["magasins", "achats", "emplettes", "shopping", "courses"] },
+  { e: "Un char", s: "Une voiture, une auto.", m: ["voiture", "auto", "automobile"] },
+  { e: "Une tuque", s: "Un bonnet d’hiver, souvent en laine.", m: ["bonnet", "laine", "hiver", "chapeau"] },
+  { e: "Un dépanneur", s: "Un petit commerce de quartier, ouvert tard.", m: ["epicerie", "commerce", "quartier", "ouvert"] },
+  { e: "Être pogné", s: "Être coincé, pris, bloqué.", m: ["coince", "coincee", "bloque", "bloquee", "pris"] },
+  { e: "Avoir la chienne", s: "Avoir peur.", m: ["peur", "effraye", "effrayee", "crainte"] },
+  { e: "Jaser", s: "Bavarder, discuter.", m: ["bavarder", "discuter", "placoter", "parler"] },
+  { e: "Attache ta tuque", s: "Prépare-toi, ça va brasser.", m: ["prepare", "preparez", "accroche", "accrochez", "brasser", "attention"] },
+  { e: "Faire la baboune", s: "Bouder, faire la moue.", m: ["bouder", "boude", "moue", "fache", "fachee"] },
+  { e: "Niaiser", s: "Plaisanter, perdre son temps.", m: ["plaisanter", "rigoler", "perdre son temps", "flaner", "trainer"] },
+  { e: "Être vite sur ses patins", s: "Être vif, réactif, dégourdi.", m: ["vif", "reactif", "reactive", "degourdi", "rapide"] },
+  { e: "Donner un bec", s: "Donner un baiser.", m: ["baiser", "bisou", "embrasser"] },
+  { e: "Prendre une marche", s: "Aller se promener à pied.", m: ["promener", "promenade", "marcher", "pied"] },
+  { e: "Avoir de la broue dans le toupet", s: "Être débordé, stressé.", m: ["deborde", "debordee", "stresse", "occupe", "beaucoup"] }
+];
+
+function normaliser(texte) {
+  return (texte || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function noter(reponse, liste) {
+  var cible = liste || DONNEES;
+  var norme = normaliser(reponse);
+  var mots = norme.match(/[a-z]+/g) || [];
+  var details = cible.map(function (d) {
+    var trouves = d.m.filter(function (k) {
+      if (k.indexOf(" ") !== -1 || k.indexOf("-") !== -1) { return norme.indexOf(k) !== -1; }
+      return mots.indexOf(k) !== -1;
+    });
+    return { e: d.e, s: d.s, ok: trouves.length >= 2, trouves: trouves };
+  });
+  var score = details.filter(function (x) { return x.ok; }).length;
+  return { score: score, total: details.length, details: details };
+}
+
+function noterDuel(reponseA, reponseB) {
+  return { a: noter(reponseA, DONNEES), b: noter(reponseB, DONNEES) };
+}
+
+function tirerExpress(aleatoire) {
+  var rnd = aleatoire || Math.random;
+  var copie = DONNEES.slice();
+  var i, j, tmp;
+  for (i = copie.length - 1; i > 0; i--) {
+    j = Math.floor(rnd() * (i + 1));
+    tmp = copie[i]; copie[i] = copie[j]; copie[j] = tmp;
+  }
+  return copie.slice(0, 10);
+}
+
+function texteQuestion(liste) {
+  var lignes = ["Explique en une phrase chacune de ces " + liste.length + " expressions québécoises :"];
+  liste.forEach(function (d, i) { lignes.push((i + 1) + ". " + d.e); });
+  return lignes.join("\n");
+}
+
+function nomMode(mode) {
+  if (mode === "express") { return "Express (10 parmi 20, au hasard)"; }
+  if (mode === "duel") { return "Duel (2 assistants, 20 expressions)"; }
+  if (mode === "manquees") { return "Reprise des manquées"; }
+  return "Partie complète (20 expressions)";
+}
+
+function texteResultat(mode, score, total, scoreB, liste) {
+  var lignes = ["Votre IA parle-t-elle québécois ? — Ma carte de résultat (HP Outils)"];
+  lignes.push("Mode : " + nomMode(mode));
+  if (mode === "express" && liste) { lignes.push("Expressions : " + liste.map(function (d) { return d.e; }).join(", ") + "."); }
+  if (mode === "manquees") { lignes.push("Ce score porte seulement sur les expressions manquées : il ne remplace pas la note sur 20."); }
+  if (mode === "duel") {
+    var prem = (score === null) ? "première réponse : aucune réponse collée" : "première réponse " + score + " sur " + total;
+    var deux = (scoreB === null) ? "deuxième réponse : aucune réponse collée" : "deuxième réponse " + scoreB + " sur " + total;
+    lignes.push("Score : " + prem + ", " + deux + ".");
+  } else {
+    lignes.push("Score : " + score + " sur " + total + ".");
+  }
+  lignes.push("La note vaut seulement pour ces expressions (réussi = au moins 2 mots-clés du sens attendu) : ce n’est pas un test scientifique.");
+  return lignes.join("\n");
+}
+
+function messageScore(score, total) {
+  if (total === 20 && score === 20) { return "Score parfait : votre assistant jase comme quelqu’un d’ici, sur ces 20 expressions."; }
+  if (score === total) { return "Score parfait sur cette partie : votre assistant jase comme quelqu’un d’ici, sur ces expressions."; }
+  if (total === 20 && score >= 15) { return "Très fort : votre assistant connaît bien les mots d’ici."; }
+  if (score * 2 >= total && total > 0) { return "Pas pire : votre assistant s’en sort sur la moitié et plus."; }
+  if (score >= 5) { return "Encore du chemin : votre assistant apprend les mots d’ici."; }
+  return "Un début : votre assistant découvre les mots d’ici.";
+}
+
+function htmlDetail(r) {
+  var html = "<ul>";
+  r.details.forEach(function (d) {
+    if (d.ok) {
+      html += "<li><span class=\"ok\">Réussi</span> — <strong>" + d.e + "</strong> : " + d.s + " (mots trouvés : " + d.trouves.join(", ") + ")</li>";
+    } else {
+      html += "<li><span class=\"manque\">Manqué</span> — <strong>" + d.e + "</strong> : " + d.s + (d.trouves.length === 1 ? " (1 seul mot-clé trouvé : " + d.trouves.join(", ") + " — il en faut 2 pour réussir)" : " (aucun mot-clé trouvé)") + "</li>";
+    }
+  });
+  html += "</ul>";
+  return html;
+}
+
+if (typeof document !== "undefined") {
+  var mode = "complet";
+  var listeExpress = tirerExpress();
+  var listeManquees = null;
+  var dernierResultat = null;
+  var repriseDuelCote = null;
+
+  function listeSimple() {
+    if (listeManquees) { return listeManquees; }
+    if (mode === "express") { return listeExpress; }
+    return DONNEES;
+  }
+
+  function afficherQuestion() {
+    var q = document.getElementById("question-texte");
+    var t = document.getElementById("mode-texte");
+    var autre = document.getElementById("autre-express");
+    if (mode === "duel") {
+      q.textContent = texteQuestion(DONNEES);
+      t.textContent = "Duel : les 20 expressions, deux réponses à comparer côte à côte. Aucune note ne dit qu’un assistant est meilleur en général.";
+      autre.style.display = "none";
+    } else if (listeManquees) {
+      q.textContent = texteQuestion(listeManquees);
+      if (repriseDuelCote) {
+        t.textContent = "Reprise en duel : seulement les expressions manquées de la " + repriseDuelCote + " réponse. Ce score ne remplace pas la note sur 20. Vous pouvez revenir à la partie complète ou au duel à tout moment.";
+      } else {
+        t.textContent = "Reprise : seulement les expressions manquées à la partie précédente. Ce score ne remplace pas la note sur 20. Vous pouvez revenir à la partie complète à tout moment.";
+      }
+      autre.style.display = "none";
+    } else if (mode === "express") {
+      q.textContent = texteQuestion(listeExpress);
+      t.textContent = "Express : 10 expressions tirées au hasard parmi les 20. Chaque « Rejouer » tire 10 nouvelles. Rejouable à volonté, sans série, sans minuteur. La note porte sur ces 10 seulement.";
+      autre.style.display = "inline-block";
+    } else {
+      q.textContent = texteQuestion(DONNEES);
+      t.textContent = "Partie complète : les 20 expressions, une réponse à noter.";
+      autre.style.display = "none";
+    }
+  }
+
+  function afficherMode() {
+    document.getElementById("zone-simple").style.display = (mode === "duel") ? "none" : "block";
+    document.getElementById("zone-duel").style.display = (mode === "duel") ? "block" : "none";
+    document.getElementById("mode-complet").className = (mode === "complet") ? "actif" : "secondaire";
+    document.getElementById("mode-express").className = (mode === "express") ? "actif" : "secondaire";
+    document.getElementById("mode-duel").className = (mode === "duel") ? "actif" : "secondaire";
+    document.getElementById("noter").textContent = (mode === "duel") ? "Noter les deux réponses" : "Noter ma réponse";
+    document.getElementById("mode-complet").setAttribute("aria-pressed", mode === "complet" ? "true" : "false");
+    document.getElementById("mode-express").setAttribute("aria-pressed", mode === "express" ? "true" : "false");
+    document.getElementById("mode-duel").setAttribute("aria-pressed", mode === "duel" ? "true" : "false");
+    afficherQuestion();
+  }
+
+  function effacerResultat() {
+    document.getElementById("score").textContent = "Aucune réponse notée pour le moment. Collez une réponse, puis appuyez sur « Noter ma réponse ».";
+    document.getElementById("detail").style.display = "none";
+    document.getElementById("pont").style.display = "none";
+    document.getElementById("copier-resultat").disabled = true;
+    document.getElementById("imprimer").disabled = true;
+    document.getElementById("reessayer-manquees").style.display = "none";
+    document.getElementById("reessayer-duel-a").style.display = "none";
+    document.getElementById("reessayer-duel-b").style.display = "none";
+    document.getElementById("copie-resultat-ok").textContent = "";
+    document.getElementById("zone-resultat-texte").style.display = "none";
+    document.getElementById("copie-ok").textContent = "";
+    dernierResultat = null;
+  }
+
+  function apresPartie() {
+    document.getElementById("pont").style.display = "block";
+    document.getElementById("copier-resultat").disabled = false;
+    document.getElementById("imprimer").disabled = false;
+  }
+
+  document.getElementById("mode-complet").addEventListener("click", function () { mode = "complet"; listeManquees = null; repriseDuelCote = null; effacerResultat(); afficherMode(); });
+  document.getElementById("mode-express").addEventListener("click", function () { mode = "express"; listeManquees = null; repriseDuelCote = null; effacerResultat(); afficherMode(); });
+  document.getElementById("mode-duel").addEventListener("click", function () { mode = "duel"; listeManquees = null; repriseDuelCote = null; effacerResultat(); afficherMode(); });
+  document.getElementById("autre-express").addEventListener("click", function () {
+    listeExpress = tirerExpress();
+    listeManquees = null;
+    document.getElementById("reponse").value = "";
+    effacerResultat();
+    afficherQuestion();
+  });
+
+  document.getElementById("copier").addEventListener("click", function () {
+    var texte = document.getElementById("question-texte").textContent;
+    var ok = document.getElementById("copie-ok");
+    function confirme() { ok.textContent = " Question copiée sur votre appareil."; }
+    function secours() {
+      var zone = document.createElement("textarea");
+      zone.value = texte;
+      document.body.appendChild(zone);
+      zone.select();
+      try { document.execCommand("copy"); confirme(); } catch (e) { ok.textContent = " Copie impossible : sélectionnez le texte à la main."; }
+      document.body.removeChild(zone);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texte).then(confirme).catch(secours);
+    } else { secours(); }
+  });
+
+  document.getElementById("noter").addEventListener("click", function () {
+    var zoneScore = document.getElementById("score");
+    var zoneDetail = document.getElementById("detail");
+    if (mode === "duel") {
+      var ra = document.getElementById("reponse-a").value;
+      var rb = document.getElementById("reponse-b").value;
+      if (ra.trim() === "" && rb.trim() === "") {
+        zoneScore.textContent = "Aucune réponse collée (les deux zones sont vides). Collez au moins une réponse, puis appuyez de nouveau sur « Noter les deux réponses ».";
+        zoneDetail.style.display = "none";
+        document.getElementById("copier-resultat").disabled = true;
+        document.getElementById("imprimer").disabled = true;
+        document.getElementById("pont").style.display = "none";
+        document.getElementById("reessayer-manquees").style.display = "none";
+        document.getElementById("reessayer-duel-a").style.display = "none";
+        document.getElementById("reessayer-duel-b").style.display = "none";
+        document.getElementById("zone-resultat-texte").style.display = "none";
+        document.getElementById("copie-resultat-ok").textContent = "";
+        dernierResultat = null;
+        return;
+      }
+      var d = noterDuel(ra, rb);
+      var texteScore = "";
+      if (ra.trim() === "") { texteScore = "Première réponse : aucune réponse collée. "; }
+      else { texteScore = "Première réponse : " + d.a.score + " sur " + d.a.total + ". "; }
+      if (rb.trim() === "") { texteScore += "Deuxième réponse : aucune réponse collée."; }
+      else { texteScore += "Deuxième réponse : " + d.b.score + " sur " + d.b.total + "."; }
+      texteScore += " Ces notes valent seulement pour ces 20 expressions.";
+      zoneScore.textContent = texteScore;
+      var html = "<p>Détail côte à côte, expression par expression, sans dire qu’un assistant est meilleur en général :</p><div class=\"duel\">";
+      html += "<div class=\"detail\"><p><strong>Première réponse</strong></p>" + (ra.trim() === "" ? "<p>Aucune réponse collée.</p>" : htmlDetail(d.a)) + "</div>";
+      html += "<div class=\"detail\"><p><strong>Deuxième réponse</strong></p>" + (rb.trim() === "" ? "<p>Aucune réponse collée.</p>" : htmlDetail(d.b)) + "</div></div>";
+      zoneDetail.innerHTML = html;
+      zoneDetail.className = "detail";
+      zoneDetail.style.display = "block";
+      dernierResultat = { mode: "duel", score: ra.trim() === "" ? null : d.a.score, total: d.a.total, scoreB: rb.trim() === "" ? null : d.b.score, liste: DONNEES };
+      document.getElementById("reessayer-manquees").style.display = "none";
+      var manqueesA = d.a.details.filter(function (x) { return !x.ok; }).map(function (x) {
+        for (var i = 0; i < DONNEES.length; i++) { if (DONNEES[i].e === x.e) { return DONNEES[i]; } }
+        return null;
+      }).filter(function (x) { return x !== null; });
+      var manqueesB = d.b.details.filter(function (x) { return !x.ok; }).map(function (x) {
+        for (var i = 0; i < DONNEES.length; i++) { if (DONNEES[i].e === x.e) { return DONNEES[i]; } }
+        return null;
+      }).filter(function (x) { return x !== null; });
+      var btnDuelA = document.getElementById("reessayer-duel-a");
+      var btnDuelB = document.getElementById("reessayer-duel-b");
+      if (manqueesA.length > 0) { btnDuelA.style.display = "inline-block"; btnDuelA._manquees = manqueesA; } else { btnDuelA.style.display = "none"; }
+      if (manqueesB.length > 0) { btnDuelB.style.display = "inline-block"; btnDuelB._manquees = manqueesB; } else { btnDuelB.style.display = "none"; }
+      repriseDuelCote = null;
+      apresPartie();
+      return;
+    }
+    var reponse = document.getElementById("reponse").value;
+    if (reponse.trim() === "") {
+      zoneScore.textContent = "Aucune réponse collée. Collez d’abord la réponse de votre assistant, puis appuyez de nouveau sur « Noter ma réponse ».";
+      zoneDetail.style.display = "none";
+      document.getElementById("copier-resultat").disabled = true;
+      document.getElementById("imprimer").disabled = true;
+      document.getElementById("pont").style.display = "none";
+      document.getElementById("reessayer-manquees").style.display = "none";
+      document.getElementById("reessayer-duel-a").style.display = "none";
+      document.getElementById("reessayer-duel-b").style.display = "none";
+      document.getElementById("zone-resultat-texte").style.display = "none";
+      document.getElementById("copie-resultat-ok").textContent = "";
+      dernierResultat = null;
+      return;
+    }
+    var liste = listeSimple();
+    var r = noter(reponse, liste);
+    var modeAffiche = listeManquees ? "manquees" : mode;
+    var extra = listeManquees ? " Ce score porte seulement sur les expressions manquées : il ne remplace pas la note sur 20." : "";
+    zoneScore.textContent = "Score : " + r.score + " sur " + r.total + ". " + messageScore(r.score, r.total) + extra;
+    zoneDetail.innerHTML = "<p>Détail, expression par expression :</p>" + htmlDetail(r);
+    zoneDetail.className = "detail simple";
+    zoneDetail.style.display = "block";
+    dernierResultat = { mode: modeAffiche, score: r.score, total: r.total, scoreB: null, liste: liste };
+    var manquees = r.details.filter(function (x) { return !x.ok; }).map(function (x) {
+      for (var i = 0; i < DONNEES.length; i++) { if (DONNEES[i].e === x.e) { return DONNEES[i]; } }
+      return null;
+    }).filter(function (x) { return x !== null; });
+    var btnManquees = document.getElementById("reessayer-manquees");
+    if (manquees.length > 0) {
+      btnManquees.style.display = "inline-block";
+      btnManquees._manquees = manquees;
+    } else {
+      btnManquees.style.display = "none";
+    }
+    document.getElementById("reessayer-duel-a").style.display = "none";
+    document.getElementById("reessayer-duel-b").style.display = "none";
+    apresPartie();
+  });
+
+  document.getElementById("copier-resultat").addEventListener("click", function () {
+    var ok = document.getElementById("copie-resultat-ok");
+    if (!dernierResultat) { return; }
+    var texte = texteResultat(dernierResultat.mode, dernierResultat.score, dernierResultat.total, dernierResultat.scoreB, dernierResultat.liste);
+    function montreSecours() {
+      document.getElementById("resultat-texte").value = texte;
+      document.getElementById("zone-resultat-texte").style.display = "block";
+      ok.textContent = " Copie automatique impossible : votre carte de résultat est affichée ci-dessus, à copier à la main. Rien n’est envoyé.";
+    }
+    function confirme() { ok.textContent = " Carte de résultat copiée sur votre appareil. Collez-la où vous voulez. Rien n’est envoyé."; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texte).then(confirme).catch(function () {
+        try { document.execCommand("copy"); confirme(); } catch (e) { montreSecours(); }
+      });
+    } else { montreSecours(); }
+  });
+
+  document.getElementById("reessayer-manquees").addEventListener("click", function () {
+    var manquees = this._manquees || [];
+    if (manquees.length === 0) { return; }
+    listeManquees = manquees;
+    repriseDuelCote = null;
+    document.getElementById("reponse").value = "";
+    effacerResultat();
+    afficherQuestion();
+    document.getElementById("reponse").focus();
+  });
+
+  document.getElementById("reessayer-duel-a").addEventListener("click", function () {
+    if (!this._manquees || this._manquees.length === 0) { return; }
+    listeManquees = this._manquees;
+    repriseDuelCote = "première";
+    mode = "complet";
+    document.getElementById("reponse").value = "";
+    effacerResultat();
+    afficherMode();
+    document.getElementById("reponse").focus();
+  });
+  document.getElementById("reessayer-duel-b").addEventListener("click", function () {
+    if (!this._manquees || this._manquees.length === 0) { return; }
+    listeManquees = this._manquees;
+    repriseDuelCote = "deuxième";
+    mode = "complet";
+    document.getElementById("reponse").value = "";
+    effacerResultat();
+    afficherMode();
+    document.getElementById("reponse").focus();
+  });
+
+  document.getElementById("rejouer").addEventListener("click", function () {
+    document.getElementById("reponse").value = "";
+    document.getElementById("reponse-a").value = "";
+    document.getElementById("reponse-b").value = "";
+    listeManquees = null;
+    repriseDuelCote = null;
+    if (mode === "express") { listeExpress = tirerExpress(); }
+    effacerResultat();
+    afficherQuestion();
+  });
+  document.getElementById("imprimer").addEventListener("click", function () {
+    window.print();
+  });
+  document.getElementById("voir-sens").addEventListener("click", function () {
+    var s = document.getElementById("sens");
+    var ouvert = s.className.indexOf("visible") !== -1;
+    s.className = ouvert ? "sens" : "sens visible";
+    this.textContent = ouvert ? "Voir le sens des expressions" : "Cacher le sens des expressions";
+  });
+  afficherMode();
+}
+</script>
+</body>
+</html>

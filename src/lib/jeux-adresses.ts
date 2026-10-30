@@ -47,6 +47,7 @@ export const GAME_FILES: Record<string, string> = {
   "conception-de-molecules-3d": "/apps/conception-de-molecules-3d/conception-de-molecules-3d-v2.0.html",
   "hydro-electricite": "/apps/hydro-electricite/hydro-electricite-v1.1.html",
   "anxiete-le-jeu": "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html",
+  "votre-ia-parle-t-elle-quebecois": "/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html",
 };
 
 /** Adresse stable (partageable) d'un jeu, ex. « /apps/caribou-run ». */

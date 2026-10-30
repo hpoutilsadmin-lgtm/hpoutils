@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 36 + 1 caché en ligne | HP Outils",
-      description: "Des jeux gratuits créés au Québec — 36 + 1 caché : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
+      title: "Jeux gratuits en français du Québec — 37 + 1 caché en ligne | HP Outils",
+      description: "Des jeux gratuits créés au Québec — 37 + 1 caché : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
       path: "/jeux",
     }),
     scripts: [
@@ -73,6 +73,7 @@ const GAMES = [
   { title: "Conception de molécules 3D", file: "/apps/conception-de-molecules-3d/conception-de-molecules-3d-v2.0.html", copy: "Jeu de sciences 3D gratuit : un labo pour explorer l'ADN et fabriquer des remèdes, avec des missions sur de vraies molécules (aspirine, caféine, insuline…), en 4 niveaux.", tag: "Sciences · Molécules et ADN", faits: "4 niveaux · d'enfant à très avancé", mono: "M3", art: 3 },
   { title: "L'hydroélectricité, comment ça marche", file: "/apps/hydro-electricite/hydro-electricite-v1.1.html", copy: "Jeu éducatif gratuit : visite guidée d'une centrale hydroélectrique québécoise en suivant une goutte d'eau — barrage, turbine, alternateur… jusqu'à ta maison.", tag: "Éducatif · Centrale hydroélectrique", faits: "7 stations · pensée pour partir de zéro", mono: "HY", art: 0 },
   { title: "Anxiété, le jeu", file: "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", copy: "Jeu de sensibilisation gratuit : une semaine dans la peau d'Alex, qui vit avec un trouble anxieux — météo intérieure, pensées qui envahissent et outils réels pour traverser. Ce jeu ne pose pas de diagnostic.", tag: "Sensibilisation · Santé mentale", faits: "5 journées · ressources 811 et 988 incluses", mono: "AX", art: 5 },
+  { title: "Votre IA parle-t-elle québécois?", file: "/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html", copy: "Jeu gratuit : donnez 20 expressions québécoises à votre assistant, collez sa réponse, et la page la note dans votre navigateur. Modes complet, express et duel, carte de résultat à copier, rien n'est envoyé.", tag: "Québécois · IA et expressions", faits: "20 expressions · 3 modes · carte de résultat", mono: "IA", art: 0 },
 ];
 
 const PALETTES: [string, string][] = [
@@ -492,7 +493,7 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur HP 22 h 50 : 36 (= 35 jeux + tuile Panier, jouée dans En cuisine) + 1 caché, non nommé */}
+            {/* Compteur HP 22 h 50 : 37 (= 36 jeux + tuile Panier, jouée dans En cuisine) + 1 caché, non nommé */}
             <span style={CHIP_STYLE}>{GAMES.length + 1} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans ton navigateur</span>

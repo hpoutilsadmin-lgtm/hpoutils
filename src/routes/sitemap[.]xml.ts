@@ -44,7 +44,7 @@ const STATIC_PATHS = [
   "/outils-web/ca-vaut-tu-la-peine.html",
   "/outils-web/le-relais.html",
   "/outils-web/maintenant.html",
-  // Les 36 jeux gratuits + 1 caché (adresses stables /apps/<slug> — redirection 301 vers le fichier courant)
+  // Les 37 jeux gratuits + 1 caché (adresses stables /apps/<slug> — redirection 301 vers le fichier courant)
   "/apps/releve",
   "/apps/la-banque",
   "/apps/bons-reflexes",
@@ -80,6 +80,7 @@ const STATIC_PATHS = [
   "/apps/conception-de-molecules-3d",
   "/apps/hydro-electricite",
   "/apps/anxiete-le-jeu",
+  "/apps/votre-ia-parle-t-elle-quebecois",
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({
