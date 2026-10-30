@@ -185,7 +185,7 @@ function Index() {
               </Link>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>À toi l'histoire</h3>
-                <p>12 tomes interactifs : vous choisissez, l'histoire change. Le 1er est gratuit.</p>
+                <p>12 tomes au total : vous choisissez, l'histoire change. Le 1er est gratuit.</p>
                 <Link className="pillar-cta" to="/univers">Choisir votre histoire →</Link>
               </div>
             </article>
@@ -199,12 +199,12 @@ function Index() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les Passeurs</h3>
-              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, inscription ouverte — aucune taxe ajoutée.</p>
+              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, inscription par courriel ouverte, paiement automatisé s'en vient, aucun prélèvement sans confirmation. C'est un abonnement, pas un outil gratuit.</p>
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
             <article className="pillar-card">
               <h3>Le Passeur de savoir</h3>
-              <p>Les trucs et les savoirs de nos grands-parents, recueillis et transmis.</p>
+              <p>Les trucs et les savoirs de nos grands-parents, recueillis et transmis. Outil gratuit, sans compte — distinct de l'abonnement Les Passeurs.</p>
               <a className="pillar-cta" href="/passeur-de-savoir/">Ouvrir le Passeur →</a>
             </article>
             <article className="pillar-card">

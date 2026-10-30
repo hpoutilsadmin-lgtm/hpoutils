@@ -1,4 +1,4 @@
-// Fiche « Crée ton À toi l'histoire » — LOT 2, 5 $.
+// Fiche « Crée TON histoire » — LOT 2, 5 $.
 // CRÉATEUR, pas la série : l'utilisateur crée SA propre histoire à partir de
 // ses choix. Ce n'est PAS la série « À toi l'histoire » existante (12 tomes).
 // Textes 100 % originaux, adaptés du prototype `histoire-a-toi.html` (écrit
@@ -23,7 +23,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/cree-ton-histoire-a-toi")({
   head: () =>
     createSeoHead({
-      title: "Crée ton À toi l'histoire | HP Outils",
+      title: "Crée TON histoire | HP Outils",
       description:
         "Créez votre propre histoire : un prénom, 4 thèmes, 2 à 4 fins, un ton, une longueur — et le récit s'assemble d'un coup. Essai gratuit, sans compte. Vente pas encore ouverte.",
       path: "/cree-ton-histoire-a-toi",

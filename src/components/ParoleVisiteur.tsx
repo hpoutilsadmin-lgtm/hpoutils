@@ -6,7 +6,7 @@
 const CITATION_MAEVA = "Y'é tropppp cute hgpto ! C'tu une mascotte.";
 
 const REPLIQUE_HGPTO =
-  "Une mascotte ?! Minute ! Je suis un gnome magique érudit, moi. …Mais merci, Maëva — je le prends comme un compliment. On avance !";
+  "Une mascotte ?! Minute ! Je suis Sir H. Gepeto, le gérant du site, moi. …Mais merci, Maëva — je le prends comme un compliment. On avance !";
 
 export function ParoleVisiteur() {
   return (

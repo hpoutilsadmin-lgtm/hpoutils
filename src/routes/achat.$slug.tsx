@@ -103,7 +103,7 @@ function OffrirChoice({
         C'est pour offrir
       </label>
       <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65 }}>
-        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, un humain vous répond sous 3 jours ouvrables. En cas de remboursement, le lien est coupé.
+        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. En cas de remboursement, le lien est coupé.
       </p>
       {giftChecked && !giftConfirmed && (
         <div style={{ marginTop: 12 }}>
@@ -189,7 +189,7 @@ function Page() {
           )}
           {product.slug === "sans-honte-collection" && (
             <p style={{ maxWidth: 700, lineHeight: 1.65 }}>
-              Bundle Sans Honte — Choisissez 10 kits parmi 15, 40 $, aucune taxe ajoutée. Vous choisissez vos 10 kits, vous payez, vous recevez 10 liens de téléchargement, un par kit choisi, par courriel — chaque kit se télécharge séparément, comme les kits seuls à 5 $. Vous recevez : les 10 kits choisis, en PDF, à télécharger sur votre appareil. Durée : vos liens restent récupérables par « Récupérer un achat », avec votre courriel. Si ça ne marche pas : écrivez à la direction humaine, un humain vous répond sous 3 jours ouvrables. Si vous changez d'idée après paiement : les produits numériques ne sont pas remboursables, sauf en cas de panne technique — écrivez-nous, on regarde votre cas un par un.
+              Bundle Sans Honte — Choisissez 10 kits parmi 15, 40 $, aucune taxe ajoutée. Vous choisissez vos 10 kits, vous payez, vous recevez 10 liens de téléchargement, un par kit choisi, par courriel — chaque kit se télécharge séparément, comme les kits seuls à 5 $. Vous recevez : les 10 kits choisis, en PDF, à télécharger sur votre appareil. Durée : vos liens restent récupérables par « Récupérer un achat », avec votre courriel. Si ça ne marche pas : écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. Si vous changez d'idée après paiement : les produits numériques ne sont pas remboursables, sauf en cas de panne technique — écrivez-nous, on regarde votre cas un par un.
             </p>
           )}
         </div>

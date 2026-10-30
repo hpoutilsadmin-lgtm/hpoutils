@@ -192,7 +192,7 @@ function Page() {
               C'est pour offrir
             </label>
             <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65 }}>
-        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, un humain vous répond sous 3 jours ouvrables. En cas de remboursement, le lien est coupé.
+        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. En cas de remboursement, le lien est coupé.
       </p>
             {giftChecked && (
               <label style={{ fontSize: 14, fontWeight: 600 }}>
@@ -209,7 +209,7 @@ function Page() {
             )}
           </div>
 
-          <h2>Les 11 tomes</h2>
+          <h2>Les 11 tomes payants</h2>
           <div className="pillar-grid">
             {PAYANT_TOMES.map((tome) => (
               <article className="pillar-card" key={tome.slug}>
@@ -256,7 +256,7 @@ function Page() {
           <h2>Autre chose — Crée TON histoire</h2>
           <p>
             Ce n’est pas la série « À toi l’histoire » : ici, c’est vous qui
-            créez votre histoire — un prénom, 1 thème parmi 4, et 2, 3 ou 4 fins.
+            créez votre histoire — un prénom, 4 thèmes parmi 8, et 2, 3 ou 4 fins.
             Bientôt — vente pas encore ouverte, aucun achat possible pour
             l’instant. Prix prévu : 5 $, aucune taxe ajoutée.
           </p>

@@ -144,7 +144,7 @@ function Page() {
             <p>
               Ce lien d'annulation ne correspond à aucun abonnement. Si vous
               pensez qu'il s'agit d'une erreur, écrivez à la direction
-              humaine : une personne vous répond sous 3 jours ouvrables.
+              humaine : la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi.
             </p>
             <Link to="/les-passeurs">Retour aux Passeurs</Link>
           </div>
@@ -162,8 +162,7 @@ function Page() {
             <p>
               L'annulation n'a pas pu être traitée pour l'instant. Rien n'a
               été modifié. Réessayez dans quelques minutes, ou écrivez à la
-              direction humaine : une personne vous répond sous 3 jours
-              ouvrables.
+              direction humaine : la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi.
             </p>
             <Link to="/les-passeurs">Retour aux Passeurs</Link>
           </div>

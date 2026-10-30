@@ -53,7 +53,7 @@ const GAMES = [
   { title: "Mots de Chez Nous — mots cachés d'ici", file: "/apps/mots-de-chez-nous/mots-de-chez-nous-v1.0.html", copy: "Jeu de mots cachés gratuit : 665 mots d'ici à retrouver, définitions incluses, grilles de 6 à 10 mots.", tag: "Mots cachés · Mots d'ici", faits: "665 mots · grilles de 6 à 10 mots", mono: "MC", art: 5 },
   { title: "Mémoire des Cantons — jeu de mémoire du Québec", file: "/apps/memoire-des-cantons/memoire-des-cantons-v1.0.html", copy: "Jeu de mémoire gratuit aux icônes du Québec : retourne les cartes et retrouve les paires d'ici.", tag: "Mémoire · Icônes du Québec", mono: "MÉ", art: 1 },
   { title: "Tir de Boules de Neige — 50 niveaux", file: "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html", copy: "Jeu d'adresse gratuit : 50 niveaux de tir à la boule de neige, sauvegarde incluse.", tag: "Adresse · Tir et 50 niveaux", faits: "50 niveaux · sauvegarde incluse", mono: "TB", art: 0 },
-  { title: "Hockey 2 contre 2 — HGPTO & Pixel", file: "/apps/hockey-hgpto/hockey-hgpto-v1.0.html", copy: "Jeu de sport gratuit : une partie de hockey 2 contre 2 de 2 minutes — toi et ton gardien contre HGPTO et Pixel, la chatte gardienne. Attention à ses moments de distraction…", tag: "Sport · Hockey 2 contre 2", mono: "H2", art: 7 },
+  { title: "Hockey 2 contre 2 — Sir H. Gepeto & Pixel", file: "/apps/hockey-hgpto/hockey-hgpto-v1.0.html", copy: "Jeu de sport gratuit : une partie de hockey 2 contre 2 de 2 minutes — toi et ton gardien contre Sir H. Gepeto et Pixel, la chatte gardienne. Attention à ses moments de distraction…", tag: "Sport · Hockey 2 contre 2", mono: "H2", art: 7 },
   { title: "Ado odieux, adieu", file: "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html", copy: "Jeu d'humour et de choix gratuit : fais des mauvais coups sans te faire pogner… et assume la vraie sentence.", tag: "Humour · Mauvais coups", mono: "AO", art: 5 },
   { title: "Couleuvre du Québec — jeu du serpent", file: "/apps/couleuvre-du-quebec/couleuvre-du-quebec-v1.0.html", copy: "Jeu d'arcade gratuit, le serpent d'ici : souris, bestioles dorées, mouettes et vidanges.", tag: "Arcade · Serpent du Québec", mono: "CQ", art: 1 },
   { title: "Fusion Sirop — fusion à la cabane à sucre", file: "/apps/fusion-sirop/fusion-sirop-v1.0.html", copy: "Jeu de réflexion et de fusion gratuit, à la cabane à sucre : de la sève au pain de sucre.", tag: "Réflexion · Fusion à la cabane à sucre", mono: "FS", art: 3 },
@@ -795,7 +795,7 @@ function JeuxPage() {
 <section className="collections-strip">
         <div className="container" style={{ maxWidth: 720 }}>
           <span className="editorial-kicker">Infolettre</span>
-          <h2>Les nouveaux jeux <em>dans votre boîte</em></h2>
+          <h2>Les nouveaux jeux <em>à venir</em></h2>
           <p className="strip-intro">
             Nouveaux jeux, nouveaux tomes « À toi l'histoire », coulisses HP.
             Un courriel de temps en temps, jamais de spam.

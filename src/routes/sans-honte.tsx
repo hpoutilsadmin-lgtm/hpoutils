@@ -22,7 +22,7 @@ const FAQ = [
   },
   {
     q: "Combien de temps mon lien de téléchargement reste-t-il valide ?",
-    a: "Après le paiement, vous recevez un lien de téléchargement personnel, valide 7 jours. Téléchargez votre fichier dès que vous le recevez, et gardez-le.",
+    a: "Après le paiement, vous recevez un lien de téléchargement personnel, valide 7 jours. Téléchargez votre fichier dès que vous le recevez, et gardez-le. Passé ce délai, la page « Récupérer un achat » vous redonne accès à ce que vous avez acheté.",
   },
   {
     q: "Et si je ne retrouve plus mon achat ?",
@@ -180,7 +180,7 @@ function Page() {
               Ces kits aident à avancer à son rythme, une petite étape à la fois.{" "}
               <strong>Ils ne remplacent pas un professionnel de la santé.</strong> Certains parlent
               de moments lourds — Tenir Debout, Me Reconnaître, Proche Aidant, 72 Heures. Si ce que
-              tu traverses devient trop lourd — pour toi ou pour un proche que tu aides — de l'aide
+              vous traversez devient trop lourd — pour vous ou pour un proche que vous aidez — de l'aide
               existe, gratuite et sans jugement :
             </p>
             <ul style={{ fontSize: 16, lineHeight: 1.7, color: "#3a2a20", marginBottom: 10, paddingLeft: 20 }}>
@@ -194,7 +194,7 @@ function Page() {
               </li>
             </ul>
             <p style={{ fontSize: 16, lineHeight: 1.7, color: "#3a2a20" }}>
-              Les organismes d'aide et d'écoute de ta région peuvent aussi t'accompagner. Pour les
+              Les organismes d'aide et d'écoute de votre région peuvent aussi vous accompagner. Pour les
               proches aidants, L'Appui est là pour ça.
             </p>
           </div>
