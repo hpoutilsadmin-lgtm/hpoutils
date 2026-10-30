@@ -21,10 +21,12 @@ import { template as purchaseRecovery } from './purchase-recovery'
 import { template as purchaseDelivery } from './purchase-delivery'
 import { template as tomeDelivery } from './tome-delivery'
 import { template as giftDelivery } from './gift-delivery'
+import { template as passeursBienvenue } from './passeurs-bienvenue'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'purchase-recovery': purchaseRecovery,
   'purchase-delivery': purchaseDelivery,
   'tome-delivery': tomeDelivery,
   'gift-delivery': giftDelivery,
+  'passeurs-bienvenue': passeursBienvenue,
 }
