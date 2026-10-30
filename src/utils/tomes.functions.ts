@@ -130,7 +130,7 @@ export const createTomeCheckoutSession = createServerFn({ method: "POST" })
         ui_mode: "hosted_page",
         success_url: `${origin}/lire/merci?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/lire/`,
-        automatic_tax: { enabled: true },
+        automatic_tax: { enabled: false },
         // [MEL-002 29 oct 2026] « auto » : Stripe n exige l adresse que si le paiement
         // l exige vraiment. À 0,00 $ (coupon 100 %), le champ ne bloque plus.
         billing_address_collection: "auto",

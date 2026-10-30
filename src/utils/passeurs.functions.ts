@@ -86,7 +86,7 @@ export const createPasseursCheckoutSession = createServerFn({ method: "POST" })
         ui_mode: "embedded_page",
         return_url: returnUrl,
         // Petit fournisseur : aucune taxe perçue (Stripe Tax calcule 0,00 $).
-        automatic_tax: { enabled: true },
+        automatic_tax: { enabled: false },
         // [MEL-002 29 oct 2026] « auto » : Stripe n'exige l'adresse que si
         // le paiement l'exige vraiment.
         billing_address_collection: "auto",

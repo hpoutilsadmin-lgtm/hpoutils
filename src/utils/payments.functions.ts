@@ -117,7 +117,7 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
         // Stripe Tax calcule TPS/TVQ à partir de l'adresse de facturation.
         // Tous les produits doivent avoir un tax_code (txcd_10000000 — biens
         // numériques) — voir scripts/setup-tax-codes.functions.ts.
-        automatic_tax: { enabled: true },
+        automatic_tax: { enabled: false },
         // [MEL-002 29 oct 2026] « auto » : Stripe n exige l adresse que si le paiement
         // l exige vraiment. À 0,00 $ (coupon 100 %), le champ ne bloque plus.
         billing_address_collection: "auto",
