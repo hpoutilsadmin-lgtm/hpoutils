@@ -316,10 +316,11 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceId: "enfants_cuisinent_pdf_10",
     slug: "enfants-cuisinent",
     title: "Les enfants cuisinent pour faire plaisir",
-    seoDescription: "Cuisiner avec les enfants, pour le plaisir, pas la performance : essayer, rater, goûter, offrir. PDF familles et écoles, 10 $ CAD, aucune taxe ajoutée.",
+    seoDescription: "Bientôt. Prix prévu 10 $, aucune taxe ajoutée. Aucun achat pour le moment, aucun paiement pris.",
     pdfPath: "enfants-cuisinent.pdf",
     downloadFileName: "Les-enfants-cuisinent.pdf",
-    priceLabel: "10 $ CAD, aucune taxe ajoutée",
+    priceLabel: "Bientôt. Prix prévu 10 $, aucune taxe ajoutée. Aucun achat pour le moment, aucun paiement pris.",
+    purchaseHold: "Bientôt. Prix prévu 10 $, aucune taxe ajoutée. Aucun achat pour le moment, aucun paiement pris.",
     blurb:
       "Un projet doux pour transmettre le plaisir, pas la performance. Téléchargement immédiat après paiement.",
     cover: "/images/cover-enfants.jpg",
