@@ -132,7 +132,7 @@ function Page() {
           vrai. Aucun jeu ne sort sans avoir été testé sur téléphone avant
           livraison — et vous testez le prototype sur VOTRE téléphone avant de
           dire oui. Une ronde de corrections est incluse. Ce que personne ne
-          peut recréer : Sir H. Gepeto, l&apos;assistant virtuel d&apos;HP Outils, qui salue le
+          peut recréer : Sir H. Gepeto, l&apos;gérant du site d&apos;HP Outils, qui salue le
           joueur et présente le jeu ; le jeu qui vit sur hp-outils.com, la
           maison où vivent aussi les livres, les recettes, les outils et le
           balado ; et le prix petit commerce.
