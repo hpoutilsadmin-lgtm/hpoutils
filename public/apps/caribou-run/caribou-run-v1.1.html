@@ -7,9 +7,7 @@
 <meta name="description" content="Caribou Run — un endless runner québécois : saute les bancs de neige, baisse-toi sous les branches et échappe à la déneigeuse!" />
 <link rel="icon" href="data:," />
 <title>Caribou Run v1.1</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<!-- Polices systeme seulement : aucun chargement Google Fonts (lot nuit 1C, en attente de go). -->
 <style>
 :root{
   --bg:#dcebf7;
@@ -41,7 +39,7 @@
 html,body{height:100%}
 body{
   margin:0;
-  font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
   background:var(--bg-grad);
   color:var(--ink);
   display:flex;flex-direction:column;align-items:center;
@@ -73,8 +71,8 @@ body{
   border-radius:14px;padding:7px 16px 8px;color:#fff;text-align:right;
   min-width:118px;
 }
-.score-box .dist{font-family:'Baloo 2',cursive;font-weight:800;font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
-.score-box .points{font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;line-height:1.15;color:#ffd76e;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.score-box .dist{font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-weight:800;font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
+.score-box .points{font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-weight:800;font-size:17px;line-height:1.15;color:#ffd76e;font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .score-box .best{font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.85;font-variant-numeric:tabular-nums}
 .hud-left{display:flex;gap:8px;pointer-events:auto}
 .icon-btn{
@@ -95,7 +93,7 @@ body{
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast.warn{
   background:repeating-linear-gradient(-45deg,#c8372d 0 18px,#96291f 18px 36px);
-  border-color:#ffd9a0;font-family:'Baloo 2',cursive;font-size:17px;letter-spacing:.04em;
+  border-color:#ffd9a0;font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-size:17px;letter-spacing:.04em;
 }
 .overlay{
   position:absolute;inset:0;z-index:6;
@@ -112,7 +110,7 @@ body{
   box-shadow:0 24px 60px rgba(4,10,22,.4);
 }
 .game-title{
-  font-family:'Baloo 2',cursive;font-weight:800;
+  font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-weight:800;
   font-size:clamp(38px,7vw,58px);line-height:.95;margin:0 0 2px;
   color:var(--ink);
 }
@@ -123,7 +121,7 @@ body{
   background:rgba(127,168,210,.14);border:1px solid var(--card-border);
   border-radius:16px;padding:12px 10px;
 }
-.ctrl h3{margin:0 0 6px;font-family:'Baloo 2',cursive;font-size:17px;letter-spacing:.03em}
+.ctrl h3{margin:0 0 6px;font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-size:17px;letter-spacing:.03em}
 .ctrl p{margin:0;font-size:13px;color:var(--ink-soft);font-weight:600;line-height:1.45}
 .keys{margin-bottom:6px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 .key{
@@ -136,9 +134,9 @@ body{
   background:repeating-linear-gradient(-45deg,rgba(200,55,45,.16) 0 14px,rgba(200,55,45,.07) 14px 28px);
   border:1px dashed var(--accent);font-size:13.5px;font-weight:700;line-height:1.5;
 }
-.warn-strip b{color:var(--accent);font-family:'Baloo 2',cursive;letter-spacing:.05em;font-size:15px}
+.warn-strip b{color:var(--accent);font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;letter-spacing:.05em;font-size:15px}
 .btn{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:21px;
+  font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-weight:800;font-size:21px;
   background:linear-gradient(180deg,var(--accent),var(--accent-dark));
   color:#fff;border:none;border-radius:16px;padding:13px 34px;cursor:pointer;
   box-shadow:0 5px 0 var(--accent-dark),0 10px 24px rgba(0,0,0,.25);
@@ -147,7 +145,7 @@ body{
 .btn:hover{filter:brightness(1.06)}
 .btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--accent-dark)}
 .fineprint{margin:14px 0 0;font-size:12px;color:var(--ink-soft);font-weight:600}
-.over-score{font-family:'Baloo 2',cursive;font-weight:800;font-size:56px;line-height:1;margin:2px 0 0}
+.over-score{font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-weight:800;font-size:56px;line-height:1;margin:2px 0 0}
 .over-unit{font-size:22px;color:var(--ink-soft);font-weight:700}
 .over-best{
   display:inline-block;margin:8px 0 12px;padding:6px 18px;border-radius:999px;
@@ -162,8 +160,8 @@ body{
 }
 .over-msg{font-size:17px;font-weight:700;margin:0 0 20px;line-height:1.5;min-height:52px}
 .caption{font-size:12.5px;color:var(--ink-soft);font-weight:600;text-align:center;margin:0;padding:0 8px}
-/* ---- v2 : boutique & pommes de pin ---- */
-.btn2{font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;background:transparent;color:var(--ink);border:2px solid var(--card-border);border-radius:14px;padding:10px 22px;cursor:pointer;transition:transform .08s ease,filter .12s ease}
+/* ---- v2 : récompenses & pommes de pin ---- */
+.btn2{font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-weight:800;font-size:17px;background:transparent;color:var(--ink);border:2px solid var(--card-border);border-radius:14px;padding:10px 22px;cursor:pointer;transition:transform .08s ease,filter .12s ease}
 .btn2:hover{filter:brightness(1.08)}
 .btn2:active{transform:translateY(2px)}
 .btn2:disabled{opacity:.45;cursor:not-allowed;transform:none;filter:none}
@@ -172,17 +170,17 @@ body{
 .cone-ico{width:20px;height:20px;flex:0 0 auto}
 .earned{font-weight:800;font-size:16px;margin:0 0 16px;line-height:1.5}
 .shop-card{text-align:left;max-width:640px}
-.shop-title{text-align:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(28px,5vw,40px);margin:0 0 2px;color:var(--ink)}
+.shop-title{text-align:center;font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-weight:800;font-size:clamp(28px,5vw,40px);margin:0 0 2px;color:var(--ink)}
 .shop-title .run{color:var(--accent)}
 .shop-card .tagline{text-align:center}
 .shop-balance{text-align:center;font-weight:800;font-size:17px;margin:4px 0 16px;padding:10px;border-radius:14px;background:rgba(122,74,34,.12);border:1px solid var(--card-border)}
-#shopCones{font-family:'Baloo 2',cursive;font-size:26px;color:var(--accent)}
+#shopCones{font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-size:26px;color:var(--accent)}
 #ups{display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
 .up-row{display:flex;gap:12px;align-items:center;border:1px solid var(--card-border);border-radius:16px;padding:12px;background:rgba(127,168,210,.10)}
 .up-ico{flex:0 0 46px;width:46px;height:46px;border-radius:13px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center}
 .up-ico svg{width:26px;height:26px}
 .up-info{flex:1;min-width:0}
-.up-info h4{margin:0 0 3px;font-family:'Baloo 2',cursive;font-size:17px;letter-spacing:.02em}
+.up-info h4{margin:0 0 3px;font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-size:17px;letter-spacing:.02em}
 .up-info p{margin:0 0 7px;font-size:13px;color:var(--ink-soft);font-weight:600;line-height:1.42}
 .pips{display:flex;gap:6px}
 .pip{width:22px;height:10px;border-radius:99px;background:rgba(127,168,210,.3)}
@@ -205,13 +203,13 @@ body{
 
 /* ---- v1.1 : fantômes + pelages ---- */
 .ver{font-weight:800;color:var(--accent)}
-.sec-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:24px;margin:20px 0 2px;text-align:center;letter-spacing:.02em}
+.sec-title{font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-weight:800;font-size:24px;margin:20px 0 2px;text-align:center;letter-spacing:.02em}
 .sec-tag{text-align:center;font-size:13.5px;color:var(--ink-soft);font-weight:700;margin:0 0 12px}
 .skin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0 0 6px}
 .skin-card{border:1px solid var(--card-border);border-radius:16px;padding:10px;background:rgba(127,168,210,.10);text-align:center}
 .skin-card.active{border:2px solid var(--accent);padding:9px}
 .skin-prev{width:100%;height:auto;border-radius:10px;background:linear-gradient(180deg,#bcdcf5 0%,#eef4fb 65%,#f7f2e7 100%);display:block;margin-bottom:6px}
-.skin-card h4{margin:0 0 2px;font-family:'Baloo 2',cursive;font-size:16px;letter-spacing:.02em}
+.skin-card h4{margin:0 0 2px;font-family:ui-rounded, 'Trebuchet MS', 'Segoe UI', Verdana, system-ui, sans-serif;font-size:16px;letter-spacing:.02em}
 .skin-card p{margin:0 0 8px;font-size:12px;color:var(--ink-soft);font-weight:600;line-height:1.4;min-height:34px}
 .skin-card .btn2{font-size:14px;padding:8px 14px;width:100%}
 .code-input{width:100%;font-size:14px;font-weight:700;padding:11px 13px;border-radius:12px;border:1px solid var(--card-border);background:rgba(127,168,210,.12);color:var(--ink);margin:4px 0 10px}
@@ -273,7 +271,7 @@ body{
       <p class="warn-strip"><b>DÉNEIGEUSE!</b><br/>Si tu en vois une arriver… saute au bon moment. Elle ne fait pas dans la dentelle.</p>
       <div class="menu-meta">
         <span class="cone-pill"><svg class="cone-ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="14.5" rx="6.5" ry="7" fill="#7a4a22"/><path d="M5.5 9.5Q12 5 18.5 9.5 12 7.6 5.5 9.5" fill="#5c3416"/><path d="M6.8 13.5Q12 10.8 17.2 13.5M7.8 17Q12 15 16.2 17" stroke="#5c3416" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg> <span id="menuCones">0</span> pommes</span>
-        <button class="btn2" id="shopBtn">La boutique</button>
+        <button class="btn2" id="shopBtn">Mes récompenses</button>
         <button class="btn2" id="ghostBtn">👻 Fantôme d’ami</button>
       </div>
       <div class="menu-meta" id="ghostChipWrap" style="display:none;margin-top:2px">
@@ -301,7 +299,7 @@ body{
       </div>
       <div class="menu-meta">
         <span class="cone-pill"><svg class="cone-ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="14.5" rx="6.5" ry="7" fill="#7a4a22"/><path d="M5.5 9.5Q12 5 18.5 9.5 12 7.6 5.5 9.5" fill="#5c3416"/><path d="M6.8 13.5Q12 10.8 17.2 13.5M7.8 17Q12 15 16.2 17" stroke="#5c3416" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg> <span id="overConesTotal">0</span> pommes</span>
-        <button class="btn2" id="shopBtn2">La boutique</button>
+        <button class="btn2" id="shopBtn2">Mes récompenses</button>
       </div>
       <p class="fineprint">Ou appuie sur ESPACE pour repartir.</p>
     </div>
@@ -309,8 +307,8 @@ body{
 
   <div class="overlay hidden" id="shopOv">
     <div class="card shop-card">
-      <h2 class="shop-title">La boutique du <span class="run">caribou</span></h2>
-      <p class="tagline">Payé cash en pommes de pin. Pas de crédit, pas de rabais.</p>
+      <h2 class="shop-title">Les récompenses du <span class="run">caribou</span></h2>
+      <p class="tagline">Que des pommes de pin gagnées en courant. Aucun argent réel.</p>
       <div class="shop-balance"><span id="shopCones">0</span> pommes de pin dans le sac</div>
       <div id="ups"></div>
       <p class="shop-msg" id="shopMsg"></p>
@@ -346,7 +344,7 @@ body{
     </div>
   </div>
 </div>
-<p class="caption">Clavier : ESPACE ou ↑ pour sauter · ↓ pour se baisser · Sur mobile : tap pour sauter, glisse vers le bas pour se baisser</p>
+<p class="caption">Clavier : ESPACE ou ↑ pour sauter · ↓ pour se baisser · Sur mobile : tap pour sauter, glisse vers le bas pour se baisser · À la souris : clique pour sauter, glisse vers le bas pour se baisser</p>
 <script>
 (() => {
 'use strict';
@@ -1182,7 +1180,7 @@ function skinCardHTML(s){
   else if(owned) btn='<button class="btn2" data-wear="'+s.id+'">Porter</button>';
   else if(s.price) btn='<button class="btn2" data-buyskin="'+s.id+'"><span class="cone-mini">'+CONE_SVG+'</span> '+s.price+'</button>';
   else btn='<button class="btn2" disabled>'+unlockLabel(s.unlock)+'</button>';
-  const sub=active?'Ton look actuel.':owned?'Dans ta garde-robe.':(s.price?'Pay\u00e9 cash en pommes de pin.':s.desc);
+  const sub=active?'Ton look actuel.':owned?'Dans ta garde-robe.':(s.price?'À débloquer en pommes de pin.':s.desc);
   return '<div class="skin-card'+(active?' active':'')+'">'
     +'<canvas class="skin-prev" width="150" height="115" data-skin="'+s.id+'"></canvas>'
     +'<h4>'+s.name+'</h4><p>'+sub+'</p>'+btn+'</div>';
@@ -1438,7 +1436,7 @@ function drawPlow(o){
   g.fillRect(x+2,gy-100,92,10);
   // inscription
   g.fillStyle='rgba(60,35,5,.85)';
-  g.font='800 11px Nunito,sans-serif'; g.textAlign='center';
+  g.font='800 11px system-ui, sans-serif'; g.textAlign='center';
   g.fillText('DÉNEIGEUSE',x+48,gy-52);
   // cabine (avant, à gauche = face au caribou)
   g.fillStyle='#f0b52a';
@@ -1615,7 +1613,7 @@ function finishDeath(){
   overBest.textContent='Meilleur : '+G.best+' m';
   overBest.classList.toggle('record',isRecord);
   if(isRecord) overBest.textContent='NOUVEAU RECORD : '+G.best+' m!';
-  overCones.textContent=gain>0?('+'+gain+' pomme'+(gain>1?'s':'')+' de pin! Total : '+cones+' — la boutique t\u2019attend.')
+  overCones.textContent=gain>0?('+'+gain+' pomme'+(gain>1?'s':'')+' de pin! Total : '+cones+' — tes récompenses t\u2019attendent.')
     :'Cette fois, aucune pomme de pin... cours plus loin!';
   const msg=OBS[P.hitType]?OBS[P.hitType].msg:DEATH_GENERIC[0];
   overMsg.textContent=(Math.random()<0.75?msg:DEATH_GENERIC[Math.floor(Math.random()*DEATH_GENERIC.length)])+'  ('+m+' m — pas pire!)'+ghostNote;
@@ -1628,7 +1626,7 @@ function restartGame(){
   G.state=ST.RUN; G.paused=false;
 }
 
-/* ============================== Boutique ============================== */
+/* ============================== Récompenses ============================== */
 const UP_ICONS={
   jump:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M5 11l7-7 7 7"/></svg>',
   shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l8 3.5V11c0 4.8-3.4 7.8-8 9.5C7.4 18.8 4 15.8 4 11V6.5L12 3z"/><path d="M12 8.5v5" stroke-linecap="round"/></svg>',
@@ -1656,7 +1654,7 @@ function renderShop(){
   }).join('');
   upsEl.querySelectorAll('.buy').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); buy(b.getAttribute('data-id')); }));
   upsEl.innerHTML+='<h3 class="sec-title">\u{1f98c} La garde-robe du caribou</h3>'
-    +'<p class="sec-tag">Le style, \u00e7a se m\u00e9rite. Ou \u00e7a s\u2019ach\u00e8te en pommes de pin.</p>'
+    +'<p class="sec-tag">Le style, \u00e7a se m\u00e9rite. Ou \u00e7a se débloque en pommes de pin gagnées en courant.</p>'
     +'<div class="skin-grid">'+SKINS.map(skinCardHTML).join('')+'</div>';
   upsEl.querySelectorAll('.skin-prev').forEach(cv2=>{
     const s=skinById(cv2.getAttribute('data-skin'));
@@ -2272,7 +2270,7 @@ function drawRings(){
   g.globalAlpha=1;
 }
 function drawFloaters(){
-  g.textAlign='center'; g.font='800 19px Nunito,sans-serif';
+  g.textAlign='center'; g.font='800 19px system-ui, sans-serif';
   for(const f of floaters){
     const a=1-f.t/f.life;
     g.globalAlpha=a; g.fillStyle='#ffd76e';

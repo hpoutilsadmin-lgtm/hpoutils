@@ -174,7 +174,7 @@ body{
 }
 .over-msg{font-size:17px;font-weight:700;margin:0 0 20px;line-height:1.5;min-height:52px}
 .caption{font-size:12.5px;color:var(--ink-soft);font-weight:600;text-align:center;margin:0;padding:0 8px}
-/* ---- v2 : boutique & pommes de pin ---- */
+/* ---- v2 : récompenses & pommes de pin ---- */
 .btn2{font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;background:transparent;color:var(--ink);border:2px solid var(--card-border);border-radius:14px;padding:10px 22px;cursor:pointer;transition:transform .08s ease,filter .12s ease}
 .btn2:hover{filter:brightness(1.08)}
 .btn2:active{transform:translateY(2px)}
@@ -293,7 +293,7 @@ body{
       <p class="warn-strip"><b>DÉNEIGEUSE!</b><br/>Si tu en vois une arriver… saute au bon moment. Elle ne fait pas dans la dentelle.</p>
       <div class="menu-meta">
         <span class="cone-pill"><svg class="cone-ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="14.5" rx="6.5" ry="7" fill="#7a4a22"/><path d="M5.5 9.5Q12 5 18.5 9.5 12 7.6 5.5 9.5" fill="#5c3416"/><path d="M6.8 13.5Q12 10.8 17.2 13.5M7.8 17Q12 15 16.2 17" stroke="#5c3416" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg> <span id="menuCones">0</span> pommes</span>
-        <button class="btn2" id="shopBtn">La boutique</button>
+        <button class="btn2" id="shopBtn">Mes récompenses</button>
         <button class="btn2" id="ghostBtn">👻 Fantôme d’ami</button>
       </div>
       <div class="menu-meta" id="ghostChipWrap" style="display:none;margin-top:2px">
@@ -321,7 +321,7 @@ body{
       </div>
       <div class="menu-meta">
         <span class="cone-pill"><svg class="cone-ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="14.5" rx="6.5" ry="7" fill="#7a4a22"/><path d="M5.5 9.5Q12 5 18.5 9.5 12 7.6 5.5 9.5" fill="#5c3416"/><path d="M6.8 13.5Q12 10.8 17.2 13.5M7.8 17Q12 15 16.2 17" stroke="#5c3416" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg> <span id="overConesTotal">0</span> pommes</span>
-        <button class="btn2" id="shopBtn2">La boutique</button>
+        <button class="btn2" id="shopBtn2">Mes récompenses</button>
       </div>
       <p class="fineprint">Ou appuie sur ESPACE pour repartir.</p>
     </div>
@@ -329,8 +329,8 @@ body{
 
   <div class="overlay hidden" id="shopOv">
     <div class="card shop-card">
-      <h2 class="shop-title">La boutique du <span class="run">caribou</span></h2>
-      <p class="tagline">Payé cash en pommes de pin. Pas de crédit, pas de rabais.</p>
+      <h2 class="shop-title">Les récompenses du <span class="run">caribou</span></h2>
+      <p class="tagline">Que des pommes de pin gagnées en courant. Aucun argent réel.</p>
       <div class="shop-balance"><span id="shopCones">0</span> pommes de pin dans le sac</div>
       <div id="ups"></div>
       <p class="shop-msg" id="shopMsg"></p>
@@ -1202,7 +1202,7 @@ function skinCardHTML(s){
   else if(owned) btn='<button class="btn2" data-wear="'+s.id+'">Porter</button>';
   else if(s.price) btn='<button class="btn2" data-buyskin="'+s.id+'"><span class="cone-mini">'+CONE_SVG+'</span> '+s.price+'</button>';
   else btn='<button class="btn2" disabled>'+unlockLabel(s.unlock)+'</button>';
-  const sub=active?'Ton look actuel.':owned?'Dans ta garde-robe.':(s.price?'Pay\u00e9 cash en pommes de pin.':s.desc);
+  const sub=active?'Ton look actuel.':owned?'Dans ta garde-robe.':(s.price?'À débloquer en pommes de pin.':s.desc);
   return '<div class="skin-card'+(active?' active':'')+'">'
     +'<canvas class="skin-prev" width="150" height="115" data-skin="'+s.id+'"></canvas>'
     +'<h4>'+s.name+'</h4><p>'+sub+'</p>'+btn+'</div>';
@@ -1635,7 +1635,7 @@ function finishDeath(){
   overBest.textContent='Meilleur : '+G.best+' m';
   overBest.classList.toggle('record',isRecord);
   if(isRecord) overBest.textContent='NOUVEAU RECORD : '+G.best+' m!';
-  overCones.textContent=gain>0?('+'+gain+' pomme'+(gain>1?'s':'')+' de pin! Total : '+cones+' — la boutique t\u2019attend.')
+  overCones.textContent=gain>0?('+'+gain+' pomme'+(gain>1?'s':'')+' de pin! Total : '+cones+' — tes récompenses t\u2019attendent.')
     :'Cette fois, aucune pomme de pin... cours plus loin!';
   const msg=OBS[P.hitType]?OBS[P.hitType].msg:DEATH_GENERIC[0];
   overMsg.textContent=(Math.random()<0.75?msg:DEATH_GENERIC[Math.floor(Math.random()*DEATH_GENERIC.length)])+'  ('+m+' m — pas pire!)'+ghostNote;
@@ -1648,7 +1648,7 @@ function restartGame(){
   G.state=ST.RUN; G.paused=false;
 }
 
-/* ============================== Boutique ============================== */
+/* ============================== Récompenses ============================== */
 const UP_ICONS={
   jump:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M5 11l7-7 7 7"/></svg>',
   shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l8 3.5V11c0 4.8-3.4 7.8-8 9.5C7.4 18.8 4 15.8 4 11V6.5L12 3z"/><path d="M12 8.5v5" stroke-linecap="round"/></svg>',
@@ -1676,7 +1676,7 @@ function renderShop(){
   }).join('');
   upsEl.querySelectorAll('.buy').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); buy(b.getAttribute('data-id')); }));
   upsEl.innerHTML+='<h3 class="sec-title">\u{1f98c} La garde-robe du caribou</h3>'
-    +'<p class="sec-tag">Le style, \u00e7a se m\u00e9rite. Ou \u00e7a s\u2019ach\u00e8te en pommes de pin.</p>'
+    +'<p class="sec-tag">Le style, \u00e7a se m\u00e9rite. Ou \u00e7a se débloque en pommes de pin gagnées en courant.</p>'
     +'<div class="skin-grid">'+SKINS.map(skinCardHTML).join('')+'</div>';
   upsEl.querySelectorAll('.skin-prev').forEach(cv2=>{
     const s=skinById(cv2.getAttribute('data-skin'));

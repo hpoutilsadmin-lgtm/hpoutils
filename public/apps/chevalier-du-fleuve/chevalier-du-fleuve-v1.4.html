@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chevalier du fleuve — HP Outils</title>
 <meta name="description" content="Stratégie temps réel : la campagne vraie de Pierre Le Moyne d'Iberville, chevalier de Saint-Louis (1661-1706). Gratuit. 12 ans et plus.">
 <style>
@@ -1393,6 +1393,17 @@ addEventListener("pointerup",e=>{
   }
 });
 addEventListener("pointercancel",()=>{ souris.bas=false; souris.mode=null; });
+/* Lot 2E — repli focus/onglet : une partie en cours ne doit pas continuer
+   pendant que l'onglet est masqué ou que la fenêtre a perdu le focus.
+   On réutilise la pause interne existante (bouton P / btnPauseI) : si elle
+   est déjà active, on ne la bascule pas ; la reprise reste manuelle, par
+   le bouton existant. Le geste en cours est abandonné, jamais exécuté. */
+function repliFocusChevalier(){
+  souris.bas=false; souris.mode=null;
+  if(G&&G.actif&&!pauseInterne) basculerPauseInterne();
+}
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) repliFocusChevalier(); });
+addEventListener("blur",repliFocusChevalier);
 function bornerCam(){ if(!G) return; G.cam.x=Math.max(0,Math.min(Math.max(0,G.w*TSC-innerWidth), G.cam.x)); G.cam.y=Math.max(0,Math.min(Math.max(0,G.h*TSC-innerHeight), G.cam.y)); }
 function uniteEn(wx,wy,camp){ let best=null,bd=26; for(const u of G.unites){ if(camp!==undefined&&u.camp!==camp) continue; const d=Math.hypot(u.x-wx,u.y-wy); if(d<bd){bd=d;best=u;} } return best; }
 function batEn(wx,wy){ for(const b of G.bats){ if(wx>=b.tx*TSC&&wx<(b.tx+b.w)*TSC&&wy>=b.ty*TSC&&wy<(b.ty+b.h)*TSC) return b; } return null; }

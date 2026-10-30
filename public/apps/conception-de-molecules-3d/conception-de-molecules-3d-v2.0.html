@@ -352,7 +352,7 @@
           <button class="btn ghost backbtn" data-goto="scr-home">← Labo</button>
           <h2 class="screentitle hand">Explorer l'ADN</h2>
         </div>
-        <p class="explain" id="dnaIntro">L'ADN, c'est le grand livre de recettes du vivant, écrit avec 4 lettres : <b>A, T, C, G</b>. Glisse ton doigt sur l'hélice pour la faire tourner en 3D !</p>
+        <p class="explain" id="dnaIntro">L'ADN, c'est le grand livre de recettes du vivant, écrit avec 4 lettres : <b>A, T, C, G</b>. Glisse ton doigt ou ta souris sur l'hélice pour la faire tourner en 3D !</p>
 
         <div class="chips" id="speciesChips"></div>
 
@@ -380,7 +380,7 @@
           <h3 class="hand" style="margin:0 0 6px;">Gènes et chromosomes</h3>
           <p style="margin:0 0 8px;line-height:1.45;">Un <b>gène</b>, c'est un morceau d'ADN qui contient la recette pour fabriquer une protéine — et les protéines font presque tout le travail dans une cellule. Chez l'humain, tout l'ADN d'une cellule est rangé en <b>46 chromosomes</b> : <b>23 paires</b>, une copie de chaque parent.</p>
           <h4 class="hand" style="margin:12px 0 4px;">La mutation : change une lettre !</h4>
-          <p style="margin:0;line-height:1.45;">L'ADN se lit par « mots » de 3 lettres : les <b>codons</b>. Chaque codon dit à la cellule quel acide aminé ajouter à la protéine. Touche une lettre pour la changer (A → C → G → T…) et regarde le mot changer sous tes yeux.</p>
+          <p style="margin:0;line-height:1.45;">L'ADN se lit par « mots » de 3 lettres : les <b>codons</b>. Chaque codon dit à la cellule quel acide aminé ajouter à la protéine. Touche ou clique une lettre pour la changer (A → C → G → T…) et regarde le mot changer sous tes yeux.</p>
           <div class="codonrow" id="mutSeq"></div>
           <div class="feedback" id="mutFeedback">Change une lettre et observe : le codon change. Est-ce que l'acide aminé en dessous change aussi ?</div>
         </div>
@@ -620,6 +620,7 @@
           <div id="learnedLevel" style="font-weight:900;font-size:1.05rem;"></div>
           <ul class="learnlist" id="learnedList"></ul>
           <div class="progressline" id="learnedProg"></div>
+          <p style="margin-top:16px"><a href="/passeur-de-savoir/" style="display:inline-block;padding:10px 12px">Découvrir des savoirs d'ici dans le Passeur →</a></p>
         </div>
         <div class="note">Modèle simplifié pour apprendre : la vraie science est plus détaillée, mais les idées ici sont vraies.</div>
       </section>
@@ -1378,7 +1379,7 @@ var LEVELS = {
     missCard:"Mission maladie : le diabète",
     missDesc:"Le sucre veut entrer dans la cellule, mais la porte est fermée. L'insuline est la clé ! Ouvre 3 portes.",
     missTitle:"Mission : le diabète et l'insuline",
-    dnaIntro:"L'ADN, c'est le grand livre de recettes du vivant, écrit avec 4 lettres : <b>A, T, C, G</b>. Glisse ton doigt sur l'hélice pour la faire tourner en 3D !",
+    dnaIntro:"L'ADN, c'est le grand livre de recettes du vivant, écrit avec 4 lettres : <b>A, T, C, G</b>. Glisse ton doigt ou ta souris sur l'hélice pour la faire tourner en 3D !",
     laboIntro:"Beaucoup de remèdes marchent comme une <b>clé dans une serrure</b> : la molécule doit avoir exactement la bonne forme pour ouvrir la serrure du microbe. Recopie la forme cible avec les atomes, puis teste ton hypothèse !" },
   ado:{ name:"Ado",
     dnaDesc:"L'hélice 3D, plus les gènes, les chromosomes (46 !) et une mutation à essayer toi-même.",
