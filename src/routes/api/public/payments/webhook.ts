@@ -3,6 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, verifyWebhook, createStripeClient } from "@/lib/stripe.server";
 import { deliverStripeSession } from "@/lib/deliver-order.server";
 import {
+  isPasseursSession,
+  fulfillPasseursSubscription,
+} from "@/lib/passeurs.server";
+import {
   revokeTomeTokensForPaymentIntent,
   revokeTomeTokensForSessions,
 } from "@/lib/tomes-tokens.server";
@@ -27,6 +31,13 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
     expand: ["line_items", "line_items.data.price"],
   });
   if (session.payment_status !== "paid") return; // jamais livrer un impayé
+  // Les Passeurs (décision HP MEL-017, 30 oct. 2026) : la session porte la
+  // métadonnée passeurs_formule. On crée l'abonnement + le jeton
+  // d'annulation, puis on sort — pas de livraison PDF/tome.
+  if (isPasseursSession(session)) {
+    await fulfillPasseursSubscription(session, env); // lève sur erreur base -> 400 -> Stripe rejoue
+    return;
+  }
   await deliverStripeSession(session, env); // lève sur erreur base -> 400 -> Stripe rejoue
 }
 
