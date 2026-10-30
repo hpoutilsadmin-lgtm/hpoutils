@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catalogue — HP Outils</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, sans-serif; background: #faf7f0; color: #222; line-height: 1.6; font-size: 1.05rem; }
+  header { padding: 32px 16px 16px; text-align: center; max-width: 900px; margin: 0 auto; }
+  header h1 { margin: 0 0 8px; font-size: 2rem; color: #5a3d1a; }
+  header p { margin: 6px 0; }
+  .tagline { font-size: 1.2rem; font-weight: 600; color: #7a5a1f; }
+  .badge { display: inline-block; background: #fff; border: 2px solid #c9a227; border-radius: 999px; padding: 6px 14px; font-size: 0.95rem; margin-top: 8px; }
+  section { padding: 8px 16px 28px; max-width: 1100px; margin: 0 auto; }
+  section h2 { font-size: 1.4rem; margin: 28px 0 4px; color: #5a3d1a; border-bottom: 3px solid #c9a227; padding-bottom: 6px; }
+  .intro { color: #555; margin: 0 0 16px; }
+  .grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+  @media (min-width: 600px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .card { background: #fff; border: 1px solid #e2d9c3; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .card h3 { margin: 0 0 6px; font-size: 1.15rem; }
+  .card p { margin: 4px 0; }
+  .desc { color: #555; }
+  .price { font-size: 1.7rem; font-weight: 700; margin: 12px 0 4px; color: #1f6f3a; }
+  .price small { font-size: 0.95rem; font-weight: 400; color: #555; }
+  .state { margin-top: 14px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 600; min-height: 56px; display: flex; align-items: center; justify-content: center; }
+  .state-buy { background: #1f6f3a; color: #fff; }
+  .state-mail { background: #fff; color: #1f6f3a; border: 2px solid #1f6f3a; }
+  .state-soon { background: #eef4ff; color: #24406e; }
+  .state-closed { background: #f3f3f3; color: #555; }
+  .state-free { background: #fff8dc; color: #5a3d1a; border: 2px solid #c9a227; }
+  footer { padding: 24px 16px 32px; text-align: center; color: #555; max-width: 900px; margin: 0 auto; }
+  details.bulle { margin-top: 12px; border: 2px solid #e2d9c3; border-radius: 12px; padding: 10px 14px; background: #fffdf5; }
+  details.bulle summary { cursor: pointer; font-weight: 700; color: #5a3d1a; min-height: 44px; display: flex; align-items: center; }
+  details.bulle p { margin: 6px 0; color: #444; }
+  .note { background: #fff8dc; border: 2px dashed #c9a227; border-radius: 12px; padding: 12px 16px; margin: 16px auto; max-width: 900px; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Catalogue</h1>
+  <p class="tagline">Des outils pour la vraie vie.</p>
+  <p>Vous choisissez à votre rythme, sans pression, sans fausse urgence.</p>
+  <p class="badge">Prix en $ CAD — aucune taxe ajoutée — Petit fournisseur, TPS/TVQ non perçues</p>
+</header>
+
+<div class="note">Catalogue à jour au 29 octobre 2026. Les prix affichés ici sont les prix en vigueur. Aucun prix ancien n'est repris.</div>
+
+<section>
+  <h2>Livres — format PDF</h2>
+  <p class="intro">Des livres à lire à votre rythme, pour la vraie vie.</p>
+  <div class="grid">
+    <div class="card"><h3>La faim justifie les moyens</h3><p class="desc">Manger dignement, même avec un petit budget.</p><p>Format : PDF</p><p class="price">10 $</p><div class="state state-buy">Acheter le PDF</div></div>
+    <div class="card"><h3>Horizon Québec</h3><p class="desc">Un regard sur le Québec, ses gens et ses possibles.</p><p>Format : PDF</p><p class="price">10 $</p><div class="state state-buy">Acheter le PDF</div></div>
+    <div class="card"><h3>Enjeux de l'humanité à l'ère de l'IA</h3><p class="desc">Comprendre ce que l'intelligence artificielle change pour les humains, sans jargon inutile.</p><p>Format : PDF</p><p class="price">15 $</p><div class="state state-buy">Acheter le PDF</div></div>
+    <div class="card"><h3>Un petit pas à la fois — le mini cahier</h3><p class="desc">Un petit cahier, un pas à la fois.</p><p>Format : PDF</p><p class="price">10 $</p><div class="state state-buy">Acheter le PDF</div></div>
+    <div class="card"><h3>Les enfants cuisinent pour faire plaisir</h3><p class="desc">Cuisiner en famille, pour le plaisir de faire plaisir.</p><p>Format : PDF</p><p class="price">10 $</p><div class="state state-soon">Voir le livre</div></div>
+  </div>
+  <details class="bulle"><summary>Que recevez-vous, au juste ?</summary><p>Un fichier PDF à télécharger, à garder, à relire, à prêter comme un livre. Lien personnel, valable 7 jours — téléchargez-le dès réception, et gardez-le. Si le lien ne fonctionne pas, on répare d'abord, sinon on rembourse.</p></details>
+</section>
+
+<section>
+  <h2>Kits Sans Honte — téléchargement</h2>
+  <p class="intro">Des petits outils pratiques, sans honte.</p>
+  <div class="grid">
+    <div class="card"><h3>Kits unitaires — 15 kits</h3><p class="desc">Un kit au choix parmi 15, pour le quotidien.</p><p>Format : téléchargement</p><p class="price">5 $ <small>chacun</small></p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Bundle — Choisissez 10 kits parmi 15</h3><p class="desc">Dix kits au choix, pour la vraie vie, sans honte.</p><p>Format : téléchargement</p><p class="price">40 $ <small>— économie de 10 $</small></p><div class="state state-buy">Acheter</div></div>
+  </div>
+  <details class="bulle"><summary>Que recevez-vous, au juste ?</summary><p>Des fiches pratiques en PDF, à télécharger une par une. Le bundle : vous choisissez 10 kits parmi 15, vous recevez 10 liens, un par kit choisi, par courriel. Chaque kit se télécharge séparément, comme les kits à 5 $.</p></details>
+</section>
+
+<section>
+  <h2>Tomes « À toi l'histoire » — numérique</h2>
+  <p class="intro">Des histoires à lire, un tome à la fois.</p>
+  <div class="grid">
+    <div class="card"><h3>Mini-récits</h3><p>Format : numérique</p><p class="price">8 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Le Directeur</h3><p>Format : numérique</p><p class="price">5 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Gaïa</h3><p>Format : numérique</p><p class="price">8 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Debout!</h3><p>Format : numérique</p><p class="price">5 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Contact</h3><p>Format : numérique</p><p class="price">8 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>L'hiver du loup</h3><p>Format : numérique</p><p class="price">8 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Le Voile</h3><p>Format : numérique</p><p class="price">8 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Violence conjugale</h3><p>Format : numérique</p><p class="price">5 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Halloween</h3><p>Format : numérique</p><p class="price">5 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>La Vague</h3><p>Format : numérique</p><p class="price">8 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Le bébé</h3><p>Format : numérique</p><p class="price">5 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>Bundle — 3 tomes au choix</h3><p class="desc">Trois tomes au choix, à lire à votre rythme.</p><p>Format : numérique</p><p class="price">12 $</p><div class="state state-buy">Acheter</div></div>
+    <div class="card"><h3>La Chasse-Galerie</h3><p class="desc">Une histoire inspirée de la légende québécoise de la chasse-galerie.</p><p>Format : numérique</p><p class="price">Gratuit</p><div class="state state-free">Obtenir le lien gratuit</div></div>
+  </div>
+  <details class="bulle"><summary>Que recevez-vous, au juste ?</summary><p>Un lien personnel pour lire en ligne. Tome 1 gratuit. Tomes standards 5 $, grands tomes 8 $, lot de 3 tomes au choix 12 $. La Chasse-Galerie est gratuite. Les histoires ne sont pas dans les jeux : ce sont des lectures, à votre rythme.</p></details>
+</section>
+
+<section>
+  <h2>Les Passeurs — feuilles de savoirs</h2>
+  <p class="intro">Des savoirs qui se transmettent, de personne en personne.</p>
+  <div class="grid">
+    <div class="card"><h3>Les Passeurs</h3><p class="desc">16 savoirs, feuilles au fur et à mesure, 3 par trimestre maximum. La collection n'est pas complète aujourd'hui.</p><p class="price">3 $ <small>par mois</small> — 28 $ <small>par an (économie de 8 $)</small></p><div class="state state-mail">S'inscrire par courriel</div></div>
+  </div>
+  <details class="bulle"><summary>Comment ça marche, honnêtement ?</summary><p>Inscription par courriel seulement, pour l'instant. 3 $ par mois ou 28 $ par an, aucune taxe ajoutée. Vous recevez les feuilles au fur et à mesure, 3 par trimestre maximum — la collection n'est pas complète aujourd'hui. Annulation par courriel, effet fin de période payée, sans frais. Le bouton d'annulation en 1 clic est en construction : aucune annonce tant qu'il n'est pas construit ET testé.</p></details>
+</section>
+
+<section>
+  <h2>Jeux à votre image — jeu web à l'image d'un commerce</h2>
+  <p class="intro">Un jeu à l'image de votre commerce, pour vos clients.</p>
+  <div class="grid">
+    <div class="card"><h3>Express</h3><p>Durée : 7 jours — niveau 1</p><p class="price">29 $</p><div class="state state-closed">Ventes fermées pour l'instant</div></div>
+    <div class="card"><h3>Événement</h3><p>Durée : 30 jours — niveau 2</p><p class="price">199 $</p><div class="state state-closed">Ventes fermées pour l'instant</div></div>
+    <div class="card"><h3>Saisonnier</h3><p>Durée : 90 jours — re-habillage chaque saison — niveau 3</p><p class="price">299 $</p><div class="state state-closed">Ventes fermées pour l'instant</div></div>
+  </div>
+  <p>Hébergement : gratuit la première année, puis 29 $ par an et par jeu. La prolongation n'est jamais automatique — elle est confirmée par le client.</p>
+  <details class="bulle"><summary>Pourquoi « ventes fermées » ?</summary><p>Parce qu'aucun palier n'est prouvé vendable pour l'instant : aucun test à 0 $ passé par palier, aucun prix Stripe confirmé pour ces offres. Hébergement gratuit la première année, puis 29 $ par an et par jeu — la prolongation n'est jamais automatique, elle est confirmée par le client.</p></details>
+</section>
+
+<section>
+  <h2>Ateliers — en personne</h2>
+  <p class="intro">Apprendre ensemble, en personne.</p>
+  <div class="grid">
+    <div class="card"><h3>Ateliers</h3><p class="desc">Apprendre ensemble, en personne, près de chez vous.</p><p>En personne, Terrebonne et environs. Maximum 2 ateliers par semaine.</p><p class="price">150 $ à 290 $</p><div class="state state-mail">Réserver par courriel</div></div>
+  </div>
+  <details class="bulle"><summary>Comment réserver ?</summary><p>Par courriel seulement, pour l'instant. En personne, Terrebonne et environs, maximum 2 ateliers par semaine. Forfaits de groupe de 150 $ à 290 $ selon l'atelier, aucune taxe ajoutée. Aucune date, aucune place inventée : tout se confirme avec l'équipe avant la réservation.</p></details>
+</section>
+
+<section>
+  <h2>Bientôt</h2>
+  <p class="intro">Ce qui s'en vient — rien n'est vendu avant d'être prêt et testé.</p>
+  <div class="grid">
+    <div class="card"><h3>Mon premier chez-moi</h3><p class="desc">Un parcours pour son premier chez-soi, avec un réseau d'entraide gratuit inclus dans la base.</p><p class="price">29 $ <small>— essai gratuit 7 jours, puis 29 $</small></p><div class="state state-soon">Bientôt — produit en validation, aucune vente pour l'instant</div></div>
+    <div class="card"><h3>Ton jeu à toi — Famille</h3><p class="desc">Un jeu à votre image, pour la famille.</p><p class="price">5 $ <small>(prix proposé)</small></p><div class="state state-soon">Bientôt</div></div>
+  </div>
+  <details class="bulle"><summary>Pourquoi « bientôt » ?</summary><p>Parce que rien n'est vendu avant d'être prêt et testé. Mon premier chez-moi (29 $, essai gratuit 7 jours, réseau gratuit inclus) est en validation, pas prêt, pas de dépôt tout de suite. Ton jeu à toi — Famille (5 $ proposé) : prix proposé, test à 0 $ non passé.</p></details>
+</section>
+
+<footer>
+  <p>Prix en $ CAD, aucune taxe ajoutée. Petit fournisseur — TPS/TVQ non perçues.</p>
+  <p>Bons cadeaux maintenus. Aucune fausse urgence, aucun compte à rebours, aucune pression.</p>
+  <p>Une question ? Une réponse d'humain sous 3 jours ouvrables.</p>
+  <p><b>Catalogue interne — rien n'est publié, déposé ou appliqué au site sans votre go nominatif nommant le lot.</b></p>
+</footer>
+</body>
+</html>
