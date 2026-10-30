@@ -1,6 +1,5 @@
 /* Questions fréquentes HP Outils — source UNIQUE de la page /faq.
-   Amorce vérifiée : les questions-réponses que Sir H. Gepeto, l'gérant du site
-   du site, donne déjà aux visiteurs (sa base de connaissances,
+   Amorce vérifiée : les questions-réponses que Sir H. Gepeto, le gérant du site, donne déjà aux visiteurs (sa base de connaissances,
    src/components/hgpto/hgpto-data.ts) — aucune réponse inventée.
    Boucle « Pour HP » (item nº 9, vague 1) : chaque lundi, les
    questions sans réponse validées par HP peuvent être versées ici
