@@ -28,6 +28,7 @@ type State =
   | { kind: "missing" }
   | { kind: "pending" }
   | { kind: "paid" }
+  | { kind: "delivered" }
   | { kind: "error"; message: string };
 
 function Page() {
@@ -46,6 +47,14 @@ function Page() {
         const result = await check({ data: { sessionId: session_id } });
         if (cancelled) return;
         if (result.status === "pending") setState({ kind: "pending" });
+        // B-T1 : getCheckoutStatus renvoie aussi "delivered" (toutes les
+        // lignes paid ont delivery_sent_at). Sans cette branche, un achat
+        // déjà livré tombait dans "missing" et affichait
+        // « Session introuvable » — jamais plus pour un état livré.
+        // Fusion 3B+3J : la branche distincte « delivered » de 3B est
+        // gardée (meilleure que le repli « paid » de 3J) ; la précision
+        // d'adresse de 3J est reportée dans le texte « Déjà livré ».
+        else if (result.status === "delivered") setState({ kind: "delivered" });
         else if (result.status === "paid") setState({ kind: "paid" });
         else setState({ kind: "missing" });
       } catch (e: any) {
@@ -73,15 +82,29 @@ function Page() {
           {state.kind === "pending" && (
             <>
               <h1>Paiement en cours</h1>
-              <p>Ton paiement est en cours de traitement. Vérifiez votre courriel dans quelques minutes, ou récupérez votre achat ici :{" "}
+              <p>Votre paiement est en cours de traitement. Vérifiez votre courriel dans quelques minutes, ou récupérez votre achat ici :{" "}
                 <Link to="/recuperer-achat">Récupérer un achat</Link>.</p>
+            </>
+          )}
+          {state.kind === "delivered" && (
+            <>
+              <h1>Déjà livré</h1>
+              <p>Les liens de lecture vous ont déjà été envoyés par courriel à l'adresse de livraison — la vôtre, ou celle de la personne à qui vous offrez cet achat, si vous avez coché «&nbsp;C'est pour offrir&nbsp;». Vérifiez la boîte de réception de cette adresse (et vos indésirables, au besoin).</p>
+              <p>
+                Si vous avez perdu vos liens, récupérez votre achat ici :{" "}
+                <Link to="/recuperer-achat">Récupérer un achat</Link>.
+              </p>
+              <p>
+                <Link to="/lire">Retour aux tomes</Link>
+              </p>
             </>
           )}
           {state.kind === "paid" && (
             <>
               <h1>Merci !</h1>
               <ThankYouCelebration />
-              <p>Les liens de lecture vous ont été envoyés par courriel. Vérifiez votre boîte de réception (et vos indésirables, au besoin).</p>
+              <p>Les liens de lecture ont été envoyés par courriel à l'adresse de livraison — la vôtre, ou celle de la personne à qui vous offrez cet achat, si vous avez coché «&nbsp;C'est pour offrir&nbsp;». Vérifiez la boîte de réception de cette adresse (et vos indésirables, au besoin).</p>
+              {/* Fusion 3J+3I : texte 3J gardé — la variante 3I (« votre boîte ») serait fausse pour un cadeau. */}
               <p>
                 <Link to="/lire">Retour aux tomes</Link>
               </p>
@@ -94,6 +117,9 @@ function Page() {
               <p>
                 <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a> —
                 la direction humaine répond sous 3 jours ouvrables.
+              </p>
+              <p>
+                <Link to="/lire">Retour aux tomes</Link>
               </p>
             </>
           )}

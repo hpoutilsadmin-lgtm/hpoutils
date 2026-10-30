@@ -48,11 +48,11 @@ function Page() {
             ce qui compte et passer à l'action — gratuitement, sans compte.
           </p>
           <p style={{ marginBottom: 0 }}>
-            Respire avec moi (respiration guidée animée), Ta carte ikigaï (les
-            quatre questions, en format interactif) et Ton plan WOOP (un souhait,
+            Respirez avec moi (respiration guidée animée), Votre carte ikigaï (les
+            quatre questions, en format interactif) et Votre plan WOOP (un souhait,
             un résultat, un obstacle, un plan — avec un engagement doux de
             7 jours). Tout se fait sur votre appareil : aucune donnée ne sort d'ici.
-            C'est le compagnon gratuit du mini cahier du même nom — l'écran te
+            C'est le compagnon gratuit du mini cahier du même nom — l'écran vous
             guide ; le papier te fait écrire, et durer.
           </p>
         </header>

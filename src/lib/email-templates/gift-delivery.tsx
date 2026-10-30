@@ -30,20 +30,20 @@ const GiftDeliveryEmail = ({
 }: GiftDeliveryProps) => (
   <Html lang="fr" dir="ltr">
     <Head />
-    <Preview>Ton bon cadeau {SITE_NAME}</Preview>
+    <Preview>Votre bon cadeau {SITE_NAME}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>Merci pour ton achat</Heading>
+        <Heading style={h1}>Merci pour votre achat</Heading>
         <Text style={text}>
-          Voici ton bon cadeau <strong>{title}</strong> — {amountLabel}.
-          Offre-le à qui tu veux : la personne saisit ce code au panier,
+          Voici votre bon cadeau <strong>{title}</strong> — {amountLabel}.
+          Offrez-le à qui vous voulez : la personne saisit ce code au panier,
           et le montant s'applique à son achat.
         </Text>
         <Text style={codeStyle}>{code}</Text>
         <Text style={text}>
           Le code se dépense par tranches : s'il reste du solde après un
-          achat, le reste demeure sur le même code. Conserve ce courriel.
-          Une question ? Écris à la direction humaine — la direction humaine répond sous 3 jours ouvrables.
+          achat, le reste demeure sur le même code. Conservez ce courriel.
+          Une question ? Écrivez à la direction humaine — la direction humaine répond sous 3 jours ouvrables.
         </Text>
         <Text style={footer}>— L'équipe {SITE_NAME}</Text>
       </Container>
@@ -53,7 +53,7 @@ const GiftDeliveryEmail = ({
 
 export const template = {
   component: GiftDeliveryEmail,
-  subject: () => `Ton bon cadeau — ${SITE_NAME}`,
+  subject: () => `Votre bon cadeau — ${SITE_NAME}`,
   displayName: 'Livraison de bon cadeau',
   previewData: {
     title: 'Bon cadeau HP Outils',

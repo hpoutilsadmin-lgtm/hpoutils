@@ -103,7 +103,8 @@ function OffrirChoice({
         C'est pour offrir
       </label>
       <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65 }}>
-        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. En cas de remboursement, le lien est coupé.
+        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. En cas de remboursement, le lien est coupé. Si vous entrez votre propre courriel, le lien vous est envoyé à vous.
+        {/* Fusion tête+3K : formulation promesse de la tête gardée (« la direction humaine …, lundi à vendredi ») + phrase propre courriel de 3K. */}
       </p>
       {giftChecked && !giftConfirmed && (
         <div style={{ marginTop: 12 }}>
@@ -219,12 +220,12 @@ function Page() {
                 }}
               >
                 <p style={{ margin: "0 0 8px", fontWeight: 700 }}>
-                  Ce livre vient de baisser de prix : 10 $
+                  Ce livre vient de baisser de prix.
                 </p>
                 <p style={{ margin: 0, fontSize: 14 }}>
                   {product.purchaseHold} En attendant, le pendant gratuit{" "}
                   <Link to="/en-cuisine/">En cuisine</Link> est ouvert, et
-                  pour toute question, écris à{" "}
+                  pour toute question, écrivez à{" "}
                   <a href="mailto:hpoutils.admin@gmail.com">
                     hpoutils.admin@gmail.com
                   </a>
@@ -260,9 +261,9 @@ function Page() {
               <p style={{ margin: "0 0 8px", fontSize: 14 }}>
                 Vous recevez votre lien de téléchargement par courriel (valide
                 7 jours). Vous n'arrivez pas à ouvrir votre PDF, votre lien est
-                expiré ou le courriel n'arrive pas ? Passe par la page{" "}
+                expiré ou le courriel n'arrive pas ? Passez par la page{" "}
                 <Link to="/recuperer-achat">Récupérer un achat</Link>, ou
-                écris à{" "}
+                écrivez à{" "}
                 <a href="mailto:hpoutils.admin@gmail.com">
                   hpoutils.admin@gmail.com
                 </a>{" "}
@@ -276,6 +277,11 @@ function Page() {
                 — HP
               </p>
             </div>
+            <p style={{ textAlign: "center", margin: 0 }}>
+              <Link to="/pdf/$slug" params={{ slug: product.slug }}>
+                Retour à la fiche
+              </Link>
+            </p>
           </div>
         </div>
       </section>
@@ -315,7 +321,7 @@ function BundleCheckout({ product, giftTo }: { product: DigitalProduct; giftTo?:
           }}
         >
           <p style={{ margin: "0 0 6px", fontWeight: 700 }}>
-            Tes {BUNDLE_KIT_COUNT} kits sont choisis ✓
+            Vos {BUNDLE_KIT_COUNT} kits sont choisis ✓
           </p>
           <p style={{ margin: "0 0 12px", fontSize: 14 }}>
             {selected
@@ -355,7 +361,7 @@ function BundleCheckout({ product, giftTo }: { product: DigitalProduct; giftTo?:
           Choisissez vos {BUNDLE_KIT_COUNT} kits
         </h2>
         <p style={{ margin: 0 }}>
-          Coche exactement {BUNDLE_KIT_COUNT} kits parmi les {kits.length} —
+          Cochez exactement {BUNDLE_KIT_COUNT} kits parmi les {kits.length} —
           ce sont eux que vous recevrez par courriel après le paiement.{" "}
           <strong>
             {selected.length} / {BUNDLE_KIT_COUNT} choisis

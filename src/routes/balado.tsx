@@ -3,7 +3,7 @@ import { createSeoHead } from "@/lib/seo";
 import { ShareButton } from "@/components/ShareButton";
 
 const BALADO_DESCRIPTION =
-  "Lea et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. De nouveaux épisodes, annoncés dès leur parution, directs et sans jargon.";
+  "Léa et Marc regardent l'intelligence artificielle en face : entrepreneuriat, PME et futur, le bon comme le mauvais. De nouveaux épisodes, annoncés dès leur parution, directs et sans jargon.";
 
 export const Route = createFileRoute("/balado")({
   head: () => ({
@@ -92,14 +92,14 @@ function Page() {
             Futur <em>simple</em>.
           </h1>
           <p className="lead">
-            Lea et Marc regardent l'intelligence artificielle en face : l'entrepreneuriat,
+            Léa et Marc regardent l'intelligence artificielle en face : l'entrepreneuriat,
             les PME et le futur à venir — <strong>le bon comme le mauvais</strong>. De nouveaux épisodes, annoncés ici dès leur parution, quand ils sont prêts. Direct, concret, sans jargon. Comme tout ce qu'on fait ici.
           </p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait un balado IA à direction humaine, qui parle de vraie vie. »</p>
           <div className="lead-actions">
             <a href="#episodes" className="btn-primary">Écouter le dernier épisode</a>
             <a href={FEED_URL} className="btn-ghost" target="_blank" rel="noreferrer">S'abonner au flux RSS</a>
-            <ShareButton text="Futur simple — le balado HP sur l'IA, les PME et le futur. T'es pas game d'écouter 2 minutes ?" />
+            <ShareButton text="Futur simple — le balado HP sur l'IA, les PME et le futur. Vous n'êtes pas game d'écouter 2 minutes ?" />
           </div>
           <img src="/images/futur-simple-pochette-v4.jpg" alt="Pochette du balado Futur simple — Léa et Marc" style={{ maxWidth: 320, width: "100%", borderRadius: 12, marginTop: 24 }} />
         </div>
@@ -129,7 +129,7 @@ function Page() {
       <section className="collections-strip">
         <div className="container">
           <span className="editorial-kicker">S'abonner</span>
-          <h2>Le balado te suit <em>partout</em></h2>
+          <h2>Le balado vous suit <em>partout</em></h2>
           <p className="strip-intro">
             Ajoutez le flux dans votre appli de balados préférée : chaque nouvel épisode
             y apparaît tout seul, dès sa parution. C'est gratuit, sans compte, sans piège.
@@ -178,7 +178,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les livres HP</h3>
-              <p>Le sujet du balado te suit en lecture : <em>Enjeux de l'humanité à l'ère de l'IA</em> et les autres livres et PDF d'HP.</p>
+              <p>Le sujet du balado vous suit en lecture : <em>Enjeux de l'humanité à l'ère de l'IA</em> et les autres livres et PDF d'HP.</p>
               <Link to="/livres-pdf" className="pillar-cta">Voir les livres →</Link>
             </article>
             <article className="pillar-card">

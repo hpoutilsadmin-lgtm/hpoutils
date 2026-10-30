@@ -218,7 +218,7 @@ export const fulfillGiftPurchase = createServerFn({ method: "POST" })
         recipientEmail: email,
         idempotencyKey: `gift-delivery-${session.id}`,
         templateData: {
-          title: "Ton bon cadeau HP Outils",
+          title: "Votre bon cadeau HP Outils",
           code,
           amountLabel: `${amountCents / 100} $ CAD`,
           siteOrigin: getTrustedSiteOrigin(),
@@ -321,14 +321,25 @@ export const payCartWithGift = createServerFn({ method: "POST" })
 // est libérée immédiatement.
 
 export const createCartCheckoutWithGift = createServerFn({ method: "POST" })
-  .inputValidator((data: { items: Array<{ priceId: string }>; code: string; environment: StripeEnv }) => {
+  .inputValidator((data: { items: Array<{ priceId: string }>; code: string; environment: StripeEnv; giftTo?: string }) => {
     const priceIds = validateCartItems(data.items.map((i) => i?.priceId));
     const normalized = normalizeGiftCode(data.code);
     if (!normalized) throw new Error("Code invalide");
     if (data.environment !== "sandbox" && data.environment !== "live") {
       throw new Error("Environnement invalide");
     }
-    return { priceIds, code: normalized, environment: data.environment };
+    // « Offrir » : même validation que les autres flux — destinataire
+    // facultatif, validé, jamais de débit sans destinataire valide quand
+    // la case est cochée. Sans lui, le parcours bon partiel livrait au
+    // payeur au lieu du destinataire.
+    let giftTo: string | undefined;
+    if (data.giftTo !== undefined && data.giftTo !== null && data.giftTo !== "") {
+      if (typeof data.giftTo !== "string" || data.giftTo.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.giftTo)) {
+        throw new Error("Courriel du destinataire invalide");
+      }
+      giftTo = data.giftTo.toLowerCase();
+    }
+    return { priceIds, code: normalized, environment: data.environment, giftTo };
   })
   .handler(async ({ data }) => {
     const admin = getAdmin();
@@ -394,7 +405,9 @@ export const createCartCheckoutWithGift = createServerFn({ method: "POST" })
         cancel_url: `${origin}/panier/`,
         automatic_tax: { enabled: true },
         billing_address_collection: "required",
-        metadata: { cart: "1", priceIds: data.priceIds.join(","), giftRef: ref },
+        metadata: data.giftTo
+          ? { cart: "1", priceIds: data.priceIds.join(","), giftRef: ref, gift_to: data.giftTo }
+          : { cart: "1", priceIds: data.priceIds.join(","), giftRef: ref },
       });
       await admin
         .from("gift_cards")

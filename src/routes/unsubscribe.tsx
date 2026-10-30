@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { createSeoHead } from "@/lib/seo";
 
@@ -96,6 +96,11 @@ function Page() {
         )}
         {state === "error" && (
           <p>Une erreur est survenue. Veuillez réessayer plus tard.</p>
+        )}
+        {(state === "invalid" || state === "already" || state === "done" || state === "error") && (
+          <p style={{ marginTop: 24 }}>
+            <Link to="/">Retour à l'accueil</Link>
+          </p>
         )}
       </div>
     </section>

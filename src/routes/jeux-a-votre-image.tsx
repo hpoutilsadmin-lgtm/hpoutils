@@ -213,8 +213,8 @@ function Page() {
         </p>
       </section>
 
-      <section aria-label="Trois choses qui ramènent du monde" style={BLOC}>
-        <h2 style={H2}>Trois choses qui ramènent du monde.</h2>
+      <section aria-label="Cinq choses qui ramènent du monde" style={BLOC}>
+        <h2 style={H2}>Cinq choses qui ramènent du monde.</h2>
         <p style={P}>
           Pour qui ? Les commerces locaux, tous les jours ou pour un
           événement. Les parents : un jeu au prénom de leur enfant — c&apos;est l&apos;Express (Course, nom au choix seulement), sans le délai de 14 jours. Les écoles, les équipes, les associations : un jeu pour

@@ -7,12 +7,62 @@
 // la page de retour le signale sans renvoyer de doublon.
 
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
+import { createClient } from "@supabase/supabase-js";
 import {
   type StripeEnv,
   createStripeClient,
   getStripeErrorMessage,
 } from "@/lib/stripe.server";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
+
+let _tomeAdmin: any = null;
+function getTomeAdmin() {
+  if (!_tomeAdmin) {
+    _tomeAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    );
+  }
+  return _tomeAdmin;
+}
+
+// Limite de débit : 5 tentatives / heure par courriel ou par IP, même
+// motif que recoverOrdersByEmail (table recovery_attempts, déjà en base).
+// Sans elle, le tome gratuit et la récupération de tomes acceptaient un
+// nombre illimité d'appels — un jeton + un courriel neufs à chaque appel.
+// Réponse neutre quand la limite est atteinte : aucun jeton, aucun
+// courriel, mais { ok: true }. En cas d'erreur base, on laisse passer
+// (fail-open journalisé) pour ne pas couper un accès légitime sur une
+// panne de la table.
+async function tomeRateLimitExceeded(email: string): Promise<boolean> {
+  try {
+    const admin = getTomeAdmin();
+    const ip =
+      getRequestHeader("cf-connecting-ip") ||
+      getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ||
+      null;
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count: emailCount } = await admin
+      .from("recovery_attempts")
+      .select("id", { count: "exact", head: true })
+      .eq("email", email)
+      .gte("created_at", oneHourAgo);
+    const { count: ipCount } = ip
+      ? await admin
+          .from("recovery_attempts")
+          .select("id", { count: "exact", head: true })
+          .eq("ip", ip)
+          .gte("created_at", oneHourAgo)
+      : { count: 0 };
+    if ((emailCount ?? 0) >= 5 || (ipCount ?? 0) >= 5) return true;
+    await admin.from("recovery_attempts").insert({ email, ip });
+    return false;
+  } catch (e) {
+    console.error("tome rate-limit check failed, allowing (fail-open)", e);
+    return false;
+  }
+}
 
 function getTrustedSiteOrigin(): string {
   const raw = process.env.SITE_URL?.trim();
@@ -129,8 +179,11 @@ export const createTomeCheckoutSession = createServerFn({ method: "POST" })
         allow_promotion_codes: true,
         ui_mode: "hosted_page",
         success_url: `${origin}/lire/merci?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/lire/`,
+        cancel_url: `${origin}/lire/?paiement=annule`,
         automatic_tax: { enabled: false },
+        // Fusion tête+3K : cancel_url de 3K (message d'annulation tome) +
+        // automatic_tax de la tête (false, correctif post-6423e10) — le
+        // true côté 3K n'était que le contexte de son ancienne base.
         // [MEL-002 29 oct 2026] « auto » : Stripe n exige l adresse que si le paiement
         // l exige vraiment. À 0,00 $ (coupon 100 %), le champ ne bloque plus.
         billing_address_collection: "auto",
@@ -149,6 +202,7 @@ export const createTomeCheckoutSession = createServerFn({ method: "POST" })
 export const requestFreeTomeLink = createServerFn({ method: "POST" })
   .inputValidator((data: { email: string }) => ({ email: validEmail(data.email) }))
   .handler(async ({ data }) => {
+    if (await tomeRateLimitExceeded(data.email)) return { ok: true };
     const { tome, token } = await createFreeTomeToken(data.email);
     await enqueueTransactionalEmail({
       templateName: "tome-delivery",
@@ -167,6 +221,7 @@ export const recoverTomeLinks = createServerFn({ method: "POST" })
   .inputValidator((data: { email: string }) => ({ email: validEmail(data.email) }))
   .handler(async ({ data }) => {
     // Réponse neutre : on ne révèle jamais si le courriel a des achats.
+    if (await tomeRateLimitExceeded(data.email)) return { ok: true };
     const fresh = await mintRecoveryTomeTokens(data.email);
     if (fresh.length > 0) {
       await enqueueTransactionalEmail({

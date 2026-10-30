@@ -41,8 +41,8 @@ export const Route = createFileRoute("/api/public/download-pdf")({
           .eq("status", "paid")
           .limit(1)
           .maybeSingle();
-        const { data: paidGiftOrder } = paidOrder
-          ? { data: null }
+        const { data: paidGiftOrder, error: paidGiftError } = paidOrder
+          ? { data: null, error: null }
           : await admin
               .from("orders")
               .select("id,status")
@@ -51,6 +51,10 @@ export const Route = createFileRoute("/api/public/download-pdf")({
               .eq("status", "paid")
               .limit(1)
               .maybeSingle();
+        // Diagnostic H-P2 : si la colonne gift_recipient_email manque
+        // (migration non appliquée), la requête échoue et le destinataire
+        // d'un cadeau tombe en 410 — journalisé, jamais silencieux.
+        if (paidGiftError) console.error("download gift lookup failed", paidGiftError.message);
         // Bundle : une commande bundle payée vaut pour chaque kit de sa
         // liste kit_slugs, même si aucun achat seul du kit n'existe.
         // Refus strict sinon : kit hors liste, kit_slugs absent, ou
@@ -65,8 +69,8 @@ export const Route = createFileRoute("/api/public/download-pdf")({
             .eq("status", "paid")
             .limit(1)
             .maybeSingle();
-          const { data: bundleGift } = bundlePaid
-            ? { data: null }
+          const { data: bundleGift, error: bundleGiftError } = bundlePaid
+            ? { data: null, error: null }
             : await admin
                 .from("orders")
                 .select("id,status,kit_slugs")
@@ -75,6 +79,7 @@ export const Route = createFileRoute("/api/public/download-pdf")({
                 .eq("status", "paid")
                 .limit(1)
                 .maybeSingle();
+          if (bundleGiftError) console.error("download bundle gift lookup failed", bundleGiftError.message);
           const bundle = bundlePaid ?? bundleGift;
           const slugs = typeof bundle?.kit_slugs === "string" ? bundle.kit_slugs.split(",").filter(Boolean) : [];
           if (bundle && product.slug && slugs.includes(product.slug)) bundleOrder = bundle;

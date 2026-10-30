@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { createSeoHead } from "@/lib/seo";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { createCartCheckoutSession } from "@/utils/cart.functions";
 import {
@@ -108,6 +109,9 @@ function Page() {
             items: items.map(({ product }) => ({ priceId: product.priceId })),
             code: codeCadeau,
             environment: getStripeEnvironment(),
+            // « Offrir » ne doit pas se perdre dans le parcours bon
+            // partiel : le destinataire voyage avec la session Stripe.
+            ...(giftToPanier ? { giftTo: giftToPanier } : {}),
           },
         });
         if ("error" in resultCadeau) {
@@ -115,6 +119,7 @@ function Page() {
           return;
         }
         if (typeof resultCadeau.checkoutUrl === "string" && resultCadeau.checkoutUrl.startsWith("https://")) {
+          try { sessionStorage.setItem("hp-panier-en-paiement", "1"); } catch { /* stockage indisponible */ }
           window.location.href = resultCadeau.checkoutUrl;
           return;
         }
@@ -133,6 +138,7 @@ function Page() {
         return;
       }
       if (typeof result.checkoutUrl === "string" && result.checkoutUrl.startsWith("https://")) {
+        try { sessionStorage.setItem("hp-panier-en-paiement", "1"); } catch { /* stockage indisponible */ }
         window.location.href = result.checkoutUrl;
         return;
       }
@@ -163,7 +169,10 @@ function Page() {
         setCadeau({
           valide: true,
           soldeCents: result.availableCents,
-          message: `Solde utilisable : ${afficherSolde(result.availableCents)}.`,
+          message:
+            result.availableCents === 0
+              ? "Ce code est valide mais son solde est de 0 $ : il ne réduit pas le total."
+              : `Solde utilisable : ${afficherSolde(result.availableCents)}.`,
         });
       } else {
         setCadeau({
@@ -190,7 +199,9 @@ function Page() {
         data: {
           items: items.map(({ product }) => ({ priceId: product.priceId })),
           code: codeCadeau,
-          email: courrielCadeau.trim(),
+          // « Offrir » confirmé : le destinataire confirmé EST le
+          // courriel de livraison, pas le courriel saisi à part.
+          email: giftToPanier ?? courrielCadeau.trim(),
         },
       });
       if ("ok" in result && result.ok) {
@@ -213,6 +224,7 @@ function Page() {
 
   return (
     <>
+      <PaymentTestModeBanner />
       <section className="editorial-hero">
         <div className="container">
           <span className="editorial-kicker">Panier d'achat</span>
@@ -326,6 +338,9 @@ function Page() {
                   />
                   C'est pour offrir
                 </label>
+                {offrirCoche && (
+                  <p style={{ marginTop: 12 }}>Si le courriel entré est le vôtre, c'est vous qui recevez les liens.</p>
+                )}
                 {offrirCoche && !offrirConfirme && (
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginTop: 12 }}>
                     <input
@@ -354,6 +369,7 @@ function Page() {
 
               <div style={{ marginTop: 16, maxWidth: 640 }}>
                 <p style={{ fontWeight: 700, marginBottom: 8 }}>Code cadeau</p>
+                <p style={{ marginTop: 0 }}>Les bons ne sont plus en vente ; un code déjà émis reste utilisable ici. Pour offrir, voir « C'est pour offrir » ci-dessus.</p>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
                   <input
                     type="text"
@@ -454,7 +470,7 @@ function Page() {
           <span className="editorial-kicker">Bon à savoir</span>
           <h2>Ce qui n'entre <em>pas</em> dans ce panier</h2>
           <p className="strip-intro">
-            Le bundle « Choisis 10 kits parmi 15 » garde son propre parcours
+            Le bundle « Choisissez 10 kits parmi 15 » garde son propre parcours
             de sélection : il ne passe pas par ce panier. Le reste, c'est
             l'honnêteté ordinaire d'HP : chaque produit dit pourquoi il ne passe pas par ce panier.
           </p>

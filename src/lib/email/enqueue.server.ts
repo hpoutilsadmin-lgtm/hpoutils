@@ -19,27 +19,32 @@ function generateToken(): string {
  * Server-side helper to enqueue a transactional email without going through
  * the /lovable/email/transactional/send route (which requires a user JWT).
  * Use this from server functions invoked by unauthenticated public actions.
- * Always returns silently — never throws — so callers can keep their
- * response neutral.
+ * Never throws, so callers can keep their response neutral — but it
+ * RETURNS whether the message was actually queued (B-W2) : true only
+ * when the enqueue RPC succeeded. Any other outcome (env manquant,
+ * gabarit inconnu, adresse supprimée/désinscrite, jeton en échec,
+ * RPC en échec) renvoie false. Les appelants qui marquent une
+ * livraison comme faite DOIVENT vérifier ce booléen : un false ne
+ * doit jamais devenir un delivery_sent_at.
  */
 export async function enqueueTransactionalEmail(params: {
   templateName: string
   recipientEmail: string
   idempotencyKey: string
   templateData?: Record<string, any>
-}): Promise<void> {
+}): Promise<boolean> {
   const supabaseUrl = process.env.SUPABASE_URL!
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
   if (!supabaseUrl || !serviceKey) {
     console.error('enqueueTransactionalEmail: missing env')
-    return
+    return false
   }
   const supabase = createClient(supabaseUrl, serviceKey)
 
   const template = TEMPLATES[params.templateName]
   if (!template) {
     console.error('enqueueTransactionalEmail: unknown template', params.templateName)
-    return
+    return false
   }
   const recipient = (template.to || params.recipientEmail).toLowerCase()
 
@@ -49,7 +54,7 @@ export async function enqueueTransactionalEmail(params: {
     .select('id')
     .eq('email', recipient)
     .maybeSingle()
-  if (suppressed) return
+  if (suppressed) return false
 
   // Unsubscribe token (one per recipient)
   const { data: existing } = await supabase
@@ -62,7 +67,7 @@ export async function enqueueTransactionalEmail(params: {
   if (existing && !existing.used_at) {
     unsubscribeToken = existing.token
   } else if (existing && existing.used_at) {
-    return // already unsubscribed
+    return false // already unsubscribed
   } else {
     unsubscribeToken = generateToken()
     const { error } = await supabase
@@ -70,7 +75,7 @@ export async function enqueueTransactionalEmail(params: {
       .insert({ email: recipient, token: unsubscribeToken })
     if (error) {
       console.error('enqueueTransactionalEmail: token insert failed', error)
-      return
+      return false
     }
   }
 
@@ -108,12 +113,19 @@ export async function enqueueTransactionalEmail(params: {
   })
   if (enqueueError) {
     console.error('enqueueTransactionalEmail: enqueue failed', enqueueError)
-    await supabase.from('email_send_log').insert({
-      message_id: messageId,
-      template_name: params.templateName,
-      recipient_email: recipient,
-      status: 'failed',
-      error_message: 'Failed to enqueue email',
-    })
+    // B-W2 (journal) : la ligne 'pending' déjà insérée ci-dessus ne
+    // doit pas rester 'pending' — elle devient 'failed', sinon le
+    // journal laisse croire qu'un envoi est en cours. On met à jour
+    // la ligne existante (même message_id) au lieu d'en ajouter une
+    // seconde, pour garder un seul état par message.
+    const { error: logError } = await supabase
+      .from('email_send_log')
+      .update({ status: 'failed', error_message: 'Failed to enqueue email' })
+      .eq('message_id', messageId)
+    if (logError) {
+      console.error('enqueueTransactionalEmail: failed-log update failed', logError)
+    }
+    return false
   }
+  return true
 }

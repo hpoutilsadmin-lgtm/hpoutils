@@ -59,4 +59,9 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     reponse:
       "La direction humaine, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, Sir H. Gepeto — le gérant du site — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à l'équipe au lieu d'inventer une réponse.",
   },
+  {
+    question: "C'est quoi, un jeu à votre image ?",
+    reponse:
+      "Un petit jeu qui porte votre nom et vos couleurs, que vos clients peuvent jouer et partager. Quatre niveaux : Express 29 $ CAD, Événement 199 $ CAD, Saisonnier 299 $ CAD, Permanent 399 $ CAD. Hébergement gratuit la première année, puis 29 $ CAD par année, par jeu. Aucune taxe ajoutée. La vente n'est pas encore ouverte : le parcours actuel, c'est un brief par courriel, un devis, votre oui explicite, puis un paiement à confirmer. Voir la page « Jeux à votre image ».",
+  },
 ];

@@ -96,7 +96,7 @@ function Page() {
               incluses aux ateliers de cuisine.
             </p>
             <p>
-              <strong>Territoire :</strong> Terrebonne, Lanaudière et les environs.
+              <strong>Territoire :</strong> Terrebonne, Lanaudière et les environs. Déplacement gratuit à Terrebonne, L'Assomption, Repentigny et Charlemagne, sinon 0,71 $/km.
               <strong> Réservation :</strong> par courriel à{" "}
               <a href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a> —
               chaque proposition peut être adaptée à votre milieu.
@@ -175,8 +175,10 @@ function Page() {
   );
 }
 
-// « L'IA sans jargon » figure dans ATELIERS et dans FETES : on déduplique
-// pour ne pas l'afficher deux fois dans la liste déroulante.
+// « L'IA sans jargon » existe en deux éditions aux titres distincts
+// (régulière / Édition des Fêtes) : la déduplication par titre exact
+// ci-dessous ne les fusionne pas — la liste déroulante compte donc
+// 9 choix, IA deux fois, un par édition.
 const ATELIER_CHOICES = Array.from(
   new Set([...ATELIERS.map((a) => a.title), ...FETES.map((f) => f.title)]),
 );
@@ -233,11 +235,11 @@ function FormulaireAtelier() {
   return (
     <form onSubmit={envoyer} style={{ display: "grid", gap: 18, marginTop: 24 }}>
       <div>
-        <label htmlFor="atelier-nom" style={labelStyle}>Ton nom *</label>
+        <label htmlFor="atelier-nom" style={labelStyle}>Votre nom *</label>
         <input id="atelier-nom" required value={nom} onChange={(e) => setNom(e.target.value)} style={inputStyle} autoComplete="name" />
       </div>
       <div>
-        <label htmlFor="atelier-courriel" style={labelStyle}>Ton courriel *</label>
+        <label htmlFor="atelier-courriel" style={labelStyle}>Votre courriel *</label>
         <input id="atelier-courriel" type="email" required value={courriel} onChange={(e) => setCourriel(e.target.value)} style={inputStyle} autoComplete="email" />
       </div>
       <div>
@@ -265,11 +267,11 @@ function FormulaireAtelier() {
         <input id="atelier-personnes" value={personnes} onChange={(e) => setPersonnes(e.target.value)} style={inputStyle} placeholder="Ex. : 12" inputMode="numeric" />
       </div>
       <div>
-        <label htmlFor="atelier-message" style={labelStyle}>Ton besoin, en quelques mots</label>
+        <label htmlFor="atelier-message" style={labelStyle}>Votre besoin, en quelques mots</label>
         <textarea id="atelier-message" value={message} onChange={(e) => setMessage(e.target.value)} style={{ ...inputStyle, minHeight: 110 }} rows={4} />
       </div>
       <div>
-        <button type="submit" className="btn-primary">Ouvrir ma demande dans mon courriel</button>
+        <button type="submit" className="btn-primary">Ouvrir votre demande dans votre courriel</button>
       </div>
       {ouvert && (
         <p role="status" style={{ fontSize: 16, lineHeight: 1.65, border: "1px solid rgba(58,42,32,.25)", borderLeft: "4px solid #3a2a20", borderRadius: 8, background: "rgba(247,244,236,.85)", padding: "14px 18px" }}>

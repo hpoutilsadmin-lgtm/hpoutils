@@ -152,8 +152,19 @@ export async function deliverStripeSession(session: any, env: StripeEnv) {
   }
 
   // Tomes : jetons + courriel, puis sortie (pas de courriel PDF).
+  // Pertes journalisées en erreur, jamais silencieuses : si la session
+  // est un tome mais qu'aucun courriel de livraison ni aucun tome
+  // reconnaissable n'existe, on NE marque rien comme livré par la
+  // branche tomes — le parcours ci-dessous ne doit pas non plus poser
+  // delivery_sent_at sans courriel (voir garde en fin de fonction).
+  if (isTomeSession(session) && !deliveryEmail) {
+    console.error("tome session without delivery email; no tome email can be sent", session.id);
+  }
   if (isTomeSession(session) && deliveryEmail) {
     const slugs = resolveTomeSlugsForSession(session);
+    if (slugs.length === 0) {
+      console.error("tome session with no resolvable slugs; no tome email can be sent", session.id);
+    }
     if (slugs.length > 0) {
       const created = await createTomeTokensForSession({
         sessionId: session.id,
@@ -162,19 +173,33 @@ export async function deliverStripeSession(session: any, env: StripeEnv) {
         environment: env,
       });
       const fresh = created.filter((c) => c.token !== null);
-      if (fresh.length > 0) {
-        await enqueueTransactionalEmail({
-          templateName: "tome-delivery",
-          recipientEmail: deliveryEmail,
-          idempotencyKey: `tome-delivery-${session.id}`,
-          templateData: {
-            title: "À toi l'histoire",
-            items: fresh.map((c) => ({ title: c.tome.title, readerUrl: readerUrl(c.token!) })),
-            siteOrigin: origin(),
-            isGift,
-          },
-        });
+      // B-W2 : ne marquer livré QUE si le courriel est réellement mis
+      // en file. Sans jeton frais, on ne peut pas renvoyer les liens
+      // d'origine (bruts non retrouvables depuis leur empreinte) : une
+      // livraison antérieure incomplète ne doit pas devenir « livrée »
+      // par défaut — elle lève, le webhook répond 400, Stripe rejoue,
+      // et l'acheteur garde la récupération par courriel (/lire,
+      // /recuperer-achat) qui forge de nouveaux jetons.
+      // Fusion 3B+3J : le journal d'erreur de 3J est gardé avant le
+      // lever de 3B (visibilité + non-marquage) ; le bloc d'envoi
+      // « fire-and-forget » de 3J est abandonné, l'envoi ci-dessous
+      // (chemin 3B, vérifié) l'englobe — sinon double courriel.
+      if (fresh.length === 0) {
+        console.error("tome session with pre-existing tokens only; no email can be resent from this run", session.id);
+        throw new Error("Tome delivery: no fresh tokens to email");
       }
+      const queued = await enqueueTransactionalEmail({
+        templateName: "tome-delivery",
+        recipientEmail: deliveryEmail,
+        idempotencyKey: `tome-delivery-${session.id}`,
+        templateData: {
+          title: "À toi l'histoire",
+          items: fresh.map((c) => ({ title: c.tome.title, readerUrl: readerUrl(c.token!) })),
+          siteOrigin: origin(),
+          isGift,
+        },
+      });
+      if (!queued) throw new Error("Tome delivery email enqueue failed");
       await markDelivered(db, session.id, rows);
       return { delivered: true, email: payer, giftEmail: isGift ? deliveryEmail : null, itemCount: fresh.length };
     }
@@ -232,8 +257,20 @@ export async function deliverStripeSession(session: any, env: StripeEnv) {
     if (error) console.warn("kit_slugs not recorded (migration pending?)", error.message);
   }
 
+  // Garde M2 : une session tome arrivée ici n'a ni courriel de
+  // livraison ni tome reconnaissable (voir gardes ci-dessus). La marquer
+  // « livrée » sans courriel serait faux : on ne pose pas
+  // delivery_sent_at, la commande reste « paid » (récupérable, et le
+  // rejeu Stripe ne la fera pas passer pour livrée).
+  if (isTomeSession(session) && emailItems.length === 0) {
+    console.error("tome session delivered without any email item; delivery NOT marked", session.id);
+    return { delivered: false, email: payer, giftEmail: isGift ? deliveryEmail : null, itemCount: 0 };
+  }
   if (deliveryEmail && emailItems.length > 0) {
-    await enqueueTransactionalEmail({
+    // B-W2 : un échec de mise en file lève AVANT markDelivered — le
+    // webhook répond 400, Stripe rejoue, et la commande reste
+    // paid-sans-delivery_sent_at au lieu d'être faussement « livrée ».
+    const queued = await enqueueTransactionalEmail({
       templateName: "purchase-delivery",
       recipientEmail: deliveryEmail,
       // Clé PAR ARTICLE : un panier ne perd plus son 2e article en cas de rejeu.
@@ -245,6 +282,9 @@ export async function deliverStripeSession(session: any, env: StripeEnv) {
         isGift,
       },
     });
+    if (!queued) throw new Error("Purchase delivery email enqueue failed");
+  } else if (deliveryEmail && emailItems.length === 0) {
+    console.error("delivery with no email item; order still marked delivered by existing flow", session.id);
   }
   await markDelivered(db, session.id, toDeliver);
   return { delivered: true, email: payer, giftEmail: isGift ? deliveryEmail : null, itemCount: emailItems.length };

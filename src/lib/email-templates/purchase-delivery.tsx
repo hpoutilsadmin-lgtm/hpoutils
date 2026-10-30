@@ -52,8 +52,8 @@ const PurchaseDeliveryEmail = ({
         {items.length > 0 ? (
           <>
             <Text style={text}>
-              Voici vos liens de téléchargement pour <strong>{title}</strong>{' '}
-              — vos {items.length} kits choisis. Chaque lien est valide 7
+              Voici vos liens de téléchargement — {items.length} article
+              {items.length > 1 ? 's' : ''}. Chaque lien est valide 7
               jours. Conservez ce courriel — vous pouvez toujours revenir sur
               la page «&nbsp;Récupérer mon achat&nbsp;» pour en générer de
               nouveaux.

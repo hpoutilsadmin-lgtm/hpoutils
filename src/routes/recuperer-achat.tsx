@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { recoverOrdersByEmail } from "@/utils/payments.functions";
@@ -74,12 +74,14 @@ function Page() {
               Étape 1 — Cherchez le reçu Stripe dans vos courriels
             </h2>
             <p style={stepTextStyle}>
-              Après votre achat, Stripe vous a envoyé un reçu par courriel,
-              et votre lien (téléchargement ou lecture web, selon le produit) se trouve dedans. Cherchez
+              Après votre achat, Stripe vous a envoyé un reçu par courriel :
+              ce reçu confirme le paiement, mais il ne contient pas votre
+              lien HP. Votre lien se trouve dans le courriel envoyé par
+              HP Outils, séparément. Cherchez
               «&nbsp;Stripe&nbsp;» ou «&nbsp;HP Outils&nbsp;» dans votre
               boîte de réception. Jetez aussi un œil au dossier
-              «&nbsp;Indésirables&nbsp;» (le pourriel)&nbsp;: le reçu s'y
-              glisse parfois.
+              «&nbsp;Indésirables&nbsp;» (le pourriel)&nbsp;: le courriel
+              s'y glisse parfois.
             </p>
           </div>
           <div style={cardStyle}>
@@ -88,8 +90,13 @@ function Page() {
             </h2>
             <p style={{ ...stepTextStyle, marginBottom: 16 }}>
               Entrez l'adresse exacte utilisée lors de votre achat. Si une
-              commande payée est associée à cette adresse, un nouveau lien (téléchargement ou lecture web, selon le produit, valide 7 jours) vous sera envoyé par
-              courriel dans les prochaines minutes.
+              commande payée est associée à cette adresse, un nouveau lien vous sera envoyé par
+              courriel dans les prochaines minutes (téléchargement valide 7 jours, ou lecture web sans expiration, selon le produit).
+              {/* Fusion 3B+3J : le texte 3B est gardé car le formulaire
+                  couvre désormais aussi les tomes (récupération 3B) — la
+                  restriction « PDF seulement » de 3J serait fausse après
+                  fusion. La correction « reçu Stripe » de 3J est gardée
+                  dans le paragraphe précédent. */}
             </p>
           {submitted ? (
             <div>
@@ -98,6 +105,7 @@ function Page() {
                 contenant vos liens vient d'être envoyé.
                 Vérifiez votre boîte de réception (et le dossier
                 «&nbsp;Indésirables&nbsp;») dans les prochaines minutes.
+                Pour un tome, vous pouvez aussi utiliser la page <a href="/lire">Lire</a>.
               </p>
               <p style={{ marginTop: 16, fontSize: 13, opacity: 0.75 }}>
                 Vous ne recevez rien&nbsp;?{" "}
@@ -157,6 +165,9 @@ function Page() {
               <a href="/contact#formulaire-contact">formulaire de contact</a>.
             </p>
           </div>
+          <p style={{ textAlign: "center" }}>
+            <Link to="/">Retour à l'accueil</Link>
+          </p>
         </div>
       </section>
     </>

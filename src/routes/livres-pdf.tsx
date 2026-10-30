@@ -41,7 +41,7 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/kit-13.jpg", title: "Kit Sans Honte — Chalet — Les règles qui sauvent les Noëls", desc: "Les règles d'un chalet partagé, écrites quand tout va bien : qui paie quoi, qui décide, le calendrier, les invités, les réparations et la clause de sortie.", tag: "Kit PDF", slug: "sans-honte-chalet", price: "5 $" },
   { cover: "/images/sans-honte/kit-14.jpg", title: "Kit Sans Honte — L'année québécoise", desc: "L'année québécoise mois par mois : impôts, REER, pneus, rentrée et Fêtes — plus les rendez-vous annuels qu'on oublie toujours, de la SAAQ aux assurances.", tag: "Kit PDF", slug: "sans-honte-annee-quebecoise", price: "5 $" },
   { cover: "/images/sans-honte/kit-15.jpg", title: "Kit Sans Honte — Héritage numérique", desc: "Préparer la transmission de sa vie en ligne : l'inventaire des comptes, le coffre à mots de passe, les photos, les abonnements et la personne de confiance.", tag: "Kit PDF", slug: "sans-honte-heritage-numerique", price: "5 $" },
-  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — Choisis 10 kits parmi 15", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisis 10 kits parmi les 15.", tag: "Collection PDF", slug: "sans-honte-collection", price: "40 $" },
+  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — Choisissez 10 kits parmi 15", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisissez 10 kits parmi les 15.", tag: "Collection PDF", slug: "sans-honte-collection", price: "40 $" },
 ];
 
 function discoverLabel(tag: Kind): string {

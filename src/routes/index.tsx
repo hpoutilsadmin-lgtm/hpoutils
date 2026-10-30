@@ -91,17 +91,18 @@ function Index() {
             PDF à petit prix, des livres et des ateliers, créés au Québec.
             Des outils éducatifs gratuits pour les familles de Terrebonne, au Québec.
           </p>
-          <p style={{ margin: "0 0 28px", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
-            Écrit par un humain, accéléré par l'IA. On le dit toujours.
-          </p>
-          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, margin: "0 0 28px", maxWidth: 700 }}>
-            « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — HP
-          </p>
+          {/* Nuit 4A : les appels d'abord, les citations ensuite — textes inchangés, ordre seul. */}
           <div className="lead-actions">
             <Link to="/jeux" className="btn-primary">Jouer — 36 + 1 caché jeux gratuits</Link>
             <Link to="/outils" className="btn-primary">Outils gratuits, sans compte</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
+          <p style={{ margin: "28px 0", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
+            Écrit par un humain, accéléré par l'IA. On le dit toujours.
+          </p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, margin: "0 0 28px", maxWidth: 700 }}>
+            « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — HP
+          </p>
         </div>
       </section>
 
@@ -195,7 +196,7 @@ function Index() {
 
       <section className="three-pillars">
         <div className="container">
-          <span className="editorial-kicker">Découvre aussi</span>
+          <span className="editorial-kicker">Découvrez aussi</span>
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les Passeurs</h3>

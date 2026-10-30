@@ -48,7 +48,7 @@ function Page() {
               <span className="pillar-num">03</span>
               <h3>Ateliers sur mesure</h3>
               <p>Survie alimentaire, marché du travail et smoothie — adaptés à votre groupe.</p>
-              <Link className="pillar-cta" to="/ateliers">Découvrir les ateliers et la fiche organismes &amp; écoles →</Link>
+              <a className="pillar-cta" href="/ateliers#organismes-ecoles">Découvrir les ateliers et la fiche organismes &amp; écoles →</a>
             </article>
           </div>
         </div>

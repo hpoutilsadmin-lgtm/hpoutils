@@ -6,7 +6,7 @@ export const Route = createFileRoute("/merci")({
   head: () => {
     const head = createSeoHead({
       title: "Merci — votre extrait Frigo Sans Honte | HP Outils",
-      description: "Merci pour votre inscription aux nouveautés HP. Télécharge l'extrait gratuit du kit Frigo Sans Honte.",
+      description: "Merci pour votre inscription aux nouveautés HP. Téléchargez l'extrait gratuit du kit Frigo Sans Honte.",
       path: "/merci",
     });
     return { ...head, meta: [...(head.meta ?? []), { name: "robots", content: "noindex" }] };

@@ -9,6 +9,15 @@ import {
 } from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
+// B-T2 : récupération tomes — même primitives que le formulaire /lire
+// (recoverTomeLinks, src/utils/tomes.functions.ts) : mintRecoveryTomeTokens
+// forge de nouveaux jetons (les bruts d'origine ne sont pas retrouvables
+// depuis leur empreinte) et tome-delivery envoie les liens de lecture.
+// Aucun changement au webhook ni à la création de jetons à l'achat.
+import {
+  mintRecoveryTomeTokens,
+  readerUrl,
+} from "@/lib/tomes-tokens.server";
 
 function buildDownloadUrl(priceId: string, email: string): string {
   const token = signDownloadToken({ priceId, email });
@@ -83,6 +92,12 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
     // correspondant existe) : aucune session ne peut être créée, même
     // via une requête forgée — jamais de paiement à l'ancien prix.
     if (product.purchaseHold) throw new Error("Achat suspendu pour ce produit");
+    // Bundle : une sélection absente ne doit pas créer de session —
+    // sans elle, la livraison retomberait sur le fichier de repli
+    // (collection entière) au lieu des 10 kits choisis.
+    if (data.priceId === COLLECTION_PRICE_ID && data.kitSlugs === undefined) {
+      throw new Error("Sélection de kits invalide");
+    }
     if (data.kitSlugs !== undefined) {
       // La sélection de kits n'a de sens que pour le bundle, et elle doit
       // être complète et valide (exactement 10 kits Sans Honte, uniques).
@@ -184,7 +199,10 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
       .select("id, price_id, pdf_path, created_at, status")
       .ilike("customer_email", escapedEmail)
       .eq("status", "paid")
-      .eq("environment", data.environment)
+      // Les commandes 100 % bon ont environment "gift" (payCartWithGift,
+      // cadeaux.functions.ts), sans sandbox ni live : les inclure, sinon
+      // un achat payé entièrement par bon est irrécupérable ici.
+      .in("environment", [data.environment, "gift"])
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -203,8 +221,11 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
       .select("id, price_id, pdf_path, created_at, status")
       .ilike("gift_recipient_email", escapedEmail)
       .eq("status", "paid")
-      .eq("environment", data.environment)
+      // Même règle que la recherche payeur ci-dessus : les commandes
+      // 100 % bon portent environment "gift", pas sandbox/live.
+      .in("environment", [data.environment, "gift"])
       .order("created_at", { ascending: false });
+    if (giftErr) console.warn("recover gift lookup failed (migration gift_recipient_email ?)", giftErr.message);
     if (!giftErr && giftOrders && Array.isArray(orders)) {
       for (const o of giftOrders as typeof orders) {
         if (o && !seenIds.has(o.id as string)) {
@@ -283,6 +304,42 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
         idempotencyKey: `recover-${data.email}-${Date.now()}`,
         templateData: { items, siteOrigin },
       });
+    }
+
+    // B-T2 : les tomes ne passent PAS par la boucle PDF ci-dessus — la
+    // boucle saute toute ligne sans pdf_path (continue), et les tomes
+    // n'ont pas de pdf_path. Avant ce bloc, un acheteur de tomes qui
+    // passait par /recuperer-achat (lien présent sur /lire et sur
+    // /lire/merci) recevait le message neutre « un courriel vient
+    // d'être envoyé » sans qu'aucun courriel ne parte. On réutilise
+    // exactement le parcours /lire : nouveaux jetons + courriel
+    // tome-delivery séparé (gabarit distinct, liens de lecture, pas
+    // de téléchargement). La réponse reste neutre dans tous les cas.
+    // Limite héritée de /lire (voir rapport) : mintRecoveryTomeTokens
+    // ne filtre pas par environment et ne retrouve pas les tomes
+    // offerts quand c'est le payeur (et non le destinataire) qui
+    // récupère — comportement identique au formulaire /lire, pas une
+    // régression. Un échec ici ne casse jamais la récupération PDF
+    // ci-dessus : il est journalisé, la réponse reste neutre.
+    try {
+      const tomeFresh = await mintRecoveryTomeTokens(data.email);
+      if (tomeFresh.length > 0) {
+        await enqueueTransactionalEmail({
+          templateName: "tome-delivery",
+          recipientEmail: data.email,
+          idempotencyKey: `tome-recovery-${data.email}-${Date.now()}`,
+          templateData: {
+            title: "À toi l'histoire",
+            items: tomeFresh.map((c) => ({
+              title: c.tome.title,
+              readerUrl: readerUrl(c.token),
+            })),
+            siteOrigin,
+          },
+        });
+      }
+    } catch (e) {
+      console.error("recover tome links error", e);
     }
 
     return { ok: true as const };

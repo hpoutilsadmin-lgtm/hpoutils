@@ -482,10 +482,11 @@ function JeuxPage() {
         <div className="container">
           <span className="editorial-kicker">Jeux HP</span>
           <h1>Jouer, choisir, <em>essayer autrement</em>.</h1>
-          <p className="lead">Des jeux courts et des histoires interactives pour exercer ses réflexes, imaginer la suite et apprendre sans pression.</p>
           {/* Lot /jeux façon Friv (phrase d'accueil approuvée, en vous — option B :
               la page en vous, les contenus de jeux en tu) */}
-          <p className="lead" style={{ marginTop: 10 }}>Jeux gratuits, sans compte, sans pub — choisissez et jouez tout de suite.</p>
+          {/* Nuit 4A : la valeur (gratuits, sans compte, sans pub) en première phrase — textes inchangés, ordre seul. */}
+          <p className="lead">Jeux gratuits, sans compte, sans pub — choisissez et jouez tout de suite.</p>
+          <p className="lead" style={{ marginTop: 10 }}>Des jeux courts et des histoires interactives pour exercer ses réflexes, imaginer la suite et apprendre sans pression.</p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des jeux pour la vraie vie. »</p>
           <div className="lead-actions">
             <a className="btn-primary" href="/apps/bons-reflexes">Jouer aux Bons réflexes d'HP</a>
@@ -702,7 +703,7 @@ function JeuxPage() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Votre commerce, votre jeu</h3>
-              <p>Un petit jeu aux couleurs de votre commerce, que vos clients jouent, partagent et retiennent. De 29 $ à 399 $, hébergement gratuit la première année, aucune taxe ajoutée. Service sur mesure — ce n&apos;est pas un jeu gratuit de la liste ci-dessus, et il ne change pas le compteur des jeux gratuits.</p>
+              <p>Un petit jeu aux couleurs de votre commerce, que vos clients jouent, partagent et retiennent. De 29 $ à 399 $, hébergement gratuit la première année, puis 29 $ par année, par jeu hébergé, aucune taxe ajoutée. Service sur mesure — ce n&apos;est pas un jeu gratuit de la liste ci-dessus, et il ne change pas le compteur des jeux gratuits.</p>
               <Link to="/jeux-a-votre-image" className="pillar-cta">Voir l&apos;offre →</Link>
             </article>
           </div>
@@ -750,8 +751,7 @@ function JeuxPage() {
             })}
           </ul>
           <p style={{ textAlign: "center", maxWidth: 680, margin: "22px auto 0", color: "#5a4a3f", fontSize: 15, lineHeight: 1.6 }}>
-            Et Cherche &amp; Trouve — La vraie vie a été approuvé à
-            l'unanimité : tous les tampons d'un coup.
+            Et Cherche &amp; Trouve — La vraie vie figure aussi dans la liste ci-dessus.
           </p>
         </div>
       </section>

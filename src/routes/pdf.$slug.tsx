@@ -282,7 +282,7 @@ function Page() {
                 params={{ slug: "sans-honte-collection" }}
                 className="collection-offer"
               >
-                Choisis 10 kits parmi 15 pour 40 $ CAD — Voir la collection →
+                Choisissez 10 kits parmi 15 pour 40 $ CAD — Voir la collection →
               </Link>
             )}
           </div>
@@ -461,6 +461,9 @@ function Page() {
                 <Link to="/sans-honte">← Retour à la collection Sans Honte — Voir les 15 kits</Link>
               </p>
             )}
+            <p style={{ textAlign: "center", marginTop: 12 }}>
+              <Link to="/livres-pdf">Retour à la bibliothèque</Link>
+            </p>
             <p style={{ textAlign: "center", color: "#3a2a20", fontSize: 14, marginTop: 8 }}>
               HP — des outils pour la vraie vie
             </p>

@@ -279,7 +279,17 @@
 
       /* Dock compact au téléphone : il ne doit pas couvrir la mascotte */
       @media (max-width:560px){
-        .bot-controls{gap:4px;max-width:66vw}
+        /* Lot nuit 2B (piste minimale, en attente du go) : au téléphone,
+           le right:176px de la règle de base (ordinateur : il protège
+           Détectôt et le badge, NE PAS le toucher hors mobile)
+           plaçait le ••• fermé au milieu de l'écran et faisait déborder
+           le panneau ouvert à gauche. Réinitialisé ici à 12px — une seule
+           règle, qui vaut pour les états fermé ET ouvert (la règle
+           .bot-controls.open ne redéfinit pas right). Arbitrage restant,
+           à trancher au doigt, pas ici : à droite, le ••• recouvre la
+           partie basse de Détectôt (même coin) ; à gauche, il recouvrirait
+           le robot. Voir le rapport nuit-2b. */
+        .bot-controls{gap:4px;max-width:66vw;right:12px}
         .bot-controls button,.bot-controls select{font-size:12px;padding:10px 10px;min-height:44px}
         /* Retouche du propriétaire (22 oct.) : nettement plus petit au
            téléphone — présence discrète en bas d'écran, qui couvre beaucoup

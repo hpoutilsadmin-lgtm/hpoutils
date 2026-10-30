@@ -41,7 +41,7 @@ const WEB_TOOLS = [
     emoji: "🍲",
     tag: "Recettes",
     title: "En cuisine — Recettes HP",
-    copy: "629 recettes pour cuisiner avec ce qu'on a sous la main : cherche par ingrédients, convertis les températures du four et trouve quoi faire avec les restes.",
+    copy: "629 recettes pour cuisiner avec ce qu'on a sous la main : cherchez par ingrédients, convertissez les températures du four et trouvez quoi faire avec les restes.",
     cta: "Entrer dans la cuisine →",
     href: "/en-cuisine/",
   },
@@ -60,6 +60,14 @@ const WEB_TOOLS = [
     copy: "Combien vous pouvez dépenser par jour jusqu'à la fin du mois, sans vous mettre dans le trouble. Trois boutons pour la vraie vie : reçu, dépensé, coup dur.",
     cta: "Calculer mon reste →",
     href: "/outils-web/le-reste-du-mois.html",
+  },
+  {
+    emoji: "🛒",
+    tag: "Achat",
+    title: "Ça vaut-tu la peine ?",
+    copy: "Entrez le prix et combien de fois vous l'utiliserez : l'outil calcule le coût par usage, l'équivalent en heures de travail et la projection sur un an.",
+    cta: "Calculer le vrai coût →",
+    href: "/outils-web/ca-vaut-tu-la-peine.html",
   },
   {
     emoji: "🤝",
@@ -193,9 +201,9 @@ function Page() {
             <div className="tool-grid">
               <article className="tool-card">
                 <span className="tool-tag">Collection PDF — 40 $ CAD, aucune taxe ajoutée</span>
-                <h3>Collection Sans Honte — Choisis 10 kits parmi 15</h3>
+                <h3>Collection Sans Honte — Choisissez 10 kits parmi 15</h3>
                 <p>
-                  Choisis 10 kits parmi les 15 Sans Honte, en un seul PDF — Papiers, Frigo, Tenir Debout,
+                  Choisissez 10 kits parmi les 15 Sans Honte, en un seul PDF — Papiers, Frigo, Tenir Debout,
                   Seconde Main, Entraide et plus. Téléchargement immédiat après paiement.
                 </p>
                 <Link to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF →</Link>
@@ -241,7 +249,7 @@ function Page() {
               </article>
               <article className="tool-card">
                 <span className="tool-tag">Bundle — 40 $ CAD, aucune taxe ajoutée</span>
-                <h3>Tous les outils pratiques</h3>
+                <h3>Collection Sans Honte — 10 kits au choix</h3>
                 <p>Un seul ensemble pour réunir les fiches et outils pratiques HP.</p>
                 <Link to="/achat/sans-honte-collection">Acheter la collection →</Link>
               </article>

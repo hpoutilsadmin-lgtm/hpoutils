@@ -4,7 +4,7 @@
 // total calculé côté client.
 //
 // Règles métier (décisions HP, 24 octobre 2026) :
-// - Seuls les produits VENDABLES aujourd'hui sont ajoutables : les 3 livres
+// - Seuls les produits VENDABLES aujourd'hui sont ajoutables : les 5 livres
 //   et les 15 kits Sans Honte du catalogue, sans purchaseHold.
 // - Les PDF ne se vendent qu'en 1 exemplaire : la quantité est plafonnée à 1
 //   par produit (un fichier à télécharger, pas un objet). Ajouter deux fois

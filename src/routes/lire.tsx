@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { createSeoHead } from "@/lib/seo";
@@ -41,6 +41,14 @@ function Page() {
   // et le bundle. Le tome gratuit et la récupération ne sont pas concernés.
   const [giftChecked, setGiftChecked] = useState(false);
   const [giftEmail, setGiftEmail] = useState("");
+  // Annulation Stripe : cancel_url renvoie ici avec ?paiement=annule
+  // (tomes.functions.ts) — message neutre, aucun débit.
+  const [paiementAnnule, setPaiementAnnule] = useState(false);
+  useEffect(() => {
+    try {
+      if (new URLSearchParams(window.location.search).get("paiement") === "annule") setPaiementAnnule(true);
+    } catch { /* recherche indisponible : pas de message */ }
+  }, []);
 
   // Destinataire validé AVANT tout paiement : case cochée + courriel
   // invalide = erreur affichée, aucune session Stripe créée, aucun débit.
@@ -75,7 +83,7 @@ function Page() {
   async function buyBundle() {
     setError(null);
     if (bundleChoice.length !== BUNDLE.count) {
-      setError("Choisis exactement 3 tomes pour le bundle.");
+      setError("Choisissez exactement 3 tomes pour le bundle.");
       return;
     }
     const giftTo = giftToOrError();
@@ -139,7 +147,7 @@ function Page() {
           <h1>Des livres-jeux qui se lisent par lien web personnel.</h1>
           <p className="lead">
             11 tomes payants, de 5 $ à 8 $, plus le tome gratuit La Chasse-Galerie.
-            Après l'achat, tu reçois ton lien web personnel par courriel — pas de
+            Après l'achat, vous recevez votre lien web personnel par courriel — pas de
             PDF, pas de compte. Aucune taxe ajoutée.
           </p>
           <div className="lead-actions">
@@ -153,6 +161,7 @@ function Page() {
           <p style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
             Les liens d'accès sont envoyés par courriel après le paiement.
           </p>
+          {paiementAnnule && <p role="status">Paiement annulé, aucun débit.</p>}
           {error && <p role="alert" style={{ color: "#8a1f1f" }}>{error}</p>}
 
           <h2>Le tome gratuit</h2>
@@ -160,11 +169,11 @@ function Page() {
             <h3>{FREE_TOME.title}</h3>
             <p>{FREE_TOME.hook}</p>
             {freeSent ? (
-              <p>Vérifie ta boîte courriel : ton lien gratuit est en route.</p>
+              <p>Vérifiez votre boîte courriel : votre lien gratuit est en route.</p>
             ) : (
               <form onSubmit={askFreeLink}>
                 <label>
-                  Ton courriel
+                  Votre courriel
                   <input
                     type="email"
                     required
@@ -192,7 +201,8 @@ function Page() {
               C'est pour offrir
             </label>
             <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65 }}>
-        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. En cas de remboursement, le lien est coupé.
+        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. En cas de remboursement, le lien est coupé. Si vous entrez votre propre courriel, le lien vous est envoyé à vous.
+        {/* Fusion tête+3K : formulation promesse de la tête gardée + phrase propre courriel de 3K (même résolution que /achat). */}
       </p>
             {giftChecked && (
               <label style={{ fontSize: 14, fontWeight: 600 }}>
@@ -271,12 +281,12 @@ function Page() {
           {recoverSent ? (
             <p>
               Si des achats existent pour ce courriel, de nouveaux liens sont en
-              route. Vérifie ta boîte courriel.
+              route. Vérifiez votre boîte courriel.
             </p>
           ) : (
             <form onSubmit={askRecover}>
               <label>
-                Ton courriel
+                Votre courriel
                 <input
                   type="email"
                   required

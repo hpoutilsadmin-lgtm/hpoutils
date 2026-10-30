@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getCheckoutStatus } from "@/utils/checkout-status.server";
 import { createSeoHead } from "@/lib/seo";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { ThankYouCelebration } from "@/components/ThankYouCelebration";
 
 export const Route = createFileRoute("/checkout/return")({
@@ -59,8 +60,25 @@ function Page() {
     };
   }, [session_id, check]);
 
+  // Panier vidé après un paiement Stripe réussi, seulement si ce paiement
+  // venait du panier (drapeau posé par /panier avant la redirection).
+  // Un achat seul ne vide jamais un panier mis de côté par ailleurs.
+  useEffect(() => {
+    if (state.kind !== "paid" && state.kind !== "delivered") return;
+    try {
+      if (sessionStorage.getItem("hp-panier-en-paiement") === "1") {
+        localStorage.removeItem("hp-panier-v1");
+        sessionStorage.removeItem("hp-panier-en-paiement");
+      }
+    } catch {
+      // Stockage indisponible : le panier reste, sans planter la page.
+    }
+  }, [state.kind]);
+
   return (
-    <section className="subpage-content">
+    <>
+      <PaymentTestModeBanner />
+      <section className="subpage-content">
       <div className="container" style={{ maxWidth: 720, textAlign: "center", padding: "64px 24px" }}>
         {state.kind === "loading" && <p>Confirmation de votre paiement…</p>}
         {state.kind === "missing" && (
@@ -99,8 +117,10 @@ function Page() {
             <h1>Merci !</h1>
             <ThankYouCelebration />
             <p>
-              Votre achat est confirmé. Les liens de téléchargement vous ont été envoyés par courriel.
-              Vérifiez votre boîte de réception (et le dossier «&nbsp;Indésirables&nbsp;») dans les prochaines minutes.
+              Votre achat est confirmé. Les liens de téléchargement ont été envoyés par courriel à l'adresse de livraison
+              — la vôtre, ou celle de la personne à qui vous offrez cet achat, si vous avez coché «&nbsp;C'est pour offrir&nbsp;».
+              Vérifiez la boîte de réception de cette adresse (et le dossier «&nbsp;Indésirables&nbsp;») dans les prochaines minutes.
+              {/* Fusion 3J+3I+3K : texte 3J gardé — les variantes 3I/3K (« votre boîte ») seraient fausses pour un cadeau. */}
             </p>
             <p style={{ marginTop: 32, fontSize: 14, opacity: 0.7 }}>
               Le lien de téléchargement reste valide 7 jours. Conservez-le précieusement.
@@ -124,7 +144,7 @@ function Page() {
               </p>
               <p style={{ margin: 0, fontSize: 14 }}>
                 Si ça coince — un fichier qui ne s'ouvre pas, un lien
-                mort, le mauvais fichier — écris à{" "}
+                mort, le mauvais fichier — écrivez à{" "}
                 <a href="mailto:hpoutils.admin@gmail.com">
                   hpoutils.admin@gmail.com
                 </a>{" "}
@@ -141,5 +161,6 @@ function Page() {
         )}
       </div>
     </section>
+    </>
   );
 }

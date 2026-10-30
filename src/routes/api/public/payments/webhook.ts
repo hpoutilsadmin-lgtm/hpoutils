@@ -58,8 +58,25 @@ async function handleChargeRefunded(charge: any, env: StripeEnv) {
   const paymentIntentId =
     typeof charge.payment_intent === "string" ? charge.payment_intent : null;
   if (!paymentIntentId) {
-    console.warn("charge refunded without payment_intent; nothing revoked", {
+    // Abandon visible : sans payment_intent, ni la commande ni les liens
+    // ne peuvent être retrouvés. Le 200 est conservé (rejouer ne
+    // réparerait rien), mais l'événement est journalisé en erreur pour
+    // qu'un suivi manuel soit possible — jamais silencieux.
+    console.error("charge refunded without payment_intent; nothing revoked, manual follow-up required", {
       chargeId: charge.id ?? null,
+    });
+    return;
+  }
+  // Un remboursement annulé ou refusé ne rembourse rien : amount_refunded
+  // à 0 ne doit ni marquer la commande comme remboursée ni révoquer un
+  // lien. Seul un montant réellement remboursé (> 0) agit ici. Le cas
+  // partiel (0 < remboursé < total) garde le comportement actuel —
+  // commande marquée remboursée, liens révoqués — tant que la direction
+  // n'a pas tranché le partiel (voir commentaire d'origine ci-dessous).
+  if (typeof charge.amount_refunded !== "number" || charge.amount_refunded <= 0) {
+    console.log("charge refund update with nothing refunded; nothing revoked", {
+      chargeId: charge.id ?? null,
+      amount_refunded: charge.amount_refunded ?? null,
     });
     return;
   }
@@ -88,26 +105,36 @@ async function handleChargeRefunded(charge: any, env: StripeEnv) {
     paymentIntentId,
     env,
   );
-  if (revokedFromOrders > 0) {
-    console.log(
-      `charge refunded: revoked ${revokedFromOrders} tome tokens via orders for payment_intent ${paymentIntentId}`,
-    );
-    return;
-  }
-  // Repli indépendant de orders : retrouver les sessions par Stripe.
+  console.log(
+    `charge refunded: revoked ${revokedFromOrders} tome tokens via orders for payment_intent ${paymentIntentId}`,
+  );
+  // Lot 3L (F-W2) : le repli s'exécute TOUJOURS, même si la voie orders
+  // a déjà révoqué au moins un jeton. Avant, le retour anticipé ci-dessus
+  // laissait vivant tout jeton d'une session absente de orders.
+  // La révocation est idempotente (revoked_at IS NULL) : un jeton déjà
+  // révoqué par orders n'est pas compté deux fois.
+  // Lot 3L (F-W1) : la liste Stripe est paginée (100 par page, 100 pages
+  // maximum en garde-fou), au lieu d'un seul appel plafonné à 10 sessions.
   const stripe = createStripeClient(env);
-  const sessions = await stripe.checkout.sessions.list({
-    payment_intent: paymentIntentId,
-    limit: 10,
-  });
-  const sessionIds = sessions.data.map((s) => s.id);
+  const sessionIds: string[] = [];
+  let startingAfter: string | undefined;
+  for (let page = 0; page < 100; page++) {
+    const pageResult = await stripe.checkout.sessions.list({
+      payment_intent: paymentIntentId,
+      limit: 100,
+      ...(startingAfter ? { starting_after: startingAfter } : {}),
+    });
+    for (const s of pageResult.data) sessionIds.push(s.id);
+    if (!pageResult.has_more || pageResult.data.length === 0) break;
+    startingAfter = pageResult.data[pageResult.data.length - 1].id;
+  }
   if (sessionIds.length === 0) {
-    console.warn(
-      `charge refunded: no orders row and no Stripe checkout session for payment_intent ${paymentIntentId}; nothing to revoke`,
+    console.error(
+      `charge refunded: no Stripe checkout session for payment_intent ${paymentIntentId}; nothing to revoke via fallback, manual follow-up required`,
     );
     return;
   }
-  const revokedFromStripe = await revokeTomeTokensForSessions(sessionIds);
+  const revokedFromStripe = await revokeTomeTokensForSessions(sessionIds, env);
   console.log(
     `charge refunded: revoked ${revokedFromStripe} tome tokens via Stripe session fallback for payment_intent ${paymentIntentId}`,
   );
@@ -135,9 +162,15 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
     handlers: {
       POST: async ({ request }) => {
         const rawEnv = new URL(request.url).searchParams.get("env");
+        // B-W1 : un env invalide ne doit JAMAIS répondre 200 « ignored ».
+        // Un 200 dit à Stripe « reçu, ne rejouez pas » : un événement
+        // légitime arrivé avec un mauvais paramètre d'URL serait perdu
+        // sans livraison et sans rejeu. Un non-200 (400, comme les
+        // autres erreurs webhook ci-dessous) fait rejouer Stripe, et
+        // rien n'est livré ici : on sort avant handleWebhook.
         if (rawEnv !== "sandbox" && rawEnv !== "live") {
           console.error("Webhook with invalid env:", rawEnv);
-          return Response.json({ received: true, ignored: "invalid env" });
+          return new Response("Webhook error: invalid env", { status: 400 });
         }
         try {
           await handleWebhook(request, rawEnv as StripeEnv);

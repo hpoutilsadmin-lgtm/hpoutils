@@ -636,7 +636,12 @@ export function initHgpto() {
          une file — les répliques se succèdent, sans se chevaucher.
          Les réponses demandées par le visiteur (mood « answer » /
          « question ») et les réactions immédiates à ses gestes
-         (opts.now) passent tout de suite, comme avant. */
+         (opts.now) passent tout de suite, comme avant.
+         Lot 2A (préparation, piste Q3 à confirmer par go nominatif) :
+         la durée proportionnelle ci-dessus RESTE la fenêtre de lecture
+         garantie — elle pilote la file d'attente et la garde
+         anti-sommeil — mais elle n'éteint plus la bulle : aucune
+         minuterie ne la retire, elle reste jusqu'au premier geste. */
       var bubbleFreeAt = 0;
       var bubbleQueue = [];
       var bubbleFlushTimer = null;
@@ -660,20 +665,23 @@ export function initHgpto() {
         if (bubbleTimer) clearTimeout(bubbleTimer);
         bubbleTimer = null;
         if (dur){
+          /* Lot 2A — bulle jusqu'au premier geste (piste Q3, à confirmer) :
+             la durée calculée reste la fenêtre de lecture garantie (file
+             d'attente + garde anti-sommeil, ligne du setInterval de vie),
+             mais AUCUNE minuterie n'éteint plus la bulle. Seuls un geste
+             (goCorner), un masquage légitime (hideBubble) ou une bulle
+             suivante la retirent. L'ancienne minuterie (setTimeout vers
+             expireBubble) est supprimée, pas déplacée ni allongée. */
           var ms = bubbleReadMs(html, dur);
           bubbleFreeAt = Date.now() + ms;
-          bubbleTimer = setTimeout(expireBubble, ms);
           return ms;
         }
         bubbleFreeAt = 0;
         return 0;
       }
-      function expireBubble(){
-        bubbleTimer = null;
-        bubble.classList.remove('show');
-        bubbleFreeAt = 0;
-        flushBubbleQueue();
-      }
+      /* Lot 2A : expireBubble supprimée — aucune minuterie ne retire plus
+         la bulle. La file d'attente (flushBubbleQueue, ci-dessous) est
+         inchangée : piste séparée, non touchée par ce lot. */
       function flushBubbleQueue(){
         if (bubbleFlushTimer){ clearTimeout(bubbleFlushTimer); bubbleFlushTimer = null; }
         if (!bubbleQueue.length) return;
@@ -1534,7 +1542,14 @@ export function initHgpto() {
           showBubble(esc(YAWN_LINE), 2800, 'none');
           yawnSound();
           setTimeout(function(){
-            if (!paused && state !== 'sleep'){ hideBubble(); setState('sleep'); setExpr('sleep'); }
+            /* Lot 2A : ce minuteur ne gouverne QUE la transition vers le
+               sommeil (bâillement → sommeil), il ne masque plus la bulle.
+               Cohérence retenue : comme la bulle « sieste » de la branche
+               jour, la bulle qui annonce le sommeil reste visible pendant
+               le sommeil ; elle disparaît au prochain geste (après le
+               réveil), au prochain masquage légitime ou à la bulle
+               suivante. Aucun second minuteur caché n'est introduit. */
+            if (!paused && state !== 'sleep'){ setState('sleep'); setExpr('sleep'); }
           }, 3000);
         } else {
           if (momentRateSession && !sessFlag('hgpto-moment-rate')){

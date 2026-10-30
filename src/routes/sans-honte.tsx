@@ -26,7 +26,7 @@ const FAQ = [
   },
   {
     q: "Et si je ne retrouve plus mon achat ?",
-    a: "Le courriel n'arrive pas, ou votre lien est expiré ? La page Récupérer un achat vous redonne accès à ce que vous avez acheté — ou écrivez-nous.",
+    a: (<>Le courriel n'arrive pas, ou votre lien est expiré ? La page <Link to="/recuperer-achat">Récupérer un achat</Link> vous redonne accès à ce que vous avez acheté — ou écrivez-nous.</>),
   },
 ];
 
@@ -149,7 +149,7 @@ function Page() {
           </div>
           <div className="cta-band" style={{ marginTop: 48 }}>
             <div>
-              <h3>Le bundle — Choisis 10 kits parmi 15</h3>
+              <h3>Le bundle — Choisissez 10 kits parmi 15</h3>
                <p>Choisissez 10 kits parmi les 15 de la collection Sans Honte — 40 $ CAD, aucune taxe ajoutée. Téléchargement immédiat.</p>
                <p><strong>Économie de 10 $ :</strong> achetés un par un, 10 kits coûteraient 50 $ — le bundle est à 40 $.</p>
                <p>Les 15 titres parmi lesquels vous choisissez vos 10 : {KITS.map((k) => k.title).join(" · ")}.</p>

@@ -15,8 +15,8 @@ export const Route = createFileRoute("/cadeaux_/merci")({
   }),
   head: () =>
     createSeoHead({
-      title: "Merci — votre bon cadeau | HP Outils",
-      description: "Confirmation de votre bon cadeau HP Outils.",
+      title: "Merci — statut de votre bon cadeau | HP Outils",
+      description: "Statut d'un bon cadeau HP Outils (programme fermé : aucun nouveau bon n'est émis).",
       path: "/cadeaux/merci",
       noindex: true,
     }),
@@ -46,7 +46,7 @@ function Page() {
         const result = await check({ data: { sessionId: session_id } });
         if (cancelled) return;
         if (result.status === "pending") setState({ kind: "pending" });
-        else if (result.status === "paid") setState({ kind: "paid" });
+        else if (result.status === "paid" || result.status === "delivered") setState({ kind: "paid" });
         else setState({ kind: "missing" });
       } catch {
         if (!cancelled) setState({ kind: "error" });
@@ -71,14 +71,14 @@ function Page() {
         {state.kind === "pending" && (
           <>
             <h1>Paiement en cours</h1>
-            <p>Rafraîchis cette page dans un instant.</p>
+            <p>Rafraîchissez cette page dans un instant.</p>
           </>
         )}
         {state.kind === "error" && (
           <>
             <h1>Une erreur est survenue</h1>
             <p>
-              Ton paiement n'a pas pu être confirmé. Une question ?{" "}
+              Votre paiement n'a pas pu être confirmé. Une question ?{" "}
               <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a>.
             </p>
           </>
@@ -88,8 +88,10 @@ function Page() {
             <h1>Merci !</h1>
             <ThankYouCelebration />
             <p>
-              Votre achat est confirmé. Les détails vous ont été envoyés par courriel.
-              Les codes déjà émis restent utilisables au panier.
+              Votre paiement est confirmé. Aucun nouveau code n'est émis sur cette page :
+              le programme de bons cadeaux est fermé, et les codes déjà émis restent utilisables au panier.
+              Si vous attendiez un code pour cet achat, écrivez à la direction humaine :{" "}
+              <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a>.
             </p>
             <p style={{ marginTop: 24 }}>
               <Link to="/panier">Aller au panier →</Link>

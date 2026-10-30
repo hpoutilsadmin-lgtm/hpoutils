@@ -40,6 +40,17 @@ export function createStripeClient(env: StripeEnv): Stripe {
 }
 
 export function getStripeErrorMessage(error: unknown): string {
+  // Erreurs Stripe (SDK, champ `type` : StripeCardError,
+  // StripeInvalidRequestError, …) : ne jamais renvoyer le message brut
+  // (anglais, détails techniques) à la visiteuse ou au visiteur —
+  // message neutre en français. Les erreurs non Stripe (validations
+  // françaises du code) gardent leur message. Limite : une erreur
+  // Stripe relayée sans son `type` (passerelle) passe encore brute —
+  // les messages réels observés en TEST 0 $ compléteront la table.
+  const type = (error as { type?: unknown } | null)?.type;
+  if (typeof type === "string" && type.startsWith("Stripe")) {
+    return "Impossible de créer la session de paiement";
+  }
   if (error instanceof Error && error.message) return error.message;
   return "Impossible de créer la session de paiement";
 }

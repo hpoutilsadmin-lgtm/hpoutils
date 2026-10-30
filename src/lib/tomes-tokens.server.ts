@@ -206,18 +206,33 @@ export async function createFreeTomeToken(
  * commande manquante (bug remboursement, oct. 2026). Renvoie le nombre
  * de jetons révoqués (0 si rien à révoquer — jamais silencieux côté
  * appelant, qui journalise le résultat).
+ *
+ * Lot 3L (F-W3) : quand `environment` est fourni, la révocation est
+ * filtrée sur cet environnement, pour qu'une révocation sandbox ne
+ * touche jamais un jeton live (et inversement). La valeur "recovery"
+ * est gardée avec l'environnement demandé : un jeton de récupération
+ * reprend l'identifiant de la session d'origine, il doit donc être
+ * coupé par le remboursement de cette session. Un filtre strict sur
+ * l'environnement seul l'aurait laissé vivant — c'est le piège évité ici.
+ * La colonne est NOT NULL avec défaut "sandbox" (migration
+ * 20261024_tome_tokens.sql), donc le filtre ne manque aucun jeton
+ * créé par ce schéma.
  */
 export async function revokeTomeTokensForSessions(
   sessionIds: string[],
+  environment?: string,
 ): Promise<number> {
   if (sessionIds.length === 0) return 0;
   const supabase = getSupabase();
-  const { data, error } = await supabase
+  let query = supabase
     .from("tome_tokens")
     .update({ revoked_at: new Date().toISOString() })
     .in("stripe_session_id", sessionIds)
-    .is("revoked_at", null)
-    .select("id");
+    .is("revoked_at", null);
+  if (environment) {
+    query = query.in("environment", [environment, "recovery"]);
+  }
+  const { data, error } = await query.select("id");
   if (error) {
     console.error("tome tokens revoke failed", error);
     throw new Error("Database error");
@@ -242,5 +257,5 @@ export async function revokeTomeTokensForPaymentIntent(
     .eq("stripe_payment_intent_id", paymentIntentId)
     .eq("environment", environment);
   const sessionIds = (orders ?? []).map((o: { stripe_session_id: string }) => o.stripe_session_id);
-  return revokeTomeTokensForSessions(sessionIds);
+  return revokeTomeTokensForSessions(sessionIds, environment);
 }

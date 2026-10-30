@@ -207,9 +207,14 @@ export function validateBundleChoice(slugs: unknown): string[] {
   }
   const unique = [...new Set(slugs)];
   if (unique.length !== BUNDLE.count) {
-    throw new Error("Choisis 3 tomes différents.");
+    throw new Error("Choisissez 3 tomes différents.");
   }
   for (const slug of unique) {
+    if (slug === FREE_TOME.slug) {
+      // Le gratuit existe, mais ne compte pas dans les trois : le
+      // message « n'existe pas » serait faux pour ce cas.
+      throw new Error("La Chasse-Galerie est déjà gratuite : elle ne compte pas dans les trois.");
+    }
     if (typeof slug !== "string" || !TOMES.some((t) => t.slug === slug)) {
       throw new Error("Un des tomes choisis n'existe pas.");
     }

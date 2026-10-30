@@ -80,11 +80,11 @@ function Page() {
         <p className="lead" style={{ maxWidth: 640 }}>
           Les vraies réponses d'HP Outils — les mêmes que Sir H. Gepeto, l'assistant
           virtuel du site, donne aux visiteurs. Une question qui n'est pas
-          ici ? Écris à{" "}
+          ici ? Écrivez à{" "}
           <a href="mailto:hpoutils.admin@gmail.com">
             hpoutils.admin@gmail.com
           </a>{" "}
-          : la direction humaine te répond.
+          : la direction humaine vous répond sous 3 jours ouvrables.
         </p>
         {FAQ_ENTRIES.map((e) => (
           <article key={e.question} style={{ marginTop: 30 }}>
