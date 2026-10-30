@@ -69,7 +69,7 @@
       #gauge-wrap{flex:1 1 100px;min-width:90px;}
       #gauge-track{height:12px;border:2px solid var(--ink);border-radius:6px;background:var(--card);overflow:hidden;}
       #gauge-fill{height:100%;width:0%;background:var(--green);transition:width .18s linear, background .3s;}
-      .icon-btn{background:var(--card);border:2.5px solid var(--ink);border-radius:6px;color:var(--ink);width:38px;height:38px;font-size:1.05rem;cursor:pointer;line-height:1;flex:0 0 auto;}
+      .icon-btn{background:var(--card);border:2.5px solid var(--ink);border-radius:6px;color:var(--ink);width:44px;height:44px;font-size:1.05rem;cursor:pointer;line-height:1;flex:0 0 auto;}
       #objectives{border:2.5px solid var(--ink);border-radius:6px;background:var(--card);padding:8px 11px;margin-bottom:8px;box-shadow:3px 3px 0 var(--shadow);}
       #objectives .obj-title{font-family:Georgia,serif;font-weight:bold;font-size:.92rem;margin-bottom:3px;}
       #objectives ul{margin:0;padding-left:20px;font-size:.88rem;line-height:1.45;}
@@ -230,7 +230,7 @@
           <div id="joystick"><div id="stick"></div></div>
         </div>
         <div id="actions"></div>
-        <p class="hint">Glisse ton doigt sur le décor pour te déplacer (ou flèches / WASD au clavier). Approche-toi d'une cible, puis frappe un mauvais coup — sans te faire voir pour faire monter ton combo&nbsp;!</p>
+        <p class="hint">Glisse ton doigt ou ta souris sur le décor pour te déplacer (ou flèches / WASD au clavier). Approche-toi d'une cible, puis frappe un mauvais coup — sans te faire voir pour faire monter ton combo&nbsp;!</p>
       </section>
 
       <!-- ======== SENTENCE ======== -->
@@ -273,6 +273,7 @@
         <button class="big-btn red" id="btn-next-level" type="button">Tableau suivant →</button>
         <button class="ghost-btn" id="btn-success-levels" type="button">Voir tous les tableaux</button>
         <button class="ghost-btn" id="btn-success-replay" type="button">Rejouer ce tableau (pour un meilleur score)</button>
+        <p id="pontAteliers" style="display:none;margin-top:16px;text-align:center"><a href="/ateliers" style="display:inline-block;padding:10px 12px">Renseignements sur l'atelier jeunesse →</a></p>
       </section>
 
       <!-- ======== JOURNÉE RATÉE (ADIEU) ======== -->
@@ -651,6 +652,7 @@
         : 'Astuce étoiles : zéro arrestation = 3 étoiles. Le combo « sans se faire voir » (×2, ×3) gonfle ton score.';
       var nb = document.getElementById('btn-next-level');
       nb.textContent = S.level === 5 ? 'Revoir les tableaux 🏆' : 'Tableau suivant → ' + LEVELS[S.level+1].name;
+      document.getElementById('pontAteliers').style.display = S.level === 5 ? 'block' : 'none';
       show('screen-success');
     }
     function levelFail(reason){

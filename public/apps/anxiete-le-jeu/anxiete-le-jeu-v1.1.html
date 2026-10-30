@@ -384,7 +384,7 @@
         {label:"Laisser sonner, regarder qui c’est d’abord", resp:"Le message vocal dit : garage, voiture prête. Éviter a soulagé sur le coup — mais Alex se demande déjà comment il va rappeler.", meteo:5, batt:-6, card:"evitement"},
         {label:"Respirer lentement trois fois, puis répondre", resp:"Trois respirations lentes, le cœur ralentit un peu. « Allô ? » — c’était le garage.", meteo:4, batt:-3, tool:"respiration"}
       ]},
-      {t:"breath", mode:"hold", cycles:3, titre:"L’outil nº 1 : la respiration lente", text:"On apprend l’outil au calme, pour l’avoir dans la tempête. Doigt appuyé quand le cercle grandit (inspire), relâché quand il rapetisse (expire, plus lentement).", meteoTo:3, batt:8},
+      {t:"breath", mode:"hold", cycles:3, titre:"L’outil nº 1 : la respiration lente", text:"On apprend l’outil au calme, pour l’avoir dans la tempête. Doigt ou souris appuyé quand le cercle grandit (inspire), relâché quand il rapetisse (expire, plus lentement).", meteoTo:3, batt:8},
       {t:"choice", titre:"Au bureau — le courriel imprévu", scene:"bureau", text:"« OBJET : À discuter dès que possible. » Aucun détail. La tête d’Alex part en vrille : erreur ? plainte ?", options:[
         {label:"Relire le courriel cinq fois, mot à mot", resp:"Cinq lectures plus tard, Alex n’en sait pas plus — nuque raide, tête qui bourdonne. Relire ne calme pas la rumination : ça la nourrit.", meteo:7, batt:-10, card:"concentration", zone:"nuque"},
         {label:"Prendre une pause de cinq minutes avant d’ouvrir la suite", resp:"Eau, fenêtre, air frais. La pause ne règle pas le courriel, mais elle empêche l’alarme de décider à la place d’Alex.", meteo:5, batt:-2, tool:"pause"},
@@ -671,7 +671,7 @@
       var root=$("play-root");
       root.innerHTML = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p>'
         + '<div class="breath-stage"><button type="button" class="breath-circle" id="bc">Prêt·e ?</button>'
-        + '<div class="breath-hint" id="bh">'+(st.mode==="hold"?"Touche le cercle et garde ton doigt appuyé pour commencer.":"Le cercle respire : suis-le des yeux.")+'</div>'
+        + '<div class="breath-hint" id="bh">'+(st.mode==="hold"?"Touche le cercle avec ton doigt ou ta souris et garde appuyé pour commencer.":"Le cercle respire : suis-le des yeux.")+'</div>'
         + '<div class="progress-dots" id="bdots"></div></div><div id="br-done"></div></div>';
       var circle=$("bc"), hint=$("bh"), dots=$("bdots");
       var total=st.cycles||3, doneCycles=0;
@@ -728,6 +728,12 @@
         circle.addEventListener("pointerdown", function(e){ e.preventDefault(); holding=true; if(!phase) runPhase("in"); });
         window.addEventListener("pointerup", function(){ holding=false; });
         circle.addEventListener("pointerleave", function(){ holding=false; });
+        circle.addEventListener("pointercancel", function(){ holding=false; });
+        /* Lot 2E — repli focus/onglet : le maintien est remis à false, comme
+           sur pointerup. Le repli ne valide rien par lui-même : à la fin de
+           la phase, la logique de reprise existante s'applique. */
+        document.addEventListener("visibilitychange", function(){ if(document.hidden) holding=false; });
+        window.addEventListener("blur", function(){ holding=false; });
       } else {
         later(function(){ runPhase("in"); }, 700);
       }
@@ -744,7 +750,7 @@
         var key=senses[idx][0], need=senses[idx][1];
         foundInSense=0;
         $("gs-count").textContent = need + " " + senses[idx][2];
-        $("gs-sub").textContent = "Touche-les une à une, en les remarquant pour vrai.";
+        $("gs-sub").textContent = "Touche-les ou clique-les une à une, en les remarquant pour vrai.";
         var grid=$("gs-grid"); grid.innerHTML="";
         var pool = st.sets[key].slice();
         /* ajouter 2 distracteurs doux des autres sens pour faire chercher — non : on garde simple et vrai, tous les éléments comptent */
@@ -887,7 +893,7 @@
     function renderGroundIn(container, st, onDone){
       var senses=[["voir",5,"choses que tu VOIS"],["entendre",4,"choses que tu ENTENDS"],["toucher",3,"choses que tu TOUCHES"],["sentir",2,"choses que tu SENS"],["gouter",1,"chose que tu GOÛTES"]];
       var idx=0;
-      container.innerHTML = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p><div class="sense-count" id="gg-count"></div><p class="center small">Touche-les une à une, en les remarquant pour vrai.</p><div class="sense-grid" id="gg-grid"></div></div>';
+      container.innerHTML = '<div class="card"><h2>'+st.titre+'</h2><p>'+st.text+'</p><div class="sense-count" id="gg-count"></div><p class="center small">Touche-les ou clique-les une à une, en les remarquant pour vrai.</p><div class="sense-grid" id="gg-grid"></div></div>';
       function renderSense(){
         var key=senses[idx][0], need=senses[idx][1], found=0;
         container.querySelector("#gg-count").textContent = need + " " + senses[idx][2];
