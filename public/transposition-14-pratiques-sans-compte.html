@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transposition — les 14 pratiques sans compte ni nuage</title>
+<style>
+  :root { --bg: #faf7f0; --fg: #222; --card: #fff; --accent: #1f6f3a; }
+  body.theme-dark { --bg: #1a1a1a; --fg: #f0f0f0; --card: #2a2a2a; --accent: #7bc47f; }
+  body.theme-sepia { --bg: #f4ecd8; --fg: #433422; --card: #fdf6e3; --accent: #7a5a1f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, sans-serif; background: var(--bg); color: var(--fg); line-height: 1.6; font-size: 1.05rem; }
+  a { color: var(--accent); }
+  header, main, footer { max-width: 900px; margin: 0 auto; padding: 16px; }
+  .skip { position: absolute; left: -9999px; }
+  .skip:focus { left: 16px; top: 16px; background: #fff; padding: 8px; z-index: 10; }
+  .card { background: var(--card); border: 1px solid #ddd; border-radius: 16px; padding: 20px; margin: 16px 0; }
+  .toolbar { position: sticky; bottom: 12px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; background: rgba(255,255,255,0.9); border: 2px solid #c9a227; border-radius: 999px; padding: 8px; margin: 24px auto; max-width: 900px; }
+  body.theme-dark .toolbar { background: rgba(40,40,40,0.95); }
+  .toolbar button { min-height: 56px; min-width: 56px; padding: 10px 14px; border-radius: 12px; border: 2px solid #999; background: #fff; font-size: 1rem; cursor: pointer; }
+  .focus-line { background: #fff8dc; outline: 3px solid #c9a227; }
+  body.theme-dark .focus-line { background: #3a3a1a; }
+  .steps { display: flex; gap: 8px; margin: 12px 0; }
+  .step { flex: 1; text-align: center; padding: 12px; border-radius: 10px; background: #eee; }
+  .step.done { background: #d4edda; font-weight: 700; }
+  .state { padding: 12px; border-radius: 10px; background: #eef4ff; margin: 12px 0; }
+  @media print {
+    .toolbar, .noprint { display: none !important; }
+    body { background: #fff; color: #000; }
+    .card { border: 1px solid #000; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header>
+  <h1>Les 14 pratiques, transposées pour HP — sans compte, sans nuage</h1>
+  <p>Des outils pour la vraie vie. Tout reste sur votre appareil. Aucune donnée n'est envoyée. Aucun compte n'est demandé.</p>
+  <p class="noprint"><b>Démo interne — rien n'est publié, déposé ou appliqué au site sans votre go nominatif nommant le lot.</b> La PWA (pratique 5 et 6) demande un manifeste et 2 icônes, à placer par Mélanie via Lovable — voir la note en bas de page.</p>
+</header>
+<main id="contenu">
+  <div class="card" id="lecture">
+    <h2>Texte à lire, à écouter, à reprendre</h2>
+    <p class="ligne">Première ligne : vous choisissez comment lire, à votre rythme, sans pression.</p>
+    <p class="ligne">Deuxième ligne : la lecture à voix haute utilise la voix déjà installée sur votre appareil, en français.</p>
+    <p class="ligne">Troisième ligne : vos préférences et votre position restent sur votre appareil, et vous pouvez tout effacer en un geste.</p>
+    <div class="steps" role="list" aria-label="Étapes">
+      <div class="step done" id="etape1">Étape 1 — Lire</div>
+      <div class="step" id="etape2">Étape 2 — Choisir</div>
+      <div class="step" id="etape3">Étape 3 — Garder</div>
+    </div>
+    <div class="state" id="etat">État : vos préférences sont sur cet appareil seulement.</div>
+    <p><a href="#outils">Continuer dans les outils →</a> (lien profond interne, pratique 9)</p>
+  </div>
+  <div class="card" id="outils">
+    <h2>Passerelles, sans ressaisir</h2>
+    <p>Partager, copier, exporter, imprimer — tout se fait sur votre appareil, sans compte.</p>
+    <button id="btnPartager" style="min-height:56px;padding:12px 18px;border-radius:12px;">Partager</button>
+    <button id="btnCopier" style="min-height:56px;padding:12px 18px;border-radius:12px;">Copier le lien</button>
+    <button id="btnExporter" style="min-height:56px;padding:12px 18px;border-radius:12px;">Exporter (fichier local)</button>
+    <button id="btnImprimer" style="min-height:56px;padding:12px 18px;border-radius:12px;">Imprimer proprement</button>
+    <p id="resultatPartage"></p>
+  </div>
+  <div class="card">
+    <h2>Les 14 pratiques, 1 par 1</h2>
+    <ol>
+      <li><b>Barre d'outils d'utilité</b> — en bas de page, à portée du pouce, repliable.</li>
+      <li><b>Mode sombre / clair / sépia</b> — interrupteur manuel, jamais déduit en silence.</li>
+      <li><b>Lecture à voix haute, voix du système</b> — Web Speech API, voix installée sur l'appareil, vitesse réglable.</li>
+      <li><b>Reprise locale</b> — position et préférences en localStorage, bouton d'effacement.</li>
+      <li><b>PWA, icône sur l'écran d'accueil</b> — manifeste + icônes 192/512 px, à placer par Mélanie.</li>
+      <li><b>Hors-ligne PWA</b> — service worker, mise en cache sur l'appareil.</li>
+      <li><b>Impression propre</b> — @media print, navigation et barre masquées, fond blanc.</li>
+      <li><b>Export local</b> — fichier généré sur l'appareil (texte, CSV), jamais envoyé.</li>
+      <li><b>Liens profonds internes</b> — « Continuer dans l'outil X », contexte dans l'adresse.</li>
+      <li><b>Partage natif</b> — Web Share API, repli « copier le lien » toujours visible.</li>
+      <li><b>Progression par étapes</b> — étapes claires, sans compteur culpabilisant, sans série.</li>
+      <li><b>Navigation clavier, zoom, lien d'évitement</b> — tabulation soignée, « Aller au contenu ».</li>
+      <li><b>Page légère, mode léger</b> — aucun script tiers, aucune vidéo automatique, aucune image lourde.</li>
+      <li><b>Personnalisation expliquée, sans dark pattern</b> — choix explicites, contrôles d'ajustement, zéro pression.</li>
+    </ol>
+    <p><b>Jamais transposé :</b> synchronisation multi-appareils, agents IA, résumés IA, automatisations tierces, notifications poussées par défaut, mode sombre déduit du comportement, voix naturelles en nuage.</p>
+  </div>
+</main>
+<div class="toolbar" role="toolbar" aria-label="Barre d'outils de confort">
+  <button id="btnMoins" title="Texte plus petit">A−</button>
+  <button id="btnPlus" title="Texte plus grand">A+</button>
+  <button id="btnContraste" title="Changer le thème">Thème</button>
+  <button id="btnFocus" title="Focus sur une ligne">Focus ligne</button>
+  <button id="btnLire" title="Lire à voix haute">Lire</button>
+  <button id="btnArret" title="Arrêter la lecture">Arrêter</button>
+  <button id="btnEffacer" title="Effacer mes préférences">Effacer mes préférences</button>
+</div>
+<footer>
+  <p>Prix en $ CAD, aucune taxe ajoutée. Petit fournisseur — TPS/TVQ non perçues.</p>
+  <p>Une question ? Une réponse d'humain sous 3 jours ouvrables.</p>
+  <p class="noprint"><b>Note PWA pour Mélanie :</b> manifeste JSON (nom, icônes 192 px et 512 px, URL de démarrage, mode standalone), diffusion en HTTPS, service worker pour le hors-ligne. Icônes à placer via Lovable — jamais par push_files (binaires interdits par cette voie).</p>
+</footer>
+<script>
+(function () {
+  var taille = 1.05;
+  var themeIndex = 0;
+  var themes = ['', 'theme-dark', 'theme-sepia'];
+  var ligneIndex = 0;
+  function sauver() {
+    try {
+      localStorage.setItem('hp-confort-taille', String(taille));
+      localStorage.setItem('hp-confort-theme', themes[themeIndex]);
+      localStorage.setItem('hp-confort-ligne', String(ligneIndex));
+    } catch (e) { /* stockage indisponible : on continue sans mémoriser */ }
+  }
+  function charger() {
+    try {
+      var t = localStorage.getItem('hp-confort-taille');
+      var th = localStorage.getItem('hp-confort-theme');
+      var li = localStorage.getItem('hp-confort-ligne');
+      if (t) { taille = parseFloat(t); document.body.style.fontSize = taille + 'rem'; }
+      if (th) { themeIndex = themes.indexOf(th); if (themeIndex < 0) themeIndex = 0; document.body.className = themes[themeIndex]; }
+      if (li) { ligneIndex = parseInt(li, 10) || 0; appliquerFocus(); }
+    } catch (e) { /* on continue sans préférences mémorisées */ }
+  }
+  function appliquerFocus() {
+    var lignes = document.querySelectorAll('.ligne');
+    lignes.forEach(function (el) { el.classList.remove('focus-line'); });
+    if (lignes[ligneIndex]) { lignes[ligneIndex].classList.add('focus-line'); }
+    var etat = document.getElementById('etat');
+    if (etat) { etat.textContent = 'État : ligne ' + (ligneIndex + 1) + ' sur ' + lignes.length + ' — préférences sur cet appareil seulement.'; }
+  }
+  document.getElementById('btnPlus').addEventListener('click', function () { taille = Math.min(1.6, taille + 0.1); document.body.style.fontSize = taille + 'rem'; sauver(); });
+  document.getElementById('btnMoins').addEventListener('click', function () { taille = Math.max(0.9, taille - 0.1); document.body.style.fontSize = taille + 'rem'; sauver(); });
+  document.getElementById('btnContraste').addEventListener('click', function () { themeIndex = (themeIndex + 1) % themes.length; document.body.className = themes[themeIndex]; sauver(); });
+  document.getElementById('btnFocus').addEventListener('click', function () { var lignes = document.querySelectorAll('.ligne'); ligneIndex = (ligneIndex + 1) % lignes.length; appliquerFocus(); sauver(); });
+  document.getElementById('btnLire').addEventListener('click', function () {
+    if (!('speechSynthesis' in window)) { document.getElementById('resultatPartage').textContent = 'La lecture à voix haute n’est pas offerte sur cet appareil.'; return; }
+    window.speechSynthesis.cancel();
+    var texte = document.getElementById('lecture').innerText;
+    var parole = new SpeechSynthesisUtterance(texte);
+    parole.lang = 'fr-CA';
+    parole.rate = 1;
+    window.speechSynthesis.speak(parole);
+  });
+  document.getElementById('btnArret').addEventListener('click', function () { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } });
+  document.getElementById('btnEffacer').addEventListener('click', function () {
+    try { localStorage.removeItem('hp-confort-taille'); localStorage.removeItem('hp-confort-theme'); localStorage.removeItem('hp-confort-ligne'); } catch (e) {}
+    taille = 1.05; themeIndex = 0; ligneIndex = 0;
+    document.body.style.fontSize = '1.05rem'; document.body.className = '';
+    appliquerFocus();
+    document.getElementById('etat').textContent = 'État : préférences effacées. Rien n’est conservé.';
+  });
+  document.getElementById('btnPartager').addEventListener('click', function () {
+    if (navigator.share) {
+      navigator.share({ title: 'HP Outils', text: 'Des outils pour la vraie vie.', url: window.location.href }).catch(function () {});
+    } else {
+      document.getElementById('resultatPartage').textContent = 'Partage natif indisponible ici — utilisez « Copier le lien ».';
+    }
+  });
+  document.getElementById('btnCopier').addEventListener('click', function () {
+    var lien = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lien).then(function () { document.getElementById('resultatPartage').textContent = 'Lien copié.'; });
+    } else {
+      document.getElementById('resultatPartage').textContent = 'Lien à copier : ' + lien;
+    }
+  });
+  document.getElementById('btnExporter').addEventListener('click', function () {
+    var contenu = 'HP Outils — export local\nPréférences sur cet appareil seulement.\nTaille : ' + taille + '\nThème : ' + (themes[themeIndex] || 'clair') + '\n';
+    var blob = new Blob([contenu], { type: 'text/plain' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'hp-export-local.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    document.getElementById('resultatPartage').textContent = 'Fichier exporté sur votre appareil, rien n’est envoyé.';
+  });
+  document.getElementById('btnImprimer').addEventListener('click', function () { window.print(); });
+  charger();
+})();
+</script>
+</body>
+</html>
