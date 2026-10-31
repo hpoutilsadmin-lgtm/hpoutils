@@ -46,15 +46,16 @@ const EPISODES = [
   },
   {
     n: "02",
-    label: "L'intelligence artificielle au quotidien",
-    title: "Épisode 2 — Futur simple",
-    date: "19 octobre 2026",
+    label: "Futur simple, épisode 2",
+    title: "Futur simple, épisode 2",
+    date: "31 octobre 2026",
     duration: "7 min 10 s",
     description:
       "Dans ce deuxième épisode, Léa, Marc et Maya parlent de l'intelligence " +
       "artificielle au quotidien, débattent avec un prof de philosophie et partagent " +
       "de bonnes nouvelles. Le prof est un personnage joué, pas un vrai auditeur. " +
-      "Les applaudissements entendus sont un effet de studio, pas un public.",
+      "Les applaudissements entendus sont un effet de studio, pas un public. " +
+      "Fabriqué avec l'intelligence artificielle • Direction humaine.",
     audio:
       "/audio-balado/episode-2.mp3",
   },
