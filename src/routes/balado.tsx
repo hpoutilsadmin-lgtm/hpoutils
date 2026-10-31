@@ -95,6 +95,7 @@ function Page() {
             Léa et Marc regardent l'intelligence artificielle en face : l'entrepreneuriat,
             les PME et le futur à venir — <strong>le bon comme le mauvais</strong>. De nouveaux épisodes, annoncés ici dès leur parution, quand ils sont prêts. Direct, concret, sans jargon. Comme tout ce qu'on fait ici.
           </p>
+          <p style={{ maxWidth: 700 }}>Les voix de Léa et Marc sont des voix d'intelligence artificielle, pas des voix humaines.</p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait un balado IA à direction humaine, qui parle de vraie vie. »</p>
           <div className="lead-actions">
             <a href="#episodes" className="btn-primary">Écouter le dernier épisode</a>
@@ -183,7 +184,7 @@ function Page() {
             </article>
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>Une pause entre deux épisodes : 36 + 1 caché jeux gratuits, jouables dans votre navigateur, sans inscription.</p>
+              <p>Une pause entre deux épisodes : 37 + 1 caché jeux gratuits, jouables dans votre navigateur, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Jouer →</Link>
             </article>
           </div>

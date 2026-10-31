@@ -34,7 +34,7 @@ export const Route = createFileRoute("/ateliers")({
 const ATELIERS = [
   { title: "L'IA sans jargon — régulière", price: "220 $ CAD · forfait groupe", desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie.", inclus: "Repartez avec un cas d'usage concret. Aucune taxe ajoutée." },
   { title: "Cuisine pratique", price: "260 $ CAD · forfait groupe", desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
-  { title: "Atelier jeunesse", price: "150 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
+  { title: "Atelier jeunesse", price: "150 $ CAD · forfait groupe", desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant.", inclus: "Aucune taxe ajoutée." },
   { title: "Manger mieux avec moins", price: "260 $ CAD · forfait groupe", desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
   { title: "Les enfants cuisinent", price: "190 $ CAD · forfait groupe", duree: "90 min", desc: "Cuisiner ensemble, apprendre et gagner en autonomie.", inclus: "Aucune taxe ajoutée." },
   { title: "Hygiène & salubrité", price: "150 $ CAD · forfait groupe", duree: "60 à 90 min", desc: "Sensibilisation aux bons gestes du quotidien.", inclus: "Aucune taxe ajoutée." },

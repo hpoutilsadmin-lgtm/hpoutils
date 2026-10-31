@@ -50,7 +50,7 @@ function Page() {
               Ici, la direction est humaine. L'IA est un outil très rapide et efficace : elle accélère le travail, elle ne le dirige pas. La direction travaille avec une équipe : des humains qui décident, qui vérifient, qui répondent — et l'IA qui exécute vite ce qu'on lui confie. Rien n'est publié sans vérification humaine.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Les jeux, les recettes et les outils d'ici sont testés avant d'être proposés. 36 + 1 caché jeux gratuits, 629 recettes gratuites, des outils web gratuits sans compte — et des livres et des kits à prix petits. Si vous trouvez une erreur, écrivez-nous : la direction humaine vous répond sous 3 jours ouvrables.
+              Les jeux, les recettes et les outils d'ici sont testés avant d'être proposés. 37 + 1 caché jeux gratuits, 629 recettes gratuites, des outils web gratuits sans compte — et des livres et des kits à prix petits. Si vous trouvez une erreur, écrivez-nous : la direction humaine vous répond sous 3 jours ouvrables.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
               HP Outils, c'est ça : des outils simples, pour des vies réelles, faits par des humains, avec l'IA comme outil. Merci de votre visite.

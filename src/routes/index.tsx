@@ -93,7 +93,7 @@ function Index() {
           </p>
           {/* Nuit 4A : les appels d'abord, les citations ensuite — textes inchangés, ordre seul. */}
           <div className="lead-actions">
-            <Link to="/jeux" className="btn-primary">Jouer — 36 + 1 caché jeux gratuits</Link>
+            <Link to="/jeux" className="btn-primary">Jouer — 37 + 1 caché jeux gratuits</Link>
             <Link to="/outils" className="btn-primary">Outils gratuits, sans compte</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
@@ -121,7 +121,7 @@ function Index() {
               </Link>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>Jeux</h3>
-                <p>36 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
+                <p>37 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
                 <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
               </div>
             </article>
@@ -306,7 +306,7 @@ function Index() {
       {/* MUSE — encadré bas de page, 28 oct. 2026, go HP */}
       <section aria-label="Découvrez Muse" style={{ padding: "24px 16px 40px" }}>
         <div className="container" style={{ maxWidth: 760, border: "2px solid #e8c547", background: "#fffbe6", borderRadius: 12, padding: "20px 24px", textAlign: "center" }}>
-          <h2 style={{ margin: "0 0 8px" }}>Essayez vous-même Muse, pendant que c&apos;est gratuit — win / win pour nous 2&nbsp;!</h2>
+          <h2 style={{ margin: "0 0 8px" }}>Essayez vous-même Muse, pendant que c&apos;est gratuit — avec mon code, vous m&apos;aidez à le faire connaître.</h2>
           <p style={{ margin: "0 0 8px" }}>Découvrez Muse, votre agent IA personnel. Activez mon code dans les paramètres dans les 48 heures après votre inscription.</p>
           <p style={{ margin: "0 0 8px" }}>Muse est un service externe, indépendant d'HP Outils. Ce code ne change rien à vos achats ni à vos jeux ici.</p>
           <p style={{ margin: "0 0 8px" }}>Code&nbsp;: <strong>E2ZXHX</strong></p>

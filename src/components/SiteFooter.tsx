@@ -37,7 +37,8 @@ export function SiteFooter() {
           <p>
             <Link to="/ateliers">Ateliers</Link><br />
                         <Link to="/apercu">Jeux à votre image — démo gratuite</Link><br />
-            <Link to="/recuperer-achat">Récupérer un achat</Link>
+            <Link to="/recuperer-achat">Récupérer un achat</Link><br />
+            <Link to="/cadeaux">Bons cadeaux</Link>
           </p>
           <h4>Confiance</h4>
           <p>
@@ -52,6 +53,7 @@ export function SiteFooter() {
             <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a><br />
             <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a><br />
             <a href="/ateliers#formulaire-atelier">Formulaire atelier</a><br />
+            <Link to="/contact">Contact</Link><br />
             Une réponse de la direction humaine, pas d'un robot — sous 3 jours ouvrables.
           </p>
         </div>

@@ -91,7 +91,7 @@ function Page() {
         ci-dessous s&apos;habille aussitôt, et vous pouvez y jouer. C&apos;est un
         aperçu du moteur Course (Caribou Run) : le jeu livré portera votre nom
         et vos couleurs, pour la durée de votre palier (7, 30 ou 90 jours, ou pour toujours au palier Permanent). L'hébergement est gratuit la
-        première année, puis 29 $ par année et par jeu.{" "}
+        première année, puis 29 $ par année et par jeu. Paliers de 29 $ à 399 $ CAD, aucune taxe ajoutée.{" "}
         <Link to="/jeux-a-votre-image">Voir l'offre complète.</Link>
       </p>
       <p style={{ fontSize: 18, lineHeight: 1.55, maxWidth: 640 }}>
