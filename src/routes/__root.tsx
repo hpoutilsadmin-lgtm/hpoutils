@@ -13,7 +13,7 @@ import appCss from "../styles.css?url";
 import hpCss from "../styles/hp.css?url";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { Hgpto } from "@/components/hgpto/Hgpto";
+import { HgptoTap } from "@/components/hgpto/HgptoTap";
 import { HamsterWheel } from "@/components/hamster/HamsterWheel";
 
 function NotFoundComponent() {
@@ -133,7 +133,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
       </div>
-      <Hgpto />
+      <HgptoTap />
       <HamsterWheel />
     </QueryClientProvider>
   );

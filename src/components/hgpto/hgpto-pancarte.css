@@ -1,0 +1,16 @@
+/* Pancarte de bienvenue A1 tap (30 oct. 2026) — 100 % originale, CSS/SVG
+   seulement, aucune image. Chargée avec la mascotte, jamais au départ.
+   Téléphone 360-390 px : 1 colonne, planche min(92vw, 640 px), texte
+   lisible. Tablette 768 px et ordinateur 1920 px : même planche, centrée.
+   Le voile ne ferme rien au clic : seul le bouton Fermer ferme. */
+.hgpto-pancarte-voile{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(20,16,12,.55)}
+.hgpto-pancarte{position:relative;width:min(92vw,640px);text-align:center;color:#fffaf0;background:repeating-linear-gradient(180deg,rgba(0,0,0,.12) 0 2px,transparent 2px 46px),linear-gradient(180deg,#8a5a33,#6e4423 55%,#5a3719);border:3px solid #2b2118;border-radius:12px;box-shadow:6px 6px 0 rgba(43,33,24,.35);padding:28px 20px 24px}
+.hgpto-pancarte-chaine{position:absolute;top:-64px;width:20px;height:64px}
+.hgpto-pancarte-chaine-gauche{left:24px}
+.hgpto-pancarte-chaine-droite{right:24px}
+.hgpto-pancarte-ampoules{display:flex;justify-content:space-between;gap:6px;padding:0 8px}
+.hgpto-pancarte-ampoules i{width:16px;height:16px;border-radius:50%;animation:hgpto-ampoule 1.8s ease-in-out infinite}
+@keyframes hgpto-ampoule{0%,100%{opacity:1}50%{opacity:.55}}
+.hgpto-pancarte-texte{font-family:Georgia,serif;font-size:clamp(24px,5vw,40px);line-height:1.25;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.6);margin:16px 0}
+.hgpto-pancarte-btn{min-height:56px;min-width:220px;font-size:20px;font-weight:800;border-radius:14px;border:3px solid #fffaf0;background:#3a5a4e;color:#fff;cursor:pointer;padding:14px 24px;margin-top:12px}
+@media (prefers-reduced-motion: reduce){.hgpto-pancarte-ampoules i{animation:none}}
