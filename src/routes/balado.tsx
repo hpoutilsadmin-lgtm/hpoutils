@@ -45,9 +45,9 @@ const EPISODES = [
       "/audio-balado/episode-1-officiel.mp3",
   },
   {
-    n: "02",
+    n: "02 officiel",
     label: "Futur simple, épisode 2",
-    title: "Futur simple, épisode 2",
+    title: "Futur simple, épisode 2 officiel",
     date: "31 octobre 2026",
     duration: "7 min 10 s",
     description:
