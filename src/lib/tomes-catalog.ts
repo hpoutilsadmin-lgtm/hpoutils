@@ -155,6 +155,9 @@ export const TOMES: Tome[] = [
   },
 ];
 
+/** Numéros romains B11, dans l'ordre d'affichage des TOMES (I à XI). */
+export const TOME_ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
+
 export const FREE_TOME: Tome = {
   slug: "chasse_galerie",
   title: "La Chasse-Galerie",

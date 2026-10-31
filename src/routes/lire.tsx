@@ -9,6 +9,7 @@ import {
   FREE_TOME,
   PAYANT_TOMES,
   priceLabel,
+  TOME_ROMAN,
 } from "@/lib/tomes-catalog";
 import {
   createTomeCheckoutSession,
@@ -221,9 +222,10 @@ function Page() {
 
           <h2>Les 11 tomes payants</h2>
           <div className="pillar-grid">
-            {PAYANT_TOMES.map((tome) => (
+            {PAYANT_TOMES.map((tome, i) => (
               <article className="pillar-card" key={tome.slug}>
                 <h3>{tome.title}</h3>
+                <p>Tome {TOME_ROMAN[i]} sur XI</p>
                 <p>{tome.hook}</p>
                 <p>
                   {tome.paragraphes} paragraphes · {tome.fins} fins
@@ -247,14 +249,14 @@ function Page() {
             La Chasse-Galerie est déjà gratuite : elle ne compte pas dans les trois.
           </p>
           <div className="pillar-grid">
-            {PAYANT_TOMES.map((tome) => (
+            {PAYANT_TOMES.map((tome, i) => (
               <label className="pillar-card" key={tome.slug}>
                 <input
                   type="checkbox"
                   checked={bundleChoice.includes(tome.slug)}
                   onChange={() => toggleBundle(tome.slug)}
                 />{" "}
-                <strong>{tome.title}</strong> — {priceLabel(tome)}
+                <strong>Tome {TOME_ROMAN[i]} sur XI — {tome.title}</strong> — {priceLabel(tome)}
               </label>
             ))}
           </div>

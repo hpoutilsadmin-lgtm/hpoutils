@@ -181,12 +181,12 @@ function Index() {
               <Link to="/univers" aria-label="Choisir votre histoire" style={{ display: "block", textDecoration: "none" }}>
                 <div style={{ ...categoryTile("#7a1f2b", "#a63a44"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                   <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>À</span>
-                  <span style={CATEGORY_TAG_STYLE}>1er tome gratuit</span>
+                  <span style={CATEGORY_TAG_STYLE}>Chasse-Galerie gratuite</span>
                 </div>
               </Link>
               <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                 <h3 style={{ fontSize: 23 }}>À toi l'histoire</h3>
-                <p>12 tomes au total : vous choisissez, l'histoire change. Le 1er est gratuit.</p>
+                <p>11 tomes payants au total : vous choisissez, l'histoire change. La Chasse-Galerie est gratuite.</p>
                 <Link className="pillar-cta" to="/univers">Choisir votre histoire →</Link>
               </div>
             </article>

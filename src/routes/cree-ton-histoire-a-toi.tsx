@@ -1,6 +1,6 @@
 // Fiche « Crée TON histoire » — LOT 2, 5 $.
 // CRÉATEUR, pas la série : l'utilisateur crée SA propre histoire à partir de
-// ses choix. Ce n'est PAS la série « À toi l'histoire » existante (12 tomes).
+// ses choix. Ce n'est PAS la série « À toi l'histoire » existante (11 tomes payants et un tome gratuit).
 // Textes 100 % originaux, adaptés du prototype `histoire-a-toi.html` (écrit
 // pour HP, jamais copié d'un livre existant).
 // Création essayable gratuitement ici, en session, sans compte, sans serveur.
@@ -306,7 +306,7 @@ function Page() {
         Vous choisissez vos thèmes et vos fins, puis votre histoire s&rsquo;assemble
         d&rsquo;un coup, rien qu&rsquo;à vous — sans étape manuelle, sans compte, sans serveur.
         Ceci est un <strong>créateur</strong> : vous créez votre propre histoire.
-        Ce n&rsquo;est pas la série «&nbsp;À toi l&rsquo;histoire&nbsp;» (12 tomes), qui reste
+        Ce n&rsquo;est pas la série «&nbsp;À toi l&rsquo;histoire&nbsp;» (11 tomes payants et un tome gratuit), qui reste
         une collection à part.
       </p>
 

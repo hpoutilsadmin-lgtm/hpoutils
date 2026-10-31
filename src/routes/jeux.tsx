@@ -760,7 +760,7 @@ function JeuxPage() {
         <div className="container">
           <span className="editorial-kicker">Histoires interactives</span>
           <h2>À toi <em>l'histoire</em></h2>
-          <p className="strip-intro">Tome 1 gratuit · tomes standards 5 $ CAD · grands tomes 8 $ CAD. Aucune taxe ajoutée.</p>
+          <p className="strip-intro">La Chasse-Galerie gratuite · tomes standards 5 $ CAD · grands tomes 8 $ CAD. Aucune taxe ajoutée.</p>
           <div className="pillar-grid">
             {STORIES.map((story, index) => (
               <Link to="/lire" className="pillar-card" style={{ textDecoration: "none" }} key={story.audience}>
@@ -779,7 +779,7 @@ function JeuxPage() {
           <span className="editorial-kicker">À découvrir</span>
           <div className="pillar-grid">
             {[
-              ["Tome 1 gratuit", "Commencer une histoire sans paiement et découvrir le principe des choix."],
+              ["La Chasse-Galerie gratuite", "Commencer une histoire sans paiement et découvrir le principe des choix."],
               ["Tomes standards", "Des histoires complètes à 5 $ CAD, aucune taxe ajoutée."],
               ["Grands tomes", "Grands tomes à 8 $ CAD, aucune taxe ajoutée."],
             ].map(([title, copy], index) => (

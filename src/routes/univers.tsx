@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
-import { BUNDLE, FREE_TOME, PAYANT_TOMES, priceLabel } from "@/lib/tomes-catalog";
+import { BUNDLE, FREE_TOME, PAYANT_TOMES, priceLabel, TOME_ROMAN } from "@/lib/tomes-catalog";
 import { ShareButton } from "@/components/ShareButton";
 
 export const Route = createFileRoute("/univers")({
@@ -20,14 +20,13 @@ function Page() {
           <span className="editorial-kicker">À toi l'histoire</span>
           <h1>Les histoires de HP, à vous de les vivre.</h1>
           <p className="lead">
-            « À toi l'histoire », ce sont 12 tomes : 11 livres-jeux interactifs,
-            de 5 $ à 8 $, et un tome gratuit. Chaque choix tisse l'histoire — et
+            « À toi l'histoire », ce sont 11 tomes payants, de 5 $ à 8 $, et un tome gratuit, La Chasse-Galerie. Chaque choix tisse l'histoire — et
             chaque tome arrive par lien web personnel, sans PDF ni compte. Écrits
             par un humain, pour la vraie vie.
           </p>
           <div className="lead-actions">
             <Link to="/lire" className="btn-primary">Lire les tomes</Link>
-            <ShareButton text="À toi l'histoire — 12 tomes interactifs, le 1er gratuit. HP Outils." />
+            <ShareButton text="À toi l'histoire — 11 tomes payants interactifs, La Chasse-Galerie gratuite. HP Outils." />
             <a className="btn-ghost" href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer">Écouter l'album</a>
           </div>
         </div>
@@ -53,9 +52,10 @@ function Page() {
           <span className="editorial-kicker">Les 11 tomes</span>
           <h2 className="section-title">Choisissez votre histoire</h2>
           <div className="pillar-grid">
-            {PAYANT_TOMES.map((tome) => (
+            {PAYANT_TOMES.map((tome, i) => (
               <article className="pillar-card" key={tome.slug}>
                 <h3>{tome.title}</h3>
+                <p>Tome {TOME_ROMAN[i]} sur XI</p>
                 <p>{tome.hook}</p>
                 <p>
                   {tome.paragraphes} paragraphes · {tome.fins} fins
