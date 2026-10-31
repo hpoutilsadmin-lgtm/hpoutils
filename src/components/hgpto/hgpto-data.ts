@@ -362,7 +362,7 @@ export const SITE_FACTS = {
    PAS la politique générale ci-dessus mais la section 12 des Conditions de
    vente — clause ajoutée à REFUND_POLICY + 3 entrées dédiées dans KB, pour
    qu'aucune entrée ne contredise §12. */
-export const ESCALATION_LINE = "Ça, c'est une question pour l'équipe directement — la direction humaine vous répondra, pour vrai. Écrivez à hpoutils.admin@gmail.com, racontez-moi ce que vous me racontez là, et on s'en occupe. Moi, je préfère vous passer la bonne personne plutôt que de te répondre tout croche.";
+export const ESCALATION_LINE = "Ça, c'est une question pour la direction humaine directement — elle vous répondra, pour vrai. Écrivez à hpoutils.admin@gmail.com, racontez-lui ce que vous me racontez là, et on s'en occupe. Moi, je préfère vous passer la bonne personne plutôt que de vous répondre tout croche.";
 export const ESCALATION_EMPATHY = "Je suis vraiment désolé que ça se soit passé comme ça. Vous méritez une vraie réponse, pas une réponse de robot.";
 export const REFUND_POLICY = "En toute franchise, voici comment ça marche : acheté le mauvais produit par erreur ? La direction vous l'échange contre celui que vous vouliez. Un produit impossible à ouvrir ou à recevoir, même après l'aide de l'équipe ? Elle vous rembourse. Un produit reçu et conforme à sa description ? Pas de remboursement automatique — la direction écoute ta situation et décide en personne, cas par cas. Moi, je ne touche jamais aux paiements. Pour un jeu à votre image, c'est une autre règle, celle de la section 12 des Conditions de vente : vous pouvez annuler en tout temps, vous payez seulement le travail réellement fait et ventilé, et HP vous remet le solde dans les 15 jours suivant votre annulation — jamais de « zéro remboursement ».";
 export const LIEN_PERDU_TEXT = "Pas de panique, votre achat est bien là. Cherchez dans vos courriels le reçu de Stripe — le lien de téléchargement est dedans. Regardez aussi dans vos courriels indésirables, ça arrive. Si vous ne le retrouvez vraiment pas, écrivez à la direction humaine avec le courriel utilisé à l'achat : elle vous renverra votre accès sous 3 jours ouvrables.";
@@ -395,7 +395,7 @@ export const SURPRISE_BIG_LINES = [
         "Événement rarissime : Pixel m'a fait un câlin SANS graffigner. Une journée à marquer d'un boulon blanc.",
         "Grande annonce presque jamais entendue : je viens de battre mon record de la sieste la plus courte. Quatre secondes. Je suis une machine."
       ];
-export const FALLBACK = "Là, je sais pas — mais je le note pour la direction ! Écris à hpoutils.admin@gmail.com — la direction humaine te répondra sous 3 jours ouvrables.";
+export const FALLBACK = "Là, je ne sais pas — mais je le note pour la direction ! Écrivez à hpoutils.admin@gmail.com — la direction humaine vous répondra sous 3 jours ouvrables, lundi à vendredi.";
 export const KB = [
         { q:"T'es-tu vivant ?", s:"BONNE QUESTION",
           a:"Je suis un petit robot de site : je fais semblant super bien, mais mon cœur, c'est un boulon. Les vrais câlins, c'est les humains." },
@@ -484,7 +484,7 @@ export const KB = [
           a:"Sur la page des jeux, tape un mot dans le champ « Chercher un jeu… » : la grille ne montre que les jeux dont le titre ou la description contient ce mot. Sans rien taper, tous les jeux s'affichent.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"On peut filtrer les jeux par catégorie ?", s:"CATÉGORIES",
-          a:"Oui : sur la page des jeux, des boutons filtrent la grille par catégorie — Quiz, Aventure, Gestion, Éducatif, Enquête, Arcade, Observation, Émotions, Détente, Clics, Mots cachés, Mémoire, Adresse, Sport, Humour, Réflexion, Match-3, Mots, Rapidité, Stratégie, Perception, ASMR, Sciences, Sensibilisation. Le bouton « Tous » réaffiche tout. « Le Panier Solidaire », lui, se joue dans En cuisine.",
+          a:"Oui : sur la page des jeux, des boutons filtrent la grille par catégorie — Quiz, Aventure, Gestion, Éducatif, Enquête, Arcade, Observation, Émotions, Détente, Clics, Mots cachés, Mémoire, Adresse, Sport, Humour, Réflexion, Match-3, Mots, Rapidité, Stratégie, Perception, ASMR, Sciences, Sensibilisation. Le bouton « Tous » réaffiche tout. « Le Panier Solidaire », lui, se joue dans En cuisine. Dans « Le Panier Solidaire », un lien « ← Retour aux jeux » vous ramène à /jeux.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Est-ce que ça marche sans internet ?", s:"HORS LIGNE",
           a:"Oui : une fois la page déjà ouverte, elle fonctionne sans internet — pratique quand les données sont comptées." },
