@@ -46,6 +46,7 @@ const STATIC_PATHS = [
   "/outils-web/ca-vaut-tu-la-peine.html",
   "/outils-web/le-relais.html",
   "/outils-web/maintenant.html",
+  "/outils-web/contrat-humain-ia.html",
   // Les 37 jeux gratuits + 1 caché (adresses stables /apps/<slug> — redirection 301 vers le fichier courant)
   "/apps/releve",
   "/apps/la-banque",

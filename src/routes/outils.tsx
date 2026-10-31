@@ -93,6 +93,14 @@ const WEB_TOOLS = [
     cta: "Ouvrir l'outil →",
     href: "/outils/un-petit-pas-a-la-fois",
   },
+  {
+    emoji: "📝",
+    tag: "IA",
+    title: "Le Contrat humain-IA",
+    copy: "Une feuille d'une page, en 2 minutes, qui fixe vos règles avec votre assistant IA. Gratuit, sans compte.",
+    cta: "Faire mon contrat →",
+    href: "/outils-web/contrat-humain-ia.html",
+  },
 ];
 
 const tabBarStyle: React.CSSProperties = {

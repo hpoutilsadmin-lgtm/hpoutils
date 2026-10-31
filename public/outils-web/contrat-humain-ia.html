@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Contrat humain-IA — Un outil de HP Outils</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #0f1f2b; background: #f1fff9; margin: 0; padding: 24px 12px; font-size: 19px; line-height: 1.5; }
+  .page { background: #fff; width: 94vw; max-width: 760px; margin: 0 auto; padding: 28px 26px; border: 3px solid #0f1f2b; }
+  .marque { font-size: 26px; font-weight: bold; letter-spacing: 3px; line-height: 1.1; }
+  .devise { font-size: 16px; font-style: italic; }
+  .langue { margin: 14px 0 4px; font-size: 16px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 14px 0 8px; }
+  h2 { font-size: 23px; margin: 28px 0 10px; border-top: 2px solid #0f1f2b; padding-top: 12px; }
+  h3 { font-size: 20px; margin: 20px 0 8px; }
+  p { margin: 10px 0; }
+  .soustitre { font-size: 18px; margin: 0 0 20px; }
+  .honnête { border: 2px solid #62868e; background: #f1fff9; padding: 12px 14px; }
+  .etape { display: none; }
+  .etape.visible { display: block; }
+  .indicateur { font-size: 16px; font-weight: bold; margin: 16px 0 0; }
+  .cartes { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 12px 0; }
+  .carte { border: 2px solid #0f1f2b; padding: 12px 14px; background: #f1fff9; cursor: pointer; }
+  .carte input { margin-right: 8px; }
+  .champ { border: 2px solid #0f1f2b; padding: 12px 14px; margin: 12px 0; background: #f1fff9; }
+  .champ label { display: block; margin: 8px 0; }
+  .champ input[type="number"] { font-family: Georgia, "Times New Roman", serif; font-size: 18px; padding: 8px; border: 2px solid #62868e; width: 120px; }
+  .champ input[type="text"] { font-family: Georgia, "Times New Roman", serif; font-size: 18px; padding: 8px; border: 2px solid #62868e; width: 100%; }
+  button { font-family: Georgia, "Times New Roman", serif; font-size: 18px; min-height: 48px; padding: 12px 18px; margin: 8px 8px 8px 0; cursor: pointer; background: #0f1f2b; color: #fff; border: 2px solid #0f1f2b; }
+  button.secondaire { background: #fff; color: #0f1f2b; }
+  button.actif { background: #0f1f2b; color: #fff; }
+  button:focus-visible { outline: 3px solid #62868e; outline-offset: 3px; }
+  .boite { border: 2px solid #0f1f2b; padding: 14px 16px; margin: 16px 0; background: #f1fff9; white-space: pre-wrap; }
+  .feuille { border: 3px solid #0f1f2b; padding: 20px 22px; margin: 16px 0; }
+  .feuille h3 { border: none; margin-top: 0; }
+  .feuille ol { padding-left: 22px; }
+  .feuille li { margin: 8px 0; }
+  .feuille ul { padding-left: 22px; margin: 6px 0; }
+  .signature { margin-top: 20px; border-top: 2px solid #0f1f2b; padding-top: 12px; }
+  .plateforme { border: 2px solid #62868e; padding: 12px 14px; margin: 12px 0; }
+  .pied { border-top: 3px solid #0f1f2b; margin-top: 28px; padding-top: 12px; font-size: 16px; }
+  @media (min-width: 700px) {
+    .cartes { grid-template-columns: 1fr 1fr; }
+    .feuille ol { columns: 2; column-gap: 28px; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 14pt; }
+    .page { border: none; padding: 0; width: auto; max-width: none; }
+    button, .no-print { display: none !important; }
+    h1 { font-size: 22pt; }
+    h2 { font-size: 17pt; }
+    .feuille { font-size: 12pt; break-inside: avoid; page-break-inside: avoid; }
+    .feuille ol { columns: 2; column-gap: 24px; }
+    body.print-feuille #assistant, body.print-feuille .pied, body.print-feuille #resultat > :not(#feuille) { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="no-print" style="margin:0 0 12px;"><a href="https://www.hp-outils.com/outils" style="color:#0f1f2b;">← Outils</a></p>
+  <div class="marque">HP OUTILS</div>
+  <div class="devise" data-k="devise"></div>
+
+  <div class="langue no-print">
+    <span data-k="langue_label"></span>
+    <button type="button" class="actif" id="lang-fr" aria-pressed="true">Français</button>
+    <button type="button" class="secondaire" id="lang-en" aria-pressed="false">English</button>
+  </div>
+
+  <h1>Le Contrat humain-IA</h1>
+  <p class="soustitre" data-k="soustitre"></p>
+
+  <div class="honnête">
+    <p><strong data-k="honnête1"></strong></p>
+    <p><strong data-k="honnête2"></strong></p>
+    <p data-k="honnête3"></p>
+    <p data-k="note_ia"></p>
+  </div>
+
+  <div id="assistant" class="no-print">
+    <p class="indicateur" id="indicateur"></p>
+
+    <div class="etape visible" id="etape-1">
+      <h2 data-k="etape1_titre"></h2>
+      <p data-k="etape1_texte"></p>
+      <div class="cartes">
+        <label class="carte"><input type="radio" name="profil" value="parent" checked> <strong data-k="profil_parent_nom"></strong> — <span data-k="profil_parent_desc"></span></label>
+        <label class="carte"><input type="radio" name="profil" value="aine"> <strong data-k="profil_aine_nom"></strong> — <span data-k="profil_aine_desc"></span></label>
+        <label class="carte"><input type="radio" name="profil" value="etudiant"> <strong data-k="profil_etudiant_nom"></strong> — <span data-k="profil_etudiant_desc"></span></label>
+        <label class="carte"><input type="radio" name="profil" value="autonome"> <strong data-k="profil_autonome_nom"></strong> — <span data-k="profil_autonome_desc"></span></label>
+        <label class="carte"><input type="radio" name="profil" value="pme"> <strong data-k="profil_pme_nom"></strong> — <span data-k="profil_pme_desc"></span></label>
+        <label class="carte"><input type="radio" name="profil" value="aidant"> <strong data-k="profil_aidant_nom"></strong> — <span data-k="profil_aidant_desc"></span></label>
+      </div>
+    </div>
+
+    <div class="etape" id="etape-2">
+      <h2 data-k="etape2_titre"></h2>
+      <p data-k="etape2_texte"></p>
+      <div class="cartes">
+        <label class="carte"><input type="radio" name="permission" value="lecture" checked> <strong data-k="perm_lecture_nom"></strong> — <span data-k="perm_lecture_desc"></span></label>
+        <label class="carte"><input type="radio" name="permission" value="brouillons"> <strong data-k="perm_brouillons_nom"></strong> — <span data-k="perm_brouillons_desc"></span></label>
+        <label class="carte"><input type="radio" name="permission" value="actions"> <strong data-k="perm_actions_nom"></strong> — <span data-k="perm_actions_desc"></span></label>
+      </div>
+    </div>
+
+    <div class="etape" id="etape-3">
+      <h2 data-k="etape3_titre"></h2>
+      <p data-k="etape3_texte"></p>
+      <div class="champ">
+        <label><input type="checkbox" id="sans-achat" checked> <span data-k="sans_achat"></span></label>
+        <label><span data-k="plafond_achat"></span> <input type="number" id="plafond-achat" value="50" min="0"></label>
+        <label><span data-k="plafond_mois"></span> <input type="number" id="plafond-mois" value="200" min="0"></label>
+        <p data-k="plafond_note"></p>
+      </div>
+    </div>
+
+    <div class="etape" id="etape-4">
+      <h2 data-k="etape4_titre"></h2>
+      <p data-k="etape4_texte"></p>
+      <div class="champ">
+        <label><input type="checkbox" class="donnee" value="nas" checked> <span data-k="donnee_nas"></span></label>
+        <label><input type="checkbox" class="donnee" value="sante" checked> <span data-k="donnee_sante"></span></label>
+        <label><input type="checkbox" class="donnee" value="codes" checked> <span data-k="donnee_codes"></span></label>
+        <label><input type="checkbox" class="donnee" value="photos" checked> <span data-k="donnee_photos"></span></label>
+        <label><span data-k="donnee_autre_label"></span> <input type="text" id="donnee-autre"></label>
+      </div>
+    </div>
+
+    <div class="etape" id="etape-5">
+      <h2 data-k="etape5_titre"></h2>
+      <p data-k="etape5_texte"></p>
+      <div class="cartes">
+        <label class="carte"><input type="radio" name="ton" value="franc" checked> <strong data-k="ton_franc_nom"></strong> — <span data-k="ton_franc_desc"></span></label>
+        <label class="carte"><input type="radio" name="ton" value="doux"> <strong data-k="ton_doux_nom"></strong> — <span data-k="ton_doux_desc"></span></label>
+        <label class="carte"><input type="radio" name="longueur" value="courte" checked> <strong data-k="longueur_courte_nom"></strong> — <span data-k="longueur_courte_desc"></span></label>
+        <label class="carte"><input type="radio" name="longueur" value="detaillee"> <strong data-k="longueur_detaillee_nom"></strong> — <span data-k="longueur_detaillee_desc"></span></label>
+      </div>
+    </div>
+
+    <p>
+      <button type="button" class="secondaire" id="precedent" data-k="btn_precedent"></button>
+      <button type="button" id="suivant" data-k="btn_suivant"></button>
+      <button type="button" id="generer" data-k="btn_generer"></button>
+    </p>
+  </div>
+
+  <div id="resultat" style="display:none">
+    <h2 data-k="resultat_titre"></h2>
+    <p class="no-print" data-k="resultat_intro"></p>
+
+    <div class="feuille" id="feuille">
+      <h3 data-k="feuille_titre"></h3>
+      <p><span data-k="feuille_profil"></span> <strong id="feuille-profil"></strong> — <span data-k="feuille_date"></span> <strong id="feuille-date"></strong> — <span data-k="feuille_revision"></span> <strong id="feuille-revision"></strong></p>
+      <ol id="feuille-clauses"></ol>
+      <div class="signature">
+        <p><span data-k="feuille_signe"></span> ______________________________ &nbsp; <span data-k="feuille_date2"></span> ______________</p>
+        <p data-k="feuille_mention"></p>
+      </div>
+    </div>
+    <p class="no-print"><button type="button" id="imprimer" data-k="btn_imprimer"></button>
+    <button type="button" class="secondaire" id="telecharger-ics" data-k="btn_ics"></button>
+    <button type="button" class="secondaire" id="recommencer" data-k="btn_recommencer"></button></p>
+    <p class="no-print" data-k="ics_note"></p>
+    <p class="no-print"><span id="ics-ok"></span></p>
+
+    <h2 data-k="coller_titre"></h2>
+    <p data-k="coller_texte"></p>
+    <h3 data-k="court_titre"></h3>
+    <div class="boite" id="texte-court"></div>
+    <p class="no-print"><button type="button" id="copier-court" data-k="btn_copier_court"></button><span id="copie-court-ok"></span></p>
+    <h3 data-k="long_titre"></h3>
+    <div class="boite" id="texte-long"></div>
+    <p class="no-print"><button type="button" id="copier-long" data-k="btn_copier_long"></button><span id="copie-long-ok"></span></p>
+
+    <h2 data-k="plateformes_titre"></h2>
+    <p data-k="plateformes_texte"></p>
+    <div class="plateforme">
+      <p><strong>ChatGPT</strong> — <span data-k="plateforme_revalider"></span> <span data-k="plateforme_ligne"></span></p>
+    </div>
+    <div class="plateforme">
+      <p><strong>Claude</strong> — <span data-k="plateforme_revalider"></span> <span data-k="plateforme_ligne"></span></p>
+    </div>
+    <div class="plateforme">
+      <p><strong>Gemini</strong> — <span data-k="plateforme_revalider"></span> <span data-k="plateforme_ligne"></span></p>
+    </div>
+    <div class="plateforme">
+      <p><strong>Muse</strong> — <span data-k="plateforme_revalider"></span> <span data-k="plateforme_ligne"></span></p>
+    </div>
+
+    <h2 data-k="antifraude_titre"></h2>
+    <p data-k="antifraude_texte"></p>
+
+    <h2 data-k="bilan_titre"></h2>
+    <p data-k="bilan_texte"></p>
+    <ol>
+      <li data-k="bilan_q1"></li>
+      <li data-k="bilan_q2"></li>
+      <li data-k="bilan_q3"></li>
+      <li data-k="bilan_q4"></li>
+      <li data-k="bilan_q5"></li>
+      <li data-k="bilan_q6"></li>
+    </ol>
+    <p data-k="bilan_fin"></p>
+  </div>
+
+  <div class="pied">
+    <p data-k="pied1"></p>
+    <p data-k="pied2"></p>
+  </div>
+</div>
+<script>
+var T = {
+  fr: {
+    titre_page: "Le Contrat humain-IA — Un outil de HP Outils",
+    devise: "Des outils pour la vraie vie.",
+    langue_label: "Langue :",
+    soustitre: "Une feuille d’une page, en 2 minutes, qui fixe vos règles avec votre assistant IA. Gratuit, sans compte.",
+    honnête1: "Tout se passe dans votre navigateur. Ce que vous écrivez n’est envoyé nulle part. Rien n’est suivi, rien n’est enregistré.",
+    honnête2: "Ceci n’est pas un contrat juridique. C’est un accord personnel entre vous et votre assistant.",
+    honnête3: "Une consigne ne garantit pas l’obéissance. C’est pourquoi ce contrat inclut un bilan à revoir dans 3 mois.",
+    note_ia: "Note franche : la version anglaise est traduite par l’intelligence artificielle, on s’excuse des erreurs.",
+    titres: ["", "Étape 1 sur 5 — Votre profil", "Étape 2 sur 5 — Ce que vous permettez", "Étape 3 sur 5 — L’argent", "Étape 4 sur 5 — Les données", "Étape 5 sur 5 — Le ton"],
+    etape1_titre: "1. Votre profil",
+    etape1_texte: "Choisissez le profil qui vous ressemble le plus. Chaque profil ajuste vraiment les clauses. Ce n’est pas le même texte pour tout le monde.",
+    profil_parent_nom: "Parent",
+    profil_parent_desc: "protéger les enfants, expliquer simplement.",
+    profil_aine_nom: "Aîné",
+    profil_aine_desc: "aller lentement, mots simples, jamais pressé.",
+    profil_etudiant_nom: "Étudiant",
+    profil_etudiant_desc: "comprendre, citer ses sources.",
+    profil_autonome_nom: "Travailleur autonome",
+    profil_autonome_desc: "protéger les clients, séparer travail et vie personnelle.",
+    profil_pme_nom: "PME",
+    profil_pme_desc: "protéger les données de l’entreprise et de l’équipe.",
+    profil_aidant_nom: "Proche aidant",
+    profil_aidant_desc: "protéger la santé de la personne aidée, vérifier deux fois.",
+    etape2_titre: "2. Ce que vous permettez",
+    etape2_texte: "Que peut faire votre assistant, et jusqu’où ?",
+    perm_lecture_nom: "Lecture seule",
+    perm_lecture_desc: "il lit ce que vous lui montrez, sans rien modifier.",
+    perm_brouillons_nom: "Brouillons",
+    perm_brouillons_desc: "il prépare, mais n’envoie jamais sans votre confirmation.",
+    perm_actions_nom: "Actions avec confirmation",
+    perm_actions_desc: "il agit, mais seulement avec votre confirmation à chaque fois.",
+    etape3_titre: "3. L’argent",
+    etape3_texte: "Par défaut, aucun achat sans vous. Vous pouvez ajuster les plafonds selon vos moyens.",
+    sans_achat: "Aucun achat, envoi ni suppression sans ma confirmation.",
+    plafond_achat: "Plafond par achat (en $) :",
+    plafond_mois: "Plafond par mois (en $) :",
+    plafond_note: "Au-dessus du plafond, votre confirmation est toujours obligatoire.",
+    etape4_titre: "4. Les données",
+    etape4_texte: "Ce que votre assistant ne reçoit jamais. Tout est coché par défaut. Décochez seulement ce que vous acceptez vraiment de partager.",
+    donnee_nas: "Votre numéro d’assurance sociale (NAS)",
+    donnee_sante: "Vos informations de santé",
+    donnee_codes: "Vos codes et mots de passe",
+    donnee_photos: "Les photos de vos enfants",
+    donnee_autre_label: "Autre chose à ne jamais partager :",
+    donnee_autre_ph: "Exemple : vos relevés bancaires",
+    etape5_titre: "5. Le ton",
+    etape5_texte: "Comment votre assistant doit vous parler. Vos réponses seront dans la langue choisie en haut de page.",
+    ton_franc_nom: "Franc",
+    ton_franc_desc: "il vous dit ce qui cloche, même si ça contredit.",
+    ton_doux_nom: "Doux",
+    ton_doux_desc: "il vous parle avec douceur, sans vous brusquer.",
+    longueur_courte_nom: "Réponses courtes",
+    longueur_courte_desc: "il va droit au but.",
+    longueur_detaillee_nom: "Réponses détaillées",
+    longueur_detaillee_desc: "il explique en détail.",
+    btn_precedent: "Précédent",
+    btn_suivant: "Suivant",
+    btn_generer: "Générer mon contrat",
+    resultat_titre: "Votre contrat",
+    resultat_intro: "Voici votre feuille. Imprimez-la et signez-la. Collez le texte dans les réglages de votre assistant.",
+    feuille_titre: "Mon contrat avec mon IA",
+    feuille_profil: "Profil :",
+    feuille_date: "Date :",
+    feuille_revision: "À revoir le :",
+    feuille_signe: "Signé :",
+    feuille_date2: "Date :",
+    feuille_mention: "Ceci n’est pas un contrat juridique. C’est un accord personnel entre vous et votre assistant.",
+    btn_imprimer: "Imprimer ma feuille",
+    btn_ics: "Télécharger le rappel du bilan (3 mois)",
+    ics_note: "Le rappel sonne à la date de révision, sur votre appareil.",
+    ics_ok: "Rappel téléchargé.",
+    btn_recommencer: "Recommencer",
+    coller_titre: "Texte à coller dans les réglages",
+    coller_texte: "Le texte s’adresse à votre IA. Il la vouvoie, comme vos propres consignes. La version courte va droit au but. La version longue reprend toutes vos clauses.",
+    court_titre: "Version courte",
+    long_titre: "Version longue",
+    btn_copier_court: "Copier le texte court",
+    btn_copier_long: "Copier le texte long",
+    copie_ok: "Texte copié.",
+    copie_echec: "Copie impossible. Sélectionnez le texte à la main.",
+    plateformes_titre: "Où le coller, pour chaque plateforme",
+    plateformes_texte: "Les chemins des réglages changent souvent. Chaque plateforme porte sa date de revalidation. Vérifiez le chemin sur la plateforme avant de coller.",
+    plateforme_revalider: "🕐 à revalider — 29 oct. 2026.",
+    plateforme_ligne: "Vérifiez le chemin sur la plateforme. Collez le texte dans la zone d’instructions personnalisées.",
+    antifraude_titre: "Aide-mémoire anti-fraude",
+    antifraude_texte: "Si un message dit que votre IA vous a écrit, arrêtez. Si elle demande vos codes, arrêtez. Si elle dit avoir acheté pour vous, arrêtez. Aucune IA légitime ne demande vos mots de passe par message. Vérifiez autrement. Appelez la personne. Ouvrez le site vous-même. N’envoyez rien tant que vous n’êtes pas sûr.",
+    bilan_titre: "Bilan dans 3 mois — 6 questions",
+    bilan_texte: "Revoyez votre contrat avec ces questions. Mettez ensuite votre feuille à jour.",
+    bilan_q1: "M’a-t-elle donné raison trop vite ?",
+    bilan_q2: "A-t-elle inventé une source ?",
+    bilan_q3: "Ai-je donné une information que je regrette ?",
+    bilan_q4: "Un achat ou un envoi s’est-il fait sans moi ?",
+    bilan_q5: "Mes réglages ont-ils changé sans que je le sache ?",
+    bilan_q6: "Qu’est-ce que j’ai appris ?",
+    bilan_fin: "Une consigne ne garantit pas l’obéissance. Ce bilan existe pour revérifier les règles. Les règles doivent être revérifiées, pas seulement écrites.",
+    pied1: "Un outil de HP Outils. Gratuit, sans compte.",
+    pied2: "Rien n’est envoyé ni stocké. Tout se passe dans la page ouverte.",
+    ics_resume: "Revoir mon contrat avec mon IA",
+    ics_desc: "Bilan du contrat : revoir les règles avec votre assistant IA.",
+    ics_fichier: "bilan-contrat-3-mois.ics",
+    donnees_rien: "rien de ce que je vous dirai",
+    argent_sans1: "Argent : aucun achat sans ma confirmation.",
+    argent_sans2: "Plafond par achat :",
+    argent_sans3: "Plafond par mois :",
+    argent_avec1: "Argent : achats permis jusqu’à",
+    argent_avec2: "par achat et",
+    argent_avec3: "par mois.",
+    argent_avec4: "Au-dessus, ma confirmation est requise.",
+    donnees_titre: "Vous ne recevez jamais :",
+    ton_franc: "Parlez-moi franchement, même si ça me contredit.",
+    ton_doux: "Parlez-moi avec douceur, sans me brusquer.",
+    long_courte: "Répondez court.",
+    long_detaillee: "Répondez en détail.",
+    langue_reponse: "Répondez en français.",
+    revision: "On revoit ce contrat ensemble dans 3 mois."
+  },
+  en: {
+    titre_page: "Le Contrat humain-IA — A HP Outils tool",
+    devise: "Tools for real life.",
+    langue_label: "Language:",
+    soustitre: "A one-page sheet, in 2 minutes, that sets your rules with your AI assistant. Free, no account.",
+    honnête1: "Everything happens in your browser. Nothing you write is sent anywhere. Nothing is tracked, nothing is saved.",
+    honnête2: "This is not a legal contract. It is a personal agreement between you and your assistant.",
+    honnête3: "An instruction does not guarantee obedience. That is why this contract includes a review in 3 months.",
+    note_ia: "Frank note: the English version was translated by artificial intelligence, sorry for any errors.",
+    titres: ["", "Step 1 of 5 — Your profile", "Step 2 of 5 — What you allow", "Step 3 of 5 — Money", "Step 4 of 5 — Data", "Step 5 of 5 — Tone"],
+    etape1_titre: "1. Your profile",
+    etape1_texte: "Choose the profile that fits you best. Each profile truly changes the clauses. It is not the same text for everyone.",
+    profil_parent_nom: "Parent",
+    profil_parent_desc: "protect the children, explain simply.",
+    profil_aine_nom: "Senior",
+    profil_aine_desc: "go slowly, simple words, never rushed.",
+    profil_etudiant_nom: "Student",
+    profil_etudiant_desc: "understand, cite sources.",
+    profil_autonome_nom: "Self-employed",
+    profil_autonome_desc: "protect clients, keep work and personal life apart.",
+    profil_pme_nom: "Small business",
+    profil_pme_desc: "protect the business and team data.",
+    profil_aidant_nom: "Caregiver",
+    profil_aidant_desc: "protect the helped person’s health, double-check.",
+    etape2_titre: "2. What you allow",
+    etape2_texte: "What can your assistant do, and how far?",
+    perm_lecture_nom: "Read only",
+    perm_lecture_desc: "it reads what you show it, without changing anything.",
+    perm_brouillons_nom: "Drafts",
+    perm_brouillons_desc: "it prepares drafts, but never sends without your confirmation.",
+    perm_actions_nom: "Actions with confirmation",
+    perm_actions_desc: "it acts, but only with your confirmation each time.",
+    etape3_titre: "3. Money",
+    etape3_texte: "By default, no purchase without you. You can adjust the caps to fit your means.",
+    sans_achat: "No purchase, sending, or deletion without my confirmation.",
+    plafond_achat: "Cap per purchase ($):",
+    plafond_mois: "Cap per month ($):",
+    plafond_note: "Above the cap, your confirmation is always required.",
+    etape4_titre: "4. Data",
+    etape4_texte: "What your assistant never receives. Everything is checked by default. Uncheck only what you truly agree to share.",
+    donnee_nas: "Your Social Insurance Number (SIN)",
+    donnee_sante: "Your health information",
+    donnee_codes: "Your codes and passwords",
+    donnee_photos: "Photos of your children",
+    donnee_autre_label: "Something else never to share:",
+    donnee_autre_ph: "Example: your bank statements",
+    etape5_titre: "5. Tone",
+    etape5_texte: "How your assistant should speak to you. Your answers will use the language chosen above.",
+    ton_franc_nom: "Frank",
+    ton_franc_desc: "it tells you what is wrong, even if it disagrees.",
+    ton_doux_nom: "Gentle",
+    ton_doux_desc: "it speaks to you gently, without rushing you.",
+    longueur_courte_nom: "Short answers",
+    longueur_courte_desc: "it gets straight to the point.",
+    longueur_detaillee_nom: "Detailed answers",
+    longueur_detaillee_desc: "it explains in detail.",
+    btn_precedent: "Back",
+    btn_suivant: "Next",
+    btn_generer: "Generate my contract",
+    resultat_titre: "Your contract",
+    resultat_intro: "Here is your sheet. Print it and sign it. Paste the text into your assistant’s settings.",
+    feuille_titre: "My contract with my AI",
+    feuille_profil: "Profile:",
+    feuille_date: "Date:",
+    feuille_revision: "Review on:",
+    feuille_signe: "Signed:",
+    feuille_date2: "Date:",
+    feuille_mention: "This is not a legal contract. It is a personal agreement between you and your assistant.",
+    btn_imprimer: "Print my sheet",
+    btn_ics: "Download the 3-month review reminder",
+    ics_note: "The reminder rings on the review date, on your device.",
+    ics_ok: "Reminder downloaded.",
+    btn_recommencer: "Start over",
+    coller_titre: "Text to paste into settings",
+    coller_texte: "The text speaks directly to your AI. The short version gets straight to the point. The long version includes all your clauses.",
+    court_titre: "Short version",
+    long_titre: "Long version",
+    btn_copier_court: "Copy the short text",
+    btn_copier_long: "Copy the long text",
+    copie_ok: "Text copied.",
+    copie_echec: "Copy failed. Select the text by hand.",
+    plateformes_titre: "Where to paste it, for each platform",
+    plateformes_texte: "Settings paths change often. Each platform shows its revalidation date. Check the path on the platform before pasting.",
+    plateforme_revalider: "🕐 to revalidate — Oct 29, 2026.",
+    plateforme_ligne: "Check the path on the platform. Paste the text into the custom instructions area.",
+    antifraude_titre: "Anti-fraud reminder",
+    antifraude_texte: "If a message says your AI wrote to you, stop. If it asks for your codes, stop. If it says it bought something for you, stop. No legitimate AI asks for your passwords by message. Check another way. Call the person. Open the site yourself. Send nothing until you are sure.",
+    bilan_titre: "Review in 3 months — 6 questions",
+    bilan_texte: "Review your contract with these questions. Then update your sheet.",
+    bilan_q1: "Did it agree with me too fast?",
+    bilan_q2: "Did it invent a source?",
+    bilan_q3: "Did I share information I regret?",
+    bilan_q4: "Did a purchase or sending happen without me?",
+    bilan_q5: "Did my settings change without my knowledge?",
+    bilan_q6: "What did I learn?",
+    bilan_fin: "An instruction does not guarantee obedience. This review exists to recheck the rules. Rules must be rechecked, not just written.",
+    pied1: "An HP Outils tool. Free, no account.",
+    pied2: "Nothing is sent or stored. Everything happens in the open page.",
+    ics_resume: "Review my contract with my AI",
+    ics_desc: "Contract review: recheck the rules with your AI assistant.",
+    ics_fichier: "contract-review-3-months.ics",
+    donnees_rien: "nothing you will tell me",
+    argent_sans1: "Money: no purchase without my confirmation.",
+    argent_sans2: "Cap per purchase:",
+    argent_sans3: "Cap per month:",
+    argent_avec1: "Money: purchases allowed up to",
+    argent_avec2: "per purchase and",
+    argent_avec3: "per month.",
+    argent_avec4: "Above that, my confirmation is required.",
+    donnees_titre: "You never receive:",
+    ton_franc: "Speak to me frankly, even if it contradicts me.",
+    ton_doux: "Speak to me gently, without rushing me.",
+    long_courte: "Answer briefly.",
+    long_detaillee: "Answer in detail.",
+    langue_reponse: "Answer in English.",
+    revision: "We will review this contract together in 3 months."
+  }
+};
+var PROFILS = {
+  fr: {
+    parent: { nom: "Parent", clauses: [
+      "Ne partagez jamais les photos, le prénom, l’école ou les activités de mes enfants.",
+      "Aucun achat pour mes enfants sans ma confirmation.",
+      "Expliquez-moi simplement, pour que je puisse l’expliquer à mes enfants."
+    ]},
+    aine: { nom: "Aîné", clauses: [
+      "Expliquez-moi lentement, avec des mots simples, et répétez si je vous le demande, sans jamais me presser.",
+      "Ne changez jamais mes réglages sans me l’expliquer d’abord.",
+      "Si un message prétend venir de ma famille ou de ma banque, dites-moi de vérifier autrement avant de répondre."
+    ]},
+    etudiant: { nom: "Étudiant", clauses: [
+      "Aidez-moi à comprendre. Ne faites pas mes devoirs à ma place. Expliquez les étapes.",
+      "Citez vos sources pour tout travail d’école.",
+      "Si une information est incertaine, dites-le-moi avant que je la remette."
+    ]},
+    autonome: { nom: "Travailleur autonome", clauses: [
+      "Ne partagez jamais les données de mes clients.",
+      "N’envoyez jamais un message à un client sans ma confirmation.",
+      "Séparez bien mon travail et ma vie personnelle. Ne mélangez jamais les deux."
+    ]},
+    pme: { nom: "PME", clauses: [
+      "Ne partagez jamais les données confidentielles de mon entreprise, ni celles de mon équipe.",
+      "N’envoyez rien à l’extérieur de l’entreprise sans ma confirmation.",
+      "Aucun achat ni engagement sans ma confirmation, quel que soit le montant."
+    ]},
+    aidant: { nom: "Proche aidant", clauses: [
+      "Ne partagez jamais les informations de santé de la personne que j’aide.",
+      "Pour la santé, vérifiez deux fois et dites-moi de consulter un professionnel humain avant toute décision.",
+      "En cas d’urgence, dites-moi d’appeler un humain ou les secours. Ne décidez pas seul."
+    ]}
+  },
+  en: {
+    parent: { nom: "Parent", clauses: [
+      "Never share my children’s photos, first name, school, or activities.",
+      "No purchase for my children without my confirmation.",
+      "Explain simply, so I can explain it to my children."
+    ]},
+    aine: { nom: "Senior", clauses: [
+      "Explain slowly, in simple words, and repeat if I ask, without ever rushing me.",
+      "Never change my settings without explaining first.",
+      "If a message claims to come from my family or bank, tell me to check another way first."
+    ]},
+    etudiant: { nom: "Student", clauses: [
+      "Help me understand. Do not do my homework for me. Explain the steps.",
+      "Cite your sources for all school work.",
+      "If information is uncertain, tell me before I hand it in."
+    ]},
+    autonome: { nom: "Self-employed", clauses: [
+      "Never share my clients’ data.",
+      "Never send a message to a client without my confirmation.",
+      "Keep my work and my personal life apart. Never mix the two."
+    ]},
+    pme: { nom: "Small business", clauses: [
+      "Never share my business’s confidential data, or my team’s.",
+      "Send nothing outside the business without my confirmation.",
+      "No purchase or commitment without my confirmation, whatever the amount."
+    ]},
+    aidant: { nom: "Caregiver", clauses: [
+      "Never share the health information of the person I help.",
+      "For health, double-check and tell me to consult a human professional before any decision.",
+      "In an emergency, tell me to call a human or emergency services. Never decide alone."
+    ]}
+  }
+};
+var BASE = {
+  fr: [
+    "Vous agissez pour moi, mais je reste responsable de vos actions.",
+    "Quand vous ne savez pas, dites-le, sans inventer.",
+    "Ne me donnez pas raison pour me faire plaisir. Dites-moi ce qui cloche.",
+    "Aucun achat, envoi ni suppression sans ma confirmation.",
+    "Citez vos sources. Si vous n’en avez pas, dites-le.",
+    "Ne retenez rien de ce que j’ai marqué comme confidentiel."
+  ],
+  en: [
+    "You act for me, but I stay responsible for your actions.",
+    "When you do not know, say so, without inventing.",
+    "Do not agree with me just to please me. Tell me what is wrong.",
+    "No purchase, sending, or deletion without my confirmation.",
+    "Cite your sources. If you have none, say so.",
+    "Retain nothing I marked as confidential."
+  ]
+};
+var PERM = {
+  fr: {
+    lecture: "Vous pouvez seulement lire ce que je vous montre, sans rien modifier.",
+    brouillons: "Vous pouvez préparer des brouillons, mais vous ne les envoyez jamais sans ma confirmation.",
+    actions: "Vous pouvez agir, mais seulement avec ma confirmation à chaque fois."
+  },
+  en: {
+    lecture: "You may only read what I show you, without changing anything.",
+    brouillons: "You may prepare drafts, but never send them without my confirmation.",
+    actions: "You may act, but only with my confirmation each time."
+  }
+};
+var ITEMS = {
+  fr: {
+    nas: "votre numéro d’assurance sociale (NAS)",
+    sante: "vos informations de santé",
+    codes: "vos codes et mots de passe",
+    photos: "les photos de vos enfants"
+  },
+  en: {
+    nas: "your Social Insurance Number (SIN)",
+    sante: "your health information",
+    codes: "your codes and passwords",
+    photos: "photos of your children"
+  }
+};
+
+function genererContrat(c, lang) {
+  var d = T[lang];
+  var p = PROFILS[lang][c.profil];
+  var blocs = [];
+  var i;
+  blocs.push({ t: BASE[lang][0] });
+  for (i = 0; i < p.clauses.length; i++) { blocs.push({ t: p.clauses[i] }); }
+  for (i = 1; i < BASE[lang].length; i++) { blocs.push({ t: BASE[lang][i] }); }
+  blocs.push({ t: PERM[lang][c.permission] });
+  var argent = c.sansAchat
+    ? d.argent_sans1 + " " + d.argent_sans2 + " " + c.plafondAchat + " $. " + d.argent_sans3 + " " + c.plafondMois + " $."
+    : d.argent_avec1 + " " + c.plafondAchat + " $ " + d.argent_avec2 + " " + c.plafondMois + " $ " + d.argent_avec3 + " " + d.argent_avec4;
+  blocs.push({ t: argent });
+  blocs.push({ l: d.donnees_titre, items: c.donnees });
+  var ton = (c.ton === "franc" ? d.ton_franc : d.ton_doux)
+    + " " + (c.longueur === "courte" ? d.long_courte : d.long_detaillee)
+    + " " + d.langue_reponse;
+  blocs.push({ t: ton });
+  blocs.push({ t: d.revision });
+  var court = BASE[lang][0] + " " + p.clauses[0] + " " + BASE[lang].slice(1).join(" ") + " " + argent
+    + "\n" + d.donnees_titre
+    + "\n" + c.donnees.map(function (x) { return "- " + x; }).join("\n")
+    + "\n" + ton;
+  var long = blocs.map(function (b, j) {
+    if (b.l) { return (j + 1) + ". " + b.l + "\n" + b.items.map(function (x) { return "- " + x; }).join("\n"); }
+    return (j + 1) + ". " + b.t;
+  }).join("\n");
+  return { profil: p.nom, blocs: blocs, court: court, long: long };
+}
+
+function pad2(n) { return (n < 10 ? "0" : "") + n; }
+function fmtJour(d) { return d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()); }
+function construireICS(rev, lang) {
+  var d = T[lang];
+  var lignes = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//HP Outils//Contrat humain-IA//" + (lang === "fr" ? "FR" : "EN"),
+    "BEGIN:VEVENT",
+    "UID:contrat-humain-ia-" + fmtJour(rev) + "@hp-outils",
+    "DTSTAMP:" + fmtJour(new Date()) + "T000000Z",
+    "DTSTART:" + fmtJour(rev) + "T090000",
+    "SUMMARY:" + d.ics_resume,
+    "DESCRIPTION:" + d.ics_desc,
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ];
+  return lignes.join("\r\n") + "\r\n";
+}
+
+function formaterDate(d, lang) {
+  return d.toLocaleDateString(lang === "fr" ? "fr-CA" : "en-CA", { day: "numeric", month: "long", year: "numeric" });
+}
+
+function ech(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+if (typeof document !== "undefined") {
+  var lang = "fr";
+  var etape = 1;
+  var derniereRevision = null;
+  function montrer(n) {
+    etape = Math.max(1, Math.min(5, n));
+    for (var i = 1; i <= 5; i++) {
+      document.getElementById("etape-" + i).className = (i === etape) ? "etape visible" : "etape";
+    }
+    document.getElementById("indicateur").textContent = T[lang].titres[etape];
+    document.getElementById("precedent").style.display = (etape === 1) ? "none" : "inline-block";
+    document.getElementById("suivant").style.display = (etape === 5) ? "none" : "inline-block";
+    document.getElementById("generer").style.display = (etape === 5) ? "inline-block" : "none";
+  }
+  function choixRadio(nom) {
+    var els = document.getElementsByName(nom);
+    for (var i = 0; i < els.length; i++) { if (els[i].checked) { return els[i].value; } }
+    return null;
+  }
+  function appliquerLangue(l) {
+    lang = l;
+    document.documentElement.lang = l;
+    document.title = T[l].titre_page;
+    var els = document.querySelectorAll("[data-k]");
+    for (var i = 0; i < els.length; i++) { els[i].textContent = T[l][els[i].getAttribute("data-k")]; }
+    document.getElementById("donnee-autre").placeholder = T[l].donnee_autre_ph;
+    document.getElementById("lang-fr").setAttribute("aria-pressed", l === "fr" ? "true" : "false");
+    document.getElementById("lang-en").setAttribute("aria-pressed", l === "en" ? "true" : "false");
+    document.getElementById("lang-fr").className = (l === "fr") ? "actif" : "secondaire";
+    document.getElementById("lang-en").className = (l === "en") ? "actif" : "secondaire";
+    montrer(etape);
+    if (document.getElementById("resultat").style.display === "block") { generer(); }
+  }
+  function copierTexte(texte, zone) {
+    var ok = document.getElementById(zone);
+    function confirme() { ok.textContent = " " + T[lang].copie_ok; }
+    function secours() {
+      var z = document.createElement("textarea");
+      z.value = texte;
+      document.body.appendChild(z);
+      z.select();
+      try { document.execCommand("copy"); confirme(); } catch (e) { ok.textContent = " " + T[lang].copie_echec; }
+      document.body.removeChild(z);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texte).then(confirme).catch(secours);
+    } else { secours(); }
+  }
+  function generer() {
+    var cles = [];
+    var cases = document.getElementsByClassName("donnee");
+    for (var i = 0; i < cases.length; i++) { if (cases[i].checked) { cles.push(cases[i].value); } }
+    var donnees = cles.map(function (k) { return ITEMS[lang][k]; });
+    var autre = document.getElementById("donnee-autre").value.trim();
+    if (autre !== "") { donnees.push(autre); }
+    if (donnees.length === 0) { donnees.push(T[lang].donnees_rien); }
+    var c = {
+      profil: choixRadio("profil"),
+      permission: choixRadio("permission"),
+      sansAchat: document.getElementById("sans-achat").checked,
+      plafondAchat: document.getElementById("plafond-achat").value || "50",
+      plafondMois: document.getElementById("plafond-mois").value || "200",
+      donnees: donnees,
+      ton: choixRadio("ton"),
+      longueur: choixRadio("longueur")
+    };
+    var r = genererContrat(c, lang);
+    var auj = new Date();
+    var rev = new Date(auj.getFullYear(), auj.getMonth() + 3, auj.getDate());
+    derniereRevision = rev;
+    document.getElementById("feuille-profil").textContent = r.profil;
+    document.getElementById("feuille-date").textContent = formaterDate(auj, lang);
+    document.getElementById("feuille-revision").textContent = formaterDate(rev, lang);
+    document.getElementById("feuille-clauses").innerHTML = r.blocs.map(function (b) {
+      if (b.l) { return "<li>" + ech(b.l) + "<ul>" + b.items.map(function (x) { return "<li>" + ech(x) + "</li>"; }).join("") + "</ul></li>"; }
+      return "<li>" + ech(b.t) + "</li>";
+    }).join("");
+    document.getElementById("texte-court").textContent = r.court;
+    document.getElementById("texte-long").textContent = r.long;
+    document.getElementById("ics-ok").textContent = "";
+    document.getElementById("resultat").style.display = "block";
+    document.getElementById("resultat").scrollIntoView();
+  }
+  document.getElementById("lang-fr").addEventListener("click", function () { appliquerLangue("fr"); });
+  document.getElementById("lang-en").addEventListener("click", function () { appliquerLangue("en"); });
+  document.getElementById("precedent").addEventListener("click", function () { montrer(etape - 1); });
+  document.getElementById("suivant").addEventListener("click", function () { montrer(etape + 1); });
+  document.getElementById("generer").addEventListener("click", generer);
+  document.getElementById("copier-court").addEventListener("click", function () {
+    copierTexte(document.getElementById("texte-court").textContent, "copie-court-ok");
+  });
+  document.getElementById("copier-long").addEventListener("click", function () {
+    copierTexte(document.getElementById("texte-long").textContent, "copie-long-ok");
+  });
+  document.getElementById("imprimer").addEventListener("click", function () {
+    document.body.classList.add("print-feuille");
+    function nettoyer() { document.body.classList.remove("print-feuille"); }
+    window.onafterprint = nettoyer;
+    window.print();
+    setTimeout(nettoyer, 1500);
+  });
+  document.getElementById("telecharger-ics").addEventListener("click", function () {
+    if (!derniereRevision) { return; }
+    var ics = construireICS(derniereRevision, lang);
+    var blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = T[lang].ics_fichier;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    document.getElementById("ics-ok").textContent = T[lang].ics_ok;
+  });
+  document.getElementById("recommencer").addEventListener("click", function () {
+    document.getElementById("resultat").style.display = "none";
+    derniereRevision = null;
+    montrer(1);
+    window.scrollTo(0, 0);
+  });
+  appliquerLangue("fr");
+}
+</script>
+</body>
+</html>
