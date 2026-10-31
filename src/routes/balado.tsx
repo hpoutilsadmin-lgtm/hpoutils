@@ -46,13 +46,15 @@ const EPISODES = [
   },
   {
     n: "02",
-    label: "Mois de la cybersécurité",
+    label: "L'intelligence artificielle au quotidien",
     title: "Épisode 2 — Futur simple",
     date: "19 octobre 2026",
-    duration: "Fraudes et deepfakes",
+    duration: "7 min 10 s",
     description:
-      "Fraudes vocales et deepfakes : comment se protéger à l'ère de l'IA. Publié le " +
-      "19 octobre 2026. Les épisodes suivants seront annoncés ici dès leur parution.",
+      "Dans ce deuxième épisode, Léa, Marc et Maya parlent de l'intelligence " +
+      "artificielle au quotidien, débattent avec un prof de philosophie et partagent " +
+      "de bonnes nouvelles. Le prof est un personnage joué, pas un vrai auditeur. " +
+      "Les applaudissements entendus sont un effet de studio, pas un public.",
     audio:
       "/audio-balado/episode-2.mp3",
   },
