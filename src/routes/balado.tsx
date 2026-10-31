@@ -57,7 +57,7 @@ const EPISODES = [
       "/audio-balado/episode-2.mp3",
   },
   {
-    n: "01",
+    n: "",
     label: "Épisode pilote",
     title: "L'entrepreneur solo à l'ère de l'IA : opportunité ou mirage ?",
     date: "15 octobre 2026",
@@ -113,7 +113,7 @@ function Page() {
           <div className="pillar-grid">
             {EPISODES.map((ep) => (
               <article key={ep.n} className="pillar-card">
-                <span className="pillar-num">{ep.n}</span>
+                {ep.n ? <span className="pillar-num">{ep.n}</span> : null}
                 <p className="editorial-kicker">{ep.label}</p>
                 <h3>{ep.title}</h3>
                 <p><strong>{ep.date}</strong> · {ep.duration}</p>
