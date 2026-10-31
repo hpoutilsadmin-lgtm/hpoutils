@@ -102,7 +102,7 @@ function Page() {
               chaque proposition peut être adaptée à votre milieu.
             </p>
             <p>
-              <strong>Horaires :</strong> ateliers lundi et mardi, de 9 h à 12 h et de 18 h à 21 h ; vendredi, de 18 h à 21 h ; dimanche, de 9 h à 12 h. Réservation par courriel et sur entente.
+              <strong>Horaires :</strong> pas d'horaires fixes. C'est à vous de dire quand vous le voulez, la direction humaine valide si elle est disponible. Réservation par courriel et sur entente.
             </p>
             <p>
               <strong>Ce qui se précise à la demande :</strong> les groupes d'âge visés, les
