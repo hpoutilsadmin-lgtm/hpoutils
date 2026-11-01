@@ -87,18 +87,16 @@ function Index() {
           <span className="editorial-kicker">HP — créé au Québec</span>
           <h1>Des outils concrets pour la <em>vraie vie</em>.</h1>
           <p className="lead">
-            Des jeux gratuits, des recettes et des outils web sans compte — et des kits
-            PDF à petit prix, des livres et des ateliers, créés au Québec.
-            Des outils éducatifs gratuits pour les familles de Terrebonne, au Québec.
+            Régler une démarche, tenir votre budget, cuisiner un repas avec ce que vous avez, jouer sans compte : des outils gratuits, des kits à petit prix et des ateliers, créés à Terrebonne, au Québec.
           </p>
           {/* Nuit 4A : les appels d'abord, les citations ensuite — textes inchangés, ordre seul. */}
           <div className="lead-actions">
-            <Link to="/jeux" className="btn-primary">Jouer — 37 + 1 caché jeux gratuits</Link>
-            <Link to="/outils" className="btn-primary">Outils gratuits, sans compte</Link>
+            <Link to="/outils" className="btn-primary">Régler un problème</Link>
+            <Link to="/jeux" className="btn-primary">Jouer 37 jeux gratuits</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
           <p style={{ margin: "28px 0", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
-            Écrit par un humain, accéléré par l'IA. On le dit toujours.
+            Direction humaine, accélérée par l'IA. On le dit toujours.
           </p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, margin: "0 0 28px", maxWidth: 700 }}>
             « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — HP
@@ -111,84 +109,27 @@ function Index() {
         <div className="container">
           <span className="editorial-kicker">Par où commencer</span>
           <h2 className="section-title">Vous cherchez quoi?</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 24 }}>
-            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-              <Link to="/jeux" aria-label="Voir les jeux" style={{ display: "block", textDecoration: "none" }}>
-                <div style={{ ...categoryTile("#08243a", "#0f3e62"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>J</span>
-                  <span style={CATEGORY_TAG_STYLE}>Gratuits · navigateur</span>
-                </div>
-              </Link>
-              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                <h3 style={{ fontSize: 23 }}>Jeux</h3>
-                <p>37 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
-                <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
-              </div>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>La Boîte à outils</h3>
+              <p>8 outils gratuits, sans compte, pour le quotidien : préparer son héritage, trancher une décision, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand.</p>
+              <a className="pillar-cta" href="/boite/">Ouvrir la Boîte →</a>
             </article>
-            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-              <Link to="/outils" aria-label="Voir les outils" style={{ display: "block", textDecoration: "none" }}>
-                <div style={{ ...categoryTile("#294f1e", "#496b2a"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>O</span>
-                  <span style={CATEGORY_TAG_STYLE}>Web · papier</span>
-                </div>
-              </Link>
-              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                <h3 style={{ fontSize: 23 }}>Outils</h3>
-                <p>Interactifs sur le web, ou papier à imprimer : kits Sans Honte et fiches</p>
-                <Link className="pillar-cta" to="/outils">Voir les outils →</Link>
-              </div>
+            <article className="pillar-card">
+              <h3>En cuisine</h3>
+              <p>629 recettes pour cuisiner avec ce qu'on a sous la main : cherchez par ingrédients, convertissez les températures du four et trouvez quoi faire avec les restes.</p>
+              <a className="pillar-cta" href="/en-cuisine/index.html">Ouvrir En cuisine →</a>
             </article>
-            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-              <Link to="/livres-pdf" aria-label="Voir les livres" style={{ display: "block", textDecoration: "none" }}>
-                <div style={{ ...categoryTile("#54432a", "#806943"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>L</span>
-                  <span style={CATEGORY_TAG_STYLE}>PDF à télécharger</span>
-                </div>
-              </Link>
-              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                <h3 style={{ fontSize: 23 }}>Livres</h3>
-                <p>Livres et PDF d'ici</p>
-                <Link className="pillar-cta" to="/livres-pdf">Voir les livres →</Link>
-              </div>
+            <article className="pillar-card">
+              <h3>Jeux</h3>
+              <p>37 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
+              <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
             </article>
-            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-              <a href="/en-cuisine/index.html" aria-label="Ouvrir En cuisine" style={{ display: "block", textDecoration: "none" }}>
-                <div style={{ ...categoryTile("#9a4a0d", "#c85f16"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>C</span>
-                  <span style={CATEGORY_TAG_STYLE}>Recettes HP</span>
-                </div>
-              </a>
-              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                <h3 style={{ fontSize: 23 }}>Cuisine</h3>
-                <p>Les enfants cuisinent, recettes et petits budgets</p>
-                <a className="pillar-cta" href="/en-cuisine/index.html">Ouvrir En cuisine →</a>
-              </div>
-            </article>
-            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-              <a href="/boite/" aria-label="Ouvrir la Boîte à outils" style={{ display: "block", textDecoration: "none" }}>
-                <div style={{ ...categoryTile("#3d2a56", "#5a3d80"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>B</span>
-                  <span style={CATEGORY_TAG_STYLE}>Gratuit · sans compte</span>
-                </div>
-              </a>
-              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                <h3 style={{ fontSize: 23 }}>La Boîte à outils</h3>
-                <p>8 outils gratuits, sans compte, pour le quotidien : préparer son héritage, trancher une décision, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand.</p>
-                <a className="pillar-cta" href="/boite/">Ouvrir la Boîte →</a>
-              </div>
-            </article>
-            <article className="pillar-card" style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-              <Link to="/univers" aria-label="Choisir votre histoire" style={{ display: "block", textDecoration: "none" }}>
-                <div style={{ ...categoryTile("#7a1f2b", "#a63a44"), height: 128, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                  <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 56, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>À</span>
-                  <span style={CATEGORY_TAG_STYLE}>Chasse-Galerie gratuite</span>
-                </div>
-              </Link>
-              <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                <h3 style={{ fontSize: 23 }}>À toi l'histoire</h3>
-                <p>11 tomes payants au total : vous choisissez, l'histoire change. La Chasse-Galerie est gratuite.</p>
-                <Link className="pillar-cta" to="/univers">Choisir votre histoire →</Link>
-              </div>
+            <article className="pillar-card">
+              <h3>Groupes, organismes et commerces</h3>
+              <p>Un jeu aux couleurs de votre commerce ou de votre organisme, que vos clients jouent, partagent et retiennent ; des ateliers pour vos groupes, à Terrebonne et dans Lanaudière, on vient chez vous. Jeux à vos couleurs dès 29 $, ateliers pour groupes 150 à 290 $, aucune taxe ajoutée.</p>
+              <Link className="pillar-cta" to="/jeux-a-votre-image">Voir les jeux à votre image →</Link>
+              <Link className="pillar-cta" to="/ateliers">Voir les ateliers →</Link>
             </article>
           </div>
         </div>
