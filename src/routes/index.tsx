@@ -200,7 +200,7 @@ function Index() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les Passeurs</h3>
-              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, inscription par courriel ouverte, paiement automatisé s'en vient, aucun prélèvement sans confirmation. C'est un abonnement, pas un outil gratuit.</p>
+              <p>Le programme qui tiendra le gratuit debout : 3 $ CAD par mois, inscription par courriel ouverte, aucun prélèvement sans confirmation. C'est un abonnement, pas un outil gratuit.</p>
               <Link className="pillar-cta" to="/les-passeurs">Découvrir les Passeurs →</Link>
             </article>
             <article className="pillar-card">

@@ -4,7 +4,7 @@ import { createSeoHead } from "@/lib/seo";
 export const Route = createFileRoute("/les-passeurs")({
   head: () => createSeoHead({
     title: "Les Passeurs — l'accès au savoir pour 3 $ CAD par mois",
-    description: "Les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année). Aucune taxe ajoutée (petit fournisseur). L'inscription par courriel est ouverte : écrivez à la direction humaine pour vous inscrire. Le paiement automatisé en ligne s'en vient. Aucun prélèvement sans confirmation.",
+    description: "Les Passeurs soutiennent les jeux, les livres et les outils gratuits de HP Outils. L'accès au savoir : 3 $ CAD par mois (ou 28 $ CAD pour l'année). Aucune taxe ajoutée (petit fournisseur). L'inscription par courriel est ouverte : écrivez à la direction humaine pour vous inscrire. Pour l'instant, l'inscription se fait par courriel. Aucun prélèvement sans confirmation.",
     path: "/les-passeurs",
   }),
   component: Page,
@@ -86,8 +86,7 @@ function Page() {
             <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
               Pour vous inscrire, <a href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">écrivez à la direction humaine</a> en précisant la formule (3 $ / mois ou 28 $ / an) — la direction humaine vous répond sous 3 jours
               ouvrables avec les détails. Aucun paiement n'est demandé ici : la direction
-              vous confirme les détails avant tout prélèvement. Le paiement automatisé en
-              ligne, lui, s'en vient. Et tout ce qui est gratuit sur HP Outils le reste.
+              vous confirme les détails avant tout prélèvement. Pour l'instant, l'inscription se fait par courriel. Et tout ce qui est gratuit sur HP Outils le reste.
             </p>
             <div className="lead-actions" style={{ marginTop: 16 }}>
               <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">S'inscrire en écrivant à la direction</a>
