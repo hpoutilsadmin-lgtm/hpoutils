@@ -5231,7 +5231,7 @@ export function initHgpto() {
         '/sans-honte': "Petit résumé calme : 15 kits à 5 $ chacun, le bundle « Choisis 10 parmi 15 » à 40 $, aucune taxe ajoutée. Prenez votre temps.",
         '/livres-pdf': "Petit résumé calme : 4 livres en PDF, de 10 $ à 15 $ ; téléchargement immédiat après le paiement, le livre « Enfants cuisinent » (10 $) compris, aucune taxe ajoutée. Prenez votre temps.",
         '/ateliers': "Petit résumé calme : les ateliers vont de 150 $ à 290 $, à Terrebonne et dans Lanaudière, et on répond à vos questions par courriel. Prenez votre temps.",
-        '/les-passeurs': "Petit résumé calme : les Passeurs, c'est 3 $ par mois pour l'accès aux 16 savoirs et soutenir HP Outils — et le paiement automatisé en ligne s'en vient, en toute honnêteté. Prenez votre temps."
+        '/les-passeurs': "Petit résumé calme : les Passeurs, c'est 3 $ par mois pour l'accès aux 16 savoirs et soutenir HP Outils — et pour l'instant, l'inscription se fait par courriel, en toute honnêteté. Prenez votre temps."
       };
       function isSensitiveRoute(){ return routeKey() === '/sans-honte'; }
       function isPresse(){ return Date.now() < presseUntil; }
