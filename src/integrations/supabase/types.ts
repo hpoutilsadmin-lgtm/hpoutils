@@ -158,8 +158,11 @@ export type Database = {
           created_at: string
           currency: string
           customer_email: string
+          delivery_sent_at: string | null
           environment: string
+          gift_recipient_email: string | null
           id: string
+          kit_slugs: string | null
           pdf_path: string | null
           price_id: string
           product_id: string
@@ -174,8 +177,11 @@ export type Database = {
           created_at?: string
           currency: string
           customer_email: string
+          delivery_sent_at?: string | null
           environment?: string
+          gift_recipient_email?: string | null
           id?: string
+          kit_slugs?: string | null
           pdf_path?: string | null
           price_id: string
           product_id: string
@@ -190,8 +196,11 @@ export type Database = {
           created_at?: string
           currency?: string
           customer_email?: string
+          delivery_sent_at?: string | null
           environment?: string
+          gift_recipient_email?: string | null
           id?: string
+          kit_slugs?: string | null
           pdf_path?: string | null
           price_id?: string
           product_id?: string
@@ -245,6 +254,39 @@ export type Database = {
           id?: string
           metadata?: Json | null
           reason?: string
+        }
+        Relationships: []
+      }
+      tome_tokens: {
+        Row: {
+          created_at: string
+          customer_email: string
+          environment: string
+          id: string
+          revoked_at: string | null
+          stripe_session_id: string
+          token_hash: string
+          tome_slug: string
+        }
+        Insert: {
+          created_at?: string
+          customer_email: string
+          environment?: string
+          id?: string
+          revoked_at?: string | null
+          stripe_session_id: string
+          token_hash: string
+          tome_slug: string
+        }
+        Update: {
+          created_at?: string
+          customer_email?: string
+          environment?: string
+          id?: string
+          revoked_at?: string | null
+          stripe_session_id?: string
+          token_hash?: string
+          tome_slug?: string
         }
         Relationships: []
       }
