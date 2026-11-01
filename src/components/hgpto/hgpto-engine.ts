@@ -1003,8 +1003,11 @@ export function initHgpto() {
       }
 
       /* ---------- Salut ---------- */
+      /* INTÉRIMAIRE (lot 2D légère, 31 oct. 2026) : le salut visible ne
+         joue jamais pendant une partie (gameOn), comme les autres
+         mouvements autonomes du moteur. */
       function doWave(line, dur){
-        if (state === 'sleep' || paused || isBusy() || qaOpen) return;
+        if (state === 'sleep' || paused || isBusy() || qaOpen || gameOn) return;
         setState('wave'); setExpr('happy'); busy(2400);
         if (line) showBubble(Math.random() < 0.2 ? pick(EMOJI_LINES) : esc(line), dur || 3400);
         setTimeout(function(){

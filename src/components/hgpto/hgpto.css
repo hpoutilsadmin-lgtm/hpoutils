@@ -66,6 +66,13 @@
       .bot[data-state="walk"] .bot-inner{animation:bob .46s ease-in-out infinite}
       .bot[data-state="tickle"] .bot-inner{animation:wiggle .5s ease-in-out infinite}
       .bot[data-state="tickle-big"] .bot-inner{animation:wiggle .32s ease-in-out infinite}
+      /* INTÉRIMAIRE (lot 2D légère, 31 oct. 2026) : le salut programmé
+         (état « wave ») n'avait plus aucun visuel sur l'image plate v4
+         (ses règles visaient les bras/sourcils SVG, absents du balisage).
+         On lui donne le wiggle existant, mouvement d'ensemble, sans
+         articulation neuve. Retrait prévu : supprimer cette règle quand
+         le vrai modèle arrive. */
+      .bot[data-state="wave"] .bot-inner{animation:wiggle .5s ease-in-out infinite}
       .bot[data-state="startle"] .bot-inner{animation:jump .5s ease-out}
       .bot[data-state="sleep"] .bot-inner{transform:rotate(2.5deg) translateY(3px)}
       .bot[data-state="stretch"] .bot-inner{animation:stretchy 1.3s ease-in-out}
