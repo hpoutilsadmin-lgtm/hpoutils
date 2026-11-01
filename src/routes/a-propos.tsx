@@ -75,6 +75,31 @@ function Page() {
               La direction dit des mots à elle : <em>serbouillette</em> — ça vient d'Ôz la grande petite, un mix de serviette et débarbouillette. Elle dit <em>globesandwich</em> au lieu de club sandwich. Le petit frère de HP l'appelait <em>Gros Pierre</em> au lieu de HP, et une fillette disait <em>yaourt</em> au lieu de HP.
             </p>
           </section>
+          <section style={{ maxWidth: 760, margin: "0 auto 44px" }}>
+            <span className="mini-note">HP — Des outils pour la vraie vie</span>
+            <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "10px 0 18px" }}>16 départements. Une direction humaine. Une intelligence collective augmentée par l'IA.</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              HP est une initiative indépendante portée par un créateur qui transforme ses idées en outils, jeux, contenus et expériences concrètes.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Les projets sont développés avec l'appui de quatre intelligences artificielles et d'une ressource humaine supplémentaire, chacune contribuant à la recherche, la rédaction, la conception, l'analyse ou au développement.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              L'organisation est structurée en 16 départements pour faire avancer plusieurs projets sans perdre le fil conducteur.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              Derrière le site, il n'y a pas une grosse entreprise avec 40 employés. Il y a une personne qui imagine, structure, expérimente et construit, avec l'aide de plusieurs intelligences artificielles et d'une personne bien réelle.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
+              HP n'est pas une entreprise enregistrée : c'est une initiative indépendante, pas une société ni une entreprise constituée.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: 0 }}>
+              Accéléré par l'IA. Dirigé par un humain. Conçu pour la vraie vie.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, margin: "14px 0 0" }}>
+              Accéléré par l'IA. Direction humaine.
+            </p>
+          </section>
           <div className="cards">
             <article className="info-card"><span className="mini-note">Vision</span><h3>Comprendre</h3><p>Voir le monde avec lucidité et bienveillance pour faire des choix alignés.</p></article>
             <article className="info-card"><span className="mini-note">Action</span><h3>Agir</h3><p>Passer à l'action avec des outils concrets, adaptés à la vraie vie.</p></article>
