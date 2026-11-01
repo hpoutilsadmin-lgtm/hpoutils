@@ -65,7 +65,7 @@ function Page() {
               <h3>Réponse humaine</h3>
               <p>Chaque message reçoit une réponse de la direction humaine, sous 3 jours ouvrables. Ateliers en personne, à Terrebonne, dans Lanaudière et les environs. Déplacement gratuit à Terrebonne, L'Assomption, Repentigny et Charlemagne, sinon 0,71 $/km.</p>
               <p>Réponses du lundi au vendredi, de 8 h à 16 h, sous 3 jours ouvrables.</p>
-              <p>Ateliers : lundi et mardi, de 9 h à 12 h et de 18 h à 21 h ; vendredi, de 18 h à 21 h ; dimanche, de 9 h à 12 h.</p>
+              <p>Ateliers : pas d'horaires fixes. C'est à vous de dire quand vous le voulez, la direction humaine valide si elle est disponible.</p>
             </article>
           </div>
         </div>
