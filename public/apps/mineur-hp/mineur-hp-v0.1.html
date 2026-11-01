@@ -62,11 +62,11 @@
   <p class="sub">Prototype v0.1 — la boucle de base, sans boutique, sans achat</p>
 
   <section class="honest" id="honest">
-    <b>Minute ! J't'en pause.</b> Ici, on creuse pour le fun. Les <b>boulons d'or</b> sont une monnaie de jeu — <b>pas du vrai bitcoin, pas du vrai argent</b>, et ça ne le deviendra jamais. <b>Ta mine reste dans ton téléphone</b> : rien ne quitte ton appareil, aucun compte. — HGPTO, contremaître
+    <b>Minute ! J't'en pause.</b> Ici, on creuse pour le fun. Les <b>boulons d'or</b> sont une monnaie de jeu — <b>pas du vrai bitcoin, pas du vrai argent</b>, et ça ne le deviendra jamais. <b>Ta mine reste dans ton téléphone</b> : rien ne quitte ton appareil, aucun compte. — Sir H. Gepeto, contremaître
   </section>
 
-  <section class="bubble" id="bubble" role="button" tabindex="0" aria-label="Message d'HGPTO, toucher pour effacer">
-    <div class="who">🤖 HGPTO, contremaître</div>
+  <section class="bubble" id="bubble" role="button" tabindex="0" aria-label="Message de Sir H. Gepeto, toucher pour effacer">
+    <div class="who">🤖 Sir H. Gepeto, contremaître</div>
     <p id="bubbleText"></p>
     <div class="tap">Touche la bulle pour la ranger.</div>
   </section>
@@ -313,7 +313,7 @@ function spawnRubble(){
   if(spots.length === 0) return;
   const c = S.grid[spots[Math.floor(Math.random()*spots.length)]];
   c.rubble = true; S.rubbleCount++;
-  say("Éboulement comique ! Un petit nuage de poussière, HGPTO ressort avec le casque de travers. Le passage est bloqué, mais rien n'est perdu : dégage-le pour 2 ⚡ et il te remerciera.");
+  say("Éboulement comique ! Un petit nuage de poussière, Sir H. Gepeto ressort avec le casque de travers. Le passage est bloqué, mais rien n'est perdu : dégage-le pour 2 ⚡ et il te remerciera.");
 }
 function revealCell(cc){
   if(cc.kind === "mineral"){ cc.state = "found"; }
@@ -325,7 +325,7 @@ function tapCell(r, c){
   if(cell.rubble){
     if(S.energy < 2){ say("Plus assez d'énergie pour dégager ce passage (2 ⚡). Repose-toi, puis reviens."); sndErr(); return; }
     S.energy -= 2; cell.rubble = false; cell.state = "revealed"; S.rubbleCount--; S.bolts += 2;
-    say("Passage dégagé ! +2 🔩 pour le coup de main. HGPTO remet son casque droit et te fait un clin d'œil.");
+    say("Passage dégagé ! +2 🔩 pour le coup de main. Sir H. Gepeto remet son casque droit et te fait un clin d'œil.");
     sndDig(); save(); renderAll(); return;
   }
   if(cell.state !== "hidden"){ say("Cette case est déjà creusée. Essaie une case de roche — suis les étincelles ✨."); return; }

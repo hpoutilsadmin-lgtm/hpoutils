@@ -1,9 +1,10 @@
-// Parole de visiteur — la première parole reçue sur le site, affichée telle quelle.
-// Commentaire de Maëva au sujet d'HGPTO (22 oct. 2026), posé sur l'accueil,
-// juste au-dessus de la zone de vie d'HGPTO, avec sa réplique en bulle.
-// NE PAS « corriger » la citation : son orthographe et son enthousiasme sont sa vérité.
+// Parole de visiteur — la première parole reçue sur le site.
+// Commentaire de Maëva au sujet de Sir H. Gepeto (22 oct. 2026), posé sur l'accueil,
+// juste au-dessus de la zone de vie, avec sa réplique en bulle.
+// Nom mis à jour le 1er nov. 2026 sur autorisation d'HP (c'est sa fille) : seul « hgpto »
+// devient « Sir H. Gepeto », le reste de la citation reste verbatim.
 
-const CITATION_MAEVA = "Y'é tropppp cute hgpto ! C'tu une mascotte.";
+const CITATION_MAEVA = "Y'é tropppp cute Sir H. Gepeto ! C'tu une mascotte.";
 
 const REPLIQUE_HGPTO =
   "Une mascotte ?! Minute ! Je suis Sir H. Gepeto, le gérant du site, moi. …Mais merci, Maëva — je le prends comme un compliment. On avance !";
@@ -44,7 +45,7 @@ export function ParoleVisiteur() {
           — Maëva
         </p>
 
-        {/* La réplique d'HGPTO, en bulle — vexé pour rire, puis touché. */}
+        {/* La réplique de Sir H. Gepeto, en bulle — vexé pour rire, puis touché. */}
         <div style={{ position: "relative", maxWidth: 560, margin: "34px auto 0" }}>
           <div
             aria-hidden="true"

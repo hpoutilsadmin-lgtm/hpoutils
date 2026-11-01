@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
-    <title>Hockey 2 contre 2 — HGPTO &amp; Pixel</title>
+    <title>Hockey 2 contre 2 — Sir H. Gepeto &amp; Pixel</title>
     <style>
       :root{
         --bg:#f6ecd7; --paper:#fbf4e3; --ink:#26201a; --ink-soft:#5d5240;
@@ -98,16 +98,16 @@
     <div class="hud" aria-live="polite">
       <span class="you">TOI&nbsp;<span id="scoreYou">0</span></span>
       <span class="clock" id="clock">2:00</span>
-      <span class="them"><span id="scoreThem">0</span>&nbsp;HGPTO</span>
+      <span class="them"><span id="scoreThem">0</span>&nbsp;Sir H. Gepeto</span>
     </div>
     <div class="stage" id="stage">
       <canvas id="game" width="900" height="540"></canvas>
-      <div class="bubble hidden" id="bubble"><div class="who" id="bubbleWho">HGPTO</div><div class="txt" id="bubbleText"></div></div>
+      <div class="bubble hidden" id="bubble"><div class="who" id="bubbleWho">Sir H. Gepeto</div><div class="txt" id="bubbleText"></div></div>
       <div class="banner hidden" id="banner"></div>
       <button id="shootBtn" aria-label="Tirer">TIR</button>
       <div class="overlay" id="intro">
-        <h2>HGPTO &amp; Pixel te défient !</h2>
-        <p class="teams"><span class="r">TOI + ton gardien</span> contre <span class="b">HGPTO + Pixel 🐱 (gardienne)</span></p>
+        <h2>Sir H. Gepeto &amp; Pixel te défient !</h2>
+        <p class="teams"><span class="r">TOI + ton gardien</span> contre <span class="b">Sir H. Gepeto + Pixel 🐱 (gardienne)</span></p>
         <p>Partie de <strong>2 minutes</strong>. Le plus de buts gagne ; égalité = but en or de 30 secondes.<br/>
         🖱️/👆 <strong>Glisse</strong> sur la glace pour patiner · bouton <strong>TIR</strong> (ou Espace) pour lancer.<br/>
         ⚠️ Méfie-toi : Pixel est rapide comme un chat… sauf quand un papillon imaginaire passe. Ses oreilles se dressent juste avant : c'est ton moment !</p>
@@ -120,7 +120,7 @@
       </div>
       <div class="overlay hidden" id="result">
         <h2 id="resultTitle">Victoire !</h2>
-        <p class="teams" id="resultScore">Toi 0 — 0 HGPTO</p>
+        <p class="teams" id="resultScore">Toi 0 — 0 Sir H. Gepeto</p>
         <p id="resultLine"></p>
         <button class="bigbtn" id="againBtn">Recommencer</button>
       </div>
@@ -345,7 +345,7 @@
       document.getElementById("intro").classList.add("hidden");
       document.getElementById("result").classList.add("hidden");
       AudioSys.ensure(); AudioSys.whistle();
-      say("HGPTO", pickLine("start"), 5);
+      say("Sir H. Gepeto", pickLine("start"), 5);
       faceoff();
     }
     function endMatch() {
@@ -353,9 +353,9 @@
       AudioSys.whistle();
       const title = document.getElementById("resultTitle");
       const line = document.getElementById("resultLine");
-      document.getElementById("resultScore").textContent = "Toi " + S.scoreYou + " — " + S.scoreThem + " HGPTO & Pixel";
+      document.getElementById("resultScore").textContent = "Toi " + S.scoreYou + " — " + S.scoreThem + " Sir H. Gepeto & Pixel";
       if (S.scoreYou > S.scoreThem) { title.textContent = "🏆 Victoire !"; line.textContent = pickLine("win"); }
-      else if (S.scoreThem > S.scoreYou) { title.textContent = "Partie à HGPTO & Pixel"; line.textContent = pickLine("lose"); }
+      else if (S.scoreThem > S.scoreYou) { title.textContent = "Partie à Sir H. Gepeto & Pixel"; line.textContent = pickLine("lose"); }
       else { title.textContent = "Match nul !"; line.textContent = pickLine("draw"); }
       document.getElementById("result").classList.remove("hidden");
     }
@@ -363,8 +363,8 @@
       if (byPlayer) S.scoreYou++; else S.scoreThem++;
       updateHud();
       AudioSys.goal(); AudioSys.whistle();
-      showBanner("BUT !", byPlayer ? "Un point pour toi !" : "HGPTO marque !", 1900);
-      say("HGPTO", pickLine(byPlayer ? "playerScores" : "hgptoScores"), 5);
+      showBanner("BUT !", byPlayer ? "Un point pour toi !" : "Sir H. Gepeto marque !", 1900);
+      say("Sir H. Gepeto", pickLine(byPlayer ? "playerScores" : "hgptoScores"), 5);
       if (S.overtime) { S.mode = "goalpause"; S.goalpauseT = 1.6; S.afterGoal = "end"; return; }
       S.mode = "goalpause"; S.goalpauseT = 2.3; S.afterGoal = "faceoff";
     }
@@ -485,7 +485,7 @@
     pauseBtn.addEventListener("click", function () { basculerPauseJeu(!jeuPause); });
     document.getElementById("resumeBtn").addEventListener("click", function () { basculerPauseJeu(false); });
     document.getElementById("shareBtn").addEventListener("click", function () {
-      var texte = "Hockey 2 contre 2 — HP Outils : Toi " + S.scoreYou + " — " + S.scoreThem + " HGPTO & Pixel. T'es pas game de me battre ?";
+      var texte = "Hockey 2 contre 2 — HP Outils : Toi " + S.scoreYou + " — " + S.scoreThem + " Sir H. Gepeto & Pixel. T'es pas game de me battre ?";
       var url = "https://www.hp-outils.com/apps/hockey-hgpto";
       if (navigator.share) {
         navigator.share({ title: "Hockey 2 contre 2 — HP Outils", text: texte, url: url }).catch(function () {});
@@ -608,8 +608,8 @@
         const now = performance.now();
         if (now - S.lastSaveLineAt > 7000) {
           S.lastSaveLineAt = now;
-          if (isPixel) say("HGPTO", pickLine("pixelSave"), 4.5);
-          else say("HGPTO", pickLine("goalieSave"), 5);
+          if (isPixel) say("Sir H. Gepeto", pickLine("pixelSave"), 4.5);
+          else say("Sir H. Gepeto", pickLine("goalieSave"), 5);
         }
       } else if (speed <= 300) {
         // Dégagement : le gardien renvoie la rondelle vers le centre, côté bande
@@ -704,7 +704,7 @@
           pixel.mode = "distracted"; pixel.timer = 1.15;
           if (performance.now() - S.lastDistrLineAt > 9000 && S.mode === "play") {
             S.lastDistrLineAt = performance.now();
-            say("HGPTO", pickLine("distracted"), 4);
+            say("Sir H. Gepeto", pickLine("distracted"), 4);
           }
         }
       } else { // distracted : elle fixe le papillon, réflexes réduits (elle ne suit plus la rondelle)
@@ -741,7 +741,7 @@
         if (!S.overtime && S.scoreYou === S.scoreThem) {
           S.overtime = true; S.clock = OT_TIME;
           showBanner("BUT EN OR !", "30 secondes — le prochain but gagne", 1700);
-          say("HGPTO", pickLine("golden"), 5);
+          say("Sir H. Gepeto", pickLine("golden"), 5);
           AudioSys.whistle();
         } else {
           S.clock = 0; updateHud(); endMatch(); return;
