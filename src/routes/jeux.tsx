@@ -560,8 +560,8 @@ function JeuxPage() {
             ))}
           </div>
           {favoris.length > 0 ? (
-            <div aria-label="Tes favoris" style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center", maxWidth: 900, margin: "0 auto 26px" }}>
-              <span style={{ fontSize: 13, fontWeight: 800, color: "#b3362b" }}>♥ Tes favoris :</span>
+            <div aria-label="Vos favoris" style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center", maxWidth: 900, margin: "0 auto 26px" }}>
+              <span style={{ fontSize: 13, fontWeight: 800, color: "#b3362b" }}>♥ Vos favoris :</span>
               {favoris.map((slug) => {
                 const g = GAMES.find((x) => slugDepuisFichier(x.file) === slug);
                 if (!g) return null;
