@@ -117,7 +117,7 @@ export const JOKES = [
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
 { t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — montre ça à quelqu'un, et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 37 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"37 + 1 CACHÉ" }
+        { t:"Envie de jouer en famille ? Il y a 36 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 + 1 CACHÉ" }
       ];
 export const BOOK_PITCHES = [
         { t:"Ce livre-là me donne le goût de te parler des nôtres : « Horizon Québec » (10 $) et « La faim justifie les moyens » (10 $) sont au catalogue, en PDF.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
@@ -132,7 +132,7 @@ export const ATELIER_PITCHES = [
       ];
 export const PITCHES = [
 { t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 37 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"37 + 1 CACHÉ" },
+        { t:"Envie de jouer en famille ? Il y a 36 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"36 + 1 CACHÉ" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper votre quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
         { t:"Vous avez des ingrédients qui traînent ? Tapez-les dans Recettes HP : 629 recettes gratuites à découvrir.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"629 RECETTES" },
@@ -305,7 +305,7 @@ export const FLASH_INFOS = [
   "Nos livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, le livre « Enfants cuisinent » 10 $.",
   "Les Passeurs de savoirs : l'accès aux 16 savoirs, 3 $ par mois, 28 $ par an — inscription par courriel, le paiement automatisé s'en vient.",
   "Nos ateliers : de 150 $ à 290 $ selon la formule, en vrai monde, avec du monde.",
-  "37 + 1 caché jeux gratuits, sans inscription — dont « Le Panier Solidaire », aussi dans En cuisine.",
+  "36 + 1 caché jeux gratuits, sans inscription — dont « Le Panier Solidaire », aussi dans En cuisine.",
   "« Futur simple », épisode 1 officiel, 26 octobre 2026, environ 7 minutes : « La première fois qu'on essaie cela. »",
   "Un jeu à l'image de votre commerce : de 29 $ à 399 $, hébergement gratuit la première année.",
   "Astuce : un fond de casserole qui attache ? Eau chaude et bicarbonate, on laisse tremper, on frotte doux.",
@@ -337,7 +337,7 @@ export const SITE_FACTS = {
           kits:   { nom:"Kits Sans Honte", prix:"5 $ le kit, bundle 40 $", url:"https://www.hp-outils.com/sans-honte" },
           livres: { nom:"Livres PDF", prix:"10 $ à 15 $", url:"https://www.hp-outils.com/livres-pdf" },
           recettes:{ nom:"Recettes HP", prix:"Gratuit — 629 recettes", url:"https://www.hp-outils.com/en-cuisine/" },
-          jeux:   { nom:"Jeux", prix:"Gratuit — 37 + 1 caché", url:"https://www.hp-outils.com/jeux" },
+          jeux:   { nom:"Jeux", prix:"Gratuit — 36 + 1 caché", url:"https://www.hp-outils.com/jeux" },
           ateliers:{ nom:"Ateliers", prix:"150 $ à 290 $", url:"https://www.hp-outils.com/ateliers" },
           passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois, 28 $ / an — accès aux 16 savoirs (inscription par courriel)", url:"https://www.hp-outils.com/les-passeurs" },
           balado: { nom:"Balado Futur simple", prix:"Gratuit, nouveaux épisodes quand ils sont prêts", url:"https://www.hp-outils.com/balado" },
@@ -405,6 +405,12 @@ export const KB = [
           a:"Jamais ! Mes boulons sont honnêtes. Les dés font ce qu'ils veulent — c'est ça, le jeu." },
         { q:"T'es-tu triste pour vrai ?", s:"BONNE QUESTION",
           a:"Je joue les émotions comme un petit acteur, avec tout mon cœur de boulon. Les vraies émotions qui comptent, ce sont les tiennes — et celles des humains autour de toi." },
+        { q:"Tu fais de la magie ?", s:"PAS DE MAGIE",
+          a:"De la magie ? Non, moi je fais pas ça. Un outil bien fait, ça a l'air magique, mais c'est juste du bon travail. Tu veux que je te montre un jeu, à la place ?",
+          u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
+        { q:"Tu as un ordinateur ?", s:"PAS D'ORDINATEUR",
+          a:"Un ordinateur ? J'en ai pas besoin — j'ai mes mains pis mes outils. Pis pour ce que je sais pas, je te passe la direction humaine, sous 3 jours ouvrables.",
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" },
         { q:"C'est combien, les kits ?", s:"5 $",
           a:"Les 15 kits Sans Honte sont à 5 $ chacun, en PDF. Et le bundle « Choisis 10 parmi 15 » est à 40 $. Aucune taxe ajoutée !",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits" },
@@ -420,20 +426,23 @@ export const KB = [
         { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
           a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
-        { q:"Vous avez quels jeux ?", s:"37 + 1 CACHÉ",
-          a:"37 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
+        { q:"Vous avez quels jeux ?", s:"36 + 1 CACHÉ",
+          a:"36 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"C'est quoi, IGLOO ?", s:"GRATUIT !",
           a:"IGLOO — La guerre des igloos : une bataille de boules de neige en arène ! Tu déploies tes cartes, tu défends ton igloo et tu fais tomber celui d'en face — et chaque bataille tire une loi du quartier au hasard. Campagne de 10 batailles, parties d'environ 3 minutes. Gratuit !",
           u:"https://www.hp-outils.com/apps/igloo/igloo-v1.0.html", l:"Jouer à IGLOO" },
         { q:"C'est quoi, Chevalier du fleuve ?", s:"NOUVEAU !",
-          a:"Chevalier du fleuve : notre grand jeu de stratégie temps réel — pour les 12 ans et plus. Tu refais la campagne VRAIE de Pierre Le Moyne d'Iberville, né à Ville-Marie, premier Canadien fait chevalier de Saint-Louis : la baie James en 1686, la défense de Québec en 1690, le Pélican en 1697, le fort Maurepas en 1699. Tu bâtis, tu lèves ton armée, tu conquiers le littoral du fleuve — et il y a même la légende des nains albinos des terriers et leur Forge des Rois Gybbys ! Gratuit en entier : les pierres précieuses se gagnent en jouant.",
+          a:"Chevalier du fleuve : notre grand jeu de stratégie temps réel — pour les 12 ans et plus. Tu refais la campagne VRAIE de Pierre Le Moyne d'Iberville, né à Ville-Marie, premier Canadien fait chevalier de Saint-Louis : la baie James en 1686, la défense de Québec en 1690, le Pélican en 1697, le fort Maurepas en 1699. Tu bâtis, tu lèves ton armée, tu conquiers le littoral du fleuve. Gratuit en entier : les pierres précieuses se gagnent en jouant.",
           u:"https://www.hp-outils.com/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", l:"Jouer à Chevalier du fleuve" },
         { q:"C'est quoi, les pierres précieuses et les Gybbys ?", s:"LÉGENDE DU FLEUVE",
           a:"Dans Chevalier du fleuve, les pierres précieuses sont la monnaie des Gybbys — les nains albinos, le peuple oublié des terriers du fleuve, une invention de la direction. On les gagne en jouant (missions, filons, trocs) et elles servent à forger l'équipement à la Forge des Rois Gybbys. C'est la part de légende du jeu ; la campagne, elle, est de l'histoire vraie, sources à l'appui.",
           u:"https://www.hp-outils.com/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", l:"Découvrir la Forge" },
         { q:"On peut acheter des pierres dans Chevalier du fleuve ?", s:"GRATUIT !",
           a:"Non : dans Chevalier du fleuve, toutes les pierres se gagnent en jouant (missions, filons, trocs). La boutique est fermée : aucun achat, aucun prix. Tout le jeu est gratuit.",          u:"https://www.hp-outils.com/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", l:"Jouer à Chevalier du fleuve" },
+        { q:"Que se passe-t-il si j'efface ma sauvegarde dans Chevalier du fleuve ?", s:"SAUVEGARDE",
+          a:"Les pierres précieuses se gagnent en jouant et sont gardées sur votre appareil : si la sauvegarde est effacée, les pierres sont perdues.",
+          u:"https://www.hp-outils.com/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", l:"Jouer à Chevalier du fleuve" },
         { q:"C'est quoi, Que vois-tu ?", s:"GRATUIT !",
           a:"Que vois-tu ? : un jeu de perception. Tu regardes une image et tu dis ce que tu vois en premier — il n'y a pas de mauvaise réponse ! 42 défis en 3 terrains : Jeunesse, Ado et Adulte. Gratuit !",
           u:"https://www.hp-outils.com/apps/que-vois-tu/que-vois-tu-v2.0.html", l:"Jouer à Que vois-tu ?" },
@@ -461,6 +470,12 @@ export const KB = [
         { q: "C'est quoi, « Le Contrat humain-IA » ?", s: "GRATUIT !",
   a: "« Le Contrat humain-IA » est un outil gratuit de HP Outils, sans compte. En 2 minutes, vous choisissez votre profil parmi 6 (parent, aîné, étudiant, travailleur autonome, PME, proche aidant), puis vous obtenez une feuille d'une page et des textes à coller dans les réglages de votre assistant IA, en français ou en anglais. Vous restez responsable des actions de votre IA : la première clause le dit. Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est gardé. Un rappel de bilan dans 3 mois est offert. Le lien « ← Outils » vous ramène aux Outils.",
   u: "https://www.hp-outils.com/outils-web/contrat-humain-ia.html", l: "Ouvrir Le Contrat humain-IA" },
+        { q:"C'est quoi, Les bons réflexes d'HP ?", s:"GRATUIT !",
+          a:"Les bons réflexes d'HP : un jeu éducatif gratuit sur les bons réflexes du quotidien, par âge et par activité — cuisine, maison, entraide, émotions et sécurité. Gratuit, comme tous les jeux du site.",
+          u:"https://www.hp-outils.com/apps/bons-reflexes/index.html", l:"Jouer aux bons réflexes" },
+        { q:"C'est quoi, Fait fructifier 100 $ en 30 jours ?", s:"GRATUIT !",
+          a:"Fait fructifier 100 $ en 30 jours : un jeu de gestion et d'investissement 100 % fictif et gratuit — 100 $ de départ fictifs, 30 jours pour fructifier. C'est un jeu, jamais un conseil financier réel : aucun vrai argent, aucun vrai placement.",
+          u:"https://www.hp-outils.com/apps/100-en-30-jours/100-en-30-jours-v1.2.html", l:"Faire fructifier" },
 
         { q:"Comment marchent les ateliers ?", s:"ATELIERS",
           a:"Des ateliers de groupe, à Terrebonne et dans Lanaudière : Cuisine pratique (260 $), Manger mieux avec moins (260 $), L'IA sans jargon — régulière (220 $), l'atelier « Les enfants cuisinent » (190 $, 90 min), Atelier jeunesse (150 $), Hygiène & salubrité (150 $, 60 à 90 min). Pour l'Édition des Fêtes : le Pain maison à domicile (290 $, 3 h, 6 à 8 personnes, soit 36 $ à 48 $ par personne), L'IA sans jargon — Édition des Fêtes (220 $, 2 h, forfait groupe) et la conférence « La faim justifie les moyens » (220 $, cachet, 45 à 60 min + questions). Remplis le formulaire d'atelier sur la page Ateliers : dis-leur pour qui c'est, combien de personnes et quand tu vises — la direction humaine te répondra sous 3 jours ouvrables ! Horaires : réponses du lundi au vendredi, de 8 h à 16 h, sous 3 jours ouvrables ; ateliers lundi et mardi, de 9 h à 12 h et de 18 h à 21 h, vendredi, de 18 h à 21 h, dimanche, de 9 h à 12 h. Ateliers des Fêtes sur réservation et entente, le milieu d'accueil doit disposer d'un local cuisine — sauf la conférence « La faim justifie les moyens », exemptée (décision du 26 octobre 2026).",
@@ -472,13 +487,13 @@ export const KB = [
           a:"Le livre « Les enfants cuisinent pour faire plaisir » coûte 10 $, en PDF — aucune taxe ajoutée. C'est un livre complet de recettes à faire en famille. Vous le retrouvez sur la page Prix et sur sa fiche. Vous l'achetez par carte, directement sur le site, et vous le téléchargez tout de suite après le paiement. Si un paiement ne passe pas, écrivez à la direction humaine, la direction humaine vous répondra sous 3 jours ouvrables.",
           u:"https://www.hp-outils.com/pdf/enfants-cuisinent", l:"Voir le livre" },
         { q:"C'est quoi, les Passeurs ?", s:"3 $ / MOIS",
-          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde. Honnêtement ? L'inscription est ouverte : écris à la direction humaine pour t'inscrire — elle te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient. Tu peux annuler en tout temps par courriel : l'annulation prend effet à la fin de la période déjà payée, sans frais ni pénalité. Avant un renouvellement annuel, la direction humaine te rappelle par courriel.",
+          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde. Honnêtement ? L'inscription est ouverte : écris à la direction humaine pour t'inscrire — elle te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient. Vous pouvez annuler en tout temps, en 1 clic via le lien du courriel de bienvenue, et par courriel à la direction humaine si besoin : l'annulation prend effet à la fin de la période déjà payée, sans frais ni pénalité. Avant un renouvellement annuel, la direction humaine te rappelle par courriel.",
           u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
         { q:"Combien coûtent les Passeurs de savoirs ?", s:"3 $ / MOIS",
-          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde. Honnêtement ? L'inscription est ouverte : écris à la direction humaine pour t'inscrire — elle te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient. Tu peux annuler en tout temps par courriel : l'annulation prend effet à la fin de la période déjà payée, sans frais ni pénalité. Avant un renouvellement annuel, la direction humaine te rappelle par courriel.",
+          a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde. Honnêtement ? L'inscription est ouverte : écris à la direction humaine pour t'inscrire — elle te répond sous 3 jours ouvrables. Le paiement automatisé en ligne, lui, s'en vient. Vous pouvez annuler en tout temps, en 1 clic via le lien du courriel de bienvenue, et par courriel à la direction humaine si besoin : l'annulation prend effet à la fin de la période déjà payée, sans frais ni pénalité. Avant un renouvellement annuel, la direction humaine te rappelle par courriel.",
           u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
-        { q:"Combien y a-t-il de jeux sur le site ?", s:"37 + 1 CACHÉ",
-          a:"37 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
+        { q:"Combien y a-t-il de jeux sur le site ?", s:"36 + 1 CACHÉ",
+          a:"36 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus) Et « Le Panier Solidaire », l'autre jeu de la banque alimentaire, aussi dans En cuisine — celui-là joue avec les 15 ingrédients les plus donnés.",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Comment chercher un jeu ?", s:"RECHERCHE",
           a:"Sur la page des jeux, tape un mot dans le champ « Chercher un jeu… » : la grille ne montre que les jeux dont le titre ou la description contient ce mot. Sans rien taper, tous les jeux s'affichent.",
@@ -557,7 +572,7 @@ export const KB = [
         { q:"C'est quoi, ton choix du moment ?", s:"MON CHOIX ♥", fn:"choix",
           a:"" },
         { q:"Montre-moi les jeux", s:"PAR ICI →", go:"sec-jeux",
-          a:"Les jeux sont là : 37 + 1 caché jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
+          a:"Les jeux sont là : 36 + 1 caché jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !" },
         { q:"Montre-moi les kits", s:"PAR ICI →", go:"sec-kits",
           a:"Les kits Sans Honte sont juste là : 5 $ le kit, 15 thèmes du quotidien, et le bundle à 40 $." },
         { q:"Comment préparer mon testament ?", s:"5 $", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits",
@@ -729,7 +744,7 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
           u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
-          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 37 + 1 caché jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
+          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 36 + 1 caché jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" }
       ];
       /* L'alternative honnête : après une réponse qui présente un produit
@@ -776,21 +791,18 @@ export const MOOD_LINES = {
         ami: "Mode « Ami » : je vous accompagne pas à pas, tranquillement, avec des mots simples et tout le temps qu'il faut. Ici, aucune vente — juste de l'aide et du support.",
         grognon: "Mode « Grognon drôle » : je grogne pour rire et je fais des bêtises partout dans le site — jamais contre vous, promis. (%#!!) …Ça commence déjà."
       };
-      /* La réplique « mascotte » (ajout validé par la direction, 22 oct. 2026) :
-         HGPTO DÉTESTE se faire appeler « mascotte » — il se prend pour
-         un « gnome magique érudit ». Vexé pour rire, puis touché malgré
-         lui. Rotation sans répétition immédiate (moteur). La liste
-         grognon grogne un cran de plus ; les autres humeurs partagent
-         la liste digne (en Drôle, le moteur ajoute le rire ; en
-         Vendeur, il reste digne). */
+      /* La réplique « mascotte » (ajout validé par la direction, 22 oct. 2026 ;
+         lignes atelier validées, lot C 31 oct. 2026) : quand on l'appelle
+         « mascotte », il répond en robot d'atelier — pas de magie, pas
+         d'ordinateur. R1 validée, reprise telle quelle. La liste grognon
+         partage la même présentation, livrée grognon (le moteur ajoute
+         l'expression). Noms d'export inchangés (renommage interne = lot
+         séparé Q6). */
 export const GNOME_LINES = [
-        "Mascotte ?! Minute ! J'suis un gnome magique érudit, moi — érudit en boulons, diplômé en bonne humeur. …Bon, d'accord : ça me touche pareil, ton petit compliment.",
-        "Une mascotte ? Les mascottes dansent dans des costumes en peluche. Moi, je suis un gnome magique érudit : je réponds aux questions et je connais chaque recoin du site. …Mais merci, hein.",
-        "Gnome. Magique. Érudit. C'est mon titre officiel — « mascotte », c'est pour les autres. …Cela dit, entre nous : ça m'a fait un petit velours, là."
+        "Une mascotte ?! Minute ! Je suis Sir H. Gepeto, robot d'atelier. Je fais pas de magie, je touche pas d'ordinateur — je fabrique des outils, je raconte des blagues, pis je joue des tours. …Mais merci — je le prends comme un compliment. On avance !"
       ];
 export const GNOME_LINES_GROGNON = [
-        "Mascotte ?! (%#!!) Saleté d'crème — on dit GNOME MAGIQUE ÉRUDIT. …Bon. Merci pareil. Mais juste un peu.",
-        "(%#!!) Mascotte… J'ai des sourcils d'érudit, moi, pas de la mousse de costume ! …Touche pas à ma fierté. Enfin — merci pareil, grogne le gnome."
+        "Une mascotte ?! Minute ! Je suis Sir H. Gepeto, robot d'atelier. Je fais pas de magie, je touche pas d'ordinateur — je fabrique des outils, je raconte des blagues, pis je joue des tours. …Mais merci — je le prends comme un compliment. On avance !"
       ];
       /* La mini-scène de l'encadré de porte (humeur Grognon la rend
          fréquente via ses grognes ; elle existe dans sa vie dans toutes

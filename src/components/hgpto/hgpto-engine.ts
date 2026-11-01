@@ -657,6 +657,16 @@ export function initHgpto() {
       }
       function renderBubble(html, dur, mood, onShow){
         bubble.innerHTML = html;
+        /* Lot C (31 oct. 2026) : ✕ propre à la bulle — fermeture manuelle
+           seulement. Le bouton est réajouté à chaque rendu (innerHTML
+           l'efface) ; son clic est géré par le gestionnaire de clic de
+           la bulle, il ne ferme que la bulle. */
+        var bubbleClose = document.createElement('button');
+        bubbleClose.type = 'button';
+        bubbleClose.className = 'bubble-close';
+        bubbleClose.setAttribute('aria-label', 'Fermer la bulle');
+        bubbleClose.textContent = '✕';
+        bubble.appendChild(bubbleClose);
         bubble.classList.add('show');
         lastBubbleAt = Date.now();
         /* Replié : la bulle est cachée, on ne parle pas dans le vide. */
@@ -668,10 +678,12 @@ export function initHgpto() {
           /* Lot 2A — bulle jusqu'au premier geste (piste Q3, à confirmer) :
              la durée calculée reste la fenêtre de lecture garantie (file
              d'attente + garde anti-sommeil, ligne du setInterval de vie),
-             mais AUCUNE minuterie n'éteint plus la bulle. Seuls un geste
-             (goCorner), un masquage légitime (hideBubble) ou une bulle
-             suivante la retirent. L'ancienne minuterie (setTimeout vers
-             expireBubble) est supprimée, pas déplacée ni allongée. */
+             mais AUCUNE minuterie n'éteint plus la bulle. Seuls le ✕ propre
+             à la bulle, « Fermer HGPTO », un masquage légitime (sommeil,
+             calme, refus, début de partie) ou une bulle suivante la retirent.
+             Un geste sur la page ne la ferme plus (lot C). L'ancienne
+             minuterie (setTimeout vers expireBubble) est supprimée, pas
+             déplacée ni allongée. */
           var ms = bubbleReadMs(html, dur);
           bubbleFreeAt = Date.now() + ms;
           return ms;
@@ -1638,7 +1650,8 @@ export function initHgpto() {
         if (calm || qaOpen || gameOn || state === 'sleep') return;
         if (isBusy() && state !== 'walk' && state !== 'idle') return;
         cornerUntil = Date.now() + 20000;
-        hideBubble();
+        /* Lot C (31 oct. 2026) : interagir ne ferme plus la bulle — seul
+           son ✕ la ferme (la bulle suit le robot au coin, elle ne disparaît pas). */
         setState('idle'); setExpr('happy');
         bot.classList.remove('nosmooth');
         bot.style.transition = 'transform .8s ease';
@@ -2058,7 +2071,7 @@ export function initHgpto() {
       function choixReco(pourQui, quoi){
         var t = "", p = null;
         if (quoi === 'jouer'){
-          t = "Mon honnête recommandation : commence par les jeux gratuits — 37 + 1 caché jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
+          t = "Mon honnête recommandation : commence par les jeux gratuits — 36 + 1 caché jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
           p = { u:"https://hp-outils.com/jeux", l:"Voir les jeux gratuits" };
         } else if (quoi === 'cuisiner'){
           if (pourQui === 'enfants'){
@@ -2127,8 +2140,9 @@ export function initHgpto() {
         });
       }
       /* ---------- La réplique « mascotte » (ajout validé par la direction,
-         22 oct. 2026) : HGPTO déteste « mascotte » — il se prend pour
-         un « gnome magique érudit ». Détection prudente : le mot doit
+         22 oct. 2026 ; lignes atelier, lot C 31 oct. 2026) : quand on
+         l'appelle « mascotte », il répond en robot d'atelier — pas de
+         magie, pas d'ordinateur. Détection prudente : le mot doit
          lui être ADRESSÉ (2e personne, apostrophe, compliment, ou
          message très court) ; un usage non adressé (« je cherche une
          mascotte pour mon équipe ») laisse la question primer, comme
@@ -2305,6 +2319,7 @@ export function initHgpto() {
       // Micro-célébration : un clic sur un lien DANS une bulle de
       // réponse = le visiteur suit le chemin trouvé (23 oct. 2026).
       bubble.addEventListener('click', function(ev){
+        if (ev.target && ev.target.closest && ev.target.closest('.bubble-close')){ hideBubble(); return; }
         if (ev.target && ev.target.closest && ev.target.closest('a')) microCelebrate();
       });
       qaClose.addEventListener('click', closeQA);
