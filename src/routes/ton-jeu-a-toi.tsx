@@ -699,7 +699,7 @@ function Page() {
           <div style={{ marginTop: 32, border: "2px solid #b7791f", borderRadius: 12, padding: 12, background: "#fdf0d5" }}>
             <h2 style={{ marginTop: 0 }}>L'achat — vente pas encore ouverte</h2>
             <p>
-              Prix : {JEU_PRODUIT.prixAffiche}. Ce jeu personnalisé n'est pas
+              Prix prévu : {JEU_PRODUIT.prixAffiche}. Ce jeu personnalisé n'est pas
               encore en vente. Vous pouvez essayer l'aperçu gratuit ci-dessus,
               sans compte et sans engagement. Quand la vente ouvrira, les
               conditions seront affichées ici avant tout paiement.

@@ -487,7 +487,7 @@ function JeuxPage() {
           {/* Nuit 4A : la valeur (gratuits, sans compte, sans pub) en première phrase — textes inchangés, ordre seul. */}
           <p className="lead">Jeux gratuits, sans compte, sans pub — choisissez et jouez tout de suite.</p>
           <p className="lead" style={{ marginTop: 10 }}>Des jeux courts et des histoires interactives pour exercer ses réflexes, imaginer la suite et apprendre sans pression.</p>
-          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des jeux pour la vraie vie. »</p>
+          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des jeux pour la vraie vie. » — HP</p>
           <div className="lead-actions">
             <a className="btn-primary" href="/apps/bons-reflexes">Jouer aux Bons réflexes d'HP</a>
             <a className="btn-ghost" href="#tous-les-jeux">Voir tous les jeux</a>
