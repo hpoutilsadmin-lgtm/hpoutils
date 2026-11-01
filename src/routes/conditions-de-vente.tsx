@@ -54,6 +54,7 @@ function Page() {
     <h2>10. Nous joindre — service client</h2>
     <p>Une question, un souci avec un achat, un lien qui ne fonctionne pas ? Écrivez à hpoutils.admin@gmail.com. Une réponse de la direction humaine, pas d'un robot — sous 3 jours ouvrables. C'est la direction humaine qui vous répond. Pour vos renseignements personnels, voyez la Politique de confidentialité.</p>
     <h2>11. Bons cadeaux</h2>
+    <p>Les bons cadeaux ne sont plus en vente chez HP Outils. Les codes déjà émis restent utilisables, selon les règles ci-dessous.</p>
     <p>Codes personnels de 5 $, 10 $, 20 $, 50 $ ou 100 $ CAD, aucune taxe ajoutée. Applicables en une fois ou par tranches jusqu'à épuisement du solde. Sans date d'expiration. Aucun frais d'utilisation. Les bons ne s'échangent pas contre de l'argent, sauf le solde de 5 $ ou moins, remboursable à la demande.</p>
     <p><strong>Vérifier votre solde.</strong> Le solde se vérifie au panier : saisissez votre code au panier, le solde utilisable s'affiche avant tout paiement. Si la vérification ne passe pas, écrivez à la direction humaine — la direction humaine vous répondra sous 3 jours ouvrables.</p>
     <p><strong>Remboursement.</strong> Solde de 5 $ ou moins : remboursable à votre demande. Un solde de plus de 5 $ n'est pas remboursable en argent: il reste utilisable, sans date d'expiration et sans frais, en une fois ou par tranches, jusqu'à épuisement.</p>
