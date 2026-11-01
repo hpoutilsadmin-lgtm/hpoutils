@@ -497,7 +497,7 @@ function JeuxPage() {
             {/* Compteur HP 22 h 50 : 37 (= 36 jeux + tuile Panier, jouée dans En cuisine) + 1 caché, non nommé */}
             <span style={CHIP_STYLE}>{GAMES.length + 1} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
-            <span style={CHIP_STYLE}>Jouables dans ton navigateur</span>
+            <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
         </div>
       </section>
