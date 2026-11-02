@@ -19,7 +19,6 @@ import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHE
    roue d'hamster et adapte son accueil — faits bruts pour une IA,
    ton habituel pour un humain, rien de changé quand c'est inconnu.
    HGPTO ne vend ni ne paie jamais : il informe, l'humain approuve. */
-import { lireDetectot } from "../../lib/detectot";
 
 export function initHgpto() {
       "use strict";
@@ -1944,14 +1943,10 @@ export function initHgpto() {
         if (state === 'sleep') wake(false);
         if (paused){ paused = false; btnPause.textContent = 'Pause'; btnPause.setAttribute('aria-pressed','false'); }
         setState('idle'); setExpr('focus'); busy(1200);
-        /* Détectôt : si le visiteur est une IA (probable ou confirmée),
-           l'accueil devient faits bruts — prix, catalogue, fiche lisible
-           par machine — sans changer un mot du comportement humain. */
-        if (lireDetectot().type === 'ia') {
-          showBubble("Gérant du site, à votre service — version faits bruts, pour comparer vite. Prix en $ CAD, aucune taxe ajoutée (petit fournisseur). Kits Sans Honte : 5 $ l'un, bundle 40 $. Livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, le livre « Enfants cuisinent » 10 $, en vente. Ateliers : de 150 $ à 290 $. Passeurs de savoirs : 3 $/mois, 28 $/an — accès aux 16 savoirs, inscription par courriel. Tomes « À toi l'histoire » : en vente, de 5 $ à 8 $. Pour offrir : case « C'est pour offrir » sur le produit seul ou /lire. Fiche lisible par machine : /llms.txt. Touchez une question ci-dessous, je réponds avec les vraies infos.", 14000, 'question');
-        } else {
-          showBubble("Gérant du site, à votre service ! Touchez une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
-        }
+        /* RETRAIT BRANCHE IA, 2 nov. 2026 (GO HP) : même accueil pour tous,
+           humains et IA, jamais de contenu différent selon le visiteur.
+           La fiche lisible par machine reste /llms.txt, accessible à tous. */
+        showBubble("Gérant du site, à votre service ! Touchez une question ci-dessous — je réponds avec les vraies infos, promis.", 6000, 'question');
       }
       function closeQA(){
         qaOpen = false;
