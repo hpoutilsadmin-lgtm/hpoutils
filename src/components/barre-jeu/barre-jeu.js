@@ -278,14 +278,13 @@
   /* ---------------- Tampons des testeurs ----------------
      Mêmes signatures que sur /jeux (registre du 22 oct. 2026) :
      nom court dans la barre, nom complet en infobulle.
-     Ajout du 23 oct. 2026, 20 h 35 : O'Z « la grande », tampon
      jaune (#8A6D00) — 2 vérités 1 mensonge et LA BANQUE. */
   var TAMPONS = {
-    louka: { court: "Louka", complet: "Louka", couleur: "#2e7d32", rotation: -2 },
-    maeva: { court: "Maëva", symbole: "☾", complet: "Maëva (tampon noir, petite lune)", couleur: "#23201c", rotation: 1.5 },
-    mel: { court: "Mel", complet: "Mel « The girl boss »", couleur: "#7b2d8b", rotation: -1.5 },
-    lo: { court: "Lo", complet: "Lo « le petit Raptor »", couleur: "#0F6CA8", rotation: 2 },
-    oz: { court: "O'Z", complet: "O'Z « la grande »", couleur: "#8A6D00", rotation: 1 },
+    louka: { court: "Testeur", complet: "Testeur vérifié", couleur: "#2e7d32", rotation: -2 },
+    maeva: { court: "Testeur", complet: "Testeur vérifié", couleur: "#23201c", rotation: 1.5 },
+    mel: { court: "Testeur", complet: "Testeur vérifié", couleur: "#7b2d8b", rotation: -1.5 },
+    lo: { court: "Testeur", complet: "Testeur vérifié", couleur: "#0F6CA8", rotation: 2 },
+    oz: { court: "Testeur", complet: "Testeur vérifié", couleur: "#8A6D00", rotation: 1 },
     hp: { court: "HP", complet: "HP, le créateur", couleur: "#2456a6", rotation: -1.5 },
     tous: { court: "Tous", complet: "Tous les testeurs — à l'unanimité", couleur: "#221a12", rotation: 0 }
   };
@@ -751,9 +750,7 @@
       var zoneTampons = el("span", "bj-tampons");
       zoneTampons.setAttribute("role", "img");
       zoneTampons.setAttribute("aria-label",
-        "Approuvé par : " + cfg.tampons.map(function (c) {
-          return (TAMPONS[c] || {}).complet || c;
-        }).join(", "));
+        "Approuvé par des testeurs HP");
       cfg.tampons.forEach(function (cle) {
         var t = TAMPONS[cle];
         if (!t) return;
@@ -761,24 +758,23 @@
         pastille.style.borderColor = t.couleur;
         pastille.style.color = t.couleur;
         pastille.style.transform = "rotate(" + t.rotation + "deg)";
-        pastille.title = "Approuvé par " + t.complet + ", testeur HP";
+        pastille.title = "Approuvé par un testeur HP";
         var coche = el("span", null, "✓");
         coche.setAttribute("aria-hidden", "true");
         pastille.appendChild(coche);
-        /* Le symbole (la petite lune de Maëva) reste visible même
-           sur petit écran, où le nom se replie : la couleur et le
+        /* Le symbole reste visible même
+           sur petit écran : la couleur et le
            symbole portent alors la signature. */
         if (t.symbole) {
           var symb = el("span", null, t.symbole);
           symb.setAttribute("aria-hidden", "true");
           pastille.appendChild(symb);
         }
-        /* Libellé complet avec le nom (demande d'HP, 23 oct. 2026) :
-           « Approuvé par : Louka ». Il vit dans le même span que le
-           nom : sur ≤ 520 px, le span se replie comme avant (la
+        /* Libellé complet neutre (retrait des noms, 2 nov. 2026) :
+           « Approuvé par un testeur ». Il vit dans le même span : sur ≤ 520 px, le span se replie comme avant (la
            couleur et le symbole portent la signature) — aucun
            débordement possible dans la barre. */
-        var nomT = el("span", "bj-tampon-nom", "Approuvé par : " + t.court);
+        var nomT = el("span", "bj-tampon-nom", "Approuvé par un testeur");
         pastille.appendChild(nomT);
         zoneTampons.appendChild(pastille);
       });

@@ -238,7 +238,8 @@ function BoutonCoeur({
   );
 }
 
-/* ── Tampons des testeurs (décision de la direction, 23 oct. 2026, 08 h 18 :
+/* ── Tampons des testeurs — RETRAIT DES NOMS, 2 nov. 2026 (GO HP) : consentement écrit des parents non trouvé à la tête, noms retirés, couleurs et approbations conservées, tampons neutres « Approuvé par un testeur ». Réversible seulement sur preuve écrite.
+   Décision d'origine, 23 oct. 2026, 08 h 18 :
    « Oui — les tampons au site, noms + couleurs ») ──────────────────
    Source de vérité : le registre des approbations rapportées par la direction
    le 22 oct. 2026, 21 h 31 (approbations-joueurs-2026-10-22.md).
@@ -246,18 +247,15 @@ function BoutonCoeur({
    registre, affichés tels quels. La couleur de Lo n'est pas précisée
    au registre : son tampon est posé en neutre, sans rien inventer.
    « Fusion Shop », approuvé par Mel au registre, n'existe pas (encore)
-   sur le site : aucun tampon posé pour lui.
-   Ajout du 23 oct. 2026, 20 h 35 (dicté par la direction) : O'Z « la grande »,
-   tampon JAUNE — jaune profond #8A6D00, lisible sur fond crème
-   (contraste ≈ 4,7:1, même exigence que le bleu ciel de Lo) :
+    Ajout du 23 oct. 2026, 20 h 35 : tampon JAUNE — jaune profond #8A6D00, lisible sur fond crème
    2 vérités 1 mensonge (en plus du mauve de Mel) et LA BANQUE
    (premier tampon du jeu). */
 const TESTEURS = {
-  louka: { nom: "Louka", couleur: "#2e7d32", fond: "rgba(46,125,50,.10)", rotation: -1.4 },
-  maeva: { nom: "Maëva ☾", couleur: "#23201c", fond: "rgba(35,32,28,.07)", rotation: 1 },
-  mel: { nom: "Mel « The girl boss »", couleur: "#7b2d8b", fond: "rgba(123,45,139,.09)", rotation: -0.8 },
-  lo: { nom: "Lo « le petit Raptor »", couleur: "#0F6CA8", fond: "rgba(15,108,168,.10)", rotation: 1.3 },
-  oz: { nom: "O'Z « la grande »", couleur: "#8A6D00", fond: "rgba(138,109,0,.10)", rotation: -0.5 },
+  louka: { nom: "Testeur vérifié", couleur: "#2e7d32", fond: "rgba(46,125,50,.10)", rotation: -1.4 },
+  maeva: { nom: "Testeur vérifié", couleur: "#23201c", fond: "rgba(35,32,28,.07)", rotation: 1 },
+  mel: { nom: "Testeur vérifié", couleur: "#7b2d8b", fond: "rgba(123,45,139,.09)", rotation: -0.8 },
+  lo: { nom: "Testeur vérifié", couleur: "#0F6CA8", fond: "rgba(15,108,168,.10)", rotation: 1.3 },
+  oz: { nom: "Testeur vérifié", couleur: "#8A6D00", fond: "rgba(138,109,0,.10)", rotation: -0.5 },
   hp: { nom: "HP, le créateur", couleur: "#2456a6", fond: "rgba(36,86,166,.09)", rotation: -1 },
   tous: { nom: "à compléter", couleur: "#221a12", fond: "rgba(34,26,18,.06)", rotation: 0 },
 } as const;
@@ -312,7 +310,7 @@ function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
           ? "Créateur : HP"
           : cle === "tous"
           ? "Approuvé par : à compléter"
-          : "Approuvé par " + t.nom + ", testeur HP"
+          : "Approuvé par un testeur HP"
       }
       style={{
         display: "inline-flex",
@@ -334,11 +332,9 @@ function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
     >
       {cle !== "hp" && <span aria-hidden="true">✓</span>}
       {/* Libellé complet sur le tampon même (demande de la direction, 23 oct.
-          2026, 19 h 18 : « Ajouter au tampon avec nom le Approuvé
-          par : ») — avant, il ne vivait que dans le title/aria,
-          invisibles au tactile. Le nom, la couleur et la lune de
-          Maëva sont inchangés. */}
-      {cle === "hp" ? "Créateur : HP" : "Approuvé par : " + t.nom}
+          2026, 19 h 18) — avant, il ne vivait que dans le title/aria,
+          invisibles au tactile. Les couleurs sont inchangées. */}
+      {cle === "hp" ? "Créateur : HP" : "Approuvé par un testeur"}
     </span>
   );
 }
@@ -351,7 +347,7 @@ function RangeeTampons({ slug, grand }: { slug: string; grand?: boolean }) {
       aria-label={
         cles.length === 1 && cles[0] === "hp"
           ? "Créateur : HP"
-          : "Approuvé par : " + cles.map((c) => TESTEURS[c].nom).join(", ")
+          : "Approuvé par des testeurs HP"
       }
       style={{ display: "flex", flexWrap: "wrap", gap: 7, alignItems: "center" }}
     >
@@ -716,12 +712,14 @@ function JeuxPage() {
           <h2 className="section-title">Approuvés par <em>nos joueurs</em></h2>
           <p style={{ textAlign: "center", maxWidth: 680, margin: "-6px auto 18px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.6 }}>
             Avant d'arriver ici, les jeux HP passent entre les mains de vrais
-            joueurs — de jeunes testeurs et la famille d'HP. Leur tampon
+            joueurs — de vrais joueurs, testeurs et famille. Leur tampon
             « approuvé » ne s'achète pas et ne s'invente pas : il se mérite,
             partie par partie.
           </p>
           <p style={{ textAlign: "center", maxWidth: 680, margin: "0 auto 22px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.6 }}>
-            Chaque testeur a son tampon, sa couleur, sa signature :
+            Merci aux petits testeurs — à tous les enfants qui ont joué, testé, ri,
+            et qui ont rendu ces jeux meilleurs, merci. Chaque testeur a son tampon
+            et sa couleur, sans nom affiché :
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 9, justifyContent: "center", margin: "0 auto 30px", maxWidth: 680 }}>
             {(Object.keys(TESTEURS) as CleTesteur[])
