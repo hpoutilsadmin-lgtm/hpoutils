@@ -466,7 +466,7 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (35), Quiz (2), etc.
+     conformes à la liste exacte approuvée — Tous (36), Quiz (2), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
@@ -495,6 +495,7 @@ function JeuxPage() {
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
+          <p style={{ fontSize: 14, marginTop: 10 }}>37, c'est 36 jeux + la tuile Panier, jouée dans En cuisine, + 1 jeu caché, non nommé.</p>
         </div>
       </section>
 
