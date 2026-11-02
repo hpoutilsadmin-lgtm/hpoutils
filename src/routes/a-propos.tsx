@@ -63,7 +63,7 @@ function Page() {
               <li>Une réponse de la direction humaine sous 3 jours ouvrables.</li>
               <li>Des prix honnêtes, aucune taxe ajoutée, jamais de pression ni de fausse urgence.</li>
               <li>Tout 100 % original. L'IA est un outil très rapide et efficace — la direction, l'émotion, le « ce que je fais », c'est pour les humains.</li>
-              <li>Écrit par un humain, accéléré par l'IA. On le dit toujours.</li>
+              <li>Direction humaine, accélérée par l'IA. On le dit toujours.</li>
             </ul>
             <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les buts</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
