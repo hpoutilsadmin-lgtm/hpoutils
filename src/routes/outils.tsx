@@ -259,7 +259,7 @@ function Page() {
                 <span className="tool-tag">Bundle — 40 $ CAD, aucune taxe ajoutée</span>
                 <h3>Collection Sans Honte — 10 kits au choix</h3>
                 <p>Un seul ensemble pour réunir les fiches et outils pratiques HP.</p>
-                <Link to="/achat/sans-honte-collection">Acheter la collection →</Link>
+                <Link to="/achat/$slug" params={{ slug: "sans-honte-collection" }}>Acheter la collection →</Link>
               </article>
             </div>
           </div>

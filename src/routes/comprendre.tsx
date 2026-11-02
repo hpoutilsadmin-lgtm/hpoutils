@@ -23,7 +23,7 @@ function Page() {
             agir avec lucidité et espérance.
           </p>
           <div className="lead-actions">
-            <Link className="btn-primary" to="/pdf/enjeux-humanite">Découvrir le livre</Link>
+            <Link className="btn-primary" to="/pdf/$slug" params={{ slug: "enjeux-humanite" }}>Découvrir le livre</Link>
             <Link to="/contact" className="btn-ghost">Demander un extrait</Link>
           </div>
         </div>
@@ -59,7 +59,7 @@ function Page() {
             <em>Enjeux de l'humanité à l'ère de l'IA</em> — « Mot de l'auteur », p. 5 : "Je n'ai pas écrit ce livre pour prédire l'avenir. Je l'ai écrit parce que quelque chose ne tourne plus rond dans la manière dont on comprend le monde."
           </p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
-            <Link to="/pdf/enjeux-humanite" className="btn-primary">Découvrir le PDF — 15 $ CAD, aucune taxe ajoutée</Link>
+            <Link to="/pdf/$slug" params={{ slug: "enjeux-humanite" }} className="btn-primary">Découvrir le PDF — 15 $ CAD, aucune taxe ajoutée</Link>
           </div>
         </div>
       </section>
@@ -69,7 +69,7 @@ function Page() {
           <h2>La lucidité n’est pas du <em>pessimisme</em>.</h2>
           <p className="strip-intro">C’est la première étape de l’action juste.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
-            <Link to="/achat/enjeux-humanite" className="btn-primary">Commander — 15 $</Link>
+            <Link to="/achat/$slug" params={{ slug: "enjeux-humanite" }} className="btn-primary">Commander — 15 $</Link>
           </div>
         </div>
       </section>

@@ -224,7 +224,7 @@ function Page() {
                 </p>
                 <p style={{ margin: 0, fontSize: 14 }}>
                   {product.purchaseHold} En attendant, le pendant gratuit{" "}
-                  <Link to="/en-cuisine/">En cuisine</Link> est ouvert, et
+                  <Link to="/en-cuisine">En cuisine</Link> est ouvert, et
                   pour toute question, écrivez à{" "}
                   <a href="mailto:hpoutils.admin@gmail.com">
                     hpoutils.admin@gmail.com
