@@ -60,13 +60,48 @@ export async function fulfillPasseursSubscription(session: any, env: StripeEnv) 
 
   // Idempotence : si Stripe rejoue le webhook, on ne crée pas de doublon
   // et on ne régénère pas le jeton (le lien envoyé reste le bon).
+  // Mais un rejeu doit réparer une bienvenue jamais mise en file :
+  // si la ligne existe déjà, on reprend son jeton et sa date de fin,
+  // on vérifie email_send_log, et on renvoie avec le MÊME jeton si
+  // aucune bienvenue n'a été mise en file / envoyée. Jamais de jeton
+  // journalisé, jamais affiché.
   const { data: existing } = await db
     .from("passeurs_abonnements")
-    .select("id")
+    .select("id, jeton_annulation, date_fin_periode, formule")
     .eq("stripe_subscription_id", subscriptionId)
     .maybeSingle();
   if (existing) {
-    console.log("fulfillPasseursSubscription: already fulfilled, skipping", {
+    const { data: alreadySent } = await db
+      .from("email_send_log")
+      .select("id")
+      .eq("template_name", "passeurs-bienvenue")
+      .eq("recipient_email", email.toLowerCase())
+      .neq("status", "failed")
+      .limit(1)
+      .maybeSingle();
+    if (alreadySent) {
+      console.log("fulfillPasseursSubscription: already fulfilled, welcome already queued/sent, skipping", {
+        sessionId: session.id,
+      });
+      return;
+    }
+    const formuleExistante = (existing as any).formule ?? formule;
+    const bienvenueRemiseEnFile = await enqueueTransactionalEmail({
+      templateName: "passeurs-bienvenue",
+      recipientEmail: email,
+      idempotencyKey: `passeurs-bienvenue-${subscriptionId}`,
+      templateData: {
+        formuleLabel: FORMULE_LABEL[formuleExistante] ?? formuleExistante,
+        lienAnnulation: `${origin()}/passeurs/annuler/${(existing as any).jeton_annulation}`,
+        dateFinPeriode: new Date((existing as any).date_fin_periode).toLocaleDateString("fr-CA", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+      },
+    });
+    if (!bienvenueRemiseEnFile) throw new Error("Passeurs: bienvenue non mise en file");
+    console.log("fulfillPasseursSubscription: welcome resent with existing token", {
       sessionId: session.id,
     });
     return;
@@ -96,7 +131,7 @@ export async function fulfillPasseursSubscription(session: any, env: StripeEnv) 
 
   // Courriel de bienvenue avec le lien d'annulation en 1 clic.
   // Clé d'idempotence par abonnement : pas de doublon si Stripe rejoue.
-  await enqueueTransactionalEmail({
+  const bienvenueMiseEnFile = await enqueueTransactionalEmail({
     templateName: "passeurs-bienvenue",
     recipientEmail: email,
     idempotencyKey: `passeurs-bienvenue-${subscriptionId}`,
@@ -110,6 +145,7 @@ export async function fulfillPasseursSubscription(session: any, env: StripeEnv) 
       }),
     },
   });
+  if (!bienvenueMiseEnFile) throw new Error("Passeurs: bienvenue non mise en file");
 
   console.log("fulfillPasseursSubscription: created", {
     sessionId: session.id,

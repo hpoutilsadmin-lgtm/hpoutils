@@ -30,7 +30,24 @@ async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
   const session = await stripe.checkout.sessions.retrieve(rawSession.id, {
     expand: ["line_items", "line_items.data.price"],
   });
-  if (session.payment_status !== "paid") return; // jamais livrer un impayé
+  if (
+    session.payment_status !== "paid" &&
+    session.payment_status !== "no_payment_required"
+  ) {
+    // Unpaid only: never deliver an unpaid order. A 0 $ checkout with a
+    // 100 % coupon is a Stripe no-cost order: session complete, no
+    // PaymentIntent, payment_status = "no_payment_required" — legitimate.
+    console.log("webhook: checkout not payable, skipping delivery", {
+      sessionId: session.id,
+      paymentStatus: session.payment_status,
+    });
+    return;
+  }
+  if (session.payment_status === "no_payment_required") {
+    console.log("webhook: no-cost Passeurs/order checkout accepted", {
+      sessionId: session.id,
+    });
+  }
   // Les Passeurs (décision HP MEL-017, 30 oct. 2026) : la session porte la
   // métadonnée passeurs_formule. On crée l'abonnement + le jeton
   // d'annulation, puis on sort — pas de livraison PDF/tome.
