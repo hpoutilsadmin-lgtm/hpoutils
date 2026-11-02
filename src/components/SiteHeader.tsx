@@ -56,7 +56,7 @@ export function SiteHeader() {
             <Link
               key={l.to}
               to={l.to}
-              activeOptions={{ exact: l.to === "/" }}
+              activeOptions={{ exact: false }}
               activeProps={{ className: "active" }}
             >
               {l.label}

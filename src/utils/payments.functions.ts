@@ -215,7 +215,7 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     // son propre courriel (migration 20261028_gift_recipient_email.sql).
     // Best-effort : si la colonne n'existe pas encore, on ignore l'erreur
     // et on continue — la récupération du payeur reste inchangée.
-    const seenIds = new Set((orders ?? []).map((o) => o.id as string));
+    const seenIds = new Set((orders ?? []).map((o: { id: string }) => o.id));
     const { data: giftOrders, error: giftErr } = await admin
       .from("orders")
       .select("id, price_id, pdf_path, created_at, status")
@@ -239,7 +239,7 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     // kit_slugs ajoutée par migration ; si elle n'existe pas encore, la
     // requête échoue et on retombe sur le lien de la collection).
     const kitSlugsByOrder = new Map<string, string[]>();
-    const orderIds = (orders ?? []).map((o) => o.id as string);
+    const orderIds = (orders ?? []).map((o: { id: string }) => o.id);
     if (orderIds.length > 0) {
       const { data: ksRows, error: ksErr } = await admin
         .from("orders")
