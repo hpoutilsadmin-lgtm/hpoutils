@@ -15,6 +15,7 @@
    Aucune donnée personnelle n'est lue ni conservée.
    ============================================================ */
 import { JOKES, GAME_PITCHES, BOOK_PITCHES, KIT_PITCHES, ATELIER_PITCHES, PITCHES, TICKLE_LINES, TICKLE_BIG, SLEEP_LINES, TINKER_LINES, WAVE_LINES, COOK_LINES, COOK_TASTE, RECETTES_LINE, EVENING_LINES, COMPANION_LINES, MEALS, HUGO_LINES, EMOJI_LINES, QC_HISTORY, ANECDOTES, PHILO, EMPATHY, NEWS_LINES, JANITOR, INTRO, STARTLE_LINES, BUCKET_LINES, YAWN_LINE, MORNING_LINE, NIGHTFALL_LINE, SITE_FACTS, FALLBACK, KB, SYNONYMS, STOPWORDS, AIRS_ORIGINAUX, HUGO_SONGS, CHOIX_LINES, ETHIQUE_LINES, GRUMBLES, BESOIN_SUGGESTIONS, ALT_LINES, BUNDLE_MATH, DWELL_SUGGESTIONS, VENDEUR_HOOKS, MOOD_LINES, BUMP_LINE, BUMP_END, GNOME_LINES, GNOME_LINES_GROGNON, ESCALATION_LINE, ESCALATION_EMPATHY, REFUND_POLICY, LIEN_PERDU_TEXT, RETURN_WINK_LINES, SURPRISE_WINK_LINES, SURPRISE_MED_LINES, SURPRISE_BIG_LINES, PAGE_SUGGESTIONS, PAGE_SUGGESTION_FALLBACK, FLASH_INFOS, INDISP_MOMENTS, INDISP_VICTOIRES, DANCE_JOY_LINES, FLEUR_LINES, FLEUR_DEJA, PIXEL_JEU_LINES, PIXEL_JEU_ARRIVEE, PIXEL_JEU_GRAFFIGNE, PIXEL_JEU_FIN, PIXEL_JEU_DODO, PIXEL_JEU_CONSOLE, BATAILLE_TEXTES, INDISP_BONJOUR, INDISP_BONJOUR_AUTOMNE, INDISP_AUREVOIR, INDISP_AIDE_HESITATION, INDISP_AIDE_PERDU, INDISP_AIDE_NUIT, INDISP_VIE } from "./hgpto-data";
+import { createHgptoVoice } from "./hgpto-voice";
 /* Détectôt (24 oct. 2026) : HGPTO lit le type de visiteur publié par la
    roue d'hamster et adapte son accueil — faits bruts pour une IA,
    ton habituel pour un humain, rien de changé quand c'est inconnu.
@@ -394,10 +395,11 @@ export function initHgpto() {
       applyZoom();
       applyReduit();
 
-      /* ---------- Sa voix : un charabia de petit robot (WebAudio) ----------
-         Des blips formantiques doux, synchronisés avec le texte de la bulle.
+      /* ---------- Voix A : tendre / grognon, charabia en repli ----------
          Le son ne peut démarrer qu'après un premier geste du visiteur. */
       var actx = null, muted = false;
+      var voiceAudio = createHgptoVoice();
+      var audioInteracted = false;
       /* Lot nº 4 : le son devient un réglage en trois niveaux — Fort →
          Doux → Muet — appliqué à TOUT ce qu'il émet (voix charabia,
          petits sons, fredonnage, sons de Pixel) via volMul(), lu au
@@ -406,8 +408,9 @@ export function initHgpto() {
          Session seulement, comme tout chez lui. */
       var soundLevel = 2;   // 2 = fort, 1 = doux, 0 = muet
       function volMul(){ return soundLevel === 2 ? 1 : soundLevel === 1 ? 0.45 : 0; }
-      function syncMuted(){ muted = soundLevel === 0; }
+      function syncMuted(){ muted = soundLevel === 0; voiceAudio.setVolume(volMul()); }
       function ensureAudio(){
+        audioInteracted = true;
         if (!actx){
           var AC = window.AudioContext || window.webkitAudioContext;
           if (AC){ try { actx = new AC(); } catch(e){ actx = null; } }
@@ -442,6 +445,13 @@ export function initHgpto() {
         return (d.textContent || '').replace(/\s+/g,' ').trim();
       }
       function speak(text, mood){
+        if (!audioInteracted || muted || docHidden || isHidden || !text || mood === 'none') return;
+        voiceAudio.play(true, hgMode === 'grognon', volMul(), function(){
+          if (!audioInteracted || muted || docHidden || isHidden || hgptoReduit) return;
+          speakCharabia(text, mood);
+        });
+      }
+      function speakCharabia(text, mood){
         if (!actx || muted || docHidden || !text || mood === 'none') return;
         // Passe audio 2026-10-22 : hauteur PLAFONNÉE (jamais strident), volume
         // doux, et il baisse pendant qu'on lit une réponse (mood 'answer').
@@ -2563,6 +2573,7 @@ export function initHgpto() {
           hgptoClosed = true;
           if (pastille) pastille.textContent = 'Rouvrir Sir H. Gepeto';
           isHidden = true;
+          voiceAudio.stop();
           hideBubble();
           if (tourOn) stopTour(true);
           bot.classList.add('hidden');
@@ -2840,6 +2851,7 @@ export function initHgpto() {
       /* ---------- Onglet inactif : on se calme ---------- */
       document.addEventListener('visibilitychange', function(){
         docHidden = document.hidden;
+        if (docHidden) voiceAudio.stop();
         lastTs = null;
         if (!docHidden){ lastInteract = Date.now(); if (state === 'sleep') wake(false); }
       });

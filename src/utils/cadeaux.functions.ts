@@ -13,7 +13,8 @@
 
 import { createServerFn } from "@tanstack/react-start";
 import crypto from "crypto";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { GiftDatabase } from "@/lib/gift-database";
 import {
   type StripeEnv,
   createStripeClient,
@@ -54,13 +55,13 @@ function getTrustedSiteOrigin(): string {
   return "https://www.hp-outils.com";
 }
 
-let _admin: ReturnType<typeof createClient> | null = null;
+let _admin: SupabaseClient<GiftDatabase> | null = null;
 function getAdmin() {
   if (!_admin) {
-    _admin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!url || !key) throw new Error("Base des bons cadeaux indisponible");
+    _admin = createClient<GiftDatabase>(url, key);
   }
   return _admin;
 }
@@ -75,7 +76,7 @@ async function resolveGiftPriceId(stripe: StripeClient, lookupKey: string): Prom
   return page.data[0]?.id ?? null;
 }
 
-async function readGiftRow(admin: ReturnType<typeof createClient>, code: string) {
+async function readGiftRow(admin: SupabaseClient<GiftDatabase>, code: string) {
   const { data, error } = await admin
     .from("gift_cards")
     .select("code,balance_cents,reserved_cents,reserved_until,reserved_session_id,status")
@@ -284,13 +285,14 @@ export const payCartWithGift = createServerFn({ method: "POST" })
     const items: Array<{ title: string; downloadUrl: string }> = [];
     for (const key of data.priceIds) {
       const product = getProduct(key);
-      if (!product) continue;
+      const cartProduct = getCartProduct(key);
+      if (!product || !cartProduct) continue;
       await admin.from("orders").insert({
         stripe_session_id: `gift-${data.code}-${Date.now()}`,
         customer_email: data.email,
         product_id: product.priceId,
         price_id: key,
-        amount_total: product.priceCad * 100,
+        amount_total: cartProduct.priceCad * 100,
         currency: "cad",
         status: "paid",
         pdf_path: product.pdfPath ?? null,
