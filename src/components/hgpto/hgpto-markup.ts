@@ -107,7 +107,7 @@ export const HGPTO_MARKUP = `
     <!-- Panneau des questions fréquentes -->
     <div class="qa" id="qa" hidden>
       <div class="qa-head">
-        <span>Pose-moi une question !</span>
+        <span>Sir H. Gepeto, gérant du site<br>Pose-moi une question !</span>
         <button type="button" id="qa-close" aria-label="Fermer les questions">✕</button>
       </div>
       <div class="qa-suggestion" id="qa-suggestion" hidden></div>
