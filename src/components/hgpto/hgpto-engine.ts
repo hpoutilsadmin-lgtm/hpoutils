@@ -1013,13 +1013,6 @@ export function initHgpto() {
           if (state === 'wave') setState(reduced ? 'idle' : 'walk');
         }, 2400);
       }
-      function scheduleWave(){
-        if (waveTimer) clearTimeout(waveTimer);
-        waveTimer = setTimeout(function(){
-          if (!isBusy() && state !== 'sleep' && !tourOn) doWave(pick(WAVE_LINES));
-          scheduleWave();
-        }, 38000 + Math.random()*22000);
-      }
 
       /* ---------- Étirement ---------- */
       function doStretch(line){
@@ -5167,7 +5160,6 @@ export function initHgpto() {
         }, 3000);
         scheduleTalk();
         scheduleLife();
-        scheduleWave();
         scheduleCatLife();
         scheduleChoix();
         scheduleGhost();
