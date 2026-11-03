@@ -930,3 +930,24 @@
 @media (prefers-reduced-motion: reduce){
   .bot.dancing .bot-inner{animation:none!important}
 }
+/* Sir H. Gepeto — fragment ÉTAPE 1 (accueil + zone de vie), 3 nov. 2026. PRÉPARATION.
+   À AJOUTER à la fin de hgpto.css (jamais en remplacement d'une règle existante).
+   Keyframes antenne VERBATIM de la démo ; dimensions = .bot-img (hgpto.css l. 88, 307). */
+/* Figure maître : mêmes boîtes que l'ancien PNG, pour ne déplacer aucun bouton. */
+.bot-maitre .bot-inner svg#gepeto { width: 132px; height: 127px; display: block; }
+@media (max-width: 560px) {
+  .bot-maitre .bot-inner svg#gepeto { width: 106px; height: 102px; }
+}
+/* Gardes : les anciens overlays (cravate à pois + mallette, hgpto.css l. 831-834) ne
+   s'affichent JAMAIS par-dessus le maître, même si le moteur passe en mode Vendeur.
+   La cravate Vendeur du maître viendra avec son étape, après D1/D3 tranchés. */
+.bot-maitre .hgpto-tie, .bot-maitre .hgpto-case { display: none !important; }
+/* Le salut démo remplace le wiggle « wave » du moteur sous le maître. */
+.bot-maitre[data-state="wave"] .bot-inner { animation: none !important; }
+/* Antenne rare (démo) : inclinaison ±2°, cycle 9 s, fenêtre brève. */
+.bot-maitre #antenne { animation: antenne-tilt 9s infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.bot-maitre #antenne.fermee { animation: none; }
+@keyframes antenne-tilt { 0%, 90%, 100% { transform: rotate(0deg); } 93%, 97% { transform: rotate(2deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .bot-maitre #antenne { animation: none !important; transform: none !important; }
+}

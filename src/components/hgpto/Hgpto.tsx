@@ -46,6 +46,22 @@ export function Hgpto({ pancarte, onPancarteFermer }: HgptoProps) {
     if (closed) return;
     document.body.classList.add("hgpto-on");
     host.innerHTML = HGPTO_MARKUP;
+    // ÉTAPE 1 (accueil seul) : échange de la figure, le reste ne bouge pas.
+    if (window.location.pathname === "/") {
+      const bot = host.querySelector("#bot");
+      const inner = host.querySelector(".bot-inner");
+      if (bot && inner) {
+        fetch("/hgpto/gepeto-maitre.svg")
+          .then((r) => (r.ok ? r.text() : Promise.reject()))
+          .then((svg) => {
+            inner.innerHTML = svg;
+            bot.classList.add("bot-maitre");
+            window.HgptoMaitreEtape1?.saluer?.();
+            window.HgptoMaitreEtape1?.reverence?.();
+          })
+          .catch(() => { /* repli : l'ancien PNG reste */ });
+      }
+    }
     initHgpto();
   }, []);
 
