@@ -49,7 +49,7 @@ function Page() {
         else if (result.status === "paid" || result.status === "delivered") setState({ kind: "paid" });
         else setState({ kind: "missing" });
       } catch {
-        setState({ kind: "error" });
+        if (!cancelled) setState({ kind: "error" });
       }
     })();
     return () => {
