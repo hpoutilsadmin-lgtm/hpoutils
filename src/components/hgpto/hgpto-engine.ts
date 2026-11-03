@@ -2072,7 +2072,7 @@ export function initHgpto() {
       function choixReco(pourQui, quoi){
         var t = "", p = null;
         if (quoi === 'jouer'){
-          t = "Mon honnête recommandation : commence par les jeux gratuits — 36 + 1 caché jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
+          t = "Mon honnête recommandation : commence par les jeux gratuits — 37 + 1 caché jeux, aucun compte, rien à payer. Le gratuit fait la job pour jouer, promis.";
           p = { u:"https://hp-outils.com/jeux", l:"Voir les jeux gratuits" };
         } else if (quoi === 'cuisiner'){
           if (pourQui === 'enfants'){
@@ -2664,7 +2664,7 @@ export function initHgpto() {
          stopTour), jamais après un arrêt demandé par le visiteur. */
       var TOUR = [
         { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que vous allez voir part d'ici. Moi, c'est Sir H. Gepeto, le gérant du site : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et vous pouvez arrêter la visite quand vous voulez." },
-        { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 36, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
+        { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 37, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
         { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
         { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : vous écrivez les ingrédients que vous avez déjà, et il vous propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et votre liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
         { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que vous téléchargez tout de suite après le paiement, le livre « Les enfants cuisinent » (10 $) compris. « La faim justifie les moyens » (10 $), c'est l'histoire vraie de la direction ; le livre « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },

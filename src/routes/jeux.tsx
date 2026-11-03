@@ -467,7 +467,7 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (36), Quiz (2), etc.
+     conformes à la liste exacte approuvée — Tous (37), Quiz (2), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
@@ -491,12 +491,12 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur HP 22 h 50 : 37 (= 36 jeux + tuile Panier, jouée dans En cuisine) + 1 caché, non nommé */}
+            {/* Compteur HP 3 nov. 13 h 31 (Slalomeuse compte) : 38 (= 37 jeux + tuile Panier, jouée dans En cuisine) + 1 caché, non nommé */}
             <span style={CHIP_STYLE}>{GAMES.length + 1} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>37, c'est 36 jeux + la tuile Panier, jouée dans En cuisine, + 1 jeu caché, non nommé.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>38, c'est 37 jeux + la tuile Panier, jouée dans En cuisine, + 1 jeu caché, non nommé.</p>
         </div>
       </section>
 
