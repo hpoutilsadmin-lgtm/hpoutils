@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Slalomeuse de nids-de-poule — Paquet site-ready</title>
+<style>
+  :root { --fond:#fdf6ec; --route:#3d3d3d; --ligne:#fdf6ec; --orange:#e76f1a; --texte:#2b2118; --bouton:#2b2118; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--fond); color:var(--texte); font-family: system-ui, sans-serif; }
+  main { max-width:560px; margin:0 auto; padding:16px; }
+  .bandeau { background:#2b2118; color:#fdf6ec; padding:10px 12px; border-radius:10px; font-size:14px; text-align:center; }
+  h1 { font-size:26px; line-height:1.2; text-align:center; margin:16px 0 4px; }
+  .sous-titre, .note { text-align:center; font-size:15px; line-height:1.4; }
+  .note { color:#5a4a3a; }
+  #hud { display:flex; justify-content:space-between; gap:8px; margin:16px 0 8px; font-weight:700; font-size:16px; }
+  #hud span { white-space:nowrap; }
+  #route { position:relative; height:520px; background:var(--route); border-radius:14px; overflow:hidden; border:3px solid #2b2118; touch-action:none; }
+  .voie { position:absolute; top:0; bottom:0; width:33.333%; border-right:2px dashed var(--ligne); }
+  .voie:last-child { border-right:0; }
+  #voiture { position:absolute; bottom:18px; width:52px; height:72px; left:50%; transform:translateX(-50%); transition:left .14s ease; z-index:3; }
+  #voiture .carrosserie { width:52px; height:52px; background:#f2c14e; border:3px solid #2b2118; border-radius:14px; }
+  #voiture .parebrise { width:34px; height:16px; background:#bfe3ea; border:2px solid #2b2118; border-radius:6px; margin:6px auto 0; }
+  .obstacle { position:absolute; width:52px; z-index:2; }
+  .nid { height:34px; background:#171717; border-radius:50%; border:3px solid #000; }
+  .cone { height:56px; background:var(--orange); clip-path:polygon(50% 0, 100% 100%, 0 100%); border:0; }
+  .cone::after { content:""; display:block; width:52px; height:10px; background:#fdf6ec; margin-top:24px; }
+  .panneau { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:rgba(253,246,236,.94); padding:20px; text-align:center; z-index:5; }
+  .panneau[hidden] { display:none; }
+  .panneau p { margin:0; font-size:18px; line-height:1.4; }
+  .panneau .gros { font-size:22px; font-weight:800; }
+  #message { min-height:26px; text-align:center; font-weight:700; margin:8px 0; }
+  button { min-height:56px; min-width:56px; padding:0 18px; font-size:18px; font-weight:700; border-radius:12px; border:3px solid #2b2118; background:#fdf6ec; color:#2b2118; cursor:pointer; }
+  button.primaire { background:var(--bouton); color:#fdf6ec; }
+  #controles { display:flex; justify-content:space-between; gap:12px; margin-top:10px; }
+  #controles button { flex:1; font-size:26px; }
+  .actions { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:14px; }
+  @media (max-width:390px) {
+    main { padding:10px; }
+    h1 { font-size:22px; }
+    #route { height:480px; }
+  }
+  @media (min-width:768px) {
+    main { max-width:560px; }
+    #route { height:560px; }
+  }
+  @media (min-width:1920px) {
+    main { max-width:560px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #voiture { transition:none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="bandeau">PAQUET SITE-READY — PRÉPARATION, NON PUBLIÉ — Titre de travail, non adopté</div>
+  <h1>La Slalomeuse de nids-de-poule</h1>
+  <p class="sous-titre">Jeu gratuit, sans compte, sans pub. Score personnel seulement, aucune donnée recueillie.</p>
+
+  <div id="hud" aria-live="off">
+    <span id="hud-score">Score : 0</span>
+    <span id="hud-cones">Cônes : 0</span>
+    <span id="hud-metres">Mètres : 0</span>
+    <span id="hud-roues">Roues : ●●●</span>
+  </div>
+
+  <div id="route" aria-label="Rue de jeu, trois voies">
+    <div class="voie" style="left:0"></div>
+    <div class="voie" style="left:33.333%"></div>
+    <div class="voie" style="left:66.666%"></div>
+    <div id="voiture" aria-label="Petite voiturette de jeu"><div class="carrosserie"><div class="parebrise"></div></div></div>
+
+    <div id="panneau-depart" class="panneau">
+      <p class="gros">Jeu seulement, jamais sur la route.</p>
+      <p>Glisse pour slalomer.</p>
+      <p>Évite les nids-de-poule.</p>
+      <p>Ramasse les cônes orange.</p>
+      <p>Trois roues, pas plus.</p>
+      <button class="primaire" id="bouton-jouer" type="button">Jouer</button>
+    </div>
+
+    <div id="panneau-fin" class="panneau" hidden>
+      <p class="gros">Partie finie. Bravo, quand même !</p>
+      <p id="texte-score-final">Ton score : 0 points.</p>
+      <p id="texte-detail-final">0 cônes, 0 mètres.</p>
+      <div class="actions">
+        <button class="primaire" id="bouton-rejouer" type="button">Rejouer ?</button>
+        <button id="bouton-partager" type="button">Partager mon score</button>
+        <button id="bouton-retour" type="button">Retour aux jeux</button>
+      </div>
+    </div>
+  </div>
+
+  <p id="message" role="status" aria-live="polite"></p>
+
+  <div id="controles">
+    <button id="bouton-gauche" type="button" aria-label="Aller à gauche">◀</button>
+    <button id="bouton-droite" type="button" aria-label="Aller à droite">▶</button>
+  </div>
+  <p class="note">Clavier : flèches gauche et droite, espace pour recommencer. Glisser à gauche ou à droite, sur la rue.</p>
+  <p class="note">Aucun son, aucun compte, aucune pub, aucun suivi.</p>
+</main>
+<script src="game.js" defer></script>
+</body>
+</html>
