@@ -11,7 +11,6 @@ export const Route = createFileRoute("/recuperer-achat")({
     title: "Récupérer mon achat — HP",
     description: "Recevez par courriel un nouveau lien pour vos achats numériques HP.",
     path: "/recuperer-achat",
-    noindex: true,
   }),
   component: Page,
 });

@@ -10,7 +10,6 @@ export const Route = createFileRoute("/unsubscribe")({
     title: "Désabonnement — HP Outils",
     description: "Gérez votre désabonnement aux courriels HP.",
     path: "/unsubscribe",
-    noindex: true,
   }),
   component: Page,
 });
