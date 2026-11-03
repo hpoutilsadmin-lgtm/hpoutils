@@ -18,6 +18,7 @@ export const Route = createFileRoute("/cadeaux_/merci")({
       title: "Merci — statut de votre bon cadeau | HP Outils",
       description: "Statut d'un bon cadeau HP Outils (programme fermé : aucun nouveau bon n'est émis).",
       path: "/cadeaux/merci",
+      noindex: true,
     }),
   component: Page,
 });
@@ -48,7 +49,7 @@ function Page() {
         else if (result.status === "paid" || result.status === "delivered") setState({ kind: "paid" });
         else setState({ kind: "missing" });
       } catch {
-        if (!cancelled) setState({ kind: "error" });
+        setState({ kind: "error" });
       }
     })();
     return () => {

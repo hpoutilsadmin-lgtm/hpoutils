@@ -10,6 +10,7 @@ export const Route = createFileRoute("/unsubscribe")({
     title: "Désabonnement — HP Outils",
     description: "Gérez votre désabonnement aux courriels HP.",
     path: "/unsubscribe",
+    noindex: true,
   }),
   component: Page,
 });
@@ -25,7 +26,7 @@ function Page() {
       setState("invalid");
       return;
     }
-    fetch(`/email/unsubscribe?token=${encodeURIComponent(token)}`)
+    fetch(`/email/unsubscribe?token=${token}`)
       .then(async (r) => {
         const data = await r.json();
         if (!r.ok) {

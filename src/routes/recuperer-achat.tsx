@@ -11,6 +11,7 @@ export const Route = createFileRoute("/recuperer-achat")({
     title: "Récupérer mon achat — HP",
     description: "Recevez par courriel un nouveau lien pour vos achats numériques HP.",
     path: "/recuperer-achat",
+    noindex: true,
   }),
   component: Page,
 });
@@ -103,7 +104,7 @@ function Page() {
                 Si un achat est associé à cette adresse, un courriel
                 contenant vos liens vient d'être envoyé.
                 Vérifiez votre boîte de réception (et le dossier
-                «&nbsp;Indésirables&nbsp;») dans les prochaines minutes.
+                « Indésirables ») dans les prochaines minutes.
                 Pour un tome, vous pouvez aussi utiliser la page <a href="/lire">Lire</a>.
               </p>
               <p style={{ marginTop: 16, fontSize: 13, opacity: 0.75 }}>
@@ -113,38 +114,38 @@ function Page() {
             </div>
           ) : (
             <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
-            <label htmlFor="email" style={{ fontWeight: 600 }}>
-              Courriel
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="vous@exemple.com"
-              style={{
-                padding: "12px 14px",
-                border: "1px solid #ccc",
-                borderRadius: 4,
-                fontSize: 16,
-              }}
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                padding: "14px 28px",
-                background: "#b04a2f",
-                color: "#fff",
-                border: "none",
-                borderRadius: 4,
-                fontWeight: 600,
-                cursor: loading ? "wait" : "pointer",
-              }}
-            >
-              {loading ? "Envoi…" : "Recevoir mes liens par courriel"}
-            </button>
+              <label htmlFor="email" style={{ fontWeight: 600 }}>
+                Courriel
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="vous@exemple.com"
+                style={{
+                  padding: "12px 14px",
+                  border: "1px solid #ccc",
+                  borderRadius: 4,
+                  fontSize: 16,
+                }}
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  padding: "14px 28px",
+                  background: "#b04a2f",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 4,
+                  fontWeight: 600,
+                  cursor: loading ? "wait" : "pointer",
+                }}
+              >
+                {loading ? "Envoi…" : "Recevoir mes liens par courriel"}
+              </button>
             </form>
           )}
           </div>
