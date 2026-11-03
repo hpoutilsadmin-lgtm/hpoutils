@@ -2,16 +2,6 @@ import { useEffect, useRef } from "react";
 import "./hgpto.css";
 import { HGPTO_MARKUP } from "./hgpto-markup";
 import { initHgpto } from "./hgpto-engine";
-import { HgptoPancarte } from "./HgptoPancarte";
-
-export type HgptoProps = {
-  /** Pancarte de bienvenue (A1 tap) : vraie au premier chargement de la
-   * session seulement. Le lanceur (HgptoTap) décide ; ce composant ne
-   * montre jamais la pancarte tout seul. */
-  pancarte: boolean;
-  /** Tap sur Fermer de la pancarte : le lanceur bascule vers la mascotte. */
-  onPancarteFermer: () => void;
-};
 
 /**
  * Sir H. Gepeto — le gérant du site HP Outils, monté globalement
@@ -20,9 +10,7 @@ export type HgptoProps = {
  * Lot A1 tap (30 oct. 2026) : ce composant n'est PLUS importé en
  * statique par __root. Il n'arrive que par l'import dynamique de
  * HgptoTap, au tap de la pastille, 1 fois. La scène de départ
- * (tapis rouge, confettis, feux) est ENLEVÉE : elle est remplacée
- * par la pancarte (HgptoPancarte), montrée par le lanceur au premier
- * chargement de la session seulement.
+ * (tapis rouge, confettis, feux) est ENLEVÉE.
  *
  * La surcouche (figure, Pixel, bulles, dock, panneau Questions, jeu
  * caché) est injectée côté client seulement — le serveur ne rend
@@ -31,7 +19,7 @@ export type HgptoProps = {
  * au montage, si la session l'a fermé, rien n'est injecté. Le lanceur
  * efface ce drapeau au tap explicite, donc un tap rouvre toujours.
  */
-export function Hgpto({ pancarte, onPancarteFermer }: HgptoProps) {
+export function Hgpto() {
   const hostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,7 +55,6 @@ export function Hgpto({ pancarte, onPancarteFermer }: HgptoProps) {
 
   return (
     <>
-      {pancarte && <HgptoPancarte onFermer={onPancarteFermer} />}
       <div ref={hostRef} className="hgpto-host" />
     </>
   );

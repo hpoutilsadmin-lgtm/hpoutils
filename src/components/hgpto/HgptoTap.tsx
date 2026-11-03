@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import type { HgptoProps } from "./Hgpto";
 
 /**
  * Lot A1 tap (candidat, 30 oct. 2026) — la mascotte ne charge qu'au tap.
@@ -13,9 +12,6 @@ import type { HgptoProps } from "./Hgpto";
  * Machine à états (mémoire seulement, jamais localStorage) :
  * - pastille : pastille seule + zone. Tap → chargement.
  * - chargement : pastille visible, taps ignorés (rien ne casse).
- * - pancarte : code chargé, pancarte de bienvenue affichée (1 fois
- *   par session, drapeau sessionStorage « hgpto-pancarte-vue »).
- *   Son Fermer → mascotte.
  * - mascotte : la mascotte vit normalement. Son propre « Fermer »
  *   (moteur, 4 s d'au revoir) la ferme pour la session ; sa pastille
  *   « Rouvrir » (moteur) la ramène au tap. Jamais automatique.
@@ -33,7 +29,7 @@ import type { HgptoProps } from "./Hgpto";
  * moteur (body.hgpto-on) est neutralisé tant que la zone existe :
  * aucune double réservation, aucun saut de mise en page au chargement.
  */
-type Etat = "pastille" | "chargement" | "pancarte" | "mascotte" | "echec";
+type Etat = "pastille" | "chargement" | "mascotte" | "echec";
 
 const STYLE = `
 .hgpto-tap-zone{height:290px}
@@ -45,7 +41,7 @@ body.hgpto-tap-zone-on.hgpto-on{padding-bottom:0}
 
 export function HgptoTap() {
   const [etat, setEtat] = useState<Etat>("pastille");
-  const [Mascotte, setMascotte] = useState<React.ComponentType<HgptoProps> | null>(null);
+  const [Mascotte, setMascotte] = useState<React.ComponentType | null>(null);
 
   // La zone est toujours présente tant que le lanceur est monté :
   // la classe qui neutralise le padding moteur l'est aussi, sinon
@@ -71,27 +67,12 @@ export function HgptoTap() {
           /* stockage indisponible */
         }
         document.body.classList.remove("hgpto-closed");
-        let vue = false;
-        try {
-          vue = sessionStorage.getItem("hgpto-pancarte-vue") === "1";
-        } catch {
-          /* stockage indisponible : on montre la pancarte */
-        }
-        setEtat(vue ? "mascotte" : "pancarte");
+        setEtat("mascotte");
       })
       .catch(() => setEtat("echec"));
   };
 
-  const fermerPancarte = () => {
-    try {
-      sessionStorage.setItem("hgpto-pancarte-vue", "1");
-    } catch {
-      /* stockage indisponible */
-    }
-    setEtat("mascotte");
-  };
-
-  const monte = etat === "pancarte" || etat === "mascotte";
+  const monte = etat === "mascotte";
   const etiquette =
     etat === "chargement"
       ? "Chargement de Sir H. Gepeto"
@@ -117,12 +98,7 @@ export function HgptoTap() {
           réessayer.
         </p>
       )}
-      {monte && Mascotte && (
-        <Mascotte
-          pancarte={etat === "pancarte"}
-          onPancarteFermer={fermerPancarte}
-        />
-      )}
+      {monte && Mascotte && <Mascotte />}
     </>
   );
 }
