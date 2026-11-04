@@ -38,6 +38,7 @@ const BLOCS = [
   { titre: "Passeurs et ateliers", lignes: ROWS.slice(10, 12) },
   { titre: "Jeux", lignes: ROWS.slice(12, 14) },
   { titre: "Outils gratuits", lignes: ROWS.slice(14) },
+];
 
 function Page() {
   return (
