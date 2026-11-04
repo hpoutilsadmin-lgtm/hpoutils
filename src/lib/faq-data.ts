@@ -57,7 +57,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Qui répond quand j'écris à HP Outils ?",
     reponse:
-      "La direction humaine, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, Sir H. Gepeto — le gérant du site — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à l'équipe au lieu d'inventer une réponse.",
+      "La direction humaine, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, Sir H. Gepeto — le gérant du site — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à la direction humaine au lieu d'inventer une réponse.",
   },
   {
     question: "C'est quoi, un jeu à votre image ?",

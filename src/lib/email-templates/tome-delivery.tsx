@@ -68,7 +68,7 @@ const TomeDeliveryEmail = ({
           Une question ? La direction humaine te répond sous 3 jours
           ouvrables : hpoutils.admin@gmail.com.
         </Text>
-        <Text style={footer}>— L'équipe {SITE_NAME}</Text>
+        <Text style={footer}>— La direction humaine {SITE_NAME}</Text>
       </Container>
     </Body>
   </Html>

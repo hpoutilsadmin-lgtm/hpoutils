@@ -87,7 +87,7 @@ const PurchaseDeliveryEmail = ({
           Le PDF est filigrané avec votre courriel — il est destiné à un
           usage personnel.
         </Text>
-        <Text style={footer}>— L'équipe {SITE_NAME}</Text>
+        <Text style={footer}>— La direction humaine {SITE_NAME}</Text>
       </Container>
     </Body>
   </Html>

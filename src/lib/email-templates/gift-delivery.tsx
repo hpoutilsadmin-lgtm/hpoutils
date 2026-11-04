@@ -45,7 +45,7 @@ const GiftDeliveryEmail = ({
           achat, le reste demeure sur le même code. Conservez ce courriel.
           Une question ? Écrivez à la direction humaine — la direction humaine répond sous 3 jours ouvrables.
         </Text>
-        <Text style={footer}>— L'équipe {SITE_NAME}</Text>
+        <Text style={footer}>— La direction humaine {SITE_NAME}</Text>
       </Container>
     </Body>
   </Html>

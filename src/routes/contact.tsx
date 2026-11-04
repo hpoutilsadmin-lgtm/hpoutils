@@ -152,7 +152,7 @@ function Page() {
       <section className="collections-strip" style={{ textAlign: "center" }}>
         <div className="container" style={{ maxWidth: 760 }}>
           <h2>Une question, une idée, un <em>projet</em> ?</h2>
-          <p className="strip-intro">L'équipe est là pour écouter et aider.</p>
+          <p className="strip-intro">La direction humaine est là pour écouter et aider.</p>
           <div className="lead-actions" style={{ justifyContent: "center" }}>
             <a className="btn-primary" href="#formulaire-contact">Écrire à la direction humaine</a>
           </div>

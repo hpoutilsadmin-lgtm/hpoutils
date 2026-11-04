@@ -57,7 +57,7 @@ const PurchaseRecoveryEmail = ({
             </Section>
           ))
         )}
-        <Text style={footer}>— L'équipe {SITE_NAME}</Text>
+        <Text style={footer}>— La direction humaine {SITE_NAME}</Text>
       </Container>
     </Body>
   </Html>
