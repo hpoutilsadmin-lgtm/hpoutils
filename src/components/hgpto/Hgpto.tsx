@@ -56,6 +56,50 @@ export function Hgpto() {
       }
     }
     initHgpto();
+    // Lot Gepeto planches modes : figure selon le mode puis le contexte.
+    // Mode explicite d'abord (vendeur, grognon), puis contexte (/jeux,
+    // /en-cuisine), sinon normal (défaut + ami — ami = normal, proposé,
+    // à confirmer). Observateur calqué sur celui de Pixel (grognon).
+    {
+      const choisirFigure = (): string => {
+        const bot = host.querySelector("#bot");
+        const mode = bot?.getAttribute("data-mode");
+        if (mode === "vendeur") return "/hgpto/gepeto/vendeur.png";
+        if (mode === "grognon") return "/hgpto/gepeto/grognon.png";
+        const chemin = window.location.pathname || "";
+        if (chemin === "/jeux" || chemin.startsWith("/jeux/")) return "/hgpto/gepeto/gaming.png";
+        if (chemin === "/en-cuisine" || chemin.startsWith("/en-cuisine/")) return "/hgpto/gepeto/chef.png";
+        return "/hgpto/gepeto/normal.png";
+      };
+      const poserFigure = (): void => {
+        const bot = host.querySelector("#bot");
+        const inner = host.querySelector(".bot-inner");
+        if (!bot || !inner) return;
+        const src = choisirFigure();
+        const courant = inner.querySelector("img.bot-img");
+        if (courant && courant.getAttribute("src") === src) return;
+        figureVoulue = src;
+        const img = new Image();
+        img.className = "bot-img";
+        img.alt = "Sir H. Gepeto";
+        img.src = src;
+        img.onload = () => {
+          if (figureVoulue !== src) return;
+          inner.innerHTML = "";
+          inner.appendChild(img);
+          bot.classList.add("bot-maitre");
+        };
+        img.onerror = () => { /* repli : la figure actuelle reste */ };
+      };
+      const bot = host.querySelector("#bot");
+      if (bot) {
+        new MutationObserver(() => poserFigure()).observe(bot, {
+          attributes: true,
+          attributeFilter: ["data-mode"],
+        });
+      }
+      poserFigure();
+    }
   }, []);
 
   return (
