@@ -2811,7 +2811,7 @@ export function initHgpto() {
         var dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
         var dec = seasonDecorKind();
         var decoStr = dec === 'halloween' ? " — décos d'Halloween installées par lui-même" : dec === 'noel' ? " — lumières de Noël installées par lui-même" : "";
-        document.getElementById('scard-bot').innerHTML = MINI_BOT;
+        document.getElementById('scard-bot').innerHTML = '<img src="/hgpto/gepeto/normal.png" alt="Sir H. Gepeto" width="110">';
         document.getElementById('scard-meta').textContent = "Sir H. Gepeto, " + outfitLabel() + decoStr;
         document.getElementById('scard-line').textContent = "Souvenir du " + dateStr + ", chez HP Outils (Terrebonne, Québec).";
         scardText = "Photo souvenir avec Sir H. Gepeto, le gérant du site HP Outils — " + outfitLabel() + ", le " + dateStr + ". " +

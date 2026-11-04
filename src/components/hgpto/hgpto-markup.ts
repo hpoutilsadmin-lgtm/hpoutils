@@ -16,7 +16,7 @@ export const HGPTO_MARKUP = `
         <div class="bubble" id="bubble" aria-live="polite"></div>        <div class="zzz" aria-hidden="true"><span>Z</span><span>Z</span><span>Z</span></div>
         <div class="burst" id="burst" aria-hidden="true"></div>
         <div class="bot-inner">
-          <img class="bot-img" src="/images/hgepeto-base-definitive.png" alt="Sir H. Gepeto" draggable="false">
+          <img class="bot-img" src="/hgpto/gepeto/normal.png" alt="Sir H. Gepeto" draggable="false">
         </div>
         <div class="hgpto-tie" aria-hidden="true"><svg viewBox="0 0 24 64" width="24" height="64"><polygon points="12,2 19,8 15,14 12,12 9,14 5,8" fill="#1f3a5f"/><polygon points="9,14 15,14 19,34 12,62 5,34" fill="#1f3a5f"/><g fill="#d89532"><circle cx="12" cy="24" r="1.8"/><circle cx="12" cy="34" r="1.8"/><circle cx="12" cy="44" r="1.8"/></g></svg></div>
         <div class="hgpto-case" aria-hidden="true"><svg viewBox="0 0 48 34" width="48" height="34"><path d="M16 10 V6 a4 4 0 0 1 4 -4 h8 a4 4 0 0 1 4 4 v4" fill="none" stroke="#2b2118" stroke-width="2.6"/><rect x="2" y="10" width="44" height="22" rx="4" fill="#6b4a2f" stroke="#2b2118" stroke-width="2.4"/><rect x="20" y="10" width="8" height="7" rx="1.5" fill="#d89532" stroke="#2b2118" stroke-width="1.6"/></svg></div>
