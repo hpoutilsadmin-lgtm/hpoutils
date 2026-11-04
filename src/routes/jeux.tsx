@@ -713,8 +713,7 @@ function JeuxPage() {
           <span className="editorial-kicker">Testés pour vrai</span>
           <h2 className="section-title">Approuvés par <em>nos joueurs</em></h2>
           <p style={{ textAlign: "center", maxWidth: 680, margin: "-6px auto 18px", color: "#5a4a3f", fontSize: 16, lineHeight: 1.6 }}>
-            Avant d'arriver ici, les jeux HP passent entre les mains de vrais
-            joueurs — de vrais joueurs, testeurs et famille. Leur tampon
+            Avant d'arriver ici, les jeux HP passent entre les mains de vrais joueurs, testeurs et famille. Leur tampon
             « approuvé » ne s'achète pas et ne s'invente pas : il se mérite,
             partie par partie.
           </p>
@@ -750,9 +749,6 @@ function JeuxPage() {
               );
             })}
           </ul>
-          <p style={{ textAlign: "center", maxWidth: 680, margin: "22px auto 0", color: "#5a4a3f", fontSize: 15, lineHeight: 1.6 }}>
-            Et Cherche &amp; Trouve — La vraie vie figure aussi dans la liste ci-dessus.
-          </p>
         </div>
       </section>
 
