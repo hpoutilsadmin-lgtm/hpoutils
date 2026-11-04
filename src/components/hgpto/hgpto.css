@@ -530,6 +530,7 @@
         box-shadow:2px 2px 0 var(--shadow);
       }
       .pawn-bot svg{width:104%;height:104%;filter:drop-shadow(2px 2px 0 rgba(43,33,24,.25))}
+      .pawn-bot img{height:104%;width:auto;filter:drop-shadow(2px 2px 0 rgba(43,33,24,.25))}
       .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:4}
       .confetti i{
         position:absolute;top:-4%;width:8px;height:13px;border-radius:2px;

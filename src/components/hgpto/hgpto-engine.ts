@@ -2945,7 +2945,7 @@ export function initHgpto() {
           s += '<path d="M' + (a.sx - 6) + ' ' + (a.sy + 6) + ' Q' + a.sx + ' ' + (a.sy + 11) + ' ' + (a.sx + 6) + ' ' + (a.sy + 6) + '" fill="none" stroke="#2b2118" stroke-width="2.6" stroke-linecap="round"/>';
         });
         boardArt.innerHTML = s;
-        botPawn.innerHTML = MINI_BOT;
+        botPawn.innerHTML = '<img src="/hgpto/gepeto/normal.png" alt="Sir H. Gepeto">';
       }
       function placePawn(pawn, n){
         var p = cellPos(n);
