@@ -496,7 +496,7 @@ function JeuxPage() {
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>38, c'est 37 jeux + la tuile Panier, jouée dans En cuisine, + 1 jeu caché, non nommé.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>38, c'est 37 jeux + Le Panier Solidaire, joué dans En cuisine. Le « + 1 » est un jeu caché, non nommé.</p>
         </div>
       </section>
 
