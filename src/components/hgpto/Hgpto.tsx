@@ -34,8 +34,8 @@ export function Hgpto() {
     if (closed) return;
     document.body.classList.add("hgpto-on");
     host.innerHTML = HGPTO_MARKUP;
-    // ÉTAPE 1 (accueil seul) : échange de la figure, le reste ne bouge pas.
-    if (window.location.pathname === "/") {
+    // Lot Gepeto seul (3 nov.) : figure maître sur toutes les pages.
+    {
       const bot = host.querySelector("#bot");
       const inner = host.querySelector(".bot-inner");
       if (bot && inner) {

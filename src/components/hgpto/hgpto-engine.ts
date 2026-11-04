@@ -1150,7 +1150,7 @@ export function initHgpto() {
         setTimeout(function(){
           if (state !== 'idle' || gameOn || tourOn) return;
           setState('graffiti'); setExpr('focus');
-          logDay("barbouillé la photo de la direction — chapeau melon et lunettes, signés HGPTO");
+          logDay("barbouillé la photo de la direction — chapeau melon et lunettes, signés Sir H. Gepeto");
         }, 1200);
         setTimeout(function(){
           // Le geste est fait : on prévient le système photo. (S'il
