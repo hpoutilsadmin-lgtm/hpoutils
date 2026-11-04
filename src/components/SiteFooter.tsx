@@ -38,7 +38,7 @@ export function SiteFooter() {
             <Link to="/ateliers">Ateliers</Link><br />
                         <Link to="/apercu">Jeux à votre image — démo gratuite</Link><br />
             <Link to="/recuperer-achat">Récupérer un achat</Link><br />
-            <Link to="/cadeaux">Bons cadeaux</Link>
+            <Link to="/cadeaux">Utiliser un code cadeau</Link>
           </p>
           <h4>Confiance</h4>
           <p>
