@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 37 + 1 caché en ligne | HP Outils",
-      description: "Des jeux gratuits créés au Québec — 37 + 1 caché : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — tu joues dans ton navigateur.",
+      title: "Jeux gratuits en français du Québec — 38 jeux en ligne | HP Outils",
+      description: "Des jeux gratuits créés au Québec — 38 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
       path: "/jeux",
     }),
     scripts: [
