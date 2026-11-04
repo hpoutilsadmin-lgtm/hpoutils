@@ -101,6 +101,14 @@ const WEB_TOOLS = [
     cta: "Faire mon contrat →",
     href: "/outils-web/contrat-humain-ia.html",
   },
+  {
+    emoji: "💂",
+    tag: "La garde",
+    title: "La garde",
+    copy: "Où chaque gardien a son utilité : Le Garde, Survie 72h, Personne seule. Trois outils gratuits, sans compte, page ouverte seulement, pour se protéger, se préparer et alerter un proche.",
+    cta: "Ouvrir La garde →",
+    href: "/la-garde",
+  },
 ];
 
 const tabBarStyle: React.CSSProperties = {

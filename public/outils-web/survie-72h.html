@@ -1,0 +1,1200 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Survie 72h</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Spectral:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6eddd;
+        --ink: #1d252c;
+        --gold: #d89532;
+        --night: #07111b;
+        --red: #af3c2d;
+        --green: #294f1e;
+        --surface: #f6eddd;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #07111b;
+          --ink: #f6eddd;
+          --surface: #07111b;
+        }
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 18px;
+        line-height: 1.55;
+      }
+      html.tres-grand body { font-size: 24px; }
+      html.tres-grand h1 { font-size: 42px; }
+      html.tres-grand h2 { font-size: 32px; }
+      html.tres-grand h3 { font-size: 26px; }
+      html.tres-grand .btn,
+      html.tres-grand .geste button,
+      html.tres-grand .toolbar button,
+      html.tres-grand .nav-reperes a { min-height: 68px; font-size: 22px; padding: 16px 24px; }
+      html.tres-grand .stepper button { width: 84px; height: 84px; font-size: 38px; }
+      html.tres-grand li.item input[type="checkbox"] { width: 40px; height: 40px; }
+      html.tres-grand .sheet-inner { font-size: 20px; }
+      html.tres-grand .sheet-inner li { font-size: 20px; padding-top: 10px; padding-bottom: 10px; }
+
+      .wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 56px; }
+      h1, h2, h3 { font-family: "Spectral", Georgia, serif; line-height: 1.2; margin: 0; }
+      h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.01em; }
+      h2 { font-size: 25px; font-weight: 700; }
+      h3 { font-size: 20px; font-weight: 600; }
+      a { color: var(--ink); }
+      :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+      /* ---------- Repères et barre d'outils ---------- */
+      .nav-reperes {
+        position: sticky; top: 0; z-index: 20;
+        background: var(--night); color: #f6eddd;
+        margin: -20px -16px 20px; padding: 10px 12px;
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      }
+      .nav-reperes a {
+        color: #f6eddd; text-decoration: none; font-weight: 700; font-size: 16.5px;
+        border: 2px solid #f6eddd; border-radius: 10px; padding: 10px 14px; min-height: 48px;
+        display: inline-flex; align-items: center;
+      }
+      .nav-reperes a .tag {
+        background: #f6eddd; color: #07111b; border-radius: 6px; padding: 1px 8px; margin-right: 8px; font-size: 14px;
+      }
+      .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; }
+      .toolbar button {
+        min-height: 54px; padding: 12px 18px; border-radius: 12px; font: inherit; font-weight: 700; font-size: 17px;
+        cursor: pointer; border: 2px solid var(--ink); background: var(--bg); color: var(--ink);
+      }
+      .toolbar button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+      /* ---------- En-tête ---------- */
+      .region { font-size: 15px; font-weight: 700; margin: 0 0 6px; }
+      .gold-rule { width: 56px; height: 5px; background: var(--gold); border-radius: 3px; margin: 10px 0 0; }
+      .lede { font-size: 19px; margin: 10px 0 0; max-width: 34em; }
+      .facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+      .facts li { border: 2px solid var(--ink); border-radius: 999px; padding: 6px 14px; font-size: 15.5px; font-weight: 700; }
+      .gratuit-note { font-weight: 700; font-size: 18px; margin: 14px 0 0; }
+      .offline-note { margin: 8px 0 0; font-size: 16.5px; }
+      .notgame { margin: 18px 0 0; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; font-size: 17px; }
+      .notgame strong { display: block; margin-bottom: 2px; }
+      .quitter-zone { margin-top: 16px; }
+      .quitter-msg { display: none; margin: 10px 0 0; font-size: 16.5px; border: 1px solid var(--ink); border-radius: 10px; padding: 10px 14px; }
+      .quitter-msg.show { display: block; }
+
+      /* ---------- Sections ---------- */
+      section.block { margin-top: 38px; }
+      .block-head { display: flex; align-items: baseline; gap: 12px; border-bottom: 3px solid var(--ink); padding-bottom: 8px; margin-bottom: 18px; }
+      .block-head .num { font-family: "Spectral", Georgia, serif; font-weight: 700; font-size: 22px; background: var(--ink); color: var(--bg); border-radius: 8px; padding: 2px 10px; }
+      .block-head p { margin: 0; font-size: 16px; opacity: 0.85; }
+
+      .card { border: 2px solid var(--ink); border-radius: 14px; padding: 18px; margin-top: 16px; background: var(--bg); }
+      .card-flat { border: 1px solid var(--ink); border-radius: 14px; padding: 18px; margin-top: 16px; }
+
+      /* ---------- Progression ---------- */
+      .progress-count { font-size: 20px; font-weight: 700; }
+      .progress-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+      .bar { margin-top: 12px; height: 14px; border-radius: 999px; border: 2px solid var(--ink); overflow: hidden; background: var(--bg); }
+      .bar-fill { height: 100%; width: 0%; background: var(--ink); transition: width 0.35s ease; }
+      @media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }
+      .progress-done { margin: 12px 0 0; font-weight: 700; color: var(--green); display: none; }
+      .progress-done.show { display: block; }
+      .progress-msg { margin: 10px 0 0; font-size: 16.5px; }
+      .coches-note { margin: 12px 0 0; font-weight: 700; font-size: 16.5px; border-top: 1px solid var(--ink); padding-top: 10px; }
+
+      /* ---------- Gestes ---------- */
+      .subhead { font-family: "Spectral", Georgia, serif; font-size: 22px; font-weight: 700; margin: 26px 0 4px; }
+      .subhead-sub { margin: 0 0 12px; font-size: 16.5px; opacity: 0.9; }
+      .gestes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .geste { border: 2px solid var(--ink); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+      .geste .step { font-family: "Spectral", Georgia, serif; font-weight: 700; font-size: 22px; }
+      .geste h3 { font-size: 18.5px; }
+      .geste p { margin: 0; font-size: 16px; flex: 1; opacity: 0.9; }
+      .geste button { min-height: 52px; border-radius: 10px; border: 2px solid var(--ink); background: var(--bg); color: var(--ink); font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; padding: 8px 10px; }
+      .geste button.done { background: var(--ink); color: var(--bg); }
+      @media (max-width: 640px) { .gestes { grid-template-columns: 1fr; } }
+
+      /* ---------- Calculateur d'eau ---------- */
+      .water p.intro { margin: 0 0 14px; font-size: 16.5px; }
+      .water h3 { margin-bottom: 4px; }
+      .stepper { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+      .stepper button { width: 68px; height: 68px; border-radius: 50%; border: 3px solid var(--ink); background: var(--bg); color: var(--ink); font-size: 32px; font-weight: 700; line-height: 1; cursor: pointer; }
+      .stepper button:active { background: var(--ink); color: var(--bg); }
+      .stepper .who { font-size: 19px; font-weight: 700; min-width: 9.5em; }
+      .water-result { margin: 14px 0 0; font-size: 18px; border: 2px solid var(--ink); border-radius: 10px; padding: 12px 14px; }
+      .water-result strong { font-size: 20px; }
+      .water-limit { margin: 10px 0 0; font-size: 16.5px; }
+
+      /* ---------- Liste ---------- */
+      fieldset.group { border: 2px solid var(--ink); border-radius: 14px; margin: 16px 0 0; padding: 8px 18px 14px; background: var(--bg); }
+      fieldset.group legend { font-family: "Spectral", Georgia, serif; font-weight: 700; font-size: 20px; padding: 10px 6px 2px; }
+      .group-sub { font-size: 16px; margin: 0 0 6px; padding: 0 6px; opacity: 0.9; }
+      .source-tag { display: inline-block; font-size: 14px; font-weight: 700; border: 1.5px solid var(--ink); border-radius: 6px; padding: 1px 8px; margin-left: 6px; vertical-align: middle; }
+      ul.items { list-style: none; margin: 0; padding: 0; }
+      li.item { border-top: 1px solid var(--ink); }
+      li.item:first-child { border-top: none; }
+      li.item label { display: flex; gap: 14px; align-items: flex-start; padding: 14px 6px; cursor: pointer; min-height: 56px; }
+      li.item input[type="checkbox"] { appearance: none; -webkit-appearance: none; flex: 0 0 auto; width: 30px; height: 30px; margin: 1px 0 0; border: 2.5px solid var(--ink); border-radius: 8px; background: var(--bg); cursor: pointer; position: relative; }
+      li.item input[type="checkbox"]:checked { background: var(--ink); }
+      li.item input[type="checkbox"]:checked::after { content: ""; position: absolute; left: 8px; top: 3px; width: 8px; height: 15px; border: solid var(--bg); border-width: 0 3.5px 3.5px 0; transform: rotate(45deg); }
+      .item-name { font-weight: 700; display: block; font-size: 18px; }
+      .item-detail { font-size: 16.5px; display: block; margin-top: 1px; opacity: 0.92; }
+      li.item input[type="checkbox"]:checked ~ .item-text .item-name { opacity: 0.65; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+      .item-why { font-size: 16.5px; display: block; margin-top: 1px; }
+      .item-why em { font-style: normal; font-weight: 700; }
+      .tag-pas-exigence { display: inline-block; margin-top: 5px; font-size: 14px; font-weight: 700; border: 1.5px dashed var(--ink); border-radius: 6px; padding: 2px 8px; }
+      .extra-note { border: 2px dashed var(--ink); border-radius: 14px; padding: 12px 16px; font-size: 16.5px; margin-top: 14px; }
+      .extra-note p { margin: 0; }
+      .extra-count { font-size: 16px; margin: 10px 2px 0; }
+
+      /* ---------- Plan familial ---------- */
+      .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+      @media (max-width: 640px) { .plan-grid { grid-template-columns: 1fr; } }
+      .plan-grid label.field { display: block; font-weight: 700; font-size: 16.5px; }
+      .plan-grid input { display: block; width: 100%; margin-top: 6px; min-height: 52px; padding: 10px 12px; font: inherit; font-size: 17px; color: var(--ink); background: var(--bg); border: 2px solid var(--ink); border-radius: 10px; }
+      .plan-card .hint { font-size: 15.5px; margin: 12px 0 0; }
+
+      /* ---------- Boutons ---------- */
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; align-items: center; }
+      .btn { min-height: 56px; padding: 12px 22px; border-radius: 12px; font: inherit; font-weight: 700; font-size: 17.5px; cursor: pointer; border: 2px solid var(--ink); }
+      .btn-primary { background: var(--ink); color: var(--bg); }
+      .btn-ghost { background: var(--bg); color: var(--ink); }
+      .btn:active { transform: translateY(1px); }
+      .print-note-inline { font-weight: 700; font-size: 16px; max-width: 22em; margin: 0; }
+      .reset-confirm { display: none; margin-top: 14px; border: 2px solid var(--ink); border-radius: 14px; padding: 14px 16px; }
+      .reset-confirm.show { display: block; }
+      .reset-confirm p { margin: 0 0 12px; }
+      .reset-confirm .row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+      /* ---------- LIRE ---------- */
+      .read-card { border: 2px solid var(--ink); border-radius: 14px; padding: 20px; margin-top: 16px; }
+      .read-card h3 { margin: 22px 0 6px; }
+      .read-card h3:first-child { margin-top: 0; }
+      .read-card p { margin: 0 0 10px; }
+      .read-card ul { margin: 0 0 10px; padding-left: 22px; }
+      .read-card li { margin-bottom: 6px; }
+      .geste-concret { border: 2px solid var(--ink); border-radius: 14px; padding: 16px 18px; margin: 0 0 16px; }
+      .geste-concret .big { font-size: 20px; font-weight: 700; margin: 0 0 6px; }
+      .geste-concret p { margin: 0; }
+      .limit { border: 2px solid var(--ink); border-radius: 14px; padding: 16px 18px; margin: 4px 0 6px; }
+      .limit p { margin: 0 0 8px; }
+      .limit p:last-child { margin-bottom: 0; }
+      .limit .big { font-size: 20px; font-weight: 700; }
+      .num-911 { color: var(--red); font-weight: 700; }
+      .sources { font-size: 16.5px; }
+      .sources a { font-weight: 700; }
+      .small-note { font-size: 15.5px; }
+      .porte-humaine { border: 2px solid var(--ink); border-radius: 14px; padding: 16px 18px; margin-top: 16px; }
+      .porte-humaine p { margin: 0; }
+      .porte-humaine .big { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+
+      /* ---------- Version simple ---------- */
+      #simpleView { display: none; }
+      #simpleView.open { display: block; }
+      body.simple-mode .app-full { display: none; }
+
+      /* ---------- Version imprimable ---------- */
+      #sheet { display: none; }
+      #sheet.open { display: block; }
+      .sheet-inner { background: #f6eddd; color: #1d252c; border: 2px solid #1d252c; border-radius: 14px; padding: 26px 24px; margin-top: 18px; }
+      .sheet-inner h2 { font-size: 24px; margin-bottom: 2px; }
+      .sheet-inner .sheet-sub { margin: 0 0 10px; font-size: 15.5px; }
+      .sheet-inner h3 { font-size: 18px; margin: 18px 0 6px; }
+      .sheet-inner ul { list-style: none; margin: 0; padding: 0; }
+      .sheet-inner li { padding: 7px 0 7px 34px; position: relative; border-bottom: 1px solid #1d252c; font-size: 16px; }
+      .sheet-inner li .box { position: absolute; left: 2px; top: 9px; width: 17px; height: 17px; border: 2px solid #1d252c; border-radius: 4px; font-size: 14px; line-height: 14px; text-align: center; font-weight: 700; }
+      .sheet-inner .ligne-vide { border-bottom: 2px solid #1d252c; min-height: 30px; margin: 4px 0 10px; }
+      .sheet-inner .notes-libres { border: 2px solid #1d252c; border-radius: 8px; min-height: 120px; margin-top: 8px; }
+      .sheet-inner .sheet-foot { margin-top: 20px; font-size: 14.5px; }
+
+      footer { margin-top: 40px; border-top: 2px solid var(--ink); padding-top: 16px; font-size: 15.5px; }
+      footer p { margin: 0 0 6px; }
+      .signature { font-weight: 700; font-size: 16.5px; color: var(--ink); }
+
+      @media (max-width: 520px) {
+        body { font-size: 17.5px; }
+        h1 { font-size: 30px; }
+        .wrap { padding: 16px 13px 48px; }
+        .nav-reperes { margin: -16px -13px 16px; }
+        fieldset.group { padding: 6px 12px 10px; }
+        .stepper .who { min-width: 0; }
+      }
+
+      @media print {
+        body { background: #f6eddd; }
+        .app-full, .nav-reperes, .toolbar { display: none !important; }
+        #sheet { display: block !important; }
+        .sheet-inner { border: none; border-radius: 0; padding: 0; margin: 0; }
+        .wrap { max-width: none; padding: 0; }
+        html.tres-grand .sheet-inner { font-size: 21px; }
+        html.tres-grand .sheet-inner li { font-size: 21px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <nav class="nav-reperes" aria-label="Repères rapides">
+        <a href="#verifier"><span class="tag">1</span>VÉRIFIER</a>
+        <a href="#lire"><span class="tag">2</span>LIRE</a>
+        <a href="#imprimable" id="navPrint"><span class="tag">3</span>Version imprimable</a>
+      </nav>
+
+      <div class="toolbar" role="group" aria-label="Affichage et écoute">
+        <button type="button" id="hugeBtn" aria-pressed="false">Très grand texte</button>
+        <button type="button" id="simpleBtn" aria-pressed="false">Version simple</button>
+        <button type="button" id="speakBtn">Écouter le texte affiché</button>
+        <button type="button" id="speakStopBtn" hidden>Arrêter la lecture</button>
+      </div>
+
+      <!-- ================= VERSION SIMPLE ================= -->
+      <div id="simpleView" aria-label="Version simple, sur une seule page">
+        <h1>Survie 72h — version simple</h1>
+        <p class="lede">Seulement l'essentiel : les 3 gestes, l'eau pour votre foyer, et votre plan familial.</p>
+        <p class="gratuit-note">Outil gratuit, utilisable sans compte ni abonnement.</p>
+
+        <h2 class="subhead">Les 3 gestes</h2>
+        <div class="gestes">
+          <div class="geste">
+            <span class="step">Geste 1</span>
+            <h3>Remplissez votre eau</h3>
+            <p>Des bouteilles ou un contenant propre : au moins 6 litres par personne, pour 3 jours.</p>
+            <button type="button" data-quick="item-eau">Marquer comme fait</button>
+          </div>
+          <div class="geste">
+            <span class="step">Geste 2</span>
+            <h3>Rassemblez la nourriture</h3>
+            <p>Les conserves et les aliments non périssables déjà dans vos armoires comptent.</p>
+            <button type="button" data-quick="item-nourriture">Marquer comme fait</button>
+          </div>
+          <div class="geste">
+            <span class="step">Geste 3</span>
+            <h3>Regroupez lampe et radio</h3>
+            <p>Mettez la lampe de poche, la radio et des piles de rechange au même endroit.</p>
+            <button type="button" data-quick="item-lampe item-radio">Marquer comme fait</button>
+          </div>
+        </div>
+
+        <div class="card water" data-water-block>
+          <h3>Combien d'eau pour votre foyer ?</h3>
+          <p class="intro">Le guide officiel compte 2 litres d'eau potable par personne, par jour, pour au moins 3 jours.</p>
+          <div class="stepper">
+            <button type="button" data-minus aria-label="Une personne de moins">−</button>
+            <span class="who" data-who>1 personne</span>
+            <button type="button" data-plus aria-label="Une personne de plus">+</button>
+          </div>
+          <p class="water-result" data-water-result aria-live="polite">Pour 1 personne : prévoyez <strong>au moins 6 litres</strong> d'eau pour 3 jours.</p>
+          <p class="water-limit">Ce chiffre est le minimum officiel, pas une réserve confortable : prévoyez davantage si possible. Suivez toujours les consignes des autorités locales.</p>
+        </div>
+
+        <div class="card plan-card">
+          <h3>Votre plan familial, en simple</h3>
+          <div class="plan-grid">
+            <label class="field">Votre point de rencontre
+              <input type="text" data-plan-sync="plan-point" autocomplete="off" placeholder="Ex. : devant la maison, chez un voisin" />
+            </label>
+            <label class="field">Personne à joindre hors secteur — nom
+              <input type="text" data-plan-sync="plan-contact-nom" autocomplete="off" placeholder="Ex. : le nom d'un proche ailleurs" />
+            </label>
+            <label class="field">Personne à joindre — téléphone
+              <input type="tel" data-plan-sync="plan-contact-tel" autocomplete="off" placeholder="Ex. : 555 123-4567" />
+            </label>
+            <label class="field">Où se trouve votre trousse
+              <input type="text" data-plan-sync="plan-trousse" autocomplete="off" placeholder="Ex. : garde-robe de l'entrée" />
+            </label>
+          </div>
+          <p class="hint">Refaites ce plan quand votre foyer ou votre point de rencontre change.</p>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="simpleBack">Voir la version complète</button>
+        </div>
+        <p class="signature" style="margin-top:24px;">HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
+      </div>
+
+      <div class="app app-full">
+        <header id="haut">
+          <p class="region">Québec · Canada</p>
+          <h1>Survie 72h</h1>
+          <div class="gold-rule" aria-hidden="true"></div>
+          <p class="lede">
+            Préparez votre trousse de 72 heures, un article à la fois, à votre
+            rythme. Vous cochez ce que vous avez déjà, et vous voyez ce qu'il
+            reste à rassembler.
+          </p>
+          <p class="gratuit-note">Outil gratuit, utilisable sans compte ni abonnement.</p>
+          <ul class="facts">
+            <li>Gratuit</li>
+            <li>Sans compte</li>
+            <li>Sans abonnement</li>
+            <li>Rien n'est envoyé</li>
+            <li>Aucun suivi</li>
+          </ul>
+          <p class="offline-note">Pour relire cette page sans réseau : sur votre téléphone, ouvrez le menu de votre navigateur et choisissez « Ajouter à l'écran d'accueil » ou « Enregistrer la page ».</p>
+          <p class="notgame">
+            <strong>Ceci n'est pas un jeu.</strong>
+            C'est une liste de préparation, tirée des guides officiels. Vous la
+            remplissez quand vous voulez, sans pression.
+          </p>
+          <div class="quitter-zone">
+            <button type="button" class="btn btn-ghost" id="quitBtn">Quitter cet outil</button>
+            <p class="quitter-msg" id="quitMsg">Vous pouvez quitter maintenant, sans questionnaire, sans courriel à rédiger et sans relance. Fermer l'onglet reste le geste de votre navigateur : fermez cet onglet pour quitter complètement.</p>
+          </div>
+        </header>
+
+        <!-- ================= VÉRIFIER ================= -->
+        <section class="block" id="verifier" aria-labelledby="titre-verifier">
+          <div class="block-head">
+            <span class="num">1</span>
+            <div>
+              <h2 id="titre-verifier">VÉRIFIER</h2>
+              <p>Cochez ce que vous avez déjà dans votre trousse.</p>
+            </div>
+          </div>
+
+          <div class="card" aria-live="polite" style="margin-top:0;">
+            <div class="progress-top">
+              <span class="progress-count" id="progressCount">0 article sur 21</span>
+              <p style="margin:0; font-size:16px;">Base officielle seulement</p>
+            </div>
+            <div class="bar" role="progressbar" aria-label="Progression de la liste" aria-valuemin="0" aria-valuemax="21" aria-valuenow="0" id="progressBar">
+              <div class="bar-fill" id="progressFill"></div>
+            </div>
+            <p style="margin:12px 0 0; font-size:16.5px;"><strong>Le comptage, clairement :</strong> les 21 articles comptent seulement la base officielle. Les 6 bonnes pratiques, plus bas, sont en plus et comptées à part — elles ne font pas partie des 21.</p>
+            <p class="progress-done" id="progressDone">Votre liste est complète. Pensez à la revérifier au moins une fois par an.</p>
+            <p class="progress-msg" id="progressMsg">Commencez par les 3 gestes faciles ci-dessous — le reste suit, à votre rythme.</p>
+            <p class="coches-note">Vos coches ne restent que dans la page ouverte. Pour garder une trace, imprimez la page cochée avec la version imprimable, plus bas.</p>
+          </div>
+
+          <h3 class="subhead">Par où commencer : 3 gestes faciles</h3>
+          <p class="subhead-sub">Trois choses simples, que vous avez peut-être déjà sous la main. Le reste de la liste viendra ensuite, sans presse.</p>
+          <div class="gestes">
+            <div class="geste">
+              <span class="step">Geste 1</span>
+              <h3>Remplissez votre eau</h3>
+              <p>Des bouteilles ou un contenant propre : au moins 6 litres par personne, pour 3 jours.</p>
+              <button type="button" data-quick="item-eau">Marquer comme fait</button>
+            </div>
+            <div class="geste">
+              <span class="step">Geste 2</span>
+              <h3>Rassemblez la nourriture</h3>
+              <p>Les conserves et les aliments non périssables déjà dans vos armoires comptent.</p>
+              <button type="button" data-quick="item-nourriture">Marquer comme fait</button>
+            </div>
+            <div class="geste">
+              <span class="step">Geste 3</span>
+              <h3>Regroupez lampe et radio</h3>
+              <p>Mettez la lampe de poche, la radio et des piles de rechange au même endroit.</p>
+              <button type="button" data-quick="item-lampe item-radio">Marquer comme fait</button>
+            </div>
+          </div>
+
+          <div class="card water" data-water-block>
+            <h3>Combien d'eau pour votre foyer ?</h3>
+            <p class="intro">
+              Le guide officiel compte 2 litres d'eau potable par personne, par
+              jour, pour au moins 3 jours — soit 6 litres par personne. Utilisez les grands boutons + et − pour changer le nombre de personnes, sans clavier.
+            </p>
+            <div class="stepper">
+              <button type="button" data-minus aria-label="Une personne de moins">−</button>
+              <span class="who" data-who>1 personne</span>
+              <button type="button" data-plus aria-label="Une personne de plus">+</button>
+            </div>
+            <p class="water-result" data-water-result aria-live="polite">
+              Pour 1 personne : prévoyez <strong>au moins 6 litres</strong> d'eau pour 3 jours.
+            </p>
+            <p class="water-limit"><strong>Limite du calculateur :</strong> ce chiffre est le minimum officiel, pas une réserve confortable. Prévoyez davantage si possible, et suivez toujours les consignes des autorités locales.</p>
+          </div>
+
+          <h3 class="subhead">La base officielle — 21 articles</h3>
+          <p class="subhead-sub">Source Canada : gouvernement du Canada — Préparez-vous. Source Québec : Urgence Québec / Québec — articles essentiels. Ce sont deux sources distinctes. Dans cette base, les vêtements, les couvertures et les bougies (chandelles) viennent des compléments Québec / évacuation, et non de la seule liste de base Canada.ca.</p>
+
+          <form id="checklist" novalidate>
+            <fieldset class="group">
+              <legend>Les essentiels <span class="source-tag">Canada + Québec</span></legend>
+              <p class="group-sub">Le cœur de la trousse, selon les guides officiels.</p>
+              <ul class="items">
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item id="item-eau" />
+                    <span class="item-text">
+                      <span class="item-name">Eau potable</span>
+                      <span class="item-detail">2 litres par personne, par jour, pour au moins 3 jours — au moins 6 litres par personne. <span data-water-detail>Pour votre foyer : au moins 6 litres.</span></span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item id="item-nourriture" />
+                    <span class="item-text">
+                      <span class="item-name">Nourriture non périssable</span>
+                      <span class="item-detail">Pour au moins 3 jours.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Ouvre-boîte manuel</span>
+                      <span class="item-detail">Pour ouvrir les conserves sans électricité.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item id="item-lampe" />
+                    <span class="item-text">
+                      <span class="item-name">Lampe de poche</span>
+                      <span class="item-detail">À manivelle ou à piles, avec des piles de rechange.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item id="item-radio" />
+                    <span class="item-text">
+                      <span class="item-name">Radio</span>
+                      <span class="item-detail">À manivelle ou à piles, avec des piles de rechange, pour suivre les consignes officielles.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Trousse de premiers soins</span>
+                      <span class="item-detail">Pansements adhésifs, compresses de gaze stériles, antiseptique, gants jetables, ciseaux, analgésiques.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Médicaments et leurs listes</span>
+                      <span class="item-detail">Vos médicaments, et la liste des médicaments et des ordonnances.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Chargeur de téléphone et chargeur portatif</span>
+                      <span class="item-detail">Le chargeur de votre téléphone et un chargeur portatif chargé, pour garder votre téléphone utilisable.</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </fieldset>
+
+            <fieldset class="group">
+              <legend>Documents et argent <span class="source-tag">Canada + Québec</span></legend>
+              <ul class="items">
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Documents importants, en copies</span>
+                      <span class="item-detail">Pièces d'identité, assurances, plan d'urgence familial, coordonnées d'urgence.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Argent comptant et monnaie</span>
+                      <span class="item-detail">Un montant en espèces, au cas où les paiements électroniques ne fonctionnent pas.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Clés supplémentaires</span>
+                      <span class="item-detail">Pour la maison et pour la voiture.</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </fieldset>
+
+            <fieldset class="group">
+              <legend>Maison et confort <span class="source-tag">Canada + Québec</span></legend>
+              <ul class="items">
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Articles d'hygiène</span>
+                      <span class="item-detail">Papiers-mouchoirs, papier hygiénique et essuie-tout, plus les articles d'hygiène de votre foyer, pour au moins 3 jours.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Vêtements de rechange</span>
+                      <span class="item-detail">Un ensemble de rechange pour chaque personne. Complément Québec / évacuation — pas la seule liste de base Canada.ca.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Couvertures</span>
+                      <span class="item-detail">Des couvertures pour le foyer. Complément Québec / évacuation — pas la seule liste de base Canada.ca.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Briquet ou allumettes, et chandelles</span>
+                      <span class="item-detail">Bougies et chandelles à utiliser avec prudence : une chandelle allumée ne se laisse jamais sans surveillance. Complément Québec / évacuation — pas la seule liste de base Canada.ca.</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </fieldset>
+
+            <fieldset class="group">
+              <legend>Besoins particuliers de votre foyer <span class="source-tag">Canada + Québec</span></legend>
+              <p class="group-sub">Cochez seulement ce qui s'applique à vous.</p>
+              <ul class="items">
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Pour un bébé</span>
+                      <span class="item-detail">Nourriture, couches et articles de soin pour votre bébé, pour au moins 3 jours.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Pour vos animaux de compagnie</span>
+                      <span class="item-detail">Nourriture et eau pour vos animaux, pour au moins 3 jours.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Besoins médicaux particuliers</span>
+                      <span class="item-detail">Les médicaments et les fournitures médicales propres à votre foyer, avec leurs listes à jour.</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </fieldset>
+
+            <fieldset class="group">
+              <legend>Plan et entretien <span class="source-tag">Canada + Québec</span></legend>
+              <ul class="items">
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Plan d'urgence familial</span>
+                      <span class="item-detail">Un plan simple, préparé et connu de tout le foyer.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Trousse facile à emporter</span>
+                      <span class="item-detail">Une trousse que vous pouvez prendre rapidement si vous devez évacuer.</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-item />
+                    <span class="item-text">
+                      <span class="item-name">Vérification annuelle faite</span>
+                      <span class="item-detail">Au moins une fois par an : vérifiez les dates de péremption, les piles et l'eau de la réserve, et remplacez ce qui doit l'être.</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </fieldset>
+          </form>
+
+          <h3 class="subhead">En plus, bonnes pratiques — 6, comptées à part</h3>
+          <div class="extra-note">
+            <p>
+              <strong>Ces 6 ajouts ne font pas partie des 21 articles de la base officielle.</strong>
+              Ce sont des bonnes pratiques reconnues de préparation, ajoutées
+              pour aller un peu plus loin que le minimum officiel. Chacune est
+              justifiée en une phrase et porte l'étiquette « pas une exigence du gouvernement ». Votre trousse reste complète sans elles.
+            </p>
+          </div>
+
+          <form id="checklist-extra" novalidate>
+            <fieldset class="group extra">
+              <legend>En plus, si vous voulez</legend>
+              <ul class="items">
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-extra />
+                    <span class="item-text">
+                      <span class="item-name">Réserve d'eau un peu plus large</span>
+                      <span class="item-why"><em>Pourquoi :</em> les 2 litres officiels sont pour boire ; cuisiner et se laver en demandent davantage.</span>
+                      <span class="tag-pas-exigence">Pas une exigence du gouvernement</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-extra />
+                    <span class="item-text">
+                      <span class="item-name">De quoi purifier l'eau, en appoint</span>
+                      <span class="item-why"><em>Pourquoi :</em> des pastilles de purification ou un petit filtre prolongent votre réserve si elle vient à s'épuiser.</span>
+                      <span class="tag-pas-exigence">Pas une exigence du gouvernement</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-extra />
+                    <span class="item-text">
+                      <span class="item-name">Masques contre la poussière</span>
+                      <span class="item-why"><em>Pourquoi :</em> l'air peut devenir poussiéreux pendant un nettoyage ou après un dégât, et un masque rend la respiration plus confortable.</span>
+                      <span class="tag-pas-exigence">Pas une exigence du gouvernement</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-extra />
+                    <span class="item-text">
+                      <span class="item-name">Sifflet</span>
+                      <span class="item-why"><em>Pourquoi :</em> signaler votre présence au sifflet demande beaucoup moins d'effort que de crier.</span>
+                      <span class="tag-pas-exigence">Pas une exigence du gouvernement</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-extra />
+                    <span class="item-text">
+                      <span class="item-name">Un sac d'évacuation par personne</span>
+                      <span class="item-why"><em>Pourquoi :</em> quand chacun porte l'essentiel de ses propres besoins, le départ est plus rapide et les sacs restent légers.</span>
+                      <span class="tag-pas-exigence">Pas une exigence du gouvernement</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="item">
+                  <label>
+                    <input type="checkbox" data-extra />
+                    <span class="item-text">
+                      <span class="item-name">Vérification à chaque changement de saison</span>
+                      <span class="item-why"><em>Pourquoi :</em> le minimum officiel est une fois par année ; un coup d'œil à chaque saison suit mieux les piles, l'eau et les dates de péremption.</span>
+                      <span class="tag-pas-exigence">Pas une exigence du gouvernement</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+              <p class="extra-count" id="extraCount" aria-live="polite">Bonnes pratiques cochées : 0 sur 6 — à votre choix, sans obligation. Comptées à part des 21 articles.</p>
+            </fieldset>
+          </form>
+
+          <h3 class="subhead">Votre plan familial, en simple</h3>
+          <p class="subhead-sub">Des lignes à remplir, connues de tout le foyer. Elles s'ajoutent à votre version imprimable, qui garde aussi des lignes vides à remplir au crayon.</p>
+          <div class="card plan-card" style="margin-top:0;">
+            <div class="plan-grid">
+              <label class="field">Votre point de rencontre
+                <input type="text" id="plan-point" autocomplete="off" placeholder="Ex. : devant la maison, chez un voisin" />
+              </label>
+              <label class="field">Personne à joindre hors secteur — nom
+                <input type="text" id="plan-contact-nom" autocomplete="off" placeholder="Ex. : le nom d'un proche ailleurs" />
+              </label>
+              <label class="field">Personne à joindre — téléphone
+                <input type="tel" id="plan-contact-tel" autocomplete="off" placeholder="Ex. : 555 123-4567" />
+              </label>
+              <label class="field">Où se trouve votre trousse
+                <input type="text" id="plan-trousse" autocomplete="off" placeholder="Ex. : garde-robe de l'entrée" />
+              </label>
+              <label class="field">Prochaine vérification de la trousse
+                <input type="date" id="plan-date" />
+              </label>
+            </div>
+            <p class="hint">
+              Refaites ce plan quand votre foyer ou votre point de rencontre change.
+              Ces lignes restent dans cette page, sur votre appareil, et ne sont
+              jamais envoyées.
+            </p>
+            <p class="hint">
+              Le rappel ci-dessous est un ajout à votre calendrier, choisi par vous : un rappel local, dans votre propre calendrier. Ce n'est ni un suivi, ni un envoi, ni une surveillance.
+            </p>
+            <div class="actions" style="margin-top:14px;">
+              <button type="button" class="btn btn-ghost" id="icsBtn">Ajouter un rappel à votre calendrier (fichier .ics à télécharger)</button>
+            </div>
+          </div>
+
+          <div class="card-flat">
+            <h3>Vérification annuelle, en simple</h3>
+            <p style="margin:8px 0 0;">Au moins une fois par an, vérifiez les dates de péremption, les piles et l'eau de votre réserve, et remplacez ce qui doit l'être. C'est un rappel d'entretien — pas un nouvel article obligatoire à ajouter à la liste.</p>
+          </div>
+
+          <div class="actions" id="imprimable">
+            <button type="button" class="btn btn-primary" id="toggleSheet">Voir la version imprimable</button>
+            <button type="button" class="btn btn-ghost" id="resetBtn">Réinitialiser la liste</button>
+            <p class="print-note-inline">Vos coches ne restent que dans la page ouverte — imprimez la page cochée pour garder votre trace sur papier.</p>
+          </div>
+          <div class="reset-confirm" id="resetConfirm" role="group" aria-label="Confirmer la réinitialisation">
+            <p>Vous voulez décocher tous les articles ? Votre progression repartira à zéro, sur cette page.</p>
+            <div class="row">
+              <button type="button" class="btn btn-primary" id="resetYes">Oui, tout décocher</button>
+              <button type="button" class="btn btn-ghost" id="resetNo">Annuler</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= LIRE ================= -->
+        <section class="block" id="lire" aria-labelledby="titre-lire">
+          <div class="block-head">
+            <span class="num">2</span>
+            <div>
+              <h2 id="titre-lire">LIRE</h2>
+              <p>D'abord un geste concret, puis ce que cette liste est et ses limites, dans cette même section.</p>
+            </div>
+          </div>
+
+          <div class="read-card">
+            <div class="geste-concret">
+              <p class="big">Geste concret à faire en premier</p>
+              <p>Faites ceci maintenant : remplissez un contenant propre avec au moins 6 litres d'eau potable par personne de votre foyer, et rangez-le avec votre trousse. C'est le geste 1 de VÉRIFIER, et le point de départ de toute la liste.</p>
+            </div>
+
+            <h3>Ses limites, dans la même section</h3>
+            <div class="limit">
+              <p class="big">En urgence réelle, ce guide ne suffit pas.</p>
+              <p>
+                Ce guide ne remplace pas les secours, ni le <span class="num-911">911</span> en cas
+                d'urgence réelle. Si une urgence survient, composez le <span class="num-911">911</span> et
+                suivez les consignes des autorités locales.
+              </p>
+              <p>
+                Une trousse préparée aide à tenir le coup plus calmement. Elle
+                ne garantit ni la sécurité, ni l'arrivée des services dans un
+                délai précis.
+              </p>
+              <p>
+                Le délai de 72 heures, c'est le temps que pourraient prendre les
+                secours pour arriver, ou le rétablissement des services
+                essentiels. Ce n'est pas une prédiction.
+              </p>
+            </div>
+
+            <h3>Ce que c'est</h3>
+            <p>
+              Une liste de vérification pour préparer, chez vous, une trousse
+              qui couvre les besoins de base de votre foyer pendant environ
+              72 heures : eau, nourriture, lumière, nouvelles, soins, documents
+              et un peu de confort.
+            </p>
+
+            <h3>Deux sources, deux niveaux, clairement séparés</h3>
+            <p>
+              <strong>Source Canada :</strong> la section « La base officielle » reprend d'abord le guide du
+              gouvernement du Canada — Préparez-vous, lié ci-dessous.
+              <strong>Source Québec :</strong> les articles essentiels du Québec et les compléments Québec / évacuation
+              (dont les vêtements, les couvertures et les bougies) viennent d'Urgence Québec / Québec — ils ne sont pas attribués au seul lien Canada.ca.
+            </p>
+            <p>
+              La section « En plus, bonnes pratiques » va un peu plus loin : 6 ajouts de
+              précaution, chacun justifié en une phrase et étiqueté « pas une exigence du gouvernement »,
+              inspirés des bonnes pratiques de préparation reconnues ailleurs dans le monde. Ils
+              ne sont ni une exigence du gouvernement, ni une prédiction —
+              seulement des idées de plus, à prendre ou à laisser selon votre
+              foyer.
+            </p>
+
+            <h3>Vos coches restent chez vous</h3>
+            <p>
+              Cette page fonctionne sans compte. Vos coches ne restent que dans la page ouverte : rien n'est envoyé, rien n'est suivi.
+              Si vous fermez la page, les coches s'effacent — imprimez la page cochée, avec la version imprimable ci-dessus, pour garder votre trace sur papier.
+            </p>
+
+            <h3>Gardez la trousse à jour</h3>
+            <ul>
+              <li>Vérifiez votre trousse au moins une fois par an : les dates, les piles et l'eau de la réserve.</li>
+              <li>Remplacez l'eau, la nourriture et les médicaments avant leur date de péremption.</li>
+              <li>Gardez la trousse facile à emporter, au cas où vous devriez évacuer.</li>
+              <li>Refaites votre plan familial quand votre foyer ou votre point de rencontre change.</li>
+            </ul>
+
+            <h3>Sources</h3>
+            <p class="sources">
+              Source Canada — gouvernement du Canada, Préparez-vous : obtenir un kit d'urgence :
+              <a href="https://www.canada.ca/fr/services/police/urgences/protection/preparez-vous/kits-urgence/obtenir-kit.html" target="_blank" rel="noopener">https://www.canada.ca/fr/services/police/urgences/protection/preparez-vous/kits-urgence/obtenir-kit.html</a>
+            </p>
+            <p class="sources">
+              Source Québec — Urgence Québec / Québec, Sécurité et situations d'urgence : les articles essentiels du Québec et les compléments Québec / évacuation.
+            </p>
+            <p class="small-note">
+              Région couverte : le Québec et le Canada. Les consignes de votre
+              municipalité et des autorités locales priment toujours sur un
+              guide général.
+            </p>
+          </div>
+
+          <div class="porte-humaine">
+            <p class="big">Une question sur cet outil ?</p>
+            <p>Un humain de l'équipe vous répond sous 3 jours ouvrables. C'est un humain de l'équipe qui répond — pas une réponse automatique, et jamais la mascotte à la place d'un humain.</p>
+          </div>
+        </section>
+
+        <footer>
+          <p class="signature">HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
+          <p>Survie 72h — un outil gratuit de préparation, en VOUS, sans compte, sans abonnement et sans envoi. Ce n'est pas une application de sécurité, ni un service, ni une surveillance.</p>
+          <p>En cas d'urgence réelle, composez le <span class="num-911">911</span> et suivez les consignes des autorités locales.</p>
+        </footer>
+      </div>
+
+      <!-- Version imprimable (aussi utilisée par l'impression du navigateur) -->
+      <div id="sheet" aria-label="Version imprimable de la liste">
+        <div class="sheet-inner" id="sheetInner"></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var boxes = Array.prototype.slice.call(document.querySelectorAll("input[type='checkbox'][data-item]"));
+        var total = boxes.length;
+        var countEl = document.getElementById("progressCount");
+        var fillEl = document.getElementById("progressFill");
+        var barEl = document.getElementById("progressBar");
+        var doneEl = document.getElementById("progressDone");
+        barEl.setAttribute("aria-valuemax", String(total));
+
+        /* ----- Très grand texte ----- */
+        var hugeBtn = document.getElementById("hugeBtn");
+        hugeBtn.addEventListener("click", function () {
+          var on = document.documentElement.classList.toggle("tres-grand");
+          hugeBtn.setAttribute("aria-pressed", on ? "true" : "false");
+          hugeBtn.textContent = on ? "Très grand texte : activé" : "Très grand texte";
+          buildSheet();
+        });
+
+        /* ----- Quitter ----- */
+        document.getElementById("quitBtn").addEventListener("click", function () {
+          document.getElementById("quitMsg").classList.add("show");
+          try { window.close(); } catch (e) {}
+        });
+
+        /* ----- Version simple ----- */
+        var simpleBtn = document.getElementById("simpleBtn");
+        var simpleView = document.getElementById("simpleView");
+        function setSimple(on) {
+          simpleView.classList.toggle("open", on);
+          document.body.classList.toggle("simple-mode", on);
+          simpleBtn.setAttribute("aria-pressed", on ? "true" : "false");
+          simpleBtn.textContent = on ? "Version simple : activée" : "Version simple";
+          if (on) { simpleView.scrollIntoView({ block: "start" }); }
+        }
+        simpleBtn.addEventListener("click", function () { setSimple(!simpleView.classList.contains("open")); });
+        document.getElementById("simpleBack").addEventListener("click", function () { setSimple(false); });
+
+        /* ----- Lecture à voix haute ----- */
+        var speakBtn = document.getElementById("speakBtn");
+        var speakStopBtn = document.getElementById("speakStopBtn");
+        function stopSpeak() {
+          if ("speechSynthesis" in window) { window.speechSynthesis.cancel(); }
+          speakStopBtn.hidden = true;
+        }
+        speakBtn.addEventListener("click", function () {
+          if (!("speechSynthesis" in window)) {
+            speakBtn.textContent = "Lecture à voix haute non disponible sur cet appareil";
+            return;
+          }
+          window.speechSynthesis.cancel();
+          var root = simpleView.classList.contains("open") ? simpleView : document.querySelector(".app-full");
+          var text = root ? root.innerText.replace(/\s+/g, " ").trim() : "";
+          if (!text) { return; }
+          var u = new SpeechSynthesisUtterance(text);
+          u.lang = "fr-CA";
+          u.onend = function () { speakStopBtn.hidden = true; };
+          u.onerror = function () { speakStopBtn.hidden = true; };
+          speakStopBtn.hidden = false;
+          window.speechSynthesis.speak(u);
+        });
+        speakStopBtn.addEventListener("click", stopSpeak);
+
+        /* ----- Personnes et eau (tous les blocs synchronisés) ----- */
+        var people = 1;
+        function renderWater() {
+          var litres = people * 6;
+          document.querySelectorAll("[data-who]").forEach(function (el) {
+            el.textContent = people === 1 ? "1 personne" : people + " personnes";
+          });
+          document.querySelectorAll("[data-water-result]").forEach(function (el) {
+            el.innerHTML = "Pour " + (people === 1 ? "1 personne" : people + " personnes") + " : prévoyez <strong>au moins " + litres + " litres</strong> d'eau pour 3 jours.";
+          });
+          document.querySelectorAll("[data-water-detail]").forEach(function (el) {
+            el.textContent = "Pour votre foyer : au moins " + litres + " litres.";
+          });
+        }
+        document.querySelectorAll("[data-minus]").forEach(function (b) {
+          b.addEventListener("click", function () { if (people > 1) { people -= 1; renderWater(); buildSheet(); } });
+        });
+        document.querySelectorAll("[data-plus]").forEach(function (b) {
+          b.addEventListener("click", function () { if (people < 12) { people += 1; renderWater(); buildSheet(); } });
+        });
+
+        /* ----- Plan : synchronisation version simple / complète ----- */
+        function syncPlan(fromEl) {
+          var key = fromEl.getAttribute("data-plan-sync") || fromEl.id;
+          var val = fromEl.value;
+          document.querySelectorAll("[data-plan-sync]").forEach(function (el) {
+            if (el.getAttribute("data-plan-sync") === key && el !== fromEl) { el.value = val; }
+          });
+          var main = document.getElementById(key);
+          if (main && main !== fromEl) { main.value = val; }
+          buildSheet();
+        }
+        document.querySelectorAll("[data-plan-sync]").forEach(function (el) {
+          el.addEventListener("input", function () { syncPlan(el); });
+        });
+
+        /* ----- Version imprimable ----- */
+        var sheet = document.getElementById("sheet");
+        var sheetInner = document.getElementById("sheetInner");
+        var toggleBtn = document.getElementById("toggleSheet");
+
+        function planValue(id) {
+          var el = document.getElementById(id);
+          return el && el.value ? el.value.trim().replace(/</g, "") : "";
+        }
+        function esc(s) { return String(s).replace(/</g, ""); }
+
+        function buildSheet() {
+          var now = new Date();
+          var dateImp = now.toLocaleDateString("fr-CA", { year: "numeric", month: "long", day: "numeric" });
+          var html = "";
+          html += "<h2>Survie 72h — ma liste de vérification</h2>";
+          html += '<p class="sheet-sub">Trousse de 72 heures · Québec, Canada · Imprimée le ' + esc(dateImp) + ".</p>";
+          html += '<p class="sheet-sub">Les 21 articles ci-dessous comptent seulement la base officielle. Les 6 bonnes pratiques sont en plus, comptées à part.</p>';
+          html += '<p class="sheet-sub">Eau pour votre foyer (' + (people === 1 ? "1 personne" : people + " personnes") + ') : au moins ' + (people * 6) + " litres pour 3 jours — minimum officiel, prévoyez davantage si possible.</p>";
+          html += '<p class="sheet-sub">Vos coches ne restent que dans la page ouverte — cette feuille imprimée est votre trace sur papier.</p>';
+
+          var groups = document.querySelectorAll(".app-full fieldset.group");
+          Array.prototype.forEach.call(groups, function (g) {
+            var legend = g.querySelector("legend");
+            var isExtra = g.classList.contains("extra");
+            html += "<h3>" + esc(legend.textContent) + (isExtra ? " — bonnes pratiques, en plus des 21 articles de la base officielle, pas une exigence du gouvernement" : "") + "</h3><ul>";
+            var items = g.querySelectorAll("li.item");
+            Array.prototype.forEach.call(items, function (li) {
+              var cb = li.querySelector("input[type='checkbox']");
+              var name = li.querySelector(".item-name").textContent;
+              var detEl = li.querySelector(".item-detail") || li.querySelector(".item-why");
+              var det = detEl ? detEl.textContent : "";
+              var tagEl = li.querySelector(".tag-pas-exigence");
+              if (tagEl) { det += " " + tagEl.textContent + "."; }
+              html += '<li><span class="box">' + (cb.checked ? "✓" : "") + "</span>" +
+                "<strong>" + esc(name) + "</strong>" +
+                (det ? ' — <span>' + esc(det) + "</span>" : "") + "</li>";
+            });
+            html += "</ul>";
+          });
+
+          var point = planValue("plan-point");
+          var contactNom = planValue("plan-contact-nom");
+          var contactTel = planValue("plan-contact-tel");
+          var trousse = planValue("plan-trousse");
+          var dateVerif = planValue("plan-date");
+          html += "<h3>Mon plan familial</h3><ul>";
+          html += '<li><span class="box"></span><strong>Point de rencontre</strong>' + (point ? " — " + esc(point) : "") + "</li>";
+          html += '<li><span class="box"></span><strong>Personne à joindre hors secteur</strong>' + (contactNom || contactTel ? " — " + esc((contactNom + " " + contactTel).trim()) : "") + "</li>";
+          html += '<li><span class="box"></span><strong>Trousse rangée</strong>' + (trousse ? " — " + esc(trousse) : "") + "</li>";
+          html += '<li><span class="box"></span><strong>Prochaine vérification</strong>' + (dateVerif ? " — " + esc(dateVerif) : "") + "</li>";
+          html += "</ul>";
+
+          html += "<h3>Plan familial — lignes vides à remplir au crayon</h3>";
+          html += "<p>Noms des personnes du foyer :</p><div class='ligne-vide'></div><div class='ligne-vide'></div>";
+          html += "<p>Point de rencontre :</p><div class='ligne-vide'></div>";
+          html += "<p>Personnes à joindre (noms et téléphones) :</p><div class='ligne-vide'></div><div class='ligne-vide'></div>";
+          html += "<p style='margin-top:6px;'>Refaites ce plan quand votre foyer ou votre point de rencontre change.</p>";
+
+          html += "<h3>Notes personnelles</h3>";
+          html += "<p>Espace libre pour vos notes — sur papier seulement, sans envoi ni sauvegarde en ligne.</p>";
+          html += "<div class='notes-libres'></div>";
+
+          html += '<p class="sheet-foot">Vérification annuelle : au moins une fois par an, vérifiez les dates, les piles et l\'eau de la réserve. En cas d\'urgence réelle, composez le 911 et suivez les consignes des autorités locales. Ce guide ne remplace pas les secours, et 72 heures n\'est pas une prédiction.</p>';
+          html += '<p class="sheet-foot">Source Canada, adresse complète : https://www.canada.ca/fr/services/police/urgences/protection/preparez-vous/kits-urgence/obtenir-kit.html — Gouvernement du Canada, Préparez-vous : obtenir un kit d\'urgence. Source Québec : Urgence Québec / Québec, Sécurité et situations d\'urgence (articles essentiels du Québec et compléments Québec / évacuation).</p>';
+          html += '<p class="sheet-foot">HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>';
+          sheetInner.innerHTML = html;
+        }
+
+        function openSheet() {
+          if (!sheet.classList.contains("open")) {
+            sheet.classList.add("open");
+            toggleBtn.textContent = "Masquer la version imprimable";
+          }
+          buildSheet();
+          sheet.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        toggleBtn.addEventListener("click", function () {
+          var open = sheet.classList.toggle("open");
+          toggleBtn.textContent = open ? "Masquer la version imprimable" : "Voir la version imprimable";
+          if (open) { buildSheet(); sheet.scrollIntoView({ behavior: "smooth", block: "start" }); }
+        });
+        document.getElementById("navPrint").addEventListener("click", function (e) {
+          e.preventDefault();
+          if (document.body.classList.contains("simple-mode")) { setSimple(false); }
+          openSheet();
+        });
+
+        /* ----- Progression ----- */
+        var msgEl = document.getElementById("progressMsg");
+        var quickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-quick]"));
+
+        function syncQuick() {
+          quickBtns.forEach(function (btn) {
+            var ids = btn.getAttribute("data-quick").split(" ");
+            var all = ids.every(function (id) {
+              var cb = document.getElementById(id);
+              return cb && cb.checked;
+            });
+            btn.classList.toggle("done", all);
+            btn.textContent = all ? "C'est fait" : "Marquer comme fait";
+          });
+        }
+        quickBtns.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            btn.getAttribute("data-quick").split(" ").forEach(function (id) {
+              var cb = document.getElementById(id);
+              if (cb) { cb.checked = true; }
+            });
+            update();
+          });
+        });
+
+        function update() {
+          var n = boxes.filter(function (b) { return b.checked; }).length;
+          countEl.textContent = n + (n <= 1 ? " article sur " : " articles sur ") + total;
+          fillEl.style.width = (total ? (n / total) * 100 : 0) + "%";
+          barEl.setAttribute("aria-valuenow", String(n));
+          doneEl.classList.toggle("show", n === total);
+          if (n === 0) {
+            msgEl.textContent = "Commencez par les 3 gestes faciles ci-dessous — le reste suit, à votre rythme.";
+          } else if (n === total) {
+            msgEl.textContent = "Base officielle complète (21 articles). Les 6 bonnes pratiques, en dessous, sont un surplus à votre choix, compté à part.";
+          } else if (n * 2 >= total) {
+            msgEl.textContent = "Vous êtes à plus de la moitié de la base officielle. Continuez à votre rythme.";
+          } else {
+            msgEl.textContent = "Bon départ. Chaque article coché est un souci de moins pour votre foyer.";
+          }
+          syncQuick();
+          updateExtra();
+          buildSheet();
+        }
+        boxes.forEach(function (b) { b.addEventListener("change", update); });
+
+        /* ----- Bonnes pratiques (compteur à part) ----- */
+        var extras = Array.prototype.slice.call(document.querySelectorAll("input[type='checkbox'][data-extra]"));
+        var extraCountEl = document.getElementById("extraCount");
+        function updateExtra() {
+          var n = extras.filter(function (b) { return b.checked; }).length;
+          extraCountEl.textContent = "Bonnes pratiques cochées : " + n + " sur " + extras.length + " — à votre choix, sans obligation. Comptées à part des 21 articles.";
+        }
+        extras.forEach(function (b) { b.addEventListener("change", function () { updateExtra(); buildSheet(); }); });
+
+        /* ----- Plan familial : date par défaut et rappel calendrier ----- */
+        var dateInput = document.getElementById("plan-date");
+        var inSixMonths = new Date();
+        inSixMonths.setMonth(inSixMonths.getMonth() + 6);
+        function isoDate(d) {
+          var m = String(d.getMonth() + 1); if (m.length < 2) { m = "0" + m; }
+          var j = String(d.getDate()); if (j.length < 2) { j = "0" + j; }
+          return d.getFullYear() + "-" + m + "-" + j;
+        }
+        if (dateInput && !dateInput.value) { dateInput.value = isoDate(inSixMonths); }
+        ["plan-point", "plan-contact-nom", "plan-contact-tel", "plan-trousse", "plan-date"].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) { el.addEventListener("input", buildSheet); }
+        });
+        document.getElementById("icsBtn").addEventListener("click", function () {
+          var d = (dateInput && dateInput.value) ? dateInput.value.replace(/-/g, "") : isoDate(inSixMonths).replace(/-/g, "");
+          var now = new Date();
+          var stamp = now.getUTCFullYear() + String(now.getUTCMonth() + 1).padStart(2, "0") + String(now.getUTCDate()).padStart(2, "0") + "T" + String(now.getUTCHours()).padStart(2, "0") + String(now.getUTCMinutes()).padStart(2, "0") + "00Z";
+          var ics = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "PRODID:-//Survie 72h//Rappel de verification//FR",
+            "BEGIN:VEVENT",
+            "UID:survie72h-" + stamp + "@survie72h",
+            "DTSTAMP:" + stamp,
+            "DTSTART;VALUE=DATE:" + d,
+            "RRULE:FREQ=YEARLY",
+            "SUMMARY:Vérifier la trousse Survie 72h",
+            "DESCRIPTION:Vérifiez la trousse de 72 heures : vérifiez les dates\\, les piles et l'eau de la réserve\\, et remplacez ce qui doit l'être.",
+            "END:VEVENT",
+            "END:VCALENDAR"
+          ].join("\r\n");
+          var blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = "rappel-verification-trousse.ics";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+        });
+
+        /* ----- Réinitialiser ----- */
+        var resetBtn = document.getElementById("resetBtn");
+        var resetConfirm = document.getElementById("resetConfirm");
+        resetBtn.addEventListener("click", function () {
+          resetConfirm.classList.add("show");
+          document.getElementById("resetYes").focus();
+        });
+        document.getElementById("resetNo").addEventListener("click", function () {
+          resetConfirm.classList.remove("show");
+          resetBtn.focus();
+        });
+        document.getElementById("resetYes").addEventListener("click", function () {
+          boxes.forEach(function (b) { b.checked = false; });
+          extras.forEach(function (b) { b.checked = false; });
+          people = 1;
+          renderWater();
+          update();
+          resetConfirm.classList.remove("show");
+          resetBtn.focus();
+        });
+
+        renderWater();
+        update();
+      })();
+    </script>
+  </body>
+</html>

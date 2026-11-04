@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>La garde — Trois outils pour la vraie vie</title>
+    <style>
+      :root {
+        --fond: #f6eddd;
+        --fond-doux: #efe3cd;
+        --tuile: #fdf9f1;
+        --encre: #1d252c;
+        --encre-douce: #4a545e;
+        --ligne: #d9cbae;
+        --or: #d89532;
+        --bouton: #1d252c;
+        --bouton-texte: #f6eddd;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fond: #171d22;
+          --fond-doux: #1d252c;
+          --tuile: #212a31;
+          --encre: #f2ead8;
+          --encre-douce: #c6bda9;
+          --ligne: #3d474f;
+          --or: #d89532;
+          --bouton: #f6eddd;
+          --bouton-texte: #1d252c;
+        }
+      }
+
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+
+      body {
+        margin: 0;
+        background: var(--fond);
+        color: var(--encre);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 18px;
+        line-height: 1.55;
+      }
+
+      .page {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 28px 20px 56px;
+      }
+
+      /* ---------- Signature ---------- */
+      .signature {
+        text-align: center;
+        padding: 10px 0 26px;
+      }
+      .signature .regle {
+        width: 56px;
+        height: 3px;
+        background: var(--or);
+        border-radius: 2px;
+        margin: 0 auto 16px;
+      }
+      .signature p {
+        margin: 0;
+        font-size: 1.05rem;
+        letter-spacing: 0.01em;
+        color: var(--encre);
+      }
+      .signature strong { font-weight: 700; }
+      .signature .devise {
+        display: block;
+        margin-top: 4px;
+        color: var(--encre-douce);
+        font-size: 1rem;
+      }
+
+      /* ---------- En-tête ---------- */
+      header.intro { text-align: center; max-width: 720px; margin: 0 auto 34px; }
+      header.intro h1 {
+        font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+        font-size: clamp(2.3rem, 6vw, 3.4rem);
+        font-weight: 700;
+        margin: 0 0 12px;
+        line-height: 1.12;
+      }
+      header.intro p.utilite {
+        font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+        font-style: italic;
+        font-size: 1.25rem;
+        color: var(--encre);
+        margin: 0 0 10px;
+      }
+      header.intro p {
+        margin: 0;
+        font-size: 1.13rem;
+        color: var(--encre-douce);
+      }
+
+      /* ---------- Tuiles ---------- */
+      .trio {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      @media (min-width: 920px) {
+        .trio { grid-template-columns: repeat(3, 1fr); align-items: start; }
+      }
+
+      .tuile {
+        background: var(--tuile);
+        border: 1px solid var(--ligne);
+        border-radius: 14px;
+        padding: 26px 24px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .tuile .icone {
+        width: 52px;
+        height: 52px;
+        color: var(--encre);
+      }
+      .tuile .icone svg { width: 100%; height: 100%; display: block; }
+      .tuile h2 {
+        font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+        font-size: 1.65rem;
+        line-height: 1.2;
+        margin: 0;
+      }
+      .tuile .phrase {
+        margin: 0;
+        font-size: 1.08rem;
+      }
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 2px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .badges li {
+        border: 1px solid var(--ligne);
+        background: var(--fond-doux);
+        border-radius: 999px;
+        padding: 5px 12px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .details { display: flex; flex-direction: column; gap: 16px; }
+      .details h3 {
+        font-size: 0.98rem;
+        margin: 0 0 6px;
+        text-transform: none;
+        letter-spacing: 0.01em;
+      }
+      .details h3 .marque { color: var(--encre); font-weight: 700; }
+      .details h3 .marque-non { color: var(--encre); font-weight: 700; }
+      .details ul {
+        margin: 0;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .details li { font-size: 1rem; }
+      .details[hidden] { display: none; }
+
+      .btn-details {
+        margin-top: auto;
+        min-height: 58px;
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        background: var(--bouton);
+        color: var(--bouton-texte);
+        font: inherit;
+        font-size: 1.05rem;
+        font-weight: 700;
+        padding: 14px 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      .btn-details:focus-visible {
+        outline: 3px solid var(--or);
+        outline-offset: 3px;
+      }
+      .btn-details .fleche { transition: transform 0.18s ease; font-size: 0.9em; }
+      .btn-details[aria-expanded="false"] .fleche { transform: rotate(-90deg); }
+      @media (prefers-reduced-motion: reduce) {
+        .btn-details .fleche { transition: none; }
+      }
+
+      /* ---------- Téléchargement ---------- */
+      .telechargement {
+        max-width: 720px;
+        margin: 0 auto 34px;
+        background: var(--tuile);
+        border: 1px solid var(--ligne);
+        border-radius: 14px;
+        padding: 26px 24px;
+        text-align: center;
+      }
+      .telechargement h2 {
+        font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+        font-size: 1.45rem;
+        margin: 0 0 8px;
+      }
+      .telechargement p { margin: 0 0 18px; font-size: 1.05rem; }
+      .btn-telecharger {
+        min-height: 64px;
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        background: var(--bouton);
+        color: var(--bouton-texte);
+        font: inherit;
+        font-size: 1.13rem;
+        font-weight: 700;
+        padding: 16px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+      }
+      .btn-telecharger:focus-visible {
+        outline: 3px solid var(--or);
+        outline-offset: 3px;
+      }
+      .btn-telecharger svg { width: 24px; height: 24px; flex: none; }
+      .telechargement .franchement {
+        margin: 16px 0 0;
+        font-size: 1rem;
+        color: var(--encre-douce);
+        text-align: left;
+      }
+      .telechargement .statut {
+        margin: 12px 0 0;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: center;
+      }
+      .telechargement .statut:empty { display: none; }
+
+      /* ---------- Pied de page ---------- */
+      .urgence {
+        text-align: center;
+        margin: 38px auto 0;
+        max-width: 720px;
+        font-size: 1.05rem;
+      }
+      .urgence strong { font-weight: 700; }
+
+      .porte {
+        margin: 22px auto 0;
+        max-width: 720px;
+        background: var(--fond-doux);
+        border: 1px solid var(--ligne);
+        border-radius: 14px;
+        padding: 26px 24px;
+        text-align: center;
+      }
+      .porte h2 {
+        font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+        font-size: 1.45rem;
+        margin: 0 0 8px;
+      }
+      .porte p { margin: 0; font-size: 1.05rem; color: var(--encre); }
+      .porte .point-or {
+        width: 34px; height: 3px; background: var(--or);
+        border-radius: 2px; margin: 0 auto 16px;
+      }
+
+      /* ---------- Option confort ---------- */
+      .confort {
+        margin: 30px auto 0;
+        max-width: 720px;
+        text-align: center;
+      }
+      .confort .phrase-confort {
+        margin: 0 0 8px;
+        font-size: 1.13rem;
+        font-weight: 700;
+      }
+      .confort p { margin: 0; font-size: 1rem; color: var(--encre-douce); }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+
+      <div class="signature" role="banner">
+        <div class="regle" aria-hidden="true"></div>
+        <p>
+          <strong>HP — Des outils pour la vraie vie.</strong>
+          <span class="devise">Comprendre. Agir. Transmettre.</span>
+        </p>
+      </div>
+
+      <header class="intro">
+        <h1>La garde</h1>
+        <p class="utilite">Où chaque gardien a son utilité.</p>
+        <p>Trois outils gratuits, sans compte, pour la vraie vie. Vous choisissez celui qui correspond à votre situation — chacun fonctionne seulement quand sa page est ouverte, et c'est vous qui décidez quand vous en servir.</p>
+      </header>
+
+      <main>
+        <section class="telechargement" aria-labelledby="telechargement-titre">
+          <h2 id="telechargement-titre">Télécharger cette page sur votre téléphone</h2>
+          <p>En un geste, téléchargez la page. Ouvrez ensuite le fichier « la-garde.html » dans vos téléchargements pour la relire plus tard, même sans réseau.</p>
+          <button class="btn-telecharger" type="button" id="btn-telecharger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 4 v11" />
+              <path d="M6.5 10.5 L12 16 l5.5 -5.5" />
+              <path d="M4 20 h16" />
+            </svg>
+            <span>Télécharger pour votre téléphone</span>
+          </button>
+          <p class="franchement">Franchement : ce n'est pas une installation. C'est la page elle-même, sauvegardée sur votre téléphone, sans compte et sans aucun envoi. Le fichier « la-garde.html » se relit sans réseau une fois téléchargé. Page sauvegardée, pas une application installée.</p>
+          <p class="statut" id="statut-telechargement" role="status" aria-live="polite"></p>
+        </section>
+
+        <div class="trio">
+
+          <!-- ===== Tuile 1 : Le Garde ===== -->
+          <article class="tuile">
+            <div class="icone" aria-hidden="true">
+              <svg viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M26 5 L43 11 V25 C43 36 36 43.5 26 47 C16 43.5 9 36 9 25 V11 Z" />
+                <path d="M18.5 26.5 L23.5 31.5 L34 20.5" />
+              </svg>
+            </div>
+            <h2>Le Garde</h2>
+            <p class="phrase">Un outil à portée de main, à déclencher vous-même, quand quelqu'un vous intimide.</p>
+            <ul class="badges">
+              <li>Gratuit</li>
+              <li>Sans compte</li>
+              <li>Page ouverte seulement</li>
+            </ul>
+            <div class="details" id="details-garde">
+              <section>
+                <h3><span class="marque">Ce que ça fait</span></h3>
+                <ul>
+                  <li>Vous aide à attirer l'attention des gens autour de vous.</li>
+                  <li>Vous aide à gagner du temps et à vous sentir plus calme.</li>
+                  <li>Vous le déclenchez vous-même, au moment où vous le jugez utile.</li>
+                </ul>
+              </section>
+              <section>
+                <h3><span class="marque-non">Ce que ça ne fait pas</span></h3>
+                <ul>
+                  <li>Il n'appelle pas d'aide tout seul.</li>
+                  <li>Il ne garantit pas votre sécurité.</li>
+                  <li>Il ne remplace pas le 911.</li>
+                </ul>
+              </section>
+            </div>
+            <button class="btn-details" type="button" aria-expanded="true" aria-controls="details-garde" data-cible="details-garde">
+              <span class="libelle">Masquer les détails</span>
+              <span class="fleche" aria-hidden="true">▾</span>
+            </button>
+          </article>
+
+          <!-- ===== Tuile 2 : Survie 72h ===== -->
+          <article class="tuile">
+            <div class="icone" aria-hidden="true">
+              <svg viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 20 L26 9 L44 20 V42 a2 2 0 0 1 -2 2 H10 a2 2 0 0 1 -2 -2 Z" />
+                <path d="M19 44 V30 h14 v14" />
+                <path d="M22.5 21.5 h7" />
+              </svg>
+            </div>
+            <h2>Survie 72h</h2>
+            <p class="phrase">Votre préparation, faite à l'avance, pour vous débrouiller au moins 72 heures.</p>
+            <ul class="badges">
+              <li>Gratuit</li>
+              <li>Sans compte</li>
+              <li>Page ouverte seulement</li>
+            </ul>
+            <div class="details" id="details-survie">
+              <section>
+                <h3><span class="marque">Ce que ça fait</span></h3>
+                <ul>
+                  <li>Vous préparez l'eau, la nourriture et les essentiels, étape par étape.</li>
+                  <li>Vous notez votre plan familial au même endroit, tant que la page reste ouverte.</li>
+                  <li>Vous suivez votre progression en cochant ce qui est fait, tant que la page reste ouverte — les notes et les coches ne survivent pas à la fermeture de la page ; imprimez la page pour en garder une trace.</li>
+                </ul>
+              </section>
+              <section>
+                <h3><span class="marque-non">Ce que ça ne fait pas</span></h3>
+                <ul>
+                  <li>72 heures n'est pas une prédiction : c'est un minimum de préparation.</li>
+                  <li>Il ne remplace ni les secours ni le 911.</li>
+                  <li>Les consignes des autorités locales passent toujours en premier.</li>
+                </ul>
+              </section>
+            </div>
+            <button class="btn-details" type="button" aria-expanded="true" aria-controls="details-survie" data-cible="details-survie">
+              <span class="libelle">Masquer les détails</span>
+              <span class="fleche" aria-hidden="true">▾</span>
+            </button>
+          </article>
+
+          <!-- ===== Tuile 3 : Personne seule ===== -->
+          <article class="tuile">
+            <div class="icone" aria-hidden="true">
+              <svg viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="26" cy="17" r="7.5" />
+                <path d="M12 44 c1.5 -8 7 -12 14 -12 s12.5 4 14 12" />
+                <path d="M40 8.5 h.01" stroke-width="4" />
+              </svg>
+            </div>
+            <h2>Personne seule</h2>
+            <p class="phrase">Un moyen simple de donner signe de vie, sans système à bouton payant.</p>
+            <ul class="badges">
+              <li>Gratuit</li>
+              <li>Sans compte</li>
+              <li>Page ouverte seulement</li>
+            </ul>
+            <div class="details" id="details-seule">
+              <section>
+                <h3><span class="marque">Ce que ça fait</span></h3>
+                <ul>
+                  <li>Un message d'aide prêt à copier, que vous envoyez vous-même.</li>
+                  <li>Vous pouvez appeler un proche, noter votre signe de vie et convenir d'un signal avec cette personne.</li>
+                </ul>
+              </section>
+              <section>
+                <h3><span class="marque-non">Ce que ça ne fait pas</span></h3>
+                <ul>
+                  <li>Il n'appelle pas d'aide tout seul, et il n'y a aucune surveillance en arrière-plan.</li>
+                  <li>Il ne garantit pas votre sécurité.</li>
+                  <li>Il ne remplace ni le 911 ni un système d'alerte médicale.</li>
+                </ul>
+              </section>
+            </div>
+            <button class="btn-details" type="button" aria-expanded="true" aria-controls="details-seule" data-cible="details-seule">
+              <span class="libelle">Masquer les détails</span>
+              <span class="fleche" aria-hidden="true">▾</span>
+            </button>
+          </article>
+
+        </div>
+
+        <p class="urgence">En cas d'urgence immédiate, composez le <strong>911</strong>.</p>
+
+        <section class="porte" aria-labelledby="porte-titre">
+          <div class="point-or" aria-hidden="true"></div>
+          <h2 id="porte-titre">Écrire à la direction humaine</h2>
+          <p>Une question sur l'un de ces outils ? Écrivez-nous : un humain de l'équipe vous répond sous 3 jours ouvrables, lundi à vendredi.</p>
+        </section>
+
+        <section class="confort" aria-label="Option confort personnalisé">
+          <p class="phrase-confort">Option confort personnalisé : 5 $.</p>
+          <p>La personnalisation se choisit sur votre appareil seulement — l'aspect, le nom affiché, le parcours — sans envoi et sans compte, et la version gratuite reste complète. Les personnes de confiance ne sont personnalisées que dans leur présentation : le confort ne leur ajoute aucune fonction, qui reste celle de la version gratuite. Cette page ne vend rien pour l'instant : le paiement automatique reste à construire et à tester avant toute vente.</p>
+        </section>
+      </main>
+
+    </div>
+
+    <script>
+      (function () {
+        var btnTelecharger = document.getElementById("btn-telecharger");
+        var statut = document.getElementById("statut-telechargement");
+        if (btnTelecharger) {
+          btnTelecharger.addEventListener("click", function () {
+            try {
+              var source = "<!doctype html>\n" + document.documentElement.outerHTML;
+              var blob = new Blob([source], { type: "text/html;charset=utf-8" });
+              var url = URL.createObjectURL(blob);
+              var lien = document.createElement("a");
+              lien.href = url;
+              lien.download = "la-garde.html";
+              document.body.appendChild(lien);
+              lien.click();
+              document.body.removeChild(lien);
+              setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+              if (statut) {
+                statut.textContent = "La page est sauvegardée sur votre téléphone. Retrouvez le fichier « la-garde.html » dans vos téléchargements pour la relire, même sans réseau.";
+              }
+            } catch (e) {
+              if (statut) {
+                statut.textContent = "Le téléchargement n'a pas fonctionné sur cet appareil. Gardez la page ouverte dans votre navigateur pour la relire.";
+              }
+            }
+          });
+        }
+
+        var boutons = document.querySelectorAll(".btn-details");
+        boutons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var cible = document.getElementById(btn.getAttribute("data-cible"));
+            if (!cible) return;
+            var ouvert = btn.getAttribute("aria-expanded") === "true";
+            if (ouvert) {
+              cible.hidden = true;
+              btn.setAttribute("aria-expanded", "false");
+              btn.querySelector(".libelle").textContent = "Voir les détails";
+            } else {
+              cible.hidden = false;
+              btn.setAttribute("aria-expanded", "true");
+              btn.querySelector(".libelle").textContent = "Masquer les détails";
+            }
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Personne seule</title>
+<style>
+  :root{
+    --bg:#f6eddd; --panel:#fffaf0; --panel2:#efe3cd; --ink:#1d252c; --ink-soft:#3c4750;
+    --line:#d8c9a8; --gold:#d89532; --night:#07111b; --red:#af3c2d; --red-ink:#ffffff;
+    --green:#294f1e; --green-bg:#e3ecd9; --btn:#1d252c; --btn-ink:#f6eddd;
+    --fs:20px; --fs-big:24px; --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#07111b; --panel:#101c28; --panel2:#16242f; --ink:#f6eddd; --ink-soft:#cfd6da;
+      --line:#33424e; --btn:#f6eddd; --btn-ink:#1d252c;
+      --green-bg:#1d2f16; --green:#b9d69a;
+    }
+  }
+  body.grand{ --fs:24px; --fs-big:30px; }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size:var(--fs); line-height:1.45;
+    padding-bottom:110px;
+  }
+  .wrap{ max-width:860px; margin:0 auto; padding:16px 16px 32px; }
+  h1{ font-size:calc(var(--fs-big) + 14px); line-height:1.1; margin:14px 0 6px; }
+  h2{ font-size:calc(var(--fs-big) + 6px); margin:0 0 10px; line-height:1.15; }
+  h3{ font-size:var(--fs-big); margin:0 0 8px; }
+  p{ margin:0 0 12px; }
+  .intro{ font-size:var(--fs-big); }
+  .small{ font-size:calc(var(--fs) - 2px); color:var(--ink-soft); }
+  a{ color:inherit; }
+
+  /* Bandeau ESSAI — calme, informatif, jamais une alerte */
+  #essaiBanner{
+    position:sticky; top:0; z-index:40;
+    background:var(--panel2); color:var(--ink);
+    border-bottom:3px solid var(--gold);
+    padding:12px 16px; font-size:var(--fs); font-weight:bold; text-align:center;
+  }
+  #essaiBanner[hidden]{ display:none; }
+
+  /* Bandeau 911 — jamais touché par ESSAI */
+  .b911{
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    background:var(--red); color:var(--red-ink); text-decoration:none;
+    font-size:calc(var(--fs-big) + 8px); font-weight:bold;
+    min-height:76px; padding:14px 16px; border-radius:var(--radius); margin:16px 0 8px;
+    text-align:center;
+  }
+  .b911:focus-visible{ outline:4px solid var(--ink); outline-offset:3px; }
+  .b911-note{ text-align:center; }
+
+  /* Très grand bouton vrai mode, juste après la phrase ESSAI */
+  .vrai-zone{ margin:14px 0 6px; }
+  #btnVraiTop{
+    width:100%; min-height:84px; padding:16px;
+    font:inherit; font-size:calc(var(--fs-big) + 6px); font-weight:bold;
+    background:var(--btn); color:var(--btn-ink); border:none; border-radius:var(--radius); cursor:pointer;
+  }
+  body.simple #btnVraiTop{ min-height:100px; }
+
+  /* Contrôles */
+  .controls{ display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 6px; }
+  .ctl{
+    flex:1 1 200px; min-height:64px; padding:12px 14px;
+    font:inherit; font-size:var(--fs); font-weight:bold;
+    background:var(--panel); color:var(--ink);
+    border:3px solid var(--ink); border-radius:var(--radius); cursor:pointer;
+  }
+  .ctl[aria-pressed="true"]{ background:var(--btn); color:var(--btn-ink); }
+  .ctl:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline:4px solid var(--gold); outline-offset:2px;
+  }
+
+  section{ margin-top:30px; }
+  .sec-head{
+    display:flex; align-items:baseline; gap:12px; border-bottom:4px solid var(--ink);
+    padding-bottom:8px; margin-bottom:16px;
+  }
+  .sec-head .tag{
+    font-size:calc(var(--fs) - 3px); font-weight:bold; letter-spacing:.08em; text-transform:uppercase;
+    background:var(--panel2); border:2px solid var(--line); border-radius:999px; padding:4px 12px;
+  }
+
+  /* Éléments visibles seulement en version simple */
+  .only-simple{ display:none; }
+  body.simple .only-simple{ display:block; }
+  .phrase-simple{
+    background:var(--panel); border:3px solid var(--ink); border-radius:var(--radius);
+    padding:18px; font-size:var(--fs-big); font-weight:bold; margin-top:16px;
+  }
+
+  /* Parcours guidé */
+  .parcours{
+    background:var(--panel); border:2px solid var(--line); border-radius:var(--radius);
+    padding:20px 18px; margin-top:22px;
+  }
+  .parcours ol{ margin:0; padding-left:28px; }
+  .parcours li{ margin-bottom:16px; }
+  .parcours li:last-child{ margin-bottom:0; }
+  .stepbtn{
+    display:block; margin-top:8px; min-height:64px; width:100%;
+    font:inherit; font-size:var(--fs); font-weight:bold;
+    background:var(--panel); color:var(--ink); border:3px solid var(--ink);
+    border-radius:10px; cursor:pointer; padding:12px;
+  }
+
+  /* Tuiles AGIR : nom + 1 verbe */
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:560px){ .grid{ grid-template-columns:1fr; } }
+  .tile{
+    position:relative; background:var(--panel); border:3px solid var(--ink); border-radius:var(--radius);
+    padding:20px 18px 18px; display:flex; flex-direction:column; gap:10px;
+  }
+  .tile .nom{ font-size:calc(var(--fs-big) + 4px); font-weight:bold; line-height:1.15; }
+  .tile .desc{ color:var(--ink-soft); font-size:calc(var(--fs) - 1px); margin:0; }
+  .tile .pastille{
+    position:absolute; top:10px; right:10px;
+    font-size:14px; font-weight:bold;
+    background:var(--panel2); color:var(--ink-soft); border:2px solid var(--line);
+    border-radius:999px; padding:3px 10px;
+  }
+  body.reel .tile .pastille{ display:none; }
+  .aide-ligne, .exemple{
+    font-size:calc(var(--fs) - 1px); color:var(--ink-soft); margin:0;
+    border-top:2px dashed var(--line); padding-top:10px;
+  }
+  .checkin-grand{ font-size:var(--fs-big); font-weight:bold; margin:0; line-height:1.3; }
+  .agir-note{ font-size:var(--fs); font-weight:bold; margin-bottom:14px; }
+  .bigbtn{
+    margin-top:auto; min-height:72px; width:100%;
+    font:inherit; font-size:calc(var(--fs-big) + 2px); font-weight:bold;
+    background:var(--btn); color:var(--btn-ink); border:none; border-radius:10px; cursor:pointer;
+    padding:14px;
+  }
+  .bigbtn.second{ background:var(--panel); color:var(--ink); border:3px solid var(--ink); }
+  .bigbtn[disabled]{ opacity:.45; cursor:not-allowed; }
+  .agir-actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+  .agir-actions .bigbtn{ flex:1 1 240px; width:auto; margin-top:0; }
+  .statut{
+    background:var(--green-bg); color:var(--green); border:2px solid var(--green);
+    border-radius:var(--radius); padding:14px 16px; font-weight:bold; margin-top:14px;
+  }
+  @media (prefers-color-scheme: dark){ .statut{ color:#cfe3b8; } }
+  .statut[hidden]{ display:none; }
+  #statusLine{
+    background:var(--panel2); border:2px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; margin-top:14px; font-size:var(--fs);
+  }
+  #rappel{
+    background:var(--panel); border:4px solid var(--gold); border-radius:var(--radius);
+    padding:20px 18px; margin-top:14px; font-size:var(--fs-big); font-weight:bold;
+  }
+  #rappel .rappel-titre{ display:block; font-size:calc(var(--fs-big) + 10px); line-height:1.15; margin-bottom:8px; }
+  #rappel .rappel-note{ display:block; font-size:var(--fs); font-weight:normal; margin-top:10px; }
+  #rappel[hidden]{ display:none; }
+
+  /* LIRE */
+  .card{
+    background:var(--panel); border:2px solid var(--line); border-radius:var(--radius);
+    padding:20px 18px; margin-bottom:16px;
+  }
+  .nonremplacement{ font-size:var(--fs-big); font-weight:bold; margin:0; line-height:1.3; }
+  ul.frank{ margin:0 0 6px; padding-left:24px; }
+  ul.frank li{ margin-bottom:10px; }
+  label{ display:block; font-weight:bold; margin:16px 0 6px; }
+  label:first-of-type{ margin-top:4px; }
+  input[type="text"], input[type="tel"], textarea, select{
+    width:100%; font:inherit; font-size:var(--fs); color:var(--ink);
+    background:var(--bg); border:3px solid var(--ink); border-radius:10px; padding:14px; min-height:60px;
+  }
+  textarea{ min-height:110px; resize:vertical; }
+  .rowbtns{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .rowbtns .bigbtn{ flex:1 1 220px; width:auto; }
+  .danger{ background:var(--red) !important; color:var(--red-ink) !important; border:none !important; }
+  .garder-box{
+    border:3px solid var(--ink); border-radius:var(--radius); padding:16px; margin:16px 0 6px;
+    background:var(--bg);
+  }
+  .garder-box .bigbtn{ margin-top:6px; }
+  #journal{ list-style:none; margin:0; padding:0; }
+  #journal li{ padding:10px 0; border-bottom:1px solid var(--line); }
+  #journal li:last-child{ border-bottom:none; }
+  .vide{ color:var(--ink-soft); }
+
+  /* Carte papier */
+  .carte p{ margin-bottom:10px; }
+  .carte .carte-ligne{ border-bottom:2px solid var(--line); padding-bottom:8px; }
+
+  .signature{ margin-top:28px; text-align:center; }
+  .signature .goldbar{ width:56px; height:5px; background:var(--gold); margin:0 auto 10px; border-radius:3px; }
+  .signature p{ font-weight:bold; margin:0; }
+
+  /* STOP fixe */
+  #stopBar{
+    position:fixed; left:0; right:0; bottom:0; z-index:50;
+    background:var(--bg); padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    border-top:3px solid var(--line);
+  }
+  #btnStop{
+    width:100%; min-height:64px; font:inherit; font-size:calc(var(--fs-big) + 6px); font-weight:bold;
+    background:var(--red); color:var(--red-ink); border:none; border-radius:12px; cursor:pointer;
+  }
+
+  /* Modales */
+  .overlay{
+    position:fixed; inset:0; z-index:60; background:rgba(7,17,27,.72);
+    display:flex; align-items:center; justify-content:center; padding:16px;
+  }
+  .overlay[hidden]{ display:none; }
+  .modal{
+    background:var(--panel); color:var(--ink); border-radius:var(--radius);
+    max-width:560px; width:100%; padding:24px 20px; max-height:90vh; overflow:auto;
+  }
+  .modal h3{ font-size:calc(var(--fs-big) + 4px); }
+  .modal .bigbtn{ margin-top:10px; }
+
+  /* Page banale de sortie rapide : couvre tout l'écran, au-dessus de tout */
+  #ovBanale{ z-index:80; background:var(--bg); }
+  .banale-page{
+    background:var(--panel); color:var(--ink); border:2px solid var(--line); border-radius:var(--radius);
+    max-width:560px; width:100%; padding:24px 20px; max-height:90vh; overflow:auto;
+  }
+  .banale-page .ligne-vide{ border-bottom:2px solid var(--line); min-height:34px; }
+
+  /* Version simple : textes ultra-courts, LIRE et carte cachés */
+  body.simple #lireSection, body.simple #carteSection, body.simple .tile .desc, body.simple .intro-long,
+  body.simple #wakeRow, body.simple .sec-head .tag{ display:none; }
+  body.simple .tile .nom{ font-size:calc(var(--fs-big) + 8px); }
+  body.simple .bigbtn{ min-height:88px; }
+
+  @media print{
+    #stopBar, .controls, #essaiBanner, .vrai-zone, .overlay{ display:none !important; }
+    body{ padding-bottom:0; }
+    body *{ visibility:hidden; }
+    #carteSection, #carteSection *{ visibility:visible; }
+    #carteSection{ position:absolute; top:0; left:0; right:0; margin:0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="essaiBanner" role="status">Vous êtes en ESSAI, rien ne part pour vrai</div>
+
+<div class="wrap">
+
+  <a class="b911" href="tel:911" id="lien911">Urgence : 911</a>
+  <p class="small b911-note">Le 911 fonctionne toujours pour vrai, même en mode ESSAI. En urgence réelle, touchez le bandeau rouge.</p>
+
+  <div class="vrai-zone">
+    <button id="btnVraiTop">Passer en vrai mode</button>
+  </div>
+
+  <h1>Personne seule</h1>
+  <p class="intro">Ceci n'est pas un jeu. C'est un outil pour la vraie vie. Essayer, c'est gratuit.</p>
+  <p class="intro-long">Vous êtes seul ou seule à la maison. Cet outil vous aide à demander de l'aide avec votre téléphone, sans payer une fortune pour un système à bouton. Gratuit, sans compte, sans abonnement.</p>
+  <p class="intro-long">En haut : <strong>AGIR</strong>, les gestes, en 1 tap. En bas : <strong>LIRE ET RÉGLER</strong>, pour comprendre et préparer vos proches de confiance, au calme.</p>
+
+  <div class="controls" role="group" aria-label="Réglages d'affichage et de mode">
+    <button class="ctl" id="btnMode" aria-pressed="true">Mode ESSAI : activé</button>
+    <button class="ctl" id="btnSimple" aria-pressed="false">Version simple</button>
+    <button class="ctl" id="btnGrand" aria-pressed="false">Très grand texte</button>
+  </div>
+  <div class="controls" id="wakeRow">
+    <button class="ctl" id="btnWake" aria-pressed="false">Garder l'écran allumé</button>
+  </div>
+  <p class="small">L'outil fonctionne seulement si la page reste ouverte. Si votre téléphone ne peut pas garder l'écran allumé, laissez la page ouverte et l'écran déverrouillé quand vous en avez besoin.</p>
+
+  <p class="phrase-simple only-simple">Cet outil ne remplace ni le 911 ni un système d'alerte médicale, et ne surveille personne.</p>
+
+  <!-- ================= Parcours guidé ================= -->
+  <div class="parcours" id="parcours">
+    <h3>Parcours guidé — dans l'ordre</h3>
+    <ol>
+      <li><strong>Choisissez un proche.</strong> Écrivez son nom et son numéro dans vos réglages, plus bas.
+        <button class="stepbtn" id="btnEtape1">Étape 1 : choisir un proche</button></li>
+      <li><strong>Essayez en ESSAI.</strong> Touchez chaque geste au calme : rien ne part pour vrai.
+        <button class="stepbtn" id="btnEtape2">Étape 2 : essayer les gestes en ESSAI</button></li>
+      <li><strong>Passez en vrai mode seulement si vous le voulez.</strong> Une confirmation vous sera demandée.
+        <button class="stepbtn" id="btnEtape3">Étape 3 : passer en vrai mode, si voulu</button></li>
+    </ol>
+  </div>
+
+  <!-- ================= AGIR ================= -->
+  <section id="agir" aria-labelledby="titreAgir">
+    <div class="sec-head"><h2 id="titreAgir">AGIR</h2><span class="tag">Gestes en 1 tap</span></div>
+
+    <p class="agir-note">Gardez votre téléphone chargé. Si la batterie tombe, l'outil s'arrête.</p>
+
+    <div class="grid">
+      <div class="tile">
+        <span class="pastille">ESSAI · pratique</span>
+        <div class="nom">Message d'aide</div>
+        <button class="bigbtn" id="btnAide">Copier</button>
+        <button class="bigbtn second" id="btnSms" hidden>Ouvrir Messages</button>
+        <p class="aide-ligne">Si l'appel ou le message ne part pas, vérifiez le crédit ou le réseau, puis essayez un autre proche.</p>
+      </div>
+
+      <div class="tile">
+        <span class="pastille">ESSAI · pratique</span>
+        <div class="nom">Proche</div>
+        <button class="bigbtn" id="btnAppeler">Appeler</button>
+        <p class="exemple">Exemple : un ami, un intervenant, un membre de votre famille — c'est vous qui choisissez.</p>
+        <p class="aide-ligne">Si l'appel ou le message ne part pas, vérifiez le crédit ou le réseau, puis essayez un autre proche.</p>
+      </div>
+
+      <div class="tile">
+        <span class="pastille">ESSAI · pratique</span>
+        <div class="nom">Je vais bien</div>
+        <p class="checkin-grand">Si vous ne cochez pas, personne n'est prévenu automatiquement. C'est à vous ou à un proche de vérifier.</p>
+        <button class="bigbtn" id="btnBien">Noter</button>
+      </div>
+
+      <div class="tile">
+        <span class="pastille">ESSAI · pratique</span>
+        <div class="nom">Signal convenu</div>
+        <button class="bigbtn" id="btnSignal">Copier</button>
+        <p class="aide-ligne">Si l'appel ou le message ne part pas, vérifiez le crédit ou le réseau, puis essayez un autre proche.</p>
+      </div>
+    </div>
+
+    <div class="statut" id="bienStatut" hidden></div>
+    <div id="rappel" hidden>
+      <span class="rappel-titre">C'est l'heure de votre check-in</span>
+      Si tout va bien, touchez « Je vais bien ». Si ça ne va pas, utilisez le message d'aide ou le 911.
+      <span class="rappel-note">Ce rappel reste affiché ici tant que vous n'avez pas touché « Je vais bien » ou STOP. Là où votre téléphone le permet, il vibre aussi — mais la vibration n'existe pas sur tous les téléphones.</span>
+    </div>
+    <div id="statusLine" role="status" aria-live="polite">Prêt. Commencez en mode ESSAI pour apprendre les gestes au calme.</div>
+
+    <div class="agir-actions">
+      <button class="bigbtn danger" id="btnEffacerAgir">Tout effacer</button>
+      <button class="bigbtn second" id="btnQuitter">Quitter vite</button>
+    </div>
+    <p class="small">« Tout effacer » vide vos réglages et votre journal, avec une courte confirmation. « Quitter vite » couvre l'écran d'une page ordinaire, tout de suite, sans rien effacer.</p>
+  </section>
+
+  <!-- ================= LIRE ET RÉGLER ================= -->
+  <section id="lireSection" aria-labelledby="titreLire">
+    <div class="sec-head"><h2 id="titreLire">LIRE ET RÉGLER</h2><span class="tag">Au calme</span></div>
+
+    <div class="card">
+      <p class="nonremplacement">Cet outil ne remplace ni le 911 ni un système d'alerte médicale, et ne surveille personne.</p>
+    </div>
+
+    <div class="card">
+      <h3>Comment ça aide</h3>
+      <ul class="frank">
+        <li>Le <strong>message d'aide</strong> est déjà écrit : sous stress, vous n'avez pas à composer un texte. Vous le copiez, vous choisissez à qui l'envoyer, par message texte ou par appel.</li>
+        <li><strong>Appeler</strong> compose le numéro de votre proche de confiance, en 1 tap.</li>
+        <li><strong>« Je vais bien »</strong> note l'heure de votre dernier signe de vie, ici, sur cet appareil. Un rappel peut apparaître si la page reste ouverte.</li>
+        <li>Le <strong>signal convenu</strong> est un message court, décidé d'avance avec vos proches : quand ils le reçoivent de vous, ils savent quoi faire.</li>
+        <li>Le mode <strong>ESSAI</strong> vous laisse pratiquer chaque geste au calme, sans vrai appel et sans vrai message.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Ce que ça ne fait pas — dit franchement</h3>
+      <ul class="frank">
+        <li>Ça peut aider à attirer l'attention, à gagner du temps, ou à se sentir plus calme. C'est tout, et c'est déjà ça.</li>
+        <li>Ça n'appelle pas de l'aide tout seul. Chaque geste, c'est vous qui le faites.</li>
+        <li>Ça ne garantit pas la sécurité.</li>
+        <li>Ça ne remplace pas le numéro d'urgence local. En urgence réelle, composez le <strong>911</strong>.</li>
+        <li>Ça ne remplace pas un système d'alerte médicale.</li>
+        <li>Ça ne surveille personne en arrière-plan. Il n'y a aucun suivi continu, et le lieu n'est lu qu'au moment où vous touchez « Copier » du message d'aide.</li>
+        <li>Ça fonctionne seulement si la page reste ouverte, et si quelqu'un voit ou entend sur place ou reçoit le message que vous envoyez vous-même.</li>
+        <li>Le rappel « Je vais bien » n'avertit personne d'autre que vous : il apparaît seulement ici, sur votre écran.</li>
+        <li>Si vous ne cochez pas « Je vais bien », personne n'est prévenu automatiquement. C'est à vous ou à un proche de vérifier.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Mode ESSAI et vrai mode</h3>
+      <p>En <strong>ESSAI</strong>, vous apprenez les gestes : aucun appel ne part, aucun message ne s'ouvre pour vrai. La phrase « Vous êtes en ESSAI, rien ne part pour vrai » reste visible en haut de la page, et chaque tuile porte la mention « ESSAI · pratique ».</p>
+      <p>Pour passer au <strong>vrai mode</strong>, touchez le très grand bouton « Passer en vrai mode » en haut de la page : une confirmation vous sera demandée, et c'est « Oui, vrai mode » qui confirme. Le bandeau 911, lui, fonctionne toujours pour vrai, dans les deux modes.</p>
+    </div>
+
+    <div class="card" id="reglages">
+      <h3>Mes réglages</h3>
+      <p>Vos proches sont vides par défaut : aucun nom, aucun numéro n'est inventé. Le message d'aide et le signal ci-dessous sont pré-écrits pour vous : vous pouvez les changer. Écrivez seulement ce que vous voulez.</p>
+      <p>Si vous n'avez personne pour l'instant, vous pouvez quand même utiliser Message d'aide et Je vais bien, et ajouter un proche plus tard.</p>
+      <p><strong>Quand votre proche change, revérifiez les numéros ici, puis mettez votre carte papier à jour.</strong> Un ancien numéro ne rejoint plus la bonne personne.</p>
+
+      <div class="garder-box">
+        <h3>Garder sur cet appareil</h3>
+        <p>Sans cet opt-in, vos réglages disparaissent quand vous fermez la page. Si vous choisissez de les garder, ils restent <strong>sur cet appareil seulement</strong> : aucun envoi, aucun compte. Vous pouvez effacer cette copie en 1 tap, ici même ou avec « Tout effacer ».</p>
+        <button class="bigbtn second" id="btnGarderCopie" aria-pressed="false">Garder mes numéros sur cet appareil</button>
+        <p class="small" id="gardeStatut">Copie gardée : non. Vos réglages vivent seulement dans la page ouverte et disparaîtront à la fermeture.</p>
+      </div>
+
+      <label for="nom1">Proche 1 — nom</label>
+      <input type="text" id="nom1" autocomplete="off" placeholder="Exemple : le nom de votre fille, votre fils, votre voisine…" />
+
+      <label for="tel1">Proche 1 — numéro de téléphone</label>
+      <input type="tel" id="tel1" autocomplete="off" inputmode="tel" placeholder="Le numéro à appeler" />
+
+      <label for="nom2">Proche 2 — nom (si vous voulez)</label>
+      <input type="text" id="nom2" autocomplete="off" />
+
+      <label for="tel2">Proche 2 — numéro de téléphone</label>
+      <input type="tel" id="tel2" autocomplete="off" inputmode="tel" />
+
+      <label for="lieu">Votre lieu habituel (écrit par vous)</label>
+      <input type="text" id="lieu" autocomplete="off" placeholder="Exemple : à la maison, 123 rue…" />
+
+      <label for="msgAide">Votre message d'aide</label>
+      <textarea id="msgAide">Bonjour, j'ai besoin d'aide. Pouvez-vous venir ou m'appeler ? Merci.</textarea>
+
+      <label for="msgSignal">Votre signal convenu</label>
+      <textarea id="msgSignal">Viens me voir.</textarea>
+
+      <label for="delai">Rappel « Je vais bien » après</label>
+      <select id="delai">
+        <option value="30">30 minutes</option>
+        <option value="60" selected>1 heure</option>
+        <option value="120">2 heures</option>
+        <option value="240">4 heures</option>
+        <option value="0">Aucun rappel</option>
+      </select>
+      <p class="small">Le rappel apparaît seulement si la page reste ouverte. Il n'est envoyé à personne. Quand il apparaît, il s'affiche en grand et reste là tant que vous n'avez pas touché « Je vais bien » ou STOP. Là où votre téléphone le permet, il vibre aussi — la vibration n'existe pas sur tous les téléphones.</p>
+    </div>
+
+    <div class="card">
+      <h3>Journal local</h3>
+      <p class="small">Vos gestes, notés ici seulement, sur cet appareil, pendant que la page est ouverte. Rien n'est envoyé, rien n'est partagé. Le journal n'est jamais gardé après la fermeture, même si vous gardez vos numéros.</p>
+      <ul id="journal"><li class="vide">Aucun geste noté pour le moment.</li></ul>
+    </div>
+
+    <div class="card">
+      <h3>Vos données</h3>
+      <p>Vos réglages vivent sur cet appareil seulement. Ils ne sont jamais envoyés, jamais partagés, et il n'y a aucun compte.</p>
+      <p>Si vous n'avez pas choisi « Garder mes numéros sur cet appareil », vos réglages disparaissent quand vous fermez la page. Si vous l'avez choisi, la copie reste sur cet appareil jusqu'à ce que vous l'effaciez — ici en 1 tap, ou avec « Tout effacer ».</p>
+      <p>Si quelqu'un prend votre téléphone déverrouillé, il pourrait voir ce qui est écrit ici. « Tout effacer », dans AGIR comme ici, vide tout, tout de suite, après une courte confirmation.</p>
+      <div class="rowbtns">
+        <button class="bigbtn danger" id="btnEffacer">Tout effacer de cet appareil</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Une question ?</h3>
+      <p>Écrivez à la direction humaine. Un humain de l'équipe vous répond sous 3 jours ouvrables.</p>
+    </div>
+  </section>
+
+  <!-- ================= Carte papier ================= -->
+  <section id="carteSection" aria-labelledby="titreCarte">
+    <div class="sec-head"><h2 id="titreCarte">Ma carte papier</h2><span class="tag">À imprimer</span></div>
+    <div class="card carte">
+      <h3>Personne seule — mes numéros</h3>
+      <p><strong>Urgence : 911</strong></p>
+      <p class="carte-ligne">Proche 1 : <strong><span id="cNom1">— à écrire au crayon —</span></strong> · <span id="cTel1">—</span></p>
+      <p class="carte-ligne">Proche 2 : <strong><span id="cNom2">— à écrire au crayon —</span></strong> · <span id="cTel2">—</span></p>
+      <p class="carte-ligne">Mon lieu habituel : <span id="cLieu">— à écrire au crayon —</span></p>
+      <p class="carte-ligne">Mon message d'aide : <span id="cMsg"></span></p>
+      <p class="carte-ligne">Mon signal convenu : <span id="cSignal"></span></p>
+      <p><strong>Cet outil ne remplace ni le 911 ni un système d'alerte médicale, et ne surveille personne.</strong></p>
+      <p class="small">Gardez cette carte près de votre téléphone. Elle se remplit toute seule avec ce que vous écrivez dans vos réglages. Quand votre proche change, revérifiez les numéros, puis réimprimez la carte. Pour imprimer : ouvrez le menu de votre navigateur ou de votre appareil et choisissez « Imprimer » — seule cette carte sortira sur le papier. Les champs vides restent à écrire au crayon.</p>
+    </div>
+  </section>
+
+  <div class="signature">
+    <div class="goldbar"></div>
+    <p>HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
+  </div>
+</div>
+
+<div id="stopBar">
+  <button id="btnStop">STOP — Tout arrêter</button>
+</div>
+
+<!-- Confirmation : passage au vrai mode -->
+<div class="overlay" id="ovReel" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ovReelTitre">
+    <h3 id="ovReelTitre">Passer au vrai mode ?</h3>
+    <p>En vrai mode, le bouton « Appeler » compose pour vrai le numéro de votre proche, et « Ouvrir Messages » ouvre vos messages avec le texte copié. C'est vous qui choisissez à qui l'envoyer.</p>
+    <p>Le 911 fonctionne pour vrai dans les deux modes.</p>
+    <button class="bigbtn" id="btnConfirmeReel">Oui, vrai mode</button>
+    <button class="bigbtn second" id="btnResteEssai">Non, rester en ESSAI</button>
+  </div>
+</div>
+
+<!-- Confirmation courte : tout effacer -->
+<div class="overlay" id="ovEffacer" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ovEffTitre">
+    <h3 id="ovEffTitre">Tout effacer ?</h3>
+    <p>Tout sera effacé de cet appareil : proches, numéros, messages réglés, copie gardée, « Je vais bien » et journal.</p>
+    <button class="bigbtn danger" id="btnConfirmeEffacer">Oui, tout effacer</button>
+    <button class="bigbtn second" id="btnGarder">Non, garder</button>
+  </div>
+</div>
+
+<!-- Page banale de sortie rapide -->
+<div class="overlay" id="ovBanale" hidden>
+  <div class="banale-page" role="dialog" aria-modal="true" aria-labelledby="ovBanaleTitre">
+    <h3 id="ovBanaleTitre">Notes</h3>
+    <p>Liste du jour</p>
+    <p class="ligne-vide"></p>
+    <p class="ligne-vide"></p>
+    <p class="ligne-vide"></p>
+    <p>À ne pas oublier</p>
+    <p class="ligne-vide"></p>
+    <p class="ligne-vide"></p>
+    <button class="bigbtn second" id="btnRetourOutil">Revenir à l'outil</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var essai = true;
+  var dernierBien = null;
+  var rappelTimer = null;
+  var wakeLock = null;
+  var copieAide = "";
+  var garder = false;
+  var CLE = "personneSeule.reglages.v1";
+  var CHAMPS = ["nom1","tel1","nom2","tel2","lieu","msgAide","msgSignal","delai"];
+
+  var $ = function(id){ return document.getElementById(id); };
+  var statusLine = $("statusLine");
+
+  function suivreLien(href){
+    var a = document.createElement("a");
+    a.href = href; a.style.display = "none";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ if (a.parentNode) a.parentNode.removeChild(a); }, 500);
+  }
+  function heure(d){
+    return d.toLocaleTimeString("fr-CA", { hour:"2-digit", minute:"2-digit" });
+  }
+  function dire(msg){ statusLine.textContent = msg; }
+  function journaliser(action){
+    var ul = $("journal");
+    var vide = ul.querySelector(".vide");
+    if (vide) vide.remove();
+    var li = document.createElement("li");
+    li.textContent = heure(new Date()) + " — " + action + (essai ? " (ESSAI)" : "");
+    ul.insertBefore(li, ul.firstChild);
+  }
+
+  function copier(texte, okMsg){
+    function ok(){ dire(okMsg); }
+    function repli(){
+      var ta = document.createElement("textarea");
+      ta.value = texte; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); ok(); }
+      catch(e){ dire("Copie impossible ici. Le texte : " + texte); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(ok, repli);
+    } else { repli(); }
+  }
+
+  /* ---- Garder sur cet appareil : opt-in explicite, local seulement ---- */
+  function majGarderUI(){
+    var b = $("btnGarderCopie");
+    b.textContent = garder ? "Arrêter et effacer la copie gardée" : "Garder mes numéros sur cet appareil";
+    b.setAttribute("aria-pressed", garder ? "true" : "false");
+    $("gardeStatut").textContent = garder
+      ? "Copie gardée : oui, sur cet appareil seulement. Touchez le bouton pour l'effacer en 1 tap."
+      : "Copie gardée : non. Vos réglages vivent seulement dans la page ouverte et disparaîtront à la fermeture.";
+  }
+  function sauvegarder(){
+    majCarte();
+    if (!garder) return;
+    try {
+      var data = {};
+      CHAMPS.forEach(function(id){ data[id] = $(id).value; });
+      localStorage.setItem(CLE, JSON.stringify(data));
+    } catch(e){ /* stockage refusé par l'appareil : la page continue en session seulement */ }
+  }
+  function charger(){
+    try {
+      var raw = localStorage.getItem(CLE);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      CHAMPS.forEach(function(id){ if (typeof data[id] === "string") $(id).value = data[id]; });
+      garder = true;
+    } catch(e){ garder = false; }
+  }
+  $("btnGarderCopie").addEventListener("click", function(){
+    if (garder){
+      garder = false;
+      try { localStorage.removeItem(CLE); } catch(e){}
+      majGarderUI();
+      journaliser("Copie gardée effacée");
+      dire("Copie gardée effacée de cet appareil. Vos réglages restent dans la page ouverte, et disparaîtront à la fermeture.");
+    } else {
+      garder = true;
+      try {
+        var data = {};
+        CHAMPS.forEach(function(id){ data[id] = $(id).value; });
+        localStorage.setItem(CLE, JSON.stringify(data));
+        majGarderUI();
+        journaliser("Numéros gardés sur cet appareil (votre choix)");
+        dire("Vos réglages sont gardés sur cet appareil seulement. Aucun envoi, aucun compte. Effaçables en 1 tap, ici ou avec « Tout effacer ».");
+      } catch(e){
+        garder = false; majGarderUI();
+        dire("Votre appareil ne permet pas de garder la copie ici. Vos réglages vivent seulement dans la page ouverte : notez vos numéros sur la carte papier.");
+      }
+    }
+  });
+  CHAMPS.forEach(function(id){
+    $(id).addEventListener("input", sauvegarder);
+    $(id).addEventListener("change", sauvegarder);
+  });
+
+  /* ---- Carte papier : se remplit avec les réglages ---- */
+  function majCarte(){
+    function mettre(idSpan, idChamp, vide){
+      var v = $(idChamp).value.trim();
+      $(idSpan).textContent = v ? v : vide;
+    }
+    mettre("cNom1","nom1","— à écrire au crayon —");
+    mettre("cTel1","tel1","—");
+    mettre("cNom2","nom2","— à écrire au crayon —");
+    mettre("cTel2","tel2","—");
+    mettre("cLieu","lieu","— à écrire au crayon —");
+    mettre("cMsg","msgAide","");
+    mettre("cSignal","msgSignal","");
+  }
+
+  /* ---- Mode ESSAI / réel ---- */
+  var btnMode = $("btnMode"), banner = $("essaiBanner"), btnVraiTop = $("btnVraiTop");
+  function majMode(){
+    btnMode.textContent = essai ? "Mode ESSAI : activé" : "Vrai mode : activé";
+    btnMode.setAttribute("aria-pressed", essai ? "true" : "false");
+    btnVraiTop.textContent = essai ? "Passer en vrai mode" : "Retour au mode ESSAI";
+    banner.hidden = !essai;
+    document.body.classList.toggle("reel", !essai);
+    if (!essai) $("btnSms").hidden = !copieAide;
+  }
+  function demanderReel(){
+    if (essai){ $("ovReel").hidden = false; }
+    else { essai = true; majMode(); journaliser("Retour au mode ESSAI"); dire("Vous êtes en ESSAI, rien ne part pour vrai."); }
+  }
+  btnMode.addEventListener("click", demanderReel);
+  btnVraiTop.addEventListener("click", demanderReel);
+  $("btnConfirmeReel").addEventListener("click", function(){
+    essai = false; $("ovReel").hidden = true; majMode();
+    journaliser("Passage au vrai mode"); dire("Vrai mode. Les boutons agissent pour vrai. Le STOP arrête tout.");
+  });
+  $("btnResteEssai").addEventListener("click", function(){ $("ovReel").hidden = true; });
+
+  /* ---- Parcours guidé ---- */
+  $("btnEtape1").addEventListener("click", function(){
+    if (document.body.classList.contains("simple")){
+      document.body.classList.remove("simple");
+      $("btnSimple").setAttribute("aria-pressed","false");
+    }
+    document.getElementById("reglages").scrollIntoView();
+    dire("Étape 1 : écrivez le nom et le numéro de votre proche dans vos réglages.");
+  });
+  $("btnEtape2").addEventListener("click", function(){
+    document.getElementById("agir").scrollIntoView();
+    dire("Étape 2 : touchez chaque geste en ESSAI, au calme. Rien ne part pour vrai.");
+  });
+  $("btnEtape3").addEventListener("click", function(){
+    if (essai){ $("ovReel").hidden = false; }
+    else { dire("Vous êtes déjà en vrai mode."); }
+  });
+
+  /* ---- Version simple / Très grand texte ---- */
+  $("btnSimple").addEventListener("click", function(){
+    var on = document.body.classList.toggle("simple");
+    this.setAttribute("aria-pressed", on ? "true" : "false");
+    dire(on ? "Version simple : gestes seulement, textes très courts." : "Version complète.");
+    if (on) document.getElementById("parcours").scrollIntoView();
+  });
+  $("btnGrand").addEventListener("click", function(){
+    var on = document.body.classList.toggle("grand");
+    this.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+
+  /* ---- Garder l'écran allumé ---- */
+  $("btnWake").addEventListener("click", function(){
+    var btn = this;
+    if (wakeLock){ try{ wakeLock.release(); }catch(e){} wakeLock = null; btn.setAttribute("aria-pressed","false"); btn.textContent = "Garder l'écran allumé"; dire("Écran allumé : arrêté."); return; }
+    if (navigator.wakeLock && navigator.wakeLock.request){
+      navigator.wakeLock.request("screen").then(function(wl){
+        wakeLock = wl; btn.setAttribute("aria-pressed","true"); btn.textContent = "Écran allumé : oui (touchez pour arrêter)";
+        dire("Votre téléphone garde l'écran allumé pendant que la page est ouverte.");
+      }, function(){ dire("Votre téléphone ne peut pas garder l'écran allumé ici. Laissez la page ouverte et l'écran déverrouillé."); });
+    } else {
+      dire("Votre téléphone ne peut pas garder l'écran allumé ici. Laissez la page ouverte et l'écran déverrouillé.");
+    }
+  });
+
+  /* ---- Message d'aide : copier, lieu seulement au tap ---- */
+  $("btnAide").addEventListener("click", function(){
+    var base = $("msgAide").value.trim();
+    var lieuEcrit = $("lieu").value.trim();
+    function finir(lieuTxt){
+      var texte = base + (lieuTxt ? " Je suis : " + lieuTxt + "." : "");
+      copieAide = texte;
+      journaliser("Message d'aide copié");
+      if (essai){
+        copier(texte, "ESSAI : message copié pour pratiquer. En ESSAI, aucun message ne s'ouvre pour vrai. Texte : " + texte);
+      } else {
+        copier(texte, "Message copié. Touchez « Ouvrir Messages » et choisissez vous-même à qui l'envoyer — ou appelez votre proche.");
+        $("btnSms").hidden = false;
+      }
+    }
+    if (navigator.geolocation){
+      dire("Lecture de votre lieu, seulement maintenant…");
+      var fait = false;
+      navigator.geolocation.getCurrentPosition(function(pos){
+        if (fait) return; fait = true;
+        finir("position lue (" + pos.coords.latitude.toFixed(4) + ", " + pos.coords.longitude.toFixed(4) + ")");
+      }, function(){
+        if (fait) return; fait = true;
+        finir(lieuEcrit ? lieuEcrit : "position non lue — écrivez votre lieu dans vos réglages");
+        if (!lieuEcrit) dire("Position non lue. Écrivez votre lieu dans « Mes réglages », plus bas, puis recopiez le message.");
+      }, { timeout: 5000, maximumAge: 60000 });
+    } else {
+      finir(lieuEcrit ? lieuEcrit : "position non lue — écrivez votre lieu dans vos réglages");
+    }
+  });
+  $("btnSms").addEventListener("click", function(){
+    if (essai){ dire("ESSAI : les messages ne s'ouvrent pas pour vrai."); return; }
+    if (!copieAide){ dire("Copiez d'abord le message d'aide."); return; }
+    journaliser("Messages ouverts par vous");
+    suivreLien("sms:?&body=" + encodeURIComponent(copieAide));
+  });
+
+  /* ---- Appeler un proche ---- */
+  $("btnAppeler").addEventListener("click", function(){
+    var tel = $("tel1").value.trim();
+    var nom = $("nom1").value.trim();
+    if (essai){
+      journaliser("Appel pratiqué");
+      dire(tel ? "ESSAI : vous auriez appelé " + (nom || "votre proche") + " au " + tel + ". Aucun appel n'est parti." : "ESSAI : aucun numéro n'est écrit dans vos réglages. Rien n'a été inventé. Écrivez le numéro de votre proche plus bas.");
+      return;
+    }
+    if (!tel){ dire("Aucun numéro n'est écrit dans vos réglages. Rien n'a été inventé. Écrivez le numéro de votre proche dans « Mes réglages »."); document.getElementById("reglages").scrollIntoView(); return; }
+    journaliser("Appel à " + (nom || "votre proche"));
+    suivreLien("tel:" + tel.replace(/[^0-9+]/g, ""));
+  });
+
+  /* ---- Signal convenu : copier ---- */
+  $("btnSignal").addEventListener("click", function(){
+    var s = $("msgSignal").value.trim() || "Viens me voir.";
+    journaliser("Signal convenu copié");
+    copier(s, essai ? "ESSAI : signal copié pour pratiquer. Aucun envoi. Signal : " + s
+                    : "Signal copié. Envoyez-le vous-même à votre proche, comme convenu ensemble. Signal : " + s);
+  });
+
+  /* ---- Check-in : Je vais bien ---- */
+  function armerRappel(){
+    if (rappelTimer){ clearTimeout(rappelTimer); rappelTimer = null; }
+    var min = parseInt($("delai").value, 10);
+    if (!min || !dernierBien) return;
+    rappelTimer = setTimeout(function(){
+      $("rappel").hidden = false;
+      $("rappel").scrollIntoView({ block:"center" });
+      journaliser("Rappel « Je vais bien » apparu");
+      if (navigator.vibrate){ try{ navigator.vibrate([200, 100, 200, 100, 200]); }catch(e){} }
+    }, min * 60 * 1000);
+  }
+  $("btnBien").addEventListener("click", function(){
+    dernierBien = new Date();
+    $("rappel").hidden = true;
+    var b = $("bienStatut");
+    b.hidden = false;
+    b.textContent = "Je vais bien — noté à " + heure(dernierBien) + ". Rien n'a été envoyé.";
+    journaliser("« Je vais bien » noté");
+    dire("Noté à " + heure(dernierBien) + ", ici seulement. Rien n'a été envoyé à personne.");
+    armerRappel();
+  });
+  $("delai").addEventListener("change", armerRappel);
+
+  /* ---- STOP : 1 geste, sans NIP, arrête tout ---- */
+  $("btnStop").addEventListener("click", function(){
+    if (rappelTimer){ clearTimeout(rappelTimer); rappelTimer = null; }
+    $("rappel").hidden = true;
+    $("ovBanale").hidden = true;
+    if (wakeLock){ try{ wakeLock.release(); }catch(e){} wakeLock = null; var bw = $("btnWake"); bw.setAttribute("aria-pressed","false"); bw.textContent = "Garder l'écran allumé"; }
+    if (window.speechSynthesis){ try{ speechSynthesis.cancel(); }catch(e){} }
+    journaliser("STOP — tout arrêté");
+    dire("STOP. Tout est arrêté : rappel coupé, écran allumé coupé. Le 911 reste toujours disponible en haut de la page.");
+  });
+
+  /* ---- Sortie rapide : page banale ---- */
+  $("btnQuitter").addEventListener("click", function(){
+    $("ovBanale").hidden = false;
+    journaliser("Sortie rapide — page ordinaire affichée");
+  });
+  $("btnRetourOutil").addEventListener("click", function(){
+    $("ovBanale").hidden = true;
+    dire("Vous êtes de retour sur l'outil. Rien n'a été effacé.");
+  });
+
+  /* ---- Tout effacer : AGIR et LIRE, confirmation courte ---- */
+  function ouvrirEffacer(){ $("ovEffacer").hidden = false; }
+  $("btnEffacer").addEventListener("click", ouvrirEffacer);
+  $("btnEffacerAgir").addEventListener("click", ouvrirEffacer);
+  $("btnGarder").addEventListener("click", function(){ $("ovEffacer").hidden = true; });
+  $("btnConfirmeEffacer").addEventListener("click", function(){
+    ["nom1","tel1","nom2","tel2","lieu"].forEach(function(id){ $(id).value = ""; });
+    $("msgAide").value = "Bonjour, j'ai besoin d'aide. Pouvez-vous venir ou m'appeler ? Merci.";
+    $("msgSignal").value = "Viens me voir.";
+    $("delai").value = "60";
+    dernierBien = null; copieAide = "";
+    garder = false;
+    try { localStorage.removeItem(CLE); } catch(e){}
+    if (rappelTimer){ clearTimeout(rappelTimer); rappelTimer = null; }
+    $("rappel").hidden = true; $("bienStatut").hidden = true; $("btnSms").hidden = true;
+    $("journal").innerHTML = '<li class="vide">Aucun geste noté pour le moment.</li>';
+    essai = true; majMode(); majGarderUI(); majCarte();
+    $("ovEffacer").hidden = true;
+    dire("Tout est effacé de cet appareil. Les champs sont vides, comme au départ. Vous êtes de retour en mode ESSAI.");
+  });
+
+  charger();
+  majGarderUI();
+  majCarte();
+  majMode();
+  if (garder) dire("Vos réglages gardés sur cet appareil ont été retrouvés. Ils ne sont jamais envoyés.");
+})();
+</script>
+</body>
+</html>
