@@ -405,6 +405,8 @@
         box-shadow:2px 2px 0 var(--shadow);opacity:.85;
       }
       #btn-ask{background:var(--gold);color:#2b2118;opacity:1}
+      /* Lot correctif 4 nov. 2026 (P0-4) : indicateur visible « accompagnement actif ». */
+      #btn-accompany.accompany-on{background:var(--gold);color:#2b2118;opacity:1}
 
       /* Panneau questions fréquentes */
       .qa{

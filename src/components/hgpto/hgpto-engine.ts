@@ -836,6 +836,25 @@ export function initHgpto() {
         if (state === 'sleep' || isBusy()) return false;
         return true;
       }
+      /* Lot correctif 4 nov. 2026 (P0-3) : un bouton visible ne doit jamais
+         sembler mort. Quand peutDivertir() refuse, la raison est dite dans
+         une bulle courte, au lieu d'un retour muet (même patron que
+         startBataille, qui l'expliquait déjà). Appelée seulement sur les
+         actions demandées explicitement, jamais sur les chemins
+         automatiques (vie, dwell) : eux restent silencieux. */
+      function bullePasDivertir(){
+        var txt = 'Je ne peux pas là, minute — ';
+        if (calm) txt += 'je suis en mode calme. Sors-en, pis on recommence !';
+        else if (state === 'sleep') txt += 'je dormais, là. Réveille-moi, pis on recommence !';
+        else if (gameOn) txt += 'je suis déjà en partie de Serpents et échelles. Finis-la, pis on recommence !';
+        else if (tourOn) txt += 'je suis en visite guidée. Finis-la, pis on recommence !';
+        else if (batailleOn) txt += 'je suis déjà en bataille. Finis-la, pis on recommence !';
+        else if (paused) txt += 'je suis en pause. Touche Pause pour repartir, pis on recommence !';
+        else if (qaOpen) txt += 'le panneau de questions est ouvert. Ferme-le, pis on recommence !';
+        else if (isBusy()) txt += 'je finis ce que je fais, minute, pis on recommence !';
+        else txt += 'pas tout de suite. Réessaie dans un instant !';
+        showBubble(esc(txt), 8000, 'talk', { now:true });
+      }
       function talk(){
         // Lot nº 3 : pendant la visite guidée, le bavardage ambiant se
         // tait — avec les textes longs de la visite tranquille, une
@@ -1220,7 +1239,8 @@ export function initHgpto() {
         ensureAudio();
         engage();
         lastInteract = Date.now();
-        if (isHidden || paused) return;
+        if (paused){ showBubble(esc('Je suis en pause. Touche Pause pour repartir !'), 5000, 'talk', { now:true }); return; }
+        if (isHidden) return;
         bot.classList.remove('sleep-book');
         bot.classList.add('dripping');
         setTimeout(function(){ bot.classList.remove('dripping'); }, 7000);
@@ -1686,10 +1706,16 @@ export function initHgpto() {
       }
       /* « Minute ! J't'en pause. » : touché pendant qu'il est occupé, il se
          fige théâtralement, le dit… puis il reprend exactement où il était.
-         Dosé : parfois seulement, jamais systématique. */
+         Dosé par throttle (lot correctif 4 nov. 2026) : au plus 1 fois par
+         25 s, jamais si la même bulle est déjà affichée — sinon, en rafale,
+         la phrase sortait à presque chaque tap. */
+      var lastPauseLineAt = 0;
       function pauseLine(){
         lastInteract = Date.now();
         if (bot.classList.contains('frozen')) return;
+        if (Date.now() - lastPauseLineAt < 25000) return;
+        if (bubble.classList.contains('show') && bubble.innerHTML.indexOf("J't'en pause") !== -1) return;
+        lastPauseLineAt = Date.now();
         bot.classList.add('frozen');
         var keep = bubble.innerHTML;
         showBubble("Minute ! J't'en pause ! 😄", 1900, 'none', { now:true });
@@ -1775,13 +1801,14 @@ export function initHgpto() {
       function tickle(){
         lastInteract = Date.now();
         engage();
-        if (paused || isHidden) return;
+        if (paused){ showBubble(esc('Je suis en pause. Touche Pause pour me réveiller !'), 5000, 'talk', { now:true }); return; }
+        if (isHidden) return;
         if (tickleEscaping) return;
         if (state === 'nosepick'){ caughtPick(); return; }
         if (state === 'sleep'){ wake(true); return; }
         if (state === 'graffiti'){ caughtGraffiti(); return; }
-        if (gameOn && Math.random() < 0.5){ pauseLine(); return; }
-        if (isBusy() && BUSY_VIGNETTES.indexOf(state) !== -1 && Math.random() < 0.55){ pauseLine(); return; }
+        if (gameOn && Math.random() < 0.35){ pauseLine(); return; }
+        if (isBusy() && BUSY_VIGNETTES.indexOf(state) !== -1 && Math.random() < 0.35){ pauseLine(); return; }
         var nowTap = Date.now();
         tapTimes = tapTimes.filter(function(t){ return nowTap - t < 1600; });
         tapTimes.push(nowTap);
@@ -2335,7 +2362,8 @@ export function initHgpto() {
       btnGames.addEventListener('click', function(){
         ensureAudio();
         lastInteract = Date.now();
-        if (gameOn || tourOn) return;
+        if (gameOn){ showBubble(esc('Je suis déjà en partie de Serpents et échelles. Finis-la, pis on recommence !'), 6000, 'talk', { now:true }); return; }
+        if (tourOn){ showBubble(esc('Je suis en visite guidée. Finis-la, pis on recommence !'), 6000, 'talk', { now:true }); return; }
         if (qaOpen) closeQA();
         if (paused){ paused = false; btnPause.textContent = 'Pause'; btnPause.setAttribute('aria-pressed','false'); }
         if (state === 'sleep') wake(false);
@@ -2398,6 +2426,7 @@ export function initHgpto() {
         accompany = v;
         btnAccompany.textContent = v ? 'Arrêter l\u2019accompagnement' : 'Accompagne-moi';
         btnAccompany.setAttribute('aria-pressed', v ? 'true' : 'false');
+        btnAccompany.classList.toggle('accompany-on', v);
       }
       function applyMode(m, announce){
         if (['defaut','vendeur','ami','grognon'].indexOf(m) === -1) m = 'defaut';
@@ -2584,26 +2613,10 @@ export function initHgpto() {
         var open = controlsEl.classList.toggle('open');
         btnDock.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
-      controlsEl.addEventListener('click', function(ev){
-        if (ev.target !== btnDock && controlsEl.classList.contains('open') && window.innerWidth <= 560){
-          /* Correctif du doigt de la direction (23 oct. 2026, 19 h 18) : ce
-             referme-tout attrapait aussi les SÉLECTEURS (mode, météo).
-             Au tactile, le tap sur un <select> émet son « click » AVANT
-             l'ouverture du menu natif : le panneau se refermait donc
-             sur-le-champ, le sélecteur passait en display:none et le
-             menu n'ouvrait jamais — « le sélecteur ne fonctionne pas
-             sur tactile », « les modes toujours non présents ». Les
-             suites d'avant pilotaient le sélecteur par programme
-             (selectOption) au format bureau : invisibles au défaut.
-             Règle : un tap qui vise un sélecteur (ou son intérieur)
-             ne referme JAMAIS le panneau — le visiteur est en train
-             de choisir. */
-          var t = ev.target;
-          if (t && (t.tagName === 'SELECT' || (t.closest && t.closest('select')))) return;
-          controlsEl.classList.remove('open');
-          btnDock.setAttribute('aria-expanded','false');
-        }
-      });
+      /* Lot correctif 4 nov. 2026 (P0-2) : le dock ne se referme PLUS
+         après un tap — sur mobile, chaque action exigeait sinon de
+         rouvrir ••• d'abord (piège du dock). Il se ferme uniquement
+         par ••• (bascule ci-dessus). */
 
       /* ---------- Guider pour vrai : il marche jusqu'à la section, elle brille ---------- */
       /* Portage site : correspondance sections -> routes réelles.
@@ -2729,7 +2742,7 @@ export function initHgpto() {
       /* ---------- Mode « Accompagne-moi » : il réagit aux clics et aux sections,
          seulement quand le visiteur l'a demandé. Quittable en un clic, et il se
          retire pendant le jeu (reco nº 7). ---------- */
-      var accompany = false, commentedSecs = {}, lastAccompAt = 0;
+      var accompany = false, commentedSecs = {}, lastAccompAt = 0, lastAccompResetAt = 0;
       var SECTION_COMMENTS = {
         "sec-accueil":"Vous voilà à l'accueil ! C'est ici que tout commence.",
         "sec-jeux":"Les jeux gratuits ! Voulez-vous que je vous en conseille un ? Ouvrez « Une question ? ».",
@@ -2740,11 +2753,17 @@ export function initHgpto() {
         "sec-mascotte":"C'est ma carte, ça ! Gérant, informateur, et champion de la chatouille subie.",
         "sec-arbre":"L'arbre HP Outils : chaque branche aide les autres à pousser."
       };
+      /* Lot correctif 4 nov. 2026 (P0-4 / P1-1) : ligne de repli quand aucun
+         commentaire précis ne s'applique — le silence ne doit plus passer
+         pour une panne. Sert aux taps, aux sections sans ligne et aux
+         routes sans ligne. */
+      var ACCOMP_FALLBACK = "Je vous accompagne — dites-moi si vous cherchez quelque chose.";
       var btnAccompany = document.getElementById('btn-accompany');
       btnAccompany.addEventListener('click', function(){
         accompany = !accompany;
         btnAccompany.textContent = accompany ? 'Arrêter l\u2019accompagnement' : 'Accompagne-moi';
         btnAccompany.setAttribute('aria-pressed', accompany ? 'true' : 'false');
+        btnAccompany.classList.toggle('accompany-on', accompany);
         lastInteract = Date.now();
         if (accompany){
           if (state === 'sleep') wake(false);
@@ -2759,29 +2778,38 @@ export function initHgpto() {
             if (!en.isIntersecting || !accompany || commentedSecs[en.target.id]) return;
             if (paused || isHidden || gameOn || qaOpen || state === 'sleep' || isBusy()) return;
             if (Date.now() - lastAccompAt < 9000) return;
-            var line = SECTION_COMMENTS[en.target.id];
-            if (!line) return;
+            var line = SECTION_COMMENTS[en.target.id] || ACCOMP_FALLBACK;
             commentedSecs[en.target.id] = true;
             lastAccompAt = Date.now();
             guideTarget = maxX() - 8;
             showBubble(esc(line), 7000, 'talk');
           });
         }, { threshold: 0.45 });
+        var seenSecs = {};
         Object.keys(SECTION_COMMENTS).forEach(function(id){
           var el = document.getElementById(id);
-          if (el) secObs.observe(el);
+          if (el){ secObs.observe(el); seenSecs[id] = true; }
+        });
+        /* Lot correctif 4 nov. 2026 (P1-1) : observer aussi les sections
+           sec-* sans ligne précise — elles reçoivent la ligne de repli. */
+        Array.prototype.forEach.call(document.querySelectorAll('[id^="sec-"]'), function(el){
+          if (!seenSecs[el.id]) secObs.observe(el);
         });
       }
       document.addEventListener('pointerdown', function(ev){
-        if (!accompany || gameOn || paused || isHidden) return;
-        if (!ev.target.closest || !ev.target.closest('main')) return;
+        if (!accompany || gameOn || batailleOn || paused || isHidden) return;
+        var tg = ev.target;
+        if (!tg.closest) return;
+        if (tg.closest('#bot') || tg.closest('#bot-controls') || tg.closest('#qa') || tg.closest('#souvenir')) return;
         if (Date.now() - lastAccompAt < 7000) return;
         lastAccompAt = Date.now();
         guideTarget = ev.clientX < vw()/2 ? minX() + 8 : maxX() - 8;
-        var sec = ev.target.closest('[id^="sec-"]');
+        var sec = tg.closest('[id^="sec-"]');
         if (sec && SECTION_COMMENTS[sec.id] && !commentedSecs[sec.id]){
           commentedSecs[sec.id] = true;
           showBubble(esc(SECTION_COMMENTS[sec.id]), 7000, 'talk');
+        } else if (!sec || !SECTION_COMMENTS[sec.id]){
+          showBubble(esc(ACCOMP_FALLBACK), 7000, 'talk');
         }
       }, { passive:true });
 
@@ -4745,7 +4773,7 @@ export function initHgpto() {
       function doFleur(auto){
         lastInteract = Date.now();
         if (fleurBusy) return;
-        if (!peutDivertir()) return;
+        if (!peutDivertir()){ if (!auto) bullePasDivertir(); return; }
         /* Gardes fleur : jamais en vendeur, jamais la nuit, jamais
            sur route sensible, max 1/session. Le refus d'achat ne
            bloque que la proposition AUTOMATIQUE (moment calme) : une
@@ -4775,22 +4803,33 @@ export function initHgpto() {
         setTimeout(function(){ fleurBusy = false; }, reduced ? 80 : 640);
       }
       var pixelJeuBusy = false, lastPixelIdx = -1, lastScratch = false;
+      var pixelJeuTimer = null;
       function doPixelJeu(){
         lastInteract = Date.now();
-        if (pixelJeuBusy) return;
-        if (!peutDivertir()) return;
+        if (pixelJeuBusy){ showBubble(esc('On joue déjà avec Pixel ! Attends la fin de la partie.'), 5000, 'talk', { now:true }); return; }
+        if (!peutDivertir()){ bullePasDivertir(); return; }
         sessClearFlag('hgpto-refus');   // demande explicite : initiative du visiteur (§4.2)
         /* Gardes Pixel : on ne dérange ni une consoleuse ni une dormeuse. */
         if (catVisible && catState === 'console'){ showBubble(esc(PIXEL_JEU_CONSOLE), 6000, 'talk'); return; }
         if (catVisible && catState === 'sleep'){ showBubble(esc(PIXEL_JEU_DODO), 6000, 'talk'); return; }
         pixelJeuBusy = true;
+        /* Lot correctif 4 nov. 2026 (P1-2) : temporisateur de secours — si la
+           chaîne de bonds ne progresse pas, le drapeau se libère seul après
+           30 s (une partie normale dure moins de 20 s). Prudence, pas de
+           preuve de blocage (audit §3, cause nº 4). */
+        if (pixelJeuTimer) clearTimeout(pixelJeuTimer);
+        pixelJeuTimer = setTimeout(function(){
+          pixelJeuBusy = false;
+          if (peloteEl){ peloteEl.style.opacity = '0'; peloteEl.hidden = true; }
+          pixelJeuTimer = null;
+        }, 30000);
         meow();   // doux au bouton « Joue avec Pixel » (décision HP 4 nov. 2026)
         var wasAbsent = !catVisible;
         if (wasAbsent) summonCat('goto');
         showBubble(esc(PIXEL_JEU_ARRIVEE), 5000, 'talk');
         var bonds = 3 + (Math.random() < 0.5 ? 1 : 0), step = 0;
         function bond(){
-          if (paused || isHidden || batailleOn){ pixelJeuBusy = false; peloteEl.style.opacity = '0'; peloteEl.hidden = true; return; }
+          if (paused || isHidden || batailleOn){ if (pixelJeuTimer){ clearTimeout(pixelJeuTimer); pixelJeuTimer = null; } pixelJeuBusy = false; peloteEl.style.opacity = '0'; peloteEl.hidden = true; return; }
           if (step >= bonds){ finishPixelJeu(); return; }
           var px = Math.max(10, Math.min(vw() - 50, catX + CAT_W * 0.5 + (Math.random() * 60 - 30)));
           peloteEl.style.left = px + 'px';
@@ -4825,6 +4864,7 @@ export function initHgpto() {
           }
         }
         function endPixelJeu(){
+          if (pixelJeuTimer){ clearTimeout(pixelJeuTimer); pixelJeuTimer = null; }
           pixelJeuBusy = false;
           logDay("joué avec Pixel — pelote, ronrons, session seulement");
           if (!catVisible) return;
@@ -5658,8 +5698,10 @@ export function initHgpto() {
       })();
       setInterval(function(){
         var k = routeKey();
+        if (Date.now() - lastAccompResetAt > 600000){ commentedSecs = {}; lastAccompResetAt = Date.now(); }
         if (k === lastRoute) return;
         lastRoute = k;
+        commentedSecs = {};
         dwellRoute = k; dwellStart = Date.now();
         ieOnRoute(k);
         // Retour sur une page déjà vue cette session : armer le clin
@@ -5673,8 +5715,7 @@ export function initHgpto() {
         if (returnWinkPending) return;
         if (!accompany || paused || isHidden || gameOn || qaOpen || state === 'sleep' || isBusy()) return;
         if (commentedSecs['route:' + k]) return;
-        var line = ROUTE_COMMENTS[k];
-        if (!line) return;
+        var line = ROUTE_COMMENTS[k] || ACCOMP_FALLBACK;
         if (Date.now() - lastAccompAt < 9000) return;
         commentedSecs['route:' + k] = true;
         lastAccompAt = Date.now();
