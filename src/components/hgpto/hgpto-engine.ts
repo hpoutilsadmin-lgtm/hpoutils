@@ -652,6 +652,7 @@ export function initHgpto() {
          anti-sommeil — mais elle n'éteint plus la bulle : aucune
          minuterie ne la retire, elle reste jusqu'au premier geste. */
       var bubbleFreeAt = 0;
+      var lastBubbleHtml = '';
       var bubbleQueue = [];
       var bubbleFlushTimer = null;
       function bubbleReadMs(html, dur){
@@ -665,7 +666,18 @@ export function initHgpto() {
         return Math.min(ms, 45000);
       }
       function renderBubble(html, dur, mood, onShow){
+        /* Lot correctif nº 2 (4 nov. 2026) : une réponse identique à la
+           bulle déjà affichée (ex. deux pastilles dont la réponse est
+           mot pour mot la même) rendait le tap invisible — même texte,
+           même badge, aucun changement à l'écran. On force alors une
+           re-livraison visible : la bulle s'efface puis réapparaît
+           (fondu CSS .25 s), et la voix redit la réponse. Hors
+           mouvement réduit, pas de fondu : le re-rendu + la voix
+           suffisent. Aucun texte n'est changé ici. */
+        var sameAnswer = bubble.classList.contains('show') && lastBubbleHtml === html;
+        if (sameAnswer && !reduced){ bubble.classList.remove('show'); void bubble.offsetWidth; }
         bubble.innerHTML = html;
+        lastBubbleHtml = html;
         /* Lot C (31 oct. 2026) : ✕ propre à la bulle — fermeture manuelle
            seulement. Le bouton est réajouté à chaque rendu (innerHTML
            l'efface) ; son clic est géré par le gestionnaire de clic de
@@ -4693,10 +4705,18 @@ export function initHgpto() {
       function throwKibble(){
         ensureAudio();
         lastInteract = Date.now();
-        if (kibbleBusy || gameOn || paused || isHidden || docHidden) return;
+        /* Lot correctif nº 2 (4 nov. 2026) : ces gardes retournaient
+           muettes — un tap sur « Croquette » semblait mort. Chaque
+           refus dit maintenant sa raison, avec les formulations déjà
+           employées par bullePasDivertir ; les conditions, elles, ne
+           changent pas. */
+        if (kibbleBusy){ showBubble(esc('Une croquette est déjà en route, minute !'), 5000, 'talk', { now:true }); return; }
+        if (gameOn){ showBubble(esc('Je suis en partie de Serpents et échelles, minute — finis-la, pis on recommence !'), 5000, 'talk', { now:true }); return; }
+        if (paused){ showBubble(esc('Je suis en pause. Touche Pause pour repartir, pis on recommence !'), 5000, 'talk', { now:true }); return; }
+        if (isHidden || docHidden){ showBubble(esc('Pas tout de suite. Réessaie dans un instant !'), 5000, 'talk', { now:true }); return; }
         if (state === 'sleep') wake(false);   // même précédent que doFeedCat : la nourriture réveille la maison
-        if (hopBusy) return;   // elle saute de bloc en bloc : on ne lui dispute pas la trajectoire, le visiteur réessaiera
-        if (catVisible && catState === 'console') return;   // elle console HGPTO : on ne la dérange pas
+        if (hopBusy){ showBubble(esc('Pixel saute de bloc en bloc, minute — relance ta croquette dans un instant !'), 5000, 'talk', { now:true }); return; }   // elle saute de bloc en bloc : on ne lui dispute pas la trajectoire, le visiteur réessaiera
+        if (catVisible && catState === 'console'){ showBubble(esc('Pixel me console, là — laisse-la finir, pis on joue !'), 5000, 'talk', { now:true }); return; }   // elle console HGPTO : on ne la dérange pas
         if (catVisible && catState === 'sleep') setCatState('idle');   // mais une croquette, ça réveille une gourmande
         kibbleBusy = true;
         var wasAbsent = !catVisible;
@@ -4708,6 +4728,12 @@ export function initHgpto() {
         kibbleEl.style.left = startX + 'px';
         kibbleEl.style.opacity = '1';
         kibbleEl.hidden = false;
+        /* Lot correctif nº 2 (4 nov. 2026) : retour visuel immédiat —
+           la ligne de croquette part au lancer, à tous les coups
+           (avant, 40 % seulement, et seulement à l'atterrissage,
+           après la marche de Pixel). La bulle d'atterrissage est
+           retirée du même coup : une seule bulle par lancer. */
+        showBubble(esc(pick(KIBBLE_LINES)), 5200, 'talk', { now:true });
         if (actx && !muted) tone(actx.currentTime + 0.02, 300, 540, 0.09, 0.05, 'sine');
         var dx = landX - startX;
         var anim = null;
@@ -4734,9 +4760,6 @@ export function initHgpto() {
               if (catVisible){ catMode = 'follow'; catGo(catBesideX(), 68, catArrivedFollow); }
             }, 2100);
           });
-          if (Math.random() < 0.4 && !qaOpen && !isBusy()){
-            showBubble(esc(pick(KIBBLE_LINES)), 5200, 'talk');
-          }
           logDay("un visiteur a lancé une croquette à Pixel — accourue, mangée, miaulée");
         }
         if (anim && anim.finished) anim.finished.then(landed);
@@ -4826,7 +4849,13 @@ export function initHgpto() {
         meow();   // doux au bouton « Joue avec Pixel » (décision HP 4 nov. 2026)
         var wasAbsent = !catVisible;
         if (wasAbsent) summonCat('goto');
-        showBubble(esc(PIXEL_JEU_ARRIVEE), 5000, 'talk');
+        /* Lot correctif nº 2 (4 nov. 2026) : retour visuel immédiat —
+           la bulle d'arrivée était en file d'attente ('talk' sans
+           priorité) : derrière une bulle de réponse, elle n'apparaissait
+           que des secondes plus tard. Un tap explicite rend sa bulle
+           prioritaire, comme bullePasDivertir et la bulle « déjà en
+           partie » ci-dessus. */
+        showBubble(esc(PIXEL_JEU_ARRIVEE), 5000, 'talk', { now:true });
         var bonds = 3 + (Math.random() < 0.5 ? 1 : 0), step = 0;
         function bond(){
           if (paused || isHidden || batailleOn){ if (pixelJeuTimer){ clearTimeout(pixelJeuTimer); pixelJeuTimer = null; } pixelJeuBusy = false; peloteEl.style.opacity = '0'; peloteEl.hidden = true; return; }
