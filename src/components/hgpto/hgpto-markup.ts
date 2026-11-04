@@ -29,6 +29,27 @@ export const HGPTO_MARKUP = `
       <div class="cat" id="cat" data-state="sleep" role="button" tabindex="0"
            aria-label="Pixel, la chatte de Sir H. Gepeto. Touchez-la doucement pour la flatter.">
         <div class="burst" id="cat-burst" aria-hidden="true"></div>
+        <div class="pixel-scene" id="pixel-scene"><div class="pixel-jump"><div class="pixel-flip">
+        <img id="c-queue" src="/hgpto/pixel/c-queue.png" alt="queue" style="position:absolute;left:198px;top:171px;width:113px;height:150px;" draggable="false">
+        <img id="c-patte-arr" src="/hgpto/pixel/c-patte-arr.png" alt="patte-arr" style="position:absolute;left:176px;top:243px;width:80px;height:111px;" draggable="false">
+        <img id="c-torse" src="/hgpto/pixel/c-torse.png" alt="torse" style="position:absolute;left:48px;top:171px;width:214px;height:129px;" draggable="false">
+        <img id="c-patte-av-g" src="/hgpto/pixel/c-patte-av-g.png" alt="patte-av-g" style="position:absolute;left:16px;top:221px;width:96px;height:129px;" draggable="false">
+        <img id="c-patte-av-d" src="/hgpto/pixel/c-patte-av-d.png" alt="patte-av-d" style="position:absolute;left:96px;top:232px;width:90px;height:121px;" draggable="false">
+        <div id="tete-wrap" style="position:absolute;left:26px;top:5px;width:269px;height:195px">
+        <img id="c-tete" src="/hgpto/pixel/c-tete.png" alt="tete" style="position:absolute;left:0;bottom:-10px;width:100%;height:100%" draggable="false">
+        <img id="oreille-g" src="/hgpto/pixel/oreille-g.png" alt="oreille gauche" style="position:absolute;left:16.1%;top:8.6%;width:23.5%;height:27.1%" draggable="false">
+        <img id="oreille-d" src="/hgpto/pixel/oreille-d.png" alt="oreille droite" style="position:absolute;left:56.6%;top:23.3%;width:21.4%;height:17.1%" draggable="false">
+        <img id="oeil-cyan" src="/hgpto/pixel/oeil-cyan.png" alt="oeil cyan" style="position:absolute;left:47.6%;top:46.6%;width:28.6%;height:42%" draggable="false">
+        <img id="oeil-rouge" src="/hgpto/pixel/oeil-rouge.png" alt="oeil rouge" style="position:absolute;left:47.6%;top:46.6%;width:28.6%;height:42%;display:none" draggable="false">
+        <img id="c-tete-grognon" src="/hgpto/pixel/c-tete-grognon.png" alt="tete grognon" style="position:absolute;left:0;bottom:0;width:100%;display:none" draggable="false">
+        <img id="c-tete-fiche-heureux" src="/hgpto/pixel/c-tete-fiche-heureux.png" alt="tete fiche heureux" style="position:absolute;left:42px;bottom:-20px;width:170px;display:none" draggable="false">
+        <img id="c-tete-fiche-curieux" src="/hgpto/pixel/c-tete-fiche-curieux.png" alt="tete fiche curieux" style="position:absolute;left:49px;bottom:-14px;width:170px;display:none" draggable="false">
+        <img id="c-tete-fiche-surpris" src="/hgpto/pixel/c-tete-fiche-surpris.png" alt="tete fiche surpris" style="position:absolute;left:56px;bottom:-11px;width:170px;display:none" draggable="false">
+        </div>
+        <img id="queue-grognon" src="/hgpto/pixel/queue-grognon.png" alt="queue grognon" style="position:absolute;left:213px;top:156px;width:105px;display:none" draggable="false">
+        <img id="panneaux" src="/hgpto/pixel/panneaux.png" alt="panneaux" style="position:absolute;right:-10px;top:-10px;width:130px;display:none" draggable="false">
+</div></div><span id="pixel-zzz" class="pixel-zzz" aria-hidden="true" style="position:absolute;top:2px;right:12px;display:none">Zzz</span></div>
+        <div class="pixel-fallback" id="pixel-fallback" hidden>
         <div class="cat-inner">
           <svg class="cat-svg" viewBox="0 0 120 92" aria-hidden="true">
             <ellipse cx="60" cy="85" rx="34" ry="4.5" fill="rgba(43,33,24,.20)"/>
@@ -87,6 +108,7 @@ export const HGPTO_MARKUP = `
               <path d="M6 4 Q12 14 8 26"/><path d="M16 2 Q22 13 18 27"/><path d="M26 4 Q31 14 28 25"/>
             </g>
           </svg>
+        </div>
         </div>
       </div>
       <div class="bowl" id="bowl" hidden aria-hidden="true">

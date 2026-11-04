@@ -4432,6 +4432,61 @@ export function initHgpto() {
       var bowlEl = document.getElementById('bowl');
       var kibbleEl = document.getElementById('kibble');
       var scratchEl = document.getElementById('scratch');
+      /* --- Scène Pixel (lot Pixel seul, 4 nov. 2026) : la scène du
+         template corrigé remplace le chat SVG. Les calques vivent
+         sous /hgpto/pixel/. La tête reste strictement fixe : aucune
+         animation ne vise tete-wrap. --- */
+      var pixelSceneEl = document.getElementById('pixel-scene');
+      var pixelFallbackEl = document.getElementById('pixel-fallback');
+      /* Repli : si l'image centrale (torse) échoue à charger, on
+         montre l'ancien chat SVG (caché par défaut) — jamais de vide.
+         Le repli est statique (poses/yeux suivent data-state, sans
+         animation). */
+      (function pixelSceneCheck(){
+        var torse = document.getElementById('c-torse');
+        if (!pixelSceneEl || !torse) return;
+        function pixelUseFallback(){ catEl.classList.add('pixel-fb'); }
+        if (torse.complete && torse.naturalWidth === 0){ pixelUseFallback(); return; }
+        torse.addEventListener('error', pixelUseFallback);
+      })();
+      /* Expressions : 5 têtes commutables du template (planches,
+         grognon, heureux, curieux, surpris). Adapté de teteVar() :
+         mêmes ids, sans boutons de test. L'œil rouge est un calque
+         de test du template : il reste caché sur le site. */
+      function pixelExpr(v){
+        function show(id, on){ var el = document.getElementById(id); if (el) el.style.display = on ? '' : 'none'; }
+        show('c-tete', v === 'planches');
+        show('oreille-g', v === 'planches');
+        show('oreille-d', v === 'planches');
+        show('c-tete-grognon', v === 'grognon');
+        show('oeil-cyan', v === 'planches');
+        show('oeil-rouge', false);
+        show('c-tete-fiche-heureux', v === 'heureux');
+        show('c-tete-fiche-curieux', v === 'curieux');
+        show('c-tete-fiche-surpris', v === 'surpris');
+        show('c-queue', v !== 'grognon');
+        show('queue-grognon', v === 'grognon');
+      }
+      /* Table états moteur → expressions (validée par HP 4 nov. 2026) :
+         walk/zoom → planches ; rub → heureux ; purr → heureux ;
+         sleep/console → planches immobile + « Zzz » textuel ;
+         eat → planches (devant le bol) ; stare → curieux ;
+         startle → surpris (+ saut CSS) ; sinon → planches.
+         Mode grognon du site activé : Pixel est grognon, sauf si
+         elle dort ou console (le sommeil garde le dessus). */
+      function pixelApplyState(s){
+        var zzzEl = document.getElementById('pixel-zzz');
+        if (zzzEl) zzzEl.style.display = (s === 'sleep' || s === 'console') ? '' : 'none';
+        if (hgMode === 'grognon' && s !== 'sleep' && s !== 'console'){ pixelExpr('grognon'); return; }
+        if (s === 'walk' || s === 'zoom') pixelExpr('planches');
+        else if (s === 'rub') pixelExpr('heureux');
+        else if (s === 'purr') pixelExpr('heureux');
+        else if (s === 'sleep' || s === 'console') pixelExpr('planches');
+        else if (s === 'eat') pixelExpr('planches');
+        else if (s === 'stare') pixelExpr('curieux');
+        else if (s === 'startle') pixelExpr('surpris');
+        else pixelExpr('planches');
+      }
       var CAT_W = window.innerWidth <= 560 ? 76 : 96;
       var catX = -160, catVisible = false, catMode = 'off', catState = 'idle';
       var catTarget = null, catSpeed = 60, catArrive = null, catTimer = null;
@@ -4442,11 +4497,29 @@ export function initHgpto() {
         "Doucement, doucement… voilà, comme ça, ma belle.",
         "Ce ronron-là, c'est sa façon de dire merci. Moi, je traduis."
       ];
-      function setCatState(s){ catState = s; catEl.setAttribute('data-state', s); }
+      function setCatState(s){ catState = s; catEl.setAttribute('data-state', s); pixelApplyState(s); }
       function catPlace(){ catEl.style.transform = 'translateX(' + catX + 'px)'; }
       function catBesideX(){
         var right = x + botW() + 6;
-        return (right + CAT_W < vw() - 4) ? right : Math.max(4, x - CAT_W - 6);
+        var cand = (right + CAT_W < vw() - 4) ? right : Math.max(4, x - CAT_W - 6);
+        return catAvoidDock(cand);
+      }
+      /* Évite que Pixel se gare sous le dock ••• (z 61 > couche 60) :
+         le dock est mesuré en direct (sa largeur dépend de ses
+         boutons), avec 6 px de marge. Si les deux côtés de Gepeto
+         chevauchent le dock, on garde l'ancien comportement (repli
+         sans régression). La traversée (zoomies) passe toujours
+         brièvement sous le dock, comme avant. */
+      function catAvoidDock(cand){
+        var dock = document.querySelector('.bot-controls');
+        if (!dock) return cand;
+        var r = dock.getBoundingClientRect();
+        if (!r || r.width === 0) return cand;
+        var lo = r.left - 6, hi = r.right + 6;
+        if (cand + CAT_W <= lo || cand >= hi) return cand;
+        var other = (cand === x + botW() + 6) ? Math.max(4, x - CAT_W - 6) : (x + botW() + 6);
+        if (other + CAT_W <= lo || other >= hi) return Math.max(4, Math.min(other, vw() - CAT_W - 4));
+        return cand;
       }
       function catGo(target, speed, arrive){
         catTarget = Math.max(-CAT_W - 20, Math.min(vw() + 20, target));
@@ -4468,6 +4541,7 @@ export function initHgpto() {
         if (catMode !== 'follow' || !catVisible) return;
         if (state === 'sleep'){ setCatState('sleep'); return; }
         setCatState('rub');
+        meow();   // doux à l'arrivée (décision HP 4 nov. 2026)
         if (!isBusy() && !qaOpen && Math.random() < 0.5){
           setExpr('happy');
           showBubble(esc(pick(CAT_RUB_LINES)), 4600, 'none');
@@ -4506,37 +4580,30 @@ export function initHgpto() {
         o.connect(g); g.connect(actx.destination);
         o.start(t0); o.stop(t0 + dur + 0.02);
       }
-      function meow(soft){
-        if (!actx || muted || docHidden) return;
-        // Niveaux relevés le 23 oct. 2026 (doigt de la direction : Pixel ne
-        // s'entendait pas) — le doux reste doux, le franc s'entend.
-        var t = actx.currentTime + 0.02, v = soft ? 0.04 : 0.07;
-        toneRaw(t, 540, 880, 0.16, v, 'sine');
-        toneRaw(t + 0.17, 880, 430, 0.26, v, 'sine');
+      /* Miaule doux (4 nov. 2026, lot Pixel seul) : l'ancien synthétisé
+         (toneRaw) est remplacé par les enregistrements doux validés
+         14 h 44 — rotation 1-2-3, sur geste seulement. Aucun appel
+         automatique ne subsiste : les appels de comportements ont été
+         retirés (voir note de dépôt). */
+      var PIXEL_MEOWS = ['/hgpto/pixel/pixel-miaou-distinct-1-doux.mp3', '/hgpto/pixel/pixel-miaou-distinct-2-doux.mp3', '/hgpto/pixel/pixel-miaou-distinct-3-doux.mp3'];
+      var pixelMeowIdx = 0, pixelMeowAudio = null;
+      function meow(){
+        if (muted || docHidden) return;
+        try {
+          if (!pixelMeowAudio) pixelMeowAudio = new Audio();
+          pixelMeowAudio.src = PIXEL_MEOWS[pixelMeowIdx % PIXEL_MEOWS.length];
+          pixelMeowIdx++;
+          pixelMeowAudio.currentTime = 0;
+          var pr = pixelMeowAudio.play();
+          if (pr && pr.catch) pr.catch(function(){});
+        } catch (e) {}
       }
+      /* Ronron synthétisé, gardé (décision HP 4 nov. 2026) : l'ancien
+         purr() du moteur, restauré verbatim — la caresse ronronne. */
       function purr(){
         if (!actx || muted || docHidden) return;
         var t = actx.currentTime + 0.02;
         for (var i = 0; i < 9; i++) toneRaw(t + i * 0.13, 56, 48, 0.1, 0.075, 'sawtooth');
-      }
-      /* Elle miaule PARFOIS, pour rien, comme une vraie chatte
-         (demande de la direction, 23 oct. 2026) : un petit miaou doux quand
-         elle est là, tranquille — jamais en rafale (au plus un aux
-         ~80 s, et l'horaire de vie ne la propose qu'à l'occasion),
-         jamais quand elle dort, jamais par-dessus une tâche. Une
-         fois sur quatre, un deuxième miaou plus doux répond, comme
-         si elle se parlait à elle-même. */
-      var lastAmbientMeow = 0;
-      function catAmbientMeow(){
-        if (!catVisible || catState === 'sleep' || catState === 'console' || catState === 'eat') return;
-        if (state === 'sleep') return;
-        var now = Date.now();
-        if (now - lastAmbientMeow < 80000) return;
-        lastAmbientMeow = now;
-        meow(true);
-        if (Math.random() < 0.25){
-          setTimeout(function(){ if (catVisible && catState !== 'sleep') meow(true); }, 950);
-        }
       }
       function spawnCatBurst(chars, n){
         if (reduced) return;
@@ -4569,11 +4636,11 @@ export function initHgpto() {
         showBubble("À manger, ma Pixel ! Viens, c'est prêt.", 4200, 'question');
         logDay("nourri Pixel — elle mange comme quatre, cette chatte");
         summonCat('goto');
-        meow();
         catGo(bx - 4, 165, function(){
           setCatState('eat');
           setTimeout(function(){
             if (catState === 'eat') setCatState('idle');
+            meow();   // doux après manger (décision HP 4 nov. 2026)
             bowlEl.style.opacity = '0';
             setTimeout(function(){ bowlEl.hidden = true; }, 450);
             if (catVisible){ catMode = 'follow'; catGo(catBesideX(), 68, catArrivedFollow); }
@@ -4627,7 +4694,6 @@ export function initHgpto() {
           catMode = 'goto';
           catGo(landX - CAT_W / 2 + 6, 330, function(){
             setCatState('eat');
-            meow();
             setTimeout(function(){
               kibbleEl.style.opacity = '0';
               setTimeout(function(){
@@ -4636,6 +4702,7 @@ export function initHgpto() {
                 kibbleBusy = false;
               }, 380);
               if (catState === 'eat') setCatState('idle');
+              meow();   // doux après manger (décision HP 4 nov. 2026)
               if (catVisible){ catMode = 'follow'; catGo(catBesideX(), 68, catArrivedFollow); }
             }, 2100);
           });
@@ -4650,6 +4717,17 @@ export function initHgpto() {
       btnKibble.addEventListener('click', function(){ throwKibble(); });
       if (btnFleur) btnFleur.addEventListener('click', function(){ doFleur(); });
       if (btnPixelJeu) btnPixelJeu.addEventListener('click', function(){ doPixelJeu(); });
+      /* Pixel suit le mode grognon du site (décision HP 4 nov. 2026) :
+         applyMode() pose data-mode sur le bot — on l'observe, sans
+         toucher au code de Sir H. Gepeto. Si elle dort ou console,
+         le sommeil garde le dessus. */
+      if (typeof MutationObserver !== 'undefined' && typeof bot !== 'undefined' && bot){
+        new MutationObserver(function(){
+          if (bot.getAttribute('data-mode') === 'grognon' && catState !== 'sleep' && catState !== 'console') pixelExpr('grognon');
+          else pixelApplyState(catState);
+        }).observe(bot, { attributes: true, attributeFilter: ['data-mode'] });
+        if (bot.getAttribute('data-mode') === 'grognon' && catState !== 'sleep' && catState !== 'console') pixelExpr('grognon');
+      }
       if (btnBataille) btnBataille.addEventListener('click', function(){ startBataille(); });
       /* ---------- Scènes de vie quotidienne (26 oct. 2026) ----------
          Fleur + Pixel, après throwKibble (même pattern : élément créé
@@ -4706,6 +4784,7 @@ export function initHgpto() {
         if (catVisible && catState === 'console'){ showBubble(esc(PIXEL_JEU_CONSOLE), 6000, 'talk'); return; }
         if (catVisible && catState === 'sleep'){ showBubble(esc(PIXEL_JEU_DODO), 6000, 'talk'); return; }
         pixelJeuBusy = true;
+        meow();   // doux au bouton « Joue avec Pixel » (décision HP 4 nov. 2026)
         var wasAbsent = !catVisible;
         if (wasAbsent) summonCat('goto');
         showBubble(esc(PIXEL_JEU_ARRIVEE), 5000, 'talk');
@@ -4776,7 +4855,6 @@ export function initHgpto() {
         var tx = 30 + Math.random() * Math.max(30, vw() - CAT_W - 60);
         catGo(tx, 125, function(){
           setCatState('stare');
-          meow(true);
           setTimeout(function(){
             if (catState === 'stare'){
               setCatState('idle');
@@ -4792,7 +4870,6 @@ export function initHgpto() {
         var toRight = catX < vw() / 2;
         catGo(toRight ? vw() - CAT_W - 6 : 6, 640, function(){
           setCatState('idle');
-          meow(true);
           setTimeout(function(){
             if (catVisible && catMode === 'goto'){ catMode = 'follow'; catGo(catBesideX(), 68, catArrivedFollow); }
           }, 1300);
@@ -4805,7 +4882,7 @@ export function initHgpto() {
         ensureAudio();
         lastInteract = Date.now();
         if (!catVisible || gameOn || paused) return;
-        if (catState === 'sleep' || catState === 'console'){ purr(); return; }
+        if (catState === 'sleep' || catState === 'console'){ return; }
         var now = Date.now();
         petTimes = petTimes.filter(function(t){ return now - t < 1600; });
         petTimes.push(now);
@@ -4818,7 +4895,6 @@ export function initHgpto() {
       function catScratch(){
         setCatState('startle');
         scratchEl.hidden = false;
-        meow();
         catMode = 'goto';
         var away = catX < vw() / 2 ? Math.min(vw() - CAT_W - 6, catX + 250) : Math.max(6, catX - 250);
         catGo(away, 330, function(){ if (catState === 'startle') setCatState('idle'); });
@@ -5024,7 +5100,6 @@ export function initHgpto() {
                 });
               }
               else if (r < 0.78) catLeave();
-              else if (r < 0.88) catAmbientMeow();   // un petit miaou pour rien, parfois (23 oct. 2026)
             }
           }
           scheduleCatLife();

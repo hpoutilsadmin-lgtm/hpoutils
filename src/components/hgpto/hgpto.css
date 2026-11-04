@@ -751,51 +751,71 @@
       .bot[data-expr="sleep"] .led,.bot[data-expr="yawn"] .led{fill:#3f7d5c}
       .bot[data-expr="focus"] .led{fill:#f0c16d}
       .bot[data-expr="wide"] .led{fill:#fff3b0}
-      /* ===== PIXEL, la chatte d'HGPTO (ajout de la direction, 22 oct.) =====
-         Petite chatte de dessin animé 100 % originale, blocs doux en clin
-         d'œil « pixel », collier simple à clochette. Elle ne parle pas :
-         miaulements et ronrons seulement. */
+      /* ===== PIXEL — scène du template corrigé (lot Pixel seul, 4 nov. 2026) =====
+         La scène 320×357 du template (mouvements très légers, tête
+         strictement fixe, sans clin) remplace le chat SVG. Elle est
+         affichée à l'échelle CAT_W (96 bureau / 76 mobile) : toute la
+         mathématique du moteur (catBesideX, catGo, catPlace) est
+         inchangée. Les panneaux sont cachés par défaut (comme dans
+         le template). Le repli (ancien SVG) est statique. */
       .cat{
-        position:absolute;bottom:4px;left:0;width:96px;height:74px;z-index:59;
+        position:absolute;bottom:4px;left:0;width:96px;height:107.1px;z-index:59;
         pointer-events:auto;cursor:pointer;user-select:none;-webkit-user-select:none;
         -webkit-tap-highlight-color:transparent;touch-action:manipulation;
         transition:opacity .5s ease;outline:none;
       }
       .cat.gone{opacity:0;pointer-events:none}
       .cat:focus-visible{filter:drop-shadow(0 0 6px var(--gold-deep))}
-      .cat-svg{width:96px;height:74px;display:block;overflow:visible}
-      .cat.face-l .cat-svg{transform:scaleX(-1)}
-      .cat-inner{position:absolute;inset:0;transform-origin:50% 92%}
-      .cat[data-state="walk"] .cat-inner{animation:catbob .34s ease-in-out infinite}
-      .cat[data-state="zoom"] .cat-inner{animation:catbob .15s ease-in-out infinite}
-      @keyframes catbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-      .cat-tail{transform-box:fill-box;transform-origin:8% 92%;animation:tailwag 2.6s ease-in-out infinite}
-      @keyframes tailwag{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(9deg)}}
-      .cat[data-state="rub"] .cat-inner{animation:catrub .85s ease-in-out infinite}
-      @keyframes catrub{0%,100%{transform:rotate(-3.5deg) translateX(-2px)}50%{transform:rotate(3.5deg) translateX(2px)}}
-      .cat[data-state="purr"] .cat-inner{animation:purrpulse .45s ease-in-out infinite}
-      @keyframes purrpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
-      .cat-head{transform-box:fill-box;transform-origin:50% 82%}
-      .cat[data-state="eat"] .cat-head{animation:eatbob .45s ease-in-out infinite}
-      @keyframes eatbob{0%,100%{transform:rotate(0deg) translateY(0)}50%{transform:rotate(7deg) translateY(3px)}}
-      .cat[data-state="stare"] .cat-head{transform:translateY(-2.5px)}
-      .cat[data-state="startle"] .cat-inner{animation:catjump .45s ease-out}
-      @keyframes catjump{35%{transform:translateY(-13px) scaleY(1.05)}}
-      /* Sauts de bloc en bloc (ajout de la direction, 22 oct.) : l'arc du saut ;
-         le déplacement horizontal et la hauteur du bloc sont posés par
-         le moteur. Placée après les règles d'état pour primer le temps
-         du saut seulement (la classe « hopping » est retirée à
-         l'atterrissage). */
-      .cat.hopping .cat-inner{animation:cathop .55s cubic-bezier(.34,.56,.4,1)}
-      @keyframes cathop{0%{transform:translateY(0)}45%{transform:translateY(-52px)}100%{transform:translateY(0)}}
+      .pixel-scene{position:absolute;left:0;bottom:0;width:320px;height:357px;transform:scale(0.30);transform-origin:left bottom}
+      .pixel-scene img{position:absolute}
+      .pixel-jump{position:absolute;left:0;top:0;width:320px;height:357px}
+      .pixel-flip{position:absolute;left:0;top:0;width:320px;height:357px}
+      .pixel-scene .pixel-zzz{font-size:46px;font-weight:800;letter-spacing:2px;line-height:1;color:#3a4a52}
+      .pixel-scene #tete-wrap{transform-origin:50% 97%}
+      .pixel-scene #c-queue,.pixel-scene #queue-grognon{transform-origin:12% 80%}
+      .pixel-scene #c-patte-av-g,.pixel-scene #c-patte-av-d,.pixel-scene #c-patte-arr{transform-origin:50% 6%}
+      .pixel-scene #oreille-g{transform-origin:54% 89%}
+      .pixel-scene #oreille-d{transform-origin:50% 83%}
+      @keyframes pixelPasG{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+      @keyframes pixelPasD{from{transform:rotate(2deg)}to{transform:rotate(-2deg)}}
+      @keyframes pixelPasArr{from{transform:rotate(-1.5deg)}to{transform:rotate(1.5deg)}}
+      @keyframes pixelBob{from{transform:translateY(0)}to{transform:translateY(-1px)}}
+      @keyframes pixelWagMarche{from{transform:rotate(-1deg)}to{transform:rotate(1deg)}}
+      @keyframes pixelWiggleG{from{transform:rotate(-1.5deg)}to{transform:rotate(1.5deg)}}
+      @keyframes pixelWiggleD{from{transform:rotate(1.5deg)}to{transform:rotate(-1.5deg)}}
+      @keyframes pixelJump{0%{transform:translateY(0)}35%{transform:translateY(-13px)}100%{transform:translateY(0)}}
+      @keyframes pixelHop{0%{transform:translateY(0)}45%{transform:translateY(-52px)}100%{transform:translateY(0)}}
+      /* Marche (walk, zoom) : pattes + bob torse + queue, comme le template. */
+      .cat[data-state="walk"] .pixel-scene #c-patte-av-g,.cat[data-state="zoom"] .pixel-scene #c-patte-av-g{animation:pixelPasG .64s ease-in-out infinite alternate}
+      .cat[data-state="walk"] .pixel-scene #c-patte-av-d,.cat[data-state="zoom"] .pixel-scene #c-patte-av-d{animation:pixelPasD .64s ease-in-out infinite alternate}
+      .cat[data-state="walk"] .pixel-scene #c-patte-arr,.cat[data-state="zoom"] .pixel-scene #c-patte-arr{animation:pixelPasArr .64s ease-in-out infinite alternate}
+      .cat[data-state="walk"] .pixel-scene #c-torse,.cat[data-state="zoom"] .pixel-scene #c-torse{animation:pixelBob .64s ease-in-out infinite alternate}
+      .cat[data-state="walk"] .pixel-scene #c-queue,.cat[data-state="walk"] .pixel-scene #queue-grognon,.cat[data-state="zoom"] .pixel-scene #c-queue,.cat[data-state="zoom"] .pixel-scene #queue-grognon{animation:pixelWagMarche .64s ease-in-out infinite alternate;animation-delay:.12s}
+      /* Frottement (rub) : oreilles, comme le template. */
+      .cat[data-state="rub"] .pixel-scene #oreille-g{animation:pixelWiggleG .9s ease-in-out infinite alternate}
+      .cat[data-state="rub"] .pixel-scene #oreille-d{animation:pixelWiggleD .9s ease-in-out infinite alternate}
+      /* Sursaut (startle) et sauts de bloc (hopping) : la SCÈNE entière
+         saute, jamais la tête (règle tête fixe). */
+      .cat[data-state="startle"] .pixel-jump{animation:pixelJump .45s ease-out}
+      .cat.hopping .pixel-jump{animation:pixelHop .55s cubic-bezier(.34,.56,.4,1)}
+      /* Miroir (face-l) : le conteneur interne, pas la boîte #cat
+         (la mathématique de placement ne change pas). */
+      .cat.face-l .pixel-flip{transform:scaleX(-1)}
+      /* Repli ancien SVG : caché par défaut, montré si la scène échoue. */
+      .pixel-fallback{position:absolute;left:0;bottom:0;width:96px;height:74px;display:none}
+      .cat.pixel-fb .pixel-scene{display:none}
+      .cat.pixel-fb .pixel-fallback{display:block}
+      .pixel-fallback .cat-inner{position:absolute;inset:0;transform-origin:50% 92%}
+      .pixel-fallback .cat-svg{width:96px;height:74px;display:block;overflow:visible}
       #poseCurl{display:none}
       .cat[data-state="sleep"] #poseStand,.cat[data-state="console"] #poseStand{display:none}
       .cat[data-state="sleep"] #poseCurl,.cat[data-state="console"] #poseCurl{display:block}
-      .cat .eyes-shut{display:none}
+      .pixel-fallback .eyes-shut{display:none}
       .cat[data-state="sleep"] .eyes-open,.cat[data-state="console"] .eyes-open,
       .cat[data-state="purr"] .eyes-open{display:none}
       .cat[data-state="sleep"] .eyes-shut,.cat[data-state="console"] .eyes-shut,
       .cat[data-state="purr"] .eyes-shut{display:block}
+      /* Props : bol, croquette, griffe — inchangés. */
       .scratch{position:absolute;top:2px;right:-8px;pointer-events:none}
       .bowl{position:absolute;bottom:0;z-index:58;pointer-events:none;transition:opacity .4s ease}
       /* Croquette lancée par le visiteur (23 oct. 2026, demande de la direction) :
@@ -803,8 +823,13 @@
          devant Pixel. Purement décorative, aucun pointeur. */
       .kibble{position:absolute;bottom:6px;z-index:58;pointer-events:none;transition:opacity .35s ease}
       .kibble[hidden]{display:none}
+      @media (max-width:560px){
+        .cat{width:76px;height:84.8px}
+        .pixel-scene{transform:scale(0.2375)}
+        .pixel-fallback{width:76px;height:59px}
+      }
       @media (prefers-reduced-motion: reduce){
-        .cat-inner,.cat-tail,.cat-head{animation:none!important}
+        .pixel-scene *{animation:none!important}
       }
 
       /* ---------- Portage site : zone de vie + fermeture de session ---------- */
