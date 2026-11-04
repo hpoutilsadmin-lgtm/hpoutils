@@ -34,20 +34,25 @@ export function Hgpto() {
     if (closed) return;
     document.body.classList.add("hgpto-on");
     host.innerHTML = HGPTO_MARKUP;
-    // Lot Gepeto seul (3 nov.) : figure maître sur toutes les pages.
+    // Lot Gepeto planches normal : figure planche sur toutes les pages.
+    // Remplace la figure maître SVG. Les gestes Étape 1, liés aux calques
+    // SVG, ne s'appliquent pas à une PNG et ne sont plus appelés.
+    let figureVoulue = "/hgpto/gepeto/normal.png";
     {
       const bot = host.querySelector("#bot");
       const inner = host.querySelector(".bot-inner");
       if (bot && inner) {
-        fetch("/hgpto/gepeto-maitre.svg")
-          .then((r) => (r.ok ? r.text() : Promise.reject()))
-          .then((svg) => {
-            inner.innerHTML = svg;
-            bot.classList.add("bot-maitre");
-            window.HgptoMaitreEtape1?.saluer?.();
-            window.HgptoMaitreEtape1?.reverence?.();
-          })
-          .catch(() => { /* repli : l'ancien PNG reste */ });
+        const img = new Image();
+        img.className = "bot-img";
+        img.alt = "Sir H. Gepeto";
+        img.src = figureVoulue;
+        img.onload = () => {
+          if (figureVoulue !== "/hgpto/gepeto/normal.png") return;
+          inner.innerHTML = "";
+          inner.appendChild(img);
+          bot.classList.add("bot-maitre");
+        };
+        img.onerror = () => { /* repli : l'ancien PNG reste */ };
       }
     }
     initHgpto();
