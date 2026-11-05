@@ -34,8 +34,7 @@
      panneau), 'hp:gepeto-question' (ouvrir les Questions),
      'hp:gepeto-lire' (lire la page à voix haute),
      'hp:gepeto-lecture-pause' / 'hp:gepeto-lecture-reprise',
-     'hp:gepeto-scene' {scene} (cuisine, lecture, graffiti, skate,
-     lutteur, mime, 2heures, barbouillage), 'hp:gepeto-rouvrir'.
+     'hp:gepeto-rouvrir'.
    - Moteur -> barre : 'hp:gepeto-pret' (moteur monté, fin du
      « Chargement… »), 'hp:gepeto-ferme' (Fermer pour la session),
      'hp:gepeto-reduire' (Réduire : fermer le panneau),
@@ -98,21 +97,9 @@
     pixel: "Miaou. Je suis Pixel, la chatte du site. Je me promène sur la barre, je ne gêne personne, et je reviens quand vous m'appelez."
   };
 
-  /* Les 8 scènes commandables (P2-b) : elles existent dans le
-     moteur (doCook, doRead, doGraffiti, doSkate, doWrestler,
-     doMime, doTwoHours, doBarbouille) — la barre les commande
-     par événement, jamais toute seule. Retours visuels décidés
-     par HP (P2-c) : bulle + gigotement seulement. */
-  var SCENES = [
-    { id: "cuisine", label: "En cuisine" },
-    { id: "lecture", label: "En lecture" },
-    { id: "graffiti", label: "Graffiti" },
-    { id: "skate", label: "En skate" },
-    { id: "lutteur", label: "Lutteur" },
-    { id: "mime", label: "Mime" },
-    { id: "2heures", label: "Scène des 2 heures" },
-    { id: "barbouillage", label: "Barbouillage" }
-  ];
+  /* Scènes retirées du panneau le 5 nov. 2026 (mot d'HP : « il en
+     faut aucune ») — le moteur garde ses scènes de vie autonomes,
+     jamais commandées par la barre. */
 
   /* ---------- Petits outils ---------- */
   function $(sel, racine) { return (racine || document).querySelector(sel); }
@@ -230,7 +217,7 @@
 
   /* ---------- Construction du DOM ---------- */
   var racine, barre, panneau, zonePanneau, sectionGepeto, hoteGepeto,
-    dialogueGepeto, rangeeScenes, marcheur, boutonRappel, poignee;
+    dialogueGepeto, marcheur, boutonRappel, poignee;
   var panneauOuvert = null; /* "recherche" | "favoris" | "plus" | "confort" | "lanterne" | "aide" | "gepeto" | null */
   var modeLectureActif = false;
   var modeJeuActif = false;
@@ -335,9 +322,9 @@
     barre.appendChild(panneau);
 
     /* Section Sir H. Gepeto, intégrée DANS la barre (v3 §5) :
-       dialogue d'accueil (rangée, fermable), hôte du moteur,
-       sélecteur de scènes. Le moteur ne charge qu'au tap sur
-       la commande Gepeto (0 code mascotte avant). */
+       dialogue d'accueil (rangée, fermable), hôte du moteur.
+       Le moteur ne charge qu'au tap sur la commande Gepeto
+       (0 code mascotte avant). */
     sectionGepeto = el("div", { "class": "compagnon-gepeto", "hidden": "" });
     dialogueGepeto = el("div", { "class": "compagnon-gepeto-dialogue", "hidden": "" });
     var dialogueTexte = el("p", { "class": "compagnon-gepeto-texte" }, DIALOGUES.gepeto);
@@ -347,17 +334,6 @@
     on(dialogueFermer, "click", function () { dialogueGepeto.setAttribute("hidden", ""); });
     dialogueGepeto.appendChild(dialogueFermer);
     sectionGepeto.appendChild(dialogueGepeto);
-    rangeeScenes = el("div", { "class": "compagnon-scenes", "role": "group", "aria-label": "Scènes de Sir H. Gepeto" });
-    rangeeScenes.appendChild(el("p", { "class": "compagnon-scenes-titre" }, "Scènes :"));
-    SCENES.forEach(function (s) {
-      var b = boutonCommande(s.label, "Jouer la scène : " + s.label, function () {
-        assurerMoteur(function () {
-          document.dispatchEvent(new CustomEvent("hp:gepeto-scene", { detail: { scene: s.id } }));
-        });
-      });
-      rangeeScenes.appendChild(b);
-    });
-    sectionGepeto.appendChild(rangeeScenes);
     hoteGepeto = el("div", { "id": "compagnon-gepeto-hote", "class": "compagnon-gepeto-hote" });
     sectionGepeto.appendChild(hoteGepeto);
     barre.appendChild(sectionGepeto);

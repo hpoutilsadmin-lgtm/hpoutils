@@ -300,16 +300,6 @@ html.compagnon-actif { scroll-padding-bottom: 160px; }
 .compagnon-gepeto-texte { flex: 1; margin: 0; font-size: 15.5px; line-height: 1.45; }
 .compagnon-gepeto-dialogue .compagnon-fermer { min-width: 44px; min-height: 44px; }
 .compagnon-gepeto-chargement { margin: 12px 14px; font-size: 15px; line-height: 1.4; color: #3a3a32; }
-.compagnon-scenes { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 14px 0; }
-.compagnon-scenes-titre { width: 100%; margin: 0; font-size: 14px; font-weight: 700; }
-.compagnon-scenes .compagnon-commande {
-  width: auto;
-  flex: 1 1 30%;
-  min-height: 48px;
-  margin: 0;
-  font-size: 14.5px;
-  text-align: center;
-}
 .compagnon-gepeto-hote { position: relative; }
 
 /* ---------- Bande de vie (promenade) ---------- */
@@ -373,8 +363,7 @@ html.compagnon-sombre .compagnon-lien,
 html.compagnon-sombre .compagnon-panneau-titre,
 html.compagnon-sombre .compagnon-groupe-titre,
 html.compagnon-sombre .compagnon-rapides-titre,
-html.compagnon-sombre .compagnon-secondaires-titre,
-html.compagnon-sombre .compagnon-scenes-titre { color: #f6eddd; }
+html.compagnon-sombre .compagnon-secondaires-titre { color: #f6eddd; }
 html.compagnon-sombre .compagnon-commande,
 html.compagnon-sombre .compagnon-fav,
 html.compagnon-sombre .compagnon-secondaires .compagnon-cmd { background: #2e3840; color: #f6eddd; border-color: #d89532; }
@@ -415,7 +404,6 @@ html.compagnon-clavier input:focus-visible { outline: 3px solid #d89532; outline
   .compagnon-titre { font-size: 15px; }
   .compagnon-slogan { font-size: 12px; }
   .compagnon-panneau, .compagnon-gepeto { max-height: calc(100dvh - 190px); }
-  .compagnon-scenes .compagnon-commande { flex: 1 1 44%; }
 }
 
 /* ---------- Mouvement réduit : jamais d'animation ---------- */
