@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Pète et Répète</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#dff2f7;
+        --panel:#ffffff;
+        --panel-soft:#f2fbfe;
+        --ink:#123a4a;
+        --ink-soft:#3d6472;
+        --accent:#0e7d96;
+        --accent-dark:#0a5d71;
+        --orange:#e8762c;
+        --good:#1d9e57;
+        --bad:#e23b3b;
+        --combo:#b97f10;
+        --line:#bfe0ea;
+        --track:#a8d8e8;
+        --shadow:0 4px 14px rgba(10,60,80,.16);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#0b2531;
+          --panel:#123744;
+          --panel-soft:#0f303f;
+          --ink:#eaf7fb;
+          --ink-soft:#a9cbd6;
+          --accent:#2fb3d1;
+          --accent-dark:#25a0bd;
+          --orange:#f08a3c;
+          --good:#3fce7d;
+          --bad:#ff6b6b;
+          --combo:#f2b73c;
+          --line:#24586b;
+          --track:#1d4a5c;
+          --shadow:0 4px 14px rgba(0,0,0,.4);
+        }
+      }
+      *{ box-sizing:border-box; }
+      html,body{ height:100%; }
+      body{
+        margin:0;
+        font-family:"Fredoka",system-ui,-apple-system,"Segoe UI",sans-serif;
+        background:var(--bg);
+        color:var(--ink);
+        overflow:hidden;
+        -webkit-tap-highlight-color:transparent;
+      }
+      .app{
+        height:100dvh;
+        max-width:1000px;
+        margin:0 auto;
+        padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+        display:flex;
+        flex-direction:column;
+        gap:8px;
+      }
+      /* ---------- HUD ---------- */
+      .hud{
+        display:flex;
+        flex-wrap:wrap;
+        gap:6px;
+        align-items:stretch;
+      }
+      .chip{
+        background:var(--panel);
+        border:2px solid var(--line);
+        border-radius:12px;
+        padding:4px 12px;
+        min-height:44px;
+        display:flex;
+        align-items:center;
+        gap:8px;
+        box-shadow:var(--shadow);
+        font-weight:600;
+        font-size:clamp(.85rem,2.6vw,1.05rem);
+        white-space:nowrap;
+      }
+      .chip .lbl{ color:var(--ink-soft); font-weight:500; font-size:.82em; }
+      .chip .val{ font-variant-numeric:tabular-nums; }
+      .chip.rep .val{ color:var(--orange); }
+      .chip.combo{ border-color:var(--combo); }
+      .chip.combo .val{ color:var(--combo); }
+      .chip.combo.hot{ background:var(--combo); border-color:var(--combo); }
+      .chip.combo.hot .val,.chip.combo.hot .lbl{ color:#fff; }
+      .spacer{ flex:1; }
+      .icon-btn{
+        background:var(--panel);
+        border:2px solid var(--line);
+        border-radius:12px;
+        min-width:44px; min-height:44px;
+        display:flex; align-items:center; justify-content:center;
+        cursor:pointer; box-shadow:var(--shadow);
+        color:var(--ink);
+      }
+      .icon-btn:active{ transform:scale(.95); }
+      .icon-btn svg{ width:24px; height:24px; }
+      /* ---------- Jauge de progression ---------- */
+      .track-wrap{ padding:2px 2px 0; }
+      .track{
+        position:relative;
+        height:30px;
+        border-radius:999px;
+        background:linear-gradient(180deg,var(--track),var(--accent));
+        border:2px solid var(--accent-dark);
+        overflow:visible;
+      }
+      .track .finish{
+        position:absolute; right:-2px; top:-8px;
+        width:12px; height:44px; border-radius:3px;
+        background:repeating-linear-gradient(180deg,#e23b3b 0 7px,#ffffff 7px 14px);
+        border:1.5px solid rgba(0,0,0,.25);
+      }
+      .marker{
+        position:absolute; top:50%;
+        transform:translate(-50%,-50%);
+        transition:left .25s linear;
+        z-index:2;
+        pointer-events:none;
+      }
+      .marker .dot{
+        width:20px; height:20px; border-radius:50%;
+        border:3px solid #fff;
+        box-shadow:0 1px 5px rgba(0,0,0,.35);
+      }
+      .marker .tag{
+        position:absolute; left:50%; transform:translateX(-50%);
+        top:-19px;
+        font-size:.68rem; font-weight:700; letter-spacing:.02em;
+        background:var(--panel); color:var(--ink);
+        border:1.5px solid var(--line);
+        padding:0 6px; border-radius:999px; white-space:nowrap;
+      }
+      .marker.me .dot{ background:var(--accent); }
+      .marker.rep .dot{ background:var(--orange); }
+      .marker .tag{ transition:opacity .3s; }
+      .track-labels{
+        display:flex; justify-content:space-between;
+        font-size:.75rem; color:var(--ink-soft); font-weight:600;
+        margin-top:3px; padding:0 2px;
+      }
+      /* ---------- Scène ---------- */
+      .stage{
+        position:relative;
+        flex:1 1 auto;
+        min-height:170px;
+        border-radius:18px;
+        overflow:hidden;
+        border:3px solid var(--accent-dark);
+        box-shadow:var(--shadow);
+        background:#8ec9e8;
+        touch-action:none;
+      }
+      canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+      .overlay{
+        position:absolute; inset:0;
+        display:flex; flex-direction:column;
+        align-items:center; justify-content:center;
+        text-align:center;
+        padding:18px;
+        background:color-mix(in srgb, var(--panel) 88%, transparent);
+        backdrop-filter:blur(2px);
+        z-index:5;
+        overflow-y:auto;
+      }
+      .overlay.hidden{ display:none; }
+      .overlay h1{
+        margin:0 0 2px;
+        font-size:clamp(2rem,8vw,3.4rem);
+        font-weight:700; line-height:1.05;
+        color:var(--accent-dark);
+      }
+      @media (prefers-color-scheme: dark){ .overlay h1{ color:var(--accent); } }
+      .slogan{
+        font-size:clamp(1rem,3.4vw,1.3rem);
+        font-weight:600; color:var(--orange);
+        margin:0 0 12px;
+      }
+      .joke{
+        max-width:560px;
+        font-size:clamp(.95rem,3vw,1.12rem);
+        line-height:1.45; margin:0 0 10px;
+      }
+      .rules{
+        max-width:560px;
+        font-size:clamp(.9rem,2.8vw,1.05rem);
+        line-height:1.5; color:var(--ink-soft);
+        margin:0 0 16px;
+      }
+      .big-btn{
+        font-family:inherit;
+        font-size:clamp(1.15rem,4vw,1.45rem);
+        font-weight:700;
+        color:#fff;
+        background:var(--orange);
+        border:none; border-radius:999px;
+        padding:14px 38px;
+        cursor:pointer;
+        box-shadow:0 5px 0 #b85a1d, var(--shadow);
+        min-height:56px;
+      }
+      .big-btn:active{ transform:translateY(3px); box-shadow:0 2px 0 #b85a1d; }
+      .stats-grid{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(96px,1fr));
+        gap:8px;
+        margin:6px 0 18px;
+        max-width:520px; width:100%;
+      }
+      .stat{
+        background:var(--panel-soft);
+        border:2px solid var(--line);
+        border-radius:12px;
+        padding:8px 6px;
+      }
+      .stat .v{ font-size:clamp(1.15rem,4vw,1.5rem); font-weight:700; font-variant-numeric:tabular-nums; }
+      .stat .k{ font-size:.75rem; color:var(--ink-soft); font-weight:600; }
+      .end-title{ font-size:clamp(1.6rem,6.5vw,2.6rem); }
+      /* ---------- Mot à taper ---------- */
+      .word-zone{
+        background:var(--panel);
+        border:2px solid var(--line);
+        border-radius:16px;
+        box-shadow:var(--shadow);
+        padding:8px 10px 10px;
+        text-align:center;
+      }
+      .word-hint{ font-size:.8rem; color:var(--ink-soft); font-weight:600; margin-bottom:2px; }
+      .word{
+        font-size:clamp(2.1rem,9vw,3.6rem);
+        font-weight:700;
+        letter-spacing:.06em;
+        line-height:1.15;
+        min-height:1.15em;
+        text-transform:uppercase;
+        user-select:none;
+      }
+      .word .ch{ color:var(--ink-soft); opacity:.55; border-bottom:4px solid transparent; }
+      .word .ch.done{ color:var(--good); opacity:1; }
+      .word .ch.cur{ color:var(--ink); opacity:1; border-bottom-color:var(--orange); animation:pulse 1s infinite; }
+      .word .ch.err{ color:var(--bad) !important; opacity:1; border-bottom-color:var(--bad); }
+      @keyframes pulse{ 0%,100%{ border-bottom-color:var(--orange);} 50%{ border-bottom-color:transparent;} }
+      @media (prefers-reduced-motion: reduce){ .word .ch.cur{ animation:none; } }
+      /* ---------- Clavier tactile ---------- */
+      .kb{
+        display:grid;
+        grid-template-columns:repeat(7,1fr);
+        gap:6px;
+      }
+      .kb button{
+        font-family:inherit;
+        font-size:clamp(1.15rem,4.5vw,1.5rem);
+        font-weight:700;
+        text-transform:uppercase;
+        color:var(--ink);
+        background:var(--panel);
+        border:2px solid var(--line);
+        border-bottom-width:4px;
+        border-radius:12px;
+        min-height:52px;
+        cursor:pointer;
+        box-shadow:var(--shadow);
+        touch-action:manipulation;
+        user-select:none;
+        padding:0;
+      }
+      .kb button:active{ transform:translateY(2px); border-bottom-width:2px; background:var(--panel-soft); }
+      .kb button.needed{ border-color:var(--accent); color:var(--accent-dark); }
+      @media (prefers-color-scheme: dark){ .kb button.needed{ color:var(--accent); } }
+      @media (max-height:560px){
+        .word{ font-size:clamp(1.7rem,7vw,2.6rem); }
+        .kb button{ min-height:46px; }
+        .stage{ min-height:130px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- HUD -->
+      <div class="hud">
+        <div class="chip me"><span class="lbl">Toi</span><span class="val" id="hudDist">0 m</span></div>
+        <div class="chip rep"><span class="lbl">Répète</span><span class="val" id="hudRep">0 m</span></div>
+        <div class="chip"><span class="lbl">Chrono</span><span class="val" id="hudTime">0:00</span></div>
+        <div class="chip combo" id="chipCombo"><span class="lbl">Combo</span><span class="val" id="hudCombo">×0</span></div>
+        <div class="spacer"></div>
+        <button class="icon-btn" id="btnSound" aria-label="Activer ou couper le son" title="Son">
+          <svg id="icoSndOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+          <svg id="icoSndOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" stroke="none"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
+        </button>
+      </div>
+
+      <!-- Jauge de progression -->
+      <div class="track-wrap">
+        <div class="track" id="track">
+          <div class="marker rep" id="mkRep" style="left:0%"><span class="tag">Répète</span><div class="dot"></div></div>
+          <div class="marker me" id="mkMe" style="left:0%"><span class="tag">Toi</span><div class="dot"></div></div>
+          <div class="finish" title="Bouée d'arrivée"></div>
+        </div>
+        <div class="track-labels"><span>Départ</span><span>Bouée d'arrivée — 300 m</span></div>
+      </div>
+
+      <!-- Scène -->
+      <div class="stage" id="stage">
+        <canvas id="cv"></canvas>
+
+        <!-- Écran d'accueil -->
+        <div class="overlay" id="ovMenu">
+          <h1>Pète et Répète</h1>
+          <p class="slogan">« Bref, pet, un mot, répète. »</p>
+          <p class="joke">Pete et Répète sont dans un bateau… Pete tombe à l'eau. Qui reste-t-il ? <strong>Répète !</strong> À toi de le battre.</p>
+          <p class="rules">Tape le mot affiché, lettre par lettre, pour péter et faire avancer ton bateau. Plus le mot est long et tapé vite, plus le pet pousse fort ! Trois mots parfaits d'affilée = <strong>SUPER PET</strong>. Une erreur ? Un petit pet mouillé… et on continue. Au clavier ou avec les grosses touches à l'écran.</p>
+          <button class="big-btn" id="btnStart">C'est parti !</button>
+        </div>
+
+        <!-- Écran de fin -->
+        <div class="overlay hidden" id="ovEnd">
+          <h1 class="end-title" id="endTitle">Tu as battu Répète !</h1>
+          <p class="joke" id="endSub"></p>
+          <div class="stats-grid">
+            <div class="stat"><div class="v" id="stTime">0:00</div><div class="k">Temps</div></div>
+            <div class="stat"><div class="v" id="stDist">0 m</div><div class="k">Ta distance</div></div>
+            <div class="stat"><div class="v" id="stWords">0</div><div class="k">Mots complétés</div></div>
+            <div class="stat"><div class="v" id="stWpm">0</div><div class="k">Mots / minute</div></div>
+            <div class="stat"><div class="v" id="stAcc">100 %</div><div class="k">Précision</div></div>
+            <div class="stat"><div class="v" id="stCombo">×0</div><div class="k">Meilleur combo</div></div>
+          </div>
+          <button class="big-btn" id="btnAgain">Rejouer</button>
+        </div>
+      </div>
+
+      <!-- Mot à taper -->
+      <div class="word-zone">
+        <div class="word-hint" id="wordHint">Tape le mot pour péter !</div>
+        <div class="word" id="wordBox" aria-live="polite"></div>
+      </div>
+
+      <!-- Clavier tactile -->
+      <div class="kb" id="kb" role="group" aria-label="Clavier tactile"></div>
+    </div>
+
+    <script>
+    "use strict";
+    /* ============================================================
+       PÈTE ET RÉPÈTE — course de bateaux à pets propulseurs
+       ============================================================ */
+    var TOTAL = 300; // mètres
+
+    /* ---------- Listes de mots (français) par palier de longueur ---------- */
+    var WORDS = [
+      // Palier 1 : 3-4 lettres
+      ["pet","lac","mer","vent","rame","flot","port","quai","nord","sud",
+       "café","thé","pain","lune","ciel","ours","loup","bois","feu","nuit",
+       "jour","gel","bol","jus","miel","rade","anse","dune","brin","gîte"],
+      // Palier 2 : 5-6 lettres
+      ["vague","bouée","voile","ancre","phare","marée","écume","sirop","tuque","cabane",
+       "castor","huard","prout","bulle","fusée","pétard","rivage","bateau","canot","kayak",
+       "pagaie","bleuet","érable","neige","hiver","glace","sapin","renard","loutre","berge"],
+      // Palier 3 : 7-8 lettres
+      ["mouette","tempête","orignal","poutine","caribou","souffle","bouchon","torrent","cascade","rivière",
+       "chaloupe","matelot","fromage","bonhomme","pétarade","goéland","hérisson","voilier","pagayeur","canotier",
+       "sifflet","tonnerre","abeille","papillon","banquise","iceberg","blizzard","pétomane","traîneau","naufrage"],
+      // Palier 4 : 9 lettres et plus
+      ["dépanneur","patinoire","érablière","avalanche","propulsion","catamaran","tourtière","bleuetière","libellule","coccinelle",
+       "souffleuse","motoneige","raquettes","poudrerie","fromagerie","tourbillon","bourrasque","crépuscule","grenouille","embarcation",
+       "moussaillon","sapinière","canneberge","tournesol","citrouille","pétillant","chasse-neige"]
+    ];
+    // Note : « chasse-neige » contient un trait d'union — il est accepté automatiquement.
+
+    function norm(ch){
+      return ch.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+    }
+    function fmtTime(s){
+      var m = Math.floor(s/60), ss = Math.floor(s%60);
+      return m + ":" + (ss<10?"0":"") + ss;
+    }
+    function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+    function rand(a,b){ return a + Math.random()*(b-a); }
+
+    /* ---------- État du jeu ---------- */
+    var state = "menu"; // menu | playing | finished
+    var dist = 0, visualDist = 0;         // joueur : distance cible et affichée
+    var repDist = 0, repVisual = 0, repT = 0;
+    var startTime = 0, elapsed = 0;
+    var word = "", wordIdx = 0, wordStart = 0, wordError = false, lastWord = "";
+    var combo = 0, bestCombo = 0;
+    var wordsDone = 0, totalKeys = 0, correctKeys = 0;
+    var hopT = 1e9;              // temps depuis le dernier bond du bateau
+    var errFlashUntil = 0;
+    var soundOn = true;
+    var lastFrame = 0, scrollX = 0;
+    var puffs = [];              // nuages de pet {x,y,r,life,max,vx,vy,col}
+    var drops = [];              // éclaboussures {x,y,vx,vy,life}
+    var floats = [];             // textes flottants {x,y,text,life,col,size}
+    var gulls = [];              // mouettes {x,y,v,ph}
+    var repPuffTimer = 2;
+
+    /* ---------- DOM ---------- */
+    var cv = document.getElementById("cv");
+    var ctx = cv.getContext("2d");
+    var stage = document.getElementById("stage");
+    var hudDist = document.getElementById("hudDist");
+    var hudRep = document.getElementById("hudRep");
+    var hudTime = document.getElementById("hudTime");
+    var hudCombo = document.getElementById("hudCombo");
+    var chipCombo = document.getElementById("chipCombo");
+    var mkMe = document.getElementById("mkMe");
+    var mkRep = document.getElementById("mkRep");
+    var wordBox = document.getElementById("wordBox");
+    var wordHint = document.getElementById("wordHint");
+    var kb = document.getElementById("kb");
+    var ovMenu = document.getElementById("ovMenu");
+    var ovEnd = document.getElementById("ovEnd");
+    var W = 0, H = 0;
+
+    function resize(){
+      var r = stage.getBoundingClientRect();
+      var dpr = Math.min(window.devicePixelRatio||1, 2);
+      W = r.width; H = r.height;
+      cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    window.addEventListener("resize", resize);
+
+    /* ============================================================
+       SONS — Web Audio, générés par code, aucun fichier externe
+       ============================================================ */
+    var AC = null;
+    function audio(){
+      if(!AC){ try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ AC = null; } }
+      if(AC && AC.state === "suspended"){ AC.resume(); }
+      return AC;
+    }
+    function noiseBuffer(ac, dur){
+      var buf = ac.createBuffer(1, Math.floor(ac.sampleRate*dur), ac.sampleRate);
+      var d = buf.getChannelData(0);
+      for(var i=0;i<d.length;i++){ d[i] = Math.random()*2-1; }
+      return buf;
+    }
+    function fartSound(big){
+      if(!soundOn) return;
+      var ac = audio(); if(!ac) return;
+      var t = ac.currentTime;
+      var dur = big ? 0.5 : 0.3;
+      var osc = ac.createOscillator();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(big?200:150, t);
+      osc.frequency.exponentialRampToValueAtTime(42, t+dur);
+      var lfo = ac.createOscillator(); lfo.type="square"; lfo.frequency.value = big?26:32;
+      var lfoG = ac.createGain(); lfoG.gain.value = 26;
+      lfo.connect(lfoG); lfoG.connect(osc.frequency);
+      var f = ac.createBiquadFilter(); f.type="lowpass"; f.frequency.value = 700;
+      var g = ac.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(big?0.30:0.20, t+0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+      osc.connect(f); f.connect(g); g.connect(ac.destination);
+      osc.start(t); osc.stop(t+dur+0.05); lfo.start(t); lfo.stop(t+dur+0.05);
+      var nz = ac.createBufferSource(); nz.buffer = noiseBuffer(ac, dur);
+      var nf = ac.createBiquadFilter(); nf.type="bandpass"; nf.frequency.value=420; nf.Q.value=0.8;
+      var ng = ac.createGain();
+      ng.gain.setValueAtTime(big?0.14:0.09, t);
+      ng.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+      nz.connect(nf); nf.connect(ng); ng.connect(ac.destination);
+      nz.start(t); nz.stop(t+dur);
+    }
+    function wetSound(){
+      if(!soundOn) return;
+      var ac = audio(); if(!ac) return;
+      var t = ac.currentTime;
+      var osc = ac.createOscillator(); osc.type="triangle";
+      osc.frequency.setValueAtTime(340, t);
+      osc.frequency.exponentialRampToValueAtTime(80, t+0.16);
+      var g = ac.createGain();
+      g.gain.setValueAtTime(0.10, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.18);
+      osc.connect(g); g.connect(ac.destination);
+      osc.start(t); osc.stop(t+0.2);
+      var nz = ac.createBufferSource(); nz.buffer = noiseBuffer(ac, 0.12);
+      var nf = ac.createBiquadFilter(); nf.type="highpass"; nf.frequency.value=2000;
+      var ng = ac.createGain(); ng.gain.setValueAtTime(0.05,t);
+      ng.gain.exponentialRampToValueAtTime(0.0001, t+0.12);
+      nz.connect(nf); nf.connect(ng); ng.connect(ac.destination);
+      nz.start(t); nz.stop(t+0.13);
+    }
+    function blip(){
+      if(!soundOn) return;
+      var ac = audio(); if(!ac) return;
+      var t = ac.currentTime;
+      var osc = ac.createOscillator(); osc.type="sine";
+      osc.frequency.value = 660 + Math.random()*120;
+      var g = ac.createGain();
+      g.gain.setValueAtTime(0.035, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.06);
+      osc.connect(g); g.connect(ac.destination);
+      osc.start(t); osc.stop(t+0.07);
+    }
+    function fanfare(win){
+      if(!soundOn) return;
+      var ac = audio(); if(!ac) return;
+      var notes = win ? [523,659,784,1046] : [392,330,262];
+      for(var i=0;i<notes.length;i++){
+        (function(i){
+          var t = ac.currentTime + i*0.14;
+          var osc = ac.createOscillator(); osc.type="triangle"; osc.frequency.value = notes[i];
+          var g = ac.createGain();
+          g.gain.setValueAtTime(0.0001,t);
+          g.gain.exponentialRampToValueAtTime(0.16, t+0.03);
+          g.gain.exponentialRampToValueAtTime(0.0001, t+0.3);
+          osc.connect(g); g.connect(ac.destination);
+          osc.start(t); osc.stop(t+0.32);
+        })(i);
+      }
+    }
+
+    /* ============================================================
+       MOTS
+       ============================================================ */
+    function tierFor(d){
+      var p = d/TOTAL;
+      if(p < 0.25) return 0;
+      if(p < 0.50) return 1;
+      if(p < 0.75) return 2;
+      return 3;
+    }
+    function pickWord(){
+      var list = WORDS[tierFor(dist)];
+      var w, guard = 0;
+      do { w = list[Math.floor(Math.random()*list.length)]; guard++; }
+      while(w === lastWord && guard < 12);
+      lastWord = w;
+      return w;
+    }
+    function renderWord(){
+      var html = "";
+      for(var i=0;i<word.length;i++){
+        var cls = "ch";
+        if(i < wordIdx) cls += " done";
+        else if(i === wordIdx){
+          cls += " cur";
+          if(performance.now() < errFlashUntil) cls += " err";
+        }
+        var c = word[i] === "-" ? "‑" : word[i];
+        html += '<span class="'+cls+'">'+c+"</span>";
+      }
+      wordBox.innerHTML = html;
+    }
+    function buildKeyboard(){
+      kb.innerHTML = "";
+      var seen = {}, letters = [];
+      for(var i=0;i<word.length;i++){
+        var n = norm(word[i]);
+        if(n >= "a" && n <= "z" && !seen[n]){ seen[n] = word[i]; letters.push({disp: word[i], val: n, need:true}); }
+      }
+      var fillers = "abcdefghijklmnopqrstuvwxyz".split("").filter(function(c){ return !seen[c]; });
+      while(letters.length < 14 && fillers.length){
+        var f = fillers.splice(Math.floor(Math.random()*fillers.length),1)[0];
+        letters.push({disp:f, val:f, need:false});
+      }
+      // Mélange
+      for(var j=letters.length-1;j>0;j--){
+        var k = Math.floor(Math.random()*(j+1));
+        var tmp = letters[j]; letters[j] = letters[k]; letters[k] = tmp;
+      }
+      letters.forEach(function(L){
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = L.disp.toUpperCase();
+        if(L.need) b.className = "needed";
+        b.setAttribute("aria-label", "Lettre " + L.disp);
+        b.addEventListener("pointerdown", function(e){
+          e.preventDefault();
+          handleLetter(L.val);
+        });
+        kb.appendChild(b);
+      });
+    }
+    function nextWord(){
+      word = pickWord();
+      wordIdx = 0;
+      wordError = false;
+      wordStart = performance.now();
+      // Les traits d'union et espaces sont franchis automatiquement
+      skipSeparators();
+      renderWord();
+      buildKeyboard();
+    }
+    function skipSeparators(){
+      while(wordIdx < word.length && (word[wordIdx] === "-" || word[wordIdx] === " ")){
+        wordIdx++;
+      }
+    }
+
+    /* ============================================================
+       SAISIE
+       ============================================================ */
+    function handleLetter(raw){
+      if(state !== "playing") return;
+      var L = norm(raw);
+      if(!(L.length === 1 && L >= "a" && L <= "z")) return;
+      totalKeys++;
+      if(L === norm(word[wordIdx])){
+        correctKeys++;
+        wordIdx++;
+        skipSeparators();
+        blip();
+        if(wordIdx >= word.length){ completeWord(); return; }
+        renderWord();
+      } else {
+        // Pet mouillé : combo cassé, mini-poussée, on continue le même mot
+        combo = 0;
+        wordError = true;
+        errFlashUntil = performance.now() + 280;
+        dist = Math.min(TOTAL, dist + 0.4);
+        wetSound();
+        spawnWet();
+        updateComboChip();
+        renderWord();
+        setTimeout(renderWord, 300);
+      }
+    }
+    function comboMult(c){
+      if(c >= 5) return 1.5;
+      if(c >= 3) return 1.25;
+      return 1;
+    }
+    function completeWord(){
+      var now = performance.now();
+      var secs = Math.max(0.25, (now - wordStart)/1000);
+      var len = word.replace(/[- ]/g,"").length;
+      var cps = len / secs;
+      var speedFactor = clamp(0.75 + cps*0.18, 0.8, 1.7);
+      var perfect = !wordError;
+      if(perfect){
+        combo++;
+        if(combo > bestCombo) bestCombo = combo;
+      }
+      var mult = comboMult(combo);
+      var push = len * 1.35 * speedFactor * mult;
+      dist = Math.min(TOTAL, dist + push);
+      wordsDone++;
+      hopT = 0;
+      var superPet = perfect && mult > 1;
+      fartSound(superPet);
+      spawnFart(superPet, push);
+      spawnSplash(superPet ? 14 : 8);
+      var bx = boatScreenX(visualDist, repVisual), by = playerY();
+      addFloat(bx - 10, by - 92, "+" + Math.round(push) + " m", superPet ? "#e8762c" : "#0a5d71", superPet ? 26 : 20);
+      if(superPet){
+        addFloat(bx - 10, by - 122, "SUPER PET ×" + (mult+"").replace(".",","), "#b97f10", 24);
+      }
+      updateComboChip();
+      nextWord();
+    }
+    function updateComboChip(){
+      hudCombo.textContent = "×" + combo;
+      chipCombo.classList.toggle("hot", combo >= 3);
+      wordHint.textContent = combo >= 3 ? "SUPER PET en cours — continue sans erreur !" :
+        (combo === 2 ? "Encore un mot parfait = SUPER PET !" : "Tape le mot pour péter !");
+    }
+
+    /* ============================================================
+       COURSE
+       ============================================================ */
+    function startGame(){
+      dist = 0; visualDist = 0;
+      repDist = 0; repVisual = 0; repT = 0;
+      elapsed = 0; combo = 0; bestCombo = 0;
+      wordsDone = 0; totalKeys = 0; correctKeys = 0;
+      lastWord = ""; puffs = []; drops = []; floats = [];
+      hopT = 1e9; repPuffTimer = 2;
+      state = "playing";
+      startTime = performance.now();
+      lastFrame = performance.now();
+      ovMenu.classList.add("hidden");
+      ovEnd.classList.add("hidden");
+      updateComboChip();
+      nextWord();
+      updateHUD();
+      audio(); // débloque l'audio sur geste utilisateur
+    }
+    function endGame(win){
+      state = "finished";
+      fanfare(win);
+      document.getElementById("endTitle").textContent = win ? "Tu as battu Répète !" : "Répète gagne…";
+      document.getElementById("endSub").textContent = win
+        ? "Pete est tombé à l'eau, et toi, tu as filé comme le vent. Répète reste… bouche bée !"
+        : "Répète gagne… qui reste-t-il ? Toi, trempé ! Revanche ?";
+      document.getElementById("stTime").textContent = fmtTime(elapsed);
+      document.getElementById("stDist").textContent = Math.round(Math.min(dist,TOTAL)) + " m";
+      document.getElementById("stWords").textContent = wordsDone;
+      var mins = elapsed/60;
+      document.getElementById("stWpm").textContent = mins > 0 ? Math.round(wordsDone/mins) : 0;
+      document.getElementById("stAcc").textContent = (totalKeys ? Math.round(correctKeys/totalKeys*100) : 100) + " %";
+      document.getElementById("stCombo").textContent = "×" + bestCombo;
+      ovEnd.classList.remove("hidden");
+    }
+    function updateHUD(){
+      hudDist.textContent = Math.round(Math.min(dist,TOTAL)) + " m";
+      hudRep.textContent = Math.round(Math.min(repDist,TOTAL)) + " m";
+      hudTime.textContent = fmtTime(elapsed);
+      mkMe.style.left = clamp(dist/TOTAL*100, 0, 100) + "%";
+      mkRep.style.left = clamp(repDist/TOTAL*100, 0, 100) + "%";
+      // Étiquettes : décalage horizontal pour ne jamais sortir de la jauge
+      mkMe.querySelector(".tag").style.transform = "translateX(-" + (10 + (dist/TOTAL)*80) + "%)";
+      mkRep.querySelector(".tag").style.transform = "translateX(-" + (10 + (repDist/TOTAL)*80) + "%)";
+      // Étiquettes : on masque celle de Répète tant que les bateaux sont collés
+      mkRep.querySelector(".tag").style.opacity = Math.abs(dist - repDist) < 26 ? "0" : "1";
+    }
+
+    /* ============================================================
+       EFFETS VISUELS
+       ============================================================ */
+    function playerY(){ return H*0.68; }
+    function repY(){ return H*0.47; }
+    function boatScreenX(myV, repV){
+      return clamp(W*0.34 + (myV - repV)*7, W*0.14, W*0.72);
+    }
+    function spawnFart(big, push){
+      var bx = boatScreenX(visualDist, repVisual), by = playerY();
+      var n = big ? 16 : 9;
+      for(var i=0;i<n;i++){
+        puffs.push({
+          x: bx - 52 - Math.random()*14, y: by - 6 + rand(-8,8),
+          r: rand(6, big?20:13), life: 0, max: rand(0.6, 1.15),
+          vx: rand(-70,-30), vy: rand(-16,4),
+          col: big ? "200,170,60" : "168,178,110"
+        });
+      }
+    }
+    function spawnWet(){
+      var bx = boatScreenX(visualDist, repVisual), by = playerY();
+      for(var i=0;i<7;i++){
+        drops.push({ x: bx - 50, y: by - 4, vx: rand(-60,-15), vy: rand(-50,-5), life: 0 });
+      }
+      addFloat(bx - 16, by - 84, "Pet mouillé…", "#3d7ea6", 17);
+    }
+    function spawnSplash(n){
+      var bx = boatScreenX(visualDist, repVisual), by = playerY();
+      for(var i=0;i<n;i++){
+        drops.push({ x: bx + rand(-46,40), y: by + 12, vx: rand(-24,24), vy: rand(-95,-30), life: 0 });
+      }
+    }
+    function spawnRepPuff(){
+      var rx = boatScreenX(visualDist, repVisual) + (repVisual - visualDist)*7;
+      rx = clamp(W*0.34 + (repVisual - visualDist)*7, W*0.10, W*0.86);
+      var ry = repY();
+      for(var i=0;i<5;i++){
+        puffs.push({ x: rx - 40, y: ry - 4 + rand(-5,5), r: rand(4,10), life:0, max: rand(0.4,0.8), vx: rand(-45,-20), vy: rand(-8,2), col:"178,168,150" });
+      }
+    }
+    function addFloat(x,y,text,col,size){
+      floats.push({x:x, y:y, text:text, col:col, size:size, life:0});
+    }
+
+    /* ============================================================
+       DESSIN DE LA SCÈNE
+       ============================================================ */
+    function drawSpruce(x, baseY, h, col){
+      ctx.fillStyle = col;
+      for(var i=0;i<3;i++){
+        var wdt = h*0.62*(1 - i*0.22), yy = baseY - h*0.3*i;
+        ctx.beginPath();
+        ctx.moveTo(x - wdt/2, yy); ctx.lineTo(x + wdt/2, yy); ctx.lineTo(x, yy - h*0.42);
+        ctx.closePath(); ctx.fill();
+      }
+      ctx.fillRect(x - h*0.045, baseY - h*0.06, h*0.09, h*0.1);
+    }
+    function drawBoat(x, y, s, hull, shirt, hat, hatCol, name, isRep){
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(s, s);
+      // Capitaine
+      ctx.fillStyle = shirt;
+      ctx.beginPath(); ctx.arc(6, -26, 11, 0, Math.PI*2); ctx.fill(); // corps (cercle haut)
+      ctx.fillRect(-5, -28, 22, 16); // torse
+      ctx.fillStyle = "#f6c48a";
+      ctx.beginPath(); ctx.arc(7, -40, 10, 0, Math.PI*2); ctx.fill(); // tête
+      // sourire
+      ctx.strokeStyle = "#7a4a21"; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(8, -38, 4.5, 0.25*Math.PI, 0.8*Math.PI); ctx.stroke();
+      ctx.fillStyle = "#263238";
+      ctx.beginPath(); ctx.arc(4.5, -42, 1.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(11, -42, 1.5, 0, Math.PI*2); ctx.fill();
+      // Chapeau
+      if(isRep){
+        // Tuque rouge
+        ctx.fillStyle = hatCol;
+        ctx.beginPath(); ctx.arc(7, -47, 10, Math.PI, 0); ctx.fill();
+        ctx.fillRect(-3, -49, 20, 4);
+        ctx.beginPath(); ctx.arc(7, -57, 3.6, 0, Math.PI*2); ctx.fill(); // pompon
+      } else {
+        // Casquette de capitaine blanche
+        ctx.fillStyle = hatCol;
+        ctx.beginPath(); ctx.arc(7, -46, 10.5, Math.PI, 0); ctx.fill();
+        ctx.fillRect(-3.5, -47.5, 21, 3.6);
+        ctx.fillStyle = "#123a4a";
+        ctx.fillRect(-4, -46, 24, 3); // visière
+      }
+      // Coque
+      ctx.fillStyle = hull;
+      ctx.beginPath();
+      ctx.moveTo(-52, -12); ctx.lineTo(56, -12); ctx.lineTo(42, 8); ctx.lineTo(-38, 8);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,.55)";
+      ctx.fillRect(-52, -14, 108, 4);
+      ctx.restore();
+      // Nom
+      ctx.font = "700 12px Fredoka, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "rgba(255,255,255,.92)";
+      var tw = ctx.measureText(name).width + 14;
+      ctx.beginPath();
+      ctx.roundRect(x - tw/2, y - 78*s, tw, 17, 8);
+      ctx.fill();
+      ctx.fillStyle = "#123a4a";
+      ctx.fillText(name, x, y - 78*s + 13);
+    }
+    function drawBuoy(x, y){
+      ctx.save();
+      ctx.translate(x, y);
+      for(var i=0;i<4;i++){
+        ctx.fillStyle = i%2 ? "#ffffff" : "#e23b3b";
+        ctx.fillRect(-9, -46 + i*13, 18, 13);
+      }
+      ctx.strokeStyle = "rgba(0,0,0,.25)"; ctx.lineWidth = 1.5;
+      ctx.strokeRect(-9, -46, 18, 52);
+      ctx.fillStyle = "#e23b3b";
+      ctx.beginPath(); ctx.moveTo(9, -46); ctx.lineTo(30, -40); ctx.lineTo(9, -34); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,.5)";
+      ctx.beginPath(); ctx.ellipse(0, 10, 20, 4.5, 0, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+    function drawScene(now, dt){
+      // Ciel
+      var sky = ctx.createLinearGradient(0,0,0,H*0.55);
+      sky.addColorStop(0, "#6db9e6"); sky.addColorStop(1, "#dff3fb");
+      ctx.fillStyle = sky; ctx.fillRect(0,0,W,H);
+      // Soleil
+      ctx.fillStyle = "#ffd94d";
+      ctx.beginPath(); ctx.arc(W - 56, 44, 24, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = "rgba(255,217,77,.35)";
+      ctx.beginPath(); ctx.arc(W - 56, 44, 36, 0, Math.PI*2); ctx.fill();
+      // Nuages (parallaxe lente)
+      ctx.fillStyle = "rgba(255,255,255,.92)";
+      var coff = (scrollX*0.15) % (W + 320);
+      for(var ci=0; ci<3; ci++){
+        var cx = ((ci*340 + 90 - coff) % (W+320) + (W+320)) % (W+320) - 160;
+        var cy = 26 + (ci%2)*30;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 34, 13, 0, 0, Math.PI*2);
+        ctx.ellipse(cx + 24, cy + 3, 24, 10, 0, 0, Math.PI*2);
+        ctx.ellipse(cx - 25, cy + 4, 22, 9, 0, 0, Math.PI*2);
+        ctx.fill();
+      }
+      // Mouettes
+      ctx.strokeStyle = "rgba(38,50,56,.75)"; ctx.lineWidth = 2; ctx.lineCap = "round";
+      for(var gi=gulls.length-1; gi>=0; gi--){
+        var g = gulls[gi];
+        g.x += g.v*dt; g.ph += dt*7;
+        if(g.x > W + 30){ gulls.splice(gi,1); continue; }
+        var flap = Math.sin(g.ph)*4;
+        ctx.beginPath();
+        ctx.moveTo(g.x - 9, g.y + flap); ctx.quadraticCurveTo(g.x - 3, g.y - 4, g.x, g.y);
+        ctx.quadraticCurveTo(g.x + 3, g.y - 4, g.x + 9, g.y + flap);
+        ctx.stroke();
+      }
+      if(Math.random() < dt*0.12 && gulls.length < 3){
+        gulls.push({ x:-25, y: rand(24, H*0.2), v: rand(26,44), ph: 0 });
+      }
+      // Rive lointaine + sapins
+      var shoreY = H*0.36;
+      ctx.fillStyle = "#7fb069";
+      ctx.fillRect(0, shoreY - 8, W, 10);
+      var sp = 46, off = (scrollX*0.5) % sp;
+      for(var sx = -off - sp; sx < W + sp; sx += sp){
+        var hh = 30 + ((Math.floor((sx + scrollX*0.5)/sp) * 37) % 17);
+        drawSpruce(sx + 12, shoreY - 4, hh, "#2e6b3e");
+      }
+      // Eau
+      var wat = ctx.createLinearGradient(0, shoreY, 0, H);
+      wat.addColorStop(0, "#3f9dbd"); wat.addColorStop(1, "#1668c4");
+      ctx.fillStyle = wat; ctx.fillRect(0, shoreY, W, H - shoreY);
+      // Vagues qui défilent
+      ctx.strokeStyle = "rgba(255,255,255,.4)"; ctx.lineWidth = 2;
+      var wsp = 54;
+      for(var row=0; row<4; row++){
+        var wy = shoreY + 16 + row*((H - shoreY)/4.2);
+        var woff = (scrollX*(1 + row*0.25) + row*27) % wsp;
+        ctx.beginPath();
+        for(var wx = -woff; wx < W + wsp; wx += wsp){
+          ctx.arc(wx + 12, wy, 9, Math.PI*1.08, Math.PI*1.55);
+        }
+        ctx.stroke();
+      }
+      // Bouée d'arrivée (apparaît à l'approche)
+      var myX = boatScreenX(visualDist, repVisual);
+      var buoyX = myX + (TOTAL - visualDist)*7;
+      if(buoyX < W + 60){ drawBuoy(buoyX, playerY() + 4); }
+      var buoyXr = myX + (TOTAL - repVisual)*7;
+      if(buoyXr < W + 60 && Math.abs(buoyXr - buoyX) > 30){ drawBuoy(buoyXr, repY() + 4); }
+
+      // Nuages de pet (derrière les bateaux)
+      for(var pi=puffs.length-1; pi>=0; pi--){
+        var p = puffs[pi];
+        p.life += dt;
+        if(p.life >= p.max){ puffs.splice(pi,1); continue; }
+        p.x += p.vx*dt; p.y += p.vy*dt; p.r += 16*dt;
+        var a = 0.5 * (1 - p.life/p.max);
+        ctx.fillStyle = "rgba(" + p.col + "," + a.toFixed(3) + ")";
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+      }
+      // Bateau de Répète (voie du haut)
+      var repX = clamp(myX + (repVisual - visualDist)*7, W*0.10, W*0.88);
+      var repBob = Math.sin(now/380)*2.2;
+      drawBoat(repX, repY() + repBob, 0.82, "#e8762c", "#3f9e4d", "#d43a2f", "#d43a2f", "RÉPÈTE", true);
+      // Sillage de Répète
+      ctx.fillStyle = "rgba(255,255,255,.35)";
+      ctx.beginPath(); ctx.ellipse(repX - 52, repY() + repBob + 12, 26, 3.5, 0, 0, Math.PI*2); ctx.fill();
+      // Bateau du joueur (premier plan, avec bond après un pet)
+      var hop = hopT < 0.55 ? Math.sin((hopT/0.55)*Math.PI) * -13 : 0;
+      var bob = Math.sin(now/330)*2.6;
+      drawBoat(myX, playerY() + bob + hop, 1.08, "#0e7d96", "#f2b73c", "#ffffff", "#ffffff", "TOI", false);
+      ctx.fillStyle = "rgba(255,255,255,.45)";
+      ctx.beginPath(); ctx.ellipse(myX - 58, playerY() + bob + 13, 30, 4, 0, 0, Math.PI*2); ctx.fill();
+      // Éclaboussures
+      for(var di=drops.length-1; di>=0; di--){
+        var d = drops[di];
+        d.life += dt;
+        if(d.life > 0.55){ drops.splice(di,1); continue; }
+        d.x += d.vx*dt; d.y += d.vy*dt; d.vy += 340*dt;
+        ctx.fillStyle = "rgba(220,245,255," + (0.9*(1 - d.life/0.55)).toFixed(3) + ")";
+        ctx.beginPath(); ctx.arc(d.x, d.y, 2.6, 0, Math.PI*2); ctx.fill();
+      }
+      // Textes flottants
+      ctx.textAlign = "center";
+      for(var fi=floats.length-1; fi>=0; fi--){
+        var f = floats[fi];
+        f.life += dt;
+        if(f.life > 1.15){ floats.splice(fi,1); continue; }
+        ctx.font = "700 " + f.size + "px Fredoka, sans-serif";
+        ctx.globalAlpha = clamp(1.3 - f.life, 0, 1);
+        ctx.lineWidth = 4; ctx.strokeStyle = "rgba(255,255,255,.85)";
+        var fy = f.y - f.life*34;
+        ctx.strokeText(f.text, f.x, fy);
+        ctx.fillStyle = f.col;
+        ctx.fillText(f.text, f.x, fy);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    /* ============================================================
+       BOUCLE DE JEU
+       ============================================================ */
+    function loop(now){
+      requestAnimationFrame(loop);
+      if(!lastFrame) lastFrame = now;
+      var dt = Math.min(0.05, (now - lastFrame)/1000);
+      lastFrame = now;
+      if(W === 0){ resize(); }
+
+      if(state === "playing"){
+        elapsed += dt;
+        hopT += dt;
+        // Répète : rythme régulier, accélère doucement, petite marge vivante
+        repT += dt;
+        var repSpeed = 2.25 + 0.85*clamp(repDist/TOTAL,0,1) + Math.sin(repT*0.6)*0.14 + Math.sin(repT*1.7)*0.05;
+        repDist = Math.min(TOTAL, repDist + repSpeed*dt);
+        repPuffTimer -= dt;
+        if(repPuffTimer <= 0){ spawnRepPuff(); repPuffTimer = rand(1.4, 2.6); }
+        // Mouvement fluide du joueur vers sa distance
+        var prevV = visualDist;
+        visualDist += (dist - visualDist) * Math.min(1, dt*3.2);
+        repVisual += (repDist - repVisual) * Math.min(1, dt*3.2);
+        scrollX += Math.max(0, (visualDist - prevV))*26 + dt*6;
+        updateHUD();
+        if(dist >= TOTAL){ visualDist = TOTAL; drawScene(now, dt); endGame(true); return; }
+        if(repDist >= TOTAL){ drawScene(now, dt); endGame(false); return; }
+      } else {
+        // Scène vivante derrière les écrans menu / fin
+        scrollX += dt*10;
+        hopT += dt;
+        visualDist += (dist - visualDist) * Math.min(1, dt*3.2);
+        repVisual += (repDist - repVisual) * Math.min(1, dt*3.2);
+      }
+      drawScene(now, dt);
+    }
+
+    /* ============================================================
+       ÉVÉNEMENTS
+       ============================================================ */
+    document.getElementById("btnStart").addEventListener("click", startGame);
+    document.getElementById("btnAgain").addEventListener("click", startGame);
+    document.getElementById("btnSound").addEventListener("click", function(){
+      soundOn = !soundOn;
+      document.getElementById("icoSndOn").style.display = soundOn ? "" : "none";
+      document.getElementById("icoSndOff").style.display = soundOn ? "none" : "";
+      if(soundOn) audio();
+    });
+    document.addEventListener("keydown", function(e){
+      if(state === "playing"){
+        if(e.key && e.key.length === 1){
+          var n = norm(e.key);
+          if(n >= "a" && n <= "z"){ e.preventDefault(); handleLetter(e.key); }
+        }
+      } else if(e.key === "Enter"){
+        startGame();
+      }
+    });
+    // Évite le défilement tactile sur la scène
+    stage.addEventListener("touchmove", function(e){ e.preventDefault(); }, { passive:false });
+
+    /* ---------- Démarrage ---------- */
+    resize();
+    updateHUD();
+    wordBox.innerHTML = '<span class="ch cur">PRÊT ?</span>';
+    buildKeyboardForMenu();
+    function buildKeyboardForMenu(){
+      // Aperçu du clavier avant le départ (lettres du mot « pet »)
+      word = "pet"; wordIdx = 0;
+      buildKeyboard();
+      word = ""; 
+    }
+    requestAnimationFrame(loop);
+    </script>
+  </body>
+</html>
