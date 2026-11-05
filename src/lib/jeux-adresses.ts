@@ -49,6 +49,7 @@ export const GAME_FILES: Record<string, string> = {
   "anxiete-le-jeu": "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html",
   "votre-ia-parle-t-elle-quebecois": "/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html",
   "slalomeuse": "/apps/slalomeuse/index.html",
+  "sur-lherbe": "/apps/sur-lherbe/sur-lherbe-v1.0.html",
   "pete-et-repete": "/apps/pete-et-repete/pete-et-repete-v1.0.html",
   "hommes-prehistoriques": "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html",
   "bataille-aura-magic": "/apps/bataille-aura-magic/bataille-aura-magic-v1.0.html",
