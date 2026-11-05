@@ -72,7 +72,7 @@ function Page() {
               <article key={b.title} className="library-item">
                 {b.cover && <PdfCover src={b.cover} alt={`Couverture ${b.title}`} />}
                 <div className="library-meta"><span className="dot" />{b.tag} — {b.price} CAD, aucune taxe ajoutée</div>
-                <h3>{b.title}</h3>
+                <h3 title={b.title}>{b.title}</h3>
                 <p>{b.desc}</p>
                 <Link className="lib-link" to="/pdf/$slug" params={{ slug: b.slug }}>
                   {discoverLabel(b.tag)} →

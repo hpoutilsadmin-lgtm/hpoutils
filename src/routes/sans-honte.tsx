@@ -141,7 +141,7 @@ function Page() {
                   <span className="kit-watermark">Aperçu • HP</span>
                 </div>
                 <div className="library-meta"><span className="dot" />Kit PDF — 5 $ CAD, aucune taxe ajoutée</div>
-                <h3>{k.title}</h3>
+                <h3 title={k.title}>{k.title}</h3>
                 <p>{k.sub}</p>
                 <Link className="lib-link" to="/pdf/$slug" params={{ slug: k.slug }}>Découvrir le kit PDF →</Link>
               </article>
