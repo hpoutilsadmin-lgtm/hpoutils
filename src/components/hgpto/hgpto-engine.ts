@@ -3476,18 +3476,37 @@ export function initHgpto() {
          part JAMAIS toute seule : seulement sur demande explicite. */
       var TTS = ('speechSynthesis' in window) ? window.speechSynthesis : null;
       var voiceOn = true, heliumOn = true, frVoice = null;
+      /* Voix de lecture : la plus proche d'Isidore (voix officielle
+         de Sir H. Gepeto — SpeechGen, français canadien, vieux
+         conteur chaleureux) utilisable en direct à coût zéro.
+         Isidore est une voix cloud (crédits SpeechGen, clé API) :
+         elle ne peut pas lire une page en direct — elle servira
+         aux dialogues préenregistrés en MP3 (banque officielle,
+         prochaine étape). En direct, on prend donc la voix
+         d'homme québécoise du terminal lui-même (Nicolas ou
+         Sébastien sur iPhone/Mac, Claude sur Windows, voix
+         Google fr-CA sur Android), avec replis propres.
+         Règles : fr-CA d'abord ; homme nommé d'abord ; mot entier
+         (« daniel » n'attrape pas « danielle », « luc » pas
+         « lucie ») ; accents ignorés (« Amélie » = « amelie »). */
       function pickFrVoice(){
         if (!TTS) return;
         var vs = [];
         try { vs = TTS.getVoices() || []; } catch(e){ vs = []; }
         var fr = vs.filter(function(v){ return /^fr/i.test(v.lang || ''); });
         if (!fr.length){ frVoice = null; return; }
-        var male = ['thomas','paul','henri','nicolas','mathieu','jacques','daniel','antoine','loic','jean','pierre','luc','remi'];
-        var female = ['amelie','audrey','julie','hortense','marie','virginie','lea','aurelie','chloe','celia','anna','sophie'];
-        function has(v, list){ var n = (v.name || '').toLowerCase(); return list.some(function(w){ return n.indexOf(w) >= 0; }); }
+        var maleCA = ['nicolas', 'sebastien'];
+        var maleFR = ['thomas', 'paul', 'henri', 'mathieu', 'jacques', 'daniel', 'antoine', 'loic', 'jean', 'pierre', 'luc', 'remi', 'claude', 'guillaume'];
+        var female = ['amelie', 'audrey', 'julie', 'hortense', 'marie', 'virginie', 'lea', 'aurelie', 'chloe', 'celia', 'anna', 'sophie', 'chantal', 'caroline', 'danielle', 'lucie', 'jeanne', 'gabrielle', 'sylvie'];
+        function norm(n){ return (n || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim(); }
+        function hasWord(v, list){ var n = ' ' + norm(v.name) + ' '; return list.some(function(w){ return n.indexOf(' ' + w + ' ') >= 0; }); }
+        function isFrCA(v){ return /^fr-ca/i.test(v.lang || ''); }
         frVoice = null;
-        for (var i = 0; i < fr.length && !frVoice; i++) if (has(fr[i], male)) frVoice = fr[i];
-        if (!frVoice) for (var j = 0; j < fr.length && !frVoice; j++) if (!has(fr[j], female)) frVoice = fr[j];
+        var i;
+        for (i = 0; i < fr.length && !frVoice; i++) if (isFrCA(fr[i]) && hasWord(fr[i], maleCA)) frVoice = fr[i];
+        if (!frVoice) for (i = 0; i < fr.length && !frVoice; i++) if (hasWord(fr[i], maleFR)) frVoice = fr[i];
+        if (!frVoice) for (i = 0; i < fr.length && !frVoice; i++) if (isFrCA(fr[i]) && !hasWord(fr[i], female)) frVoice = fr[i];
+        if (!frVoice) for (i = 0; i < fr.length && !frVoice; i++) if (!hasWord(fr[i], female)) frVoice = fr[i];
         if (!frVoice) frVoice = fr[0];
       }
       if (TTS){ pickFrVoice(); TTS.onvoiceschanged = pickFrVoice; }
@@ -3496,7 +3515,7 @@ export function initHgpto() {
         try {
           if (opts && opts.interrupt) TTS.cancel();
           var u = new SpeechSynthesisUtterance(text);
-          u.lang = 'fr-FR';
+          u.lang = (frVoice && frVoice.lang) || 'fr-FR';   // la langue suit la voix choisie (fr-CA si voix québécoise) — sinon le navigateur peut substituer une autre voix
           if (frVoice) u.voice = frVoice;
           u.rate = (opts && opts.rate) || 1;
           u.pitch = (opts && opts.pitch) || 1;
@@ -3548,9 +3567,9 @@ export function initHgpto() {
         if (!reading.on || !TTS) return;
         if (reading.i >= reading.chunks.length){ finishReading(); return; }
         var u = new SpeechSynthesisUtterance(reading.chunks[reading.i]);
-        u.lang = 'fr-FR';
+        u.lang = (frVoice && frVoice.lang) || 'fr-FR';   // la langue suit la voix choisie (fr-CA si voix québécoise)
         if (frVoice) u.voice = frVoice;
-        u.rate = 1; u.pitch = 1;   // voix homme standard, débit normal — jamais d'hélium ici
+        u.rate = 1; u.pitch = 1;   // voix d'homme québécois (la plus proche d'Isidore), débit normal — jamais d'hélium ici
         u.onend = function(){ reading.i++; readChunk(); };
         u.onerror = function(){ reading.i++; readChunk(); };
         TTS.speak(u);
