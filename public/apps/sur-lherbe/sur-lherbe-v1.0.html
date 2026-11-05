@@ -17,6 +17,7 @@ main{max-width:480px;margin:0 auto;padding:10px}
 #hud span{background:var(--card);border-radius:8px;padding:4px 8px;white-space:nowrap}
 .cv{position:relative}
 canvas{width:100%;height:auto;display:block;border-radius:14px;background:#3a611f;touch-action:none}
+canvas:focus-visible{outline:3px solid #ffd84a;outline-offset:2px}
 #tm{position:absolute;top:10px;left:0;right:0;text-align:center;color:#fff;font-weight:600;text-shadow:0 1px 4px #000;pointer-events:none}
 #ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;border-radius:14px;background:rgba(15,25,10,.82);color:#f2f5e8}
 #ov[hidden]{display:none}
@@ -34,7 +35,7 @@ button:active{transform:scale(.97)}button:disabled{opacity:.45}
 <body>
 <main>
 <div id="hud"><span>🍃 <b id="f">0</b></span><span>🌰 <b id="g">0</b></span><span>🍯 <b id="n">0</b></span><span>🟠 <b id="a">0</b></span><span>Vague <b id="w">0</b></span><span>👑 <b id="q">100</b></span></div>
-<div class="cv"><canvas id="c"></canvas><div id="tm"></div>
+<div class="cv"><canvas id="c" tabindex="0" role="application" aria-label="Carte du jeu. Flèches pour déplacer le ralliement, Entrée pour agir, Échap pour la boutique ou la pause."></canvas><div id="tm"></div>
 <div id="ov"><h2>Sur l’herbe</h2><p>Protège ta reine pendant 8 vagues.</p><p>Tes ouvrières récoltent seules. Produis des soldates contre les araignées et les frelons.</p><p><b>Un cercle rouge apparaît ? Touche-le :</b> tes fourmis fuient avant le plongeon de l’oiseau.</p><p>Touche la carte pour placer le point de ralliement des soldates.</p><button id="go">Jouer</button></div></div>
 <div class="btns"><button id="bw">Ouvrière 🍃10</button><button id="bs">Soldate 🍃12 🌰6</button><button id="bf">Festin 🍯20</button><button id="bx">Capacité</button><button id="bh">Boutique</button><button id="bn">Son : oui</button></div>
 <div id="shop" hidden></div>
@@ -144,7 +145,7 @@ function fin(v){S.end=1;pause=true;if(v&&CUR+1>prog())try{localStorage.setItem('
 const o=$('ov');o.hidden=false;o.innerHTML=v?'<h2>Tableau réussi !</h2><p>'+LV[CUR].n+' : la colonie a survécu aux '+S.W+' vagues.</p><p>Ambre en réserve : '+S.am+'</p>':'<h2>La reine est tombée</h2><p>Vague atteinte : '+S.wave+'/'+S.W+'</p>';
 const mk=(t,f)=>{const b=document.createElement('button');b.textContent=t;b.onclick=f;o.appendChild(b)};
 if(v&&CUR<LV.length-1)mk('Tableau suivant',()=>{CUR++;start()});mk(v?'Rejouer':'Réessayer',start);mk('Menu',()=>menu());sfx(v?400:200,v?900:60,.8,'triangle',.12)}
-function menu(){pause=true;const o=$('ov'),p=prog();o.hidden=false;o.innerHTML='<h2>Sur l’herbe</h2><p>Protège ta reine. Récolte feuilles, graines et nectar.</p><p><b>Cercle rouge ?</b> Touche-le : tes fourmis fuient avant l’oiseau. Touche la carte pour placer le ralliement.</p>';
+function menu(){pause=true;const o=$('ov'),p=prog();o.hidden=false;o.innerHTML='<h2>Sur l’herbe</h2><p>Protège ta reine. Récolte feuilles, graines et nectar.</p><p><b>Cercle rouge ?</b> Touche-le : tes fourmis fuient avant l’oiseau. Touche la carte pour placer le ralliement.</p><p>Clavier : flèches pour déplacer le ralliement, Entrée pour agir, Échap pour la boutique ou la pause.</p>';
 const fr=document.createElement('div');fr.style.cssText='display:flex;gap:6px;margin-top:10px';FA.forEach((f,i)=>{const b=document.createElement('button');b.style.cssText='margin:0;padding:14px 6px;min-width:0;flex:1;background:'+(i==FAC?'#5b9a35':'#4a5340');b.textContent=f.n;b.onclick=()=>{FAC=i;menu()};fr.appendChild(b)});o.appendChild(fr);const fd=document.createElement('p');fd.innerHTML=FA[FAC].d+'<br>💪 '+FA[FAC].fo+'<br>⚠️ '+FA[FAC].fb;o.appendChild(fd);LV.forEach((l,i)=>{const b=document.createElement('button');b.textContent=(i+1)+'. '+l.n+(i>p?' 🔒':'');b.disabled=i>p;b.onclick=()=>{CUR=i;start()};o.appendChild(b);const d=document.createElement('p');d.textContent=l.d;o.appendChild(d)})}
 function start(){reset(CUR);lab();pause=false;$('ov').hidden=true;if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(ac)ac.resume();$('shop').hidden=true;toast(LV[CUR].n+' : prépare tes soldates !',3)}
 function src(l,r){g.save();g.translate(l.x,l.y);if(l.t=='g'){for(let i=0;i<7;i++){const a=i*2.4,d=r*.7*((i%3)/2+.3);g.fillStyle=i%2?'#b88a4a':'#8a5a2a';g.beginPath();g.ellipse(Math.cos(a)*d,Math.sin(a)*d,r*.32,r*.2,a,0,TAU);g.fill()}}else{for(let i=0;i<8;i++){g.rotate(TAU/8);g.fillStyle='#fff';g.beginPath();g.ellipse(r*.9,0,r*.6,r*.22,0,0,TAU);g.fill()}g.fillStyle='#f2b21b';g.beginPath();g.arc(0,0,r*.4,0,TAU);g.fill()}g.restore()}
@@ -170,6 +171,16 @@ cv.addEventListener('pointerdown',e=>{if(pause||S.end)return;const r=cv.getBound
 const z=S.zones.find(z=>z.t>=0&&z.t<(z.k=='r'?8:3)&&Math.hypot(x-z.x,y-z.y)<z.r*1.9);
 if(z){for(const u of S.units){const d=Math.hypot(u.x-z.x,u.y-z.y)||1;if(d<z.r*1.5){u.fl=1.8;u.fx=z.x+(u.x-z.x)/d*z.r*2.1;u.fy=z.y+(u.y-z.y)/d*z.r*2.1}}sfx(700,1400,.12,'square',.05);toast('Elles fuient !',1)}
 else{S.rally.x=cl(x,20,W-20);S.rally.y=cl(y,40,H-70)}});
+cv.addEventListener('keydown',e=>{if(pause||S.end)return;
+const st=e.shiftKey?60:20;let used=true;
+if(e.key==='ArrowLeft')S.rally.x=cl(S.rally.x-st,20,W-20);
+else if(e.key==='ArrowRight')S.rally.x=cl(S.rally.x+st,20,W-20);
+else if(e.key==='ArrowUp')S.rally.y=cl(S.rally.y-st,40,H-70);
+else if(e.key==='ArrowDown')S.rally.y=cl(S.rally.y+st,40,H-70);
+else if(e.key==='Enter'){const z=S.zones.find(z=>z.t>=0&&z.t<(z.k=='r'?8:3)&&Math.hypot(S.rally.x-z.x,S.rally.y-z.y)<z.r*1.9);if(z){for(const u of S.units){const d=Math.hypot(u.x-z.x,u.y-z.y)||1;if(d<z.r*1.5){u.fl=1.8;u.fx=z.x+(u.x-z.x)/d*z.r*2.1;u.fy=z.y+(u.y-z.y)/d*z.r*2.1}}sfx(700,1400,.12,'square',.05);toast('Elles fuient !',1)}}
+else if(e.key==='Escape'){if(!$('shop').hidden){$('bh').click()}else{pause=true;$('ov').hidden=false;menu()}}
+else used=false;
+if(used)e.preventDefault()});
 $('bw').onclick=()=>{const c=FA[FAC].wc;if(S.f>=c){S.f-=c;add('w');sfx(500,700,.08,'sine',.06)}};
 $('bs').onclick=()=>{const c=FA[FAC].sc;if(S.f>=c[0]&&S.g>=c[1]&&S.n>=c[2]){S.f-=c[0];S.g-=c[1];S.n-=c[2];add('s');sfx(300,520,.1,'triangle',.07)}};
 $('bh').onclick=()=>{if(S.end||!$('ov').hidden)return;const sh=$('shop');sh.hidden=!sh.hidden;pause=!sh.hidden;if(!sh.hidden)last=performance.now();shop();if(!sh.hidden)requestAnimationFrame(()=>sh.scrollIntoView({block:'nearest',behavior:'smooth'}))};
