@@ -97,6 +97,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: [
       {
+        /* Barre unique v3 — correctif republication (5 nov. 2026) :
+           la barre se charge en defer dès l'analyse du HTML,
+           comme sur les pages statiques, au lieu d'attendre
+           l'hydratation React (elle montait avec quelques secondes
+           de retard sur l'accueil, page d'entrée). CompagnonBar
+           reste en repli (garde script[data-compagnon]). */
+        src: "/compagnon/compagnon.js",
+        defer: true,
+        "data-compagnon": "1",
+      },
+      {
         src: "https://static.cloudflareinsights.com/beacon.min.js",
         defer: true,
         "data-cf-beacon": '{"token": "208bfc7b189846a98c30479f932e5762"}',

@@ -432,3 +432,20 @@ html.compagnon-animations-reduites .compagnon-barre,
 html.compagnon-animations-reduites .compagnon-cmd,
 html.compagnon-animations-reduites .compagnon-marcheur { transition: none !important; }
 html.compagnon-animations-reduites .compagnon-cmd:active { transform: none; }
+
+/* ---------- Garde-fou îlot (lot correctifs republication, 5 nov. 2026) ----------
+   La barre vit dans le document de chaque page : les règles globales
+   d'une page statique s'appliquent aussi à ses contrôles. Exemple
+   (maintenant.html) : button{width:100%} donnait 100 % de la rangée
+   flex au bouton Fermer du dialogue Gepeto, et le texte se retrouvait
+   en colonne d'un mot (~65 px). Les commandes (.compagnon-cmd,
+   flex:1 1 0) et les boutons à largeur explicite (.compagnon-champ,
+   .compagnon-commande…) ne sont pas touchés : seuls les contrôles
+   sans largeur propre reprennent auto, leur valeur naturelle. */
+.compagnon-poignee,
+.compagnon-reduire,
+.compagnon-fermer,
+.compagnon-fav,
+.compagnon-rappel {
+  width: auto;
+}

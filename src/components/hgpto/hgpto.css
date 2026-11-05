@@ -747,3 +747,20 @@
       @media (max-width:560px){
         html.compagnon-v3 .bot-controls:not(.open) > *:not(#btn-dock){display:inline-block}
       }
+
+      /* ---------- Garde-fou îlot (lot correctifs republication, 5 nov. 2026) ----------
+         Même cause que la barre (compagnon.css) : sur une page statique
+         aux règles globales (ex. maintenant.html : button{width:100%} et
+         input,select,textarea{width:100%}), les contrôles du moteur sans
+         largeur propre prenaient 100 % de leur rangée flex et écrasaient
+         leurs voisins. Seuls les contrôles sans largeur explicite
+         reprennent auto ; .qa-play (width:100 % voulu) et .bubble-close
+         (36 px) ne sont pas touchés. */
+      .bot-controls button,
+      .bot-controls select,
+      .qa-form button,
+      .qa-actions button,
+      .qa-preview,
+      .bubble .bubble-no {
+        width: auto;
+      }

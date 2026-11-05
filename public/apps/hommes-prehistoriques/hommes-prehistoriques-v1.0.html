@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Les hommes préhistoriques du Québec — jeu 2.5D drôle avec de vrais dinosaures</title>
+<meta name="description" content="Jeu 2.5D simple et drôle : cours avec Silex l'homme préhistorique dans le Québec d'il y a 70 millions d'années. Saute par-dessus les roches, ramasse des silex et découvre 8 vraies espèces de dinosaures : Tricératops, Tyrannosaure, Brachiosaure, Vélociraptor et plus. Gratuit, pour toute la famille.">
+<meta property="og:title" content="Les hommes préhistoriques du Québec">
+<meta property="og:description" content="Un petit jeu 2.5D tout simple : cours, saute, ramasse des silex et découvre 8 vrais dinosaures. Pour les explorateurs de 6 à 99 ans!">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:site_name" content="HP Outils">
+<meta property="og:url" content="https://www.hp-outils.com/apps/hommes-prehistoriques">
+<meta property="og:image" content="https://www.hp-outils.com/images/share-hp.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Les hommes préhistoriques du Québec">
+<meta name="twitter:description" content="Cours avec Silex, saute par-dessus les roches et découvre 8 vrais dinosaures dans un Québec préhistorique en 2.5D.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Les hommes préhistoriques du Québec","description":"Petit jeu 2.5D simple et drôle : cours avec Silex l'homme préhistorique, saute par-dessus les roches, ramasse des silex et découvre 8 espèces de dinosaures dans le Québec du Crétacé.","inLanguage":"fr","genre":["Aventure","Famille"],"author":{"@type":"Organization","name":"HP Outils"},"audience":{"@type":"PeopleAudience","suggestedMinAge":6,"suggestedMaxAge":99}}
+</script>
+<style>
+:root{
+  --brun:#5a3a1e; --brun-fonce:#3d2712; --sable:#ffedcb; --orange:#e8762c;
+  --orange-fonce:#c85a17; --vert:#4d9b47; --vert-fonce:#35702f;
+  --carte:#fff8e8; --rouge:#e2483d;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#79b5d9;
+  font-family:'Nunito',system-ui,sans-serif;-webkit-user-select:none;user-select:none;touch-action:none;
+  -webkit-tap-highlight-color:transparent;}
+#jeu{position:fixed;inset:0;width:100%;height:100%;display:block;}
+
+/* ---------- HUD ---------- */
+#hud{position:fixed;top:0;left:0;right:0;display:none;justify-content:space-between;align-items:flex-start;
+  padding:10px 12px;z-index:30;pointer-events:none;gap:8px;}
+#hud.visible{display:flex;}
+.hud-boite{background:rgba(255,248,232,.92);border:3px solid var(--brun);border-radius:16px;
+  padding:6px 14px;color:var(--brun-fonce);box-shadow:0 3px 0 rgba(61,39,18,.35);}
+#coeurs{font-size:24px;letter-spacing:2px;line-height:1;color:var(--rouge);}
+#coeurs .perdu{color:#cbb894;}
+#pointage{font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;line-height:1.1;}
+#pointage small{display:block;font-family:'Nunito',sans-serif;font-weight:800;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#8a6a42;}
+#btn-album{pointer-events:auto;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;
+  background:var(--vert);color:#fff;border:3px solid var(--vert-fonce);border-radius:16px;padding:8px 16px;
+  box-shadow:0 4px 0 var(--vert-fonce);}
+#btn-album:active{transform:translateY(3px);box-shadow:0 1px 0 var(--vert-fonce);}
+#btn-son{pointer-events:auto;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;
+  background:var(--vert);color:#fff;border:3px solid var(--vert-fonce);border-radius:16px;padding:8px 16px;
+  box-shadow:0 4px 0 var(--vert-fonce);}
+#btn-son:active{transform:translateY(3px);box-shadow:0 1px 0 var(--vert-fonce);}
+
+/* ---------- Carte découverte (coin supérieur gauche, SOUS le HUD :
+   elle ne passe plus jamais devant Silex ni devant la course) ---------- */
+#carte-dino{position:fixed;left:12px;top:106px;transform:translateX(-18px);z-index:40;width:min(320px,74vw);
+  background:var(--carte);border:4px solid var(--brun);border-radius:20px;padding:10px 14px 12px;
+  box-shadow:0 8px 24px rgba(61,39,18,.35);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;}
+#carte-dino.visible{opacity:1;transform:translateX(0);}
+#carte-dino .nouveau{font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-fonce);}
+#carte-dino h3{margin:2px 0 4px;font-family:'Baloo 2',cursive;font-size:22px;color:var(--brun-fonce);line-height:1.05;}
+#carte-dino p{margin:0;font-size:14.5px;font-weight:600;color:#5f4630;line-height:1.35;}
+
+/* ---------- Écrans (accueil / fin / album) ---------- */
+.ecran{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;
+  background:rgba(43,30,16,.45);padding:14px;overflow-y:auto;}
+.ecran.visible{display:flex;}
+.panneau{background:var(--carte);border:4px solid var(--brun);border-radius:26px;max-width:560px;width:100%;
+  padding:26px 28px 24px;text-align:center;box-shadow:0 14px 40px rgba(30,20,8,.45);margin:auto;}
+.panneau h1{font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(30px,6.5vw,46px);line-height:1.02;
+  margin:0 0 6px;color:var(--brun-fonce);}
+.panneau h2{font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(26px,5.5vw,36px);margin:0 0 8px;color:var(--brun-fonce);}
+.panneau .sous-titre{font-size:17px;font-weight:700;color:#7a5a36;margin:0 0 16px;}
+.regles{display:flex;flex-direction:column;gap:9px;text-align:left;margin:0 auto 20px;max-width:420px;}
+.regle{display:flex;gap:11px;align-items:flex-start;font-size:16px;font-weight:700;color:#5f4630;line-height:1.3;}
+.regle .pastille{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--orange);color:#fff;
+  font-family:'Baloo 2',cursive;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:16px;margin-top:1px;}
+.gros-btn{cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:24px;color:#fff;
+  background:var(--orange);border:3px solid var(--orange-fonce);border-radius:999px;padding:13px 42px;
+  box-shadow:0 6px 0 var(--orange-fonce);}
+.gros-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--orange-fonce);}
+.petit-btn{cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;color:var(--brun-fonce);
+  background:#ffe1a8;border:3px solid var(--brun);border-radius:999px;padding:9px 22px;box-shadow:0 4px 0 var(--brun);}
+.petit-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--brun);}
+.lien-discret{display:inline-block;margin-top:14px;background:none;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:14.5px;color:#8a6a42;text-decoration:underline;}
+.score-final{font-family:'Baloo 2',cursive;font-weight:800;font-size:30px;color:var(--orange-fonce);margin:4px 0 2px;}
+#album-grille{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 18px;text-align:left;}
+.case-dino{border:3px solid #d9bd8a;border-radius:16px;padding:10px 12px;background:#fffdf4;}
+.case-dino.trouve{border-color:var(--vert);background:#f0f9ec;}
+.case-dino .nom{font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;color:var(--brun-fonce);}
+.case-dino.trouve .nom{color:var(--vert-fonce);}
+.case-dino .fait{font-size:13px;font-weight:600;color:#77603f;line-height:1.3;margin-top:2px;}
+.case-dino .mystere{font-size:13px;font-weight:700;color:#b39b6d;}
+.rang-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center;}
+
+/* ---------- Bouton sauter (mobile) ---------- */
+#btn-saut{position:fixed;right:16px;bottom:18px;z-index:35;width:84px;height:84px;border-radius:50%;
+  background:var(--orange);border:4px solid var(--orange-fonce);color:#fff;box-shadow:0 6px 0 var(--orange-fonce);
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;display:none;align-items:center;justify-content:center;
+  cursor:pointer;line-height:1.05;text-align:center;}
+#btn-saut.visible{display:flex;}
+#btn-saut:active{transform:translateY(4px);box-shadow:0 2px 0 var(--orange-fonce);}
+#astuce{position:fixed;left:12px;bottom:16px;z-index:25;background:rgba(255,248,232,.88);border:2.5px solid var(--brun);
+  border-radius:12px;padding:5px 12px;font-weight:800;font-size:13.5px;color:var(--brun-fonce);display:none;}
+#astuce.visible{display:block;}
+@media (max-width:560px){
+  #album-grille{grid-template-columns:1fr;}
+  .panneau{padding:20px 18px;}
+  #pointage{font-size:19px;}
+  #coeurs{font-size:20px;}
+  #carte-dino{top:94px;}
+}
+/* ---------- Bandeau de niveau (en haut, au centre : jamais devant Silex) ---------- */
+#bandeau{position:fixed;top:12px;left:50%;transform:translate(-50%,-12px);z-index:45;background:var(--orange);
+  color:#fff;font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(18px,4.5vw,26px);white-space:nowrap;
+  border:3px solid var(--orange-fonce);border-radius:999px;padding:6px 22px;box-shadow:0 5px 0 var(--orange-fonce);
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;text-align:center;max-width:94vw;}
+#bandeau.visible{opacity:1;transform:translate(-50%,0);}
+#boost-ligne{font-weight:800;font-size:13px;color:var(--orange-fonce);letter-spacing:.02em;}
+
+/* ---------- Éditeur de parcours ---------- */
+.panneau.large{max-width:640px;}
+#palette{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 12px;}
+.pal-btn{cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:16px;color:var(--brun-fonce);
+  background:#ffe1a8;border:3px solid var(--brun);border-radius:14px;padding:8px 14px;box-shadow:0 3px 0 var(--brun);}
+.pal-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--brun);}
+#parcours-liste{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;min-height:46px;
+  border:3px dashed #d9bd8a;border-radius:14px;padding:8px;margin:0 0 16px;background:#fffdf4;}
+#parcours-liste .vide{font-weight:700;color:#b39b6d;font-size:14.5px;margin:auto;text-align:center;}
+.chip{cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;color:#fff;background:var(--vert);
+  border:2.5px solid var(--vert-fonce);border-radius:999px;padding:4px 12px;}
+.chip:active{transform:translateY(2px);}
+
+@media (prefers-reduced-motion:reduce){
+  #carte-dino{transition:none;}
+  #bandeau{transition:none;}
+}
+</style>
+</head>
+<body>
+<canvas id="jeu"></canvas>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="hud-boite">
+    <div id="coeurs"><span>♥</span><span>♥</span><span>♥</span></div>
+    <div id="pointage"><small>Pointage · <span id="niveau-val">Niveau 1</span></small><span id="score-val">0</span></div>
+    <div id="boost-ligne"></div>
+  </div>
+  <button id="btn-album" type="button">Album : <span id="album-val">0/8</span></button>
+  <button id="btn-son" type="button" aria-label="Activer ou couper le son" title="Son">🔊 Son</button>
+</div>
+
+<!-- Bandeau de niveau -->
+<div id="bandeau" aria-live="polite"></div>
+
+<!-- Carte découverte -->
+<div id="carte-dino" aria-live="polite">
+  <div class="nouveau">Nouveau dinosaure découvert!</div>
+  <h3 id="carte-nom"></h3>
+  <p id="carte-fait"></p>
+</div>
+
+<div id="astuce">Espace ou touche l'écran pour sauter</div>
+<button id="btn-saut" type="button">SAUT!</button>
+
+<!-- Accueil -->
+<div class="ecran visible" id="ecran-accueil">
+  <div class="panneau">
+    <h1>Les hommes préhistoriques du Québec</h1>
+    <p class="sous-titre">Il y a 70 millions d'années, avec Silex et ses amis dinosaures!</p>
+    <p class="sous-titre">🧰 HP — des outils pour la vraie vie.</p>
+    <div class="regles">
+      <div class="regle"><span class="pastille">1</span><span><strong>Cours tout seul, saute quand il faut</strong> — un seul bouton : ESPACE, un clic, ou le bouton SAUT!</span></div>
+      <div class="regle"><span class="pastille">2</span><span><strong>Saute par-dessus</strong> les roches et les troncs, sinon Silex se cogne (aïe, un cœur en moins!).</span></div>
+      <div class="regle"><span class="pastille">3</span><span><strong>Ramasse les silex et les baies</strong> pour gonfler ton pointage. L'œuf doré redonne un cœur!</span></div>
+      <div class="regle"><span class="pastille">4</span><span><strong>Découvre les 8 dinosaures</strong> : Tricératops, T-Rex, Brachiosaure et les autres. Chacun a son secret!</span></div>
+      <div class="regle"><span class="pastille">5</span><span><strong>Grimpe sur les paliers</strong>, attrape les <strong>boosts</strong> (turbo, super saut)… et monte de niveau : les dinos deviennent plus rapides et plus menaçants!</span></div>
+    </div>
+    <button class="gros-btn" id="btn-jouer" type="button">Jouer!</button>
+    <br>
+    <button class="petit-btn" id="btn-creer-parcours" type="button" style="margin-top:12px">Créer mon parcours</button>
+    <br>
+    <button class="lien-discret" id="btn-album-accueil" type="button">Voir l'album des dinosaures</button>
+    <br>
+    <a class="lien-discret" href="https://www.hp-outils.com/jeux">← Retour aux jeux HP</a>
+  </div>
+</div>
+
+<!-- Fin de partie -->
+<div class="ecran" id="ecran-fin">
+  <div class="panneau">
+    <h2 id="fin-titre">Belle course, Silex!</h2>
+    <div class="score-final"><span id="fin-score">0</span> points</div>
+    <p class="sous-titre" id="fin-detail"></p>
+    <div class="rang-btns">
+      <button class="gros-btn" id="btn-rejouer" type="button">Rejouer</button>
+      <button class="petit-btn" id="btn-album-fin" type="button">Mon album</button>
+    </div>
+    <br>
+    <button class="lien-discret" id="btn-accueil-fin" type="button">Retour à l'accueil</button>
+  </div>
+</div>
+
+<!-- Éditeur de parcours -->
+<div class="ecran" id="ecran-editeur">
+  <div class="panneau large">
+    <h2>Crée ton parcours!</h2>
+    <p class="sous-titre">Touche un élément pour l'ajouter à ta course, dans l'ordre. Touche un élément de la liste pour le retirer. Puis lance Silex dedans!</p>
+    <div id="palette"></div>
+    <div id="parcours-liste"><span class="vide">Ton parcours est vide… ajoute des éléments!</span></div>
+    <div class="rang-btns">
+      <button class="gros-btn" id="btn-parcours-jouer" type="button">Jouer mon parcours!</button>
+    </div>
+    <div class="rang-btns" style="margin-top:12px">
+      <button class="petit-btn" id="btn-parcours-hasard" type="button">Parcours surprise</button>
+      <button class="petit-btn" id="btn-parcours-effacer" type="button">Tout effacer</button>
+      <button class="petit-btn" id="btn-fermer-editeur" type="button">Retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- Album -->
+<div class="ecran" id="ecran-album">
+  <div class="panneau">
+    <h2>L'album des dinosaures</h2>
+    <p class="sous-titre" id="album-sous-titre">0 dinosaure découvert sur 8</p>
+    <div id="album-grille"></div>
+    <button class="petit-btn" id="btn-fermer-album" type="button">Retour au jeu</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* =====================================================================
+   LES HOMMES PRÉHISTORIQUES DU QUÉBEC — version 2.5D simple et drôle
+   Un seul bouton pour sauter. Des dinosaures dessinés en formes lisses
+   (aucun pixel!), en profondeur grâce aux couches qui défilent.
+   ===================================================================== */
+var cv = document.getElementById('jeu');
+var ctx = cv.getContext('2d');
+var W = 0, H = 0, DPR = 1, U = 1;        // U = unité d'échelle du dessin
+var solY = 0;                             // hauteur du sol (y du dessus de la bande de terre)
+
+function redimensionner() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  U = Math.max(0.55, Math.min(1.15, H / 780));
+  solY = Math.round(H * 0.80);
+}
+window.addEventListener('resize', redimensionner);
+redimensionner();
+
+/* ---------------- Les 8 dinosaures (de vraies espèces!) ---------------- */
+var ESPECES = [
+  { id:'triceratops', nom:'Tricératops', voie:'pres', taille:1.12,
+    fait:"Trois cornes et un énorme bouclier osseux derrière la tête pour se protéger. C'est le costaud gentil de la bande!",
+    c1:'#e08a3c', c2:'#b8641f', ventre:'#f7cf9a' },
+  { id:'raptor', nom:'Vélociraptor', voie:'pres', taille:0.72,
+    fait:"Petit comme une dinde, super rapide... et couvert de plumes! Sa grosse griffe recourbée servait à attraper ses proies.",
+    c1:'#7fae4c', c2:'#557f2e', ventre:'#dcebb9' },
+  { id:'stego', nom:'Stégosaure', voie:'pres', taille:1.05,
+    fait:"De grandes plaques osseuses sur le dos et quatre grosses pointes au bout de la queue pour dire « recule! » aux carnivores.",
+    c1:'#5f9e8f', c2:'#3d7466', ventre:'#cfe5d8' },
+  { id:'ankylo', nom:'Ankylosaure', voie:'pres', taille:0.98,
+    fait:"Une véritable armure vivante, couverte de plaques d'os, avec une massue géante au bout de la queue. Même le T-Rex y pensait deux fois!",
+    c1:'#9a7b4f', c2:'#71572f', ventre:'#d9c093' },
+  { id:'para', nom:'Parasaurolophe', voie:'pres', taille:1.08,
+    fait:"Sa longue crête sur la tête servait de trompette : il soufflait dedans pour jaser avec sa gang à des kilomètres!",
+    c1:'#c96f8e', c2:'#9c4662', ventre:'#f3ccd9' },
+  { id:'trex', nom:'Tyrannosaure', voie:'loin', taille:1.5,
+    fait:"Le roi des dinosaures! Ses dents faisaient la taille d'une banane et il pouvait courir aussi vite qu'un cheval au galop.",
+    c1:'#a8574a', c2:'#7e3a30', ventre:'#e5b7a4' },
+  { id:'brachio', nom:'Brachiosaure', voie:'loin', taille:1.7,
+    fait:"Un cou si long qu'il broutait les feuilles à 12 mètres de haut — comme le toit d'un immeuble de quatre étages!",
+    c1:'#8a9a5b', c2:'#5f7038', ventre:'#dde3bb' },
+  { id:'ptero', nom:'Ptéranodon', voie:'ciel', taille:0.95,
+    fait:"Surprise : ce n'est pas un dinosaure! C'est un reptile volant, cousin des dinos, qui pêchait des poissons en planant au-dessus de l'eau.",
+    c1:'#d9a441', c2:'#a97a24', ventre:'#f6e3ae' }
+];
+var parId = {};
+ESPECES.forEach(function (e) { parId[e.id] = e; });
+
+/* ---------------- Sons (petits bruits maison, WebAudio) ---------------- */
+var AC = null, sonActif = true;
+function audio() {
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; } }
+  if (AC && AC.state === 'suspended') { AC.resume(); }
+  return AC;
+}
+function bip(freq, duree, type, vol, glisse) {
+  var ac = audio(); if (!ac || !sonActif) return;
+  var t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain();
+  o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t);
+  if (glisse) o.frequency.exponentialRampToValueAtTime(Math.max(30, glisse), t + duree);
+  g.gain.setValueAtTime(vol || 0.12, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + duree);
+  o.connect(g); g.connect(ac.destination);
+  o.start(t); o.stop(t + duree + 0.02);
+}
+var SONS = {
+  saut:   function () { bip(300, 0.16, 'sine', 0.10, 620); },
+  ramasse:function () { bip(880, 0.09, 'triangle', 0.12); setTimeout(function(){ bip(1320, 0.12, 'triangle', 0.10); }, 55); },
+  oeuf:   function () { [660, 880, 990, 1320].forEach(function (f, i) { setTimeout(function(){ bip(f, 0.14, 'triangle', 0.11); }, i * 70); }); },
+  cogne:  function () { bip(140, 0.22, 'square', 0.10, 60); },
+  glisse: function () { bip(500, 0.25, 'sawtooth', 0.05, 150); },
+  decouvre:function () { [523, 659, 784, 1046].forEach(function (f, i) { setTimeout(function(){ bip(f, 0.16, 'triangle', 0.11); }, i * 80); }); },
+  victoire:function () { [523, 659, 784, 1046, 784, 1046, 1318].forEach(function (f, i) { setTimeout(function(){ bip(f, 0.2, 'triangle', 0.11); }, i * 110); }); }
+};
+/* Bruit blanc filtré : la texture « souffle » des gros rugissements */
+function bruit(duree, vol, freqFiltre) {
+  var ac = audio(); if (!ac || !sonActif) return;
+  var n = Math.floor(ac.sampleRate * duree);
+  var buf = ac.createBuffer(1, n, ac.sampleRate);
+  var d = buf.getChannelData(0);
+  for (var i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+  var src = ac.createBufferSource(); src.buffer = buf;
+  var f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = freqFiltre;
+  var g = ac.createGain(); g.gain.value = vol;
+  src.connect(f); f.connect(g); g.connect(ac.destination);
+  src.start();
+}
+/* Chaque dinosaure a SA voix : le T-Rex gronde dans les graves, le
+   Parasaurolophe trompette avec sa crête, le raptor crie aigu… */
+function rugir(e) {
+  if (!sonActif) return;
+  switch (e.id) {
+    case 'trex':
+      bip(68, 0.85, 'sawtooth', 0.20, 36); bruit(0.8, 0.15, 300);
+      setTimeout(function () { bip(52, 0.5, 'sawtooth', 0.16, 34); }, 260);
+      break;
+    case 'raptor':
+      bip(1150, 0.15, 'square', 0.06, 720);
+      setTimeout(function () { bip(1320, 0.18, 'square', 0.06, 800); }, 130);
+      break;
+    case 'para': // la crête-trompette!
+      bip(196, 0.3, 'sawtooth', 0.10, 220);
+      setTimeout(function () { bip(262, 0.42, 'sawtooth', 0.10, 196); }, 240);
+      break;
+    case 'brachio':
+      bip(84, 0.9, 'sine', 0.18, 54); bruit(0.7, 0.05, 200);
+      break;
+    case 'ptero':
+      bip(1350, 0.32, 'sawtooth', 0.05, 620);
+      break;
+    case 'ankylo':
+      bip(110, 0.3, 'triangle', 0.13, 70); bruit(0.22, 0.06, 420);
+      break;
+    default: // tricératops, stégosaure : grognement amical
+      bip(145, 0.32, 'triangle', 0.12, 82); bruit(0.25, 0.05, 500);
+  }
+}
+
+/* ---------------- État du jeu ---------------- */
+var G = {
+  etat: 'accueil',          // accueil | jeu | fin | album (pause) | editeur (pause)
+  score: 0, coeurs: 3, distance: 0, vitesse: 0,
+  trouves: {}, nbTrouves: 0,
+  temps: 0, dernierSpawn: 0, prochainDans: 1.2,
+  camera: 0,                // défilement total (pour la parallaxe)
+  niveau: 1,                // monte avec la distance : dinos plus rapides et menaçants
+  turbo: 0, superSaut: 0,   // boosts en secondes restantes
+  mode: 'libre',            // 'libre' (aléatoire) ou 'parcours' (créé par le joueur)
+  file: [], parcoursDef: [], spawnTimer: 0, nbSpawnParcours: 0
+};
+var P = {                       // Silex, notre héros
+  x: 0, y: 0, vy: 0, auSol: true, phase: 0,
+  invincible: 0, etourdi: 0, poussiere: 0,
+  plat: null, surfaceY: 0       // palier sous les pieds + hauteur de son ombre
+};
+var obstacles = [], items = [], dinos = [], particules = [], textes = [], platforms = [];
+var nuages = [], fummees = [];
+(function initDecor() {
+  for (var i = 0; i < 7; i++) nuages.push({ x: Math.random(), y: 0.04 + Math.random() * 0.2, s: 0.6 + Math.random() * 0.9, v: 0.004 + Math.random() * 0.006 });
+})();
+
+function solDuJoueur() { return solY; }
+
+/* ---------------- Entrées ---------------- */
+var toucheBas = false;
+function appuyer() {
+  audio();
+  if (G.etat !== 'jeu') return;
+  if (P.auSol) {
+    P.vy = -15.2 * U * 1.9 * (G.superSaut > 0 ? 1.32 : 1); P.auSol = false; P.plat = null;
+    SONS.saut(); poussiere(P.x, P.y, 6);
+    if (G.superSaut > 0) bip(500, 0.18, 'sine', 0.07, 920);
+  }
+  toucheBas = true;
+}
+function relacher() {
+  toucheBas = false;
+  if (!P.auSol && P.vy < -6 * U * 1.9) P.vy = -6 * U * 1.9;  // saut variable : relâcher = retomber plus vite
+}
+window.addEventListener('keydown', function (e) {
+  if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') { e.preventDefault(); if (!e.repeat) appuyer(); }
+});
+window.addEventListener('keyup', function (e) {
+  if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') relacher();
+});
+cv.addEventListener('pointerdown', function (e) { e.preventDefault(); appuyer(); });
+window.addEventListener('pointerup', relacher);
+var btnSaut = document.getElementById('btn-saut');
+btnSaut.addEventListener('pointerdown', function (e) { e.preventDefault(); e.stopPropagation(); appuyer(); });
+btnSaut.addEventListener('pointerup', function (e) { e.stopPropagation(); relacher(); });
+
+/* ---------------- Particules et textes flottants ---------------- */
+function poussiere(x, y, n) {
+  for (var i = 0; i < n; i++) particules.push({ type:'poussiere', x: x + (Math.random() - 0.5) * 26 * U, y: y - Math.random() * 4,
+    vx: (Math.random() - 0.7) * 1.6, vy: -Math.random() * 1.1, vie: 0.5 + Math.random() * 0.3, t: 0, r: (3 + Math.random() * 5) * U });
+}
+function etincelles(x, y, couleur) {
+  for (var i = 0; i < 10; i++) { var a = Math.random() * Math.PI * 2, v = 1 + Math.random() * 2.4;
+    particules.push({ type:'etincelle', x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1, vie: 0.45, t: 0, r: 2.6 * U, coul: couleur }); }
+}
+function eclabousse(x, y) {
+  for (var i = 0; i < 12; i++) particules.push({ type:'goutte', x: x + (Math.random() - 0.5) * 30 * U, y: y,
+    vx: (Math.random() - 0.5) * 3, vy: -2 - Math.random() * 3, vie: 0.5, t: 0, r: 3 * U });
+}
+function texteFlottant(x, y, txt, coul) {
+  textes.push({ x: x, y: y, txt: txt, coul: coul || '#fff', t: 0, vie: 1.15 });
+}
+</script>
+
+<script>
+/* =====================================================================
+   DESSIN DU DÉCOR — couches qui défilent à des vitesses différentes
+   (ciel, volcan, montagnes, collines de fougères, sol) = effet 2.5D.
+   ===================================================================== */
+function arrondi(x, y, l, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + l, y, x + l, y + h, r); ctx.arcTo(x + l, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + l, y, r);
+  ctx.closePath();
+}
+/* Polygone doux répété pour les silhouettes de montagnes/collines */
+function silhouette(decalage, base, amp, pas, graine) {
+  ctx.beginPath(); ctx.moveTo(-40, H);
+  var x, y;
+  for (x = -40; x <= W + 40; x += pas) {
+    var n = Math.sin((x + decalage) * 0.011 + graine) * 0.55 + Math.sin((x + decalage) * 0.023 + graine * 2.7) * 0.45;
+    y = base - (n * 0.5 + 0.5) * amp;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(W + 40, H); ctx.closePath(); ctx.fill();
+}
+var gradCiel = null, gradCielSol = -1;
+function dessinerCiel(t) {
+  if (!gradCiel || gradCielSol !== solY) {   // dégradé mis en cache : recréé seulement si la hauteur change
+    gradCiel = ctx.createLinearGradient(0, 0, 0, solY);
+    gradCiel.addColorStop(0, '#6fb3dd'); gradCiel.addColorStop(0.55, '#a8d3ea'); gradCiel.addColorStop(1, '#fdeecb');
+    gradCielSol = solY;
+  }
+  var g = gradCiel;
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, solY + 2);
+  // Soleil
+  var sx = W * 0.82, sy = H * 0.13, sr = 40 * U;
+  ctx.fillStyle = 'rgba(255,214,110,.35)';
+  ctx.beginPath(); ctx.arc(sx, sy, sr * 1.7, 0, 7); ctx.fill();
+  ctx.fillStyle = '#ffd66e';
+  ctx.beginPath(); ctx.arc(sx, sy, sr, 0, 7); ctx.fill();
+  // Nuages (lentissimes)
+  ctx.fillStyle = 'rgba(255,255,255,.92)';
+  nuages.forEach(function (n) {
+    var nx = ((n.x - G.camera * n.v * 0.001) % 1.15 + 1.15) % 1.15 * W - W * 0.07;
+    var ny = n.y * H, ns = n.s * U;
+    ctx.beginPath();
+    ctx.arc(nx, ny, 22 * ns, 0, 7); ctx.arc(nx + 24 * ns, ny + 4 * ns, 17 * ns, 0, 7);
+    ctx.arc(nx - 25 * ns, ny + 5 * ns, 15 * ns, 0, 7); ctx.arc(nx + 2 * ns, ny - 9 * ns, 16 * ns, 0, 7);
+    ctx.fill();
+  });
+}
+function dessinerVolcan(t) {
+  var periode = W + 640;
+  var vx = (W + 320) - ((G.camera * 0.05) % periode), vy = solY;
+  ctx.fillStyle = '#8d6e5d';
+  ctx.beginPath();
+  ctx.moveTo(vx - 190 * U, vy); ctx.lineTo(vx - 42 * U, vy - 235 * U);
+  ctx.lineTo(vx + 42 * U, vy - 235 * U); ctx.lineTo(vx + 190 * U, vy); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#a5856f';
+  ctx.beginPath();
+  ctx.moveTo(vx - 42 * U, vy - 235 * U); ctx.lineTo(vx + 42 * U, vy - 235 * U);
+  ctx.lineTo(vx + 90 * U, vy - 120 * U); ctx.lineTo(vx - 90 * U, vy - 120 * U); ctx.closePath(); ctx.fill();
+  // Cratère + lave
+  ctx.fillStyle = '#5d4436';
+  ctx.beginPath(); ctx.ellipse(vx, vy - 238 * U, 44 * U, 10 * U, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = '#ff7a29';
+  ctx.beginPath(); ctx.ellipse(vx, vy - 238 * U, 30 * U, 6.5 * U, 0, 0, 7); ctx.fill();
+  ctx.strokeStyle = '#ff7a29'; ctx.lineWidth = 5 * U; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(vx - 8 * U, vy - 232 * U);
+  ctx.quadraticCurveTo(vx - 20 * U, vy - 170 * U, vx - 12 * U, vy - 110 * U); ctx.stroke();
+  // Fumée qui monte
+  if (Math.random() < 0.05) fummees.push({ x: vx + (Math.random() - 0.5) * 16 * U, y: vy - 250 * U, r: 8 * U, t: 0 });
+  for (var i = fummees.length - 1; i >= 0; i--) {
+    var f = fummees[i]; f.t += 0.016; f.y -= 0.55 * U; f.x += 0.35 * U; f.r += 0.35 * U;
+    if (f.t > 3.2) { fummees.splice(i, 1); continue; }
+    ctx.fillStyle = 'rgba(240,240,240,' + (0.5 * (1 - f.t / 3.2)) + ')';
+    ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill();
+  }
+}
+/* ---------- Le vent : un zigzag DOUX et lent pour les arbres ----------
+   Avant, la hauteur des palmiers se recalculait depuis leur position à
+   l'écran : elle sautait au hasard à chaque image (effet « trooop intense »).
+   Maintenant, chaque arbre garde SA hauteur (stable, tirée de son numéro
+   dans le monde) et penche lentement en zigzag — aller, retour — comme
+   poussé par une brise. Amplitude minuscule, période longue (~6 s). */
+var MOUVEMENT_REDUIT = false;
+try { MOUVEMENT_REDUIT = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+function graineStable(n) { var s = Math.sin(n * 12.9898) * 43758.5453; return s - Math.floor(s); }
+function ventZigzag(phase) { // triangle doux : -1 → +1 → -1, en lignes droites (le zigzag demandé)
+  if (MOUVEMENT_REDUIT) return 0;
+  var u = phase - Math.floor(phase);
+  return u < 0.5 ? (u * 4 - 1) : (3 - u * 4);
+}
+function ventArbre(t, idx) { // la brise voyage d'arbre en arbre (léger décalage par arbre)
+  return ventZigzag(t / 6.2 + idx * 0.045);
+}
+function dessinerFonds(t) {
+  // Plateau lointain (une couche de plus : le monde paraît plus large)
+  ctx.fillStyle = '#9db4a6';
+  silhouette(G.camera * 0.05, solY - 52 * U, 54 * U, 150, 9.3);
+  // Montagnes lointaines
+  ctx.fillStyle = '#7d9bb5';
+  silhouette(G.camera * 0.12, solY - 30 * U, 120 * U, 90, 1.7);
+  // Collines vertes
+  ctx.fillStyle = '#79b06a';
+  silhouette(G.camera * 0.3, solY - 6 * U, 62 * U, 70, 4.2);
+  // Rangée de palmiers et fougères géantes (silhouettes)
+  // Chaque arbre garde sa hauteur (stable) et penche DOUCEMENT en zigzag
+  // au rythme du vent : le sommet bouge de quelques pixels seulement.
+  ctx.fillStyle = '#4d8a44';
+  var pas = 150 * U, dep = G.camera * 0.55;
+  for (var x = -((dep) % pas) - pas; x < W + pas; x += pas) {
+    var idx = Math.round((x + dep) / pas);               // le numéro de CET arbre dans le monde
+    var base = solY + 4;
+    var h1 = 74 * U * (0.86 + graineStable(idx) * 0.26); // hauteur stable : plus de sauts d'une image à l'autre
+    var vent = ventArbre(t, idx);
+    var penche = vent * 3.4 * U;                          // déplacement du sommet : ±3-4 px, pas plus
+    // Tronc légèrement courbé par la brise (au lieu du rectangle droit)
+    ctx.strokeStyle = '#4d8a44'; ctx.lineWidth = 6 * U; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x, base);
+    ctx.quadraticCurveTo(x + penche * 0.35, base - h1 * 0.55, x + penche, base - h1); ctx.stroke();
+    // Couronne de feuilles : elle suit le sommet et s'incline à peine
+    ctx.save(); ctx.translate(x + penche, base - h1); ctx.rotate(vent * 0.045);
+    for (var k = 0; k < 5; k++) {
+      var a = -Math.PI * (0.12 + k * 0.19);
+      ctx.save(); ctx.rotate(a);
+      ctx.beginPath(); ctx.ellipse(26 * U, 0, 28 * U, 6.5 * U, 0, 0, 7); ctx.fill(); ctx.restore();
+    }
+    ctx.restore();
+  }
+}
+var gradSol = null, gradSolCle = '';
+function dessinerSol(t) {
+  var gh = H - solY;
+  var cleSol = solY + 'x' + H;
+  if (!gradSol || gradSolCle !== cleSol) {   // même optimisation : dégradé en cache
+    gradSol = ctx.createLinearGradient(0, solY, 0, H);
+    gradSol.addColorStop(0, '#caa06a'); gradSol.addColorStop(0.25, '#b8895a'); gradSol.addColorStop(1, '#8a6238');
+    gradSolCle = cleSol;
+  }
+  var g = gradSol;
+  ctx.fillStyle = g; ctx.fillRect(0, solY, W, gh);
+  ctx.fillStyle = '#e7c88f'; ctx.fillRect(0, solY, W, 5);
+  // LE COULOIR : bande de terre battue que Silex suit, bords + marques qui défilent
+  var hautCouloir = Math.max(22, gh * 0.52);
+  ctx.fillStyle = 'rgba(255,230,170,.20)';
+  ctx.fillRect(0, solY + 9, W, hautCouloir);
+  ctx.strokeStyle = 'rgba(90,58,30,.30)'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(0, solY + 9); ctx.lineTo(W, solY + 9);
+  ctx.moveTo(0, solY + 9 + hautCouloir); ctx.lineTo(W, solY + 9 + hautCouloir);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(90,58,30,.20)';
+  var pasC = 90 * U;
+  for (var xc = -((G.camera) % pasC); xc < W + pasC; xc += pasC) {
+    ctx.beginPath(); ctx.ellipse(xc + 40 * U, solY + 11 + hautCouloir * 0.55, 13 * U, 4 * U, 0, 0, 7); ctx.fill();
+  }
+  // Cailloux et touffes qui défilent (premier plan)
+  var pas = 64 * U, dep = G.camera;
+  ctx.fillStyle = 'rgba(90,58,30,.35)';
+  for (var x = -((dep) % pas); x < W + pas; x += pas) {
+    var idxP = Math.round((x + dep) / pas);
+    var yy = solY + 16 + graineStable(idxP * 3 + 7) * Math.max(10, gh - 26); // position stable par caillou : fini le scintillement
+    ctx.beginPath(); ctx.ellipse(x + 20 * U, yy, 7 * U, 3.5 * U, 0, 0, 7); ctx.fill();
+  }
+  ctx.strokeStyle = '#5d8a3c'; ctx.lineWidth = 2.6 * U; ctx.lineCap = 'round';
+  var pas2 = 110 * U;
+  for (var x2 = -((dep * 1.0) % pas2); x2 < W + pas2; x2 += pas2) {
+    var bx = x2 + 30 * U;
+    var idxG = Math.round((x2 + dep) / pas2);
+    var souffle = ventArbre(t || 0, idxG) * 2.2 * U;  // les brins d'herbe suivent la même brise, en miniature
+    ctx.beginPath();
+    ctx.moveTo(bx, solY + 3); ctx.quadraticCurveTo(bx - 5 * U + souffle * 0.4, solY - 9 * U, bx - 9 * U + souffle, solY - 12 * U);
+    ctx.moveTo(bx, solY + 3); ctx.quadraticCurveTo(bx + souffle * 0.4, solY - 10 * U, bx + 1 * U + souffle, solY - 15 * U);
+    ctx.moveTo(bx, solY + 3); ctx.quadraticCurveTo(bx + 6 * U + souffle * 0.4, solY - 9 * U, bx + 10 * U + souffle, solY - 11 * U);
+    ctx.stroke();
+  }
+}
+/* Premier plan : touffes de fougères sombres tout en bas, qui défilent
+   PLUS vite que Silex — c'est ça qui donne la sensation de profondeur. */
+function dessinerPremierPlan(t) {
+  var pas = 210 * U, dep = G.camera * 1.35;
+  ctx.fillStyle = 'rgba(34,60,26,.9)';
+  for (var x = -((dep) % pas) - pas; x < W + pas; x += pas) {
+    var idxF = Math.round((x + dep) / pas);
+    var h = (16 + graineStable(idxF * 5 + 3) * 10) * U;   // hauteur stable par touffe (avant : elle sautait à chaque image)
+    var frisson = ventArbre(t || 0, idxF) * 1.8 * U;       // juste un frisson de vent au bout des feuilles
+    ctx.beginPath(); ctx.ellipse(x + 30 * U + frisson * 0.4, H + h * 0.6, 40 * U, h, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = 'rgba(34,60,26,.9)'; ctx.lineWidth = 3.4 * U; ctx.lineCap = 'round';
+    for (var k = 0; k < 3; k++) {
+      var bx = x + (8 + k * 20) * U;
+      ctx.beginPath(); ctx.moveTo(bx, H + 2);
+      ctx.quadraticCurveTo(bx - 4 * U + frisson * 0.5, H - h * (0.7 + k * 0.18), bx - 8 * U + frisson, H - h * (0.9 + k * 0.2)); ctx.stroke();
+    }
+  }
+}
+function ombre(x, y, rx) {
+  ctx.fillStyle = 'rgba(60,38,16,.28)';
+  ctx.beginPath(); ctx.ellipse(x, y + 3, rx, rx * 0.22, 0, 0, 7); ctx.fill();
+}
+
+/* =====================================================================
+   SILEX, LE HÉROS — petit bonhomme dessiné en formes lisses
+   ===================================================================== */
+function dessinerSilex(t) {
+  var s = U, x = P.x, piedY = P.y;
+  var course = P.auSol ? Math.sin(P.phase) : 0;
+  var rebond = P.auSol ? Math.abs(Math.sin(P.phase)) * 4 * s : 0;
+  var cligne = (P.invincible > 0 && Math.floor(t * 14) % 2 === 0);
+  ctx.save(); ctx.translate(x, piedY - rebond);
+  if (cligne) ctx.globalAlpha = 0.35;
+  ombre(0, (P.surfaceY || solY) - piedY + rebond, 30 * s);
+  ctx.lineCap = 'round';
+  // Jambes (peau) + pieds
+  var j1 = P.auSol ? course * 15 * s : 12 * s, j2 = P.auSol ? -course * 15 * s : -7 * s;
+  ctx.strokeStyle = '#c97e4e'; ctx.lineWidth = 9 * s;
+  ctx.beginPath(); ctx.moveTo(-3 * s, -34 * s); ctx.lineTo(-3 * s + j1, -2 * s); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(5 * s, -34 * s); ctx.lineTo(5 * s + j2, -2 * s); ctx.stroke();
+  ctx.fillStyle = '#8a5a30';
+  ctx.beginPath(); ctx.ellipse(-3 * s + j1 + 3 * s, -2 * s, 7 * s, 4 * s, 0, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(5 * s + j2 + 3 * s, -2 * s, 7 * s, 4 * s, 0, 0, 7); ctx.fill();
+  // Tunique léopard
+  ctx.fillStyle = '#e8a33d';
+  ctx.beginPath();
+  ctx.moveTo(-13 * s, -66 * s); ctx.quadraticCurveTo(0, -72 * s, 13 * s, -66 * s);
+  ctx.lineTo(16 * s, -32 * s); ctx.quadraticCurveTo(0, -27 * s, -16 * s, -32 * s); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#7a4a21';
+  [[-6, -56, 3.4], [6, -48, 2.8], [-2, -40, 3], [8, -60, 2.2]].forEach(function (p) {
+    ctx.beginPath(); ctx.ellipse(p[0] * s, p[1] * s, p[2] * s, p[2] * s * 0.75, 0.4, 0, 7); ctx.fill();
+  });
+  // Bras arrière
+  ctx.strokeStyle = '#c97e4e'; ctx.lineWidth = 8 * s;
+  var bArr = P.auSol ? -course * 12 * s : -6 * s;
+  ctx.beginPath(); ctx.moveTo(-10 * s, -60 * s); ctx.quadraticCurveTo(-18 * s, -48 * s, -14 * s + bArr, -36 * s); ctx.stroke();
+  // Bras avant + massue
+  var bAv = P.auSol ? course * 12 * s : 8 * s;
+  ctx.beginPath(); ctx.moveTo(10 * s, -60 * s); ctx.quadraticCurveTo(19 * s, -50 * s, 17 * s + bAv, -40 * s); ctx.stroke();
+  ctx.save(); ctx.translate(17 * s + bAv, -42 * s); ctx.rotate(P.auSol ? course * 0.35 : -0.5);
+  ctx.fillStyle = '#8a5a30';
+  arrondi(-3 * s, -4 * s, 6 * s, 20 * s, 3 * s); ctx.fill();
+  ctx.fillStyle = '#a9743f';
+  ctx.beginPath(); ctx.ellipse(0, -9 * s, 8.5 * s, 10 * s, 0, 0, 7); ctx.fill();
+  ctx.restore();
+  // Tête
+  ctx.fillStyle = '#d98d55';
+  ctx.beginPath(); ctx.arc(0, -80 * s, 15.5 * s, 0, 7); ctx.fill();
+  // Cheveux ébouriffés
+  ctx.fillStyle = '#2e2019';
+  ctx.beginPath();
+  ctx.arc(-6 * s, -90 * s, 8.5 * s, 0, 7); ctx.arc(2 * s, -93 * s, 9.5 * s, 0, 7); ctx.arc(9 * s, -88 * s, 7.5 * s, 0, 7);
+  ctx.fill();
+  ctx.fillRect(-14 * s, -90 * s, 28 * s, 5 * s);
+  // Visage : gros œil, sourire, nez rigolo
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(-4 * s, -80 * s, 5.6 * s, 0, 7); ctx.fill();
+  ctx.fillStyle = '#26201c';
+  var regard = P.etourdi > 0 ? 0 : 1.6 * s;
+  ctx.beginPath(); ctx.arc(-4 * s + regard, -80 * s, 2.8 * s, 0, 7); ctx.fill();
+  ctx.fillStyle = '#d98d55';
+  ctx.beginPath(); ctx.arc(4.5 * s, -76 * s, 3.6 * s, 0, 7); ctx.fill();
+  ctx.strokeStyle = '#7a3f1d'; ctx.lineWidth = 2.2 * s;
+  ctx.beginPath();
+  if (P.etourdi > 0) { ctx.arc(1 * s, -68 * s, 3.4 * s, 0, 7); }
+  else ctx.arc(-1 * s, -71 * s, 6.5 * s, 0.25, Math.PI - 0.7);
+  ctx.stroke();
+  // Étoiles quand étourdi
+  if (P.etourdi > 0) {
+    ctx.fillStyle = '#ffbf3f';
+    for (var i = 0; i < 3; i++) {
+      var a = t * 4 + i * 2.1;
+      ctx.beginPath(); ctx.arc(Math.cos(a) * 20 * s, -96 * s + Math.sin(a) * 5 * s, 3 * s, 0, 7); ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+</script>
+
+<script>
+/* =====================================================================
+   LES DINOSAURES — dessinés en formes lisses et courbes (aucun pixel!).
+   Chaque espèce a sa vraie silhouette : cornes du Tricératops, plaques
+   du Stégosaure, long cou du Brachiosaure, crête-trompette du
+   Parasaurolophe, massue de l'Ankylosaure, plumes du Vélociraptor...
+   Origine locale : (0,0) = sol sous le centre du dino, il regarde à gauche.
+   ===================================================================== */
+function patte(x, haut, long, epais, phase, coul) {
+  var bal = Math.sin(phase) * long * 0.34;
+  ctx.strokeStyle = coul; ctx.lineWidth = epais; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x, haut); ctx.lineTo(x + bal, 0); ctx.stroke();
+  ctx.fillStyle = coul;
+  ctx.beginPath(); ctx.ellipse(x + bal + epais * 0.3, -1.5, epais * 0.62, epais * 0.3, 0, 0, 7); ctx.fill();
+}
+function corpsDino(e, rx, ry, cy) {
+  var g = ctx.createLinearGradient(0, cy - ry, 0, cy + ry);
+  g.addColorStop(0, e.c1); g.addColorStop(1, e.c2);
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.ellipse(0, cy, rx, ry, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = e.ventre;
+  ctx.beginPath(); ctx.ellipse(2, cy + ry * 0.42, rx * 0.66, ry * 0.5, 0, 0, 7); ctx.fill();
+}
+function oeilDino(x, y, r) {
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+  ctx.fillStyle = '#26201c'; ctx.beginPath(); ctx.arc(x - r * 0.25, y, r * 0.52, 0, 7); ctx.fill();
+}
+function queueDino(x, y, long, ep, balance) {
+  ctx.strokeStyle = arguments[5] || '#000';
+  ctx.lineWidth = ep; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x, y);
+  ctx.quadraticCurveTo(x + long * 0.55, y - ep * 0.4 + balance, x + long, y - ep * 0.2 + balance * 1.6); ctx.stroke();
+}
+
+function dinoTriceratops(e, ph) {
+  queueDino(38, -58, 46, 13, Math.sin(ph * 0.7) * 4, e.c2);
+  patte(-28, -26, 30, 13, ph, e.c2); patte(26, -26, 30, 13, ph + Math.PI, e.c2);
+  corpsDino(e, 52, 33, -56);
+  patte(-34, -28, 30, 14, ph + Math.PI, e.c1); patte(32, -28, 30, 14, ph, e.c1);
+  // Grande collerette (le bouclier!)
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.ellipse(-48, -78, 27, 31, 0.15, 0, 7); ctx.fill();
+  ctx.fillStyle = e.ventre;
+  ctx.beginPath(); ctx.ellipse(-48, -78, 20, 24, 0.15, 0, 7); ctx.fill();
+  ctx.fillStyle = e.c2;
+  for (var i = 0; i < 7; i++) { var a = -0.4 + i * 0.42;
+    ctx.beginPath(); ctx.arc(-48 + Math.sin(a) * 20, -78 - Math.cos(a) * 23, 3.4, 0, 7); ctx.fill(); }
+  // Tête + 3 cornes + bec
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.ellipse(-62, -66, 19, 15, 0.2, 0, 7); ctx.fill();
+  ctx.fillStyle = e.ventre;
+  ctx.beginPath(); ctx.moveTo(-78, -58); ctx.quadraticCurveTo(-86, -52, -78, -47); ctx.quadraticCurveTo(-70, -50, -70, -57); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#f3e6cf';
+  ctx.beginPath(); ctx.moveTo(-66, -76); ctx.lineTo(-80, -94); ctx.lineTo(-58, -79); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-52, -78); ctx.lineTo(-58, -95); ctx.lineTo(-45, -80); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-72, -64); ctx.lineTo(-88, -68); ctx.lineTo(-73, -57); ctx.closePath(); ctx.fill();
+  oeilDino(-64, -70, 4.6);
+}
+function dinoRaptor(e, ph) {
+  queueDino(26, -46, 62, 8, Math.sin(ph * 0.8) * 5, e.c2);
+  patte(8, -22, 26, 8, ph, e.c2);
+  ctx.save(); ctx.translate(0, -44); ctx.rotate(-0.12); corpsDino(e, 34, 20, 0); ctx.restore();
+  patte(-2, -22, 26, 9, ph + Math.PI, e.c1);
+  // Grosse griffe recourbée
+  ctx.strokeStyle = '#f3e6cf'; ctx.lineWidth = 3.4; ctx.lineCap = 'round';
+  var bx = -2 + Math.sin(ph + Math.PI) * 26 * 0.34;
+  ctx.beginPath(); ctx.moveTo(bx + 2, -8); ctx.quadraticCurveTo(bx + 8, -14, bx + 5, -20); ctx.stroke();
+  // Petit bras
+  ctx.strokeStyle = e.c1; ctx.lineWidth = 5.5;
+  ctx.beginPath(); ctx.moveTo(-24, -34); ctx.lineTo(-32, -22); ctx.stroke();
+  // Cou + tête à museau
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.ellipse(-36, -62, 13, 10, -0.5, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-46, -58); ctx.quadraticCurveTo(-62, -54, -60, -48); ctx.quadraticCurveTo(-48, -46, -42, -52); ctx.closePath(); ctx.fill();
+  // Plumes sur la tête et le dos
+  ctx.strokeStyle = e.c2; ctx.lineWidth = 3;
+  for (var i = 0; i < 4; i++) {
+    ctx.beginPath(); ctx.moveTo(-34 + i * 3, -70 - i); ctx.quadraticCurveTo(-30 + i * 4, -80 - i * 2, -24 + i * 5, -82 - i * 2); ctx.stroke();
+  }
+  oeilDino(-40, -63, 4);
+}
+function dinoStego(e, ph) {
+  queueDino(40, -56, 52, 11, Math.sin(ph * 0.7) * 4, e.c2);
+  // Pointes au bout de la queue
+  ctx.fillStyle = '#f3e6cf';
+  [[86, -64], [92, -52]].forEach(function (p) {
+    ctx.beginPath(); ctx.moveTo(p[0] - 4, p[1] + 5); ctx.lineTo(p[0] + 3, p[1] - 9); ctx.lineTo(p[0] + 7, p[1] + 5); ctx.closePath(); ctx.fill();
+  });
+  patte(-28, -24, 28, 12, ph, e.c2); patte(28, -24, 28, 12, ph + Math.PI, e.c2);
+  corpsDino(e, 50, 30, -52);
+  patte(-34, -26, 28, 13, ph + Math.PI, e.c1); patte(34, -26, 28, 13, ph, e.c1);
+  // Plaques osseuses sur le dos (deux rangées)
+  ctx.fillStyle = e.c2;
+  var plaques = [[-30, -84, 15], [-6, -92, 18], [18, -88, 16], [38, -78, 12]];
+  plaques.forEach(function (p) {
+    ctx.beginPath(); ctx.moveTo(p[0] - p[2] * 0.6, p[1] + p[2] * 0.7);
+    ctx.quadraticCurveTo(p[0], p[1] - p[2], p[0] + p[2] * 0.6, p[1] + p[2] * 0.7); ctx.closePath(); ctx.fill();
+  });
+  ctx.fillStyle = e.c1;
+  plaques.forEach(function (p) {
+    ctx.beginPath(); ctx.moveTo(p[0] - p[2] * 0.38 + 7, p[1] + p[2] * 0.55);
+    ctx.quadraticCurveTo(p[0] + 7, p[1] - p[2] * 0.62, p[0] + p[2] * 0.38 + 7, p[1] + p[2] * 0.55); ctx.closePath(); ctx.fill();
+  });
+  // Petite tête basse
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.ellipse(-56, -38, 14, 9, 0.35, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-67, -34); ctx.quadraticCurveTo(-76, -30, -68, -26); ctx.quadraticCurveTo(-60, -28, -61, -33); ctx.closePath(); ctx.fill();
+  oeilDino(-58, -40, 3.6);
+}
+function dinoAnkylo(e, ph) {
+  // Queue avec massue
+  ctx.strokeStyle = e.c2; ctx.lineWidth = 10; ctx.lineCap = 'round';
+  var bal = Math.sin(ph * 0.7) * 5;
+  ctx.beginPath(); ctx.moveTo(36, -34); ctx.quadraticCurveTo(62, -30 + bal, 82, -26 + bal * 1.5); ctx.stroke();
+  ctx.fillStyle = e.c2;
+  ctx.beginPath(); ctx.ellipse(88, -25 + bal * 1.5, 12, 10, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = e.ventre;
+  ctx.beginPath(); ctx.arc(84, -29 + bal * 1.5, 3, 0, 7); ctx.arc(92, -21 + bal * 1.5, 2.6, 0, 7); ctx.fill();
+  patte(-26, -16, 18, 12, ph, e.c2); patte(26, -16, 18, 12, ph + Math.PI, e.c2);
+  // Corps-armure : grand dôme bosselé
+  var g = ctx.createLinearGradient(0, -72, 0, -8);
+  g.addColorStop(0, e.c1); g.addColorStop(1, e.c2);
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.ellipse(0, -34, 54, 30, 0, Math.PI, 0); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = e.ventre;
+  ctx.beginPath(); ctx.ellipse(0, -12, 46, 9, 0, 0, 7); ctx.fill();
+  patte(-32, -16, 18, 13, ph + Math.PI, e.c1); patte(32, -16, 18, 13, ph, e.c1);
+  // Bosses d'armure
+  ctx.fillStyle = e.c2;
+  [[-34, -52, 7], [-14, -62, 8], [8, -62, 8], [28, -52, 7], [-24, -42, 6], [0, -48, 7], [22, -40, 6]].forEach(function (b) {
+    ctx.beginPath(); ctx.arc(b[0], b[1], b[2], Math.PI, 0); ctx.closePath(); ctx.fill();
+  });
+  // Tête basse blindée + cornes des joues
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.ellipse(-56, -24, 16, 11, 0.1, 0, 7); ctx.fill();
+  ctx.fillStyle = '#f3e6cf';
+  ctx.beginPath(); ctx.moveTo(-46, -18); ctx.lineTo(-38, -12); ctx.lineTo(-47, -11); ctx.closePath(); ctx.fill();
+  oeilDino(-60, -27, 3.8);
+}
+function dinoPara(e, ph) {
+  queueDino(36, -58, 58, 11, Math.sin(ph * 0.7) * 4, e.c2);
+  patte(-24, -28, 32, 11, ph, e.c2); patte(28, -28, 32, 11, ph + Math.PI, e.c2);
+  corpsDino(e, 48, 30, -58);
+  patte(-30, -30, 32, 12, ph + Math.PI, e.c1); patte(34, -30, 32, 12, ph, e.c1);
+  // Petit bras
+  ctx.strokeStyle = e.c1; ctx.lineWidth = 7;
+  ctx.beginPath(); ctx.moveTo(-38, -52); ctx.lineTo(-44, -30 + Math.sin(ph) * 4); ctx.stroke();
+  // Cou + tête avec bec de canard
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.ellipse(-48, -88, 14, 11, -0.4, 0, 7); ctx.fill();
+  ctx.fillStyle = e.ventre;
+  ctx.beginPath(); ctx.moveTo(-58, -82); ctx.quadraticCurveTo(-74, -80, -72, -74); ctx.quadraticCurveTo(-60, -72, -54, -77); ctx.closePath(); ctx.fill();
+  // LA crête-trompette!
+  ctx.strokeStyle = e.c2; ctx.lineWidth = 8; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-44, -94); ctx.quadraticCurveTo(-22, -106, -2, -102); ctx.stroke();
+  ctx.fillStyle = e.c2; ctx.beginPath(); ctx.arc(-2, -102, 5, 0, 7); ctx.fill();
+  oeilDino(-50, -89, 4.2);
+}
+function dinoTrex(e, ph) {
+  queueDino(44, -84, 78, 17, Math.sin(ph * 0.6) * 6, e.c2);
+  patte(16, -52, 54, 17, ph, e.c2);
+  ctx.save(); ctx.translate(0, -96); ctx.rotate(0.1); corpsDino(e, 56, 38, 0); ctx.restore();
+  patte(-2, -52, 54, 19, ph + Math.PI, e.c1);
+  // Petits bras ridicules (c'est ça qui est drôle!)
+  ctx.strokeStyle = e.c1; ctx.lineWidth = 6;
+  ctx.beginPath(); ctx.moveTo(-44, -84); ctx.lineTo(-54, -70); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-54, -70); ctx.lineTo(-49, -64); ctx.moveTo(-54, -70); ctx.lineTo(-59, -65); ctx.stroke();
+  // Énorme tête
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.ellipse(-64, -128, 30, 21, -0.12, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-88, -118); ctx.quadraticCurveTo(-100, -108, -88, -100); ctx.quadraticCurveTo(-66, -98, -58, -108); ctx.closePath(); ctx.fill();
+  // Mâchoire + dents
+  ctx.fillStyle = e.c2;
+  ctx.beginPath(); ctx.moveTo(-90, -106); ctx.quadraticCurveTo(-70, -94, -50, -102); ctx.quadraticCurveTo(-66, -108, -90, -106); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#fff';
+  for (var i = 0; i < 5; i++) {
+    ctx.beginPath(); ctx.moveTo(-86 + i * 8, -107); ctx.lineTo(-83 + i * 8, -99); ctx.lineTo(-80 + i * 8, -107); ctx.closePath(); ctx.fill();
+  }
+  // Sourcil de méchant + œil
+  ctx.strokeStyle = e.c2; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(-80, -140); ctx.lineTo(-62, -135); ctx.stroke();
+  oeilDino(-70, -130, 5);
+}
+function dinoBrachio(e, ph) {
+  queueDino(42, -70, 60, 13, Math.sin(ph * 0.6) * 5, e.c2);
+  patte(-30, -34, 36, 14, ph, e.c2); patte(30, -34, 36, 14, ph + Math.PI, e.c2);
+  corpsDino(e, 54, 34, -72);
+  patte(-36, -36, 38, 15, ph + Math.PI, e.c1); patte(36, -36, 38, 15, ph, e.c1);
+  // Immense cou
+  ctx.strokeStyle = e.c1; ctx.lineWidth = 24; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-40, -88);
+  ctx.quadraticCurveTo(-62, -140, -56, -186 + Math.sin(ph * 0.5) * 3); ctx.stroke();
+  // Petite tête tout en haut
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.ellipse(-58, -192 + Math.sin(ph * 0.5) * 3, 15, 10, -0.25, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.arc(-60, -200 + Math.sin(ph * 0.5) * 3, 5.5, 0, 7); ctx.fill();
+  oeilDino(-62, -193 + Math.sin(ph * 0.5) * 3, 3.8);
+  // Feuilles dans la bouche (il grignote!)
+  ctx.fillStyle = '#4d9b47';
+  ctx.beginPath(); ctx.ellipse(-72, -186 + Math.sin(ph * 0.5) * 3, 7, 4, 0.5, 0, 7); ctx.fill();
+}
+function dinoPtero(e, ph, t) {
+  var flap = Math.sin(t * 9) * 0.55;
+  // Aile arrière
+  ctx.fillStyle = e.c2;
+  ctx.save(); ctx.translate(6, -6); ctx.rotate(-flap * 0.8 + 0.25);
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(38, -16, 74, 6); ctx.quadraticCurveTo(38, 8, 2, 10); ctx.closePath(); ctx.fill(); ctx.restore();
+  // Corps fuselé
+  var g = ctx.createLinearGradient(0, -12, 0, 12);
+  g.addColorStop(0, e.c1); g.addColorStop(1, e.c2);
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.ellipse(0, 0, 30, 11, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = e.ventre;
+  ctx.beginPath(); ctx.ellipse(-2, 4, 20, 6, 0, 0, 7); ctx.fill();
+  // Petites pattes pendantes
+  ctx.strokeStyle = e.c2; ctx.lineWidth = 3.5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(6, 9); ctx.lineTo(9, 17); ctx.moveTo(14, 8); ctx.lineTo(18, 15); ctx.stroke();
+  // Aile avant (la grande)
+  ctx.fillStyle = e.c1;
+  ctx.save(); ctx.translate(-8, -4); ctx.rotate(flap);
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-30, -34, -78, -30);
+  ctx.quadraticCurveTo(-44, -6, -4, 8); ctx.closePath(); ctx.fill(); ctx.restore();
+  // Tête : long bec + crête
+  ctx.fillStyle = e.c1;
+  ctx.beginPath(); ctx.arc(-32, -6, 9, 0, 7); ctx.fill();
+  ctx.fillStyle = '#f0b13f';
+  ctx.beginPath(); ctx.moveTo(-38, -8); ctx.lineTo(-72, -2); ctx.lineTo(-38, 0); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = e.c2; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.moveTo(-26, -12); ctx.quadraticCurveTo(-14, -22, -4, -20); ctx.stroke();
+  oeilDino(-34, -7, 3.4);
+}
+
+var DESSINS = {
+  triceratops: dinoTriceratops, raptor: dinoRaptor, stego: dinoStego,
+  ankylo: dinoAnkylo, para: dinoPara, trex: dinoTrex,
+  brachio: dinoBrachio, ptero: dinoPtero
+};
+function dessinerDino(d, t) {
+  var e = d.espece;
+  var s = U * e.taille * (d.echelle || 1) * (d.voie === 'loin' ? 0.82 : d.voie === 'milieu' ? 0.92 : d.voie === 'ciel' ? 0.9 : 1);
+  ctx.save();
+  if (d.voie === 'ciel') {
+    ctx.translate(d.x, d.y);
+    ctx.scale(s, s);
+    DESSINS[e.id](e, d.phase, t);
+  } else {
+    var baseY = d.voie === 'loin' ? solY - 26 * U : d.voie === 'milieu' ? solY - 13 * U : solY;
+    ombre(d.x, baseY, 52 * s);
+    ctx.translate(d.x, baseY);
+    ctx.scale(s, s);
+    DESSINS[e.id](e, d.phase, t);
+  }
+  ctx.restore();
+  // Petit nom au-dessus quand il est tout près (aide les petits lecteurs)
+  if (G.trouves[e.id] && d.voie !== 'ciel' && Math.abs(d.x - P.x) < 260 * U) {
+    ctx.font = '800 ' + Math.round(14 * U + 4) + 'px Nunito, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(61,39,18,.75)';
+    ctx.fillText(e.nom, d.x, (d.voie === 'loin' ? solY - 26 * U : d.voie === 'milieu' ? solY - 13 * U : solY) - (e.id === 'brachio' ? 215 : e.id === 'trex' ? 165 : 118) * U * e.taille * (d.echelle || 1));
+  }
+}
+</script>
+
+<script>
+/* =====================================================================
+   OBSTACLES ET TRÉSORS
+   ===================================================================== */
+function dessinerObstacle(o) {
+  var s = U;
+  ctx.save(); ctx.translate(o.x, solY);
+  if (o.type === 'roche') {
+    ombre(0, 0, 30 * s);
+    var g = ctx.createLinearGradient(0, -46 * s, 0, 0);
+    g.addColorStop(0, '#a8a29a'); g.addColorStop(1, '#6f6a61');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(-26 * s, 0); ctx.quadraticCurveTo(-30 * s, -34 * s, -10 * s, -42 * s);
+    ctx.quadraticCurveTo(8 * s, -50 * s, 20 * s, -36 * s); ctx.quadraticCurveTo(30 * s, -22 * s, 26 * s, 0);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.beginPath(); ctx.ellipse(-8 * s, -34 * s, 9 * s, 5 * s, -0.4, 0, 7); ctx.fill();
+    ctx.strokeStyle = 'rgba(40,36,30,.4)'; ctx.lineWidth = 2 * s;
+    ctx.beginPath(); ctx.moveTo(6 * s, -40 * s); ctx.lineTo(2 * s, -24 * s); ctx.lineTo(10 * s, -14 * s); ctx.stroke();
+  } else if (o.type === 'tronc') {
+    ombre(0, 0, 40 * s);
+    ctx.fillStyle = '#8a5a30';
+    arrondi(-38 * s, -25 * s, 76 * s, 25 * s, 10 * s); ctx.fill();
+    ctx.fillStyle = '#a9743f'; arrondi(-38 * s, -25 * s, 76 * s, 9 * s, 5 * s); ctx.fill();
+    ctx.fillStyle = '#d9b77c';
+    ctx.beginPath(); ctx.ellipse(-38 * s, -12.5 * s, 6 * s, 12 * s, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#a5854f'; ctx.lineWidth = 1.8 * s;
+    ctx.beginPath(); ctx.ellipse(-38 * s, -12.5 * s, 3.4 * s, 7 * s, 0, 0, 7); ctx.stroke();
+    ctx.fillStyle = '#4d9b47';
+    ctx.beginPath(); ctx.ellipse(14 * s, -27 * s, 10 * s, 4 * s, 0.3, 0, 7); ctx.fill();
+  } else { // boue
+    ctx.fillStyle = '#7a5230';
+    ctx.beginPath(); ctx.ellipse(0, -2, 46 * s, 8 * s, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#96683d';
+    ctx.beginPath(); ctx.ellipse(-8 * s, -3, 30 * s, 5 * s, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.25)';
+    var b = 3 + Math.sin(G.temps * 3 + o.x) * 1.2;
+    ctx.beginPath(); ctx.arc(12 * s, -4 * s, b * s * 0.8, 0, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+function dessinerItem(it, t) {
+  var s = U, bob = Math.sin(t * 3 + it.phase) * 4 * s;
+  ctx.save(); ctx.translate(it.x, it.y + bob);
+  if (it.type === 'silex') {
+    ctx.fillStyle = '#8f9299';
+    ctx.beginPath();
+    ctx.moveTo(0, -11 * s); ctx.lineTo(10 * s, -2 * s); ctx.lineTo(6 * s, 10 * s);
+    ctx.lineTo(-6 * s, 10 * s); ctx.lineTo(-10 * s, -2 * s); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#c9ccd2';
+    ctx.beginPath(); ctx.moveTo(0, -11 * s); ctx.lineTo(10 * s, -2 * s); ctx.lineTo(0, 2 * s); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 1.6 * s;
+    ctx.beginPath(); ctx.moveTo(12 * s, -10 * s); ctx.lineTo(12 * s, -4 * s); ctx.moveTo(9 * s, -7 * s); ctx.lineTo(15 * s, -7 * s); ctx.stroke();
+  } else if (it.type === 'baie') {
+    ctx.strokeStyle = '#4d7a2e'; ctx.lineWidth = 3 * s; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(0, 10 * s); ctx.quadraticCurveTo(2 * s, 0, -4 * s, -6 * s); ctx.stroke();
+    ctx.fillStyle = '#5da244';
+    ctx.beginPath(); ctx.ellipse(-6 * s, -8 * s, 8 * s, 4 * s, -0.6, 0, 7); ctx.fill();
+    [[-8, 0], [4, -3], [-1, 7]].forEach(function (p) {
+      ctx.fillStyle = '#e2483d';
+      ctx.beginPath(); ctx.arc(p[0] * s, p[1] * s, 6 * s, 0, 7); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      ctx.beginPath(); ctx.arc(p[0] * s - 2 * s, p[1] * s - 2 * s, 2 * s, 0, 7); ctx.fill();
+    });
+  } else if (it.type === 'oeuf') { // oeuf doré
+    var g = ctx.createLinearGradient(0, -15 * s, 0, 13 * s);
+    g.addColorStop(0, '#ffe066'); g.addColorStop(1, '#f0a51f');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.ellipse(0, 0, 10.5 * s, 13.5 * s, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#c47f0e';
+    ctx.beginPath(); ctx.arc(-3 * s, -4 * s, 1.8 * s, 0, 7); ctx.arc(4 * s, 2 * s, 1.8 * s, 0, 7); ctx.arc(-1 * s, 7 * s, 1.8 * s, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#fff2b0'; ctx.lineWidth = 2 * s;
+    var r = 16 * s + Math.sin(t * 5) * 2.5 * s;
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, 7); ctx.stroke();
+  } else if (it.type === 'turbo') { // BOOST turbo : éclair dans un médaillon orange
+    ctx.fillStyle = '#e8762c';
+    ctx.beginPath(); ctx.arc(0, 0, 15 * s, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#fff2b0'; ctx.lineWidth = 2 * s;
+    ctx.beginPath(); ctx.arc(0, 0, 18 * s + Math.sin(t * 5) * 2 * s, 0, 7); ctx.stroke();
+    ctx.fillStyle = '#ffd23e';
+    ctx.beginPath();
+    ctx.moveTo(3 * s, -11 * s); ctx.lineTo(-6 * s, 2 * s); ctx.lineTo(-0.5 * s, 2 * s);
+    ctx.lineTo(-3 * s, 11 * s); ctx.lineTo(7 * s, -2 * s); ctx.lineTo(1 * s, -2 * s);
+    ctx.closePath(); ctx.fill();
+  } else { // BOOST super-saut : ressort vert avec flèche vers le haut
+    ctx.strokeStyle = '#35702f'; ctx.lineWidth = 3.4 * s; ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(-8 * s, 10 * s); ctx.lineTo(8 * s, 5 * s); ctx.lineTo(-8 * s, 0); ctx.lineTo(8 * s, -5 * s); ctx.lineTo(-3 * s, -9 * s);
+    ctx.stroke();
+    ctx.fillStyle = '#4d9b47';
+    ctx.beginPath(); ctx.moveTo(0, -20 * s); ctx.lineTo(-6 * s, -11 * s); ctx.lineTo(6 * s, -11 * s); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#dff2d8';
+    ctx.beginPath(); ctx.ellipse(0, 12 * s, 10 * s, 3 * s, 0, 0, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+
+/* =====================================================================
+   LES PALIERS (style Mario) — plateformes de pierre où Silex atterrit
+   ===================================================================== */
+function dessinerPalier(pl) {
+  var s = U;
+  ctx.save(); ctx.translate(pl.x, pl.y);
+  ombre(pl.w / 2, solY - pl.y, pl.w * 0.40); // ombre portée au sol : on voit la hauteur!
+  // Dessous rocheux qui se rétrécit
+  ctx.fillStyle = '#8a6238';
+  ctx.beginPath();
+  ctx.moveTo(6 * s, 0); ctx.lineTo(pl.w - 6 * s, 0); ctx.lineTo(pl.w - 20 * s, 20 * s); ctx.lineTo(20 * s, 20 * s);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#6e4c26';
+  ctx.beginPath();
+  ctx.moveTo(20 * s, 20 * s); ctx.lineTo(pl.w - 20 * s, 20 * s); ctx.lineTo(pl.w - 34 * s, 30 * s); ctx.lineTo(34 * s, 30 * s);
+  ctx.closePath(); ctx.fill();
+  // Dessus : pierre + bande d'herbe
+  ctx.fillStyle = '#b08954'; arrondi(-2 * s, -7 * s, pl.w + 4 * s, 10 * s, 5 * s); ctx.fill();
+  ctx.fillStyle = '#5da244'; arrondi(-2 * s, -10 * s, pl.w + 4 * s, 7 * s, 4 * s); ctx.fill();
+  // Petite liane qui pend
+  ctx.strokeStyle = '#4d8a44'; ctx.lineWidth = 2.4 * s; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(pl.w * 0.3, 16 * s); ctx.quadraticCurveTo(pl.w * 0.3 - 3 * s, 28 * s, pl.w * 0.3 + 2 * s, 36 * s); ctx.stroke();
+  ctx.restore();
+}
+
+/* =====================================================================
+   APPARITIONS (spawns)
+   ===================================================================== */
+function choisirEspece() {
+  // Les espèces se débloquent avec les niveaux : d'abord les gentils
+  // herbivores, puis l'Ankylosaure et le Ptéranodon, le raptor rapide,
+  // et enfin le T-Rex. Plus on avance, plus ça devient menaçant!
+  var ids = ['triceratops', 'stego', 'para', 'brachio'];
+  if (G.niveau >= 2) ids = ids.concat(['ankylo', 'ptero']);
+  if (G.niveau >= 3) ids.push('raptor');
+  if (G.niveau >= 4) ids.push('trex');
+  var dispo = ids.map(function (id) { return parId[id]; });
+  var manquantes = dispo.filter(function (e) { return !G.trouves[e.id]; });
+  var bassin = (manquantes.length && Math.random() < 0.72) ? manquantes : dispo;
+  return bassin[Math.floor(Math.random() * bassin.length)];
+}
+function creerDino(e, x) {
+  var voie = e.voie;
+  // Variété : les gentils se promènent parfois dans la voie du milieu (profondeur)
+  if (voie === 'pres' && (e.id === 'stego' || e.id === 'para' || e.id === 'triceratops') && Math.random() < 0.3) voie = 'milieu';
+  // Menaçant : aux niveaux avancés, le T-Rex descend dans NOTRE voie!
+  if (e.id === 'trex' && G.niveau >= 5 && Math.random() < 0.5) voie = 'pres';
+  var vf = 0.99; // vitesse propre : certains dinos foncent vers Silex
+  if (e.id === 'raptor') vf = 1.07 + G.niveau * 0.012;
+  else if (e.id === 'trex' && voie === 'pres') vf = 1.05;
+  return { espece: e, voie: voie, x: x, y: e.voie === 'ciel' ? solY - (180 + Math.random() * 90) * U : 0,
+    phase: Math.random() * 6, decouvert: false, salue: false, aRugi: false, vf: vf,
+    echelle: 0.85 + Math.random() * 0.33 }; // tailles variées : petits jeunes et gros adultes
+}
+function creerPalier(x) {
+  var pl = { x: x, w: (150 + Math.random() * 80) * U, y: solY - (Math.random() < 0.5 ? 100 : 152) * U };
+  platforms.push(pl);
+  // Des trésors attendent sur le palier : ça vaut le saut!
+  var n = 2 + Math.floor(Math.random() * 2);
+  for (var i = 0; i < n; i++) items.push({ type: Math.random() < 0.6 ? 'silex' : 'baie', x: pl.x + 24 * U + i * 48 * U, y: pl.y - 24 * U, phase: i * 0.8, pris: false });
+  return pl;
+}
+/* Un élément de parcours : utilisé par le mode libre ET par l'éditeur */
+function spawnElement(type, x) {
+  x = (typeof x === 'number') ? x : W + 90;
+  if (type === 'roche' || type === 'tronc' || type === 'boue') {
+    obstacles.push({ type: type, x: x, touche: false });
+  } else if (type === 'palier') {
+    creerPalier(x);
+  } else if (type === 'dino') {
+    dinos.push(creerDino(choisirEspece(), x + 60));
+  } else if (type === 'oeuf') {
+    items.push({ type: 'oeuf', x: x, y: solY - 105 * U, phase: Math.random() * 6, pris: false });
+  } else if (type === 'boost') {
+    items.push({ type: Math.random() < 0.5 ? 'turbo' : 'super-saut', x: x, y: solY - (62 + Math.random() * 48) * U, phase: Math.random() * 6, pris: false });
+  } else { // 'tresor' : rangée de silex ou de baies
+    var tt = Math.random() < 0.55 ? 'silex' : 'baie';
+    var hh = Math.random() < 0.45 ? solY - 118 * U : solY - 34 * U;
+    var nn = 3 + Math.floor(Math.random() * 3);
+    for (var i = 0; i < nn; i++) items.push({ type: tt, x: x + i * 52 * U, y: hh, phase: i * 0.9, pris: false });
+  }
+}
+function apparition() {
+  var r = Math.random();
+  if (r < 0.30) {                       // dinosaure!
+    spawnElement('dino');
+    G.prochainDans = 1.5 + Math.random() * 0.9;
+  } else if (r < 0.55) {                // obstacle
+    spawnElement(['roche', 'tronc', 'boue'][Math.floor(Math.random() * 3)]);
+    G.prochainDans = 1.05 + Math.random() * 0.75;
+  } else if (r < 0.68) {                // palier (style Mario!)
+    spawnElement('palier');
+    G.prochainDans = 1.35 + Math.random() * 0.6;
+  } else if (r < 0.75) {                // œuf doré (rare!)
+    spawnElement('oeuf');
+    G.prochainDans = 0.9 + Math.random() * 0.5;
+  } else if (r < 0.82) {                // boost!
+    spawnElement('boost');
+    G.prochainDans = 1.1 + Math.random() * 0.5;
+  } else {                              // rangée de petits trésors
+    spawnElement('tresor');
+    G.prochainDans = 1.0 + Math.random() * 0.7;
+  }
+}
+
+/* =====================================================================
+   MISE À JOUR
+   ===================================================================== */
+function perdreCoeur(x, y) {
+  G.coeurs--; majCoeurs();
+  P.invincible = 1.7; P.etourdi = 1.0;
+  SONS.cogne(); G.shake = 9;
+  texteFlottant(x, y - 110 * U, 'Ouille!', '#e2483d');
+  if (G.coeurs <= 0) finPartie();
+}
+function decouvrir(d) {
+  d.decouvert = true;
+  var e = d.espece;
+  if (!G.trouves[e.id]) {
+    G.trouves[e.id] = true; G.nbTrouves++;
+    G.score += 50; majScore(); majAlbumBtn();
+    SONS.decouvre();
+    texteFlottant(P.x + 30 * U, P.y - 130 * U, '+50', '#4d9b47');
+    montrerCarte(e);
+    if (G.nbTrouves === ESPECES.length) {
+      setTimeout(function () { texteFlottant(P.x, P.y - 170 * U, 'ALBUM COMPLET!', '#e8762c'); SONS.victoire(); }, 600);
+    }
+  } else if (!d.salue) {
+    d.salue = true;
+    texteFlottant(d.x, (d.voie === 'ciel' ? d.y : solY) - 130 * U, 'Salut, ' + e.nom + '!', '#5a3a1e');
+  }
+}
+function majAJour(dt, t) {
+  var pas = Math.min(dt * 60, 2.6);
+  var enJeu = (G.etat === 'jeu');
+  var demo = (G.etat === 'accueil' || G.etat === 'fin');
+  G.vitesse = enJeu ? (5.0 + Math.min(3.0, G.distance / 2600) + (G.niveau - 1) * 0.5) * U : 2.1 * U;
+  if (enJeu && G.turbo > 0) G.vitesse *= 1.45;
+  if (G.boue > 0) { G.boue -= dt; G.vitesse *= 0.55; }
+  G.camera += G.vitesse * pas;
+  if (enJeu) {
+    G.distance += G.vitesse * pas * 0.02; G.score = Math.max(G.score, Math.floor(G.distance)); majScore();
+    // Montée de niveau : tout s'accélère, de nouveaux dinos arrivent
+    var nv = 1 + Math.floor(G.distance / 300);
+    if (nv > G.niveau) { G.niveau = nv; majNiveau(); bandeau('Niveau ' + nv + ' ! Ça s\'accélère…'); SONS.decouvre(); }
+    // Boosts qui s'écoulent
+    if (G.turbo > 0) { G.turbo -= dt; P.invincible = Math.max(P.invincible, 0.25); if (Math.random() < 0.6) poussiere(P.x - 18 * U, P.y - 26 * U, 1); }
+    if (G.superSaut > 0) G.superSaut -= dt;
+    majBoostUI();
+  }
+
+  // --- Silex (physique du saut, avec atterrissage sur les paliers) ---
+  P.phase += dt * (enJeu ? 11 : 9) * (G.vitesse / (5 * U));
+  var avantY = P.y;
+  if (!P.auSol) {
+    P.vy += 1.6 * U * pas;
+    P.y += P.vy * pas;
+    if (P.vy > 0) { // en descente seulement : les paliers sont traversants par en dessous
+      for (var pi = 0; pi < platforms.length; pi++) {
+        var pl = platforms[pi];
+        if (P.x + 13 * U > pl.x && P.x - 13 * U < pl.x + pl.w && avantY <= pl.y + 1 && P.y >= pl.y) {
+          P.y = pl.y; P.auSol = true; P.vy = 0; P.plat = pl; poussiere(P.x, P.y, 5);
+          break;
+        }
+      }
+    }
+    if (!P.auSol && P.y >= solY) { P.y = solY; P.auSol = true; P.vy = 0; P.plat = null; poussiere(P.x, solY, 5); }
+  } else {
+    if (P.plat) { // toujours sur le palier? sinon, on retombe!
+      if (platforms.indexOf(P.plat) === -1 || P.x + 13 * U < P.plat.x || P.x - 13 * U > P.plat.x + P.plat.w) {
+        P.auSol = false; P.vy = 0; P.plat = null;
+      } else P.y = P.plat.y;
+    }
+    if (enJeu && Math.random() < 0.3) poussiere(P.x - 14 * U, P.y, 1);
+  }
+  P.surfaceY = (P.auSol && P.plat) ? P.plat.y : solY;
+  if (P.invincible > 0) P.invincible -= dt;
+  if (P.etourdi > 0) P.etourdi -= dt;
+  if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 26);
+
+  // --- Apparitions ---
+  if (enJeu || demo) {
+    G.dernierSpawn -= dt;
+    if (G.dernierSpawn <= 0) {
+      if (enJeu) {
+        if (G.mode === 'libre') { apparition(); G.dernierSpawn = G.prochainDans; }
+        else G.dernierSpawn = 0.5;
+      }
+      else { // en démo : seulement des dinos qui se promènent
+        var e = ESPECES[Math.floor(Math.random() * ESPECES.length)];
+        dinos.push({ espece: e, voie: e.voie, x: W + 120, y: e.voie === 'ciel' ? solY - (180 + Math.random() * 90) * U : 0, phase: Math.random() * 6, decouvert: true, salue: true, aRugi: true, vf: 0.99, echelle: 0.9 + Math.random() * 0.25 });
+        G.dernierSpawn = 2.6 + Math.random() * 2.4;
+      }
+    }
+  }
+  // --- Parcours personnalisé : les éléments du joueur, dans son ordre ---
+  if (enJeu && G.mode === 'parcours') {
+    G.spawnTimer -= dt;
+    if (G.file.length > 0 && G.spawnTimer <= 0) {
+      spawnElement(G.file.shift()); G.nbSpawnParcours++; G.spawnTimer = 1.15;
+    } else if (G.file.length === 0 && G.nbSpawnParcours > 0 &&
+               obstacles.length === 0 && dinos.length === 0 && platforms.length === 0 && items.length === 0) {
+      finParcours(); // tout est passé : parcours terminé!
+    }
+  }
+
+  var v = G.vitesse * pas;
+  // --- Dinos ---
+  for (var i = dinos.length - 1; i >= 0; i--) {
+    var d = dinos[i];
+    var vitD;
+    if (d.voie === 'ciel') vitD = v + 2.4 * U * pas;       // il vole vers nous, plus vite que le décor
+    else if (d.voie === 'loin') vitD = v * 0.94;           // voie du fond : un peu plus lente (profondeur)
+    else if (d.voie === 'milieu') vitD = v * 0.97;         // voie du milieu
+    else vitD = v * (d.vf || 0.99);                        // voie proche : vitesse propre (raptor et T-Rex foncent!)
+    d.x -= vitD;
+    if (d.voie === 'ciel') d.y += Math.sin(t * 2 + d.phase) * 0.3;
+    d.phase += dt * 7;
+    // Rugissement quand le dino entre dans la scène (chacun sa voix!)
+    if (enJeu && !d.aRugi && d.voie !== 'ciel' && d.x < W - 20 && d.x > P.x + 40 * U) {
+      d.aRugi = true;
+      if (d.espece.id === 'trex' || d.espece.id === 'raptor' || Math.random() < 0.45) rugir(d.espece);
+    }
+    if (enJeu && !d.decouvert && Math.abs(d.x - P.x) < 56 * U) decouvrir(d);
+    // Collision avec un dino de la voie proche
+    if (enJeu && d.voie === 'pres' && P.invincible <= 0) {
+      var hD = 112 * U * d.espece.taille * (d.echelle || 1);
+      if (Math.abs(d.x - P.x) < 44 * U && P.y > solY - hD * 0.52) {
+        rugir(d.espece); perdreCoeur(P.x, P.y);
+      }
+    }
+    if (d.x < -320) dinos.splice(i, 1);
+  }
+  // --- Paliers ---
+  for (var q = platforms.length - 1; q >= 0; q--) {
+    platforms[q].x -= v;
+    if (platforms[q].x + platforms[q].w < -80) platforms.splice(q, 1);
+  }
+  // --- Obstacles ---
+  for (var j = obstacles.length - 1; j >= 0; j--) {
+    var o = obstacles[j]; o.x -= v;
+    if (enJeu && !o.touche) {
+      var demiL = o.type === 'tronc' ? 36 * U : o.type === 'boue' ? 44 * U : 24 * U;
+      var hautO = o.type === 'roche' ? 44 * U : o.type === 'tronc' ? 25 * U : 6 * U;
+      if (Math.abs(o.x - P.x) < demiL + 16 * U) {
+        if (o.type === 'boue') {
+          if (P.auSol && !P.plat) { o.touche = true; G.boue = 0.9; SONS.glisse(); eclabousse(P.x, solY); texteFlottant(P.x, P.y - 115 * U, 'Gliss!', '#7a5230'); }
+        } else if (P.y > solY - hautO + 10 * U && P.invincible <= 0) {
+          o.touche = true; perdreCoeur(P.x, P.y);
+        }
+      }
+    }
+    if (o.x < -140) obstacles.splice(j, 1);
+  }
+  // --- Trésors ---
+  for (var k = items.length - 1; k >= 0; k--) {
+    var it = items[k]; it.x -= v;
+    if (enJeu && !it.pris) {
+      var dx = it.x - P.x, dy = it.y - (P.y - 52 * U);
+      if (dx * dx + dy * dy < Math.pow(42 * U, 2)) {
+        it.pris = true;
+        var mult = G.turbo > 0 ? 2 : 1; // en turbo, les points comptent double!
+        if (it.type === 'silex') { G.score += 10 * mult; SONS.ramasse(); texteFlottant(it.x, it.y - 24 * U, '+' + (10 * mult), '#fff'); etincelles(it.x, it.y, '#ffe066'); }
+        else if (it.type === 'baie') { G.score += 5 * mult; SONS.ramasse(); texteFlottant(it.x, it.y - 24 * U, '+' + (5 * mult), '#fff'); etincelles(it.x, it.y, '#ff8a7a'); }
+        else if (it.type === 'turbo') { G.turbo = 5; SONS.oeuf(); texteFlottant(it.x, it.y - 24 * U, 'TURBO!', '#e8762c'); etincelles(it.x, it.y, '#ffd23e'); }
+        else if (it.type === 'super-saut') { G.superSaut = 8; SONS.oeuf(); texteFlottant(it.x, it.y - 24 * U, 'SUPER SAUT!', '#35702f'); etincelles(it.x, it.y, '#9fe08a'); }
+        else { SONS.oeuf(); etincelles(it.x, it.y, '#ffd23e');
+          if (G.coeurs < 3) { G.coeurs++; majCoeurs(); texteFlottant(it.x, it.y - 24 * U, '+1 cœur!', '#e2483d'); }
+          else { G.score += 50 * mult; texteFlottant(it.x, it.y - 24 * U, '+' + (50 * mult), '#f0a51f'); } }
+        majScore();
+      }
+    }
+    if (it.x < -80 || it.pris) items.splice(k, 1);
+  }
+  // --- Particules et textes ---
+  for (var m = particules.length - 1; m >= 0; m--) {
+    var p = particules[m]; p.t += dt;
+    if (p.t > p.vie) { particules.splice(m, 1); continue; }
+    p.x += p.vx * pas * 0.7; p.y += p.vy * pas * 0.7;
+    if (p.type === 'goutte') p.vy += 0.25 * pas;
+  }
+  for (var n = textes.length - 1; n >= 0; n--) {
+    textes[n].t += dt; textes[n].y -= 34 * dt;
+    if (textes[n].t > textes[n].vie) textes.splice(n, 1);
+  }
+}
+
+/* =====================================================================
+   RENDU
+   ===================================================================== */
+function dessinerParticules() {
+  particules.forEach(function (p) {
+    var a = 1 - p.t / p.vie;
+    if (p.type === 'poussiere') { ctx.fillStyle = 'rgba(214,186,140,' + (a * 0.7) + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * (1 + p.t), 0, 7); ctx.fill(); }
+    else if (p.type === 'etincelle') { ctx.fillStyle = p.coul; ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); ctx.globalAlpha = 1; }
+    else { ctx.fillStyle = 'rgba(122,82,48,' + a + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); }
+  });
+}
+function dessinerTextes() {
+  ctx.textAlign = 'center';
+  textes.forEach(function (tx) {
+    var a = tx.t > tx.vie - 0.3 ? (tx.vie - tx.t) / 0.3 : 1;
+    ctx.globalAlpha = a;
+    ctx.font = '800 ' + Math.round(21 * U + 5) + 'px "Baloo 2", sans-serif';
+    ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(61,39,18,.55)';
+    ctx.strokeText(tx.txt, tx.x, tx.y); ctx.fillStyle = tx.coul; ctx.fillText(tx.txt, tx.x, tx.y);
+    ctx.globalAlpha = 1;
+  });
+}
+function rendre(t) {
+  ctx.save();
+  if (G.shake > 0) ctx.translate((Math.random() - 0.5) * G.shake, (Math.random() - 0.5) * G.shake * 0.6);
+  dessinerCiel(t);
+  dessinerVolcan(t);
+  dessinerFonds(t);
+  dinos.forEach(function (d) { if (d.voie === 'loin') dessinerDino(d, t); });
+  dessinerSol(t);
+  dinos.forEach(function (d) { if (d.voie === 'milieu') dessinerDino(d, t); });
+  platforms.forEach(dessinerPalier);
+  items.forEach(function (it) { dessinerItem(it, t); });
+  obstacles.forEach(dessinerObstacle);
+  dinos.forEach(function (d) { if (d.voie === 'pres') dessinerDino(d, t); });
+  dessinerSilex(t);
+  dinos.forEach(function (d) { if (d.voie === 'ciel') dessinerDino(d, t); });
+  dessinerPremierPlan(t);
+  dessinerParticules();
+  dessinerTextes();
+  ctx.restore();
+}
+
+/* =====================================================================
+   INTERFACE (HUD, cartes, écrans)
+   ===================================================================== */
+var el = function (id) { return document.getElementById(id); };
+function majScore() { el('score-val').textContent = G.score; }
+function majCoeurs() {
+  var spans = el('coeurs').children;
+  for (var i = 0; i < spans.length; i++) spans[i].className = i < G.coeurs ? '' : 'perdu';
+}
+function majAlbumBtn() { el('album-val').textContent = G.nbTrouves + '/8'; }
+function majNiveau() { el('niveau-val').textContent = 'Niveau ' + G.niveau; }
+var dernierBoostTxt = '';
+function majBoostUI() {
+  var morceaux = [];
+  if (G.turbo > 0) morceaux.push('TURBO ' + Math.ceil(G.turbo) + ' s');
+  if (G.superSaut > 0) morceaux.push('SUPER SAUT ' + Math.ceil(G.superSaut) + ' s');
+  var txt = morceaux.join(' • ');
+  if (txt !== dernierBoostTxt) { dernierBoostTxt = txt; el('boost-ligne').textContent = txt; }
+}
+var bandeauTimer = null;
+function bandeau(txt) {
+  var b = el('bandeau');
+  b.textContent = txt; b.classList.add('visible');
+  if (bandeauTimer) clearTimeout(bandeauTimer);
+  bandeauTimer = setTimeout(function () { b.classList.remove('visible'); }, 1700);
+}
+var carteTimer = null;
+function montrerCarte(e) {
+  el('carte-nom').textContent = e.nom;
+  el('carte-fait').textContent = e.fait;
+  el('carte-dino').classList.add('visible');
+  if (carteTimer) clearTimeout(carteTimer);
+  carteTimer = setTimeout(function () { el('carte-dino').classList.remove('visible'); }, 3200);
+}
+function rendreAlbum() {
+  el('album-sous-titre').textContent = G.nbTrouves + ' dinosaure' + (G.nbTrouves > 1 ? 's' : '') + ' découvert' + (G.nbTrouves > 1 ? 's' : '') + ' sur 8';
+  var html = '';
+  ESPECES.forEach(function (e) {
+    if (G.trouves[e.id]) html += '<div class="case-dino trouve"><div class="nom">' + e.nom + '</div><div class="fait">' + e.fait + '</div></div>';
+    else html += '<div class="case-dino"><div class="nom">? ? ?</div><div class="mystere">Pas encore rencontré… Continue de courir!</div></div>';
+  });
+  el('album-grille').innerHTML = html;
+}
+var etatAvantAlbum = 'accueil';
+function ouvrirAlbum() {
+  etatAvantAlbum = G.etat;
+  if (G.etat === 'jeu' || G.etat === 'accueil' || G.etat === 'fin') G.etat = 'album';
+  rendreAlbum();
+  el('ecran-album').classList.add('visible');
+}
+function fermerAlbum() {
+  el('ecran-album').classList.remove('visible');
+  G.etat = (etatAvantAlbum === 'jeu') ? 'jeu' : etatAvantAlbum;
+  if (G.etat === 'accueil') el('ecran-accueil').classList.add('visible');
+  if (G.etat === 'fin') el('ecran-fin').classList.add('visible');
+}
+function demarrer(mode) {
+  audio();
+  G.etat = 'jeu'; G.score = 0; G.coeurs = 3; G.distance = 0;
+  G.trouves = {}; G.nbTrouves = 0; G.boue = 0; G.shake = 0;
+  G.dernierSpawn = 0.8; G.camera = 0;
+  G.niveau = 1; G.turbo = 0; G.superSaut = 0;
+  G.mode = (mode === 'parcours') ? 'parcours' : 'libre';
+  G.file = G.mode === 'parcours' ? G.parcoursDef.slice() : [];
+  G.spawnTimer = 0.7; G.nbSpawnParcours = 0;
+  obstacles = []; items = []; dinos = []; particules = []; textes = []; platforms = [];
+  P.y = solY; P.vy = 0; P.auSol = true; P.invincible = 0; P.etourdi = 0; P.plat = null; P.surfaceY = solY;
+  el('ecran-accueil').classList.remove('visible');
+  el('ecran-fin').classList.remove('visible');
+  el('ecran-editeur').classList.remove('visible');
+  el('carte-dino').classList.remove('visible');
+  el('hud').classList.add('visible');
+  if ('ontouchstart' in window) { el('btn-saut').classList.add('visible'); el('astuce').classList.remove('visible'); }
+  else el('astuce').classList.add('visible');
+  setTimeout(function () { el('astuce').classList.remove('visible'); }, 6000);
+  majScore(); majCoeurs(); majAlbumBtn(); majNiveau();
+  if (G.mode === 'parcours') bandeau('Ton parcours commence!');
+}
+function finParcours() {
+  G.mode = 'libre'; G.etat = 'fin';
+  el('btn-saut').classList.remove('visible');
+  el('carte-dino').classList.remove('visible');
+  SONS.victoire();
+  el('fin-titre').textContent = 'Parcours terminé! Bravo, architecte!';
+  el('fin-score').textContent = G.score;
+  el('fin-detail').textContent = 'Tu as traversé tout ton parcours et découvert ' + G.nbTrouves + ' dinosaure' + (G.nbTrouves > 1 ? 's' : '') + ' sur 8' +
+    '. Distance : ' + Math.round(G.distance) + ' m de course dans le Crétacé.';
+  setTimeout(function () { el('ecran-fin').classList.add('visible'); }, 500);
+}
+function finPartie() {
+  G.etat = 'fin';
+  el('btn-saut').classList.remove('visible');
+  el('carte-dino').classList.remove('visible');
+  var complet = G.nbTrouves === ESPECES.length;
+  el('fin-titre').textContent = complet ? 'ALBUM COMPLET! Super pisteur!' : (G.nbTrouves >= 5 ? 'Quelle belle expédition!' : 'Belle course, Silex!');
+  if (G.mode === 'parcours') { el('fin-titre').textContent = 'Ouille! Parcours interrompu'; G.mode = 'libre'; }
+  el('fin-score').textContent = G.score;
+  el('fin-detail').textContent = 'Tu as découvert ' + G.nbTrouves + ' dinosaure' + (G.nbTrouves > 1 ? 's' : '') + ' sur 8' +
+    (complet ? '. Tu les connais tous!' : '. Encore ' + (8 - G.nbTrouves) + ' à rencontrer!') +
+    ' Distance : ' + Math.round(G.distance) + ' m de course dans le Crétacé.';
+  if (complet) SONS.victoire();
+  setTimeout(function () { el('ecran-fin').classList.add('visible'); }, 650);
+}
+/* =====================================================================
+   ÉDITEUR DE PARCOURS — le joueur compose sa course, élément par élément
+   ===================================================================== */
+var PALETTE = [
+  { type:'roche', label:'Roche' }, { type:'tronc', label:'Tronc' }, { type:'boue', label:'Boue' },
+  { type:'palier', label:'Palier' }, { type:'tresor', label:'Trésors' }, { type:'oeuf', label:'Œuf doré' },
+  { type:'boost', label:'Boost' }, { type:'dino', label:'Dino surprise' }
+];
+function labelType(type) {
+  for (var i = 0; i < PALETTE.length; i++) if (PALETTE[i].type === type) return PALETTE[i].label;
+  return type;
+}
+function rendreParcoursListe() {
+  var boite = el('parcours-liste');
+  boite.innerHTML = '';
+  if (!G.parcoursDef.length) {
+    boite.innerHTML = '<span class="vide">Ton parcours est vide… ajoute des éléments!</span>';
+    return;
+  }
+  G.parcoursDef.forEach(function (type, idx) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip';
+    b.textContent = (idx + 1) + '. ' + labelType(type) + ' ✕';
+    b.addEventListener('click', function () { G.parcoursDef.splice(idx, 1); rendreParcoursListe(); });
+    boite.appendChild(b);
+  });
+}
+function construirePalette() {
+  var boite = el('palette');
+  boite.innerHTML = '';
+  PALETTE.forEach(function (p) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'pal-btn';
+    b.textContent = '+ ' + p.label;
+    b.addEventListener('click', function () {
+      if (G.parcoursDef.length >= 24) { bandeau('Parcours plein! (24 éléments max)'); return; }
+      G.parcoursDef.push(p.type); rendreParcoursListe(); SONS.ramasse();
+    });
+    boite.appendChild(b);
+  });
+}
+var etatAvantEditeur = 'accueil';
+function ouvrirEditeur() {
+  etatAvantEditeur = G.etat;
+  G.etat = 'editeur';
+  el('ecran-accueil').classList.remove('visible');
+  el('ecran-fin').classList.remove('visible');
+  construirePalette(); rendreParcoursListe();
+  el('ecran-editeur').classList.add('visible');
+}
+function fermerEditeur() {
+  el('ecran-editeur').classList.remove('visible');
+  G.etat = etatAvantEditeur;
+  if (G.etat === 'accueil') el('ecran-accueil').classList.add('visible');
+  if (G.etat === 'fin') el('ecran-fin').classList.add('visible');
+}
+
+el('btn-jouer').addEventListener('click', demarrer);
+el('btn-rejouer').addEventListener('click', demarrer);
+el('btn-album').addEventListener('click', ouvrirAlbum);
+el('btn-son').addEventListener('click', function () {
+  sonActif = !sonActif;
+  el('btn-son').textContent = sonActif ? '🔊 Son' : '🔇 Muet';
+});
+el('btn-album-accueil').addEventListener('click', ouvrirAlbum);
+el('btn-album-fin').addEventListener('click', ouvrirAlbum);
+el('btn-fermer-album').addEventListener('click', fermerAlbum);
+el('btn-creer-parcours').addEventListener('click', ouvrirEditeur);
+el('btn-fermer-editeur').addEventListener('click', fermerEditeur);
+el('btn-parcours-effacer').addEventListener('click', function () { G.parcoursDef = []; rendreParcoursListe(); });
+el('btn-parcours-hasard').addEventListener('click', function () {
+  G.parcoursDef = [];
+  for (var i = 0; i < 10; i++) G.parcoursDef.push(PALETTE[Math.floor(Math.random() * PALETTE.length)].type);
+  rendreParcoursListe();
+});
+el('btn-parcours-jouer').addEventListener('click', function () {
+  if (!G.parcoursDef.length) { bandeau('Ajoute des éléments à ton parcours!'); return; }
+  demarrer('parcours');
+});
+el('btn-accueil-fin').addEventListener('click', function () {
+  el('ecran-fin').classList.remove('visible');
+  el('hud').classList.remove('visible');
+  el('btn-saut').classList.remove('visible');
+  G.etat = 'accueil';
+  el('ecran-accueil').classList.add('visible');
+});
+
+/* =====================================================================
+   BOUCLE PRINCIPALE
+   ===================================================================== */
+P.x = Math.min(W * 0.24, 300); P.y = solY;
+window.addEventListener('resize', function () { P.x = Math.min(W * 0.24, 300); if (P.auSol) P.y = solY; });
+var dernier = performance.now();
+function boucle(now) {
+  var dt = Math.min((now - dernier) / 1000, 0.05);
+  dernier = now;
+  G.temps += dt;
+  if (G.etat !== 'album' && G.etat !== 'editeur') majAJour(dt, G.temps);
+  rendre(G.temps);
+  requestAnimationFrame(boucle);
+}
+requestAnimationFrame(boucle);
+</script>
+</body>
+</html>

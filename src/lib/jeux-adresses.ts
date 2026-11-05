@@ -50,6 +50,7 @@ export const GAME_FILES: Record<string, string> = {
   "votre-ia-parle-t-elle-quebecois": "/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html",
   "slalomeuse": "/apps/slalomeuse/index.html",
   "pete-et-repete": "/apps/pete-et-repete/pete-et-repete-v1.0.html",
+  "hommes-prehistoriques": "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html",
 };
 
 /** Adresse stable (partageable) d'un jeu, ex. « /apps/caribou-run ». */

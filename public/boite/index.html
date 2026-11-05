@@ -965,7 +965,7 @@ ul.cf-plain li{margin:.3em 0}
             <span class="lbl" id="h-jalon-lbl">Le jalon de vie</span>
             <div class="chips" role="group" aria-labelledby="h-jalon-lbl" id="h-jalons"></div>
             <div class="field" id="h-jalon-custom-wrap" hidden style="margin-top:12px">
-              <label class="lbl" for="h-jalon-custom">Décris le jalon</label>
+              <label class="lbl" for="h-jalon-custom">Décrivez le jalon</label>
               <input type="text" id="h-jalon-custom" maxlength="120" placeholder="ex. : quand elle aura son premier appartement" />
             </div>
             <p class="err" id="h-jalon-err">Choisissez ou décrivez le jalon de vie.</p>
@@ -1929,7 +1929,7 @@ ul.cf-plain li{margin:.3em 0}
 
   <section aria-label="Découvrez aussi" style="border-top:1px solid rgba(58,42,32,.18);padding:22px 4px 4px;margin-top:8px">
     <h2 style="margin:0 0 8px;font-size:1.25rem">Découvrez aussi</h2>
-    <p style="margin:0;line-height:1.7">Le reste d'HP Outils, gratuit lui aussi : <a href="/en-cuisine/">En cuisine — 629 recettes gratuites</a> · <a href="/jeux">39 + 1 caché jeux gratuits, sans inscription</a> · <a href="/livres-pdf">les livres et kits PDF</a>.</p>
+    <p style="margin:0;line-height:1.7">Le reste d'HP Outils, gratuit lui aussi : <a href="/en-cuisine/">En cuisine — 629 recettes gratuites</a> · <a href="/jeux">40 + 1 caché jeux gratuits, sans inscription</a> · <a href="/livres-pdf">les livres et kits PDF</a>.</p>
   </section>
 
   <footer class="page-foot">
@@ -3086,7 +3086,7 @@ function pRenderFiche(f){
   P.fiche = f;
   var typeLabel = f.type.label + (f.org ? " — "+f.org.name : "");
   var detectNote = "Repéré grâce aux mots : « "+f.typeKws.concat(f.orgKws).slice(0,4).map(esc).join(" », « ")+" »";
-  if (!f.typeKws.length && !f.orgKws.length) detectNote = "Aucun mot-clé reconnu clairement — la fiche reste prudente, lis la lettre au complet.";
+  if (!f.typeKws.length && !f.orgKws.length) detectNote = "Aucun mot-clé reconnu clairement — la fiche reste prudente, lisez la lettre au complet.";
   var bclass = f.urgency.level==="urgent" ? "danger" : f.urgency.level==="warn" ? "warn" : "ok";
 
   var datesHTML;
@@ -5101,6 +5101,21 @@ function rlCharger(){
     var o = JSON.parse(brut);
     rl.items = (o && Array.isArray(o.items)) ? o.items : [];
   } catch(e){ rl.items = []; }
+  // Migration 5 nov. 2026 : l'exemple semé avant le passage en VOUS
+  // gardait son texte en TU dans les navigateurs déjà venus — la graine
+  // du code est en VOUS depuis le lot Boîte, mais les données stockées
+  // ne se réécrivent pas toutes seules. On réécrit une seule fois
+  // l'ancienne note d'exemple (drapeau exemple + texte exact) ; les
+  // promesses de l'utilisateur ne sont jamais touchées.
+  var RL_NOTE_EXEMPLE_ANCIENNE = "Ceci est un exemple : efface-le avec le bouton Supprimer, puis ajoute tes vraies promesses.";
+  var RL_NOTE_EXEMPLE_NOUVELLE = "Ceci est un exemple : effacez-le avec le bouton Supprimer, puis ajoutez vos vraies promesses.";
+  var rlMigre = false;
+  for (var i = 0; i < rl.items.length; i++){
+    if (rl.items[i] && rl.items[i].exemple && rl.items[i].note === RL_NOTE_EXEMPLE_ANCIENNE){
+      rl.items[i].note = RL_NOTE_EXEMPLE_NOUVELLE; rlMigre = true;
+    }
+  }
+  if (rlMigre) rlSauver();
 }
 function rlISO(d){
   var m = String(d.getMonth() + 1).padStart(2, "0"), j = String(d.getDate()).padStart(2, "0");
@@ -5284,7 +5299,7 @@ function rlRendre(){
     var h = document.createElement("h3"); h.textContent = item.nom;
     top.appendChild(h);
     if (item.exemple){
-      var bx = document.createElement("span"); bx.className = "rl-badge exemple"; bx.textContent = "Exemple — efface-moi";
+      var bx = document.createElement("span"); bx.className = "rl-badge exemple"; bx.textContent = "Exemple — effacez-moi";
       top.appendChild(bx);
     } else if (diff < 0){
       var b1 = document.createElement("span"); b1.className = "rl-badge late";

@@ -207,7 +207,7 @@ export const HGPTO_MARKUP = `
       <button type="button" id="btn-zoom-moins" aria-label="Sir H. Gepeto plus petit">Petit</button>
       <button type="button" id="btn-zoom-plus" aria-label="Sir H. Gepeto plus grand">Grand</button>
       <button type="button" id="btn-sound" aria-pressed="true">Son : fort</button>
-      <select id="sel-mood" aria-label="Mode de Sir H. Gepeto — choisis comment je me comporte">
+      <select id="sel-mood" aria-label="Mode de Sir H. Gepeto — choisissez comment je me comporte">
         <option value="defaut">Mode : comme d'habitude</option>
         <option value="vendeur">Vendeur pro actif</option>
         <option value="ami">Ami</option>

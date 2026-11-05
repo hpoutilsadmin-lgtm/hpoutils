@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 39 jeux en ligne | HP Outils",
-      description: "Des jeux gratuits créés au Québec — 39 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
+      title: "Jeux gratuits en français du Québec — 40 jeux en ligne | HP Outils",
+      description: "Des jeux gratuits créés au Québec — 40 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
       path: "/jeux",
     }),
     scripts: [
@@ -77,6 +77,7 @@ const GAMES = [
   { title: "La Slalomeuse de nids-de-poule", file: "/apps/slalomeuse/index.html", copy: "Jeu d'arcade gratuit, slalom québécois : glisse entre les nids-de-poule, 3 roues, parties d'environ 1 minute.", tag: "Arcade · Slalom québécois", faits: "Parties d'environ 1 minute · 3 roues", mono: "SL", art: 0 },
   { title: "Sur l'herbe — La colonie", file: "/apps/sur-lherbe/sur-lherbe-v1.0.html", copy: "Jeu de stratégie gratuit : mène ta colonie sous l'herbe — Fourmis, Abeilles ou Araignées, 3 tableaux de 6 à 8 vagues, boutique en ambre gagnée en jeu.", tag: "Stratégie · Colonie sous l'herbe", faits: "3 factions · 3 tableaux · 6 à 8 vagues", mono: "SH", art: 0 },
   { title: "Pète et Répète", file: "/apps/pete-et-repete/pete-et-repete-v1.0.html", copy: "Jeu de course gratuit : tape les mots, lettre par lettre, pour faire péter ton bateau et battre Répète jusqu'à la bouée des 300 m. 3 mots parfaits d'affilée = SUPER PET !", tag: "Course · Mots à taper", faits: "300 m · mots français · clavier ou tactile", mono: "PR", art: 0 },
+  { title: "Les hommes préhistoriques du Québec", file: "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html", copy: "Jeu 2.5D gratuit : cours avec Silex, saute par-dessus les roches et les troncs, ramasse des silex et découvre 8 vrais dinosaures. Grimpe sur les paliers, attrape les boosts et crée ton parcours !", tag: "Aventure · 8 vrais dinosaures", faits: "8 dinos · paliers et boosts · crée ton parcours", mono: "HP", art: 0 },
 ];
 
 const PALETTES: [string, string][] = [
@@ -469,7 +470,7 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (39), Quiz (2), etc.
+     conformes à la liste exacte approuvée — Tous (40), Quiz (2), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
@@ -493,12 +494,12 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur HP 5 nov. (Pète et Répète compte) : 39 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
+            {/* Compteur HP 5 nov. (Hommes préhistoriques comptent) : 40 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
             <span style={CHIP_STYLE}>{GAMES.length} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>39, c'est 39 jeux. Le « + 1 » est un jeu caché, non nommé.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>40, c'est 40 jeux. Le « + 1 » est un jeu caché, non nommé.</p>
         </div>
       </section>
 

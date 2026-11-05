@@ -3,12 +3,13 @@ import { useEffect } from "react";
 /**
  * Compagnon de navigation — montage React (lot, §3 étape 2).
  *
- * Ce composant ne rend rien : il charge le fichier généré
+ * Ce composant ne rend rien : en repli, il charge le fichier généré
  * `/compagnon/compagnon.js` (build `build:compagnon`, source
- * `src/components/compagnon/compagnon.js`), exactement comme les
- * pages statiques le chargent par `<script src="/compagnon/compagnon.js"
- * defer>` (lot, §3 étape 3). Une seule source, un seul comportement,
- * React ou statique.
+ * `src/components/compagnon/compagnon.js`) si le `head()` de
+ * `src/routes/__root.tsx` ne l'a pas déjà chargé en `<script defer>`
+ * (chemin principal depuis le correctif republication du 5 nov. 2026 :
+ * la barre ne doit plus attendre l'hydratation). Une seule source,
+ * un seul comportement, React ou statique.
  *
  * Le CSS (`/compagnon/compagnon.css`) est lié dans le `head()` de
  * `src/routes/__root.tsx` (rendu côté serveur, sans flash) — pas ici.
