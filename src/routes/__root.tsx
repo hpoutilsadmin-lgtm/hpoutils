@@ -15,6 +15,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { HgptoTap } from "@/components/hgpto/HgptoTap";
 import { HamsterWheel } from "@/components/hamster/HamsterWheel";
+import { CompagnonBar } from "@/components/CompagnonBar";
 
 function NotFoundComponent() {
   return (
@@ -92,6 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: hpCss },
+      { rel: "stylesheet", href: "/compagnon/compagnon.css" },
     ],
     scripts: [
       {
@@ -134,6 +136,7 @@ function RootComponent() {
         <SiteFooter />
       </div>
       <HgptoTap />
+      <CompagnonBar />
       <HamsterWheel />
     </QueryClientProvider>
   );

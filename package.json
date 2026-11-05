@@ -8,6 +8,7 @@
     "build": "vite build",
     "build:hgpto": "node scripts/build-hgpto-standalone.mjs",
     "build:barre": "node scripts/build-barre-jeu.mjs",
+    "build:compagnon": "node scripts/build-compagnon.mjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
