@@ -50,7 +50,7 @@ function Page() {
               Ici, la direction est humaine. L'IA est un outil très rapide et efficace : elle accélère le travail, elle ne le dirige pas. La direction travaille avec une équipe : des humains qui décident, qui vérifient, qui répondent — et l'IA qui exécute vite ce qu'on lui confie. Rien n'est publié sans vérification humaine.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
-              Les jeux, les recettes et les outils d'ici sont testés avant d'être proposés. 38 + 1 caché jeux gratuits, 629 recettes gratuites, des outils web gratuits sans compte — et des livres et des kits à prix petits. Si vous trouvez une erreur, écrivez-nous : la direction humaine vous répond sous 3 jours ouvrables.
+              Les jeux, les recettes et les outils d'ici sont testés avant d'être proposés. 38 + 1 caché jeux gratuits, 629 recettes gratuites, des outils web gratuits sans compte — et des livres et des kits à prix petits. Si vous trouvez une erreur, écrivez-nous : la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px" }}>
               HP Outils, c'est ça : des outils simples, pour des vies réelles, faits par des humains, avec l'IA comme outil. Merci de votre visite.
@@ -60,7 +60,7 @@ function Page() {
             </p>
             <h3 style={{ fontFamily: "Georgia,serif", fontSize: 22, margin: "26px 0 10px" }}>Les contrats avec vous</h3>
             <ul style={{ fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", paddingLeft: 22 }}>
-              <li>Une réponse de la direction humaine sous 3 jours ouvrables.</li>
+              <li>Une réponse de la direction humaine sous 3 jours ouvrables, lundi à vendredi.</li>
               <li>Des prix honnêtes, aucune taxe ajoutée, jamais de pression ni de fausse urgence.</li>
               <li>Tout 100 % original. L'IA est un outil très rapide et efficace — la direction, l'émotion, le « ce que je fais », c'est pour les humains.</li>
               <li>Direction humaine, accélérée par l'IA. On le dit toujours.</li>
