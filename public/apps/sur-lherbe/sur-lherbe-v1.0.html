@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sur l’herbe — La colonie</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#5b9a35">
 <style>
 :root{--bg:#f4f1e8;--fg:#1d2418;--mut:#5b6650;--card:#e3ddcb;--line:#b9b29a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14180f;--fg:#e8eddc;--mut:#a2ad94;--card:#222a1b;--line:#46513a;color-scheme:dark}}
@@ -179,6 +181,9 @@ reset(0);menu();
 function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;tm+=dt;if(!pause)upd(dt);draw();hud();requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
 })();
+</script>
+<script>
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').then(function(r){r.addEventListener('updatefound',function(){var b=document.createElement('button');b.textContent='Nouvelle version disponible — recharger';b.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:99;padding:14px;border-radius:10px;background:#5b9a35;color:#fff;font:inherit';b.onclick=function(){location.reload()};document.body.appendChild(b)})})}
 </script>
 </body>
 </html>
