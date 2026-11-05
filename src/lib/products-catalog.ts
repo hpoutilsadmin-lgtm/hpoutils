@@ -517,12 +517,12 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
   sans_honte_collection_pdf_40: {
     priceId: "sans_honte_collection_pdf_40",
     slug: "sans-honte-collection",
-    title: "Collection Sans Honte — Choisis 10 kits parmi 15",
+    title: "Collection Sans Honte — Choisissez 10 kits parmi 15",
     pdfPath: "sans-honte-collection.pdf",
     downloadFileName: "Collection-Sans-Honte.pdf",
     priceLabel: "40 $ CAD, aucune taxe ajoutée",
     blurb:
-      "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisis 10 kits parmi les 15, 10 liens de téléchargement, un par kit choisi, par courriel.",
+      "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisissez 10 kits parmi les 15, 10 liens de téléchargement, un par kit choisi, par courriel.",
     cover: "/images/sans-honte/collection-cover.png",
     formatLabel: "Collection PDF",
     shortDescription:
@@ -543,7 +543,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
       "garder une bibliothèque d'outils près de soi",
     ],
     precaution:
-      "Le choix des kits se fait à l'étape suivante, avant le paiement : tu coches exactement 10 kits parmi les 15, et ce sont ces 10-là que tu reçois par courriel.",
+      "Le choix des kits se fait à l'étape suivante, avant le paiement : vous cochez exactement 10 kits parmi les 15, et ce sont ces 10-là que vous recevez par courriel.",
   },
   // MINI CAHIER « UN PETIT PAS À LA FOIS » — publié le 23 octobre 2026
   // (déplacé de MINI_CAHIER_DRAFT, voir la note à la fin du fichier).
@@ -594,7 +594,7 @@ export function getProductBySlug(slug: string): DigitalProduct | null {
   return Object.values(PRODUCTS).find((p) => p.slug === slug) ?? null;
 }
 
-// --- Bundle Sans Honte : « Choisis 10 kits parmi 15 » -----------------------
+// --- Bundle Sans Honte : « Choisissez 10 kits parmi 15 » -----------------------
 
 export const COLLECTION_PRICE_ID = "sans_honte_collection_pdf_40";
 export const BUNDLE_KIT_COUNT = 10;
@@ -720,7 +720,7 @@ export const PLANIFICATEUR_PAIR_OFFER = {
   discountPerPairCad: 1,
   boxTitle: "Un deuxième planificateur pour 7 $",
   boxText:
-    "Choisis-en deux : la paire revient à 15 $ au lieu de 16 $. La réduction s'applique automatiquement dans le panier.",
+    "Choisissez-en deux : la paire revient à 15 $ au lieu de 16 $. La réduction s'applique automatiquement dans le panier.",
   /** Paires suggérées approuvées (slugs) — les autres paires restent à décider. */
   suggestedPairs: [
     ["outil-papier-budget-par-paie", "planificateur-famille"],
@@ -1176,7 +1176,7 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
     priceLabel: "15 $ CAD, aucune taxe ajoutée",
     pages: 40,
     totalPages: 41,
-    blurb: "Le duo sans pression : choisis tes 3 choses d'un côté, suis ton habitude de l'autre — un X à la fois, jamais de retard.",
+    blurb: "Le duo sans pression : choisissez vos 3 choses d'un côté, suivez votre habitude de l'autre — un X à la fois, jamais de retard.",
     metadataLine: paperDuoMetadataLine(41),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [
