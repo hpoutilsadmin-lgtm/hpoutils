@@ -22,7 +22,8 @@ import {
  *   par endormir l'hamster, et c'est voulu (le gag l'avoue).
  * ?hamster=court|marche|dort force l'état (tests / démo).
  * « Fermer » = session seulement (sessionStorage).
- * Coin bas DROIT : HGPTO occupe le bas gauche (z-index 58 < 59-62).
+ * Coin haut DROIT, replié par défaut (mot d'HP 5 nov. 2026 : discret
+ * en haut) : HGPTO occupe le bas gauche (z-index 58 < 59-62).
  *
  * Nom public (24 oct. 2026, décision d'Hugo) : le hamster S'APPELLE Détectôt,
  * affiché sous la roue — pour que les visiteurs connaissent déjà le nom
@@ -62,7 +63,10 @@ export function HamsterWheel() {
   const [ferme, setFerme] = useState(false);
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [reduit, setReduit] = useState(false);
+  /* Mot d'HP 5 nov. 2026 : discret en haut — replié par défaut (mini-roue).
+     Seule une valeur « 0 » stockée en session (visiteur qui l'a rouverte)
+     le déplie au chargement. */
+  const [reduit, setReduit] = useState(true);
   const [zoomIdx, setZoomIdx] = useState(1);
   const [enTrainDeGlisser, setEnTrainDeGlisser] = useState(false);
   const etatRef = useRef<Etat>("marche");
@@ -71,7 +75,8 @@ export function HamsterWheel() {
   const posRef = useRef({ x: 0, y: 0 });
   const dragRef = useRef<{ pid: number; sx: number; sy: number; ox: number; oy: number; bouge: boolean } | null>(null);
 
-  /* Restauration session : position, repli, taille. */
+  /* Restauration session : position, repli, taille.
+     Sans valeur stockée, le repli par défaut (true) est gardé. */
   useEffect(() => {
     try {
       const p = JSON.parse(sessionStorage.getItem("hamster-pos") || "null");
@@ -79,7 +84,7 @@ export function HamsterWheel() {
         posRef.current = { x: p.x, y: p.y };
         setPos({ x: p.x, y: p.y });
       }
-      if (sessionStorage.getItem("hamster-reduit") === "1") setReduit(true);
+      if (sessionStorage.getItem("hamster-reduit") === "0") setReduit(false);
       const z = parseFloat(sessionStorage.getItem("hamster-zoom") || "1");
       if (ZOOM_STEPS_H.indexOf(z) !== -1) setZoomIdx(ZOOM_STEPS_H.indexOf(z));
     } catch {

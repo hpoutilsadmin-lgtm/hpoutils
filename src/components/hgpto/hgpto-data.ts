@@ -931,7 +931,6 @@ export const DWELL_SUGGESTIONS = {
 export const INDISP_MOMENTS = {
   ragout: "Oups… mon ragoût a encore collé. Ben, on recommence — c'est ça, la vraie vie.",
   chute: "Aïe, mes boulons… ça va, je me relève. On avance !",
-  sieste: "Minute… j't'en pause. Une petite sieste, pis je reviens.",
 };
 export const INDISP_VICTOIRES = [
   "Yes ! Tu l'as trouvé. On est une bonne équipe, toi pis moi.",

@@ -1,7 +1,8 @@
 /* Roue d'hamster — HP Outils. Même code que le snippet autonome.
-   Coin bas DROIT (HGPTO occupe le bas gauche) ; z-index 58, sous les
-   panneaux HGPTO (59-62) pour ne jamais les cacher. */
-.rh{position:fixed;right:12px;bottom:12px;z-index:58;width:132px;font-family:Georgia,serif;color:#241a12;pointer-events:none}
+   Coin haut DROIT, repliée par défaut (mot d'HP 5 nov. 2026 : discret
+   en haut) ; z-index 58, sous les panneaux HGPTO (59-62) pour ne
+   jamais les cacher. */
+.rh{position:fixed;right:12px;top:12px;z-index:58;width:132px;font-family:Georgia,serif;color:#241a12;pointer-events:none}
 .rh-bulle{background:#fffdf6;border:2px solid #7a4a2b;border-radius:12px;padding:6px 8px;font-size:12.5px;line-height:1.25;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.12);margin-bottom:4px}
 /* Déplacement (24 oct. 2026) : la scène se glisse au doigt et à la souris
    (seuil 8 px côté composant) ; un tap ne déplace jamais. */
@@ -42,4 +43,4 @@
   .rh-roue,.rh-hamster,.rh-vitesse,.rh-zzz{animation:none!important}
   .rh[data-etat="dort"] .rh-zzz{opacity:1}
 }
-@media (max-width:480px){.rh{width:108px;right:8px;bottom:8px}.rh-bulle{font-size:11px}}
+@media (max-width:480px){.rh{width:108px;right:8px;top:8px}.rh-bulle{font-size:11px}}

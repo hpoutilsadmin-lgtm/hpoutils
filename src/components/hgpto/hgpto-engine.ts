@@ -1609,12 +1609,10 @@ export function initHgpto() {
             if (!paused && state !== 'sleep'){ setState('sleep'); setExpr('sleep'); }
           }, 3000);
         } else {
-          if (momentRateSession && !sessFlag('hgpto-moment-rate')){
-            sessSetFlag('hgpto-moment-rate');
-            showBubble(esc(INDISP_MOMENTS.sieste), 4200, 'sleep');
-          } else {
-            hideBubble();
-          }
+          /* Mot d'HP 5 nov. 2026 : la sieste automatique ne s'annonce
+             plus avec « Minute… j't'en pause » — il s'endort en silence.
+             La phrase ne se dit qu'à la vraie Pause (setLifePause). */
+          hideBubble();
           setState('sleep'); setExpr('sleep');
         }
       }
@@ -1737,26 +1735,10 @@ export function initHgpto() {
           (function(el){ setTimeout(function(){ el.remove(); }, 1050); })(s);
         }
       }
-      /* « Minute ! J't'en pause. » : touché pendant qu'il est occupé, il se
-         fige théâtralement, le dit… puis il reprend exactement où il était.
-         Dosé par throttle (lot correctif 4 nov. 2026) : au plus 1 fois par
-         25 s, jamais si la même bulle est déjà affichée — sinon, en rafale,
-         la phrase sortait à presque chaque tap. */
-      var lastPauseLineAt = 0;
-      function pauseLine(){
-        lastInteract = Date.now();
-        if (bot.classList.contains('frozen')) return;
-        if (Date.now() - lastPauseLineAt < 25000) return;
-        if (bubble.classList.contains('show') && bubble.innerHTML.indexOf("J't'en pause") !== -1) return;
-        lastPauseLineAt = Date.now();
-        bot.classList.add('frozen');
-        var keep = bubble.innerHTML;
-        showBubble("Minute ! J't'en pause ! 😄", 1900, 'none', { now:true });
-        setTimeout(function(){
-          bot.classList.remove('frozen');
-          if (keep && state !== 'sleep'){ bubble.innerHTML = keep; bubble.classList.add('show'); }
-        }, 1950);
-      }
+      /* « Minute ! J't'en pause. » : code mort retiré le 5 nov. 2026
+         (mot d'HP : la phrase ne se dit plus n'importe quand) — la
+         fonction n'était plus appelée nulle part ; la phrase ne vit
+         plus qu'à la vraie Pause (setLifePause). */
       var BUSY_VIGNETTES = ['read','cook','cookfail','tinker','mime','wrestler','fix','dust','sweep','janitor'];
       /* Micro-célébration (pack taquin du document, 23 oct. 2026) :
          quand le visiteur TROUVE ce qu'il cherchait — un lien de
@@ -2044,8 +2026,8 @@ export function initHgpto() {
         if (item.fn === 'anecdote'){ dismissQA(); showBubble(esc("J'ai lu ça tantôt : " + pick(ANECDOTES)), 11000, 'answer'); return; }
         if (item.fn === 'empathy'){ dismissQA(); showBubble(esc(pick(EMPATHY)), 11000, 'answer'); return; }
         if (item.fn === 'tour'){ startTour(); return; }
-        if (item.fn === 'pixel'){ dismissQA(); showBubble(esc(PIXEL_STORY), 11000, 'answer'); summonCat('follow'); return; }
-        if (item.fn === 'feed'){ closeQA(); doFeedCat(); return; }
+        if (item.fn === 'pixel'){ dismissQA(); showBubble(esc(PIXEL_STORY), 11000, 'answer'); summonCat('follow', true); return; }
+        if (item.fn === 'feed'){ closeQA(); doFeedCat(true); return; }
         if (item.fn === 'choix'){ closeQA(); busyUntil = 0; lastBubbleAt = 0; doChoix(true); return; }
         if (item.fn === 'choisir'){ startAideChoix(); return; }
         /* Barre unique v3 — les 5 rapides (décision nº 6) : trois
@@ -2555,7 +2537,7 @@ export function initHgpto() {
           if (typeof endBataille === 'function' && batailleOn) endBataille('stop');
           if (typeof bataillePanel !== 'undefined' && bataillePanel) bataillePanel.hidden = true;
           if (state !== 'sleep'){ setState('idle'); setExpr('happy'); }
-          showBubble("Je suis en pause — touche Pause pour repartir.", 8000, 'none', { now:true });
+          showBubble("Minute ! J't'en pause. Touche Pause pour repartir.", 8000, 'none', { now:true });
         } else {
           lastInteract = Date.now();
           if (state !== 'sleep'){ setState(reduced ? 'idle' : 'walk'); setExpr('happy'); }
@@ -4616,6 +4598,12 @@ export function initHgpto() {
       var CAT_W = window.innerWidth <= 560 ? 76 : 96;
       var catX = -160, catVisible = false, catMode = 'off', catState = 'idle';
       var catTarget = null, catSpeed = 60, catArrive = null, catTimer = null;
+      /* Mot d'HP 5 nov. 2026 : Pixel ne miaule qu'avec une action du
+         visiteur. Vrai = la prochaine arrivée en suivi fait suite à un
+         appel explicite du visiteur (question « Pixel ») : elle miaule
+         en arrivant. Toutes les autres arrivées (retour de sauts, de
+         zoomies, réveil automatique, fin de jeu) sont silencieuses. */
+      var catArriveeVisiteur = false;
       var PIXEL_STORY = "Pixel, c'est ma chatte : 2 ans, super féline. Je l'ai trouvée dehors, un hiver, toute petite dans le froid — depuis, elle vit au chaud, ici, avec moi. Affectueuse, gourmande, championne de la sieste… et un brin graffigneuse quand on la flatte trop. Doucement, avec elle.";
       var CAT_RUB_LINES = [
         "Elle se frotte contre mes jambes… un robot qui fond, ça fait des flaques de bonheur.",
@@ -4652,8 +4640,9 @@ export function initHgpto() {
         catSpeed = speed || 60;
         catArrive = arrive || null;
       }
-      function summonCat(mode){
+      function summonCat(mode, parVisiteur){
         if (gameOn) return;
+        catArriveeVisiteur = !!parVisiteur;
         if (!catVisible){
           catVisible = true;
           catEl.classList.remove('gone');
@@ -4667,7 +4656,7 @@ export function initHgpto() {
         if (catMode !== 'follow' || !catVisible) return;
         if (state === 'sleep'){ setCatState('sleep'); return; }
         setCatState('rub');
-        meow();   // doux à l'arrivée (décision HP 4 nov. 2026)
+        if (catArriveeVisiteur){ catArriveeVisiteur = false; meow(); }   // doux à l'arrivée, seulement quand le visiteur l'a appelée (mot d'HP 5 nov. 2026)
         if (!isBusy() && !qaOpen && Math.random() < 0.5){
           setExpr('happy');
           showBubble(esc(pick(CAT_RUB_LINES)), 4600, 'none');
@@ -4749,7 +4738,7 @@ export function initHgpto() {
         }
       }
       /* HGPTO la nourrit : il remplit son bol, elle accourt et mange avec appétit */
-      function doFeedCat(){
+      function doFeedCat(parVisiteur){
         if (gameOn || paused || isHidden) return;
         if (state === 'sleep') wake(false);
         var bx = x + botW() + 16;
@@ -4765,7 +4754,7 @@ export function initHgpto() {
           setCatState('eat');
           setTimeout(function(){
             if (catState === 'eat') setCatState('idle');
-            meow();   // doux après manger (décision HP 4 nov. 2026)
+            if (parVisiteur) meow();   // doux après manger, seulement quand le visiteur l'a nourrie (mot d'HP 5 nov. 2026)
             bowlEl.style.opacity = '0';
             setTimeout(function(){ bowlEl.hidden = true; }, 450);
             if (catVisible){ catMode = 'follow'; catGo(catBesideX(), 68, catArrivedFollow); }
