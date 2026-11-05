@@ -75,6 +75,7 @@ const GAMES = [
   { title: "Anxiété, le jeu", file: "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", copy: "Jeu de sensibilisation gratuit : une semaine dans la peau d'Alex, qui vit avec un trouble anxieux — météo intérieure, pensées qui envahissent et outils réels pour traverser. Ce jeu ne pose pas de diagnostic.", tag: "Sensibilisation · Santé mentale", faits: "5 journées · ressources 811 et 988 incluses", mono: "AX", art: 5 },
   { title: "Votre IA parle-t-elle québécois?", file: "/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html", copy: "Jeu gratuit : donne 20 expressions québécoises à ton assistant, colle sa réponse, et la page la note dans ton navigateur. Modes complet, express et duel, carte de résultat à copier, rien n'est envoyé.", tag: "Québécois · IA et expressions", faits: "20 expressions · 3 modes · carte de résultat", mono: "IA", art: 0 },
   { title: "La Slalomeuse de nids-de-poule", file: "/apps/slalomeuse/index.html", copy: "Jeu d'arcade gratuit, slalom québécois : glisse entre les nids-de-poule, 3 roues, parties d'environ 1 minute.", tag: "Arcade · Slalom québécois", faits: "Parties d'environ 1 minute · 3 roues", mono: "SL", art: 0 },
+  { title: "Sur l'herbe — La colonie", file: "/apps/sur-lherbe/sur-lherbe-v1.0.html", copy: "Jeu de stratégie gratuit : mène ta colonie sous l'herbe — Fourmis, Abeilles ou Araignées, 3 tableaux de 6 à 8 vagues, boutique en ambre gagnée en jeu.", tag: "Stratégie · Colonie sous l'herbe", faits: "3 factions · 3 tableaux · 6 à 8 vagues", mono: "SH", art: 0 },
 ];
 
 const PALETTES: [string, string][] = [
@@ -467,7 +468,7 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (37), Quiz (2), etc.
+     conformes à la liste exacte approuvée — Tous (38), Quiz (2), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
@@ -491,12 +492,12 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur HP 3 nov. 13 h 31 (Slalomeuse compte) : 38 (= 37 jeux + tuile Panier, jouée dans En cuisine) + 1 caché, non nommé */}
-            <span style={CHIP_STYLE}>{GAMES.length + 1} + 1 caché</span>
+            {/* Compteur HP 5 nov. (Sur l'herbe compte) : 38 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
+            <span style={CHIP_STYLE}>{GAMES.length} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>38, c'est 37 jeux + Le Panier Solidaire, joué dans En cuisine. Le « + 1 » est un jeu caché, non nommé.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>38, c'est 38 jeux. Le « + 1 » est un jeu caché, non nommé.</p>
         </div>
       </section>
 
