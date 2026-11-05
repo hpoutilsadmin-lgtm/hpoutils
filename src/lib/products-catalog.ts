@@ -113,7 +113,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     ],
     preview: {
       title: "Fiche 2 — La conversation",
-      text: "Amorcer le sujet sans braquer ses parents. Personne n'aime se faire dire qu'il ne gère plus : parle d'aide, pas de contrôle.",
+      text: "Amorcer le sujet sans braquer ses parents. Personne n'aime se faire dire qu'il ne gère plus : parlez d'aide, pas de contrôle.",
     },
     audienceSentence: "Ce kit s'adresse aux personnes qui accompagnent leurs parents dans l'organisation de leurs papiers.",
   },
@@ -214,7 +214,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
       "Le coffre à mots de passe",
       "Le gestionnaire",
       "La double vérification",
-      "Ton courriel, la clé",
+      "Votre courriel, la clé",
       "Banque et argent",
       "Photos et souvenirs",
       "Réseaux sociaux",
@@ -236,7 +236,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     ],
     preview: {
       title: "Fiche 3 — Le coffre à mots de passe",
-      text: "Centralise tes mots de passe de façon sécuritaire, pas n'importe comment. Un seul mot de passe partout = toutes les portes ouvertes avec une seule clé.",
+      text: "Centralisez vos mots de passe de façon sécuritaire, pas n'importe comment. Un seul mot de passe partout = toutes les portes ouvertes avec une seule clé.",
     },
     audienceSentence: "Ce kit s'adresse aux personnes qui veulent préparer la transmission de leurs comptes et de leurs documents numériques.",
   },
@@ -362,7 +362,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     shortDescription:
       "Reprendre le contrôle de son frigo : une méthode pour bâtir un repas avec ce qu'on a déjà, sauver ce qui fatigue et comprendre les dates sans paniquer.",
     contents: [
-      "La méthode des 4 morceaux : bâtir un repas avec ce que tu as",
+      "La méthode des 4 morceaux : bâtir un repas avec ce que vous avez",
       "Sauver les aliments fatigués, sans jouer avec la salubrité",
       "Comprendre les dates sans paniquer",
       "Des listes réalistes pour cuisiner avec peu",
@@ -564,23 +564,23 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     cover: "/images/cover-hyper-potentiel.jpg",
     formatLabel: "Version PDF",
     shortDescription:
-      "Un mini cahier de 20 pages à imprimer — ikigaï, respiration, méditation, mouvement et buts — pour passer à l'action au crayon, à ton rythme.",
+      "Un mini cahier de 20 pages à imprimer — ikigaï, respiration, méditation, mouvement et buts — pour passer à l'action au crayon, à votre rythme.",
     volumeLabel: "20 pages",
     includes: [
       "Le fichier PDF complet — 20 pages, couverture comprise",
-      "Des exercices à remplir au crayon dans chaque section : ta carte ikigaï, tes séances de respiration et de méditation, ton plan WOOP, ton suivi de 30 jours",
+      "Des exercices à remplir au crayon dans chaque section : votre carte ikigaï, vos séances de respiration et de méditation, votre plan WOOP, votre suivi de 30 jours",
       "L'outil web gratuit Un petit pas à la fois en compagnon (respiration guidée, carte ikigaï interactive, plan WOOP) — sur hp-outils.com",
       "Téléchargement immédiat après l'achat",
       "Usage personnel",
-      "À imprimer chez toi ou au centre de copies",
+      "À imprimer chez vous ou au centre de copies",
     ],
     contents: [
-      "Ta carte ikigaï",
+      "Votre carte ikigaï",
       "Respiration et méditation guidée de 2 minutes",
       "Auto-hypnose désenchantée — avec ses prudences",
       "Reprise d'activité sur 4 semaines",
-      "Menu de 12 micro-expériences pour trouver tes passions",
-      "Ton plan WOOP",
+      "Menu de 12 micro-expériences pour trouver vos passions",
+      "Votre plan WOOP",
       "Suivi de 30 jours et tableau de bord à réimprimer",
     ],
   },
@@ -685,11 +685,11 @@ export const PAPER_TOOL_INCLUDES: string[] = [
   "Le fichier PDF complet — couverture + pages de contenu",
   "Téléchargement immédiat après l'achat",
   "Usage personnel",
-  "À imprimer chez toi ou au centre de copies",
+  "À imprimer chez vous ou au centre de copies",
 ];
 
 function paperToolMetadataLine(pages: number): string {
-  return `${pages} pages · Format Lettre (8,5 × 11 po) · Non daté · Réutilisable — imprime seulement les pages qu'il te faut`;
+  return `${pages} pages · Format Lettre (8,5 × 11 po) · Non daté · Réutilisable — imprimez seulement les pages qu'il vous faut`;
 }
 
 // ----------------------------------------------------------------------------
@@ -756,7 +756,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 2,
     priceLabel: "2 $ CAD, aucune taxe ajoutée",
     pages: 8,
-    blurb: "Un mot de passe que seuls les vrais membres de ta famille connaissent.",
+    blurb: "Un mot de passe que seuls les vrais membres de votre famille connaissent.",
     metadataLine: paperToolMetadataLine(8),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -793,7 +793,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 5,
     priceLabel: "5 $ CAD, aucune taxe ajoutée",
     pages: 16,
-    blurb: "Tous tes codes au même endroit — sans jamais écrire le mot de passe au complet.",
+    blurb: "Tous vos codes au même endroit — sans jamais écrire le mot de passe au complet.",
     metadataLine: paperToolMetadataLine(16),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -847,7 +847,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 5,
     priceLabel: "5 $ CAD, aucune taxe ajoutée",
     pages: 12,
-    blurb: "Tout ce que ta maison contient, noté une fois — pour l'assurance comme pour la succession.",
+    blurb: "Tout ce que votre maison contient, noté une fois — pour l'assurance comme pour la succession.",
     metadataLine: paperToolMetadataLine(12),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -865,7 +865,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 5,
     priceLabel: "5 $ CAD, aucune taxe ajoutée",
     pages: 10,
-    blurb: "Sache quelles IA voient quoi de ta vie — et garde le contrôle.",
+    blurb: "Sachez quelles IA voient quoi de votre vie — et gardez le contrôle.",
     metadataLine: paperToolMetadataLine(10),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -884,7 +884,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 8,
     priceLabel: "8 $ CAD, aucune taxe ajoutée",
     pages: 14,
-    blurb: "Chaque paie, tu sais où va ton argent — avant qu'il parte.",
+    blurb: "Chaque paie, vous savez où va votre argent — avant qu'il parte.",
     metadataLine: paperToolMetadataLine(14),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -922,7 +922,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 8,
     priceLabel: "8 $ CAD, aucune taxe ajoutée",
     pages: 10,
-    blurb: "Une case à cocher par jour : tes habitudes deviennent visibles.",
+    blurb: "Une case à cocher par jour : vos habitudes deviennent visibles.",
     metadataLine: paperToolMetadataLine(10),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -941,7 +941,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 8,
     priceLabel: "8 $ CAD, aucune taxe ajoutée",
     pages: 12,
-    blurb: "Tes symptômes et tes médicaments notés au même endroit pour ton prochain rendez-vous.",
+    blurb: "Vos symptômes et vos médicaments notés au même endroit pour votre prochain rendez-vous.",
     metadataLine: paperToolMetadataLine(12),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -960,7 +960,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 8,
     priceLabel: "8 $ CAD, aucune taxe ajoutée",
     pages: 12,
-    blurb: "L'historique complet de ton auto, du premier changement d'huile à la revente.",
+    blurb: "L'historique complet de votre auto, du premier changement d'huile à la revente.",
     metadataLine: paperToolMetadataLine(12),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -998,7 +998,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 8,
     priceLabel: "8 $ CAD, aucune taxe ajoutée",
     pages: 24,
-    blurb: "Horaires, ouvertures, passations : le commerce roule, même quand tu n'es pas là.",
+    blurb: "Horaires, ouvertures, passations : le commerce roule, même quand vous n'êtes pas là.",
     metadataLine: paperToolMetadataLine(24),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -1017,7 +1017,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 8,
     priceLabel: "8 $ CAD, aucune taxe ajoutée",
     pages: 28,
-    blurb: "Trois choses par jour, pas trente — un planificateur qui ne te juge pas.",
+    blurb: "Trois choses par jour, pas trente — un planificateur qui ne vous juge pas.",
     metadataLine: paperToolMetadataLine(28),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -1036,7 +1036,7 @@ export const PAPER_TOOLS_DRAFT: PaperToolDraft[] = [
     priceCad: 8,
     priceLabel: "8 $ CAD, aucune taxe ajoutée",
     pages: 24,
-    blurb: "Ta session au complet sur papier : échéances, examens et budget, sans application.",
+    blurb: "Votre session au complet sur papier : échéances, examens et budget, sans application.",
     metadataLine: paperToolMetadataLine(24),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [...PAPER_TOOL_INCLUDES],
@@ -1100,7 +1100,7 @@ export interface PaperToolDuoDraft {
 }
 
 function paperDuoMetadataLine(totalPages: number): string {
-  return `${totalPages} pages au total (couverture duo + les deux planificateurs au complet) · Format Lettre (8,5 × 11 po) · Non daté · Réutilisable — imprime seulement les pages qu'il te faut`;
+  return `${totalPages} pages au total (couverture duo + les deux planificateurs au complet) · Format Lettre (8,5 × 11 po) · Non daté · Réutilisable — imprimez seulement les pages qu'il vous faut`;
 }
 
 export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
@@ -1125,7 +1125,7 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
       "Le Planificateur de famille — 28 pages de contenu",
       "Téléchargement immédiat après l'achat",
       "Usage personnel",
-      "À imprimer chez toi ou au centre de copies",
+      "À imprimer chez vous ou au centre de copies",
     ],
     components: [
       { slug: "outil-papier-budget-par-paie", title: "Mon budget par paie", contentPages: 14 },
@@ -1146,7 +1146,7 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
     priceLabel: "15 $ CAD, aucune taxe ajoutée",
     pages: 40,
     totalPages: 41,
-    blurb: "Le commerce la semaine, tes paies sans casse-tête : les deux cahiers qui font rouler l'argent, au travail comme à la maison.",
+    blurb: "Le commerce la semaine, vos paies sans casse-tête : les deux cahiers qui font rouler l'argent, au travail comme à la maison.",
     metadataLine: paperDuoMetadataLine(41),
     taxNote: PAPER_TOOL_TAX_NOTE,
     includes: [
@@ -1155,7 +1155,7 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
       "Le Planificateur du gérant — 24 pages de contenu",
       "Téléchargement immédiat après l'achat",
       "Usage personnel",
-      "À imprimer chez toi ou au centre de copies",
+      "À imprimer chez vous ou au centre de copies",
     ],
     components: [
       { slug: "outil-papier-budget-par-paie", title: "Mon budget par paie", contentPages: 14 },
@@ -1185,7 +1185,7 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
       "Mes habitudes, jour après jour — 10 pages de contenu",
       "Téléchargement immédiat après l'achat",
       "Usage personnel",
-      "À imprimer chez toi ou au centre de copies",
+      "À imprimer chez vous ou au centre de copies",
     ],
     components: [
       { slug: "planificateur-tdah", title: "Mon planificateur TDAH", contentPages: 28 },
@@ -1215,7 +1215,7 @@ export const PAPER_TOOL_DUOS_DRAFT: PaperToolDuoDraft[] = [
       "Le Planificateur de l'étudiant — 24 pages de contenu",
       "Téléchargement immédiat après l'achat",
       "Usage personnel",
-      "À imprimer chez toi ou au centre de copies",
+      "À imprimer chez vous ou au centre de copies",
     ],
     components: [
       { slug: "planificateur-tdah", title: "Mon planificateur TDAH", contentPages: 28 },
