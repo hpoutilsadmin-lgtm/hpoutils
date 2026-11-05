@@ -28,7 +28,6 @@ export function initHgpto() {
       var bot = document.getElementById('bot');
       var bubble = document.getElementById('bubble');
       var burst = document.getElementById('burst');
-      var signText = document.getElementById('signText');
       var btnPause = document.getElementById('btn-pause');
       var btnHide = document.getElementById('btn-hide');
       var btnAsk = document.getElementById('btn-ask');
@@ -38,7 +37,6 @@ export function initHgpto() {
       var qaPanel = document.getElementById('qa');
       var qaChips = document.getElementById('qa-chips');
       var qaClose = document.getElementById('qa-close');
-      var bookTitle = document.getElementById('bookTitle');
       var graffiti = document.getElementById('graffiti');
       var btnTickle = document.getElementById('btn-tickle');
       var btnBucket = document.getElementById('btn-bucket');
@@ -49,16 +47,8 @@ export function initHgpto() {
       var btnCalm = document.getElementById('btn-calm');
       var selWeather = document.getElementById('sel-weather');
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var pupils = document.getElementById('pupils');
-      document.addEventListener('pointermove', function(e){
-        if (!pupils) return;
-        var r = bot.getBoundingClientRect();
-        var dx = (e.clientX - (r.left + r.width/2)) / (window.innerWidth || 1);
-        var dy = (e.clientY - (r.top + r.height*0.32)) / (window.innerHeight || 1);
-        var px = Math.max(-3.6, Math.min(3.6, dx*7));
-        var py = Math.max(-2.4, Math.min(2.4, dy*5));
-        pupils.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px)';
-      }, { passive:true });
+      /* Barre unique v3 (P2-g) : #pupils retiré avec la pancarte —
+         le suivi du pointeur par les pupilles SVG n'existe plus. */
       /* ---------- Panneau « Pour HP » : discret (lot nº 2) ----------
          La section « questions sans réponse, à valider » ne doit PAS être
          visible des visiteurs du site public. La consignation continue en
@@ -73,6 +63,7 @@ export function initHgpto() {
         if (qaHugoEl) qaHugoEl.remove();
       }
       (function blinkLoop(){
+        if (reduced) return;
         setTimeout(function(){
           bot.classList.add('blink');
           setTimeout(function(){ bot.classList.remove('blink'); }, 130);
@@ -288,9 +279,25 @@ export function initHgpto() {
       var lastInteract = Date.now();
       var bubbleTimer = null, talkTimer = null, waveTimer = null, lifeTimer = null;
 
-      function vw(){ return window.innerWidth || 390; }
+      /* Barre unique v3 (E8) : cadrage du moteur dans le panneau.
+         Quand le moteur vit dans le panneau de la barre (hôte
+         #compagnon-gepeto-hote présent et contenant le robot), ses
+         mesures portent sur le panneau, pas sur la fenêtre. Hors
+         barre (page autonome En cuisine), tout reste comme avant. */
+      function hoteIntegre(){
+        var h = document.getElementById('compagnon-gepeto-hote');
+        if (!h) return null;
+        if (!h.contains(bot)) return null;
+        return h;
+      }
+      function zoneIntegree(){ return hoteIntegre() !== null; }
+      function vw(){
+        var h = hoteIntegre();
+        if (h) return h.getBoundingClientRect().width || 390;
+        return window.innerWidth || 390;
+      }
       function minX(){ return 6; }
-      function botW(){ var m = window.innerWidth <= 560; return calm ? (m ? 128 : 160) : (bot.classList.contains('big') ? (m ? 120 : 152) : BOT_W); }
+      function botW(){ var m = vw() <= 560; return calm ? (m ? 128 : 160) : (bot.classList.contains('big') ? (m ? 120 : 152) : BOT_W); }
       function maxX(){ return Math.max(minX(), vw() - botW() - 6); }
       function clampX(v){ return Math.min(maxX(), Math.max(minX(), v)); }
 
@@ -342,13 +349,15 @@ export function initHgpto() {
            l'offset (deux passes) au lieu de le borner à l'aveugle.
            Le dock ne bouge plus avec lui (décision 24 oct. 2026) : il
            n'entre plus dans le calcul. */
-        var m = 8, vw2 = window.innerWidth, vh2 = window.innerHeight;
+        var m = 8, x0 = 0, y0 = 0, vw2 = window.innerWidth, vh2 = window.innerHeight;
+        var hi = hoteIntegre();
+        if (hi){ var r0 = hi.getBoundingClientRect(); x0 = r0.left; y0 = r0.top; vw2 = r0.right; vh2 = r0.bottom; }
         for (var pass = 0; pass < 2; pass++){
           applyDrag();
           var r = bot.getBoundingClientRect();
-          if (r.left < m) dragDX += m - r.left;
+          if (r.left < x0 + m) dragDX += (x0 + m) - r.left;
           if (r.right > vw2 - m) dragDX -= r.right - (vw2 - m);
-          if (r.top < m) dragDY += m - r.top;
+          if (r.top < y0 + m) dragDY += (y0 + m) - r.top;
           if (r.bottom > vh2 - m) dragDY -= r.bottom - (vh2 - m);
         }
         applyDrag();
@@ -1035,7 +1044,6 @@ export function initHgpto() {
       function doInvite(p, onShow, immediate){
         if (paused || state === 'sleep' || isBusy()) { showBubble(esc(p.t) + (p.u ? linkHtml(p) : ''), 6000, null, { onShow:onShow, now:immediate }); return; }
         setState('invite'); setExpr('happy'); busy(5600);
-        if (signText) signText.textContent = p.s || 'PAR ICI →';
         showBubble(esc(p.t) + (p.u ? linkHtml(p) : ''), 6200, null, { onShow:onShow, now:immediate });
         setTimeout(function(){
           if (state === 'invite') setState(reduced ? 'idle' : 'walk');
@@ -1087,7 +1095,6 @@ export function initHgpto() {
       var BOOK_TITLES = ["Horizon Québec", "La faim justifie les moyens"];
       function doRead(){
         if (state === 'sleep' || paused || isBusy() || qaOpen) return;
-        if (bookTitle) bookTitle.textContent = pick(BOOK_TITLES);
         setState('read'); setExpr('happy'); busy(11000);
         logDay("lu un livre, lunettes de lecture sur le nez");
         setTimeout(function(){
@@ -1503,6 +1510,7 @@ export function initHgpto() {
         if (heat > 62 && state !== 'hot' && !isBusy()) doHeat();
       });
       setInterval(function(){
+        if (docHidden) return;
         heat = Math.max(0, heat - 4);
         if (state === 'hot' && heat < 25){ setExpr('happy'); setState(reduced ? 'idle' : 'walk'); }
       }, 1200);
@@ -1659,6 +1667,7 @@ export function initHgpto() {
 
       /* ---------- Changement jour / nuit pendant la visite ---------- */
       setInterval(function(){
+        if (docHidden) return;
         var n = isNight();
         if (n === wasNight) return;
         wasNight = n;
@@ -1683,6 +1692,18 @@ export function initHgpto() {
       }
       /* Zone de retrait : si le visiteur utilise la page, il va s'asseoir
          sagement dans son coin (reco nº 7). */
+      /* Barre unique v3 (P2-i, tranché HP 5 nov. 10 h 42) : le robot
+         recule-t-il ? Oui seulement quand il recouvre le contenu touché
+         (≤ 300 ms, transform seul) — jamais à chaque tap. */
+      function botRecouvreCible(ev){
+        var t = ev.target;
+        if (!t || !t.getBoundingClientRect) return false;
+        var cible = (t.closest && t.closest('a, button, input, select, textarea, [role="button"]')) || t;
+        var r = bot.getBoundingClientRect();
+        var c = cible.getBoundingClientRect();
+        if (!c.width && !c.height) return false;
+        return r.left < c.right && r.right > c.left && r.top < c.bottom && r.bottom > c.top;
+      }
       function goCorner(){
         if (calm || qaOpen || gameOn || state === 'sleep') return;
         if (isBusy() && state !== 'walk' && state !== 'idle') return;
@@ -1819,8 +1840,8 @@ export function initHgpto() {
         if (state === 'nosepick'){ caughtPick(); return; }
         if (state === 'sleep'){ wake(true); return; }
         if (state === 'graffiti'){ caughtGraffiti(); return; }
-        if (gameOn && Math.random() < 0.35){ pauseLine(); return; }
-        if (isBusy() && BUSY_VIGNETTES.indexOf(state) !== -1 && Math.random() < 0.35){ pauseLine(); return; }
+        /* Barre unique v3 (P2-f) : chaque tap répond — les deux branches
+           aléatoires (35 %) qui ignoraient le tap sont retirées. */
         var nowTap = Date.now();
         tapTimes = tapTimes.filter(function(t){ return nowTap - t < 1600; });
         tapTimes.push(nowTap);
@@ -1908,7 +1929,7 @@ export function initHgpto() {
           ensureAudio();
           lastInteract = Date.now();
           if (evt === 'pointerdown' && ev.target.closest && ev.target.closest('main, header, footer')){
-            goCorner();
+            if (botRecouvreCible(ev)) goCorner();
           }
           if (state === 'sleep' && !(ev.target.closest && ev.target.closest('#bot'))){
             wake(false);
@@ -1919,6 +1940,7 @@ export function initHgpto() {
       /* ---------- Déplacement ---------- */
       var lastTs = null;
       function frame(ts){
+        if (docHidden){ lastTs = null; return; }
         requestAnimationFrame(frame);
         if (lastTs === null){ lastTs = ts; return; }
         var dt = Math.min(0.05, (ts - lastTs)/1000); lastTs = ts;
@@ -1980,7 +2002,8 @@ export function initHgpto() {
         qaOpen = true;
         qaPanel.hidden = false;
         renderPageSuggestion();
-        if (catVisible && catState !== 'sleep' && catState !== 'console') catLeave();
+        /* Barre unique v3 (P2-d) : Pixel ne part plus quand on ouvre
+           les Questions — elle reste dans le panneau, avec Sir H. Gepeto. */
         lastInteract = Date.now();
         if (state === 'sleep') wake(false);
         if (paused){ paused = false; btnPause.textContent = 'Pause'; btnPause.setAttribute('aria-pressed','false'); }
@@ -2025,6 +2048,21 @@ export function initHgpto() {
         if (item.fn === 'feed'){ closeQA(); doFeedCat(); return; }
         if (item.fn === 'choix'){ closeQA(); busyUntil = 0; lastBubbleAt = 0; doChoix(true); return; }
         if (item.fn === 'choisir'){ startAideChoix(); return; }
+        /* Barre unique v3 — les 5 rapides (décision nº 6) : trois
+           nouveaux gestionnaires + « choisir » qui existait déjà. */
+        if (item.fn === 'expliquer'){
+          var s = pageSuggestionForRoute();
+          if (s){ dismissQA(); setExpr('happy'); explainPageSuggestion(s); }
+          else { dismissQA(); showBubble(esc("Cette page, je ne la connais pas encore par cœur — mais je peux vous guider : touchez « Une question ? » et demandez-moi ce que vous cherchez."), 9000, 'answer'); }
+          return;
+        }
+        if (item.fn === 'outil'){ dismissQA(); document.dispatchEvent(new CustomEvent('hp:compagnon-recherche')); return; }
+        if (item.fn === 'resume'){
+          dismissQA();
+          var phrases = pageText().split(/(?<=[.!?…])\s+/).slice(0, 2).join(' ');
+          showBubble(esc(phrases || "Cette page ne se résume pas en deux phrases — mais tout est écrit dessus !"), 11000, 'answer');
+          return;
+        }
         dismissQA();
         var text = item.a || pick(JOKES);
         var deliver = function(prefix){
@@ -2032,7 +2070,6 @@ export function initHgpto() {
           if (item.u) html += linkHtml({ u:item.u, l:item.l });
           if (opts && opts.doux) html += '<br>' + esc(pick(ETHIQUE_LINES));
           if (item.s){
-            if (signText) signText.textContent = item.s;
             setState('invite'); busy(3400);
             setTimeout(function(){ if (state === 'invite') setState(qaOpen ? 'idle' : (reduced ? 'idle' : 'walk')); }, 3400);
           }
@@ -2371,7 +2408,7 @@ export function initHgpto() {
          /jeux et présente la section à l'arrivée. Pendant une partie
          du jeu caché ou une visite guidée, le bouton ne dérange rien
          (le jeu et le guide ont déjà la main). */
-      btnGames.addEventListener('click', function(){
+      if (btnGames) btnGames.addEventListener('click', function(){
         ensureAudio();
         lastInteract = Date.now();
         if (gameOn){ showBubble(esc('Je suis déjà en partie de Serpents et échelles. Finis-la, pis on recommence !'), 6000, 'talk', { now:true }); return; }
@@ -2550,6 +2587,10 @@ export function initHgpto() {
          personnage invisible. Aucune rétraction automatique n'existe. */
       var btnReduire = document.getElementById('btn-reduire');
       if (btnReduire) btnReduire.addEventListener('click', function(){
+        /* Barre unique v3 : dans le panneau, « Réduire » ferme le
+           panneau de la barre (le moteur reste chargé) — plus de
+           repli en pastille. Hors barre, le repli classique demeure. */
+        if (zoneIntegree()){ document.dispatchEvent(new CustomEvent('hp:gepeto-reduire')); return; }
         hgptoReduit = true;
         applyReduit();
       });
@@ -2615,6 +2656,7 @@ export function initHgpto() {
           if (controlsEl) controlsEl.style.display = 'none';
           document.body.classList.add('hgpto-closed');
           document.body.classList.remove('hgpto-on');
+          document.dispatchEvent(new CustomEvent('hp:gepeto-ferme'));
         }, 4000);
       });
 
@@ -2886,7 +2928,7 @@ export function initHgpto() {
         docHidden = document.hidden;
         if (docHidden) voiceAudio.stop();
         lastTs = null;
-        if (!docHidden){ lastInteract = Date.now(); if (state === 'sleep') wake(false); }
+        if (!docHidden){ lastInteract = Date.now(); if (state === 'sleep') wake(false); requestAnimationFrame(frame); }
       });
       window.addEventListener('resize', function(){ x = clampX(x); place(); clampDrag(); });
 
@@ -3473,7 +3515,7 @@ export function initHgpto() {
       var reading = { on:false, chunks:[], i:0 };
       var btnRead = document.getElementById('qa-read');
       var btnReadDock = document.getElementById('btn-read');
-      function setReadLabels(t){ btnRead.textContent = t; btnReadDock.textContent = t; }
+      function setReadLabels(t){ if (btnRead) btnRead.textContent = t; if (btnReadDock) btnReadDock.textContent = t; }
       function pageText(){
         var parts = [];
         function grab(sel){
@@ -3517,47 +3559,65 @@ export function initHgpto() {
         dismissQA();   // la lecture se regarde : le panneau se referme (le bouton du dock permet aussi d'arrêter)
         if (reading.on){ stopReading(true); return; }
         if (!TTS){
-          showBubble("Ton appareil n'a pas de voix de lecture intégrée — je ne peux pas te lire ça à voix haute ici. Mais tout est écrit sur la page !", 7000, 'answer');
+          showBubble("Votre appareil n'a pas de voix de lecture intégrée — je ne peux pas vous lire ça à voix haute ici. Mais tout est écrit sur la page !", 7000, 'answer');
           return;
         }
         if (!voiceOn){
-          showBubble("Ma voix est fermée dans mes réglages — rouvre-la avec le bouton « Voix » et je te lis ça avec plaisir.", 7000, 'answer');
+          showBubble("Ma voix est fermée dans mes réglages — rouvrez-la avec le bouton « Voix » et je vous lis ça avec plaisir.", 7000, 'answer');
           return;
         }
         ensureAudio();
         pickFrVoice();
+        if (!frVoice){
+          showBubble("Votre appareil n'a pas de voix française — je ne peux pas vous lire la page à voix haute ici. Mais tout est écrit sur la page !", 7000, 'answer');
+          return;
+        }
         reading.chunks = chunkText(pageText());
         reading.i = 0; reading.on = true;
         setReadLabels('Arrête la lecture');
+        surlignerLecture(true);
+        document.dispatchEvent(new CustomEvent('hp:lecture-etat', { detail: { etat: 'lecture' } }));
         if (state === 'sleep') wake(false);
         setState('read'); setExpr('focus');
-        showBubble("Je te lis la page — mes lunettes de lecture sont de sortie. Bouton « Arrête la lecture » quand t'en as assez !", 5000, 'none');
+        showBubble("Je vous lis la page — mes lunettes de lecture sont de sortie. Bouton « Arrête la lecture » quand vous en avez assez !", 5000, 'none');
         logDay("lu la page à voix haute, sur demande");
         readChunk();
+      }
+      /* Barre unique v3 (P2-f) : surlignage du paragraphe lu — le
+         1er paragraphe de la page au démarrage (le découpage actuel
+         est par phrases, pas par paragraphes ; le suivi du paragraphe
+         courant est un raffinement ultérieur, pas un blocage). */
+      function surlignerLecture(actif){
+        var ps = document.querySelectorAll('main p');
+        if (ps.length) ps[0].classList.toggle('compagnon-en-lecture', !!actif);
       }
       function stopReading(manual){
         if (TTS) { try { TTS.cancel(); } catch(e){} }
         var was = reading.on;
         reading.on = false; reading.chunks = []; reading.i = 0;
         setReadLabels('Lis-moi ça');
+        surlignerLecture(false);
+        document.dispatchEvent(new CustomEvent('hp:lecture-etat', { detail: { etat: 'arretee' } }));
         if (was && state === 'read') setState(reduced ? 'idle' : 'walk');
         if (was && manual) showBubble("Ok, j'arrête là. Le reste est écrit sur la page !", 4200, 'talk', { now:true });
       }
       function finishReading(){
         reading.on = false; reading.chunks = []; reading.i = 0;
         setReadLabels('Lis-moi ça');
+        surlignerLecture(false);
+        document.dispatchEvent(new CustomEvent('hp:lecture-etat', { detail: { etat: 'arretee' } }));
         if (state === 'read') setState(reduced ? 'idle' : 'walk');
         showBubble("Et voilà, c'est lu ! Autre chose ?", 4600, 'talk');
       }
       btnRead.addEventListener('click', function(){ readPage(); });
-      btnReadDock.addEventListener('click', function(){ ensureAudio(); readPage(); });
+      if (btnReadDock) btnReadDock.addEventListener('click', function(){ ensureAudio(); readPage(); });
       var btnVoice = document.getElementById('qa-voice');
       btnVoice.addEventListener('click', function(){
         voiceOn = !voiceOn;
         btnVoice.textContent = voiceOn ? 'Voix : oui' : 'Voix : non';
         btnVoice.setAttribute('aria-pressed', voiceOn ? 'true' : 'false');
         if (!voiceOn){ if (reading.on) stopReading(false); if (TTS) { try { TTS.cancel(); } catch(e){} } }
-        else { pickFrVoice(); showBubble("Voix rouverte ! Demande-moi « Lis-moi ça » quand tu veux.", 4200, 'talk', { now:true }); }
+        else { pickFrVoice(); showBubble("Voix rouverte ! Demandez-moi « Lis-moi ça » quand vous voulez.", 4200, 'talk', { now:true }); }
       });
 
       /* ---------- Flash info : avant chaque info produit demandée ----------
@@ -4494,7 +4554,14 @@ export function initHgpto() {
          mêmes ids, sans boutons de test. L'œil rouge est un calque
          de test du template : il reste caché sur le site. */
       function pixelExpr(v){
-        function show(id, on){ var el = document.getElementById(id); if (el) el.style.display = on ? '' : 'none'; }
+        function show(id, on){
+          var el = document.getElementById(id);
+          if (!el) return;
+          /* Barre unique v3 (P2-a) : calque à la demande — le PNG ne
+             charge qu'au premier affichage, jamais au démarrage. */
+          if (on && el.dataset && el.dataset.src && !el.getAttribute('src')) el.src = el.dataset.src;
+          el.style.display = on ? '' : 'none';
+        }
         show('c-tete', v === 'planches');
         show('oreille-g', v === 'planches');
         show('oreille-d', v === 'planches');
@@ -4672,7 +4739,6 @@ export function initHgpto() {
         bowlEl.hidden = false;
         bowlEl.style.opacity = '1';
         setState('invite'); setExpr('happy'); busy(1700);
-        if (signText) signText.textContent = 'MIAM !';
         showBubble("À manger, ma Pixel ! Viens, c'est prêt.", 4200, 'question');
         logDay("nourri Pixel — elle mange comme quatre, cette chatte");
         summonCat('goto');
@@ -5143,9 +5209,10 @@ export function initHgpto() {
         if (catTimer) clearTimeout(catTimer);
         catTimer = setTimeout(function(){
           if (!paused && !isHidden && !docHidden && !gameOn && !qaOpen){
-            if (!catVisible){
-              if (Math.random() < 0.65) summonCat('follow');
-            } else if (catState === 'sleep' || catState === 'console'){
+            /* Barre unique v3 (P2-d) : Pixel est là dès l'arrivée (boot)
+               — plus de minuteur d'apparition 26–44 s, plus de départ
+               par minuteur. Ses activités (sauts, repas, regards) restent. */
+            if (catState === 'sleep' || catState === 'console'){
               if (Math.random() < 0.55){
                 setCatState('idle');
                 catMode = 'follow';
@@ -5168,7 +5235,7 @@ export function initHgpto() {
                   }, 17000);
                 });
               }
-              else if (r < 0.78) catLeave();
+              /* Barre unique v3 (P2-d) : plus de départ par minuteur. */
             }
           }
           scheduleCatLife();
@@ -5211,7 +5278,6 @@ export function initHgpto() {
         if (!seasonDecorKind()){ doJanitor(); return; }
         buildDecor();
         setState('invite'); setExpr('happy'); busy(5200);
-        if (signText) signText.textContent = 'DÉCO !';
         showBubble(decorShown ? "Je les admirais encore… belles, hein ?" : "Regarde en haut : c'est MOI qui ai installé les décorations !", 4600, 'joke');
         decorEl.classList.add('on'); decorShown = true;
         logDay("installé les décorations de saison, comme un bon gérant");
@@ -5546,7 +5612,7 @@ export function initHgpto() {
         box.innerHTML = '';
         var label = document.createElement('div');
         label.className = 'qa-sugg-label';
-        label.textContent = 'Sur cette page, je te suggère :';
+        label.textContent = 'Sur cette page, je vous suggère :';
         box.appendChild(label);
         var row = document.createElement('div');
         row.className = 'qa-sugg-row';
@@ -5654,6 +5720,7 @@ export function initHgpto() {
          affichée). /sans-honte est exclu : route sensible, dignité
          d'abord — le résumé calme du lot nº 2 y couvre l'hésitation. */
       setInterval(function(){
+        if (docHidden) return;
         if (!DWELL_SUGGESTIONS[dwellRoute]) return;
         if (Date.now() - dwellStart < dwellThreshold()) return;
         // Moment creux : aucune bulle, ou une bulle ambiante déjà âgée
@@ -5692,6 +5759,7 @@ export function initHgpto() {
         bot.setAttribute('data-costume', c || '');
       }
       setInterval(function(){
+        if (docHidden) return;
         if (routeKey() === '/jeux' && !calendarCostume()) jeuxCostumeIdx++;
         applyCostume();
       }, 45000);
@@ -5726,6 +5794,7 @@ export function initHgpto() {
         if (saved && saved !== 'defaut') applyMode(saved, false);
       })();
       setInterval(function(){
+        if (docHidden) return;
         var k = routeKey();
         if (Date.now() - lastAccompResetAt > 600000){ commentedSecs = {}; lastAccompResetAt = Date.now(); }
         if (k === lastRoute) return;
@@ -5774,5 +5843,30 @@ export function initHgpto() {
           showBubble(esc(ligne), 6000, 'talk');
         }, 1500);
       })();
+
+      /* ---------- Commandes de la barre unique v3 (lot 5 nov. 2026) ----------
+         La barre commande le moteur par événements ; le moteur répond
+         de même. Aucun appel direct entre les deux fichiers. */
+      document.addEventListener('hp:gepeto-scene', function(e){
+        var s = (e && e.detail && e.detail.scene) || '';
+        if (s === 'cuisine') doCook();
+        else if (s === 'lecture') doRead();
+        else if (s === 'graffiti') doGraffiti();
+        else if (s === 'skate') doSkate();
+        else if (s === 'lutteur') doWrestler();
+        else if (s === 'mime') doMime();
+        else if (s === '2heures') doTwoHours();
+        else if (s === 'barbouillage') doBarbouille();
+      });
+      document.addEventListener('hp:gepeto-question', function(){ openQA(); });
+      document.addEventListener('hp:gepeto-lire', function(){ readPage(); });
+      document.addEventListener('hp:gepeto-lecture-pause', function(){
+        if (reading.on){ try { if (TTS) TTS.pause(); } catch(err){} document.dispatchEvent(new CustomEvent('hp:lecture-etat', { detail: { etat: 'pause' } })); }
+      });
+      document.addEventListener('hp:gepeto-lecture-reprise', function(){
+        if (reading.on){ try { if (TTS) TTS.resume(); } catch(err){} document.dispatchEvent(new CustomEvent('hp:lecture-etat', { detail: { etat: 'lecture' } })); }
+      });
+      document.addEventListener('hp:gepeto-rouvrir', function(){ if (hgptoClosed) restoreFromClosed(); });
+      document.dispatchEvent(new CustomEvent('hp:gepeto-pret'));
 
 }

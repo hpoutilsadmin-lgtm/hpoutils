@@ -40,75 +40,21 @@ export const HGPTO_MARKUP = `
         <img id="oreille-g" src="/hgpto/pixel/oreille-g.png" alt="oreille gauche" style="position:absolute;left:16.1%;top:8.6%;width:23.5%;height:27.1%" draggable="false">
         <img id="oreille-d" src="/hgpto/pixel/oreille-d.png" alt="oreille droite" style="position:absolute;left:56.6%;top:23.3%;width:21.4%;height:17.1%" draggable="false">
         <img id="oeil-cyan" src="/hgpto/pixel/oeil-cyan.png" alt="oeil cyan" style="position:absolute;left:47.6%;top:46.6%;width:28.6%;height:42%" draggable="false">
-        <img id="oeil-rouge" src="/hgpto/pixel/oeil-rouge.png" alt="oeil rouge" style="position:absolute;left:47.6%;top:46.6%;width:28.6%;height:42%;display:none" draggable="false">
-        <img id="c-tete-grognon" src="/hgpto/pixel/c-tete-grognon.png" alt="tete grognon" style="position:absolute;left:0;bottom:0;width:100%;display:none" draggable="false">
-        <img id="c-tete-fiche-heureux" src="/hgpto/pixel/c-tete-fiche-heureux.png" alt="tete fiche heureux" style="position:absolute;left:42px;bottom:-20px;width:170px;display:none" draggable="false">
-        <img id="c-tete-fiche-curieux" src="/hgpto/pixel/c-tete-fiche-curieux.png" alt="tete fiche curieux" style="position:absolute;left:49px;bottom:-14px;width:170px;display:none" draggable="false">
-        <img id="c-tete-fiche-surpris" src="/hgpto/pixel/c-tete-fiche-surpris.png" alt="tete fiche surpris" style="position:absolute;left:56px;bottom:-11px;width:170px;display:none" draggable="false">
+        <img id="oeil-rouge" data-src="/hgpto/pixel/oeil-rouge.png" alt="oeil rouge" style="position:absolute;left:47.6%;top:46.6%;width:28.6%;height:42%;display:none" draggable="false">
+        <img id="c-tete-grognon" data-src="/hgpto/pixel/c-tete-grognon.png" alt="tete grognon" style="position:absolute;left:0;bottom:0;width:100%;display:none" draggable="false">
+        <img id="c-tete-fiche-heureux" data-src="/hgpto/pixel/c-tete-fiche-heureux.png" alt="tete fiche heureux" style="position:absolute;left:42px;bottom:-20px;width:170px;display:none" draggable="false">
+        <img id="c-tete-fiche-curieux" data-src="/hgpto/pixel/c-tete-fiche-curieux.png" alt="tete fiche curieux" style="position:absolute;left:49px;bottom:-14px;width:170px;display:none" draggable="false">
+        <img id="c-tete-fiche-surpris" data-src="/hgpto/pixel/c-tete-fiche-surpris.png" alt="tete fiche surpris" style="position:absolute;left:56px;bottom:-11px;width:170px;display:none" draggable="false">
         </div>
-        <img id="queue-grognon" src="/hgpto/pixel/queue-grognon.png" alt="queue grognon" style="position:absolute;left:213px;top:156px;width:105px;display:none" draggable="false">
-        <img id="panneaux" src="/hgpto/pixel/panneaux.png" alt="panneaux" style="position:absolute;right:-10px;top:-10px;width:130px;display:none" draggable="false">
+        <img id="queue-grognon" data-src="/hgpto/pixel/queue-grognon.png" alt="queue grognon" style="position:absolute;left:213px;top:156px;width:105px;display:none" draggable="false">
+        <img id="panneaux" data-src="/hgpto/pixel/panneaux.png" alt="panneaux" style="position:absolute;right:-10px;top:-10px;width:130px;display:none" draggable="false">
 </div></div><span id="pixel-zzz" class="pixel-zzz" aria-hidden="true" style="position:absolute;top:2px;right:12px;display:none">Zzz</span></div>
-        <div class="pixel-fallback" id="pixel-fallback" hidden>
-        <div class="cat-inner">
-          <svg class="cat-svg" viewBox="0 0 120 92" aria-hidden="true">
-            <ellipse cx="60" cy="85" rx="34" ry="4.5" fill="rgba(43,33,24,.20)"/>
-            <g id="poseStand">
-              <path class="cat-tail" d="M90 60 Q114 56 110 29" fill="none" stroke="#6f757f" stroke-width="9" stroke-linecap="round"/>
-              <rect x="38" y="66" width="8" height="14" rx="3" fill="#7d8593" stroke="var(--botink)" stroke-width="2.2"/>
-              <rect x="52" y="66" width="8" height="14" rx="3" fill="#7d8593" stroke="var(--botink)" stroke-width="2.2"/>
-              <rect x="72" y="66" width="8" height="14" rx="3" fill="#7d8593" stroke="var(--botink)" stroke-width="2.2"/>
-              <rect x="84" y="66" width="8" height="14" rx="3" fill="#7d8593" stroke="var(--botink)" stroke-width="2.2"/>
-              <rect x="28" y="44" width="64" height="28" rx="13" fill="#9aa1ae" stroke="var(--botink)" stroke-width="3"/>
-              <g stroke="#6f757f" stroke-width="3" stroke-linecap="round">
-                <path d="M50 47 v8"/><path d="M62 47 v8"/><path d="M74 47 v8"/>
-              </g>
-              <g class="cat-head">
-                <path d="M13 27 L18 7 L33 19 Z" fill="#9aa1ae" stroke="var(--botink)" stroke-width="2.6" stroke-linejoin="round"/>
-                <path d="M41 19 L56 7 L61 27 Z" fill="#9aa1ae" stroke="var(--botink)" stroke-width="2.6" stroke-linejoin="round"/>
-                <path d="M19 21 L21 12 L28 18 Z" fill="#d98a9e"/>
-                <path d="M47 18 L54 12 L56 21 Z" fill="#d98a9e"/>
-                <circle cx="37" cy="35" r="19" fill="#9aa1ae" stroke="var(--botink)" stroke-width="3"/>
-                <g stroke="#6f757f" stroke-width="2.4" stroke-linecap="round">
-                  <path d="M31 19 v6"/><path d="M38 18 v6"/><path d="M45 19 v6"/>
-                </g>
-                <g class="eyes-open">
-                  <circle cx="29" cy="35" r="2.7" fill="#20242c"/><circle cx="45" cy="35" r="2.7" fill="#20242c"/>
-                  <circle cx="30" cy="34" r="0.9" fill="#fff"/><circle cx="46" cy="34" r="0.9" fill="#fff"/>
-                </g>
-                <g class="eyes-shut" fill="none" stroke="var(--botink)" stroke-width="2.2" stroke-linecap="round">
-                  <path d="M24 35 Q29 38.5 34 35"/><path d="M40 35 Q45 38.5 50 35"/>
-                </g>
-                <path d="M34 41 h6 l-3 4 z" fill="#d98a9e" stroke="var(--botink)" stroke-width="1.6" stroke-linejoin="round"/>
-                <path d="M37 45 q-3 3 -6 1.5 M37 45 q3 3 6 1.5" fill="none" stroke="var(--botink)" stroke-width="1.8" stroke-linecap="round"/>
-                <g stroke="#c9cdd4" stroke-width="1.6" stroke-linecap="round">
-                  <path d="M18 40 L4 37"/><path d="M18 44 L5 45"/><path d="M56 40 L70 37"/><path d="M56 44 L69 45"/>
-                </g>
-                <path d="M21 50 Q37 58 53 50" fill="none" stroke="#b97f24" stroke-width="5" stroke-linecap="round"/>
-                <circle cx="37" cy="55" r="3.6" fill="var(--gold)" stroke="var(--botink)" stroke-width="1.8"/>
-              </g>
-            </g>
-            <g id="poseCurl">
-              <ellipse cx="60" cy="68" rx="37" ry="15" fill="#9aa1ae" stroke="var(--botink)" stroke-width="3"/>
-              <g stroke="#6f757f" stroke-width="3" stroke-linecap="round">
-                <path d="M52 57 q2 5 0 9"/><path d="M66 56 q2 6 0 10"/>
-              </g>
-              <path d="M94 72 Q62 84 28 77" fill="none" stroke="#6f757f" stroke-width="7" stroke-linecap="round"/>
-              <circle cx="28" cy="64" r="12" fill="#9aa1ae" stroke="var(--botink)" stroke-width="2.6"/>
-              <path d="M19 57 L22 45 L31 53 Z" fill="#9aa1ae" stroke="var(--botink)" stroke-width="2.2" stroke-linejoin="round"/>
-              <path class="eyes-shut" d="M21 64 Q25 66.5 29 64" fill="none" stroke="var(--botink)" stroke-width="2" stroke-linecap="round"/>
-              <path d="M18 73 Q28 78 38 74" fill="none" stroke="#b97f24" stroke-width="4" stroke-linecap="round"/>
-              <circle cx="30" cy="76" r="3" fill="var(--gold)" stroke="var(--botink)" stroke-width="1.6"/>
-            </g>
-          </svg>
-        </div>
         <div class="scratch" id="scratch" hidden aria-hidden="true">
           <svg viewBox="0 0 34 30" width="34" height="30">
             <g fill="none" stroke="#c0392b" stroke-width="2.6" stroke-linecap="round">
               <path d="M6 4 Q12 14 8 26"/><path d="M16 2 Q22 13 18 27"/><path d="M26 4 Q31 14 28 25"/>
             </g>
           </svg>
-        </div>
         </div>
       </div>
       <div class="bowl" id="bowl" hidden aria-hidden="true">
@@ -247,9 +193,7 @@ export const HGPTO_MARKUP = `
 
     <div class="bot-controls" id="bot-controls" role="group" aria-label="Contrôles de la mascotte">
       <button type="button" id="btn-dock" aria-label="Ouvrir les contrôles de Sir H. Gepeto" aria-expanded="false">•••</button>
-      <button type="button" id="btn-games" aria-label="Aller aux jeux">Jeux</button>
       <button type="button" id="btn-ask">Une question ?</button>
-      <button type="button" id="btn-read">Lis-moi ça</button>
       <button type="button" id="btn-accompany" aria-pressed="false">Accompagne-moi</button>
       <button type="button" id="btn-tickle">Chatouiller</button>
       <button type="button" id="btn-bucket">Seau d'eau</button>

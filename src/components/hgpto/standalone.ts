@@ -37,7 +37,11 @@ function bootHgptoStandalone(): void {
   const host = document.createElement("div");
   host.className = "hgpto-host";
   host.innerHTML = HGPTO_MARKUP;
-  document.body.appendChild(host);
+  // Barre unique v3 (lot 5 nov. 2026) : si la barre est là, le moteur
+  // vit DANS son panneau Gepeto, jamais dans le body.
+  const hoteBarre = document.getElementById("compagnon-gepeto-hote");
+  if (hoteBarre) hoteBarre.appendChild(host);
+  else document.body.appendChild(host);
   // Lot Gepeto planches normal : figure planche sur toutes les pages.
   // Miroir de Hgpto.tsx : remplace la figure maître SVG. Les gestes
   // Étape 1, liés aux calques SVG, ne s'appliquent pas à une PNG

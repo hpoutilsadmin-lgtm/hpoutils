@@ -13,7 +13,7 @@ import appCss from "../styles.css?url";
 import hpCss from "../styles/hp.css?url";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { HgptoTap } from "@/components/hgpto/HgptoTap";
+import { HgptoPont } from "@/components/hgpto/HgptoPont";
 import { HamsterWheel } from "@/components/hamster/HamsterWheel";
 import { CompagnonBar } from "@/components/CompagnonBar";
 
@@ -135,7 +135,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
       </div>
-      <HgptoTap />
+      <HgptoPont />
       <CompagnonBar />
       <HamsterWheel />
     </QueryClientProvider>

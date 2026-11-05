@@ -30,8 +30,7 @@
     --line:#f3e9d2;
     --shadow:rgba(0,0,0,.5);
     --bubble-bg:#2e2417;
-  }
-}
+  }}
 
       /* ---------- HGPTO : la couche mascotte ---------- */
       .bot-layer{
@@ -80,21 +79,10 @@
       @keyframes wiggle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg) translateY(-3px)}}
       @keyframes jump{0%{transform:translateY(0)}35%{transform:translateY(-16px) rotate(-2deg)}100%{transform:translateY(0)}}
       @keyframes stretchy{0%,100%{transform:scaleY(1)}40%{transform:scaleY(1.07) translateY(-3px)}}
-
-      .bot-svg{width:132px;height:127px;display:block;overflow:visible}
       /* Sir H. Gepeto (tuile 1, 29 oct. 2026) : l'image remplace le SVG dessiné.
          Mêmes dimensions et mêmes places ; object-fit:contain garde les
          proportions de l'image (2176×1152). */
       .bot-img{width:132px;height:127px;display:block;object-fit:contain}
-      .bot-svg .expr,.bot-svg .mouthv,.bot-svg .browv{display:none}
-      .bot[data-expr="happy"] .expr-happy,.bot[data-expr="happy"] .mouth-smile,.bot[data-expr="happy"] .brow-happy{display:block}
-      .bot[data-expr="laugh"] .expr-laugh,.bot[data-expr="laugh"] .mouth-laugh,.bot[data-expr="laugh"] .brow-laugh{display:block}
-      .bot[data-expr="sleep"] .expr-sleep,.bot[data-expr="sleep"] .mouth-o,.bot[data-expr="sleep"] .brow-sleep{display:block}
-      .bot[data-expr="yawn"] .expr-sleep,.bot[data-expr="yawn"] .mouth-yawn,.bot[data-expr="yawn"] .brow-sleep{display:block}
-      .bot[data-expr="focus"] .expr-focus,.bot[data-expr="focus"] .mouth-flat,.bot[data-expr="focus"] .brow-focus{display:block}
-      .bot[data-expr="wide"] .expr-wide,.bot[data-expr="wide"] .mouth-o,.bot[data-expr="wide"] .brow-wide{display:block}
-      .bot[data-expr="angry"] .expr-angry,.bot[data-expr="angry"] .mouth-grumble,.bot[data-expr="angry"] .brow-angry{display:block}
-      .bot[data-expr="sad"] .expr-sad,.bot[data-expr="sad"] .mouth-sad,.bot[data-expr="sad"] .brow-sad{display:block}
 
       /* Météo intérieure : colère comique, désespoir bref, pleurs résilients */
       .bot[data-state="angry"] .bot-inner{animation:stomp .28s ease-in-out infinite}
@@ -103,98 +91,26 @@
          coups, déclenchés par la classe .stomping quand une de ses
          grognes signature sort en humeur Grognon. */
       .bot.stomping .bot-inner{animation:stomp .28s ease-in-out 3}
-      .angersteam{opacity:0}
-      .bot[data-state="angry"] .angersteam{opacity:1}
-      .bot[data-state="angry"] .angersteam circle{animation:steampuff .7s ease-out infinite}
-      .angersteam circle{transform-box:fill-box;transform-origin:center}
-      @keyframes steampuff{0%{transform:scale(.5) translateY(3px);opacity:.9}100%{transform:scale(1.5) translateY(-6px);opacity:0}}
+      
       .bot[data-state="despair"] .bot-inner{transform:translateY(7px) scaleY(.93)}
-      .bot[data-state="despair"] .arm-l{transform:rotate(16deg)}
-      .bot[data-state="despair"] .arm-r{transform:rotate(34deg)}
-      .tears,.hanky{opacity:0;transition:opacity .3s}
-      .bot[data-state="cry"] .tears,.bot[data-state="cry"] .hanky{opacity:1}
-      .bot[data-state="cry"] .tears path{animation:tearfall 1.1s ease-in infinite}
-      .bot[data-state="cry"] .tears path:nth-child(2){animation-delay:.55s}
-      @keyframes tearfall{0%{transform:translateY(0);opacity:0}25%{opacity:1}100%{transform:translateY(13px);opacity:0}}
+      
       .bot.shakeoff .bot-inner{animation:shakeoff .5s ease-in-out}
       @keyframes shakeoff{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
-
-      /* Les sourcils portent les émotions */
-      .bot[data-state="wave"] .brow-happy{animation:browbounce .55s ease-in-out infinite}
-      @keyframes browbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-      .bot[data-state="tickle"] .brow-laugh,.bot[data-state="tickle-big"] .brow-laugh{animation:browshake .16s ease-in-out infinite}
-      @keyframes browshake{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-2.5px) rotate(1.5deg)}}
-      .bot[data-state="sleep"] .brow-sleep{animation:browdrift 3.2s ease-in-out infinite}
-      @keyframes browdrift{0%,100%{transform:translateY(0)}50%{transform:translateY(1.8px)}}
-
-      .antenna-ball{transform-origin:110px 22px}
-      .bot[data-state="walk"] .antenna-ball{animation:sway 1.2s ease-in-out infinite}
-      .bot[data-state="tickle"] .antenna-ball,.bot[data-state="tickle-big"] .antenna-ball{animation:sway .4s ease-in-out infinite}
-      @keyframes sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
-
-      .arm-r{transform-origin:134px 150px}
-      .arm-l{transform-origin:86px 150px}
-      .bot[data-state="wave"] .arm-r{animation:wave .55s ease-in-out infinite}
-      @keyframes wave{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-38deg)}}
-      .bot[data-state="tinker"] .arm-r{animation:tinker .5s ease-in-out infinite}
-      @keyframes tinker{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(10deg)}}
-      .bot[data-state="stretch"] .arm-r{transform:rotate(-50deg)}
-      .bot[data-state="stretch"] .arm-l{transform:rotate(50deg)}
-      .tool{opacity:0;transition:opacity .25s}
-      .bot[data-state="tinker"] .tool{opacity:1}
-      .sparks{opacity:0}
-      .bot[data-state="tinker"] .sparks{opacity:1}
-      .bot[data-state="tinker"] .spark{animation:sparkle .5s ease-in-out infinite}
-      .bot[data-state="tinker"] .spark.s2{animation-delay:.16s}
-      .bot[data-state="tinker"] .spark.s3{animation-delay:.32s}
-      @keyframes sparkle{0%,100%{transform:scale(.4);opacity:.3}50%{transform:scale(1.15);opacity:1}}
-      .spark{transform-origin:center;transform-box:fill-box}
-      .wheel-spokes{transform-origin:110px 190px}
-      .bot[data-state="walk"] .wheel-spokes{animation:spin .7s linear infinite}
-      @keyframes spin{to{transform:rotate(360deg)}}
-      .shadow-el{transform-origin:110px 203px}
-      .bot[data-state="walk"] .shadow-el{animation:shpulse .46s ease-in-out infinite}
-      @keyframes shpulse{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.92)}}
-
-      /* Cuisine */
-      .bot[data-state="cook"] .arm-l{animation:stir .7s ease-in-out infinite}
-      @keyframes stir{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(11deg)}}
-      .spoon,.pot{opacity:0;transition:opacity .25s}
-      .bot[data-state="cook"] .spoon,.bot[data-state="cook"] .pot{opacity:1}
-      .steam path{opacity:0}
-      .bot[data-state="cook"] .steam path{animation:steamup 2.2s ease-in-out infinite}
-      .bot[data-state="cook"] .steam path:nth-child(2){animation-delay:.7s}
-      .bot[data-state="cook"] .steam path:nth-child(3){animation-delay:1.3s}
-      @keyframes steamup{0%{transform:translateY(5px);opacity:0}35%{opacity:.85}100%{transform:translateY(-9px);opacity:0}}
-
-      /* Invitation : mini-pancarte levée, autre bras qui pointe la bulle */
-      .sign{opacity:0;transition:opacity .25s}
-      .bot[data-state="invite"] .sign{opacity:1}
-      .bot[data-state="invite"] .arm-l{transform:rotate(24deg)}
-      .bot[data-state="invite"] .arm-r{transform:rotate(-18deg)}
-
-      /* Aucun chapeau, même la nuit (retouche du propriétaire, 22 oct.) :
-         il dort tête nue — plus de bonnet de nuit. */
-
-      /* Lecture */
-      .book{opacity:0;transition:opacity .3s}
-      .bot[data-state="read"] .book,.bot.sleep-book .book{opacity:1}
-      .bot[data-state="read"] .expr-happy{animation:readscan 2.6s ease-in-out infinite}
-      @keyframes readscan{0%,100%{transform:translateX(-2.5px)}50%{transform:translateX(2.5px)}}
-      .pageflip{transform-box:fill-box;transform-origin:0% 50%}
-      .bot[data-state="read"] .pageflip{animation:pageflip 3.6s ease-in-out infinite}
-      @keyframes pageflip{0%,70%,100%{transform:scaleX(1)}84%{transform:scaleX(.06)}}
-
-      /* Graffiti espiègle */
-      .spraycan,.spraydots{opacity:0;transition:opacity .2s}
-      .bot[data-state="graffiti"] .spraycan,.bot[data-state="graffiti"] .spraydots{opacity:1}
-      .bot[data-state="graffiti"] .arm-r{animation:sprayshake .18s linear infinite}
-      @keyframes sprayshake{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(-10deg) translateY(-1.5px)}}
-      .bot[data-state="graffiti"] .spraydots circle{animation:spraypuff .5s ease-out infinite}
-      .bot[data-state="graffiti"] .spraydots circle:nth-child(2n){animation-delay:.15s}
-      .bot[data-state="graffiti"] .spraydots circle:nth-child(3n){animation-delay:.3s}
-      @keyframes spraypuff{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.5);opacity:0}}
-      .spraydots circle{transform-box:fill-box;transform-origin:center}
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       .graffiti{
         position:fixed;bottom:138px;z-index:59;pointer-events:none;
         opacity:0;transition:opacity 1.4s ease;
@@ -204,30 +120,8 @@
       /* Seau d'eau froide */
       .bot[data-state="wet"] .bot-inner{animation:shiver .12s linear infinite}
       @keyframes shiver{0%,100%{transform:translateX(-1.6px) rotate(-.6deg)}50%{transform:translateX(1.6px) rotate(.6deg)}}
-      .drops{opacity:0;transition:opacity .4s}
-      .bot.dripping .drops{opacity:1}
       .burst i.water{color:#5b9bd5}
-
-      /* Garde-robe météo */
-      .scarf,.raincoat,.umbrella,.rain{opacity:0;transition:opacity .3s}
-      .bot[data-outfit="froid"] .scarf{opacity:1}
-      /* Déguisements contextuels (lot nº 2) : un seul à la fois, choisi par
-         le moteur (attribut data-costume : page et calendrier des fêtes). */
-      .costume{opacity:0;transition:opacity .3s}
-      .bot[data-costume="apron"] .costume-apron{opacity:1}
-      .bot[data-costume="hero"] .costume-hero{opacity:1}
-      .bot[data-costume="wrestler"] .costume-wrestler{opacity:1}
-      .bot[data-costume="wrestler"] .belt{opacity:1}
-      .bot[data-costume="halloween"] .costume-halloween{opacity:1}
-      .bot[data-costume="noel"] .costume-noel{opacity:1}
-      .bot[data-costume="stjean"] .costume-stjean{opacity:1}
-      .bot[data-costume="sucres"] .costume-sucres{opacity:1}
-      .bot[data-costume="rentree"] .costume-rentree{opacity:1}
-      .bot[data-outfit="pluie"] .raincoat,.bot[data-outfit="pluie"] .umbrella,.bot[data-outfit="pluie"] .rain{opacity:1}
-      .bot[data-outfit="pluie"] .rain line{animation:rainfall .7s linear infinite}
-      .bot[data-outfit="pluie"] .rain line:nth-child(2n){animation-delay:.22s}
-      .bot[data-outfit="pluie"] .rain line:nth-child(3n){animation-delay:.45s}
-      @keyframes rainfall{0%{transform:translateY(-4px);opacity:0}25%{opacity:.8}100%{transform:translateY(16px);opacity:0}}
+      
 
       /* (Ancienne règle « un accessoire à la fois » retirée avec les chapeaux,
          retouche du propriétaire, 22 oct. : zéro chapeau, partout.) */
@@ -236,53 +130,21 @@
          mode calme = plus grand, lent, dans son coin, animations minimales. */
       .bot{transition:transform .12s linear,bottom .7s ease,width .4s ease,height .4s ease}
       .bot.big{width:152px;height:146px}
-      .bot.big .bot-svg{width:152px;height:146px}
       .bot.big .bot-img{width:152px;height:146px;object-fit:contain}
       .bot.calm{width:160px;height:154px}
-      .bot.calm .bot-svg{width:160px;height:154px}
       .bot.calm .bot-img{width:160px;height:154px;object-fit:contain}
-      .bot.calm .bot-inner,.bot.calm .antenna-ball,.bot.calm .arm-r,.bot.calm .arm-l,
-      .bot.calm .wheel-spokes,.bot.calm .brow-happy,.bot.calm .brow-laugh{animation:none!important}
+      .bot.calm .bot-inner{animation:none!important}
 
       .bot-inner{transition:transform .3s ease}
-      /* Skate */
-      .skateboard{opacity:0;transition:opacity .25s}
-      .mainwheel{transition:opacity .2s}
-      .bot[data-state="skate"] .skateboard{opacity:1}
-      .bot[data-state="skate"] .mainwheel{opacity:0}
       .bot[data-state="skate"] .bot-inner{animation:bob .3s ease-in-out infinite}
       .bot.ollie .bot-inner{animation:ollie .55s ease-out}
       @keyframes ollie{40%{transform:translateY(-17px) rotate(-4deg)}}
       .bot[data-state="fallen"] .bot-inner{transform:rotate(63deg) translate(8px,20px)}
-      .bot[data-state="fallen"] .arm-r{transform:rotate(-118deg)}
-      .bot[data-state="fallen"] .skateboard{opacity:1;transform:rotate(-14deg)}
-      .skateboard{transform-box:fill-box;transform-origin:center}
-
-      /* Lutteur (poses seulement) */
-      .belt{opacity:0;transition:opacity .25s}
-      .bot[data-state="wrestler"] .belt{opacity:1}
       .bot[data-state="wrestler"] .bot-inner{animation:flexpump .8s ease-in-out infinite}
       @keyframes flexpump{0%,100%{transform:scale(1)}50%{transform:scale(1.045,1.07)}}
-      .bot[data-state="wrestler"] .arm-l{transform:rotate(40deg)}
-      .bot[data-state="wrestler"] .arm-r{transform:rotate(-40deg)}
-
-      /* Mime (silencieux) */
-      .mimewall{opacity:0;transition:opacity .3s}
-      .bot[data-state="mime"] .mimewall{opacity:1}
-      .bot[data-state="mime"] .arm-l{animation:mimepat 1.1s ease-in-out infinite}
-      .bot[data-state="mime"] .arm-r{animation:mimepat 1.1s ease-in-out infinite reverse}
-      @keyframes mimepat{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(9deg)}}
-
-      /* Cuisine ratée */
-      .smoke,.cloth{opacity:0;transition:opacity .3s}
-      .bot[data-state="cookfail"] .pot,.bot[data-state="cookfail"] .cloth,.bot[data-state="cookfail"] .smoke{opacity:1}
-      .bot[data-state="cookfail"] .arm-r{animation:fanwave .45s ease-in-out infinite}
-      @keyframes fanwave{0%,100%{transform:rotate(-24deg)}50%{transform:rotate(14deg)}}
-      .bot[data-state="cookfail"] .smoke circle{animation:smokepuff 1.7s ease-in-out infinite alternate}
-      .bot[data-state="cookfail"] .smoke circle:nth-child(2){animation-delay:.4s}
-      .bot[data-state="cookfail"] .smoke circle:nth-child(3){animation-delay:.8s}
-      .smoke circle{transform-box:fill-box;transform-origin:center}
-      @keyframes smokepuff{from{transform:translateY(4px) scale(.8)}to{transform:translateY(-7px) scale(1.2)}}
+      
+      
+      
 
       /* Dock compact au téléphone : il ne doit pas couvrir la mascotte */
       @media (max-width:560px){
@@ -297,24 +159,19 @@
            partie basse de Détectôt (même coin) ; à gauche, il recouvrirait
            le robot. Voir le rapport nuit-2b. */
         .bot-controls{gap:4px;max-width:66vw;right:12px}
-        .bot-controls button,.bot-controls select{font-size:12px;padding:10px 10px;min-height:44px}
+        .bot-controls button,.bot-controls select{font-size:12px;padding:10px 10px;min-height:48px}
         /* Retouche du propriétaire (22 oct.) : nettement plus petit au
            téléphone — présence discrète en bas d'écran, qui couvre beaucoup
            moins de contenu. Pixel suit la même échelle relative.
            Les boutons du dock gardent une cible tactile ≥ 44 px. */
         .bot{width:106px;height:102px}
-        .bot .bot-svg{width:106px;height:102px}
         .bot .bot-img{width:106px;height:102px;object-fit:contain}
         .bot.big{width:120px;height:116px}
-        .bot.big .bot-svg{width:120px;height:116px}
         .bot.big .bot-img{width:120px;height:116px;object-fit:contain}
         .bot.calm{width:128px;height:123px}
-        .bot.calm .bot-svg{width:128px;height:123px}
         .bot.calm .bot-img{width:128px;height:123px;object-fit:contain}
         .cat{width:76px;height:59px}
-        .cat .cat-svg{width:76px;height:59px}
-        .graffiti{bottom:112px}
-      }
+        .graffiti{bottom:112px}}
 
       /* Bulle de parole */
       .bubble{
@@ -394,8 +251,8 @@
       .bot-controls button{
         font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;
         background:var(--paper);color:var(--ink);
-        border:2px solid var(--line);border-radius:999px;padding:5px 11px;
-        box-shadow:2px 2px 0 var(--shadow);opacity:.85;
+        border:2px solid var(--line);border-radius:999px;padding:12px 14px;
+        box-shadow:2px 2px 0 var(--shadow);opacity:.85;min-height:48px;
       }
       .bot-controls button:hover{opacity:1;background:var(--gold);color:#2b2118}
       .bot-controls select{
@@ -481,7 +338,7 @@
         display:flex;flex-direction:column;align-items:center;
         padding:14px 10px 26px;
       }
-      @media (prefers-color-scheme: dark){ .game{background:rgba(28,22,17,.93)} }
+      @media (prefers-color-scheme: dark){ .game{background:rgba(28,22,17,.93)}}
       .game[hidden]{display:none}
       .game-top{
         width:min(94vw,540px);display:flex;justify-content:space-between;align-items:center;gap:10px;
@@ -585,85 +442,21 @@
       .card-note{font-size:13px;color:var(--gold-deep);font-weight:700}
 
       @media (prefers-reduced-motion: reduce){
-        .bot-inner,.antenna-ball,.arm-r,.arm-l,.wheel-spokes,.zzz span,.burst i,
-        .brow-happy,.brow-laugh,.brow-sleep{animation:none!important}
-        .bot{transition:none}
-      }
-    
-      /* ===== Nouveau look : robot explorateur adulte (spec de la direction, 22 oct. 2026) =====
-         Tête ≈ 48 %, barbe de six jours, pupilles qui suivent le pointeur,
-         jambes qui marchent ; lunettes UNIQUEMENT pour lire. */
-      .leg-l{transform-origin:95px 173px}
-      .leg-r{transform-origin:125px 173px}
-      .arm-l{transform-origin:63px 124px}
-      .arm-r{transform-origin:157px 124px}
-      .bot[data-state="walk"] .leg-l,.bot[data-state="walk"] .arm-r{animation:step .5s ease-in-out infinite alternate}
-      .bot[data-state="walk"] .leg-r,.bot[data-state="walk"] .arm-l{animation:step .5s ease-in-out infinite alternate-reverse}
-      @keyframes step{from{transform:rotate(-20deg)}to{transform:rotate(20deg)}}
-      .led{animation:ledpulse 1.6s ease-in-out infinite}
-      @keyframes ledpulse{50%{opacity:.35}}
-      .eyes-all{transform-box:fill-box;transform-origin:center;transition:transform .07s ease}
-      .bot.blink .eyes-all{transform:scaleY(.08)}
-      #pupils{transition:transform .18s ease}
-      .bot[data-expr="laugh"] #pupils,.bot[data-expr="sleep"] #pupils,.bot[data-expr="yawn"] #pupils{display:none}
-      .bot[data-state="read"] .expr-happy{animation:none}
-      .bot[data-state="read"] .eyes-all{animation:readscan 2.6s ease-in-out infinite}
-      .readglasses{opacity:0;transition:opacity .3s}
-      .bot[data-state="read"] .readglasses{animation:glasseslife 11s ease-in-out both}
-      .bot.sleep-book .readglasses{opacity:1;animation:none}
-      @keyframes glasseslife{
-        0%{opacity:0;transform:translateY(-7px)}
-        7%{opacity:1;transform:translateY(0)}
-        52%{transform:translateY(0)}
-        64%{transform:translateY(6px)}
-        84%{transform:translateY(6px);opacity:1}
-        96%,100%{opacity:0;transform:translateY(-4px)}
-      }
-      @keyframes wave{0%,100%{transform:rotate(-128deg)}50%{transform:rotate(-163deg)}}
-      @keyframes tinker{0%,100%{transform:rotate(-80deg)}50%{transform:rotate(-99deg)}}
-      @keyframes sprayshake{0%,100%{transform:rotate(-54deg)}50%{transform:rotate(-45deg) translateY(-1.5px)}}
-      .bot[data-state="stretch"] .arm-l{transform:rotate(158deg)}
-      .bot[data-state="stretch"] .arm-r{transform:rotate(-158deg)}
-      .bot[data-state="despair"] .arm-l{transform:rotate(14deg)}
-      .bot[data-state="despair"] .arm-r{transform:rotate(-14deg)}
-      .bot[data-state="invite"] .arm-r{transform:rotate(-136deg)}
-      .bot[data-state="wrestler"] .arm-l{transform:rotate(116deg)}
-      .bot[data-state="wrestler"] .arm-r{transform:rotate(-116deg)}
-      .bot[data-state="skate"] .arm-l{transform:rotate(18deg)}
-      .bot[data-state="skate"] .arm-r{transform:rotate(-18deg)}
-      .bot.calm .leg-l,.bot.calm .leg-r{animation:none!important}
-      @media (prefers-reduced-motion: reduce){
-        .bot .leg-l,.bot .leg-r{animation:none!important}
-        .bot[data-state="read"] .readglasses{animation:none;opacity:1}
-      }
-    
-      /* ===== Pack personnalité : petits défauts, gérant, interactions physiques ===== */
-      .nosefinger,.stars,.duster,.broom{opacity:0;transition:opacity .25s}
-      .bot[data-state="nosepick"] .nosefinger{opacity:1}
-      .bot[data-state="nosepick"] .arm-r{transform:rotate(-155deg)}
-      .bot[data-state="tumble"] .stars{opacity:1}
-      .bot[data-state="tumble"] .stars path{transform-box:fill-box;transform-origin:center;animation:startwinkle .8s ease-in-out infinite}
-      .bot[data-state="tumble"] .stars path:nth-child(2){animation-delay:.25s}
-      .bot[data-state="tumble"] .stars path:nth-child(3){animation-delay:.5s}
-      @keyframes startwinkle{0%,100%{transform:scale(.65) rotate(0deg)}50%{transform:scale(1.2) rotate(24deg)}}
+        .bot-inner, .zzz span, .burst i{animation:none!important}
+        .bot{transition:none}}
+      
+      
+      
+      
+      
+      
+      
       .bot[data-state="tumble"] .bot-inner{transform:rotate(72deg) translate(10px,24px)}
-      .bot[data-state="dust"] .duster{opacity:1}
-      .bot[data-state="dust"] .arm-r{animation:dustwave .5s ease-in-out infinite}
-      @keyframes dustwave{0%,100%{transform:rotate(-96deg)}50%{transform:rotate(-70deg)}}
-      .bot[data-state="sweep"] .broom{opacity:1}
+      
       .bot[data-state="sweep"] .bot-inner{animation:sweepsway .8s ease-in-out infinite}
       @keyframes sweepsway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2.2deg) translateX(3px)}}
-      .bot[data-state="fix"] .tool{opacity:1}
-      .bot[data-state="fix"] .arm-r{animation:tinker .5s ease-in-out infinite}
-      .bot[data-state="hot"] .arm-r{animation:fanwave .45s ease-in-out infinite}
-      .bot[data-state="hot"] .angersteam{opacity:1}
-      .bot[data-state="hot"] .angersteam circle{animation:steampuff .7s ease-out infinite}
-      .bot[data-state="hot"] .led{fill:#f0563c}
-      .bot[data-state="hot"] .bot-svg{filter:drop-shadow(0 0 9px rgba(240,86,60,.55))}
-      .bot[data-state="yawn"] .arm-l{animation:eyerub 1.1s ease-in-out infinite}
-      .bot[data-state="yawn"] .arm-r{animation:eyerubr 1.1s ease-in-out infinite}
-      @keyframes eyerub{0%,100%{transform:rotate(146deg)}50%{transform:rotate(159deg)}}
-      @keyframes eyerubr{0%,100%{transform:rotate(-146deg)}50%{transform:rotate(-159deg)}}
+      
+      
       #decor{position:fixed;top:0;left:0;right:0;z-index:55;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
       #decor.on{opacity:1}
       #decor .spider{position:absolute;top:0;width:34px;animation:spiderdrop 6.5s ease-in-out infinite alternate}
@@ -690,8 +483,7 @@
       @keyframes ghostfade{0%{opacity:0}12%{opacity:1}82%{opacity:1}100%{opacity:0}}
       @media (prefers-reduced-motion: reduce){
         #decor .ghost-pass.lr,#decor .ghost-pass.rl{animation:ghostfade 6.5s ease forwards;left:50%;transform:translateX(-50%)}
-        #decor .ghost-figure{animation:none}
-      }
+        #decor .ghost-figure{animation:none}}
 
 
       /* ===== Lot 2026-10-22 : visite guidée, accompagnement, questions tapées ===== */
@@ -742,18 +534,9 @@
         .bot-controls.open{
           background:var(--paper);border:2.5px solid var(--line);border-radius:16px;
           padding:8px;box-shadow:4px 4px 0 var(--shadow);max-width:calc(100vw - 24px);
-        }
-      }
+        }}
       .scard .scard-bot{width:110px;margin:2px auto 4px}
       .scard .scard-meta{font-weight:700;color:var(--ink)}
-
-      /* ===== Correction du visage (la direction, 22 oct.) : sourcils fins, expressions
-         par les yeux, la bouche, la posture… et la LED qui change d'humeur ===== */
-      .bot[data-expr="angry"] .led{fill:#f0563c}
-      .bot[data-expr="sad"] .led{fill:#6ea8d8}
-      .bot[data-expr="sleep"] .led,.bot[data-expr="yawn"] .led{fill:#3f7d5c}
-      .bot[data-expr="focus"] .led{fill:#f0c16d}
-      .bot[data-expr="wide"] .led{fill:#fff3b0}
       /* ===== PIXEL — scène du template corrigé (lot Pixel seul, 4 nov. 2026) =====
          La scène 320×357 du template (mouvements très légers, tête
          strictement fixe, sans clin) remplace le chat SVG. Elle est
@@ -804,20 +587,6 @@
       /* Miroir (face-l) : le conteneur interne, pas la boîte #cat
          (la mathématique de placement ne change pas). */
       .cat.face-l .pixel-flip{transform:scaleX(-1)}
-      /* Repli ancien SVG : caché par défaut, montré si la scène échoue. */
-      .pixel-fallback{position:absolute;left:0;bottom:0;width:96px;height:74px;display:none}
-      .cat.pixel-fb .pixel-scene{display:none}
-      .cat.pixel-fb .pixel-fallback{display:block}
-      .pixel-fallback .cat-inner{position:absolute;inset:0;transform-origin:50% 92%}
-      .pixel-fallback .cat-svg{width:96px;height:74px;display:block;overflow:visible}
-      #poseCurl{display:none}
-      .cat[data-state="sleep"] #poseStand,.cat[data-state="console"] #poseStand{display:none}
-      .cat[data-state="sleep"] #poseCurl,.cat[data-state="console"] #poseCurl{display:block}
-      .pixel-fallback .eyes-shut{display:none}
-      .cat[data-state="sleep"] .eyes-open,.cat[data-state="console"] .eyes-open,
-      .cat[data-state="purr"] .eyes-open{display:none}
-      .cat[data-state="sleep"] .eyes-shut,.cat[data-state="console"] .eyes-shut,
-      .cat[data-state="purr"] .eyes-shut{display:block}
       /* Props : bol, croquette, griffe — inchangés. */
       .scratch{position:absolute;top:2px;right:-8px;pointer-events:none}
       .bowl{position:absolute;bottom:0;z-index:58;pointer-events:none;transition:opacity .4s ease}
@@ -828,16 +597,13 @@
       .kibble[hidden]{display:none}
       @media (max-width:560px){
         .cat{width:76px;height:84.8px}
-        .pixel-scene{transform:scale(0.2375)}
-        .pixel-fallback{width:76px;height:59px}
-      }
+        .pixel-scene{transform:scale(0.2375)}}
       @media (prefers-reduced-motion: reduce){
-        .pixel-scene *{animation:none!important}
-      }
+        .pixel-scene *{animation:none!important}}
 
       /* ---------- Portage site : zone de vie + fermeture de session ---------- */
       body.hgpto-on{padding-bottom:290px}
-      @media (max-width:560px){ body.hgpto-on{padding-bottom:240px} }
+      @media (max-width:560px){ body.hgpto-on{padding-bottom:240px}}
       body.hgpto-closed .bot-controls,body.hgpto-closed #decor{display:none!important}
       /* Correctif réouverture (26 oct. 2026) : après « Fermer », tout
          HGPTO se cache SAUF la pastille, seul élément restant. La
@@ -868,8 +634,7 @@
       .bataille-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
       .bataille-btns button{cursor:pointer}
       @media (prefers-reduced-motion: reduce){
-        .hgpto-fleur,.hgpto-pelote{transition:none}
-      }
+        .hgpto-fleur,.hgpto-pelote{transition:none}}
 
       /* ---------- LOT « HGPTO JOUEUR » (portage de l'artefact vérifié
          le 22 oct. 2026 au soir) : tampons officiels du panneau,
@@ -896,27 +661,16 @@
       }
       .stampcard .sv a{background:var(--paper);color:var(--ink)}
       .qa-actions button[aria-pressed="false"]{opacity:.55}
-
-      /* La balloune qu'il tient (gag hélium) */
-      .pballoon{opacity:0;transition:opacity .35s;pointer-events:none}
-      .bot.has-balloon .pballoon{opacity:1}
-      .bot.has-balloon .pballoon .hit{pointer-events:all;cursor:pointer}
-      .bot.has-balloon .pballoon .balloon-body{animation:balloonsway 2.3s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
-      @keyframes balloonsway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3.5deg) translateY(-2px)}}
+      
       .bot.helium .bot-inner{animation:heliumhop .48s ease-in-out infinite}
       @keyframes heliumhop{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px) rotate(-1.2deg)}}
-      .bot.helium .led{fill:#ff8ad8}
-      /* Tête balloune (24 oct. 2026) : pendant l'hélium, la tête gonfle
-         progressivement jusqu'à ~1,6 — puis envol et retour (voir moteur). */
-      .bot.helium .head{transform-box:fill-box;transform-origin:50% 88%;animation:heliumgonfle 8s ease-in-out forwards}
-      @keyframes heliumgonfle{from{transform:scale(1)}to{transform:scale(1.6)}}
+      
       .bot.helium-envol{animation:heliumenvol 1.2s ease-in forwards}
       @keyframes heliumenvol{from{transform:translateY(0) rotate(0)}to{transform:translateY(-120vh) rotate(-8deg)}}
       .bot.helium-retour{animation:heliumretour .9s cubic-bezier(.34,.56,.4,1)}
       @keyframes heliumretour{from{transform:translateY(-115vh) rotate(-6deg)}to{transform:translateY(0) rotate(0)}}
       @media (prefers-reduced-motion: reduce){
-        .bot.has-balloon .pballoon .balloon-body,.bot.helium .bot-inner,.bot.helium .head,.bot.helium-envol,.bot.helium-retour{animation:none!important}
-      }
+        .bot.helium .bot-inner, .bot.helium-envol, .bot.helium-retour{animation:none!important}}
 
       /* Montgolfière contre HGPTO */
       .mg-wrap{position:relative;width:min(94vw,560px);margin-top:12px}
@@ -956,26 +710,40 @@
   90%{transform:translateY(0) rotate(2deg)}
 }
 @media (prefers-reduced-motion: reduce){
-  .bot.dancing .bot-inner{animation:none!important}
-}
-/* Sir H. Gepeto — fragment ÉTAPE 1 (accueil + zone de vie), 3 nov. 2026. PRÉPARATION.
-   À AJOUTER à la fin de hgpto.css (jamais en remplacement d'une règle existante).
-   Keyframes antenne VERBATIM de la démo ; dimensions = .bot-img (hgpto.css l. 88, 307). */
+  .bot.dancing .bot-inner{animation:none!important}}
+/* Sir H. Gepeto — fragment ÉTAPE 1 (3 nov. 2026). Les règles svg#gepeto et
+   l'antenne ont été retirées par le lot barre unique v3 (P2-c : SVG mort) ;
+   la figure maître est une PNG, les gardes ci-dessous demeurent. */
 /* Figure maître : mêmes boîtes que l'ancien PNG, pour ne déplacer aucun bouton. */
-.bot-maitre .bot-inner svg#gepeto { width: 132px; height: 127px; display: block; }
-@media (max-width: 560px) {
-  .bot-maitre .bot-inner svg#gepeto { width: 106px; height: 102px; }
-}
 /* Gardes : les anciens overlays (cravate à pois + mallette, hgpto.css l. 831-834) ne
    s'affichent JAMAIS par-dessus le maître, même si le moteur passe en mode Vendeur.
    La cravate Vendeur du maître viendra avec son étape, après D1/D3 tranchés. */
 .bot-maitre .hgpto-tie, .bot-maitre .hgpto-case { display: none !important; }
 /* Le salut démo remplace le wiggle « wave » du moteur sous le maître. */
 .bot-maitre[data-state="wave"] .bot-inner { animation: none !important; }
-/* Antenne rare (démo) : inclinaison ±2°, cycle 9 s, fenêtre brève. */
-.bot-maitre #antenne { animation: antenne-tilt 9s infinite; transform-box: fill-box; transform-origin: 50% 100%; }
-.bot-maitre #antenne.fermee { animation: none; }
-@keyframes antenne-tilt { 0%, 90%, 100% { transform: rotate(0deg); } 93%, 97% { transform: rotate(2deg); } }
-@media (prefers-reduced-motion: reduce) {
-  .bot-maitre #antenne { animation: none !important; transform: none !important; }
-}
+
+      /* Barre unique v3 (P2-d) : apparition de Pixel en 200 ms, à la
+         première visite seulement (elle est là dès l'arrivée). */
+      @keyframes compagnon-pixel-apparition{from{opacity:0}to{opacity:1}}
+      .cat:not(.gone){animation:compagnon-pixel-apparition .2s cubic-bezier(0.23, 1, 0.32, 1) both}
+
+      /* Barre unique v3 (P2-f) : surlignage du paragraphe lu. */
+      .compagnon-en-lecture{background:rgba(240,193,109,.35)!important;transition:background-color 150ms ease-out,opacity 150ms ease-out}
+
+      /* ============================================================
+         BARRE UNIQUE v3 — intégration du moteur dans la barre.
+         Portée html.compagnon-v3 (posée par la barre au démarrage).
+         Hors barre (page autonome En cuisine), l'ancien comportement
+         demeure : couche fixe, dock fixe, pastille, zone de vie. */
+      html.compagnon-v3 .hgpto-host{position:relative;display:flex;flex-direction:column}
+      html.compagnon-v3 .hgpto-host .bot-layer{position:relative;left:auto;right:auto;bottom:auto;height:150px;flex:none}
+      html.compagnon-v3 .hgpto-host .bot-controls{position:static;right:auto;bottom:auto;z-index:auto;max-width:none;pointer-events:auto}
+      html.compagnon-v3 .hgpto-host .bot-controls button,html.compagnon-v3 .hgpto-host .bot-controls select{min-height:48px}
+      html.compagnon-v3 #btn-dock{display:none!important}
+      html.compagnon-v3 #bot-pastille{display:none!important}
+      html.compagnon-v3 .hgpto-host .qa{position:static;left:auto;bottom:auto;z-index:auto;width:auto;max-width:none;max-height:300px;overflow-y:auto}
+      html.compagnon-v3 body.hgpto-on{padding-bottom:0}
+      html.compagnon-v3 body.hgpto-closed #bot-pastille{display:none!important}
+      @media (max-width:560px){
+        html.compagnon-v3 .bot-controls:not(.open) > *:not(#btn-dock){display:inline-block}
+      }

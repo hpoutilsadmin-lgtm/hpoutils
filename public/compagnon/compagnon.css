@@ -4,373 +4,431 @@
    Régénérer : bun run build:compagnon
    ============================================================ */
 /* ============================================================
-   COMPAGNON DE NAVIGATION HP — styles de la barre.
+   COMPAGNON DE NAVIGATION HP — styles de la barre unique v3.
    Source : src/components/compagnon/compagnon.css
    Généré : public/compagnon/compagnon.css (bun run build:compagnon)
-   Palette HP : fond crème #f6eddd, encre #1d252c, or #d89532.
-   Cibles 48 px, contrastes, mouvement réduit, focus visible.
+   Lot : workspace/lot-barre-unique-v3-5nov-2026/ (P1 + P2)
+   Base : tête dc2371a7 (socle ecd2b23b reconstruit).
+
+   Style : photo 1 (barre vert foncé arrondie, or, « HP À portée
+   de main », « Réduire »). Palette de marque HP : crème #f6eddd,
+   encre #1d252c, or #d89532, brun #3a3a32, rouge doux #b35a44.
+   Boutons ≥ 48 px (standard confort HP). Jetons d'animation :
+   ease-out cubic-bezier(0.23, 1, 0.32, 1), tiroir
+   cubic-bezier(0.32, 0.72, 0, 1), tap 100–160 ms scale(0.97),
+   panneau 200–500 ms, plafond UI 300 ms, transform/opacity
+   seulement, jamais scale(0), jamais transition: all, jamais
+   ease-in (REGLES-ANIMATION-HP-5nov-2026.md).
    ============================================================ */
 
-/* Réserve de bas de page : la barre ne recouvre jamais un champ,
-   un résultat ni un bouton de validation (lot §2.5). */
-html.compagnon-actif {
-  scroll-padding-bottom: 160px;
-}
-html.compagnon-actif body {
-  padding-bottom: 150px;
-}
+/* ---------- Réserve : le contenu ne passe jamais sous la barre ---------- */
+html.compagnon-actif body { padding-bottom: 150px; }
+html.compagnon-actif { scroll-padding-bottom: 160px; }
 
-/* Taille du texte (commande de la boîte, persistée). */
-html.compagnon-texte-1 { font-size: 112%; }
-html.compagnon-texte-2 { font-size: 125%; }
-
-/* ---------- La barre ---------- */
+/* ---------- Barre unique : panneau flottant, style photo 1 ---------- */
 .compagnon-barre {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   z-index: 9000;
+  width: min(680px, calc(100vw - 16px));
+  max-height: calc(100dvh - 24px);
+  display: flex;
+  flex-direction: column;
+  background: #1d252c;
+  color: #f6eddd;
+  border: 1px solid #d89532;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+}
+.compagnon-barre.en-deplacement {
+  transition: none;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  cursor: grabbing;
+}
+.compagnon-barre.compagnon-deplacee {
+  transform: none;
+  left: auto;
+  right: auto;
+  bottom: auto;
+}
+/* Réduite : seule la poignée dépasse (liseré), le bouton « Barre » rappelle. */
+.compagnon-barre.compagnon-reduite {
+  transform: translateX(-50%) translateY(calc(100% - 22px));
+}
+.compagnon-barre.compagnon-reduite.compagnon-deplacee {
+  transform: translateY(calc(100% - 22px));
+}
+.compagnon-barre.compagnon-repliee {
+  transform: translateX(-50%) translateY(calc(100% - 22px));
+}
+.compagnon-barre.compagnon-repliee.compagnon-deplacee {
+  transform: translateY(calc(100% - 22px));
+}
+
+/* ---------- En-tête : poignée + titre + Réduire ---------- */
+.compagnon-tete {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  min-height: 64px;
-  padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
-  background: #1d252c;
-  border-top: 3px solid #d89532;
-  box-sizing: border-box;
-  transition: transform 0.25s ease;
+  gap: 8px;
+  padding: 6px 10px 0;
 }
-
-/* Réduction au défilement vers le bas : il ne reste qu'un liseré
-   de 20 px ; un tap dessus ou un défilement vers le haut ramène
-   la barre. */
-.compagnon-barre.reduite {
-  transform: translateY(calc(100% - 20px));
-}
-
-/* Barre masquée (jeu, mode lecture, champ de formulaire, masquée). */
-.compagnon-barre.compagnon-cache {
-  transform: translateY(110%);
-}
-
-.compagnon-icone {
-  display: flex;
+.compagnon-poignee {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
   min-width: 48px;
   min-height: 48px;
   padding: 0;
-  margin: 0;
   background: transparent;
-  border: 2px solid transparent;
+  color: #d89532;
+  border: 1px solid transparent;
   border-radius: 12px;
+  cursor: grab;
+  touch-action: none;
+}
+.compagnon-poignee:hover { background: rgba(216, 149, 50, 0.14); }
+.compagnon-poignee:focus-visible { outline: 3px solid #d89532; outline-offset: 2px; }
+.compagnon-titre {
+  flex: 1;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.25;
   color: #f6eddd;
+}
+.compagnon-titre strong { color: #d89532; }
+.compagnon-reduire {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 14px;
+  background: #d89532;
+  color: #1d252c;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
 }
-.compagnon-icone[aria-expanded="true"] {
+.compagnon-reduire:focus-visible { outline: 3px solid #f6eddd; outline-offset: 2px; }
+
+/* ---------- Slogan fixe ---------- */
+.compagnon-slogan {
+  margin: 2px 12px 0;
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: #d8cdb8;
+}
+
+/* ---------- Rangée des 10 commandes ---------- */
+.compagnon-rangee {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  padding: 8px 10px 10px;
+}
+.compagnon-cmd {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 2px;
+  background: transparent;
+  color: #f6eddd;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.15;
+  cursor: pointer;
+  transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.compagnon-cmd:hover { background: rgba(246, 237, 221, 0.1); }
+.compagnon-cmd:active { transform: scale(0.97); }
+.compagnon-cmd:focus-visible { outline: 3px solid #d89532; outline-offset: 2px; }
+.compagnon-cmd[aria-expanded="true"] {
   background: #d89532;
   color: #1d252c;
 }
-.compagnon-icone svg {
-  display: block;
-  width: 24px;
-  height: 24px;
+.compagnon-cmd.en-lecture {
+  background: #d89532;
+  color: #1d252c;
 }
+.compagnon-cmd svg { flex: none; }
+.compagnon-cmd-texte {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.compagnon-cmd-secondaire { flex: 1 1 0; }
 
-/* ---------- Panneau + boîte d'expansion ---------- */
+/* ---------- Panneau (recherche, favoris, Plus, Confort, Lanterne, aide) ---------- */
 .compagnon-panneau {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: calc(64px + env(safe-area-inset-bottom, 0px));
-  z-index: 8999;
-  max-height: min(70vh, 560px);
-  overflow-y: auto;
-  margin: 0 8px;
-  padding: 14px 14px 16px;
+  border-top: 1px solid rgba(246, 237, 221, 0.22);
   background: #f6eddd;
   color: #1d252c;
-  border: 2px solid #1d252c;
-  border-top: 3px solid #d89532;
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 -4px 24px rgba(29, 37, 44, 0.35);
-  box-sizing: border-box;
+  overflow-y: auto;
+  max-height: calc(100dvh - 200px);
 }
+.compagnon-panneau-contenu { padding: 12px 14px 16px; }
 .compagnon-panneau-tete {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin: 0 0 10px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
-.compagnon-panneau-titre {
-  margin: 0;
-  font-size: 1.15rem;
-  line-height: 1.3;
-  color: #1d252c;
-}
+.compagnon-panneau-titre { margin: 0; font-size: 18px; line-height: 1.25; }
 .compagnon-fermer {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
   min-width: 48px;
   min-height: 48px;
   padding: 0;
   background: transparent;
-  border: 2px solid #1d252c;
-  border-radius: 12px;
   color: #1d252c;
+  border: 1px solid transparent;
+  border-radius: 12px;
   cursor: pointer;
 }
+.compagnon-fermer:focus-visible { outline: 3px solid #d89532; outline-offset: 2px; }
 
-/* La petite boîte : les commandes du moment, quand la barre
-   s'ouvre plus grand. Jamais ouverte toute seule. */
-.compagnon-boite {
-  margin-top: 14px;
-  padding: 12px;
-  border: 2px solid #d89532;
-  border-radius: 12px;
-  background: #f6eddd;
-}
-.compagnon-boite-titre {
-  margin: 0 0 10px;
-  font-weight: 700;
-  color: #1d252c;
-}
-.compagnon-commande {
-  display: inline-block;
-  min-width: 48px;
-  min-height: 48px;
-  margin: 0 8px 8px 0;
-  padding: 10px 16px;
-  background: #d89532;
-  color: #1d252c;
-  border: 2px solid #1d252c;
-  border-radius: 24px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-.compagnon-commande[aria-pressed="true"] {
-  background: #1d252c;
-  color: #f6eddd;
-  border-color: #d89532;
-}
-.compagnon-commande-reduire {
-  background: #1d252c;
-  color: #f6eddd;
-}
-
-/* ---------- Recherche, favoris, menu, aide ---------- */
 .compagnon-champ {
-  display: block;
   width: 100%;
   min-height: 48px;
-  padding: 10px 14px;
-  margin: 0 0 10px;
-  font-size: 1.05rem;
-  color: #1d252c;
-  background: #ffffff;
+  padding: 10px 12px;
+  font-size: 16px;
   border: 2px solid #1d252c;
   border-radius: 12px;
+  background: #fffdf8;
+  color: #1d252c;
   box-sizing: border-box;
 }
-.compagnon-astuce {
-  margin: 8px 0;
-  color: #1d252c;
-  line-height: 1.45;
-}
-.compagnon-resultat {
+.compagnon-champ:focus { outline: 3px solid #d89532; outline-offset: 1px; }
+
+.compagnon-rapides { margin-top: 10px; }
+.compagnon-rapides-titre { margin: 0 0 6px; font-size: 14px; font-weight: 700; }
+.compagnon-resultats { list-style: none; margin: 10px 0 0; padding: 0; }
+.compagnon-resultats li {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(29, 37, 44, 0.2);
-}
-.compagnon-resultat-lien {
-  flex: 1 1 auto;
-  color: #1d252c;
-  font-weight: 700;
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-}
-.compagnon-resultat-famille {
-  flex: 0 0 auto;
-  font-size: 0.85rem;
-  color: #1d252c;
-  opacity: 0.75;
-}
-.compagnon-fav-ajout {
-  flex: 0 0 auto;
-  min-width: 48px;
-  min-height: 48px;
-  padding: 6px 10px;
-  background: transparent;
-  color: #1d252c;
-  border: 2px solid #1d252c;
-  border-radius: 12px;
-  cursor: pointer;
-}
-.compagnon-liste-favoris {
-  list-style: none;
-  margin: 10px 0 0;
-  padding: 0;
-}
-.compagnon-menu-section {
-  margin: 0 0 12px;
-}
-.compagnon-menu-titre {
-  margin: 0 0 6px;
-  font-size: 1rem;
-  color: #1d252c;
-}
-.compagnon-menu-liste {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.compagnon-menu-liste li {
-  margin: 0 0 6px;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(29, 37, 44, 0.14);
 }
 .compagnon-lien {
   color: #1d252c;
-  font-weight: 700;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
+  font-size: 16px;
+  line-height: 1.35;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
-.compagnon-aide-ligne {
-  margin: 0 0 10px;
-  line-height: 1.5;
+.compagnon-lien-meta { color: #5c5546; font-size: 13px; }
+.compagnon-vide { padding: 10px 0; font-size: 15px; line-height: 1.4; color: #3a3a32; }
+.compagnon-fav {
+  flex: none;
+  min-height: 48px;
+  padding: 0 12px;
+  background: transparent;
   color: #1d252c;
+  border: 2px solid #1d252c;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
 }
-.compagnon-aide-ligne + .compagnon-lien,
-.compagnon-lien + .compagnon-lien {
-  display: block;
-  margin-top: 8px;
-}
+.compagnon-fav:focus-visible { outline: 3px solid #d89532; outline-offset: 2px; }
 
-/* ---------- Carte mascotte ---------- */
-.compagnon-mascotte {
-  position: fixed;
-  left: 8px;
-  right: 8px;
-  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-  z-index: 9001;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px;
+.compagnon-groupe { margin-top: 12px; }
+.compagnon-groupe-titre { margin: 0 0 6px; font-size: 14px; font-weight: 700; }
+.compagnon-commande {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin: 4px 0;
+  padding: 10px 12px;
+  background: #fffdf8;
+  color: #1d252c;
+  border: 2px solid #1d252c;
+  border-radius: 12px;
+  font-size: 16px;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+.compagnon-commande:hover { background: #f0e4c8; }
+.compagnon-commande:focus-visible { outline: 3px solid #d89532; outline-offset: 2px; }
+.compagnon-commande.actif { background: #d89532; color: #1d252c; border-color: #d89532; }
+.compagnon-commande[disabled] { opacity: 0.45; cursor: not-allowed; }
+.compagnon-note { margin: 0 0 8px; font-size: 15px; line-height: 1.45; color: #3a3a32; }
+
+.compagnon-secondaires .compagnon-cmd {
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  background: #fffdf8;
+  color: #1d252c;
+  border: 2px solid #1d252c;
+  font-size: 16px;
+}
+.compagnon-secondaires .compagnon-cmd-texte { white-space: normal; }
+.compagnon-secondaires-titre { margin: 0 0 6px; font-size: 14px; font-weight: 700; }
+.compagnon-menu .compagnon-lien { display: block; padding: 6px 0; }
+
+/* ---------- Section Sir H. Gepeto, intégrée dans la barre ---------- */
+.compagnon-gepeto {
+  border-top: 1px solid rgba(246, 237, 221, 0.22);
   background: #f6eddd;
   color: #1d252c;
-  border: 2px solid #1d252c;
-  border-top: 3px solid #d89532;
-  border-radius: 16px;
-  box-shadow: 0 -4px 24px rgba(29, 37, 44, 0.35);
-  box-sizing: border-box;
+  overflow-y: auto;
+  max-height: calc(100dvh - 200px);
 }
-.compagnon-mascotte-img {
-  flex: 0 0 auto;
-  width: 74px;
-  height: auto;
-  max-height: 110px;
-  object-fit: contain;
-}
-.compagnon-mascotte-repli {
-  flex: 0 0 auto;
+.compagnon-gepeto-dialogue {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 74px;
-  height: 74px;
-  background: #d89532;
-  color: #1d252c;
-  border: 2px solid #1d252c;
-  border-radius: 50%;
-  font-size: 2rem;
-  font-weight: 700;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 14px 0;
+  padding: 10px 12px;
+  background: #fffdf8;
+  border: 2px solid #d89532;
+  border-radius: 12px;
 }
-.compagnon-mascotte-texte {
-  flex: 1 1 auto;
-  margin: 4px 0 0;
-  line-height: 1.5;
-  color: #1d252c;
+.compagnon-gepeto-texte { flex: 1; margin: 0; font-size: 15.5px; line-height: 1.45; }
+.compagnon-gepeto-dialogue .compagnon-fermer { min-width: 44px; min-height: 44px; }
+.compagnon-gepeto-chargement { margin: 12px 14px; font-size: 15px; line-height: 1.4; color: #3a3a32; }
+.compagnon-scenes { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 14px 0; }
+.compagnon-scenes-titre { width: 100%; margin: 0; font-size: 14px; font-weight: 700; }
+.compagnon-scenes .compagnon-commande {
+  width: auto;
+  flex: 1 1 30%;
+  min-height: 48px;
+  margin: 0;
+  font-size: 14.5px;
+  text-align: center;
 }
+.compagnon-gepeto-hote { position: relative; }
 
-/* ---------- Promenade sur la barre ---------- */
+/* ---------- Bande de vie (promenade) ---------- */
 .compagnon-marcheur {
   position: absolute;
-  top: -32px;
-  left: 8px;
+  left: 10px;
+  top: -34px;
   width: 40px;
   height: 34px;
   object-fit: contain;
   opacity: 0;
   pointer-events: none;
-  /* Aucune rotation, aucun balancement : la tête de Pixel reste
-     strictement fixe, le marcheur ne fait que glisser. */
-}
-.compagnon-marcheur.visible {
-  display: block;
+  transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* ---------- Bouton de rappel « Barre » ---------- */
 .compagnon-rappel {
   position: fixed;
-  right: 12px;
-  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   z-index: 9000;
   min-width: 48px;
   min-height: 48px;
-  padding: 10px 18px;
-  background: #1d252c;
-  color: #f6eddd;
-  border: 2px solid #d89532;
-  border-radius: 24px;
-  font-size: 1rem;
+  padding: 0 18px;
+  background: #d89532;
+  color: #1d252c;
+  border: 1px solid #1d252c;
+  border-radius: 999px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+.compagnon-rappel:focus-visible { outline: 3px solid #f6eddd; outline-offset: 2px; }
+
+/* ---------- Lanterne : atténuation + éclairage de zone ---------- */
+.compagnon-lanterne-cible { position: relative; z-index: 1; }
+.compagnon-lanterne-voile {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.compagnon-lanterne-doux { background: rgba(29, 37, 44, 0.55); }
+.compagnon-lanterne-sombre { background: rgba(10, 12, 15, 0.78); }
+html.compagnon-lanterne .compagnon-barre { box-shadow: 0 0 0 3px #d89532, 0 10px 28px rgba(0, 0, 0, 0.5); }
+
+/* ---------- Confort : taille du texte (3 niveaux) ---------- */
+html.compagnon-texte-1 body { font-size: 112.5%; }
+html.compagnon-texte-2 body { font-size: 125%; }
+html.compagnon-texte-1 .compagnon-cmd-texte { font-size: 13px; }
+html.compagnon-texte-2 .compagnon-cmd-texte { font-size: 14px; }
+
+/* ---------- Confort : fond sombre ---------- */
+html.compagnon-sombre body { background: #14181d; color: #f6eddd; }
+html.compagnon-sombre .compagnon-panneau,
+html.compagnon-sombre .compagnon-gepeto { background: #232b32; color: #f6eddd; }
+html.compagnon-sombre .compagnon-lien,
+html.compagnon-sombre .compagnon-panneau-titre,
+html.compagnon-sombre .compagnon-groupe-titre,
+html.compagnon-sombre .compagnon-rapides-titre,
+html.compagnon-sombre .compagnon-secondaires-titre,
+html.compagnon-sombre .compagnon-scenes-titre { color: #f6eddd; }
+html.compagnon-sombre .compagnon-commande,
+html.compagnon-sombre .compagnon-fav,
+html.compagnon-sombre .compagnon-secondaires .compagnon-cmd { background: #2e3840; color: #f6eddd; border-color: #d89532; }
+html.compagnon-sombre .compagnon-champ { background: #2e3840; color: #f6eddd; border-color: #d89532; }
+html.compagnon-sombre .compagnon-note,
+html.compagnon-sombre .compagnon-vide,
+html.compagnon-sombre .compagnon-gepeto-chargement { color: #d8cdb8; }
+html.compagnon-sombre .compagnon-gepeto-dialogue { background: #2e3840; border-color: #d89532; }
+html.compagnon-sombre .compagnon-fermer { color: #f6eddd; }
+
+/* ---------- Confort : contraste renforcé ---------- */
+html.compagnon-contraste body { color: #000; }
+html.compagnon-contraste .compagnon-lien { color: #000; text-decoration-thickness: 2px; }
+html.compagnon-contraste .compagnon-note,
+html.compagnon-contraste .compagnon-vide,
+html.compagnon-contraste .compagnon-lien-meta { color: #1d252c; }
+
+/* ---------- Confort : espacement du texte ---------- */
+html.compagnon-espacement body { line-height: 1.7; letter-spacing: 0.02em; word-spacing: 0.08em; }
+
+/* ---------- Confort : navigation clavier renforcée ---------- */
+html.compagnon-clavier a:focus-visible,
+html.compagnon-clavier button:focus-visible,
+html.compagnon-clavier input:focus-visible { outline: 3px solid #d89532; outline-offset: 3px; }
+
+/* ---------- Tablette : 2 rangées de 5 ---------- */
+@media (min-width: 561px) and (max-width: 900px) {
+  .compagnon-barre { width: min(560px, calc(100vw - 16px)); }
+  .compagnon-rangee { flex-wrap: wrap; }
+  .compagnon-rangee .compagnon-cmd { flex: 1 1 18%; }
 }
 
-/* ---------- Mode lecture : la barre disparaît, le reste suit ---------- */
-html.compagnon-lecture .compagnon-barre,
-html.compagnon-lecture .compagnon-panneau,
-html.compagnon-lecture .compagnon-mascotte {
-  display: none;
+/* ---------- Téléphone : 4 visibles, libellés courts ---------- */
+@media (max-width: 560px) {
+  .compagnon-barre { width: calc(100vw - 12px); border-radius: 16px; }
+  .compagnon-rangee { gap: 2px; padding: 8px 6px 10px; }
+  .compagnon-cmd { font-size: 11.5px; }
+  .compagnon-titre { font-size: 15px; }
+  .compagnon-slogan { font-size: 12px; }
+  .compagnon-panneau, .compagnon-gepeto { max-height: calc(100dvh - 190px); }
+  .compagnon-scenes .compagnon-commande { flex: 1 1 44%; }
 }
 
-/* ---------- Focus visible, partout ---------- */
-.compagnon :focus-visible,
-.compagnon-rappel:focus-visible {
-  outline: 3px solid #d89532;
-  outline-offset: 2px;
-}
-
-/* ---------- Mouvement réduit : aucune animation ---------- */
+/* ---------- Mouvement réduit : jamais d'animation ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .compagnon-barre,
-  .compagnon-marcheur,
-  .compagnon-panneau,
-  .compagnon-mascotte {
-    transition: none !important;
-    animation: none !important;
-  }
+  .compagnon-barre, .compagnon-cmd, .compagnon-marcheur { transition: none !important; }
+  .compagnon-cmd:active { transform: none; }
 }
-
-/* ---------- Petits écrans ---------- */
-@media (max-width: 480px) {
-  .compagnon-panneau {
-    margin: 0 4px;
-    padding: 10px 10px 12px;
-  }
-  .compagnon-mascotte-img {
-    width: 56px;
-  }
-  .compagnon-resultat {
-    flex-wrap: wrap;
-  }
-}
+html.compagnon-animations-reduites .compagnon-barre,
+html.compagnon-animations-reduites .compagnon-cmd,
+html.compagnon-animations-reduites .compagnon-marcheur { transition: none !important; }
+html.compagnon-animations-reduites .compagnon-cmd:active { transform: none; }

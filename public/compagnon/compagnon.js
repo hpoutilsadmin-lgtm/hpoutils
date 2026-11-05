@@ -5,16 +5,53 @@
    Régénérer : bun run build:compagnon
    ============================================================ */
 /* ============================================================
-   COMPAGNON DE NAVIGATION HP — barre universelle du site.
+   COMPAGNON DE NAVIGATION HP — barre unique v3.
    Source : src/components/compagnon/compagnon.js
    Généré : public/compagnon/compagnon.js (bun run build:compagnon)
-   Lot : workspace/compagnon-navigation/LOT-TRANSFERT-SITE.md
-   Cahier : sections A à F. Périmètre gelé (T1 à T12, 5 nov. 2026).
+   Lot : workspace/lot-barre-unique-v3-5nov-2026/ (P1 + P2)
+   Base : tête dc2371a7 (socle ecd2b23b reconstruit, pas reparti de zéro).
+
+   Modèle tranché : workspace/simplification-navigation-site-5nov-2026/
+   PROPOSITION-V3-MODELE-TRANCHE.md — UNE SEULE barre, déplaçable,
+   style photo 1 (vert foncé arrondi, « HP À portée de main »,
+   « Réduire »), les 10 commandes, le panneau Sir H. Gepeto intégré
+   DANS la barre, plus de pastille, plus de panneau séparé, plus de
+   boîte d'expansion. Principe d'HP (5 nov. 09 h 01) : « Voilà plu
+   rien de cacher et même barré partout, simple et utilitaire. »
 
    Règles : JS vanilla, aucune dépendance, aucun appel réseau,
    aucune donnée envoyée, aucun compte, aucun service payant.
    Les images des mascottes sont celles du site, chargées
    seulement à la demande (jamais dans le chemin critique).
+   Boutons ≥ 48 px. VOUS hors jeux. Slogan fixe :
+   « HP — des outils pour la vraie vie. »
+
+   TENSION OUVERTE (v3 §10 nº 1, NON tranchée par ce lot) :
+   « barre partout » contre l'option A (Le Garde / Personne seule
+   exclus pour le STOP, 5 nov. 06 h 31). Ce fichier applique
+   l'option A (EXCLURE_PAGES_STOP = true, en vigueur) ET porte
+   le mécanisme de coexistence (zone interdite : la barre ne peut
+   pas être glissée sur le STOP, elle revient en bas). Basculer
+   l'exclusion est 1 tap d'HP, pas une décision de ce lot.
+   Jamais : déplacer le STOP, ni baisser le z-index sous 500.
+
+   CONTRAT D'ÉVÉNEMENTS avec le moteur Sir H. Gepeto (P2) :
+   - Barreau -> moteur : 'hp:gepeto-ouvrir' (charger + ouvrir le
+     panneau), 'hp:gepeto-question' (ouvrir les Questions),
+     'hp:gepeto-lire' (lire la page à voix haute),
+     'hp:gepeto-lecture-pause' / 'hp:gepeto-lecture-reprise',
+     'hp:gepeto-scene' {scene} (cuisine, lecture, graffiti, skate,
+     lutteur, mime, 2heures, barbouillage), 'hp:gepeto-rouvrir'.
+   - Moteur -> barre : 'hp:gepeto-pret' (moteur monté, fin du
+     « Chargement… »), 'hp:gepeto-ferme' (Fermer pour la session),
+     'hp:gepeto-reduire' (Réduire : fermer le panneau),
+     'hp:lecture-etat' {etat} (lecture, pause, arretee).
+   - Recherche (5 rapides) : 'hp:compagnon-recherche' (le moteur
+     demande d'ouvrir la Loupe).
+   Le moteur se charge de deux façons : pages React, par le pont
+   (HgptoPont, événement 'hp:gepeto-ouvrir', signalé par
+   data-hgpto-pont sur <html>) ; pages statiques, par injection du
+   bundle autonome /hgpto/hgpto.js (+ /hgpto/hgpto.css).
    ============================================================ */
 (function () {
   "use strict";
@@ -30,14 +67,30 @@
   var LS_FAVORIS = "compagnon-favoris-v1";
   var LS_TEXTE = "compagnon-texte-v1";
   var LS_PROMENADE = "compagnon-promenade-v1";
+  var LS_POSITION = "compagnon-position-v1";
+  var LS_CONFORT = "compagnon-confort-v1";
   var SS_ACCUEIL = "compagnon-accueil-v1";
   var SS_MASQUEE = "compagnon-masquee-v1";
 
   var IMG_GEPETO = "/hgpto/gepeto/normal.png";
   var IMG_PIXEL = "/hgpto/pixel/c-tete.png";
   var MAIL_DIRECTION = "mailto:hpoutils.admin@gmail.com";
+  var URL_RESEAUX = {
+    instagram: "https://www.instagram.com/hpoutils/",
+    facebook: "https://www.facebook.com/hpoutils/",
+    tiktok: "https://www.tiktok.com/@hp2zl",
+    youtube: "https://www.youtube.com/@hpoutils"
+  };
 
-  /* Ordre des sections du menu (lot §2.2). Pas de section
+  /* Option A (5 nov. 06 h 31, EN VIGUEUR) : la barre ne se monte
+     pas sur Le Garde ni sur Personne seule, tant qu'HP n'a pas
+     tranché la coexistence barre déplaçable / STOP (1 tap).
+     Le mécanisme de zone interdite ci-dessous reste en place
+     pour le jour du basculement. */
+  var EXCLURE_PAGES_STOP = true;
+  var PAGES_STOP_EXCLUES = ["/le-garde", "/personne-seule"];
+
+  /* Ordre des sections du menu Plus (lot §2.2). Pas de section
      « Tout le site » : /plan-du-site n'existe pas encore (T5,
      lot B13-reste). Les liens du menu viennent de l'index
      (champ « menu »), jamais d'une liste en dur. */
@@ -50,6 +103,22 @@
     gepeto: "On avance ! Je suis Sir H. Gepeto, le gérant du site. Touchez une icône de la barre et je vous guide.",
     pixel: "Miaou. Je suis Pixel, la chatte du site. Je me promène sur la barre, je ne gêne personne, et je reviens quand vous m'appelez."
   };
+
+  /* Les 8 scènes commandables (P2-b) : elles existent dans le
+     moteur (doCook, doRead, doGraffiti, doSkate, doWrestler,
+     doMime, doTwoHours, doBarbouille) — la barre les commande
+     par événement, jamais toute seule. Retours visuels décidés
+     par HP (P2-c) : bulle + gigotement seulement. */
+  var SCENES = [
+    { id: "cuisine", label: "En cuisine" },
+    { id: "lecture", label: "En lecture" },
+    { id: "graffiti", label: "Graffiti" },
+    { id: "skate", label: "En skate" },
+    { id: "lutteur", label: "Lutteur" },
+    { id: "mime", label: "Mime" },
+    { id: "2heures", label: "Scène des 2 heures" },
+    { id: "barbouillage", label: "Barbouillage" }
+  ];
 
   /* ---------- Petits outils ---------- */
   function $(sel, racine) { return (racine || document).querySelector(sel); }
@@ -68,7 +137,7 @@
     return n;
   }
 
-  function on(noeud, evt, fn) { noeud.addEventListener(evt, fn); }
+  function on(noeud, evt, fn, opts) { noeud.addEventListener(evt, fn, opts); }
 
   /* Normalisation sans accents, pour une recherche qui accepte
      « sirop » comme « sirop », « érable » comme « erable ». */
@@ -101,6 +170,12 @@
   var estLecture = false;
   for (var i = 0; i < PAGES_LECTURE.length; i++) {
     if (chemin === PAGES_LECTURE[i] || chemin.indexOf(PAGES_LECTURE[i] + "/") === 0) { estLecture = true; break; }
+  }
+  var estPageStopExclue = false;
+  if (EXCLURE_PAGES_STOP) {
+    for (var s = 0; s < PAGES_STOP_EXCLUES.length; s++) {
+      if (chemin === PAGES_STOP_EXCLUES[s] || chemin.indexOf(PAGES_STOP_EXCLUES[s] + "/") === 0) { estPageStopExclue = true; break; }
+    }
   }
 
   /* ---------- Recherche (index local, rien n'est envoyé) ---------- */
@@ -141,88 +216,68 @@
     sauverFavoris(f);
   }
 
+  /* ---------- Confort (réglages persistés, sans compte) ----------
+     Taille : 3 niveaux (existant). Sombre, contraste renforcé,
+     animations réduites, espacement du texte, navigation clavier :
+     des classes sur <html>, jamais une modification définitive
+     du site. Réglages de base, à affiner par page au pilote. */
+  var CONFORT_DEFAUT = { sombre: false, contraste: false, animations: false, espacement: false, clavier: false };
+  var confort = lireLS(LS_CONFORT, CONFORT_DEFAUT);
+  if (!confort || typeof confort !== "object") confort = CONFORT_DEFAUT;
+  function appliquerConfort() {
+    var html = document.documentElement;
+    html.classList.toggle("compagnon-sombre", !!confort.sombre);
+    html.classList.toggle("compagnon-contraste", !!confort.contraste);
+    html.classList.toggle("compagnon-animations-reduites", !!confort.animations);
+    html.classList.toggle("compagnon-espacement", !!confort.espacement);
+    html.classList.toggle("compagnon-clavier", !!confort.clavier);
+  }
+  function sauverConfort() { ecrireLS(LS_CONFORT, confort); }
+
   /* ---------- Construction du DOM ---------- */
-  var barre, panneau, zonePanneau, boite, carteMascotte, marcheur, boutonRappel;
-  var panneauOuvert = null; /* "recherche" | "favoris" | "menu" | "aide" | null */
-  var mascotteOuverte = null; /* "gepeto" | "pixel" | null */
+  var racine, barre, panneau, zonePanneau, sectionGepeto, hoteGepeto,
+    dialogueGepeto, rangeeScenes, marcheur, boutonRappel, poignee;
+  var panneauOuvert = null; /* "recherche" | "favoris" | "plus" | "confort" | "lanterne" | "aide" | "gepeto" | null */
   var modeLectureActif = false;
   var modeJeuActif = false;
   var niveauTexte = lireLS(LS_TEXTE, 0);
   var promenadeActive = lireLS(LS_PROMENADE, true);
   var minuteurPromenade = null;
   var jetonPromenade = 0;
+  var moteurCharge = false;
+  var moteurEnChargement = false;
+  var gepetoFermeSession = false;
+  var lectureEtat = "arretee"; /* "lecture" | "pause" | "arretee" */
+  var lanterneActive = false;
+  var lanterneFond = "doux"; /* "doux" | "sombre" */
+  var boutonsCommandes = {}; /* nom -> bouton (une seule porte par commande) */
+  var boutonsSecondaires = ["retour", "suivant", "lire", "lanterne", "question", "confort"];
+  var telephoneEtroit = false;
+  try { telephoneEtroit = window.matchMedia("(max-width: 560px)").matches; } catch (e) { telephoneEtroit = false; }
 
   /* Icônes SVG originales, traits simples, sans texte permanent. */
   var ICONES = {
     accueil: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>',
+    retour: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+    suivant: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
     recherche: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>',
-    favoris: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>',
-    menu: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+    lire: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    lanterne: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.4 1 2.3h6c0-.9.4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg>',
+    question: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>',
+    gepeto: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4"/><circle cx="12" cy="3" r="1"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/><path d="M9 17h6"/></svg>',
+    confort: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg>',
     fermer: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>',
-    haut: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg>'
+    haut: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg>',
+    deplacer: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="6" r="1.2" fill="currentColor"/><circle cx="15" cy="6" r="1.2" fill="currentColor"/><circle cx="9" cy="12" r="1.2" fill="currentColor"/><circle cx="15" cy="12" r="1.2" fill="currentColor"/><circle cx="9" cy="18" r="1.2" fill="currentColor"/><circle cx="15" cy="18" r="1.2" fill="currentColor"/></svg>'
   };
 
-  function boutonIcone(nom, label, action) {
-    var b = el("button", { "class": "compagnon-icone", "type": "button", "aria-label": label, "aria-expanded": "false" });
-    b.innerHTML = ICONES[nom];
+  function boutonCommandeBarre(nom, label, libelle, action) {
+    var b = el("button", { "class": "compagnon-cmd", "type": "button", "aria-label": label });
+    b.innerHTML = ICONES[nom] + '<span class="compagnon-cmd-texte">' + libelle + "</span>";
     on(b, "click", function () { action(b); });
+    boutonsCommandes[nom] = b;
     return b;
-  }
-
-  function construire() {
-    if (document.getElementById("compagnon-barre")) return; /* jamais deux barres */
-
-    var racine = el("div", { "id": "compagnon", "class": "compagnon" });
-    document.body.appendChild(racine);
-
-    /* Carte mascotte (Gepeto ou Pixel, jamais les deux à la fois). */
-    carteMascotte = el("div", { "class": "compagnon-mascotte", "role": "dialog", "aria-label": "Compagnon", "hidden": "" });
-    racine.appendChild(carteMascotte);
-
-    /* Panneau (recherche, favoris, menu, aide) + boîte d'expansion. */
-    panneau = el("div", { "class": "compagnon-panneau", "role": "dialog", "aria-label": "Panneau du Compagnon", "hidden": "" });
-    zonePanneau = el("div", { "class": "compagnon-panneau-contenu" });
-    panneau.appendChild(zonePanneau);
-    boite = el("div", { "class": "compagnon-boite" });
-    var titreBoite = el("p", { "class": "compagnon-boite-titre" }, "À portée de main");
-    boite.appendChild(titreBoite);
-    boite.appendChild(boutonCommande("Gepeto", "Afficher Sir H. Gepeto", function () { basculerMascotte("gepeto"); }));
-    boite.appendChild(boutonCommande("Pixel", "Afficher Pixel", function () { basculerMascotte("pixel"); }));
-    boite.appendChild(boutonCommande("Mode lecture", "Activer ou quitter le mode lecture", basculerModeLecture));
-    boite.appendChild(boutonCommande("Mode jeu", "Masquer la barre pendant le jeu", basculerModeJeu));
-    boite.appendChild(boutonCommande("Taille du texte", "Changer la taille du texte", changerTailleTexte));
-    boite.appendChild(boutonCommande("Aide", "Ouvrir l'aide", function () { ouvrirPanneau("aide"); }));
-    boite.appendChild(boutonCommande("Promenade", "Activer ou arrêter la promenade sur la barre", basculerPromenade));
-    var btnReduire = boutonCommande("Réduire", "Réduire la barre", fermerPanneau);
-    btnReduire.classList.add("compagnon-commande-reduire");
-    boite.appendChild(btnReduire);
-    panneau.appendChild(boite);
-    racine.appendChild(panneau);
-
-    /* La barre : 4 icônes, 48 px, sans texte permanent. */
-    barre = el("nav", { "id": "compagnon-barre", "class": "compagnon-barre", "aria-label": "Compagnon de navigation" });
-    var btnAccueil = el("button", { "class": "compagnon-icone", "type": "button", "aria-label": "Accueil" });
-    btnAccueil.innerHTML = ICONES.accueil;
-    on(btnAccueil, "click", function () { window.location.href = "/"; });
-    barre.appendChild(btnAccueil);
-    barre.appendChild(boutonIcone("recherche", "Rechercher sur le site", function (b) { basculerPanneau("recherche", b); }));
-    barre.appendChild(boutonIcone("favoris", "Vos favoris", function (b) { basculerPanneau("favoris", b); }));
-    barre.appendChild(boutonIcone("menu", "Ouvrir le menu", function (b) { basculerPanneau("menu", b); }));
-    racine.appendChild(barre);
-
-    /* Bande de vie : la promenade marche ici, jamais sur les icônes. */
-    marcheur = el("img", { "class": "compagnon-marcheur", "alt": "", "aria-hidden": "true", "loading": "lazy", "decoding": "async" });
-    barre.appendChild(marcheur);
-
-    /* Bouton de rappel « Barre » : rappelle la barre masquée. */
-    boutonRappel = el("button", { "class": "compagnon-rappel", "type": "button", "hidden": "" }, "Barre");
-    boutonRappel.setAttribute("aria-label", "Afficher la barre du Compagnon");
-    on(boutonRappel, "click", rappelerBarre);
-    racine.appendChild(boutonRappel);
-
-    document.documentElement.classList.add("compagnon-actif");
-    appliquerTailleTexte();
-    mettreAJourPromenadeBouton();
   }
 
   function boutonCommande(texte, label, action) {
@@ -231,457 +286,906 @@
     return b;
   }
 
-  /* ---------- Panneaux ---------- */
-  function basculerPanneau(nom, bouton) {
-    if (panneauOuvert === nom) { fermerPanneau(); return; }
-    ouvrirPanneau(nom, bouton);
+  function construire() {
+    if (document.getElementById("compagnon-barre")) return; /* jamais deux barres */
+    if (estPageStopExclue) return; /* option A en vigueur (tension ouverte, v3 §10 nº 1) */
+
+    racine = el("div", { "id": "compagnon", "class": "compagnon" });
+    document.body.appendChild(racine);
+
+    /* La barre : un panneau flottant vert foncé arrondi (style photo 1),
+       qui démarre en bas de l'écran. Tout vit dedans : l'en-tête, les
+       10 commandes, les panneaux, le panneau Sir H. Gepeto. */
+    barre = el("div", { "id": "compagnon-barre", "class": "compagnon-barre", "role": "region", "aria-label": "Barre HP, à portée de main" });
+
+    /* En-tête : poignée de déplacement + « HP À portée de main » + Réduire. */
+    var tete = el("div", { "class": "compagnon-tete" });
+    poignee = el("button", {
+      "class": "compagnon-poignee", "type": "button",
+      "aria-label": "Déplacer la barre : glissez, ou utilisez les flèches du clavier, Échap pour annuler"
+    });
+    poignee.innerHTML = ICONES.deplacer;
+    tete.appendChild(poignee);
+    var titre = el("p", { "class": "compagnon-titre" });
+    titre.innerHTML = "<strong>HP</strong> À portée de main";
+    tete.appendChild(titre);
+    var btnReduire = el("button", { "class": "compagnon-reduire", "type": "button", "aria-label": "Réduire la barre" }, "Réduire");
+    on(btnReduire, "click", function () { reduireBarre(); });
+    tete.appendChild(btnReduire);
+    barre.appendChild(tete);
+
+    /* Slogan fixe, partout, exactement « HP — des outils pour la vraie vie. » */
+    var slogan = el("p", { "class": "compagnon-slogan" }, "HP — des outils pour la vraie vie.");
+    barre.appendChild(slogan);
+
+    /* Rangée des 10 commandes. Sur téléphone, 4 visibles (Accueil,
+       Loupe, Gepeto, Plus) — les 6 secondaires vivent dans Plus. */
+    var rangee = el("nav", { "class": "compagnon-rangee", "aria-label": "Commandes de la barre" });
+    rangee.appendChild(boutonCommandeBarre("accueil", "Accueil", "Accueil", function () { window.location.href = "/"; }));
+    rangee.appendChild(boutonCommandeBarre("retour", "Retour", "Retour", function () { window.history.back(); }));
+    rangee.appendChild(boutonCommandeBarre("suivant", "Suivant", "Suivant", function () { window.history.forward(); }));
+    rangee.appendChild(boutonCommandeBarre("recherche", "Loupe : rechercher sur le site", "Loupe", function (b) { basculerPanneau("recherche", b); }));
+    rangee.appendChild(boutonCommandeBarre("lire", "Lire : lecture vocale de la page", "Lire", function () { basculerLecture(); }));
+    rangee.appendChild(boutonCommandeBarre("lanterne", "Lanterne : mode lecture confortable", "Lanterne", function (b) { basculerPanneau("lanterne", b); }));
+    rangee.appendChild(boutonCommandeBarre("question", "Question : poser une question sur la page", "Question", function () { ouvrirQuestion(); }));
+    rangee.appendChild(boutonCommandeBarre("gepeto", "Gepeto : ouvrir Sir H. Gepeto", "Gepeto", function () { basculerGepeto(); }));
+    rangee.appendChild(boutonCommandeBarre("confort", "Confort : réglages d'affichage", "Confort", function (b) { basculerPanneau("confort", b); }));
+    rangee.appendChild(boutonCommandeBarre("plus", "Plus : fonctions secondaires", "Plus", function (b) { basculerPanneau("plus", b); }));
+    barre.appendChild(rangee);
+
+    /* Panneau : recherche, favoris, Plus, Confort, Lanterne, aide.
+       Une section du conteneur, jamais un recouvrement. */
+    panneau = el("div", { "class": "compagnon-panneau", "role": "dialog", "aria-label": "Panneau de la barre", "hidden": "" });
+    zonePanneau = el("div", { "class": "compagnon-panneau-contenu" });
+    panneau.appendChild(zonePanneau);
+    barre.appendChild(panneau);
+
+    /* Section Sir H. Gepeto, intégrée DANS la barre (v3 §5) :
+       dialogue d'accueil (rangée, fermable), hôte du moteur,
+       sélecteur de scènes. Le moteur ne charge qu'au tap sur
+       la commande Gepeto (0 code mascotte avant). */
+    sectionGepeto = el("div", { "class": "compagnon-gepeto", "hidden": "" });
+    dialogueGepeto = el("div", { "class": "compagnon-gepeto-dialogue", "hidden": "" });
+    var dialogueTexte = el("p", { "class": "compagnon-gepeto-texte" }, DIALOGUES.gepeto);
+    dialogueGepeto.appendChild(dialogueTexte);
+    var dialogueFermer = el("button", { "class": "compagnon-fermer", "type": "button", "aria-label": "Fermer le dialogue" });
+    dialogueFermer.innerHTML = ICONES.fermer;
+    on(dialogueFermer, "click", function () { dialogueGepeto.setAttribute("hidden", ""); });
+    dialogueGepeto.appendChild(dialogueFermer);
+    sectionGepeto.appendChild(dialogueGepeto);
+    rangeeScenes = el("div", { "class": "compagnon-scenes", "role": "group", "aria-label": "Scènes de Sir H. Gepeto" });
+    rangeeScenes.appendChild(el("p", { "class": "compagnon-scenes-titre" }, "Scènes :"));
+    SCENES.forEach(function (s) {
+      var b = boutonCommande(s.label, "Jouer la scène : " + s.label, function () {
+        assurerMoteur(function () {
+          document.dispatchEvent(new CustomEvent("hp:gepeto-scene", { detail: { scene: s.id } }));
+        });
+      });
+      rangeeScenes.appendChild(b);
+    });
+    sectionGepeto.appendChild(rangeeScenes);
+    hoteGepeto = el("div", { "id": "compagnon-gepeto-hote", "class": "compagnon-gepeto-hote" });
+    sectionGepeto.appendChild(hoteGepeto);
+    barre.appendChild(sectionGepeto);
+
+    /* Bande de vie : la promenade marche ici, jamais sur les icônes. */
+    marcheur = el("img", { "class": "compagnon-marcheur", "alt": "", "aria-hidden": "true", "loading": "lazy", "decoding": "async" });
+    barre.appendChild(marcheur);
+
+    racine.appendChild(barre);
+
+    /* Bouton de rappel « Barre » : rappelle la barre réduite ou masquée. */
+    boutonRappel = el("button", { "class": "compagnon-rappel", "type": "button", "hidden": "" }, "Barre");
+    boutonRappel.setAttribute("aria-label", "Afficher la barre du Compagnon");
+    on(boutonRappel, "click", rappelerBarre);
+    racine.appendChild(boutonRappel);
+
+    document.documentElement.classList.add("compagnon-actif", "compagnon-v3");
+    appliquerTailleTexte();
+    appliquerConfort();
+    appliquerPositionMemorisee();
+    placerCommandes();
+    mettreAJourCommandes();
   }
 
-  function ouvrirPanneau(nom, bouton) {
+  /* ---------- Placement des commandes selon le format ----------
+     Téléphone (≤560 px) : 4 visibles — Accueil, Loupe, Gepeto,
+     Plus (décision nº 2). Les 6 secondaires déménagent dans le
+     panneau Plus (un seul élément bouton, deux parents possibles,
+     jamais de doublon). Ordinateur et tablette : les 10 visibles. */
+  var conteneurSecondaires = null;
+  var conteneurSecondairesCache = null;
+  function placerCommandes() {
+    var rangee = $(".compagnon-rangee", barre);
+    if (!rangee) return;
+    boutonsSecondaires.forEach(function (nom) {
+      var b = boutonsCommandes[nom];
+      if (!b) return;
+      if (telephoneEtroit) {
+        /* Sur téléphone, les 6 secondaires vivent dans Plus.
+           Si Plus n'a jamais été ouvert, un conteneur caché les
+           garde (jamais de doublon, jamais de débordement). Si le
+           conteneur de Plus a été retiré (panneau refermé), on
+           retombe sur le conteneur caché. */
+        if (!conteneurSecondaires || !document.contains(conteneurSecondaires)) {
+          if (!conteneurSecondairesCache) {
+            conteneurSecondairesCache = el("div", { "class": "compagnon-secondaires-cache", "hidden": "" });
+            barre.appendChild(conteneurSecondairesCache);
+          }
+          conteneurSecondaires = conteneurSecondairesCache;
+        }
+        if (b.parentNode !== conteneurSecondaires) conteneurSecondaires.appendChild(b);
+        b.classList.add("compagnon-cmd-secondaire");
+      } else {
+        if (b.parentNode !== rangee) rangee.appendChild(b);
+        b.classList.remove("compagnon-cmd-secondaire");
+      }
+    });
+    /* Remettre les 4 visibles dans l'ordre : Accueil, Loupe, Gepeto, Plus. */
+    if (!telephoneEtroit) {
+      ["accueil", "retour", "suivant", "recherche", "lire", "lanterne", "question", "gepeto", "confort", "plus"].forEach(function (nom) {
+        var b = boutonsCommandes[nom];
+        if (b) rangee.appendChild(b);
+      });
+    }
+  }
+
+  /* ---------- Déplacer la barre (décision nº 9) ----------
+     Poignée seule prise du glisser (Pointer Events). Seuil 8 px :
+     un tap reste un tap, le défilement reste le défilement.
+     Position mémorisée (localStorage, par appareil, sans compte).
+     La barre ne sort jamais de l'écran ; jamais sur le STOP
+     (zone interdite) ; jamais sur un bouton important (garde
+     simple : boutons de validation et de paiement visibles).
+     Au clavier : flèches pour déplacer, Échap pour annuler.
+     Mouvement réduit : saut direct, aucune animation. */
+  var enDeplacement = false;
+  var deplacementActif = false;
+  var depSX = 0, depSY = 0, depOX = 0, depOY = 0, depPid = null;
+  var depAvant = null;
+
+  function rectBarre() { return barre.getBoundingClientRect(); }
+
+  function zonesInterdites() {
+    var zones = [];
+    $all(".stop-global, #stopBar").forEach(function (n) {
+      if (n.offsetParent !== null) zones.push(n.getBoundingClientRect());
+    });
+    return zones;
+  }
+
+  function recouvreZoneInterdite(rect) {
+    var zones = zonesInterdites();
+    for (var i = 0; i < zones.length; i++) {
+      var z = zones[i];
+      if (rect.left < z.right && rect.right > z.left && rect.top < z.bottom && rect.bottom > z.top) return true;
+    }
+    return false;
+  }
+
+  function recouvreBoutonImportant(rect) {
+    var boutons = $all("button[type='submit'], a[href*='checkout'], a[href*='paiement'], [data-paiement]");
+    for (var i = 0; i < boutons.length; i++) {
+      var b = boutons[i];
+      if (b.offsetParent === null) continue;
+      if (racine.contains(b)) continue;
+      var r = b.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) continue;
+      if (rect.left < r.right && rect.right > r.left && rect.top < r.bottom && rect.bottom > r.top) return true;
+    }
+    return false;
+  }
+
+  function contraindrePosition(left, top) {
+    var vw = window.innerWidth || 360;
+    var vh = window.innerHeight || 640;
+    var r = rectBarre();
+    var marge = 8;
+    var safeBas = 0;
+    try { safeBas = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sat") || "0", 10) || 0; } catch (e) { safeBas = 0; }
+    left = Math.max(marge, Math.min(left, vw - r.width - marge));
+    top = Math.max(marge, Math.min(top, vh - r.height - marge - safeBas));
+    return { left: left, top: top };
+  }
+
+  function poserBarre(left, top) {
+    var p = contraindrePosition(left, top);
+    barre.style.left = p.left + "px";
+    barre.style.top = p.top + "px";
+    barre.style.right = "auto";
+    barre.style.bottom = "auto";
+    barre.classList.add("compagnon-deplacee");
+    return p;
+  }
+
+  function remettreEnBas() {
+    barre.style.left = "";
+    barre.style.top = "";
+    barre.style.right = "";
+    barre.style.bottom = "";
+    barre.classList.remove("compagnon-deplacee");
+    try { window.localStorage.removeItem(LS_POSITION); } catch (e) { /* stockage indisponible */ }
+  }
+
+  function appliquerPositionMemorisee() {
+    var pos = lireLS(LS_POSITION, null);
+    if (!pos || typeof pos.left !== "number" || typeof pos.top !== "number") return;
+    var p = poserBarre(pos.left, pos.top);
+    if (recouvreZoneInterdite(rectBarre()) || recouvreBoutonImportant(rectBarre())) remettreEnBas();
+    else poserBarre(p.left, p.top);
+  }
+
+  function memoriserPosition() {
+    var r = rectBarre();
+    ecrireLS(LS_POSITION, { left: Math.round(r.left), top: Math.round(r.top) });
+  }
+
+  function surPoigneeBas(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    enDeplacement = true;
+    deplacementActif = false;
+    depSX = e.clientX; depSY = e.clientY;
+    var r = rectBarre();
+    depOX = r.left; depOY = r.top;
+    depPid = e.pointerId;
+    depAvant = { left: r.left, top: r.top };
+    try { poignee.setPointerCapture(e.pointerId); } catch (err) { /* capture indisponible */ }
+    e.preventDefault();
+  }
+
+  function surPoigneeBouger(e) {
+    if (!enDeplacement || e.pointerId !== depPid) return;
+    var dx = e.clientX - depSX, dy = e.clientY - depSY;
+    if (!deplacementActif && Math.sqrt(dx * dx + dy * dy) <= 8) return;
+    if (!deplacementActif) {
+      deplacementActif = true;
+      barre.classList.add("en-deplacement");
+      arreterPromenade(true);
+    }
+    poserBarre(depOX + dx, depOY + dy);
+  }
+
+  function surPoigneeHaut(e) {
+    if (!enDeplacement || e.pointerId !== depPid) return;
+    enDeplacement = false;
+    barre.classList.remove("en-deplacement");
+    if (!deplacementActif) return; /* c'était un tap, pas un glisser */
+    deplacementActif = false;
+    if (recouvreZoneInterdite(rectBarre()) || recouvreBoutonImportant(rectBarre())) {
+      /* Jamais sur le STOP ni sur un bouton important : retour en bas. */
+      if (depAvant) poserBarre(depAvant.left, depAvant.top);
+      else remettreEnBas();
+      return;
+    }
+    memoriserPosition();
+  }
+
+  function surPoigneeClavier(e) {
+    var pas = e.shiftKey ? 64 : 16;
+    var r = rectBarre();
+    var x = r.left, y = r.top, bouge = true;
+    if (e.key === "ArrowLeft") x -= pas;
+    else if (e.key === "ArrowRight") x += pas;
+    else if (e.key === "ArrowUp") y -= pas;
+    else if (e.key === "ArrowDown") y += pas;
+    else if (e.key === "Escape") {
+      if (depAvant) poserBarre(depAvant.left, depAvant.top);
+      return;
+    } else bouge = false;
+    if (!bouge) return;
+    e.preventDefault();
+    if (!depAvant) depAvant = { left: r.left, top: r.top };
+    var p = poserBarre(x, y);
+    if (recouvreZoneInterdite(rectBarre()) || recouvreBoutonImportant(rectBarre())) {
+      if (depAvant) poserBarre(depAvant.left, depAvant.top);
+      return;
+    }
+    poserBarre(p.left, p.top);
+    memoriserPosition();
+  }
+
+  /* ---------- Panneaux ---------- */
+  function fermerPanneau() {
+    if (panneau) panneau.setAttribute("hidden", "");
+    if (sectionGepeto) sectionGepeto.setAttribute("hidden", "");
+    panneauOuvert = null;
+    mettreAJourCommandes();
+  }
+
+  function ouvrirPanneau(nom) {
     panneauOuvert = nom;
-    $all(".compagnon-icone", barre).forEach(function (b) { b.setAttribute("aria-expanded", "false"); });
-    if (bouton) bouton.setAttribute("aria-expanded", "true");
-    panneau.removeAttribute("hidden");
-    panneau.classList.add("ouvert");
+    if (sectionGepeto) sectionGepeto.setAttribute("hidden", "");
     if (nom === "recherche") rendreRecherche();
     else if (nom === "favoris") rendreFavoris();
-    else if (nom === "menu") rendreMenu();
+    else if (nom === "plus") rendrePlus();
+    else if (nom === "confort") rendreConfort();
+    else if (nom === "lanterne") rendreLanterne();
     else if (nom === "aide") rendreAide();
-    var champ = $("input", panneau);
-    if (champ) champ.focus();
+    panneau.removeAttribute("hidden");
+    mettreAJourCommandes();
   }
 
-  function fermerPanneau() {
-    panneauOuvert = null;
-    panneau.classList.remove("ouvert");
-    panneau.setAttribute("hidden", "");
-    $all(".compagnon-icone", barre).forEach(function (b) { b.setAttribute("aria-expanded", "false"); });
-    arreterPromenade(true);
+  function basculerPanneau(nom, bouton) {
+    if (panneauOuvert === nom) { fermerPanneau(); return; }
+    ouvrirPanneau(nom);
   }
 
-  function enTetePanneau(titre) {
+  function mettreAJourCommandes() {
+    ["recherche", "lanterne", "confort", "plus"].forEach(function (nom) {
+      var b = boutonsCommandes[nom];
+      if (b) b.setAttribute("aria-expanded", panneauOuvert === nom ? "true" : "false");
+    });
+    var bGepeto = boutonsCommandes.gepeto;
+    if (bGepeto) bGepeto.setAttribute("aria-expanded", panneauOuvert === "gepeto" ? "true" : "false");
+    var bLire = boutonsCommandes.lire;
+    if (bLire) {
+      bLire.classList.toggle("en-lecture", lectureEtat === "lecture");
+      bLire.setAttribute("aria-label", lectureEtat === "lecture" ? "Lire : lecture en cours, touchez pour arrêter" : (lectureEtat === "pause" ? "Lire : lecture en pause, touchez pour reprendre" : "Lire : lecture vocale de la page"));
+    }
+  }
+
+  function entetePanneau(titre, boutonFermer) {
     var h = el("div", { "class": "compagnon-panneau-tete" });
     h.appendChild(el("h2", { "class": "compagnon-panneau-titre" }, titre));
-    var b = el("button", { "class": "compagnon-fermer", "type": "button", "aria-label": "Fermer le panneau" });
-    b.innerHTML = ICONES.fermer;
-    on(b, "click", fermerPanneau);
-    h.appendChild(b);
+    if (boutonFermer) {
+      var f = el("button", { "class": "compagnon-fermer", "type": "button", "aria-label": "Fermer le panneau" });
+      f.innerHTML = ICONES.fermer;
+      on(f, "click", fermerPanneau);
+      h.appendChild(f);
+    }
     return h;
   }
 
+  /* Loupe : recherche sur l'index local (110 entrées) + favoris.
+     La recherche sert aussi les 5 rapides de la Question
+     (« Trouve un outil » ouvre la Loupe). */
   function rendreRecherche() {
-    zonePanneau.textContent = "";
-    zonePanneau.appendChild(enTetePanneau("Rechercher sur le site"));
-    var champ = el("input", { "class": "compagnon-champ", "type": "search", "placeholder": "Tapez un mot : jeux, outils, recettes, prix…", "aria-label": "Rechercher sur le site", "autocomplete": "off" });
-    zonePanneau.appendChild(champ);
-    var liste = el("div", { "class": "compagnon-resultats" });
-    var astuce = el("p", { "class": "compagnon-astuce" }, "La recherche reste sur votre appareil : rien n'est envoyé.");
-    liste.appendChild(astuce);
-    zonePanneau.appendChild(liste);
-    on(champ, "input", function () { rendreResultats(champ.value, liste); });
-  }
-
-  function rendreResultats(requete, liste) {
-    liste.textContent = "";
-    var resultats = chercher(requete);
-    if (norm(requete).length === 0) {
-      liste.appendChild(el("p", { "class": "compagnon-astuce" }, "Tapez un mot : jeux, outils, recettes, prix…"));
-      return;
-    }
-    if (resultats.length === 0) {
-      var vide = el("p", { "class": "compagnon-astuce" }, "Aucun résultat. Essayez un autre mot, ou écrivez à la direction humaine.");
-      liste.appendChild(vide);
-      var lien = el("a", { "class": "compagnon-lien", "href": MAIL_DIRECTION }, "Écrire à la direction humaine");
-      liste.appendChild(lien);
-      return;
-    }
-    resultats.forEach(function (e) {
-      var ligne = el("div", { "class": "compagnon-resultat" });
-      var a = el("a", { "class": "compagnon-resultat-lien", "href": e.url }, e.titre);
-      ligne.appendChild(a);
-      ligne.appendChild(el("span", { "class": "compagnon-resultat-famille" }, e.famille));
-      var fav = el("button", { "class": "compagnon-fav-ajout", "type": "button", "aria-label": "Ajouter aux favoris : " + e.titre }, estFavori(e.url) ? "Ajouté ✓" : "+ Favori");
-      on(fav, "click", function () {
-        if (estFavori(e.url)) { retirerFavori(e.url); fav.textContent = "+ Favori"; }
-        else { ajouterFavori(e.titre, e.url); fav.textContent = "Ajouté ✓"; }
-      });
-      ligne.appendChild(fav);
-      liste.appendChild(ligne);
+    zonePanneau.innerHTML = "";
+    zonePanneau.appendChild(entetePanneau("Rechercher sur le site", true));
+    var champ = el("input", {
+      "class": "compagnon-champ", "type": "search", "placeholder": "Rechercher jeux, outils, livres, ateliers…",
+      "aria-label": "Rechercher sur le site", "autocomplete": "off"
     });
+    var resultats = el("ul", { "class": "compagnon-resultats", "aria-label": "Résultats de la recherche" });
+    var aides = el("div", { "class": "compagnon-rapides" });
+    aides.appendChild(el("p", { "class": "compagnon-rapides-titre" }, "Par ici :"));
+    ["Jeux", "Outils", "Livres", "Ateliers"].forEach(function (nom) {
+      var b = boutonCommande(nom, "Aller à " + nom, function () { window.location.href = nom === "Jeux" ? "/jeux" : (nom === "Outils" ? "/outils" : (nom === "Livres" ? "/livres-pdf" : "/ateliers")); });
+      aides.appendChild(b);
+    });
+    zonePanneau.appendChild(champ);
+    zonePanneau.appendChild(aides);
+    zonePanneau.appendChild(resultats);
+
+    function afficher(liste, vide) {
+      resultats.innerHTML = "";
+      if (liste.length === 0) {
+        var li = el("li", { "class": "compagnon-vide" }, vide);
+        resultats.appendChild(li);
+        return;
+      }
+      liste.forEach(function (e) {
+        var li = el("li");
+        var a = el("a", { "class": "compagnon-lien", "href": e.url }, e.titre);
+        var meta = el("span", { "class": "compagnon-lien-meta" }, " " + e.famille);
+        a.appendChild(meta);
+        li.appendChild(a);
+        var f = el("button", { "class": "compagnon-fav", "type": "button", "aria-label": estFavori(e.url) ? "Retirer des favoris" : "Ajouter aux favoris" }, estFavori(e.url) ? "★ Retiré" : "☆ Favori");
+        on(f, "click", function () {
+          if (estFavori(e.url)) retirerFavori(e.url); else ajouterFavori(e.titre, e.url);
+          afficher(chercher(champ.value), "Aucun résultat pour cette recherche.");
+        });
+        li.appendChild(f);
+        resultats.appendChild(li);
+      });
+    }
+    afficher(chercher(""), "");
+    on(champ, "input", function () {
+      var q = champ.value;
+      if (q.trim() === "") { afficher(chercher(""), ""); return; }
+      afficher(chercher(q), "Aucun résultat pour cette recherche.");
+    });
+    setTimeout(function () { try { champ.focus(); } catch (e) { /* focus indisponible */ } }, 60);
   }
 
   function rendreFavoris() {
-    zonePanneau.textContent = "";
-    zonePanneau.appendChild(enTetePanneau("Vos favoris"));
+    zonePanneau.innerHTML = "";
+    zonePanneau.appendChild(entetePanneau("Vos favoris", true));
     var f = chargerFavoris();
-    var ajout = el("button", { "class": "compagnon-commande", "type": "button" }, "Ajouter cette page aux favoris");
-    on(ajout, "click", function () {
-      ajouterFavori(document.title || chemin, chemin);
-      rendreFavoris();
-    });
-    zonePanneau.appendChild(ajout);
+    var liste = el("ul", { "class": "compagnon-resultats" });
     if (f.length === 0) {
-      zonePanneau.appendChild(el("p", { "class": "compagnon-astuce" }, "Aucun favori pour l'instant. Vos favoris restent sur votre appareil, sans compte."));
-      return;
+      liste.appendChild(el("li", { "class": "compagnon-vide" }, "Aucun favori pour l'instant. Touchez ☆ à côté d'un résultat de recherche pour en garder un ici."));
+    } else {
+      f.forEach(function (x) {
+        var li = el("li");
+        li.appendChild(el("a", { "class": "compagnon-lien", "href": x.url }, x.titre));
+        var r = el("button", { "class": "compagnon-fav", "type": "button", "aria-label": "Retirer des favoris" }, "★ Retiré");
+        on(r, "click", function () { retirerFavori(x.url); rendreFavoris(); });
+        li.appendChild(r);
+        liste.appendChild(li);
+      });
     }
-    var liste = el("ul", { "class": "compagnon-liste-favoris" });
-    f.forEach(function (x) {
-      var li = el("li", { "class": "compagnon-resultat" });
-      li.appendChild(el("a", { "class": "compagnon-resultat-lien", "href": x.url }, x.titre));
-      var sup = el("button", { "class": "compagnon-fav-ajout", "type": "button", "aria-label": "Retirer des favoris : " + x.titre }, "Retirer");
-      on(sup, "click", function () { retirerFavori(x.url); rendreFavoris(); });
-      li.appendChild(sup);
-      liste.appendChild(li);
-    });
     zonePanneau.appendChild(liste);
-    zonePanneau.appendChild(el("p", { "class": "compagnon-astuce" }, "Suppression en 1 tap, sans confirmation."));
   }
 
-  function rendreMenu() {
-    zonePanneau.textContent = "";
-    zonePanneau.appendChild(enTetePanneau("Menu"));
-    var parSection = {};
-    DONNEES.forEach(function (e) {
-      if (!e.menu) return;
-      (parSection[e.menu] = parSection[e.menu] || []).push(e);
+  /* Plus : fonctions secondaires. Sans Paramètres séparé (décision
+     nº 5) : tout réglage vit dans Confort. Sans lien du menu
+     « Tout le site » : /plan-du-site n'existe pas (T5). */
+  function rendrePlus() {
+    zonePanneau.innerHTML = "";
+    zonePanneau.appendChild(entetePanneau("Plus", true));
+    conteneurSecondaires = el("div", { "class": "compagnon-secondaires" });
+    if (telephoneEtroit) {
+      conteneurSecondaires.appendChild(el("p", { "class": "compagnon-secondaires-titre" }, "Commandes :"));
+      placerCommandes();
+    }
+    zonePanneau.appendChild(conteneurSecondaires);
+
+    var groupe = el("div", { "class": "compagnon-groupe" });
+    groupe.appendChild(el("p", { "class": "compagnon-groupe-titre" }, "Partager et garder :"));
+    var bPartager = boutonCommande("Partager", "Partager cette page", partagerPage);
+    groupe.appendChild(bPartager);
+    groupe.appendChild(boutonCommande("Copier le lien", "Copier le lien de cette page", copierLien));
+    groupe.appendChild(boutonCommande("Favoris", "Voir vos favoris", function () { ouvrirPanneau("favoris"); }));
+    groupe.appendChild(boutonCommande("Imprimer", "Imprimer cette page", function () { window.print(); }));
+    var bTelecharger = boutonCommande("Télécharger", "Télécharger le fichier de cette page", function () {
+      var a = document.querySelector("[data-telechargement]");
+      if (a) a.click();
     });
-    ORDRE_MENU.forEach(function (section) {
-      var entrees = parSection[section];
+    var aTel = document.querySelector("[data-telechargement]");
+    if (!aTel) bTelecharger.setAttribute("disabled", "");
+    groupe.appendChild(bTelecharger);
+    groupe.appendChild(boutonCommande("Revenir en haut", "Revenir en haut de la page", function () {
+      if (mouvementReduit) window.scrollTo(0, 0);
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    }));
+    zonePanneau.appendChild(groupe);
+
+    var groupe2 = el("div", { "class": "compagnon-groupe" });
+    groupe2.appendChild(el("p", { "class": "compagnon-groupe-titre" }, "Aide et réseaux :"));
+    groupe2.appendChild(boutonCommande("Signaler un problème", "Signaler un problème sur cette page", function () {
+      var sujet = encodeURIComponent("Problème sur la page : " + (document.title || window.location.href));
+      var corps = encodeURIComponent("Bonjour,\n\nPage : " + window.location.href + "\n\nProblème :\n");
+      window.location.href = MAIL_DIRECTION + "?subject=" + sujet + "&body=" + corps;
+    }));
+    groupe2.appendChild(boutonCommande("Aide", "Aide et réponses", function () { ouvrirPanneau("aide"); }));
+    groupe2.appendChild(boutonCommande("Contacter HP", "Écrire à la direction humaine", function () { window.location.href = MAIL_DIRECTION; }));
+    groupe2.appendChild(el("p", { "class": "compagnon-groupe-titre" }, "Réseaux sociaux :"));
+    Object.keys(URL_RESEAUX).forEach(function (nom) {
+      groupe2.appendChild(boutonCommande(nom.charAt(0).toUpperCase() + nom.slice(1), "Ouvrir " + nom + " dans un nouvel onglet", function () { window.open(URL_RESEAUX[nom], "_blank", "noopener"); }));
+    });
+    groupe2.appendChild(boutonCommande("Remettre en bas", "Remettre la barre en bas de l'écran", function () { remettreEnBas(); }));
+    zonePanneau.appendChild(groupe2);
+
+    /* Menu du site (index, champs « menu »), par section. */
+    var sections = {};
+    for (var i = 0; i < DONNEES.length; i++) {
+      var e = DONNEES[i];
+      if (!e.menu) continue;
+      if (!sections[e.famille]) sections[e.famille] = [];
+      sections[e.famille].push(e);
+    }
+    var nav = el("nav", { "class": "compagnon-menu", "aria-label": "Menu du site" });
+    ORDRE_MENU.forEach(function (famille) {
+      var entrees = sections[famille];
       if (!entrees || entrees.length === 0) return;
-      var bloc = el("section", { "class": "compagnon-menu-section" });
-      bloc.appendChild(el("h3", { "class": "compagnon-menu-titre" }, section));
-      var ul = el("ul", { "class": "compagnon-menu-liste" });
+      var g = el("div", { "class": "compagnon-groupe" });
+      g.appendChild(el("p", { "class": "compagnon-groupe-titre" }, famille + " :"));
       entrees.forEach(function (e) {
-        var li = el("li");
-        li.appendChild(el("a", { "class": "compagnon-lien", "href": e.url }, e.titre));
-        ul.appendChild(li);
+        g.appendChild(el("a", { "class": "compagnon-lien", "href": e.url }, e.titre));
       });
-      if (section === "Aide et contact") {
-        var liMail = el("li");
-        liMail.appendChild(el("a", { "class": "compagnon-lien", "href": MAIL_DIRECTION }, "Écrire à la direction humaine"));
-        ul.appendChild(liMail);
-      }
-      bloc.appendChild(ul);
-      zonePanneau.appendChild(bloc);
+      nav.appendChild(g);
     });
-    var desactiver = el("section", { "class": "compagnon-menu-section" });
-    desactiver.appendChild(el("h3", { "class": "compagnon-menu-titre" }, "Désactiver"));
-    var btnMasquer = el("button", { "class": "compagnon-commande", "type": "button" }, "Masquer la barre");
-    on(btnMasquer, "click", masquerBarre);
-    desactiver.appendChild(btnMasquer);
-    zonePanneau.appendChild(desactiver);
+    zonePanneau.appendChild(nav);
+  }
+
+  /* Confort : 7 réglages (décision nº 4 + P1). La taille vit
+     ici ; la Lanterne garde l'atténuation, l'éclairage de zone,
+     le fond doux/sombre et la fermeture en 1 clic — le contraste
+     et l'espacement restent ici, un seul contrôle par réglage.
+     (Point à trancher au pilote : déplacer contraste/espacement
+     dans Lanterne serait 1 ligne.) */
+  function rendreConfort() {
+    zonePanneau.innerHTML = "";
+    zonePanneau.appendChild(entetePanneau("Confort", true));
+    zonePanneau.appendChild(el("p", { "class": "compagnon-note" }, "Vos réglages sont gardés sur cet appareil, sans compte. Ils s'appliquent à tout le site."));
+
+    var g1 = el("div", { "class": "compagnon-groupe" });
+    g1.appendChild(el("p", { "class": "compagnon-groupe-titre" }, "Taille du texte :"));
+    var tailles = ["Texte normal", "Texte plus grand", "Texte très grand"];
+    tailles.forEach(function (label, idx) {
+      var b = boutonCommande(label, label, function () { niveauTexte = idx; ecrireLS(LS_TEXTE, idx); appliquerTailleTexte(); rendreConfort(); });
+      if (niveauTexte === idx) b.classList.add("actif");
+      g1.appendChild(b);
+    });
+    zonePanneau.appendChild(g1);
+
+    var g2 = el("div", { "class": "compagnon-groupe" });
+    g2.appendChild(el("p", { "class": "compagnon-groupe-titre" }, "Affichage :"));
+    function bascule(label, cle, description) {
+      var b = boutonCommande(label + (confort[cle] ? " : activé" : " : désactivé"), description, function () {
+        confort[cle] = !confort[cle];
+        sauverConfort(); appliquerConfort(); rendreConfort();
+      });
+      if (confort[cle]) b.classList.add("actif");
+      g2.appendChild(b);
+    }
+    bascule("Fond sombre", "sombre", "Activer ou couper le fond sombre");
+    bascule("Contraste renforcé", "contraste", "Activer ou couper le contraste renforcé");
+    bascule("Animations réduites", "animations", "Activer ou couper les animations réduites");
+    bascule("Espacement du texte", "espacement", "Activer ou couper l'espacement du texte");
+    bascule("Navigation au clavier", "clavier", "Activer ou couper la navigation au clavier renforcée");
+    zonePanneau.appendChild(g2);
+
+    var g3 = el("div", { "class": "compagnon-groupe" });
+    g3.appendChild(boutonCommande("Réinitialiser le confort", "Réinitialiser tous les réglages de confort", function () {
+      confort = { sombre: false, contraste: false, animations: false, espacement: false, clavier: false };
+      niveauTexte = 0; ecrireLS(LS_TEXTE, 0); sauverConfort(); appliquerConfort(); appliquerTailleTexte(); rendreConfort();
+    }));
+    zonePanneau.appendChild(g3);
+  }
+
+  /* Lanterne : atténuation + éclairage de zone (P1). Le fond
+     doux/sombre et la fermeture en 1 clic sont ici aussi. */
+  function rendreLanterne() {
+    zonePanneau.innerHTML = "";
+    zonePanneau.appendChild(entetePanneau("Lanterne", true));
+    zonePanneau.appendChild(el("p", { "class": "compagnon-note" }, "Mode lecture confortable : la page s'assombrit, la zone de lecture reste éclairée."));
+    var g = el("div", { "class": "compagnon-groupe" });
+    var bActiver = boutonCommande(lanterneActive ? "Lanterne : activée" : "Allumer la Lanterne", "Allumer ou éteindre la Lanterne", function () {
+      lanterneActive = !lanterneActive;
+      document.documentElement.classList.toggle("compagnon-lanterne", lanterneActive);
+      if (lanterneActive) appliquerLanterne(); else retirerLanterne();
+      rendreLanterne();
+    });
+    if (lanterneActive) bActiver.classList.add("actif");
+    g.appendChild(bActiver);
+    ["doux", "sombre"].forEach(function (fond) {
+      var b = boutonCommande(fond === "doux" ? "Fond doux" : "Fond sombre", "Choisir le fond " + fond, function () {
+        lanterneFond = fond; appliquerLanterne(); rendreLanterne();
+      });
+      if (lanterneFond === fond) b.classList.add("actif");
+      g.appendChild(b);
+    });
+    zonePanneau.appendChild(g);
+  }
+
+  function appliquerLanterne() {
+    retirerLanterne();
+    var cible = document.querySelector("main") || document.body;
+    var voile = el("div", { "class": "compagnon-lanterne-voile compagnon-lanterne-" + lanterneFond, "aria-hidden": "true" });
+    on(voile, "click", function () { lanterneActive = false; document.documentElement.classList.remove("compagnon-lanterne"); retirerLanterne(); fermerPanneau(); });
+    cible.appendChild(voile);
+    cible.classList.add("compagnon-lanterne-cible");
+  }
+  function retirerLanterne() {
+    $all(".compagnon-lanterne-voile").forEach(function (n) { n.remove(); });
+    $all(".compagnon-lanterne-cible").forEach(function (n) { n.classList.remove("compagnon-lanterne-cible"); });
   }
 
   function rendreAide() {
-    zonePanneau.textContent = "";
-    zonePanneau.appendChild(enTetePanneau("Aide"));
-    var lignes = [
-      "La barre en bas vous mène partout sur le site : accueil, recherche, favoris et menu.",
-      "Elle ne recouvre jamais un champ, un résultat ni un bouton : si elle vous gêne, masquez-la, elle revient avec le bouton « Barre ».",
-      "La direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi."
-    ];
-    lignes.forEach(function (t) { zonePanneau.appendChild(el("p", { "class": "compagnon-aide-ligne" }, t)); });
-    zonePanneau.appendChild(el("a", { "class": "compagnon-lien", "href": "/faq" }, "Questions fréquentes"));
-    zonePanneau.appendChild(el("a", { "class": "compagnon-lien", "href": MAIL_DIRECTION }, "Écrire à la direction humaine"));
+    zonePanneau.innerHTML = "";
+    zonePanneau.appendChild(entetePanneau("Aide", true));
+    zonePanneau.appendChild(el("p", { "class": "compagnon-note" }, "La direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi."));
+    var g = el("div", { "class": "compagnon-groupe" });
+    g.appendChild(boutonCommande("Écrire à la direction humaine", "Écrire à la direction humaine par courriel", function () { window.location.href = MAIL_DIRECTION; }));
+    g.appendChild(boutonCommande("Poser une question à Sir H. Gepeto", "Poser une question à Sir H. Gepeto", function () { ouvrirQuestion(); }));
+    g.appendChild(boutonCommande("Plan du site (à venir)", "Le plan du site n'existe pas encore", function () { /* T5 : /plan-du-site, lot B13-reste */ }));
+    zonePanneau.appendChild(g);
   }
 
-  /* ---------- Mascottes (à la demande seulement, jamais les deux) ---------- */
-  function afficherMascotte(qui, texte) {
-    fermerMascotte();
-    mascotteOuverte = qui;
-    var estGepeto = qui === "gepeto";
-    var img = el("img", {
-      "class": "compagnon-mascotte-img",
-      "alt": estGepeto ? "Sir H. Gepeto" : "Pixel, la chatte",
-      "loading": "lazy",
-      "decoding": "async"
-    });
-    img.src = estGepeto ? IMG_GEPETO : IMG_PIXEL;
-    on(img, "error", function () {
-      /* Repli honnête hors ligne : l'initiale, jamais une image générique. */
-      var repli = el("span", { "class": "compagnon-mascotte-repli", "aria-hidden": "true" }, estGepeto ? "G" : "P");
-      if (img.parentNode) img.parentNode.replaceChild(repli, img);
-    });
-    carteMascotte.textContent = "";
-    carteMascotte.appendChild(img);
-    carteMascotte.appendChild(el("p", { "class": "compagnon-mascotte-texte" }, texte || (estGepeto ? DIALOGUES.gepeto : DIALOGUES.pixel)));
-    var fermer = el("button", { "class": "compagnon-fermer", "type": "button", "aria-label": "Fermer" });
-    fermer.innerHTML = ICONES.fermer;
-    on(fermer, "click", fermerMascotte);
-    carteMascotte.appendChild(fermer);
-    carteMascotte.removeAttribute("hidden");
-    carteMascotte.classList.add("ouverte");
+  /* ---------- Sir H. Gepeto, intégré dans la barre (v3 §5) ---------- */
+  function ouvrirGepeto() {
+    panneauOuvert = "gepeto";
+    if (panneau) panneau.setAttribute("hidden", "");
+    sectionGepeto.removeAttribute("hidden");
+    dialogueGepeto.removeAttribute("hidden");
+    mettreAJourCommandes();
+    assurerMoteur(function () { /* moteur prêt, rien de plus */ });
   }
 
-  function basculerMascotte(qui) {
-    if (mascotteOuverte === qui) { fermerMascotte(); return; }
-    afficherMascotte(qui);
-  }
-
-  function fermerMascotte() {
-    mascotteOuverte = null;
-    carteMascotte.classList.remove("ouverte");
-    carteMascotte.setAttribute("hidden", "");
-    carteMascotte.textContent = "";
-  }
-
-  /* ---------- Commandes de la boîte d'expansion ---------- */
-  function basculerModeLecture() {
-    modeLectureActif = !modeLectureActif;
-    document.documentElement.classList.toggle("compagnon-lecture", modeLectureActif);
-    if (modeLectureActif) {
-      fermerPanneau();
-      fermerMascotte();
-      cacherBarre("lecture");
-      boutonRappel.textContent = "Sortir du mode lecture";
-      boutonRappel.setAttribute("aria-label", "Sortir du mode lecture");
-    } else {
-      boutonRappel.textContent = "Barre";
-      boutonRappel.setAttribute("aria-label", "Afficher la barre du Compagnon");
-      montrerBarre();
+  function fermerGepeto() {
+    if (panneauOuvert === "gepeto") {
+      sectionGepeto.setAttribute("hidden", "");
+      panneauOuvert = null;
+      mettreAJourCommandes();
     }
-    mettreAJourCommandes();
   }
 
-  function basculerModeJeu() {
-    modeJeuActif = !modeJeuActif;
-    if (modeJeuActif) {
-      fermerPanneau();
-      fermerMascotte();
-      cacherBarre("jeu");
-    } else {
-      montrerBarre();
+  function basculerGepeto() {
+    if (panneauOuvert === "gepeto") { fermerGepeto(); return; }
+    if (gepetoFermeSession) {
+      document.dispatchEvent(new CustomEvent("hp:gepeto-rouvrir"));
+      gepetoFermeSession = false;
     }
-    mettreAJourCommandes();
+    ouvrirGepeto();
   }
 
-  var LIBELLES_TEXTE = ["Taille du texte : normale", "Taille du texte : grande", "Taille du texte : très grande"];
-  function changerTailleTexte() {
-    niveauTexte = (niveauTexte + 1) % 3;
-    ecrireLS(LS_TEXTE, niveauTexte);
-    appliquerTailleTexte();
-    mettreAJourCommandes();
+  /* Chargement du moteur (P2-a) : un seul tap = un seul
+     chargement. Pages React : le pont (HgptoPont) écoute
+     'hp:gepeto-ouvrir'. Pages statiques : injection du bundle
+     autonome /hgpto/hgpto.js (+ /hgpto/hgpto.css). Le moteur
+     signale 'hp:gepeto-pret' quand il est monté. */
+  function assurerMoteur(apres) {
+    if (moteurCharge) { if (apres) apres(); return; }
+    /* Moteur déjà monté par une autre voie (ex. page autonome qui
+       charge son bundle au chargement) : rien à charger, on signale
+       prêt tout de suite — sinon la barre attendrait un événement
+       déjà passé. */
+    if (document.querySelector(".hgpto-host")) {
+      moteurCharge = true;
+      if (apres) apres();
+      return;
+    }
+    if (moteurEnChargement) {
+      if (apres) document.addEventListener("hp:gepeto-pret", function pourPret() { document.removeEventListener("hp:gepeto-pret", pourPret); apres(); });
+      return;
+    }
+    moteurEnChargement = true;
+    var indicateur = el("p", { "class": "compagnon-gepeto-chargement" }, "Chargement de Sir H. Gepeto…");
+    hoteGepeto.appendChild(indicateur);
+    /* Un tap explicite sur Gepeto rouvre toujours : on efface le
+       drapeau de fermeture de session avant de charger (comme
+       l'ancien lanceur HgptoTap). */
+    try { window.sessionStorage.removeItem("hgpto-closed"); } catch (e) { /* session seulement */ }
+    var pontPresent = false;
+    try { pontPresent = document.documentElement.dataset.hgptoPont === "1"; } catch (e) { pontPresent = false; }
+    document.addEventListener("hp:gepeto-pret", function pourPret() {
+      document.removeEventListener("hp:gepeto-pret", pourPret);
+      moteurCharge = true;
+      moteurEnChargement = false;
+      if (indicateur.parentNode) indicateur.remove();
+      if (apres) apres();
+    });
+    if (pontPresent) {
+      document.dispatchEvent(new CustomEvent("hp:gepeto-ouvrir"));
+    } else {
+      if (!document.querySelector('link[href="/hgpto/hgpto.css"]')) {
+        var css = el("link", { "rel": "stylesheet", "href": "/hgpto/hgpto.css" });
+        document.head.appendChild(css);
+      }
+      if (!document.querySelector('script[src="/hgpto/hgpto.js"]')) {
+        var js = el("script", { "src": "/hgpto/hgpto.js", "defer": "" });
+        on(js, "error", function () {
+          moteurEnChargement = false;
+          indicateur.textContent = "Sir H. Gepeto n'a pas pu se charger. Réessayez, ou écrivez à la direction humaine.";
+        });
+        document.body.appendChild(js);
+      }
+    }
+    /* La promenade Gepeto : tant que le moteur n'est pas chargé,
+       Pixel seule marche sur la bande (c-tete.png, 55 Ko). */
+    if (!moteurCharge) demarrerPromenade("pixel");
   }
+
+  function ouvrirQuestion() {
+    assurerMoteur(function () {
+      if (panneauOuvert !== "gepeto") ouvrirGepeto();
+      document.dispatchEvent(new CustomEvent("hp:gepeto-question"));
+    });
+  }
+
+  /* ---------- Lire : lecture vocale à la demande (décision nº 8) ----------
+     La lecture est faite par le moteur (voix du navigateur,
+     français si disponible). La barre ne fait que commander
+     et montrer l'état : lecture, pause, arrêtée. */
+  function basculerLecture() {
+    if (lectureEtat === "lecture") {
+      document.dispatchEvent(new CustomEvent("hp:gepeto-lecture-pause"));
+      return;
+    }
+    if (lectureEtat === "pause") {
+      document.dispatchEvent(new CustomEvent("hp:gepeto-lecture-reprise"));
+      return;
+    }
+    assurerMoteur(function () {
+      document.dispatchEvent(new CustomEvent("hp:gepeto-lire"));
+    });
+  }
+
+  /* ---------- Partager et copier ---------- */
+  function partagerPage() {
+    var url = window.location.href;
+    var titre = document.title || "HP Outils";
+    if (navigator.share) {
+      navigator.share({ title: titre, url: url }).catch(function () { /* partage annulé */ });
+    } else {
+      copierLien();
+    }
+  }
+
+  function copierLien() {
+    var url = window.location.href;
+    function ok() {
+      var b = boutonsCommandes.plus;
+      if (b) b.setAttribute("aria-label", "Plus : lien copié");
+      setTimeout(function () { if (b) b.setAttribute("aria-label", "Plus : fonctions secondaires"); }, 3000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(ok, function () { copierLienSecours(url); ok(); });
+    } else {
+      copierLienSecours(url);
+      ok();
+    }
+  }
+
+  function copierLienSecours(url) {
+    var t = el("textarea");
+    t.value = url;
+    t.style.position = "fixed"; t.style.opacity = "0";
+    document.body.appendChild(t);
+    t.select();
+    try { document.execCommand("copy"); } catch (e) { /* copie indisponible */ }
+    t.remove();
+  }
+
+  /* ---------- Promenade (P2-d) ----------
+     Pixel seule marche sur la bande de la barre (sa tête est
+     fixe). Sir H. Gepeto ne marche que si le moteur est déjà
+     chargé (sinon, charger son image de 695 Ko juste pour la
+     promenade serait du gaspillage). Arrêt dès usage de la
+     barre, dès mouvement réduit, dès l'interrupteur coupé. */
+  function demarrerPromenade(qui) {
+    arreterPromenade();
+    if (!promenadeActive || mouvementReduit) return;
+    if (modeJeuActif || estLecture) return;
+    jetonPromenade++;
+    var monJeton = jetonPromenade;
+    var img = qui === "gepeto" ? IMG_GEPETO : IMG_PIXEL;
+    var delai = qui === "gepeto" ? 16000 + Math.random() * 14000 : 8000 + Math.random() * 8000;
+    minuteurPromenade = setTimeout(function () {
+      if (monJeton !== jetonPromenade) return;
+      marcheur.src = img;
+      marcheur.style.opacity = "1";
+      var rect = barre.getBoundingClientRect();
+      var largeur = rect.width || 320;
+      var depart = Math.random() * (largeur - 60);
+      var distance = 60 + Math.random() * 140;
+      var direction = Math.random() < 0.5 ? 1 : -1;
+      var fin = Math.max(10, Math.min(largeur - 50, depart + direction * distance));
+      marcheur.style.left = depart + "px";
+      marcheur.style.transform = direction < 0 ? "scaleX(-1)" : "";
+      if (!mouvementReduit) marcheur.style.transition = "left " + (2 + Math.random() * 3.2) + "s linear";
+      else marcheur.style.transition = "none";
+      requestAnimationFrame(function () { marcheur.style.left = fin + "px"; });
+      minuteurPromenade = setTimeout(function () {
+        if (monJeton !== jetonPromenade) return;
+        marcheur.style.opacity = "0";
+        minuteurPromenade = setTimeout(function () { if (monJeton === jetonPromenade) demarrerPromenade("pixel"); }, 400);
+      }, 2500 + Math.random() * 2700);
+    }, delai);
+  }
+
+  function arreterPromenade(definitif) {
+    if (minuteurPromenade) { clearTimeout(minuteurPromenade); minuteurPromenade = null; }
+    jetonPromenade++;
+    if (marcheur) marcheur.style.opacity = "0";
+    if (definitif) promenadeActive = false;
+  }
+
+  /* ---------- Réduire / rappeler (un seul verbe : « Réduire ») ---------- */
+  function reduireBarre() {
+    fermerPanneau();
+    barre.classList.add("compagnon-reduite");
+    boutonRappel.removeAttribute("hidden");
+    try { window.sessionStorage.setItem(SS_MASQUEE, "1"); } catch (e) { /* session seulement */ }
+  }
+
+  function rappelerBarre() {
+    barre.classList.remove("compagnon-reduite");
+    boutonRappel.setAttribute("hidden", "");
+    try { window.sessionStorage.removeItem(SS_MASQUEE); } catch (e) { /* session seulement */ }
+  }
+
+  /* ---------- Taille du texte (3 niveaux, existant) ---------- */
   function appliquerTailleTexte() {
     var html = document.documentElement;
     html.classList.remove("compagnon-texte-1", "compagnon-texte-2");
     if (niveauTexte === 1) html.classList.add("compagnon-texte-1");
-    if (niveauTexte === 2) html.classList.add("compagnon-texte-2");
+    else if (niveauTexte === 2) html.classList.add("compagnon-texte-2");
   }
 
-  function basculerPromenade() {
-    promenadeActive = !promenadeActive;
-    ecrireLS(LS_PROMENADE, promenadeActive);
-    if (!promenadeActive) arreterPromenade(true);
-    else planifierPromenade();
-    mettreAJourCommandes();
-    mettreAJourPromenadeBouton();
-  }
-  function mettreAJourPromenadeBouton() {
-    var b = $all(".compagnon-commande", boite).filter(function (x) { return x.textContent.indexOf("Promenade") === 0; })[0];
-    if (b) b.textContent = promenadeActive ? "Promenade : oui" : "Promenade : non";
-  }
+  /* ---------- Écoutes ---------- */
+  function ecouter() {
+    if (poignee) {
+      on(poignee, "pointerdown", surPoigneeBas);
+      on(poignee, "pointermove", surPoigneeBouger);
+      on(poignee, "pointerup", surPoigneeHaut);
+      on(poignee, "pointercancel", surPoigneeHaut);
+      on(poignee, "keydown", surPoigneeClavier);
+    }
 
-  function mettreAJourCommandes() {
-    var boutons = $all(".compagnon-commande", boite);
-    boutons.forEach(function (b) {
-      var t = b.textContent;
-      if (t.indexOf("Mode lecture") === 0) b.setAttribute("aria-pressed", modeLectureActif ? "true" : "false");
-      if (t.indexOf("Mode jeu") === 0) b.setAttribute("aria-pressed", modeJeuActif ? "true" : "false");
-      if (t.indexOf("Taille du texte") === 0) b.textContent = LIBELLES_TEXTE[niveauTexte];
+    /* Événements du moteur (contrat P2). */
+    document.addEventListener("hp:gepeto-ferme", function () {
+      gepetoFermeSession = true;
+      fermerGepeto();
     });
-  }
+    document.addEventListener("hp:gepeto-reduire", function () { fermerGepeto(); });
+    document.addEventListener("hp:lecture-etat", function (e) {
+      lectureEtat = (e && e.detail && e.detail.etat) || "arretee";
+      mettreAJourCommandes();
+    });
+    /* Le rapide « Trouve un outil » du moteur ouvre la Loupe. */
+    document.addEventListener("hp:compagnon-recherche", function () { ouvrirPanneau("recherche"); });
 
-  /* ---------- Masquer / rappeler la barre ---------- */
-  function cacherBarre(raison) {
-    barre.classList.add("compagnon-cache");
-    document.documentElement.classList.remove("compagnon-actif");
-    boutonRappel.removeAttribute("hidden");
-    if (raison === "session") ecrireSS(SS_MASQUEE, "1");
-    arreterPromenade(true);
-  }
-  function montrerBarre() {
-    barre.classList.remove("compagnon-cache", "reduite");
-    document.documentElement.classList.add("compagnon-actif");
-    boutonRappel.setAttribute("hidden", "");
-    try { window.sessionStorage.removeItem(SS_MASQUEE); } catch (e) { /* session seulement */ }
-    planifierPromenade();
-  }
-  function masquerBarre() {
-    fermerPanneau();
-    fermerMascotte();
-    modeLectureActif = false;
-    document.documentElement.classList.remove("compagnon-lecture");
-    boutonRappel.textContent = "Barre";
-    boutonRappel.setAttribute("aria-label", "Afficher la barre du Compagnon");
-    cacherBarre("session");
-  }
-  function rappelerBarre() {
-    if (modeLectureActif) { basculerModeLecture(); return; }
-    modeJeuActif = false;
-    montrerBarre();
-    mettreAJourCommandes();
-  }
+    /* Échap : ferme le panneau ouvert, jamais la barre. */
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && panneauOuvert) { fermerPanneau(); }
+    });
 
-  /* ---------- Promenade sur la barre (Gepeto et Pixel seulement) ----------
-     Courte et occasionnelle, jamais d'animation permanente : un seul
-     compagnon à la fois, une courte marche sur le bord de la barre,
-     jamais sur les icônes, puis un long repos. Arrêt dès qu'on
-     utilise la barre, arrêt avec le mouvement réduit, désactivable.
-     La tête de Pixel reste strictement fixe : le marcheur ne fait
-     que glisser horizontalement, sans rotation ni balancement. */
-  var marcheurQui = "pixel";
-  function planifierPromenade() {
-    if (minuteurPromenade) { clearTimeout(minuteurPromenade); minuteurPromenade = null; }
-    if (!promenadeActive || mouvementReduit) return;
-    if (document.hidden || panneauOuvert || mascotteOuverte) {
-      minuteurPromenade = setTimeout(planifierPromenade, 30000);
-      return;
-    }
-    minuteurPromenade = setTimeout(demarrerMarche, 18000 + Math.random() * 17000);
-  }
+    /* Réduction au défilement : la barre se replie en liseré,
+       le bouton « Barre » la rappelle. */
+    var dernierY = window.scrollY || 0;
+    var minuteurDefilement = null;
+    window.addEventListener("scroll", function () {
+      var y = window.scrollY || 0;
+      var descend = y > dernierY && y > 200;
+      dernierY = y;
+      if (minuteurDefilement) clearTimeout(minuteurDefilement);
+      minuteurDefilement = setTimeout(function () {
+        if (descend && panneauOuvert === null && !barre.classList.contains("compagnon-reduite") && !barre.classList.contains("compagnon-deplacee")) {
+          barre.classList.add("compagnon-repliee");
+          boutonRappel.removeAttribute("hidden");
+        } else if (!descend) {
+          barre.classList.remove("compagnon-repliee");
+          if (!barre.classList.contains("compagnon-reduite")) boutonRappel.setAttribute("hidden", "");
+        }
+      }, 120);
+    }, { passive: true });
 
-  function demarrerMarche() {
-    minuteurPromenade = null;
-    if (!promenadeActive || mouvementReduit || document.hidden || panneauOuvert || mascotteOuverte) { planifierPromenade(); return; }
-    if (barre.classList.contains("compagnon-cache") || barre.classList.contains("reduite")) { planifierPromenade(); return; }
-    marcheurQui = marcheurQui === "pixel" ? "gepeto" : "pixel";
-    var estGepeto = marcheurQui === "gepeto";
-    marcheur.src = estGepeto ? IMG_GEPETO : IMG_PIXEL;
-    marcheur.alt = "";
-    var jeton = ++jetonPromenade;
-    var partGauche = Math.random() < 0.5;
-    var largeur = barre.offsetWidth || 360;
-    var distance = Math.max(90, Math.min(200, Math.round(largeur * 0.4)));
-    var depart = partGauche ? 8 : largeur - 8 - 40;
-    var arrivee = partGauche ? depart + distance : depart - distance;
-    marcheur.style.transition = "none";
-    marcheur.style.left = depart + "px";
-    marcheur.style.opacity = "0";
-    marcheur.classList.add("visible");
-    /* Fondu d'entrée, marche, fondu de sortie. */
-    setTimeout(function () {
-      if (jeton !== jetonPromenade) return;
-      marcheur.style.transition = "opacity .45s ease, left 7s linear";
-      marcheur.style.opacity = "1";
-      marcheur.style.left = arrivee + "px";
-    }, 60);
-    setTimeout(function () {
-      if (jeton !== jetonPromenade) return;
-      marcheur.style.opacity = "0";
-    }, 6800);
-    setTimeout(function () {
-      if (jeton !== jetonPromenade) return;
-      marcheur.classList.remove("visible");
-      planifierPromenade();
-    }, 7400);
-  }
+    /* À la moindre interaction avec la barre, la promenade s'arrête. */
+    ["pointerdown", "focusin"].forEach(function (evt) {
+      barre.addEventListener(evt, function () { arreterPromenade(); });
+    });
 
-  function arreterPromenade(immediat) {
-    jetonPromenade++;
-    if (minuteurPromenade) { clearTimeout(minuteurPromenade); minuteurPromenade = null; }
-    if (marcheur) {
-      marcheur.style.transition = "none";
-      marcheur.style.opacity = "0";
-      marcheur.classList.remove("visible");
-    }
-    if (!immediat) planifierPromenade();
-  }
+    /* Retour au premier plan : la promenade reprend. */
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden && promenadeActive) demarrerPromenade("pixel");
+    });
 
-  /* ---------- Comportements ---------- */
-  var dernierDefilement = 0;
-  function surDefilement() {
-    if (mouvementReduit || panneauOuvert) return;
-    var y = window.scrollY || window.pageYOffset || 0;
-    if (y > dernierDefilement && y > 120) barre.classList.add("reduite");
-    else if (y < dernierDefilement) barre.classList.remove("reduite");
-    dernierDefilement = y;
-  }
-
-  function surFocusDans(e) {
-    var c = e.target;
-    if (!c || !c.tagName) return;
-    var nom = c.tagName.toLowerCase();
-    if ((nom === "input" || nom === "textarea" || nom === "select") && !document.getElementById("compagnon").contains(c)) {
-      barre.classList.add("compagnon-cache");
-      document.documentElement.classList.remove("compagnon-actif");
-      arreterPromenade(true);
-    }
-  }
-  function surFocusDehors(e) {
-    var c = e.target;
-    if (!c || !c.tagName) return;
-    var nom = c.tagName.toLowerCase();
-    if ((nom === "input" || nom === "textarea" || nom === "select") && !document.getElementById("compagnon").contains(c)) {
-      if (!barre.classList.contains("compagnon-cache")) return;
-      if (modeLectureActif || modeJeuActif || lireSS(SS_MASQUEE)) return;
-      if (estJeu) return; /* sur une page de jeu, la barre reste masquée */
-      barre.classList.remove("compagnon-cache");
-      document.documentElement.classList.add("compagnon-actif");
-    }
-  }
-
-  function surTouche(e) {
-    if (e.key === "Escape") {
-      if (mascotteOuverte) { fermerMascotte(); return; }
-      if (panneauOuvert) { fermerPanneau(); return; }
-    }
-  }
-
-  function surPointeurBas(e) {
-    /* Sur une page de jeu, un tap hors de la barre = on rejoue :
-       la barre se masque, le bouton « Barre » la rappelle (T2). */
-    if (!estJeu) return;
-    if (barre.classList.contains("compagnon-cache")) return;
-    var racine = document.getElementById("compagnon");
-    if (racine && racine.contains(e.target)) return;
-    cacherBarre("jeu");
-    boutonRappel.textContent = "Barre";
-    boutonRappel.setAttribute("aria-label", "Afficher la barre du Compagnon");
-  }
-
-  /* ---------- Accueil : Gepeto accueille, une fois par session (T9) ---------- */
-  function accueil() {
-    if (!estAccueil) return;
-    if (lireSS(SS_ACCUEIL)) return;
-    ecrireSS(SS_ACCUEIL, "1");
-    setTimeout(function () {
-      if (barre.classList.contains("compagnon-cache")) return;
-      if (mascotteOuverte || panneauOuvert) return;
-      afficherMascotte("gepeto", DIALOGUES.gepeto_accueil);
-    }, 800);
+    /* Changement de format : les commandes se replacent. */
+    try {
+      window.matchMedia("(max-width: 560px)").addEventListener("change", function (e) {
+        telephoneEtroit = e.matches;
+        placerCommandes();
+        if (panneauOuvert === "plus") rendrePlus();
+      });
+    } catch (e) { /* écoute indisponible */ }
+    window.addEventListener("resize", function () {
+      if (barre.classList.contains("compagnon-deplacee")) {
+        var r = rectBarre();
+        poserBarre(r.left, r.top);
+      }
+    });
   }
 
   /* ---------- Démarrage ---------- */
   function demarrer() {
-    construire();
-    if (!barre) return;
-    on(window, "scroll", surDefilement, { passive: true });
-    on(document, "focusin", surFocusDans);
-    on(document, "focusout", surFocusDehors);
-    on(document, "keydown", surTouche);
-    on(document, "pointerdown", surPointeurBas);
-    on(document, "visibilitychange", function () { if (!document.hidden) planifierPromenade(); });
-    on(barre, "pointerdown", function () { arreterPromenade(true); });
-    on(barre, "focusin", function () { arreterPromenade(true); });
-    mettreAJourCommandes();
-
-    if (lireSS(SS_MASQUEE) && !estJeu) {
-      cacherBarre("session");
-    } else if (estJeu) {
-      /* T2 : sur une page de jeu, la barre est masquée pendant le
-         jeu ; le bouton « Barre » la rappelle à la pause ou au menu. */
-      modeJeuActif = true;
-      cacherBarre("jeu");
-      mettreAJourCommandes();
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", demarrer);
+      return;
     }
-    accueil();
-    planifierPromenade();
+    /* Le Garde et Personne seule : la barre ne se monte pas
+       (option A, tension ouverte). La zone interdite s'applique
+       quand même si la barre y apparaît un jour. */
+    if (estPageStopExclue) return;
+    construire();
+    ecouter();
+    if (lireSS(SS_MASQUEE) === "1") reduireBarre();
+
+    /* Accueil (T9) : Sir H. Gepeto accueille à l'arrivée, une
+       fois par session, après 800 ms, dans le panneau de la
+       barre — jamais un recouvrement, jamais une pastille. */
+    if (estAccueil && lireSS(SS_ACCUEIL) !== "1") {
+      ecrireSS(SS_ACCUEIL, "1");
+      setTimeout(function () {
+        if (panneauOuvert) return;
+        dialogueGepeto.querySelector(".compagnon-gepeto-texte").textContent = DIALOGUES.gepeto_accueil;
+        ouvrirGepeto();
+      }, 800);
+    }
+    if (!estLecture && !modeJeuActif) demarrerPromenade("pixel");
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", demarrer);
-  } else {
-    demarrer();
-  }
+  demarrer();
 })();

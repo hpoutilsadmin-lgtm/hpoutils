@@ -397,6 +397,14 @@ export const SURPRISE_BIG_LINES = [
       ];
 export const FALLBACK = "Là, je ne sais pas — mais je le note pour la direction ! Écrivez à hpoutils.admin@gmail.com — la direction humaine vous répondra sous 3 jours ouvrables, lundi à vendredi.";
 export const KB = [
+        { q:"Explique-moi cette page", s:"CETTE PAGE", fn:"expliquer" },
+        { q:"Trouve un outil", s:"PAR ICI", fn:"outil" },
+        { q:"Résume-moi ceci", s:"EN BREF", fn:"resume" },
+        { q:"Comment ça marche ?", s:"LE SITE",
+          a:"Ici, tout est simple : les jeux et les outils sont gratuits, sans compte. Les livres, les kits et les ateliers sont payants — le paiement se fait par Stripe, et les fichiers se téléchargent après l'achat. Une question ? Écrivez à la direction humaine.",
+          u:"mailto:hpoutils.admin@gmail.com", l:"Écrire à la direction humaine" },
+        { q:"Aide-moi à choisir", s:"SANS PRESSE", fn:"choisir",
+          a:"" },
         { q:"T'es-tu vivant ?", s:"BONNE QUESTION",
           a:"Je suis un petit robot de site : je fais semblant super bien, mais mon cœur, c'est un boulon. Les vrais câlins, c'est les humains." },
         { q:"Tu m'aimes-tu pour vrai ?", s:"BONNE QUESTION",
@@ -569,8 +577,6 @@ export const KB = [
         { q:"C'est qui, Pixel ?", s:"MA CHATTE", fn:"pixel",
           a:"" },
         { q:"Nourris Pixel pour moi", s:"MIAM !", fn:"feed",
-          a:"" },
-        { q:"J'hésite, aide-moi à choisir", s:"SANS PRESSE", fn:"choisir",
           a:"" },
         { q:"C'est quoi, ton choix du moment ?", s:"MON CHOIX ♥", fn:"choix",
           a:"" },
