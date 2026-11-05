@@ -1033,16 +1033,29 @@
     if (definitif) promenadeActive = false;
   }
 
+  /* ---------- Bas de page : libéré quand la barre est en liseré ---------- */
+  /* La réserve de 150 px (compagnon-actif) ne sert que quand la barre est
+     dépliée. En liseré — réduite par le bouton « Réduire » ou repliée par
+     le défilement — le bas se libère : 30 px environ (voir compagnon.css).
+     Un seul endroit synchronise la classe : chaque changement d'état de
+     la barre passe par ici. */
+  function synchroniserBasDePage() {
+    var enLisere = barre.classList.contains("compagnon-reduite") || barre.classList.contains("compagnon-repliee");
+    document.documentElement.classList.toggle("compagnon-bas-libere", enLisere);
+  }
+
   /* ---------- Réduire / rappeler (un seul verbe : « Réduire ») ---------- */
   function reduireBarre() {
     fermerPanneau();
     barre.classList.add("compagnon-reduite");
+    synchroniserBasDePage();
     boutonRappel.removeAttribute("hidden");
     try { window.sessionStorage.setItem(SS_MASQUEE, "1"); } catch (e) { /* session seulement */ }
   }
 
   function rappelerBarre() {
     barre.classList.remove("compagnon-reduite");
+    synchroniserBasDePage();
     boutonRappel.setAttribute("hidden", "");
     try { window.sessionStorage.removeItem(SS_MASQUEE); } catch (e) { /* session seulement */ }
   }
@@ -1095,9 +1108,11 @@
       minuteurDefilement = setTimeout(function () {
         if (descend && panneauOuvert === null && !barre.classList.contains("compagnon-reduite") && !barre.classList.contains("compagnon-deplacee")) {
           barre.classList.add("compagnon-repliee");
+          synchroniserBasDePage();
           boutonRappel.removeAttribute("hidden");
         } else if (!descend) {
           barre.classList.remove("compagnon-repliee");
+          synchroniserBasDePage();
           if (!barre.classList.contains("compagnon-reduite")) boutonRappel.setAttribute("hidden", "");
         }
       }, 120);

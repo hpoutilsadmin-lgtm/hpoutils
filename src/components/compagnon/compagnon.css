@@ -19,6 +19,11 @@
 /* ---------- Réserve : le contenu ne passe jamais sous la barre ---------- */
 html.compagnon-actif body { padding-bottom: 150px; }
 html.compagnon-actif { scroll-padding-bottom: 160px; }
+/* Barre en liseré (réduite ou repliée) : le bas de page se libère.
+   32 px = liseré 22 px + marge 10 px (même marge que la barre dépliée) ;
+   env() suit la zone sûre du téléphone, comme le bas de la barre. */
+html.compagnon-actif.compagnon-bas-libere body { padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
+html.compagnon-actif.compagnon-bas-libere { scroll-padding-bottom: calc(42px + env(safe-area-inset-bottom, 0px)); }
 
 /* ---------- Barre unique : panneau flottant, style photo 1 ---------- */
 .compagnon-barre {
