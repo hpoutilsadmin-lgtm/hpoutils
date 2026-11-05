@@ -44,11 +44,11 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#
 #pointage{font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;line-height:1.1;}
 #pointage small{display:block;font-family:'Nunito',sans-serif;font-weight:800;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#8a6a42;}
 #btn-album{pointer-events:auto;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;
-  background:var(--vert);color:#fff;border:3px solid var(--vert-fonce);border-radius:16px;padding:8px 16px;
+  background:var(--vert);color:#fff;border:3px solid var(--vert-fonce);border-radius:16px;padding:11px 16px;
   box-shadow:0 4px 0 var(--vert-fonce);}
 #btn-album:active{transform:translateY(3px);box-shadow:0 1px 0 var(--vert-fonce);}
 #btn-son{pointer-events:auto;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;
-  background:var(--vert);color:#fff;border:3px solid var(--vert-fonce);border-radius:16px;padding:8px 16px;
+  background:var(--vert);color:#fff;border:3px solid var(--vert-fonce);border-radius:16px;padding:11px 16px;
   box-shadow:0 4px 0 var(--vert-fonce);}
 #btn-son:active{transform:translateY(3px);box-shadow:0 1px 0 var(--vert-fonce);}
 
@@ -81,9 +81,9 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#
   box-shadow:0 6px 0 var(--orange-fonce);}
 .gros-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--orange-fonce);}
 .petit-btn{cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:17px;color:var(--brun-fonce);
-  background:#ffe1a8;border:3px solid var(--brun);border-radius:999px;padding:9px 22px;box-shadow:0 4px 0 var(--brun);}
+  background:#ffe1a8;border:3px solid var(--brun);border-radius:999px;padding:12px 22px;box-shadow:0 4px 0 var(--brun);}
 .petit-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--brun);}
-.lien-discret{display:inline-block;margin-top:14px;background:none;border:none;cursor:pointer;
+.lien-discret{display:inline-block;margin-top:2px;padding:14px 10px;background:none;border:none;cursor:pointer;
   font-family:'Nunito',sans-serif;font-weight:800;font-size:14.5px;color:#8a6a42;text-decoration:underline;}
 .score-final{font-family:'Baloo 2',cursive;font-weight:800;font-size:30px;color:var(--orange-fonce);margin:4px 0 2px;}
 #album-grille{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 18px;text-align:left;}
@@ -124,14 +124,15 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#
 .panneau.large{max-width:640px;}
 #palette{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 12px;}
 .pal-btn{cursor:pointer;font-family:'Baloo 2',cursive;font-weight:800;font-size:16px;color:var(--brun-fonce);
-  background:#ffe1a8;border:3px solid var(--brun);border-radius:14px;padding:8px 14px;box-shadow:0 3px 0 var(--brun);}
+  background:#ffe1a8;border:3px solid var(--brun);border-radius:14px;padding:14px 14px;box-shadow:0 3px 0 var(--brun);}
 .pal-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--brun);}
 #parcours-liste{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;min-height:46px;
   border:3px dashed #d9bd8a;border-radius:14px;padding:8px;margin:0 0 16px;background:#fffdf4;}
 #parcours-liste .vide{font-weight:700;color:#b39b6d;font-size:14.5px;margin:auto;text-align:center;}
-.chip{cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;color:#fff;background:var(--vert);
-  border:2.5px solid var(--vert-fonce);border-radius:999px;padding:4px 12px;}
+.chip{cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;color:#fff;background:var(--vert);
+  border:2.5px solid var(--vert-fonce);border-radius:999px;padding:12px 14px;min-height:48px;}
 .chip:active{transform:translateY(2px);}
+#palette-desc{font-weight:700;font-size:14.5px;color:#7a5a36;margin:0 0 12px;min-height:20px;}
 
 @media (prefers-reduced-motion:reduce){
   #carte-dino{transition:none;}
@@ -178,6 +179,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#
       <div class="regle"><span class="pastille">3</span><span><strong>Ramasse les silex et les baies</strong> pour gonfler ton pointage. L'œuf doré redonne un cœur!</span></div>
       <div class="regle"><span class="pastille">4</span><span><strong>Découvre les 8 dinosaures</strong> : Tricératops, T-Rex, Brachiosaure et les autres. Chacun a son secret!</span></div>
       <div class="regle"><span class="pastille">5</span><span><strong>Grimpe sur les paliers</strong>, attrape les <strong>boosts</strong> (turbo, super saut)… et monte de niveau : les dinos deviennent plus rapides et plus menaçants!</span></div>
+      <div class="regle"><span class="pastille">6</span><span><strong>Crée ton parcours</strong> : 12 éléments à placer — et ta course ne s'arrête jamais, elle va de plus en plus vite !</span></div>
     </div>
     <button class="gros-btn" id="btn-jouer" type="button">Jouer!</button>
     <br>
@@ -208,8 +210,9 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#
 <div class="ecran" id="ecran-editeur">
   <div class="panneau large">
     <h2>Crée ton parcours!</h2>
-    <p class="sous-titre">Touche un élément pour l'ajouter à ta course, dans l'ordre. Touche un élément de la liste pour le retirer. Puis lance Silex dedans!</p>
+    <p class="sous-titre">Touche un élément pour l'ajouter à ta course, dans l'ordre. Touche un élément de la liste pour le retirer. Quand tu lances Silex, ta course ne s'arrête jamais : tes éléments reviennent en boucle, de plus en plus vite !</p>
     <div id="palette"></div>
+    <p class="sous-titre" id="palette-desc">Touche un élément pour voir ce qu'il fait !</p>
     <div id="parcours-liste"><span class="vide">Ton parcours est vide… ajoute des éléments!</span></div>
     <div class="rang-btns">
       <button class="gros-btn" id="btn-parcours-jouer" type="button">Jouer mon parcours!</button>
@@ -308,6 +311,7 @@ var SONS = {
   oeuf:   function () { [660, 880, 990, 1320].forEach(function (f, i) { setTimeout(function(){ bip(f, 0.14, 'triangle', 0.11); }, i * 70); }); },
   cogne:  function () { bip(140, 0.22, 'square', 0.10, 60); },
   glisse: function () { bip(500, 0.25, 'sawtooth', 0.05, 150); },
+  crache: function () { bip(180, 0.14, 'square', 0.06, 70); },
   decouvre:function () { [523, 659, 784, 1046].forEach(function (f, i) { setTimeout(function(){ bip(f, 0.16, 'triangle', 0.11); }, i * 80); }); },
   victoire:function () { [523, 659, 784, 1046, 784, 1046, 1318].forEach(function (f, i) { setTimeout(function(){ bip(f, 0.2, 'triangle', 0.11); }, i * 110); }); }
 };
@@ -365,7 +369,8 @@ var G = {
   niveau: 1,                // monte avec la distance : dinos plus rapides et menaçants
   turbo: 0, superSaut: 0,   // boosts en secondes restantes
   mode: 'libre',            // 'libre' (aléatoire) ou 'parcours' (créé par le joueur)
-  file: [], parcoursDef: [], spawnTimer: 0, nbSpawnParcours: 0
+  file: [], parcoursDef: [], spawnTimer: 0, nbSpawnParcours: 0,
+  sansFin: false, boucle: 0   // course sans fin : le parcours créé tourne en boucle, de plus en plus vite
 };
 var P = {                       // Silex, notre héros
   x: 0, y: 0, vy: 0, auSol: true, phase: 0,
@@ -373,6 +378,7 @@ var P = {                       // Silex, notre héros
   plat: null, surfaceY: 0       // palier sous les pieds + hauteur de son ombre
 };
 var obstacles = [], items = [], dinos = [], particules = [], textes = [], platforms = [];
+var cailloux = [];   // cailloux crachés par les petits volcans (éditeur + course sans fin)
 var nuages = [], fummees = [];
 (function initDecor() {
   for (var i = 0; i < 7; i++) nuages.push({ x: Math.random(), y: 0.04 + Math.random() * 0.2, s: 0.6 + Math.random() * 0.9, v: 0.004 + Math.random() * 0.006 });
@@ -995,6 +1001,30 @@ function dessinerObstacle(o) {
     ctx.beginPath(); ctx.ellipse(-38 * s, -12.5 * s, 3.4 * s, 7 * s, 0, 0, 7); ctx.stroke();
     ctx.fillStyle = '#4d9b47';
     ctx.beginPath(); ctx.ellipse(14 * s, -27 * s, 10 * s, 4 * s, 0.3, 0, 7); ctx.fill();
+  } else if (o.type === 'volcan') { // petit volcan qui crache des cailloux
+    ombre(0, 0, 34 * s);
+    ctx.fillStyle = '#6f6a61';
+    ctx.beginPath();
+    ctx.moveTo(-32 * s, 0); ctx.lineTo(-10 * s, -52 * s); ctx.lineTo(10 * s, -52 * s); ctx.lineTo(32 * s, 0);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#8a8580';
+    ctx.beginPath(); ctx.moveTo(-10 * s, -52 * s); ctx.lineTo(10 * s, -52 * s); ctx.lineTo(6 * s, -38 * s); ctx.lineTo(-6 * s, -38 * s); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#e8762c'; // le cratère brille : ça va cracher!
+    ctx.beginPath(); ctx.ellipse(0, -52 * s, 10 * s, 4 * s, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffd23e';
+    ctx.beginPath(); ctx.arc(0, -56 * s - Math.sin(G.temps * 5) * 2 * s, 3 * s, 0, 7); ctx.fill();
+  } else if (o.type === 'nid') { // nid de brindilles avec trois petits œufs
+    ombre(0, 0, 48 * s);
+    ctx.fillStyle = '#8a5a30';
+    ctx.beginPath(); ctx.ellipse(0, -6 * s, 46 * s, 10 * s, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#a9743f';
+    ctx.beginPath(); ctx.ellipse(0, -8 * s, 36 * s, 7 * s, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#fff8e8';
+    [[-15, -13], [0, -16], [15, -13]].forEach(function (p) {
+      ctx.beginPath(); ctx.ellipse(p[0] * s, p[1] * s, 6 * s, 7.5 * s, 0, 0, 7); ctx.fill();
+    });
+    ctx.fillStyle = '#7ec8e3';
+    ctx.beginPath(); ctx.arc(-15 * s, -15 * s, 2 * s, 0, 7); ctx.arc(0, -18 * s, 2 * s, 0, 7); ctx.arc(15 * s, -15 * s, 2 * s, 0, 7); ctx.fill();
   } else { // boue
     ctx.fillStyle = '#7a5230';
     ctx.beginPath(); ctx.ellipse(0, -2, 46 * s, 8 * s, 0, 0, 7); ctx.fill();
@@ -1049,6 +1079,18 @@ function dessinerItem(it, t) {
     ctx.moveTo(3 * s, -11 * s); ctx.lineTo(-6 * s, 2 * s); ctx.lineTo(-0.5 * s, 2 * s);
     ctx.lineTo(-3 * s, 11 * s); ctx.lineTo(7 * s, -2 * s); ctx.lineTo(1 * s, -2 * s);
     ctx.closePath(); ctx.fill();
+  } else if (it.type === 'cristal') { // cristal de quartz : il brille, +25 points!
+    var brille = 0.7 + Math.sin(t * 5 + it.phase) * 0.3;
+    ctx.globalAlpha = brille;
+    ctx.fillStyle = '#b8e6ff';
+    ctx.beginPath();
+    ctx.moveTo(0, -14 * s); ctx.lineTo(10 * s, 0); ctx.lineTo(0, 14 * s); ctx.lineTo(-10 * s, 0);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#e8f7ff';
+    ctx.beginPath(); ctx.moveTo(0, -14 * s); ctx.lineTo(10 * s, 0); ctx.lineTo(0, 0); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(3 * s, -4 * s, 2 * s, 0, 7); ctx.fill();
   } else { // BOOST super-saut : ressort vert avec flèche vers le haut
     ctx.strokeStyle = '#35702f'; ctx.lineWidth = 3.4 * s; ctx.lineCap = 'round';
     ctx.beginPath();
@@ -1068,6 +1110,20 @@ function dessinerItem(it, t) {
 function dessinerPalier(pl) {
   var s = U;
   ctx.save(); ctx.translate(pl.x, pl.y);
+  if (pl.pont) { // pont de lianes : planches de bois et lianes qui pendent
+    ombre(pl.w / 2, solY - pl.y, pl.w * 0.40);
+    ctx.fillStyle = '#8a5a30';
+    arrondi(0, -8 * s, pl.w, 12 * s, 6 * s); ctx.fill();
+    ctx.strokeStyle = '#6e4c26'; ctx.lineWidth = 2 * s;
+    for (var k = 0; k < 5; k++) { var px = (pl.w / 5) * (k + 0.5); ctx.beginPath(); ctx.moveTo(px, -8 * s); ctx.lineTo(px, 4 * s); ctx.stroke(); }
+    ctx.fillStyle = '#a9743f';
+    arrondi(0, -8 * s, pl.w, 4 * s, 2 * s); ctx.fill();
+    ctx.strokeStyle = '#4d8a44'; ctx.lineWidth = 2.6 * s; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(pl.w * 0.25, 4 * s); ctx.quadraticCurveTo(pl.w * 0.25 - 3 * s, 18 * s, pl.w * 0.25 + 2 * s, 26 * s); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pl.w * 0.7, 4 * s); ctx.quadraticCurveTo(pl.w * 0.7 + 3 * s, 16 * s, pl.w * 0.7 - 2 * s, 24 * s); ctx.stroke();
+    ctx.restore();
+    return;
+  }
   ombre(pl.w / 2, solY - pl.y, pl.w * 0.40); // ombre portée au sol : on voit la hauteur!
   // Dessous rocheux qui se rétrécit
   ctx.fillStyle = '#8a6238';
@@ -1124,6 +1180,13 @@ function creerPalier(x) {
   for (var i = 0; i < n; i++) items.push({ type: Math.random() < 0.6 ? 'silex' : 'baie', x: pl.x + 24 * U + i * 48 * U, y: pl.y - 24 * U, phase: i * 0.8, pris: false });
   return pl;
 }
+function creerPont(x) {
+  // Pont de lianes : long et bas, en planches de bois — on court dessus!
+  var pl = { x: x, w: (280 + Math.random() * 40) * U, y: solY - 72 * U, pont: true };
+  platforms.push(pl);
+  for (var i = 0; i < 2; i++) items.push({ type: 'silex', x: pl.x + 44 * U + i * 64 * U, y: pl.y - 24 * U, phase: i * 0.8, pris: false });
+  return pl;
+}
 /* Un élément de parcours : utilisé par le mode libre ET par l'éditeur */
 function spawnElement(type, x) {
   x = (typeof x === 'number') ? x : W + 90;
@@ -1137,6 +1200,14 @@ function spawnElement(type, x) {
     items.push({ type: 'oeuf', x: x, y: solY - 105 * U, phase: Math.random() * 6, pris: false });
   } else if (type === 'boost') {
     items.push({ type: Math.random() < 0.5 ? 'turbo' : 'super-saut', x: x, y: solY - (62 + Math.random() * 48) * U, phase: Math.random() * 6, pris: false });
+  } else if (type === 'volcan') {
+    obstacles.push({ type: 'volcan', x: x, touche: false, crache: 0.7 + Math.random() * 0.4 });
+  } else if (type === 'nid') {
+    obstacles.push({ type: 'nid', x: x, touche: false });
+  } else if (type === 'pont') {
+    creerPont(x);
+  } else if (type === 'cristal') {
+    items.push({ type: 'cristal', x: x, y: solY - (70 + Math.random() * 60) * U, phase: Math.random() * 6, pris: false });
   } else { // 'tresor' : rangée de silex ou de baies
     var tt = Math.random() < 0.55 ? 'silex' : 'baie';
     var hh = Math.random() < 0.45 ? solY - 118 * U : solY - 34 * U;
@@ -1199,6 +1270,7 @@ function majAJour(dt, t) {
   var enJeu = (G.etat === 'jeu');
   var demo = (G.etat === 'accueil' || G.etat === 'fin');
   G.vitesse = enJeu ? (5.0 + Math.min(3.0, G.distance / 2600) + (G.niveau - 1) * 0.5) * U : 2.1 * U;
+  if (enJeu && G.sansFin) G.vitesse = Math.min(G.vitesse, 12 * U); // course sans fin : la vitesse monte doucement, plafonnée pour rester jouable
   if (enJeu && G.turbo > 0) G.vitesse *= 1.45;
   if (G.boue > 0) { G.boue -= dt; G.vitesse *= 0.55; }
   G.camera += G.vitesse * pas;
@@ -1258,13 +1330,21 @@ function majAJour(dt, t) {
     }
   }
   // --- Parcours personnalisé : les éléments du joueur, dans son ordre ---
+  // Course sans fin : quand la file est vide, elle se remplit à nouveau —
+  // Silex court et saute indéfiniment, les éléments arrivent de plus en plus vite.
   if (enJeu && G.mode === 'parcours') {
     G.spawnTimer -= dt;
+    var delaiParcours = G.sansFin ? Math.max(0.55, 1.15 - (G.boucle - 1) * 0.12) : 1.15;
     if (G.file.length > 0 && G.spawnTimer <= 0) {
-      spawnElement(G.file.shift()); G.nbSpawnParcours++; G.spawnTimer = 1.15;
-    } else if (G.file.length === 0 && G.nbSpawnParcours > 0 &&
-               obstacles.length === 0 && dinos.length === 0 && platforms.length === 0 && items.length === 0) {
-      finParcours(); // tout est passé : parcours terminé!
+      spawnElement(G.file.shift()); G.nbSpawnParcours++; G.spawnTimer = delaiParcours;
+    } else if (G.file.length === 0 && G.nbSpawnParcours > 0) {
+      if (G.sansFin) {
+        G.file = G.parcoursDef.slice(); G.boucle++; majNiveau();
+        bandeau('Tour ' + G.boucle + ' ! Ça s\'accélère…');
+        G.spawnTimer = Math.max(0.55, 1.15 - (G.boucle - 1) * 0.12); // délai du NOUVEAU tour, pas de l'ancien
+      } else if (obstacles.length === 0 && dinos.length === 0 && platforms.length === 0 && items.length === 0) {
+        finParcours(); // tout est passé : parcours terminé!
+      }
     }
   }
 
@@ -1303,9 +1383,16 @@ function majAJour(dt, t) {
   // --- Obstacles ---
   for (var j = obstacles.length - 1; j >= 0; j--) {
     var o = obstacles[j]; o.x -= v;
+    if (enJeu && o.type === 'volcan') { // le petit volcan crache des cailloux qui tombent du ciel!
+      o.crache -= dt;
+      if (o.crache <= 0 && o.x > -60 && o.x < W + 120) {
+        cailloux.push({ x: o.x + (Math.random() - 0.5) * 36 * U, y: -24, vy: 0 });
+        o.crache = 0.85; SONS.crache();
+      }
+    }
     if (enJeu && !o.touche) {
-      var demiL = o.type === 'tronc' ? 36 * U : o.type === 'boue' ? 44 * U : 24 * U;
-      var hautO = o.type === 'roche' ? 44 * U : o.type === 'tronc' ? 25 * U : 6 * U;
+      var demiL = o.type === 'tronc' ? 36 * U : o.type === 'boue' ? 44 * U : o.type === 'nid' ? 46 * U : o.type === 'volcan' ? 30 * U : 24 * U;
+      var hautO = o.type === 'roche' ? 44 * U : o.type === 'tronc' ? 25 * U : o.type === 'nid' ? 20 * U : o.type === 'volcan' ? 52 * U : 6 * U;
       if (Math.abs(o.x - P.x) < demiL + 16 * U) {
         if (o.type === 'boue') {
           if (P.auSol && !P.plat) { o.touche = true; G.boue = 0.9; SONS.glisse(); eclabousse(P.x, solY); texteFlottant(P.x, P.y - 115 * U, 'Gliss!', '#7a5230'); }
@@ -1315,6 +1402,16 @@ function majAJour(dt, t) {
       }
     }
     if (o.x < -140) obstacles.splice(j, 1);
+  }
+  // --- Cailloux crachés par les petits volcans ---
+  for (var c = cailloux.length - 1; c >= 0; c--) {
+    var k = cailloux[c];
+    k.vy += 0.9 * U * pas; k.y += k.vy * pas; k.x -= v;
+    if (enJeu && P.invincible <= 0 && Math.abs(k.x - P.x) < 26 * U && k.y > P.y - 84 * U && k.y < P.y + 8 * U) {
+      perdreCoeur(P.x, P.y); cailloux.splice(c, 1); continue;
+    }
+    if (k.y >= solY) { poussiere(k.x, solY, 3); cailloux.splice(c, 1); continue; }
+    if (k.x < -80) cailloux.splice(c, 1);
   }
   // --- Trésors ---
   for (var k = items.length - 1; k >= 0; k--) {
@@ -1328,6 +1425,7 @@ function majAJour(dt, t) {
         else if (it.type === 'baie') { G.score += 5 * mult; SONS.ramasse(); texteFlottant(it.x, it.y - 24 * U, '+' + (5 * mult), '#fff'); etincelles(it.x, it.y, '#ff8a7a'); }
         else if (it.type === 'turbo') { G.turbo = 5; SONS.oeuf(); texteFlottant(it.x, it.y - 24 * U, 'TURBO!', '#e8762c'); etincelles(it.x, it.y, '#ffd23e'); }
         else if (it.type === 'super-saut') { G.superSaut = 8; SONS.oeuf(); texteFlottant(it.x, it.y - 24 * U, 'SUPER SAUT!', '#35702f'); etincelles(it.x, it.y, '#9fe08a'); }
+        else if (it.type === 'cristal') { G.score += 25 * mult; SONS.ramasse(); texteFlottant(it.x, it.y - 24 * U, '+25', '#7ec8e3'); etincelles(it.x, it.y, '#b8e6ff'); }
         else { SONS.oeuf(); etincelles(it.x, it.y, '#ffd23e');
           if (G.coeurs < 3) { G.coeurs++; majCoeurs(); texteFlottant(it.x, it.y - 24 * U, '+1 cœur!', '#e2483d'); }
           else { G.score += 50 * mult; texteFlottant(it.x, it.y - 24 * U, '+' + (50 * mult), '#f0a51f'); } }
@@ -1371,6 +1469,15 @@ function dessinerTextes() {
     ctx.globalAlpha = 1;
   });
 }
+function dessinerCaillou(k) {
+  var s = U;
+  ctx.save(); ctx.translate(k.x, k.y);
+  ctx.fillStyle = '#6f6a61';
+  ctx.beginPath(); ctx.arc(0, 0, 7 * s, 0, 7); ctx.fill();
+  ctx.fillStyle = '#a8a29a';
+  ctx.beginPath(); ctx.arc(-2 * s, -2 * s, 3.5 * s, 0, 7); ctx.fill();
+  ctx.restore();
+}
 function rendre(t) {
   ctx.save();
   if (G.shake > 0) ctx.translate((Math.random() - 0.5) * G.shake, (Math.random() - 0.5) * G.shake * 0.6);
@@ -1383,6 +1490,7 @@ function rendre(t) {
   platforms.forEach(dessinerPalier);
   items.forEach(function (it) { dessinerItem(it, t); });
   obstacles.forEach(dessinerObstacle);
+  cailloux.forEach(dessinerCaillou);
   dinos.forEach(function (d) { if (d.voie === 'pres') dessinerDino(d, t); });
   dessinerSilex(t);
   dinos.forEach(function (d) { if (d.voie === 'ciel') dessinerDino(d, t); });
@@ -1402,11 +1510,12 @@ function majCoeurs() {
   for (var i = 0; i < spans.length; i++) spans[i].className = i < G.coeurs ? '' : 'perdu';
 }
 function majAlbumBtn() { el('album-val').textContent = G.nbTrouves + '/8'; }
-function majNiveau() { el('niveau-val').textContent = 'Niveau ' + G.niveau; }
+function majNiveau() { el('niveau-val').textContent = G.sansFin ? ('Tour ' + G.boucle + ' · Niveau ' + G.niveau) : ('Niveau ' + G.niveau); }
 var dernierBoostTxt = '';
 function majBoostUI() {
   var morceaux = [];
   if (G.turbo > 0) morceaux.push('TURBO ' + Math.ceil(G.turbo) + ' s');
+  if (G.sansFin) morceaux.push('Vitesse ' + (G.vitesse / U).toFixed(1).replace('.', ','));
   if (G.superSaut > 0) morceaux.push('SUPER SAUT ' + Math.ceil(G.superSaut) + ' s');
   var txt = morceaux.join(' • ');
   if (txt !== dernierBoostTxt) { dernierBoostTxt = txt; el('boost-ligne').textContent = txt; }
@@ -1453,11 +1562,12 @@ function demarrer(mode) {
   G.etat = 'jeu'; G.score = 0; G.coeurs = 3; G.distance = 0;
   G.trouves = {}; G.nbTrouves = 0; G.boue = 0; G.shake = 0;
   G.dernierSpawn = 0.8; G.camera = 0;
-  G.niveau = 1; G.turbo = 0; G.superSaut = 0;
+  G.niveau = 1; G.turbo = 0; G.superSaut = 0; G.sansFin = false; G.boucle = 0;
   G.mode = (mode === 'parcours') ? 'parcours' : 'libre';
   G.file = G.mode === 'parcours' ? G.parcoursDef.slice() : [];
+  if (G.mode === 'parcours') { G.sansFin = true; G.boucle = 1; }
   G.spawnTimer = 0.7; G.nbSpawnParcours = 0;
-  obstacles = []; items = []; dinos = []; particules = []; textes = []; platforms = [];
+  obstacles = []; items = []; dinos = []; particules = []; textes = []; platforms = []; cailloux = [];
   P.y = solY; P.vy = 0; P.auSol = true; P.invincible = 0; P.etourdi = 0; P.plat = null; P.surfaceY = solY;
   el('ecran-accueil').classList.remove('visible');
   el('ecran-fin').classList.remove('visible');
@@ -1468,7 +1578,7 @@ function demarrer(mode) {
   else el('astuce').classList.add('visible');
   setTimeout(function () { el('astuce').classList.remove('visible'); }, 6000);
   majScore(); majCoeurs(); majAlbumBtn(); majNiveau();
-  if (G.mode === 'parcours') bandeau('Ton parcours commence!');
+  if (G.mode === 'parcours') bandeau('Ton parcours commence — sans fin !');
 }
 function finParcours() {
   G.mode = 'libre'; G.etat = 'fin';
@@ -1487,11 +1597,16 @@ function finPartie() {
   el('carte-dino').classList.remove('visible');
   var complet = G.nbTrouves === ESPECES.length;
   el('fin-titre').textContent = complet ? 'ALBUM COMPLET! Super pisteur!' : (G.nbTrouves >= 5 ? 'Quelle belle expédition!' : 'Belle course, Silex!');
-  if (G.mode === 'parcours') { el('fin-titre').textContent = 'Ouille! Parcours interrompu'; G.mode = 'libre'; }
+  var etaitSansFin = G.sansFin, toursFin = G.boucle;
+  if (G.mode === 'parcours') {
+    el('fin-titre').textContent = etaitSansFin ? 'Course sans fin terminée !' : 'Ouille! Parcours interrompu';
+    G.mode = 'libre'; G.sansFin = false;
+  }
   el('fin-score').textContent = G.score;
   el('fin-detail').textContent = 'Tu as découvert ' + G.nbTrouves + ' dinosaure' + (G.nbTrouves > 1 ? 's' : '') + ' sur 8' +
     (complet ? '. Tu les connais tous!' : '. Encore ' + (8 - G.nbTrouves) + ' à rencontrer!') +
-    ' Distance : ' + Math.round(G.distance) + ' m de course dans le Crétacé.';
+    ' Distance : ' + Math.round(G.distance) + ' m de course dans le Crétacé.' +
+    (etaitSansFin ? ' Ton parcours a tourné ' + toursFin + ' fois !' : '');
   if (complet) SONS.victoire();
   setTimeout(function () { el('ecran-fin').classList.add('visible'); }, 650);
 }
@@ -1499,9 +1614,18 @@ function finPartie() {
    ÉDITEUR DE PARCOURS — le joueur compose sa course, élément par élément
    ===================================================================== */
 var PALETTE = [
-  { type:'roche', label:'Roche' }, { type:'tronc', label:'Tronc' }, { type:'boue', label:'Boue' },
-  { type:'palier', label:'Palier' }, { type:'tresor', label:'Trésors' }, { type:'oeuf', label:'Œuf doré' },
-  { type:'boost', label:'Boost' }, { type:'dino', label:'Dino surprise' }
+  { type:'roche', label:'🪨 Roche', desc:'Une grosse roche : saute par-dessus, sinon aïe !' },
+  { type:'tronc', label:'🪵 Tronc', desc:'Un tronc tombé : saute par-dessus, sinon aïe !' },
+  { type:'boue', label:'💧 Boue', desc:'Une flaque de boue : elle te fait glisser et ralentit ta course !' },
+  { type:'palier', label:'🧱 Palier', desc:'Un palier de pierre : grimpe dessus, des trésors t\'attendent !' },
+  { type:'pont', label:'🌿 Pont de lianes', desc:'Un pont de lianes, long et bas : cours dessus, ramasse les silex !' },
+  { type:'volcan', label:'🌋 Petit volcan', desc:'Un petit volcan qui crache des cailloux : évite le cône ET les cailloux qui tombent !' },
+  { type:'nid', label:'🐣 Nid d\'œufs', desc:'Un nid avec trois petits œufs : saute par-dessus sans réveiller les petits !' },
+  { type:'tresor', label:'✨ Trésors', desc:'Une rangée de silex ou de baies : ramasse tout pour gonfler ton pointage !' },
+  { type:'cristal', label:'💎 Cristal', desc:'Un cristal de quartz qui brille : +25 points quand tu le ramasses !' },
+  { type:'oeuf', label:'🥚 Œuf doré', desc:'Un œuf doré, rare : il te redonne un cœur (ou +50 points) !' },
+  { type:'boost', label:'⚡ Boost', desc:'Un boost surprise : turbo (plus vite, points doublés) ou super saut !' },
+  { type:'dino', label:'🦕 Dino surprise', desc:'Un dinosaure surprise qui se promène : passe à côté pour le découvrir (+50) !' }
 ];
 function labelType(type) {
   for (var i = 0; i < PALETTE.length; i++) if (PALETTE[i].type === type) return PALETTE[i].label;
@@ -1530,6 +1654,7 @@ function construirePalette() {
     b.type = 'button'; b.className = 'pal-btn';
     b.textContent = '+ ' + p.label;
     b.addEventListener('click', function () {
+      el('palette-desc').textContent = p.desc;
       if (G.parcoursDef.length >= 24) { bandeau('Parcours plein! (24 éléments max)'); return; }
       G.parcoursDef.push(p.type); rendreParcoursListe(); SONS.ramasse();
     });
