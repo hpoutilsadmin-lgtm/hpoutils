@@ -3199,7 +3199,7 @@ function pEnsureTesseract(){
   if (tessPromise) return tessPromise;
   tessPromise = new Promise(function(resolve, reject){
     var s = document.createElement("script");
-    s.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+    s.src = "/boite/assets/tesseract/tesseract.min.js";
     var to = setTimeout(function(){ reject(new Error("timeout")); }, 45000);
     s.onload = function(){ clearTimeout(to); window.Tesseract ? resolve() : reject(new Error("noglobal")); };
     s.onerror = function(){ clearTimeout(to); reject(new Error("load")); };
@@ -3229,6 +3229,9 @@ $("p-read").addEventListener("click", function(){
   pEnsureTesseract().then(function(){
     if (!P.ocrBusy) return;
     return window.Tesseract.recognize(P.photoFile, "fra", {
+      workerPath: "/boite/assets/tesseract/worker.min.js",
+      corePath: "/boite/assets/tesseract/tesseract-core-lstm.wasm.js",
+      langPath: "/boite/assets/tesseract/",
       logger: function(m){
         if (!P.ocrBusy) return;
         if (m.status) $("p-status").textContent = pFriendlyStatus(m.status);
@@ -3248,7 +3251,7 @@ $("p-read").addEventListener("click", function(){
     }
     pRenderFiche(pAnalyze(text, true));
   }).catch(function(){
-    fail("Le lecteur de texte n’a pas pu se charger (il faut une connexion internet la première fois). Collez le texte à la main ci-dessous — tout le reste marchera hors-ligne.");
+    fail("Le lecteur de texte n’a pas pu se charger. Collez le texte à la main ci-dessous — tout le reste marchera hors-ligne.");
   });
 });
 function pFriendlyStatus(st){
@@ -3338,7 +3341,7 @@ $("c-read-photos").addEventListener("click",function(){
     chosen.forEach(function(k){
       chain=chain.then(function(){
         status.textContent="Lecture de l’étiquette "+k.toUpperCase()+"…";
-        return window.Tesseract.recognize(C.files[k],"fra").then(function(r){found.push({k:k,data:cExtract((r.data&&r.data.text)||"",k)});});
+        return window.Tesseract.recognize(C.files[k],"fra",{workerPath:"/boite/assets/tesseract/worker.min.js",corePath:"/boite/assets/tesseract/tesseract-core-lstm.wasm.js",langPath:"/boite/assets/tesseract/"}).then(function(r){found.push({k:k,data:cExtract((r.data&&r.data.text)||"",k)});});
       });
     });
     return chain.then(function(){
@@ -3701,7 +3704,7 @@ xRenderList();
       var done = false;
       function fin(ok){ if (!done){ done = true; resolve(!!ok); } }
       var s = document.createElement("script");
-      s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+      s.src = "/boite/assets/qrcode.min.js";
       s.onload = function(){ fin(!!window.qrcode); };
       s.onerror = function(){ fin(false); };
       setTimeout(function(){ fin(!!window.qrcode); }, 20000);

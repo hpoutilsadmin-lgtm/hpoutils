@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hors ligne — HP Outils</title>
+<style>
+body{margin:0;background:#F7F2E6;color:#2b2118;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:560px;margin:0 auto;padding:24px 16px 48px}
+header{display:flex;gap:12px;align-items:center}
+header img{width:48px;height:48px;border-radius:50%;object-fit:cover;background:#fff}
+h1{font-size:22px;margin:0}
+p{margin:12px 0}
+h2{font-size:18px;margin:28px 0 8px}
+ul{margin:8px 0;padding-left:22px}
+li{margin:6px 0}
+a{color:#7a4d12}
+.note{background:#fff;border:1px solid #d8c9a8;border-radius:12px;padding:14px 16px}
+.btn{display:inline-block;margin-top:16px;padding:14px 28px;border-radius:10px;background:#7a4d12;color:#fff;text-decoration:none;font-weight:600}
+.etat{font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<header>
+<img src="/hgpto/gepeto/tete-144.png" alt="Sir H. Gepeto" width="48" height="48">
+<h1>Vous etes hors ligne</h1>
+</header>
+<p>Bonjour, c'est Gepeto. Pas de panique : pas besoin d'internet pour ce qui suit, tout est deja sur votre appareil.</p>
+<p class="etat" id="etat">Etat : hors ligne.</p>
+
+<h2>Ce qui marche sans internet</h2>
+<ul>
+<li><a href="/boite/index.html">La Boite a outils</a> — les 8 outils : heritage, decision, lecture de paperasse (photo ou texte colle), vrai prix au 100 g, script d'appel, demarches, coffre a codes, relanceur. La lecture de photo marche aussi hors ligne : le lecteur et son dictionnaire francais sont sur votre appareil.</li>
+<li><a href="/en-cuisine/index.html">En cuisine</a> — les 629 recettes, le convertisseur et la liste d'epicerie, avec <a href="/en-cuisine/panier/index.html">le panier</a>.</li>
+<li><a href="/passeur-de-savoir/index.html">Le Passeur de savoir</a> — la collection et vos fiches gardees sur votre appareil.</li>
+<li><a href="/outils-web/index.html">Les outils autonomes</a> — <a href="/outils-web/le-reste-du-mois.html">le reste du mois</a>, <a href="/outils-web/ca-vaut-tu-la-peine.html">ca vaut-tu la peine</a>, <a href="/outils-web/le-relais.html">le relais</a>, <a href="/outils-web/maintenant.html">maintenant</a> et <a href="/apps/hp-hyper-potentiel/index.html">un petit pas a la fois</a>.</li>
+<li>6 jeux legers — <a href="/apps/hockey-hgpto/hockey-hgpto-v1.0.html">Hockey HGPTO</a>, <a href="/apps/mineur-hp/mineur-hp-v0.1.html">Mineur HP</a>, <a href="/apps/slalomeuse/index.html">Slalomeuse</a>, <a href="/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html">Votre IA parle-t-elle quebecois ?</a>, <a href="/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html">Chevalier du fleuve</a>, <a href="/apps/sur-lherbe/sur-lherbe-v1.0.html">Sur l'herbe</a>.</li>
+</ul>
+
+<h2>Ce qui attend internet</h2>
+<ul>
+<li>Les achats, les formulaires d'inscription et les liens vers les autres pages du site.</li>
+<li>Les coeurs publics des jeux : vos favoris restent gardes sur votre appareil, le compteur public reviendra avec internet.</li>
+<li>Les polices d'origine du site : en attendant, votre telephone utilise ses propres polices, le texte reste lisible.</li>
+</ul>
+
+<div class="note">
+<p><strong>Astuce iPhone :</strong> pour garder ce pack plus de 7 jours sans visite, ajoutez-le a votre ecran d'accueil : bouton Partager, puis Ajouter a l'ecran d'accueil. Les applis ajoutees a l'ecran d'accueil ont leur propre compteur.</p>
+<p><strong>Vos donnees :</strong> les pages hors ligne sont conservees sur votre appareil. Rien de ce que vous ecrivez dans les outils ne part sur internet.</p>
+</div>
+
+<p><a class="btn" href="/boite/index.html">Ouvrir la Boite a outils</a></p>
+</main>
+<script>
+(function () {
+  var el = document.getElementById('etat');
+  function maj() {
+    el.textContent = navigator.onLine ? 'Etat : en ligne. La page va se recharger.' : 'Etat : hors ligne.';
+    if (navigator.onLine) { location.reload(); }
+  }
+  window.addEventListener('online', maj);
+  window.addEventListener('offline', maj);
+  maj();
+})();
+</script>
+</body>
+</html>
