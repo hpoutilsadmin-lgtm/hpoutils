@@ -6,7 +6,7 @@ export const Route = createFileRoute("/outils")({
   head: () => ({
     ...createSeoHead({
       title: "Outils gratuits pour la vraie vie, sans compte | HP Outils",
-      description: "La Boîte à outils HP : budget du mois, relais des proches aidants, 629 recettes. 100 % gratuit, sans compte, et vos données restent sur votre appareil.",
+      description: "La Boîte à outils HP : budget du mois, relais des proches aidants, 666 recettes. 100 % gratuit, sans compte, et vos données restent sur votre appareil.",
       path: "/outils",
     }),
     scripts: [
@@ -41,7 +41,7 @@ const WEB_TOOLS = [
     emoji: "🍲",
     tag: "Recettes",
     title: "En cuisine — Recettes HP",
-    copy: "629 recettes pour cuisiner avec ce qu'on a sous la main : cherchez par ingrédients, convertissez les températures du four et trouvez quoi faire avec les restes.",
+    copy: "666 recettes pour cuisiner avec ce qu'on a sous la main : cherchez par ingrédients, convertissez les températures du four et trouvez quoi faire avec les restes.",
     cta: "Entrer dans la cuisine →",
     href: "/en-cuisine/",
   },

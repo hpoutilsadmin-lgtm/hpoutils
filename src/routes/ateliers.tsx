@@ -165,7 +165,7 @@ function Page() {
             </article>
             <article className="pillar-card">
               <h3>En cuisine, gratuitement</h3>
-              <p>Le pendant libre des ateliers cuisine : 629 recettes gratuites, un convertisseur et des idées pour les petits budgets.</p>
+              <p>Le pendant libre des ateliers cuisine : 666 recettes gratuites, un convertisseur et des idées pour les petits budgets.</p>
               <a className="pillar-cta" href="/en-cuisine/">Ouvrir En cuisine →</a>
             </article>
           </div>

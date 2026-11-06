@@ -135,7 +135,7 @@ export const PITCHES = [
         { t:"Envie de jouer en famille ? Il y a 41 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"41 + 1 CACHÉ" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper votre quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
-        { t:"Vous avez des ingrédients qui traînent ? Tapez-les dans Recettes HP : 629 recettes gratuites à découvrir.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"629 RECETTES" },
+        { t:"Vous avez des ingrédients qui traînent ? Tapez-les dans Recettes HP : 666 recettes gratuites à découvrir.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"666 RECETTES" },
         { t:"« La faim justifie les moyens », notre livre à 10 $ : des histoires qui nourrissent, à lire tranquillement.", s:"LIVRES" },
         { t:"Le livre « Les enfants cuisinent pour faire plaisir » : 10 $ de recettes à faire en famille, petits chefs bienvenus.", s:"EN FAMILLE" },
         { t:"Nos livres « Horizon Québec » (10 $) et « Enjeux de l'humanité à l'ère de l'IA » (15 $) sont au catalogue.", s:"LIVRES" },
@@ -195,7 +195,7 @@ export const COOK_LINES = [
         "Un robot qui cuisine, ça surprend ? Moi, je trouve ça très humain."
       ];
 export const COOK_TASTE = "Mmm… je goûte… encore une petite minute et c'est prêt !";
-export const RECETTES_LINE = "Ce soir, c'est soupe ! La recette vient de Recettes HP — il y en a 629, toutes gratuites.";
+export const RECETTES_LINE = "Ce soir, c'est soupe ! La recette vient de Recettes HP — il y en a 666, toutes gratuites.";
 export const EVENING_LINES = [
         "Bonne nuit… je veille sur le site en dormant.",
         "Chut… le site se repose, moi aussi, presque.",
@@ -336,7 +336,7 @@ export const SITE_FACTS = {
         produits: {
           kits:   { nom:"Kits Sans Honte", prix:"5 $ le kit, bundle 40 $", url:"https://www.hp-outils.com/sans-honte" },
           livres: { nom:"Livres PDF", prix:"10 $ à 15 $", url:"https://www.hp-outils.com/livres-pdf" },
-          recettes:{ nom:"Recettes HP", prix:"Gratuit — 629 recettes", url:"https://www.hp-outils.com/en-cuisine/" },
+          recettes:{ nom:"Recettes HP", prix:"Gratuit — 666 recettes", url:"https://www.hp-outils.com/en-cuisine/" },
           jeux:   { nom:"Jeux", prix:"Gratuit — 41 + 1 caché", url:"https://www.hp-outils.com/jeux" },
           ateliers:{ nom:"Ateliers", prix:"150 $ à 290 $", url:"https://www.hp-outils.com/ateliers" },
           passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois, 28 $ / an — accès aux 16 savoirs (inscription par courriel)", url:"https://www.hp-outils.com/les-passeurs" },
@@ -425,8 +425,8 @@ export const KB = [
         { q:"Il y a quoi, dans les kits ?", s:"15 KITS",
           a:"15 thèmes du quotidien : Papiers (24 fiches), Frigo, Me Reconnaître, Tenir Debout, Seconde Main, Entraide, Fraude, Logement, Proche Aidant, 72 Heures, Testament olographe, Papiers de mes parents, Chalet, L'année québécoise et Héritage numérique.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits" },
-        { q:"Qu'est-ce qu'il y a pour cuisiner ?", s:"629 RECETTES",
-          a:"Recettes HP : 629 recettes gratuites, écrites de zéro. Vous tapez les ingrédients que vous avez, il vous propose quoi cuisiner — portions de 1 à 300 et liste d'épicerie incluses !",
+        { q:"Qu'est-ce qu'il y a pour cuisiner ?", s:"666 RECETTES",
+          a:"Recettes HP : 666 recettes gratuites, écrites de zéro. Vous tapez les ingrédients que vous avez, il vous propose quoi cuisiner — portions de 1 à 300 et liste d'épicerie incluses !",
           u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP" },
         { q:"C'est quoi, « Votre cuisine familiale, à vous » ?", s:"BIENTÔT",
           a:"Ce n'est pas Recettes HP : c'est l'outil cuisine de votre famille — vos recettes à vous, celles que votre famille saisit elle-même. Les portions se recalculent toutes seules, la liste d'épicerie se combine, et la recherche trouve même si tu oublies les accents. Bientôt : prix prévu 5 $, aucune taxe ajoutée, mais la vente n'est pas encore ouverte et aucun achat n'est possible pour l'instant — elle ouvrira seulement une fois le prix confirmé et le parcours testé à 0 $.",
@@ -600,7 +600,7 @@ export const KB = [
         { q:"Comment classer mes papiers ?", s:"5 $", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits",
           a:"Pour classer vos papiers, c'est le kit « Papiers » qu'il vous faut, dans les kits Sans Honte (5 $) : 24 fiches pour les classer et les retrouver sans tout virer à l'envers." },
         { q:"Montre-moi les recettes", s:"PAR ICI →", go:"sec-recettes",
-          a:"Recettes HP est là : 629 recettes gratuites. Vous tapez vos ingrédients, il trouve quoi cuisiner !",
+          a:"Recettes HP est là : 666 recettes gratuites. Vous tapez vos ingrédients, il trouve quoi cuisiner !",
           u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP" },
         { q:"Montre-moi les livres", s:"PAR ICI →", go:"sec-livres",
           a:"Nos 4 livres sont là, en PDF, de 10 $ à 15 $, plus le mini-cahier « Un petit pas à la fois » (10 $) — téléchargement immédiat après le paiement, le livre « Enfants cuisinent » (10 $) compris, aucune taxe ajoutée.",
@@ -713,7 +713,7 @@ export const HUGO_SONGS = [
          jamais plus d'une invitation par séquence. */
 export const CHOIX_LINES = [
         { t:"Mon choix du moment : LA BANQUE, notre jeu gratuit sur la banque alimentaire. Une saison de 8 semaines, et ça fait réfléchir en s'amusant.", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"MON CHOIX ♥" },
-        { t:"Mon choix du moment : Recettes HP — 629 recettes gratuites. Tapez ce qu'il y a dans votre frigo, il vous trouve un souper.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
+        { t:"Mon choix du moment : Recettes HP — 666 recettes gratuites. Tapez ce qu'il y a dans votre frigo, il vous trouve un souper.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : RELÈVE, notre jeu dont vous choisissez la suite. Le chapitre 1 est gratuit !", u:"https://www.hp-outils.com/jeux", l:"Découvrir RELÈVE", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment : « Futur simple », le balado d'HP Outils — de nouveaux épisodes quand ils sont prêts, sans jargon.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"MON CHOIX ♥" },
         { t:"Mon choix du moment, côté lecture : le livre « Les enfants cuisinent pour faire plaisir » (10 $) — cuisiner en famille, c'est des souvenirs qui se mangent.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"MON CHOIX ♥" }
@@ -761,13 +761,13 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour ça, c'est celui-là qui fait ça : le kit « Papiers », dans les kits Sans Honte (5 $) — 24 fiches pour classer vos papiers et les retrouver sans tout virer à l'envers.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { id:'enfants-cuisine', mots:['cuisiner','cuisine','recette','manger'], aussi:['enfant','famille','petits chefs'], dejaVu:'enfants cuisinent',
-          t:"Pour cuisiner en famille, c'est celui-là qui fait ça : le livre « Les enfants cuisinent pour faire plaisir » (10 $), des recettes pensées pour les petits chefs. Et au quotidien, Recettes HP reste gratuit : 629 recettes pour tout le monde.",
+          t:"Pour cuisiner en famille, c'est celui-là qui fait ça : le livre « Les enfants cuisinent pour faire plaisir » (10 $), des recettes pensées pour les petits chefs. Et au quotidien, Recettes HP reste gratuit : 666 recettes pour tout le monde.",
           u:"https://www.hp-outils.com/livres-pdf", l:"Voir le livre", s:"EN FAMILLE" },
         { id:'apprendre', mots:['apprendre','cours de cuisine','formation','atelier'], dejaVu:'ateliers sont la',
-          t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $). Et pour commencer sans payer, les 629 recettes gratuites sont là.",
+          t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $). Et pour commencer sans payer, les 666 recettes gratuites sont là.",
           u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
-          t:"Budget serré ? Commence par le gratuit, pour vrai : 629 recettes et 41 + 1 caché jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
+          t:"Budget serré ? Commence par le gratuit, pour vrai : 666 recettes et 41 + 1 caché jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" }
       ];
       /* L'alternative honnête : après une réponse qui présente un produit
@@ -776,7 +776,7 @@ export const BESOIN_SUGGESTIONS = [
 export const ALT_LINES = {
         kits:   { t:"Et si le budget dit « pas maintenant », c'est bien correct aussi : les recettes et les jeux sont gratuits, sans inscription. Les kits seront là quand vous voudrez.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux gratuits", s:"GRATUIT !" },
         livres: { t:"Et côté gratuit, pour patienter : « Futur simple », notre balado (de nouveaux épisodes quand ils sont prêts), et RELÈVE, l'histoire dont vous choisissez la suite — le chapitre 1 est gratuit.", u:"https://www.hp-outils.com/balado", l:"Écouter le balado", s:"GRATUIT !" },
-        ateliers:{ t:"Et pour commencer sans payer : Recettes HP — 629 recettes gratuites. Vous tapez vos ingrédients, il vous propose quoi cuisiner.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"GRATUIT !" }
+        ateliers:{ t:"Et pour commencer sans payer : Recettes HP — 666 recettes gratuites. Vous tapez vos ingrédients, il vous propose quoi cuisiner.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"GRATUIT !" }
       };
       /* Le bundle, dit vrai : déclenché quand le visiteur s'intéresse aux
          kits pour la 2e fois dans la session. Le calcul est réel :
@@ -881,11 +881,11 @@ export const PAGE_SUGGESTIONS = {
           histoire:"C'est un atelier de groupe, le côté humain d'HP Outils qui se vit pour vrai, autour d'une table, à Terrebonne et dans les environs.",
           pourquoi:"260 $, forfait groupe, aucune taxe ajoutée — on apprend en gang, pour vrai.",
           mots:['cuisine pratique'], u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers" },
-        '/en-cuisine': { id:'sugg-recettes', titre:"Recettes HP — 629 recettes gratuites",
+        '/en-cuisine': { id:'sugg-recettes', titre:"Recettes HP — 666 recettes gratuites",
           accroche:"Tapez ce qu'il y a dans votre frigo, il vous trouve un souper.",
           marche:"Tape les ingrédients que tu as déjà : il te propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et ta liste d'épicerie se prépare toute seule.",
           sert:"Trouver quoi cuisiner avec ce qu'on a déjà, sans gaspiller et sans payer — parfait quand le frigo a l'air vide mais ne l'est pas.",
-          histoire:"629 recettes gratuites, écrites de zéro.",
+          histoire:"666 recettes gratuites, écrites de zéro.",
           pourquoi:"Gratuit, sans inscription — pensé pour les vraies cuisines, pas pour les photos.",
           mots:['recettes'], u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP" },
         '/lire': { id:'sugg-chasse', titre:"« La Chasse-Galerie », le tome gratuit",

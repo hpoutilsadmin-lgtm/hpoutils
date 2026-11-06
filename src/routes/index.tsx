@@ -42,7 +42,7 @@ export const Route = createFileRoute("/")({
     ...createSeoHead({
       title: "HP Outils — jeux, kits et outils pour la vraie vie",
       description:
-        "Jeux gratuits, 629 recettes, outils web sans compte et kits PDF à 5 $ CAD — créés à Terrebonne pour les familles et les petits budgets. Aucune taxe ajoutée.",
+        "Jeux gratuits, 666 recettes, outils web sans compte et kits PDF à 5 $ CAD — créés à Terrebonne pour les familles et les petits budgets. Aucune taxe ajoutée.",
       path: "/",
     }),
     scripts: [
@@ -117,7 +117,7 @@ function Index() {
             </article>
             <article className="pillar-card">
               <h3>En cuisine</h3>
-              <p>629 recettes pour cuisiner avec ce qu'on a sous la main : cherchez par ingrédients, convertissez les températures du four et trouvez quoi faire avec les restes.</p>
+              <p>666 recettes pour cuisiner avec ce qu'on a sous la main : cherchez par ingrédients, convertissez les températures du four et trouvez quoi faire avec les restes.</p>
               <a className="pillar-cta" href="/en-cuisine/index.html">Ouvrir En cuisine →</a>
             </article>
             <article className="pillar-card">

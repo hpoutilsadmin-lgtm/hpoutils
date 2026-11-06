@@ -1378,7 +1378,7 @@ export function initHgpto() {
         setTimeout(function(){
           if (state !== 'despair' && state !== 'cookfail') return;
           setState('cookfail'); setExpr('laugh'); giggle();
-          showBubble(esc("Celle-là, je l'ai ratée solide… Toi, va voir les 629 recettes, elles sont pas mal plus faciles !") +
+          showBubble(esc("Celle-là, je l'ai ratée solide… Toi, va voir les 666 recettes, elles sont pas mal plus faciles !") +
             linkHtml({ u:"https://hp-outils.com/en-cuisine/", l:"Voir les recettes" }), 3400, 'joke');
         }, 6900 + extra);
         setTimeout(function(){
@@ -1574,7 +1574,7 @@ export function initHgpto() {
         setState('cook'); setExpr('focus'); busy(8200);
         var m = mealForNow();
         logDay("cuisiné " + m.meal + " (un de mes 3 repas du jour, tirés des Recettes)");
-        showBubble(esc(m.when + " : " + m.meal + " — une des 629 idées de l'outil Recettes. Vous aussi, tapez vos ingrédients !") + linkHtml({ u:"https://hp-outils.com/en-cuisine/", l:"Ouvrir Recettes HP" }), 5200);
+        showBubble(esc(m.when + " : " + m.meal + " — une des 666 idées de l'outil Recettes. Vous aussi, tapez vos ingrédients !") + linkHtml({ u:"https://hp-outils.com/en-cuisine/", l:"Ouvrir Recettes HP" }), 5200);
         setTimeout(function(){
           if (state !== 'cook') return;
           setExpr('happy');
@@ -2137,7 +2137,7 @@ export function initHgpto() {
             t = "Mon honnête recommandation : le livre « Les enfants cuisinent pour faire plaisir » (10 $) — fait pour cuisiner EN famille, avec des recettes pensées pour les petites mains. Et les recettes gratuites du site sont parfaites pour essayer avant.";
             p = { u:"https://hp-outils.com/en-cuisine", l:"Voir la cuisine" };
           } else {
-            t = "Mon honnête recommandation : commencez par les 629 recettes gratuites du site — ça coûte zéro et ça dépanne pour vrai. Si vous voulez un livre ensuite, « La faim justifie les moyens » est à 10 $.";
+            t = "Mon honnête recommandation : commencez par les 666 recettes gratuites du site — ça coûte zéro et ça dépanne pour vrai. Si vous voulez un livre ensuite, « La faim justifie les moyens » est à 10 $.";
             p = { u:"https://hp-outils.com/en-cuisine", l:"Voir les recettes gratuites" };
           }
         } else if (quoi === 'organiser'){
@@ -2715,7 +2715,7 @@ export function initHgpto() {
         { id:'sec-accueil', t:"Bienvenue chez nous. Ici, c'est la pièce d'entrée : la direction y présente HP Outils — « Des outils pour la vraie vie » — et tout ce que vous allez voir part d'ici. Moi, c'est Sir H. Gepeto, le gérant du site : je réponds aux questions et je connais chaque recoin. On y va tranquillement, pièce par pièce, et vous pouvez arrêter la visite quand vous voulez." },
         { id:'sec-jeux', t:"Ici, c'est le salon : les jeux. Il y en a 38, tous gratuits, jouables tout de suite, sans inscription — pour les familles, les curieux, les soirées tranquilles. Certains font plus que divertir : LA BANQUE, par exemple, fait comprendre de l'intérieur comment fonctionne une vraie banque alimentaire." },
         { id:'sec-kits', t:"Là, ce sont les kits Sans Honte : 15 petits guides en PDF pour les affaires du quotidien qu'on remet toujours — ranger ses papiers, préparer un testament, organiser son budget. Ils coûtent 5 $ chacun, sans taxe ajoutée, et l'idée est dans le nom : jamais de honte, jamais de jugement." },
-        { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 629 recettes gratuites : vous écrivez les ingrédients que vous avez déjà, et il vous propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et votre liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
+        { id:'sec-recettes', t:"La cuisine, mon endroit préféré. Ici, 666 recettes gratuites : vous écrivez les ingrédients que vous avez déjà, et il vous propose quoi cuisiner avec ça. Les portions s'ajustent de 1 à 300 personnes, et votre liste d'épicerie se prépare toute seule. C'est pensé pour les vraies cuisines, pas pour les photos." },
         { id:'sec-livres', t:"La bibliothèque : des livres en PDF, de 10 $ à 15 $, que vous téléchargez tout de suite après le paiement, le livre « Les enfants cuisinent » (10 $) compris. « La faim justifie les moyens » (10 $), c'est l'histoire vraie de la direction ; le livre « Les enfants cuisinent pour faire plaisir » (10 $), c'est pour cuisiner en famille. On lit à son rythme, on garde le fichier pour toujours." },
         { id:'sec-ateliers', t:"Et ici, on sort de l'écran : les ateliers se vivent en groupe, à Terrebonne et dans les environs. « Cuisine pratique » (260 $), « Manger mieux avec moins » (260 $) — on cuisine ensemble, on apprend des choses utiles, et c'est le côté humain d'HP Outils qui se vit pour vrai, autour d'une table." },
         { id:'sec-arbre', t:"On est de retour à l'entrée — la visite est terminée, merci de m'avoir suivi. Vous avez vu l'arbre au complet : chaque branche aide les autres, et rien ne se cache. Restez jaser si vous voulez : posez-moi une question dans mon petit panneau, je connais toutes les réponses du site — et sinon, explorez à votre rythme. Ici, la porte est toujours ouverte." }
@@ -2783,7 +2783,7 @@ export function initHgpto() {
         "sec-accueil":"Vous voilà à l'accueil ! C'est ici que tout commence.",
         "sec-jeux":"Les jeux gratuits ! Voulez-vous que je vous en conseille un ? Ouvrez « Une question ? ».",
         "sec-kits":"Les kits Sans Honte, 5 $ chacun. Regardez-les à votre rythme, sans pression.",
-        "sec-recettes":"629 recettes gratuites : parfait quand le frigo a l'air vide mais ne l'est pas.",
+        "sec-recettes":"666 recettes gratuites : parfait quand le frigo a l'air vide mais ne l'est pas.",
         "sec-livres":"Nos livres ! « Horizon Québec » est mon préféré… mais je suis partial, je le lis tout le temps.",
         "sec-ateliers":"Les ateliers, à Terrebonne : cuisiner ensemble, ça rapproche.",
         "sec-mascotte":"C'est ma carte, ça ! Gérant, informateur, et champion de la chatouille subie.",
@@ -5777,7 +5777,7 @@ export function initHgpto() {
         '/': "Vous voilà à l'accueil ! C'est ici que tout commence.",
         '/jeux': "Les jeux gratuits ! Voulez-vous que je vous en conseille un ? Ouvrez « Une question ? ».",
         '/sans-honte': "Les kits Sans Honte, 5 $ chacun. Regardez-les à votre rythme, sans pression.",
-        '/en-cuisine': "629 recettes gratuites : parfait quand le frigo a l'air vide mais ne l'est pas.",
+        '/en-cuisine': "666 recettes gratuites : parfait quand le frigo a l'air vide mais ne l'est pas.",
         '/livres-pdf': "Nos livres ! « Horizon Québec » est mon préféré… mais je suis partial, je le lis tout le temps.",
         '/ateliers': "Les ateliers, à Terrebonne : cuisiner ensemble, ça rapproche.",
         '/balado': "Le balado « Futur simple » : de nouveaux épisodes quand ils sont prêts, sans jargon.",

@@ -398,7 +398,7 @@ function Page() {
                   : product.slug === "enjeux-humanite"
                   ? { desc: "Le même sujet, en audio : Futur simple, le balado HP sur l'IA — gratuit, de nouveaux épisodes quand ils sont prêts.", href: "/balado", label: "Écouter le balado" }
                   : product.slug === "faim-justifie-les-moyens"
-                    ? { desc: "Le pendant gratuit de ce livre : 629 recettes, pensées pour les petits budgets.", href: "/en-cuisine/", label: "Ouvrir En cuisine" }
+                    ? { desc: "Le pendant gratuit de ce livre : 666 recettes, pensées pour les petits budgets.", href: "/en-cuisine/", label: "Ouvrir En cuisine" }
                     : product.slug === "enfants-cuisinent"
                       ? { desc: "Le pendant gratuit de ce livre : des recettes à faire en famille, avec le convertisseur.", href: "/en-cuisine/", label: "Ouvrir En cuisine" }
                       : product.slug === "horizon-quebec"

@@ -23,16 +23,16 @@ La page /jeux présente aussi les histoires interactives « À toi l'histoire »
 Chevalier du fleuve : jeu de stratégie gratuit en entier, boutique fermée — toutes les pierres se gagnent en jouant.
 Sur le site vit aussi Sir H. Gepeto, le gérant du site, qui répond aux questions des visiteurs.
 
-## En cuisine — 629 recettes gratuites (page /en-cuisine/index.html)
+## En cuisine — 666 recettes gratuites (page /en-cuisine/index.html)
 
-629 recettes gratuites écrites de zéro : québécoises, du monde, soutien alimentaire,
+666 recettes gratuites écrites de zéro : québécoises, du monde, soutien alimentaire,
 anti-gaspillage, collations et plus — pensées pour les petits budgets et la vraie vie.
 Convertisseur de températures de four intégré. Aucun compte requis.
 
 
 ### Quoi faire avec ton panier — banque alimentaire (page /en-cuisine/panier/)
 
-164 recettes de soutien gratuites, construites uniquement avec les 15 ingrédients les plus
+169 recettes de soutien gratuites, construites uniquement avec les 15 ingrédients les plus
 donnés aux banques alimentaires (pâtes, riz, tomates en conserve, légumineuses, thon en
 conserve, beurre d'arachide, avoine, farine, lait, œufs, pommes de terre, oignons, maïs en
 conserve, sauce tomate, huile végétale), plus les bases de la maison.
