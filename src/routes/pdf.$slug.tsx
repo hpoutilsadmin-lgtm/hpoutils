@@ -125,7 +125,8 @@ function HealthSupportNote() {
 }
 
 // « Avant d'acheter » — les faits des Conditions de vente (§5, §6, §7),
-// repris tels quels, placés avant le bouton d'achat.
+// repris tels quels. Depuis le lot Jour 3 (6 nov. 2026), le bouton
+// d'achat est AVANT cet encadré (il était après : premier écran sans bouton).
 function BeforeYouBuyNote() {
   return (
     <div
@@ -243,33 +244,39 @@ function Page() {
                 ? "Nouveau prix · Aucune taxe ajoutée · Achat en ligne bientôt rouvert"
                 : "PDF téléchargeable · Aucune taxe ajoutée · Paiement sécurisé"}
             </p>
+            {/* Lot Jour 3 (6 nov. 2026) — le bloc d'achat (bouton +
+                Ajouter au panier) est AVANT l'encadré « Avant d'acheter » :
+                le bouton est visible sans défiler jusqu'après l'encadré.
+                Destination et libellés inchangés. */}
+            <div style={{ marginBottom: 16 }}>
+              {product.purchaseHold ? (
+                <p style={{ maxWidth: 520, lineHeight: 1.65, margin: 0 }}>
+                  {product.purchaseHold}
+                </p>
+              ) : (
+                <>
+                  <Link
+                    to="/achat/$slug"
+                    params={{ slug: product.slug }}
+                    className="btn-primary"
+                    style={{ display: "inline-block" }}
+                  >
+                    {buyLabel(fmt)} — {product.priceLabel}
+                  </Link>
+                  {fmt !== "Collection PDF" ? (
+                    <>
+                      {" "}
+                      <AjouterAuPanier priceId={product.priceId} />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
             <BeforeYouBuyNote />
             {["faim-justifie-les-moyens", "horizon-quebec", "enjeux-humanite", "enfants-cuisinent"].includes(product.slug) && (
               <p style={{ fontSize: 14, lineHeight: 1.65, color: "#3a2a20", marginBottom: 16 }}>
                 Une réponse de la direction humaine sous 3 jours ouvrables.
               </p>
-            )}
-            {product.purchaseHold ? (
-              <p style={{ maxWidth: 520, lineHeight: 1.65, margin: 0 }}>
-                {product.purchaseHold}
-              </p>
-            ) : (
-              <>
-                <Link
-                  to="/achat/$slug"
-                  params={{ slug: product.slug }}
-                  className="btn-primary"
-                  style={{ display: "inline-block" }}
-                >
-                  {buyLabel(fmt)} — {product.priceLabel}
-                </Link>
-                {fmt !== "Collection PDF" ? (
-                  <>
-                    {" "}
-                    <AjouterAuPanier priceId={product.priceId} />
-                  </>
-                ) : null}
-              </>
             )}
             <div style={{ marginTop: 16 }}>
               <ShareButton
@@ -445,7 +452,7 @@ function Page() {
                     params={{ slug: product.slug }}
                     className="action-btn"
                   >
-                    {buyLabel(fmt)}
+                    {buyLabel(fmt)} — {product.priceLabel}
                   </Link>
                   {fmt !== "Collection PDF" ? (
                     <>

@@ -264,7 +264,11 @@ function Page() {
               </div>
             </div>
           ) : (
-            <div style={{ maxWidth: 720 }}>
+            // Lot Jour 3 (6 nov. 2026) — 960 px : le tableau (min-width
+            // 760 px, hp.css) tient sans défilement horizontal sur
+            // bureau ; le défilement interne (.table-wrap) reste en
+            // repli sous ~800 px.
+            <div style={{ maxWidth: 960 }}>
               <div className="table-wrap">
                 <table>
                   <thead>

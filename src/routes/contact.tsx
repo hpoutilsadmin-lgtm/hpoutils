@@ -23,7 +23,7 @@ function Page() {
           </p>
           <div className="lead-actions">
             <a className="btn-primary" href="#formulaire-contact">Écrire à la direction humaine</a>
-            <a className="btn-ghost" href="/ateliers#formulaire-atelier">Réserver un atelier</a>
+            <a className="btn-ghost" href="/ateliers#formulaire-atelier">Demander un atelier</a>
           </div>
         </div>
       </section>
@@ -85,7 +85,7 @@ function Page() {
               <span className="pillar-num">02</span>
               <h3>Commander un outil</h3>
               <p>Demander une fiche, un kit ou une ressource pratique.</p>
-              <Link to="/sans-honte" className="pillar-cta">Voir les outils →</Link>
+              <Link to="/outils" className="pillar-cta">Voir les outils →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>

@@ -16,9 +16,15 @@
    ease-in (REGLES-ANIMATION-HP-5nov-2026.md).
    ============================================================ */
 
-/* ---------- Réserve : le contenu ne passe jamais sous la barre ---------- */
-html.compagnon-actif body { padding-bottom: 150px; }
-html.compagnon-actif { scroll-padding-bottom: 160px; }
+/* ---------- Réserve : le contenu ne passe jamais sous la barre ----------
+   Lot Jour 3 (6 nov. 2026) : la barre dépliée occupe ~150 px en bas de
+   l'écran (contenu ~140 px + 10 px de bas) — la réserve de 150 px ne
+   laissait aucune marge (slogan sur 2 lignes, dialogue Gepeto ouvert :
+   le contenu passait sous la barre). Réserve 170 px = 20 px d'air ;
+   scroll-padding-bottom suit (180 px). Ce n'est PAS la décision A2
+   (barre réduite à l'arrivée) : la barre s'ouvre toujours dépliée. */
+html.compagnon-actif body { padding-bottom: 170px; }
+html.compagnon-actif { scroll-padding-bottom: 180px; }
 /* Barre en liseré (réduite ou repliée) : le bas de page se libère.
    32 px = liseré 22 px + marge 10 px (même marge que la barre dépliée) ;
    env() suit la zone sûre du téléphone, comme le bas de la barre. */

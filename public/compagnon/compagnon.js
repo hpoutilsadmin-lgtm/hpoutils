@@ -1042,7 +1042,7 @@
   }
 
   /* ---------- Bas de page : libéré quand la barre est en liseré ---------- */
-  /* La réserve de 150 px (compagnon-actif) ne sert que quand la barre est
+  /* La réserve de 170 px (compagnon-actif) ne sert que quand la barre est
      dépliée. En liseré — réduite par le bouton « Réduire » ou repliée par
      le défilement — le bas se libère : 30 px environ (voir compagnon.css).
      Un seul endroit synchronise la classe : chaque changement d'état de
