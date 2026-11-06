@@ -118,6 +118,9 @@
       .bar{ height:14px; background:var(--card2); border:2px solid var(--ink); border-radius:999px; overflow:hidden; margin-top:8px; }
       .bar i{ display:block; height:100%; background:var(--green); transition:width .25s ease; }
       .bar i.full{ background:var(--terra); }
+      /* Volet 3 — progression vers le grade : ligne compacte + barre fine, même famille visuelle que .bar. */
+      .prog{ font-weight:800; font-size:14px; margin-top:8px; }
+      .bar.fine{ height:10px; margin-top:4px; }
 
       table.market{ width:100%; border-collapse:collapse; }
       table.market td{ padding:8px 2px; border-bottom:1px dashed var(--line); vertical-align:middle; }
@@ -422,6 +425,7 @@
         event:null, noVentes:false, rabais:false,
         prodBatches:0, prodSnap:null, cart:{}, cartIng:{},
         semFam:0, semFamTotal:0, semVentes:0, confirmEnd:false,
+        pertes:[], pertesFaites:0, paliersVus:[], /* volet 3 : paliers de progression déjà annoncés */
         carnet:{}, priorite:[],
         rareteSemaine: 5 + Math.floor(Math.random()*2)
       };
@@ -431,6 +435,7 @@
       S.phase = 0; S.confirmEnd = false;
       S.semFam = 0; S.semVentes = 0;
       S.prodBatches = 0; S.prodSnap = null; S.cart = {}; S.cartIng = {};
+      S.echangePuree = 0; /* volet 2 : quantité de purées à échanger cette semaine */
       /* prix du marché de la semaine */
       S.prix = {}; S.prixIng = {};
       for (var k in ITEMS) if (k !== "crepes") S.prix[k] = +(ITEMS[k].prix * (0.85 + Math.random()*0.4)).toFixed(2);
@@ -455,6 +460,40 @@
       var tot = S.ventesTot + S.donsArgent;
       if (tot <= 0) return null;
       return Math.round(S.ventesTot / tot * 100);
+    }
+    /* ================= Volet 3 — Grades et progression =================
+       GRADES reprend les noms, seuils et mots EXACTS de renderFinal()
+       (ordre décroissant). renderFinal() les utilise désormais. */
+    var GRADES = [
+      { seuil:34, nom:"🏆 Modèle du quartier", mot:"Une banque que tout le quartier connaît — et qui tient debout toute seule." },
+      { seuil:27, nom:"🌟 Banque autonome", mot:"Tes ventes financent ta mission : l'autonomie n'est plus un rêve, c'est ton fonctionnement." },
+      { seuil:19, nom:"💪 Banque solide", mot:"La machine roule. Encore quelques ajustements et l'autonomie complète est à portée." },
+      { seuil:11, nom:"🌱 Banque en démarrage", mot:"Les bases sont là. Vends un peu plus, gaspille un peu moins — et regarde les familles nourries grimper." },
+      { seuil:0, nom:"🌱 Premiers pas", mot:"Chaque banque commence quelque part. Rejoue une saison : les dons changent, les réflexes restent." }
+    ];
+    var PALIERS = [
+      { seuil:10, txt:"Le quartier commence à te connaître." },
+      { seuil:15, txt:"Le bouche-à-oreille fonctionne : de nouvelles familles poussent la porte." },
+      { seuil:20, txt:"Le quartier parle de la banque — en bien." }
+    ];
+    function gradeActuel(){
+      for (var i = 0; i < GRADES.length; i++){ if (S.familles >= GRADES[i].seuil) return GRADES[i]; }
+      return GRADES[GRADES.length - 1];
+    }
+    function prochainGrade(){
+      var prochain = null;
+      for (var i = 0; i < GRADES.length; i++){ if (S.familles < GRADES[i].seuil) prochain = GRADES[i]; }
+      return prochain;
+    }
+    function progressionGradeHtml(){
+      var p = prochainGrade();
+      if (!p) return '<div class="prog">🏆 Modèle du quartier — le meilleur grade, bravo !</div><div class="bar fine"><i style="width:100%"></i></div>';
+      var manque = p.seuil - S.familles;
+      var pct = Math.min(100, Math.round(S.familles / p.seuil * 100));
+      /* famNourries(0) donnerait « 0 famille nourrie » (singulier) : le
+         pluriel est voulu ici (« 0 familles nourries »), comme dans le DESIGN. */
+      var nb = S.familles === 1 ? "1 famille nourrie" : S.familles + " familles nourries";
+      return '<div class="prog">❤️ ' + nb + ' — plus que ' + manque + ' pour ' + p.nom + '</div><div class="bar fine"><i style="width:' + pct + '%"></i></div>';
     }
     var AC = null;
     function bip(freq, dur){
@@ -567,11 +606,19 @@
       S.semFamTotal = S.fams.length; /* toutes les familles présentes, dépannage d’urgence compris */
     }
     function genOffres(){
+      /* Volet 1 (6 nov. 2026) : les écoles n'achètent que 40 crêpes par semaine
+         au maximum — le quartier ne peut pas tout absorber. Offres de 10 ou
+         20 crêpes, total plafonné à 40. */
       S.offres = [];
       var noms = shuffle(ECOLES.slice());
       var n = rnd(2,3);
+      var total = 0;
       for (var i=0;i<n;i++){
-        S.offres.push({ nom:noms[i], qty:rnd(2,8)*10, prix:+(0.95 + Math.random()*0.6).toFixed(2), ok:false });
+        var q = rnd(1,2)*10;
+        if (total + q > 40) q = 40 - total;
+        if (q < 10) break;
+        total += q;
+        S.offres.push({ nom:noms[i], qty:q, prix:+(0.95 + Math.random()*0.6).toFixed(2), vendu:0 });
       }
     }
     /* ================= Rendu général ================= */
@@ -620,6 +667,7 @@
         h += "<div class=\"" + (i === S.phase ? "on" : (i < S.phase ? "done" : "")) + "\">" + p + "</div>";
       });
       h += "</div></div>";
+      h += progressionGradeHtml(); /* volet 3 : progression vers le grade, visible sur toutes les phases */
       if (S.event) h += '<div class="event">' + S.event + "</div>";
       h += '<div class="stockbar">' + stockChips() + "</div>";
       if (S.phase === 0) h += bandeauFamilles();
@@ -645,7 +693,8 @@
         '<div class="mission"><h3>Comment ça marche</h3>' +
         '<p>Chaque semaine, les dons arrivent : tu les tries, ta cuisine produit des crêpes, les écoles les achètent, et tu composes les paniers des familles.</p>' +
         '<details class="verite"><summary>La ligne de vérité — touche pour lire</summary><p>« Dans la vraie vie, on ne vend jamais ce qui est donné. Ici, la cuisine vend ce qu\'elle produit avec ses achats — et chaque dollar retourne aux familles. »</p></details>' +
-        '<p><b>Leçon du jeu :</b> vendre aujourd\'hui, c\'est nourrir plus de familles demain.</p><p><b>Gestes :</b> au doigt ou à la souris, touche les boutons pour jouer.</p></div>' +
+        '<p><b>Leçon du jeu :</b> vendre aujourd\'hui, c\'est nourrir plus de familles demain.</p><p><b>Gestes :</b> au doigt ou à la souris, touche les boutons pour jouer.</p>' +
+        '<p>🎯 Objectif de la saison : nourrir 34 familles pour devenir Modèle du quartier.</p></div>' +
         '<div class="score3"><div><b>❤️</b><small>FAMILLES NOURRIES — le vrai score</small></div><div><b>📈</b><small>AUTONOMIE — % du budget gagné par tes activités</small></div><div><b>🥖</b><small>EFFICACITÉ — familles nourries par tes ressources</small></div></div>' +
         blocDonHtml(false) +
         (save ? '<button class="btn sun big" onclick="reprendre()">↩ Reprendre la saison — semaine ' + save.sem + ' / 8</button>' : "") +
@@ -685,7 +734,7 @@
     var PERISSABLES = { frais:1, viande:1, fruits:1, legumes:1, pain:1, puree:1 };
     function vueTri(){
       var h = '<h2 class="ptitle">🔍 Le tri</h2>';
-      h += '<p class="phint">Vérifie chaque lot à la main. Les denrées données ne se vendent jamais : elles se distribuent.</p>';
+      h += '<p class="phint">Vérifie chaque lot à la main. Les denrées données ne se vendent jamais : elles se distribuent. Les denrées fraîches non distribuées seront perdues en fin de semaine — distribue-les ou transforme-les.</p>';
       S.lots.forEach(function(l, i){
         h += '<div class="card">';
         if (l.type === "food"){
@@ -786,31 +835,48 @@
         return h;
       }
       if (!S.offres.length) genOffres();
-      var reserve = S.offres.filter(function(o){return o.ok;}).reduce(function(t,o){return t+o.qty;},0);
-      h += '<p class="phint">Chaque école propose son prix. Vendre rapporte — mais chaque crêpe vendue manque aux paniers.</p>';
+      /* Garde sauvegardes anciennes : les offres d'avant le volet 1 ont un
+         champ ok et pas de vendu. */
+      S.offres.forEach(function(o){ if (typeof o.vendu !== "number") o.vendu = 0; });
+      var reserve = S.offres.reduce(function(t,o){return t+(o.vendu||0);},0);
+      h += '<p class="phint">Chaque école propose son prix. Vendre rapporte — mais chaque crêpe vendue manque aux paniers. Les écoles n\'achètent que 40 crêpes par semaine au maximum — le quartier ne peut pas tout absorber.</p>';
       h += '<p class="small"><b>Crêpes disponibles : 🥞 ' + S.stock.crepes + '</b> (réservées : ' + reserve + ').</p>';
       S.offres.forEach(function(o, i){
-        var total = o.qty * o.prix;
-        var okPossible = o.ok || (reserve + o.qty <= S.stock.crepes);
+        /* Maximum vendable pour cette offre : ce qu'elle veut, sans dépasser
+           les crêpes restantes une fois les autres offres réservées. */
+        var max = Math.min(o.qty, S.stock.crepes - (reserve - (o.vendu||0)));
+        if (max < 0) max = 0;
+        var total = (o.vendu||0) * o.prix;
         h += '<div class="card"><div class="row"><div><h3>' + o.nom + '</h3><div class="small muted">Veut <b>' + o.qty + ' crêpes</b> à ' + fmt(o.prix) + " l'unité</div></div>" +
           '<div class="qty">' + fmt(total) + "</div></div>" +
-          '<button class="btn ' + (o.ok ? "terra" : "") + '" style="margin-top:10px;width:100%" ' + (!okPossible ? "disabled" : "") + ' onclick="toggleOffre(' + i + ')">' +
-          (o.ok ? "✓ Acceptée — toucher pour refuser" : (okPossible ? "Accepter l'offre" : "Pas assez de crêpes")) + "</button></div>";
+          '<div class="stepper"><span class="small"><b>À vendre :</b></span><button onclick="offreAdj(' + i + ',-1)" ' + ((o.vendu||0)<=0?"disabled":"") + '>−</button><div class="n">' + (o.vendu||0) + '</div><button onclick="offreAdj(' + i + ',1)" ' + ((o.vendu||0)>=max?"disabled":"") + '>+</button><button class="btn" style="width:auto;min-width:64px;height:48px;border-radius:12px;font-size:15px;padding:0 12px" onclick="offreMax(' + i + ')">Max</button></div>' +
+          '<div class="small center">' + (o.vendu||0) + ' crêpes → ' + fmt(total) + "</div></div>";
       });
       h += '<button class="btn big" onclick="validerVentes()">Valider les ventes →</button>';
       return h;
     }
-    function toggleOffre(i){
+    /* Volet 1 : vente partielle, pas de 5 crêpes, bornes 0..max.
+       d = +1 ou -1 marche de 5. */
+    function offreMaxVendu(i){
+      var reserveAutres = 0;
+      S.offres.forEach(function(x, j){ if (j !== i) reserveAutres += (x.vendu||0); });
+      return Math.max(0, Math.min(S.offres[i].qty, S.stock.crepes - reserveAutres));
+    }
+    function offreAdj(i, d){
       var o = S.offres[i];
-      if (!o.ok){
-        var reserve = S.offres.filter(function(x){return x.ok;}).reduce(function(t,x){return t+x.qty;},0);
-        if (reserve + o.qty > S.stock.crepes) return;
-      }
-      o.ok = !o.ok; bip(o.ok?700:400); render();
+      var v = Math.max(0, Math.min(offreMaxVendu(i), (o.vendu||0) + d*5));
+      if (v === (o.vendu||0)) return;
+      o.vendu = v; bip(d>0?700:400); render();
+    }
+    function offreMax(i){
+      var o = S.offres[i];
+      var v = offreMaxVendu(i);
+      if (v === (o.vendu||0)) return;
+      o.vendu = v; bip(700); render();
     }
     function validerVentes(){
       var gain = 0, vendues = 0;
-      S.offres.forEach(function(o){ if (o.ok){ gain += o.qty*o.prix; vendues += o.qty; } });
+      S.offres.forEach(function(o){ gain += (o.vendu||0)*o.prix; vendues += (o.vendu||0); });
       S.stock.crepes -= vendues;
       S.caisse += gain; S.ventesTot += gain; S.semVentes += gain;
       S.offres = [];
@@ -866,12 +932,52 @@
         ligneBesoin("🔥 Portions sans four", sim.manqueFour, "portion(s) pour les ménages sans four") +
         '<p class="small" style="margin:8px 0 0">Avec ton stock et ce panier de marché : <b>' + sim.couvertes + " / " + sim.total + " familles</b> pourraient recevoir un panier complet.</p>";
     }
+    /* Volet 2 — échange entre banques : purées en trop contre conserves, 1:1.
+       Surplus = purées en stock au-delà de 3 par famille avec bébé non servie
+       cette semaine. Échange denrée contre denrée, jamais d'argent, jamais une vente. */
+    function surplusPuree(){
+      /* Garde sauvegardes anciennes : S.echangePuree n'existait pas avant le volet 2. */
+      if (typeof S.echangePuree !== "number") S.echangePuree = 0;
+      var bebes = 0;
+      (S.fams || []).forEach(function(f){ if (f.c.indexOf("bebe") >= 0 && !f.served) bebes++; });
+      return Math.max(0, (S.stock.puree || 0) - 3 * bebes);
+    }
+    function echangeCardHtml(){
+      var surplus = surplusPuree();
+      if (S.echangePuree > surplus) S.echangePuree = surplus;
+      var h = '<div class="card"><h3>🤝 Échange entre banques</h3>';
+      h += "<p>La banque du quartier voisin a besoin de purées bébé. Elle t'offre des conserves en échange, une pour une. Les purées en trop sont celles que les bébés de cette semaine ne peuvent pas prendre — et elles périment en fin de semaine.</p>";
+      h += "<p><b>Purées en trop : " + surplus + "</b> <span class=\"muted small\">(stock : " + (S.stock.puree || 0) + " purées bébé · " + (S.stock.conserves || 0) + " conserves)</span></p>";
+      if (surplus === 0){
+        h += "<p class=\"muted\">Aucune purée en trop cette semaine.</p>";
+      } else {
+        var m = S.echangePuree;
+        h += '<div class="stepper"><span class="small"><b>À échanger :</b></span><button onclick="echangeAdj(-1)" ' + (m<=0?"disabled":"") + '>−</button><div class="n">' + m + '</div><button onclick="echangeAdj(1)" ' + (m>=surplus?"disabled":"") + '>+</button></div>' +
+          '<button class="btn big" style="width:100%" ' + (m<=0?"disabled":"") + ' onclick="echangerPurees()">Échanger ' + m + ' purée' + (m>1?"s":"") + ' contre ' + m + ' conserve' + (m>1?"s":"") + '</button>';
+      }
+      h += "</div>";
+      return h;
+    }
+    function echangeAdj(d){
+      var surplus = surplusPuree();
+      var v = Math.max(0, Math.min(surplus, S.echangePuree + d));
+      if (v === S.echangePuree) return;
+      S.echangePuree = v; bip(d>0?700:400); render();
+    }
+    function echangerPurees(){
+      var m = Math.max(0, Math.min(S.echangePuree || 0, surplusPuree()));
+      if (m <= 0) return;
+      S.stock.puree -= m; S.stock.conserves += m;
+      S.echangePuree = 0;
+      bip(760); renderKeep();
+    }
     function vueAchats(){
       var h = '<h2 class="ptitle">🛒 Le marché</h2>';
       h += '<p class="phint">Comble les manques avec ta caisse. Les prix changent chaque semaine.</p>';
       if (S.rabais) h += '<p class="small">🏷️ <b>Semaine de rabais : −25 % sur tout le marché.</b></p>';
       var sim = simulerBesoins();
       h += '<div class="card" id="msim">' + simCardHtml(sim) + "</div>";
+      h += echangeCardHtml();
       h += '<div class="card"><h3>Pour les paniers</h3><table class="market">';
       for (var k in ITEMS){
         if (k === "crepes") continue;
@@ -1234,7 +1340,34 @@
       /* Les familles non servies (hors dépannage d'urgence) seront prioritaires la semaine prochaine. */
       S.priorite = S.fams.filter(function(f){ return !f.served && !f.urgence; }).map(function(f){ return f.nom; });
       if (S.sem >= 8){ renderFinal(); return; }
+      /* Volet 2 — A. Péremption : semaines 1–7 seulement (la semaine 8 termine
+         la saison, le stock n'a plus d'usage). Tout le stock restant des 6 clés
+         PERISSABLES est perdu. Garde anti-double-calcul : showCarnet(true)
+         rappelle finSemaine() pour ré-afficher le bilan — la garde empêche de
+         recalculer (le stock est déjà à 0, la liste S.pertes est conservée).
+         Gardes sauvegardes anciennes : S.pertesFaites / S.pertes n'existaient
+         pas avant le volet 2. */
+      if (typeof S.pertesFaites !== "number") S.pertesFaites = 0;
+      if (!Array.isArray(S.pertes)) S.pertes = [];
+      if (S.pertesFaites !== S.sem){
+        S.pertesFaites = S.sem;
+        S.pertes = [];
+        for (var pk in PERISSABLES){
+          var pq = S.stock[pk] || 0;
+          if (pq > 0){ S.pertes.push({ cle:pk, qty:pq }); S.stock[pk] = 0; }
+        }
+      }
       var auto = autonomie();
+      /* Volet 3 — paliers : pour chaque palier franchi cette semaine
+         (seuil ≤ S.familles et pas encore vu), on l'annonce au bilan et on
+         le marque vu. Garde sauvegardes anciennes : S.paliersVus n'existait
+         pas avant le volet 3. Le marquage rend l'annonce unique : un
+         ré-affichage du bilan (fermeture du carnet) ne la répète pas. */
+      if (!Array.isArray(S.paliersVus)) S.paliersVus = [];
+      var paliersFranchis = [];
+      PALIERS.forEach(function(p){
+        if (S.familles >= p.seuil && S.paliersVus.indexOf(p.seuil) === -1){ S.paliersVus.push(p.seuil); paliersFranchis.push(p); }
+      });
       var h = '<div class="overlay"><div class="sheet">';
       h += "<h2>📋 Bilan — semaine " + S.sem + "</h2>";
       h += '<table class="bilan">' +
@@ -1243,6 +1376,17 @@
         "<tr><td>💰 Caisse</td><td>" + fmt(S.caisse) + "</td></tr>" +
         "<tr><td>❤️ Familles nourries (saison)</td><td>" + S.familles + "</td></tr>" +
         "<tr><td>📈 Autonomie</td><td>" + (auto === null ? "—" : auto + " %") + "</td></tr></table>";
+      /* Volet 3 — progression vers le grade, sous le tableau du bilan. */
+      var pg = prochainGrade();
+      if (pg) h += '<p>🎯 Progression : ' + S.familles + ' familles — plus que ' + (pg.seuil - S.familles) + ' pour ' + pg.nom + '</p><div class="bar"><i style="width:' + Math.min(100, Math.round(S.familles / pg.seuil * 100)) + '%"></i></div>';
+      else h += '<p>🎯 Progression : ' + S.familles + ' familles — 🏆 Modèle du quartier, le meilleur grade, bravo !</p><div class="bar"><i style="width:100%"></i></div>';
+      paliersFranchis.forEach(function(p){ h += '<p>🎉 ' + p.txt + '</p>'; });
+      if (S.pertes && S.pertes.length){
+        var pluriel = { pain:"pains", fruits:"fruits", legumes:"légumes", frais:"produits frais", viande:"viandes congelées", puree:"purées bébé" };
+        var detail = S.pertes.map(function(p){ return p.qty + " " + (pluriel[p.cle] || p.cle); }).join(", ");
+        h += '<p>🗑 <b>Périmé cette semaine : ' + detail + ".</b></p>";
+        h += '<p class="small muted">Le frais ne se garde pas d\'une semaine à l\'autre — on distribue, on transforme, on échange.</p>';
+      }
       h += '<p class="muted">' + (S.semFam >= S.semFamTotal ? "Semaine parfaite : tout le monde repart avec son panier. 🎉" : "Chaque panier servi compte. Les familles non servies seront premières accueillies la semaine prochaine.") + "</p>";
       h += '<button class="btn ghost big" onclick="showCarnet(true)">📖 Carnet de la banque</button>';
       h += '<button class="btn big" onclick="semaineSuivante()">Semaine ' + (S.sem+1) + " →</button>";
@@ -1286,12 +1430,8 @@
       $("modal").innerHTML = "";
       var auto = autonomie();
       var eff = S.portions > 0 ? Math.round(S.familles / S.portions * 100) : 0;
-      var grade, mot;
-      if (S.familles >= 34){ grade = "🏆 Modèle du quartier"; mot = "Une banque que tout le quartier connaît — et qui tient debout toute seule."; }
-      else if (S.familles >= 27){ grade = "🌟 Banque autonome"; mot = "Tes ventes financent ta mission : l'autonomie n'est plus un rêve, c'est ton fonctionnement."; }
-      else if (S.familles >= 19){ grade = "💪 Banque solide"; mot = "La machine roule. Encore quelques ajustements et l'autonomie complète est à portée."; }
-      else if (S.familles >= 11){ grade = "🌱 Banque en démarrage"; mot = "Les bases sont là. Vends un peu plus, gaspille un peu moins — et regarde les familles nourries grimper."; }
-      else { grade = "🌱 Premiers pas"; mot = "Chaque banque commence quelque part. Rejoue une saison : les dons changent, les réflexes restent."; }
+      var g = gradeActuel(); /* volet 3 : seuils, noms et mots repris de GRADES */
+      var grade = g.nom, mot = g.mot;
       var conserve = S.caisse;
       var h = '<h2 class="ptitle center">🏁 La saison est terminée</h2>';
       h += '<div class="grade">' + grade + "</div>";
