@@ -5075,7 +5075,7 @@ xRenderList();
    Gestionnaire de promesses 100 % local : localStorage, clé propre, aucun envoi.
    Deux volets : « On me doit » (sens "doit") et « Je dois » (sens "je"). */
 var RL_CLE = "relanceur:v1";
-var rl = { items: [], volet: "doit", msgPour: null, msgTon: "doux", dernierFait: null, undoTimer: null };
+var rl = { items: [], volet: "doit", msgPour: null, msgTon: "doux", msgVous: true, dernierFait: null, undoTimer: null };
 
 function rl$(id){ return document.getElementById(id); }
 function rlId(){
@@ -5146,7 +5146,11 @@ function rlHumain(diff){
 }
 
 /* ---------- Messages générés ---------- */
-function rlMessage(item, ton){
+function rlMessage(item, ton, vous){
+  // VOUS par défaut : règle du site (VOUS partout sauf dans les jeux).
+  // « vous » absent ou vrai -> VOUS ; faux seulement si l'utilisateur
+  // a choisi « Tu » dans le panneau du message.
+  vous = vous !== false;
   var date = rlDateLongue(item.date);
   var diff = rlDiff(item);
   var retard = "", retardJe = "";
@@ -5158,13 +5162,25 @@ function rlMessage(item, ton){
     retardJe = " — c’est aujourd’hui, je m’y mets";
   }
   if (item.sens === "doit"){
-    if (ton === "doux") return "Bonjour " + item.nom + ", j’espère que tu vas bien ! Petit rappel en douceur : " + item.quoi + " — c’était prévu pour le " + date + ". Quand tu auras un moment, ce serait vraiment apprécié. Merci !";
-    if (ton === "ferme") return "Bonjour " + item.nom + ", je te relance au sujet de ceci : " + item.quoi + ". L’échéance était le " + date + retard + ". J’aimerais qu’on règle ça sans tarder — dis-moi quand ce sera fait. Merci.";
-    return "Bonjour " + item.nom + ", c’est urgent : " + item.quoi + " devait être réglé pour le " + date + retard + ". J’ai besoin que ce soit fait aujourd’hui. Réponds-moi tout de suite pour me dire comment tu t’y prends.";
+    if (ton === "doux") return vous
+      ? "Bonjour " + item.nom + ", j’espère que vous allez bien ! Petit rappel en douceur : " + item.quoi + " — c’était prévu pour le " + date + ". Quand vous aurez un moment, ce serait vraiment apprécié. Merci !"
+      : "Bonjour " + item.nom + ", j’espère que tu vas bien ! Petit rappel en douceur : " + item.quoi + " — c’était prévu pour le " + date + ". Quand tu auras un moment, ce serait vraiment apprécié. Merci !";
+    if (ton === "ferme") return vous
+      ? "Bonjour " + item.nom + ", je vous relance au sujet de ceci : " + item.quoi + ". L’échéance était le " + date + retard + ". J’aimerais qu’on règle ça sans tarder — dites-moi quand ce sera fait. Merci."
+      : "Bonjour " + item.nom + ", je te relance au sujet de ceci : " + item.quoi + ". L’échéance était le " + date + retard + ". J’aimerais qu’on règle ça sans tarder — dis-moi quand ce sera fait. Merci.";
+    return vous
+      ? "Bonjour " + item.nom + ", c’est urgent : " + item.quoi + " devait être réglé pour le " + date + retard + ". J’ai besoin que ce soit fait aujourd’hui. Répondez-moi tout de suite pour me dire comment vous vous y prenez."
+      : "Bonjour " + item.nom + ", c’est urgent : " + item.quoi + " devait être réglé pour le " + date + retard + ". J’ai besoin que ce soit fait aujourd’hui. Réponds-moi tout de suite pour me dire comment tu t’y prends.";
   }
-  if (ton === "doux") return "Bonjour " + item.nom + ", un petit mot pour te dire que je ne t’ai pas oublié : " + item.quoi + " — prévu pour le " + date + ". Je m’en occupe très bientôt. Merci de ta patience !";
-  if (ton === "ferme") return "Bonjour " + item.nom + ", je te confirme que je m’occupe de ceci : " + item.quoi + ". Échéance : le " + date + retardJe + ". Je te tiens au courant dès que c’est fait.";
-  return "Bonjour " + item.nom + ", je te dois ceci : " + item.quoi + ". L’échéance : le " + date + retardJe + ". Je m’en occupe aujourd’hui même et je te confirme dès que c’est réglé. Merci de ta compréhension.";
+  if (ton === "doux") return vous
+    ? "Bonjour " + item.nom + ", un petit mot pour vous dire que je ne vous ai pas oublié : " + item.quoi + " — prévu pour le " + date + ". Je m’en occupe très bientôt. Merci de votre patience !"
+    : "Bonjour " + item.nom + ", un petit mot pour te dire que je ne t’ai pas oublié : " + item.quoi + " — prévu pour le " + date + ". Je m’en occupe très bientôt. Merci de ta patience !";
+  if (ton === "ferme") return vous
+    ? "Bonjour " + item.nom + ", je vous confirme que je m’occupe de ceci : " + item.quoi + ". Échéance : le " + date + retardJe + ". Je vous tiens au courant dès que c’est fait."
+    : "Bonjour " + item.nom + ", je te confirme que je m’occupe de ceci : " + item.quoi + ". Échéance : le " + date + retardJe + ". Je te tiens au courant dès que c’est fait.";
+  return vous
+    ? "Bonjour " + item.nom + ", je vous dois ceci : " + item.quoi + ". L’échéance : le " + date + retardJe + ". Je m’en occupe aujourd’hui même et je vous confirme dès que c’est réglé. Merci de votre compréhension."
+    : "Bonjour " + item.nom + ", je te dois ceci : " + item.quoi + ". L’échéance : le " + date + retardJe + ". Je m’en occupe aujourd’hui même et je te confirme dès que c’est réglé. Merci de ta compréhension.";
 }
 function rlCopier(txt, statusEl){
   function ok(){ if (statusEl) statusEl.textContent = "Message copié ! Collez-le dans votre courriel, votre texto ou votre application de messagerie."; }
@@ -5199,7 +5215,7 @@ function rlFermerMessage(){
 function rlOuvrirMessage(item, carte){
   if (rl.msgPour === item.id){ rlFermerMessage(); return; }
   rlFermerMessage();
-  rl.msgPour = item.id; rl.msgTon = "doux";
+  rl.msgPour = item.id; rl.msgTon = "doux"; rl.msgVous = true;
   var panel = document.createElement("div");
   panel.className = "rl-msg"; panel.id = "rl-msg-panel";
   var titre = document.createElement("h3");
@@ -5220,12 +5236,30 @@ function rlOuvrirMessage(item, carte){
       rl.msgTon = t[0];
       chips.querySelectorAll(".chip").forEach(function(c){ c.setAttribute("aria-pressed", "false"); });
       b.setAttribute("aria-pressed", "true");
-      ta.value = rlMessage(item, rl.msgTon);
+      ta.value = rlMessage(item, rl.msgTon, rl.msgVous);
     });
     chips.appendChild(b);
   });
   panel.appendChild(chips);
-  ta.value = rlMessage(item, "doux");
+  var lblVous = document.createElement("p");
+  lblVous.className = "hint"; lblVous.style.margin = "12px 0 8px";
+  lblVous.textContent = "Vous ou tu ? Par défaut, le message vouvoie — choisissez « Tu » si vous tutoyez cette personne.";
+  panel.appendChild(lblVous);
+  var chipsVous = document.createElement("div"); chipsVous.className = "chips"; chipsVous.setAttribute("role", "group"); chipsVous.setAttribute("aria-label", "Vouvoiement ou tutoiement");
+  [["vous", "Vous"], ["tu", "Tu"]].forEach(function(v){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.textContent = v[1];
+    b.setAttribute("aria-pressed", v[0] === "vous" ? "true" : "false");
+    b.addEventListener("click", function(){
+      rl.msgVous = (v[0] === "vous");
+      chipsVous.querySelectorAll(".chip").forEach(function(c){ c.setAttribute("aria-pressed", "false"); });
+      b.setAttribute("aria-pressed", "true");
+      ta.value = rlMessage(item, rl.msgTon, rl.msgVous);
+    });
+    chipsVous.appendChild(b);
+  });
+  panel.appendChild(chipsVous);
+  ta.value = rlMessage(item, "doux", rl.msgVous);
   panel.appendChild(ta);
   var row = document.createElement("div"); row.className = "row"; row.style.marginTop = "12px";
   var status = document.createElement("p"); status.className = "copy-status"; status.setAttribute("aria-live", "polite");
