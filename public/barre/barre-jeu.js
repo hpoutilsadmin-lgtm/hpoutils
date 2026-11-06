@@ -756,7 +756,7 @@
       zoneTampons.setAttribute("role", "img");
       zoneTampons.setAttribute("aria-label",
         "Approuvé par des testeurs HP");
-      cfg.tampons.forEach(function (cle) {
+      cfg.tampons.forEach(function (cle, idx) {
         var t = TAMPONS[cle];
         if (!t) return;
         var pastille = el("span", "bj-tampon");
@@ -778,9 +778,15 @@
         /* Libellé complet neutre (retrait des noms, 2 nov. 2026) :
            « Approuvé par un testeur ». Il vit dans le même span : sur ≤ 520 px, le span se replie comme avant (la
            couleur et le symbole portent la signature) — aucun
-           débordement possible dans la barre. */
-        var nomT = el("span", "bj-tampon-nom", "Approuvé par un testeur");
-        pastille.appendChild(nomT);
+           débordement possible dans la barre.
+           Un seul libellé visible par barre (correctif 6 nov. 2026) :
+           les libellés sont identiques depuis le retrait des noms, un jeu
+           à deux testeurs les affichait deux fois côte à côte. Chaque
+           testeur garde sa pastille (✓ + couleur + infobulle). */
+        if (idx === 0) {
+          var nomT = el("span", "bj-tampon-nom", "Approuvé par un testeur");
+          pastille.appendChild(nomT);
+        }
         zoneTampons.appendChild(pastille);
       });
       bar.appendChild(zoneTampons);
