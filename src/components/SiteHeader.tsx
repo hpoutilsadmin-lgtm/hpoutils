@@ -25,7 +25,8 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="container header-inner">
         <Link className="logo" to="/" aria-label="Accueil HP">
-          <img src="/images/hp-logo-clean.png" alt="HP — Des outils simples pour la vraie vie" />
+          <img src="/images/hp-logo-clean.png" alt="HP — des outils pour la vraie vie" />
+          <img src="/hgpto/gepeto/tete-144.png" alt="" className="logo-gepeto" width="48" height="48" />
         </Link>
         <button
           className="nav-toggle"

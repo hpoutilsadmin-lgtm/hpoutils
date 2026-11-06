@@ -79,15 +79,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "HP — Des outils simples pour la vraie vie" },
+      { title: "HP — des outils pour la vraie vie" },
       { name: "description", content: "HP — Comprendre. Agir. Transmettre. Livres, outils pratiques et ateliers pour la vraie vie." },
       { name: "author", content: "HP" },
       { name: "theme-color", content: "#07111b" },
-      { property: "og:title", content: "HP — Des outils simples pour la vraie vie" },
+      { property: "og:title", content: "HP — des outils pour la vraie vie" },
       { property: "og:description", content: "HP — Comprendre. Agir. Transmettre. Livres, outils pratiques et ateliers pour la vraie vie." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: "HP — Des outils simples pour la vraie vie" },
+      { name: "twitter:title", content: "HP — des outils pour la vraie vie" },
       { name: "twitter:description", content: "HP — Comprendre. Agir. Transmettre. Livres, outils pratiques et ateliers pour la vraie vie." },
     ],
     links: [

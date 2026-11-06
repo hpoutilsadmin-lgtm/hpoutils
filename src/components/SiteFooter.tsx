@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="container footer-grid">
         <div>
           <img src="/images/hp-logo-clean.png" alt="HP" className="footer-logo" />
-          <p>Des outils simples<br />pour la vraie vie.</p>
+          <p>HP — des outils<br />pour la vraie vie.</p>
           <div className="socials">
             <a href="https://www.facebook.com/1186804767843963" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
             <a href="https://www.instagram.com/hpoutils/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">◎</a>
