@@ -30,6 +30,7 @@ export const Route = createFileRoute("/panier")({
       description:
         "Votre panier HP Outils : livres et kits PDF, prix en $ CAD, aucune taxe ajoutée, livraison par courriel après paiement.",
       path: "/panier",
+      noindex: true,
     }),
   component: Page,
 });
