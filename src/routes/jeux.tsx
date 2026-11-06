@@ -607,7 +607,6 @@ function JeuxPage() {
                 </span>
               </a>
               <div style={{ flex: "2 1 320px", padding: "30px 32px", display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
-                <span className="editorial-kicker" style={{ margin: 0, background: "rgba(200,95,22,.12)", color: "#be5c23", borderColor: "rgba(200,95,22,.35)" }}>Jeu vedette</span>
                 <h3 style={{ fontSize: 34 }}>{featured.title}</h3>
                 <span style={TAG_ON_PAPER_STYLE}>{featured.tag}</span>
                 <p>{featured.copy}</p>
