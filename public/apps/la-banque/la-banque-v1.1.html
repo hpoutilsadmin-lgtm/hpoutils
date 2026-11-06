@@ -99,7 +99,7 @@
       .tri{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
       .tri button{
         border:2px solid var(--ink); border-radius:12px; background:var(--card2);
-        padding:9px 4px; font-weight:800; font-size:14.5px; color:var(--ink);
+        padding:13px 6px; font-weight:800; font-size:14.5px; color:var(--ink);
       }
       .tri button small{ display:block; font-weight:700; color:var(--muted); font-size:12px; margin-top:2px; }
       .tri button:active{ transform:translateY(1px); }
@@ -122,11 +122,16 @@
       table.market{ width:100%; border-collapse:collapse; }
       table.market td{ padding:8px 2px; border-bottom:1px dashed var(--line); vertical-align:middle; }
       table.market td:last-child{ text-align:right; }
-      .mini{ display:inline-flex; align-items:center; gap:7px; }
+      .mini{ display:inline-flex; align-items:center; gap:7px; flex-wrap:wrap; }
       .mini button{
-        width:36px; height:36px; border-radius:50%; border:2px solid var(--ink);
-        background:var(--card); color:var(--ink); font-size:19px; font-weight:800; line-height:1;
+        width:48px; height:48px; border-radius:50%; border:2px solid var(--ink);
+        background:var(--card); color:var(--ink); font-size:20px; font-weight:800; line-height:1;
       }
+      .mini button.rapide{
+        width:auto; min-width:54px; min-height:48px; border-radius:12px;
+        background:var(--sun-soft); font-size:15px; padding:0 10px;
+      }
+      .mini button.rapide:disabled{ opacity:.4; }
       .mini .n{ min-width:26px; text-align:center; font-weight:800; font-size:17px; }
 
       /* ---------- Familles ---------- */
@@ -137,13 +142,13 @@
       .tag48{ display:inline-block; background:var(--sun); color:#2A332A; border:1.5px solid var(--ink); border-radius:999px; padding:2px 9px; font-size:12.5px; font-weight:800; }
       .items{ display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:10px; }
       .item{
-        display:flex; align-items:center; justify-content:space-between; gap:4px;
+        display:flex; align-items:center; justify-content:space-between; gap:4px; flex-wrap:wrap;
         background:var(--card2); border-radius:12px; padding:6px 8px;
       }
       .item .lbl{ font-size:13.5px; font-weight:800; line-height:1.15; }
       .item .lbl small{ display:block; color:var(--muted); font-weight:700; font-size:11.5px; }
       .item.off{ opacity:.45; }
-      .item .mini button{ width:44px; height:44px; font-size:17px; }
+      .item .mini button{ width:48px; height:48px; font-size:18px; }
       .served{ text-align:center; padding:8px 0 2px; }
       .served .heart{ font-size:38px; }
       .fam.done{ background:var(--green-soft); }
@@ -182,21 +187,27 @@
       .bilan tr.total td{ border-bottom:none; font-size:18px; }
       .donbox{ background:var(--card); border:2px solid var(--ink); border-radius:18px; box-shadow:var(--shadow); padding:16px 18px; margin:16px 0; }
       .donbox .amounts{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-      .donbox .amounts span{ border:2px solid var(--ink); border-radius:999px; padding:5px 14px; font-weight:800; background:var(--sun-soft); }
+      .donbox .amounts span, .donbox .amounts a{ border:2px solid var(--ink); border-radius:999px; padding:5px 14px; font-weight:800; background:var(--sun-soft); }
+      .donbox .amounts a{ color:var(--ink); text-decoration:none; display:inline-block; }
+      .donbox .amounts a:active{ transform:translateY(1px); }
       .grade{ font-family:ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, system-ui, sans-serif; font-size:30px; font-weight:800; color:var(--green-d); text-align:center; margin:8px 0 2px; }
       .center{ text-align:center; }
+      .rappel{ background:var(--card2); border:2px dashed var(--line); border-radius:12px; padding:8px 12px; margin:12px 0 2px; font-weight:700; }
+      details.verite{ background:var(--card); border:2px solid var(--ink); border-radius:14px; padding:10px 14px; margin:12px 0; text-align:left; }
+      details.verite summary{ font-weight:800; cursor:pointer; }
+      details.verite p{ margin:8px 0 0; }
       footer{ text-align:center; color:var(--muted); font-size:13.5px; margin-top:26px; }
     </style>
   
 <!-- Partage HP : adresse stable + image d'aperçu (vagues 0-1, 23 oct. 2026) -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="HP Outils" />
-<meta property="og:title" content="LA BANQUE — le jeu de la banque alimentaire" />
+<meta property="og:title" content="L'aide alimentaire" />
 <meta property="og:description" content="Gère une banque alimentaire sur une saison de 8 semaines : dons, tri, cuisine et service aux familles. Ton score : les familles nourries. Jeu gratuit." />
 <meta property="og:url" content="https://www.hp-outils.com/apps/la-banque" />
 <meta property="og:image" content="https://www.hp-outils.com/images/share-hp.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="LA BANQUE — le jeu de la banque alimentaire" />
+<meta name="twitter:title" content="L'aide alimentaire" />
 <meta name="twitter:description" content="Gère une banque alimentaire sur une saison de 8 semaines : dons, tri, cuisine et service aux familles. Ton score : les familles nourries. Jeu gratuit." />
 <meta name="twitter:image" content="https://www.hp-outils.com/images/share-hp.jpg" />
 <link rel="canonical" href="https://www.hp-outils.com/apps/la-banque" />
@@ -207,6 +218,18 @@
 
     <script>
     "use strict";
+    /* ================= Vrai don — POINT OUVERT (lot P1b, #6) =================
+       Aucun organisme ni lien reel n'est invente ici : l'organisme de la
+       campagne en cours, son lien de don, l'objectif collectif et le montant
+       remis sont A CONFIRMER PAR HP avant depot. Remplir les 5 constantes
+       ci-dessous (nom exact de l'organisme + page de don officielle), et les
+       montants deviennent des liens cliquables. Tant que DON_URL est vide,
+       le bloc affiche les montants sans lien et le dit franchement. */
+    var DON_ORGANISME = ""; /* nom exact de l'organisme, valide par HP */
+    var DON_CAMPAGNE = "";  /* ex. "oct. 2026 -> mars 2027" */
+    var DON_OBJECTIF = "";  /* ex. "500 $ pour la campagne en cours" */
+    var DON_REMIS = "";     /* ex. "120 $ remis a ce jour" — montant reel, jamais invente */
+    var DON_URL = "";       /* page de don officielle de l'organisme */
     /* ================= Données ================= */
     var ITEMS = {
       pain:     { nom:"Pain",             ico:"🍞", prix:0.55 },
@@ -337,6 +360,31 @@
     /* ================= État ================= */
     var S = null;
     function stockVide(){ return { pain:0, conserves:0, fruits:0, legumes:0, frais:0, viande:0, arachide:0, plats:0, crepes:0, puree:0 }; }
+    /* ================= Sauvegarde automatique (lot P1b, #7) =================
+       Reprise locale seulement : aucune donnee personnelle, aucun compte.
+       La saison en cours est enregistree a chaque rendu ; fermer l'onglet
+       ne fait plus tout perdre. La fin de saison efface la sauvegarde. */
+    var SAVE_KEY = "hp-la-banque-v1";
+    function sauver(){
+      try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){}
+    }
+    function chargerSave(){
+      try{
+        var brut = localStorage.getItem(SAVE_KEY);
+        if (!brut) return null;
+        var sv = JSON.parse(brut);
+        if (!sv || typeof sv.sem !== "number" || sv.sem < 1 || sv.sem > 8 || !Array.isArray(sv.fams)) return null;
+        return sv;
+      }catch(e){ return null; }
+    }
+    function effacerSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+    function reprendre(){
+      var sv = chargerSave();
+      if (!sv){ renderStart(); return; }
+      S = sv;
+      render();
+      window.scrollTo(0,0);
+    }
     function newGame(){
       S = {
         sem:1, caisse:40,
@@ -348,14 +396,13 @@
         prodBatches:0, prodSnap:null, cart:{}, cartIng:{},
         semFam:0, semFamTotal:0, semVentes:0, confirmEnd:false,
         carnet:{}, priorite:[],
-        coupMain:false, rareteSemaine: 5 + Math.floor(Math.random()*2)
+        rareteSemaine: 5 + Math.floor(Math.random()*2)
       };
       startWeek();
     }
     function startWeek(){
       S.phase = 0; S.confirmEnd = false;
       S.semFam = 0; S.semVentes = 0;
-      S.coupMain = false;
       S.prodBatches = 0; S.prodSnap = null; S.cart = {}; S.cartIng = {};
       /* prix du marché de la semaine */
       S.prix = {}; S.prixIng = {};
@@ -469,7 +516,7 @@
         var t = c.t;
         if (!S.carnet[t.nom]) S.carnet[t.nom] = { rencontres:0, foisServies:0 };
         S.carnet[t.nom].rencontres++;
-        var f = { nom:t.nom, desc:t.desc, pers:t.pers, c:t.c.slice(), besoin:t.pers*3, alloc:{}, served:false,
+        var f = { nom:t.nom, desc:t.desc, pers:t.pers, c:t.c.slice(), besoin:t.pers*3, alloc:{}, served:false, coupMain:false,
                   prioritaire:!!c.prioritaire, urgence:false, reaction:null, portionsServies:0, suivi:null, pureeManquante:false };
         if (!f.prioritaire && S.carnet[t.nom].foisServies > 0){
           var sv = SUIVIS[t.nom];
@@ -484,7 +531,7 @@
           var tu = pick(restes);
           if (!S.carnet[tu.nom]) S.carnet[tu.nom] = { rencontres:0, foisServies:0 };
           S.carnet[tu.nom].rencontres++;
-          S.fams.push({ nom:tu.nom, desc:tu.desc, pers:tu.pers, c:tu.c.slice(), besoin:tu.pers*3, alloc:{}, served:false,
+          S.fams.push({ nom:tu.nom, desc:tu.desc, pers:tu.pers, c:tu.c.slice(), besoin:tu.pers*3, alloc:{}, served:false, coupMain:false,
                         prioritaire:false, urgence:true, reaction:null, portionsServies:0, suivi:null, pureeManquante:false });
         }
       }
@@ -518,6 +565,14 @@
       h += "</div>";
       return h;
     }
+    function rappelFamilles(){
+      /* Rappel compact des phases 1 a 4 (lot P1b, #4) : le detail complet
+         (qui vient, contraintes, suivis) est a la phase Dons, une fois par
+         semaine ; les contraintes sont aussi rappelees sur chaque panier. */
+      var n = 0, portions = 0;
+      S.fams.forEach(function(f){ if (!f.served){ n++; portions += f.besoin; } });
+      return '<div class="rappel">👨‍👩‍👧 Cette semaine : <b>' + n + ' famille' + (n>1?"s":"") + ' · ' + portions + ' portions</b> à servir — les contraintes sont rappelées sur chaque panier.</div>';
+    }
     function stockChips(){
       var h = "";
       for (var k in ITEMS) if (S.stock[k] > 0) h += "<span>" + ITEMS[k].ico + " " + S.stock[k] + "</span>";
@@ -538,7 +593,8 @@
       h += "</div></div>";
       if (S.event) h += '<div class="event">' + S.event + "</div>";
       h += '<div class="stockbar">' + stockChips() + "</div>";
-      if (S.phase <= 4) h += bandeauFamilles();
+      if (S.phase === 0) h += bandeauFamilles();
+      else if (S.phase <= 4) h += rappelFamilles();
       if (S.phase === 0) h += vueDons();
       else if (S.phase === 1) h += vueTri();
       else if (S.phase === 2) h += vueProduction();
@@ -546,9 +602,11 @@
       else if (S.phase === 4) h += vueAchats();
       else h += vueFamilles();
       $("app").innerHTML = h;
+      sauver();
     }
 
     function renderStart(){
+      var save = chargerSave();
       $("app").innerHTML =
         '<div class="start">' +
         '<div class="big">L\'AIDE ALIMENTAIRE</div>' +
@@ -556,12 +614,14 @@
         '<p class="sub">Tu diriges une banque alimentaire de quartier qui veut devenir <b>autonome, sans financement gouvernemental</b>. Ton but n\'est pas d\'accumuler l\'argent : c\'est de nourrir le plus de familles possible.</p>' +
         '<div class="loop"><span>🎁 Dons</span><i>→</i><span>🔍 Tri</span><i>→</i><span>🥞 Cuisine</span><i>→</i><span>🏫 Ventes</span><i>→</i><span>🛒 Achats</span><i>→</i><span>❤️ Familles</span><i>→</i><span>📋 Bilan</span></div>' +
         '<div class="mission"><h3>Comment ça marche</h3>' +
-        '<p>Chaque semaine : les dons arrivent et tu les tries selon les vraies règles. Les denrées données sont distribuées aux familles — jamais vendues. Ta cuisine transforme les ingrédients <b>achetés</b> au marché en crêpes que les écoles achètent : c\'est cet argent-là qui finance tes achats. Puis tu composes le panier de provisions de chaque famille — des ménages que tu apprends à connaître, semaine après semaine.</p>' +
-        '<p><b>La ligne de vérité :</b> « Dans la vraie vie, on ne vend jamais ce qui est donné. Ici, la cuisine vend ce qu\'elle produit avec ses achats — et chaque dollar retourne aux familles. »</p>' +
-        '<p><b>Leçon du jeu :</b> vendre intelligemment aujourd\'hui, c\'est nourrir plus de familles demain. La rentabilité sert la mission — jamais l\'inverse.</p><p><b>Gestes :</b> au doigt ou avec ta souris, clique les boutons pour jouer.</p></div>' +
+        '<p>Chaque semaine, les dons arrivent : tu les tries, ta cuisine produit des crêpes, les écoles les achètent, et tu composes les paniers des familles.</p>' +
+        '<details class="verite"><summary>La ligne de vérité — touche pour lire</summary><p>« Dans la vraie vie, on ne vend jamais ce qui est donné. Ici, la cuisine vend ce qu\'elle produit avec ses achats — et chaque dollar retourne aux familles. »</p></details>' +
+        '<p><b>Leçon du jeu :</b> vendre aujourd\'hui, c\'est nourrir plus de familles demain.</p><p><b>Gestes :</b> au doigt ou à la souris, touche les boutons pour jouer.</p></div>' +
         '<div class="score3"><div><b>❤️</b><small>FAMILLES NOURRIES — le vrai score</small></div><div><b>📈</b><small>AUTONOMIE — % du budget gagné par tes activités</small></div><div><b>🥖</b><small>EFFICACITÉ — familles nourries par tes ressources</small></div></div>' +
+        (save ? '<button class="btn sun big" onclick="reprendre()">↩ Reprendre la saison — semaine ' + save.sem + ' / 8</button>' : "") +
         '<button class="btn big" onclick="newGame()">Commencer la saison — 8 semaines</button>' +
-        '<footer>Un jeu d\'économie sociale, sans morale forcée : juste des choix, des familles, et des paniers à composer.<br>HP Outils — « Des outils pour la vraie vie. » · Version 1.1</footer>' +
+        (save ? '<p class="small muted" style="margin-top:8px">Sauvegarde automatique sur cet appareil : ta saison reprend où tu l\'as laissée.</p>' : "") +
+        '<footer>Un jeu d\'économie sociale, sans morale forcée : juste des choix, des familles, et des paniers à composer.<br>HP Outils — « Des outils pour la vraie vie. » · Version 1.2</footer>' +
         "</div>";
       window.scrollTo(0,0);
     }
@@ -569,7 +629,7 @@
     /* ================= Phase 0 : Dons ================= */
     function vueDons(){
       var h = '<h2 class="ptitle">📥 Les dons arrivent</h2>';
-      h += '<p class="phint">Le camion revient de sa tournée : supermarchés, commerces et citoyens ont donné. Voici ce qui entre à l\'entrepôt ce matin. Ensuite, au tri, chaque lot sera vérifié selon les règles de la banque — et rappelle-toi : <b>tout ce qui arrive cette semaine part cette semaine</b>. La redistribution ne dort pas : 48 heures, pas plus.</p>';
+      h += '<p class="phint">Le camion a livré les dons du matin. Vérifie-les au tri : tout part cette semaine, sous 48 heures.</p>';
       if (S.sem === 6) h += '<div class="event">🎄 Les inscriptions aux paniers de Noël sont ouvertes ! Les familles de la saison s\'inscrivent dès maintenant pour la Grande distribution de la semaine 8.</div>';
       if (S.sem === S.rareteSemaine) h += '<div class="event">📉 <b>Semaine creuse</b> — le camion est revenu presque vide : les dons sont minces, et ce n\'est la faute de personne, ça arrive certaines semaines. Le stock ne couvrira peut-être pas tout le monde : tu choisiras l\'ordre de service, et les familles qui attendent seront <b>premières accueillies la semaine prochaine</b>.</div>';
       if (S.sem === 8) h += '<div class="event">🎄 Semaine de la Grande distribution : on réunit les familles de la saison pour les paniers de Noël — le sommet de l\'année.</div>';
@@ -595,7 +655,7 @@
     var PERISSABLES = { frais:1, viande:1, fruits:1, legumes:1, pain:1, puree:1 };
     function vueTri(){
       var h = '<h2 class="ptitle">🔍 Le tri</h2>';
-      h += '<p class="phint">Chaque lot est vérifié à la main, comme dans les vraies banques : « meilleur avant » ne veut pas dire périmé, mais une boîte bombée ne négocie pas. Et la règle d\'or : <b>les denrées données ne se vendent jamais</b> — elles se distribuent aux familles, ou la cuisine les transforme en plats pour elles.</p>';
+      h += '<p class="phint">Vérifie chaque lot à la main. Les denrées données ne se vendent jamais : elles se distribuent.</p>';
       S.lots.forEach(function(l, i){
         h += '<div class="card">';
         if (l.type === "food"){
@@ -662,9 +722,10 @@
       var max = Math.min(CAPACITE, maxIng);
       if (S.prodBatches > max) S.prodBatches = max;
       var h = '<h2 class="ptitle">🥞 La cuisine produit</h2>';
-      h += '<p class="phint">Ta cuisine transforme les <b>ingrédients achetés au marché</b> en <b>crêpes nutritives</b> : vendues aux écoles, elles financent la banque; gardées, elles nourrissent les familles. Les ingrédients reçus en dons, eux, sont déjà partis en plats préparés pour les familles au tri — <b>on ne vend jamais ce qui est donné</b>. 1 lot = 10 crêpes (3 🌾 · 2 🥚 · 1 🥛). Maximum ' + CAPACITE + ' lots par semaine.</p>';
+      h += '<p class="phint">Transforme tes ingrédients achetés en crêpes : 1 lot = 10 crêpes. Vendues, elles financent la banque.</p>';
       h += '<div class="card"><h3>Combien de lots de crêpes ?</h3>';
       h += '<div class="stepper"><button onclick="prod(-1)" ' + (S.prodBatches<=0?"disabled":"") + '>−</button><div class="n">' + S.prodBatches + '</div><button onclick="prod(1)" ' + (S.prodBatches>=max?"disabled":"") + '>+</button></div>';
+      h += '<div class="center small muted">Recette : 3 🌾 · 2 🥚 · 1 🥛 par lot — maximum ' + CAPACITE + ' lots par semaine. Les ingrédients reçus en dons sont déjà partis en plats préparés pour les familles.</div>';
       h += '<div class="center"><span class="qty">🥞 ' + (S.prodBatches*10) + ' crêpes</span><div class="small muted">Ingrédients restants après production : 🌾 ' + (S.prodSnap.farine - S.prodBatches*3) + " · 🥚 " + (S.prodSnap.oeufs - S.prodBatches*2) + " · 🥛 " + (S.prodSnap.lait - S.prodBatches*1) + "</div></div>";
       if (max === 0) h += '<p class="miss">Il manque des ingrédients achetés pour produire. Tu pourras en acheter à la phase Achats pour la semaine prochaine.</p>';
       h += "</div>";
@@ -696,7 +757,8 @@
       }
       if (!S.offres.length) genOffres();
       var reserve = S.offres.filter(function(o){return o.ok;}).reduce(function(t,o){return t+o.qty;},0);
-      h += '<p class="phint">Chaque école propose son prix pour tes crêpes — le seul produit que la banque vend, parce qu\'il est fabriqué avec des ingrédients achetés. Les denrées données, elles, ne se vendent jamais : elles se donnent. Plus le prix est élevé, plus la caisse se remplit — mais chaque crêpe vendue est une crêpe de moins dans les paniers. À toi de trouver l\'équilibre. <b>Crêpes disponibles : 🥞 ' + S.stock.crepes + '</b> (réservées : ' + reserve + ').</p>';
+      h += '<p class="phint">Chaque école propose son prix. Vendre rapporte — mais chaque crêpe vendue manque aux paniers.</p>';
+      h += '<p class="small"><b>Crêpes disponibles : 🥞 ' + S.stock.crepes + '</b> (réservées : ' + reserve + ').</p>';
       S.offres.forEach(function(o, i){
         var total = o.qty * o.prix;
         var okPossible = o.ok || (reserve + o.qty <= S.stock.crepes);
@@ -743,11 +805,10 @@
         if (f.served) return;
         res.total++;
         var reste = f.besoin;
-        var okF = true;
         if (f.c.indexOf("bebe") >= 0){
           var pb = Math.min(3, pool.puree, reste);
           pool.puree -= pb; reste -= pb;
-          if (pb < 3){ res.manqueBebe += (3 - pb); okF = false; }
+          if (pb < 3){ res.manqueBebe += (3 - pb); }
         }
         var ordre = ["plats","crepes","viande","pain","conserves","fruits","arachide","legumes","frais"];
         for (var i=0;i<ordre.length && reste>0;i++){
@@ -760,7 +821,7 @@
           res.manque += reste;
           if (f.c.indexOf("frigo") >= 0) res.manqueFrigo += reste;
           if (f.c.indexOf("four") >= 0) res.manqueFour += reste;
-        } else if (okF) res.couvertes++;
+        } else res.couvertes++; /* aligné sur peutServir() : purées souhaitées, jamais bloquantes (lot P1b, #10) */
       });
       return res;
     }
@@ -768,31 +829,35 @@
       if (manque <= 0) return '<p style="margin:5px 0"><span class="okline">✓ ' + label + '</span> <span class="muted">— couvert</span></p>';
       return '<p style="margin:5px 0">⬜ <b>' + label + '</b> — il te manque : <b>' + manque + " " + unite + "</b></p>";
     }
-    function vueAchats(){
-      var h = '<h2 class="ptitle">🛒 Le marché</h2>';
-      h += '<p class="phint">Comble les manques avec ta caisse : ce qui nourrira les familles cette semaine, et les ingrédients achetés pour produire la semaine prochaine. Les prix changent chaque semaine' + (S.rabais ? " — <b>et c'est la semaine de rabais (−25 %)</b>" : "") + '.</p>';
-      var sim = simulerBesoins();
-      h += '<div class="card"><h3>🎯 Les besoins des familles, en direct</h3>' +
+    function simCardHtml(sim){
+      return '<h3>🎯 Les besoins des familles, en direct</h3>' +
         ligneBesoin("🍼 Purées bébé", sim.manqueBebe, "purée(s) bébé") +
         ligneBesoin("🧊 Portions sans frigo", sim.manqueFrigo, "portion(s) pour les ménages sans réfrigérateur") +
         ligneBesoin("🔥 Portions sans four", sim.manqueFour, "portion(s) pour les ménages sans four") +
-        '<p class="small" style="margin:8px 0 0">Avec ton stock et ce panier de marché : <b>' + sim.couvertes + " / " + sim.total + " familles</b> pourraient recevoir un panier complet.</p></div>";
+        '<p class="small" style="margin:8px 0 0">Avec ton stock et ce panier de marché : <b>' + sim.couvertes + " / " + sim.total + " familles</b> pourraient recevoir un panier complet.</p>";
+    }
+    function vueAchats(){
+      var h = '<h2 class="ptitle">🛒 Le marché</h2>';
+      h += '<p class="phint">Comble les manques avec ta caisse. Les prix changent chaque semaine.</p>';
+      if (S.rabais) h += '<p class="small">🏷️ <b>Semaine de rabais : −25 % sur tout le marché.</b></p>';
+      var sim = simulerBesoins();
+      h += '<div class="card" id="msim">' + simCardHtml(sim) + "</div>";
       h += '<div class="card"><h3>Pour les paniers</h3><table class="market">';
       for (var k in ITEMS){
         if (k === "crepes") continue;
         var q = S.cart[k] || 0;
-        h += "<tr><td>" + ITEMS[k].ico + " <b>" + ITEMS[k].nom + '</b> <span class="muted small">(stock : ' + S.stock[k] + ')</span></td><td class="muted">' + fmt(S.prix[k]) + '</td><td><span class="mini"><button onclick="cartAdj(\'' + k + "',-1)\">−</button><span class=\"n\">" + q + '</span><button onclick="cartAdj(\'' + k + "',1)\">+</button></span></td></tr>";
+        h += "<tr><td>" + ITEMS[k].ico + " <b>" + ITEMS[k].nom + '</b> <span class="muted small">(stock : ' + S.stock[k] + ')</span></td><td class="muted">' + fmt(S.prix[k]) + '</td><td><span class="mini"><button onclick="cartAdj(\'' + k + "',-1)\">−</button><span class=\"n\" id=\"cn-" + k + "\">" + q + '</span><button onclick="cartAdj(\'' + k + "',1)\">+</button>" + '<button class="rapide" onclick="cartAdj5(\'' + k + '\')">+5</button><button class="rapide" onclick="cartMax(\'' + k + '\')">Max</button></span></td></tr>';
       }
       h += '</table><h3 style="margin-top:14px">Pour la cuisine</h3><table class="market">';
       for (var g in ING){
         var q2 = S.cartIng[g] || 0;
-        h += "<tr><td>" + ING[g].ico + " <b>" + ING[g].nom + '</b> <span class="muted small">(stock : ' + S.ing[g] + ')</span></td><td class="muted">' + fmt(S.prixIng[g]) + '</td><td><span class="mini"><button onclick="cartIngAdj(\'' + g + "',-1)\">−</button><span class=\"n\">" + q2 + '</span><button onclick="cartIngAdj(\'' + g + "',1)\">+</button></span></td></tr>";
+        h += "<tr><td>" + ING[g].ico + " <b>" + ING[g].nom + '</b> <span class="muted small">(stock : ' + S.ing[g] + ')</span></td><td class="muted">' + fmt(S.prixIng[g]) + '</td><td><span class="mini"><button onclick="cartIngAdj(\'' + g + "',-1)\">−</button><span class=\"n\" id=\"cni-" + g + "\">" + q2 + '</span><button onclick="cartIngAdj(\'' + g + "',1)\">+</button>" + '<button class="rapide" onclick="cartIngAdj5(\'' + g + '\')">+5</button><button class="rapide" onclick="cartIngMax(\'' + g + '\')">Max</button></span></td></tr>';
       }
       var tot = cartTotal();
-      h += '</table><div class="row" style="margin-top:12px"><b>Total du panier</b><span class="qty">' + fmt(tot) + '</span></div>' +
-        '<div class="small muted">Caisse : ' + fmt(S.caisse) + " — après validation : " + fmt(S.caisse - tot) + '</div>' +
-        (tot > S.caisse ? '<p class="miss">La caisse ne suffit pas — réduis le panier.</p>' : "") +
-        '<button class="btn sun" style="width:100%;margin-top:10px" ' + (tot > S.caisse ? "disabled" : "") + ' onclick="recapMarche()">Valider le marché ✓</button>' +
+      h += '</table><div class="row" style="margin-top:12px"><b>Total du panier</b><span class="qty" id="mtotal">' + fmt(tot) + '</span></div>' +
+        '<div class="small muted" id="mapres">Caisse : ' + fmt(S.caisse) + " — après validation : " + fmt(S.caisse - tot) + '</div>' +
+        '<p class="miss" id="mdepasse"' + (tot > S.caisse ? "" : ' style="display:none"') + '>La caisse ne suffit pas — réduis le panier.</p>' +
+        '<button class="btn sun" id="mvalider" style="width:100%;margin-top:10px" ' + (tot > S.caisse ? "disabled" : "") + ' onclick="recapMarche()">Valider le marché ✓</button>' +
         '<div class="small muted" style="margin-top:6px">La validation ouvre le récapitulatif : montant dépensé, besoins couverts et besoins restants. Rien n\'est débité avant ta confirmation.</div>' +
         "</div>";
       return h;
@@ -842,12 +907,59 @@
     function cartAdj(k, d){
       var v = Math.max(0, (S.cart[k]||0) + d);
       if (v === (S.cart[k]||0)) return;
-      S.cart[k] = v; renderKeep();
+      S.cart[k] = v; majMarche();
     }
     function cartIngAdj(k, d){
       var v = Math.max(0, (S.cartIng[k]||0) + d);
       if (v === (S.cartIng[k]||0)) return;
-      S.cartIng[k] = v; renderKeep();
+      S.cartIng[k] = v; majMarche();
+    }
+    function cartAdj5(k){ cartAdj(k, 5); }
+    function cartIngAdj5(k){ cartIngAdj(k, 5); }
+    function cartMax(k){
+      /* « Max » au marché = tout ce que la caisse permet encore pour cet article. */
+      var prix = S.prix[k];
+      if (!prix || prix <= 0) return;
+      var reste = S.caisse - (cartTotal() - (S.cart[k]||0) * prix);
+      var v = Math.max(0, Math.floor(reste / prix));
+      if (v === (S.cart[k]||0)) return;
+      S.cart[k] = v; majMarche();
+    }
+    function cartIngMax(k){
+      var prix = S.prixIng[k];
+      if (!prix || prix <= 0) return;
+      var reste = S.caisse - (cartTotal() - (S.cartIng[k]||0) * prix);
+      var v = Math.max(0, Math.floor(reste / prix));
+      if (v === (S.cartIng[k]||0)) return;
+      S.cartIng[k] = v; majMarche();
+    }
+    /* Mise à jour ciblée du marché (lot P1b, #2) : on ne reconstruit plus
+       toute la page à chaque tap — seuls les compteurs, les totaux et la
+       carte des besoins sont mis à jour. Le bouton tapé n'est jamais détruit.
+       Si un élément attendu manque, on retombe sur le rendu complet. */
+    function majMarche(){
+      var ok = true;
+      for (var k in ITEMS){
+        if (k === "crepes") continue;
+        var el = $("cn-" + k);
+        if (!el){ ok = false; break; }
+        el.textContent = S.cart[k] || 0;
+      }
+      if (ok) for (var g in ING){
+        var el2 = $("cni-" + g);
+        if (!el2){ ok = false; break; }
+        el2.textContent = S.cartIng[g] || 0;
+      }
+      var tEl = $("mtotal"), aEl = $("mapres"), vEl = $("mvalider"), sEl = $("msim"), dEl = $("mdepasse");
+      if (!tEl || !aEl || !vEl || !sEl || !dEl) ok = false;
+      if (!ok){ renderKeep(); return; }
+      var tot = cartTotal();
+      tEl.textContent = fmt(tot);
+      aEl.textContent = "Caisse : " + fmt(S.caisse) + " — après validation : " + fmt(S.caisse - tot);
+      vEl.disabled = tot > S.caisse;
+      dEl.style.display = tot > S.caisse ? "" : "none";
+      sEl.innerHTML = simCardHtml(simulerBesoins());
+      sauver();
     }
     /* ================= Phase 5 : Familles ================= */
     function itemValide(f, k){
@@ -878,7 +990,8 @@
     function peutServir(f){ return !f.served && portionsValides(f) >= f.besoin; }
     function vueFamilles(){
       var h = '<h2 class="ptitle">' + (S.sem >= 8 ? "🎄 La Grande distribution — les paniers de Noël" : "❤️ Les familles") + "</h2>";
-      h += '<p class="phint">Le cœur de la semaine — et le cœur du métier. Compose le panier de provisions de chaque famille : il lui faut <b>3 portions par personne</b>, en respectant ses contraintes. Tu choisis l\'ordre de service : le stock baisse sous tes yeux à chaque panier servi. Besoin d\'un coup de main ? Le bouton <b>🤲 Coup de main</b> (1 fois par semaine) te suggère un panier de départ — jamais le panier parfait : à toi de l\'ajuster, puis de servir toi-même. Une famille servie = une famille nourrie.</p>';
+      h += '<p class="phint">Compose le panier de chaque famille : 3 portions par personne, selon ses contraintes.</p>';
+      h += '<p class="small">🤲 <b>Coup de main</b> : une suggestion complète par famille — à toi de l\'ajuster, puis de servir toi-même. Une famille servie = une famille nourrie.</p>';
       if (S.sem === S.rareteSemaine) h += '<div class="event" style="margin:0 0 12px">📉 <b>Semaine creuse</b> : le stock ne couvrira pas tout le monde. Choisis l\'ordre de service — les familles qui attendent seront premières accueillies la semaine prochaine, sans reproche.</div>';
       var anyServed = S.fams.some(function(f){ return f.served; });
       if (!anyServed) h += '<button class="btn ghost" style="margin-bottom:2px" onclick="goPhase(4)">← Retourner au marché</button>';
@@ -901,28 +1014,33 @@
         } else {
           var pv = portionsValides(f);
           var pct = Math.min(100, Math.round(pv / f.besoin * 100));
-          h += '<div class="bar"><i style="width:' + pct + '%" class="' + (pct>=100 ? "" : "") + '"></i></div>';
-          h += '<div class="small" style="margin-top:5px"><b>' + pv + " / " + f.besoin + " portions valides</b>" +
+          h += '<div class="bar"><i id="fb-' + fi + '" style="width:' + pct + '%"></i></div>';
+          h += '<div class="small" id="fc-' + fi + '" style="margin-top:5px"><b>' + pv + " / " + f.besoin + " portions valides</b>" +
             (f.c.indexOf("bebe") >= 0 ? " · purées bébé : " + (f.alloc.puree||0) + " / 3" : "") + "</div>";
           h += '<div class="items">';
           for (var k in ITEMS){
-            if (dispo(f,k) <= 0) continue;
             var val = itemValide(f,k);
             var n = f.alloc[k] || 0;
+            var dk = dispo(f,k);
             var raison = "";
             if (!val){
               if (ITEMS[k].cuisson) raison = "demande un four";
               else if (ITEMS[k].frigo) raison = "demande un frigo";
               else if (ITEMS[k].arachide) raison = "allergie";
               else if (ITEMS[k].bebe) raison = "réservé aux bébés";
-            }
-            h += '<div class="item' + (val ? "" : " off") + '"><span class="lbl">' + ITEMS[k].ico + " " + ITEMS[k].nom + "<small>stock " + dispo(f,k) + (raison ? " · " + raison : "") + '</small></span>' +
-              '<span class="mini"><button onclick="allocAdj(' + fi + ",'" + k + "',-1)\">−</button><span class=\"n\">" + n + '</span><button onclick="allocAdj(' + fi + ",'" + k + "',1)\" " + (!val || dispo(f,k) - n <= 0 || pv >= f.besoin ? "disabled style=\"opacity:.35\"" : "") + ">+</button></span></div>";
+            } else if (dk <= 0) raison = "stock 0";
+            var plusOff = !val || dk - n <= 0 || pv >= f.besoin;
+            h += '<div class="item' + (val && dk > 0 ? "" : " off") + '" id="at-' + fi + "-" + k + '"><span class="lbl">' + ITEMS[k].ico + " " + ITEMS[k].nom + '<small id="as-' + fi + "-" + k + '">stock ' + dk + (raison ? " · " + raison : "") + '</small></span>' +
+              '<span class="mini"><button id="amoin-' + fi + "-" + k + '" onclick="allocAdj(' + fi + ",'" + k + "',-1)\" " + (n <= 0 ? "disabled style=\"opacity:.35\"" : "") + ">−</button><span class=\"n\" id=\"an-" + fi + "-" + k + "\">" + n + '</span><button id="ap-' + fi + "-" + k + '" onclick="allocAdj(' + fi + ",'" + k + "',1)\" " + (plusOff ? "disabled style=\"opacity:.35\"" : "") + ">+</button>" + '<button class="rapide" id="a5-' + fi + "-" + k + '" onclick="allocAdj5(' + fi + ",'" + k + "')\" " + (plusOff ? "disabled" : "") + ">+5</button>" + '<button class="rapide" id="am-' + fi + "-" + k + '" onclick="allocMax(' + fi + ",'" + k + "')\" " + (plusOff ? "disabled" : "") + ">Max</button></span></div>";
           }
           h += "</div>";
-          if (!bebeOk(f)) h += '<p class="small" style="margin-top:8px;font-weight:700">🍼 Il manque des purées bébé au stock. Ici, on sert quand même le reste du panier — <b>selon les disponibilités</b>, comme sur le terrain — et le manque sera noté au Carnet de la banque.</p>';
-          h += '<div class="row" style="margin-top:12px;gap:8px"><button class="btn ghost" style="flex:1" ' + (S.coupMain ? "disabled" : "") + ' onclick="composer(' + fi + ')">' + (S.coupMain ? "🤲 Coup de main déjà donné cette semaine" : "🤲 Coup de main — suggérer un panier (1/sem.)") + '</button>' +
-            '<button class="btn" style="flex:1" ' + (peutServir(f) ? "" : "disabled") + ' onclick="servir(' + fi + ')">Servir le panier ❤️</button></div>';
+          var toutVide = true;
+          for (var k2 in ITEMS) if (dispo(f,k2) > 0){ toutVide = false; break; }
+          h += '<p class="miss" id="fv-' + fi + '"' + ((toutVide && pv < f.besoin) ? "" : ' style="display:none"') + '>Plus rien en stock pour cette famille — termine la semaine, le stock reviendra.</p>';
+          h += '<p class="small" id="fp-' + fi + '" style="margin-top:8px;font-weight:700' + (bebeOk(f) ? ";display:none" : "") + '">🍼 Il manque des purées bébé au stock. Ici, on sert quand même le reste du panier — <b>selon les disponibilités</b>, comme sur le terrain — et le manque sera noté au Carnet de la banque.</p>';
+          h += '<p class="small" id="fq-' + fi + '" style="margin-top:8px' + (peutServir(f) ? ";display:none" : "") + '">Il te manque <b>' + (f.besoin - pv) + ' portion' + ((f.besoin - pv) > 1 ? "s" : "") + '</b> pour servir ce panier.</p>';
+          h += '<div class="row" style="margin-top:12px;gap:8px"><button class="btn ghost" style="flex:1" ' + (f.coupMain ? "disabled" : "") + ' onclick="composer(' + fi + ')">' + (f.coupMain ? "🤲 Coup de main déjà utilisé pour cette famille" : "🤲 Coup de main — suggérer un panier") + '</button>' +
+            '<button class="btn" id="fs-' + fi + '" style="flex:1" ' + (peutServir(f) ? "" : "disabled") + ' onclick="servir(' + fi + ')">Servir le panier ❤️</button></div>';
         }
         h += "</div>";
       });
@@ -937,27 +1055,92 @@
     function allocAdj(fi, k, d){
       var f = S.fams[fi];
       if (f.served || !itemValide(f,k)) return;
-      var n = (f.alloc[k]||0) + d;
-      if (n < 0) return;
+      var cur = f.alloc[k]||0;
+      var n = cur + d;
+      if (n < 0) n = 0;
       if (d > 0){
-        if (dispo(f,k) - (f.alloc[k]||0) <= 0) return;
-        if (portionsValides(f) >= f.besoin) return;
+        /* Jamais plus que le besoin restant, jamais plus que le stock restant. */
+        var maxAjout = Math.min(dispo(f,k) - cur, f.besoin - portionsValides(f));
+        if (maxAjout <= 0) return;
+        if (n > cur + maxAjout) n = cur + maxAjout;
       }
+      if (n === cur) return;
       f.alloc[k] = n; if (n === 0) delete f.alloc[k];
-      renderFamKeep(fi);
+      majFam(fi);
     }
-    /* 🤲 Le coup de main — 1 fois par semaine. Il PRÉ-REMPLIT une suggestion de départ :
-       contraintes respectées (donc correcte), mais remplissage naïf (les denrées du quotidien
-       d'abord, les plats précieux gardés) et volontairement incomplet — jamais le panier optimal.
-       Il ne valide rien : le joueur ajuste, puis sert lui-même. */
+    function allocAdj5(fi, k){ allocAdj(fi, k, 5); }
+    function allocMax(fi, k){
+      /* « Max » = remplir le besoin restant avec cet article, jusqu'au stock. */
+      var f = S.fams[fi];
+      if (f.served || !itemValide(f,k)) return;
+      var take = Math.min(dispo(f,k) - (f.alloc[k]||0), f.besoin - portionsValides(f));
+      if (take <= 0) return;
+      f.alloc[k] = (f.alloc[k]||0) + take;
+      majFam(fi);
+    }
+    /* Mise à jour ciblée d'une famille (lot P1b, #2) : seuls la barre, le
+       compteur, les étiquettes de stock et les boutons sont mis à jour — le
+       bouton tapé n'est jamais détruit. Si un élément attendu manque, on
+       retombe sur le rendu complet. */
+    function majFam(fi){
+      var f = S.fams[fi];
+      var pv = portionsValides(f);
+      var pct = Math.min(100, Math.round(pv / f.besoin * 100));
+      var bar = $("fb-" + fi), cnt = $("fc-" + fi), srv = $("fs-" + fi);
+      var manque = $("fq-" + fi), vide = $("fv-" + fi), puree = $("fp-" + fi);
+      if (!bar || !cnt || !srv || !manque || !vide || !puree){ renderFamKeep(fi); return; }
+      bar.style.width = pct + "%";
+      cnt.innerHTML = "<b>" + pv + " / " + f.besoin + " portions valides</b>" +
+        (f.c.indexOf("bebe") >= 0 ? " · purées bébé : " + (f.alloc.puree||0) + " / 3" : "");
+      srv.disabled = !peutServir(f);
+      var mq = f.besoin - pv;
+      manque.style.display = peutServir(f) ? "none" : "";
+      if (!peutServir(f)) manque.innerHTML = "Il te manque <b>" + mq + " portion" + (mq > 1 ? "s" : "") + "</b> pour servir ce panier.";
+      var toutVide = true;
+      for (var k in ITEMS) if (dispo(f,k) > 0){ toutVide = false; break; }
+      vide.style.display = (toutVide && pv < f.besoin) ? "" : "none";
+      puree.style.display = bebeOk(f) ? "none" : "";
+      /* Tous les compteurs et états des steppers, toutes familles confondues :
+         le stock affiché dépend des paniers des autres familles. */
+      var ok = true;
+      S.fams.forEach(function(o, oj){
+        if (o.served) return;
+        var pvo = portionsValides(o);
+        for (var kk in ITEMS){
+          var nn = $("an-" + oj + "-" + kk), st = $("as-" + oj + "-" + kk);
+          var pl = $("ap-" + oj + "-" + kk), c5 = $("a5-" + oj + "-" + kk), mx = $("am-" + oj + "-" + kk);
+          var mn = $("amoin-" + oj + "-" + kk), tl = $("at-" + oj + "-" + kk);
+          if (!nn || !st || !pl || !c5 || !mx || !mn || !tl){ ok = false; return; }
+          var dk = dispo(o,kk), val = itemValide(o,kk), n2 = o.alloc[kk]||0;
+          nn.textContent = n2;
+          var raison = "";
+          if (!val){
+            if (ITEMS[kk].cuisson) raison = "demande un four";
+            else if (ITEMS[kk].frigo) raison = "demande un frigo";
+            else if (ITEMS[kk].arachide) raison = "allergie";
+            else if (ITEMS[kk].bebe) raison = "réservé aux bébés";
+          } else if (dk <= 0) raison = "stock 0";
+          st.textContent = "stock " + dk + (raison ? " · " + raison : "");
+          tl.className = "item" + ((val && dk > 0) ? "" : " off");
+          var plusOff = !val || dk - n2 <= 0 || pvo >= o.besoin;
+          pl.disabled = plusOff; c5.disabled = plusOff; mx.disabled = plusOff;
+          mn.disabled = n2 <= 0;
+        }
+      });
+      if (!ok){ renderFamKeep(fi); return; }
+      sauver();
+    }
+    /* 🤲 Le coup de main — une suggestion COMPLÈTE par famille (lot P1b, #5).
+       Il PRÉ-REMPLIT un panier de départ : contraintes respectées (donc correct),
+       remplissage naïf (les denrées du quotidien d'abord, les plats précieux
+       gardés) — jamais le panier optimal. Le joueur retire ce qu'il veut,
+       ajuste, puis sert lui-même : la suggestion ne valide rien. */
     function composer(fi){
       var f = S.fams[fi];
-      if (f.served || S.coupMain) return;
-      S.coupMain = true;
+      if (f.served || f.coupMain) return;
+      f.coupMain = true;
       f.alloc = {};
-      var laisse = f.besoin >= 9 ? 2 : 1;
-      var cible = Math.max(0, f.besoin - laisse);
-      var reste = cible;
+      var reste = f.besoin;
       if (f.c.indexOf("bebe") >= 0){
         var pb = Math.min(3, dispo(f,"puree"), reste);
         if (pb > 0){ f.alloc.puree = pb; reste -= pb; }
@@ -1069,6 +1252,7 @@
 
     /* ================= Fin de saison ================= */
     function renderFinal(){
+      effacerSave();
       $("modal").innerHTML = "";
       var auto = autonomie();
       var eff = S.portions > 0 ? Math.round(S.familles / S.portions * 100) : 0;
@@ -1104,13 +1288,21 @@
       h += '<div class="card"><p style="margin:0"><b>La ligne de vérité :</b> « Dans la vraie vie, on ne vend jamais ce qui est donné. Ici, la cuisine vend ce qu\'elle produit avec ses achats — et chaque dollar retourne aux familles. »</p></div>';
       h += '<div class="donbox"><h3>🤲 Le vrai don</h3>' +
         "<p>Ton jeu a nourri <b>" + S.familles + " familles</b> virtuelles. Dans la vraie vie, les banques alimentaires du Québec font ce travail chaque semaine, avec de vraies denrées et de vrais bénévoles.</p>" +
-        "<p>Envie de transformer ta partie en geste réel ? Le montant est libre — il n'y a pas de pourcentage obligatoire, le jeu reste un jeu :</p>" +
-        '<div class="amounts"><span>2 $</span><span>5 $</span><span>10 $</span><span>20 $</span><span>Montant libre</span></div>' +
-        '<p class="small muted" style="margin-top:10px">HP Outils soutient un organisme différent tous les 6 mois (banque alimentaire, organisme jeunesse, maison de la famille…). L\'organisme de la campagne en cours et le bilan des dons remis sont affichés par HP Outils en toute transparence.</p>' +
+        "<p>Envie de transformer ta partie en geste réel ? Le montant est libre — il n'y a pas de pourcentage obligatoire, le jeu reste un jeu :</p>";
+      if (DON_URL){
+        h += '<div class="amounts"><a href="' + DON_URL + '" target="_blank" rel="noopener">2 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">5 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">10 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">20 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">Montant libre</a></div>' +
+          '<p style="margin-top:10px">🤲 <b>' + DON_ORGANISME + '</b> — campagne ' + DON_CAMPAGNE + '.</p>' +
+          '<p class="small">Objectif collectif : ' + DON_OBJECTIF + ' · ' + DON_REMIS + '.</p>' +
+          '<p class="small muted">Les montants ouvrent la page de don de l\'organisme — tu choisis le montant sur place.</p>';
+      } else {
+        h += '<div class="amounts"><span>2 $</span><span>5 $</span><span>10 $</span><span>20 $</span><span>Montant libre</span></div>' +
+          '<p class="small muted" style="margin-top:10px">Le lien de don de la campagne en cours sera affiché ici dès qu\'HP Outils aura confirmé l\'organisme soutenu.</p>';
+      }
+      h += '<p class="small muted">HP Outils soutient un organisme différent tous les 6 mois (banque alimentaire, organisme jeunesse, maison de la famille…). L\'organisme de la campagne en cours et le bilan des dons remis sont affichés par HP Outils en toute transparence.</p>' +
         '<p style="font-weight:800;margin-bottom:0">« Jouer dans la vraie vie. Aider dans la vraie vie. »</p></div>';
       h += '<button class="btn big" onclick="renderStart()">Rejouer une saison</button>';
       h += '<p class="center" style="margin-top:16px"><a href="/en-cuisine/">Voir les recettes de soutien et de récupération dans En cuisine →</a></p>';
-      h += '<footer>L\'aide alimentaire — un jeu HP Outils, 100 % original. Version 1.1<br>Donner. Produire. Vendre. Nourrir.</footer>';
+      h += '<footer>L\'aide alimentaire — un jeu HP Outils, 100 % original. Version 1.2<br>Donner. Produire. Vendre. Nourrir.</footer>';
       $("app").innerHTML = h;
       window.scrollTo(0,0);
     }
