@@ -127,18 +127,6 @@
         font-size: 13.5px; color: var(--muted); padding: 10px 2px 0;
         display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
       }
-      .hero-facts {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
-        border-top: 1px solid var(--line-strong); margin-top: 34px;
-      }
-      .hero-facts div { padding: 18px 20px 6px 0; }
-      .hero-facts div + div { border-left: 1px solid var(--line); padding-left: 20px; }
-      .hero-facts strong {
-        display: block; font-family: "Spectral", Georgia, serif;
-        font-size: 21px; font-weight: 700; line-height: 1.25; margin-bottom: 4px;
-      }
-      .hero-facts span { font-size: 14.5px; color: var(--muted); line-height: 1.5; display: block; }
-
       /* ---------- Problème ---------- */
       .losses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 34px; }
       .loss {
@@ -288,46 +276,6 @@
       .who-item h3 { font-size: 20px; }
       .who-item p { font-size: 15.5px; color: var(--ink-soft); margin: 0; }
 
-      /* ---------- Financement ---------- */
-      .funding { background: var(--green-deep); color: var(--on-green); }
-      .funding .num { color: var(--ochre); }
-      .funding .num::after { background: var(--ochre); }
-      .funding h2 { color: var(--on-green); }
-      .funding .lede { color: var(--on-green-soft); }
-      .funding a { color: var(--ochre); }
-      .rule {
-        border: 1px solid var(--on-green-line); border-left: 4px solid var(--ochre);
-        border-radius: 4px; padding: 20px 24px; margin: 30px 0 8px;
-        font-family: "Spectral", Georgia, serif; font-size: clamp(19px, 2.6vw, 24px); line-height: 1.45;
-      }
-      .rule b { color: var(--ochre); }
-      .phases { margin-top: 30px; border-top: 1px solid var(--on-green-line); }
-      .phase {
-        display: grid; grid-template-columns: 190px 1fr 170px; gap: 26px;
-        padding: 24px 0; border-bottom: 1px solid var(--on-green-line); align-items: start;
-      }
-      .phase .ph-name { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ochre); padding-top: 4px; }
-      .phase h3 { color: var(--on-green); font-size: 21px; }
-      .phase p { color: var(--on-green-soft); font-size: 15.5px; margin: 0; }
-      .phase .amount { text-align: right; }
-      .phase .amount strong { font-family: "Spectral", Georgia, serif; font-size: 26px; font-weight: 700; display: block; line-height: 1.15; }
-      .phase .amount span { font-size: 13px; color: var(--on-green-soft); }
-      .sources { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 36px; }
-      .source {
-        border: 1px solid var(--on-green-line); border-radius: 6px; padding: 22px 24px 16px;
-        background: rgba(243, 236, 216, .04);
-      }
-      .source h3 { color: var(--on-green); font-size: 20px; }
-      .source p, .source li { color: var(--on-green-soft); font-size: 15px; }
-      .source ul { margin: 6px 0 8px; padding-left: 18px; }
-      .source li { margin-bottom: 6px; }
-      .source li b { color: var(--on-green); }
-      .perennite { margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-      .perennite .box { border-top: 2px solid var(--ochre); padding-top: 16px; }
-      .perennite h3 { color: var(--on-green); }
-      .perennite p { color: var(--on-green-soft); font-size: 15.5px; }
-      .funding .fineprint { margin-top: 34px; font-size: 13.5px; color: var(--on-green-soft); opacity: .85; max-width: 52em; }
-
       /* ---------- Commencer ---------- */
       .first-steps { counter-reset: fs; list-style: none; margin: 30px 0 0; padding: 0; }
       .first-steps li {
@@ -356,12 +304,8 @@
 
       @media (max-width: 860px) {
         section { padding: 56px 0; }
-        .losses, .steps, .cards, .sources, .perennite { grid-template-columns: 1fr; }
+        .losses, .steps, .cards { grid-template-columns: 1fr; }
         .idea-grid, .who-grid { grid-template-columns: 1fr; }
-        .hero-facts { grid-template-columns: 1fr; }
-        .hero-facts div + div { border-left: none; border-top: 1px solid var(--line); padding-left: 0; }
-        .phase { grid-template-columns: 1fr; gap: 8px; }
-        .phase .amount { text-align: left; }
         .fiche-card dl { grid-template-columns: 1fr; row-gap: 2px; }
         .fiche-card dd { margin-bottom: 8px; }
       }
@@ -453,7 +397,8 @@
             <input type="text" id="f-truc" placeholder="Ex. : toujours du bas vers le haut, jamais l'inverse" autocomplete="off" />
           </div>
           <p class="consent"><strong>Tout reste sur cet appareil.</strong> Rien n'est envoyé, rien n'est publié, aucun compte à créer. La fiche appartient à la personne qui transmet : c'est elle — et toi — qui décidez de la partager (export, impression) ou de la garder ici.</p>
-          <button type="submit" class="btn-main">Créer la fiche</button>
+          <button type="submit" class="btn-main" id="btn-creer">Créer la fiche</button>
+          <button type="button" class="mini-btn" id="btn-annuler-modif" hidden>Annuler la modification</button>
           <p class="form-status" id="form-status" aria-live="polite"></p>
         </form>
       </div>
@@ -465,7 +410,7 @@
       <div class="wrap">
         <h2>Des savoirs à sauver — et à retrouver</h2>
         <p class="lede">Cherche un savoir, filtre par thème. Les fiches d'exemple montrent le format ; celles que tu captes s'ajoutent ici même, sur ton appareil. Essaie « cannelle », « bois » ou « sirop ».</p>
-        <p class="small" style="margin-top:14px;">Les fiches ci-dessous sont fictives, écrites pour montrer le format. La vraie collection sera faite de vraies personnes, avec leur consentement.</p>
+        <p class="small" style="margin-top:14px;">La fiche nº 1 est vraie — c'est le premier savoir capté, celui d'HP. Les autres fiches ci-dessous sont fictives, écrites pour montrer le format. La vraie collection sera faite de vraies personnes, avec leur consentement.</p>
         <div class="searchbar">
           <input type="search" id="q" placeholder="Chercher un savoir… (ex. : tourtière, aiguiser, greffer)" aria-label="Chercher dans la collection d'exemples" />
         </div>
@@ -477,9 +422,17 @@
           <button type="button" class="chip" data-theme="quartier" aria-pressed="false">Quartier</button>
           <button type="button" class="chip" data-theme="jardin" aria-pressed="false">Jardin &amp; nature</button>
           <button type="button" class="chip" data-theme="memoire" aria-pressed="false">Mémoire vivante</button>
+          <button type="button" class="chip" data-theme="autre" aria-pressed="false">Autre</button>
         </div>
         <p class="count" id="count" aria-live="polite"></p>
         <div class="cards" id="cards">
+          <article class="card" data-theme="memoire" data-search="hoquet cuillère envers eau grand-mère mémoire remède oket">
+            <span class="mine-badge">Fiche nº 1 · la première, vraie</span>
+            <h4>La cuillère à l'envers contre le hoquet</h4>
+            <span class="meta">Fiche nº 1 · Mémoire vivante · Ma grand mère · Captée le 20 octobre 2026</span>
+            <p>Pour faire passer le hoquet : mettre une cuillère à l'envers et boire de l'eau.</p>
+            <p class="secret"><b>Le truc :</b> « mettais une cuillère a l'envers et buvait de l'eau »</p>
+          </article>
           <article class="card" data-theme="cuisine" data-search="tourtière cannelle pâte viande noël recette famille rose-aimée">
             <h4>La tourtière : la cannelle et la pâte de la veille</h4>
             <span class="meta">Cuisine · Rose-Aimée, 84 ans · Lanaudière</span>
@@ -532,7 +485,7 @@
         <p class="empty" id="empty">Aucune fiche ne correspond à cette recherche — dans la vraie collection, ce serait un savoir de plus à aller capter.</p>
         <figure class="atelier-figure">
           <img src="assets/atelier.webp" alt="Gravure style linogravure : dans un atelier, un menuisier retraité montre à un adolescent comment aiguiser un ciseau sur une pierre, entourés d'outils à main et de copeaux de bois." loading="lazy" />
-          <figcaption>Le savoir-faire ne se dicte pas toujours : il se montre. D'où la vidéo et les photos des gestes, pas seulement la voix.</figcaption>
+          <figcaption>Le savoir-faire ne se dicte pas toujours : il se montre.</figcaption>
         </figure>
       </div>
     </section>
@@ -601,7 +554,49 @@
         var CAT = { cuisine: 'Cuisine', metiers: 'Métiers', quartier: 'Quartier', jardin: 'Jardin & nature', memoire: 'Mémoire vivante', autre: 'Autre savoir' };
         var statusEl = document.getElementById('form-status');
         function status(msg) { if (statusEl) statusEl.textContent = msg; }
-        function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+        var corruptionSignalee = false;
+        function load() {
+          var raw = null;
+          try { raw = localStorage.getItem(KEY); } catch (e) { return []; }
+          if (raw == null || raw === '') return [];
+          var data;
+          try { data = JSON.parse(raw); } catch (e) {
+            signalerCorruption('Vos fiches enregistrées étaient illisibles, elles ne s’affichent pas.');
+            return [];
+          }
+          if (!Array.isArray(data)) {
+            signalerCorruption('Vos fiches enregistrées avaient une forme inattendue, elles ne s’affichent pas.');
+            return [];
+          }
+          var propres = data.filter(function (f) { return f && typeof f === 'object' && typeof f.titre === 'string' && typeof f.savoir === 'string'; });
+          if (propres.length !== data.length) {
+            signalerCorruption('Certaines de vos fiches enregistrées étaient abîmées et ne s’affichent pas. Les fiches lisibles sont là.');
+          }
+          return propres;
+        }
+        function signalerCorruption(msg) {
+          /* Met l'ancienne valeur de côté AVANT tout nouvel enregistrement, pour ne
+             jamais écraser des fiches en silence ; n'avertit qu'une fois par visite. */
+          if (corruptionSignalee) return;
+          corruptionSignalee = true;
+          var gardee = false;
+          try {
+            var raw = localStorage.getItem(KEY);
+            if (raw != null) {
+              try { localStorage.setItem(KEY + '-corrompu-' + Date.now().toString(36), raw); gardee = true; } catch (e) {}
+            }
+          } catch (e) {}
+          status(msg + (gardee ? ' L’ancienne valeur a été mise de côté, elle n’a pas été effacée.' : ''));
+        }
+        function fmtDateFR(iso) {
+          /* Jour calendaire tel qu'enregistré (pas de décalage de fuseau horaire). */
+          try {
+            var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+            if (!m) return '';
+            var d = new Date(+m[1], +m[2] - 1, +m[3]);
+            return d.toLocaleDateString('fr-CA', { day: 'numeric', month: 'long', year: 'numeric' });
+          } catch (e) { return ''; }
+        }
         function save(list) { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) { status('Le navigateur a refusé la sauvegarde : la fiche reste affichée pour cette visite.'); } }
         function el(tag, cls, text) {
           var n = document.createElement(tag);
@@ -610,7 +605,12 @@
           return n;
         }
         function ficheTexte(f) {
-          var L = [f.titre, (CAT[f.theme] || 'Autre savoir') + ' · ' + (f.nom || 'Personne qui transmet') + (f.lien ? ', ' + f.lien : ''), '', f.savoir];
+          var meta2 = (CAT[f.theme] || 'Autre savoir') + ' · ' + (f.nom || 'Personne qui transmet') + (f.lien ? ', ' + f.lien : '');
+          var dateCaptee = fmtDateFR(f.date);
+          if (dateCaptee) meta2 += ' · Captée le ' + dateCaptee;
+          var dateModifiee = fmtDateFR(f.modifiee);
+          if (dateModifiee) meta2 += ' · Modifiée le ' + dateModifiee;
+          var L = [f.titre, meta2, '', f.savoir];
           if (f.truc) { L.push('', 'Le truc : ' + f.truc); }
           L.push('', '— Fiche captée avec Le Passeur de savoir (HP Outils) et gardée sur l’appareil.');
           return L.join('\n');
@@ -635,14 +635,20 @@
         }
         function renderFiche(f) {
           var card = el('article', 'card mine');
+          card.setAttribute('data-fiche-id', f.id || '');
           card.setAttribute('data-theme', f.theme);
           card.setAttribute('data-search', fold([f.titre, f.nom, f.lien, f.savoir, f.truc, CAT[f.theme] || ''].join(' ')));
           card.appendChild(el('span', 'mine-badge', 'Ma fiche · sur cet appareil seulement'));
           card.appendChild(el('h4', null, f.titre));
           var meta = (CAT[f.theme] || 'Autre savoir') + ' · ' + (f.nom || 'Personne qui transmet');
           if (f.lien) meta += ', ' + f.lien;
+          var dateCaptee = fmtDateFR(f.date);
+          if (dateCaptee) meta += ' · Captée le ' + dateCaptee;
+          var dateModifiee = fmtDateFR(f.modifiee);
+          if (dateModifiee) meta += ' · Modifiée le ' + dateModifiee;
           card.appendChild(el('span', 'meta', meta));
-          var lignes = f.savoir.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+          var savoirTxt = typeof f.savoir === 'string' ? f.savoir : '';
+          var lignes = savoirTxt.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
           if (lignes.length > 1) {
             var ol = el('ol', 'steps-list');
             lignes.forEach(function (s) { ol.appendChild(el('li', null, s)); });
@@ -660,6 +666,9 @@
           var btnExp = el('button', 'mini-btn', 'Exporter le texte');
           btnExp.type = 'button';
           btnExp.addEventListener('click', function () { exporter(f); });
+          var btnMod = el('button', 'mini-btn', 'Modifier');
+          btnMod.type = 'button';
+          btnMod.addEventListener('click', function () { commencerModification(f); });
           var btnDel = el('button', 'mini-btn', 'Retirer de cet appareil');
           btnDel.type = 'button';
           btnDel.addEventListener('click', function () {
@@ -669,33 +678,92 @@
             status('Fiche retirée de cet appareil.');
           });
           actions.appendChild(btnExp);
+          actions.appendChild(btnMod);
           actions.appendChild(btnDel);
           card.appendChild(actions);
           return card;
         }
         load().forEach(function (f) { cardsBox.insertBefore(renderFiche(f), cardsBox.firstChild); });
 
+        var editionId = null; /* fiche en cours de modification, sinon null */
+        function commencerModification(f) {
+          editionId = f.id;
+          document.getElementById('f-nom').value = f.nom || '';
+          document.getElementById('f-lien').value = f.lien || '';
+          document.getElementById('f-titre').value = f.titre || '';
+          document.getElementById('f-cat').value = CAT[f.theme] ? f.theme : 'autre';
+          document.getElementById('f-savoir').value = f.savoir || '';
+          document.getElementById('f-truc').value = f.truc || '';
+          var btn = document.getElementById('btn-creer');
+          if (btn) btn.textContent = 'Enregistrer les modifications';
+          var btnAnn = document.getElementById('btn-annuler-modif');
+          if (btnAnn) btnAnn.hidden = false;
+          status('Vous modifiez la fiche « ' + f.titre + ' ». Enregistrez pour appliquer, ou annulez.');
+          var form2 = document.getElementById('capte-form');
+          if (form2 && form2.scrollIntoView) form2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          var titre2 = document.getElementById('f-titre');
+          if (titre2) titre2.focus();
+        }
+        function terminerModification() {
+          editionId = null;
+          var btn = document.getElementById('btn-creer');
+          if (btn) btn.textContent = 'Créer la fiche';
+          var btnAnn = document.getElementById('btn-annuler-modif');
+          if (btnAnn) btnAnn.hidden = true;
+        }
+
         var form = document.getElementById('capte-form');
+        var btnAnnuler = document.getElementById('btn-annuler-modif');
+        if (btnAnnuler) btnAnnuler.addEventListener('click', function () {
+          terminerModification();
+          form.reset();
+          status('Modification annulée — la fiche est inchangée.');
+        });
         form.addEventListener('submit', function (e) {
           e.preventDefault();
-          var f = {
-            id: 'f' + Date.now().toString(36),
-            nom: document.getElementById('f-nom').value.trim(),
-            lien: document.getElementById('f-lien').value.trim(),
-            titre: document.getElementById('f-titre').value.trim(),
-            theme: document.getElementById('f-cat').value,
-            savoir: document.getElementById('f-savoir').value.trim(),
-            truc: document.getElementById('f-truc').value.trim()
-          };
-          if (!f.titre || !f.savoir) { status('Il manque le titre ou le savoir raconté.'); return; }
+          var titre = document.getElementById('f-titre').value.trim();
+          var savoir = document.getElementById('f-savoir').value.trim();
+          if (!titre || !savoir) { status('Il manque le titre ou le savoir raconté.'); return; }
           var list = load();
+          var f;
+          if (editionId) {
+            var ancien = null;
+            list.forEach(function (x) { if (x.id === editionId) ancien = x; });
+            f = {
+              id: editionId,
+              nom: document.getElementById('f-nom').value.trim(),
+              lien: document.getElementById('f-lien').value.trim(),
+              titre: titre,
+              theme: document.getElementById('f-cat').value,
+              savoir: savoir,
+              truc: document.getElementById('f-truc').value.trim(),
+              date: (ancien && ancien.date) || new Date().toISOString(),
+              modifiee: new Date().toISOString()
+            };
+            list = list.filter(function (x) { return x.id !== editionId; });
+            var vieilles = cardsBox.querySelectorAll('[data-fiche-id="' + editionId + '"]');
+            Array.prototype.forEach.call(vieilles, function (c) { c.remove(); });
+          } else {
+            f = {
+              id: 'f' + Date.now().toString(36),
+              nom: document.getElementById('f-nom').value.trim(),
+              lien: document.getElementById('f-lien').value.trim(),
+              titre: titre,
+              theme: document.getElementById('f-cat').value,
+              savoir: savoir,
+              truc: document.getElementById('f-truc').value.trim(),
+              date: new Date().toISOString()
+            };
+          }
           list.unshift(f);
           save(list);
           var card = renderFiche(f);
           cardsBox.insertBefore(card, cardsBox.firstChild);
           form.reset();
+          var enEdition = !!editionId;
+          terminerModification();
           apply();
-          status('Fiche créée — elle est dans la collection, ici même, sur cet appareil.');
+          status(enEdition ? 'Fiche modifiée — elle est dans la collection, ici même, sur cet appareil.' : 'Fiche créée — elle est dans la collection, ici même, sur cet appareil.');
           if (card.scrollIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
 
