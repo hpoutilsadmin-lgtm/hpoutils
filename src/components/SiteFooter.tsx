@@ -1,5 +1,16 @@
 import { Link } from "@tanstack/react-router";
 
+/* P1 — retour en haut intermittent (6 nov. 2026) : chaque route est un
+   morceau JS chargé à la demande ; sans préchargement, le 1er clic sur
+   une route jamais visitée (/a-propos, /les-passeurs au point 8 de la
+   vérification live b98f4303) laissait l'ancienne page affichée.
+   preload="viewport" : dès que le pied de page entre dans l'écran, le
+   morceau de chaque route liée est téléchargé — au clic, la page est
+   déjà là et s'ouvre en haut au 1er essai. Les liens <a> pleins
+   (/boite/, /passeur-de-savoir/, mailto, réseaux) ne sont pas des
+   routes : ils restent tels quels. L'ancre /ateliers#formulaire-atelier
+   reste aussi telle quelle (rechargement plein + ancre native, vérifié). */
+
 export function SiteFooter() {
   return (
     <footer className="footer">
@@ -17,34 +28,34 @@ export function SiteFooter() {
         <div>
           <h4>Découvrir</h4>
           <p>
-            <Link to="/">Accueil</Link><br />
-            <Link to="/jeux">Jeux gratuits</Link><br />
-            <Link to="/outils">Outils</Link><br />
+            <Link preload="viewport" to="/">Accueil</Link><br />
+            <Link preload="viewport" to="/jeux">Jeux gratuits</Link><br />
+            <Link preload="viewport" to="/outils">Outils</Link><br />
             <a href="/boite/">La Boîte à outils</a><br />
-            <Link to="/univers">À toi l'histoire</Link><br />
-            <Link to="/balado">Balado Futur simple</Link><br />
-            <Link to="/a-propos">À propos</Link>
+            <Link preload="viewport" to="/univers">À toi l'histoire</Link><br />
+            <Link preload="viewport" to="/balado">Balado Futur simple</Link><br />
+            <Link preload="viewport" to="/a-propos">À propos</Link>
           </p>
           <h4>Apprendre</h4>
           <p>
-            <Link to="/livres-pdf">Livres, PDF &amp; réflexions</Link><br />
+            <Link preload="viewport" to="/livres-pdf">Livres, PDF &amp; réflexions</Link><br />
             <a href="/passeur-de-savoir/">Le Passeur de savoir</a><br />
-            <Link to="/les-passeurs">Les Passeurs</Link><br />
-            <Link to="/comprendre">Comprendre — le livre Enjeux de l'humanité</Link><br />
-            <Link to="/transmettre">Transmettre — cuisiner en famille</Link>
+            <Link preload="viewport" to="/les-passeurs">Les Passeurs</Link><br />
+            <Link preload="viewport" to="/comprendre">Comprendre — le livre Enjeux de l'humanité</Link><br />
+            <Link preload="viewport" to="/transmettre">Transmettre — cuisiner en famille</Link>
           </p>
           <h4>Acheter</h4>
           <p>
-            <Link to="/ateliers">Ateliers</Link><br />
-                        <Link to="/apercu">Jeux à votre image — démo gratuite</Link><br />
-            <Link to="/recuperer-achat">Récupérer un achat</Link><br />
-            <Link to="/cadeaux">Utiliser un code cadeau</Link>
+            <Link preload="viewport" to="/ateliers">Ateliers</Link><br />
+                        <Link preload="viewport" to="/apercu">Jeux à votre image — démo gratuite</Link><br />
+            <Link preload="viewport" to="/recuperer-achat">Récupérer un achat</Link><br />
+            <Link preload="viewport" to="/cadeaux">Utiliser un code cadeau</Link>
           </p>
           <h4>Confiance</h4>
           <p>
-            <Link to="/faq">Questions fréquentes</Link><br />
-            <Link to="/confidentialite">Confidentialité</Link><br />
-            <Link to="/conditions-de-vente">Conditions de vente</Link>
+            <Link preload="viewport" to="/faq">Questions fréquentes</Link><br />
+            <Link preload="viewport" to="/confidentialite">Confidentialité</Link><br />
+            <Link preload="viewport" to="/conditions-de-vente">Conditions de vente</Link>
           </p>
         </div>
         <div>
@@ -53,7 +64,7 @@ export function SiteFooter() {
             <a href="mailto:hpoutils.admin@gmail.com">hpoutils.admin@gmail.com</a><br />
             <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a><br />
             <a href="/ateliers#formulaire-atelier">Formulaire atelier</a><br />
-            <Link to="/contact">Contact</Link><br />
+            <Link preload="viewport" to="/contact">Contact</Link><br />
             Une réponse de la direction humaine, pas d'un robot — sous 3 jours ouvrables.
           </p>
         </div>

@@ -344,6 +344,16 @@ function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
   );
 }
 
+/* Pastille testeur ×2 — correctif P1, 6 nov. 2026 : UNE seule pastille par
+   tuile. Avant, chaque testeur de APPROBATIONS rendait SA pastille avec le
+   libellé complet « Approuvé par un testeur », donc 2 pastilles identiques
+   côte à côte pour les jeux approuvés par 2 testeurs (2 vérités : mel+oz,
+   Tir de Boules de Neige : maeva+lo, Montgolfière : louka+maeva).
+   On n'affiche que le premier testeur du registre (ordre inchangé) : la
+   pastille garde son ✓ et sa couleur. Les autres approbations restent
+   dans APPROBATIONS (source de vérité intacte) et chaque testeur garde
+   sa pastille dans la légende « Approuvés par nos joueurs » ci-dessous,
+   qui n'utilise pas ce composant. */
 function RangeeTampons({ slug, grand }: { slug: string; grand?: boolean }) {
   const cles = APPROBATIONS[slug];
   if (!cles || cles.length === 0) return null;
@@ -356,9 +366,7 @@ function RangeeTampons({ slug, grand }: { slug: string; grand?: boolean }) {
       }
       style={{ display: "flex", flexWrap: "wrap", gap: 7, alignItems: "center" }}
     >
-      {cles.map((c) => (
-        <PastilleTampon key={c} cle={c} grand={grand} />
-      ))}
+      <PastilleTampon cle={cles[0]} grand={grand} />
     </div>
   );
 }
