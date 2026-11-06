@@ -835,21 +835,13 @@ function JeuxPage() {
         </div>
       </section>
 
-      {/* S2 — Bloc pied HGPTO (texte exact de la spécification cohérence) :
-          /jeux se terminait par « Voir les outils → », sans ce bloc, alors
-          que les autres pages l'ont en lecture texte. Le bloc ne figure
-          dans le source d'aucune route (il est rendu par la couche
-          globale) : cette section statique garantit la vérification S2.
-          RISQUE SIGNALÉ AU CHEF : si le widget HGPTO apparaît aussi en
-          direct sur /jeux après dépôt, retirer cette section statique
-          pour éviter le doublon. */}
-      <section className="collections-strip">
-        <div className="container" style={{ maxWidth: 720 }}>
-          <p className="strip-intro">Un humain se promène par ici. Il marche, tranquille.</p>
-          <p className="strip-intro">Détectôt</p>
-          <p className="strip-intro">Il devine à qui la page s'adresse — IA ou humain probable — et ne surveille personne.</p>
-        </div>
-      </section>
+      {/* Détectôt — bande statique RETIRÉE (6 nov. 2026, lot Détectôt
+          permanent) : elle doublait le widget fixe HamsterWheel monté
+          globalement dans __root.tsx, et les deux rendus du même texte
+          se chevauchaient sur la page (photo d'HP, 6 nov.). Le texte
+          reste sur /jeux via le widget fixe. Conséquence : la
+          vérification S2 (source) ne trouvera plus le texte dans ce
+          fichier ; elle doit être re-vérifiée en lecture du rendu. */}
     </>
   );
 }

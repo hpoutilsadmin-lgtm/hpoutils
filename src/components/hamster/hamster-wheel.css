@@ -44,3 +44,23 @@
   .rh[data-etat="dort"] .rh-zzz{opacity:1}
 }
 @media (max-width:480px){.rh{width:108px;right:8px;top:8px}.rh-bulle{font-size:11px}}
+
+/* Détectôt permanent — accueil seulement (6 nov. 2026, go HP).
+   En flux, pas en surimpression : la roue à gauche, le texte à côté
+   (nom, description, bulle, boutons). Le bouton « Fermer » est masqué
+   (installé permanent, on ne le ferme pas) ; Réduire / Petit / Grand
+   restent. Sur téléphone étroit, tout s'empile, centré.
+   Ces règles sont APRÈS .rh et son media query : même spécificité,
+   c'est l'ordre qui les fait gagner. */
+.rh-permanent{position:static;width:auto;max-width:720px;margin:0 auto;pointer-events:auto;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"scene nom" "scene pied" "scene bulle" "scene pied2";align-items:center;gap:4px 20px;padding:20px 16px}
+.rh-permanent .rh-scene{grid-area:scene;cursor:default;touch-action:auto}
+.rh-permanent .rh-bulle{grid-area:bulle;margin-bottom:0}
+.rh-permanent .rh-nom{grid-area:nom;text-align:left;font-size:18px;margin-top:0}
+.rh-permanent .rh-pied{grid-area:pied;display:block;margin-top:0}
+.rh-permanent .rh-honnete{font-size:14px;line-height:1.5}
+.rh-permanent .rh-fermer{display:none}
+.rh-permanent .rh-pied2{grid-area:pied2;justify-content:flex-start;margin-top:6px}
+.rh-permanent .rh-controle{font-size:14px;padding:12px 18px;min-height:48px}
+/* Replié en permanent : mini-roue seule, centrée (la grille se retire). */
+.rh-permanent.rh-reduit{display:block}
+@media (max-width:480px){.rh-permanent{grid-template-columns:1fr;grid-template-areas:"scene" "nom" "pied" "bulle" "pied2";justify-items:center;text-align:center}.rh-permanent .rh-nom{text-align:center}.rh-permanent .rh-pied2{justify-content:center}}

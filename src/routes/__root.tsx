@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -136,6 +137,12 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  /* Détectôt permanent sur l'accueil seulement (6 nov. 2026, go HP) :
+     la page d'accueil a sa propre section Détectôt en flux (voir
+     index.tsx) ; le widget fixe est masqué ici (pathname "/") pour
+     éviter le doublon. useLocation re-rend à chaque navigation, donc
+     le widget réapparaît dès qu'on quitte l'accueil. */
+  const loc = useLocation();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -148,7 +155,7 @@ function RootComponent() {
       </div>
       <HgptoPont />
       <CompagnonBar />
-      <HamsterWheel />
+      {loc.pathname !== "/" && <HamsterWheel />}
     </QueryClientProvider>
   );
 }

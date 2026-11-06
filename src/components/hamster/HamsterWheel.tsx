@@ -33,6 +33,13 @@ import {
  * jamais), se replie À LA MAIN en mini-roue (tap pour rouvrir, jamais
  * automatique), et s'agrandit par pas — position, repli et taille en
  * session seulement. « Fermer » reste séparé du repli.
+ *
+ * Permanent (accueil seulement, 6 nov. 2026, go HP) : la prop
+ * `permanent` installe la roue EN FLUX sur la page d'accueil — roue à
+ * gauche, description à côté — dépliée d'emblée, sans déplacement ni
+ * fermeture (le bouton « Fermer » est masqué en CSS). Réduire / Petit /
+ * Grand restent. Le widget fixe (monté dans __root.tsx) est masqué sur
+ * l'accueil pour éviter le doublon.
  */
 type Etat = "dort" | "marche" | "court";
 
@@ -58,15 +65,17 @@ const PHRASES: Record<Etat, string[]> = {
 
 const ZOOM_STEPS_H = [0.75, 1, 1.35, 1.7];
 
-export function HamsterWheel() {
+export function HamsterWheel({ permanent = false }: { permanent?: boolean }) {
   const [etat, setEtat] = useState<Etat>("marche");
   const [ferme, setFerme] = useState(false);
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   /* Mot d'HP 5 nov. 2026 : discret en haut — replié par défaut (mini-roue).
      Seule une valeur « 0 » stockée en session (visiteur qui l'a rouverte)
-     le déplie au chargement. */
-  const [reduit, setReduit] = useState(true);
+     le déplie au chargement.
+     Permanent (accueil, 6 nov. 2026) : installé, donc déplié d'emblée —
+     on ignore le repli stocké au chargement. */
+  const [reduit, setReduit] = useState(permanent ? false : true);
   const [zoomIdx, setZoomIdx] = useState(1);
   const [enTrainDeGlisser, setEnTrainDeGlisser] = useState(false);
   const etatRef = useRef<Etat>("marche");
@@ -76,20 +85,26 @@ export function HamsterWheel() {
   const dragRef = useRef<{ pid: number; sx: number; sy: number; ox: number; oy: number; bouge: boolean } | null>(null);
 
   /* Restauration session : position, repli, taille.
-     Sans valeur stockée, le repli par défaut (true) est gardé. */
+     Sans valeur stockée, le repli par défaut (true) est gardé.
+     Permanent : pas de position à restaurer (en flux, pas de
+     translation) et pas de repli stocké (déplié d'emblée) ; la taille
+     (zoom) reste une préférence du visiteur, on la garde. */
   useEffect(() => {
     try {
-      const p = JSON.parse(sessionStorage.getItem("hamster-pos") || "null");
-      if (p && isFinite(p.x) && isFinite(p.y)) {
-        posRef.current = { x: p.x, y: p.y };
-        setPos({ x: p.x, y: p.y });
+      if (!permanent) {
+        const p = JSON.parse(sessionStorage.getItem("hamster-pos") || "null");
+        if (p && isFinite(p.x) && isFinite(p.y)) {
+          posRef.current = { x: p.x, y: p.y };
+          setPos({ x: p.x, y: p.y });
+        }
+        if (sessionStorage.getItem("hamster-reduit") === "0") setReduit(false);
       }
-      if (sessionStorage.getItem("hamster-reduit") === "0") setReduit(false);
       const z = parseFloat(sessionStorage.getItem("hamster-zoom") || "1");
       if (ZOOM_STEPS_H.indexOf(z) !== -1) setZoomIdx(ZOOM_STEPS_H.indexOf(z));
     } catch {
       /* stockage indisponible : on reste à la place par défaut */
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sauverPos = (p: { x: number; y: number }) => {
@@ -200,7 +215,9 @@ export function HamsterWheel() {
 
   useEffect(() => {
     try {
-      if (sessionStorage.getItem("hamster-ferme") === "1") {
+      /* Permanent : installé, on ne le ferme pas — même si le visiteur
+         a fermé le widget fixe sur une autre page (même session). */
+      if (!permanent && sessionStorage.getItem("hamster-ferme") === "1") {
         setFerme(true);
         return;
       }
@@ -273,12 +290,12 @@ export function HamsterWheel() {
   return (
     <div
       ref={racineRef}
-      className={"rh" + (reduit ? " rh-reduit" : "") + (enTrainDeGlisser ? " rh-dragging" : "")}
+      className={"rh" + (permanent ? " rh-permanent" : "") + (reduit ? " rh-reduit" : "") + (enTrainDeGlisser ? " rh-dragging" : "")}
       data-etat={etat}
       role="note"
-      aria-label={reduit ? "Détectôt, la roue d'hamster d'HP Outils, repliée — touche pour rouvrir" : "Détectôt, la roue d'hamster d'HP Outils — glisse pour déplacer"}
+      aria-label={reduit ? "Détectôt, la roue d'hamster d'HP Outils, repliée — touche pour rouvrir" : permanent ? "Détectôt, la roue d'hamster d'HP Outils" : "Détectôt, la roue d'hamster d'HP Outils — glisse pour déplacer"}
       title={reduit ? "Hamster replié — touche pour rouvrir" : undefined}
-      style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
+      style={permanent ? undefined : { transform: `translate(${pos.x}px, ${pos.y}px)` }}
     >
       <div className="rh-bulle">
         <span>{PHRASES[etat][phraseIdx]}</span>

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { ParoleVisiteur } from "@/components/ParoleVisiteur";
+import { HamsterWheel } from "@/components/hamster/HamsterWheel";
 import { createSeoHead } from "@/lib/seo";
 import type { CSSProperties } from "react";
 
@@ -158,6 +159,14 @@ function Index() {
         </div>
       </section>
 
+      {/* DÉTECTÔT PERMANENT (accueil seulement, 6 nov. 2026, go HP) : installé
+          en flux, roue + description côte à côte. Le widget fixe est masqué
+          sur l'accueil (voir __root.tsx) pour éviter le doublon. */}
+      <section className="collections-strip" aria-label="Détectôt, la roue d'hamster d'HP Outils">
+        <div className="container">
+          <HamsterWheel permanent />
+        </div>
+      </section>
 
       {/* SANS HONTE */}
       <section className="collections-strip">
