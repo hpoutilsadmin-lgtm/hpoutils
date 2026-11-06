@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { PRODUCTS } from "@/lib/products-catalog";
+import { GAME_FILES, adresseStableJeu } from "@/lib/jeux-adresses";
 
 const BASE_URL = "https://www.hp-outils.com";
 const STATIC_PATHS = [
@@ -50,44 +51,17 @@ const STATIC_PATHS = [
   "/outils-web/le-relais.html",
   "/outils-web/maintenant.html",
   "/outils-web/contrat-humain-ia.html",
-  // Les 37 jeux gratuits + 1 caché (adresses stables /apps/<slug> — redirection 301 vers le fichier courant)
-  "/apps/releve",
-  "/apps/la-banque",
-  "/apps/bons-reflexes",
-  "/apps/mysteres-du-nord",
-  "/apps/100-en-30-jours",
-  "/apps/caribou-run",
-  "/apps/cherche-trouve-la-vraie-vie",
-  "/apps/devine-l-humeur",
-  "/apps/la-spirale-asmr",
-  "/apps/poutine-panic",
-  "/apps/retromania",
-  "/apps/sirop-clicker",
-  "/apps/mots-de-chez-nous",
-  "/apps/memoire-des-cantons",
-  "/apps/tir-de-boules-de-neige",
-  "/apps/hockey-hgpto",
-  "/apps/ado-odieux-adieu",
-  "/apps/couleuvre-du-quebec",
-  "/apps/fusion-sirop",
-  "/apps/trio-des-elements",
-  "/apps/bernache-express",
-  "/apps/le-bonhomme-pendu",
-  "/apps/montgolfiere",
-  "/apps/pop-ballons",
-  "/apps/2-verites-1-mensonge",
-  "/apps/chat-attaque",
-  "/apps/nord-2087",
-  "/apps/igloo",
-  "/apps/chevalier-du-fleuve",
-  "/apps/que-vois-tu",
-  "/apps/tapinoue",
-  "/apps/ton-chum-frotte-son-char",
-  "/apps/conception-de-molecules-3d",
-  "/apps/hydro-electricite",
-  "/apps/anxiete-le-jeu",
-  "/apps/votre-ia-parle-t-elle-quebecois",
 ];
+
+// Les jeux publics (41) + 1 caché : les adresses stables /apps/<slug>
+// sont générées depuis src/lib/jeux-adresses.ts (source unique —
+// c'est ce fichier qui définit ce qu'on partage et ce qui va dans
+// le sitemap). Le jeu caché n'est pas dans GAME_FILES, donc il
+// n'apparaît pas dans le sitemap. Redirection 301 vers le fichier
+// courant (voir src/routes/apps.$slug.tsx).
+const GAME_PATHS = Object.keys(GAME_FILES).map((slug) =>
+  adresseStableJeu(slug),
+);
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -99,7 +73,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         // Pages /achat/* exclues volontairement : ce sont des pages d'achat
         // noindex, elles n'ont pas leur place dans le sitemap.
         const dynamicPaths = slugs.map((s) => `/pdf/${s}`);
-        const paths = [...STATIC_PATHS, ...dynamicPaths];
+        const paths = [...STATIC_PATHS, ...GAME_PATHS, ...dynamicPaths];
         const urls = paths.map(
           (p) => `  <url><loc>${BASE_URL}${p}</loc><changefreq>weekly</changefreq></url>`
         ).join("\n");
