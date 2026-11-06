@@ -238,7 +238,7 @@
     function blocDonHtml(avecScore){
       var h = '<div class="donbox"><h3>🤲 Le vrai don</h3>';
       if (avecScore){
-        h += "<p>Ton jeu a nourri <b>" + S.familles + " familles</b> virtuelles. Dans la vraie vie, les banques alimentaires du Québec font ce travail chaque semaine, avec de vraies denrées et de vrais bénévoles.</p>";
+        h += "<p>Ton jeu a nourri <b>" + famNb(S.familles) + "</b> virtuelles. Dans la vraie vie, les banques alimentaires du Québec font ce travail chaque semaine, avec de vraies denrées et de vrais bénévoles.</p>";
         h += "<p>Envie de transformer ta partie en geste réel ? Le montant est libre — il n'y a pas de pourcentage obligatoire, le jeu reste un jeu :</p>";
       } else {
         h += "<p>Dans la vraie vie, les banques alimentaires du Québec font ce travail chaque semaine, avec de vraies denrées et de vrais bénévoles.</p>";
@@ -446,6 +446,8 @@
     /* ================= Utilitaires ================= */
     function $(id){ return document.getElementById(id); }
     function fmt(n){ return n.toFixed(2).replace(".", ",") + " $"; }
+    function famNourries(n){ return n + (n > 1 ? " familles nourries" : " famille nourrie"); }
+    function famNb(n){ return n + (n > 1 ? " familles" : " famille"); }
     function rnd(a,b){ return a + Math.floor(Math.random()*(b-a+1)); }
     function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
     function shuffle(a){ for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
@@ -562,7 +564,7 @@
                         prioritaire:false, urgence:true, reaction:null, portionsServies:0, suivi:null, pureeManquante:false });
         }
       }
-      S.semFamTotal = n;
+      S.semFamTotal = S.fams.length; /* toutes les familles présentes, dépannage d’urgence compris */
     }
     function genOffres(){
       S.offres = [];
@@ -1294,7 +1296,7 @@
       var h = '<h2 class="ptitle center">🏁 La saison est terminée</h2>';
       h += '<div class="grade">' + grade + "</div>";
       h += '<p class="center muted">' + mot + "</p>";
-      h += '<div class="card center"><div style="font-size:52px">❤️</div><div class="qty" style="font-size:40px">' + S.familles + " familles nourries</div>" +
+      h += '<div class="card center"><div style="font-size:52px">❤️</div><div class="qty" style="font-size:40px">' + famNourries(S.familles) + "</div>" +
         '<div class="muted">C\'est ça, le vrai score.</div></div>';
       h += '<div class="card"><h3>📋 Le bilan de la saison</h3><table class="bilan">' +
         "<tr><td>🏫 Revenus de tes ventes</td><td>" + fmt(S.ventesTot) + "</td></tr>" +
@@ -1309,7 +1311,7 @@
         .sort(function(a,b){ return b.fois - a.fois; });
       if (topF.length){
         var nomsTop = topF.slice(0,4).map(function(t){ return t.nom + " " + t.fois + " fois"; }).join(", ");
-        h += '<div class="card"><h3>❤️ La saison, en noms</h3><p><b>' + S.familles + " familles nourries</b> — " + nomsTop + (topF.length > 4 ? "…" : "") + '</p>' +
+        h += '<div class="card"><h3>❤️ La saison, en noms</h3><p><b>' + famNourries(S.familles) + "</b> — " + nomsTop + (topF.length > 4 ? "…" : "") + '</p>' +
           '<p class="small muted">Derrière chaque chiffre, un ménage qu\'on a appris à connaître, semaine après semaine.</p>' +
           '<button class="btn ghost" style="width:100%" onclick="showCarnet(false)">📖 Ouvrir le carnet de la banque</button></div>';
       }
