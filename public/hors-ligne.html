@@ -32,7 +32,7 @@ a{color:#7a4d12}
 <h2>Ce qui marche sans internet</h2>
 <ul>
 <li><a href="/boite/index.html">La Boite a outils</a> — les 8 outils : heritage, decision, lecture de paperasse (photo ou texte colle), vrai prix au 100 g, script d'appel, demarches, coffre a codes, relanceur. La lecture de photo marche aussi hors ligne : le lecteur et son dictionnaire francais sont sur votre appareil.</li>
-<li><a href="/en-cuisine/index.html">En cuisine</a> — les 629 recettes, le convertisseur et la liste d'epicerie, avec <a href="/en-cuisine/panier/index.html">le panier</a>.</li>
+<li><a href="/en-cuisine/index.html">En cuisine</a> — les 666 recettes, le convertisseur et la liste d'epicerie, avec <a href="/en-cuisine/panier/index.html">le panier</a>.</li>
 <li><a href="/passeur-de-savoir/index.html">Le Passeur de savoir</a> — la collection et vos fiches gardees sur votre appareil.</li>
 <li><a href="/outils-web/index.html">Les outils autonomes</a> — <a href="/outils-web/le-reste-du-mois.html">le reste du mois</a>, <a href="/outils-web/ca-vaut-tu-la-peine.html">ca vaut-tu la peine</a>, <a href="/outils-web/le-relais.html">le relais</a>, <a href="/outils-web/maintenant.html">maintenant</a> et <a href="/apps/hp-hyper-potentiel/index.html">un petit pas a la fois</a>.</li>
 <li>6 jeux legers — <a href="/apps/hockey-hgpto/hockey-hgpto-v1.0.html">Hockey HGPTO</a>, <a href="/apps/mineur-hp/mineur-hp-v0.1.html">Mineur HP</a>, <a href="/apps/slalomeuse/index.html">Slalomeuse</a>, <a href="/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html">Votre IA parle-t-elle quebecois ?</a>, <a href="/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html">Chevalier du fleuve</a>, <a href="/apps/sur-lherbe/sur-lherbe-v1.0.html">Sur l'herbe</a>.</li>
@@ -55,9 +55,16 @@ a{color:#7a4d12}
 <script>
 (function () {
   var el = document.getElementById('etat');
+  /* Ne recharger qu'une seule fois, quand la connexion REVIENT.
+     Recharger au chargement alors qu'on est deja en ligne, c'est
+     repartir en boucle (en ligne -> recharge -> en ligne -> ...),
+     et l'onglet reste bloque sur la page. */
+  var vuHorsLigne = !navigator.onLine;
   function maj() {
-    el.textContent = navigator.onLine ? 'Etat : en ligne. La page va se recharger.' : 'Etat : hors ligne.';
-    if (navigator.onLine) { location.reload(); }
+    var enLigne = navigator.onLine;
+    if (!enLigne) { vuHorsLigne = true; el.textContent = 'Etat : hors ligne.'; }
+    else if (vuHorsLigne) { el.textContent = 'Etat : en ligne. La page va se recharger.'; location.reload(); }
+    else { el.textContent = 'Etat : en ligne.'; }
   }
   window.addEventListener('online', maj);
   window.addEventListener('offline', maj);
