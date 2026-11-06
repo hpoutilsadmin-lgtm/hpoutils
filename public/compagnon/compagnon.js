@@ -69,6 +69,7 @@
   var LS_POSITION = "compagnon-position-v1";
   var LS_CONFORT = "compagnon-confort-v1";
   var SS_ACCUEIL = "compagnon-accueil-v1";
+  var SS_CUISINE = "compagnon-cuisine-v1";
   var SS_MASQUEE = "compagnon-masquee-v1";
 
   var IMG_GEPETO = "/hgpto/gepeto/normal.png";
@@ -153,6 +154,7 @@
 
   var chemin = window.location.pathname || "/";
   var estAccueil = chemin === "/" || chemin === "/index.html" || chemin === "/index.htm";
+  var estCuisine = chemin === "/en-cuisine" || chemin.indexOf("/en-cuisine/") === 0;
   var estJeu = chemin.indexOf("/apps/") === 0;
   var estLecture = false;
   for (var i = 0; i < PAGES_LECTURE.length; i++) {
@@ -1172,6 +1174,20 @@
       setTimeout(function () {
         if (panneauOuvert) return;
         dialogueGepeto.querySelector(".compagnon-gepeto-texte").textContent = DIALOGUES.gepeto_accueil;
+        ouvrirGepeto();
+      }, 800);
+    }
+    /* En cuisine (lot 5 nov. 2026, retours HP 15 h 46 n° 8-9) :
+       Sir H. Gepeto accueille en chef à l'arrivée, une fois par
+       session, après 800 ms, dans le panneau de la barre — même
+       patron que l'accueil (T9). Il ne quitte plus l'écran : il
+       vit dans le panneau, en tenue de chef (le moteur choisit
+       chef.png sur /en-cuisine). Refermable, jamais rouvert
+       dans la même session. */
+    if (estCuisine && lireSS(SS_CUISINE) !== "1") {
+      ecrireSS(SS_CUISINE, "1");
+      setTimeout(function () {
+        if (panneauOuvert) return;
         ouvrirGepeto();
       }, 800);
     }
