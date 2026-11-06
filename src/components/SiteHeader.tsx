@@ -32,7 +32,13 @@ export function SiteHeader() {
       <div className="container header-inner">
         <Link className="logo" to="/" aria-label="Accueil HP">
           <img src="/images/hp-logo-clean.png" alt="HP — des outils pour la vraie vie" />
-          <img src="/hgpto/gepeto/tete-144.png" alt="" className="logo-gepeto" width="48" height="48" />
+          {/* Accueil sans face (6 nov. 2026, décision 17) : la petite face de
+              Gepeto va dans l'en-tête de tous les jeux, outils et En cuisine —
+              mais PAS sur l'accueil. Le composant est partagé : on la masque
+              ici seulement quand la route est "/" ; elle reste partout ailleurs. */}
+          {loc.pathname !== "/" && (
+            <img src="/hgpto/gepeto/tete-144.png" alt="" className="logo-gepeto" width="48" height="48" />
+          )}
         </Link>
         <button
           className="nav-toggle"
