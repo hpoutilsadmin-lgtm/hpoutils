@@ -105,6 +105,36 @@ function Index() {
         </div>
       </section>
 
+      {/* DEUX PORTES (Jour 3, 6 nov. 2026, lot 2) : « Un outil pour moi »
+          vers /outils et « Un atelier pour mon groupe » vers /ateliers,
+          AU-DESSUS de « Vous cherchez quoi ? », sans remplacer la
+          navigation existante ni aucune section de l'accueil, sans toucher
+          aux boutons du hero. Même famille visuelle que les cartes
+          existantes (three-pillars / pillar-grid / pillar-card) : côte à
+          côte sur ordinateur (grille), empilées sous 860 px (règle
+          existante de hp.css). La porte outil distingue outils web
+          gratuits et kits PDF payants, à part — sinon elle reproduirait
+          la confusion « Voir les outils » signalée au Jour 3. Les Jeux
+          gardent leur entrée directe, hors des deux portes. */}
+      <section id="sec-portes" className="three-pillars" aria-label="Deux portes d'entrée">
+        <div className="container">
+          <span className="editorial-kicker">Commencez ici</span>
+          <h2 className="section-title">Deux portes pour commencer</h2>
+          <div className="pillar-grid">
+            <article className="pillar-card">
+              <h3>Un outil pour moi</h3>
+              <p>Outils web gratuits, sans compte, pour le quotidien — et, à part, des kits PDF payants pour les situations de la vraie vie.</p>
+              <Link className="pillar-cta" to="/outils">Voir les outils →</Link>
+            </article>
+            <article className="pillar-card">
+              <h3>Un atelier pour mon groupe</h3>
+              <p>Pour votre groupe, votre organisme, votre école : des ateliers à Terrebonne et dans Lanaudière — on vient chez vous.</p>
+              <Link className="pillar-cta" to="/ateliers">Voir les ateliers →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
       {/* TU CHERCHES QUOI? */}
       <section id="sec-arbre" className="three-pillars">
         <div className="container">
@@ -194,25 +224,25 @@ function Index() {
               <span className="pillar-num">01</span>
               <h3>Enjeux de l'humanité à l'ère de l'IA</h3>
               <p>Voir clair sur ce qui se joue, sans paniquer ni minimiser. — 15 $ CAD, aucune taxe ajoutée</p>
-              <Link to="/pdf/$slug" params={{ slug: "enjeux-humanite" }} className="pillar-cta">Voir le PDF →</Link>
+              <Link to="/pdf/$slug" params={{ slug: "enjeux-humanite" }} className="pillar-cta">Voir le produit →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">02</span>
               <h3>La faim justifie les moyens</h3>
               <p>Mieux manger avec peu : bases simples, recettes accessibles et réflexes anti-gaspillage. — 10 $ CAD, aucune taxe ajoutée</p>
-              <Link to="/pdf/$slug" params={{ slug: "faim-justifie-les-moyens" }} className="pillar-cta">Voir le PDF →</Link>
+              <Link to="/pdf/$slug" params={{ slug: "faim-justifie-les-moyens" }} className="pillar-cta">Voir le produit →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">03</span>
               <h3>Les enfants cuisinent pour faire plaisir</h3>
               <p>Un projet doux pour transmettre le plaisir, pas la performance. — 10 $ CAD, aucune taxe ajoutée</p>
-              <Link to="/pdf/$slug" params={{ slug: "enfants-cuisinent" }} className="pillar-cta">Voir le PDF →</Link>
+              <Link to="/pdf/$slug" params={{ slug: "enfants-cuisinent" }} className="pillar-cta">Voir le produit →</Link>
             </article>
             <article className="pillar-card">
               <span className="pillar-num">04</span>
               <h3>Horizon Québec</h3>
               <p>Une nouvelle québécoise sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. — 10 $ CAD, aucune taxe ajoutée</p>
-              <Link to="/pdf/$slug" params={{ slug: "horizon-quebec" }} className="pillar-cta">Voir le PDF →</Link>
+              <Link to="/pdf/$slug" params={{ slug: "horizon-quebec" }} className="pillar-cta">Voir le produit →</Link>
             </article>
           </div>
           <div className="lead-actions" style={{ marginTop: 28 }}>

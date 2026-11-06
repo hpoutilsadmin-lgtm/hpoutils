@@ -13,6 +13,12 @@ const NAV_SECONDARY = [
   { to: "/ateliers", label: "Ateliers" },
   { to: "/prix", label: "Prix" },
   { to: "/a-propos", label: "À propos" },
+  /* Contact (Jour 3, 6 nov. 2026, lot 2) : en fin du groupe secondaire,
+     après « À propos » — la route /contact existe déjà
+     (src/routes/contact.tsx) ; aucun lien existant n'est déplacé ni
+     supprimé. La même <nav> sert le bureau et le menu mobile (bouton
+     « Menu », classe .open) : un seul ajout couvre les deux. */
+  { to: "/contact", label: "Contact" },
 ] as const;
 
 const MAIN_LINK_STYLE = { color: "#f0c16d" } as const;
