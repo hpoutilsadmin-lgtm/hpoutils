@@ -4,7 +4,7 @@
   "note": "113 entrées concrètes (110 au lot de transfert + Pète et Répète, Les hommes préhistoriques et Bataille d'aura, lots de sortie 5 nov. 2026). Le lot de transfert annonçait 111 : l'écart venait du total « 65 pages » du lot, alors que ses propres tableaux en comptent 64 (1 accueil + 1 hub /jeux + 22 outils + 11 livres + 3 passeurs + 16 commerce + 2 balado/ateliers + 8 confiance). La 111e annoncée alors serait la route générique /apps/<slug>, qui n'est pas une destination en soi. Exclusions respectées : les 666 recettes (T4), Mineur et le « + 1 caché » (T8), /test-passeurs. Les 4 adresses à paramètre ($slug / $jeton) sont reprises telles qu'au §1 : elles mènent à une page réelle seulement avec un vrai paramètre.",
   "entrees": [
     { "titre": "Accueil — HP Outils, jeux, kits et outils pour la vraie vie", "famille": "Accueil", "url": "/", "mots": "accueil outils jeux kits vraie vie" },
-    { "titre": "Jeux gratuits — grille 41 + 1 caché", "famille": "Jeux", "url": "/jeux", "mots": "jeux gratuits grille jouer", "menu": "Jeux" },
+    { "titre": "Jeux gratuits — grille 42 + 1 caché", "famille": "Jeux", "url": "/jeux", "mots": "jeux gratuits grille jouer", "menu": "Jeux" },
     { "titre": "RELÈVE — Chapitre 1 : Surchauffe", "famille": "Jeux", "url": "/apps/releve", "mots": "relève surchauffe chapitre jeu" },
     { "titre": "LA BANQUE — le jeu de la banque alimentaire", "famille": "Jeux", "url": "/apps/la-banque", "mots": "banque alimentaire jeu" },
     { "titre": "Les bons réflexes d'HP", "famille": "Jeux", "url": "/apps/bons-reflexes", "mots": "bons réflexes sécurité jeu" },

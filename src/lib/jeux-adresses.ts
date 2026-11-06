@@ -53,6 +53,7 @@ export const GAME_FILES: Record<string, string> = {
   "pete-et-repete": "/apps/pete-et-repete/pete-et-repete-v1.0.html",
   "hommes-prehistoriques": "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html",
   "bataille-aura-magic": "/apps/bataille-aura-magic/bataille-aura-magic-v1.0.html",
+  "mini-jeux": "/apps/mini-jeux/mini-jeux-hp.html",
 };
 
 /** Adresse stable (partageable) d'un jeu, ex. « /apps/caribou-run ». */
