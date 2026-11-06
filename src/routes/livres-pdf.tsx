@@ -45,9 +45,9 @@ const ITEMS: Array<{
 ];
 
 function discoverLabel(tag: Kind): string {
-  if (tag === "Kit PDF") return "Découvrir le kit PDF";
-  if (tag === "Collection PDF") return "Découvrir la collection PDF";
-  return "Découvrir le PDF";
+  if (tag === "Kit PDF") return "Voir le produit";
+  if (tag === "Collection PDF") return "Voir le produit";
+  return "Voir le produit";
 }
 
 function Page() {
