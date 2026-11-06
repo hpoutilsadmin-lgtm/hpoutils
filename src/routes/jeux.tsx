@@ -756,7 +756,12 @@ function JeuxPage() {
                   >
                     {g.title}
                   </a>
-                  <RangeeTampons slug={slug} />
+                  {/* Pastille retirée ici (décision 6 nov. 2026, 11 h 37) :
+                      une seule occurrence par jeu sur /jeux. La pastille
+                      reste sur la tuile de la grille (ou la carte vedette) ;
+                      cette liste ne fait que nommer les jeux approuvés, avec
+                      leur lien. La légende des testeurs ci-dessus est
+                      inchangée. */}
                 </li>
               );
             })}
