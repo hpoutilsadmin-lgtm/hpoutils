@@ -194,6 +194,7 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
     <h2 style="font-size:1.2rem;margin-top:0">Ça peut aider quelqu'un d'autre</h2>
     <p style="color:var(--brun);margin-top:0">Un ami qui étire son budget&nbsp;? Envoie-lui ton chiffre — ou juste l'outil.</p>
     <button id="btn-partager" class="principal">📤 Partager</button>
+    <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter mon chiffre (.txt)</button>
     <p class="message" id="msg-partage"></p>
   </section>
 
@@ -450,7 +451,7 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
   });
 
   // Partage
-  $("btn-partager").addEventListener("click", function(){
+  function textePartage(){
     var jours = joursRestants();
     var reste = donnees.revenus - donnees.depenses;
     var texte;
@@ -462,6 +463,24 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
     } else {
       texte = "« Le reste du mois » : combien tu peux dépenser par jour sans te mettre dans le trouble. Gratuit, sans compte, fait au Québec. — HP, des outils pour la vraie vie.";
     }
+    return texte;
+  }
+  function texteExport(){
+    var jours = joursRestants();
+    var reste = donnees.revenus - donnees.depenses;
+    var fin = new Date(); fin = new Date(fin.getFullYear(), fin.getMonth()+1, 0);
+    var lignes = ["Le reste du mois — HP Outils",
+      "Date : " + new Date().toLocaleDateString("fr-CA", {day:"numeric", month:"long", year:"numeric"}),
+      "",
+      "Revenus du mois : " + fmt(donnees.revenus),
+      "Dépenses du mois : " + fmt(donnees.depenses),
+      "Reste : " + fmt(reste) + " pour " + jours + " jour(s), soit " + fmt(reste/jours) + " par jour, jusqu'au " + fin.getDate() + " " + moisNom(fin) + ".",
+      "",
+      "Calculé avec « Le reste du mois », un outil HP gratuit. Fichier gardé sur votre appareil."];
+    return lignes.join("\n");
+  }
+  $("btn-partager").addEventListener("click", function(){
+    var texte = textePartage();
     var msg = $("msg-partage");
     if (navigator.share){
       navigator.share({title:"Le reste du mois", text:texte}).then(function(){
@@ -476,6 +495,18 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
     } else {
       msg.textContent = texte;
     }
+  });
+
+  $("btn-exporter").addEventListener("click", function(){
+    var msg = $("msg-partage");
+    var blob = new Blob([texteExport()], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    var ajd = new Date();
+    a.download = "le-reste-du-mois-" + ajd.getFullYear() + "-" + ("0" + (ajd.getMonth() + 1)).slice(-2) + "-" + ("0" + ajd.getDate()).slice(-2) + ".txt";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    msg.textContent = "Fichier .txt téléchargé — il reste sur votre appareil. 💛";
   });
 
   $("btn-reset").addEventListener("click", function(){

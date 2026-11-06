@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Un petit pas à la fois | HP Outils</title>
+<meta name="description" content="Un petit pas à la fois : trois petits outils gratuits — respiration guidée, carte ikigaï, plan WOOP de 7 jours — pour avancer doucement. Sans compte, tout reste sur votre appareil. Fait au Québec.">
+<meta property="og:title" content="Un petit pas à la fois | HP Outils">
+<meta property="og:description" content="Trois petits outils gratuits : respirer, voir clair, se faire un plan de 7 jours. Sans compte, tout reste sur votre appareil.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:url" content="https://www.hp-outils.com/outils/un-petit-pas-a-la-fois">
+<link rel="canonical" href="https://www.hp-outils.com/outils/un-petit-pas-a-la-fois">
 <style>
 :root{--creme:#F8F4E7;--vert:#1E4634;--vert2:#2A5C46;--or:#B8860B;--carte:#FFFDF4;--bord:#D8CFB4}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -90,7 +97,7 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 </header>
 <main id="accueil">
 <div class="choix">
-<button class="btn-vert" id="go-respire" type="button"><span class="t">🫁 Module 1 — Respire avec moi</span><span class="d">Trois respirations guidées, animées, de 1 à 5 minutes.</span></button>
+<button class="btn-vert" id="go-respire" type="button"><span class="t">🫁 Module 1 — Respire avec moi</span><span class="d">Trois respirations guidées, animées, de 45 secondes à 5 minutes.</span></button>
 <button class="btn-vert" id="go-ikigai" type="button"><span class="t">🧭 Module 2 — Ta carte ikigaï</span><span class="d">Quatre questions courtes pour voir clair dans ce qui te fait avancer.</span></button>
 <button class="btn-vert" id="go-woop" type="button"><span class="t">🎯 Module 3 — Ton plan WOOP</span><span class="d">Un souhait, un obstacle, un plan « si… alors… » — et 7 jours pour t'y mettre.</span></button>
 </div>
@@ -102,7 +109,7 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 <p>Choisis une pratique, suis le cercle, c'est tout. Tu peux arrêter en tout temps, d'un seul toucher.</p>
 <p>Fais ça doucement, sans jamais forcer. Si tu sens un étourdissement, des picotements, une oppression, le cœur qui s'emballe ou l'angoisse qui monte : arrête, respire normalement, assis. Ne pratique jamais en conduisant, dans le bain ou la douche. Si tu as une condition respiratoire ou cardiaque, si tu es enceinte, ou si la respiration déclenche habituellement de la panique chez toi, demande d'abord l'avis de ton médecin ou de ton professionnel de la santé.</p>
 <div class="modes" id="modes">
-<button class="btn-doux" type="button" data-mode="soupir"><span class="t">Soupir physiologique</span><span class="d">Deux petites inspirations par le nez, longue expiration par la bouche. 5 cycles, environ 1 minute.</span></button>
+<button class="btn-doux" type="button" data-mode="soupir"><span class="t">Soupir physiologique</span><span class="d">Deux petites inspirations par le nez, longue expiration par la bouche. 5 cycles, environ 45 secondes.</span></button>
 <button class="btn-doux" type="button" data-mode="coherence"><span class="t">Cohérence 5 minutes</span><span class="d">6 respirations par minute : 5 secondes j'inspire, 5 secondes j'expire. Compte à rebours de 5 minutes.</span></button>
 <button class="btn-doux" type="button" data-mode="carree"><span class="t">Respiration carrée</span><span class="d">J'inspire 4, je retiens 4, j'expire 4, je retiens 4. Quatre cycles, environ 1 minute. Les temps de rétention peuvent être inconfortables pour certaines personnes : si c'est ton cas, choisis le soupir ou la cohérence, sans insister.</span></button>
 </div>
@@ -117,7 +124,7 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 <button class="btn-mini" id="btn-changer" type="button" style="margin-top:10px;width:100%">Choisir une autre pratique</button>
 <p class="ok cache" id="respire-fini">Séance terminée — ou arrêtée, ce qui est tout aussi correct. Prends un instant pour remarquer comment tu te sens, sans jugement : plus calme, pareil ou moins bien sont toutes des réponses possibles. Si tu te sens moins bien, respire normalement et reprends une activité familière ; si la détresse persiste, voir les ressources en bas de page.</p>
 </div>
-<div class="micro">💡 Le fait : dans l’étude de Stanford (Balban et al., 2023), 5 minutes de soupirs répétés chaque jour pendant un mois ont amélioré l’humeur positive plus que 5 minutes de méditation par jour. Ici, la séance "soupir" dure environ 1 minute : c’est une façon de découvrir le geste, pas la dose étudiée. Respirer lentement (6 respirations par minute) amplifie dans le moment les variations du rythme cardiaque liées à la respiration. Aucune de ces pratiques n’est un traitement contre l’anxiété.</div>
+<div class="micro">💡 Le fait : dans l’étude de Stanford (Balban et al., 2023), 5 minutes de soupirs répétés chaque jour pendant un mois ont amélioré l’humeur positive plus que 5 minutes de méditation par jour. Ici, la séance "soupir" dure environ 45 secondes : c’est une façon de découvrir le geste, pas la dose étudiée. Respirer lentement (6 respirations par minute) amplifie dans le moment les variations du rythme cardiaque liées à la respiration. Aucune de ces pratiques n’est un traitement contre l’anxiété.</div>
 </section>
 
 <!-- MODULE 2 : IKIGAÏ -->
@@ -272,7 +279,7 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 <div class="navrangee"><button class="btn-mini" id="tout-effacer-oui" type="button">Oui, tout effacer</button><button class="btn-mini" id="tout-effacer-non" type="button">Retour</button></div>
 </div>
 <p class="ligne">HP Outils — Des outils pour la vraie vie</p>
-<p class="petite">Aucun compte. Aucun suivi. Tes réponses restent sur ton appareil.</p>
+<p class="petite">Aucun compte. Aucune donnée saisie n'est envoyée. Tes réponses restent sur ton appareil.</p>
 </footer>
 </div>
 <script>
@@ -351,7 +358,7 @@ $("#ik-retour").addEventListener("click",function(){if(ikEtape>0)ikMontrer(ikEta
 $("#ik-modifier").addEventListener("click",function(){$("#ikigai-carte").classList.add("cache");$("#ikigai-etapes").classList.remove("cache");ikMontrer(0,true)});
 $("#ik-reset").addEventListener("click",function(){var btn=this;armerEffacement(btn,function(){ikData={reponses:{},phrase:""};ikEtaitRempli=false;try{localStorage.removeItem("hp_ikigai")}catch(e){}$$("[data-ik]").forEach(function(i){i.value=""});$("#ik-phrase").value="";var d=$("#ik-deja");if(d)d.classList.add("cache");$("#ikigai-carte").classList.add("cache");$("#ikigai-etapes").classList.remove("cache");ikMontrer(0,true)})});
 $("#ik-copier").addEventListener("click",function(){var texte=ikData.phrase?("Mon HP, c’est "+ikData.phrase):$("#z-centre").textContent;function fait(){$("#ik-copie-ok").classList.remove("cache")}function repli(){var ta=document.createElement("textarea");ta.value=texte;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy")}catch(e){}document.body.removeChild(ta);fait()}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(texte).then(fait,repli)}else{repli()}});
-$("#ik-vers-woop").addEventListener("click",function(){ouvrir("woop");var champ=$("#w-souhait");if(champ&&champ.value.trim()===""){champ.value="Cette semaine, j’essaie…";if(typeof wSauver==="function")wSauver()}});
+$("#ik-vers-woop").addEventListener("click",function(){ouvrir("woop");var champ=$("#w-souhait");if(champ&&champ.value.trim()===""){champ.value="Cette semaine, j’essaie…";wSouhaitPreRempli=true;champ.focus()}});
 ikRestaurer();ikMontrer(0);
 if(ikData.phrase||Object.keys(ikData.reponses||{}).some(function(g){return (ikData.reponses[g]||[]).some(function(v){return v.trim()})}))ikCarte();
 </script>
@@ -360,13 +367,15 @@ if(ikData.phrase||Object.keys(ikData.reponses||{}).some(function(g){return (ikDa
 var wEtape=0,wEtapes=$$(".w-etape");
 var wData=lire("hp_woop",{souhait:"",resultat:"",obstacle:"",si:"",alors:"",engage:false,debut:"",jours:[false,false,false,false,false,false,false]});
 var wEtaitRempli=!!(wData.souhait&&wData.alors);
+var wSouhaitPreRempli=false;
 function wDateISO(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
 function wDateLisible(iso,decal){var parties=iso.split("-");var d=new Date(parseInt(parties[0],10),parseInt(parties[1],10)-1,parseInt(parties[2],10)+decal);var jn=["dim.","lun.","mar.","mer.","jeu.","ven.","sam."];var ms=["janv.","févr.","mars","avr.","mai","juin","juill.","août","sept.","oct.","nov.","déc."];return jn[d.getDay()]+" "+d.getDate()+" "+ms[d.getMonth()]}
-function wSauver(){wData.souhait=$("#w-souhait").value;wData.resultat=$("#w-resultat").value;wData.obstacle=$("#w-obstacle").value;wData.si=$("#w-si").value;wData.alors=$("#w-alors").value;var ok=sauver("hp_woop",wData);indiquerSauvegarde("w",ok);return ok}
+function wSauver(){var sEl=$("#w-souhait");wData.souhait=(wSouhaitPreRempli&&sEl&&sEl.value==="Cette semaine, j’essaie…")?"":sEl.value;wData.resultat=$("#w-resultat").value;wData.obstacle=$("#w-obstacle").value;wData.si=$("#w-si").value;wData.alors=$("#w-alors").value;var ok=sauver("hp_woop",wData);indiquerSauvegarde("w",ok);return ok}
 function wMontrer(n,focus){wEtape=n;wEtapes.forEach(function(e,i){e.classList.toggle("cache",i!==n)});$("#w-retour").classList.toggle("cache",n===0);$("#w-suivant").textContent=n===3?"Voir ma carte plan →":"Continuer →";if(focus){$("#mod-woop").scrollIntoView({block:"start"});var h=wEtapes[n].querySelector("h3");if(h)h.focus({preventScroll:true})}}
 function wCarte(){wSauver();$("#c-souhait").textContent=wData.souhait||"(pas encore rempli)";$("#c-resultat").textContent=wData.resultat||"(pas encore rempli)";$("#c-obstacle").textContent=wData.obstacle||"(pas encore rempli)";$("#c-si").textContent=wData.si||"…";$("#c-alors").textContent=wData.alors||"…";$("#woop-etapes").classList.add("cache");$("#woop-carte").classList.remove("cache");var dejaw=$("#w-deja");if(dejaw)dejaw.classList.toggle("cache",!wEtaitRempli);wJoursAfficher();if(!$("#mod-woop").classList.contains("cache")){$("#woop-carte").scrollIntoView({block:"start"});var hw=$("#woop-carte").querySelector("h3");if(hw)hw.focus({preventScroll:true})}}
 function wJoursAfficher(){$("#w-engagement-zone").classList.toggle("cache",!!wData.engage);$("#w-jours-zone").classList.toggle("cache",!wData.engage);if(!wData.engage)return;if(!wData.debut){wData.debut=wDateISO(new Date());sauver("hp_woop",wData)}var zone=$("#w-jours");zone.innerHTML="";wData.jours.forEach(function(coche,i){var lab=document.createElement("label");lab.className="jour";var sp=document.createElement("span");sp.textContent="Jour "+(i+1)+(wData.debut?(" — "+wDateLisible(wData.debut,i)):"");var inp=document.createElement("input");inp.type="checkbox";inp.checked=!!coche;inp.setAttribute("aria-label","Jour "+(i+1));inp.addEventListener("change",function(){wData.jours[i]=inp.checked;var ok=sauver("hp_woop",wData);indiquerSauvegarde("w",ok);wBravo()});lab.appendChild(sp);lab.appendChild(inp);zone.appendChild(lab)});wBravo()}
 function wBravo(){$("#w-bravo").classList.toggle("cache",!(wData.jours&&wData.jours.every(function(x){return x})))}
+$("#w-souhait").addEventListener("input",function(){wSouhaitPreRempli=false;});
 ["#w-souhait","#w-resultat","#w-obstacle","#w-si","#w-alors"].forEach(function(s){$(s).addEventListener("input",wSauver)});
 function wEtapeVide(){var champs=wEtapes[wEtape].querySelectorAll("input,textarea");for(var i=0;i<champs.length;i++){if(champs[i].value.trim()!=="")return false}return true}
 $("#w-suivant").addEventListener("click",function(){var vide=wEtapeVide();if(wEtape<3){wMontrer(wEtape+1,true);$("#w-vide").classList.toggle("cache",!vide)}else{$("#w-vide").classList.add("cache");wCarte()}});

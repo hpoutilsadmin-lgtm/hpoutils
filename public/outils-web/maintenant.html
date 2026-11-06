@@ -109,6 +109,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
   border:1.5px solid var(--bord); background:#fff; color:var(--brun); font-weight:600; cursor:pointer;}
 .humeurs button.actif{border-color:var(--nuit); background:var(--nuit); color:#fff; font-weight:800;}
 .date-jour{text-align:center; color:var(--brun); margin-bottom:4px; font-size:1.02rem;}
+.date-note{text-align:center; color:var(--brun); margin:-2px 0 4px; font-size:.92rem; font-style:italic;}
 </style>
 <link rel="stylesheet" href="/compagnon/compagnon.css">
 </head>
@@ -129,6 +130,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
   <div class="principe">«&nbsp;Je n'ai pas besoin de tout organiser.<br>J'ai besoin de savoir <em>ce qui compte maintenant</em>.&nbsp;»</div>
 
   <p class="date-jour" id="date-jour"></p>
+  <p class="date-note" id="date-note"></p>
 
   <section class="bloc" aria-label="Argent">
     <div class="tete"><span class="icone">💰</span><h2>Argent</h2></div>
@@ -164,6 +166,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     <h2 style="font-size:1.2rem;margin-top:0">Quelqu'un vit la même journée&nbsp;?</h2>
     <p style="color:var(--brun);margin-top:0">Envoie-lui l'outil — pas tes notes, juste l'outil. Tes mots restent à toi.</p>
     <button id="btn-partager" class="principal">📤 Partager «&nbsp;Maintenant&nbsp;»</button>
+    <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter mes notes (.txt)</button>
     <p class="message" id="msg-partage"></p>
   </section>
 
@@ -183,7 +186,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     </details>
     <details>
       <summary>Où vont mes notes&nbsp;?</summary>
-      <p>Nulle part&nbsp;: tout reste sur votre appareil, dans votre navigateur. Le bouton Partager n'envoie que le lien de l'outil — jamais vos mots.</p>
+      <p>Nulle part&nbsp;: tout reste sur votre appareil, dans votre navigateur. Le bouton Partager n'envoie que le lien de l'outil — jamais vos mots. Vos notes sont datées : la date de la dernière note s'affiche sous la date du jour.</p>
     </details>
   </section>
 
@@ -212,10 +215,30 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     } catch(e){ return {}; }
   }
   function ecrire(d){
+    d.date = new Date().toISOString().slice(0, 10);
     try { localStorage.setItem(CLE, JSON.stringify(d)); } catch(e){}
+    majDateNote();
+  }
+  function fmtDateNote(iso){
+    try {
+      var p = iso.split("-");
+      var d = new Date(+p[0], +p[1] - 1, +p[2]);
+      return d.toLocaleDateString("fr-CA", { weekday:"long", day:"numeric", month:"long", year:"numeric" })
+        .replace(/^./, function(c){ return c.toUpperCase(); });
+    } catch(e){ return ""; }
+  }
+  function majDateNote(){
+    var el = $("date-note");
+    if (!el) return;
+    var aDuContenu = CHAMPS.some(function(id){ return (donnees[id] || "").trim() !== ""; }) || (donnees.humeur || "");
+    if (!aDuContenu){ el.textContent = ""; return; }
+    el.textContent = donnees.date
+      ? "Noté le " + fmtDateNote(donnees.date) + "."
+      : "Sans date — noté avant cette mise à jour.";
   }
 
   var donnees = lire();
+  majDateNote();
 
   $("date-jour").textContent = new Date().toLocaleDateString("fr-CA", {
     weekday:"long", day:"numeric", month:"long"
@@ -262,12 +285,33 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     }
   });
 
+  $("btn-exporter").addEventListener("click", function(){
+    var msg = $("msg-partage");
+    var lignes = ["Maintenant — où est-ce que j'en suis ?"];
+    lignes.push(donnees.date ? "Noté le " + fmtDateNote(donnees.date) : "Sans date");
+    lignes.push("");
+    var etiquettes = {"f-argent":"Argent", "f-repas":"Repas", "f-maison":"Maison", "f-demain":"Demain", "f-moi":"Moi"};
+    CHAMPS.forEach(function(id){ lignes.push(etiquettes[id] + " : " + (donnees[id] || "—")); });
+    var humeurs = {"en-forme":"En forme", "correct":"Correct", "fatigue":"Fatigué"};
+    lignes.push("État : " + (humeurs[donnees.humeur] || "—"));
+    lignes.push("");
+    lignes.push("Noté avec « Maintenant », un outil HP gratuit. Fichier gardé sur votre appareil.");
+    var blob = new Blob([lignes.join("\n")], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    var ajd = new Date();
+    a.download = "maintenant-" + ajd.getFullYear() + "-" + ("0" + (ajd.getMonth() + 1)).slice(-2) + "-" + ("0" + ajd.getDate()).slice(-2) + ".txt";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    msg.textContent = "Fichier .txt téléchargé — il reste sur votre appareil. 💛";
+  });
+
   $("btn-reset").addEventListener("click", function(){
     if (confirm("Tout effacer ?")){
       donnees = {};
       try { localStorage.removeItem(CLE); } catch(e){}
       CHAMPS.forEach(function(id){ $(id).value = ""; });
-      majHumeurs();
+      majHumeurs(); majDateNote();
     }
   });
 })();

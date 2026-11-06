@@ -208,7 +208,7 @@
   <section id="homeScreen">
     <div class="speech"><b>HP binoclard :</b> « Bienvenue ! Dans chaque manche, je te lis trois faits. Deux sont vrais… un seul est un mensonge. À toi de le démasquer — et lis bien l’explication, c’est là qu’on apprend les vraies affaires ! »</div>
     <div class="cat-list" id="catList"></div>
-    <p class="rules">📜 <b>Comment ça marche :</b> touche ou clique l’affirmation que tu crois fausse. La réponse et la vraie histoire s’affichent aussitôt. Enchaîne les bonnes réponses pour faire grandir ta série. Chaque catégorie contient 110 manches — et aucun ensemble ne revient avant que tu aies tout épuisé !<br />🎺 <b>Musique de jeu télé :</b> fanfare au départ, petite tension pendant que tu réfléchis, jingle à la révélation — le bouton 🔊 en haut à droite coupe ou relance tout.</p>
+    <p class="rules">📜 <b>Comment ça marche :</b> touche ou clique l’affirmation que tu crois fausse. La réponse et la vraie histoire s’affichent aussitôt. Enchaîne les bonnes réponses pour faire grandir ta série. Histoire : 55 manches · Insolite : 55 · Cocasse : 220 · Total : 330 — et aucun ensemble ne revient avant que tu aies tout épuisé !<br />🎺 <b>Musique de jeu télé :</b> fanfare au départ, petite tension pendant que tu réfléchis, jingle à la révélation — le bouton 🔊 en haut à droite coupe ou relance tout.</p>
     <p class="sign">Un jeu HP Outils — pour les curieux de 7 à 107 ans.</p>
   </section>
 
@@ -259,7 +259,7 @@
    Chaque ensemble : a = [3 affirmations], m = index du MENSONGE (0,1,2), e = explication.
    Les deux autres affirmations sont des faits établis et vérifiables. */
 
-/* ---------- 1) FAIT HISTORIQUE (55 ensembles v1 + 55 v2 = 110) ---------- */
+/* ---------- 1) FAIT HISTORIQUE (55 ensembles) ---------- */
 var HIST = [
 {a:["La ville de Québec a été fondée en 1608 par Samuel de Champlain.","Jacques Cartier est arrivé à Gaspé en 1534.","Montréal a été fondée en 1608, la même année que Québec."],m:2,e:"Le mensonge : Montréal n’a pas été fondée en 1608, mais en 1642, sous le nom de Ville-Marie. Québec date bien de 1608, et Cartier a planté sa croix à Gaspé en 1534."},
 {a:["Le Canada est devenu un pays le 1er juillet 1867.","John A. Macdonald a été le premier premier ministre du Canada.","La première capitale du Canada a été Toronto."],m:2,e:"Le mensonge : la première capitale du Dominion a été Ottawa, choisie par la reine Victoria en 1857. La Confédération date bien de 1867 et Macdonald a bien été le premier à diriger le pays."},
@@ -318,7 +318,7 @@ var HIST = [
 {a:["Le pont de la Confédération relie l’Île-du-Prince-Édouard au Nouveau-Brunswick.","Le pont de la Confédération, ouvert en 1997, mesure près de 13 kilomètres.","Avant le pont de la Confédération, on se rendait à l’Île-du-Prince-Édouard en train sous-marin."],m:2,e:"Le mensonge : il n’y a jamais eu de train sous-marin ; on prenait le traversier ! Le pont de la Confédération, près de 13 km, relie l’île au continent depuis 1997."}
 ];
 
-/* ---------- 2) FAIT INUSITÉ (55 ensembles v1 + 55 v2 = 110) ---------- */
+/* ---------- 2) FAIT INUSITÉ (55 ensembles) ---------- */
 var INUS = [
 {a:["La pieuvre possède trois cœurs.","Le sang de la pieuvre est bleu.","La pieuvre peut vivre plus de 50 ans."],m:2,e:"Le mensonge : la plupart des pieuvres ne vivent qu’un an à cinq ans. Elles ont bien trois cœurs — et un sang bleu, à base de cuivre plutôt que de fer."},
 {a:["Du miel vieux de 3 000 ans, retrouvé dans des tombes égyptiennes, était encore comestible.","Le miel se conserve presque indéfiniment s’il est bien fermé.","Une abeille produit environ une cuillère à soupe de miel par jour."],m:2,e:"Le mensonge : une abeille produit à peine un douzième de cuillère à thé de miel dans toute sa vie ! C’est le travail de milliers d’abeilles qui remplit un pot — un pot qui peut se garder des millénaires."},
@@ -377,7 +377,7 @@ var INUS = [
 {a:["L’œil de l’autruche est plus gros que son cerveau.","L’autruche est le plus grand oiseau du monde.","Quand elle a peur, l’autruche enfouit sa tête dans le sable."],m:2,e:"Le mensonge : l’autruche ne cache jamais sa tête dans le sable — c’est un mythe célèbre. Son œil, plus gros que son cerveau, est le plus grand de tous les animaux terrestres."}
 ];
 
-/* ---------- 3) FAIT COCASSE (55 ensembles v1 + 55 v2 = 110) ---------- */
+/* ---------- 3) FAIT COCASSE (220 ensembles) ---------- */
 var COC = [
 {a:["L’animal national officiel de l’Écosse est la licorne.","L’animal emblème officiel du Canada est le castor.","L’animal national de la France est la vache."],m:2,e:"Le mensonge : l’emblème de la France est le coq gaulois, pas la vache. L’Écosse a vraiment choisi la licorne — un animal de légende pour figurer sur ses armoiries — et le Canada, le castor."},
 {a:["En Suisse, la loi sur le bien-être animal exige qu’un cochon d’Inde vive avec au moins un compagnon de son espèce.","Le cochon d’Inde est un animal social qui souffre de la solitude.","En Suisse, il est interdit d’avoir un chat à la maison."],m:2,e:"Le mensonge : les chats sont tout à fait permis en Suisse ! Mais la loi sur le bien-être animal y interdit de garder un cochon d’Inde seul, car ces petites bêtes ont besoin de compagnie."},

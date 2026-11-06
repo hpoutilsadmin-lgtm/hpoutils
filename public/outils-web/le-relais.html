@@ -140,13 +140,20 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
 
   <section aria-label="Le carnet">
     <h2 style="font-size:1.25rem">Le carnet <span id="compte" style="font-weight:400;color:var(--brun);font-size:1rem"></span></h2>
+    <label for="in-recherche">Rechercher dans le carnet</label>
+    <input type="search" id="in-recherche" placeholder="Par personne ou par note… ex. Sophie" maxlength="60" autocomplete="off">
     <div id="liste"></div>
+    <div id="zone-annuler" class="cache" style="margin:10px 0" role="status">
+      <p class="message" id="msg-suppr" style="margin:0 0 6px"></p>
+      <button id="btn-annuler-suppr" class="discret petit" type="button">↩ Annuler la suppression</button>
+    </div>
   </section>
 
   <section class="carte" aria-label="Numéros utiles">
     <h2 style="font-size:1.2rem;margin-top:0">📞 Numéros utiles</h2>
     <ul style="margin:8px 0;padding-left:20px">
-      <li><strong>811</strong> — Info-Santé, partout au Canada, 24&nbsp;h/24 et 7&nbsp;j/7</li>
+      <li><strong>811</strong> — Info-Santé, partout au Canada sauf au Manitoba et au Nunavut, 24&nbsp;h/24 et 7&nbsp;j/7</li>
+      <li>Au Manitoba et au Nunavut : <strong>Health Links–Info Santé</strong> au <strong>1-888-315-9257</strong> (204 788-8200 à Winnipeg)</li>
       <li id="ligne-ressource-locale"></li>
     </ul>
     <label for="in-contact-local">Votre ressource locale <span class="note">(CLSC, pharmacie, voisin…)</span></label>
@@ -158,6 +165,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
     <h2 style="font-size:1.2rem;margin-top:0">Passer le relais</h2>
     <p style="color:var(--brun);margin-top:0">Un texte prêt à coller dans Messenger ou par SMS — pour que tout le monde sache où on en est.</p>
     <button id="btn-transmettre" class="principal">📤 Transmettre le relais</button>
+    <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter le carnet (.txt)</button>
     <p class="message" id="msg-transmettre"></p>
   </section>
 
@@ -256,6 +264,17 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
   }
 
   var entrees = lire();
+  var recherche = "";
+  var supprRecente = null, supprTimer = null;
+  function normaliser(s){
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  function cacherAnnuler(){
+    var z = $("zone-annuler");
+    if (z) z.classList.add("cache");
+    supprRecente = null;
+    if (supprTimer){ clearTimeout(supprTimer); supprTimer = null; }
+  }
 
   function afficher(){
     var liste = $("liste");
@@ -265,6 +284,16 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
       return;
     }
     var tri = entrees.slice().sort(function(a,b){ return b.ts - a.ts; });
+    var filtre = normaliser(recherche);
+    if (filtre){
+      tri = tri.filter(function(e){
+        return normaliser(e.qui).indexOf(filtre) !== -1 || normaliser(e.quoi).indexOf(filtre) !== -1;
+      });
+      if (!tri.length){
+        liste.innerHTML = '<p class="vide">Aucune entrée ne correspond à « ' + echapper(recherche) + ' ».</p>';
+        return;
+      }
+    }
     var html = "";
     tri.forEach(function(e, i){
       var idx = entrees.indexOf(e);
@@ -281,8 +310,14 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
       (function(btn){
         btn.addEventListener("click", function(){
           var i = parseInt(btn.getAttribute("data-suppr"), 10);
+          supprRecente = { entree: entrees[i], index: i };
           entrees.splice(i, 1);
           ecrire(entrees); afficher();
+          var z = $("zone-annuler");
+          z.classList.remove("cache");
+          $("msg-suppr").textContent = "Entrée retirée — vous avez 5 secondes pour annuler.";
+          if (supprTimer) clearTimeout(supprTimer);
+          supprTimer = setTimeout(cacherAnnuler, 5000);
         });
       })(boutons[k]);
     }
@@ -332,6 +367,34 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
     } else {
       msg.textContent = texte;
     }
+  });
+
+  $("in-recherche").addEventListener("input", function(){
+    recherche = this.value.trim();
+    afficher();
+  });
+
+  $("btn-annuler-suppr").addEventListener("click", function(){
+    if (!supprRecente) return;
+    entrees.splice(Math.min(supprRecente.index, entrees.length), 0, supprRecente.entree);
+    ecrire(entrees); afficher(); cacherAnnuler();
+    $("msg-ajout").textContent = "Entrée restaurée. 💛";
+  });
+
+  $("btn-exporter").addEventListener("click", function(){
+    var msg = $("msg-transmettre");
+    if (!entrees.length){
+      msg.textContent = "Le carnet est encore vide — note quelque chose d'abord.";
+      return;
+    }
+    var blob = new Blob([texteRelais()], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    var ajd = new Date();
+    a.download = "le-relais-" + ajd.getFullYear() + "-" + ("0" + (ajd.getMonth() + 1)).slice(-2) + "-" + ("0" + ajd.getDate()).slice(-2) + ".txt";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    msg.textContent = "Carnet exporté en fichier .txt — il reste sur votre appareil. 💛";
   });
 
   $("btn-reset").addEventListener("click", function(){

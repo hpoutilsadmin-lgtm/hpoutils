@@ -158,6 +158,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     <h2 style="font-size:1.2rem;margin-top:0">Montre les chiffres à quelqu'un</h2>
     <p style="color:var(--brun);margin-top:0">Parfois, voir le calcul écrit noir sur blanc, ça aide à trancher.</p>
     <button id="btn-partager" class="principal">📤 Partager</button>
+    <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter le calcul (.txt)</button>
     <p class="message" id="msg-partage"></p>
   </section>
 
@@ -181,7 +182,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     </details>
     <details>
       <summary>Où vont mes données&nbsp;?</summary>
-      <p>Nulle part&nbsp;: tout reste sur votre appareil, dans votre navigateur. Pas de compte, pas de serveur.</p>
+      <p>Nulle part&nbsp;: tout reste sur votre appareil, dans votre navigateur. Pas de compte, pas de serveur. Votre dernier calcul est conservé sur votre appareil et retrouvé à votre prochaine visite.</p>
     </details>
   </section>
 
@@ -230,7 +231,35 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     return s.toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2}) + " $/h";
   }
 
+  var CLE_CALCUL = "hp-ca-vaut-tu-v1";
   var $ = function(id){ return document.getElementById(id); };
+  function sauverCalcul(){
+    var prixBase = parseFloat($("in-prix").value) || 0;
+    var fois = parseInt($("in-fois").value, 10) || 0;
+    if (!(prixBase > 0) || !(fois >= 1)) return;
+    try {
+      localStorage.setItem(CLE_CALCUL, JSON.stringify({
+        nom: $("in-nom").value.trim(),
+        prix: prixBase,
+        fois: fois,
+        taxes: $("in-taxes").checked,
+        salaire: parseFloat($("in-salaire").value) || 0,
+        recurrence: $("in-recurrence").value,
+        date: new Date().toISOString().slice(0, 10)
+      }));
+    } catch(e){}
+  }
+  function restaurerCalcul(){
+    var d = null;
+    try { d = JSON.parse(localStorage.getItem(CLE_CALCUL) || "null"); } catch(e){}
+    if (!d || typeof d !== "object" || !(d.prix > 0) || !(d.fois >= 1)) return;
+    if (d.nom) $("in-nom").value = d.nom;
+    $("in-prix").value = d.prix;
+    $("in-fois").value = d.fois;
+    $("in-taxes").checked = !!d.taxes;
+    if (d.salaire > 0) $("in-salaire").value = d.salaire;
+    if (d.recurrence) $("in-recurrence").value = d.recurrence;
+  }
   function fmt(n){
     return n.toLocaleString("fr-CA",{minimumFractionDigits:2, maximumFractionDigits:2}) + " $";
   }
@@ -268,6 +297,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     }
     $("bloc-resultat").style.display = "";
     $("bloc-partage").style.display = "";
+    sauverCalcul();
 
     var coutFois = prix / fois;
     $("etiquette-nom").textContent = nom ? "« " + nom + " »" : "Résultat";
@@ -306,7 +336,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     $(id).addEventListener(id === "in-taxes" ? "change" : "input", calculer);
   });
 
-  $("btn-partager").addEventListener("click", function(){
+  function textePartage(){
     var prixBase = parseFloat($("in-prix").value) || 0;
     var prix = prixAvecTaxes();
     var fois = parseInt($("in-fois").value, 10) || 0;
@@ -321,6 +351,11 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
       texte += ", soit " + (prix/salaire).toLocaleString("fr-CA",{minimumFractionDigits:1, maximumFractionDigits:1}) + " h de travail";
     }
     texte += ". Calculé avec « Ça vaut-tu la peine ? », un outil HP gratuit.";
+    return texte;
+  }
+
+  $("btn-partager").addEventListener("click", function(){
+    var texte = textePartage();
     var msg = $("msg-partage");
     if (navigator.share){
       navigator.share({title:"Ça vaut-tu la peine ?", text:texte}).then(function(){
@@ -335,8 +370,21 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     }
   });
 
+  $("btn-exporter").addEventListener("click", function(){
+    var msg = $("msg-partage");
+    var blob = new Blob([textePartage()], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    var ajd = new Date();
+    a.download = "ca-vaut-tu-la-peine-" + ajd.getFullYear() + "-" + ("0" + (ajd.getMonth() + 1)).slice(-2) + "-" + ("0" + ajd.getDate()).slice(-2) + ".txt";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    msg.textContent = "Fichier .txt téléchargé — il reste sur votre appareil. 💛";
+  });
+
   $("btn-reset").addEventListener("click", function(){
     var p = hpProvince();
+    try { localStorage.removeItem(CLE_CALCUL); } catch(e){}
     ["in-nom","in-prix","in-fois"].forEach(function(id){ $(id).value = ""; });
     $("in-salaire").value = p.info.salaire.toFixed(2);
     $("in-taxes").checked = false;
@@ -346,6 +394,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
 
   majProvince();
   $("in-salaire").value = hpProvince().info.salaire.toFixed(2);
+  restaurerCalcul();
   calculer();
 })();
 </script>

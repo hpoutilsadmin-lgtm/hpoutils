@@ -52,6 +52,9 @@ Conçus au Québec, dans l'esprit de la Loi 25 ; sélecteur de province pour tou
 - Ça vaut-tu la peine ? (/outils-web/ca-vaut-tu-la-peine.html) : vrai coût d'un achat — coût par usage et équivalent en heures de travail.
 - Le relais (/outils-web/le-relais.html) : cahier de transmission pour proches aidants — qui a fait quoi, quand. Transmet l'information, ne prend jamais de décision médicale.
 - Maintenant (/outils-web/maintenant.html) : mini tableau de bord de la vraie vie — Argent, Repas, Maison, Demain, Moi.
+- Un petit pas à la fois (/outils/un-petit-pas-a-la-fois) : trois petits outils gratuits — respiration guidée, carte ikigaï, plan WOOP de 7 jours. Sans compte, tout reste sur l'appareil.
+- Contrat humain-IA (/outils-web/contrat-humain-ia.html) : une feuille d'une page, en 2 minutes, qui fixe vos règles avec votre assistant IA. Gratuit, sans compte.
+- La garde (/outils-web/la-garde.html) : le trio — trois outils gratuits, sans compte, pour la vraie vie ; on choisit celui qui correspond à sa situation.
 - La Boîte à outils (/boite/) : 8 outils pour la vraie vie réunis au même endroit.
 - Le Passeur de savoir (/passeur-de-savoir/) : les trucs et savoirs des gens, recueillis pour être transmis.
 
