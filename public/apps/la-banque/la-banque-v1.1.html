@@ -230,6 +230,33 @@
     var DON_OBJECTIF = "";  /* ex. "500 $ pour la campagne en cours" */
     var DON_REMIS = "";     /* ex. "120 $ remis a ce jour" — montant reel, jamais invente */
     var DON_URL = "";       /* page de don officielle de l'organisme */
+    /* ================= Bloc du vrai don (accueil + fin de saison) =================
+       Même bloc aux deux endroits : sur l'accueil (visible avant de jouer) et à
+       la fin de saison. Seule l'intro change (avec ou sans le score de la saison).
+       Les montants sont de simples choix sans lien tant que DON_URL est vide ;
+       quand HP aura confirmé l'organisme et son lien, ils deviennent des liens. */
+    function blocDonHtml(avecScore){
+      var h = '<div class="donbox"><h3>🤲 Le vrai don</h3>';
+      if (avecScore){
+        h += "<p>Ton jeu a nourri <b>" + S.familles + " familles</b> virtuelles. Dans la vraie vie, les banques alimentaires du Québec font ce travail chaque semaine, avec de vraies denrées et de vrais bénévoles.</p>";
+        h += "<p>Envie de transformer ta partie en geste réel ? Le montant est libre — il n'y a pas de pourcentage obligatoire, le jeu reste un jeu :</p>";
+      } else {
+        h += "<p>Dans la vraie vie, les banques alimentaires du Québec font ce travail chaque semaine, avec de vraies denrées et de vrais bénévoles.</p>";
+        h += "<p>Envie de transformer ton jeu en geste réel ? Le montant est libre — il n'y a pas de pourcentage obligatoire, le jeu reste un jeu :</p>";
+      }
+      if (DON_URL){
+        h += '<div class="amounts"><a href="' + DON_URL + '" target="_blank" rel="noopener">2 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">5 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">10 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">20 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">Montant libre</a></div>' +
+          '<p style="margin-top:10px">🤲 <b>' + DON_ORGANISME + '</b> — campagne ' + DON_CAMPAGNE + '.</p>' +
+          '<p class="small">Objectif collectif : ' + DON_OBJECTIF + ' · ' + DON_REMIS + '.</p>' +
+          '<p class="small muted">Les montants ouvrent la page de don de l\'organisme — tu choisis le montant sur place.</p>';
+      } else {
+        h += '<div class="amounts"><span>2 $</span><span>5 $</span><span>10 $</span><span>20 $</span><span>Montant libre</span></div>' +
+          '<p class="small muted" style="margin-top:10px">Le lien de don de la campagne en cours sera affiché ici dès qu\'HP Outils aura confirmé l\'organisme soutenu.</p>';
+      }
+      h += '<p class="small muted">HP Outils soutient un organisme différent tous les 6 mois (banque alimentaire, organisme jeunesse, maison de la famille…). L\'organisme de la campagne en cours et le bilan des dons remis sont affichés par HP Outils en toute transparence.</p>' +
+        '<p style="font-weight:800;margin-bottom:0">« Jouer dans la vraie vie. Aider dans la vraie vie. »</p></div>';
+      return h;
+    }
     /* ================= Données ================= */
     var ITEMS = {
       pain:     { nom:"Pain",             ico:"🍞", prix:0.55 },
@@ -618,6 +645,7 @@
         '<details class="verite"><summary>La ligne de vérité — touche pour lire</summary><p>« Dans la vraie vie, on ne vend jamais ce qui est donné. Ici, la cuisine vend ce qu\'elle produit avec ses achats — et chaque dollar retourne aux familles. »</p></details>' +
         '<p><b>Leçon du jeu :</b> vendre aujourd\'hui, c\'est nourrir plus de familles demain.</p><p><b>Gestes :</b> au doigt ou à la souris, touche les boutons pour jouer.</p></div>' +
         '<div class="score3"><div><b>❤️</b><small>FAMILLES NOURRIES — le vrai score</small></div><div><b>📈</b><small>AUTONOMIE — % du budget gagné par tes activités</small></div><div><b>🥖</b><small>EFFICACITÉ — familles nourries par tes ressources</small></div></div>' +
+        blocDonHtml(false) +
         (save ? '<button class="btn sun big" onclick="reprendre()">↩ Reprendre la saison — semaine ' + save.sem + ' / 8</button>' : "") +
         '<button class="btn big" onclick="newGame()">Commencer la saison — 8 semaines</button>' +
         (save ? '<p class="small muted" style="margin-top:8px">Sauvegarde automatique sur cet appareil : ta saison reprend où tu l\'as laissée.</p>' : "") +
@@ -1286,20 +1314,7 @@
           '<button class="btn ghost" style="width:100%" onclick="showCarnet(false)">📖 Ouvrir le carnet de la banque</button></div>';
       }
       h += '<div class="card"><p style="margin:0"><b>La ligne de vérité :</b> « Dans la vraie vie, on ne vend jamais ce qui est donné. Ici, la cuisine vend ce qu\'elle produit avec ses achats — et chaque dollar retourne aux familles. »</p></div>';
-      h += '<div class="donbox"><h3>🤲 Le vrai don</h3>' +
-        "<p>Ton jeu a nourri <b>" + S.familles + " familles</b> virtuelles. Dans la vraie vie, les banques alimentaires du Québec font ce travail chaque semaine, avec de vraies denrées et de vrais bénévoles.</p>" +
-        "<p>Envie de transformer ta partie en geste réel ? Le montant est libre — il n'y a pas de pourcentage obligatoire, le jeu reste un jeu :</p>";
-      if (DON_URL){
-        h += '<div class="amounts"><a href="' + DON_URL + '" target="_blank" rel="noopener">2 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">5 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">10 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">20 $</a><a href="' + DON_URL + '" target="_blank" rel="noopener">Montant libre</a></div>' +
-          '<p style="margin-top:10px">🤲 <b>' + DON_ORGANISME + '</b> — campagne ' + DON_CAMPAGNE + '.</p>' +
-          '<p class="small">Objectif collectif : ' + DON_OBJECTIF + ' · ' + DON_REMIS + '.</p>' +
-          '<p class="small muted">Les montants ouvrent la page de don de l\'organisme — tu choisis le montant sur place.</p>';
-      } else {
-        h += '<div class="amounts"><span>2 $</span><span>5 $</span><span>10 $</span><span>20 $</span><span>Montant libre</span></div>' +
-          '<p class="small muted" style="margin-top:10px">Le lien de don de la campagne en cours sera affiché ici dès qu\'HP Outils aura confirmé l\'organisme soutenu.</p>';
-      }
-      h += '<p class="small muted">HP Outils soutient un organisme différent tous les 6 mois (banque alimentaire, organisme jeunesse, maison de la famille…). L\'organisme de la campagne en cours et le bilan des dons remis sont affichés par HP Outils en toute transparence.</p>' +
-        '<p style="font-weight:800;margin-bottom:0">« Jouer dans la vraie vie. Aider dans la vraie vie. »</p></div>';
+      h += blocDonHtml(true);
       h += '<button class="btn big" onclick="renderStart()">Rejouer une saison</button>';
       h += '<p class="center" style="margin-top:16px"><a href="/en-cuisine/">Voir les recettes de soutien et de récupération dans En cuisine →</a></p>';
       h += '<footer>L\'aide alimentaire — un jeu HP Outils, 100 % original. Version 1.2<br>Donner. Produire. Vendre. Nourrir.</footer>';
