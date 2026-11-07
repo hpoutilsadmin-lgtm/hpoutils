@@ -42,7 +42,6 @@ import { Route as RecupererAchatRouteImport } from './routes/recuperer-achat'
 import { Route as ReflexionsRouteImport } from './routes/reflexions'
 import { Route as SansHonteRouteImport } from './routes/sans-honte'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as TestPasseursRouteImport } from './routes/test-passeurs'
 import { Route as TonJeuAToiRouteImport } from './routes/ton-jeu-a-toi'
 import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as UniversRouteImport } from './routes/univers'
@@ -235,11 +234,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TestPasseursRoute = TestPasseursRouteImport.update({
-  id: '/test-passeurs',
-  path: '/test-passeurs',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TonJeuAToiRoute = TonJeuAToiRouteImport.update({
   id: '/ton-jeu-a-toi',
   path: '/ton-jeu-a-toi',
@@ -409,7 +403,6 @@ export interface FileRoutesByFullPath {
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/test-passeurs': typeof TestPasseursRoute
   '/ton-jeu-a-toi': typeof TonJeuAToiRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
@@ -471,7 +464,6 @@ export interface FileRoutesByTo {
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/test-passeurs': typeof TestPasseursRoute
   '/ton-jeu-a-toi': typeof TonJeuAToiRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
@@ -534,7 +526,6 @@ export interface FileRoutesById {
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/test-passeurs': typeof TestPasseursRoute
   '/ton-jeu-a-toi': typeof TonJeuAToiRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
@@ -598,7 +589,6 @@ export interface FileRouteTypes {
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
-    | '/test-passeurs'
     | '/ton-jeu-a-toi'
     | '/transmettre'
     | '/univers'
@@ -660,7 +650,6 @@ export interface FileRouteTypes {
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
-    | '/test-passeurs'
     | '/ton-jeu-a-toi'
     | '/transmettre'
     | '/univers'
@@ -722,7 +711,6 @@ export interface FileRouteTypes {
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
-    | '/test-passeurs'
     | '/ton-jeu-a-toi'
     | '/transmettre'
     | '/univers'
@@ -785,7 +773,6 @@ export interface RootRouteChildren {
   ReflexionsRoute: typeof ReflexionsRoute
   SansHonteRoute: typeof SansHonteRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  TestPasseursRoute: typeof TestPasseursRoute
   TonJeuAToiRoute: typeof TonJeuAToiRoute
   TransmettreRoute: typeof TransmettreRoute
   UniversRoute: typeof UniversRoute
@@ -1045,13 +1032,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/test-passeurs': {
-      id: '/test-passeurs'
-      path: '/test-passeurs'
-      fullPath: '/test-passeurs'
-      preLoaderRoute: typeof TestPasseursRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/ton-jeu-a-toi': {
       id: '/ton-jeu-a-toi'
       path: '/ton-jeu-a-toi'
@@ -1295,7 +1275,6 @@ const rootRouteChildren: RootRouteChildren = {
   ReflexionsRoute: ReflexionsRoute,
   SansHonteRoute: SansHonteRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  TestPasseursRoute: TestPasseursRoute,
   TonJeuAToiRoute: TonJeuAToiRoute,
   TransmettreRoute: TransmettreRoute,
   UniversRoute: UniversRoute,
