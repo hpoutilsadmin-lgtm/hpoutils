@@ -16,6 +16,11 @@ dist-ssr
 .nitro
 *.local
 
+# Secrets — ne jamais suivre les fichiers d'environnement (S-1, D-002)
+.env
+.env.*
+!.env.example
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
