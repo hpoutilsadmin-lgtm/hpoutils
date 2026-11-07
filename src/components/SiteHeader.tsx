@@ -12,6 +12,7 @@ const NAV_SECONDARY = [
   { to: "/univers", label: "À toi l'histoire" },
   { to: "/ateliers", label: "Ateliers" },
   { to: "/prix", label: "Prix" },
+  { to: "/jeux-a-votre-image", label: "Jeux à votre image" },
   { to: "/a-propos", label: "À propos" },
   /* Contact (Jour 3, 6 nov. 2026, lot 2) : en fin du groupe secondaire,
      après « À propos » — la route /contact existe déjà

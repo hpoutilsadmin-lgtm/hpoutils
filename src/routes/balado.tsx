@@ -35,7 +35,7 @@ export const Route = createFileRoute("/balado")({
 const EPISODES = [
   {
     n: "02 officiel",
-    label: "Futur simple, épisode 2",
+    label: "L’IA au quotidien.",
     title: "Futur simple, épisode 2 officiel",
     date: "31 octobre 2026",
     duration: "7 min 10 s",
@@ -187,7 +187,7 @@ function Page() {
             </article>
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>Une pause entre deux épisodes : 42 + 1 caché jeux gratuits, jouables dans votre navigateur, sans inscription.</p>
+              <p>Une pause entre deux épisodes : 44 + 1 caché jeux gratuits, jouables dans votre navigateur, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Jouer →</Link>
             </article>
           </div>

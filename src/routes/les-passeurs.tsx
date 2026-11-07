@@ -37,7 +37,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Les jeux gratuits</h3>
-              <p>42 + 1 caché jeux qui restent gratuits pour tout le monde, sans inscription.</p>
+              <p>44 + 1 caché jeux qui restent gratuits pour tout le monde, sans inscription.</p>
               <Link to="/jeux" className="pillar-cta">Voir les jeux →</Link>
             </article>
             <article className="pillar-card">
@@ -61,9 +61,7 @@ function Page() {
           
           <h3>C'est 3 $ CAD / mois — ou 28 $ CAD / an. Les 16 savoirs choisis par HP — de lire à connaître ses droits — en feuilles à consulter au fur et à mesure de leur parution, 3 par trimestre au maximum.</h3>
           <p className="strip-intro" style={{ marginTop: 4 }}>L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde.</p>
-          <p className="strip-intro" style={{ marginTop: 4 }}>Le geste d'annulation est immédiat, effet à la fin de la période déjà payée, sans frais, sans relance. Aucun prélèvement automatique n'est pris sans votre confirmation préalable des détails par courriel. Information générale, pas un avis juridique.</p>
-          <p className="strip-intro" style={{ marginTop: 4 }}>Vous gardez l'accès aux feuilles Passeurs parues jusqu'à la fin de la période déjà payée, puis l'abonnement s'arrête. Le geste d'annulation est immédiat et prend effet à la fin de la période déjà payée, sans frais, sans relance. Si un problème survient, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi.</p>
-          <p className="strip-intro" style={{ marginTop: 4 }}>Pour annuler : le geste d'annulation est immédiat, effet à la fin de la période déjà payée, sans frais, sans relance. Pour les abonnés existants, le lien reçu dans le courriel de bienvenue reste le geste à utiliser, sans être présenté comme le mécanisme final. Si vous avez un problème, écrivez à la direction humaine : la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi.</p>
+          <p className="strip-intro" style={{ marginTop: 4 }}>Vous gardez l'accès aux feuilles Passeurs parues jusqu'à la fin de la période déjà payée, puis l'abonnement s'arrête. Le geste d'annulation est immédiat, effet à la fin de la période déjà payée, sans frais, sans relance. Aucun prélèvement automatique n'est pris sans votre confirmation préalable des détails par courriel. Pour annuler, utilisez le lien reçu dans le courriel de bienvenue. Si un problème survient, écrivez à la direction humaine : la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. Information générale, pas un avis juridique.</p>
           <p className="strip-intro" style={{ marginTop: 4 }}>Aucune taxe ajoutée : petit fournisseur, la TPS et la TVQ ne sont pas perçues.</p>
           <p className="strip-intro" style={{ marginTop: 12, textAlign: "left", maxWidth: 640, margin: "12px auto 0" }}><strong>Les 16 savoirs :</strong> 1. Lire vite et comprendre ; 2. Écrire clairement ; 3. Parler et se faire comprendre, y compris devant un groupe ; 4. Math du quotidien ; 5. Finances personnelles ; 6. Pensée critique ; 7. Apprendre à apprendre ; 8. Santé de base ; 9. Gestion du stress et des émotions ; 10. Négociation et vente ; 11. Écoute et relations ; 12. Gestion du temps et de l'attention ; 13. Littératie numérique et IA ; 14. Cuisiner ; 15. Réparer et bricoler ; 16. Notions de droit.</p>
           <p className="strip-intro" style={{ marginTop: 4, textAlign: "left", maxWidth: 640, margin: "4px auto 0" }}><em>Cet ordre est un jugement, pas une vérité : selon la personne et son projet, les priorités changent.</em></p>

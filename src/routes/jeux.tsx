@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 42 jeux en ligne | HP Outils",
-      description: "Des jeux gratuits créés au Québec — 42 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
+      title: "Jeux gratuits en français du Québec — 44 jeux en ligne | HP Outils",
+      description: "Des jeux gratuits créés au Québec — 44 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
       path: "/jeux",
     }),
     scripts: [
@@ -77,10 +77,13 @@ const GAMES = [
   { title: "La Slalomeuse de nids-de-poule", file: "/apps/slalomeuse/index.html", copy: "Jeu d'arcade gratuit, slalom québécois : glisse entre les nids-de-poule, 3 roues, parties d'environ 1 minute.", tag: "Arcade · Slalom québécois", faits: "Parties d'environ 1 minute · 3 roues", mono: "SL", art: 0 },
   { title: "Sur l'herbe — La colonie", file: "/apps/sur-lherbe/sur-lherbe-v1.0.html", copy: "Jeu de stratégie gratuit : mène ta colonie sous l'herbe — Fourmis, Abeilles ou Araignées, 3 tableaux de 6 à 8 vagues, boutique en ambre gagnée en jeu.", tag: "Stratégie · Colonie sous l'herbe", faits: "3 factions · 3 tableaux · 6 à 8 vagues", mono: "SH", art: 0 },
   { title: "Pète et Répète", file: "/apps/pete-et-repete/pete-et-repete-v1.0.html", copy: "Jeu de course gratuit : tape les mots, lettre par lettre, pour faire péter ton bateau et battre Répète jusqu'à la bouée des 300 m. 3 mots parfaits d'affilée = SUPER PET !", tag: "Course · Mots à taper", faits: "300 m · mots français · clavier ou tactile", mono: "PR", art: 0 },
-  { title: "Les hommes préhistoriques du Québec", file: "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html", copy: "Jeu 2.5D gratuit : cours avec Silex, saute par-dessus les roches et les troncs, ramasse des silex et découvre 8 vrais dinosaures. Grimpe sur les paliers, attrape les boosts et crée ton parcours !", tag: "Aventure · 8 vrais dinosaures", faits: "8 dinos · paliers et boosts · crée ton parcours", mono: "HP", art: 0 },
-  { title: "Bataille d'aura — H Gepeto Magic", file: "/apps/bataille-aura-magic/bataille-aura-magic-v1.0.html", copy: "Duel de magie gratuit : Sir H. Gepeto, en armure et marionnette à fils, défend sa scène contre 14 duellistes. Touche pour un petit sort, maintiens pour charger, relâche à MAX pour le gros sort !", tag: "Duel · 14 actes", faits: "14 actes · 3 auras · charge à MAX", mono: "MA", art: 0 },
+  { title: "Les hommes préhistoriques du Québec", file: "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html", copy: "Jeu fantaisiste 2.5D gratuit : cours avec Silex dans un Québec imaginaire, avec des dinosaures inventés pour le jeu. Saute par-dessus les roches et les troncs, ramasse des silex et découvre 8 dinosaures imaginaires. Grimpe sur les paliers, attrape les boosts et crée ton parcours !", tag: "Aventure · 8 dinosaures imaginaires", faits: "8 dinos imaginaires · paliers et boosts · crée ton parcours", mono: "HP", art: 0 },
+  { title: "Bataille d'aura — Sir H. Gepeto", file: "/apps/bataille-aura-magic/bataille-aura-magic-v1.0.html", copy: "Duel de magie gratuit : Sir H. Gepeto, en armure et marionnette à fils, défend sa scène contre 14 duellistes. Touche pour un petit sort, maintiens pour charger, relâche à MAX pour le gros sort !", tag: "Duel · 14 actes", faits: "14 actes · 3 auras · charge à MAX", mono: "MA", art: 0 },
   { title: "Mini-jeux HP", file: "/apps/mini-jeux/mini-jeux-hp.html", copy: "Trois mini-jeux gratuits réunis, jouables hors ligne : Hiverman, le bonhomme de neige qui ramasse les points en évitant les fantômes ; Flocon, pour dessiner ton flocon ; Mini point, pour dessiner au doigt. Aucun son, aucun réseau — fond noir pour économiser la pile.", tag: "Mini-jeux · 3 jeux en un", faits: "3 mini-jeux · jouables hors ligne", mono: "MJ", art: 7 },
 ];
+
+// Compteur option B : Mini-jeux HP compte pour 3 jeux (1 tuile, 3 jeux) — source unique du chiffre public.
+const JEUX_JOUABLES = GAMES.length + 2;
 
 const PALETTES: [string, string][] = [
   ["#08243a", "#0f3e62"],
@@ -480,11 +483,11 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (42), Quiz (2), etc.
+     conformes à la liste exacte approuvée — Tous (44), Quiz (2), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
-      ? GAMES.length
+      ? JEUX_JOUABLES
       : GAMES.filter((x) => x.tag.split(" · ")[0] === g).length;
   return (
     <>
@@ -504,12 +507,12 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur HP 5 nov. (Bataille d'aura compte) : 42 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
-            <span style={CHIP_STYLE}>{GAMES.length} + 1 caché</span>
+            {/* Compteur option B (Mini-jeux HP = 3 jeux) : 44 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
+            <span style={CHIP_STYLE}>{JEUX_JOUABLES} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>42, c'est 42 jeux. Le « + 1 » est un jeu caché, non nommé.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>44, c'est 44 jeux. Le « + 1 » est un jeu caché, non nommé. Le « + 2 », c'est la tuile Mini-jeux HP : 1 tuile, 3 jeux.</p>
         </div>
       </section>
 

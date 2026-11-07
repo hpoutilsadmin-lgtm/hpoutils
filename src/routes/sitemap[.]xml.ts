@@ -48,7 +48,7 @@ const STATIC_PATHS = [
   "/outils-web/contrat-humain-ia.html",
 ];
 
-// Les jeux publics (42) + 1 caché : les adresses stables /apps/<slug>
+// Les jeux publics (44) + 1 caché : les adresses stables /apps/<slug>
 // sont générées depuis src/lib/jeux-adresses.ts (source unique —
 // c'est ce fichier qui définit ce qu'on partage et ce qui va dans
 // le sitemap). Le jeu caché n'est pas dans GAME_FILES, donc il

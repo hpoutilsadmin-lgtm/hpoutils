@@ -22,7 +22,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Les recettes et les jeux sont-ils vraiment gratuits ?",
     reponse:
-      "Oui : 666 recettes gratuites en cuisine et 42 + 1 caché jeux gratuits, sans inscription, jouables dans votre navigateur. C'est le cœur d'HP : des outils pour la vraie vie, accessibles à tout le monde.",
+      "Oui : 666 recettes gratuites en cuisine et 44 + 1 caché jeux gratuits, sans inscription, jouables dans votre navigateur. C'est le cœur d'HP : des outils pour la vraie vie, accessibles à tout le monde.",
   },
   {
     question: "Pourquoi aucune taxe n'est ajoutée aux prix ?",
@@ -57,11 +57,21 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Qui répond quand j'écris à HP Outils ?",
     reponse:
-      "La direction humaine, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables. Sur le site, Sir H. Gepeto — le gérant du site — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à la direction humaine au lieu d'inventer une réponse.",
+      "La direction humaine, à hpoutils.admin@gmail.com — réponse sous 3 jours ouvrables, lundi à vendredi. Sur le site, Sir H. Gepeto — le gérant du site — répond aux questions fréquentes ; ce qu'il ne sait pas, il le transmet à la direction humaine au lieu d'inventer une réponse.",
   },
   {
     question: "C'est quoi, un jeu à votre image ?",
     reponse:
       "Un petit jeu qui porte votre nom et vos couleurs, que vos clients peuvent jouer et partager. Quatre niveaux : Express 29 $ CAD, Événement 199 $ CAD, Saisonnier 299 $ CAD, Permanent 399 $ CAD. Hébergement gratuit la première année, puis 29 $ CAD par année, par jeu. Aucune taxe ajoutée. La vente n'est pas encore ouverte : le parcours actuel, c'est un brief par courriel, un devis, votre oui explicite, puis un paiement à confirmer. Voir la page « Jeux à votre image ».",
+  },
+  {
+    question: "Combien de temps mon lien de téléchargement reste-t-il valide ?",
+    reponse:
+      "Votre lien de téléchargement personnel est valide 7 jours. Téléchargez votre fichier dès que vous le recevez, et gardez-le. Si le courriel n'arrive pas ou si le lien expire, passez par la page « Récupérer un achat » du site.",
+  },
+  {
+    question: "Puis-je être remboursé ?",
+    reponse:
+      "Nos produits numériques ne sont pas remboursables. Un fichier téléchargé ou un lien de lecture ne peut pas être « retourné » : dès qu'il est livré, la vente est finale. Rien ici ne retire un droit que la loi vous donne : si le produit livré n'est pas conforme à sa description, écrivez-nous — on corrige ou on rembourse. Exception — panne technique : si le lien ou le fichier que vous avez reçu ne fonctionne pas — un fichier qui ne s'ouvre pas, un lien mort, le mauvais fichier livré — écrivez-nous. On répare : nouveau lien, nouveau fichier. Et si on n'arrive pas à vous donner un accès qui fonctionne, on vous rembourse. Vous ne payez jamais pour quelque chose que vous n'avez pas pu recevoir.",
   },
 ];
