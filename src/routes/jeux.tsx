@@ -688,6 +688,7 @@ function JeuxPage() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Le Panier Solidaire</h3>
+              <span style={{ ...CHIP_STYLE, alignSelf: "flex-start" }}>Jouable</span>
               <p>Aussi dans En cuisine — découvre le jeu là où on cuisine.</p>
               <a className="pillar-cta" href="/en-cuisine/index.html#panier-solidaire">Jouer dans En cuisine →</a>
             </article>
