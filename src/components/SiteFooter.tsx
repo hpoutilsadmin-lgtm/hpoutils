@@ -17,12 +17,16 @@ export function SiteFooter() {
       <div className="container footer-grid">
         <div>
           <img src="/images/hp-logo-clean.png" alt="HP" className="footer-logo" />
-          <p>HP — des outils<br />pour la vraie vie.</p>
+          <p>HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
           <div className="socials">
             <a href="https://www.facebook.com/1186804767843963" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
             <a href="https://www.instagram.com/hpoutils/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">◎</a>
             <a href="https://youtube.com/@hp-2zl" target="_blank" rel="noopener noreferrer" aria-label="YouTube">▶</a>
             <a href="https://www.tiktok.com/@hp2zl" target="_blank" rel="noopener noreferrer" aria-label="TikTok">♪</a>
+          </div>
+          <div className="footer-qr">
+            <img src="/images/qr-hp-outils.png" alt="Code QR — https://www.hp-outils.com/" className="footer-qr-img" width="96" height="96" />
+            <a href="https://www.hp-outils.com/">https://www.hp-outils.com/</a>
           </div>
         </div>
         <div>

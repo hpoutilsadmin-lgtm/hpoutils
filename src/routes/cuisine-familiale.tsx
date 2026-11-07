@@ -947,14 +947,6 @@ function Page() {
           </p>
         </section>
 
-        <footer>
-          <p style={mutedStyle}>
-            Vos recettes sont conservées dans votre navigateur, sur votre appareil. Le lien de partage ne passe par
-            aucun serveur et ne demande aucun compte : il contient la recette elle-même, dans l&rsquo;adresse de la
-            page. Partagez-le seulement avec des proches à qui vous voulez confier cette recette.
-          </p>
-          <p style={mutedStyle}>Vente pas encore ouverte — aucun paiement n&rsquo;est pris.</p>
-        </footer>
       </div>
     </main>
   );

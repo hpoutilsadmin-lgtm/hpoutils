@@ -191,7 +191,7 @@
         border-bottom:2.5px solid var(--line);transform:translateX(-50%) rotate(45deg);
       }
       .bubble.show{opacity:1;transform:translate(-50%,0) scale(1)}
-      .bubble-close{position:absolute;top:-11px;right:-11px;width:36px;height:36px;border-radius:50%;background:var(--paper);color:var(--ink);border:2px solid var(--line);font-size:16px;font-weight:800;line-height:1;cursor:pointer;pointer-events:auto;box-shadow:2px 2px 0 var(--shadow);z-index:2}
+      .bubble-close{position:absolute;top:-11px;right:-11px;width:48px;height:48px;border-radius:50%;background:var(--paper);color:var(--ink);border:2px solid var(--line);font-size:16px;font-weight:800;line-height:1;cursor:pointer;pointer-events:auto;box-shadow:2px 2px 0 var(--shadow);z-index:2}
       .bubble a{pointer-events:auto}
       .bubble.edge-l{transform:translate(-16%,6px) scale(.92)}
       .bubble.edge-l.show{transform:translate(-16%,0) scale(1)}
@@ -259,7 +259,7 @@
         font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;
         background:var(--paper);color:var(--ink);
         border:2px solid var(--line);border-radius:999px;padding:5px 8px;
-        box-shadow:2px 2px 0 var(--shadow);opacity:.85;
+        box-shadow:2px 2px 0 var(--shadow);opacity:.85;min-height:48px;
       }
       #btn-ask{background:var(--gold);color:#2b2118;opacity:1}
       /* Lot correctif 4 nov. 2026 (P0-4) : indicateur visible « accompagnement actif ». */
@@ -287,13 +287,13 @@
       .qa-head button{
         font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1;
         background:var(--paper2);color:var(--ink);
-        border:2px solid var(--line);border-radius:999px;padding:5px 9px;
+        border:2px solid var(--line);border-radius:999px;padding:5px 9px;min-height:48px;
       }
       .qa-chips{display:flex;flex-wrap:wrap;gap:6px;max-height:38vh;overflow-y:auto}
       .qa-chips button{
         font:inherit;font-size:13px;font-weight:600;cursor:pointer;text-align:left;
         background:var(--paper2);color:var(--ink);
-        border:2px solid var(--line);border-radius:999px;padding:6px 11px;
+        border:2px solid var(--line);border-radius:999px;padding:6px 11px;min-height:48px;
       }
       .qa-chips button:hover{background:var(--gold);color:#2b2118}
       /* Suggestion de page (24 oct. 2026) : UNE suggestion utile pour
@@ -304,22 +304,22 @@
       .qa-suggestion .qa-sugg-label{font-size:12px;font-weight:800;color:var(--ink);margin-bottom:4px}
       .qa-suggestion .qa-sugg-row{display:flex;gap:6px;align-items:flex-start}
       .qa-suggestion .qa-sugg-btn{flex:1;font:inherit;font-size:13px;font-weight:600;cursor:pointer;text-align:left;
-        background:var(--gold);color:#2b2118;border:2px solid var(--line);border-radius:999px;padding:6px 11px}
+        background:var(--gold);color:#2b2118;border:2px solid var(--line);border-radius:999px;padding:6px 11px;min-height:48px}
       .qa-suggestion .qa-sugg-no{flex:none;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1;
-        background:var(--paper2);color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:6px 9px}
+        background:var(--paper2);color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:6px 9px;min-height:48px}
       /* Aide au choix (23 oct. 2026) : l'en-tête de question prend toute
          la rangée des chips pendant que les options la remplacent. */
       .qa-choix-head{flex:0 0 100%;font-size:13px;font-weight:800;color:var(--ink);padding:2px 2px 0}
       .qa-preview{
         margin-top:9px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;
         background:none;border:none;color:var(--ink-soft);
-        text-decoration:underline;padding:2px;
+        text-decoration:underline;padding:2px;min-height:48px;
       }
       .qa-play{
         display:block;width:100%;margin-top:10px;font:inherit;font-size:15px;font-weight:800;
         cursor:pointer;background:var(--gold);color:#2b2118;
         border:2.5px solid var(--line);border-radius:10px;padding:9px 12px;
-        box-shadow:3px 3px 0 var(--shadow);
+        box-shadow:3px 3px 0 var(--shadow);min-height:48px;
       }
       .qa-play:hover{background:var(--gold-deep);color:#fff}
 
@@ -528,7 +528,7 @@
       @media (max-width:560px){
         #btn-dock{
           display:inline-flex;align-items:center;justify-content:center;
-          width:46px;height:46px;border-radius:50%!important;font-size:19px;padding:0!important;
+          width:48px;height:48px;border-radius:50%!important;font-size:19px;padding:0!important;
         }
         .bot-controls:not(.open) > *:not(#btn-dock){display:none}
         .bot-controls.open{
@@ -612,7 +612,7 @@
          masqués. Au rechargement, Hgpto.tsx / standalone ne montent
          rien quand 'hgpto-closed' est posé : HGPTO reste absent. */
       body.hgpto-closed .bot,body.hgpto-closed .cat,body.hgpto-closed .graffiti,body.hgpto-closed .bowl,body.hgpto-closed .kibble,body.hgpto-closed .hgpto-fleur,body.hgpto-closed .hgpto-pelote,body.hgpto-closed .bataille-panel{display:none!important}
-      body.hgpto-closed #bot-pastille{display:block!important;width:auto;height:44px;padding:0 14px;border-radius:22px;font-size:12px}
+      body.hgpto-closed #bot-pastille{display:block!important;width:auto;height:48px;padding:0 14px;border-radius:22px;font-size:12px}
 
       /* ---------- Scènes de vie + vendeur (26 oct. 2026) ---------- */
       .hgpto-fleur{position:absolute;bottom:104px;z-index:58;pointer-events:none;transition:opacity .35s ease}
@@ -755,7 +755,7 @@
          largeur propre prenaient 100 % de leur rangée flex et écrasaient
          leurs voisins. Seuls les contrôles sans largeur explicite
          reprennent auto ; .qa-play (width:100 % voulu) et .bubble-close
-         (36 px) ne sont pas touchés. */
+         (48 px) ne sont pas touchés. */
       .bot-controls button,
       .bot-controls select,
       .qa-form button,
