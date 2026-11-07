@@ -82,7 +82,7 @@
      Le mécanisme de zone interdite ci-dessous reste en place
      pour le jour du basculement. */
   var EXCLURE_PAGES_STOP = true;
-  var PAGES_STOP_EXCLUES = ["/le-garde", "/personne-seule"];
+  var PAGES_STOP_EXCLUES = ["/outils-web/le-garde", "/outils-web/personne-seule"];
 
   /* Ordre des sections du menu Plus (lot §2.2). Pas de section
      « Tout le site » : /plan-du-site n'existe pas encore (T5,

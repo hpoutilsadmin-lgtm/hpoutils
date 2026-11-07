@@ -47,6 +47,7 @@ export function SiteFooter() {
           <h4>Acheter</h4>
           <p>
             <Link preload="viewport" to="/ateliers">Ateliers</Link><br />
+            <Link preload="viewport" to="/prix">Prix</Link><br />
                         <Link preload="viewport" to="/apercu">Jeux à votre image — démo gratuite</Link><br />
             <Link preload="viewport" to="/recuperer-achat">Récupérer un achat</Link><br />
             <Link preload="viewport" to="/cadeaux">Utiliser un code cadeau</Link>
