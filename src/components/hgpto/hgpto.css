@@ -344,10 +344,10 @@
         width:min(94vw,540px);display:flex;justify-content:space-between;align-items:center;gap:10px;
       }
       .game-title{font-family:Georgia,serif;font-weight:700;font-size:clamp(17px,4.4vw,22px)}
-      #game-quit,.gcard button{
+      #game-quit,#mg-quit,.gcard button{
         font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;
         background:var(--paper);color:var(--ink);
-        border:2px solid var(--line);border-radius:999px;padding:7px 13px;
+        border:2px solid var(--line);border-radius:999px;padding:7px 13px;min-height:48px;
       }
       #game-quit:hover,.gcard button:hover{background:var(--gold);color:#2b2118}
       .board-wrap{
@@ -412,7 +412,7 @@
       #game-roll{
         font:inherit;font-size:16.5px;font-weight:800;cursor:pointer;
         background:var(--gold);color:#2b2118;
-        border:2.5px solid var(--line);border-radius:11px;padding:11px 20px;
+        border:2.5px solid var(--line);border-radius:11px;padding:11px 20px;min-height:48px;
         box-shadow:3px 3px 0 var(--shadow);
       }
       #game-roll:disabled{opacity:.45;cursor:default;box-shadow:none}
@@ -503,7 +503,7 @@
       .qa-form input{
         flex:1;min-width:0;font:inherit;font-size:13.5px;
         background:var(--paper2);color:var(--ink);
-        border:2px solid var(--line);border-radius:999px;padding:7px 12px;
+        border:2px solid var(--line);border-radius:999px;padding:7px 12px;min-height:48px;
       }
       .qa-form button{
         font:inherit;font-size:13px;font-weight:800;cursor:pointer;
@@ -632,7 +632,7 @@
       .bataille-card{flex:1;border:2px solid var(--line);border-radius:8px;padding:8px 4px;min-height:64px;background:var(--paper2)}
       .bataille-card b{display:block;font-size:20px}
       .bataille-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-      .bataille-btns button{cursor:pointer}
+      .bataille-btns button{cursor:pointer;min-height:48px}
       @media (prefers-reduced-motion: reduce){
         .hgpto-fleur,.hgpto-pelote{transition:none}}
 
@@ -657,7 +657,7 @@
       .stampcard .sv button,.stampcard .sv a{
         display:inline-block;margin-top:5px;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;
         background:var(--gold);color:#2b2118;border:2px solid var(--line);border-radius:999px;
-        padding:5px 11px;text-decoration:none;
+        padding:5px 11px;text-decoration:none;min-height:48px;
       }
       .stampcard .sv a{background:var(--paper);color:var(--ink)}
       .qa-actions button[aria-pressed="false"]{opacity:.55}
@@ -764,3 +764,4 @@
       .bubble .bubble-no {
         width: auto;
       }
+
