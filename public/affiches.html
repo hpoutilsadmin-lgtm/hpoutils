@@ -19,7 +19,7 @@ a{background:#fff;color:#3a5a4e}
 footer{text-align:center;margin-top:40px}
 @media print{body{max-width:none} .btns,header p,footer{display:none!important} .card{border:none;margin:0}}
 </style></head><body>
-<header><h1>HP Outils — Affiches à imprimer</h1>
+<header><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto" style="width:48px;height:48px;border-radius:50%;flex:none"><h1>HP Outils — Affiches à imprimer</h1>
 <p class="lead">Des outils pour la vraie vie. Gratuit pour commencer, sans compte.<br>On entre avec une idée, on sort autonome.</p>
 <p class="lead">Choisissez une affiche, imprimez-la, affichez-la dans votre local, votre boutique, chez vous.<br>Un humain vous répond sous 3 jours ouvrables. #ia #directionhumaine</p></header>
 
@@ -78,7 +78,11 @@ footer{text-align:center;margin-top:40px}
 <button onclick="copyLink()">📋 Copier le lien du site</button>
 </div>
 </section>
-<footer><p><a href="https://www.hp-outils.com/">www.hp-outils.com</a> — HP Outils, Terrebonne, Lanaudière, Québec</p></footer>
+<footer>
+<p class="signature" style="margin:0 0 12px">🧰 HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
+<p class="qr-pied" style="margin:0 0 12px"><img src="/images/qr-hp-outils.png" alt="Code QR — https://www.hp-outils.com/" width="96" height="96" style="background:#fff;padding:6px;border-radius:8px" /></p>
+<p class="lien-canon" style="margin:0">👉 <a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">https://www.hp-outils.com/</a></p>
+<p><a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">www.hp-outils.com</a> — HP Outils, Terrebonne, Lanaudière, Québec</p></footer>
 <script>
 function printCard(id){document.querySelectorAll('.card').forEach(c=>{if(c.id!==id)c.classList.add('hide')});window.print();document.querySelectorAll('.card').forEach(c=>c.classList.remove('hide'));}
 function copyLink(){navigator.clipboard.writeText('https://www.hp-outils.com/');alert('Lien copié : https://www.hp-outils.com/');}
