@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Pilote — barre unique en haut | HP Outils</title>
+<meta name="description" content="Page pilote de la barre unique en haut « HP À portée de main » : une seule navigation, en haut, toujours visible. GitHub seulement, pas reliée au site.">
+<!--
+  PAGE PILOTE — barre unique en haut, produit 9.
+  Déposée sur GitHub seulement (7 nov. 2026), pas reliée au site,
+  pas en production. Ne pas indexer (robots noindex), ne pas
+  ajouter au sitemap.
+  Configuration décidée par HP le 7 nov. 2026 (SPEC §7) :
+    fond #07111B, grille 5 × 2 sur téléphone, arrivée dépliée,
+    panneaux en glissement (aucun bouton jamais recouvert).
+  La barre est construite par /barre-haut/barre-haut.js ; cette page
+  n'est que le contenu sous la barre.
+-->
+<link rel="stylesheet" href="/barre-haut/barre-haut.css">
+<style>
+  /* Styles de la PAGE PILOTE seulement (pas de la barre). */
+  body {
+    margin: 0;
+    background: #f6eddd;
+    color: #07111b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 120px; }
+  h1 { font-size: 26px; line-height: 1.25; margin: 0 0 8px; }
+  h2 { font-size: 20px; margin: 28px 0 8px; }
+  .demo-etiquette {
+    display: inline-block; background: #d89532; color: #07111b;
+    font-family: system-ui, sans-serif; font-size: 13px; font-weight: 700;
+    padding: 4px 10px; border-radius: 8px; margin-bottom: 12px;
+  }
+  .demo-zone {
+    border: 2px dashed #b35a44; border-radius: 12px;
+    padding: 16px; margin: 24px 0; background: #fffdf6;
+    font-family: system-ui, sans-serif;
+  }
+  .demo-zone h2 { margin-top: 0; }
+  .demo-zone button {
+    min-height: 48px; padding: 10px 20px; border: 1px solid #07111b;
+    border-radius: 10px; background: #07111b; color: #f6eddd;
+    font: inherit; font-weight: 700; cursor: pointer;
+  }
+  .demo-zone button:disabled { opacity: .55; cursor: default; }
+  /* Effets Confort / Lanterne sur la page pilote. */
+  html[data-bh-taille="2"] body { font-size: 19px; }
+  html[data-bh-taille="3"] body { font-size: 21px; }
+  html.bh-sombre body { background: #07111b; color: #f6eddd; }
+  html.bh-sombre .demo-zone { background: #0e1c2a; color: #f6eddd; border-color: #d89532; }
+  html.bh-contraste body { color: #000; }
+  html.bh-contraste .demo-zone { border-width: 3px; }
+  html.bh-anim-reduites * { animation: none !important; transition: none !important; }
+  html.bh-lanterne-on main { background: #fff8e6; }
+  html.bh-lanterne-on body { background: #1a1a1a; }
+  html.bh-lanterne-on .demo-zone { opacity: .35; }
+</style>
+</head>
+<body>
+<div id="bh-racine"></div>
+
+<main>
+  <p class="demo-etiquette">PAGE PILOTE — GitHub seulement, pas reliée au site</p>
+  <h1>Barre unique en haut — page pilote</h1>
+  <p>Ceci est la page pilote de la barre unique en haut. Le texte ci-dessous sert seulement à la lecture vocale, à la lanterne et au confort.</p>
+  <p>La barre en haut remplace le menu. Une seule navigation, toujours visible : la face de Sir H. Gepeto, le titre « HP À portée de main », les sections Jeux, Outils et Livres en un tap, puis les dix commandes du Compagnon. Le bouton « Réduire » replie la barre en un liseré de 22 pixels, et le bouton « Barre » la rappelle.</p>
+  <p>Sur téléphone, la barre tient en une colonne. Sur tablette, les commandes tiennent sur une rangée. Sur ordinateur, tout tient sur une seule ligne. Les mots et les places ne changent pas d'un format à l'autre.</p>
+
+  <h2>Zone de paiement — démonstration</h2>
+  <div class="demo-zone" id="zone-paiement">
+    <h2>Paiement — démonstration, aucun paiement réel</h2>
+    <p>La barre du haut ne recouvre jamais cette zone. Faites défiler la page, ouvrez un panneau, réduisez la barre : le bouton ci-dessous reste toujours entièrement visible et cliquable.</p>
+    <button type="button" disabled>Payer — démonstration, désactivé</button>
+  </div>
+
+  <h2>Zone de téléchargement — démonstration</h2>
+  <div class="demo-zone" id="zone-telechargement">
+    <h2>Téléchargement — démonstration, aucun fichier réel</h2>
+    <p>Même règle : la barre et ses panneaux ne recouvrent jamais ce bouton.</p>
+    <button type="button" disabled>Télécharger — démonstration, désactivé</button>
+  </div>
+
+  <p>Fin de la page pilote. Le dernier bouton de la page est celui ci-dessus : vérifiez qu'aucun panneau ne le mange, panneau ouvert comme fermé.</p>
+</main>
+
+<script src="/barre-haut/barre-haut.js" defer data-page="jeu" data-arrivee="depliee" data-disposition="grille" data-chemin-face="/hgpto/gepeto/tete-144.png"></script>
+</body>
+</html>

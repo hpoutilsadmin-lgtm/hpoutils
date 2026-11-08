@@ -1,0 +1,455 @@
+/* ================================================================
+   BARRE UNIQUE EN HAUT — HP À portée de main
+   Pilote — produit 9, nuit du 6 au 7 nov. 2026.
+   Déposé sur GitHub seulement (7 nov. 2026), pas branché aux pages
+   live, pas en production. Décisions HP du 7 nov. 2026 : fond #07111B,
+   grille 5 × 2, arrivée dépliée, panneaux en glissement.
+
+   Remplace le menu. Une seule navigation, en haut, toujours visible.
+   Succède à la barre unique v3 (5 nov. 2026, lot déposé, commit
+   3712a96) : mêmes 10 commandes, même contrat d'événements
+   (hp:gepeto-*), même bouton « Réduire », même liseré 22 px.
+   Changements décidés par HP le 6 nov. 21 h 33 :
+   - la barre passe EN HAUT (la v3 était en bas) ;
+   - Jeux, Outils, Livres en un tap, jamais cachés dans « Plus » ;
+   - elle REMPLACE le menu (pas une deuxième barre).
+
+   Palette HP confirmée : encre #07111B (Bible-2), crème #F6EDDD,
+   dorés #d89532 / #f0c16d. La v3 utilisait #1d252c pour le fond
+   de la barre ; la présente barre applique #07111B, couleur
+   confirmée de la Bible de marque — tranchée par HP le 7 nov.
+   2026 (SPEC.md, point ouvert nº 1, fermé).
+   Boutons ≥ 48 px (standard confort 3 formats, 28 oct. 2026).
+   Aucune dépendance externe, aucun service payant.
+   ================================================================ */
+
+/* ---------- Jetons ---------- */
+:root {
+  --bh-encre: #07111b;
+  --bh-encre-doux: #0e1c2a;
+  --bh-creme: #f6eddd;
+  --bh-or: #d89532;
+  --bh-or-clair: #f0c16d;
+  --bh-rouge-doux: #b35a44;
+  --bh-bouton-min: 48px;
+  --bh-lisere: 22px;
+}
+
+/* ---------- Réserve : le contenu ne passe jamais sous la barre ----------
+   La hauteur est posée par barre-haut.js (variable --bh-hauteur),
+   mesurée sur la barre réelle : dépliée, panneau ouvert, réduite. */
+html.bh-actif body {
+  padding-top: var(--bh-hauteur, 64px);
+}
+html.bh-actif {
+  scroll-padding-top: calc(var(--bh-hauteur, 64px) + 8px);
+}
+
+/* ---------- Barre : une seule, en haut, toujours visible ---------- */
+.bh-barre {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000; /* même z que la v3 : jamais sous le contenu, jamais deux barres */
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--bh-encre);
+  color: var(--bh-creme);
+  border-bottom: 1px solid var(--bh-or);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* ---------- Liseré réduit (22 px) : seule la poignée dépasse ---------- */
+.bh-barre.bh-reduite .bh-contenu {
+  display: none;
+}
+.bh-barre.bh-reduite .bh-lisere {
+  display: flex;
+}
+.bh-lisere {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--bh-lisere);
+  height: var(--bh-lisere);
+}
+.bh-lisere button {
+  min-height: var(--bh-lisere);
+  padding: 0 18px;
+  border: 0;
+  border-radius: 0 0 10px 10px;
+  background: var(--bh-or);
+  color: var(--bh-encre);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- En-tête : face 48 px + titre + Réduire ---------- */
+.bh-tete {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  min-height: 60px;
+}
+.bh-face {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--bh-or);
+  border-radius: 10px;
+  background: var(--bh-creme);
+  object-fit: cover;
+}
+/* Règle tranchée 6 nov. 07 h 08 : la face est partout SAUF sur l'accueil. */
+.bh-barre.bh-page-accueil .bh-face {
+  display: none;
+}
+.bh-titre {
+  flex: 1 1 auto;
+  margin: 0;
+  min-width: 0;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bh-titre strong {
+  color: var(--bh-or-clair);
+}
+.bh-slogan {
+  display: none; /* la ligne de précision sous le slogan : point ouvert nº 3 de la v3, à confirmer au pilote */
+  margin: 0;
+  font-size: 13px;
+  color: var(--bh-or-clair);
+}
+.bh-reduire {
+  flex: 0 0 auto;
+  min-width: var(--bh-bouton-min);
+  min-height: var(--bh-bouton-min);
+  padding: 8px 14px;
+  border: 1px solid var(--bh-or);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--bh-creme);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.bh-reduire:hover,
+.bh-reduire:focus-visible {
+  background: var(--bh-or);
+  color: var(--bh-encre);
+}
+
+/* ---------- Sections : Jeux, Outils, Livres — en un tap, jamais dans Plus ---------- */
+.bh-sections {
+  display: flex;
+  gap: 8px;
+  padding: 0 12px 8px;
+}
+.bh-section {
+  flex: 1 1 0;
+  min-height: var(--bh-bouton-min);
+  padding: 10px 8px;
+  border: 1px solid var(--bh-or);
+  border-radius: 10px;
+  background: var(--bh-encre-doux);
+  color: var(--bh-creme);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.bh-section[aria-current="page"] {
+  background: var(--bh-or);
+  color: var(--bh-encre);
+  border-color: var(--bh-or-clair);
+}
+.bh-section:hover,
+.bh-section:focus-visible {
+  border-color: var(--bh-or-clair);
+}
+
+/* ---------- Les 10 commandes Compagnon ---------- */
+.bh-commandes {
+  display: flex;
+  gap: 6px;
+  padding: 0 12px 10px;
+}
+.bh-cmd {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: var(--bh-bouton-min);
+  padding: 6px 2px 5px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--bh-creme);
+  font: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.bh-cmd svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+.bh-cmd span {
+  font-size: 12px;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+.bh-cmd:hover,
+.bh-cmd:focus-visible {
+  border-color: var(--bh-or);
+  background: var(--bh-encre-doux);
+}
+.bh-cmd[aria-expanded="true"] {
+  background: var(--bh-or);
+  color: var(--bh-encre);
+  border-color: var(--bh-or-clair);
+}
+.bh-cmd[aria-pressed="true"] {
+  background: var(--bh-or);
+  color: var(--bh-encre);
+}
+.bh-cmd:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.bh-cmd .bh-mini-face {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--bh-or);
+  background: var(--bh-creme);
+  object-fit: cover;
+}
+
+/* ---------- Panneaux : sections du conteneur, jamais de recouvrement ----------
+   Un panneau ouvert allonge la barre vers le bas ; le contenu de la
+   page glisse (réserve --bh-hauteur recalculée par le JS) : aucun
+   bouton de la page n'est jamais couvert. */
+.bh-panneau {
+  border-top: 1px solid var(--bh-or);
+  background: var(--bh-encre-doux);
+  max-height: min(60dvh, 480px);
+  overflow-y: auto;
+  padding: 12px;
+}
+.bh-panneau[hidden] {
+  display: none;
+}
+.bh-panneau h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+.bh-panneau p {
+  margin: 0 0 10px;
+}
+.bh-panneau .bh-note {
+  font-size: 13px;
+  color: var(--bh-or-clair);
+}
+.bh-panneau input[type="search"] {
+  width: 100%;
+  min-height: var(--bh-bouton-min);
+  padding: 10px 12px;
+  border: 1px solid var(--bh-or);
+  border-radius: 10px;
+  background: var(--bh-encre);
+  color: var(--bh-creme);
+  font: inherit;
+  box-sizing: border-box;
+}
+.bh-liste {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+.bh-liste li {
+  margin: 0 0 6px;
+}
+.bh-liste button,
+.bh-liste a {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: var(--bh-bouton-min);
+  padding: 12px;
+  border: 1px solid var(--bh-or);
+  border-radius: 10px;
+  background: var(--bh-encre);
+  color: var(--bh-creme);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.bh-liste button:hover,
+.bh-liste a:hover,
+.bh-liste button:focus-visible,
+.bh-liste a:focus-visible {
+  border-color: var(--bh-or-clair);
+}
+.bh-liste button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.bh-liste .bh-maquette {
+  float: right;
+  font-size: 12px;
+  color: var(--bh-or-clair);
+}
+.bh-rang {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+.bh-rang button {
+  min-height: var(--bh-bouton-min);
+  min-width: var(--bh-bouton-min);
+  padding: 8px 14px;
+  border: 1px solid var(--bh-or);
+  border-radius: 10px;
+  background: var(--bh-encre);
+  color: var(--bh-creme);
+  font: inherit;
+  cursor: pointer;
+}
+.bh-rang button[aria-pressed="true"] {
+  background: var(--bh-or);
+  color: var(--bh-encre);
+}
+.bh-bulle {
+  border: 1px solid var(--bh-or);
+  border-radius: 12px;
+  background: var(--bh-encre);
+  padding: 12px;
+  margin: 0 0 10px;
+}
+.bh-bulle p {
+  margin: 0;
+}
+.bh-fermer-panneau {
+  min-height: var(--bh-bouton-min);
+  padding: 8px 16px;
+  border: 1px solid var(--bh-or);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--bh-creme);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---------- Téléphone 360–390 px : 1 colonne ----------
+   En-tête, sections, puis les 10 commandes en grille 5 × 2.
+   Tout est visible, rien n'est caché dans « Plus ». */
+@media (max-width: 560px) {
+  .bh-titre {
+    font-size: 17px;
+  }
+  .bh-commandes {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .bh-cmd span {
+    font-size: 11px;
+  }
+  /* Disposition de rechange (option B, non retenue : HP, 7 nov.
+     2026 — grille 5 × 2 par défaut) : une seule rangée défilante
+     au lieu de la grille 5 × 2. */
+  .bh-barre.bh-defilement .bh-commandes {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .bh-barre.bh-defilement .bh-cmd {
+    flex: 0 0 68px;
+  }
+}
+
+/* ---------- Tablette 768 px, portrait et paysage : 2 rangées ----------
+   En-tête + sections sur une ligne, 10 commandes sur une rangée. */
+@media (min-width: 561px) and (max-width: 900px) {
+  .bh-tete {
+    padding: 6px 16px;
+  }
+  .bh-sections {
+    padding: 0 16px 8px;
+  }
+  .bh-commandes {
+    padding: 0 16px 10px;
+  }
+  .bh-cmd span {
+    font-size: 12px;
+  }
+}
+
+/* ---------- Ordinateur 1920 px : une seule rangée ----------
+   Face, titre, sections et 10 commandes sur la même ligne. */
+@media (min-width: 901px) {
+  .bh-barre .bh-contenu {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 16px;
+  }
+  .bh-tete {
+    flex: 0 0 auto;
+    padding: 0;
+    min-height: 0;
+  }
+  .bh-titre {
+    white-space: nowrap;
+  }
+  .bh-sections {
+    flex: 0 0 auto;
+    padding: 0;
+  }
+  .bh-section {
+    flex: 0 0 auto;
+    padding: 10px 20px;
+  }
+  .bh-commandes {
+    flex: 1 1 auto;
+    padding: 0;
+  }
+  .bh-panneau {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+}
+
+/* ---------- Mouvement réduit : saut direct, jamais d'animation ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .bh-barre,
+  .bh-cmd,
+  .bh-section,
+  .bh-reduire {
+    transition: none;
+  }
+}
+
+/* ---------- Focus toujours visible (souris, doigt, clavier) ---------- */
+.bh-barre :focus-visible {
+  outline: 3px solid var(--bh-or-clair);
+  outline-offset: 2px;
+}
