@@ -237,6 +237,10 @@
         .coeurs span{ animation-duration:6s; }
         .bondit,.secoue,.fige.on{ animation:none; }
       }
+.hp-entete{display:flex;align-items:center;gap:10px;padding:8px 14px;min-height:56px}
+.hp-entete img{width:48px;height:48px;border-radius:50%;flex:none}
+.hp-entete .hp-entete-titre{font-weight:700;font-size:1.15rem}
+.hp-entete h1{flex:1;min-width:0}
     </style>
   
 <!-- Partage HP : adresse stable + image d'aperçu (vagues 0-1, 23 oct. 2026) -->
@@ -253,6 +257,7 @@
 <link rel="canonical" href="https://www.hp-outils.com/apps/tapinoue" />
 </head>
   <body>
+<header class="hp-entete"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto"><span class="hp-entete-titre">Tapinoue</span></header>
     <div class="wrap">
       <div class="topbar">
         <div class="steps" id="steps">
@@ -2648,5 +2653,10 @@
 
 <!-- Mesure d'audience (Cloudflare Web Analytics, sans témoins) — vagues 0-1, 23 oct. 2026 -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "208bfc7b189846a98c30479f932e5762"}'></script>
+<footer class="hp-pied" style="text-align:center;padding:24px 14px 32px">
+<p class="signature" style="margin:0 0 12px">🧰 HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
+<p class="qr-pied" style="margin:0 0 12px"><img src="/images/qr-hp-outils.png" alt="Code QR — https://www.hp-outils.com/" width="96" height="96" style="background:#fff;padding:6px;border-radius:8px" /></p>
+<p class="lien-canon" style="margin:0">👉 <a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">https://www.hp-outils.com/</a></p>
+</footer>
 </body>
 </html>

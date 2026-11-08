@@ -18,6 +18,10 @@
 .hp-brand-corner{position:absolute;left:10px;bottom:10px;z-index:2;display:flex;align-items:center;gap:6px;background:rgba(10,20,40,.6);color:#fff;border-radius:999px;padding:4px 12px 4px 6px;font-size:12px;font-weight:700;pointer-events:none;max-width:70%}
 .hp-brand-corner img{max-height:22px;max-width:60px;object-fit:contain}
 .hp-brand-corner span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hp-entete{display:flex;align-items:center;gap:10px;padding:8px 14px;min-height:56px}
+.hp-entete img{width:48px;height:48px;border-radius:50%;flex:none}
+.hp-entete .hp-entete-titre{font-weight:700;font-size:1.15rem}
+.hp-entete h1{flex:1;min-width:0}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -246,6 +250,7 @@ body{
 <link rel="canonical" href="https://www.hp-outils.com/apps/caribou-run" />
 </head>
 <body>
+<header class="hp-entete"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto"><span class="hp-entete-titre">Caribou Run — Aperçu à vos couleurs</span></header>
 <div class="game-wrap" id="wrap">
   <canvas id="game" aria-label="Caribou Run — jeu de course"></canvas>
   <div class="hud">
@@ -2373,5 +2378,10 @@ requestAnimationFrame(frame);
 <!-- Mesure d'audience (Cloudflare Web Analytics, sans témoins) — vagues 0-1, 23 oct. 2026 -->
 <script src="/apps/apercu/habillage-jeu.js"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "208bfc7b189846a98c30479f932e5762"}'></script>
+<footer class="hp-pied" style="text-align:center;padding:24px 14px 32px">
+<p class="signature" style="margin:0 0 12px">🧰 HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
+<p class="qr-pied" style="margin:0 0 12px"><img src="/images/qr-hp-outils.png" alt="Code QR — https://www.hp-outils.com/" width="96" height="96" style="background:#fff;padding:6px;border-radius:8px" /></p>
+<p class="lien-canon" style="margin:0">👉 <a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">https://www.hp-outils.com/</a></p>
+</footer>
 </body>
 </html>

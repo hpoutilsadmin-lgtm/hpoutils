@@ -24,9 +24,14 @@ h1.titre{font-size:clamp(30px,6vw,58px);letter-spacing:3px;color:var(--or2);text
 .carte-m p{font-size:14.5px;line-height:1.45}
 .etat{font-weight:bold;color:#27632a}.etat.verr{color:#8e2f26}
 .retour{align-self:flex-start;background:none;border:2px solid var(--or);color:var(--or2);border-radius:8px;padding:7px 14px;font-family:inherit;font-size:15px;cursor:pointer;margin-bottom:10px}
+.hp-entete{display:flex;align-items:center;gap:10px;padding:8px 14px;min-height:56px}
+.hp-entete img{width:48px;height:48px;border-radius:50%;flex:none}
+.hp-entete .hp-entete-titre{font-weight:700;font-size:1.15rem}
+.hp-entete h1{flex:1;min-width:0}
 </style>
 </head>
 <body>
+<header class="hp-entete"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto"><span class="hp-entete-titre">Chevalier du fleuve</span></header>
 <canvas id="cv"></canvas>
 <style>
 #hud{position:fixed;inset:0;display:none;z-index:10;pointer-events:none}
@@ -115,6 +120,11 @@ button.forger:disabled{background:#666;border-color:#999}
   et <span class="legende">la Légende du fleuve</span> (les nains albinos des terriers et leur Forge des Rois Gybbys —
   invention merveilleuse, signalée comme telle). Tout le jeu est gratuit.</p>
   <p class="note" id="titreProgres"></p>
+<footer class="hp-pied" style="text-align:center;padding:24px 14px 32px">
+<p class="signature" style="margin:0 0 12px">🧰 HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
+<p class="qr-pied" style="margin:0 0 12px"><img src="/images/qr-hp-outils.png" alt="Code QR — https://www.hp-outils.com/" width="96" height="96" style="background:#fff;padding:6px;border-radius:8px" /></p>
+<p class="lien-canon" style="margin:0">👉 <a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">https://www.hp-outils.com/</a></p>
+</footer>
 </div>
 
 <div class="ecran" id="ec-campagne">
