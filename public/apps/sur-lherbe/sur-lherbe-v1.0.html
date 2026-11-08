@@ -201,7 +201,7 @@ requestAnimationFrame(loop);
 <script>
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').then(function(r){r.addEventListener('updatefound',function(){var b=document.createElement('button');b.textContent='Nouvelle version disponible — recharger';b.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:99;padding:14px;border-radius:10px;background:#5b9a35;color:#fff;font:inherit';b.onclick=function(){location.reload()};document.body.appendChild(b)})})}
 </script>
-<footer class="hp-pied" style="text-align:center;padding:24px 14px 32px">
+<footer class="hp-pied" style="text-align:center;padding:24px 14px calc(86px + env(safe-area-inset-bottom,0px))">
 <p class="signature" style="margin:0 0 12px">🧰 HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
 <p class="qr-pied" style="margin:0 0 12px"><img src="/images/qr-hp-outils.png" alt="Code QR — https://www.hp-outils.com/" width="96" height="96" style="background:#fff;padding:6px;border-radius:8px" /></p>
 <p class="lien-canon" style="margin:0">👉 <a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">https://www.hp-outils.com/</a></p>
