@@ -19,6 +19,7 @@ import { Route as BoiteRouteImport } from './routes/boite'
 import { Route as BoutiqueChevalierRouteImport } from './routes/boutique-chevalier'
 import { Route as CadeauxRouteImport } from './routes/cadeaux'
 import { Route as CollaborerRouteImport } from './routes/collaborer'
+import { Route as CommandeRouteImport } from './routes/commande'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as ConditionsRouteImport } from './routes/conditions'
 import { Route as ConditionsDeVenteRouteImport } from './routes/conditions-de-vente'
@@ -30,18 +31,24 @@ import { Route as EnCuisineRouteImport } from './routes/en-cuisine'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as JeuxRouteImport } from './routes/jeux'
 import { Route as JeuxAVotreImageRouteImport } from './routes/jeux-a-votre-image'
+import { Route as LaGardeRouteImport } from './routes/la-garde'
+import { Route as LeGardeRouteImport } from './routes/le-garde'
 import { Route as LesPasseursRouteImport } from './routes/les-passeurs'
 import { Route as LireRouteImport } from './routes/lire'
+import { Route as LivresRouteImport } from './routes/livres'
 import { Route as LivresPdfRouteImport } from './routes/livres-pdf'
 import { Route as MerciRouteImport } from './routes/merci'
 import { Route as OutilsRouteImport } from './routes/outils'
+import { Route as OutilsWebRouteImport } from './routes/outils-web'
 import { Route as PanierRouteImport } from './routes/panier'
 import { Route as PasseurDeSavoirRouteImport } from './routes/passeur-de-savoir'
+import { Route as PersonneSeuleRouteImport } from './routes/personne-seule'
 import { Route as PrixRouteImport } from './routes/prix'
 import { Route as RecupererAchatRouteImport } from './routes/recuperer-achat'
 import { Route as ReflexionsRouteImport } from './routes/reflexions'
 import { Route as SansHonteRouteImport } from './routes/sans-honte'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as Survie72hRouteImport } from './routes/survie-72h'
 import { Route as TonJeuAToiRouteImport } from './routes/ton-jeu-a-toi'
 import { Route as TransmettreRouteImport } from './routes/transmettre'
 import { Route as UniversRouteImport } from './routes/univers'
@@ -119,6 +126,11 @@ const CollaborerRoute = CollaborerRouteImport.update({
   path: '/collaborer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommandeRoute = CommandeRouteImport.update({
+  id: '/commande',
+  path: '/commande',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComprendreRoute = ComprendreRouteImport.update({
   id: '/comprendre',
   path: '/comprendre',
@@ -174,6 +186,16 @@ const JeuxAVotreImageRoute = JeuxAVotreImageRouteImport.update({
   path: '/jeux-a-votre-image',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LaGardeRoute = LaGardeRouteImport.update({
+  id: '/la-garde',
+  path: '/la-garde',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeGardeRoute = LeGardeRouteImport.update({
+  id: '/le-garde',
+  path: '/le-garde',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LesPasseursRoute = LesPasseursRouteImport.update({
   id: '/les-passeurs',
   path: '/les-passeurs',
@@ -182,6 +204,11 @@ const LesPasseursRoute = LesPasseursRouteImport.update({
 const LireRoute = LireRouteImport.update({
   id: '/lire',
   path: '/lire',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LivresRoute = LivresRouteImport.update({
+  id: '/livres',
+  path: '/livres',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LivresPdfRoute = LivresPdfRouteImport.update({
@@ -199,6 +226,11 @@ const OutilsRoute = OutilsRouteImport.update({
   path: '/outils',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OutilsWebRoute = OutilsWebRouteImport.update({
+  id: '/outils-web',
+  path: '/outils-web',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PanierRoute = PanierRouteImport.update({
   id: '/panier',
   path: '/panier',
@@ -207,6 +239,11 @@ const PanierRoute = PanierRouteImport.update({
 const PasseurDeSavoirRoute = PasseurDeSavoirRouteImport.update({
   id: '/passeur-de-savoir',
   path: '/passeur-de-savoir',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersonneSeuleRoute = PersonneSeuleRouteImport.update({
+  id: '/personne-seule',
+  path: '/personne-seule',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrixRoute = PrixRouteImport.update({
@@ -232,6 +269,11 @@ const SansHonteRoute = SansHonteRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Survie72hRoute = Survie72hRouteImport.update({
+  id: '/survie-72h',
+  path: '/survie-72h',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TonJeuAToiRoute = TonJeuAToiRouteImport.update({
@@ -380,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/boutique-chevalier': typeof BoutiqueChevalierRoute
   '/cadeaux': typeof CadeauxRoute
   '/collaborer': typeof CollaborerRoute
+  '/commande': typeof CommandeRoute
   '/comprendre': typeof ComprendreRoute
   '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
@@ -391,18 +434,24 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/jeux-a-votre-image': typeof JeuxAVotreImageRoute
+  '/la-garde': typeof LaGardeRoute
+  '/le-garde': typeof LeGardeRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/lire': typeof LireRoute
+  '/livres': typeof LivresRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRoute
+  '/outils-web': typeof OutilsWebRoute
   '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
+  '/personne-seule': typeof PersonneSeuleRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/survie-72h': typeof Survie72hRoute
   '/ton-jeu-a-toi': typeof TonJeuAToiRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
@@ -441,6 +490,7 @@ export interface FileRoutesByTo {
   '/boutique-chevalier': typeof BoutiqueChevalierRoute
   '/cadeaux': typeof CadeauxRoute
   '/collaborer': typeof CollaborerRoute
+  '/commande': typeof CommandeRoute
   '/comprendre': typeof ComprendreRoute
   '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
@@ -452,18 +502,24 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/jeux-a-votre-image': typeof JeuxAVotreImageRoute
+  '/la-garde': typeof LaGardeRoute
+  '/le-garde': typeof LeGardeRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/lire': typeof LireRoute
+  '/livres': typeof LivresRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRoute
+  '/outils-web': typeof OutilsWebRoute
   '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
+  '/personne-seule': typeof PersonneSeuleRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/survie-72h': typeof Survie72hRoute
   '/ton-jeu-a-toi': typeof TonJeuAToiRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
@@ -503,6 +559,7 @@ export interface FileRoutesById {
   '/boutique-chevalier': typeof BoutiqueChevalierRoute
   '/cadeaux': typeof CadeauxRoute
   '/collaborer': typeof CollaborerRoute
+  '/commande': typeof CommandeRoute
   '/comprendre': typeof ComprendreRoute
   '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
@@ -514,18 +571,24 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/jeux': typeof JeuxRoute
   '/jeux-a-votre-image': typeof JeuxAVotreImageRoute
+  '/la-garde': typeof LaGardeRoute
+  '/le-garde': typeof LeGardeRoute
   '/les-passeurs': typeof LesPasseursRoute
   '/lire': typeof LireRoute
+  '/livres': typeof LivresRoute
   '/livres-pdf': typeof LivresPdfRoute
   '/merci': typeof MerciRoute
   '/outils': typeof OutilsRoute
+  '/outils-web': typeof OutilsWebRoute
   '/panier': typeof PanierRoute
   '/passeur-de-savoir': typeof PasseurDeSavoirRoute
+  '/personne-seule': typeof PersonneSeuleRoute
   '/prix': typeof PrixRoute
   '/recuperer-achat': typeof RecupererAchatRoute
   '/reflexions': typeof ReflexionsRoute
   '/sans-honte': typeof SansHonteRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/survie-72h': typeof Survie72hRoute
   '/ton-jeu-a-toi': typeof TonJeuAToiRoute
   '/transmettre': typeof TransmettreRoute
   '/univers': typeof UniversRoute
@@ -566,6 +629,7 @@ export interface FileRouteTypes {
     | '/boutique-chevalier'
     | '/cadeaux'
     | '/collaborer'
+    | '/commande'
     | '/comprendre'
     | '/conditions'
     | '/conditions-de-vente'
@@ -577,18 +641,24 @@ export interface FileRouteTypes {
     | '/faq'
     | '/jeux'
     | '/jeux-a-votre-image'
+    | '/la-garde'
+    | '/le-garde'
     | '/les-passeurs'
     | '/lire'
+    | '/livres'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/outils-web'
     | '/panier'
     | '/passeur-de-savoir'
+    | '/personne-seule'
     | '/prix'
     | '/recuperer-achat'
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
+    | '/survie-72h'
     | '/ton-jeu-a-toi'
     | '/transmettre'
     | '/univers'
@@ -627,6 +697,7 @@ export interface FileRouteTypes {
     | '/boutique-chevalier'
     | '/cadeaux'
     | '/collaborer'
+    | '/commande'
     | '/comprendre'
     | '/conditions'
     | '/conditions-de-vente'
@@ -638,18 +709,24 @@ export interface FileRouteTypes {
     | '/faq'
     | '/jeux'
     | '/jeux-a-votre-image'
+    | '/la-garde'
+    | '/le-garde'
     | '/les-passeurs'
     | '/lire'
+    | '/livres'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/outils-web'
     | '/panier'
     | '/passeur-de-savoir'
+    | '/personne-seule'
     | '/prix'
     | '/recuperer-achat'
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
+    | '/survie-72h'
     | '/ton-jeu-a-toi'
     | '/transmettre'
     | '/univers'
@@ -688,6 +765,7 @@ export interface FileRouteTypes {
     | '/boutique-chevalier'
     | '/cadeaux'
     | '/collaborer'
+    | '/commande'
     | '/comprendre'
     | '/conditions'
     | '/conditions-de-vente'
@@ -699,18 +777,24 @@ export interface FileRouteTypes {
     | '/faq'
     | '/jeux'
     | '/jeux-a-votre-image'
+    | '/la-garde'
+    | '/le-garde'
     | '/les-passeurs'
     | '/lire'
+    | '/livres'
     | '/livres-pdf'
     | '/merci'
     | '/outils'
+    | '/outils-web'
     | '/panier'
     | '/passeur-de-savoir'
+    | '/personne-seule'
     | '/prix'
     | '/recuperer-achat'
     | '/reflexions'
     | '/sans-honte'
     | '/sitemap.xml'
+    | '/survie-72h'
     | '/ton-jeu-a-toi'
     | '/transmettre'
     | '/univers'
@@ -750,6 +834,7 @@ export interface RootRouteChildren {
   BoutiqueChevalierRoute: typeof BoutiqueChevalierRoute
   CadeauxRoute: typeof CadeauxRoute
   CollaborerRoute: typeof CollaborerRoute
+  CommandeRoute: typeof CommandeRoute
   ComprendreRoute: typeof ComprendreRoute
   ConditionsRoute: typeof ConditionsRoute
   ConditionsDeVenteRoute: typeof ConditionsDeVenteRoute
@@ -761,18 +846,24 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   JeuxRoute: typeof JeuxRoute
   JeuxAVotreImageRoute: typeof JeuxAVotreImageRoute
+  LaGardeRoute: typeof LaGardeRoute
+  LeGardeRoute: typeof LeGardeRoute
   LesPasseursRoute: typeof LesPasseursRoute
   LireRoute: typeof LireRoute
+  LivresRoute: typeof LivresRoute
   LivresPdfRoute: typeof LivresPdfRoute
   MerciRoute: typeof MerciRoute
   OutilsRoute: typeof OutilsRoute
+  OutilsWebRoute: typeof OutilsWebRoute
   PanierRoute: typeof PanierRoute
   PasseurDeSavoirRoute: typeof PasseurDeSavoirRoute
+  PersonneSeuleRoute: typeof PersonneSeuleRoute
   PrixRoute: typeof PrixRoute
   RecupererAchatRoute: typeof RecupererAchatRoute
   ReflexionsRoute: typeof ReflexionsRoute
   SansHonteRoute: typeof SansHonteRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  Survie72hRoute: typeof Survie72hRoute
   TonJeuAToiRoute: typeof TonJeuAToiRoute
   TransmettreRoute: typeof TransmettreRoute
   UniversRoute: typeof UniversRoute
@@ -871,6 +962,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CollaborerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/commande': {
+      id: '/commande'
+      path: '/commande'
+      fullPath: '/commande'
+      preLoaderRoute: typeof CommandeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/comprendre': {
       id: '/comprendre'
       path: '/comprendre'
@@ -948,6 +1046,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JeuxAVotreImageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/la-garde': {
+      id: '/la-garde'
+      path: '/la-garde'
+      fullPath: '/la-garde'
+      preLoaderRoute: typeof LaGardeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/le-garde': {
+      id: '/le-garde'
+      path: '/le-garde'
+      fullPath: '/le-garde'
+      preLoaderRoute: typeof LeGardeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/les-passeurs': {
       id: '/les-passeurs'
       path: '/les-passeurs'
@@ -960,6 +1072,13 @@ declare module '@tanstack/react-router' {
       path: '/lire'
       fullPath: '/lire'
       preLoaderRoute: typeof LireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/livres': {
+      id: '/livres'
+      path: '/livres'
+      fullPath: '/livres'
+      preLoaderRoute: typeof LivresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/livres-pdf': {
@@ -983,6 +1102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OutilsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/outils-web': {
+      id: '/outils-web'
+      path: '/outils-web'
+      fullPath: '/outils-web'
+      preLoaderRoute: typeof OutilsWebRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/panier': {
       id: '/panier'
       path: '/panier'
@@ -995,6 +1121,13 @@ declare module '@tanstack/react-router' {
       path: '/passeur-de-savoir'
       fullPath: '/passeur-de-savoir'
       preLoaderRoute: typeof PasseurDeSavoirRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/personne-seule': {
+      id: '/personne-seule'
+      path: '/personne-seule'
+      fullPath: '/personne-seule'
+      preLoaderRoute: typeof PersonneSeuleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/prix': {
@@ -1030,6 +1163,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/survie-72h': {
+      id: '/survie-72h'
+      path: '/survie-72h'
+      fullPath: '/survie-72h'
+      preLoaderRoute: typeof Survie72hRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ton-jeu-a-toi': {
@@ -1252,6 +1392,7 @@ const rootRouteChildren: RootRouteChildren = {
   BoutiqueChevalierRoute: BoutiqueChevalierRoute,
   CadeauxRoute: CadeauxRoute,
   CollaborerRoute: CollaborerRoute,
+  CommandeRoute: CommandeRoute,
   ComprendreRoute: ComprendreRoute,
   ConditionsRoute: ConditionsRoute,
   ConditionsDeVenteRoute: ConditionsDeVenteRoute,
@@ -1263,18 +1404,24 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   JeuxRoute: JeuxRoute,
   JeuxAVotreImageRoute: JeuxAVotreImageRoute,
+  LaGardeRoute: LaGardeRoute,
+  LeGardeRoute: LeGardeRoute,
   LesPasseursRoute: LesPasseursRoute,
   LireRoute: LireRoute,
+  LivresRoute: LivresRoute,
   LivresPdfRoute: LivresPdfRoute,
   MerciRoute: MerciRoute,
   OutilsRoute: OutilsRoute,
+  OutilsWebRoute: OutilsWebRoute,
   PanierRoute: PanierRoute,
   PasseurDeSavoirRoute: PasseurDeSavoirRoute,
+  PersonneSeuleRoute: PersonneSeuleRoute,
   PrixRoute: PrixRoute,
   RecupererAchatRoute: RecupererAchatRoute,
   ReflexionsRoute: ReflexionsRoute,
   SansHonteRoute: SansHonteRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  Survie72hRoute: Survie72hRoute,
   TonJeuAToiRoute: TonJeuAToiRoute,
   TransmettreRoute: TransmettreRoute,
   UniversRoute: UniversRoute,
