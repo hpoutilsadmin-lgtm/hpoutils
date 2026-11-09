@@ -1157,6 +1157,13 @@
        quand même si la barre y apparaît un jour. */
     if (estPageStopExclue) return;
     construire();
+    /* Seconde instance du script (double chargement : <script defer> du
+       head + repli CompagnonBar, course entre les deux) : construire() a
+       refusé de monter une deuxième barre, `barre` est donc indéfini —
+       ne rien écouter, sinon ecouter() lève « Cannot read properties of
+       undefined (reading 'addEventListener') ». La première instance a
+       déjà tout monté : cette instance ne fait rien. */
+    if (!barre) return;
     ecouter();
     if (lireSS(SS_MASQUEE) === "1") reduireBarre();
 
