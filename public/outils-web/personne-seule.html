@@ -34,6 +34,12 @@
   h2{ font-size:calc(var(--fs-big) + 6px); margin:0 0 10px; line-height:1.15; }
   h3{ font-size:var(--fs-big); margin:0 0 8px; }
   p{ margin:0 0 12px; }
+
+  /* 13.12 : en-tête Q-STD-7 (ligne de marque) — variables mappées sur --green / --green-bg / --ink-soft, qui existent dans ce fichier (pas de --mono ici : la police est celle de la page) */
+  header{ padding:30px 0 6px; }
+  .marque{ display:flex; align-items:center; gap:12px; }
+  .marque .point{ width:16px; height:16px; border-radius:50%; background:var(--green); flex:none; box-shadow:0 0 0 5px var(--green-bg); }
+  .marque span{ font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); }
   .intro{ font-size:var(--fs-big); }
   .small{ font-size:calc(var(--fs) - 2px); color:var(--ink-soft); }
   a{ color:inherit; }
@@ -260,7 +266,11 @@
   </div>
 
   <a class="bigbtn" href="/la-garde" style="display:flex;align-items:center;justify-content:center;text-decoration:none;margin:0 0 14px;">← Retour à La garde</a>
+  <header>
+    <div class="marque"><span class="point" aria-hidden="true"></span><span>HP Outils — gratuit, sans compte</span></div>
+    <img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto">
   <h1>Personne seule</h1>
+  </header>
   <p class="intro">Ceci n'est pas un jeu. C'est un outil pour la vraie vie. Essayer, c'est gratuit.</p>
   <p class="intro-long">Vous êtes seul ou seule à la maison. Cet outil vous aide à demander de l'aide avec votre téléphone, sans payer une fortune pour un système à bouton. Gratuit, sans compte, sans abonnement.</p>
   <p class="intro-long">En haut : <strong>AGIR</strong>, les gestes, en 1 tap. En bas : <strong>LIRE ET RÉGLER</strong>, pour comprendre et préparer vos proches de confiance, au calme.</p>
@@ -834,5 +844,9 @@
   if (garder) dire("Vos réglages gardés sur cet appareil ont été retrouvés. Ils ne sont jamais envoyés.");
 })();
 </script>
+  <footer>
+    <p class="signature">HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
+    <p class="lien-canon">👉 <a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">https://www.hp-outils.com/</a></p>
+  </footer>
 </body>
 </html>
