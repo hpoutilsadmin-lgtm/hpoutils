@@ -59,7 +59,7 @@
   var ROUTES_SECTIONS = {
     jeux: "/jeux",
     outils: "/outils",
-    livres: "/lire",
+    livres: "/livres-pdf",          // P1-4 : /lire = « À toi l'histoire », pas les livres
     "en cuisine": "/en-cuisine",
     ateliers: "/ateliers"
   };
@@ -72,9 +72,18 @@
     "Aide-moi à choisir"
   ];
   /* Les 8 scènes de Sir H. Gepeto (lot v3). */
+  /* P1-1 : le moteur écoute les CLÉS (cuisine, lecture, graffiti,
+     skate, lutteur, mime, 2heures, barbouillage). L'affichage garde
+     les libellés, le dispatch envoie la clé. */
   var SCENES = [
-    "En cuisine", "En lecture", "Graffiti", "En skate",
-    "Lutteur", "Mime", "Scène des 2 heures", "Barbouillage"
+    { cle: "cuisine", label: "En cuisine" },
+    { cle: "lecture", label: "En lecture" },
+    { cle: "graffiti", label: "Graffiti" },
+    { cle: "skate", label: "En skate" },
+    { cle: "lutteur", label: "Lutteur" },
+    { cle: "mime", label: "Mime" },
+    { cle: "2heures", label: "Scène des 2 heures" },
+    { cle: "barbouillage", label: "Barbouillage" }
   ];
   /* Bulle d'accueil — texte de la capture d'HP du 6 nov. 21 h 25,
      un seul mot changé : « en bas » devient « en haut », puisque
@@ -82,7 +91,18 @@
   var BULLE_ACCUEIL = "Bienvenue chez HP Outils. Je suis Sir H. Gepeto, le gérant du site. La barre en haut vous mène partout : jeux, outils, livres. Bonne visite !";
 
   var script = document.currentScript;
-  var optPage = (script && script.getAttribute("data-page")) || "jeu";
+  var optPage = (script && script.getAttribute("data-page")) || pageDepuisChemin();
+  /* P1 (§2.2) : __root.tsx ne connaît pas la page au moment du head().
+     Quand l'attribut est absent, on dérive du chemin. La page pilote
+     garde son attribut explicite (prioritaire). */
+  function pageDepuisChemin() {
+    var p = (window.location.pathname || "").toLowerCase();
+    if (p === "/" || p === "/index.html") return "accueil";
+    if (p === "/le-garde" || p === "/personne-seule") return "garde";
+    if (p === "/en-cuisine" || p.indexOf("/en-cuisine/") === 0) return "cuisine";
+    if (p === "/outils" || p.indexOf("/outils/") === 0 || p.indexOf("/outils-web/") === 0) return "outil";
+    return "jeu";
+  }
   var optArriveeReduite = script && script.getAttribute("data-arrivee") === "reduite";
   var optDefilement = script && script.getAttribute("data-disposition") === "defilement";
   var cheminFace = (script && script.getAttribute("data-chemin-face")) || CHEMIN_FACE_DEFAUT;
@@ -327,11 +347,11 @@
     zonePanneau.appendChild(el("p", null, "Scènes :"));
     var scenes = el("div", { "class": "bh-rang" });
     SCENES.forEach(function (s) {
-      var b = el("button", { type: "button" }, s);
+      var b = el("button", { type: "button" }, s.label);
       on(b, "click", function () {
-        document.dispatchEvent(new CustomEvent("hp:gepeto-scene", { detail: { scene: s } }));
+        document.dispatchEvent(new CustomEvent("hp:gepeto-scene", { detail: { scene: s.cle } }));
         bulle.querySelector("p").textContent =
-          "Scène « " + s + " » — en production, le moteur Gepeto joue la scène ici. Le pilote montre le bouton, il ne joue pas la scène.";
+          "Scène « " + s.label + " » — en production, le moteur Gepeto joue la scène ici. Le pilote montre le bouton, il ne joue pas la scène.";
       });
       scenes.appendChild(b);
     });
@@ -521,6 +541,16 @@
     zonePanneau = el("div", { "class": "bh-panneau-contenu" });
     panneau.appendChild(zonePanneau);
     barre.appendChild(panneau);
+
+    /* P1-3 : hôte du moteur Sir H. Gepeto, même id et même classe que
+       dans la v3 (le Pont et le bundle autonome le cherchent par cet
+       id). Stable : hors de zonePanneau, vidée à chaque ouverture.
+       Section cachée au départ, comme dans la v3 ; P4-B décide
+       quand elle devient visible. */
+    var sectionGepeto = el("div", { "class": "bh-gepeto", hidden: "" });
+    var hoteGepeto = el("div", { "id": "compagnon-gepeto-hote", "class": "compagnon-gepeto-hote" });
+    sectionGepeto.appendChild(hoteGepeto);
+    barre.appendChild(sectionGepeto);
 
     /* Liseré 22 px + rappel, quand la barre est réduite. */
     var lisere = el("div", { "class": "bh-lisere" });

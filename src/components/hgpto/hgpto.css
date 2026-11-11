@@ -748,6 +748,24 @@
         html.compagnon-v3 .bot-controls:not(.open) > *:not(#btn-dock){display:inline-block}
       }
 
+      /* ============================================================
+         BARRE-HAUT (P1, 11 nov. 2026) — miroir du bloc v3 ci-dessus.
+         Mêmes règles, préfixe html.bh-actif (posé par la barre-haut
+         au démarrage) : le moteur monté dans l'hôte de la barre-haut
+         se loge dans la barre comme il se logeait dans la v3. */
+      html.bh-actif .hgpto-host{position:relative;display:flex;flex-direction:column}
+      html.bh-actif .hgpto-host .bot-layer{position:relative;left:auto;right:auto;bottom:auto;height:150px;flex:none}
+      html.bh-actif .hgpto-host .bot-controls{position:static;right:auto;bottom:auto;z-index:auto;max-width:none;pointer-events:auto}
+      html.bh-actif .hgpto-host .bot-controls button,html.bh-actif .hgpto-host .bot-controls select{min-height:48px}
+      html.bh-actif #btn-dock{display:none!important}
+      html.bh-actif #bot-pastille{display:none!important}
+      html.bh-actif .hgpto-host .qa{position:static;left:auto;bottom:auto;z-index:auto;width:auto;max-width:none;max-height:300px;overflow-y:auto}
+      html.bh-actif body.hgpto-on{padding-bottom:0}
+      html.bh-actif body.hgpto-closed #bot-pastille{display:none!important}
+      @media (max-width:560px){
+        html.bh-actif .bot-controls:not(.open) > *:not(#btn-dock){display:inline-block}
+      }
+
       /* ---------- Garde-fou îlot (lot correctifs republication, 5 nov. 2026) ----------
          Même cause que la barre (compagnon.css) : sur une page statique
          aux règles globales (ex. maintenant.html : button{width:100%} et

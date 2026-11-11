@@ -16,7 +16,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { HgptoPont } from "@/components/hgpto/HgptoPont";
 import { HamsterWheel } from "@/components/hamster/HamsterWheel";
-import { CompagnonBar } from "@/components/CompagnonBar";
+import { useEffect } from "react"; // P1 : face accueil (§2.7)
 
 function NotFoundComponent() {
   return (
@@ -94,19 +94,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: hpCss },
-      { rel: "stylesheet", href: "/compagnon/compagnon.css" },
+      { rel: "stylesheet", href: "/barre-haut/barre-haut.css" },
     ],
     scripts: [
       {
-        /* Barre unique v3 — correctif republication (5 nov. 2026) :
-           la barre se charge en defer dès l'analyse du HTML,
-           comme sur les pages statiques, au lieu d'attendre
-           l'hydratation React (elle montait avec quelques secondes
-           de retard sur l'accueil, page d'entrée). CompagnonBar
-           reste en repli (garde script[data-compagnon]). */
-        src: "/compagnon/compagnon.js",
+        /* Barre unique en haut (P1, 11 nov. 2026) : même patron que la
+           v3 — defer dès l'analyse du HTML, pas d'attente de
+           l'hydratation. data-page est dérivé du chemin par
+           barre-haut.js (§2.2) : aucun attribut ici. */
+        src: "/barre-haut/barre-haut.js",
         defer: true,
-        "data-compagnon": "1",
+        "data-barre-haut": "1",
       },
       {
         src: "https://static.cloudflareinsights.com/beacon.min.js",
@@ -144,6 +142,13 @@ function RootComponent() {
      le widget réapparaît dès qu'on quitte l'accueil. */
   const loc = useLocation();
 
+  /* P1 : la face de la barre-haut est masquée sur l'accueil (règle
+     6 nov. 07 h 08). La barre lit data-page une seule fois au
+     chargement ; en navigation côté client, on bascule la classe ici. */
+  useEffect(() => {
+    document.getElementById("bh-barre")?.classList.toggle("bh-page-accueil", loc.pathname === "/");
+  }, [loc.pathname]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="hp-app">
@@ -154,7 +159,6 @@ function RootComponent() {
         <SiteFooter />
       </div>
       <HgptoPont />
-      <CompagnonBar />
       {loc.pathname !== "/" && <HamsterWheel />}
     </QueryClientProvider>
   );

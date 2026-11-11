@@ -453,3 +453,8 @@ html.bh-actif {
   outline: 3px solid var(--bh-or-clair);
   outline-offset: 2px;
 }
+
+/* Hôte du moteur Sir H. Gepeto (P1-3) : même rôle que dans la v3
+   (compagnon.css L314). */
+.compagnon-gepeto-hote { position: relative; }
+.bh-gepeto[hidden] { display: none; }
