@@ -44,6 +44,8 @@
         <img id="c-tete-fiche-curieux" data-src="/hgpto/pixel/c-tete-fiche-curieux.png" alt="tete fiche curieux" style="position:absolute;left:49px;bottom:-14px;width:170px;display:none" draggable="false">
         <img id="c-tete-fiche-surpris" data-src="/hgpto/pixel/c-tete-fiche-surpris.png" alt="tete fiche surpris" style="position:absolute;left:56px;bottom:-11px;width:170px;display:none" draggable="false">
         </div>
+        <!-- Clochette de No\xEBl (lot D\xE9cor de No\xEBl, 10 nov. 2026) : plac\xE9e APRES tete-wrap, pas apr\xE8s c-torse \u2014 sinon la t\xEAte (peinte apr\xE8s, menton opaque) la cacherait au cou. Position au cou, \xE0 v\xE9rifier au doigt ; si elle flotte, on la retire. -->
+        <img id="c-clochette" src="/hgpto/pixel/clochette-noel.png" alt="clochette de No\xEBl" style="position:absolute;left:143px;top:178px;width:24px;height:24px;" draggable="false">
         <img id="queue-grognon" data-src="/hgpto/pixel/queue-grognon.png" alt="queue grognon" style="position:absolute;left:213px;top:156px;width:105px;display:none" draggable="false">
         <img id="panneaux" data-src="/hgpto/pixel/panneaux.png" alt="panneaux" style="position:absolute;right:-10px;top:-10px;width:130px;display:none" draggable="false">
 </div></div><span id="pixel-zzz" class="pixel-zzz" aria-hidden="true" style="position:absolute;top:2px;right:12px;display:none">Zzz</span></div>

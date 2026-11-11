@@ -46,6 +46,8 @@ export const HGPTO_MARKUP = `
         <img id="c-tete-fiche-curieux" data-src="/hgpto/pixel/c-tete-fiche-curieux.png" alt="tete fiche curieux" style="position:absolute;left:49px;bottom:-14px;width:170px;display:none" draggable="false">
         <img id="c-tete-fiche-surpris" data-src="/hgpto/pixel/c-tete-fiche-surpris.png" alt="tete fiche surpris" style="position:absolute;left:56px;bottom:-11px;width:170px;display:none" draggable="false">
         </div>
+        <!-- Clochette de Noël (lot Décor de Noël, 10 nov. 2026) : placée APRES tete-wrap, pas après c-torse — sinon la tête (peinte après, menton opaque) la cacherait au cou. Position au cou, à vérifier au doigt ; si elle flotte, on la retire. -->
+        <img id="c-clochette" src="/hgpto/pixel/clochette-noel.png" alt="clochette de Noël" style="position:absolute;left:143px;top:178px;width:24px;height:24px;" draggable="false">
         <img id="queue-grognon" data-src="/hgpto/pixel/queue-grognon.png" alt="queue grognon" style="position:absolute;left:213px;top:156px;width:105px;display:none" draggable="false">
         <img id="panneaux" data-src="/hgpto/pixel/panneaux.png" alt="panneaux" style="position:absolute;right:-10px;top:-10px;width:130px;display:none" draggable="false">
 </div></div><span id="pixel-zzz" class="pixel-zzz" aria-hidden="true" style="position:absolute;top:2px;right:12px;display:none">Zzz</span></div>

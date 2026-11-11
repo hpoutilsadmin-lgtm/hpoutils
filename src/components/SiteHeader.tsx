@@ -38,7 +38,7 @@ export function SiteHeader() {
               mais PAS sur l'accueil. Le composant est partagé : on la masque
               ici seulement quand la route est "/" ; elle reste partout ailleurs. */}
           {loc.pathname !== "/" && (
-            <img src="/hgpto/gepeto/tete-144.png" alt="" className="logo-gepeto" width="48" height="48" />
+            <img src="/hgpto/gepeto/tete-144-tuque-noel.png" alt="" className="logo-gepeto" width="48" height="48" />
           )}
         </Link>
         <button
