@@ -101,6 +101,45 @@ export type Database = {
         }
         Relationships: []
       }
+      gift_cards: {
+        Row: {
+          balance_cents: number
+          buyer_email: string | null
+          code: string
+          created_at: string
+          initial_cents: number
+          reserved_cents: number
+          reserved_session_id: string | null
+          reserved_until: string | null
+          status: string
+          stripe_session_id: string | null
+        }
+        Insert: {
+          balance_cents: number
+          buyer_email?: string | null
+          code: string
+          created_at?: string
+          initial_cents: number
+          reserved_cents?: number
+          reserved_session_id?: string | null
+          reserved_until?: string | null
+          status?: string
+          stripe_session_id?: string | null
+        }
+        Update: {
+          balance_cents?: number
+          buyer_email?: string | null
+          code?: string
+          created_at?: string
+          initial_cents?: number
+          reserved_cents?: number
+          reserved_session_id?: string | null
+          reserved_until?: string | null
+          status?: string
+          stripe_session_id?: string | null
+        }
+        Relationships: []
+      }
       newsletter_signup_attempts: {
         Row: {
           created_at: string
