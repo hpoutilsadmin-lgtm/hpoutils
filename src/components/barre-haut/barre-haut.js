@@ -24,7 +24,9 @@
      en une rangée défilante au lieu de la grille 5 × 2 (option B,
      non retenue — défaut grille 5 × 2, décidé par HP le 7 nov. 2026) ;
    - data-chemin-face="..." : chemin de la face Gepeto 48 px
-     (défaut : "/hgpto/gepeto/tete-144.png", actif canonique 144 px).
+     (défaut : "/hgpto/gepeto/tete-144.png", actif canonique 144 px ;
+      en décembre, la tuque : "/hgpto/gepeto/tete-144-tuque-noel.png",
+      lot tuque Noël Q-T3 + Q-T5, dates automatiques).
 
    Contraintes portées ici (voir SPEC.md) :
    - UNE SEULE barre (jamais deux) ;
@@ -41,7 +43,12 @@
    ================================================================ */
 (function () {
   var PAGES_STOP = ["/le-garde", "/personne-seule"];
-  var CHEMIN_FACE_DEFAUT = "/hgpto/gepeto/tete-144.png";
+  /* Lot tuque Noël (Q-T3 + Q-T5, dates automatiques) : en décembre
+     seulement, la face 48 px porte la tuque ; retour automatique
+     le 1er janvier. */
+  var CHEMIN_FACE_DEFAUT = new Date().getMonth() === 11
+    ? "/hgpto/gepeto/tete-144-tuque-noel.png"
+    : "/hgpto/gepeto/tete-144.png";
   /* Les 5 sections réelles du site (slogan HP : « Jeux, cuisine,
      outils, ateliers, livres. »). La Loupe du pilote cherche
      dans ces 5 entrées ; l'index réel de la v3 en compte 110. */

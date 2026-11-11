@@ -2,12 +2,12 @@
 /* Pack hors ligne HP Outils — service worker.
    Garde la Boite a outils, les outils autonomes, En cuisine, le Passeur
    et 6 jeux legers sur l'appareil pour qu'ils fonctionnent sans internet.
-   Cache-first, version a changer (hp-hors-ligne-2 -> hp-hors-ligne-3)
+   Cache-first, version a changer (hp-hors-ligne-3 -> hp-hors-ligne-4)
    pour mettre le pack a jour. Portee : tout le site (/).
    Seuls les fichiers de la liste PACK sont mis en cache ; le reste
    passe par le reseau, et une navigation sans reseau tombe sur
    /hors-ligne.html. Aucune donnee saisie ne quitte l'appareil. */
-var V = 'hp-hors-ligne-2';
+var V = 'hp-hors-ligne-3';
 var PACK = [
   '/manifest.webmanifest',
   '/hors-ligne.html',
@@ -28,10 +28,12 @@ var PACK = [
   /* Correctif 11 nov. 2026 : la barre et la face de l'en-tête, servies
      du cache après la 1re visite — sinon le personnage restait un
      rectangle vide à chaque navigation. Les images tuque du moteur
-     (normal-tuque-noel.png, vendeur-tuque-noel.png) ne sont pas encore
-     dans le dépôt : à ajouter au PACK quand le lot tuque sera déposé,
-     pas avant (un chemin absent fait échouer caches.addAll). */
+     (normal-tuque-noel.png, vendeur-tuque-noel.png) sont à la tête
+     depuis cd6361f : ajoutées au PACK par le lot tuque (Q-T-SW, 11 nov.),
+     juste après la face de l'en-tête. */
   '/hgpto/gepeto/tete-144-tuque-noel.png',
+  '/hgpto/gepeto/normal-tuque-noel.png',
+  '/hgpto/gepeto/vendeur-tuque-noel.png',
   '/barre-haut/barre-haut.js',
   '/barre-haut/barre-haut.css',
   '/images/hp-logo-clean.png',

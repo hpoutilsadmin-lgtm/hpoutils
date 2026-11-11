@@ -33,11 +33,28 @@ export function Hgpto() {
     }
     if (closed) return;
     document.body.classList.add("hgpto-on");
-    host.innerHTML = HGPTO_MARKUP;
+    // Lot tuque Noël (Q-T5, dates automatiques) : en décembre seulement,
+    // la figure porte la tuque ; retour automatique le 1er janvier.
+    // seasonDecorKind() n'est pas visible ici (locale au moteur) : même
+    // règle, mois de décembre (getMonth() === 11).
+    const TUQUE_NOEL = new Date().getMonth() === 11;
+    const FIGURE_INITIALE = TUQUE_NOEL
+      ? "/hgpto/gepeto/normal-tuque-noel.png"
+      : "/hgpto/gepeto/normal.png";
+    const FIGURE_VENDEUR = TUQUE_NOEL
+      ? "/hgpto/gepeto/vendeur-tuque-noel.png"
+      : "/hgpto/gepeto/vendeur.png";
+    // Le markup porte normal.png par défaut : on y met la figure initiale
+    // tout de suite, pour ne pas clignoter sans tuque en décembre (ni avec
+    // tuque en janvier).
+    host.innerHTML = HGPTO_MARKUP.replace(
+      "/hgpto/gepeto/normal.png",
+      FIGURE_INITIALE,
+    );
     // Lot Gepeto planches normal : figure planche sur toutes les pages.
     // Remplace la figure maître SVG. Les gestes Étape 1, liés aux calques
     // SVG, ne s'appliquent pas à une PNG et ne sont plus appelés.
-    let figureVoulue = "/hgpto/gepeto/normal.png";
+    let figureVoulue = FIGURE_INITIALE;
     {
       const bot = host.querySelector("#bot");
       const inner = host.querySelector(".bot-inner");
@@ -47,7 +64,7 @@ export function Hgpto() {
         img.alt = "Sir H. Gepeto";
         img.src = figureVoulue;
         img.onload = () => {
-          if (figureVoulue !== "/hgpto/gepeto/normal.png") return;
+          if (figureVoulue !== FIGURE_INITIALE) return;
           inner.innerHTML = "";
           inner.appendChild(img);
           bot.classList.add("bot-maitre");
@@ -64,12 +81,12 @@ export function Hgpto() {
       const choisirFigure = (): string => {
         const bot = host.querySelector("#bot");
         const mode = bot?.getAttribute("data-mode");
-        if (mode === "vendeur") return "/hgpto/gepeto/vendeur.png";
+        if (mode === "vendeur") return FIGURE_VENDEUR;
         if (mode === "grognon") return "/hgpto/gepeto/grognon.png";
         const chemin = window.location.pathname || "";
         if (chemin === "/jeux" || chemin.startsWith("/jeux/")) return "/hgpto/gepeto/gaming.png";
         if (chemin === "/en-cuisine" || chemin.startsWith("/en-cuisine/")) return "/hgpto/gepeto/chef.png";
-        return "/hgpto/gepeto/normal.png";
+        return FIGURE_INITIALE;
       };
       const poserFigure = (): void => {
         const bot = host.querySelector("#bot");

@@ -133,6 +133,10 @@ export function initHgpto() {
                         métal poli avec ombre de repousse rasée de ~2 jours
                         (pointillé fin, dessus arrière + côtés) ; barbe un peu
                         plus longue (courte barbe fournie, moustache reliée) ;
+                        · 2026-11-11 — EXCEPTION TUQUE NOËL (mot d'HP, Q-T8) :
+                        en décembre seulement, la tuque de Noël reste sur sa
+                        tête MÊME pendant le sommeil (figure unique, aucun
+                        retrait au sommeil) ; retour tête nue le 1er janvier.
                         sourcils encore plus velus/poilus, toujours lisibles ;
                         taille réduite : 132 px bureau, 106 px mobile (Pixel
                         suit : 76 px au téléphone), cibles du dock ≥ 44 px.
@@ -2862,6 +2866,10 @@ export function initHgpto() {
         if (cst === 'stjean') return "aux couleurs de la fête nationale";
         if (cst === 'sucres') return "en carreauté du temps des sucres";
         if (cst === 'rentree') return "avec son sac à dos de la rentrée";
+        /* Lot tuque Noël (Q-T5 + Q-T2) : en décembre, la figure porte la
+           tuque même quand le costume est rangé (partie en cours) — le
+           libellé « tête nue » mentirait sur la photo souvenir. */
+        if (seasonDecorKind() === 'noel') return "en lumières de Noël ambulantes";
         var o = bot.getAttribute('data-outfit');
         if (document.body.classList.contains('night')) return "tête nue, comme toujours";
         if (o === 'froid') return "en foulard, tête nue";
@@ -2875,7 +2883,9 @@ export function initHgpto() {
         var dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
         var dec = seasonDecorKind();
         var decoStr = dec === 'halloween' ? " — décos d'Halloween installées par lui-même" : dec === 'noel' ? " — lumières de Noël installées par lui-même" : "";
-        document.getElementById('scard-bot').innerHTML = '<img src="/hgpto/gepeto/normal.png" alt="Sir H. Gepeto" width="110">';
+        /* Lot tuque Noël (Q-T2) : la carte souvenir montre la tuque en décembre. */
+        var srcSouvenir = dec === 'noel' ? '/hgpto/gepeto/normal-tuque-noel.png' : '/hgpto/gepeto/normal.png';
+        document.getElementById('scard-bot').innerHTML = '<img src="' + srcSouvenir + '" alt="Sir H. Gepeto" width="110">';
         document.getElementById('scard-meta').textContent = "Sir H. Gepeto, " + outfitLabel() + decoStr;
         document.getElementById('scard-line').textContent = "Souvenir du " + dateStr + ", chez HP Outils (Terrebonne, Québec).";
         scardText = "Photo souvenir avec Sir H. Gepeto, le gérant du site HP Outils — " + outfitLabel() + ", le " + dateStr + ". " +
