@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 44 jeux en ligne | HP Outils",
-      description: "Des jeux gratuits créés au Québec — 44 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
+      title: "Jeux gratuits en français du Québec — 46 jeux en ligne | HP Outils",
+      description: "Des jeux gratuits créés au Québec — 46 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
       path: "/jeux",
     }),
     scripts: [
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/jeux")({
             "@type": "ListItem",
             position: i + 1,
             name: g.title,
-            url: `https://www.hp-outils.com/apps/${slugDepuisFichier(g.file)}`,
+            url: `https://www.hp-outils.com/apps/${g.slug ?? slugDepuisFichier(g.file)}`,
           })),
         }),
       },
@@ -37,8 +37,11 @@ const STORIES = [
   { audience: "Adulte", copy: "Des récits à embranchements ancrés dans les relations, le quotidien et les décisions imparfaites." },
 ];
 
-const GAMES = [
+/* Tuile : slug explicite quand le fichier ne vit pas dans son propre
+   répertoire (éditions des Fêtes) — sinon le slug est le répertoire. */
+const GAMES: { title: string; file: string; copy: string; tag: string; faits?: string; mono: string; art: number; slug?: string }[] = [
   { title: "Cherche & Trouve — La vraie vie", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html", copy: "Jeu d'observation gratuit : un cherche-et-trouve dans des scènes de la vraie vie.", tag: "Observation · Cherche-et-trouve", faits: "3 manches · 15 défis · sprint de 3 minutes", mono: "CT", art: 6 },
+  { title: "Cherche et Trouve — Édition des Fêtes", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-fetes-v1.0.html", copy: "Jeu d'observation des Fêtes : trouve un chocolat chaud, une décoration, compte 5 lumières dehors — et attention, l'étincelle bloque des touches en rigolant.", tag: "Observation · Cherche-et-trouve", faits: "4 manches · 20 défis · sprint de 3 minutes", mono: "B7", art: 6, slug: "cherche-trouve-fetes" },
   { title: "Les hommes préhistoriques du Québec", file: "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html", copy: "Jeu fantaisiste 2.5D gratuit : cours avec Silex dans un Québec imaginaire, avec des dinosaures inventés pour le jeu. Saute par-dessus les roches et les troncs, ramasse des silex et découvre 8 dinosaures imaginaires. Grimpe sur les paliers, attrape les boosts et crée ton parcours !", tag: "Aventure · 8 dinosaures imaginaires", faits: "8 dinos imaginaires · paliers et boosts · crée ton parcours", mono: "HP", art: 0 },
   { title: "Mini-jeux HP", file: "/apps/mini-jeux/mini-jeux-hp.html", copy: "Trois mini-jeux gratuits réunis, jouables hors ligne : Hiverman, le bonhomme de neige qui ramasse les points en évitant les fantômes ; Flocon, pour dessiner ton flocon ; Mini point, pour dessiner au doigt. Aucun son, aucun réseau — fond noir pour économiser la pile.", tag: "Mini-jeux · 3 jeux en un", faits: "3 mini-jeux · jouables hors ligne", mono: "MJ", art: 7 },
   { title: "RELÈVE — Chapitre 1 : Surchauffe", file: "/apps/releve/releve-chapitre-1-v1.0.html", copy: "Jeu d'enquête 3D gratuit à Percé : avec Grizz, ourson policier de Faune-Secours, et NID à la radio, trouve la cause d'une surchauffe qui menace la faune. En français et en anglais.", tag: "Aventure · Enquête 3D à Percé", faits: "Histoire d'enquête · FR/EN", mono: "R1", art: 0 },
@@ -47,6 +50,7 @@ const GAMES = [
   { title: "Mystères du Nord — enquêtes de déduction", file: "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html", copy: "Jeu d'enquête et de déduction gratuit : sept enquêtes dans le Nord — explore les lieux, interroge les suspects et démasque le coupable.", tag: "Enquête · Déduction", faits: "7 enquêtes · pour les jeunes détectives aussi", mono: "MN", art: 7 },
   { title: "Fait fructifier 100 $ en 30 jours", file: "/apps/100-en-30-jours/100-en-30-jours-v1.2.html", copy: "Jeu de gestion et d'investissement 100 % fictif et gratuit : 100 $ de départ, 30 jours pour fructifier.", tag: "Gestion · Investissement fictif", faits: "100 $ fictifs · 30 jours pour fructifier", mono: "100", art: 3 },
   { title: "Caribou Run — course sans fin québécoise", file: "/apps/caribou-run/caribou-run-v1.1.html", copy: "Jeu d'arcade gratuit, course sans fin québécoise : saute les bancs de neige et échappe à la déneigeuse !", tag: "Arcade · Course sans fin", faits: "Endless runner : la partie dure tant que tu tiens", mono: "CR", art: 0 },
+  { title: "Caribou Run — Édition des Fêtes", file: "/apps/caribou-run/caribou-run-fetes-v1.0.html", copy: "Course sans fin des Fêtes : le caribou au nez rouge ramasse les cadeaux, évite les loups et échappe à la déneigeuse illuminée — l'étincelle chevauche sur son dos.", tag: "Arcade · Course sans fin", faits: "Cadeaux à ramasser (+25 pts) · loups à éviter · déneigeuse illuminée", mono: "B6", art: 0, slug: "caribou-run-fetes" },
   { title: "Devine l'humeur — devine les émotions", file: "/apps/devine-l-humeur/devine-l-humeur-v1.1.html", copy: "Jeu des émotions gratuit : devine l'émotion cachée derrière chaque situation.", tag: "Émotions · Devine les émotions", faits: "10 manches · 13 humeurs · 52 visages", mono: "DH", art: 4 },
   { title: "La Spirale ASMR", file: "/apps/la-spirale-asmr/la-spirale-asmr-v1.1.html", copy: "Jeu de détente gratuit : un tourbillon de sable hypnotique à personnaliser — couleurs, effets et sons doux, avec respiration guidée.", tag: "Détente · ASMR et respiration", faits: "Solo · respiration guidée de 1 à 10 minutes", mono: "SA", art: 0 },
   { title: "Poutine Panic — sers des poutines à toute vitesse", file: "/apps/poutine-panic/poutine-panic-v1.1.html", copy: "Jeu d'arcade gratuit : sers des poutines à toute vitesse avant la fin du service, en parties de 2 minutes.", tag: "Arcade · Service rapide", faits: "Parties de 2 minutes", mono: "PP", art: 2 },
@@ -100,7 +104,7 @@ type GameEntry = (typeof GAMES)[number];
 
 /* Adresse stable du jeu (item nº 4) : /apps/<slug>, redirigée en 301
    vers le fichier courant — les liens partagés ne cassent plus. */
-const hrefJeu = (file: string) => `/apps/${slugDepuisFichier(file)}`;
+const hrefJeu = (g: GameEntry) => `/apps/${g.slug ?? slugDepuisFichier(g.file)}`;
 
 const GENRES = ["Tous", ...Array.from(new Set(GAMES.map((g) => g.tag.split(" · ")[0])))];
 
@@ -455,7 +459,7 @@ function JeuxPage() {
   };
 
   const etatCoeur = (g: GameEntry) => {
-    const slug = slugDepuisFichier(g.file);
+    const slug = g.slug ?? slugDepuisFichier(g.file);
     return {
       slug,
       titre: g.title,
@@ -483,7 +487,7 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (44), Quiz (2), etc.
+     conformes à la liste exacte approuvée — Tous (46), Quiz (2), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
@@ -507,12 +511,12 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur option B (Mini-jeux HP = 3 jeux) : 44 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
+            {/* Compteur option B (Mini-jeux HP = 3 jeux) : 46 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
             <span style={CHIP_STYLE}>{JEUX_JOUABLES} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>44, c'est 44 jeux. Le « + 1 » est un jeu caché, non nommé. Le « + 2 », c'est la tuile Mini-jeux HP : 1 tuile, 3 jeux.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>46, c'est 46 jeux. Le « + 1 » est un jeu caché, non nommé. Le « + 2 », c'est la tuile Mini-jeux HP : 1 tuile, 3 jeux.</p>
         </div>
       </section>
 
@@ -577,10 +581,10 @@ function JeuxPage() {
             <div aria-label="Vos favoris" style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center", maxWidth: 900, margin: "0 auto 26px" }}>
               <span style={{ fontSize: 13, fontWeight: 800, color: "#b3362b" }}>♥ Vos favoris :</span>
               {favoris.map((slug) => {
-                const g = GAMES.find((x) => slugDepuisFichier(x.file) === slug);
+                const g = GAMES.find((x) => (x.slug ?? slugDepuisFichier(x.file)) === slug);
                 if (!g) return null;
                 return (
-                  <a key={slug} href={hrefJeu(g.file)} style={{ ...FILTER_BTN_STYLE, textDecoration: "none", display: "inline-block" }}>
+                  <a key={slug} href={hrefJeu(g)} style={{ ...FILTER_BTN_STYLE, textDecoration: "none", display: "inline-block" }}>
                     {g.title}
                   </a>
                 );
@@ -599,7 +603,7 @@ function JeuxPage() {
             {vedetteVisible ? (
             <article className="pillar-card" style={{ gridColumn: "1 / -1", padding: 0, overflow: "hidden", flexDirection: "row", flexWrap: "wrap", gap: 0 }}>
               <a
-                href={hrefJeu(featured.file)}
+                href={hrefJeu(featured)}
                 aria-label={"Jouer à " + featured.title}
                 style={{ ...tileBackground(featured), flex: "1 1 260px", minHeight: 230, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, textDecoration: "none", padding: "18px 14px" }}
               >
@@ -615,9 +619,9 @@ function JeuxPage() {
                 <span style={TAG_ON_PAPER_STYLE}>{featured.tag}</span>
                 <p>{featured.copy}</p>
                 {"faits" in featured && featured.faits ? <p className="workshop-meta">{featured.faits}</p> : null}
-                <RangeeTampons slug={slugDepuisFichier(featured.file)} />
+                <RangeeTampons slug={featured.slug ?? slugDepuisFichier(featured.file)} />
                 <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-                  <a className="btn-primary" href={hrefJeu(featured.file)}>Jouer maintenant</a>
+                  <a className="btn-primary" href={hrefJeu(featured)}>Jouer maintenant</a>
                   <BoutonCoeur {...etatCoeur(featured)} />
                 </div>
               </div>
@@ -626,7 +630,7 @@ function JeuxPage() {
 
             {visibleGames.map((game) => (
               <article className="pillar-card" key={game.title} style={{ padding: 0, overflow: "hidden", gap: 0 }}>
-                <a href={hrefJeu(game.file)} aria-label={"Jouer à " + game.title} style={{ display: "block", textDecoration: "none" }}>
+                <a href={hrefJeu(game)} aria-label={"Jouer à " + game.title} style={{ display: "block", textDecoration: "none" }}>
                   <div style={{ ...tileBackground(game), minHeight: 148, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 7, position: "relative", padding: "16px 14px 30px" }}>
                     <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 52, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>
                       {game.mono}
@@ -641,11 +645,11 @@ function JeuxPage() {
                   <h3 style={{ fontSize: 23 }}>{game.title}</h3>
                   <p>{game.copy}</p>
                   {"faits" in game && game.faits ? <p className="workshop-meta">{game.faits}</p> : null}
-                  <RangeeTampons slug={slugDepuisFichier(game.file)} />
+                  <RangeeTampons slug={game.slug ?? slugDepuisFichier(game.file)} />
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginTop: "auto" }}>
                     {/* Lot /jeux façon Friv : bouton « Jouer » net par tuile —
                         un geste = le jeu se lance (même lien qu'avant). */}
-                    <a className="btn-primary" href={hrefJeu(game.file)} aria-label={"Jouer à " + game.title} style={{ fontSize: 14, padding: "9px 18px" }}>Jouer</a>
+                    <a className="btn-primary" href={hrefJeu(game)} aria-label={"Jouer à " + game.title} style={{ fontSize: 14, padding: "9px 18px" }}>Jouer</a>
                     <BoutonCoeur {...etatCoeur(game)} />
                   </div>
                 </div>
@@ -747,7 +751,7 @@ function JeuxPage() {
           </div>
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 13 }}>
             {ORDRE_PREUVE.map((slug) => {
-              const g = GAMES.find((x) => slugDepuisFichier(x.file) === slug);
+              const g = GAMES.find((x) => (x.slug ?? slugDepuisFichier(x.file)) === slug);
               if (!g) return null;
               return (
                 <li
@@ -755,7 +759,7 @@ function JeuxPage() {
                   style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center", textAlign: "center" }}
                 >
                   <a
-                    href={hrefJeu(g.file)}
+                    href={hrefJeu(g)}
                     style={{ color: "#221a12", fontWeight: 700, fontSize: 15.5, textDecoration: "underline", textUnderlineOffset: 3 }}
                   >
                     {g.title}

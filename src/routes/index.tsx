@@ -93,7 +93,7 @@ function Index() {
           {/* Nuit 4A : les appels d'abord, les citations ensuite — textes inchangés, ordre seul. */}
           <div className="lead-actions">
             <Link to="/outils" className="btn-primary">Régler un problème</Link>
-            <Link to="/jeux" className="btn-primary">Jouer 44 jeux gratuits</Link>
+            <Link to="/jeux" className="btn-primary">Jouer 46 jeux gratuits</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
           <p style={{ margin: "28px 0", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
@@ -153,7 +153,7 @@ function Index() {
             </article>
             <article className="pillar-card">
               <h3>Jeux</h3>
-              <p>44 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
+              <p>46 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
               <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
             </article>
             <article className="pillar-card">
