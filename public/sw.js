@@ -2,12 +2,12 @@
 /* Pack hors ligne HP Outils — service worker.
    Garde la Boite a outils, les outils autonomes, En cuisine, le Passeur
    et 6 jeux legers sur l'appareil pour qu'ils fonctionnent sans internet.
-   Cache-first, version a changer (hp-hors-ligne-1 -> hp-hors-ligne-2)
+   Cache-first, version a changer (hp-hors-ligne-2 -> hp-hors-ligne-3)
    pour mettre le pack a jour. Portee : tout le site (/).
    Seuls les fichiers de la liste PACK sont mis en cache ; le reste
    passe par le reseau, et une navigation sans reseau tombe sur
    /hors-ligne.html. Aucune donnee saisie ne quitte l'appareil. */
-var V = 'hp-hors-ligne-1';
+var V = 'hp-hors-ligne-2';
 var PACK = [
   '/manifest.webmanifest',
   '/hors-ligne.html',
@@ -25,6 +25,16 @@ var PACK = [
   '/hgpto/hgpto.css',
   '/hgpto/gepeto/normal.png',
   '/hgpto/gepeto/tete-144.png',
+  /* Correctif 11 nov. 2026 : la barre et la face de l'en-tête, servies
+     du cache après la 1re visite — sinon le personnage restait un
+     rectangle vide à chaque navigation. Les images tuque du moteur
+     (normal-tuque-noel.png, vendeur-tuque-noel.png) ne sont pas encore
+     dans le dépôt : à ajouter au PACK quand le lot tuque sera déposé,
+     pas avant (un chemin absent fait échouer caches.addAll). */
+  '/hgpto/gepeto/tete-144-tuque-noel.png',
+  '/barre-haut/barre-haut.js',
+  '/barre-haut/barre-haut.css',
+  '/images/hp-logo-clean.png',
   '/hgpto/pixel/c-patte-arr.png',
   '/hgpto/pixel/c-patte-av-d.png',
   '/hgpto/pixel/c-patte-av-g.png',

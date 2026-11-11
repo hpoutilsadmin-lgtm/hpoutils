@@ -101,7 +101,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         /* Barre unique en haut (P1, 11 nov. 2026) : même patron que la
            v3 — defer dès l'analyse du HTML, pas d'attente de
            l'hydratation. data-page est dérivé du chemin par
-           barre-haut.js (§2.2) : aucun attribut ici. */
+           barre-haut.js (§2.2) : aucun attribut ici. Correctif
+           11 nov. 2026 : le script se ré-exécute à chaque navigation
+           interne — sa garde d'idempotence (barre-haut.js) empêche
+           qu'une barre de plus soit montée. */
         src: "/barre-haut/barre-haut.js",
         defer: true,
         "data-barre-haut": "1",
@@ -148,6 +151,17 @@ function RootComponent() {
   useEffect(() => {
     document.getElementById("bh-barre")?.classList.toggle("bh-page-accueil", loc.pathname === "/");
   }, [loc.pathname]);
+
+  /* Correctif 11 nov. 2026 (Q-C3) : le service worker existe depuis
+     longtemps mais n'a jamais été enregistré sur les routes React —
+     son cache ne servait à rien ici. Enregistrement une fois, côté
+     client seulement ; en cas d'échec le site continue sur le réseau,
+     sans rien casser. */
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

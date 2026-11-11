@@ -114,6 +114,22 @@
     return; /* rien n'est monté, rien n'est injecté */
   }
 
+  /* ---------- Garde d'idempotence (correctif 11 nov. 2026) ---------- */
+  /* TanStack Start ré-exécute ce script à chaque navigation interne :
+     son composant <Script> retire la balise du serveur après hydratation
+     puis la recrée quand le head change — sans cette garde, chaque
+     ré-exécution montait une barre de plus (copies invisibles qui
+     interceptaient les taps). Une seule barre : on met à jour l'état
+     de celle qui existe (page courante, face accueil) et on sort. */
+  var existante = document.getElementById("bh-barre");
+  if (existante) {
+    existante.classList.toggle("bh-page-accueil", pageDepuisChemin() === "accueil");
+    document.documentElement.setAttribute("data-bh-page", optPage);
+    barre = existante; /* mesurerReserve() lit `barre` : l'assigner d'abord */
+    mesurerReserve();
+    return;
+  }
+
   /* ---------- Petits outils ---------- */
   function el(tag, attrs, texte) {
     var n = document.createElement(tag);
@@ -450,7 +466,7 @@
       "data-commande": nom
     });
     if (icone === "face") {
-      var img = el("img", { "class": "bh-mini-face", src: cheminFace, alt: "" });
+      var img = el("img", { "class": "bh-mini-face", src: cheminFace, alt: "", "width": "48", "height": "48" });
       img.setAttribute("aria-hidden", "true");
       b.appendChild(img);
     } else {
@@ -476,7 +492,8 @@
     var tete = el("div", { "class": "bh-tete" });
     var face = el("img", {
       "class": "bh-face", src: cheminFace,
-      alt: "Sir H. Gepeto, le gérant du site"
+      alt: "Sir H. Gepeto, le gérant du site",
+      "width": "48", "height": "48", "fetchpriority": "high"
     });
     tete.appendChild(face);
     var titre = el("p", { "class": "bh-titre", html: "<strong>HP</strong> À portée de main" });

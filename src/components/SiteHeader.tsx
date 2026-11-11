@@ -28,19 +28,44 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const loc = useLocation();
   useEffect(() => setOpen(false), [loc.pathname]);
+  /* Q-C1 (correctif 11 nov. 2026) : la face de l'en-tête ouvre Sir H.
+     Gepeto — même geste que le bouton Gepeto de la barre : on déclenche
+     son bouton, qui envoie 'hp:gepeto-ouvrir' et ouvre son panneau.
+     Secours (barre pas encore montée) : l'événement seul. */
+  const ouvrirGepeto = () => {
+    const btn = document.querySelector<HTMLButtonElement>('[data-commande="gepeto"]');
+    if (btn) {
+      btn.click();
+      return;
+    }
+    document.dispatchEvent(new CustomEvent("hp:gepeto-ouvrir"));
+  };
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <Link className="logo" to="/" aria-label="Accueil HP">
-          <img src="/images/hp-logo-clean.png" alt="HP — des outils pour la vraie vie" />
+        {/* Q-C1 (correctif 11 nov. 2026) : la face n'est plus dans le lien
+            d'accueil — c'est un bouton qui ouvre Sir H. Gepeto. Le logo
+            HP reste le lien d'accueil ; la disposition (logo + face,
+            10 px d'écart) est conservée. */}
+        <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <Link className="logo" to="/" aria-label="Accueil HP" style={{ minWidth: 0 }}>
+            <img src="/images/hp-logo-clean.png" alt="HP — des outils pour la vraie vie" />
+          </Link>
           {/* Accueil sans face (6 nov. 2026, décision 17) : la petite face de
               Gepeto va dans l'en-tête de tous les jeux, outils et En cuisine —
               mais PAS sur l'accueil. Le composant est partagé : on la masque
               ici seulement quand la route est "/" ; elle reste partout ailleurs. */}
           {loc.pathname !== "/" && (
-            <img src="/hgpto/gepeto/tete-144-tuque-noel.png" alt="" className="logo-gepeto" width="48" height="48" />
+            <button
+              type="button"
+              aria-label="Ouvrir Sir H. Gepeto"
+              onClick={ouvrirGepeto}
+              style={{ background: "none", border: 0, padding: 0, cursor: "pointer", flex: "none", lineHeight: 0 }}
+            >
+              <img src="/hgpto/gepeto/tete-144-tuque-noel.png" alt="" className="logo-gepeto" width="48" height="48" style={{ borderRadius: "50%", objectFit: "cover", flex: "none" }} />
+            </button>
           )}
-        </Link>
+        </span>
         <button
           className="nav-toggle"
           type="button"

@@ -52,11 +52,15 @@ export const getRouter = () => {
     defaultPendingComponent: ChargementPage,
     defaultPendingMs: 200,
     defaultPendingMinMs: 0,
-    // P1 : précharger le morceau de la route au survol / toucher (50 ms),
-    // pour tous les liens qui n'ont pas leur propre réglage — le pied de
-    // page règle les siens sur "viewport" (voir SiteFooter). Sans ce
-    // réglage, aucun préchargement n'avait lieu nulle part dans le site.
-    defaultPreload: "intent",
+    // Correctif 11 nov. 2026 (Q-C2, « viewport partout ») : précharger
+    // le morceau d'une route dès que son lien entre dans le viewport,
+    // pour tous les liens qui n'ont pas leur propre réglage — le pied
+    // de page règle les siens sur "viewport" (voir SiteFooter). Avec
+    // "intent", le premier tap partait à froid et la page restait
+    // bloquée sur « Chargement… » derrière les gros fichiers de
+    // l'accueil. Coût honnête : quelques dizaines de Ko de plus au
+    // chargement initial, sur LTE.
+    defaultPreload: "viewport",
   });
 
   return router;
