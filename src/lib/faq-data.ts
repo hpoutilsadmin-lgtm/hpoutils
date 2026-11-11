@@ -37,7 +37,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "Est-ce qu'il y a des ateliers en personne ?",
     reponse:
-      "Oui : 6 ateliers de groupe à Terrebonne et dans Lanaudière — Cuisine pratique (260 $ CAD), Manger mieux avec moins (260 $ CAD), L'IA sans jargon (220 $ CAD), Atelier jeunesse (150 $ CAD), Les enfants cuisinent (190 $ CAD), Hygiène & salubrité (150 $ CAD). Et pour l'Édition des Fêtes (1er octobre au 23 décembre) : le Pain maison à domicile (290 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h (220 $) et la conférence « La faim justifie les moyens » (220 $, 60 min + questions).",
+      "Oui : 6 ateliers de groupe à Terrebonne et dans Lanaudière — Cuisine pratique (260 $ CAD), Manger mieux avec moins (260 $ CAD), L'IA sans jargon (220 $ CAD), Atelier jeunesse (150 $ CAD), Les enfants cuisinent (190 $ CAD), Hygiène & salubrité (150 $ CAD). Et pour l'Édition des Fêtes (1er octobre au 23 décembre) : le Pain maison à domicile (290 $, 3 h, 6 à 8 personnes), L'IA sans jargon en 2 h (220 $) et la conférence « La faim justifie les moyens » (220 $, 60 min + 15 min questions).",
   },
   {
     question: "C'est quoi, le Passeur de savoir ?",
