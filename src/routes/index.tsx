@@ -158,7 +158,7 @@ function Index() {
             </article>
             <article className="pillar-card">
               <h3>Groupes, organismes et commerces</h3>
-              <p>Un jeu aux couleurs de votre commerce ou de votre organisme, que vos clients jouent, partagent et retiennent ; des ateliers pour vos groupes, à Terrebonne et dans Lanaudière, on vient chez vous. Jeux à vos couleurs dès 29 $ (aperçu gratuit, vente bientôt ouverte), ateliers pour groupes 150 à 290 $, aucune taxe ajoutée.</p>
+              <p>Un jeu aux couleurs de votre commerce ou de votre organisme, que vos clients jouent, partagent et retiennent ; des ateliers pour vos groupes, à Terrebonne et dans Lanaudière, on vient chez vous. Jeux à vos couleurs dès 19 $ (aperçu gratuit, vente bientôt ouverte), ateliers pour groupes 150 à 290 $, aucune taxe ajoutée.</p>
               <Link className="pillar-cta" to="/jeux-a-votre-image">Voir les jeux à votre image →</Link>
               <Link className="pillar-cta" to="/ateliers">Voir les ateliers →</Link>
             </article>

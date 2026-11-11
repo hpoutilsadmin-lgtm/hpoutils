@@ -62,7 +62,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "C'est quoi, un jeu à votre image ?",
     reponse:
-      "Un petit jeu qui porte votre nom et vos couleurs, que vos clients peuvent jouer et partager. Quatre niveaux : Express 29 $ CAD, Événement 199 $ CAD, Saisonnier 299 $ CAD, Permanent 399 $ CAD. Hébergement gratuit la première année, puis 29 $ CAD par année, par jeu. Aucune taxe ajoutée. La vente n'est pas encore ouverte : le parcours actuel, c'est un brief par courriel, un devis, votre oui explicite, puis un paiement à confirmer. Voir la page « Jeux à votre image ».",
+      "Un petit jeu qui porte votre nom et vos couleurs, que vos clients peuvent jouer et partager. Quatre niveaux : Express 19 $ CAD, Événement 199 $ CAD, Saisonnier 299 $ CAD, Permanent 399 $ CAD. Hébergement gratuit la première année, puis 29 $ CAD par année, par jeu. Aucune taxe ajoutée. La vente n'est pas encore ouverte : le parcours actuel, c'est un brief par courriel, un devis, votre oui explicite, puis un paiement à confirmer. Voir la page « Jeux à votre image ».",
   },
   {
     question: "Combien de temps mon lien de téléchargement reste-t-il valide ?",

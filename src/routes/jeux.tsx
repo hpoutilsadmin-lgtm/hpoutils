@@ -721,7 +721,7 @@ function JeuxPage() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Votre commerce, votre jeu</h3>
-              <p>Un petit jeu aux couleurs de votre commerce, que vos clients jouent, partagent et retiennent. De 29 $ à 399 $, hébergement gratuit la première année, puis 29 $ par année, par jeu hébergé, aucune taxe ajoutée. Service sur mesure — ce n&apos;est pas un jeu gratuit de la liste ci-dessus, et il ne change pas le compteur des jeux gratuits.</p>
+              <p>Un petit jeu aux couleurs de votre commerce, que vos clients jouent, partagent et retiennent. De 19 $ à 399 $, hébergement gratuit la première année, puis 29 $ par année, par jeu hébergé, aucune taxe ajoutée. Service sur mesure — ce n&apos;est pas un jeu gratuit de la liste ci-dessus, et il ne change pas le compteur des jeux gratuits.</p>
               <Link to="/jeux-a-votre-image" className="pillar-cta">Voir l&apos;offre →</Link>
             </article>
           </div>

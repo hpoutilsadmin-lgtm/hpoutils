@@ -20,7 +20,7 @@ export const Route = createFileRoute("/jeux-a-votre-image")({
     createSeoHead({
       title: "Jeu personnalisé pour commerce, créé par HP Outils",
       description:
-        "Un petit jeu simple, aux couleurs et au nom de votre commerce, que vos clients jouent, partagent et retiennent. De 29 $ à 399 $, hébergement gratuit la première année. Voyez l'aperçu gratuit en 30 secondes.",
+        "Un petit jeu simple, aux couleurs et au nom de votre commerce, que vos clients jouent, partagent et retiennent. De 19 $ à 399 $, hébergement gratuit la première année. Voyez l'aperçu gratuit en 30 secondes.",
       path: "/jeux-a-votre-image",
     }),
   component: Page,
@@ -91,11 +91,12 @@ function Page() {
       </p>
       <p style={P}>
         Les prix :{" "}
-        <a href="#express" style={CHIP}>Express 29 $</a>
+        <a href="#express" style={CHIP}>Express 19 $</a>
         <a href="#evenement" style={CHIP}>Événement 199 $</a>
         <a href="#saisonnier" style={CHIP}>Saisonnier 299 $</a>
         <a href="#permanent" style={CHIP}>Permanent 399 $</a>
       </p>
+      <p style={P}>Express 19 $ jusqu&apos;au 31 décembre 2026.</p>
 
       <section aria-label="Quatre jeux qui marchent déjà" style={BLOC}>
         <h2 style={H2}>Quatre jeux qui marchent déjà. On change juste les couleurs.</h2>
@@ -156,7 +157,7 @@ function Page() {
           </thead>
           <tbody>
             <tr id="express">
-              <td style={TD}><strong>Express 29 $ « Pour tester »</strong></td>
+              <td style={TD}><strong>Express 19 $ « Pour tester »</strong></td>
               <td style={TD}>7 jours.</td>
               <td style={TD}>Course seulement, un seul nom au choix (commerce, événement ou particulier), aucune option. Sans le délai de 14 jours, non crédité.</td>
             </tr>
@@ -178,7 +179,7 @@ function Page() {
           </tbody>
         </table>
         <div style={CALLOUT}>
-          Le 29 $ express n&apos;est pas crédité vers un jeu supérieur.
+          Le 19 $ express n&apos;est pas crédité vers un jeu supérieur.
           L&apos;image : vous essayez un resto, vous mangez peu, c&apos;est
           bon, vous revenez manger beaucoup — on ne vous crédite pas le premier
           repas test. Le test se paie ; le reste se paie ensuite.
@@ -196,7 +197,7 @@ function Page() {
           jamais promis.
         </p>
         <p style={P}>
-          Chaque prix se paie une seule fois : Express 29 $, Événement 199 $,
+          Chaque prix se paie une seule fois : Express 19 $, Événement 199 $,
           Saisonnier 299 $, Permanent 399 $. L&apos;hébergement s&apos;ajoute
           ensuite (gratuit l&apos;année 1, puis 29 $ par année, par jeu
           hébergé). Fin de vie, paliers à durée finie seulement (Express, Événement, Saisonnier — le Permanent est exclu) : à la fin de votre durée, le jeu disparaît : c&apos;est simplement la fin, l&apos;espace est libéré et le jeu est effacé. Aucune garde promise, aucun fichier promis comme garde après la fin.
@@ -312,7 +313,7 @@ function Page() {
           <li><strong>Le prototype, testé par vous.</strong> Vous essayez le prototype sur VOTRE téléphone, avant tout oui et avant tout paiement. Rien n&apos;est facturé avant que vous ayez vu et essayé le jeu.</li>
           <li><strong>Le devis, ventilé.</strong> Prix du niveau, hébergement, aucune taxe ajoutée — chaque montant est détaillé, sans frais cachés. Vous recevez une copie du contrat (devis + conditions) par courriel, que vous pouvez conserver et imprimer.</li>
           <li><strong>Votre OUI EXPLICITE — la porte obligatoire.</strong> Sans votre oui explicite, aucun paiement n&apos;est demandé et aucun paiement n&apos;est pris. Un silence, un aperçu ou un échange de courriels ne vaut jamais oui.</li>
-          <li><strong>Le paiement, seulement après votre oui.</strong> Le lien de paiement sécurisé Stripe vous est envoyé après votre oui explicite, et pas avant. 1 ronde de corrections est incluse pour Événement, Saisonnier et Permanent (l&apos;Express 29 $ n&apos;en inclut pas). Pour l&apos;instant : aucun paiement réel n&apos;est pris pour les jeux sur mesure — les produits Stripe sont en confirmation, et le paiement s&apos;ouvrira après cette confirmation et un test à 0 $.</li>
+          <li><strong>Le paiement, seulement après votre oui.</strong> Le lien de paiement sécurisé Stripe vous est envoyé après votre oui explicite, et pas avant. 1 ronde de corrections est incluse pour Événement, Saisonnier et Permanent (l&apos;Express 19 $ n&apos;en inclut pas). Pour l&apos;instant : aucun paiement réel n&apos;est pris pour les jeux sur mesure — les produits Stripe sont en confirmation, et le paiement s&apos;ouvrira après cette confirmation et un test à 0 $.</li>
           <li><strong>La livraison, par courriel.</strong> Adresse dédiée du jeu + kit de partage (texte du post, adresse du jeu, code QR à imprimer pour Saisonnier et Permanent). Délai convenu : sous 14 jours après validation du brief. Si le jeu n&apos;est pas livré dans les 30 jours suivant la date convenue, vous pouvez annuler en tout temps avant de l&apos;avoir reçu, et HP vous rembourse toutes les sommes payées, dans les 15 jours. Si le jeu livré ne correspond pas au brief validé, HP corrige d&apos;abord ; si HP n&apos;arrive pas à livrer un jeu conforme, vous êtes remboursé en entier, dans les 15 jours.</li>
         </ol>
         <p style={P}>

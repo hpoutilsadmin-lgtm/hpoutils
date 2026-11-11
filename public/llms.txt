@@ -108,7 +108,7 @@ pour l'instant : l'inscription se fait par courriel.
 ## Les jeux à votre image (page /jeux-a-votre-image)
 
 Un jeu aux couleurs d'un commerce, d'un événement ou d'un organisme :
-Express 29 $, Événement 199 $, Saisonnier 299 $, Permanent 399 $.
+Express 19 $, Événement 199 $, Saisonnier 299 $, Permanent 399 $.
 Hébergement gratuit l'année 1, puis 29 $ par année et par jeu.
 Aucune taxe ajoutée.
 
