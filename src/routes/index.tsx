@@ -25,7 +25,12 @@ const ORGANISATION_JSON_LD = {
         addressCountry: "CA",
       },
       areaServed: ["Lanaudière", "Québec", "Canada"],
-      sameAs: ["https://youtube.com/@hp-2zl"],
+      sameAs: [
+        "https://www.instagram.com/hpoutils/",
+        "https://www.facebook.com/1186804767843963",
+        "https://www.tiktok.com/@hp2zl",
+        "https://youtube.com/@hp-2zl",
+      ],
     },
     {
       "@type": "Person",
