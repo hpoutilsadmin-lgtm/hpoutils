@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pêche blanche — HP Outils</title>
+<style>
+  :root{--cream:#f7f3ea;--ink:#2a2620;--forest:#2f6b4f;--maple:#b5451b;--gold:#d9a441;--soft:#e8e0cf;--sky:#3f7fa3;--muted:#6b6459}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:16px 12px 24px;gap:12px;user-select:none}
+  header{width:100%;max-width:560px;display:flex;justify-content:flex-start;align-items:center;gap:10px}
+  .gepeto-face{width:48px;height:48px;border-radius:50%;flex:0 0 auto;background:#e6b88a;border:2px solid var(--soft)}
+  .gepeto-face img{display:block;width:100%;height:100%;object-fit:cover}
+  img.gepeto-face{object-fit:cover}
+  .overlay{overflow-y:auto}
+  .choix{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 0 8px}
+  .choix button{min-height:48px;padding:8px 12px;border-radius:10px;border:2px solid var(--soft);background:#fffdf7;font-family:inherit;font-size:.82rem;font-weight:600;color:var(--forest);cursor:pointer}
+  .choix button[aria-pressed="true"]{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .choix-titre{font-size:.8rem;color:var(--muted);margin:10px 0 4px}
+  .montage{margin:4px 0 8px;text-align:left}
+  .montage summary{cursor:pointer;color:var(--forest);font-weight:600;font-size:.85rem;min-height:48px;display:flex;align-items:center;justify-content:center}
+  .pause #btn-pause{flex:0 0 auto;padding-left:18px;padding-right:18px;background:var(--sky)}
+  h1{font-size:1.1rem;margin:0;color:var(--forest)}
+  h1 small{font-weight:400;color:var(--muted);font-size:.8em}
+  .hud{width:100%;max-width:560px;display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .hud b{color:var(--forest);font-size:1.05rem;display:block;font-variant-numeric:tabular-nums}
+  .wrap{position:relative;width:100%;max-width:560px}
+  #jeu{display:block;width:100%;height:auto;border-radius:14px;border:2px solid var(--soft);background:#eaf3f6;touch-action:none}
+  .overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(247,243,234,.96);
+    border-radius:14px;padding:20px;text-align:center}
+  .overlay[hidden]{display:none}
+  #confettis{position:absolute;inset:0;width:100%;height:auto;pointer-events:none;border-radius:14px}
+  #confettis[hidden]{display:none}
+  .overlay h2{margin:0 0 8px;color:var(--forest);font-size:1.4rem}
+  .overlay p{margin:0 0 14px;color:var(--muted);font-size:.95rem;max-width:36ch;line-height:1.5}
+  .overlay button{background:var(--forest);color:#fff;border:0;border-radius:10px;padding:12px 24px;
+    font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15);font-family:inherit;min-height:48px}
+  .legend{width:100%;max-width:560px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.8rem;color:var(--muted)}
+  .legend span{background:#fffdf7;border:1px solid var(--soft);border-radius:8px;padding:6px 8px;display:flex;justify-content:space-between}
+  .legend b{color:var(--forest)}
+  footer{font-size:.8rem;color:#8a8277;max-width:560px;text-align:center;line-height:1.5}
+  .pause{width:100%;max-width:560px;display:flex;gap:8px}
+  .pause button{flex:1;background:var(--forest);color:#fff;border:0;border-radius:10px;padding:12px;min-height:48px;
+    font-size:.95rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .pause button:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+
+  /* ——— Mise en page standard HP (11 nov. 2026) : Retour, cibles 48 px, mouvement réduit ——— */
+  .barre-hp{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:center}
+  .btn-retour{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-retour:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .niveau{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:center;gap:8px;
+    background:#fffdf7;border:1px solid var(--soft);border-radius:10px;padding:8px 12px;font-size:.82rem;color:var(--forest);font-weight:600}
+  .niveau small{color:var(--muted);font-weight:400}
+  .segments{display:flex;gap:4px}
+  .segments i{width:26px;height:8px;border-radius:4px;background:var(--soft)}
+  .segments i.on{background:var(--forest)}
+  .segments i.on.or{background:var(--gold)}
+  .carnet{width:100%;max-width:560px;background:#fffdf7;border:1px solid var(--soft);border-radius:10px;padding:10px 12px;font-size:.82rem;color:var(--muted);line-height:1.6}
+  .carnet summary{cursor:pointer;color:var(--forest);font-weight:600;min-height:48px;display:flex;align-items:center}
+  .carnet ul{margin:8px 0 0;padding-left:18px}
+  .carnet li b{color:var(--forest)}
+  .carnet li i{color:#8a8277}
+  .overlay p span.detail-fin{font-size:.85em;color:#8a8277}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+  /* ——— Petit écran (≤ 480 px) : l'overlay tient dans le canvas ——— */
+  /* Constat panel machine : à 360 px le contenu de l'overlay (253 px de haut)
+     débordait de 27,6 px au démarrage et de 50,4 px en fin de partie, le bouton
+     « Pêcher » / « Repêcher » chevauchant la rangée « Plus haut / Plus bas ».
+     Texte et marges resserrés ici, sans rien retirer du contenu. */
+  @media (max-width:480px){
+    .overlay{padding:10px 14px}
+    .overlay h2{font-size:1.15rem;margin-bottom:6px}
+    .overlay p{font-size:.8rem;line-height:1.35;max-width:none;margin-bottom:10px}
+    .overlay p span.detail-fin{font-size:1em}
+  }
+</style>
+</head>
+<body>
+  <div class="barre-hp"><button class="btn-retour" type="button" onclick="if(history.length>1){history.back()}else{location.href='/jeux'}">← Retour</button><button id="btn-son" class="btn-retour" type="button" aria-pressed="true">🔊 Son</button></div>
+  <header>
+    <img class="gepeto-face" src="data:image/png;base64,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" alt="">
+    <h1>Pêche blanche <small>· HP Outils</small></h1>
+  </header>
+  <div class="hud">
+    <span>Temps<b id="temps">60</b></span>
+    <span>Points<b id="score">0</b></span>
+    <span>Record<b id="best">0</b></span>
+    <span title="Combo : +0,5 par prise rapprochée, jusqu'à ×5. Il retombe à ×1 après 3 secondes sans prise.">Combo<b id="combo">×1</b></span>
+  </div>
+  <div class="niveau" id="niveau-bar"><span id="niveau-txt">Niveau 1 · Eau claire</span><span class="segments" aria-hidden="true"><i class="on"></i><i></i><i></i></span><small id="niveau-suivant">Niveau 2 après 20 s</small></div>
+  <div class="wrap">
+    <canvas id="jeu" width="560" height="420" aria-label="Zone de pêche"></canvas>
+    <div class="overlay" id="overlay">
+      <div>
+        <h2 id="ov-title">Sur la glace</h2>
+        <p id="ov-text">60 secondes, 3 niveaux de profondeur. Déplace la ligne avec le doigt (ou les flèches). 12 espèces du Québec à découvrir. Un poisson doré passe parfois : il vaut double !</p>
+        <details class="montage" id="montage-details">
+        <summary>Choisir mon montage : appât, plomb, lignes</summary>
+        <p class="choix-titre">Ton appât — il attire certaines espèces</p>
+        <div class="choix" id="choix-appat" role="group" aria-label="Choisir son appât">
+          <button type="button" data-appat="ver" aria-pressed="true">Ver de terre</button>
+          <button type="button" data-appat="larve" aria-pressed="false">Larve (asticot)</button>
+          <button type="button" data-appat="mene" aria-pressed="false">Méné mort</button>
+        </div>
+        <p class="choix-titre">Ton plomb — il règle la descente et la profondeur</p>
+        <div class="choix" id="choix-plomb" role="group" aria-label="Choisir son plomb">
+          <button type="button" data-plomb="leger" aria-pressed="false">Plomb léger</button>
+          <button type="button" data-plomb="moyen" aria-pressed="true">Plomb moyen</button>
+          <button type="button" data-plomb="lourd" aria-pressed="false">Plomb lourd</button>
+        </div>
+        <p class="choix-titre">Tes lignes — la brimbale pêche toute seule</p>
+        <div class="choix" id="choix-lignes" role="group" aria-label="Choisir le nombre de lignes">
+          <button type="button" data-lignes="1" aria-pressed="false">1 canne</button>
+          <button type="button" data-lignes="2" aria-pressed="true">Canne + brimbale</button>
+          <button type="button" data-lignes="3" aria-pressed="false">Canne + 2 brimbales</button>
+        </div>
+        <p class="choix-titre">La brimbale, c'est la ligne fixe du Québec : posée sur le trou, son drapeau se lève quand ça mord. En vrai, les appâts vivants sont interdits au Québec depuis 2017, et le nombre de lignes permises varie selon la zone.</p>
+        </details>
+        <button id="ov-btn">Pêcher</button>
+      </div>
+    </div>
+    <canvas id="confettis" width="560" height="420" hidden aria-hidden="true"></canvas>
+  </div>
+  <div class="pause">
+    <button id="btn-up">↑ Plus haut</button>
+    <button id="btn-down">↓ Plus bas</button>
+    <button id="btn-pause" type="button" aria-pressed="false">⏸ Pause</button>
+  </div>
+  <div class="legend" id="legende">
+    <span title="Perca flavescens">Perchaude <b>1</b></span>
+    <span title="Osmerus mordax">Éperlan <b>1</b></span>
+    <span title="Lepomis gibbosus">Crapet-soleil <b>1</b></span>
+    <span title="Ameiurus nebulosus">Barbotte brune <b>1</b></span>
+    <span title="Sander vitreus">Doré <b>2</b></span>
+    <span title="Micropterus dolomieu">Achigan <b>2</b></span>
+    <span title="Coregonus clupeaformis">Grand corégone <b>2</b></span>
+    <span title="Esox lucius">Brochet <b>3</b></span>
+    <span title="Salvelinus fontinalis">Omble de fontaine <b>3</b></span>
+    <span title="Salvelinus namaycush">Touladi <b>4</b></span>
+    <span title="Salmo salar — ouananiche, forme d'eau douce">Ouananiche <b>5</b></span>
+    <span title="Esox masquinongy">Maskinongé <b>5</b></span>
+    <span>✦ Poisson doré <b>×2</b></span>
+  </div>
+  <details class="carnet">
+    <summary>Carnet des 12 espèces du Québec — noms latins</summary>
+    <ul>
+      <li><b>Perchaude</b> — <i>Perca flavescens</i> · 1 pt · niveau 1</li>
+      <li><b>Éperlan</b> — <i>Osmerus mordax</i> · 1 pt · niveau 1</li>
+      <li><b>Crapet-soleil</b> — <i>Lepomis gibbosus</i> · 1 pt · niveau 1</li>
+      <li><b>Barbotte brune</b> — <i>Ameiurus nebulosus</i> · 1 pt · niveau 2</li>
+      <li><b>Doré</b> — <i>Sander vitreus</i> · 2 pts · niveau 1</li>
+      <li><b>Achigan à petite bouche</b> — <i>Micropterus dolomieu</i> · 2 pts · niveau 1</li>
+      <li><b>Grand corégone</b> — <i>Coregonus clupeaformis</i> · 2 pts · niveau 2</li>
+      <li><b>Brochet</b> — <i>Esox lucius</i> · 3 pts · niveau 2</li>
+      <li><b>Omble de fontaine</b> — <i>Salvelinus fontinalis</i> · 3 pts · niveau 2</li>
+      <li><b>Touladi</b> — <i>Salvelinus namaycush</i> · 4 pts · niveau 3</li>
+      <li><b>Ouananiche</b> — <i>Salmo salar</i> (forme d'eau douce) · 5 pts · niveau 3</li>
+      <li><b>Maskinongé</b> — <i>Esox masquinongy</i> · 5 pts · niveau 3</li>
+    </ul>
+  </details>
+  <footer>Flèches, boutons ou doigt. 12 espèces du Québec, 3 niveaux de profondeur. Prises rapprochées : le combo monte jusqu'à ×5. Brimbale, jig plombé, ver, larve, méné mort : les vrais termes de la pêche blanche au Québec. En vrai, le nombre de lignes permises varie selon la zone — vérifie ta zone. Brimbale, jig plombé, ver, larve, méné mort : les vrais termes de la pêche blanche au Québec. En vrai, le nombre de lignes permises varie selon la zone — vérifie ta zone. Idée à explorer : la pêche blanche en Lanaudière.</footer>
+
+<script>
+(() => {
+  const canvas = document.getElementById("jeu");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const KEY = "hp:peche-blanche:best";
+  const ICE = 62;
+  const HOOK_X = W / 2;
+  const DUREE = 60;
+  // Mouvement réduit : le décor animé en JS (flocons, reflets, halo) se fige ;
+  // les poissons et l'hameçon continuent — ce sont le jeu lui-même.
+  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // 12 espèces du Québec, noms latins vérifiés (Règlement de pêche du Québec,
+  // Gouvernement du Québec, MFFP). « niv » = niveau de profondeur minimum
+  // où l'espèce apparaît : 1 Eau claire, 2 Eau profonde, 3 Grand fond.
+  const ESPECES = [
+    { nom: "Perchaude",  latin: "Perca flavescens",      pts: 1, vit: 85,  minY: 130, maxY: 320, poids: 22, niv: 1, c1: "#d4b13d", c2: "#7a5f1f" },
+    { nom: "Éperlan",    latin: "Osmerus mordax",        pts: 1, vit: 130, minY: 100, maxY: 200, poids: 18, niv: 1, c1: "#cfdae2", c2: "#7a8a96" },
+    { nom: "Crapet-soleil", latin: "Lepomis gibbosus",   pts: 1, vit: 120, minY: 100, maxY: 180, poids: 12, niv: 1, c1: "#e08a3c", c2: "#8a5a1f" },
+    { nom: "Doré",       latin: "Sander vitreus",        pts: 2, vit: 75,  minY: 200, maxY: 350, poids: 16, niv: 1, c1: "#c9a24a", c2: "#5c4a1a" },
+    { nom: "Achigan",    latin: "Micropterus dolomieu",  pts: 2, vit: 100, minY: 150, maxY: 300, poids: 8,  niv: 1, c1: "#7a8a5a", c2: "#3f4d2a" },
+    { nom: "Barbotte brune", latin: "Ameiurus nebulosus", pts: 1, vit: 60, minY: 330, maxY: 395, poids: 8,  niv: 2, c1: "#6b5a4a", c2: "#3a2f26" },
+    { nom: "Grand corégone", latin: "Coregonus clupeaformis", pts: 2, vit: 90, minY: 180, maxY: 320, poids: 5, niv: 2, c1: "#b8c4c9", c2: "#6a7a82" },
+    { nom: "Brochet",    latin: "Esox lucius",           pts: 3, vit: 115, minY: 120, maxY: 270, poids: 10, niv: 2, c1: "#6b8b52", c2: "#3a4d28" },
+    { nom: "Omble de fontaine", latin: "Salvelinus fontinalis", pts: 3, vit: 110, minY: 140, maxY: 280, poids: 4, niv: 2, c1: "#c98a7a", c2: "#7a3a2a" },
+    { nom: "Touladi",    latin: "Salvelinus namaycush",  pts: 4, vit: 70,  minY: 300, maxY: 395, poids: 3,  niv: 3, c1: "#8a9a8a", c2: "#3a4d42" },
+    { nom: "Ouananiche", latin: "Salmo salar",           pts: 5, vit: 105, minY: 280, maxY: 390, poids: 5,  niv: 3, c1: "#d4b8b8", c2: "#a05060" },
+    { nom: "Maskinongé", latin: "Esox masquinongy",      pts: 5, vit: 65,  minY: 300, maxY: 395, poids: 4,  niv: 3, c1: "#3a5a3a", c2: "#1f3a1f" }
+  ];
+
+  // Niveaux de progression de la session (60 s) : 0–20 s Eau claire,
+  // 20–40 s Eau profonde, 40–60 s Grand fond. Chaque niveau débloque
+  // de nouvelles espèces et resserre légèrement l'intervalle d'apparition.
+  const NIVEAUX = [
+    { nom: "Eau claire",   seuil: 0,  intervalle: 0.85 },
+    { nom: "Eau profonde", seuil: 20, intervalle: 0.75 },
+    { nom: "Grand fond",   seuil: 40, intervalle: 0.65 }
+  ];
+  const niveauPour = (ecoule) => ecoule >= 40 ? 3 : ecoule >= 20 ? 2 : 1;
+  const best = () => { try { return Number(localStorage.getItem(KEY) || 0); } catch (e) { return 0; } };
+
+
+
+
+
+  // --- Montage de pêche blanche (vérifié, nov. 2026) ---
+  // Brimbale : ligne fixe posée sur le trou, drapeau qui se lève à la touche ;
+  // elle permet de surveiller plusieurs trous à la fois (Pêcheur Québec, Bonjour Québec).
+  // Appâts : ver de terre, larve (asticot), méné mort — les appâts vivants sont
+  // interdits au Québec depuis le 1er avril 2017, on ne propose donc que du mort.
+  // Plomb : le jig plombé descend l'hameçon ; plus il est lourd, plus la descente
+  // est rapide et profonde. Nombre de lignes : en vrai, souvent 5 max par pêcheur
+  // selon la zone (ex. lac Saint-Pierre : 10 par permis) — le jeu en propose 1 à 3.
+  const APPATS = {
+    ver:   { nom: "Ver de terre",    bonus: { "Perchaude": 1.6, "Crapet-soleil": 1.6, "Barbotte brune": 1.4, "Omble de fontaine": 1.3 } },
+    larve: { nom: "Larve (asticot)", bonus: { "Éperlan": 1.8, "Omble de fontaine": 1.5, "Grand corégone": 1.4, "Perchaude": 1.3 } },
+    mene:  { nom: "Méné mort",       bonus: { "Doré": 1.7, "Brochet": 1.7, "Touladi": 1.5, "Maskinongé": 1.5, "Ouananiche": 1.3 } }
+  };
+  const PLOMBS = {
+    leger: { nom: "Plomb léger", vit: 0.75, profMax: 320, bonus: { "Éperlan": 1.4, "Crapet-soleil": 1.4 } },
+    moyen: { nom: "Plomb moyen", vit: 1,    profMax: 380, bonus: {} },
+    lourd: { nom: "Plomb lourd", vit: 1.4,  profMax: 400, bonus: { "Barbotte brune": 1.5, "Touladi": 1.4, "Grand corégone": 1.3 } }
+  };
+  const MONTAGE_KEY = "hp:peche-blanche:montage";
+  let montage = { appat: "ver", plomb: "moyen", lignes: 2 };
+  try {
+    const m = JSON.parse(localStorage.getItem(MONTAGE_KEY) || "null");
+    if (m && APPATS[m.appat] && PLOMBS[m.plomb] && [1, 2, 3].includes(m.lignes)) montage = m;
+  } catch (e) { /* montage par défaut : le jeu continue */ }
+  function sauveMontage() { try { localStorage.setItem(MONTAGE_KEY, JSON.stringify(montage)); } catch (e) {} }
+  function majChoixMontage() {
+    document.querySelectorAll("#choix-appat button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.appat === montage.appat)));
+    document.querySelectorAll("#choix-plomb button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.plomb === montage.plomb)));
+    document.querySelectorAll("#choix-lignes button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.lignes) === montage.lignes)));
+  }
+  document.querySelectorAll("#choix-appat button").forEach(b => b.addEventListener("click", () => { montage.appat = b.dataset.appat; sauveMontage(); majChoixMontage(); }));
+  document.querySelectorAll("#choix-plomb button").forEach(b => b.addEventListener("click", () => { montage.plomb = b.dataset.plomb; sauveMontage(); majChoixMontage(); }));
+  document.querySelectorAll("#choix-lignes button").forEach(b => b.addEventListener("click", () => { montage.lignes = Number(b.dataset.lignes); sauveMontage(); majChoixMontage(); }));
+  majChoixMontage();
+
+  // Pause douce : le chrono se fige, rien n'est perdu, on reprend quand on veut.
+  let enPause = false;
+  const btnPause = document.getElementById("btn-pause");
+  function majBoutonPause() {
+    btnPause.textContent = enPause ? "▶ Reprendre" : "⏸ Pause";
+    btnPause.setAttribute("aria-pressed", String(enPause));
+    btnPause.disabled = !state || !state.running;
+  }
+  function basculePause() {
+    if (!state || !state.running) return;
+    enPause = !enPause;
+    majBoutonPause();
+  }
+  btnPause.addEventListener("click", basculePause);
+
+  const ov = document.getElementById("overlay");
+  const ovTitle = document.getElementById("ov-title");
+  const ovText = document.getElementById("ov-text");
+  const ovBtn = document.getElementById("ov-btn");
+  const elTemps = document.getElementById("temps");
+  const elScore = document.getElementById("score");
+  const elBest = document.getElementById("best");
+  const elCombo = document.getElementById("combo");
+  elBest.textContent = best();
+  // Record affiché en direct : dès que le score dépasse le record, le HUD
+  // l'affiche (sans écrire en localStorage avant la fin — la persistance
+  // reste celle de finish()). Évite de croire que le record n'a pas bougé.
+  let bestAffiche = best();
+
+  // Son doux à la capture (WebAudio, sinus 520/740 Hz, volume 0,06) + bouton Son.
+  // Préférence persistée (hp:peche-blanche:son, comme le traversier) : le choix
+  // Muet survit au rechargement. Lecture/écriture en try/catch, comme le record.
+  const SON_KEY = "hp:peche-blanche:son";
+  let audioCtx = null;
+  let sonActif = true;
+  try { const s = localStorage.getItem(SON_KEY); if (s !== null) sonActif = s !== "0"; } catch (e) {}
+  function plip(rare) {
+    if (!sonActif) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = rare ? 740 : 520;
+      gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.18);
+    } catch (e) { /* son indisponible : le jeu continue en silence */ }
+  }
+
+  // Fanfare douce du record (sinus 523 → 659 → 784 Hz, volume 0,06).
+  function fanfare() {
+    if (!sonActif) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      [523, 659, 784].forEach((f, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = f;
+        const t0 = audioCtx.currentTime + i * 0.13;
+        gain.gain.setValueAtTime(0.06, t0);
+        gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.22);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t0);
+        osc.stop(t0 + 0.22);
+      });
+    } catch (e) { /* son indisponible : le jeu continue en silence */ }
+  }
+
+  // Carillon doux de changement de niveau (sinus 660 → 880 Hz, volume 0,05).
+  function carillonNiveau() {
+    if (!sonActif) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      [660, 880].forEach((f, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = f;
+        const t0 = audioCtx.currentTime + i * 0.15;
+        gain.gain.setValueAtTime(0.05, t0);
+        gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t0);
+        osc.stop(t0 + 0.25);
+      });
+    } catch (e) { /* son indisponible : le jeu continue en silence */ }
+  }
+
+  // Confettis doux aux couleurs HP pour fêter un nouveau record.
+  // En mouvement réduit : pluie figée, dessinée une seule fois, sans animation.
+  const confCanvas = document.getElementById("confettis");
+  const confCtx = confCanvas.getContext("2d");
+  let confRaf = null;
+  let confPieces = [];
+  function lanceConfettis() {
+    const couleurs = ["#2f6b4f", "#b5451b", "#d9a441", "#3f7fa3", "#e8e0cf"];
+    confPieces = Array.from({ length: 60 }, () => ({
+      x: Math.random() * W,
+      y: REDUCED ? Math.random() * H : -10 - Math.random() * 120,
+      w: 6 + Math.random() * 6, h: 8 + Math.random() * 6,
+      vy: 40 + Math.random() * 60, sway: Math.random() * Math.PI * 2,
+      c: couleurs[Math.floor(Math.random() * couleurs.length)],
+      r: Math.random() * Math.PI
+    }));
+    confCanvas.hidden = false;
+    if (REDUCED) { dessineConfettis(0); return; }
+    const debut = performance.now();
+    let dernier = null;
+    const pas = (now) => {
+      const dt = Math.min(0.05, (now - (dernier || now)) / 1000);
+      dernier = now;
+      dessineConfettis(dt);
+      if (now - debut < 6000 && !confCanvas.hidden) confRaf = requestAnimationFrame(pas);
+    };
+    confRaf = requestAnimationFrame(pas);
+  }
+  function dessineConfettis(dt) {
+    confCtx.clearRect(0, 0, W, H);
+    for (const p of confPieces) {
+      p.y += p.vy * dt;
+      p.sway += dt * 2;
+      p.x += Math.sin(p.sway) * 20 * dt;
+      if (p.y > H + 12) { p.y = -12; p.x = Math.random() * W; }
+      confCtx.save();
+      confCtx.translate(p.x, p.y);
+      confCtx.rotate(p.r + p.sway * 0.2);
+      confCtx.fillStyle = p.c;
+      confCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      confCtx.restore();
+    }
+  }
+  function arreteConfettis() {
+    if (confRaf) cancelAnimationFrame(confRaf);
+    confRaf = null;
+    confCanvas.hidden = true;
+    confCtx.clearRect(0, 0, W, H);
+  }
+
+  let state = null;
+  let rafId = null;
+  let lastTime = 0;
+
+  function init() {
+    state = {
+      running: false,
+      t: DUREE,
+      score: 0,
+      combo: 1,
+      hookY: H / 2,
+      targetY: H / 2,
+      poissons: [],
+      spawnTimer: 0.5,
+      spawnInterval: 0.85,
+      captures: {},
+      dores: 0,
+      doreVu: false,
+      niveau: 1,
+      banniere: null,
+      brimbales: [],
+      vitesse: PLOMBS[montage.plomb].vit,
+      profMax: PLOMBS[montage.plomb].profMax,
+      especesVues: {},
+      bulles: Array.from({ length: 12 }, () => ({
+        x: Math.random() * W,
+        y: ICE + 20 + Math.random() * (H - ICE - 40),
+        v: 12 + Math.random() * 18,
+        s: 1.5 + Math.random() * 2.5
+      })),
+      flaques: [],
+      flocons: Array.from({ length: 40 }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * ICE,
+        v: 8 + Math.random() * 14,
+        s: 1 + Math.random() * 1.8
+      }))
+    };
+  }
+
+  // Barre de niveau (DOM) : nom, segments colorés, prochaine étape.
+  const elNiveauTxt = document.getElementById("niveau-txt");
+  const elNiveauSuiv = document.getElementById("niveau-suivant");
+  const elSegments = document.querySelectorAll("#niveau-bar .segments i");
+  function majNiveauBar(niv) {
+    elNiveauTxt.textContent = "Niveau " + niv + " · " + NIVEAUX[niv - 1].nom;
+    elSegments.forEach((s, i) => {
+      s.classList.toggle("on", i < niv);
+      s.classList.toggle("or", i < niv && niv === 3);
+    });
+    elNiveauSuiv.textContent = niv === 3 ? "Dernier niveau — Grand fond"
+      : niv === 2 ? "Niveau 3 après 40 s" : "Niveau 2 après 20 s";
+  }
+
+  function start() {
+    init();
+    arreteConfettis();
+    enPause = false;
+    // Brimbales : 2 lignes = 1 brimbale (trou de gauche, mi-profondeur),
+    // 3 lignes = 2 brimbales (gauche mi-profondeur, droite grand fond).
+    state.brimbales = [];
+    if (montage.lignes >= 2) state.brimbales.push({ x: 140, y: 180, drapeau: 0 });
+    if (montage.lignes >= 3) state.brimbales.push({ x: 420, y: 340, drapeau: 0 });
+    state.vitesse = PLOMBS[montage.plomb].vit;
+    state.profMax = PLOMBS[montage.plomb].profMax;
+    state.running = true;
+    majBoutonPause();
+    bestAffiche = best();
+    elBest.textContent = bestAffiche;
+    majNiveauBar(1);
+    ov.hidden = true;
+    lastTime = performance.now();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function loop(now) {
+    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+    if (state.running && !enPause) update(dt);
+    render();
+    elTemps.textContent = Math.ceil(state.t);
+    elScore.textContent = state.score;
+    if (state.running && state.score > bestAffiche) { bestAffiche = state.score; elBest.textContent = state.score; }
+    elCombo.textContent = "×" + state.combo;
+    if (state.running) rafId = requestAnimationFrame(loop);
+  }
+
+  function pickEspece() {
+    // Seules les espèces débloquées au niveau courant peuvent apparaître.
+    // L'appât et le plomb choisis attirent certaines espèces (poids multipliés).
+    const pool = ESPECES.filter(e => e.niv <= state.niveau);
+    const poidsDe = (e) => e.poids
+      * (APPATS[montage.appat].bonus[e.nom] || 1)
+      * (PLOMBS[montage.plomb].bonus[e.nom] || 1);
+    const poidsPool = pool.reduce((a, b) => a + poidsDe(b), 0);
+    let r = Math.random() * poidsPool;
+    for (const e of pool) {
+      r -= poidsDe(e);
+      if (r <= 0) return e;
+    }
+    return pool[0];
+  }
+
+  function update(dt) {
+    state.t -= dt;
+    if (state.t <= 0) { state.t = 0; finish(); return; }
+
+    // Progression : passage de niveau à 20 s puis 40 s écoulées.
+    const ecoule = DUREE - state.t;
+    const niv = niveauPour(ecoule);
+    if (niv !== state.niveau) {
+      state.niveau = niv;
+      state.spawnInterval = NIVEAUX[niv - 1].intervalle;
+      state.banniere = { texte: "Niveau " + niv + " — " + NIVEAUX[niv - 1].nom, life: 2.2 };
+      majNiveauBar(niv);
+      carillonNiveau();
+    }
+    if (state.banniere) {
+      state.banniere.life -= dt;
+      if (state.banniere.life <= 0) state.banniere = null;
+    }
+
+    state.hookY += (state.targetY - state.hookY) * Math.min(1, dt * 12 * state.vitesse);
+
+    state.spawnTimer -= dt;
+    if (state.spawnTimer <= 0) {
+      if (state.poissons.length < 6) spawn();
+      state.spawnTimer = state.spawnInterval;
+    }
+
+    for (const p of state.poissons) {
+      p.x += p.dir * p.vit * dt;
+      p.wag = (p.wag || 0) + dt * 8;
+    }
+
+    // Collision
+    for (let i = state.poissons.length - 1; i >= 0; i--) {
+      const p = state.poissons[i];
+      if (Math.abs(p.x - HOOK_X) < 26 && Math.abs(p.y - state.hookY) < 30) {
+        capture(p, i);
+      } else if (p.x < -60 || p.x > W + 60) {
+        state.poissons.splice(i, 1);
+      }
+    }
+
+    // Brimbales : un poisson qui passe près du trou lève le drapeau et se prend tout seul.
+    for (const br of state.brimbales) {
+      if (br.drapeau > 0) { br.drapeau -= dt; continue; }
+      for (let i = state.poissons.length - 1; i >= 0; i--) {
+        const p = state.poissons[i];
+        if (Math.abs(p.x - br.x) < 24 && Math.abs(p.y - br.y) < 26) {
+          br.drapeau = 1.2;
+          capture(p, i, true);
+          break;
+        }
+      }
+    }
+
+    // Flaques de capture
+    for (let i = state.flaques.length - 1; i >= 0; i--) {
+      state.flaques[i].life -= dt;
+      if (state.flaques[i].life <= 0) state.flaques.splice(i, 1);
+    }
+
+    // Flocons (figés si mouvement réduit)
+    if (!REDUCED) {
+      for (const f of state.flocons) {
+        f.y += f.v * dt;
+        f.x += Math.sin(f.y / 20) * 6 * dt;
+        if (f.y > ICE) { f.y = -4; f.x = Math.random() * W; }
+      }
+      // Bulles sous la glace (figées si mouvement réduit).
+      for (const b of state.bulles) {
+        b.y -= b.v * dt;
+        if (b.y < ICE + 8) { b.y = H - 10 - Math.random() * 20; b.x = Math.random() * W; }
+      }
+    }
+  }
+
+  function spawn() {
+    const e = pickEspece();
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    const x = dir === 1 ? -40 : W + 40;
+    const y = e.minY + Math.random() * (e.maxY - e.minY);
+    // Poisson doré : de temps en temps, un poisson scintille d'or et vaut double.
+    // Le premier est garanti dans les 8 premières secondes, pour que chacun le voie.
+    const forceDore = !state.doreVu && state.t <= DUREE - 8;
+    const dore = forceDore || Math.random() < 0.08;
+    if (dore) state.doreVu = true;
+    state.especesVues[e.nom] = true;
+    state.poissons.push({
+      espece: e,
+      x, y, dir,
+      vit: e.vit * (0.85 + Math.random() * 0.3),
+      dir: dir,
+      rare: e.pts >= 5,
+      dore: dore,
+      wag: 0
+    });
+  }
+
+  function capture(p, idx, parBrimbale) {
+    state.poissons.splice(idx, 1);
+    const base = p.espece.pts * state.combo;
+    const bonusDore = p.dore ? base : 0;
+    state.score += base + bonusDore;
+    if (p.dore) state.dores++;
+    state.combo = Math.min(5, state.combo + 0.5);
+    const nom = p.espece.nom;
+    state.captures[nom] = (state.captures[nom] || 0) + 1;
+    state.flaques.push({
+      x: HOOK_X, y: p.y, life: 0.7,
+      texte: `${parBrimbale ? "Brimbale · " : ""}${nom} +${base + bonusDore}`,
+      bonus: p.dore ? `+${bonusDore} doré` : null,
+      rare: p.rare
+    });
+    plip(p.rare);
+    // Reset combo après 3 secondes sans capture
+    clearTimeout(state.comboTimer);
+    state.comboTimer = setTimeout(() => {
+      if (state.running) state.combo = 1;
+    }, 3000);
+  }
+
+  function render() {
+    // Fond
+    ctx.fillStyle = "#dde9ef";
+    ctx.fillRect(0, 0, W, H);
+
+    // Eau (dégradé ciel HP #3f7fa3 vers le fond profond)
+    const g = ctx.createLinearGradient(0, ICE, 0, H);
+    g.addColorStop(0, "#a8d4e0");
+    g.addColorStop(0.4, "#3f7fa3");
+    g.addColorStop(0.7, "#5a9bb5");
+    g.addColorStop(1, "#1e4a63");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, ICE, W, H - ICE);
+
+    // Bulles sous la glace (figées en mouvement réduit : positions fixes).
+    ctx.strokeStyle = "rgba(255,255,255,.45)";
+    ctx.lineWidth = 1;
+    for (const b of state.bulles) {
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.s, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Reflets de lumière
+    ctx.fillStyle = "rgba(255,255,255,.06)";
+    for (let i = 0; i < 3; i++) {
+      const t = REDUCED ? 0 : performance.now() / 1400;
+      const yy = ICE + 40 + i * 90 + Math.sin(t + i) * 8;
+      ctx.beginPath();
+      ctx.ellipse(W / 2, yy, 140, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Glace
+    ctx.fillStyle = "#f0f6f9";
+    ctx.fillRect(0, 0, W, ICE);
+    ctx.strokeStyle = "#cddfe7";
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 6; i++) {
+      ctx.beginPath();
+      ctx.moveTo((i * 97 + 20) % W, 8);
+      ctx.lineTo((i * 97 + 60) % W, ICE - 8);
+      ctx.stroke();
+    }
+    // Trou
+    ctx.fillStyle = "#1e4a63";
+    ctx.beginPath();
+    ctx.ellipse(HOOK_X, ICE, 20, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Brimbales : trou, ligne fixe et drapeau (levé un moment après une prise).
+    for (const br of state.brimbales) {
+      ctx.fillStyle = "#1e4a63";
+      ctx.beginPath();
+      ctx.ellipse(br.x, ICE, 14, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,.5)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(br.x, ICE);
+      ctx.lineTo(br.x, br.y);
+      ctx.stroke();
+      ctx.fillStyle = "#b5451b";
+      ctx.beginPath();
+      ctx.arc(br.x, br.y - 5, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#7a5f1f";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(br.x + 12, ICE - 2);
+      ctx.lineTo(br.x + 12, ICE - 30);
+      ctx.stroke();
+      ctx.fillStyle = "#b5451b";
+      ctx.beginPath();
+      if (br.drapeau > 0) { ctx.moveTo(br.x + 12, ICE - 30); ctx.lineTo(br.x + 30, ICE - 24); ctx.lineTo(br.x + 12, ICE - 18); }
+      else { ctx.moveTo(br.x + 12, ICE - 30); ctx.lineTo(br.x + 26, ICE - 30); ctx.lineTo(br.x + 12, ICE - 22); }
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Flocons
+    ctx.fillStyle = "#fff";
+    for (const f of state.flocons) {
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.s, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Ligne
+    ctx.strokeStyle = "rgba(255,255,255,.5)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(HOOK_X, ICE);
+    ctx.lineTo(HOOK_X, state.hookY);
+    ctx.stroke();
+
+    // Flotteur
+    ctx.fillStyle = "#b5451b";
+    ctx.beginPath();
+    ctx.arc(HOOK_X, state.hookY - 6, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Hameçon
+    ctx.strokeStyle = "#222";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(HOOK_X, state.hookY);
+    ctx.lineTo(HOOK_X, state.hookY + 8);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(HOOK_X - 3, state.hookY + 12, 4, 0, Math.PI, false);
+    ctx.stroke();
+
+    // Poissons
+    for (const p of state.poissons) dessinePoisson(p);
+
+    // Flaques
+    for (const f of state.flaques) {
+      const alpha = Math.min(1, f.life / 0.7);
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = f.rare ? "#d9a441" : "#2f6b4f";
+      ctx.font = f.rare ? "bold 16px system-ui" : "bold 14px system-ui";
+      ctx.textAlign = "center";
+      ctx.fillText(f.texte, f.x, f.y - 24 - (0.7 - f.life) * 30);
+      if (f.bonus) {
+        ctx.fillStyle = "#b5451b";
+        ctx.font = "bold 13px system-ui";
+        ctx.fillText(f.bonus, f.x, f.y - 40 - (0.7 - f.life) * 30);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // Bannière de niveau (pilule crème, texte vert forêt) — douce, sans pression.
+    if (state.banniere) {
+      const alpha = Math.min(1, state.banniere.life);
+      ctx.globalAlpha = alpha;
+      ctx.font = "bold 17px system-ui";
+      const tw = ctx.measureText(state.banniere.texte).width;
+      ctx.fillStyle = "rgba(247,243,234,.95)";
+      ctx.strokeStyle = "#2f6b4f";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(W / 2 - tw / 2 - 14, 78, tw + 28, 32, 16);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#2f6b4f";
+      ctx.textAlign = "center";
+      ctx.fillText(state.banniere.texte, W / 2, 100);
+      ctx.globalAlpha = 1;
+    }
+
+    // Halo autour des rares et des dorés
+    for (const p of state.poissons) {
+      if (p.rare || p.dore) {
+        const t = REDUCED ? 0 : performance.now() / 500;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 24 + Math.sin(t) * 3, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(217,164,65,.6)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+  }
+
+  function dessinePoisson(p) {
+    const e = p.espece;
+    const flip = p.dir < 0 ? -1 : 1;
+    const taille = e.pts >= 5 ? 1.25 : e.pts >= 3 ? 1.1 : 1;
+    const wag = Math.sin(p.wag) * 4;
+    // Le poisson doré garde son espèce, mais scintille d'or.
+    const c1 = p.dore ? "#d9a441" : e.c1;
+    const c2 = p.dore ? "#8a6d1f" : e.c2;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.scale(flip * taille, taille);
+
+    // Corps
+    ctx.fillStyle = c1;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 20, 10, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Queue
+    ctx.beginPath();
+    ctx.moveTo(-16, 0);
+    ctx.lineTo(-30, -8 + wag);
+    ctx.lineTo(-30, 8 + wag);
+    ctx.closePath();
+    ctx.fill();
+
+    // Nageoire dorsale
+    ctx.beginPath();
+    ctx.moveTo(-4, -9);
+    ctx.lineTo(2, -16);
+    ctx.lineTo(8, -9);
+    ctx.closePath();
+    ctx.fill();
+
+    // Rayure / détail
+    ctx.strokeStyle = c2;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(-12, 0);
+    ctx.lineTo(12, 0);
+    ctx.stroke();
+    // Bandes verticales pour perchaude, brochet et achigan
+    if (e.nom === "Perchaude" || e.nom === "Brochet" || e.nom === "Achigan") {
+      for (let i = -1; i <= 1; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 6, -8);
+        ctx.lineTo(i * 6 + 1, 8);
+        ctx.stroke();
+      }
+    }
+    // Barbillons de la barbotte brune (poisson-chat du fond).
+    if (e.nom === "Barbotte brune") {
+      ctx.strokeStyle = c2;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(18, 2); ctx.lineTo(26, 6);
+      ctx.moveTo(18, -1); ctx.lineTo(25, -5);
+      ctx.stroke();
+    }
+    // Points clairs de l'omble de fontaine et du touladi.
+    if (e.nom === "Omble de fontaine" || e.nom === "Touladi") {
+      ctx.fillStyle = "rgba(247,243,234,.85)";
+      for (const [dx, dy] of [[-8, -4], [-2, 3], [4, -5], [10, 2]]) {
+        ctx.beginPath();
+        ctx.arc(dx, dy, 1.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    // Tache orangée du crapet-soleil, près de l'ouïe.
+    if (e.nom === "Crapet-soleil") {
+      ctx.fillStyle = "#b5451b";
+      ctx.beginPath();
+      ctx.arc(2, -3, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // Ventre pâle du grand corégone.
+    if (e.nom === "Grand corégone") {
+      ctx.strokeStyle = "rgba(247,243,234,.7)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(-12, 5);
+      ctx.quadraticCurveTo(0, 9, 12, 5);
+      ctx.stroke();
+    }
+
+    // Œil
+    ctx.fillStyle = "#222";
+    ctx.beginPath();
+    ctx.arc(9, -2, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(9.5, -2.5, 0.7, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Scintillement doré (figé en mouvement réduit : t = 0).
+    if (p.dore) {
+      const t = REDUCED ? 0 : performance.now() / 400;
+      ctx.fillStyle = "#fff3c4";
+      for (let i = 0; i < 3; i++) {
+        const sx = -14 + i * 14;
+        const sy = -14 + Math.sin(t + i * 2) * 2;
+        ctx.beginPath();
+        ctx.moveTo(sx, sy - 4);
+        ctx.lineTo(sx + 1.5, sy - 1.5);
+        ctx.lineTo(sx + 4, sy);
+        ctx.lineTo(sx + 1.5, sy + 1.5);
+        ctx.lineTo(sx, sy + 4);
+        ctx.lineTo(sx - 1.5, sy + 1.5);
+        ctx.lineTo(sx - 4, sy);
+        ctx.lineTo(sx - 1.5, sy - 1.5);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    ctx.restore();
+  }
+
+  function finish() {
+    state.running = false;
+    enPause = false;
+    majBoutonPause();
+    cancelAnimationFrame(rafId);
+    clearTimeout(state.comboTimer);
+    const isBest = state.score > best();
+    if (isBest) { try { localStorage.setItem(KEY, String(state.score)); } catch (e) {} }
+    elBest.textContent = best();
+
+    const total = Object.values(state.captures).reduce((a, b) => a + b, 0);
+    const detail = Object.entries(state.captures)
+      .map(([n, c]) => `${n} ×${c}`).join(" · ") || "Aucune prise cette fois.";
+    const detailDore = state.dores > 0
+      ? `<br><span style="color:#8a6d1f">✦ ${state.dores} poisson${state.dores === 1 ? "" : "s"} doré${state.dores === 1 ? "" : "s"} (×2)</span>`
+      : "";
+    const nbVues = Object.keys(state.especesVues).length;
+    const detailNiveaux = `<br>Niveau ${state.niveau} · ${NIVEAUX[state.niveau - 1].nom} — ${nbVues} espèce${nbVues === 1 ? "" : "s"} aperçue${nbVues === 1 ? "" : "s"} sur 12.<br>Montage : ${APPATS[montage.appat].nom} · ${PLOMBS[montage.plomb].nom} · ${montage.lignes} ligne${montage.lignes === 1 ? "" : "s"}.`;
+
+    ovTitle.textContent = isBest ? "Nouveau record !" : "Fin de la pêche";
+    ovText.innerHTML = `${state.score} point${state.score === 1 ? "" : "s"} · ${total} poisson${total === 1 ? "" : "s"}.<br><span class="detail-fin">${detail}</span>${detailDore}${detailNiveaux}<br>Record : ${best()}.`;
+    ovBtn.textContent = "Repêcher";
+    ov.hidden = false;
+    if (isBest) { lanceConfettis(); fanfare(); } else { arreteConfettis(); }
+  }
+
+  // Contrôles
+  function setTarget(y) {
+    const limiteHaut = ICE + 30;
+    const limiteBas = Math.min(H - 20, (state && state.profMax) || H - 20);
+    state.targetY = Math.max(limiteHaut, Math.min(limiteBas, y));
+  }
+
+  canvas.addEventListener("pointerdown", e => {
+    if (!state.running) return;
+    const r = canvas.getBoundingClientRect();
+    setTarget((e.clientY - r.top) * (H / r.height));
+  });
+  canvas.addEventListener("pointermove", e => {
+    if (!state.running || e.buttons === 0) return;
+    const r = canvas.getBoundingClientRect();
+    setTarget((e.clientY - r.top) * (H / r.height));
+  });
+  canvas.addEventListener("touchmove", e => {
+    if (!state.running) return;
+    e.preventDefault();
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches[0];
+    setTarget((t.clientY - r.top) * (H / r.height));
+  }, { passive: false });
+
+  document.getElementById("btn-up").addEventListener("click", () => setTarget(state.targetY - 60));
+  document.getElementById("btn-down").addEventListener("click", () => setTarget(state.targetY + 60));
+  document.addEventListener("keydown", e => {
+    if (e.key === "p" || e.key === "P") { basculePause(); return; }
+    if (e.key === "ArrowUp" || e.key === "w") { setTarget(state.targetY - 40); e.preventDefault(); }
+    if (e.key === "ArrowDown" || e.key === "s") { setTarget(state.targetY + 40); e.preventDefault(); }
+  });
+  ovBtn.addEventListener("click", start);
+  function majBoutonSon() {
+    const b = document.getElementById("btn-son");
+    b.textContent = sonActif ? "🔊 Son" : "🔇 Muet";
+    b.setAttribute("aria-pressed", String(sonActif));
+  }
+  majBoutonSon();
+  document.getElementById("btn-son").addEventListener("click", () => {
+    sonActif = !sonActif;
+    try { localStorage.setItem(SON_KEY, sonActif ? "1" : "0"); } catch (e) { /* préférence non persistée : le jeu continue */ }
+    majBoutonSon();
+  });
+
+  init();
+  majBoutonPause();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panne de courant — 72 h — HP Outils</title>
+<style>
+  :root{--cream:#f7f3ea;--ink:#2a2620;--forest:#2f6b4f;--maple:#b5451b;--gold:#d9a441;--soft:#e8e0cf;--muted:#6b6459;--sky:#3f7fa3}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:16px 12px 24px;gap:14px;user-select:none}
+  header{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  /* ——— Gepeto vrai (11 nov. 2026) : face du maître (tete-pastille.png, SHA b26af210), en-tête ——— */
+  header{align-items:center}
+  .titre-groupe{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+  .gepeto-face{flex:none;width:48px;height:48px;border-radius:50%;background:#fffdf7;border:2px solid var(--soft);overflow:hidden}
+  .gepeto-face svg{display:block;width:100%;height:100%}
+  .gepeto-face img{display:block;width:100%;height:100%;object-fit:cover}
+
+  h1{font-size:1.1rem;margin:0;color:var(--forest)}
+  h1 small{font-weight:400;color:var(--muted);font-size:.8em}
+  .heure{font-size:.79rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:right}
+  .heure b{font-size:1.2rem;color:var(--forest);display:block;font-variant-numeric:tabular-nums}
+  .stats{width:100%;max-width:560px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .stat{background:#fffdf7;border:1px solid var(--soft);border-radius:10px;padding:8px 4px;font-size:.79rem;text-align:center}
+  .stat span{display:block;color:var(--muted);margin-bottom:2px;font-weight:600}
+  .bar{height:5px;background:var(--soft);border-radius:3px;overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%;background:var(--forest);border-radius:3px;transition:width .3s}
+  .bar i.low{background:var(--maple)}
+  #card{width:100%;max-width:560px;background:#fffdf7;border:2px solid var(--soft);border-radius:16px;
+    padding:22px 20px;min-height:320px;display:flex;flex-direction:column;gap:14px;transition:opacity .2s;
+    box-shadow:0 4px 14px rgba(42,38,32,.08)}
+  #card.fade{opacity:0}
+  .jour{font-size:.79rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  h2{font-size:1.25rem;margin:0;color:var(--forest);line-height:1.2}
+  .texte{margin:0;line-height:1.55;font-size:.98rem}
+  .choix{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+  .choix button{background:#fff;border:2px solid var(--soft);border-radius:12px;padding:12px 14px;
+    font-size:.95rem;text-align:left;cursor:pointer;color:var(--ink);font-weight:500;font-family:inherit;min-height:48px}
+  .choix button:hover{border-color:var(--forest);background:#f0f8f3}
+  .choix button:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+  .restart:focus-visible,.btn-retour:focus-visible,.btn-son:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+  .note{margin:0;color:var(--muted);font-size:.9rem;font-style:italic;min-height:1.2em}
+  .effets{margin:0;font-size:.9rem;font-weight:600;color:var(--forest)}
+  footer{font-size:.79rem;color:#8a8277;max-width:560px;text-align:center;line-height:1.5}
+  .restart{background:var(--forest);color:#fff;border:0;border-radius:10px;padding:12px 22px;
+    font-size:1rem;font-weight:600;cursor:pointer;align-self:flex-start;box-shadow:0 3px 0 rgba(0,0,0,.15);font-family:inherit;min-height:48px}
+  .badge{display:inline-block;background:var(--gold);color:var(--ink);padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:700}
+  .resume{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+  .resume div{background:var(--cream);padding:8px 10px;border-radius:8px;font-size:.85rem}
+  .resume span{color:var(--muted);display:block;font-size:.79rem}
+
+  /* ——— Mise en page standard HP (11 nov. 2026) : Retour, cibles 48 px, mouvement réduit ——— */
+  .barre-hp{width:100%;max-width:560px;display:flex;justify-content:space-between}
+  .btn-retour{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-retour:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .btn-son{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-son:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .progression{width:100%;max-width:560px;height:8px;background:var(--soft);border-radius:4px;overflow:hidden}
+  .progression i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--forest),var(--gold) 60%,var(--sky));border-radius:4px;transition:width .3s}
+  /* ——— Paliers de progression : doux et encourageants, dans le ton HP ——— */
+  .niveau-ligne{width:100%;max-width:560px;display:flex;justify-content:center}
+  .niveau{background:#fffdf7;border:2px solid var(--sky);border-radius:999px;padding:6px 14px;font-size:.79rem;font-weight:700;color:var(--forest)}
+  .niveau b{color:var(--sky)}
+  .niveau.nouveau{animation:palier-doux .6s ease-in-out 2}
+  @keyframes palier-doux{50%{transform:scale(1.07)}}
+  .palier{margin:0;color:var(--sky);font-size:.9rem;font-weight:600}
+  /* ——— Arcade doux : série de bons choix + célébration de record ——— */
+  .serie-ligne{width:100%;max-width:560px;display:flex;justify-content:space-between;gap:8px}
+  .serie,.bonus-arcade{background:#fffdf7;border:1px solid var(--soft);border-radius:999px;padding:6px 12px;font-size:.79rem;font-weight:600;color:var(--forest)}
+  .bonus-arcade{color:var(--maple)}
+  .confettis{position:relative;height:26px;overflow:hidden}
+  .confettis i{position:absolute;top:0;width:10px;height:10px;border-radius:50%;animation:tombe 1.2s ease-in forwards}
+  @keyframes tombe{to{transform:translateY(22px) rotate(180deg);opacity:.25}}
+  .record-badge{display:inline-block;background:var(--gold);color:var(--ink);padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:700;animation:record-pulse 1s ease-in-out 2}
+  @keyframes record-pulse{50%{transform:scale(1.12)}}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+  <div class="barre-hp"><button class="btn-retour" type="button" onclick="if(history.length>1){history.back()}else{location.href='/jeux'}">← Retour</button><button class="btn-son" id="son" type="button" aria-pressed="true" title="Activer ou couper le son">🔊 Son</button></div>
+  <header>
+    <div class="titre-groupe"><div class="gepeto-face" aria-hidden="true"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAADAFBMVEXY06/h3NSvqJutrZipp6GtqJ7hv7DZ2talkGzh2ci/fz+wb0mlh1+tnH+qqtS8w8TFuJfEq6Df07vf0brSwJ/t38IAAADqupTtwJpSRTquh29oWEzTpoZwZFlIOS/kq4e1k3rNmHdXTEK3mYP///51a2Pzx6SKem22p43NtJXDnYOQhHR2dG5bU0rEimitdlj8/Pt/f3/YoX2Oi4WTlJCJaFOqVVU4LCOpfGQ0Jhw8MimRc1rXxqt4hYfn2cuqqqr/AAADAgLPu6b//wB/fz+qqlVVVVVlSziSZ06Xa1WytbRkTkCHeWzVyK78/Pny49N7PT1aZmmSalOTeGmdl4+qa0qmfWSnhGyuqqXk1Ljk1Lfu6+lLOy6SZ1GXeGWOioTUx6z/f3//qqr//39/AABuamWZcluLeXCWkYu3fXq8gFyqhm6mhmyhm5KvmYi/v3/Ow7nMxLHQ09TgoX7h0rbz2srx5M3///8tHRJTOjNuWUl/fwCYa1KPa2eXc1uXdVuZclibeGOLg3OYpaejdVqlhG6piHGupJW8urbBspXFtpjMvaPUybXOy8jhnnrm17rl1rnn28Tn59D35sny48n//7E2Li47OzRVAABALBxMMx1PNiBURjtURTZHR0daU0poRi5xVTh4VTx3VT14VVVtaGJ9dW10foF///+FXUeEW0SGZFCPa2Kad2GQd2iUjHqaiXGRjYqUlIaWlpCkfWiifWmkemKqh3Skg260nX+1k2ympnmipZmxqJWqopSuqaatqaHBg17Hu6/IvanKvqnVxafWxabGxsbOysDOysPkvaLm2Lzm3czs3cLu4MXp6en/+NkOCgARDwwAAP8XFxIWFhYA//81HBM/LB4vLyc1LiUyMig6Ny9AMB9FPzlaOixGQz1KQzpWT0pVVQBTXGF1TjRnRjBmTEx6WD9qXEBsXlNtaF9qYl12b15zbGxvb2dva2Z3d3J5d3SWUS6RXT6UVVWIXEiRbVuNbWCOgXCRgnCNjY2Li4WXjoeckH+ekHSNxmerAAABAHRSTlMS1KsMcewUJa+TBGUzdAb/dP9Auf9IAP7+/v7+/v7+/v7+/f4E/v79/P3+/f79/v3/Av78/f4D/vv+/f74//0EAf/7AQQDA/5NlPr/0ZMq/QT/rRHS/9TW+9X8/9tvRc8UAgMCAtiVMVkK/naml8sEMUz//28SbVT/Ec8CyxBvrMN2yf/XUpenjKbPsa///1KQjRE3rgMNCwP/iIa70Q6GFg0o/wd5o/8CUv8tKZi1DrOoEjMkUK0ZMQ00Cyxzyy1P/3GMwWrbFCtP/6RoulQZKUh2AWD/AbXIINc4i/9Yq1OU2wP/J4MKrTekOF3OIUCOMZ4WMQxjHP87ZBIqb4SrX8YlNAAADXdJREFUeNq1mgV4G0cWgJ2Uj3FWu7PMq90VS5YFju2AE1OYkwabpKEmaZIyMzNd8crtXZm5vTIfMzMz85tZrShyI6fpfIlkydL75/GbXXeg93h1tP3JnmQuN2PGpEmTZszI5Y7Zy4BkbnJP81uTcz17CZCcpJOnG268469Lp9G1dOoNR5G3VuT2AmDyCnj4zPFr5s3Lc7KiRKNRReG4/Ly710z9NPxmUvLdAXJU+ol5OcoHK0qWpmmyInPxE5YCI5fcc0ByNdIfOiGvhLJD+XKwQJFTp3022MUeASYhdPCJXDTcd/gcjVbE0xUniD0CQIwcOiuvRHdZGrFQjcAVl9IPjxUAlp16LCcTaVqjcK2ZwM2aMXYNkkhfwzGMw8ta0wLJgfwQkJ//8M1jBiTR/bOUCFkNBCI7dHFNgbUoOVbAMWj2sbzJRCIMIcgNhoGIdRyGodoFgA3HrRgjYHXPY8fyRDhdIKi2eCd8O0IgPCUchyaOCdCTu30Wb1blwD8SofAfNl4RXFtRjpt/8xgBObRGMasbjTC1H+uFhz+DEhvewQkdreRP5SJMK5mBYPoWVSxYkjy0Su9pH9Cz4pFT6/ZMjcRUtWAqguvZEncwWtE+IIem1RzQYCImpIX6hUrx82YnJ7YLSKK1+frN1/ZbB2zSgFFOQpPbBeTQLCbS7NaKRCaU3ghgJFChXRMl0U+40BpVIZEmm1QBlbck4oVcewDiAWLnSCUO6/bZqFMDgFGOH81GzQAdnRrGTKA80zJgm9/g70KHtgXIoTuUCFO/SQkymBYeuiSmEqdNTuLvOnRlOwB9ylcfjpjUqjyf4kNF+ADC1HulASDx+dmjlIt6wJXkYRbnmJEgUSWeb8yB5mitOIvWi4eSyTY0mHDd5TdeLQq8yVc8GGy9WjurZqo5PwSchg7bDaBnn+9ec+2SJUuuYbs6XQ6bYVngU6lAcCqwU52bawCFO/2R1jaqAqagH7CsyKoqK4pip9CJTcdsTKfazxHTbKqBMIvNf3BikobhKIAe9Ktnz/C7KIJlOwudRUs2W4hmGNPkLa6pMZDednrLSK33wRe+ScUTACuqIis6zbXa5IuMyeGr+h3TgfZjmrWeACpMASMlH/zLqIBvF1hWxb4qqiAcOGJBMOuFMxEn25XVwISs7WLyVEzVA7j5s9Hke+ZNbSwaNcAtYHsREOSbQMBEDZ6v6mAqEV7sEnEX6EY/KXaxbvjrSvffuBqdxrUG6OhisEon+V7AEQHgi1gIrQSG6YP3CyJ1EXUUfE6I0qx2whlm42kbRwFMQd8XnzYKrNjZRYKoIBIVVHiVpVYyZV4UsEisRzRjMX0kn8Yk1vj6KWk0E33jD68SgZiDaZTDYgF0AWsVMNXAwRi4xP8qyK6IBxVgN/18pD0AQuPVwhBHypACR4ybujpFuleawAJLeGT3RH4gnlqpk3sNAE49YBqZylslmr5JvP4IGeJCUUgx4ESSE2KWlrKriFuI/0kuspUH+vI7PLFhFZDPc0vR+1oCVqNvHaKPaClGifGgghRhsl0FtksmGjCB4wOzFDrpqr5BikXFRvE4F1s//5et80BHv/03GpFT0tw8p2lWlpOYfL9YhP1FFBN3VnZeAMPhYh62ikXgs8CxzBAQj6UkieG+fl3P6P1AkxS5e3Fiv5meJ8QlJSjXEsN30eAC4dk8FwP9oJIrRXC7CM5nKjaKx6QUr1hLjkKjAZJJ/XSJOy+R+LBfNn6cduNKLCjNEIj9INzKcwpZsXiMh1iQeJCO+ZtIjVUAoKSAnP3a39CM5GgaTEInScr0RCLteb2diYQbj0nV0g99IKZUWzCnAIFhil1iUMIJIJVSYjHue0TQxFEBGySlO5Eol9Xerwxsy4CVmOrwxcRSDK/EOA4MZzIAA4CZPTKoFlGiQEqJK9mfbzjxwMfrIrVZA4bvSyQymZm9vb1GOS3DQBICYHtxzsKCIOAsKBCjWzexEqloAID1MQ6qC0TBo7UhpqNhZNE38wyXSAx4Gb/Tz3gDYJZUCIhzH52+zfC8mcaCNP57vmavCiAlKfFY/MguSBBh6B/VxtME0FKmohEnlNNpLzOdk+KRymTHaYsTiVNm3lboVROJ28p9xXh9TwYAD4DnYlkCULFVnfSaAFzKjCg26FAupwcWy3xMMUNAKUHARm9v13nbyt7i7nidCqQfQFTF1oMKUIWF4sYPhGeSesBEpB+dMkmD7Zu+uLu7BJaOh2cDUwHfJDJlD5zT65W9RIKvAyhW1pJoEYviQ0527328dRSBBktoH5ZiQcCDY82wKUtgOeIctbdXzZTLiYRcN2NwAiYACLEY/qL+yv6odlxozOS3aeJLwbdSoIBkMpVUoDZa7GVOKZchyM5LdHN1x7R+jIugwHMxheeNdQ2XRxoB/yqQBiORSYgowMdhPCEJRXJNyUOGbPO8ctmbOQDypToFREHNSvAVMjzhL99+xai16CgRM5URjohdDy6WAgBUCyVP3DCQyZwyLtGXrx/CsqygCmRKpoxbGjpO03StDvLBYEUGOyluUoAUnBag1nB8qbu723S4+v0zPLQhFYPeKUhynnu1YfhqBqgcU53QY9x0M5BPp18JKhMpFVBOpYZpiWMFjPtjdLRU8gc3XttpAvh+tpY9c18LAFJ4dm3M3uoCF2N87fvjUMe5zVuajjrNAKu/OoqCi7uphQ4/XKokrRJTSE+pX9CXRAs0uBr96c9Tpz6Kmg/9zSbKsHIIUOJ0+4dXlAgQUPMVvgEBHnBdjD+Vq17IegfAFWwaZ6tHybnK+eeDeJB5fqo2YjNNCmBfsDQATJiRzLW4AtlYKu5X095g5bSkcHdmY6R/5ePxuFQnuJ4BBmI9ywPAT9GPdnvCgVLxQ8P2iyR5ZTL9DGZBdnawvx9zUBjMSMNVFnqSYyxREDTPwuzRn0PtAA4RMgaGcIPc9AQP06X6dGBlszykRaTRPqTBCLaABZEbt8vZo9VU8XvftXyLkUXXzqTTrhUgsIEhTlQ269TP81Ig3zDAQJgdN6LvHjAF/U61DGEw2i8syGQsN+2BXOxahmWlPWxZeFA26+UXwT6eZ9m+z3pHtFagEZBEB0AzIlLtNKZDtC+yAkjPWBk77S5wDdaKVKTDsIRZwxBc2IeP2YyutwH4EjhBdeFbxGtWNgu21bJkoE4L2LNcd4HliW5FvsSxvmcYhptxsaqq40aRv8u1il+rGL4lCKxlQteBU5ipZTGZG8nM7tkZQ4wG4jErGKCclQa1VFY4Ak1oB5BEz6isB/IF1oZTeCwep4XN4aNROV7MFoQF4FCGiod9CEba1Vw41ansJvBfW9cqkG50km8KrBwh5z6ei8+dOzdOxmZQB4xueywXzUJfJ7tIw2QjqD7M8QM6atNE6D4fC54rqKR3KjSBq6UoookQUlD6yfQF8SNoaWz5EEKi676BLmsLoKO306pPihcmgDgUTyrbCUITot4SKgu7RsZSffhkoei4m8iVjnY0mIDONEQLwoMlMot3EuPASBs0SAe2boTyMWQJjIk+FgXbtn/Rtomm6H8sGMYcC4ONTCwOYpzN5isVwmJD8cAxMuBd0IDFtu041snuCy1zbReAjpZDID173BAQNNYnQlRcOS1XjE8W9BiXBff6rG8TgGvLrvZ8CyvtemE2qe/Lek+iISNIZR+cjjlSIfisavjgW5ANAF8VQDqcNKl8x5VtW7u3xZXBjlb3PlhhHbrVMqilYdeegTWTp5UHXlkZwceQ6aCbD6c2mcrvIwDnrLY0ACttZtMv3zPeI6Y2SDkwBFEYHAQHwI/Y1SBQhcplGai6ml36iFM6gShyRnuACfpOwdgXPZm2sOdCKaUECEdwrGukBVp7gnO4il3HtkvnDju2SwDj2wNAUlrsslc+9FTasNY9czfUaoNGjWAZaWvA0wR61CfXXCyNt53S8PISdYHtLOzYNY46Wt1Au/x/Al4wZ2SZfSsCZ8/J0LCBvXtzNu0HxdkPDvuqsJ9j9y1yhl98yyaaOKU2AWQ4Psf33PvOPHPtlBF3aCRN2qft2enMCFqWEWgLLbCaaztPzd5ne2nRIrtI9l8qfVxf1d5NIv2Yz9usCH6AmHU3j6SXnWzMsb1zMwehAzIGFLcu7LO201fauvOiCy8slZyi7NhnL3zppY+1yLTWt7lWISB0GmRQWLcVPYDWztnqjn95i66f4cH2C1ZJ6ys9/+IF6M3uRdO77SI4oO/1i5cvH8ONOh2NnGux3vAB4eufPUA3N4QLBeGflwxfeMEOeLWjY59LuzVqny2tprp3utW4EulvDQt42RaIvMr3dHg+msVPXxR+5omF0w8queAKp++TaKLexlTRaCWE3hgSvP/Q9NdDyn93ghh9/47Hruy4ZOeiPtmVeefsrZegVWO/3TtxAhSNi35z/S7NsJJMl3Y7Lojn7dIFaLSGvLs74i0ud0+6jKiz/c2zDpSJeBr9Fx922Z7e0weztzDsZPRBzZVlUuQcc9HCcTtGazZj+8ONOqz+xNmO8wnHeWF4+6WvL9+xl/4ypKFlnFNyzjpnu75X//Skoa8OD+9PjaXro42M7w5AM2XlyvdOAzThsGSbn9xzDdpc/wdgCLHnJxmEEAAAAABJRU5ErkJggg==" alt=""></div>
+    <h1>Panne de courant — 72 h <small>· HP Outils</small></h1></div>
+    <div class="heure">Heure<b id="heure">0</b></div>
+  </header>
+  <div class="progression" aria-hidden="true"><i id="prog"></i></div>
+  <div class="niveau-ligne"><span class="niveau" id="niveau">✦ Paliers : 6 à découvrir</span></div>
+  <div class="serie-ligne" aria-live="polite"><span class="serie" id="serie">Série de bons choix : 0</span><span class="bonus-arcade" id="bonus">Bonus arcade : +0</span></div>
+  <div class="stats" id="stats"></div>
+  <main id="card"></main>
+  <footer>Gratuit · sans compte · record sur ton appareil. Pour te préparer pour vrai : le kit Urgence 72 heures.</footer>
+
+<script>
+(() => {
+  const RESSOURCES = ["eau", "nourriture", "chaleur", "batterie", "moral"];
+  const LABELS = { eau: "Eau", nourriture: "Manger", chaleur: "Chaleur", batterie: "Batterie", moral: "Moral" };
+  const KEY = "hp:panne-72h:best";
+
+  const EVENTS = [
+    { h: 0, titre: "La panne tombe", texte: "Le courant vient de lâcher. Tout le quartier est dans le noir.",
+      choix: [
+        { t: "Allumer une lampe de poche", e: { batterie: -3 }, note: "Tu vois clair, mais la batterie baisse." },
+        { t: "Chercher les chandelles", e: { chaleur: +4 }, note: "Chaleureux. Prudence avec le feu." },
+        { t: "Attendre au matin, il fait clair", e: {}, note: "Raisonnable, mais long." }
+      ]},
+    { h: 2, titre: "Remplir les contenants", texte: "L'eau du robinet coule encore. C'est le moment de mettre de l'eau de côté.",
+      choix: [
+        { t: "Remplir bouteilles et contenants", e: { eau: +10 }, note: "Deux litres par personne et par jour, c'est la réserve à viser." },
+        { t: "Remplir la baignoire pour la toilette", e: { eau: +6 }, note: "Pratique pour la chasse d'eau, plus tard." },
+        { t: "Attendre, l'eau va revenir", e: {}, note: "L'eau du robinet peut s'arrêter aussi." }
+      ]},
+    { h: 4, titre: "Le frigo", texte: "Le frigo ne ronronne plus. Il faut décider quoi faire de la nourriture.",
+      choix: [
+        { t: "Manger ce qui va se perdre", e: { nourriture: +8, moral: +3 }, note: "Pas de gaspillage." },
+        { t: "Tout laisser dans le frigo fermé", e: { nourriture: -5 }, note: "Ça se perdra un peu." }
+      ]},
+    { h: 6, titre: "Le congélateur", texte: "Le congélateur est plein. Chaque ouverture fait perdre du froid.",
+      choix: [
+        { t: "Garder la porte fermée", e: { nourriture: +8 }, note: "Plein et fermé, il tient environ 48 heures." },
+        { t: "Sortir un plat pour le souper", e: { nourriture: +4 }, note: "Un petit tour, puis on referme vite." },
+        { t: "Vérifier toutes les heures", e: { nourriture: -6 }, note: "Chaque ouverture fait perdre du froid." }
+      ]},
+    { h: 8, titre: "Les voisins", texte: "La voisine t'offre de partager son BBQ au propane.",
+      choix: [
+        { t: "Accepter et partager", e: { nourriture: +10, moral: +8 }, note: "Un repas ensemble, ça fait du bien." },
+        { t: "Refuser poliment", e: { moral: -4 }, note: "Tu restes chez toi." },
+        { t: "Offrir un coup de main en échange", e: { nourriture: +8, moral: +10 }, note: "Donner, c'est recevoir." }
+      ]},
+    { h: 11, titre: "Cuisiner sans courant", texte: "Il faut manger chaud. Le réchaud de camping est dans le garage.",
+      choix: [
+        { t: "Cuisiner dehors, sur le balcon", e: { nourriture: +8, moral: +5 }, note: "Dehors seulement : jamais de flamme à combustible à l'intérieur." },
+        { t: "Manger froid, des conserves", e: { nourriture: +5 }, note: "Simple, sans risque." },
+        { t: "Allumer le réchaud dans la cuisine", e: { nourriture: +6, chaleur: -6, moral: -4 }, note: "À éviter : le monoxyde de carbone ne se voit ni ne se sent." }
+      ]},
+    { h: 14, titre: "La noirceur tombe", texte: "Le soleil baisse. Il fait froid dans la maison.",
+      choix: [
+        { t: "Sortir les couvertures", e: { chaleur: +10 }, note: "Simple et efficace." },
+        { t: "Chauffer avec la cheminée", e: { chaleur: +18, batterie: -2 }, note: "Chaud, mais il faut du bois." },
+        { t: "Se coucher tôt", e: { chaleur: +5, moral: -2 }, note: "Le sommeil aide à passer le temps." }
+      ]},
+    { h: 17, titre: "Les nouvelles du quartier", texte: "La radio à piles capte la station locale. On parle de la panne.",
+      choix: [
+        { t: "Écouter les nouvelles 10 minutes", e: { batterie: -4, moral: +5 }, note: "Savoir où on en est, ça rassure." },
+        { t: "Noter les infos sur papier", e: { moral: +4 }, note: "Un petit carnet, ça aide à s'y retrouver." },
+        { t: "Éteindre, on verra demain", e: {}, note: "Le silence aussi, ça repose." }
+      ]},
+    { h: 20, titre: "Le cellulaire", texte: "La batterie du cellulaire est à 40 %. Il sert de radio et de lampe.",
+      choix: [
+        { t: "L'éteindre pour économiser", e: { moral: -3 }, note: "Prudent, mais tu te sens coupé·e." },
+        { t: "Écouter la radio 10 minutes", e: { batterie: -8, moral: +5 }, note: "Des nouvelles, ça rassure." },
+        { t: "Texter la famille", e: { batterie: -12, moral: +6 }, note: "Ça fait du bien au moral." }
+      ]},
+    { h: 23, titre: "La toilette", texte: "Le réservoir ne se remplit plus. Il faut trouver un moyen.",
+      choix: [
+        { t: "Verser un seau d'eau dans la cuvette", e: { eau: -4, moral: +3 }, note: "Un seau versé d'un coup, et ça part." },
+        { t: "Utiliser l'eau de la baignoire", e: { eau: -3 }, note: "C'est pour ça qu'on l'a gardée." },
+        { t: "Attendre le retour de l'eau", e: { moral: -3 }, note: "Ça peut attendre un peu." }
+      ]},
+    { h: 26, titre: "Nuit 2", texte: "Le froid s'installe. Tu dors mal.",
+      choix: [
+        { t: "Se coller dans la même pièce", e: { chaleur: +8, moral: +4 }, note: "La chaleur humaine." },
+        { t: "Chauffer une bouillotte", e: { chaleur: +10, nourriture: -2 }, note: "Efficace, coûte un peu." },
+        { t: "Endurer", e: { chaleur: -8, moral: -5 }, note: "Pas idéal." }
+      ]},
+    { h: 29, titre: "Le garde-manger", texte: "Les conserves et les aliments secs sont là, sans besoin de froid.",
+      choix: [
+        { t: "Ouvrir une conserve avec l'ouvre-boîte manuel", e: { nourriture: +8 }, note: "L'ouvre-boîte manuel, un petit héros." },
+        { t: "Manger des craquelins et des noix", e: { nourriture: +5, moral: +2 }, note: "Ça cale bien, sans cuisiner." },
+        { t: "Chercher l'ouvre-boîte électrique", e: { nourriture: -2 }, note: "Il ne marchera pas sans courant." }
+      ]},
+    { h: 32, titre: "L'eau", texte: "Tu as des réserves, mais il faut les compter.",
+      choix: [
+        { t: "Rationner : 2 L par personne", e: { eau: +5 }, note: "Prudent." },
+        { t: "Boire normalement", e: { eau: -8, moral: +2 }, note: "Le corps d'abord." }
+      ]},
+    { h: 36, titre: "Se laver sans eau chaude", texte: "Le chauffe-eau est à l'arrêt. Un peu d'eau, un peu de savon.",
+      choix: [
+        { t: "Se laver à la débarbouillette", e: { eau: -3, moral: +4 }, note: "Un peu d'eau, un peu de savon, ça fait du bien." },
+        { t: "Utiliser des lingettes", e: { moral: +3 }, note: "Pratique, sans gaspiller l'eau." },
+        { t: "Sauter la toilette du soir", e: { moral: -3 }, note: "On se sent moins frais." }
+      ]},
+    { h: 40, titre: "Un voisin a besoin d'aide", texte: "La personne âgée du 3e n'a plus de médicaments.",
+      choix: [
+        { t: "Partager les tiens si possible", e: { moral: +12, nourriture: -3 }, note: "Solidaire." },
+        { t: "Appeler la Croix-Rouge", e: { batterie: -6, moral: +5 }, note: "Le bon réflexe." },
+        { t: "Rien, ce n'est pas ta responsabilité", e: { moral: -10 }, note: "Ça pèse." }
+      ]},
+    { h: 44, titre: "Recharger le cellulaire", texte: "Le cellulaire est presque à plat. La voiture est dehors, dans l'entrée.",
+      choix: [
+        { t: "Le brancher dans la voiture, dehors", e: { batterie: +12, moral: +3 }, note: "Quelques minutes dehors suffisent. Jamais dans le garage." },
+        { t: "Le mettre en mode avion", e: { batterie: +6 }, note: "Il tiendra plus longtemps comme ça." },
+        { t: "Le laisser s'éteindre", e: { moral: -4 }, note: "On se passera de nouvelles un moment." }
+      ]},
+    { h: 48, titre: "La batterie faiblit", texte: "Il reste 10 %. Une radio à piles traîne.",
+      choix: [
+        { t: "Changer les piles de la radio", e: { batterie: +8, moral: +4 }, note: "Bonne idée." },
+        { t: "Garder le cellulaire pour la fin", e: {}, note: "Tu attends." }
+      ]},
+    { h: 51, titre: "Le tri du frigo", texte: "Ça fait plus de deux jours. Le frigo est tiède, il faut trier.",
+      choix: [
+        { t: "Jeter les périssables du frigo", e: { nourriture: -6, moral: +3 }, note: "Au-dessus de 4 °C depuis longtemps, on ne prend pas de risque." },
+        { t: "Mettre le reste dans une glacière, dehors à l'ombre", e: { nourriture: +6 }, note: "Sous 4 °C dehors, ça tient — à l'abri du soleil et des animaux." },
+        { t: "Goûter pour vérifier si c'est encore bon", e: { nourriture: -4, moral: -4 }, note: "On ne goûte jamais pour vérifier : les bactéries ne changent ni le goût ni l'odeur." }
+      ]},
+    { h: 54, titre: "Le moral", texte: "Ça fait deux jours. Le silence pèse.",
+      choix: [
+        { t: "Jouer aux cartes", e: { moral: +8 }, note: "Un petit rituel." },
+        { t: "Lire à la lampe de poche", e: { moral: +5, batterie: -4 }, note: "Un moment à toi." },
+        { t: "Sortir marcher", e: { moral: +6, chaleur: -3 }, note: "Prendre l'air." }
+      ]},
+    { h: 58, titre: "Préparer le retour", texte: "La radio dit que les équipes travaillent dans ton secteur.",
+      choix: [
+        { t: "Débrancher la télé et l'ordinateur", e: { batterie: +2, moral: +3 }, note: "Ça les protège d'une surtension au retour du courant." },
+        { t: "Laisser une lampe allumée", e: { moral: +2 }, note: "Elle te dira quand le courant revient." },
+        { t: "Tout rebrancher d'avance", e: {}, note: "Mieux vaut attendre que la tension soit stable." }
+      ]},
+    { h: 62, titre: "L'annonce", texte: "La radio annonce que le courant revient dans les prochaines heures.",
+      choix: [
+        { t: "Tenir le coup", e: { moral: +8 }, note: "On y est presque." },
+        { t: "Se relâcher un peu", e: { moral: +4, chaleur: -5 }, note: "Bientôt fini." }
+      ]},
+    { h: 66, titre: "La dernière ligne droite", texte: "Plus que quelques heures. La maison est fatiguée, toi aussi.",
+      choix: [
+        { t: "Faire le point sur les réserves", e: { eau: +3, moral: +3 }, note: "Savoir où on en est, ça calme." },
+        { t: "Préparer un petit repas chaud dehors", e: { nourriture: +6, moral: +6 }, note: "Un dernier repas de panne, en plein air." },
+        { t: "Se reposer, on a tout fait", e: { moral: +5, chaleur: +3 }, note: "Tu as tenu 66 heures. Bravo." }
+      ]}
+  ];
+
+  // Paliers de progression : par moments traversés, doux et encourageants.
+  // Le score ne change pas : le palier est affiché à part, hors score.
+  const NIVEAUX = [
+    { seuil: 1,  nom: "Première lueur",   desc: "Tu as allumé la première lampe." },
+    { seuil: 5,  nom: "Main tendue",      desc: "Tu prends soin des autres autant que de toi." },
+    { seuil: 9,  nom: "Feu de camp",      desc: "La chaleur et les bons gestes tiennent la maison." },
+    { seuil: 13, nom: "Cœur tranquille",  desc: "Tu as traversé la moitié des moments, sans te presser." },
+    { seuil: 18, nom: "Troisième aube",   desc: "Trois matins sans courant, et tu tiens toujours." },
+    { seuil: 22, nom: "Lumière retrouvée", desc: "Les 22 moments traversés, du début à la fin." }
+  ];
+  function niveauPour(n) {
+    let idx = 0;
+    for (let k = 0; k < NIVEAUX.length; k++) if (n >= NIVEAUX[k].seuil) idx = k;
+    return { idx, nom: NIVEAUX[idx].nom, desc: NIVEAUX[idx].desc };
+  }
+
+  let state = null;
+  const card = document.getElementById("card");
+  const statsEl = document.getElementById("stats");
+  const heureEl = document.getElementById("heure");
+  const best = () => { try { return Number(localStorage.getItem(KEY) || 0); } catch (e) { return 0; } };
+  const progEl = document.getElementById("prog");
+  const niveauEl = document.getElementById("niveau");
+  let niveauIdx = -1;
+  function majNiveau(moment) {
+    const niv = niveauPour(moment);
+    const monte = niv.idx > niveauIdx;
+    niveauIdx = niv.idx;
+    niveauEl.innerHTML = "✦ Palier " + (niv.idx + 1) + "/" + NIVEAUX.length + " : <b>" + niv.nom + "</b>";
+    if (monte) {
+      niveauEl.classList.remove("nouveau");
+      void niveauEl.offsetWidth; // relance l'animation douce du palier
+      niveauEl.classList.add("nouveau");
+      bip(523, 0.12); bip(659, 0.12, 0.1); bip(784, 0.18, 0.2);
+    }
+    return { monte, niv };
+  }
+  function razNiveau() {
+    niveauIdx = -1;
+    niveauEl.classList.remove("nouveau");
+    niveauEl.textContent = "✦ Paliers : 6 à découvrir";
+  }
+
+  // Arcade doux : série de bons choix (aucune ressource ne baisse) + bonus séparé.
+  // Le score de base ne change pas : le bonus est affiché à part, hors score.
+  let serie = 0, serieMax = 0, bonusArcade = 0;
+  const serieEl = document.getElementById("serie");
+  const bonusEl = document.getElementById("bonus");
+  function majSerie() {
+    // Sans série en cours, pas de multiplicateur affiché (×1,0 prêtait à confusion).
+    serieEl.textContent = serie === 0
+      ? "Série de bons choix : 0"
+      : "Série de bons choix : " + serie + " (×" + (1 + 0.1 * serie).toFixed(1).replace(".", ",") + ")";
+    bonusEl.textContent = "Bonus arcade : +" + bonusArcade;
+  }
+  function razSerie() { serie = 0; serieMax = 0; bonusArcade = 0; majSerie(); }
+
+  // Son doux (WebAudio, sinus, volume 0,05) — coupé par le bouton Son.
+  let audioCtx = null, sonActif = true;
+  function bip(freq, duree, delai) {
+    if (!sonActif) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const t = audioCtx.currentTime + (delai || 0);
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.05, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + (duree || 0.12));
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t); o.stop(t + (duree || 0.12) + 0.05);
+    } catch (e) { /* son indisponible : le jeu reste silencieux */ }
+  }
+  const btnSon = document.getElementById("son");
+  btnSon.addEventListener("click", () => {
+    sonActif = !sonActif;
+    btnSon.textContent = sonActif ? "🔊 Son" : "🔇 Son";
+    btnSon.setAttribute("aria-pressed", String(sonActif));
+    if (sonActif) bip(520);
+  });
+
+  function renderStats() {
+    statsEl.innerHTML = RESSOURCES.map(r => {
+      const v = state.res[r];
+      return `<div class="stat"><span>${LABELS[r]}</span>${v}<div class="bar"><i class="${v < 25 ? 'low' : ''}" style="width:${v}%"></i></div></div>`;
+    }).join("");
+  }
+
+  function start() {
+    state = { res: { eau: 70, nourriture: 70, chaleur: 70, batterie: 70, moral: 70 }, i: 0 };
+    razSerie();
+    razNiveau();
+    heureEl.textContent = 0;
+    progEl.style.width = "0%";
+    renderStats();
+    renderEvent();
+    bip(392);
+  }
+
+  function applyDeltas(d) {
+    for (const [k, v] of Object.entries(d))
+      state.res[k] = Math.max(0, Math.min(100, state.res[k] + v));
+  }
+
+  function renderEvent() {
+    const ev = EVENTS[state.i];
+    if (!ev) return finish();
+    heureEl.textContent = ev.h;
+    progEl.style.width = ((state.i + 1) / EVENTS.length * 100) + "%";
+    const palier = majNiveau(state.i + 1);
+    card.classList.add("fade");
+    setTimeout(() => {
+      card.innerHTML = `
+        <div class="jour">Heure ${ev.h} / 72 · Moment ${state.i + 1} sur ${EVENTS.length}</div>
+        <h2>${ev.titre}</h2>
+        ${palier.monte ? `<p class="palier">✦ Nouveau palier : ${palier.niv.nom} — ${palier.niv.desc}</p>` : ""}
+        <p class="texte">${ev.texte}</p>
+        <div class="choix">${ev.choix.map((c, i) => `<button data-i="${i}">${c.t}</button>`).join("")}</div>`;
+      card.classList.remove("fade");
+      card.querySelectorAll("button[data-i]").forEach(b =>
+        b.addEventListener("click", () => choose(+b.dataset.i)));
+    }, 120);
+  }
+
+  function choose(i) {
+    const ev = EVENTS[state.i], c = ev.choix[i];
+    // Série arcade : le choix est « bon » si aucune ressource ne baisse.
+    const bonChoix = Object.values(c.e).every(v => v >= 0);
+    if (bonChoix) { serie++; bonusArcade += serie; if (serie > serieMax) serieMax = serie; }
+    else serie = 0;
+    majSerie();
+    applyDeltas(c.e);
+    renderStats();
+    bip(520);
+    if (bonChoix) bip(Math.min(800, 600 + serie * 20), 0.12, 0.05);
+    // Effet visible du choix (données du choix, rien d'inventé) : avant, il fallait
+    // comparer les chiffres des ressources pour deviner ce qui avait changé.
+    const effets = Object.entries(c.e).map(([k, v]) => LABELS[k] + " " + (v > 0 ? "+" : "") + v).join(" · ");
+    card.innerHTML = `
+      <div class="jour">Heure ${ev.h} / 72 · Moment ${state.i + 1} sur ${EVENTS.length}</div>
+      <h2>${ev.titre}</h2>
+      <p class="texte">${c.t}.</p>
+      <p class="effets">Effet : ${effets || "aucun changement aux ressources"}</p>
+      <p class="note">${c.note}</p>
+      <div class="choix"><button id="next">Continuer →</button></div>`;
+    document.getElementById("next").addEventListener("click", () => {
+      state.i++;
+      if (state.i >= EVENTS.length) finish();
+      else renderEvent();
+    });
+  }
+
+  function feedback() {
+    const vals = Object.values(state.res);
+    const moy = vals.reduce((a, b) => a + b, 0) / vals.length;
+    if (Math.min(...vals) === 0) return "Ça a été tough. Un kit 72 h préparé d'avance change tout.";
+    if (moy > 65) return "Solide. Tu es prêt·e pour la prochaine.";
+    if (moy > 45) return "Tu as tenu. C'est ça qui compte.";
+    return "Ça s'est joué de justesse. Un peu de préparation ferait une grosse différence.";
+  }
+
+  function finish() {
+    const score = Math.round(Object.values(state.res).reduce((a, b) => a + b, 0) / 5);
+    const isBest = score > best();
+    if (isBest) { try { localStorage.setItem(KEY, String(score)); } catch (e) {} }
+    const nivFinal = niveauPour(EVENTS.length);
+    progEl.style.width = "100%";
+    bip(523, 0.18); bip(659, 0.22, 0.18);
+    // Célébration de record : fanfare douce + pastilles colorées, jamais punitive.
+    // Les couleurs viennent des tokens HP définis en :root (crème, encre, forêt, érable, or, ciel).
+    const cs = getComputedStyle(document.documentElement);
+    const token = n => (cs.getPropertyValue(n) || "").trim();
+    const couleurs = [token("--forest") || "#2f6b4f", token("--maple") || "#b5451b", token("--gold") || "#d9a441", token("--sky") || "#3f7fa3", token("--cream") || "#f7f3ea"];
+    let confettis = "";
+    if (isBest) {
+      bip(784, 0.25, 0.36);
+      let pastilles = "";
+      for (let p = 0; p < 24; p++) {
+        pastilles += `<i style="left:${(p * 41) % 96}%;background:${couleurs[p % couleurs.length]};animation-delay:${(p % 8) * 0.08}s"></i>`;
+      }
+      confettis = `<div class="confettis" aria-hidden="true">${pastilles}</div>
+      <p style="margin:0"><span class="record-badge">🎉 Nouveau record !</span></p>`;
+    }
+    card.innerHTML = `
+      <div class="jour">Heure 72 / 72</div>
+      <h2>Le courant est revenu</h2>
+      ${confettis}
+      <p class="texte">${feedback()}</p>
+      <p class="note">Palier atteint : <b>${nivFinal.nom}</b> — ${nivFinal.desc}</p>
+      <div class="resume">${RESSOURCES.map(r => `<div><span>${LABELS[r]}</span>${state.res[r]}</div>`).join("")}</div>
+      <p class="note">Score : <span class="badge">${score}</span> · Record : <span class="badge">${best()}</span></p>
+      <p class="note">Bonus arcade : +${bonusArcade} (série max ${serieMax}) — affiché à part, le score ne change pas.</p>
+      <button class="restart" id="again">Rejouer</button>
+      <p class="note" style="margin-top:8px">Le kit Urgence 72 heures de HP Outils aide à préparer une vraie panne.</p>`;
+    document.getElementById("again").addEventListener("click", renderStart);
+  }
+
+  function renderStart() {
+    razSerie();
+    razNiveau();
+    // Écran de démarrage propre : ressources de départ (70) visibles tout de suite,
+    // heure et progression remises à zéro (elles restaient à 66 / 100 % après Rejouer).
+    state = { res: { eau: 70, nourriture: 70, chaleur: 70, batterie: 70, moral: 70 }, i: 0 };
+    heureEl.textContent = 0;
+    progEl.style.width = "0%";
+    renderStats();
+    card.innerHTML = `
+      <div class="jour">72 heures · 22 moments · 6 paliers</div>
+      <h2>Panne de courant — 72 h</h2>
+      <p class="texte">Une panne prolongée. Cinq ressources à garder au-dessus du rouge : eau, nourriture, chaleur, batterie, moral. Aucune bonne réponse — juste des décisions. Un choix qui ne fait baisser aucune ressource prolonge ta série de bons choix.</p>
+      <div class="choix"><button id="go">Commencer</button></div>`;
+    document.getElementById("go").addEventListener("click", start);
+  }
+
+  renderStart();
+})();
+</script>
+</body>
+</html>

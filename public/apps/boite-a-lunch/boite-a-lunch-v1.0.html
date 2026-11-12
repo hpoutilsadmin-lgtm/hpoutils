@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Boîte à lunch — HP Outils</title>
+<style>
+  :root{--cream:#f7f3ea;--ink:#2a2620;--forest:#2f6b4f;--maple:#b5451b;--gold:#d9a441;--soft:#e8e0cf;--sky:#3f7fa3;--muted:#6b6459}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:16px 12px 24px;gap:14px;user-select:none}
+  header{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  /* ——— Gepeto vrai (11 nov. 2026) : portrait peint tete-pastille.png (SHA b26af210), en-tête ——— */
+  header{align-items:center}
+  .titre-groupe{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+  .gepeto-face{flex:none;width:48px;height:48px;border-radius:50%;background:#fffdf7;border:2px solid var(--soft);overflow:hidden}
+  .gepeto-face svg{display:block;width:100%;height:100%}
+  .gepeto-face img{display:block;width:100%;height:100%;object-fit:cover}
+
+  h1{font-size:1.1rem;margin:0;color:var(--forest)}
+  h1 small{font-weight:400;color:var(--muted);font-size:.8em}
+  .budget{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:right}
+  .budget b{display:block;font-size:1.2rem;color:var(--forest);font-variant-numeric:tabular-nums}
+  .budget b.low{color:var(--maple)}
+  #card{width:100%;max-width:560px;background:#fffdf7;border:2px solid var(--soft);border-radius:16px;
+    padding:20px 18px;min-height:340px;display:flex;flex-direction:column;gap:12px}
+  .jour{font-size:.8rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  h2{font-size:1.25rem;margin:0;color:var(--forest);line-height:1.2}
+  .texte{margin:0;line-height:1.55;font-size:.95rem}
+  .choix{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+  .choix button{background:#fff;border:2px solid var(--soft);border-radius:12px;padding:12px 14px;
+    font-size:.95rem;text-align:left;cursor:pointer;color:var(--ink);font-weight:500;font-family:inherit;min-height:48px}
+  .choix button:hover{border-color:var(--forest);background:#f0f8f3}
+  .choix button:disabled{opacity:.5;cursor:not-allowed}
+  .cats{display:flex;gap:6px;font-size:.8rem;color:var(--muted);flex-wrap:wrap}
+  .cat{padding:3px 9px;border-radius:999px;background:var(--soft)}
+  .cat.done{background:var(--forest);color:#fff}
+  .pantry{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;max-height:208px;overflow-y:auto;padding-right:2px}
+  .item{background:#fff;border:2px solid var(--soft);border-radius:10px;padding:8px 10px;font-size:.8rem;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink);min-height:48px}
+  .item.sel{border-color:var(--forest);background:#f0f8f3}
+  .item b{display:block;font-size:.85rem;margin-bottom:2px}
+  .item small{color:var(--muted);font-size:.8rem}
+  .lunch{display:flex;gap:6px;flex-wrap:wrap;min-height:26px}
+  .lunch .tag{background:var(--cream);border:1px solid var(--soft);border-radius:999px;padding:3px 10px;font-size:.8rem}
+  .allerg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+  .allerg button{background:#fff;border:2px solid var(--soft);border-radius:999px;padding:12px 16px;min-height:48px;font-size:.82rem;cursor:pointer;font-family:inherit}
+  .allerg button.sel{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .note{margin:0;color:var(--muted);font-size:.88rem;font-style:italic}
+  footer{font-size:.8rem;color:#8a8277;max-width:560px;text-align:center;line-height:1.5}
+  .restart{background:var(--forest);color:#fff;border:0;border-radius:10px;padding:12px 22px;
+    font-size:1rem;font-weight:600;cursor:pointer;align-self:flex-start;box-shadow:0 3px 0 rgba(0,0,0,.15);font-family:inherit;min-height:48px}
+  .badge{display:inline-block;background:var(--gold);color:var(--ink);padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:700}
+  .resume{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+  .resume div{background:var(--cream);padding:8px 10px;border-radius:8px;font-size:.85rem}
+  .resume span{color:var(--muted);display:block;font-size:.8rem}
+  /* ——— Arcade (lot arcade, nov. 2026) : Jour parfait + série ——— */
+  .fete{background:var(--gold);color:var(--ink);border:2px solid var(--forest);border-radius:12px;
+    padding:10px 12px;font-size:.9rem;font-weight:700;text-align:center;line-height:1.4;
+    animation:fete-pop .35s ease-out}
+  .fete small{display:block;font-weight:500;font-size:.8rem}
+  @keyframes fete-pop{from{transform:scale(.96);opacity:.6}to{transform:scale(1);opacity:1}}
+  .bonus-arcade{margin:0;color:var(--forest);font-size:.9rem;font-weight:600}
+  .bonus-arcade .badge{background:var(--gold)}
+  /* ——— Niveaux de progression (le double, nov. 2026) : paliers par jours parfaits ——— */
+  .niveau{background:#eef4f8;border:2px solid var(--sky);border-radius:12px;padding:8px 12px;
+    font-size:.85rem;font-weight:600;color:var(--sky);line-height:1.4}
+  .niveau small{display:block;font-weight:500;font-size:.8rem;color:var(--ink)}
+  .semaine{display:inline-block;background:var(--sky);color:#fff;padding:3px 10px;border-radius:999px;
+    font-size:.8rem;font-weight:700;letter-spacing:.04em}
+
+  /* ——— Mise en page standard HP (11 nov. 2026) : Retour, cibles 48 px, mouvement réduit ——— */
+  .barre-hp{width:100%;max-width:560px;display:flex;justify-content:space-between}
+  .btn-retour{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-retour:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .btn-son{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-son:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}.fete{animation:none !important}}
+  :focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+</style>
+</head>
+<body>
+  <div class="barre-hp"><button class="btn-retour" type="button" onclick="if(history.length>1){history.back()}else{location.href='/jeux'}">← Retour</button><button class="btn-son" id="son" type="button" aria-pressed="true">🔊 Son</button></div>
+  <header>
+    <div class="titre-groupe"><div class="gepeto-face" aria-hidden="true"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAADAFBMVEXY06/h3NSvqJutrZipp6GtqJ7hv7DZ2talkGzh2ci/fz+wb0mlh1+tnH+qqtS8w8TFuJfEq6Df07vf0brSwJ/t38IAAADqupTtwJpSRTquh29oWEzTpoZwZFlIOS/kq4e1k3rNmHdXTEK3mYP///51a2Pzx6SKem22p43NtJXDnYOQhHR2dG5bU0rEimitdlj8/Pt/f3/YoX2Oi4WTlJCJaFOqVVU4LCOpfGQ0Jhw8MimRc1rXxqt4hYfn2cuqqqr/AAADAgLPu6b//wB/fz+qqlVVVVVlSziSZ06Xa1WytbRkTkCHeWzVyK78/Pny49N7PT1aZmmSalOTeGmdl4+qa0qmfWSnhGyuqqXk1Ljk1Lfu6+lLOy6SZ1GXeGWOioTUx6z/f3//qqr//39/AABuamWZcluLeXCWkYu3fXq8gFyqhm6mhmyhm5KvmYi/v3/Ow7nMxLHQ09TgoX7h0rbz2srx5M3///8tHRJTOjNuWUl/fwCYa1KPa2eXc1uXdVuZclibeGOLg3OYpaejdVqlhG6piHGupJW8urbBspXFtpjMvaPUybXOy8jhnnrm17rl1rnn28Tn59D35sny48n//7E2Li47OzRVAABALBxMMx1PNiBURjtURTZHR0daU0poRi5xVTh4VTx3VT14VVVtaGJ9dW10foF///+FXUeEW0SGZFCPa2Kad2GQd2iUjHqaiXGRjYqUlIaWlpCkfWiifWmkemKqh3Skg260nX+1k2ympnmipZmxqJWqopSuqaatqaHBg17Hu6/IvanKvqnVxafWxabGxsbOysDOysPkvaLm2Lzm3czs3cLu4MXp6en/+NkOCgARDwwAAP8XFxIWFhYA//81HBM/LB4vLyc1LiUyMig6Ny9AMB9FPzlaOixGQz1KQzpWT0pVVQBTXGF1TjRnRjBmTEx6WD9qXEBsXlNtaF9qYl12b15zbGxvb2dva2Z3d3J5d3SWUS6RXT6UVVWIXEiRbVuNbWCOgXCRgnCNjY2Li4WXjoeckH+ekHSNxmerAAABAHRSTlMS1KsMcewUJa+TBGUzdAb/dP9Auf9IAP7+/v7+/v7+/v7+/f4E/v79/P3+/f79/v3/Av78/f4D/vv+/f74//0EAf/7AQQDA/5NlPr/0ZMq/QT/rRHS/9TW+9X8/9tvRc8UAgMCAtiVMVkK/naml8sEMUz//28SbVT/Ec8CyxBvrMN2yf/XUpenjKbPsa///1KQjRE3rgMNCwP/iIa70Q6GFg0o/wd5o/8CUv8tKZi1DrOoEjMkUK0ZMQ00Cyxzyy1P/3GMwWrbFCtP/6RoulQZKUh2AWD/AbXIINc4i/9Yq1OU2wP/J4MKrTekOF3OIUCOMZ4WMQxjHP87ZBIqb4SrX8YlNAAADXdJREFUeNq1mgV4G0cWgJ2Uj3FWu7PMq90VS5YFju2AE1OYkwabpKEmaZIyMzNd8crtXZm5vTIfMzMz85tZrShyI6fpfIlkydL75/GbXXeg93h1tP3JnmQuN2PGpEmTZszI5Y7Zy4BkbnJP81uTcz17CZCcpJOnG268469Lp9G1dOoNR5G3VuT2AmDyCnj4zPFr5s3Lc7KiRKNRReG4/Ly710z9NPxmUvLdAXJU+ol5OcoHK0qWpmmyInPxE5YCI5fcc0ByNdIfOiGvhLJD+XKwQJFTp3022MUeASYhdPCJXDTcd/gcjVbE0xUniD0CQIwcOiuvRHdZGrFQjcAVl9IPjxUAlp16LCcTaVqjcK2ZwM2aMXYNkkhfwzGMw8ta0wLJgfwQkJ//8M1jBiTR/bOUCFkNBCI7dHFNgbUoOVbAMWj2sbzJRCIMIcgNhoGIdRyGodoFgA3HrRgjYHXPY8fyRDhdIKi2eCd8O0IgPCUchyaOCdCTu30Wb1blwD8SofAfNl4RXFtRjpt/8xgBObRGMasbjTC1H+uFhz+DEhvewQkdreRP5SJMK5mBYPoWVSxYkjy0Su9pH9Cz4pFT6/ZMjcRUtWAqguvZEncwWtE+IIem1RzQYCImpIX6hUrx82YnJ7YLSKK1+frN1/ZbB2zSgFFOQpPbBeTQLCbS7NaKRCaU3ghgJFChXRMl0U+40BpVIZEmm1QBlbck4oVcewDiAWLnSCUO6/bZqFMDgFGOH81GzQAdnRrGTKA80zJgm9/g70KHtgXIoTuUCFO/SQkymBYeuiSmEqdNTuLvOnRlOwB9ylcfjpjUqjyf4kNF+ADC1HulASDx+dmjlIt6wJXkYRbnmJEgUSWeb8yB5mitOIvWi4eSyTY0mHDd5TdeLQq8yVc8GGy9WjurZqo5PwSchg7bDaBnn+9ec+2SJUuuYbs6XQ6bYVngU6lAcCqwU52bawCFO/2R1jaqAqagH7CsyKoqK4pip9CJTcdsTKfazxHTbKqBMIvNf3BikobhKIAe9Ktnz/C7KIJlOwudRUs2W4hmGNPkLa6pMZDednrLSK33wRe+ScUTACuqIis6zbXa5IuMyeGr+h3TgfZjmrWeACpMASMlH/zLqIBvF1hWxb4qqiAcOGJBMOuFMxEn25XVwISs7WLyVEzVA7j5s9Hke+ZNbSwaNcAtYHsREOSbQMBEDZ6v6mAqEV7sEnEX6EY/KXaxbvjrSvffuBqdxrUG6OhisEon+V7AEQHgi1gIrQSG6YP3CyJ1EXUUfE6I0qx2whlm42kbRwFMQd8XnzYKrNjZRYKoIBIVVHiVpVYyZV4UsEisRzRjMX0kn8Yk1vj6KWk0E33jD68SgZiDaZTDYgF0AWsVMNXAwRi4xP8qyK6IBxVgN/18pD0AQuPVwhBHypACR4ybujpFuleawAJLeGT3RH4gnlqpk3sNAE49YBqZylslmr5JvP4IGeJCUUgx4ESSE2KWlrKriFuI/0kuspUH+vI7PLFhFZDPc0vR+1oCVqNvHaKPaClGifGgghRhsl0FtksmGjCB4wOzFDrpqr5BikXFRvE4F1s//5et80BHv/03GpFT0tw8p2lWlpOYfL9YhP1FFBN3VnZeAMPhYh62ikXgs8CxzBAQj6UkieG+fl3P6P1AkxS5e3Fiv5meJ8QlJSjXEsN30eAC4dk8FwP9oJIrRXC7CM5nKjaKx6QUr1hLjkKjAZJJ/XSJOy+R+LBfNn6cduNKLCjNEIj9INzKcwpZsXiMh1iQeJCO+ZtIjVUAoKSAnP3a39CM5GgaTEInScr0RCLteb2diYQbj0nV0g99IKZUWzCnAIFhil1iUMIJIJVSYjHue0TQxFEBGySlO5Eol9Xerwxsy4CVmOrwxcRSDK/EOA4MZzIAA4CZPTKoFlGiQEqJK9mfbzjxwMfrIrVZA4bvSyQymZm9vb1GOS3DQBICYHtxzsKCIOAsKBCjWzexEqloAID1MQ6qC0TBo7UhpqNhZNE38wyXSAx4Gb/Tz3gDYJZUCIhzH52+zfC8mcaCNP57vmavCiAlKfFY/MguSBBh6B/VxtME0FKmohEnlNNpLzOdk+KRymTHaYsTiVNm3lboVROJ28p9xXh9TwYAD4DnYlkCULFVnfSaAFzKjCg26FAupwcWy3xMMUNAKUHARm9v13nbyt7i7nidCqQfQFTF1oMKUIWF4sYPhGeSesBEpB+dMkmD7Zu+uLu7BJaOh2cDUwHfJDJlD5zT65W9RIKvAyhW1pJoEYviQ0527328dRSBBktoH5ZiQcCDY82wKUtgOeIctbdXzZTLiYRcN2NwAiYACLEY/qL+yv6odlxozOS3aeJLwbdSoIBkMpVUoDZa7GVOKZchyM5LdHN1x7R+jIugwHMxheeNdQ2XRxoB/yqQBiORSYgowMdhPCEJRXJNyUOGbPO8ctmbOQDypToFREHNSvAVMjzhL99+xai16CgRM5URjohdDy6WAgBUCyVP3DCQyZwyLtGXrx/CsqygCmRKpoxbGjpO03StDvLBYEUGOyluUoAUnBag1nB8qbu723S4+v0zPLQhFYPeKUhynnu1YfhqBqgcU53QY9x0M5BPp18JKhMpFVBOpYZpiWMFjPtjdLRU8gc3XttpAvh+tpY9c18LAFJ4dm3M3uoCF2N87fvjUMe5zVuajjrNAKu/OoqCi7uphQ4/XKokrRJTSE+pX9CXRAs0uBr96c9Tpz6Kmg/9zSbKsHIIUOJ0+4dXlAgQUPMVvgEBHnBdjD+Vq17IegfAFWwaZ6tHybnK+eeDeJB5fqo2YjNNCmBfsDQATJiRzLW4AtlYKu5X095g5bSkcHdmY6R/5ePxuFQnuJ4BBmI9ywPAT9GPdnvCgVLxQ8P2iyR5ZTL9DGZBdnawvx9zUBjMSMNVFnqSYyxREDTPwuzRn0PtAA4RMgaGcIPc9AQP06X6dGBlszykRaTRPqTBCLaABZEbt8vZo9VU8XvftXyLkUXXzqTTrhUgsIEhTlQ269TP81Ig3zDAQJgdN6LvHjAF/U61DGEw2i8syGQsN+2BXOxahmWlPWxZeFA26+UXwT6eZ9m+z3pHtFagEZBEB0AzIlLtNKZDtC+yAkjPWBk77S5wDdaKVKTDsIRZwxBc2IeP2YyutwH4EjhBdeFbxGtWNgu21bJkoE4L2LNcd4HliW5FvsSxvmcYhptxsaqq40aRv8u1il+rGL4lCKxlQteBU5ipZTGZG8nM7tkZQ4wG4jErGKCclQa1VFY4Ak1oB5BEz6isB/IF1oZTeCwep4XN4aNROV7MFoQF4FCGiod9CEba1Vw41ansJvBfW9cqkG50km8KrBwh5z6ei8+dOzdOxmZQB4xueywXzUJfJ7tIw2QjqD7M8QM6atNE6D4fC54rqKR3KjSBq6UoookQUlD6yfQF8SNoaWz5EEKi676BLmsLoKO306pPihcmgDgUTyrbCUITot4SKgu7RsZSffhkoei4m8iVjnY0mIDONEQLwoMlMot3EuPASBs0SAe2boTyMWQJjIk+FgXbtn/Rtomm6H8sGMYcC4ONTCwOYpzN5isVwmJD8cAxMuBd0IDFtu041snuCy1zbReAjpZDID173BAQNNYnQlRcOS1XjE8W9BiXBff6rG8TgGvLrvZ8CyvtemE2qe/Lek+iISNIZR+cjjlSIfisavjgW5ANAF8VQDqcNKl8x5VtW7u3xZXBjlb3PlhhHbrVMqilYdeegTWTp5UHXlkZwceQ6aCbD6c2mcrvIwDnrLY0ACttZtMv3zPeI6Y2SDkwBFEYHAQHwI/Y1SBQhcplGai6ml36iFM6gShyRnuACfpOwdgXPZm2sOdCKaUECEdwrGukBVp7gnO4il3HtkvnDju2SwDj2wNAUlrsslc+9FTasNY9czfUaoNGjWAZaWvA0wR61CfXXCyNt53S8PISdYHtLOzYNY46Wt1Au/x/Al4wZ2SZfSsCZ8/J0LCBvXtzNu0HxdkPDvuqsJ9j9y1yhl98yyaaOKU2AWQ4Psf33PvOPHPtlBF3aCRN2qft2enMCFqWEWgLLbCaaztPzd5ne2nRIrtI9l8qfVxf1d5NIv2Yz9usCH6AmHU3j6SXnWzMsb1zMwehAzIGFLcu7LO201fauvOiCy8slZyi7NhnL3zppY+1yLTWt7lWISB0GmRQWLcVPYDWztnqjn95i66f4cH2C1ZJ6ys9/+IF6M3uRdO77SI4oO/1i5cvH8ONOh2NnGux3vAB4eufPUA3N4QLBeGflwxfeMEOeLWjY59LuzVqny2tprp3utW4EulvDQt42RaIvMr3dHg+msVPXxR+5omF0w8queAKp++TaKLexlTRaCWE3hgSvP/Q9NdDyn93ghh9/47Hruy4ZOeiPtmVeefsrZegVWO/3TtxAhSNi35z/S7NsJJMl3Y7Lojn7dIFaLSGvLs74i0ud0+6jKiz/c2zDpSJeBr9Fx922Z7e0weztzDsZPRBzZVlUuQcc9HCcTtGazZj+8ONOqz+xNmO8wnHeWF4+6WvL9+xl/4ypKFlnFNyzjpnu75X//Skoa8OD+9PjaXro42M7w5AM2XlyvdOAzThsGSbn9xzDdpc/wdgCLHnJxmEEAAAAABJRU5ErkJggg==" alt=""></div>
+    <h1>Boîte à lunch <small>· HP Outils</small></h1></div>
+    <div class="budget">Budget<b id="budget">50,00 $</b></div>
+  </header>
+  <main id="card"></main>
+  <footer>Gratuit · sans compte · idée à explorer avec En cuisine (section panier).</footer>
+
+<script>
+(() => {
+  const PANTRY = [
+    { id: "bp", nom: "Beurre d'arachide", cat: "prot", cout: 0.25, allerg: ["arachide"] },
+    { id: "oeuf", nom: "Œuf cuit", cat: "prot", cout: 0.30, allerg: ["oeuf"] },
+    { id: "thon", nom: "Thon", cat: "prot", cout: 0.80, allerg: ["poisson"] },
+    { id: "fromage", nom: "Fromage", cat: "prot", cout: 0.45, allerg: ["lait"] },
+    { id: "hummus", nom: "Hummus", cat: "prot", cout: 0.55, allerg: ["sesame"] },
+    { id: "tofu", nom: "Tofu mariné", cat: "prot", cout: 0.60, allerg: ["soya"] },
+    { id: "jambon", nom: "Jambon", cat: "prot", cout: 0.75, allerg: [] },
+    { id: "pois", nom: "Pois chiches", cat: "prot", cout: 0.35, allerg: [] },
+    { id: "poulet", nom: "Poulet rôti", cat: "prot", cout: 0.85, allerg: [] },
+    { id: "dinde", nom: "Dinde tranchée", cat: "prot", cout: 0.80, allerg: [] },
+    { id: "saumon", nom: "Saumon", cat: "prot", cout: 0.90, allerg: ["poisson"] },
+    { id: "lentilles", nom: "Lentilles", cat: "prot", cout: 0.30, allerg: [] },
+    { id: "haricots-rouges", nom: "Haricots rouges", cat: "prot", cout: 0.35, allerg: [] },
+    { id: "yogourt", nom: "Yogourt nature", cat: "prot", cout: 0.50, allerg: ["lait"] },
+    { id: "edamames", nom: "Edamames", cat: "prot", cout: 0.40, allerg: ["soya"] },
+    { id: "boeuf", nom: "Bœuf haché", cat: "prot", cout: 0.85, allerg: [] },
+    { id: "pain-blanc", nom: "Pain blanc", cat: "fec", cout: 0.15, allerg: ["ble"] },
+    { id: "pain-ble", nom: "Pain blé entier", cat: "fec", cout: 0.20, allerg: ["ble"] },
+    { id: "craq", nom: "Craquelins", cat: "fec", cout: 0.25, allerg: ["ble"] },
+    { id: "riz", nom: "Riz cuit", cat: "fec", cout: 0.30, allerg: [] },
+    { id: "pates", nom: "Pâtes froides", cat: "fec", cout: 0.25, allerg: ["ble"] },
+    { id: "tortilla", nom: "Tortilla", cat: "fec", cout: 0.30, allerg: ["ble"] },
+    { id: "galette", nom: "Galette de riz", cat: "fec", cout: 0.20, allerg: [] },
+    { id: "quinoa", nom: "Quinoa", cat: "fec", cout: 0.35, allerg: [] },
+    { id: "couscous", nom: "Couscous", cat: "fec", cout: 0.30, allerg: ["ble"] },
+    { id: "pita", nom: "Pain pita", cat: "fec", cout: 0.25, allerg: ["ble"] },
+    { id: "bagel", nom: "Bagel nature", cat: "fec", cout: 0.30, allerg: ["ble"] },
+    { id: "patate-douce", nom: "Patates douces", cat: "fec", cout: 0.30, allerg: [] },
+    { id: "mais", nom: "Maïs", cat: "fec", cout: 0.25, allerg: [] },
+    { id: "sarrasin", nom: "Galette de sarrasin", cat: "fec", cout: 0.30, allerg: [] },
+    { id: "pomme", nom: "Pomme", cat: "fv", cout: 0.40, allerg: [] },
+    { id: "banane", nom: "Banane", cat: "fv", cout: 0.30, allerg: [] },
+    { id: "carotte", nom: "Carottes", cat: "fv", cout: 0.20, allerg: [] },
+    { id: "raisin", nom: "Raisins", cat: "fv", cout: 0.50, allerg: [] },
+    { id: "concombre", nom: "Concombre", cat: "fv", cout: 0.25, allerg: [] },
+    { id: "tomate", nom: "Tomates cerises", cat: "fv", cout: 0.35, allerg: [] },
+    { id: "clem", nom: "Clémentine", cat: "fv", cout: 0.35, allerg: [] },
+    { id: "poivron", nom: "Poivron", cat: "fv", cout: 0.40, allerg: [] },
+    { id: "orange", nom: "Orange", cat: "fv", cout: 0.35, allerg: [] },
+    { id: "fraises", nom: "Fraises", cat: "fv", cout: 0.45, allerg: [] },
+    { id: "bleuets", nom: "Bleuets", cat: "fv", cout: 0.55, allerg: [] },
+    { id: "kiwi", nom: "Kiwi", cat: "fv", cout: 0.40, allerg: [] },
+    { id: "mangue", nom: "Mangue", cat: "fv", cout: 0.50, allerg: [] },
+    { id: "poire", nom: "Poire", cat: "fv", cout: 0.35, allerg: [] },
+    { id: "brocoli", nom: "Brocoli", cat: "fv", cout: 0.30, allerg: [] },
+    { id: "celeri", nom: "Céleri", cat: "fv", cout: 0.20, allerg: [] },
+    { id: "radis", nom: "Radis", cat: "fv", cout: 0.20, allerg: [] },
+    { id: "haricots-verts", nom: "Haricots verts", cat: "fv", cout: 0.30, allerg: [] }
+  ];
+
+  const ALLERGENS = [
+    { id: "arachide", nom: "Arachides" },
+    { id: "lait", nom: "Lait" },
+    { id: "oeuf", nom: "Œuf" },
+    { id: "ble", nom: "Blé" },
+    { id: "poisson", nom: "Poisson" },
+    { id: "soya", nom: "Soya" },
+    { id: "sesame", nom: "Sésame" }
+  ];
+
+  const CATS = { prot: "Protéine", fec: "Féculent", fv: "Fruit/lég." };
+  // Le double (nov. 2026) : 2 semaines de 5 jours, 10 jours au total.
+  const BADGES = ["Semaine 1 · Lundi", "Semaine 1 · Mardi", "Semaine 1 · Mercredi", "Semaine 1 · Jeudi", "Semaine 1 · Vendredi",
+    "Semaine 2 · Lundi", "Semaine 2 · Mardi", "Semaine 2 · Mercredi", "Semaine 2 · Jeudi", "Semaine 2 · Vendredi"];
+  const KEY = "hp:boite-a-lunch:best";
+  // Budget : même logique, 5 $ par jour — 25 $ pour 5 jours devient 50 $ pour 10 jours.
+  const BUDGET = 50;
+  const JOURS = 10;
+
+  // Niveaux de progression : paliers par nombre de jours parfaits dans la partie.
+  // Aucun niveau perdu, aucune pénalité : on ne fait que monter.
+  const NIVEAUX = [
+    { min: 0, nom: "Premiers pas", prochain: 1 },
+    { min: 1, nom: "Apprenti lunch", prochain: 3 },
+    { min: 3, nom: "Chef de semaine", prochain: 5 },
+    { min: 5, nom: "Pro des lunchs", prochain: 7 },
+    { min: 7, nom: "Chef des deux semaines", prochain: 9 },
+    { min: 9, nom: "Maître des boîtes à lunch", prochain: null }
+  ];
+  function niveauActuel(parfaits) {
+    let niv = NIVEAUX[0];
+    for (const n of NIVEAUX) { if (parfaits >= n.min) niv = n; }
+    return niv;
+  }
+  function texteNiveau(parfaits) {
+    const niv = niveauActuel(parfaits);
+    if (niv.prochain === null) return `Niveau : ${niv.nom} — niveau maximum, bravo !`;
+    const suiv = NIVEAUX.find(n => n.min === niv.prochain);
+    return `Niveau : ${niv.nom} · ${parfaits} jour${parfaits > 1 ? "s" : ""} parfait${parfaits > 1 ? "s" : ""} — plus que ${niv.prochain - parfaits} pour « ${suiv.nom} ».`;
+  }
+
+  const card = document.getElementById("card");
+  const budgetEl = document.getElementById("budget");
+  let state = null;
+  const best = () => { try { return Number(localStorage.getItem(KEY) || 0); } catch (e) { return 0; } };
+  const fmt = n => n.toFixed(2).replace(".", ",") + " $";
+
+  // Son doux (optimisation plaisir, 11 nov. 2026) : sinus 300–800 Hz, volume 0,06,
+  // un petit bip par geste. Bouton Son en haut pour couper. Aucune ressource externe.
+  let sonActif = true;
+  let sonCtx = null;
+  function bip(freq, duree = 0.09, delai = 0) {
+    if (!sonActif) return;
+    try {
+      sonCtx = sonCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (sonCtx.state === "suspended") sonCtx.resume();
+      const t = sonCtx.currentTime + delai;
+      const o = sonCtx.createOscillator();
+      const g = sonCtx.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.06, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + duree);
+      o.connect(g);
+      g.connect(sonCtx.destination);
+      o.start(t);
+      o.stop(t + duree + 0.02);
+    } catch (e) { /* son indisponible : le jeu reste silencieux */ }
+  }
+  const sonBtn = document.getElementById("son");
+  if (sonBtn) sonBtn.addEventListener("click", () => {
+    sonActif = !sonActif;
+    sonBtn.textContent = sonActif ? "🔊 Son" : "🔇 Son";
+    sonBtn.setAttribute("aria-pressed", String(sonActif));
+    if (sonActif) bip(520);
+  });
+
+  function updateBudget() {
+    const rest = BUDGET - state.depense;
+    budgetEl.textContent = fmt(Math.max(0, rest));
+    budgetEl.classList.toggle("low", rest < 5);
+  }
+
+  function isAllergen(item) {
+    return state.allerg !== "aucun" && item.allerg.includes(state.allerg);
+  }
+
+  function start() {
+    state = { allerg: "aucun", jour: 0, depense: 0, choix: [], historique: [], parfaits: 0, serie: 0, bonusArcade: 0, dernierBonus: 0 };
+    updateBudget();
+    renderChoixAllerg();
+  }
+
+  function renderChoixAllerg() {
+    card.innerHTML = `
+      <div class="jour">Avant de commencer</div>
+      <h2>Quel ingrédient à éviter ?</h2>
+      <p class="texte">L'école, la garderie ou un proche : on choisit un allergène à laisser de côté pour les deux semaines. Un profil « aucun » est aussi possible.</p>
+      <div class="allerg">
+        <button data-a="aucun" class="sel">Aucun</button>
+        ${ALLERGENS.map(a => `<button data-a="${a.id}">${a.nom}</button>`).join("")}
+      </div>
+      <div class="choix"><button id="go">Composer les deux semaines</button></div>`;
+    card.querySelectorAll("button[data-a]").forEach(b => {
+      b.addEventListener("click", () => {
+        card.querySelectorAll("button[data-a]").forEach(x => x.classList.remove("sel"));
+        b.classList.add("sel");
+        state.allerg = b.dataset.a;
+        bip(440);
+      });
+    });
+    document.getElementById("go").addEventListener("click", () => {
+      bip(520);
+      state.jour = 0; state.choix = [];
+      renderDay();
+    });
+  }
+
+  function renderDay() {
+    if (state.jour >= JOURS) return finish();
+    const rest = BUDGET - state.depense;
+    const disponibles = PANTRY.filter(p => !isAllergen(p));
+
+    card.innerHTML = `
+      <div class="jour">${BADGES[state.jour]} · jour ${state.jour + 1} / ${JOURS} · <span class="semaine">Semaine ${Math.floor(state.jour / 5) + 1} sur 2</span></div>
+      <h2>Compose un lunch équilibré</h2>
+      <div class="niveau" aria-live="polite">✦ ${texteNiveau(state.parfaits)}</div>
+      ${state.dernierBonus > 0 ? `<div class="fete" role="status">✦ Jour parfait ! +${state.dernierBonus}<small>Série de ${state.serie} jour${state.serie > 1 ? "s" : ""} parfait${state.serie > 1 ? "s" : ""} !</small></div>` : ""}
+      <p class="texte">Choisis 1 protéine, 1 féculent, 1 fruit ou légume. Clique à nouveau pour retirer.</p>
+      <div class="cats">
+        <span class="cat" id="c-prot">Protéine</span>
+        <span class="cat" id="c-fec">Féculent</span>
+        <span class="cat" id="c-fv">Fruit/lég.</span>
+      </div>
+      <div class="pantry">
+        ${disponibles.map(p => {
+          const sel = state.choix.some(x => x.id === p.id);
+          return `<button class="item ${sel ? 'sel' : ''}" data-id="${p.id}">
+            <b>${p.nom}</b><small>${fmt(p.cout)} · ${CATS[p.cat]}</small>
+          </button>`;
+        }).join("")}
+      </div>
+      <div class="lunch" id="lunch"></div>
+      <div class="choix"><button id="valider" disabled>Valider le lunch</button></div>
+      <p class="note" id="astuce" aria-live="polite"></p>`;
+
+    const NOM_CAT = { prot: "une protéine", fec: "un féculent", fv: "un fruit ou légume" };
+    const dire = msg => { const a = document.getElementById("astuce"); if (a) a.textContent = msg; };
+
+    const update = () => {
+      document.getElementById("lunch").innerHTML =
+        state.choix.map(c => `<span class="tag">${c.nom} — ${fmt(c.cout)}</span>`).join("");
+      document.getElementById("c-prot").classList.toggle("done", state.choix.some(c => c.cat === "prot"));
+      document.getElementById("c-fec").classList.toggle("done", state.choix.some(c => c.cat === "fec"));
+      document.getElementById("c-fv").classList.toggle("done", state.choix.some(c => c.cat === "fv"));
+      const cout = state.choix.reduce((a, b) => a + b.cout, 0);
+      document.getElementById("valider").disabled = !(state.choix.length === 3 && cout <= rest);
+      // Astuce de confort (11 nov. 2026) : dire pourquoi Valider est bloqué.
+      const manq = ["prot", "fec", "fv"].filter(cat => !state.choix.some(c => c.cat === cat));
+      dire(manq.length
+        ? "Il manque encore : " + manq.map(cat => NOM_CAT[cat]).join(", ") + "."
+        : "Ton lunch est prêt — à toi de valider !");
+    };
+
+    card.querySelectorAll(".item").forEach(b => {
+      b.addEventListener("click", () => {
+        const item = PANTRY.find(p => p.id === b.dataset.id);
+        if (!item) return;
+        if (state.choix.some(x => x.id === item.id)) {
+          state.choix = state.choix.filter(x => x.id !== item.id);
+          b.classList.remove("sel");
+          bip(340);
+          update();
+          return;
+        }
+        if (state.choix.length >= 3) { dire("Ton lunch a déjà 3 aliments — retire-en un pour changer."); bip(300, 0.07); return; }
+        if (state.choix.some(x => x.cat === item.cat)) { dire("Tu as déjà " + NOM_CAT[item.cat] + " dans ton lunch."); bip(300, 0.07); return; }
+        const cout = state.choix.reduce((a, b2) => a + b2.cout, 0);
+        if (cout + item.cout > rest) { dire("Trop cher pour le reste du budget (" + fmt(rest) + " restants)."); bip(300, 0.07); return; }
+        state.choix.push(item);
+        b.classList.add("sel");
+        bip(520);
+        update();
+      });
+    });
+
+    document.getElementById("valider").addEventListener("click", () => {
+      bip(523); bip(659, 0.09, 0.09);
+      // Arcade — Jour parfait : les 3 catégories, sans dépasser le budget.
+      // Bonus séparé du score de base : +2 × série en cours (jour 1 : +2,
+      // jour 2 d'affilée : +4, etc.). La série ne fait que grandir : aucun
+      // échec, aucune pénalité — c'est une célébration, pas une pression.
+      const coutJour = state.choix.reduce((a, b) => a + b.cout, 0);
+      const catsOk = ["prot", "fec", "fv"].every(cat => state.choix.some(c => c.cat === cat));
+      if (state.choix.length === 3 && catsOk && coutJour <= BUDGET - state.depense) {
+        state.serie++;
+        state.parfaits++;
+        state.dernierBonus = 2 * state.serie;
+        state.bonusArcade += state.dernierBonus;
+        bip(784, 0.12, 0.18);
+      } else {
+        state.serie = 0;
+        state.dernierBonus = 0;
+      }
+      state.depense += state.choix.reduce((a, b) => a + b.cout, 0);
+      state.historique.push(...state.choix.map(c => c.id));
+      state.choix = [];
+      state.jour++;
+      updateBudget();
+      if (state.jour >= JOURS) finish();
+      else renderDay();
+    });
+
+    update();
+  }
+
+  function score() {
+    const distinct = new Set(state.historique).size;
+    const reste = Math.max(0, BUDGET - state.depense);
+    return Math.round(distinct * 4 + reste * 2);
+  }
+
+  function feedback() {
+    const distinct = new Set(state.historique).size;
+    const reste = BUDGET - state.depense;
+    if (reste < 0) return "Tu as dépassé le budget. Pas grave — la prochaine fois, on ajuste les portions.";
+    // Seuils de variété doublés avec les jours (10 jours, 30 aliments max) :
+    // 12 → 24 et 8 → 16. La formule de score, elle, est inchangée.
+    if (distinct >= 24) return "Belle variété, budget respecté. Ta gang mange bien.";
+    if (distinct >= 16) return "Bonnes deux semaines. Un peu plus de variété, et c'est parfait.";
+    return "Ça nourrit, c'est l'essentiel. La variété viendra avec le temps.";
+  }
+
+  function finish() {
+    const s = score();
+    const isBest = s > best();
+    if (isBest) { try { localStorage.setItem(KEY, String(s)); } catch (e) {} }
+    bip(523); bip(659, 0.09, 0.1); bip(784, 0.12, 0.2);
+    const distinct = new Set(state.historique).size;
+    const reste = BUDGET - state.depense;
+    card.innerHTML = `
+      <div class="jour">Semaine 2 · Vendredi · fin des deux semaines</div>
+      <h2>Les deux semaines sont prêtes</h2>
+      <p class="texte">${feedback()}</p>
+      <div class="niveau">✦ ${texteNiveau(state.parfaits)}</div>
+      <div class="resume">
+        <div><span>Dépensé</span>${fmt(state.depense)}</div>
+        <div><span>Restant</span>${fmt(Math.max(0, reste))}</div>
+        <div><span>Ingrédients différents</span>${distinct}</div>
+        <div><span>Allergène évité</span>${state.allerg === "aucun" ? "—" : state.allerg}</div>
+        <div><span>Semaines complétées</span>2 sur 2</div>
+        <div><span>Niveau atteint</span>${niveauActuel(state.parfaits).nom}</div>
+      </div>
+      <p class="note">Score : <span class="badge">${s}</span> · Record : <span class="badge">${best()}</span></p>
+      <p class="bonus-arcade" id="arcade">✦ Bonus arcade : <span class="badge">+${state.bonusArcade}</span> · ${state.parfaits} jour${state.parfaits > 1 ? "s" : ""} parfait${state.parfaits > 1 ? "s" : ""} · Série de ${state.serie} · Total avec bonus : <span class="badge">${s + state.bonusArcade}</span></p>
+      ${state.parfaits > 0 ? `<div class="fete" role="status">✦ ${state.parfaits} jour${state.parfaits > 1 ? "s" : ""} parfait${state.parfaits > 1 ? "s" : ""} !<small>Bonus arcade +${state.bonusArcade} — en plus du score, jamais à la place.</small></div>` : ""}
+      <button class="restart" id="again">Rejouer</button>
+      <p class="note" style="margin-top:8px">Pour des recettes qui collent à ton panier : « Quoi faire avec ton panier » sur HP Outils.</p>`;
+    document.getElementById("again").addEventListener("click", () => { bip(440); renderStart(); });
+  }
+
+  function renderStart() {
+    // Budget affiché remis à 50 $ dès l'écran de démarrage : après « Rejouer »,
+    // l'en-tête affichait encore le restant de la partie précédente.
+    budgetEl.textContent = fmt(BUDGET);
+    budgetEl.classList.remove("low");
+    card.innerHTML = `
+      <div class="jour">10 jours · 50 $ · 1 allergène · 2 semaines</div>
+      <h2>Boîte à lunch</h2>
+      <p class="texte">Dix jours, deux semaines, un budget, un allergène à respecter. Compose un lunch équilibré chaque jour : une protéine, un féculent, un fruit ou légume. Chaque jour parfait fait monter ton niveau, sans jamais le faire redescendre.</p>
+      <div class="choix"><button id="go">Commencer</button></div>`;
+    document.getElementById("go").addEventListener("click", () => { bip(520); start(); });
+  }
+
+  renderStart();
+})();
+</script>
+</body>
+</html>

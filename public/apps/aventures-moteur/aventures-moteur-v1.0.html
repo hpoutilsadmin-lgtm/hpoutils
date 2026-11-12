@@ -1,0 +1,2024 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Les aventures du moteur — HP Outils</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#1a2634}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:grid;place-items:center;user-select:none;-webkit-tap-highlight-color:transparent}
+  #stage{position:relative;width:100%;max-width:720px;aspect-ratio:4/3;max-height:100vh;max-height:100dvh}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  @media(min-width:720px){canvas{border-radius:16px}}
+  #ui{position:absolute;inset:0;pointer-events:none}
+  #ui > *{pointer-events:auto}
+  .btn{position:absolute;background:rgba(255,253,247,.95);border:2px solid rgba(47,107,79,.3);
+    border-radius:12px;padding:8px 14px;font-family:inherit;font-size:.9rem;font-weight:600;
+    color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15);transition:transform .1s;min-height:48px}
+  .btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .btn-back{top:10px;left:10px;padding:8px 12px;font-size:.85rem}
+  .btn-back::before{content:"← ";font-weight:700}
+  .btn-sound{top:10px;right:10px;padding:8px 11px;font-size:1rem;min-width:48px}
+  .choice-panel{position:absolute;bottom:12px;left:12px;right:12px;
+    display:flex;flex-direction:column;gap:8px}
+  .choice-panel button{background:rgba(255,253,247,.97);border:2px solid rgba(47,107,79,.25);
+    border-radius:14px;padding:13px 16px;font-family:inherit;font-size:.93rem;font-weight:600;
+    color:#2a2620;cursor:pointer;text-align:left;box-shadow:0 3px 0 rgba(0,0,0,.12);
+    display:flex;justify-content:space-between;align-items:center;transition:transform .1s;min-height:48px}
+  .choice-panel button:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.12)}
+  .choice-panel button::after{content:"→";opacity:.4;font-weight:700}
+  .story-text{position:absolute;top:56px;left:12px;right:12px;
+    background:rgba(255,253,247,.95);border-radius:14px;padding:12px 16px;
+    font-size:.93rem;line-height:1.45;color:#2a2620;box-shadow:0 3px 0 rgba(0,0,0,.08);
+    max-height:140px;overflow-y:auto}
+  .story-text h2{margin:0 0 4px;font-size:1rem;color:#2f6b4f}
+  .story-text p{margin:0}
+  .color-picker{position:absolute;bottom:10px;left:10px;right:10px;
+    display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
+    background:rgba(255,253,247,.95);border-radius:12px;padding:8px;align-items:center}
+  .color-picker button{width:48px;height:48px;border-radius:50%;border:2px solid rgba(0,0,0,.1);
+    cursor:pointer;padding:0;transition:transform .1s}
+  .color-picker button:active{transform:scale(.9)}
+  .color-picker button.sel{box-shadow:0 0 0 3px #2f6b4f}
+  .size-picker{display:flex;gap:6px;align-items:center;margin-left:6px;padding-left:8px;
+    border-left:1px solid rgba(0,0,0,.1)}
+  .size-picker button{border-radius:50%;background:#2a2620;padding:0;border:0}
+  .size-picker button.sel{box-shadow:0 0 0 2px #2f6b4f}
+  .atelier-panel{position:absolute;bottom:0;left:0;right:0;
+    background:rgba(255,253,247,.97);padding:8px 10px 10px;
+    border-top-left-radius:14px;border-top-right-radius:14px;
+    display:flex;flex-direction:column;gap:5px;max-height:48%;overflow-y:auto}
+  .atelier-row{display:flex;align-items:center;gap:6px}
+  .atelier-label{font-size:.8rem;font-weight:700;color:#6b6459;text-transform:uppercase;
+    letter-spacing:.05em;min-width:66px}
+  .atelier-options{display:flex;gap:5px;overflow-x:auto;flex:1;padding-bottom:2px;
+    scrollbar-width:thin}
+  .atelier-options button{flex-shrink:0;min-width:48px;height:48px;border:2px solid #e8e0cf;
+    border-radius:8px;background:#fff;cursor:pointer;font-size:1rem;
+    display:grid;place-items:center;padding:0 5px;font-family:inherit}
+  .atelier-options button.sel{border-color:#2f6b4f;background:#eaf3ec}
+  .atelier-options button.color{width:48px;height:48px;border-radius:50%;padding:0}
+  footer{position:fixed;bottom:4px;left:0;right:0;text-align:center;font-size:.8rem;
+    color:rgba(255,255,255,.4);pointer-events:none}
+
+
+  /* ——— Gepeto vrai (11 nov. 2026) : face du maître (tete-pastille.png, SHA b26af210b2df25c53da60511c6fe414291ee16a39a7d696af27c70840c4ea4d4), en-tête ——— */
+  .gepeto-face{position:absolute;top:12%;left:50%;transform:translateX(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,253,247,.95);border:2px solid rgba(47,107,79,.3);overflow:hidden;pointer-events:none;z-index:2}
+  .gepeto-face.cache{display:none}
+  .gepeto-face img{display:block;width:100%;height:100%;object-fit:cover}
+  /* ——— Mise en page standard HP (11 nov. 2026) : cibles 48 px, textes ≥ 12,5 px, mouvement réduit ——— */
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="game"></canvas>
+  <div id="ui"></div>
+  <div class="gepeto-face" aria-hidden="true"><img src="data:image/png;base64,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" alt=""></div>
+</div>
+<footer>HP Outils · pas un outil médical</footer>
+<script>
+(() => {
+  if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+      if(r>w/2)r=w/2;if(r>h/2)r=h/2;
+      this.moveTo(x+r,y);this.arcTo(x+w,y,x+w,y+h,r);
+      this.arcTo(x+w,y+h,x,y+h,r);this.arcTo(x,y+h,x,y,r);
+      this.arcTo(x,y,x+w,y,r);this.closePath();
+    };
+  }
+  
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const ui = document.getElementById('ui');
+  const W = 640, H = 480;
+  canvas.width = W; canvas.height = H;
+  
+  const C = { cream:'#f7f3ea', ink:'#2a2620', forest:'#2f6b4f', maple:'#b5451b', gold:'#d9a441', soft:'#e8e0cf', sky:'#3f7fa3', muted:'#6b6459' };
+  
+  const KEYS = {
+    visits: 'hp:aventures:visites',
+    hugs: 'hp:aventures:calins',
+    jardin: 'hp:aventures:jardin',
+    dessin: 'hp:aventures:dessin',
+    settings: 'hp:aventures:settings',
+    custom: 'hp:aventures:custom',
+    finished: 'hp:aventures:terminees'
+  };
+  
+  let settings = (() => {
+    try { return JSON.parse(localStorage.getItem(KEYS.settings)) || {}; }
+    catch { return {}; }
+  })();
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && settings.reduceMotion === undefined) {
+    settings.reduceMotion = true;
+  }
+  if (settings.sound === undefined) settings.sound = true;
+  const saveSettings = () => { try { localStorage.setItem(KEYS.settings, JSON.stringify(settings)); } catch { } };
+  
+  // ─── CUSTOMISATION ───
+  const BODY_COLORS = [
+    { name:'Forêt',  main:'#b8d8c8', dark:'#7ab8a0', glow:'rgba(168,207,186,0.5)' },
+    { name:'Ciel',   main:'#b8d8f0', dark:'#7aa0d0', glow:'rgba(168,200,240,0.5)' },
+    { name:'Soleil', main:'#f0e0a8', dark:'#d0b860', glow:'rgba(240,220,160,0.5)' },
+    { name:'Rose',   main:'#f0c8d8', dark:'#d090b0', glow:'rgba(240,200,216,0.5)' },
+    { name:'Lavande',main:'#d8c8f0', dark:'#a090d0', glow:'rgba(216,200,240,0.5)' },
+    { name:'Menthe', main:'#c8f0d8', dark:'#80d0a0', glow:'rgba(200,240,216,0.5)' }
+  ];
+  const HATS = ['none','tuque','cap','crown','bow','flower'];
+  const HAT_ICONS = ['—','🎩','🧢','👑','🎀','🌸'];
+  const HAT_LABELS = ['Aucun','Tuque','Casquette','Couronne','Nœud','Fleur'];
+  const ACCESS_LABELS = ['Aucun','Lunettes','Écharpe','Nœud papillon','Casque audio','Sac à dos'];
+  const CLOTHING_LABELS = ['Aucun','T-shirt','Chandail à capuchon','Salopette'];
+  const ACCESS = ['none','glasses','scarf','bowtie','headphones','backpack'];
+  const ACCESS_ICONS = ['—','👓','🧣','🎀','🎧','🎒'];
+  const CLOTHING = ['none','tshirt','hoodie','overall'];
+  const CLOTHING_ICONS = ['—','👕','🧥','👖'];
+  const EXPRESSIONS = ['smile','happy','wink','surprised','sleepy'];
+  const EXPR_ICONS = ['😊','😄','😉','😮','😴'];
+  const EXPR_LABELS = ['Sourire','Content','Clin d\'œil','Surprise','Endormi'];
+  
+  let custom = (() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEYS.custom)) || {};
+      return {
+        bodyColor: saved.bodyColor ?? 0,
+        hat: saved.hat ?? 0,
+        accessory: saved.accessory ?? 0,
+        clothing: saved.clothing ?? 0,
+        expression: saved.expression ?? 0
+      };
+    } catch { return { bodyColor:0, hat:0, accessory:0, clothing:0, expression:0 }; }
+  })();
+  const saveCustom = () => { try { localStorage.setItem(KEYS.custom, JSON.stringify(custom)); } catch { } };
+  
+  let visits = 1;
+  try { const v = parseInt(localStorage.getItem(KEYS.visits) || '0', 10); visits = (isNaN(v) ? 0 : v) + 1; localStorage.setItem(KEYS.visits, String(visits)); } catch { }
+  let hugs = 0;
+  try { const h = parseInt(localStorage.getItem(KEYS.hugs) || '0', 10); hugs = isNaN(h) ? 0 : h; } catch { }
+  const addHug = () => { hugs++; try { localStorage.setItem(KEYS.hugs, String(hugs)); } catch { } };
+  
+  // ─── HISTOIRES TERMINÉES (carte de voyage) ───
+  let finished = new Set();
+  try {
+    const raw = JSON.parse(localStorage.getItem(KEYS.finished));
+    if (Array.isArray(raw)) finished = new Set(raw.filter(id => typeof id === 'string'));
+  } catch { }
+  const saveFinished = () => { try { localStorage.setItem(KEYS.finished, JSON.stringify([...finished])); } catch { } };
+  const markFinished = id => { if (!finished.has(id)) { finished.add(id); saveFinished(); } };
+  
+  // ─── AUDIO ───
+  let audioCtx = null;
+  const getAudio = () => {
+    if (!audioCtx) { try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch { } }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  };
+  function playNote(freq, dur = 0.3, vol = 0.06) {
+    if (!settings.sound) return;
+    const a = getAudio(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, a.currentTime);
+    g.gain.linearRampToValueAtTime(vol, a.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + dur);
+    o.connect(g).connect(a.destination);
+    o.start(); o.stop(a.currentTime + dur);
+  }
+  
+  // ─── BLOB ───
+  const blob = {
+    x: W/2, y: H*0.65, targetX: W/2, targetY: H*0.65, r: 52,
+    purr: 0, happy: 0, breathing: false, breathTime: 0,
+    eyeX: 0, eyeY: 0, eyeTargetX: 0, eyeTargetY: 0,
+    bounce: 0
+  };
+  const particles = [];
+  let screen = 'hub';
+  
+  function drawBlob(x, y, r, opts = {}) {
+    const cm = opts.custom || custom;
+    const bodyC = BODY_COLORS[cm.bodyColor] || BODY_COLORS[0];
+    const expr = EXPRESSIONS[cm.expression] || 'smile';
+    const purr = opts.purr || 0;
+    const happy = opts.happy || 0;
+    const eyeX = opts.eyeX || 0;
+    const eyeY = opts.eyeY || 0;
+    const breathScale = opts.breathScale || 1;
+    const exprOverride = opts.exprOverride || expr;
+    const rs = r * breathScale;
+    const t = performance.now() / 1000;
+    
+    const glow = ctx.createRadialGradient(x, y, rs*0.5, x, y, rs*1.8);
+    glow.addColorStop(0, bodyC.glow);
+    glow.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(x, y, rs*1.8, 0, Math.PI*2); ctx.fill();
+    
+    const segments = 20;
+    const amp = settings.reduceMotion ? 0.008 : 0.03;
+    const pts = [];
+    for (let i = 0; i < segments; i++) {
+      const a = (i/segments)*Math.PI*2;
+      const wob = 1 + Math.sin(a*3 + t*2)*amp + Math.cos(a*5 + t*3)*amp*0.5;
+      pts.push({ x: x + Math.cos(a)*rs*wob, y: y + Math.sin(a)*rs*wob });
+    }
+    ctx.beginPath();
+    ctx.moveTo((pts[0].x + pts[segments-1].x)/2, (pts[0].y + pts[segments-1].y)/2);
+    for (let i = 0; i < segments; i++) {
+      const p = pts[i], n = pts[(i+1)%segments];
+      ctx.quadraticCurveTo(p.x, p.y, (p.x + n.x)/2, (p.y + n.y)/2);
+    }
+    ctx.closePath();
+    const g = ctx.createRadialGradient(x - rs*0.3, y - rs*0.3, rs*0.1, x, y, rs);
+    g.addColorStop(0, '#ffffff');
+    g.addColorStop(0.5, bodyC.main);
+    g.addColorStop(1, bodyC.dark);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = 'rgba(47,107,79,0.2)'; ctx.lineWidth = 2; ctx.stroke();
+    
+    if (cm.clothing > 0) drawClothing(x, y, rs, CLOTHING[cm.clothing]);
+    
+    drawEyes(x, y, rs, exprOverride, eyeX, eyeY);
+    drawMouth(x, y, rs, exprOverride, happy);
+    
+    if (cm.accessory === 1) drawGlasses(x, y, rs, eyeX, eyeY);
+    if (cm.accessory === 2) drawScarf(x, y, rs);
+    if (cm.accessory === 3) drawBowtie(x, y, rs);
+    if (cm.accessory === 4) drawHeadphones(x, y, rs);
+    if (cm.accessory === 5) drawBackpack(x, y, rs);
+    
+    if (cm.hat > 0) drawHat(x, y, rs, HATS[cm.hat]);
+    
+    if (purr > 0.3) {
+      ctx.fillStyle = `rgba(240,160,176,${purr*0.6})`;
+      const eo = rs*0.28;
+      ctx.beginPath(); ctx.arc(x-eo-rs*0.15, y+rs*0.15, rs*0.1, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+eo+rs*0.15, y+rs*0.15, rs*0.1, 0, Math.PI*2); ctx.fill();
+    }
+  }
+  
+  function drawEyes(x, y, rs, expr, ex, ey) {
+    const eo = rs*0.28, es = rs*0.13;
+    const e1x = x-eo+ex, e2x = x+eo+ex, eyy = y-rs*0.1+ey;
+    if (expr === 'sleepy') {
+      ctx.strokeStyle = C.ink; ctx.lineWidth = rs*0.05; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(e1x, eyy, es, 0.15*Math.PI, 0.85*Math.PI); ctx.stroke();
+      ctx.beginPath(); ctx.arc(e2x, eyy, es, 0.15*Math.PI, 0.85*Math.PI); ctx.stroke();
+    } else if (expr === 'wink') {
+      ctx.fillStyle = C.ink;
+      ctx.beginPath(); ctx.arc(e1x, eyy, es, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(e1x+es*0.3, eyy-es*0.3, es*0.35, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = C.ink; ctx.lineWidth = rs*0.05; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(e2x, eyy, es, 0.15*Math.PI, 0.85*Math.PI); ctx.stroke();
+    } else if (expr === 'happy') {
+      ctx.strokeStyle = C.ink; ctx.lineWidth = rs*0.05; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(e1x, eyy+es*0.3, es*0.9, 1.1*Math.PI, 1.9*Math.PI); ctx.stroke();
+      ctx.beginPath(); ctx.arc(e2x, eyy+es*0.3, es*0.9, 1.1*Math.PI, 1.9*Math.PI); ctx.stroke();
+    } else if (expr === 'surprised') {
+      ctx.fillStyle = C.ink;
+      ctx.beginPath(); ctx.arc(e1x, eyy, es*1.2, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(e2x, eyy, es*1.2, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(e1x+es*0.3, eyy-es*0.4, es*0.45, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(e2x+es*0.3, eyy-es*0.4, es*0.45, 0, Math.PI*2); ctx.fill();
+    } else {
+      ctx.fillStyle = C.ink;
+      ctx.beginPath(); ctx.arc(e1x, eyy, es, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(e2x, eyy, es, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(e1x+es*0.3, eyy-es*0.3, es*0.35, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(e2x+es*0.3, eyy-es*0.3, es*0.35, 0, Math.PI*2); ctx.fill();
+    }
+  }
+  
+  function drawMouth(x, y, rs, expr, happy) {
+    ctx.strokeStyle = C.ink; ctx.lineWidth = rs*0.04; ctx.lineCap = 'round';
+    if (expr === 'surprised') {
+      ctx.beginPath(); ctx.arc(x, y+rs*0.22, rs*0.11, 0, Math.PI*2); ctx.stroke();
+    } else if (expr === 'happy' || happy > 0.3) {
+      ctx.beginPath(); ctx.arc(x, y+rs*0.12, rs*0.22, 0.15*Math.PI, 0.85*Math.PI); ctx.stroke();
+    } else if (expr === 'sleepy') {
+      ctx.beginPath(); ctx.moveTo(x-rs*0.1, y+rs*0.2); ctx.lineTo(x+rs*0.1, y+rs*0.2); ctx.stroke();
+    } else if (expr === 'wink') {
+      ctx.beginPath(); ctx.arc(x, y+rs*0.15, rs*0.15, 0.2*Math.PI, 0.8*Math.PI); ctx.stroke();
+    } else {
+      ctx.beginPath(); ctx.arc(x, y+rs*0.15, rs*0.15, 0.2*Math.PI, 0.8*Math.PI); ctx.stroke();
+    }
+  }
+  
+  function drawClothing(x, y, rs, type) {
+    const by = y + rs*0.35, bh = rs*0.5, bw = rs*1.4;
+    if (type === 'tshirt') {
+      ctx.fillStyle = '#e05050';
+      ctx.beginPath();
+      ctx.moveTo(x-bw/2, by-bh/2);
+      ctx.quadraticCurveTo(x, by-bh/2-8, x+bw/2, by-bh/2);
+      ctx.lineTo(x+bw/2, by+bh/2);
+      ctx.quadraticCurveTo(x, by+bh/2+10, x-bw/2, by+bh/2);
+      ctx.closePath(); ctx.fill();
+    } else if (type === 'hoodie') {
+      ctx.fillStyle = '#5080e0';
+      ctx.beginPath();
+      ctx.moveTo(x-bw/2, by-bh/2);
+      ctx.quadraticCurveTo(x, by-bh/2-12, x+bw/2, by-bh/2);
+      ctx.lineTo(x+bw/2, by+bh/2);
+      ctx.quadraticCurveTo(x, by+bh/2+10, x-bw/2, by+bh/2);
+      ctx.closePath(); ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(x, by-bh/2-4, bw/3, 8, 0, Math.PI, 0); ctx.fill();
+    } else if (type === 'overall') {
+      ctx.fillStyle = '#7a9a5a';
+      ctx.beginPath();
+      ctx.arc(x, y+rs*0.55, rs*1.2, Math.PI*0.15, Math.PI*0.85, false);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = '#7a9a5a'; ctx.lineWidth = rs*0.08;
+      ctx.beginPath(); ctx.moveTo(x-rs*0.35, y+rs*0.4); ctx.lineTo(x-rs*0.25, y-rs*0.05); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x+rs*0.35, y+rs*0.4); ctx.lineTo(x+rs*0.25, y-rs*0.05); ctx.stroke();
+    }
+  }
+  
+  function drawGlasses(x, y, rs, ex, ey) {
+    const eo = rs*0.28, eyy = y-rs*0.1+ey;
+    ctx.strokeStyle = '#2a2620'; ctx.lineWidth = rs*0.03;
+    ctx.beginPath(); ctx.arc(x-eo+ex, eyy, rs*0.17, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x+eo+ex, eyy, rs*0.17, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x-eo+ex+rs*0.17, eyy); ctx.lineTo(x+eo+ex-rs*0.17, eyy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x-eo+ex-rs*0.17, eyy); ctx.lineTo(x-rs*0.5, eyy-rs*0.05); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x+eo+ex+rs*0.17, eyy); ctx.lineTo(x+rs*0.5, eyy-rs*0.05); ctx.stroke();
+  }
+  
+  function drawScarf(x, y, rs) {
+    ctx.fillStyle = '#e06080';
+    ctx.beginPath(); ctx.ellipse(x, y+rs*0.65, rs*0.55, rs*0.12, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(x+rs*0.3, y+rs*0.65); ctx.lineTo(x+rs*0.5, y+rs*1.05);
+    ctx.lineTo(x+rs*0.35, y+rs*1.0); ctx.closePath(); ctx.fill();
+  }
+  
+  function drawBowtie(x, y, rs) {
+    const by = y+rs*0.42, bw = rs*0.15;
+    ctx.fillStyle = '#a060c0';
+    ctx.beginPath(); ctx.moveTo(x-bw*1.5, by); ctx.lineTo(x-bw*0.3, by-bw); ctx.lineTo(x-bw*0.3, by+bw); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x+bw*1.5, by); ctx.lineTo(x+bw*0.3, by-bw); ctx.lineTo(x+bw*0.3, by+bw); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(x, by, bw*0.4, 0, Math.PI*2); ctx.fill();
+  }
+  
+  function drawHeadphones(x, y, rs) {
+    ctx.strokeStyle = '#2a2620'; ctx.lineWidth = rs*0.06;
+    ctx.beginPath(); ctx.arc(x, y-rs*0.15, rs*1.05, -Math.PI*0.85, -Math.PI*0.15); ctx.stroke();
+    ctx.fillStyle = '#2a2620';
+    ctx.beginPath(); ctx.ellipse(x-rs*0.95, y-rs*0.1, rs*0.12, rs*0.22, -0.3, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x+rs*0.95, y-rs*0.1, rs*0.12, rs*0.22, 0.3, 0, Math.PI*2); ctx.fill();
+  }
+  
+  function drawBackpack(x, y, rs) {
+    ctx.strokeStyle = '#8a6a4a'; ctx.lineWidth = rs*0.08;
+    ctx.beginPath(); ctx.moveTo(x-rs*0.4, y-rs*0.4); ctx.quadraticCurveTo(x-rs*0.7, y, x-rs*0.4, y+rs*0.4); ctx.stroke();
+    ctx.fillStyle = '#a08060';
+    ctx.beginPath(); ctx.arc(x-rs*0.55, y, rs*0.2, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#8a6a4a';
+    ctx.beginPath(); ctx.arc(x-rs*0.55, y+rs*0.15, rs*0.1, 0, Math.PI*2); ctx.fill();
+  }
+  
+  function drawHat(x, y, rs, type) {
+    const topY = y - rs*0.9;
+    if (type === 'tuque') {
+      ctx.fillStyle = '#b5451b';
+      ctx.beginPath(); ctx.ellipse(x, topY, rs*0.7, rs*0.35, 0, Math.PI, 0); ctx.fill();
+      ctx.fillStyle = '#f0f0f0';
+      ctx.beginPath(); ctx.ellipse(x, topY, rs*0.7, rs*0.12, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#b5451b';
+      ctx.beginPath(); ctx.arc(x, topY-rs*0.35, rs*0.15, 0, Math.PI*2); ctx.fill();
+    } else if (type === 'cap') {
+      ctx.fillStyle = '#2f6b4f';
+      ctx.beginPath(); ctx.ellipse(x, topY, rs*0.75, rs*0.4, 0, Math.PI, 0); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(x+rs*0.3, topY, rs*0.5, rs*0.1, 0, 0, Math.PI); ctx.fill();
+    } else if (type === 'crown') {
+      ctx.fillStyle = '#d9a441';
+      ctx.beginPath();
+      ctx.moveTo(x-rs*0.5, topY); ctx.lineTo(x-rs*0.5, topY-rs*0.35);
+      ctx.lineTo(x-rs*0.25, topY-rs*0.15); ctx.lineTo(x, topY-rs*0.45);
+      ctx.lineTo(x+rs*0.25, topY-rs*0.15); ctx.lineTo(x+rs*0.5, topY-rs*0.35);
+      ctx.lineTo(x+rs*0.5, topY); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#e06080';
+      ctx.beginPath(); ctx.arc(x, topY-rs*0.15, rs*0.06, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#50a0e0';
+      ctx.beginPath(); ctx.arc(x-rs*0.3, topY-rs*0.08, rs*0.05, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+rs*0.3, topY-rs*0.08, rs*0.05, 0, Math.PI*2); ctx.fill();
+    } else if (type === 'bow') {
+      ctx.fillStyle = '#e06080';
+      ctx.beginPath(); ctx.moveTo(x, topY); ctx.lineTo(x-rs*0.4, topY-rs*0.3); ctx.lineTo(x-rs*0.4, topY+rs*0.1); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(x, topY); ctx.lineTo(x+rs*0.4, topY-rs*0.3); ctx.lineTo(x+rs*0.4, topY+rs*0.1); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, topY, rs*0.1, 0, Math.PI*2); ctx.fill();
+    } else if (type === 'flower') {
+      ctx.fillStyle = '#e06080';
+      for (let i = 0; i < 5; i++) {
+        const a = (i/5)*Math.PI*2;
+        ctx.beginPath(); ctx.ellipse(x+Math.cos(a)*rs*0.15, topY-rs*0.15+Math.sin(a)*rs*0.15, rs*0.15, rs*0.08, a, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.fillStyle = '#e0c040';
+      ctx.beginPath(); ctx.arc(x, topY-rs*0.15, rs*0.1, 0, Math.PI*2); ctx.fill();
+    }
+  }
+  
+  // ─── SCENE HELPERS ───
+  function drawSky() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#c8e0f0'); g.addColorStop(0.7, '#f0e8d8'); g.addColorStop(1, '#f8f0e0');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+  function drawSkyAutumn() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#f0c090'); g.addColorStop(0.6, '#f0d8b0'); g.addColorStop(1, '#e8c8a0');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+  function drawSkyRain() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#8898a8'); g.addColorStop(1, '#b8c0c8');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+  function drawSkyNight() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#1a2848'); g.addColorStop(1, '#3a4a68');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+  function drawGround(y, color = '#7a9a5a') {
+    ctx.fillStyle = color; ctx.fillRect(0, y, W, H-y);
+    ctx.fillStyle = 'rgba(0,0,0,0.1)';
+    for (let i = 0; i < 20; i++) ctx.fillRect((i*73+20)%W, y+4+(i%3)*3, 2, 6);
+  }
+  function drawTree(x, y, s = 1) {
+    ctx.fillStyle = '#6a4a2a'; ctx.fillRect(x-4*s, y-20*s, 8*s, 20*s);
+    ctx.fillStyle = '#4a8a3a';
+    ctx.beginPath(); ctx.arc(x, y-30*s, 22*s, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#5a9a4a';
+    ctx.beginPath(); ctx.arc(x-10*s, y-26*s, 14*s, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+10*s, y-26*s, 14*s, 0, Math.PI*2); ctx.fill();
+  }
+  function drawTreeAutumn(x, y, s = 1) {
+    ctx.fillStyle = '#6a4a2a'; ctx.fillRect(x-4*s, y-20*s, 8*s, 20*s);
+    ctx.fillStyle = '#c06040';
+    ctx.beginPath(); ctx.arc(x, y-30*s, 22*s, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#d08050';
+    ctx.beginPath(); ctx.arc(x-10*s, y-26*s, 14*s, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#b05030';
+    ctx.beginPath(); ctx.arc(x+10*s, y-26*s, 14*s, 0, Math.PI*2); ctx.fill();
+  }
+  function drawCloud(x, y, s = 1) {
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.beginPath();
+    ctx.arc(x, y, 15*s, 0, Math.PI*2);
+    ctx.arc(x+18*s, y-8*s, 18*s, 0, Math.PI*2);
+    ctx.arc(x+40*s, y, 15*s, 0, Math.PI*2);
+    ctx.fill();
+  }
+  function drawFlower(x, y, color = '#e06080', s = 1) {
+    ctx.strokeStyle = '#4a8a3a'; ctx.lineWidth = 2*s;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y-18*s); ctx.stroke();
+    ctx.fillStyle = color;
+    for (let i = 0; i < 5; i++) {
+      const a = (i/5)*Math.PI*2;
+      ctx.beginPath(); ctx.ellipse(x+Math.cos(a)*6*s, y-20*s+Math.sin(a)*6*s, 6*s, 4*s, a, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle = '#e0c040';
+    ctx.beginPath(); ctx.arc(x, y-20*s, 3*s, 0, Math.PI*2); ctx.fill();
+  }
+  function drawBuilding(x, y, w, h, color, roofColor) {
+    ctx.fillStyle = color; ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = roofColor || '#8a6a4a';
+    ctx.beginPath();
+    ctx.moveTo(x-10, y); ctx.lineTo(x+w/2, y-40); ctx.lineTo(x+w+10, y); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#6a4a2a';
+    ctx.fillRect(x+w/2-20, y+h-50, 40, 50);
+    ctx.fillStyle = '#a8d4e0';
+    for (let i = 0; i < 3; i++) ctx.fillRect(x+20+i*60, y+20, 40, 40);
+  }
+  function drawBlobInScene(x, y, r = 38, opts = {}) {
+    drawBlob(x, y, r, opts);
+  }
+  
+  // ─── STORIES ───
+  function drawSceneLac() {
+    drawSky();
+    ctx.fillStyle = '#a8d4e0'; ctx.fillRect(0, H*0.5, W, H*0.28);
+    drawGround(H*0.78);
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 2;
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      for (let x = 0; x < W; x += 15) {
+        const y = H*0.55 + i*15 + Math.sin(x/30 + performance.now()/1000)*3;
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    drawTree(80, H*0.78, 1); drawTree(550, H*0.78, 1.2);
+    drawBlobInScene(W*0.42, H*0.7, 38);
+  }
+  function drawSceneSwim() {
+    drawSky();
+    ctx.fillStyle = '#5a9bb5'; ctx.fillRect(0, H*0.4, W, H*0.6);
+    for (let i = 0; i < 8; i++) {
+      const x = (i*83 + performance.now()/50) % W;
+      const y = H*0.5 + Math.sin(performance.now()/1000 + i)*30 + i*20;
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle = '#6a4a3a';
+    ctx.beginPath(); ctx.ellipse(450, H*0.55, 30, 18, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(475, H*0.5, 12, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = C.ink;
+    ctx.beginPath(); ctx.arc(479, H*0.48, 2, 0, Math.PI*2); ctx.fill();
+    drawBlobInScene(W*0.35, H*0.55, 38, { happy: 1 });
+  }
+  function drawSceneWatch() {
+    drawSky();
+    ctx.fillStyle = '#a8d4e0'; ctx.fillRect(0, H*0.5, W, H*0.2);
+    drawGround(H*0.7);
+    ctx.fillStyle = '#e0b040';
+    ctx.beginPath(); ctx.ellipse(400, H*0.55, 20, 10, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(415, H*0.55);
+    ctx.lineTo(430, H*0.55 - 8); ctx.lineTo(430, H*0.55 + 8); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = C.ink;
+    ctx.beginPath(); ctx.arc(407, H*0.53, 1.5, 0, Math.PI*2); ctx.fill();
+    drawBlobInScene(W*0.3, H*0.68, 38);
+  }
+  function drawSceneBoat() {
+    drawSky();
+    ctx.fillStyle = '#a8d4e0'; ctx.fillRect(0, H*0.55, W, H*0.45);
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let x = 0; x < W; x += 15) {
+      const y = H*0.6 + Math.sin(x/30 + performance.now()/1000)*4;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#7ac870';
+    ctx.beginPath();
+    ctx.moveTo(W*0.3, H*0.6); ctx.quadraticCurveTo(W*0.4, H*0.64, W*0.5, H*0.6);
+    ctx.quadraticCurveTo(W*0.4, H*0.62, W*0.3, H*0.6); ctx.fill();
+    drawBlobInScene(W*0.4, H*0.56, 28);
+  }
+  function drawSceneSunset() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#f0a070'); g.addColorStop(0.5, '#f0c0a0'); g.addColorStop(1, '#f8e0c0');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(240,200,120,0.5)';
+    ctx.beginPath(); ctx.arc(W/2, H*0.55, 90, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#f0d080';
+    ctx.beginPath(); ctx.arc(W/2, H*0.55, 60, 0, Math.PI*2); ctx.fill();
+    drawGround(H*0.75, '#8a6a4a');
+    drawTree(120, H*0.75, 1); drawTree(520, H*0.75, 1.2);
+    drawBlobInScene(W/2, H*0.7, 38, { happy: 1 });
+  }
+  function drawSceneForet() {
+    drawSky();
+    drawGround(H*0.6, '#3a5a2a');
+    for (let i = 0; i < 5; i++) drawTree(60 + i*130, H*0.65, 1.3);
+    drawBlobInScene(W/2, H*0.75, 38);
+  }
+  function drawSceneOiseau() {
+    drawSky();
+    drawGround(H*0.7, '#3a5a2a');
+    drawTree(W*0.6, H*0.7, 1.4);
+    ctx.fillStyle = '#d06040';
+    ctx.beginPath(); ctx.ellipse(W*0.6, H*0.4, 15, 10, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(W*0.6 + 10, H*0.38, 8, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#e0c060';
+    ctx.beginPath(); ctx.moveTo(W*0.6 + 16, H*0.38);
+    ctx.lineTo(W*0.6 + 22, H*0.38); ctx.lineTo(W*0.6 + 16, H*0.4); ctx.fill();
+    drawBlobInScene(W*0.4, H*0.75, 38, { happy: 1 });
+  }
+  function drawSceneClairiere() {
+    drawSky();
+    drawGround(H*0.7, '#4a7a3a');
+    for (let i = 0; i < 15; i++) {
+      const x = (i*47 + Math.sin(performance.now()/1000 + i)*30 + 200) % W;
+      const y = H*0.5 + Math.cos(performance.now()/800 + i)*40;
+      ctx.fillStyle = 'rgba(240,220,100,0.8)';
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(240,220,100,0.2)';
+      ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI*2); ctx.fill();
+    }
+    drawBlobInScene(W/2, H*0.75, 38, { happy: 1 });
+  }
+  function drawSceneNuit() {
+    drawSkyNight();
+    for (let i = 0; i < 40; i++) {
+      const x = (i*61) % W, y = (i*37) % (H*0.5);
+      ctx.fillStyle = `rgba(255,255,220,${0.5 + Math.sin(performance.now()/1000 + i)*0.3})`;
+      ctx.beginPath(); ctx.arc(x, y, 1.5, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle = '#f0e8d0';
+    ctx.beginPath(); ctx.arc(W*0.8, H*0.15, 30, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#2a3a58';
+    ctx.beginPath(); ctx.arc(W*0.8 - 8, H*0.15 - 5, 26, 0, Math.PI*2); ctx.fill();
+    drawGround(H*0.7, '#1a2a1a');
+    drawBlobInScene(W/2, H*0.72, 38);
+  }
+  
+  // NEW SCENES
+  function drawSceneEcole() {
+    drawSky();
+    drawGround(H*0.7);
+    drawBuilding(140, H*0.35, 360, 170, '#e0c890', '#a87040');
+    drawBlobInScene(W*0.75, H*0.72, 38, { exprOverride: 'surprised' });
+  }
+  function drawSceneClasse() {
+    ctx.fillStyle = '#f0e8d8'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#2a4a2a'; ctx.fillRect(60, 60, 520, 150);
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '600 20px system-ui'; ctx.textAlign = 'left';
+    ctx.fillText('ABC  123', 90, 120);
+    ctx.fillText('Bonjour !', 90, 160);
+    ctx.fillStyle = '#a08060';
+    for (let i = 0; i < 3; i++) {
+      ctx.fillRect(80 + i*180, H*0.55, 140, 20);
+      ctx.fillStyle = '#8a6a4a';
+      ctx.fillRect(85 + i*180, H*0.57, 8, 30);
+      ctx.fillRect(210 + i*180, H*0.57, 8, 30);
+      ctx.fillStyle = '#a08060';
+    }
+    drawBlobInScene(W/2, H*0.4, 32, { exprOverride: 'happy' });
+  }
+  function drawSceneRecre() {
+    drawSky();
+    drawGround(H*0.7, '#8aa06a');
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+    ctx.strokeRect(W*0.1, H*0.7, W*0.35, 60);
+    ctx.fillStyle = '#d06040';
+    ctx.beginPath(); ctx.arc(W*0.7, H*0.55, 15, 0, Math.PI*2); ctx.fill();
+    drawTree(70, H*0.7, 0.9); drawTree(560, H*0.7, 1);
+    drawBlobInScene(W*0.35, H*0.72, 32, { exprOverride: 'happy' });
+  }
+  function drawScenePrintemps() {
+    drawSky();
+    drawGround(H*0.7, '#8ac06a');
+    for (let i = 0; i < 12; i++) {
+      drawFlower(50 + i*50, H*0.75, ['#e06080','#f0d040','#a060c0'][i%3], 0.9);
+    }
+    drawBlobInScene(W/2, H*0.65, 38, { happy: 1 });
+  }
+  function drawSceneNid() {
+    drawSky();
+    drawGround(H*0.7);
+    drawTree(W*0.55, H*0.7, 1.5);
+    ctx.fillStyle = '#8a6a3a';
+    ctx.beginPath(); ctx.ellipse(W*0.55, H*0.35, 30, 12, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(W*0.55, H*0.33, 6, 0, Math.PI*2); ctx.fill();
+    drawBlobInScene(W*0.25, H*0.72, 38);
+  }
+  function drawSceneAutomne() {
+    drawSkyAutumn();
+    drawGround(H*0.7, '#a08040');
+    for (let i = 0; i < 4; i++) drawTreeAutumn(80 + i*140, H*0.7, 1.1);
+    for (let i = 0; i < 15; i++) {
+      ctx.fillStyle = ['#c06040','#d08050','#e0a060'][i%3];
+      ctx.beginPath();
+      ctx.ellipse((i*47 + performance.now()/30 + i*13)%W, (i*37 + performance.now()/50 + i*20)%H, 5, 3, i, 0, Math.PI*2);
+      ctx.fill();
+    }
+    drawBlobInScene(W/2, H*0.7, 38, { exprOverride: 'happy' });
+  }
+  function drawSceneEcureuil() {
+    drawSkyAutumn();
+    drawGround(H*0.7, '#a08040');
+    drawTreeAutumn(W*0.7, H*0.7, 1.3);
+    ctx.fillStyle = '#8a5a2a';
+    ctx.beginPath(); ctx.ellipse(W*0.7, H*0.55, 14, 10, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(W*0.7+10, H*0.53, 7, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(W*0.7-8, H*0.5, 12, 6, 0.5, 0, Math.PI*2); ctx.fill();
+    drawBlobInScene(W*0.3, H*0.72, 38);
+  }
+  function drawScenePluie() {
+    drawSkyRain();
+    drawGround(H*0.75, '#5a7a4a');
+    for (let i = 0; i < 40; i++) {
+      const x = (i*37 + performance.now()/10) % W;
+      const y = (i*53 + performance.now()/5) % H;
+      ctx.strokeStyle = 'rgba(200,220,240,0.6)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x-2, y+12); ctx.stroke();
+    }
+    drawBlobInScene(W/2, H*0.72, 38, { exprOverride: 'surprised' });
+  }
+  function drawSceneFlaque() {
+    drawSkyRain();
+    drawGround(H*0.75, '#5a7a4a');
+    ctx.fillStyle = '#5a8ab0';
+    ctx.beginPath(); ctx.ellipse(W*0.5, H*0.85, 90, 20, 0, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1.5;
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.arc(W*0.5, H*0.85, 20 + i*20 + (performance.now()/500)%15, 0, Math.PI*2);
+      ctx.stroke();
+    }
+    drawBlobInScene(W*0.35, H*0.72, 38, { exprOverride: 'happy' });
+  }
+  function drawSceneAbri() {
+    drawSkyRain();
+    drawGround(H*0.75, '#5a7a4a');
+    drawTree(W*0.7, H*0.75, 1.6);
+    for (let i = 0; i < 30; i++) {
+      const x = (i*37 + performance.now()/10) % W;
+      const y = (i*53 + performance.now()/5) % (H*0.65);
+      ctx.strokeStyle = 'rgba(200,220,240,0.6)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x-2, y+12); ctx.stroke();
+    }
+    drawBlobInScene(W*0.7, H*0.73, 32);
+  }
+  function drawSceneArcEnCiel() {
+    drawSky();
+    const colors = ['#e05050','#f09050','#f0d040','#50a050','#5080e0','#a060c0'];
+    for (let i = 0; i < colors.length; i++) {
+      ctx.strokeStyle = colors[i]; ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(W/2, H*0.85, 180 - i*8, Math.PI, Math.PI*2);
+      ctx.stroke();
+    }
+    drawGround(H*0.85);
+    drawBlobInScene(W/2, H*0.82, 32, { happy: 1 });
+  }
+  function drawSceneMarche() {
+    drawSky();
+    drawGround(H*0.7, '#a09070');
+    for (let i = 0; i < 3; i++) {
+      const x = 80 + i*180;
+      ctx.fillStyle = ['#e05050','#50a050','#5080e0'][i];
+      ctx.beginPath();
+      ctx.moveTo(x, H*0.5);
+      ctx.lineTo(x + 140, H*0.5);
+      ctx.lineTo(x + 130, H*0.42);
+      ctx.lineTo(x + 10, H*0.42);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#8a6a4a';
+      ctx.fillRect(x + 10, H*0.5, 120, 100);
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      for (let j = 0; j < 6; j++) {
+        ctx.beginPath(); ctx.arc(x + 25 + j*20, H*0.55, 6, 0, Math.PI*2); ctx.fill();
+      }
+    }
+    drawBlobInScene(W/2, H*0.73, 32);
+  }
+  function drawSceneFruits() {
+    drawSky();
+    drawGround(H*0.7, '#a09070');
+    ctx.fillStyle = '#8a6a4a';
+    ctx.fillRect(W*0.15, H*0.5, W*0.7, 60);
+    const fruits = ['#e05050','#f0d040','#f09050','#a060c0','#50a050'];
+    for (let i = 0; i < 15; i++) {
+      ctx.fillStyle = fruits[i%5];
+      ctx.beginPath(); ctx.arc(W*0.2 + i*32, H*0.5 - 5, 10, 0, Math.PI*2); ctx.fill();
+    }
+    drawBlobInScene(W/2, H*0.73, 32, { exprOverride: 'surprised' });
+  }
+  function drawSceneFleurs() {
+    drawSky();
+    drawGround(H*0.7, '#a09070');
+    ctx.fillStyle = '#8a6a4a';
+    ctx.fillRect(W*0.2, H*0.55, 60, 80);
+    for (let i = 0; i < 5; i++) drawFlower(W*0.25 + (i%2)*20, H*0.52 - Math.floor(i/2)*15, ['#e06080','#f0d040','#a060c0'][i%3], 0.9);
+    drawBlobInScene(W*0.6, H*0.73, 32, { happy: 1 });
+  }
+  // ─── NOUVELLES SCÈNES (vague « le double ») ───
+  function drawSceneNeige() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#d8e4f0'); g.addColorStop(1, '#f0f0f4');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    drawGround(H*0.7, '#f4f6fa');
+    drawTree(70, H*0.7, 1); drawTree(560, H*0.7, 1.1);
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(70, H*0.7-52, 22, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(560, H*0.7-56, 24, 0, Math.PI*2); ctx.fill();
+    for (let i = 0; i < 30; i++) {
+      const x = (i*53 + performance.now()/40) % W;
+      const y = (i*71 + performance.now()/25) % H;
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI*2); ctx.fill();
+    }
+    drawBlobInScene(W/2, H*0.72, 38);
+  }
+  function drawSceneBonhomme() {
+    drawSceneNeige();
+    const bx = W*0.62, by = H*0.72;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(bx, by, 34, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(bx, by-48, 26, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(bx, by-84, 19, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = C.ink;
+    ctx.beginPath(); ctx.arc(bx-7, by-88, 2.5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(bx+7, by-88, 2.5, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#e07030';
+    ctx.beginPath(); ctx.moveTo(bx, by-82); ctx.lineTo(bx+18, by-79); ctx.lineTo(bx, by-76); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = C.maple;
+    ctx.fillRect(bx-20, by-66, 40, 8);
+    ctx.fillRect(bx+8, by-66, 8, 18);
+    ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(bx-24, by-48); ctx.lineTo(bx-44, by-64); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bx+24, by-48); ctx.lineTo(bx+44, by-62); ctx.stroke();
+    drawBlobInScene(W*0.28, H*0.72, 32, { happy: 1 });
+  }
+  function drawSceneVelo() {
+    drawSky();
+    drawGround(H*0.7);
+    ctx.fillStyle = '#e8d8b0';
+    ctx.beginPath(); ctx.ellipse(W/2, H*0.82, 260, 26, 0, 0, Math.PI*2); ctx.fill();
+    drawTree(80, H*0.7, 1); drawTree(560, H*0.7, 1.1);
+    drawFlower(120, H*0.75, '#e06080', 0.9); drawFlower(520, H*0.78, '#f0d040', 0.9);
+    const bx = W/2, by = H*0.68;
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(bx-34, by+34, 14, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(bx+34, by+34, 14, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(bx-34, by+34); ctx.lineTo(bx, by+8); ctx.lineTo(bx+34, by+34);
+    ctx.moveTo(bx, by+8); ctx.lineTo(bx-8, by+34); ctx.lineTo(bx+34, by+34);
+    ctx.moveTo(bx, by+8); ctx.lineTo(bx+10, by-2);
+    ctx.stroke();
+    drawBlobInScene(bx, by-6, 32, { happy: 1 });
+  }
+  function drawSceneCuisine() {
+    ctx.fillStyle = '#f0e8d8'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#a08060'; ctx.fillRect(0, H*0.72, W, H*0.28);
+    ctx.fillStyle = '#8a6a4a'; ctx.fillRect(W*0.15, H*0.5, W*0.7, 22);
+    ctx.fillRect(W*0.18, H*0.5+22, 12, H*0.22);
+    ctx.fillRect(W*0.8, H*0.5+22, 12, H*0.22);
+    ctx.fillStyle = '#5080c0';
+    ctx.beginPath(); ctx.arc(W*0.4, H*0.5-8, 26, 0, Math.PI); ctx.fill();
+    ctx.fillStyle = '#f0e0c0';
+    ctx.beginPath(); ctx.ellipse(W*0.4, H*0.5-8, 26, 8, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#e0c040';
+    ctx.beginPath(); ctx.arc(W*0.58, H*0.5-6, 10, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(W*0.62, H*0.5-6, 9, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#d9a441';
+    ctx.beginPath(); ctx.arc(W*0.68, H*0.5-4, 8, 0, Math.PI*2); ctx.fill();
+    drawBlobInScene(W*0.3, H*0.62, 34, { happy: 1 });
+  }
+  function drawSceneGateau() {
+    drawSceneCuisine();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.ellipse(W*0.62, H*0.5-4, 44, 8, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#e06080';
+    ctx.beginPath(); ctx.roundRect(W*0.62-34, H*0.5-34, 68, 30, 6); ctx.fill();
+    ctx.fillStyle = '#f8f0e0';
+    ctx.beginPath(); ctx.roundRect(W*0.62-34, H*0.5-34, 68, 10, 6); ctx.fill();
+    ctx.fillStyle = '#e04040';
+    for (let i = -1; i <= 1; i++) {
+      ctx.beginPath(); ctx.arc(W*0.62 + i*20, H*0.5-38, 5, 0, Math.PI*2); ctx.fill();
+    }
+    drawBlobInScene(W*0.3, H*0.62, 34, { happy: 1 });
+  }
+  function drawSceneBiblio() {
+    ctx.fillStyle = '#e8dcc8'; ctx.fillRect(0, 0, W, H);
+    for (let s = 0; s < 3; s++) {
+      const sy = 90 + s*110;
+      ctx.fillStyle = '#7a5a3a'; ctx.fillRect(50, sy, 540, 12);
+      const cols = ['#e05050','#5080e0','#e0c040','#50a050','#a060c0','#e07030'];
+      for (let b = 0; b < 12; b++) {
+        ctx.fillStyle = cols[(b + s) % cols.length];
+        ctx.fillRect(60 + b*44, sy - 42 - (b % 3) * 4, 34, 42 + (b % 3) * 4);
+      }
+    }
+    ctx.fillStyle = '#f0e8d8';
+    ctx.beginPath(); ctx.ellipse(W/2, H*0.88, 150, 30, 0, 0, Math.PI*2); ctx.fill();
+    drawBlobInScene(W/2, H*0.82, 34, { happy: 1 });
+  }
+  function drawScenePlage() {
+    drawSky();
+    ctx.fillStyle = '#7ab8d8'; ctx.fillRect(0, H*0.42, W, H*0.2);
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 2;
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      for (let x = 0; x < W; x += 15) {
+        const y = H*0.47 + i*18 + Math.sin(x/30 + performance.now()/1000)*3;
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    drawGround(H*0.62, '#e8d8a0');
+    ctx.fillStyle = '#f0e080';
+    ctx.beginPath(); ctx.arc(W*0.85, H*0.12, 26, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#e07030';
+    ctx.beginPath();
+    ctx.moveTo(W*0.2, H*0.78); ctx.lineTo(W*0.2+16, H*0.66); ctx.lineTo(W*0.2+32, H*0.78);
+    ctx.closePath(); ctx.fill();
+    ctx.fillRect(W*0.2+4, H*0.78, 24, 6);
+    ctx.strokeStyle = '#8a6a4a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(W*0.2+40, H*0.7); ctx.lineTo(W*0.2+52, H*0.6); ctx.stroke();
+    drawBlobInScene(W*0.55, H*0.72, 34, { happy: 1 });
+  }
+  function drawSceneCoquillage() {
+    drawGround(H*0.55, '#e8d8a0');
+    drawSky();
+    ctx.fillStyle = '#e8d8a0'; ctx.fillRect(0, H*0.55, W, H*0.45);
+    const shells = ['#f0c0d0','#fffdf7','#e0a060','#d0a0e0'];
+    for (let i = 0; i < 8; i++) {
+      const x = 70 + (i % 4) * 140, y = H*0.68 + Math.floor(i / 4) * 60;
+      ctx.fillStyle = shells[i % 4];
+      ctx.beginPath(); ctx.arc(x, y, 14, Math.PI, 0); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.lineWidth = 1.5;
+      for (let r = 0; r < 3; r++) {
+        ctx.beginPath(); ctx.arc(x, y, 5 + r*4, Math.PI*1.15, Math.PI*1.85); ctx.stroke();
+      }
+    }
+    drawBlobInScene(W/2, H*0.45, 32, { happy: 1 });
+  }
+  function drawScenePiqueNique() {
+    drawSky();
+    drawGround(H*0.7, '#7ab85a');
+    drawTree(80, H*0.7, 1.1); drawTree(560, H*0.7, 1);
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 3; j++) {
+        ctx.fillStyle = (i + j) % 2 === 0 ? '#e05050' : '#fffdf7';
+        ctx.fillRect(W*0.28 + i*52, H*0.72 + j*26, 52, 26);
+      }
+    }
+    ctx.fillStyle = '#8a6a3a';
+    ctx.beginPath(); ctx.roundRect(W*0.68, H*0.7, 70, 46, 8); ctx.fill();
+    ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(W*0.68+35, H*0.7, 26, Math.PI, 0); ctx.stroke();
+    ctx.fillStyle = '#e05050';
+    ctx.beginPath(); ctx.arc(W*0.38, H*0.76, 8, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#f0d040';
+    ctx.beginPath(); ctx.arc(W*0.46, H*0.78, 7, 0, Math.PI*2); ctx.fill();
+    drawBlobInScene(W*0.5, H*0.6, 32, { happy: 1 });
+  }
+  function drawSceneTrain() {
+    drawSky();
+    drawGround(H*0.7, '#8aa06a');
+    ctx.fillStyle = '#8a6a4a';
+    for (let i = 0; i < 8; i++) ctx.fillRect(i*80, H*0.78, 60, 10);
+    ctx.strokeStyle = '#5a5a5a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0, H*0.76); ctx.lineTo(W, H*0.76); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, H*0.82); ctx.lineTo(W, H*0.82); ctx.stroke();
+    const ty = H*0.62;
+    ctx.fillStyle = '#3f7fa3';
+    ctx.beginPath(); ctx.roundRect(60, ty-70, 130, 90, 10); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(200, ty-60, 110, 80, 10); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(320, ty-60, 110, 80, 10); ctx.fill();
+    ctx.fillStyle = '#2a2620';
+    ctx.beginPath(); ctx.arc(110, ty+20, 16, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(160, ty+20, 16, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(255, ty+20, 16, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(375, ty+20, 16, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#bfe0f0';
+    for (const wx of [85, 125, 225, 285, 345, 395]) ctx.fillRect(wx, ty-55, 28, 28);
+    ctx.fillStyle = '#2a2620';
+    ctx.fillRect(70, ty-95, 16, 26);
+    ctx.fillStyle = '#d9a441';
+    ctx.fillRect(56, ty-105, 44, 12);
+    drawBlobInScene(W*0.78, H*0.72, 34, { exprOverride: 'surprised' });
+  }
+  function drawSceneCabane() {
+    drawSky();
+    drawGround(H*0.7, '#7a9a5a');
+    drawTree(80, H*0.7, 1); drawTree(570, H*0.7, 1.1);
+    const cx = W*0.32, cy = H*0.42;
+    ctx.fillStyle = '#8a6a4a';
+    ctx.fillRect(cx, cy, 220, 150);
+    ctx.fillStyle = '#b5451b';
+    ctx.beginPath();
+    ctx.moveTo(cx-20, cy); ctx.lineTo(cx+110, cy-70); ctx.lineTo(cx+240, cy); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#6a4a2a';
+    ctx.fillRect(cx+90, cy+70, 44, 80);
+    ctx.fillStyle = '#d9a441';
+    ctx.beginPath(); ctx.arc(cx+118, cy+110, 4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#bfe0f0';
+    ctx.fillRect(cx+30, cy+30, 40, 40);
+    ctx.fillRect(cx+150, cy+30, 40, 40);
+    ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 3;
+    ctx.strokeRect(cx+30, cy+30, 40, 40);
+    ctx.strokeRect(cx+150, cy+30, 40, 40);
+    drawFlower(cx+260, H*0.72, '#e06080', 0.9);
+    drawBlobInScene(W*0.72, H*0.72, 34, { happy: 1 });
+  }
+  
+  const STORIES = [
+    // Existant 1
+    { id:'lac', title:'Le lac mystérieux', scenes: [
+      { draw: drawSceneLac, text: "Le moteur arrive à un lac. L'eau est claire, des poissons nagent.",
+        choices: [{ text:'Nager dedans', next:1 },{ text:'Regarder les poissons', next:2 },{ text:'Faire un bateau en feuille', next:3 }] },
+      { draw: drawSceneSwim, text: "Plouf ! L'eau est bonne. Une loutre curieuse s'approche.",
+        choices: [{ text:'Jouer avec elle', next:4 },{ text:'La saluer', next:4 }] },
+      { draw: drawSceneWatch, text: "Un poisson doré vient te voir. Il semble te montrer quelque chose.",
+        choices: [{ text:'Le suivre', next:4 },{ text:'Rester sur la berge', next:4 }] },
+      { draw: drawSceneBoat, text: "Le bateau tient ! Tu vogues doucement sur le lac.",
+        choices: [{ text:'Continuer', next:4 }] },
+      { draw: drawSceneSunset, text: "Le soleil se couche. Le moteur rentre à la maison, le cœur content.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // Existant 2
+    { id:'foret', title:'La forêt qui chante', scenes: [
+      { draw: drawSceneForet, text: "Le moteur entre dans une forêt. Il entend une mélodie au loin.",
+        choices: [{ text:'Suivre la musique', next:1 },{ text:"S'asseoir et écouter", next:2 }] },
+      { draw: drawSceneOiseau, text: "Un oiseau chante sur une branche. Il te regarde.",
+        choices: [{ text:'Chanter avec lui', next:3 },{ text:'Rester tranquille', next:3 }] },
+      { draw: drawSceneClairiere, text: "Tu trouves une clairière avec des lucioles.",
+        choices: [{ text:'Les suivre', next:3 },{ text:'Faire un vœu', next:3 }] },
+      { draw: drawSceneNuit, text: "La nuit tombe. Le moteur rentre chez lui sous les étoiles.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : École
+    { id:'ecole', title:"Le premier jour d'école", scenes: [
+      { draw: drawSceneEcole, text: "C'est le premier jour. Le moteur est un peu nerveux devant l'école.",
+        choices: [{ text:'Entrer par la porte principale', next:1 },{ text:'Faire le tour par la cour', next:1 }] },
+      { draw: drawSceneClasse, text: "Dans la classe, d'autres enfants sont là. Une place près de la fenêtre est libre.",
+        choices: [{ text:'Prendre la place près de la fenêtre', next:2 },{ text:"S'installer près d'un ami", next:2 }] },
+      { draw: drawSceneRecre, text: "C'est la récréation. Le ballon roule vers toi.",
+        choices: [{ text:'Le relancer', next:3 },{ text:'Le laisser à quelqu\'un d\'autre', next:3 }] },
+      { draw: drawSceneSunset, text: "La cloche sonne. Le moteur rentre chez lui, content de sa journée.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Amis
+    { id:'amis', title:'Un nouvel ami', scenes: [
+      { draw: drawScenePrintemps, text: "Un nouveau voisin arrive dans le quartier. Il a l'air un peu seul.",
+        choices: [{ text:'Aller lui dire bonjour', next:1 },{ text:'Lui faire un signe de la main', next:1 }] },
+      { draw: drawSceneRecre, text: "Il te propose de jouer dehors.",
+        choices: [{ text:'Jouer au ballon', next:2 },{ text:'Lui montrer ton coin préféré', next:2 }] },
+      { draw: drawScenePrintemps, text: "Vous vous amusez bien. Le soleil descend doucement.",
+        choices: [{ text:'Lui proposer de revenir demain', next:3 },{ text:'Partager un biscuit', next:3 }] },
+      { draw: drawSceneSunset, text: "Un nouvel ami, c'est une belle journée. Le moteur rentre chez lui.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Printemps
+    { id:'printemps', title:'Le printemps arrive', scenes: [
+      { draw: drawScenePrintemps, text: "Les fleurs poussent dans le jardin. Le moteur se promène.",
+        choices: [{ text:'Sentir les fleurs', next:1 },{ text:'Arroser les petites pousses', next:1 }] },
+      { draw: drawSceneNid, text: "Un oiseau construit son nid. Il cherche des brindilles.",
+        choices: [{ text:'Lui en apporter une', next:2 },{ text:'Regarder tranquillement', next:2 }] },
+      { draw: drawScenePluie, text: "Une petite pluie se met à tomber.",
+        choices: [{ text:"S'abriter sous un arbre", next:3 },{ text:'Danser sous la pluie', next:3 }] },
+      { draw: drawSceneArcEnCiel, text: "La pluie s'arrête. Un arc-en-ciel apparaît dans le ciel.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Automne
+    { id:'automne', title:"Les couleurs de l'automne", scenes: [
+      { draw: drawSceneAutomne, text: "Les feuilles sont rouges, jaunes, oranges. Elles tombent doucement.",
+        choices: [{ text:'Sauter dans un tas de feuilles', next:1 },{ text:'Attraper une feuille au vol', next:1 }] },
+      { draw: drawSceneEcureuil, text: "Un écureuil cache des noix pour l'hiver.",
+        choices: [{ text:'Le regarder faire', next:2 },{ text:'Lui laisser une noix', next:2 }] },
+      { draw: drawSceneForet, text: "Le vent se lève. Une feuille vole loin.",
+        choices: [{ text:'La suivre', next:3 },{ text:'Rentrer au chaud', next:3 }] },
+      { draw: drawSceneSunset, text: "Le moteur rentre chez lui. Une bonne odeur de chocolat chaud l'attend.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Pluie
+    { id:'pluie', title:'Une journée de pluie', scenes: [
+      { draw: drawScenePluie, text: "Il pleut dehors. Le moteur regarde par la fenêtre.",
+        choices: [{ text:'Sortir avec ses bottes', next:1 },{ text:'Rester au chaud', next:3 }] },
+      { draw: drawSceneFlaque, text: "Une grosse flaque s'est formée dans la rue.",
+        choices: [{ text:'Sauter dedans', next:2 },{ text:'Faire le tour', next:2 }] },
+      { draw: drawSceneAbri, text: "La pluie tombe plus fort. Un arbre offre un abri.",
+        choices: [{ text:"S'abriter un moment", next:3 },{ text:'Écouter la pluie', next:3 }] },
+      { draw: drawSceneArcEnCiel, text: "La pluie s'arrête. Le ciel s'éclaircit.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Marché
+    { id:'marche', title:'Au marché', scenes: [
+      { draw: drawSceneMarche, text: "Le marché du samedi matin. Des couleurs, des odeurs, du monde.",
+        choices: [{ text:'Aller voir les fruits', next:1 },{ text:'Chercher les fleurs', next:2 }] },
+      { draw: drawSceneFruits, text: "Tous ces fruits ! Lequel choisir ?",
+        choices: [{ text:'Des pommes rouges', next:3 },{ text:'Des petits fruits', next:3 }] },
+      { draw: drawSceneFleurs, text: "Un bouquet de fleurs jaunes. Il sent bon.",
+        choices: [{ text:'En acheter un', next:3 },{ text:'Juste les sentir', next:3 }] },
+      { draw: drawSceneSunset, text: "Le panier est rempli. Le moteur rentre à la maison.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Neige
+    { id:'neige', title:'Un jour de neige', scenes: [
+      { draw: drawSceneNeige, text: "Il a neigé toute la nuit. Le jardin est tout blanc et tout doux.",
+        choices: [{ text:'Faire un bonhomme de neige', next:1 },{ text:'Regarder les flocons tomber', next:2 },{ text:'Marcher dans la neige fraîche', next:2 }] },
+      { draw: drawSceneBonhomme, text: "Le bonhomme de neige a un nez en carotte et un sourire.",
+        choices: [{ text:'Lui mettre une écharpe', next:2 },{ text:'Lui faire un ami plus petit', next:2 }] },
+      { draw: drawSceneNeige, text: "La neige crisse sous les pas. Tout est calme.",
+        choices: [{ text:'Faire un ange dans la neige', next:3 },{ text:'Rentrer se réchauffer', next:3 }] },
+      { draw: drawSceneNuit, text: "La nuit tombe sur le jardin blanc. Le moteur rentre au chaud, les joues roses.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Vélo
+    { id:'velo', title:'La balade à vélo', scenes: [
+      { draw: drawSceneVelo, text: "Le moteur prend son vélo pour une balade. Le chemin est plat et tranquille.",
+        choices: [{ text:'Pédaler doucement', next:1 },{ text:"S'arrêter pour regarder les fleurs", next:1 }] },
+      { draw: drawSceneForet, text: "Le chemin passe sous les arbres. Un oiseau chante.",
+        choices: [{ text:"Continuer jusqu'au lac", next:2 },{ text:"Faire une pause à l'ombre", next:2 }] },
+      { draw: drawSceneLac, text: "Le chemin arrive au bord d'un petit lac. L'eau brille.",
+        choices: [{ text:"S'asseoir sur un banc", next:3 },{ text:'Faire un tour du lac', next:3 }] },
+      { draw: drawSceneSunset, text: "Le soleil descend. Le moteur rentre à la maison, content de sa balade.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Cuisine
+    { id:'cuisine', title:'Un gâteau pour le goûter', scenes: [
+      { draw: drawSceneCuisine, text: "Aujourd'hui, le moteur prépare un gâteau. La farine, les œufs et le sucre sont sur la table.",
+        choices: [{ text:'Mélanger la pâte', next:1 },{ text:'Goûter un petit bout', next:1 }] },
+      { draw: drawSceneCuisine, text: "La pâte est prête. Il faut la verser dans le moule.",
+        choices: [{ text:'Verser doucement', next:2 },{ text:'Ajouter des pépites', next:2 }] },
+      { draw: drawSceneGateau, text: "Le gâteau sort du four. Il est doré et il sent bon.",
+        choices: [{ text:'Le décorer avec des fruits', next:3 },{ text:'Le laisser refroidir', next:3 }] },
+      { draw: drawSceneSunset, text: "Le gâteau est prêt. Le moteur est fier de lui.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Bibliothèque
+    { id:'bibliotheque', title:'La bibliothèque', scenes: [
+      { draw: drawSceneBiblio, text: "La bibliothèque est calme. Des étagères pleines de livres montent jusqu'au plafond.",
+        choices: [{ text:"Chercher un livre d'images", next:1 },{ text:'Trouver un coin pour lire', next:1 }] },
+      { draw: drawSceneBiblio, text: "Un livre raconte l'histoire d'un petit bateau. Les images sont belles.",
+        choices: [{ text:'Lire encore une page', next:2 },{ text:"Le montrer à quelqu'un", next:2 }] },
+      { draw: drawSceneBiblio, text: "Le moteur a trouvé son livre préféré. Il le serre contre lui.",
+        choices: [{ text:'Le rapporter à la maison', next:3 },{ text:'Le relire une fois', next:3 }] },
+      { draw: drawSceneNuit, text: "La bibliothèque ferme ses portes. Le moteur rentre chez lui avec son livre.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Plage
+    { id:'plage', title:'La journée à la plage', scenes: [
+      { draw: drawScenePlage, text: "Le sable est chaud et la mer est bleue. Le moteur arrive à la plage.",
+        choices: [{ text:'Construire un château de sable', next:1 },{ text:'Chercher des coquillages', next:2 }] },
+      { draw: drawScenePlage, text: "Le château a des tours et un petit pont. Une vague vient le saluer.",
+        choices: [{ text:'Le réparer', next:3 },{ text:'Le regarder briller', next:3 }] },
+      { draw: drawSceneCoquillage, text: "Un coquillage rose, un blanc, un tout petit. Le moteur les range dans sa poche.",
+        choices: [{ text:'Continuer la collection', next:3 },{ text:'Les montrer à un ami', next:3 }] },
+      { draw: drawSceneSunset, text: "Le soleil descend sur la mer. Le moteur rentre à la maison, les poches pleines de coquillages.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Pique-nique
+    { id:'pique-nique', title:'Le pique-nique', scenes: [
+      { draw: drawScenePiqueNique, text: "Le panier est prêt. Le moteur part pour un pique-nique dans le parc.",
+        choices: [{ text:'Étaler la nappe', next:1 },{ text:"Choisir un coin à l'ombre", next:1 }] },
+      { draw: drawScenePiqueNique, text: "Des sandwichs, des fruits et de l'eau fraîche. Tout est bon.",
+        choices: [{ text:'Partager avec un ami', next:2 },{ text:'Goûter un fruit', next:2 }] },
+      { draw: drawSceneForet, text: "Après le repas, une promenade sous les arbres.",
+        choices: [{ text:'Regarder les nuages', next:3 },{ text:'Ramasser une belle feuille', next:3 }] },
+      { draw: drawSceneSunset, text: "Le panier est vide et le cœur est plein. Le moteur rentre à la maison.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Train
+    { id:'train', title:'Le petit train', scenes: [
+      { draw: drawSceneTrain, text: "Le petit train attend sur le quai. Le moteur monte dedans.",
+        choices: [{ text:"S'asseoir près de la fenêtre", next:1 },{ text:'Regarder le paysage', next:1 }] },
+      { draw: drawSceneTrain, text: "Le train roule doucement. Des champs, des maisons et des arbres défilent.",
+        choices: [{ text:'Compter les maisons', next:2 },{ text:'Écouter le bruit des roues', next:2 }] },
+      { draw: drawSceneForet, text: "Le train s'arrête près d'une forêt. Une pause pour se dégourdir les jambes.",
+        choices: [{ text:"Respirer l'air frais", next:3 },{ text:'Cueillir une fleur', next:3 }] },
+      { draw: drawSceneSunset, text: "Le train repart vers la maison. Le moteur rentre, content de son voyage.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]},
+    // NOUVEAU : Cabane
+    { id:'cabane', title:'La cabane dans le jardin', scenes: [
+      { draw: drawSceneCabane, text: "Dans le jardin, il y a une cabane en bois. Le moteur l'a construite avec des planches.",
+        choices: [{ text:'Entrer dedans', next:1 },{ text:'Décorer la porte', next:1 }] },
+      { draw: drawSceneCabane, text: "Dans la cabane, il y a un coussin et une petite lampe. C'est un endroit rien qu'à soi.",
+        choices: [{ text:'Lire un livre', next:2 },{ text:'Inviter un ami', next:2 }] },
+      { draw: drawSceneNuit, text: "La nuit tombe. La lampe de la cabane brille comme une étoile.",
+        choices: [{ text:'Regarder les étoiles', next:3 },{ text:'Écouter les bruits du soir', next:3 }] },
+      { draw: drawSceneNuit, text: "La nuit est douce. Le moteur rentre à la maison, le cœur léger.",
+        choices: [{ text:'Rentrer à la maison', end:true }] }
+    ]}
+  ];
+  
+  // ─── CHAPITRES (carte de voyage : 4 chapitres de 4 histoires) ───
+  const CHAPTERS = [
+    { title:'Près de chez soi', ids:['lac','foret','ecole','amis'] },
+    { title:'Les saisons', ids:['printemps','automne','pluie','marche'] },
+    { title:'De nouvelles routes', ids:['neige','velo','cuisine','bibliotheque'] },
+    { title:'Le grand voyage', ids:['plage','pique-nique','train','cabane'] }
+  ];
+  const aventure = { story: null, scene: 0 };
+  
+  function initAventure() {
+    const todo = STORIES.filter(s => !finished.has(s.id));
+    const pool = todo.length ? todo : STORIES;
+    aventure.story = pool[Math.floor(Math.random() * pool.length)];
+    aventure.scene = 0;
+    updateAventureUI();
+  }
+  
+  function updateAventureUI() {
+    [...ui.children].forEach(c => {
+      if (!c.classList.contains('btn-back') && !c.classList.contains('btn-sound')) c.remove();
+    });
+    if (!aventure.story) return;
+    const scene = aventure.story.scenes[aventure.scene];
+    const textDiv = document.createElement('div');
+    textDiv.className = 'story-text';
+    const h2 = document.createElement('h2');
+    h2.textContent = aventure.story.title + (finished.has(aventure.story.id) ? ' ✓' : '');
+    const p = document.createElement('p');
+    p.textContent = scene.text;
+    textDiv.appendChild(h2); textDiv.appendChild(p);
+    ui.appendChild(textDiv);
+    const panel = document.createElement('div');
+    panel.className = 'choice-panel';
+    scene.choices.forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.textContent = c.text;
+      btn.addEventListener('click', () => {
+        playNote(523 + i*80, 0.15);
+        if (c.end) { markFinished(aventure.story.id); exitScreen(); }
+        else { aventure.scene = c.next; updateAventureUI(); }
+      });
+      panel.appendChild(btn);
+    });
+    ui.appendChild(panel);
+  }
+  
+  function renderAventure() {
+    if (!aventure.story) return;
+    aventure.story.scenes[aventure.scene].draw();
+  }
+  
+  // ─── HUB ───
+  const hub = {
+    doors: [
+      { id:'calin', label:'Câlin', icon:'💚', x:110, y:170, color:'#a8c8e0' },
+      { id:'aventure', label:'Aventure', icon:'🗺️', x:250, y:170, color:'#e0c890' },
+      { id:'couleurs', label:'Couleurs', icon:'🎨', x:390, y:170, color:'#e0a8c8' },
+      { id:'dessin', label:'Dessin', icon:'✏️', x:530, y:170, color:'#a8d0c0' },
+      { id:'jardin', label:'Jardin', icon:'🌱', x:180, y:290, color:'#c8d898' },
+      { id:'chambre', label:'Chambre', icon:'🛏️', x:320, y:290, color:'#e0d0b0' },
+      { id:'atelier', label:'Atelier', icon:'✨', x:460, y:290, color:'#d8c0e8' }
+    ],
+    selected: null, transitioning: false
+  };
+  
+  function updateHub() {
+    if (hub.selected) {
+      const d = hub.doors.find(x => x.id === hub.selected);
+      blob.targetX = d.x; blob.targetY = d.y + 45;
+    } else {
+      blob.targetX = W/2; blob.targetY = H*0.7;
+    }
+    blob.x += (blob.targetX - blob.x) * 0.08;
+    blob.y += (blob.targetY - blob.y) * 0.08;
+    if (blob.purr > 0) blob.purr = Math.max(0, blob.purr - 0.02);
+    if (blob.happy > 0) blob.happy = Math.max(0, blob.happy - 0.01);
+  }
+  
+  function renderHub() {
+    drawSky();
+    ctx.fillStyle = '#a8c8a0';
+    ctx.beginPath(); ctx.ellipse(150, 350, 200, 80, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(500, 350, 200, 80, 0, 0, Math.PI*2); ctx.fill();
+    drawCloud(80, 80, 1); drawCloud(300, 60, 1.2); drawCloud(520, 90, 0.9);
+    drawGround(340);
+    drawTree(60, 375, 1); drawTree(585, 365, 1.1);
+    // Blob derrière les portes : la porte Chambre (320,290) n'est plus masquée.
+    drawBlob(blob.x, blob.y, blob.r, { eyeX: blob.eyeX, eyeY: blob.eyeY, purr: blob.purr, happy: blob.happy });
+    for (const d of hub.doors) {
+      const pulse = 1 + Math.sin(performance.now()/800 + d.x)*0.05;
+      const r = 32 * pulse;
+      const gr = ctx.createRadialGradient(d.x, d.y, 5, d.x, d.y, r*1.5);
+      gr.addColorStop(0, d.color); gr.addColorStop(1, d.color + '00');
+      ctx.fillStyle = gr;
+      ctx.beginPath(); ctx.arc(d.x, d.y, r*1.5, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = d.color;
+      ctx.beginPath(); ctx.arc(d.x, d.y, r, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 3; ctx.stroke();
+      ctx.font = '26px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(d.icon, d.x, d.y);
+      ctx.fillStyle = 'rgba(255,253,247,0.95)';
+      ctx.font = '600 13px system-ui';
+      const tw = ctx.measureText(d.label).width + 18;
+      ctx.beginPath(); ctx.roundRect(d.x - tw/2, d.y + r + 4, tw, 20, 8); ctx.fill();
+      ctx.fillStyle = C.forest;
+      ctx.fillText(d.label, d.x, d.y + r + 14);
+    }
+    ctx.fillStyle = C.cream;
+    ctx.beginPath(); ctx.roundRect(W/2 - 140, 12, 280, 34, 10); ctx.fill();
+    ctx.fillStyle = C.forest; ctx.font = '600 14px system-ui';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const greet = visits === 1 ? 'Bienvenue !' :
+                  visits < 5 ? 'Content de te revoir !' :
+                  visits < 20 ? 'Encore toi ! Salut.' :
+                  "Toujours là. C'est bien.";
+    ctx.fillText(greet, W/2, 29);
+    drawTravelMap();
+  }
+  
+  // Carte de voyage : 16 pastilles (une par histoire), or quand terminée,
+  // anneau ciel sur la prochaine histoire, regroupées par chapitre de 4.
+  function drawTravelMap() {
+    const total = STORIES.length;
+    const done = STORIES.filter(s => finished.has(s.id)).length;
+    const nextChapter = CHAPTERS.find(ch => ch.ids.some(id => !finished.has(id)));
+    const nextStory = STORIES.find(s => !finished.has(s.id));
+    const label = nextChapter
+      ? `Chapitre ${CHAPTERS.indexOf(nextChapter) + 1} — ${nextChapter.title} · ${done} sur ${total} histoires`
+      : `Toutes les ${total} histoires terminées ! Bravo.`;
+    const px = 40, pw = W - 80, py = 428, ph = 44;
+    ctx.fillStyle = 'rgba(247,243,234,0.95)';
+    ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 12); ctx.fill();
+    ctx.strokeStyle = 'rgba(47,107,79,0.3)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = C.forest; ctx.font = '600 13px system-ui';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(label, W/2, py + 12);
+    const gap = 8, r = 7, sep = 14;
+    const totalW = total * r * 2 + (total - 1) * gap + (CHAPTERS.length - 1) * sep;
+    let x = W/2 - totalW/2 + r;
+    STORIES.forEach((s, i) => {
+      if (i > 0 && i % 4 === 0) x += sep;
+      const isDone = finished.has(s.id);
+      ctx.beginPath(); ctx.arc(x, py + 31, r, 0, Math.PI*2);
+      ctx.fillStyle = isDone ? C.gold : C.soft;
+      ctx.fill();
+      ctx.strokeStyle = isDone ? C.maple : 'rgba(107,100,89,0.4)';
+      ctx.lineWidth = 2; ctx.stroke();
+      if (nextStory && s.id === nextStory.id) {
+        ctx.beginPath(); ctx.arc(x, py + 31, r + 3, 0, Math.PI*2);
+        ctx.strokeStyle = C.sky; ctx.lineWidth = 2; ctx.stroke();
+      }
+      x += r * 2 + gap;
+    });
+  }
+  
+  function handleHubClick(x, y) {
+    if (hub.transitioning) return;
+    for (const d of hub.doors) {
+      if (Math.hypot(x - d.x, y - d.y) < 42) {
+        playNote(523 + d.x * 0.5, 0.2);
+        hub.selected = d.id;
+        hub.transitioning = true;
+        setTimeout(() => { hub.transitioning = false; enterScreen(d.id); }, 500);
+        return;
+      }
+    }
+    if (Math.hypot(x - blob.x, y - blob.y) < blob.r + 15) {
+      blob.purr = 1; blob.happy = 1; addHug();
+      playNote(440, 0.2);
+      for (let i = 0; i < 6; i++) {
+        const a = Math.random()*Math.PI*2;
+        particles.push({ x: blob.x, y: blob.y, vx: Math.cos(a)*2, vy: Math.sin(a)*2 - 1,
+          life: 1, color: ['#f0a0b0','#a8c8e0','#e0c890'][i%3], size: 4 + Math.random()*3 });
+      }
+    }
+  }
+  
+  // ─── CALIN ───
+  const calin = { particles: [], holdTimer: null, pointerDown: false };
+  function initCalin() {
+    blob.targetX = W/2; blob.targetY = H/2;
+    blob.eyeTargetX = 0; blob.eyeTargetY = 0;
+    blob.purr = 0; blob.happy = 0; blob.breathing = false; blob.breathTime = 0;
+    calin.particles = [];
+  }
+  function updateCalin(dt) {
+    blob.x += (blob.targetX - blob.x) * 0.1;
+    blob.y += (blob.targetY - blob.y) * 0.1;
+    blob.eyeX += (blob.eyeTargetX - blob.eyeX) * 0.15;
+    blob.eyeY += (blob.eyeTargetY - blob.eyeY) * 0.15;
+    if (blob.purr > 0) blob.purr = Math.max(0, blob.purr - 0.02);
+    if (blob.happy > 0) blob.happy = Math.max(0, blob.happy - 0.01);
+    if (blob.breathing) blob.breathTime += dt;
+    for (let i = calin.particles.length - 1; i >= 0; i--) {
+      const p = calin.particles[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.vx *= 0.98; p.life -= 0.02;
+      if (p.life <= 0) calin.particles.splice(i, 1);
+    }
+  }
+  function renderCalin() {
+    const g = ctx.createRadialGradient(W/2, H/2, 50, W/2, H/2, W*0.8);
+    g.addColorStop(0, '#f0f8ec'); g.addColorStop(1, '#d8e8dc');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(47,107,79,0.1)';
+    ctx.beginPath(); ctx.ellipse(blob.x, blob.y + blob.r*0.9, blob.r*0.8, 8, 0, 0, Math.PI*2); ctx.fill();
+    let bs = 1 + Math.sin(performance.now()/1500)*0.03;
+    if (blob.breathing) {
+      const cycle = 8, phase = (blob.breathTime % cycle) / cycle;
+      bs = phase < 0.5 ? 1 + phase*0.3 : 1 + (1-phase)*0.3;
+      const ringR = blob.r * 1.6 * bs;
+      ctx.strokeStyle = 'rgba(47,107,79,0.25)'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(blob.x, blob.y, ringR, 0, Math.PI*2); ctx.stroke();
+      ctx.fillStyle = 'rgba(47,107,79,0.8)'; ctx.font = '600 20px system-ui';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(phase < 0.5 ? 'Inspire…' : 'Expire…', blob.x, blob.y - blob.r*2.2);
+    }
+    drawBlob(blob.x, blob.y, blob.r, { purr: blob.purr, happy: blob.happy,
+      eyeX: blob.eyeX, eyeY: blob.eyeY, breathScale: bs });
+    for (const p of calin.particles) {
+      ctx.globalAlpha = p.life; ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    if (!blob.breathing) {
+      ctx.fillStyle = 'rgba(47,107,79,0.5)'; ctx.font = 'italic 13px system-ui';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillText('Touche-le pour un câlin. Tiens-le pour respirer.', W/2, H-20);
+    }
+  }
+  function handleCalinInput(x, y, type) {
+    if (type === 'down') {
+      if (Math.hypot(x - blob.x, y - blob.y) < blob.r + 20) {
+        blob.purr = 1; blob.happy = 1; addHug();
+        playNote(440 + Math.random()*100, 0.15);
+        for (let i = 0; i < 5; i++) {
+          const a = Math.random()*Math.PI*2;
+          calin.particles.push({ x: blob.x, y: blob.y, vx: Math.cos(a)*2, vy: Math.sin(a)*2 - 2,
+            life: 1, color: ['#f0a0b0','#a8c8e0','#e0c890'][i%3], size: 3 + Math.random()*3 });
+        }
+        calin.pointerDown = true;
+        calin.holdTimer = setTimeout(() => { if (calin.pointerDown) blob.breathing = true; }, 500);
+      }
+    } else if (type === 'move') {
+      blob.eyeTargetX = Math.max(-6, Math.min(6, (x - blob.x) / 20));
+      blob.eyeTargetY = Math.max(-4, Math.min(4, (y - blob.y) / 20));
+    } else if (type === 'up') {
+      calin.pointerDown = false;
+      if (calin.holdTimer) { clearTimeout(calin.holdTimer); calin.holdTimer = null; }
+      blob.breathing = false; blob.breathTime = 0;
+      blob.eyeTargetX = 0; blob.eyeTargetY = 0;
+    }
+  }
+  
+  // ─── COULEURS ───
+  const couleurs = { shapes: [], correct: 0 };
+  const PALETTE = [{hex:'#e05050'},{hex:'#5080e0'},{hex:'#e0c040'},{hex:'#50a050'},{hex:'#a060c0'}];
+  function initCouleurs() { couleurs.shapes = []; couleurs.correct = 0; spawnColorShape(); }
+  function spawnColorShape() {
+    const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    const x = 60 + Math.random() * (W - 120);
+    const y = 130 + Math.random() * (H - 240);
+    const types = ['circle','square','star','triangle'];
+    const type = types[Math.floor(Math.random() * types.length)];
+    couleurs.shapes = [{ x, y, color, type, size: 42, spawnT: performance.now() }];
+  }
+  function renderCouleurs() {
+    ctx.fillStyle = '#f0ebe0'; ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 20; i++) {
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.beginPath(); ctx.arc((i*83)%W, (i*47)%H, 2, 0, Math.PI*2); ctx.fill();
+    }
+    for (const s of couleurs.shapes) {
+      const age = (performance.now() - s.spawnT) / 1000;
+      const scale = Math.min(1, age * 3);
+      ctx.save(); ctx.translate(s.x, s.y); ctx.scale(scale, scale);
+      ctx.fillStyle = s.color.hex;
+      ctx.beginPath();
+      if (s.type === 'circle') ctx.arc(0, 0, s.size, 0, Math.PI*2);
+      else if (s.type === 'square') ctx.roundRect(-s.size, -s.size, s.size*2, s.size*2, 10);
+      else if (s.type === 'triangle') { ctx.moveTo(0, -s.size); ctx.lineTo(s.size, s.size); ctx.lineTo(-s.size, s.size); ctx.closePath(); }
+      else if (s.type === 'star') {
+        for (let i = 0; i < 10; i++) {
+          const a = (i/10)*Math.PI*2 - Math.PI/2;
+          const r = i % 2 === 0 ? s.size : s.size*0.5;
+          i === 0 ? ctx.moveTo(Math.cos(a)*r, Math.sin(a)*r) : ctx.lineTo(Math.cos(a)*r, Math.sin(a)*r);
+        }
+        ctx.closePath();
+      }
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.beginPath(); ctx.arc(-s.size*0.3, -s.size*0.3, s.size*0.25, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+    if (couleurs.correct > 0) {
+      ctx.fillStyle = 'rgba(47,107,79,0.5)'; ctx.font = '600 14px system-ui';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillText(`${couleurs.correct} forme${couleurs.correct>1?'s':''} touchée${couleurs.correct>1?'s':''}`, W/2, H-15);
+    }
+  }
+  function handleCouleursClick(x, y) {
+    for (let i = couleurs.shapes.length - 1; i >= 0; i--) {
+      const s = couleurs.shapes[i];
+      if (Math.hypot(x - s.x, y - s.y) < s.size + 10) {
+        couleurs.correct++;
+        playNote(440 + Math.random()*300, 0.25);
+        for (let j = 0; j < 8; j++) {
+          const a = Math.random()*Math.PI*2;
+          particles.push({ x: s.x, y: s.y, vx: Math.cos(a)*3, vy: Math.sin(a)*3,
+            life: 1, color: s.color.hex, size: 4 + Math.random()*4 });
+        }
+        couleurs.shapes.splice(i, 1);
+        setTimeout(spawnColorShape, 350);
+        return;
+      }
+    }
+  }
+  
+  // ─── DESSIN ───
+  const dessin = {
+    strokes: [], currentStroke: null, color: '#2f6b4f', size: 6,
+    colors: ['#2f6b4f','#b5451b','#e0c040','#5080e0','#a060c0','#e05050','#2a2620'],
+    sizes: [4, 8, 14]
+  };
+  function initDessin() {
+    try { const s = JSON.parse(localStorage.getItem(KEYS.dessin)); dessin.strokes = Array.isArray(s) ? s : []; }
+    catch { dessin.strokes = []; }
+    updateDessinUI();
+  }
+  function updateDessinUI() {
+    [...ui.children].forEach(c => {
+      if (!c.classList.contains('btn-back') && !c.classList.contains('btn-sound')) c.remove();
+    });
+    const panel = document.createElement('div');
+    panel.className = 'color-picker';
+    dessin.colors.forEach((col, ci) => {
+      const b = document.createElement('button');
+      b.setAttribute('aria-label', 'Couleur ' + (ci + 1));
+      b.style.background = col;
+      if (col === dessin.color) b.classList.add('sel');
+      b.addEventListener('click', () => { dessin.color = col; updateDessinUI(); });
+      panel.appendChild(b);
+    });
+    const sizePick = document.createElement('div');
+    sizePick.className = 'size-picker';
+    const SIZE_LABELS = ['Petit trait', 'Trait moyen', 'Gros trait'];
+    dessin.sizes.forEach((sz, si) => {
+      const b = document.createElement('button');
+      b.setAttribute('aria-label', SIZE_LABELS[si]);
+      b.style.width = b.style.height = (8 + sz) + 'px';
+      if (sz === dessin.size) b.classList.add('sel');
+      b.addEventListener('click', () => { dessin.size = sz; updateDessinUI(); });
+      sizePick.appendChild(b);
+    });
+    panel.appendChild(sizePick);
+    ui.appendChild(panel);
+  }
+  function renderDessin() {
+    ctx.fillStyle = '#fffdf7'; ctx.fillRect(0, 0, W, H);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (const stroke of dessin.strokes) {
+      if (stroke.points.length < 2) continue;
+      ctx.strokeStyle = stroke.color; ctx.lineWidth = stroke.size;
+      ctx.beginPath();
+      ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+      for (let i = 1; i < stroke.points.length; i++) ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+      ctx.stroke();
+    }
+    if (dessin.currentStroke) {
+      const c = dessin.currentStroke;
+      ctx.strokeStyle = c.color; ctx.lineWidth = c.size; ctx.fillStyle = c.color;
+      if (c.points.length === 1) {
+        ctx.beginPath(); ctx.arc(c.points[0].x, c.points[0].y, c.size/2, 0, Math.PI*2); ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(c.points[0].x, c.points[0].y);
+        for (let i = 1; i < c.points.length; i++) ctx.lineTo(c.points[i].x, c.points[i].y);
+        ctx.stroke();
+      }
+    }
+    if (dessin.strokes.length === 0 && !dessin.currentStroke) {
+      ctx.fillStyle = 'rgba(107,100,89,0.4)'; ctx.font = 'italic 16px system-ui';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('Dessine avec ton doigt', W/2, H/2);
+    }
+  }
+  function handleDessinInput(x, y, type) {
+    if (type === 'down') dessin.currentStroke = { color: dessin.color, size: dessin.size, points: [{ x, y }] };
+    else if (type === 'move' && dessin.currentStroke) dessin.currentStroke.points.push({ x, y });
+    else if (type === 'up' && dessin.currentStroke) {
+      if (dessin.currentStroke.points.length > 0) {
+        dessin.strokes.push(dessin.currentStroke);
+        if (dessin.strokes.length > 300) dessin.strokes.shift();
+        try { localStorage.setItem(KEYS.dessin, JSON.stringify(dessin.strokes)); } catch { }
+      }
+      dessin.currentStroke = null;
+    }
+  }
+  
+  // ─── JARDIN ───
+  const jardin = { plots: [] };
+  const STAGES = [0, 5000, 15000, 30000, 60000];
+  function initJardin() {
+    try { const p = JSON.parse(localStorage.getItem(KEYS.jardin)); jardin.plots = Array.isArray(p) ? p : []; }
+    catch { jardin.plots = []; }
+    while (jardin.plots.length < 6) jardin.plots.push(null);
+  }
+  function jardinPositions() {
+    const arr = [];
+    for (let i = 0; i < 6; i++) arr.push({ x: W/2 - 180 + (i%3)*180, y: H*0.55 + Math.floor(i/3)*90 });
+    return arr;
+  }
+  function saveJardin() { try { localStorage.setItem(KEYS.jardin, JSON.stringify(jardin.plots)); } catch { } }
+  function renderJardin() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#b8d8e0'); g.addColorStop(0.5, '#e0e8c8'); g.addColorStop(1, '#c8d898');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    const positions = jardinPositions();
+    for (let i = 0; i < 6; i++) {
+      const p = positions[i];
+      ctx.fillStyle = '#a08060';
+      ctx.beginPath(); ctx.ellipse(p.x, p.y, 60, 25, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#8a6a4a';
+      ctx.beginPath(); ctx.ellipse(p.x, p.y + 4, 55, 20, 0, 0, Math.PI*2); ctx.fill();
+      if (jardin.plots[i]) {
+        const elapsed = Date.now() - jardin.plots[i].plantedAt;
+        let stage = 0;
+        for (let j = STAGES.length - 1; j >= 0; j--) if (elapsed >= STAGES[j]) { stage = j; break; }
+        const sway = settings.reduceMotion ? 0 : Math.sin(performance.now()/1000 + i) * 0.05;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(sway);
+        drawPlant(stage); ctx.restore();
+        if (stage === 4) {
+          ctx.fillStyle = 'rgba(47,107,79,0.85)'; ctx.font = '600 13px system-ui';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+          ctx.fillText('Prêt !', p.x, p.y + 30);
+        }
+      }
+    }
+    ctx.fillStyle = 'rgba(47,107,79,0.55)'; ctx.font = 'italic 13px system-ui';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText('Touche un carré pour planter. Reviens plus tard.', W/2, H-15);
+  }
+  function drawPlant(stage) {
+    if (stage === 0) { ctx.fillStyle = '#6a4a2a'; ctx.beginPath(); ctx.ellipse(0, -5, 6, 4, 0, 0, Math.PI*2); ctx.fill(); }
+    else if (stage === 1) {
+      ctx.strokeStyle = '#5a9a4a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -15); ctx.stroke();
+      ctx.fillStyle = '#5a9a4a'; ctx.beginPath(); ctx.ellipse(4, -18, 6, 3, 0.3, 0, Math.PI*2); ctx.fill();
+    } else if (stage === 2) {
+      ctx.strokeStyle = '#4a8a3a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -30); ctx.stroke();
+      ctx.fillStyle = '#5a9a4a';
+      ctx.beginPath(); ctx.ellipse(-8, -18, 9, 5, -0.4, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(8, -25, 9, 5, 0.4, 0, Math.PI*2); ctx.fill();
+    } else if (stage === 3) {
+      ctx.strokeStyle = '#4a8a3a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -40); ctx.stroke();
+      ctx.fillStyle = '#5a9a4a';
+      ctx.beginPath(); ctx.ellipse(-8, -20, 9, 5, -0.4, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(8, -30, 9, 5, 0.4, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#e06080';
+      for (let a = 0; a < 5; a++) {
+        const ang = (a/5)*Math.PI*2;
+        ctx.beginPath(); ctx.ellipse(Math.cos(ang)*8, -45 + Math.sin(ang)*8, 7, 5, ang, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.fillStyle = '#e0c040';
+      ctx.beginPath(); ctx.arc(0, -45, 5, 0, Math.PI*2); ctx.fill();
+    } else if (stage === 4) {
+      ctx.strokeStyle = '#4a8a3a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -45); ctx.stroke();
+      ctx.fillStyle = '#5a9a4a';
+      ctx.beginPath(); ctx.ellipse(-10, -22, 10, 5, -0.4, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(10, -35, 10, 5, 0.4, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#e04040';
+      ctx.beginPath(); ctx.arc(-8, -50, 9, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(8, -55, 9, 0, Math.PI*2); ctx.fill();
+    }
+  }
+  function handleJardinClick(x, y) {
+    const positions = jardinPositions();
+    for (let i = 0; i < 6; i++) {
+      const p = positions[i];
+      if (Math.hypot(x - p.x, y - p.y) < 60) {
+        if (!jardin.plots[i]) { jardin.plots[i] = { plantedAt: Date.now() }; playNote(600, 0.2); saveJardin(); }
+        else {
+          const elapsed = Date.now() - jardin.plots[i].plantedAt;
+          if (elapsed > 60000) { jardin.plots[i] = null; playNote(880, 0.3); saveJardin(); }
+        }
+        return;
+      }
+    }
+  }
+  
+  // ─── ATELIER ───
+  let atelierState = { hover: null };
+  function initAtelier() {
+    blob.targetX = W/2; blob.targetY = H*0.32;
+    blob.x = W/2; blob.y = H*0.32;
+    updateAtelierUI();
+  }
+  function updateAtelierUI() {
+    [...ui.children].forEach(c => {
+      if (!c.classList.contains('btn-back') && !c.classList.contains('btn-sound')) c.remove();
+    });
+    const panel = document.createElement('div');
+    panel.className = 'atelier-panel';
+    
+    // Couleur
+    addRow(panel, 'Couleur', BODY_COLORS.map((c, i) => ({
+      content: '', cls: 'color', bg: c.main, active: custom.bodyColor === i, label: c.name,
+      onClick: () => { custom.bodyColor = i; saveCustom(); updateAtelierUI(); playNote(523 + i*40, 0.1); }
+    })));
+    // Chapeau
+    addRow(panel, 'Chapeau', HATS.map((h, i) => ({
+      content: HAT_ICONS[i], active: custom.hat === i, label: HAT_LABELS[i],
+      onClick: () => { custom.hat = i; saveCustom(); updateAtelierUI(); playNote(600 + i*30, 0.1); }
+    })));
+    // Accessoire
+    addRow(panel, 'Accessoire', ACCESS.map((a, i) => ({
+      content: ACCESS_ICONS[i], active: custom.accessory === i, label: ACCESS_LABELS[i],
+      onClick: () => { custom.accessory = i; saveCustom(); updateAtelierUI(); playNote(650 + i*30, 0.1); }
+    })));
+    // Vêtement
+    addRow(panel, 'Vêtement', CLOTHING.map((c, i) => ({
+      content: CLOTHING_ICONS[i], active: custom.clothing === i, label: CLOTHING_LABELS[i],
+      onClick: () => { custom.clothing = i; saveCustom(); updateAtelierUI(); playNote(700 + i*30, 0.1); }
+    })));
+    // Visage
+    addRow(panel, 'Visage', EXPRESSIONS.map((e, i) => ({
+      content: EXPR_ICONS[i], active: custom.expression === i, title: EXPR_LABELS[i], label: EXPR_LABELS[i],
+      onClick: () => { custom.expression = i; saveCustom(); updateAtelierUI(); playNote(750 + i*30, 0.1); }
+    })));
+    
+    ui.appendChild(panel);
+  }
+  function addRow(panel, label, options) {
+    const row = document.createElement('div');
+    row.className = 'atelier-row';
+    const lbl = document.createElement('span');
+    lbl.className = 'atelier-label';
+    lbl.textContent = label;
+    row.appendChild(lbl);
+    const opts = document.createElement('div');
+    opts.className = 'atelier-options';
+    options.forEach(o => {
+      const b = document.createElement('button');
+      b.textContent = o.content;
+      if (o.cls) b.classList.add(o.cls);
+      if (o.bg) b.style.background = o.bg;
+      if (o.active) b.classList.add('sel');
+      if (o.title) b.title = o.title;
+      if (o.label) b.setAttribute('aria-label', o.label);
+      b.addEventListener('click', o.onClick);
+      opts.appendChild(b);
+    });
+    row.appendChild(opts);
+    panel.appendChild(row);
+  }
+  function renderAtelier() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#f0e8f8'); g.addColorStop(1, '#e8e8f0');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 12; i++) {
+      const a = (i/12)*Math.PI*2 + performance.now()/3000;
+      ctx.fillStyle = `rgba(255,220,240,${0.2 + Math.sin(i)*0.1})`;
+      ctx.beginPath(); ctx.arc(W/2 + Math.cos(a)*180, H*0.32 + Math.sin(a)*100, 30, 0, Math.PI*2); ctx.fill();
+    }
+    // Miroir
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.beginPath(); ctx.ellipse(W/2, H*0.32, 130, 110, 0, 0, Math.PI*2); ctx.fill();
+    drawBlob(W/2, H*0.32, 75, { happy: blob.happy });
+    // Instruction
+    ctx.fillStyle = 'rgba(47,107,79,0.6)'; ctx.font = 'italic 13px system-ui';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText('Choisis ce qui te plaît. Tu peux tout changer.', W/2, H*0.62);
+  }
+  
+  // ─── CHAMBRE ───
+  const chambre = { zone: 'free', targetX: W/2, targetY: H*0.72, zzzTimer: 0 };
+  const CHAMBRE_ZONES = {
+    window: { x: 145, y: 260, icon: '🪟', label: 'Regarder dehors' },
+    bed:    { x: W-130, y: H*0.58, icon: '🛏️', label: 'Dormir' },
+    rug:    { x: W/2, y: H*0.8, icon: '🟡', label: 'Danser' }
+  };
+  function initChambre() {
+    chambre.zone = 'free';
+    blob.x = W/2; blob.y = H*0.68;
+    blob.targetX = W/2; blob.targetY = H*0.68;
+    blob.purr = 0; blob.happy = 0;
+  }
+  function updateChambre(dt) {
+    blob.x += (blob.targetX - blob.x) * 0.1;
+    blob.y += (blob.targetY - blob.y) * 0.1;
+    if (blob.purr > 0) blob.purr = Math.max(0, blob.purr - 0.02);
+    if (chambre.zone === 'rug') {
+      blob.bounce = Math.abs(Math.sin(performance.now()/300)) * 8;
+    } else {
+      blob.bounce = Math.max(0, blob.bounce - 1);
+    }
+    if (chambre.zone === 'bed') {
+      chambre.zzzTimer += dt;
+      if (chambre.zzzTimer > 0.8) {
+        chambre.zzzTimer = 0;
+        particles.push({ x: blob.x + 30, y: blob.y - 20, vx: 0.3, vy: -0.8,
+          life: 1, color: 'rgba(100,140,180,0.7)', size: 8 });
+      }
+    }
+  }
+  function renderChambre() {
+    // Mur
+    ctx.fillStyle = '#e8d8c0'; ctx.fillRect(0, 0, W, H*0.68);
+    for (let i = 0; i < 20; i++) {
+      for (let j = 0; j < 5; j++) {
+        ctx.fillStyle = 'rgba(200,180,150,0.25)';
+        ctx.beginPath(); ctx.arc(30 + i*33, 30 + j*40, 2.5, 0, Math.PI*2); ctx.fill();
+      }
+    }
+    // Plancher
+    ctx.fillStyle = '#a08060'; ctx.fillRect(0, H*0.68, W, H*0.32);
+    ctx.strokeStyle = '#8a6a4a'; ctx.lineWidth = 1;
+    for (let i = 0; i < 8; i++) {
+      ctx.beginPath();
+      ctx.moveTo(0, H*0.68 + i*20); ctx.lineTo(W, H*0.68 + i*20); ctx.stroke();
+    }
+    // Fenêtre
+    const wx = 80, wy = 90, ww = 130, wh = 130;
+    const sky = ctx.createLinearGradient(wx, wy, wx, wy + wh);
+    sky.addColorStop(0, '#a8d4e0'); sky.addColorStop(1, '#e8e0c8');
+    ctx.fillStyle = sky;
+    ctx.fillRect(wx, wy, ww, wh);
+    // Soleil
+    ctx.fillStyle = '#f0e080';
+    ctx.beginPath(); ctx.arc(wx + ww*0.7, wy + 35, 16, 0, Math.PI*2); ctx.fill();
+    // Nuage
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.beginPath(); ctx.arc(wx + 30, wy + 40, 12, 0, Math.PI*2);
+    ctx.arc(wx + 45, wy + 38, 15, 0, Math.PI*2);
+    ctx.arc(wx + 60, wy + 40, 12, 0, Math.PI*2); ctx.fill();
+    // Cadre
+    ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 6;
+    ctx.strokeRect(wx, wy, ww, wh);
+    ctx.beginPath();
+    ctx.moveTo(wx + ww/2, wy); ctx.lineTo(wx + ww/2, wy + wh);
+    ctx.moveTo(wx, wy + wh/2); ctx.lineTo(wx + ww, wy + wh/2);
+    ctx.stroke();
+    // Lit
+    const bx = W - 220, by = H*0.52;
+    ctx.fillStyle = '#6a4a2a'; ctx.fillRect(bx, by - 20, 180, 60);
+    ctx.fillStyle = '#f0e8d0';
+    ctx.beginPath(); ctx.roundRect(bx - 10, by + 30, 200, 55, 8); ctx.fill();
+    ctx.fillStyle = '#fffdf7';
+    ctx.beginPath(); ctx.ellipse(bx + 40, by + 45, 32, 18, -0.1, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#a8c8e0';
+    ctx.beginPath(); ctx.roundRect(bx + 20, by + 40, 170, 70, 8); ctx.fill();
+    ctx.strokeStyle = '#88a8c0'; ctx.lineWidth = 1.5;
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.moveTo(bx + 30, by + 55 + i*15);
+      ctx.lineTo(bx + 180, by + 55 + i*15);
+      ctx.stroke();
+    }
+    // Tapis
+    ctx.fillStyle = '#e0c890';
+    ctx.beginPath(); ctx.ellipse(W/2, H*0.82, 140, 40, 0, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#c0a870'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.ellipse(W/2, H*0.82, 120, 32, 0, 0, Math.PI*2); ctx.stroke();
+    // Étagère
+    ctx.fillStyle = '#7a5a3a'; ctx.fillRect(W-80, 100, 60, 130);
+    for (let i = 0; i < 3; i++) {
+      ctx.fillStyle = '#6a4a2a'; ctx.fillRect(W-80, 100 + i*45 + 40, 60, 4);
+      for (let j = 0; j < 4; j++) {
+        ctx.fillStyle = ['#e05050','#5080e0','#e0c040','#50a050'][j];
+        ctx.fillRect(W-75 + j*13, 100 + i*45 + 10, 10, 30);
+      }
+    }
+    // Blob (avec bounce)
+    const by2 = blob.y - blob.bounce;
+    const expr = chambre.zone === 'bed' ? 'sleepy' :
+                 chambre.zone === 'rug' ? 'happy' :
+                 chambre.zone === 'window' ? 'surprised' : null;
+    drawBlob(blob.x, by2, blob.r, { purr: blob.purr, exprOverride: expr });
+    // Indication des zones
+    if (chambre.zone === 'free') {
+      ctx.fillStyle = 'rgba(47,107,79,0.45)'; ctx.font = 'italic 13px system-ui';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillText('Touche la fenêtre, le lit ou le tapis.', W/2, H-8);
+    }
+  }
+  function handleChambreClick(x, y) {
+    // Vérifie les zones
+    if (Math.hypot(x - 145, y - 155) < 90) {
+      chambre.zone = 'window';
+      blob.targetX = CHAMBRE_ZONES.window.x;
+      blob.targetY = CHAMBRE_ZONES.window.y;
+      playNote(700, 0.2);
+      return;
+    }
+    const bx = W - 130, by = H*0.58;
+    if (x > bx - 100 && x < bx + 100 && y > by - 60 && y < by + 100) {
+      chambre.zone = 'bed';
+      blob.targetX = CHAMBRE_ZONES.bed.x;
+      blob.targetY = CHAMBRE_ZONES.bed.y;
+      playNote(440, 0.3);
+      return;
+    }
+    if (Math.hypot(x - W/2, y - H*0.82) < 90) {
+      chambre.zone = 'rug';
+      blob.targetX = CHAMBRE_ZONES.rug.x;
+      blob.targetY = CHAMBRE_ZONES.rug.y - 10;
+      playNote(600, 0.2);
+      return;
+    }
+    if (Math.hypot(x - blob.x, y - blob.y) < blob.r + 15) {
+      blob.purr = 1; addHug();
+      playNote(440, 0.15);
+      return;
+    }
+    // Déplacement libre
+    chambre.zone = 'free';
+    blob.targetX = Math.max(blob.r + 10, Math.min(W - blob.r - 10, x));
+    blob.targetY = Math.max(H*0.68 + 10, Math.min(H - blob.r - 10, y));
+  }
+  
+  // ─── INPUT ───
+  let pointerDown = false;
+  function coords(e) {
+    const r = canvas.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (W / r.width), y: (e.clientY - r.top) * (H / r.height) };
+  }
+  canvas.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    const { x, y } = coords(e);
+    pointerDown = true;
+    if (screen === 'hub') handleHubClick(x, y);
+    else if (screen === 'calin') handleCalinInput(x, y, 'down');
+    else if (screen === 'couleurs') handleCouleursClick(x, y);
+    else if (screen === 'dessin') handleDessinInput(x, y, 'down');
+    else if (screen === 'jardin') handleJardinClick(x, y);
+    else if (screen === 'chambre') handleChambreClick(x, y);
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (!pointerDown) return;
+    const { x, y } = coords(e);
+    if (screen === 'calin') handleCalinInput(x, y, 'move');
+    else if (screen === 'dessin') handleDessinInput(x, y, 'move');
+  });
+  function endPointer() {
+    if (!pointerDown) return;
+    pointerDown = false;
+    if (screen === 'calin') handleCalinInput(0, 0, 'up');
+    else if (screen === 'dessin') handleDessinInput(0, 0, 'up');
+  }
+  canvas.addEventListener('pointerup', endPointer);
+  canvas.addEventListener('pointerleave', endPointer);
+  canvas.addEventListener('pointercancel', endPointer);
+  
+  // ─── NAVIGATION ───
+  function addChromeButtons() {
+    const back = document.createElement('button');
+    back.className = 'btn btn-back';
+    back.textContent = 'Retour';
+    back.addEventListener('click', function(){ if (screen === 'hub') { location.href = '/jeux'; } else { exitScreen(); } });
+    ui.appendChild(back);
+    const snd = document.createElement('button');
+    snd.className = 'btn btn-sound';
+    snd.textContent = settings.sound ? '🔊' : '🔇';
+    snd.setAttribute('aria-label', 'Son');
+    snd.addEventListener('click', () => {
+      settings.sound = !settings.sound; saveSettings();
+      snd.textContent = settings.sound ? '🔊' : '🔇';
+    });
+    ui.appendChild(snd);
+  }
+  
+  function enterScreen(id) {
+    screen = id;
+    hub.selected = null;
+    ui.innerHTML = '';
+    addChromeButtons();
+    // Gepeto vrai : face visible sur le hub seulement — dans une histoire, le panneau
+    // de titre occupe l'en-tête et une face de 48 px masquerait le titre.
+    var gf = document.querySelector('.gepeto-face'); if (gf) gf.classList.toggle('cache', id !== 'hub');
+    if (id === 'calin') initCalin();
+    else if (id === 'aventure') initAventure();
+    else if (id === 'couleurs') initCouleurs();
+    else if (id === 'dessin') initDessin();
+    else if (id === 'jardin') initJardin();
+    else if (id === 'atelier') initAtelier();
+    else if (id === 'chambre') initChambre();
+  }
+  
+  function exitScreen() {
+    screen = 'hub';
+    ui.innerHTML = '';
+    var gf2 = document.querySelector('.gepeto-face'); if (gf2) gf2.classList.remove('cache');
+    // Trait de dessin en cours : le commettre avant de quitter (sinon perdu).
+    if (dessin.currentStroke) {
+      dessin.strokes.push(dessin.currentStroke);
+      if (dessin.strokes.length > 300) dessin.strokes.shift();
+      try { localStorage.setItem(KEYS.dessin, JSON.stringify(dessin.strokes)); } catch { }
+      dessin.currentStroke = null;
+    }
+    if (calin.holdTimer) { clearTimeout(calin.holdTimer); calin.holdTimer = null; }
+    calin.pointerDown = false;
+    chambre.zone = 'free'; chambre.zzzTimer = 0;
+    blob.breathing = false; blob.breathTime = 0; blob.bounce = 0; blob.purr = 0; blob.happy = 0;
+    // Réinitialise blob au centre
+    blob.x = W/2; blob.y = H*0.7;
+    blob.targetX = W/2; blob.targetY = H*0.7;
+  }
+  
+  // ─── MAIN LOOP ───
+  let lastT = performance.now();
+  function loop(now) {
+    const dt = Math.min(0.05, (now - lastT) / 1000);
+    lastT = now;
+    if (screen === 'hub') updateHub();
+    else if (screen === 'calin') updateCalin(dt);
+    else if (screen === 'chambre') updateChambre(dt);
+    else if (screen === 'atelier') {
+      blob.x += (blob.targetX - blob.x) * 0.1;
+      blob.y += (blob.targetY - blob.y) * 0.1;
+    }
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.vx *= 0.98; p.life -= 0.02;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+    if (particles.length > 120) particles.splice(0, particles.length - 120);
+    ctx.clearRect(0, 0, W, H);
+    if (screen === 'hub') renderHub();
+    else if (screen === 'calin') renderCalin();
+    else if (screen === 'aventure') renderAventure();
+    else if (screen === 'couleurs') renderCouleurs();
+    else if (screen === 'dessin') renderDessin();
+    else if (screen === 'jardin') renderJardin();
+    else if (screen === 'atelier') renderAtelier();
+    else if (screen === 'chambre') renderChambre();
+    for (const p of particles) {
+      ctx.globalAlpha = p.life; ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

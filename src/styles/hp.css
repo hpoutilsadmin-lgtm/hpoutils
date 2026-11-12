@@ -496,3 +496,23 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
   .merci-wizz{animation:none}
   .merci-confetti{display:none}
 }
+
+/* ============================================================
+   /jeux façon arcade (lot /jeux + 5 jeux, 11 nov. 2026) —
+   périmètre .page-jeux-arcade : fond sombre, néons cyan/magenta/
+   jaune, titres crème. Les corps de cartes restent CRÈME (les
+   pastilles testeurs, couleurs approuvées par HP, y sont lisibles).
+   ============================================================ */
+.page-jeux-arcade{ background:#0f0f1a; }
+.page-jeux-arcade .jeux-hero{ border-bottom:3px solid rgba(0,229,255,.6); }
+.page-jeux-arcade .three-pillars,
+.page-jeux-arcade .collections-strip{ background:#14101f; }
+.page-jeux-arcade .section-title{ color:#f7f3ea; }
+.page-jeux-arcade .section-title::after{ background:#00e5ff; }
+.page-jeux-arcade .pillar-card{ border:3px solid rgba(0,229,255,.55); box-shadow:0 0 24px rgba(0,229,255,.18); }
+.page-jeux-arcade .collections-strip h2{ color:#f7f3ea; }
+.page-jeux-arcade .collections-strip h2 em{ color:#ff8a7a; }
+.page-jeux-arcade .strip-intro{ color:rgba(247,243,234,.78); }
+.page-jeux-arcade .newsletter-consent{ color:rgba(247,243,234,.72); }
+@media (min-width:641px) and (max-width:1060px){ .page-jeux-arcade .pillar-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px){ .page-jeux-arcade .pillar-grid{ grid-template-columns:1fr; } }

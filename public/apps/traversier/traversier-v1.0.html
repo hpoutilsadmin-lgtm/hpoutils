@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Traversier — HP Outils</title>
+<style>
+  :root{--cream:#f7f3ea;--ink:#2a2620;--forest:#2f6b4f;--maple:#b5451b;--gold:#d9a441;--soft:#e8e0cf;--muted:#6b6459}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:16px 12px 24px;gap:12px;user-select:none}
+  header{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  h1{font-size:1.1rem;margin:0;color:var(--forest)}
+  h1 small{font-weight:400;color:var(--muted);font-size:.8em}
+  /* ——— Défis Traversier (11 nov. 2026) : face Gepeto 48×48 ronde ——— */
+  .tete-hp{display:flex;align-items:center;gap:10px;min-width:0}
+  .gepeto-face{width:48px;height:48px;flex:none;border-radius:50%;border:2px solid var(--soft);background:#fffdf7;display:block;object-fit:cover}
+  .defi{width:100%;max-width:560px;margin:0;text-align:center;font-size:.85rem;line-height:1.5;color:var(--forest)}
+  .toast-defi{position:absolute;top:64px;left:50%;transform:translateX(-50%);background:#fffdf7;color:var(--forest);
+    border:2px solid var(--gold);border-radius:999px;padding:10px 18px;font-size:.95rem;font-weight:700;box-shadow:0 3px 0 rgba(0,0,0,.15);z-index:2;white-space:nowrap;max-width:94%}
+  .toast-defi[hidden]{display:none}
+  .hud{width:100%;max-width:560px;display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .hud b{color:var(--forest);font-size:1.05rem;display:block;font-variant-numeric:tabular-nums}
+  .wrap{position:relative;width:100%;max-width:560px}
+  #jeu{display:block;width:100%;height:auto;border-radius:14px;border:2px solid var(--soft);background:#fffdf7;touch-action:manipulation}
+  .overlay{position:absolute;inset:0;display:grid;overflow-y:auto;background:rgba(255,253,247,.94);
+    border-radius:14px;padding:20px;text-align:center}
+  .overlay[hidden]{display:none}
+  .overlay>div{margin:auto}
+  .overlay h2{margin:0 0 8px;color:var(--forest);font-size:1.4rem}
+  .overlay p{margin:0 0 16px;color:var(--muted);font-size:.95rem;max-width:34ch}
+  .overlay button{background:var(--forest);color:#fff;border:0;border-radius:10px;padding:12px 24px;
+    font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15);font-family:inherit;min-height:48px}
+  .controls{width:100%;max-width:560px;display:flex;gap:8px}
+  .controls button{flex:1;background:var(--forest);color:#fff;border:0;border-radius:10px;padding:14px;min-height:48px;
+    font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .controls button:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .astuce{width:100%;max-width:560px;margin:0;text-align:center;font-size:.85rem;line-height:1.5;color:var(--muted)}
+  .astuce[hidden]{display:none}
+  .hud .bonus-val{color:var(--muted);font-size:.9rem}
+  footer{font-size:.8rem;color:#8a8277;max-width:560px;text-align:center;line-height:1.5}
+
+  /* ——— Mise en page standard HP (11 nov. 2026) : Retour, cibles 48 px, mouvement réduit ——— */
+  .barre-hp{width:100%;max-width:560px;display:flex;justify-content:space-between;gap:8px}
+  .btn-retour{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-retour:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .btn-son{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-son:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  /* ——— Arcade (nov. 2026) : niveaux + série ——— */
+  .toast-niveau{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink);
+    border-radius:999px;padding:10px 18px;font-size:.95rem;font-weight:700;box-shadow:0 3px 0 rgba(0,0,0,.15);z-index:2;white-space:nowrap}
+  .toast-niveau[hidden]{display:none}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+  <div class="barre-hp"><button class="btn-retour" type="button" onclick="if(history.length>1){history.back()}else{location.href='/jeux'}">← Retour</button><button class="btn-son" id="btn-son" type="button" aria-pressed="true">🔊 Son : oui</button></div>
+  <header>
+    <div class="tete-hp">
+      <img class="gepeto-face" src="data:image/png;base64,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" alt="">
+      <h1>Traversier <small>· HP Outils</small></h1>
+    </div>
+  </header>
+  <div class="hud">
+    <span>Temps<b id="temps">60</b></span>
+    <span>Livrées<b id="score">0</b></span>
+    <span>Record<b id="best">0</b></span>
+  </div>
+  <div class="hud">
+    <span>Niveau<b id="niveau">1</b></span>
+    <span>Série<b id="serie">×1</b></span>
+    <span>Bonus série<b id="bonus" class="bonus-val">+0</b></span>
+  </div>
+  <div class="hud">
+    <span>Types débloqués<b id="types">2 / 4</b></span>
+    <span>Vers niveau suivant<b id="vers">2 caisses</b></span>
+    <span>Niveau max<b id="niveau-max">8</b></span>
+  </div>
+  <div class="hud">
+    <span>À bord<b id="abord">—</b></span>
+    <span>Bonus défis<b id="defis">+0</b></span>
+    <span>Accrochages<b id="accrochages">0</b></span>
+  </div>
+  <p class="defi" id="defi">Défi : livre 3 caisses d'un coup (+5, hors score) — ou ramasse l'étoile dorée quand elle passe (+3, hors score).</p>
+  <div class="wrap">
+    <canvas id="jeu" width="560" height="420" aria-label="Zone de jeu"></canvas>
+    <div class="toast-niveau" id="toast-niveau" hidden role="status"></div>
+    <div class="toast-defi" id="toast-defi" hidden role="status"></div>
+    <div class="overlay" id="overlay">
+      <div>
+        <h2 id="ov-title">Le traversier</h2>
+        <p id="ov-text">60 secondes. Charge jusqu'à 3 caisses, livre-les à la BONNE rive : chaque caisse dit où elle va (→ Nord, → Sud, ou ↩ même rive) — livrée à la bonne rive, elle donne ses points ; à l'autre rive, elle reste à bord, sans rien perdre. Sur la rivière : des troncs, des bouées et des banquises te ralentissent quand tu les touches (jamais ils ne coulent le traversier), et des courants te poussent un peu sur le côté — tu pilotes, tu compenses. Défis bonus, juste pour le plaisir (hors score) : livre 3 caisses d'un coup (+5) ou ramasse l'étoile dorée (+3). Quatre cargaisons : bois (1 point), forêt (2), dorée (3) et érable (4) — la verte arrive au niveau 2, l'érable au niveau 4. Enchaîne les livraisons : ta série donne un bonus jusqu'à ×6, juste pour le plaisir — il ne compte pas dans ton score ni dans ton record. Et toutes les 2 caisses livrées, tu montes de niveau, jusqu'au niveau 8 ! Le décor change à chaque niveau.</p>
+        <button id="ov-btn">Jouer</button>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="btn-nord">↑ Nord</button>
+    <button id="btn-sud">↓ Sud</button>
+  </div>
+  <p class="astuce" id="astuce" hidden>Astuce : laisse le traversier arriver jusqu'au quai avant de repartir — il charge et livre tout seul à l'arrivée.</p>
+  <footer>Flèches, boutons ou tap sur la moitié haut/bas. Idée à explorer : la logistique en Lanaudière.</footer>
+
+<script>
+(() => {
+  const canvas = document.getElementById("jeu");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const KEY = "hp:traversier:best";
+  const SON_KEY = "hp:traversier:son";
+  const NORD = 70, SUD = H - 70;
+  const FERRY_W = 84, FERRY_H = 44;
+  const SPEED = 340;
+  const CAP = 3;
+
+  const ov = document.getElementById("overlay");
+  const ovTitle = document.getElementById("ov-title");
+  const ovText = document.getElementById("ov-text");
+  const ovBtn = document.getElementById("ov-btn");
+  const elTemps = document.getElementById("temps");
+  const elScore = document.getElementById("score");
+  const elBest = document.getElementById("best");
+  const elNiveau = document.getElementById("niveau");
+  const elSerie = document.getElementById("serie");
+  const elBonus = document.getElementById("bonus");
+  const elTypes = document.getElementById("types");
+  const elVers = document.getElementById("vers");
+  const elAbord = document.getElementById("abord");
+  const elDefis = document.getElementById("defis");
+  const elAccrochages = document.getElementById("accrochages");
+  const elDefi = document.getElementById("defi");
+  const toastDefi = document.getElementById("toast-defi");
+  let toastDefiTimer = null;
+  function montrerDefi(texte) {
+    toastDefi.textContent = texte;
+    toastDefi.hidden = false;
+    clearTimeout(toastDefiTimer);
+    toastDefiTimer = setTimeout(() => { toastDefi.hidden = true; }, 3200);
+  }
+  const toastNiveau = document.getElementById("toast-niveau");
+  const elAstuce = document.getElementById("astuce");
+  let toastTimer = null;
+  const btnSon = document.getElementById("btn-son");
+
+  // Son doux (WebAudio, sinus 300–800 Hz, volume ≤ 0,05), coupable par le bouton Son.
+  let audioCtx = null;
+  let sonActif = true;
+  try { sonActif = localStorage.getItem(SON_KEY) !== "0"; } catch (e) {}
+  function majBtnSon() {
+    btnSon.textContent = sonActif ? "🔊 Son : oui" : "🔇 Son : non";
+    btnSon.setAttribute("aria-pressed", String(sonActif));
+  }
+  majBtnSon();
+  btnSon.addEventListener("click", () => {
+    sonActif = !sonActif;
+    try { localStorage.setItem(SON_KEY, sonActif ? "1" : "0"); } catch (e) {}
+    majBtnSon();
+    if (sonActif) bip(523);
+  });
+  function bip(freq, duree = 0.12, vol = 0.05, delai = 0) {
+    if (!sonActif) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      const t0 = audioCtx.currentTime + delai;
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(vol, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + duree);
+      o.connect(g).connect(audioCtx.destination);
+      o.start(t0);
+      o.stop(t0 + duree + 0.05);
+    } catch (e) { /* son indisponible : le jeu reste silencieux */ }
+  }
+
+  // « Le double » : niveaux jusqu'à 8 (un niveau toutes les 2 caisses
+  // livrées, au lieu de 3), série jusqu'à ×6, et 4 types de cargaison
+  // (bois 1, forêt 2, dorée 3, érable 4) débloqués par niveau. Le score
+  // de base ne change pas pour les types existants (1 point par caisse,
+  // 3 pour une dorée) ; le bonus de série reste une couche à part,
+  // jamais ajoutée au score ni au record. Aucune pression : la série
+  // ne fait que retomber à zéro après une arrivée sans livraison.
+  const NIVEAU_MAX = 8;
+  const PALIER_NIVEAU = 2;
+  // Cargaisons : nom, points, couleur (tokens HP), niveau de déblocage.
+  const TYPES_CARGAISON = {
+    bois:   { pts: 1, couleur: "#a8794a", niveau: 1 },
+    foret:  { pts: 2, couleur: "#2f6b4f", niveau: 2 },
+    doree:  { pts: 3, couleur: "#d9a441", niveau: 1 },
+    erable: { pts: 4, couleur: "#b5451b", niveau: 4 }
+  };
+  const typesDebloques = nv => Object.values(TYPES_CARGAISON).filter(t => t.niveau <= nv).length;
+  // Récompense visuelle / nouveauté annoncée à chaque palier.
+  const RECOMPENSES = {
+    2: "Nouvelle cargaison verte (2 points)",
+    3: "Soleil sur la rivière",
+    4: "Nouvelle cargaison érable (4 points)",
+    5: "Drapeaux au quai",
+    6: "Fleurs sur les rives",
+    7: "Fanions dorés",
+    8: "Traversier d'or"
+  };
+  const multiplicateur = () => state.serie >= 15 ? 6 : state.serie >= 12 ? 5 : state.serie >= 9 ? 4 : state.serie >= 6 ? 3 : state.serie >= 3 ? 2 : 1;
+  function montrerNiveau(nv) {
+    toastNiveau.textContent = "Niveau " + nv + " ! " + (RECOMPENSES[nv] || "");
+    toastNiveau.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastNiveau.hidden = true; }, 3200);
+  }
+  function majNiveau() {
+    const nv = Math.min(NIVEAU_MAX, 1 + Math.floor(state.livraisons / PALIER_NIVEAU));
+    if (nv > state.niveau) {
+      state.niveau = nv;
+      // À chaque niveau, les courants changent de sens : la rivière
+      // n'est jamais deux fois la même.
+      for (const c of state.courants) c.dir = -c.dir;
+      // Arpège qui monte avec le niveau (sinus 300–800 Hz, volume ≤ 0,05).
+      const base = 400 + (nv - 1) * 20;
+      bip(base, 0.12, 0.05); bip(base + 110, 0.12, 0.05, 0.1); bip(base + 220, 0.18, 0.05, 0.2);
+      montrerNiveau(nv);
+    }
+  }
+  const mouvementReduit = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const best = () => { try { return Number(localStorage.getItem(KEY) || 0); } catch (e) { return 0; } };
+  elBest.textContent = best();
+
+  let state = null;
+  let rafId = null;
+  let lastTime = 0;
+
+  function init() {
+    state = {
+      running: false,
+      t: 60,
+      score: 0,
+      ferry: { y: H / 2, target: H / 2 },
+      cargo: [],
+      ferryCargo: [],
+      spawnTimer: 0.6,
+      spawnInterval: 1.4,
+      livraisons: 0,
+      serie: 0,
+      bonusSerie: 0,
+      niveau: 1,
+      typesLivrees: { bois: 0, foret: 0, doree: 0, erable: 0 },
+      dockActuel: null,
+      // Astuce anti-blocage (panel 11 nov., TEST MACHINE) : si le joueur
+      // pilote activement mais ne livre rien depuis plus de 10 s, c'est
+      // presque toujours qu'il repart avant l'accostage — on le lui dit
+      // gentiment, une fois, sans toucher au score ni au chrono.
+      tempsJeu: 0,
+      derniereLivraisonJeu: 0,
+      changementsDepuis: 0,
+      // ——— Défis Traversier (11 nov. 2026) : obstacles, courants,
+      // destinations et défis bonus. Rien ici ne peut faire perdre :
+      // un obstacle ralentit seulement, un courant pousse seulement,
+      // une mauvaise rive garde la caisse à bord, un défi manqué
+      // n'enlève rien. Tous les bonus de défis sont hors score et
+      // hors record, comme le bonus de série.
+      obstacles: [],
+      obsTimer: 2.5,
+      // Deux bandes de courant dans la rivière : dir +1 pousse vers
+      // le sud (vers le bas), -1 vers le nord (vers le haut).
+      courants: [
+        { y0: 128, y1: 168, dir: 1 },
+        { y0: 252, y1: 292, dir: -1 }
+      ],
+      ralenti: 0,
+      accrochages: 0,
+      obstaclesVus: 0,
+      etoile: null,
+      etoileTimer: 8,
+      etoilesRamassees: 0,
+      etoilesVues: 0,
+      defisBonus: 0,
+      defis3coups: 0,
+      retoursLivres: 0,
+      mauvaiseRiveArrivee: false,
+      prevenuRive: false
+    };
+  }
+
+  function start() {
+    init();
+    state.running = true;
+    ov.hidden = true;
+    elAstuce.hidden = true;
+    toastDefi.hidden = true;
+    bip(440, 0.1);
+    lastTime = performance.now();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function loop(now) {
+    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+    if (state.running) update(dt);
+    render();
+    elTemps.textContent = Math.ceil(state.t);
+    elScore.textContent = state.score;
+    elNiveau.textContent = state.niveau;
+    elSerie.textContent = "×" + multiplicateur();
+    elBonus.textContent = "+" + state.bonusSerie;
+    elTypes.textContent = typesDebloques(state.niveau) + " / 4";
+    const restantes = state.niveau * PALIER_NIVEAU - state.livraisons;
+    elVers.textContent = state.niveau >= NIVEAU_MAX
+      ? "niveau max atteint"
+      : restantes + " caisse" + (restantes > 1 ? "s" : "");
+    // À bord : destinations des caisses chargées, pour piloter en
+    // sachant où aller. Bonus défis et accrochages (hors score).
+    const versSud = state.ferryCargo.filter(c => c.dest === "sud").length;
+    const versNord = state.ferryCargo.filter(c => c.dest === "nord").length;
+    elAbord.textContent = state.ferryCargo.length === 0 ? "—"
+      : (versSud ? versSud + " → Sud" : "") + (versSud && versNord ? " · " : "") + (versNord ? versNord + " → Nord" : "");
+    elDefis.textContent = "+" + state.defisBonus;
+    elAccrochages.textContent = state.accrochages;
+    elDefi.textContent = state.etoile
+      ? "Défi : l'étoile dorée est sur la rivière — passe dessus ! (+3, hors score)"
+      : "Défi : livre 3 caisses d'un coup (+5, hors score) — ou ramasse l'étoile dorée quand elle passe (+3, hors score).";
+    // Astuce anti-blocage : pilotage actif, aucune livraison depuis 10 s.
+    if (state.running) {
+      const sansLivraison = state.tempsJeu - state.derniereLivraisonJeu > 10 && state.changementsDepuis >= 2;
+      elAstuce.hidden = !sansLivraison;
+    }
+    if (state.running) rafId = requestAnimationFrame(loop);
+  }
+
+  function update(dt) {
+    state.t -= dt;
+    state.tempsJeu += dt;
+    if (state.t <= 0) { state.t = 0; finish(); return; }
+
+    // Vitesse réduite 2 s après un accrochage (jamais d'arrêt, jamais d'échec).
+    const vitesse = state.ralenti > 0 ? SPEED * 0.45 : SPEED;
+    if (state.ralenti > 0) state.ralenti -= dt;
+    const dy = state.ferry.target - state.ferry.y;
+    if (Math.abs(dy) < vitesse * dt) state.ferry.y = state.ferry.target;
+    else state.ferry.y += Math.sign(dy) * vitesse * dt;
+    // Courants : dans une bande, la rivière pousse le traversier d'un
+    // côté (50 + 5 par niveau px/s) — le joueur compense en pilotant.
+    // La poussée ne peut jamais empêcher l'accostage : elle s'arrête
+    // au quai visé.
+    const forceCourant = 50 + state.niveau * 5;
+    for (const c of state.courants) {
+      if (state.ferry.y >= c.y0 && state.ferry.y <= c.y1) {
+        const avant = state.ferry.target - state.ferry.y;
+        state.ferry.y += c.dir * forceCourant * dt;
+        const apres = state.ferry.target - state.ferry.y;
+        if ((avant > 0 && apres <= 0) || (avant < 0 && apres >= 0)) state.ferry.y = state.ferry.target;
+        break;
+      }
+    }
+    state.ferry.y = Math.max(26, Math.min(H - 26, state.ferry.y));
+
+    // Arrivée à une rive : une seule « visite » par accostage. Une arrivée
+    // sans livraison remet la série à zéro (sans toucher au score).
+    const bank = state.ferry.y <= NORD + 12 ? "nord" : state.ferry.y >= SUD - 12 ? "sud" : null;
+    if (bank && state.dockActuel !== bank) {
+      state.dockActuel = bank;
+      // Caisses déjà à bord qui ne vont pas à cette rive (un « retour »
+      // par exemple) : elles restent à bord, on le dira une fois ici.
+      state.mauvaiseRiveArrivee = state.ferryCargo.some(c => c.dest !== bank);
+      state.prevenuRive = false;
+      const livAvant = state.livraisons;
+      dock(bank);
+      if (state.livraisons === livAvant) state.serie = 0;
+      majNiveau();
+    } else if (bank) {
+      dock(bank);
+    } else {
+      state.dockActuel = null;
+      state.mauvaiseRiveArrivee = false;
+      state.prevenuRive = false;
+    }
+
+    state.spawnTimer -= dt;
+    if (state.spawnTimer <= 0) {
+      spawnCargo();
+      state.spawnInterval = Math.max(0.5, state.spawnInterval - 0.03);
+      state.spawnTimer = state.spawnInterval;
+    }
+
+    // Obstacles flottants : ils dérivent d'une rive à l'autre. Nombre
+    // selon le niveau (1, puis 2 dès le niveau 3, 3 dès le niveau 6).
+    state.obsTimer -= dt;
+    const maxObs = state.niveau >= 6 ? 3 : state.niveau >= 3 ? 2 : 1;
+    if (state.obsTimer <= 0 && state.obstacles.length < maxObs) {
+      spawnObstacle();
+      state.obsTimer = 3.2;
+    }
+    for (const o of state.obstacles) o.x += o.vx * dt;
+    state.obstacles = state.obstacles.filter(o => o.x > -80 && o.x < W + 80);
+    // Accrochage : le traversier ralentit 2 s, rien d'autre. Pas de
+    // score perdu, pas de caisse perdue, le traversier ne coule jamais.
+    // Hors des quais seulement : un obstacle ne touche jamais un
+    // traversier amarré.
+    const enRiviere = state.ferry.y > NORD + 12 && state.ferry.y < SUD - 12;
+    if (enRiviere) {
+      for (const o of state.obstacles) {
+        if (!o.touche && Math.abs(o.y - state.ferry.y) < 30 && Math.abs(o.x - W / 2) < 56) {
+          o.touche = true;
+          state.ralenti = 2;
+          state.accrochages++;
+          bip(220, 0.2, 0.05);
+          montrerDefi(o.nom + " ! Le traversier ralentit un peu — rien de grave, on continue.");
+        }
+      }
+    }
+    // Étoile dorée flottante : elle dérive, 9 s pour la ramasser en
+    // passant dessus (+3, hors score). Si on la manque, une autre
+    // reviendra — jamais une punition.
+    state.etoileTimer -= dt;
+    if (state.etoileTimer <= 0 && !state.etoile) {
+      const lanes = [140, 210, 280];
+      const y = lanes[Math.floor(Math.random() * lanes.length)];
+      const versDroite = Math.random() < 0.5;
+      state.etoile = { x: versDroite ? -30 : W + 30, y, vx: versDroite ? 30 : -30, ttl: 9 };
+      state.etoilesVues++;
+      state.etoileTimer = 12;
+    }
+    if (state.etoile) {
+      const e = state.etoile;
+      e.x += e.vx * dt;
+      e.ttl -= dt;
+      if (Math.abs(e.y - state.ferry.y) < 32 && Math.abs(e.x - W / 2) < 52) {
+        state.defisBonus += 3;
+        state.etoilesRamassees++;
+        state.etoile = null;
+        bip(659, 0.12, 0.05); bip(880, 0.18, 0.05, 0.1);
+        montrerDefi("Étoile dorée ramassée ! +3 (hors score)");
+      } else if (e.ttl <= 0 || e.x < -60 || e.x > W + 60) {
+        state.etoile = null;
+      }
+    }
+  }
+
+  // Un obstacle dérive sur une voie de la rivière : tronc (bois),
+  // bouée (orange) ou banquise (blanche, dès le niveau 4). Tous ont
+  // le même effet doux : ralentir 2 s. Aucun ne coule le traversier.
+  function spawnObstacle() {
+    const lanes = [140, 210, 280];
+    const y = lanes[Math.floor(Math.random() * lanes.length)];
+    const versDroite = Math.random() < 0.5;
+    const r = Math.random();
+    const type = (state.niveau >= 4 && r < 0.3) ? "banquise" : r < 0.65 ? "tronc" : "bouee";
+    state.obstacles.push({
+      x: versDroite ? -60 : W + 60,
+      y,
+      vx: (versDroite ? 1 : -1) * (40 + state.niveau * 6),
+      type,
+      nom: type === "banquise" ? "Banquise" : type === "tronc" ? "Tronc flottant" : "Bouée",
+      touche: false
+    });
+    state.obstaclesVus++;
+  }
+
+  function spawnCargo() {
+    if (state.cargo.length >= 8) return;
+    const bank = Math.random() < 0.5 ? "nord" : "sud";
+    // Caisse posée sur le quai, à distance des autres caisses de la
+    // même rive (≥ 70 px) : les étiquettes de destination ne se
+    // chevauchent jamais.
+    let x = 40 + Math.random() * (W - 80);
+    for (let essai = 0; essai < 6; essai++) {
+      const tropProche = state.cargo.some(c => c.bank === bank && Math.abs(c.x - x) < 70);
+      if (!tropProche) break;
+      x = 40 + Math.random() * (W - 80);
+    }
+    // Type de cargaison, débloqué par niveau : érable dès le niveau 4
+    // (10 %), dorée (15 %), forêt dès le niveau 2 (20 %), sinon bois.
+    const r = Math.random();
+    const type = (state.niveau >= 4 && r < 0.10) ? "erable"
+      : r < 0.25 ? "doree"
+      : (state.niveau >= 2 && r < 0.45) ? "foret"
+      : "bois";
+    state.cargo.push({
+      id: Math.random(),
+      bank,
+      x,
+      type,
+      gold: type === "doree",
+      // Destination : le plus souvent la rive d'en face — mais une
+      // caisse sur cinq est un « retour » : elle doit revenir à la
+      // même rive (on la charge, on traverse, on revient la livrer).
+      // La destination est affichée sur la caisse et dans « À bord ».
+      dest: Math.random() < 0.2 ? bank : (bank === "nord" ? "sud" : "nord"),
+      retour: false
+    });
+    state.cargo[state.cargo.length - 1].retour = state.cargo[state.cargo.length - 1].dest === bank;
+  }
+
+  function dock(bank) {
+    // Livre (score de base inchangé : 1 point, 3 pour une dorée)
+    const scoreAvant = state.score;
+    const chargeAvant = state.ferryCargo.length;
+    let livreesIci = 0;
+    state.ferryCargo = state.ferryCargo.filter(c => {
+      if (c.dest === bank) {
+        const pts = (TYPES_CARGAISON[c.type] || TYPES_CARGAISON.bois).pts;
+        state.score += pts;
+        state.livraisons++;
+        state.serie++;
+        state.typesLivrees[c.type] = (state.typesLivrees[c.type] || 0) + 1;
+        state.bonusSerie += pts * (multiplicateur() - 1);
+        if (c.retour) state.retoursLivres++;
+        livreesIci++;
+        return false;
+      }
+      return true;
+    });
+    // Défi bonus : 3 caisses livrées d'un coup à la bonne rive (+5,
+    // hors score, hors record). Jamais une punition : livrer moins
+    // ne fait rien perdre.
+    if (livreesIci >= 3) {
+      state.defisBonus += 5;
+      state.defis3coups++;
+      bip(659, 0.12, 0.05); bip(880, 0.18, 0.05, 0.1);
+      montrerDefi("Défi réussi : 3 caisses d'un coup ! +5 (hors score)");
+    }
+    // Arrivée à la « mauvaise » rive : les caisses déjà à bord avant
+    // cet accostage qui vont à l'autre rive restent à bord — on le
+    // dit gentiment, une fois par accostage, sans rien retirer.
+    // (Les caisses qu'on vient de charger ne comptent pas : elles
+    // vont à l'autre rive, c'est normal.)
+    if (state.mauvaiseRiveArrivee && !state.prevenuRive) {
+      state.prevenuRive = true;
+      state.mauvaiseRiveArrivee = false;
+      montrerDefi("Une caisse à bord va à l'autre rive — elle reste à bord, pas de souci.");
+    }
+    if (state.score > scoreAvant) {
+      bip(523, 0.12); bip(659, 0.15, 0.05, 0.09);
+      state.derniereLivraisonJeu = state.tempsJeu;
+      state.changementsDepuis = 0;
+      elAstuce.hidden = true;
+    }
+    // Charge
+    if (state.ferryCargo.length < CAP) {
+      const waiting = state.cargo.filter(c => c.bank === bank);
+      for (const c of waiting) {
+        if (state.ferryCargo.length >= CAP) break;
+        state.ferryCargo.push(c);
+        state.cargo = state.cargo.filter(cc => cc.id !== c.id);
+      }
+    }
+    if (state.ferryCargo.length > chargeAvant && state.score === scoreAvant) bip(392, 0.1);
+  }
+
+  function goTo(bank) {
+    if (!state.running) return;
+    const cible = bank === "nord" ? 26 : H - 26;
+    if (state.ferry.target !== cible) state.changementsDepuis++;
+    state.ferry.target = cible;
+  }
+
+  function render() {
+    // Fond
+    ctx.fillStyle = "#f7f3ea";
+    ctx.fillRect(0, 0, W, H);
+
+    // Rives : une palette par niveau (8 niveaux, décor qui évolue).
+    const PALETTES = [
+      { rive: "#c8d6b6", trim: "#8b6a3a", riv: ["#7eb6d4", "#3f7fa3"] },
+      { rive: "#a9cc8f", trim: "#d9a441", riv: ["#6fb0d8", "#2f7fb0"] },
+      { rive: "#8fc47a", trim: "#d9a441", riv: ["#5aa8dd", "#1f6f9e"] },
+      { rive: "#7fb96e", trim: "#b5451b", riv: ["#4f9fd6", "#1f6f9e"] },
+      { rive: "#6fae62", trim: "#d9a441", riv: ["#45a0d8", "#1e6a94"] },
+      { rive: "#62a457", trim: "#b5451b", riv: ["#3f96cf", "#1c648c"] },
+      { rive: "#559a4e", trim: "#d9a441", riv: ["#3590cc", "#1a5e86"] },
+      { rive: "#4a8f47", trim: "#d9a441", riv: ["#2f8ac6", "#175a80"] }
+    ];
+    const pal = PALETTES[Math.min(state.niveau - 1, PALETTES.length - 1)];
+    ctx.fillStyle = pal.rive;
+    ctx.fillRect(0, 0, W, NORD);
+    ctx.fillRect(0, SUD, W, H - SUD);
+    ctx.fillStyle = pal.trim;
+    ctx.fillRect(0, NORD - 8, W, 8);
+    ctx.fillRect(0, SUD, W, 8);
+    // Décor par niveau (tout statique : rien ne bouge en mouvement réduit).
+    if (state.niveau >= 2) {
+      // Arbres sur les deux rives.
+      for (const [tx, ty] of [[36, 34], [120, 22], [W - 120, 26], [W - 170, 20], [60, H - 34], [W - 90, H - 24]]) {
+        ctx.fillStyle = "#6b4a24"; ctx.fillRect(tx - 2, ty + 6, 4, 10);
+        ctx.fillStyle = "#2f6b4f"; ctx.beginPath(); ctx.arc(tx, ty, 10, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    if (state.niveau >= 3) {
+      ctx.fillStyle = "#d9a441";
+      ctx.beginPath(); ctx.arc(W - 42, 34, 18, 0, Math.PI * 2); ctx.fill();
+    }
+    if (state.niveau >= 5) {
+      // Drapeaux aux quais.
+      for (const [fx, fy] of [[24, NORD - 8], [W - 24, SUD + 8]]) {
+        ctx.fillStyle = "#2a2620"; ctx.fillRect(fx - 1, fy - 26, 2, 26);
+        ctx.fillStyle = "#b5451b"; ctx.beginPath(); ctx.moveTo(fx + 1, fy - 26); ctx.lineTo(fx + 16, fy - 21); ctx.lineTo(fx + 1, fy - 16); ctx.closePath(); ctx.fill();
+      }
+    }
+    if (state.niveau >= 6) {
+      // Fleurs sur les rives.
+      ctx.fillStyle = "#d9a441";
+      for (const [fx, fy] of [[180, 20], [300, 44], [W - 180, 52], [220, H - 20], [380, H - 44]]) {
+        ctx.beginPath(); ctx.arc(fx, fy, 3, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    if (state.niveau >= 7) {
+      // Fanions dorés le long des quais.
+      ctx.fillStyle = "#d9a441";
+      for (let i = 0; i < 7; i++) {
+        const fx = 60 + i * 70;
+        ctx.beginPath(); ctx.moveTo(fx, NORD - 8); ctx.lineTo(fx + 10, NORD - 8); ctx.lineTo(fx + 5, NORD + 2); ctx.closePath(); ctx.fill();
+      }
+    }
+
+    // Rivière
+    const grad = ctx.createLinearGradient(0, NORD, 0, SUD);
+    grad.addColorStop(0, pal.riv[0]);
+    grad.addColorStop(0.5, pal.riv[1]);
+    grad.addColorStop(1, pal.riv[0]);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, NORD, W, SUD - NORD);
+
+    // Courants : bandes avec flèches et étiquette, pour piloter en sachant.
+    for (const c of state.courants) {
+      ctx.fillStyle = "rgba(255,255,255,.14)";
+      ctx.fillRect(0, c.y0, W, c.y1 - c.y0);
+      ctx.fillStyle = "rgba(255,255,255,.9)";
+      ctx.font = "bold 13px system-ui, sans-serif";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      const fleche = c.dir > 0 ? "↓" : "↑";
+      ctx.fillText("Courant " + fleche, 10, (c.y0 + c.y1) / 2);
+      ctx.textAlign = "right";
+      for (let ax = W - 24; ax > W - 140; ax -= 28) ctx.fillText(fleche, ax, (c.y0 + c.y1) / 2);
+      ctx.textAlign = "left";
+    }
+
+    // Vagues (figées si mouvement réduit demandé)
+    ctx.strokeStyle = "rgba(255,255,255,.3)";
+    ctx.lineWidth = 2;
+    const t = mouvementReduit() ? 0 : performance.now() / 700;
+    for (let i = 0; i < 4; i++) {
+      const y = NORD + 40 + i * 70;
+      ctx.beginPath();
+      for (let x = 0; x <= W; x += 12) {
+        const yy = y + Math.sin(x / 32 + t + i) * 4;
+        x === 0 ? ctx.moveTo(x, yy) : ctx.lineTo(x, yy);
+      }
+      ctx.stroke();
+    }
+
+    // Caisses sur les rives, avec leur destination lisible.
+    for (const c of state.cargo) {
+      const y = c.bank === "nord" ? NORD - 42 : SUD + 10;
+      drawCrate(c.x, y, c.type || (c.gold ? "doree" : "bois"));
+      const destTxt = c.retour ? "↩ " + (c.dest === "nord" ? "Nord" : "Sud") : "→ " + (c.dest === "nord" ? "Nord" : "Sud");
+      ctx.font = "bold 13px system-ui, sans-serif";
+      const tw = ctx.measureText(destTxt).width;
+      const ly = y + 26;
+      const lx = Math.max(4, Math.min(W - tw - 12, c.x - tw / 2 - 4));
+      ctx.fillStyle = "rgba(255,253,247,.92)";
+      ctx.fillRect(lx, ly - 9, tw + 8, 18);
+      ctx.fillStyle = "#2a2620";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(destTxt, lx + 4, ly);
+    }
+
+    // Obstacles flottants et étoile dorée.
+    for (const o of state.obstacles) drawObstacle(o);
+    if (state.etoile) drawEtoile(state.etoile);
+
+    // Traversier
+    drawFerry(W / 2, state.ferry.y, state.ferryCargo);
+  }
+
+  // Tronc, bouée ou banquise : trois dessins, un seul effet doux.
+  function drawObstacle(o) {
+    ctx.save();
+    ctx.translate(o.x, o.y);
+    if (o.type === "tronc") {
+      ctx.fillStyle = "#8b6a3a";
+      ctx.beginPath(); ctx.ellipse(0, 0, 28, 9, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#6b4a24"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.ellipse(0, 0, 28, 9, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = "#c8a06a";
+      ctx.beginPath(); ctx.ellipse(-24, 0, 4, 7, 0, 0, Math.PI * 2); ctx.fill();
+    } else if (o.type === "bouee") {
+      ctx.fillStyle = "#e8641b";
+      ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#fffdf7";
+      ctx.fillRect(-12, -3, 24, 6);
+      ctx.fillStyle = "#e8641b";
+      ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.fill();
+    } else {
+      ctx.fillStyle = "#eef6f8";
+      ctx.beginPath(); ctx.ellipse(0, 0, 24, 11, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#bcd6dd"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.ellipse(0, 0, 24, 11, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = "#bcd6dd";
+      ctx.beginPath(); ctx.arc(-8, -2, 3, 0, Math.PI * 2); ctx.arc(8, 3, 3, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawEtoile(e) {
+    ctx.save();
+    ctx.translate(e.x, e.y);
+    ctx.fillStyle = "#ffd94a";
+    ctx.strokeStyle = "#b5891f";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const r = i % 2 === 0 ? 13 : 6;
+      const a = -Math.PI / 2 + i * Math.PI / 5;
+      const px = Math.cos(a) * r, py = Math.sin(a) * r;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawCrate(x, y, type) {
+    const t = TYPES_CARGAISON[type] || TYPES_CARGAISON.bois;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = t.couleur;
+    ctx.fillRect(-14, -14, 28, 28);
+    ctx.strokeStyle = "#6b4a24";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(-14, -14, 28, 28);
+    ctx.beginPath();
+    ctx.moveTo(-14, -14); ctx.lineTo(14, 14);
+    ctx.moveTo(14, -14); ctx.lineTo(-14, 14);
+    ctx.stroke();
+    // Marque propre à chaque type : rond vert (forêt), losange érable,
+    // étoile dorée ; le bois reste uni.
+    ctx.fillStyle = "#fffdf7";
+    if (type === "foret") { ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.fill(); }
+    else if (type === "erable") { ctx.beginPath(); ctx.moveTo(0, -6); ctx.lineTo(6, 0); ctx.lineTo(0, 6); ctx.lineTo(-6, 0); ctx.closePath(); ctx.fill(); }
+    else if (type === "doree") { ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
+  }
+
+  function drawFerry(x, y, cargo) {
+    ctx.save();
+    ctx.translate(x, y);
+    // Coque
+    ctx.fillStyle = "#b5451b";
+    ctx.beginPath();
+    ctx.moveTo(-FERRY_W / 2, FERRY_H / 2);
+    ctx.lineTo(FERRY_W / 2, FERRY_H / 2);
+    ctx.lineTo(FERRY_W / 2 - 12, -FERRY_H / 2);
+    ctx.lineTo(-FERRY_W / 2 + 12, -FERRY_H / 2);
+    ctx.closePath();
+    ctx.fill();
+    // Cabine
+    ctx.fillStyle = "#fffdf7";
+    ctx.fillRect(-22, -FERRY_H / 2 + 4, 44, 18);
+    ctx.fillStyle = "#3f7fa3";
+    for (let i = 0; i < 3; i++) ctx.fillRect(-16 + i * 11, -FERRY_H / 2 + 8, 7, 7);
+    // Niveau 5+ : petit drapeau sur la cabine. Niveau 8 : coque dorée.
+    if (state.niveau >= 5) {
+      ctx.fillStyle = "#2a2620"; ctx.fillRect(-2, -FERRY_H / 2 - 12, 2, 12);
+      ctx.fillStyle = "#d9a441"; ctx.beginPath(); ctx.moveTo(0, -FERRY_H / 2 - 12); ctx.lineTo(14, -FERRY_H / 2 - 8); ctx.lineTo(0, -FERRY_H / 2 - 4); ctx.closePath(); ctx.fill();
+    }
+    if (state.niveau >= 8) {
+      ctx.strokeStyle = "#d9a441"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(-FERRY_W / 2 + 4, FERRY_H / 2 - 4); ctx.lineTo(FERRY_W / 2 - 4, FERRY_H / 2 - 4); ctx.stroke();
+    }
+    // Indicateur de charge (couleur du type de cargaison)
+    for (let i = 0; i < cargo.length; i++) {
+      ctx.fillStyle = (TYPES_CARGAISON[cargo[i].type] || TYPES_CARGAISON.bois).couleur;
+      ctx.beginPath();
+      ctx.arc(-8 + i * 8, FERRY_H / 2 - 8, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function finish() {
+    state.running = false;
+    cancelAnimationFrame(rafId);
+    const isBest = state.score > best();
+    if (isBest) { try { localStorage.setItem(KEY, String(state.score)); } catch (e) {} }
+    elBest.textContent = best();
+    ovTitle.textContent = isBest ? "Nouveau record !" : "Traversée terminée";
+    const tl = state.typesLivrees;
+    const detailTypes = `Bois : ${tl.bois} · Forêt : ${tl.foret} · Dorée : ${tl.doree} · Érable : ${tl.erable}.`;
+    ovText.textContent = `${state.score} point${state.score === 1 ? "" : "s"} — ${state.livraisons} cargaison${state.livraisons === 1 ? "" : "s"} livrée${state.livraisons === 1 ? "" : "s"}. Record : ${best()}. Niveau ${state.niveau} / 8. ${detailTypes} Retours à la bonne rive : ${state.retoursLivres}. Étoiles dorées : ${state.etoilesRamassees}. Accrochages : ${state.accrochages} (le traversier n'a jamais coulé). Bonus de série : +${state.bonusSerie} (hors score, juste pour le plaisir). Bonus défis : +${state.defisBonus} (hors score, juste pour le plaisir).`;
+    ovBtn.textContent = "Rejouer";
+    ov.hidden = false;
+    elAstuce.hidden = true;
+    bip(523, 0.15, 0.04);
+    bip(392, 0.2, 0.04, 0.14);
+  }
+
+  // Contrôles
+  canvas.addEventListener("pointerdown", e => {
+    if (!state.running) return;
+    const r = canvas.getBoundingClientRect();
+    const y = (e.clientY - r.top) * (H / r.height);
+    goTo(y < H / 2 ? "nord" : "sud");
+  });
+  document.getElementById("btn-nord").addEventListener("click", () => goTo("nord"));
+  document.getElementById("btn-sud").addEventListener("click", () => goTo("sud"));
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
+    if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") goTo("nord");
+    if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") goTo("sud");
+  });
+  ovBtn.addEventListener("click", start);
+
+  // Lecture seule pour les tests machine (TEST MACHINE) : un instantané
+  // des compteurs, sans rien modifier. Aucun effet sur le jeu.
+  window.__traversier = {
+    snapshot: () => state ? {
+      running: state.running, t: state.t, score: state.score,
+      livraisons: state.livraisons, niveau: state.niveau, serie: state.serie,
+      bonusSerie: state.bonusSerie, defisBonus: state.defisBonus,
+      accrochages: state.accrochages, obstaclesVus: state.obstaclesVus,
+      obstacles: state.obstacles.length, etoilesVues: state.etoilesVues,
+      etoilesRamassees: state.etoilesRamassees, defis3coups: state.defis3coups,
+      retoursLivres: state.retoursLivres, ferryY: state.ferry.y,
+      ferryTarget: state.ferry.target, ferryCargo: state.ferryCargo.length,
+      cargoAttente: state.cargo.length, courants: state.courants.map(c => c.dir),
+      ralenti: state.ralenti, etoile: !!state.etoile,
+      destAttente: state.cargo.map(c => c.bank + ">" + c.dest + (c.retour ? ":retour" : "")).join(" "),
+      destBord: state.ferryCargo.map(c => c.dest + (c.retour ? ":retour" : "")).join(" "),
+      caissesX: state.cargo.map(c => c.bank[0] + Math.round(c.x)).join(" ")
+    } : null
+  };
+
+  // État initial
+  init();
+  render();
+})();
+</script>
+</body>
+</html>

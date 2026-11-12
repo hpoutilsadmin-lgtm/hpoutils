@@ -2,12 +2,12 @@
 /* Pack hors ligne HP Outils — service worker.
    Garde la Boite a outils, les outils autonomes, En cuisine, le Passeur
    et 6 jeux legers sur l'appareil pour qu'ils fonctionnent sans internet.
-   Cache-first, version a changer (hp-hors-ligne-3 -> hp-hors-ligne-4)
+   Cache-first, version a changer (hp-hors-ligne-4 -> hp-hors-ligne-5)
    pour mettre le pack a jour. Portee : tout le site (/).
    Seuls les fichiers de la liste PACK sont mis en cache ; le reste
    passe par le reseau, et une navigation sans reseau tombe sur
    /hors-ligne.html. Aucune donnee saisie ne quitte l'appareil. */
-var V = 'hp-hors-ligne-3';
+var V = 'hp-hors-ligne-4';
 var PACK = [
   '/manifest.webmanifest',
   '/hors-ligne.html',
@@ -81,7 +81,30 @@ var PACK = [
   '/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html',
   '/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html',
   '/barre/barre-jeu.js',
-  '/apps/sur-lherbe/sur-lherbe-v1.0.html'
+  '/apps/sur-lherbe/sur-lherbe-v1.0.html',
+  /* Lot /jeux + 5 jeux (11 nov. 2026) : les 11 nouveaux jeux
+     et leurs en-tetes (les 2 fichiers deja au PACK — mineur-hp
+     et hp-hyper-potentiel — ne sont pas dupliques). */
+  '/apps/panne-72h/panne-72h-v1.0.html',
+  '/apps/boite-a-lunch/boite-a-lunch-v1.0.html',
+  '/apps/traversier/traversier-v1.0.html',
+  '/apps/quiz-gepeto/quiz-gepeto-v1.0.html',
+  '/apps/panne-72h-douce/panne-72h-douce-v1.0.html',
+  '/apps/peche-blanche-arcade/peche-blanche-arcade-v1.0.html',
+  '/apps/peche-blanche-carnet/peche-blanche-carnet-v1.0.html',
+  '/apps/aventures-moteur/aventures-moteur-v1.0.html',
+  '/apps/air-bete/air-bete.html',
+  '/apps/panne-72h/entete.jpg',
+  '/apps/boite-a-lunch/entete.jpg',
+  '/apps/traversier/entete.jpg',
+  '/apps/quiz-gepeto/entete.jpg',
+  '/apps/panne-72h-douce/entete.jpg',
+  '/apps/peche-blanche-arcade/entete.jpg',
+  '/apps/peche-blanche-carnet/entete.jpg',
+  '/apps/aventures-moteur/entete.jpg',
+  '/apps/air-bete/entete.jpg',
+  '/apps/mineur-hp/entete.jpg',
+  '/apps/hp-hyper-potentiel/entete.jpg'
 ];
 
 self.addEventListener('install', function (e) {

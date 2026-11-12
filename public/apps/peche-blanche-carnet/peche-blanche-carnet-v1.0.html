@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pêche blanche — carnet — HP Outils</title>
+<style>
+  :root{--cream:#f7f3ea;--ink:#2a2620;--forest:#2f6b4f;--maple:#b5451b;--gold:#d9a441;--soft:#e8e0cf;--muted:#6b6459;--sky:#3f7fa3}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:14px 12px 22px;gap:10px;user-select:none}
+  header{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .gepeto-face{width:48px;height:48px;border-radius:50%;flex:0 0 auto;background:#e6b88a;border:2px solid var(--soft)}
+  .gepeto-face{overflow:hidden}
+  .gepeto-face img{display:block;width:100%;height:100%;object-fit:cover}
+  .fiche .zone{font-size:.82rem;color:var(--sky);font-weight:600;margin-bottom:4px}
+  .filtres{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 0 12px}
+  .filtres button{min-height:48px;padding:8px 12px;border-radius:10px;border:2px solid var(--soft);background:#fffdf7;font-family:inherit;font-size:.82rem;font-weight:600;color:var(--forest);cursor:pointer}
+  .filtres button[aria-pressed="true"]{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .chenal{background:#e8f1f6;border-left:4px solid var(--sky);padding:10px 12px;border-radius:0 8px 8px 0;font-size:.85rem;line-height:1.5;text-align:left;margin:0 0 14px;color:var(--ink)}
+  .chenal b{display:block;color:var(--sky);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+  .espece .z{font-size:.8rem;color:var(--sky);font-weight:600;line-height:1.2}
+  h1{font-size:1.05rem;margin:0;color:var(--forest)}
+  h1 small{font-weight:400;color:var(--muted);font-size:.8em}
+  #btn-carnet{background:#fffdf7;border:2px solid var(--soft);border-radius:10px;padding:12px 14px;min-height:48px;
+    font-family:inherit;font-size:.85rem;font-weight:600;color:var(--forest);cursor:pointer;display:flex;align-items:center;gap:6px}
+  #btn-carnet b{background:var(--forest);color:#fff;padding:1px 7px;border-radius:999px;font-size:.8rem}
+  #btn-carnet:active{transform:translateY(1px)}
+  .tete-btns{display:flex;gap:8px;align-items:center}
+  #btn-son{background:#fffdf7;border:2px solid var(--soft);border-radius:10px;min-width:48px;min-height:48px;padding:10px 12px;font-size:1rem;cursor:pointer;font-family:inherit}
+  #btn-son:active{transform:translateY(1px)}
+  .wrap{position:relative;width:100%;max-width:560px}
+  #jeu{display:block;width:100%;height:auto;border-radius:14px;border:2px solid var(--soft);background:#dde9ef;touch-action:none}
+  .controls{width:100%;max-width:560px;display:flex;gap:8px}
+  .controls button{flex:1;background:var(--forest);color:#fff;border:0;border-radius:10px;padding:13px;min-height:48px;
+    font-size:.95rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .controls button:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  .controls button:disabled{opacity:.4;cursor:default;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .controls #btn-ferrer{background:var(--maple);flex:0 0 auto;padding-left:20px;padding-right:20px}
+  .controls #btn-ferrer.on{animation:pulse .9s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 3px 0 rgba(0,0,0,.15),0 0 0 0 rgba(181,69,27,.6)}50%{box-shadow:0 3px 0 rgba(0,0,0,.15),0 0 0 12px rgba(181,69,27,0)}}
+  .overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(247,243,234,.97);
+    border-radius:14px;padding:20px;text-align:center;overflow-y:auto}
+  .overlay[hidden]{display:none}
+  .overlay h2{margin:0 0 8px;color:var(--forest);font-size:1.25rem;line-height:1.3}
+  .overlay p{margin:0 0 12px;color:var(--muted);font-size:.93rem;line-height:1.5;max-width:38ch}
+  .overlay button.primary{background:var(--forest);color:#fff;border:0;border-radius:10px;padding:11px 22px;min-height:48px;
+    font-size:.95rem;font-weight:600;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15);font-family:inherit;margin:4px}
+  .overlay button.ghost{background:none;border:2px solid var(--soft);color:var(--forest);border-radius:10px;
+    padding:9px 18px;min-height:48px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin:4px}
+  footer{font-size:.8rem;color:#8a8277;max-width:560px;text-align:center;line-height:1.5}
+
+  /* Fiche d'espèce */
+  .fiche{background:#fffdf7;border:2px solid var(--soft);border-radius:14px;padding:18px;max-width:420px;width:100%}
+  .fiche .latin{color:var(--muted);font-style:italic;font-size:.85rem;margin-bottom:4px}
+  .fiche .nom{font-size:1.4rem;color:var(--forest);font-weight:700;margin:0 0 8px;line-height:1.2}
+  .fiche .badge-new{display:inline-block;background:var(--gold);color:var(--ink);padding:2px 9px;border-radius:999px;
+    font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .fiche .apercu{width:100%;height:70px;border-radius:10px;background:linear-gradient(180deg,#e8f1f6,#dcebf2);margin:8px 0 12px;display:grid;place-items:center;overflow:hidden}
+  .fiche .fait{background:#eaf3ec;border-left:4px solid var(--forest);padding:10px 12px;border-radius:0 8px 8px 0;
+    font-size:.9rem;line-height:1.5;text-align:left;margin:10px 0 14px}
+  .fiche .fait b{display:block;color:var(--forest);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+
+  /* Carnet */
+  .carnet{max-width:500px;width:100%}
+  .carnet h2{text-align:center;margin:0 0 4px}
+  .carnet .sous{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:6px}
+  .carnet .rang{text-align:center;color:var(--forest);font-weight:700;font-size:.9rem;margin:0 0 2px}
+  .carnet .jalon{text-align:center;color:var(--sky);font-size:.85rem;margin:0 0 12px}
+  .celebration .rang-celebre{font-size:.85rem;font-weight:700;color:var(--maple);margin-top:4px}
+  .grille{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+  .espece{background:#fffdf7;border:2px solid var(--soft);border-radius:10px;padding:10px;text-align:left;
+    display:flex;flex-direction:column;gap:4px;min-height:72px}
+  .espece.vue{border-color:var(--forest)}
+  .espece .pastille{width:22px;height:22px;border-radius:50%;background:var(--soft);margin-bottom:2px;flex-shrink:0}
+  .espece.vue .pastille{background:var(--forest)}
+  .espece .n{font-size:.85rem;font-weight:700;color:var(--ink);line-height:1.2}
+  .espece .l{font-size:.8rem;color:var(--muted);font-style:italic;line-height:1.2}
+  .espece .d{font-size:.8rem;color:var(--muted);line-height:1.2}
+  .espece.inconnue .n{color:#a8a29a}
+  .espece.inconnue .l{color:#c8c2b8}
+  .prog{height:6px;background:var(--soft);border-radius:3px;overflow:hidden;margin-bottom:14px}
+  .prog i{display:block;height:100%;background:var(--forest);width:0;transition:width .4s}
+
+  /* Carte « Nouvelle espèce ! » : petit sursaut doux + halo or (figé en mouvement réduit) */
+  .fiche.nouvelle{animation:carte-nouvelle .6s ease-out}
+  @keyframes carte-nouvelle{0%{transform:scale(.96) translateY(6px);box-shadow:0 0 0 0 rgba(217,164,65,0)}50%{box-shadow:0 0 0 6px rgba(217,164,65,.28)}100%{transform:none;box-shadow:0 0 0 0 rgba(217,164,65,0)}}
+  /* Célébration des jalons 5/10/15/20 : confettis doux couleurs HP + message chaleureux */
+  .celebration{background:#fdf6e3;border:2px solid var(--gold);border-radius:10px;padding:10px 12px;margin:10px 0 14px;text-align:center;color:var(--forest);font-weight:600;font-size:.92rem;line-height:1.4}
+  .confettis{position:relative;height:26px;overflow:hidden;margin-bottom:4px}
+  .confettis i{position:absolute;top:-8px;width:8px;height:12px;border-radius:2px;animation:confetti-tombe 1.8s ease-in forwards}
+  @keyframes confetti-tombe{to{transform:translateY(34px) rotate(200deg);opacity:.9}}
+
+  /* ——— Mise en page standard HP (11 nov. 2026) : Retour, cibles 48 px, mouvement réduit ——— */
+  .barre-hp{width:100%;max-width:560px;display:flex;justify-content:flex-start}
+  .btn-retour{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-retour:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}.fiche.nouvelle{animation:none !important}.confettis{display:none !important}}
+</style>
+</head>
+<body>
+  <div class="barre-hp"><button class="btn-retour" type="button" onclick="if(history.length>1){history.back()}else{location.href='/jeux'}">← Retour</button></div>
+  <header>
+    <div class="gepeto-face"><img src="data:image/png;base64,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" alt=""></div>
+    <h1>Pêche blanche <small>· carnet</small></h1>
+    <span class="tete-btns">
+      <button id="btn-son" type="button" aria-label="Couper le son" title="Son doux : activé">🔊</button>
+      <button id="btn-carnet" aria-label="Ouvrir le carnet">Carnet <b id="carnet-count">0/20</b></button>
+    </span>
+  </header>
+
+  <div class="wrap">
+    <canvas id="jeu" width="560" height="420" aria-label="Trou de pêche sur la glace"></canvas>
+
+    <div class="overlay" id="overlay-start">
+      <div>
+        <h2>Sur la glace, sans presse</h2>
+        <p>Vingt poissons du Québec, de la surface jusqu'au grand fond. Aucun chrono, aucun échec. Descends ton hameçon, laisse passer les poissons, ferre quand l'un s'approche. Chaque espèce capturée entre dans ton carnet, avec sa zone de profondeur.</p>
+        <button class="primary" id="btn-start">Descendre sur la glace</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay-fiche" hidden>
+      <div class="fiche" id="fiche-content"></div>
+    </div>
+
+    <div class="overlay" id="overlay-carnet" hidden>
+      <div class="carnet">
+        <h2>Mon carnet</h2>
+        <p class="sous" id="carnet-sous">0 espèce sur 20</p>
+        <p class="rang" id="carnet-rang">Rang : Apprenti de la glace</p>
+        <p class="jalon" id="carnet-jalon">Prochain jalon : 5 espèces</p>
+        <div class="prog"><i id="carnet-prog"></i></div>
+        <div class="filtres" id="filtres-zones" role="group" aria-label="Filtrer par zone de profondeur">
+          <button type="button" data-zone="toutes" aria-pressed="true">Toutes</button>
+          <button type="button" data-zone="Surface" aria-pressed="false">Surface</button>
+          <button type="button" data-zone="Mi-profondeur" aria-pressed="false">Mi-profondeur</button>
+          <button type="button" data-zone="Grand fond" aria-pressed="false">Grand fond</button>
+          <button type="button" data-zone="Chenal" aria-pressed="false">Chenal</button>
+        </div>
+        <div class="chenal"><b>Le plus profond — le chenal Laurentien</b>Dans l'estuaire et le golfe, le chenal Laurentien descend à plus de 300 m, jusqu'à environ 500 m (Pêches et Océans Canada). Bien plus profond que les lacs du jeu : le touladi, le plus profond d'ici, vit vers 15 à 50 m. Petit poisson des chenaux : le poulamon atlantique (<i>Microgadus tomcod</i>) fraye en décembre et janvier ; Sainte-Anne-de-la-Pérade en est la capitale mondiale.</div>
+        <div class="grille" id="carnet-grille"></div>
+        <button class="ghost" id="btn-fermer-carnet">Retourner sur la glace</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="btn-up" aria-label="Remonter">↑ Remonter</button>
+    <button id="btn-ferrer" disabled aria-label="Ferrer">Ferrer !</button>
+    <button id="btn-down" aria-label="Descendre">↓ Descendre</button>
+  </div>
+
+  <footer>Gratuit · sans compte · carnet sur ton appareil. Espèces du Québec, faits vérifiables. Zones de profondeur : de la surface au chenal Laurentien (plus de 300 m). Idée à explorer : la pêche blanche en Lanaudière.</footer>
+
+<script>
+(() => {
+  const canvas = document.getElementById("jeu");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const ICE = 66;
+  const HOOK_X = W / 2;
+  const KEY = "hp:peche-carnet:captures";
+
+  // Mouvement réduit : la boucle JS fige l'ambiance (flocons, reflets, halo, ondulations)
+  const REDUIT = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // --- Son doux (WebAudio, sinus 420–760 Hz, volume 0,06) — coupable par le bouton Son ---
+  // Préférence persistée (hp:peche-carnet:son, en try/catch, comme l'arcade).
+  const SON_KEY_CARNET = "hp:peche-carnet:son";
+  let sonActif = true;
+  try { const sv = localStorage.getItem(SON_KEY_CARNET); if (sv !== null) sonActif = sv !== "0"; } catch (e) {}
+  let ctxAudio = null;
+  function jouerSon(type) {
+    if (!sonActif) return;
+    try {
+      ctxAudio = ctxAudio || new (window.AudioContext || window.webkitAudioContext)();
+      if (ctxAudio.state === "suspended") ctxAudio.resume();
+      const t = ctxAudio.currentTime;
+      // Carillon de nouvelle espèce : trois notes douces (523, 659, 784 Hz), volume 0,06.
+      if (type === "carillon") {
+        [523, 659, 784].forEach((freq, i) => {
+          const o = ctxAudio.createOscillator();
+          const g = ctxAudio.createGain();
+          o.type = "sine";
+          const debut = t + i * 0.12, duree = 0.22;
+          o.frequency.setValueAtTime(freq, debut);
+          g.gain.setValueAtTime(0.0001, debut);
+          g.gain.exponentialRampToValueAtTime(0.06, debut + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, debut + duree);
+          o.connect(g);
+          g.connect(ctxAudio.destination);
+          o.start(debut);
+          o.stop(debut + duree + 0.02);
+        });
+        return;
+      }
+      const o = ctxAudio.createOscillator();
+      const g = ctxAudio.createGain();
+      o.type = "sine";
+      const duree = type === "portee" ? 0.16 : 0.32;
+      o.frequency.setValueAtTime(type === "portee" ? 520 : 420, t);
+      o.frequency.exponentialRampToValueAtTime(type === "portee" ? 660 : 760, t + duree);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.06, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + duree);
+      o.connect(g);
+      g.connect(ctxAudio.destination);
+      o.start(t);
+      o.stop(t + duree + 0.02);
+    } catch (e) { /* Audio indisponible : le jeu reste silencieux */ }
+  }
+
+  const ESPECES = [
+    { id:"perchaude", nom:"Perchaude", latin:"Perca flavescens", zone:"Surface", prof:"0 à 5 m",
+      vit:45, minY:150, maxY:330, poids:22, c1:"#d4b13d", c2:"#7a5f1f", rayures:true,
+      fait:"Le poisson le plus pêché sur la glace au Québec. Sa chair blanche et délicate en fait un classique de la pêche blanche hivernale." },
+    { id:"eperlan", nom:"Éperlan arc-en-ciel", latin:"Osmerus mordax", zone:"Surface", prof:"0 à 5 m",
+      vit:75, minY:120, maxY:220, poids:16, c1:"#cfdae2", c2:"#7a8a96",
+      fait:"Petit poisson d'environ 15 cm. Au Québec, il remonte les rivières pour frayer au printemps. On le pêche souvent la nuit, à la lumière." },
+    { id:"dore", nom:"Doré jaune", latin:"Sander vitreus", zone:"Mi-profondeur", prof:"5 à 15 m",
+      vit:42, minY:210, maxY:350, poids:18, c1:"#c9a24a", c2:"#5c4a1a",
+      fait:"Aussi appelé « poisson-roi » des lacs québécois. Ses yeux reflètent la lumière, ce qui l'aide à chasser à l'aube et au crépuscule." },
+    { id:"brochet", nom:"Brochet du Nord", latin:"Esox lucius", zone:"Mi-profondeur", prof:"5 à 15 m",
+      vit:65, minY:140, maxY:290, poids:14, c1:"#6b8b52", c2:"#3a4d28", long:true,
+      fait:"Prédateur vorace qui peut atteindre 1 m. Il possède plus de 700 dents. Il mord bien au début de l'hiver." },
+    { id:"mouchetee", nom:"Truite mouchetée", latin:"Salvelinus fontinalis", zone:"Mi-profondeur", prof:"5 à 15 m",
+      vit:55, minY:180, maxY:310, poids:12, c1:"#8a6a3a", c2:"#c04a2a", points:true,
+      fait:"La « truite » québécoise par excellence. On la reconnaît à ses points rouges entourés de bleu. Elle aime les eaux froides et bien oxygénées." },
+    { id:"touladi", nom:"Touladi", latin:"Salvelinus namaycush", zone:"Grand fond", prof:"15 à 50 m",
+      vit:38, minY:260, maxY:385, poids:10, c1:"#7a8a9a", c2:"#3a4a5a",
+      fait:"Aussi appelé truite grise. Il vit dans les lacs profonds et froids, et peut vivre plus de 40 ans. C'est un poisson lent à grandir." },
+    { id:"ouananiche", nom:"Ouananiche", latin:"Salmo salar ouananiche", zone:"Grand fond", prof:"15 à 50 m",
+      vit:70, minY:200, maxY:330, poids:8, c1:"#d4b8b8", c2:"#a05060",
+      fait:"Un saumon atlantique qui vit en eau douce depuis la dernière glaciation. Le lac Saint-Jean est son royaume." },
+    { id:"maskinonge", nom:"Maskinongé", latin:"Esox masquinongy", zone:"Grand fond", prof:"15 à 50 m",
+      vit:48, minY:270, maxY:390, poids:5, c1:"#3a5a3a", c2:"#1f3a1f", long:true,
+      fait:"Le plus gros brochet du Québec, il peut dépasser 20 kg. On le surnomme « le poisson trophée »." },
+    { id:"coregone", nom:"Grand corégone", latin:"Coregonus clupeaformis", zone:"Mi-profondeur", prof:"5 à 15 m",
+      vit:52, minY:170, maxY:300, poids:8, c1:"#c8d0d8", c2:"#6a7a8a",
+      fait:"Aussi appelé poisson blanc. Il vit en bancs dans les lacs. Sa chair est appréciée, mais ses arêtes sont nombreuses." },
+    { id:"esturgeon", nom:"Esturgeon jaune", latin:"Acipenser fulvescens", zone:"Chenal", prof:"fleuve, 5 à 9 m, parfois 43 m",
+      vit:34, minY:310, maxY:400, poids:3, c1:"#a08060", c2:"#5a4020", long:true,
+      fait:"Poisson préhistorique, il existe depuis plus de 200 millions d'années. Au Québec, il est souvent protégé et doit être remis à l'eau." },
+    // --- 10 nouvelles espèces (vérifiées, nov. 2026) : noms latins et faits sourcés ---
+    { id:"crapetsoleil", nom:"Crapet-soleil", latin:"Lepomis gibbosus", zone:"Surface", prof:"0 à 5 m",
+      vit:58, minY:130, maxY:250, poids:18, c1:"#e8a83d", c2:"#b5451b", points:true,
+      fait:"Au Canada, on l'appelle le poisson des débutants : c'est souvent le tout premier poisson qu'un enfant pêche." },
+    { id:"crapetroche", nom:"Crapet de roche", latin:"Ambloplites rupestris", zone:"Surface", prof:"0 à 5 m",
+      vit:50, minY:150, maxY:280, poids:16, c1:"#8a7a5a", c2:"#4a3a20", rayures:true,
+      fait:"Il doit son nom à son habitat : il vit presque toujours au-dessus des fonds rocheux. C'est le crapet le moins coloré d'Amérique du Nord." },
+    { id:"achiganpb", nom:"Achigan à petite bouche", latin:"Micropterus dolomieu", zone:"Mi-profondeur", prof:"5 à 15 m",
+      vit:62, minY:170, maxY:320, poids:12, c1:"#7a8a5a", c2:"#3a4a28", rayures:true,
+      fait:"On le reconnaît à sa mâchoire : elle ne dépasse pas l'arrière de son œil, contrairement à son cousin à grande bouche. C'est l'un des poissons d'eau douce les plus combatifs." },
+    { id:"achigangb", nom:"Achigan à grande bouche", latin:"Micropterus salmoides", zone:"Mi-profondeur", prof:"5 à 15 m",
+      vit:55, minY:180, maxY:330, poids:10, c1:"#6a8a4a", c2:"#2a3a1a", bande:true, bandeC:"#2f4a1f",
+      fait:"Sa bouche est si grande qu'elle dépasse l'arrière de son œil. C'est le plus grand des achigans : jusqu'à 97 cm et 10 kg." },
+    { id:"barbotte", nom:"Barbotte brune", latin:"Ameiurus nebulosus", zone:"Grand fond", prof:"15 à 50 m",
+      vit:40, minY:280, maxY:390, poids:14, c1:"#5a4a3a", c2:"#2a2018", barbillons:true,
+      fait:"Championne de la résistance : elle peut vivre dans des eaux chaudes et pauvres en oxygène, où bien d'autres poissons ne survivent pas." },
+    { id:"lotte", nom:"Lotte", latin:"Lota lota", zone:"Grand fond", prof:"15 à 50 m",
+      vit:36, minY:300, maxY:400, poids:8, c1:"#6a5a4a", c2:"#3a2f22", long:true, barbillons:true,
+      fait:"C'est la seule morue d'eau douce : elle fait partie de la famille de la morue. L'une des rares espèces à frayer l'hiver, sous la glace." },
+    { id:"dorenoir", nom:"Doré noir", latin:"Sander canadensis", zone:"Mi-profondeur", prof:"5 à 15 m",
+      vit:48, minY:220, maxY:350, poids:12, c1:"#8a7a52", c2:"#4a3a1a", taches:true,
+      fait:"On le distingue du doré jaune par sa nageoire dorsale tachetée et par sa queue, qui n'a pas de tache blanche." },
+    { id:"truitearc", nom:"Truite arc-en-ciel", latin:"Oncorhynchus mykiss", zone:"Mi-profondeur", prof:"5 à 15 m",
+      vit:68, minY:190, maxY:320, poids:10, c1:"#a8b8c0", c2:"#5a6a72", bande:true, bandeC:"#d4687a",
+      fait:"On la reconnaît à sa large bande rose qui parcourt ses flancs. Introduite au Québec à la fin du XIXe siècle, elle est aujourd'hui l'espèce d'eau douce froide la plus répandue au monde." },
+    { id:"malachigan", nom:"Malachigan", latin:"Aplodinotus grunniens", zone:"Chenal", prof:"fleuve, fond et chenal",
+      vit:44, minY:250, maxY:380, poids:6, c1:"#7a7a6a", c2:"#3a3a2a", haut:true,
+      fait:"C'est le seul représentant en eau douce de la famille des tambours marins. On le pêche surtout dans le fleuve Saint-Laurent." },
+    { id:"barbue", nom:"Barbue de rivière", latin:"Ictalurus punctatus", zone:"Chenal", prof:"fleuve, fond et chenal",
+      vit:42, minY:270, maxY:390, poids:6, c1:"#4a4a58", c2:"#23232e", long:true, barbillons:true,
+      fait:"Le poisson-chat le plus répandu en Amérique du Nord. Le record nord-américain pesait 26,3 kg." }
+  ];
+
+  const totalPoids = ESPECES.reduce((a, b) => a + b.poids, 0);
+  const byId = Object.fromEntries(ESPECES.map(e => [e.id, e]));
+
+  // --- Progression : jalons de collection 5/10/15/20 et rangs du carnet ---
+  const JALONS = [5, 10, 15, 20];
+  const RANGS = [
+    { min: 0, nom: "Apprenti de la glace" },
+    { min: 5, nom: "Pêcheur du dimanche" },
+    { min: 10, nom: "Connaisseur des lacs" },
+    { min: 15, nom: "Grand pêcheur d'hiver" },
+    { min: 20, nom: "Maître du carnet" }
+  ];
+  function rangPour(n) {
+    let r = RANGS[0];
+    for (const x of RANGS) if (n >= x.min) r = x;
+    return r;
+  }
+
+  // --- Carnet ---
+  function lireCarnet() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+    catch { return {}; }
+  }
+  function ecrireCarnet(c) { try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} }
+  function nbCaptures() { return Object.keys(lireCarnet()).length; }
+  function majBadgeCarnet() {
+    const n = nbCaptures();
+    document.getElementById("carnet-count").textContent = `${n}/${ESPECES.length}`;
+  }
+
+  // --- État du jeu ---
+  let state = null;
+  let rafId = null;
+  let lastTime = 0;
+  let cibleProche = null; // poisson actuellement à portée de ferrer
+  let porteeSignalee = false; // « Ferrer ! » vient de s'allumer (son doux, une seule fois)
+
+  const overlayStart = document.getElementById("overlay-start");
+  const overlayFiche = document.getElementById("overlay-fiche");
+  const overlayCarnet = document.getElementById("overlay-carnet");
+  const ficheContent = document.getElementById("fiche-content");
+  const btnFerrer = document.getElementById("btn-ferrer");
+
+  function init() {
+    state = {
+      running: false,
+      hookY: H / 2,
+      targetY: H / 2,
+      poissons: [],
+      spawnTimer: 0.4,
+      spawnInterval: 1.6,
+      flocons: Array.from({ length: 36 }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * ICE,
+        v: 6 + Math.random() * 12,
+        s: 1 + Math.random() * 1.6
+      })),
+      ondulations: [],
+      attente: false
+    };
+    cibleProche = null;
+    btnFerrer.disabled = true;
+    btnFerrer.classList.remove("on");
+  }
+
+  function demarrer() {
+    init();
+    state.running = true;
+    overlayStart.hidden = true;
+    overlayFiche.hidden = true;
+    overlayCarnet.hidden = true;
+    lastTime = performance.now();
+    rafId = requestAnimationFrame(boucle);
+  }
+
+  function boucle(now) {
+    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+    if (state.running) update(dt);
+    dessine();
+    if (state.running) rafId = requestAnimationFrame(boucle);
+  }
+
+  function choisirEspece() {
+    // Les espèces pas encore au carnet mordent plus souvent (×2,5) : la fin
+    // du carnet, à 19/20, dépend moins du hasard. Les poids d'origine sinon.
+    const carnet = lireCarnet();
+    const poidsDe = (e) => e.poids * (carnet[e.id] ? 1 : 2.5);
+    const total = ESPECES.reduce((a, b) => a + poidsDe(b), 0);
+    let r = Math.random() * total;
+    for (const e of ESPECES) {
+      r -= poidsDe(e);
+      if (r <= 0) return e;
+    }
+    return ESPECES[0];
+  }
+
+  function spawn() {
+    if (state.poissons.length >= 4) return;
+    const e = choisirEspece();
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    const x = dir === 1 ? -50 : W + 50;
+    const y = e.minY + Math.random() * (e.maxY - e.minY);
+    state.poissons.push({
+      espece: e, x, y, dir,
+      vit: e.vit * (0.85 + Math.random() * 0.3),
+      wag: 0,
+      depart: performance.now()
+    });
+  }
+
+  function update(dt) {
+    // Hameçon suit la cible en douceur
+    state.hookY += (state.targetY - state.hookY) * Math.min(1, dt * 8);
+
+    // Flocons (figés si mouvement réduit)
+    if (!REDUIT) for (const f of state.flocons) {
+      f.y += f.v * dt;
+      f.x += Math.sin(f.y / 22) * 5 * dt;
+      if (f.y > ICE) { f.y = -4; f.x = Math.random() * W; }
+    }
+
+    // Génération
+    state.spawnTimer -= dt;
+    if (state.spawnTimer <= 0) {
+      spawn();
+      state.spawnTimer = state.spawnInterval + Math.random() * 0.6;
+    }
+
+    // Déplacement des poissons (la nageoire se fige si mouvement réduit, le poisson nage toujours)
+    for (const p of state.poissons) {
+      p.x += p.dir * p.vit * dt;
+      if (!REDUIT) p.wag += dt * 6;
+    }
+
+    // Nettoyage
+    state.poissons = state.poissons.filter(p => p.x > -80 && p.x < W + 80);
+
+    // Détection : un poisson à portée ?
+    cibleProche = null;
+    let meilleureDist = Infinity;
+    for (const p of state.poissons) {
+      const dx = p.x - HOOK_X, dy = p.y - state.hookY;
+      const d = Math.hypot(dx, dy);
+      if (d < 48 && d < meilleureDist) {
+        meilleureDist = d;
+        cibleProche = p;
+      }
+    }
+    if (cibleProche && !state.attente) {
+      btnFerrer.disabled = false;
+      btnFerrer.classList.add("on");
+      if (!porteeSignalee) { porteeSignalee = true; jouerSon("portee"); }
+    } else {
+      btnFerrer.disabled = true;
+      btnFerrer.classList.remove("on");
+      porteeSignalee = false;
+    }
+
+    // Où est passé le poisson visé ?
+    if (state.attente && !state.poissons.some(p => p === state.attente)) {
+      state.attente = false;
+    }
+  }
+
+  function ferrer() {
+    if (!state.running || !cibleProche || state.attente) return;
+    const p = cibleProche;
+    state.attente = true;
+    state.running = false;
+    cancelAnimationFrame(rafId);
+
+    // Ondulation au point de capture
+    state.ondulations.push({ x: p.x, y: p.y, t: 0 });
+    dessine();
+
+    // Retire le poisson
+    state.poissons = state.poissons.filter(q => q !== p);
+
+    // Ouvre la fiche après un court instant
+    setTimeout(() => ouvrirFiche(p.espece), 420);
+  }
+
+  function ouvrirFiche(espece) {
+    const carnet = lireCarnet();
+    const nouvelle = !carnet[espece.id];
+    if (nouvelle) {
+      carnet[espece.id] = new Date().toISOString().slice(0, 10);
+      ecrireCarnet(carnet);
+      majBadgeCarnet();
+    }
+    const n = Object.keys(carnet).length;
+    // Nouvelle espèce : petit carillon (trois notes douces) ; sinon le « ploc » habituel.
+    jouerSon(nouvelle ? "carillon" : "capture");
+    ficheContent.classList.toggle("nouvelle", nouvelle);
+    // Jalons du carnet : 5/10/15/20 — confettis doux + message chaleureux, sans pression.
+    let celebration = "";
+    if (nouvelle && JALONS.includes(n)) {
+      const couleurs = ["#2f6b4f", "#d9a441", "#b5451b", "#3f7fa3", "#e8e0cf"];
+      const morceaux = Array.from({ length: 18 }, (_, i) =>
+        `<i style="left:${(i * 53) % 100}%;background:${couleurs[i % couleurs.length]};animation-delay:${(i % 6) * 0.12}s"></i>`).join("");
+      const message = n === 20
+        ? "Carnet complet — 20 espèces sur 20, bravo !"
+        : n === 15
+        ? "15 espèces sur 20 — presque complet !"
+        : n === 10
+        ? "10 espèces sur 20 — la moitié du carnet !"
+        : "5 espèces sur 20 — ton carnet grandit bien !";
+      celebration = `<div class="celebration"><div class="confettis" aria-hidden="true">${morceaux}</div>${message}<div class="rang-celebre">Nouveau rang : ${rangPour(n).nom}</div></div>`;
+    }
+
+    ficheContent.innerHTML = `
+      ${nouvelle ? '<span class="badge-new">Nouvelle espèce</span>' : '<span class="badge-new" style="background:var(--soft);color:var(--ink)">Déjà au carnet</span>'}
+      <div class="latin">${espece.latin}</div>
+      <div class="nom">${espece.nom}</div>
+      <div class="zone">Zone du jeu : ${espece.zone} · ${espece.prof}</div>
+      <div class="apercu" aria-hidden="true">
+        <canvas width="360" height="70" id="apercu-${espece.id}"></canvas>
+      </div>
+      <div class="fait"><b>Le savais-tu ?</b>${espece.fait}</div>
+      ${celebration}
+      <button class="primary" id="fiche-continuer">Continuer</button>
+      <button class="ghost" id="fiche-carnet">Voir le carnet</button>
+    `;
+    overlayFiche.hidden = false;
+
+    // Dessine un aperçu du poisson
+    const ap = document.getElementById(`apercu-${espece.id}`);
+    const actx = ap.getContext("2d");
+    dessineEspece(actx, 180, 35, espece, 1.6, false, 0);
+
+    document.getElementById("fiche-continuer").addEventListener("click", () => {
+      overlayFiche.hidden = true;
+      state.running = true;
+      state.attente = false;
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(boucle);
+    });
+    document.getElementById("fiche-carnet").addEventListener("click", () => {
+      overlayFiche.hidden = true;
+      ouvrirCarnet();
+    });
+  }
+
+  function ouvrirCarnet() {
+    const carnet = lireCarnet();
+    const n = Object.keys(carnet).length;
+    document.getElementById("carnet-sous").textContent =
+      n === 0 ? "Aucune espèce encore. La glace t'attend." :
+      n === ESPECES.length ? "Carnet complet. Bravo !" :
+      `${n} espèce${n === 1 ? "" : "s"} sur ${ESPECES.length}`;
+    document.getElementById("carnet-rang").textContent = `Rang : ${rangPour(n).nom}`;
+    const prochain = JALONS.find(j => j > n);
+    document.getElementById("carnet-jalon").textContent =
+      prochain ? `Prochain jalon : ${prochain} espèces` : "Tous les jalons sont atteints !";
+    document.getElementById("carnet-prog").style.width = `${(n / ESPECES.length) * 100}%`;
+
+    const grille = document.getElementById("carnet-grille");
+    const filtre = window.__pecheFiltreZone || "toutes";
+    const liste = ESPECES.filter(e => filtre === "toutes" || e.zone === filtre);
+    grille.innerHTML = liste.map(e => {
+      const vue = !!carnet[e.id];
+      return `<div class="espece ${vue ? "vue" : "inconnue"}">
+        <div class="pastille"></div>
+        <div class="n">${vue ? e.nom : "À découvrir"}</div>
+        <div class="l">${vue ? e.latin : "—"}</div>
+        <div class="z">${e.zone} · ${e.prof}</div>
+        ${vue ? `<div class="d">Attrapée le ${carnet[e.id]}</div>` : ""}
+      </div>`;
+    }).join("");
+
+    overlayCarnet.hidden = false;
+  }
+
+  function fermerCarnet() {
+    overlayCarnet.hidden = true;
+    if (!state.running) {
+      state.running = true;
+      state.attente = false;
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(boucle);
+    }
+  }
+
+  // --- Rendu ---
+  function dessine() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Eau
+    const g = ctx.createLinearGradient(0, ICE, 0, H);
+    g.addColorStop(0, "#a8d4e0");
+    g.addColorStop(0.4, "#5a9bb5");
+    g.addColorStop(1, "#1e4a63");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, ICE, W, H - ICE);
+
+    // Reflets doux (figés si mouvement réduit)
+    ctx.fillStyle = "rgba(255,255,255,.05)";
+    const t = REDUIT ? 0 : performance.now() / 2200;
+    for (let i = 0; i < 3; i++) {
+      const yy = ICE + 60 + i * 95 + Math.sin(t + i) * 8;
+      ctx.beginPath();
+      ctx.ellipse(W / 2, yy, 150, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Glace
+    ctx.fillStyle = "#f0f6f9";
+    ctx.fillRect(0, 0, W, ICE);
+    ctx.strokeStyle = "#cddfe7";
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 7; i++) {
+      ctx.beginPath();
+      ctx.moveTo((i * 83 + 20) % W, 6);
+      ctx.lineTo((i * 83 + 70) % W, ICE - 6);
+      ctx.stroke();
+    }
+
+    // Flocons
+    ctx.fillStyle = "#fff";
+    for (const f of state.flocons) {
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.s, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Trou
+    ctx.fillStyle = "#1e4a63";
+    ctx.beginPath();
+    ctx.ellipse(HOOK_X, ICE, 22, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Ligne + hameçon
+    ctx.strokeStyle = "rgba(255,255,255,.45)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(HOOK_X, ICE);
+    ctx.lineTo(HOOK_X, state.hookY);
+    ctx.stroke();
+
+    // Flotteur
+    ctx.fillStyle = "#b5451b";
+    ctx.beginPath();
+    ctx.arc(HOOK_X, state.hookY - 6, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Hameçon
+    ctx.strokeStyle = "#222";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(HOOK_X, state.hookY);
+    ctx.lineTo(HOOK_X, state.hookY + 8);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(HOOK_X - 3, state.hookY + 12, 4, 0, Math.PI, false);
+    ctx.stroke();
+
+    // Halo si poisson à portée
+    if (cibleProche) {
+      const pulse = REDUIT ? 1 : 1 + Math.sin(performance.now() / 200) * 0.15;
+      ctx.beginPath();
+      ctx.arc(HOOK_X, state.hookY, 34 * pulse, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(217,164,65,.85)";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(HOOK_X, state.hookY, 34 * pulse + 6, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(217,164,65,.3)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    // Repères de profondeur (zones du jeu, à gauche, discrets).
+    ctx.fillStyle = "rgba(247,243,234,.85)";
+    ctx.font = "13px system-ui";
+    ctx.textAlign = "left";
+    ctx.fillText("Surface", 8, ICE + 22);
+    ctx.fillText("Mi-profondeur", 8, ICE + 118);
+    ctx.fillText("Grand fond", 8, ICE + 218);
+    ctx.fillText("Chenal ↓", 8, H - 12);
+
+    // Poissons
+    for (const p of state.poissons) {
+      dessineEspece(ctx, p.x, p.y, p.espece, 1, p.dir < 0, p.wag);
+    }
+
+    // Ondulations de capture (aucune si mouvement réduit)
+    if (REDUIT) state.ondulations = [];
+    for (const o of state.ondulations) {
+      o.t += 0.03;
+      if (o.t > 1) continue;
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, 8 + o.t * 40, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,255,255,${1 - o.t})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+    state.ondulations = state.ondulations.filter(o => o.t <= 1);
+  }
+
+  function dessineEspece(c, x, y, e, echelle, flip, wag) {
+    c.save();
+    c.translate(x, y);
+    c.scale(flip ? -echelle : echelle, echelle);
+
+    const long = e.long ? 1.3 : 1;
+    const hauteur = e.long ? 8 : (e.haut ? 13 : 11);
+    const longueur = 20 * long;
+
+    // Corps
+    c.fillStyle = e.c1;
+    c.beginPath();
+    c.ellipse(0, 0, longueur, hauteur, 0, 0, Math.PI * 2);
+    c.fill();
+
+    // Queue
+    c.beginPath();
+    c.moveTo(-longueur + 2, 0);
+    c.lineTo(-longueur - 12, -7 + wag);
+    c.lineTo(-longueur - 12, 7 + wag);
+    c.closePath();
+    c.fill();
+
+    // Nageoire dorsale
+    c.beginPath();
+    c.moveTo(-4, -hauteur + 1);
+    c.lineTo(2, -hauteur - 7);
+    c.lineTo(8, -hauteur + 1);
+    c.closePath();
+    c.fill();
+
+    // Détail central
+    c.strokeStyle = e.c2;
+    c.lineWidth = 1.2;
+    c.beginPath();
+    c.moveTo(-longueur + 4, 0);
+    c.lineTo(longueur - 6, 0);
+    c.stroke();
+
+    // Bandes verticales (perchaude, brochet)
+    if (e.rayures) {
+      for (let i = -1; i <= 1; i++) {
+        c.beginPath();
+        c.moveTo(i * 6, -hauteur + 2);
+        c.lineTo(i * 6 + 1, hauteur - 2);
+        c.stroke();
+      }
+    }
+
+    // Points (truite mouchetée)
+    if (e.points) {
+      c.fillStyle = e.c2;
+      for (let i = -2; i <= 2; i++) {
+        c.beginPath();
+        c.arc(i * 4 + 2, (i % 2 === 0 ? -3 : 3), 1.6, 0, Math.PI * 2);
+        c.fill();
+      }
+    }
+
+    // Bande latérale (achigans, truite arc-en-ciel)
+    if (e.bande) {
+      c.fillStyle = e.bandeC || e.c2;
+      c.fillRect(-longueur + 4, -2, longueur * 2 - 10, 3.5);
+    }
+
+    // Taches sur la dorsale (doré noir)
+    if (e.taches) {
+      c.fillStyle = e.c2;
+      for (let i = -1; i <= 1; i++) {
+        c.beginPath();
+        c.arc(i * 4, -hauteur - 3, 1.5, 0, Math.PI * 2);
+        c.fill();
+      }
+    }
+
+    // Barbillons (barbotte, lotte, barbue) : deux petits traits près de la bouche
+    if (e.barbillons) {
+      c.strokeStyle = e.c2;
+      c.lineWidth = 1;
+      c.beginPath();
+      c.moveTo(longueur - 4, 3);
+      c.lineTo(longueur + 3, 7);
+      c.moveTo(longueur - 4, 5);
+      c.lineTo(longueur + 2, 9);
+      c.stroke();
+    }
+
+    // Œil
+    c.fillStyle = "#222";
+    c.beginPath();
+    c.arc(longueur - 6, -2, 1.8, 0, Math.PI * 2);
+    c.fill();
+    c.fillStyle = "#fff";
+    c.beginPath();
+    c.arc(longueur - 5.4, -2.6, 0.6, 0, Math.PI * 2);
+    c.fill();
+
+    c.restore();
+  }
+
+  // --- Contrôles ---
+  function setTarget(y) {
+    if (!state.running) return;
+    state.targetY = Math.max(ICE + 34, Math.min(H - 20, y));
+  }
+
+  document.getElementById("btn-up").addEventListener("click", () => setTarget(state.targetY - 60));
+  document.getElementById("btn-down").addEventListener("click", () => setTarget(state.targetY + 60));
+  btnFerrer.addEventListener("click", ferrer);
+
+  canvas.addEventListener("pointerdown", ev => {
+    if (!state.running) return;
+    const r = canvas.getBoundingClientRect();
+    setTarget((ev.clientY - r.top) * (H / r.height));
+  });
+  canvas.addEventListener("pointermove", ev => {
+    if (!state.running || ev.buttons === 0) return;
+    const r = canvas.getBoundingClientRect();
+    setTarget((ev.clientY - r.top) * (H / r.height));
+  });
+  canvas.addEventListener("touchmove", ev => {
+    if (!state.running) return;
+    ev.preventDefault();
+    const r = canvas.getBoundingClientRect();
+    setTarget((ev.touches[0].clientY - r.top) * (H / r.height));
+  }, { passive: false });
+
+  document.addEventListener("keydown", ev => {
+    if (!state.running) return;
+    if (ev.key === "ArrowUp" || ev.key === "w") { setTarget(state.targetY - 40); ev.preventDefault(); }
+    if (ev.key === "ArrowDown" || ev.key === "s") { setTarget(state.targetY + 40); ev.preventDefault(); }
+    if (ev.key === " " || ev.key === "Enter") { ferrer(); ev.preventDefault(); }
+  });
+
+  document.querySelectorAll("#filtres-zones button").forEach(b => b.addEventListener("click", () => {
+    window.__pecheFiltreZone = b.dataset.zone;
+    document.querySelectorAll("#filtres-zones button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    ouvrirCarnet();
+  }));
+  document.getElementById("btn-start").addEventListener("click", demarrer);
+  document.getElementById("btn-carnet").addEventListener("click", ouvrirCarnet);
+  document.getElementById("btn-fermer-carnet").addEventListener("click", fermerCarnet);
+  function majBoutonSonCarnet() {
+    const b = document.getElementById("btn-son");
+    b.textContent = sonActif ? "🔊" : "🔇";
+    b.setAttribute("aria-label", sonActif ? "Couper le son" : "Activer le son");
+    b.title = sonActif ? "Son doux : activé" : "Son doux : coupé";
+  }
+  document.getElementById("btn-son").addEventListener("click", () => {
+    sonActif = !sonActif;
+    try { localStorage.setItem(SON_KEY_CARNET, sonActif ? "1" : "0"); } catch (e) {}
+    majBoutonSonCarnet();
+    if (sonActif) jouerSon("portee");
+  });
+  majBoutonSonCarnet();
+  overlayCarnet.addEventListener("click", ev => {
+    if (ev.target === overlayCarnet) fermerCarnet();
+  });
+
+  // --- Démarrage ---
+  majBadgeCarnet();
+  init();
+  dessine();
+})();
+</script>
+</body>
+</html>

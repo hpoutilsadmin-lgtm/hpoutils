@@ -98,7 +98,7 @@ function Index() {
           {/* Nuit 4A : les appels d'abord, les citations ensuite — textes inchangés, ordre seul. */}
           <div className="lead-actions">
             <Link to="/outils" className="btn-primary">Régler un problème</Link>
-            <Link to="/jeux" className="btn-primary">Jouer 46 jeux gratuits</Link>
+            <Link to="/jeux" className="btn-primary">Jouer 57 jeux gratuits</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
           <p style={{ margin: "28px 0", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
@@ -123,7 +123,7 @@ function Index() {
           gardent leur entrée directe, hors des deux portes. */}
       {/* Bannière Noël 2 « Amusez-vous gratuitement » (lot Décor de Noël, 10 nov. 2026) : accueil seulement, en flux. */}
       <div className="banniere-noel" aria-label="Amusez-vous gratuitement">
-        <p><strong>Amusez-vous gratuitement</strong> — 46 jeux gratuits, sans compte, et 666 recettes à essayer.</p>
+        <p><strong>Amusez-vous gratuitement</strong> — 57 jeux gratuits, sans compte, et 666 recettes à essayer.</p>
         <Link to="/jeux" className="banniere-noel-cta">Jouer gratuitement</Link>
       </div>
       <section id="sec-portes" className="three-pillars" aria-label="Deux portes d'entrée">
@@ -163,7 +163,7 @@ function Index() {
             </article>
             <article className="pillar-card">
               <h3>Jeux</h3>
-              <p>46 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
+              <p>57 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
               <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
             </article>
             <article className="pillar-card">

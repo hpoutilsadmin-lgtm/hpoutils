@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panne de courant — en douceur — HP Outils</title>
+<style>
+  :root{--cream:#f7f3ea;--ink:#2a2620;--forest:#2f6b4f;--maple:#b5451b;--gold:#d9a441;--soft:#e8e0cf;--sky:#3f7fa3;--muted:#6b6459}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:16px 12px 24px;gap:12px;user-select:none;transition:background-color 1.2s ease}
+  header{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  /* ——— Gepeto vrai (11 nov. 2026) : vraie tête peinte tete-pastille.png (SHA b26af210), en-tête ——— */
+  header{align-items:center}
+  .titre-groupe{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+  .gepeto-face{flex:none;width:48px;height:48px;border-radius:50%;background:#fffdf7;border:2px solid var(--soft);overflow:hidden}
+  .gepeto-face svg{display:block;width:100%;height:100%}
+  .gepeto-face img{display:block;width:100%;height:100%;object-fit:cover}
+
+  h1{font-size:1.1rem;margin:0;color:var(--forest)}
+  h1 small{font-weight:400;color:var(--muted);font-size:.8em}
+  .hud{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:right}
+  .hud b{display:block;font-size:1.05rem;color:var(--forest)}
+  #card{width:100%;max-width:560px;background:#fffdf7;border:2px solid var(--soft);border-radius:16px;
+    padding:22px 20px;min-height:340px;display:flex;flex-direction:column;gap:14px;transition:opacity .25s}
+  #card.fade{opacity:0}
+  .jour{font-size:.8rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  h2{font-size:1.25rem;margin:0;color:var(--forest);line-height:1.3}
+  .texte{margin:0;line-height:1.6;font-size:.97rem}
+  .choix{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+  .choix button{background:#fff;border:2px solid var(--soft);border-radius:12px;padding:14px 16px;
+    font-size:.95rem;text-align:left;cursor:pointer;color:var(--ink);font-weight:500;font-family:inherit;line-height:1.4}
+  .choix button:hover{border-color:var(--forest);background:#f0f8f3}
+  .pas{background:#eaf3ec;border-left:4px solid var(--forest);padding:12px 14px;border-radius:0 10px 10px 0;font-size:.92rem;line-height:1.5}
+  .pas b{color:var(--forest);display:block;margin-bottom:2px;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+  .respir{display:grid;place-items:center;padding:22px;text-align:center}
+  .cercle{width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,#d4e8db,#a8cfba);
+    margin:10px auto 14px;animation:respir 8s ease-in-out infinite}
+  @keyframes respir{0%,100%{transform:scale(.7);opacity:.7}50%{transform:scale(1);opacity:1}}
+  .respir .mot{font-size:1.05rem;color:var(--forest);font-weight:600;animation:mot 8s ease-in-out infinite}
+  @keyframes mot{0%,100%{opacity:.7}50%{opacity:1}}
+  .note{margin:0;color:var(--muted);font-size:.9rem;font-style:italic}
+  footer{font-size:.8rem;color:#8a8277;max-width:560px;text-align:center;line-height:1.5}
+  .restart{background:var(--forest);color:#fff;border:0;border-radius:10px;padding:12px 22px;
+    font-size:1rem;font-weight:600;cursor:pointer;align-self:flex-start;box-shadow:0 3px 0 rgba(0,0,0,.15);font-family:inherit;min-height:48px}
+  .skip{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.85rem;font-family:inherit;padding:12px 8px;min-height:48px}
+  .skip:hover{color:var(--maple)}
+  .resume{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+  .resume div{background:var(--cream);padding:10px 12px;border-radius:10px;font-size:.9rem}
+  .resume span{color:var(--muted);display:block;font-size:.8rem}
+  .badge{display:inline-block;background:var(--gold);color:var(--ink);padding:3px 10px;border-radius:999px;font-size:.85rem;font-weight:700}
+
+  /* ——— Mise en page standard HP (11 nov. 2026) : Retour, cibles 48 px, mouvement réduit ——— */
+  .barre-hp{width:100%;max-width:560px;display:flex;justify-content:space-between}
+  .btn-retour,.btn-son{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-retour:active,.btn-son:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}.cercle,.respir .mot{animation:none !important}}
+  /* ——— Optimisation 11 nov. 2026 : pastilles de progression (plaisir) ——— */
+  .pistes{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .pistes i{width:10px;height:10px;border-radius:50%;background:var(--soft);transition:background-color .6s ease,box-shadow .6s ease}
+  .pistes i.fait{background:var(--gold);box-shadow:0 0 7px rgba(217,164,65,.6)}
+  .pistes i.actuel{background:var(--forest);transform:scale(1.25)}
+  /* ——— Le double (16 moments) : chemin doux en 16 étapes ———
+     Une piste fine qui se remplit à chaque petit pas (forêt → or), avec une
+     goutte ciel qui marque l'étape actuelle. Rien ne presse : la piste ne
+     fait que montrer le chemin déjà parcouru, sans chrono ni objectif. */
+  .chemin{margin-top:2px}
+  .chemin .etape{font-size:.8rem;color:var(--muted);letter-spacing:.04em;line-height:1.5}
+  .chemin .etape b{color:var(--forest);font-weight:600}
+  .chemin .piste{height:6px;border-radius:999px;background:var(--soft);margin-top:6px;overflow:hidden}
+  .chemin .remplissage{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--forest),var(--gold));transition:width 1s ease}
+  .chemin .goutte{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--sky);margin-right:5px;vertical-align:baseline}
+  /* Focus visible doux (ciel HP) pour le clavier, sans rien changer au calme du jeu. */
+  .choix button:focus-visible,.restart:focus-visible,.skip:focus-visible,.btn-retour:focus-visible,.btn-son:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+  /* ——— Arcade douce : célébration douce à 4, 8 et 12 petits pas ——— */
+  .celebration{background:#fbf3dd;border-left:4px solid var(--gold);padding:12px 14px;border-radius:0 10px 10px 0;font-size:.92rem;line-height:1.5}
+  /* ——— Panel 11 nov. 2026 (doux) : courte pause tactile après un choix ———
+     Un deuxième tap qui tombe tout de suite après un choix ne fait rien :
+     ni double petit pas, ni respiration ouverte par accident. 350 ms, sans
+     rien afficher, sans rien presser. */
+  #card.pause-tap{pointer-events:none}
+</style>
+</head>
+<body>
+  <div class="barre-hp"><button class="btn-retour" type="button" onclick="if(history.length>1){history.back()}else{location.href='/jeux'}">← Retour</button><button class="btn-son" id="btn-son" type="button" aria-pressed="true" aria-label="Couper le son">🔊 Son</button></div>
+  <header>
+    <div class="titre-groupe"><div class="gepeto-face" aria-hidden="true"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAADAFBMVEXY06/h3NSvqJutrZipp6GtqJ7hv7DZ2talkGzh2ci/fz+wb0mlh1+tnH+qqtS8w8TFuJfEq6Df07vf0brSwJ/t38IAAADqupTtwJpSRTquh29oWEzTpoZwZFlIOS/kq4e1k3rNmHdXTEK3mYP///51a2Pzx6SKem22p43NtJXDnYOQhHR2dG5bU0rEimitdlj8/Pt/f3/YoX2Oi4WTlJCJaFOqVVU4LCOpfGQ0Jhw8MimRc1rXxqt4hYfn2cuqqqr/AAADAgLPu6b//wB/fz+qqlVVVVVlSziSZ06Xa1WytbRkTkCHeWzVyK78/Pny49N7PT1aZmmSalOTeGmdl4+qa0qmfWSnhGyuqqXk1Ljk1Lfu6+lLOy6SZ1GXeGWOioTUx6z/f3//qqr//39/AABuamWZcluLeXCWkYu3fXq8gFyqhm6mhmyhm5KvmYi/v3/Ow7nMxLHQ09TgoX7h0rbz2srx5M3///8tHRJTOjNuWUl/fwCYa1KPa2eXc1uXdVuZclibeGOLg3OYpaejdVqlhG6piHGupJW8urbBspXFtpjMvaPUybXOy8jhnnrm17rl1rnn28Tn59D35sny48n//7E2Li47OzRVAABALBxMMx1PNiBURjtURTZHR0daU0poRi5xVTh4VTx3VT14VVVtaGJ9dW10foF///+FXUeEW0SGZFCPa2Kad2GQd2iUjHqaiXGRjYqUlIaWlpCkfWiifWmkemKqh3Skg260nX+1k2ympnmipZmxqJWqopSuqaatqaHBg17Hu6/IvanKvqnVxafWxabGxsbOysDOysPkvaLm2Lzm3czs3cLu4MXp6en/+NkOCgARDwwAAP8XFxIWFhYA//81HBM/LB4vLyc1LiUyMig6Ny9AMB9FPzlaOixGQz1KQzpWT0pVVQBTXGF1TjRnRjBmTEx6WD9qXEBsXlNtaF9qYl12b15zbGxvb2dva2Z3d3J5d3SWUS6RXT6UVVWIXEiRbVuNbWCOgXCRgnCNjY2Li4WXjoeckH+ekHSNxmerAAABAHRSTlMS1KsMcewUJa+TBGUzdAb/dP9Auf9IAP7+/v7+/v7+/v7+/f4E/v79/P3+/f79/v3/Av78/f4D/vv+/f74//0EAf/7AQQDA/5NlPr/0ZMq/QT/rRHS/9TW+9X8/9tvRc8UAgMCAtiVMVkK/naml8sEMUz//28SbVT/Ec8CyxBvrMN2yf/XUpenjKbPsa///1KQjRE3rgMNCwP/iIa70Q6GFg0o/wd5o/8CUv8tKZi1DrOoEjMkUK0ZMQ00Cyxzyy1P/3GMwWrbFCtP/6RoulQZKUh2AWD/AbXIINc4i/9Yq1OU2wP/J4MKrTekOF3OIUCOMZ4WMQxjHP87ZBIqb4SrX8YlNAAADXdJREFUeNq1mgV4G0cWgJ2Uj3FWu7PMq90VS5YFju2AE1OYkwabpKEmaZIyMzNd8crtXZm5vTIfMzMz85tZrShyI6fpfIlkydL75/GbXXeg93h1tP3JnmQuN2PGpEmTZszI5Y7Zy4BkbnJP81uTcz17CZCcpJOnG268469Lp9G1dOoNR5G3VuT2AmDyCnj4zPFr5s3Lc7KiRKNRReG4/Ly710z9NPxmUvLdAXJU+ol5OcoHK0qWpmmyInPxE5YCI5fcc0ByNdIfOiGvhLJD+XKwQJFTp3022MUeASYhdPCJXDTcd/gcjVbE0xUniD0CQIwcOiuvRHdZGrFQjcAVl9IPjxUAlp16LCcTaVqjcK2ZwM2aMXYNkkhfwzGMw8ta0wLJgfwQkJ//8M1jBiTR/bOUCFkNBCI7dHFNgbUoOVbAMWj2sbzJRCIMIcgNhoGIdRyGodoFgA3HrRgjYHXPY8fyRDhdIKi2eCd8O0IgPCUchyaOCdCTu30Wb1blwD8SofAfNl4RXFtRjpt/8xgBObRGMasbjTC1H+uFhz+DEhvewQkdreRP5SJMK5mBYPoWVSxYkjy0Su9pH9Cz4pFT6/ZMjcRUtWAqguvZEncwWtE+IIem1RzQYCImpIX6hUrx82YnJ7YLSKK1+frN1/ZbB2zSgFFOQpPbBeTQLCbS7NaKRCaU3ghgJFChXRMl0U+40BpVIZEmm1QBlbck4oVcewDiAWLnSCUO6/bZqFMDgFGOH81GzQAdnRrGTKA80zJgm9/g70KHtgXIoTuUCFO/SQkymBYeuiSmEqdNTuLvOnRlOwB9ylcfjpjUqjyf4kNF+ADC1HulASDx+dmjlIt6wJXkYRbnmJEgUSWeb8yB5mitOIvWi4eSyTY0mHDd5TdeLQq8yVc8GGy9WjurZqo5PwSchg7bDaBnn+9ec+2SJUuuYbs6XQ6bYVngU6lAcCqwU52bawCFO/2R1jaqAqagH7CsyKoqK4pip9CJTcdsTKfazxHTbKqBMIvNf3BikobhKIAe9Ktnz/C7KIJlOwudRUs2W4hmGNPkLa6pMZDednrLSK33wRe+ScUTACuqIis6zbXa5IuMyeGr+h3TgfZjmrWeACpMASMlH/zLqIBvF1hWxb4qqiAcOGJBMOuFMxEn25XVwISs7WLyVEzVA7j5s9Hke+ZNbSwaNcAtYHsREOSbQMBEDZ6v6mAqEV7sEnEX6EY/KXaxbvjrSvffuBqdxrUG6OhisEon+V7AEQHgi1gIrQSG6YP3CyJ1EXUUfE6I0qx2whlm42kbRwFMQd8XnzYKrNjZRYKoIBIVVHiVpVYyZV4UsEisRzRjMX0kn8Yk1vj6KWk0E33jD68SgZiDaZTDYgF0AWsVMNXAwRi4xP8qyK6IBxVgN/18pD0AQuPVwhBHypACR4ybujpFuleawAJLeGT3RH4gnlqpk3sNAE49YBqZylslmr5JvP4IGeJCUUgx4ESSE2KWlrKriFuI/0kuspUH+vI7PLFhFZDPc0vR+1oCVqNvHaKPaClGifGgghRhsl0FtksmGjCB4wOzFDrpqr5BikXFRvE4F1s//5et80BHv/03GpFT0tw8p2lWlpOYfL9YhP1FFBN3VnZeAMPhYh62ikXgs8CxzBAQj6UkieG+fl3P6P1AkxS5e3Fiv5meJ8QlJSjXEsN30eAC4dk8FwP9oJIrRXC7CM5nKjaKx6QUr1hLjkKjAZJJ/XSJOy+R+LBfNn6cduNKLCjNEIj9INzKcwpZsXiMh1iQeJCO+ZtIjVUAoKSAnP3a39CM5GgaTEInScr0RCLteb2diYQbj0nV0g99IKZUWzCnAIFhil1iUMIJIJVSYjHue0TQxFEBGySlO5Eol9Xerwxsy4CVmOrwxcRSDK/EOA4MZzIAA4CZPTKoFlGiQEqJK9mfbzjxwMfrIrVZA4bvSyQymZm9vb1GOS3DQBICYHtxzsKCIOAsKBCjWzexEqloAID1MQ6qC0TBo7UhpqNhZNE38wyXSAx4Gb/Tz3gDYJZUCIhzH52+zfC8mcaCNP57vmavCiAlKfFY/MguSBBh6B/VxtME0FKmohEnlNNpLzOdk+KRymTHaYsTiVNm3lboVROJ28p9xXh9TwYAD4DnYlkCULFVnfSaAFzKjCg26FAupwcWy3xMMUNAKUHARm9v13nbyt7i7nidCqQfQFTF1oMKUIWF4sYPhGeSesBEpB+dMkmD7Zu+uLu7BJaOh2cDUwHfJDJlD5zT65W9RIKvAyhW1pJoEYviQ0527328dRSBBktoH5ZiQcCDY82wKUtgOeIctbdXzZTLiYRcN2NwAiYACLEY/qL+yv6odlxozOS3aeJLwbdSoIBkMpVUoDZa7GVOKZchyM5LdHN1x7R+jIugwHMxheeNdQ2XRxoB/yqQBiORSYgowMdhPCEJRXJNyUOGbPO8ctmbOQDypToFREHNSvAVMjzhL99+xai16CgRM5URjohdDy6WAgBUCyVP3DCQyZwyLtGXrx/CsqygCmRKpoxbGjpO03StDvLBYEUGOyluUoAUnBag1nB8qbu723S4+v0zPLQhFYPeKUhynnu1YfhqBqgcU53QY9x0M5BPp18JKhMpFVBOpYZpiWMFjPtjdLRU8gc3XttpAvh+tpY9c18LAFJ4dm3M3uoCF2N87fvjUMe5zVuajjrNAKu/OoqCi7uphQ4/XKokrRJTSE+pX9CXRAs0uBr96c9Tpz6Kmg/9zSbKsHIIUOJ0+4dXlAgQUPMVvgEBHnBdjD+Vq17IegfAFWwaZ6tHybnK+eeDeJB5fqo2YjNNCmBfsDQATJiRzLW4AtlYKu5X095g5bSkcHdmY6R/5ePxuFQnuJ4BBmI9ywPAT9GPdnvCgVLxQ8P2iyR5ZTL9DGZBdnawvx9zUBjMSMNVFnqSYyxREDTPwuzRn0PtAA4RMgaGcIPc9AQP06X6dGBlszykRaTRPqTBCLaABZEbt8vZo9VU8XvftXyLkUXXzqTTrhUgsIEhTlQ269TP81Ig3zDAQJgdN6LvHjAF/U61DGEw2i8syGQsN+2BXOxahmWlPWxZeFA26+UXwT6eZ9m+z3pHtFagEZBEB0AzIlLtNKZDtC+yAkjPWBk77S5wDdaKVKTDsIRZwxBc2IeP2YyutwH4EjhBdeFbxGtWNgu21bJkoE4L2LNcd4HliW5FvsSxvmcYhptxsaqq40aRv8u1il+rGL4lCKxlQteBU5ipZTGZG8nM7tkZQ4wG4jErGKCclQa1VFY4Ak1oB5BEz6isB/IF1oZTeCwep4XN4aNROV7MFoQF4FCGiod9CEba1Vw41ansJvBfW9cqkG50km8KrBwh5z6ei8+dOzdOxmZQB4xueywXzUJfJ7tIw2QjqD7M8QM6atNE6D4fC54rqKR3KjSBq6UoookQUlD6yfQF8SNoaWz5EEKi676BLmsLoKO306pPihcmgDgUTyrbCUITot4SKgu7RsZSffhkoei4m8iVjnY0mIDONEQLwoMlMot3EuPASBs0SAe2boTyMWQJjIk+FgXbtn/Rtomm6H8sGMYcC4ONTCwOYpzN5isVwmJD8cAxMuBd0IDFtu041snuCy1zbReAjpZDID173BAQNNYnQlRcOS1XjE8W9BiXBff6rG8TgGvLrvZ8CyvtemE2qe/Lek+iISNIZR+cjjlSIfisavjgW5ANAF8VQDqcNKl8x5VtW7u3xZXBjlb3PlhhHbrVMqilYdeegTWTp5UHXlkZwceQ6aCbD6c2mcrvIwDnrLY0ACttZtMv3zPeI6Y2SDkwBFEYHAQHwI/Y1SBQhcplGai6ml36iFM6gShyRnuACfpOwdgXPZm2sOdCKaUECEdwrGukBVp7gnO4il3HtkvnDju2SwDj2wNAUlrsslc+9FTasNY9czfUaoNGjWAZaWvA0wR61CfXXCyNt53S8PISdYHtLOzYNY46Wt1Au/x/Al4wZ2SZfSsCZ8/J0LCBvXtzNu0HxdkPDvuqsJ9j9y1yhl98yyaaOKU2AWQ4Psf33PvOPHPtlBF3aCRN2qft2enMCFqWEWgLLbCaaztPzd5ne2nRIrtI9l8qfVxf1d5NIv2Yz9usCH6AmHU3j6SXnWzMsb1zMwehAzIGFLcu7LO201fauvOiCy8slZyi7NhnL3zppY+1yLTWt7lWISB0GmRQWLcVPYDWztnqjn95i66f4cH2C1ZJ6ys9/+IF6M3uRdO77SI4oO/1i5cvH8ONOh2NnGux3vAB4eufPUA3N4QLBeGflwxfeMEOeLWjY59LuzVqny2tprp3utW4EulvDQt42RaIvMr3dHg+msVPXxR+5omF0w8queAKp++TaKLexlTRaCWE3hgSvP/Q9NdDyn93ghh9/47Hruy4ZOeiPtmVeefsrZegVWO/3TtxAhSNi35z/S7NsJJMl3Y7Lojn7dIFaLSGvLs74i0ud0+6jKiz/c2zDpSJeBr9Fx922Z7e0weztzDsZPRBzZVlUuQcc9HCcTtGazZj+8ONOqz+xNmO8wnHeWF4+6WvL9+xl/4ypKFlnFNyzjpnu75X//Skoa8OD+9PjaXro42M7w5AM2XlyvdOAzThsGSbn9xzDdpc/wdgCLHnJxmEEAAAAABJRU5ErkJggg==" alt=""></div>
+    <h1>Panne de courant — en douceur <small>· HP Outils</small></h1></div>
+    <div class="hud">Petit pas<b id="compteur">0</b></div>
+  </header>
+  <main id="card"></main>
+  <footer>Version douce, sans échec possible. Aucun chrono, aucune ressource ne tombe à zéro. Idée à explorer avec Anxiété le jeu et Un petit pas à la fois.</footer>
+
+<script>
+(() => {
+  const MOMENTS = [
+    { titre: "La lumière s'éteint",
+      texte: "Il n'y a plus de courant. La maison devient silencieuse.",
+      choix: [
+        { t: "Prendre une grande respiration", pas: "Respirer d'abord, décider ensuite.", note: "Ça n'a l'air de rien, mais c'est un vrai premier pas." },
+        { t: "Allumer une lampe de poche", pas: "Un peu de lumière aide à se sentir mieux.", note: "Simple, efficace." },
+        { t: "S'asseoir deux minutes", pas: "Le calme, c'est aussi un préparatif.", note: "Rien ne presse." }
+      ]},
+    { titre: "Une bougie, doucement",
+      texte: "On sort une bougie et des allumettes. On la pose loin des rideaux, sur une assiette.",
+      choix: [
+        { t: "Allumer une bougie", pas: "Une petite flamme, et la pièce devient plus douce.", note: "On la surveille de loin, sans s'en occuper." },
+        { t: "Poser la bougie sans l'allumer", pas: "La préparer, c'est déjà un petit pas.", note: "Elle sera là si on en a besoin." },
+        { t: "Allumer une deuxième lampe de poche", pas: "Un peu plus de lumière, sans se presser.", note: "Juste ce qu'il faut." }
+      ]},
+    { titre: "Le frigo",
+      texte: "Le frigo ne ronronne plus. Ce n'est pas urgent tout de suite.",
+      choix: [
+        { t: "Vérifier ce qu'il y a dedans", pas: "Savoir ce qu'on a, c'est déjà se rassurer.", note: "Un inventaire tout simple." },
+        { t: "Sortir ce qui se mange vite", pas: "Un petit plan pour ne rien perdre.", note: "Juste un ou deux items." }
+      ]},
+    { titre: "Un verre d'eau",
+      texte: "On pense à boire un peu d'eau. Le robinet coule encore, tout doucement.",
+      choix: [
+        { t: "Boire un verre d'eau", pas: "Un petit geste pour soi.", note: "Rien de plus simple." },
+        { t: "Remplir une bouteille d'avance", pas: "Une bouteille pleine, pour plus tard.", note: "Un seul geste, pas plus." }
+      ]},
+    { titre: "Un voisin passe",
+      texte: "La voisine du 2e cogne à la porte. Elle propose de jaser un peu.",
+      choix: [
+        { t: "Prendre un café ensemble", pas: "Être ensemble, ça aide tout le monde.", note: "La chaleur humaine, ça compte." },
+        { t: "Saluer et rester chez soi", pas: "Chacun son rythme, et c'est correct.", note: "Pas d'obligation." }
+      ]},
+    { titre: "Regarder par la fenêtre",
+      texte: "Dehors, la rue est calme. Les maisons voisines sont sombres elles aussi.",
+      choix: [
+        { t: "Regarder le ciel quelques instants", pas: "Les étoiles commencent à se montrer.", note: "Un moment rien qu'à soi." },
+        { t: "Saluer un voisin de la main", pas: "Un petit signe, sans un mot.", note: "On n'est pas seul." }
+      ]},
+    { titre: "La noirceur tombe",
+      texte: "Le soleil baisse doucement. La maison fraîchit un peu.",
+      choix: [
+        { t: "Sortir une couverture", pas: "Un geste simple pour rester au chaud.", note: "Rien de compliqué." },
+        { t: "Mettre un chandail de plus", pas: "Une couche de plus, et c'est réglé.", note: "Pas besoin de plus." },
+        { t: "Se faire une tisane", pas: "Quelque chose de chaud dans les mains.", note: "Un petit plaisir." }
+      ]},
+    { titre: "Un coin douillet",
+      texte: "On prépare un petit coin pour la soirée : un coussin, une couverture, un livre à portée de main.",
+      choix: [
+        { t: "Installer le coin douillet", pas: "Un endroit rien qu'à soi pour la soirée.", note: "Tout doux, tout simple." },
+        { t: "Choisir un livre", pas: "Un livre qu'on aime, posé à côté.", note: "Pour plus tard, quand on voudra." }
+      ]},
+    { titre: "Le cellulaire",
+      texte: "Il reste un peu de batterie. Juste assez pour un court message.",
+      choix: [
+        { t: "Envoyer un texto rassurant", pas: "Un mot à quelqu'un qu'on aime.", note: "Ça fait du bien des deux côtés." },
+        { t: "Écouter la radio quelques minutes", pas: "Entendre une voix, ça rassure.", note: "Puis on ferme." }
+      ]},
+    { titre: "Écrire un petit mot",
+      texte: "On sort un crayon et un bout de papier. Juste quelques mots, pour se souvenir.",
+      choix: [
+        { t: "Noter une chose qui a bien été", pas: "Un petit mot, rien de plus.", note: "Ça fait du bien de le voir écrit." },
+        { t: "Écrire une idée pour demain", pas: "Une idée toute simple pour demain.", note: "On verra bien." },
+        { t: "Dessiner un petit soleil", pas: "Un petit soleil sur le papier.", note: "Pour se faire sourire." }
+      ]},
+    { titre: "La nuit",
+      texte: "La nuit tombe. Le silence est plus grand que d'habitude.",
+      choix: [
+        { t: "Lire à la lampe de poche", pas: "Une histoire pour passer le temps.", note: "Un moment à soi." },
+        { t: "Faire une partie de cartes", pas: "Un petit jeu, sans écran.", note: "Rire un peu." },
+        { t: "Se coucher tôt", pas: "Le repos, c'est un vrai cadeau.", note: "Demain sera plus clair." }
+      ]},
+    { titre: "Le silence de la nuit",
+      texte: "La maison est calme. On entend la pluie, très loin, ou juste le silence.",
+      choix: [
+        { t: "Écouter les petits bruits de la nuit", pas: "Écouter, sans rien faire d'autre.", note: "Le calme, ça s'écoute." },
+        { t: "Respirer lentement trois fois", pas: "Trois respirations, tout doucement.", note: "Rien ne presse." }
+      ]},
+    { titre: "Le matin",
+      texte: "Le jour se lève. Il fait plus clair, plus calme.",
+      choix: [
+        { t: "Ouvrir les rideaux", pas: "La lumière naturelle, c'est gratuit.", note: "Un bon début." },
+        { t: "Prendre un déjeuner simple", pas: "Manger un peu, même froid.", note: "Pas besoin de plus." }
+      ]},
+    { titre: "Aérer la maison",
+      texte: "Le matin est là. On ouvre une fenêtre pour laisser entrer l'air frais.",
+      choix: [
+        { t: "Ouvrir une fenêtre", pas: "Un peu d'air frais, tout doucement.", note: "La maison respire aussi." },
+        { t: "Écouter les oiseaux", pas: "Les oiseaux chantent déjà.", note: "Un petit concert gratuit." }
+      ]},
+    { titre: "Un dernier petit rangement",
+      texte: "En attendant, on remet chaque chose à sa place, sans se presser.",
+      choix: [
+        { t: "Ranger la lampe de poche", pas: "La lampe retourne à sa place, prête pour la prochaine fois.", note: "Un geste, et c'est fait." },
+        { t: "Plier la couverture", pas: "La couverture est pliée, tout est en ordre.", note: "Doucement, à son rythme." }
+      ]},
+    { titre: "Le courant revient",
+      texte: "Un petit « clic », puis le frigo qui repart. C'est fini.",
+      choix: [
+        { t: "Souffler un bon coup", pas: "Tu as traversé ça à ton rythme.", note: "Bravo." },
+        { t: "Noter une chose à préparer", pas: "Une lampe de poche à portée, une couverture, de l'eau.", note: "Un seul petit geste, pas plus." }
+      ]}
+  ];
+
+  const KEY = "hp:panne-douce:passes";
+  let state = null;
+  /* Panel 11 nov. 2026 (doux) : un moment ne donne qu'un seul petit pas,
+     même si le choix est tapé deux fois de suite. */
+  let choixFait = false;
+  const card = document.getElementById("card");
+  const compteur = document.getElementById("compteur");
+
+  /* ——— Arcade douce : carillon très doux (sinus 300–800 Hz, volume ≤ 0,05) ———
+     Son en mémoire seulement, jamais persisté. Bascule par le bouton Son. */
+  let sonActif = true;
+  let ctxAudio = null;
+  function carillon(notes) {
+    if (!sonActif) return;
+    try {
+      if (!ctxAudio) ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+      if (ctxAudio.state === "suspended") ctxAudio.resume();
+      notes.forEach((f, k) => {
+        const o = ctxAudio.createOscillator(), g = ctxAudio.createGain();
+        o.type = "sine"; o.frequency.value = f;
+        const t0 = ctxAudio.currentTime + k * 0.22;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(0.05, t0 + 0.06);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.6);
+        o.connect(g); g.connect(ctxAudio.destination);
+        o.start(t0); o.stop(t0 + 0.65);
+      });
+    } catch (e) { /* sans son, le jeu continue en silence */ }
+  }
+  const btnSon = document.getElementById("btn-son");
+  btnSon.addEventListener("click", () => {
+    sonActif = !sonActif;
+    btnSon.textContent = sonActif ? "🔊 Son" : "🔇 Muet";
+    btnSon.setAttribute("aria-pressed", String(sonActif));
+    btnSon.setAttribute("aria-label", sonActif ? "Couper le son" : "Activer le son");
+    if (sonActif) carillon([523.25]);
+  });
+
+  /* ——— Arcade douce : le fond se réchauffe graduellement (crème → teinte or légère) ———
+     Interpolation crème #f7f3ea → or léger #f5e9cd, selon les petits pas (0 → 16). */
+  function rechauffer() {
+    const t = state.pas / MOMENTS.length;
+    const r = Math.round(247 + (245 - 247) * t);
+    const g = Math.round(243 + (233 - 243) * t);
+    const b = Math.round(234 + (205 - 234) * t);
+    document.body.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+  }
+  function refroidir() { document.body.style.backgroundColor = ""; }
+
+  function start() {
+    state = { i: 0, pas: 0 };
+    compteur.textContent = 0;
+    refroidir();
+    renderMoment();
+  }
+
+  /* Chemin doux en 16 étapes : quatre temps calmes, quatre moments chacun.
+     Le nom du temps ne change rien au jeu, il dit juste où l'on est, doucement. */
+  function etapeNom(i) {
+    if (i < 4) return "Le soir s'installe";
+    if (i < 8) return "La maison s'apaise";
+    if (i < 12) return "La nuit est douce";
+    return "Le jour revient";
+  }
+  function chemin() {
+    const pct = Math.round((state.pas / MOMENTS.length) * 100);
+    return '<div class="chemin"><div class="etape"><span class="goutte" aria-hidden="true"></span>Chemin doux : étape <b>' + (state.i + 1) + ' sur ' + MOMENTS.length + '</b> — ' + etapeNom(state.i) + '</div>'
+      + '<div class="piste" aria-hidden="true"><div class="remplissage" style="width:' + pct + '%"></div></div></div>';
+  }
+
+  /* Pastilles de progression : or = moment traversé, forêt = moment actuel, doux = à venir. */
+  function pastilles() {
+    let h = '<div class="pistes" aria-label="Progression : moment ' + (state.i + 1) + ' sur ' + MOMENTS.length + '">';
+    for (let k = 0; k < MOMENTS.length; k++) {
+      h += '<i class="' + (k < state.i ? 'fait' : k === state.i ? 'actuel' : '') + '"></i>';
+    }
+    return h + '</div>';
+  }
+
+  function renderMoment() {
+    if (state.i >= MOMENTS.length) return finish();
+    choixFait = false;
+    const m = MOMENTS[state.i];
+    card.classList.add("fade");
+    setTimeout(() => {
+      card.innerHTML = `
+        <div class="jour">Moment ${state.i + 1} sur ${MOMENTS.length}</div>
+        ${pastilles()}
+        ${chemin()}
+        <h2>${m.titre}</h2>
+        <p class="texte">${m.texte}</p>
+        <div class="choix" id="choix">
+          ${m.choix.map((c, i) => `<button data-i="${i}">${c.t}</button>`).join("")}
+        </div>`;
+      card.classList.remove("fade");
+      card.querySelectorAll("button[data-i]").forEach(b =>
+        b.addEventListener("click", () => choisir(+b.dataset.i)));
+    }, 150);
+  }
+
+  function choisir(i) {
+    if (choixFait) return;
+    choixFait = true;
+    /* Courte pause tactile : un deuxième tap immédiat ne fait rien. */
+    card.classList.add("pause-tap");
+    setTimeout(() => card.classList.remove("pause-tap"), 350);
+    const m = MOMENTS[state.i], c = m.choix[i];
+    state.pas++;
+    compteur.textContent = state.pas;
+    rechauffer();
+    /* Célébration douce à 4, à 8 et à 12 petits pas : carillon très doux + message chaleureux, jamais pressant. */
+    let celebration = "";
+    if (state.pas === 4) {
+      carillon([523.25, 659.25]);
+      celebration = '<p class="celebration" role="status">Quatre petits pas déjà, tout doucement — bravo.</p>';
+    } else if (state.pas === 8) {
+      carillon([523.25, 659.25]);
+      celebration = '<p class="celebration" role="status">Tu es à mi-chemin, tout doucement. Huit petits pas déjà — bravo.</p>';
+    } else if (state.pas === 12) {
+      carillon([523.25, 659.25, 783.99]);
+      celebration = '<p class="celebration" role="status">Douze petits pas, à ton rythme. Quelle belle traversée, tout doucement.</p>';
+    }
+    card.innerHTML = `
+      <div class="jour">Moment ${state.i + 1} sur ${MOMENTS.length}</div>
+      ${pastilles()}
+      ${chemin()}
+      <h2>${m.titre}</h2>
+      <p class="texte">${c.t}.</p>
+      <div class="pas"><b>Un petit pas</b>${c.pas}</div>
+      ${celebration}
+      <p class="note">${c.note}</p>
+      <div class="choix">
+        <button id="respir">Prendre une respiration (optionnel)</button>
+        <button id="next">Continuer →</button>
+      </div>`;
+    document.getElementById("next").addEventListener("click", () => {
+      state.i++;
+      renderMoment();
+    });
+    document.getElementById("respir").addEventListener("click", () => {
+      state.i++;
+      renderRespiration();
+    });
+  }
+
+  function renderRespiration() {
+    /* Panel 11 nov. 2026 (doux) : en mouvement réduit, l'écran de respiration
+       n'avance jamais tout seul — on attend tranquillement le bouton Passer. */
+    const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    card.classList.add("fade");
+    setTimeout(() => {
+      card.innerHTML = `
+        <div class="jour">Pause douce · après le moment ${state.i} sur ${MOMENTS.length}</div>
+        <div class="respir">
+          <div>
+            <div class="cercle" aria-hidden="true"></div>
+            <div class="mot">Inspire… puis expire…</div>
+            <p class="note" style="margin-top:14px">${reduit ? "Prends le temps qu'il faut, puis touche « Passer » quand tu veux." : "Prends le temps qu'il faut."}</p>
+            <button class="skip" id="skip">Passer</button>
+          </div>
+        </div>`;
+      card.classList.remove("fade");
+      document.getElementById("skip").addEventListener("click", () => {
+        if (state.i >= MOMENTS.length) finish();
+        else renderMoment();
+      });
+      if (!reduit) setTimeout(() => {
+        if (card.querySelector("#skip")) {
+          if (state.i >= MOMENTS.length) finish();
+          else renderMoment();
+        }
+      }, 8000);
+    }, 150);
+  }
+
+  function finish() {
+    card.innerHTML = `
+      <div class="jour">Fin de la panne</div>
+      <h2>Tu as traversé ça, à ton rythme</h2>
+      <p class="texte">Aucune ressource n'est tombée à zéro. Aucune urgence. Tu as fait ${state.pas} petit${state.pas === 1 ? "" : "s"} pas.</p>
+      <div class="resume">
+        <div><span>Petits pas</span>${state.pas}</div>
+        <div><span>Nombre de moments</span>${MOMENTS.length}</div>
+      </div>
+      <div class="pas"><b>Trois petits gestes pour vrai</b>Une lampe de poche à portée de main. Une couverture dans le salon. Une bouteille d'eau remplie d'avance. Rien de plus.</div>
+      <p class="note">Pour aller plus loin sans pression : le kit Urgence 72 heures et l'outil Un petit pas à la fois.</p>
+      <button class="restart" id="again">Rejouer</button>`;
+    document.getElementById("again").addEventListener("click", renderStart);
+  }
+
+  function renderStart() {
+    refroidir();
+    /* Panel 11 nov. 2026 (doux) : après « Rejouer », le compteur repart de 0
+       dès l'écran de démarrage — plus de 16 affiché avant de recommencer. */
+    compteur.textContent = 0;
+    card.innerHTML = `
+      <div class="jour">16 moments · aucune urgence</div>
+      <h2>Panne de courant — en douceur</h2>
+      <p class="texte">Une version calme de la panne. Aucune ressource ne descend à zéro. Aucun chrono. Tu avances à ton rythme, et chaque choix est un petit pas.</p>
+      <div class="choix"><button id="go">Commencer</button></div>`;
+    document.getElementById("go").addEventListener("click", start);
+  }
+
+  renderStart();
+})();
+</script>
+</body>
+</html>

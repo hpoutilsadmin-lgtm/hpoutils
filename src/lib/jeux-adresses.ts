@@ -56,6 +56,17 @@ export const GAME_FILES: Record<string, string> = {
   "hommes-prehistoriques": "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html",
   "bataille-aura-magic": "/apps/bataille-aura-magic/bataille-aura-magic-v1.0.html",
   "mini-jeux": "/apps/mini-jeux/mini-jeux-hp.html",
+  "air-bete": "/apps/air-bete/air-bete.html",
+  "mineur-hp": "/apps/mineur-hp/mineur-hp-v0.1.html",
+  "hp-hyper-potentiel": "/apps/hp-hyper-potentiel/index.html",
+  "panne-72h": "/apps/panne-72h/panne-72h-v1.0.html",
+  "boite-a-lunch": "/apps/boite-a-lunch/boite-a-lunch-v1.0.html",
+  "traversier": "/apps/traversier/traversier-v1.0.html",
+  "quiz-gepeto": "/apps/quiz-gepeto/quiz-gepeto-v1.0.html",
+  "panne-72h-douce": "/apps/panne-72h-douce/panne-72h-douce-v1.0.html",
+  "peche-blanche-arcade": "/apps/peche-blanche-arcade/peche-blanche-arcade-v1.0.html",
+  "peche-blanche-carnet": "/apps/peche-blanche-carnet/peche-blanche-carnet-v1.0.html",
+  "aventures-moteur": "/apps/aventures-moteur/aventures-moteur-v1.0.html",
 };
 
 /** Adresse stable (partageable) d'un jeu, ex. « /apps/caribou-run ». */

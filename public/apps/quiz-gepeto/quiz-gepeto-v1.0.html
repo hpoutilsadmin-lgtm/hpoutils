@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sir H. Gepeto — le quiz — HP Outils</title>
+<style>
+  :root{--cream:#f7f3ea;--ink:#2a2620;--forest:#2f6b4f;--maple:#b5451b;--gold:#d9a441;--soft:#e8e0cf;--muted:#6b6459;--sky:#3f7fa3}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:16px 12px 24px;gap:12px;user-select:none}
+  header{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  /* ——— Gepeto vrai (11 nov. 2026) : vraie pastille peinte (tete-pastille.png, SHA b26af210b2df25c53da60511c6fe414291ee16a39a7d696af27c70840c4ea4d4), en-tête ——— */
+  header{align-items:center}
+  .titre-groupe{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+  .gepeto-face{flex:none;width:48px;height:48px;border-radius:50%;background:#fffdf7;border:2px solid var(--soft);overflow:hidden}
+  .gepeto-face img,.bulle-gepeto .gepeto-mini img{display:block;width:100%;height:100%;object-fit:cover}
+
+  /* ——— Gepeto animateur (11 nov. 2026) : bulles de bande dessinée, textes du jeu seulement ——— */
+  .bulle-gepeto{display:flex;gap:10px;align-items:flex-start;background:#fff;border:2px solid var(--ink);border-radius:16px;border-bottom-left-radius:4px;padding:12px 14px;box-shadow:3px 3px 0 rgba(42,38,32,.15)}
+  .bulle-gepeto .gepeto-mini{flex:none;width:48px;height:48px;border-radius:50%;background:#fffdf7;border:2px solid var(--soft);overflow:hidden}
+  
+  .bulle-gepeto p{margin:0;line-height:1.5;font-size:.95rem}
+
+  h1{font-size:1.1rem;margin:0;color:var(--forest)}
+  h1 small{font-weight:400;color:var(--muted);font-size:.8em}
+  .hud{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:right}
+  .hud b{display:block;font-size:1.15rem;color:var(--forest);font-variant-numeric:tabular-nums}
+  .progress{width:100%;max-width:560px;height:6px;background:var(--soft);border-radius:3px;overflow:hidden}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--forest),var(--gold));width:0;transition:width .3s}
+  #card{width:100%;max-width:560px;background:#fffdf7;border:2px solid var(--soft);border-radius:16px;
+    padding:22px 20px;min-height:360px;display:flex;flex-direction:column;gap:14px;transition:opacity .2s}
+  #card.fade{opacity:0}
+  .jour{font-size:.8rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  h2{font-size:1.2rem;margin:0;color:var(--forest);line-height:1.3}
+  .texte{margin:0;line-height:1.55;font-size:.95rem}
+  .choix{display:flex;flex-direction:column;gap:10px}
+  .choix button{background:#fff;border:2px solid var(--soft);border-radius:12px;padding:14px 16px;
+    font-size:.95rem;text-align:left;cursor:pointer;color:var(--ink);font-weight:500;font-family:inherit;line-height:1.35}
+  .choix button:hover{border-color:var(--forest);background:#f0f8f3}
+  .choix button.bon{border-color:var(--forest);background:#e0f0e6}
+  .choix button.mauvais{border-color:var(--maple);background:#fbe9e3}
+  .choix button:disabled{cursor:default}
+  .note{margin:0;color:var(--muted);font-size:.9rem;font-style:italic}
+  .lien{display:inline-block;margin-top:6px;font-size:.88rem;color:var(--forest);font-weight:600;text-decoration:none;border-bottom:2px solid var(--gold)}
+  footer{font-size:.8rem;color:#8a8277;max-width:560px;text-align:center;line-height:1.5}
+  .restart{background:var(--forest);color:#fff;border:0;border-radius:10px;padding:12px 22px;
+    font-size:1rem;font-weight:600;cursor:pointer;align-self:flex-start;box-shadow:0 3px 0 rgba(0,0,0,.15);font-family:inherit;min-height:48px}
+  .badge{display:inline-block;background:var(--gold);color:var(--ink);padding:3px 10px;border-radius:999px;font-size:.85rem;font-weight:700}
+  .resume{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+  .resume div{background:var(--cream);padding:10px 12px;border-radius:10px;font-size:.9rem}
+  .resume span{color:var(--muted);display:block;font-size:.8rem}
+
+  /* ——— Mise en page standard HP (11 nov. 2026) : Retour, cibles 48 px, mouvement réduit ——— */
+  .barre-hp{width:100%;max-width:560px;display:flex;justify-content:space-between}
+  .btn-retour,.btn-son{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+  .btn-retour:active,.btn-son:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+  /* ——— Optimisation HP (12 nov. 2026) : lien « Aller voir » à 48 px, portrait Gepeto ——— */
+  #card a.lien{min-height:48px;display:inline-flex;align-items:center}
+  .gepeto{display:block;margin:2px auto 0;width:96px;height:96px;border-radius:50%;background:#fffdf7;border:2px solid var(--soft);overflow:hidden;object-fit:cover}
+  /* ——— Arcade HP (12 nov. 2026) : série de bonnes réponses + fête de record, tons HP ——— */
+  .popup-serie{display:inline-block;align-self:flex-start;background:var(--gold);color:var(--ink);border-radius:999px;padding:10px 16px;font-size:.95rem;font-weight:700;box-shadow:0 3px 0 rgba(0,0,0,.15);animation:pop-serie .45s ease-out}
+  @keyframes pop-serie{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1);opacity:1}}
+  /* ——— Panel quiz (nov. 2026) : focus clavier visible, ciel HP ——— */
+  button:focus-visible,a.lien:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+  .confettis{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+  .confetti{position:absolute;top:-12px;width:10px;height:14px;border-radius:2px;animation:tombe 2.6s ease-in forwards}
+  @keyframes tombe{to{transform:translateY(105vh) rotate(540deg);opacity:.9}}
+  @media (prefers-reduced-motion: reduce){.confettis{display:none}.popup-serie{animation:none}}
+</style>
+</head>
+<body>
+  <div class="barre-hp"><button class="btn-retour" type="button" onclick="if(history.length>1){history.back()}else{location.href='/jeux'}">← Retour</button><button class="btn-son" id="son" type="button" aria-pressed="true">🔊 Son</button></div>
+  <header>
+    <div class="titre-groupe"><div class="gepeto-face" aria-hidden="true"><img src="data:image/png;base64,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" alt=""></div>
+    <h1>Sir H. Gepeto <small>· le quiz HP Outils</small></h1></div>
+    <div class="hud">Question<b id="qnum">1 / 12</b></div>
+  </header>
+  <div class="progress"><i id="prog"></i></div>
+  <main id="card"></main>
+  <footer>Gratuit · sans compte · record sur ton appareil. Découvre le site en jouant.</footer>
+
+<script>
+(() => {
+  const URL = "https://hp-outils.com";
+  const BANQUE = [
+    { q: "Combien de jeux gratuits y a-t-il sur HP Outils ?", a: ["12", "24", "57 (+1 caché)", "67"], c: 2,
+      f: "57 jeux gratuits + 1 caché, jouables sans compte et sans téléchargement.", u: "/jeux/" },
+    { q: "Combien de recettes gratuites trouve-t-on sur le site ?", a: ["101", "333", "666", "999"], c: 2,
+      f: "666 recettes gratuites, écrites de zéro, avec convertisseur de températures de four.", u: "/en-cuisine/index.html" },
+    { q: "Combien coûte un kit Sans Honte ?", a: ["2 $", "5 $", "10 $", "20 $"], c: 1,
+      f: "5 $ le kit PDF imprimable, aucune taxe ajoutée.", u: "/sans-honte" },
+    { q: "Combien coûte le lot de 10 kits ?", a: ["25 $", "30 $", "40 $", "50 $"], c: 2,
+      f: "Lot de 10 kits au choix : 40 $, aucune taxe ajoutée.", u: "/sans-honte" },
+    { q: "Les prix affichés incluent-ils les taxes ?", a: ["Non, il faut ajouter", "Oui, aucune taxe ajoutée", "Seulement la TPS", "Seulement la TVQ"], c: 1,
+      f: "HP est petit fournisseur : le prix affiché est le prix payé.", u: "/" },
+    { q: "Où restent les données des outils web ?", a: ["Sur un serveur à Montréal", "Sur l'appareil (localStorage)", "Chez Google", "Dans un nuage privé"], c: 1,
+      f: "Tout reste sur l'appareil, rien n'est collecté ni transmis.", u: "/outils" },
+    { q: "Faut-il un compte pour jouer, cuisiner ou utiliser les outils ?", a: ["Oui, obligatoire", "Non, aucun compte", "Seulement pour les jeux", "Seulement pour les recettes"], c: 1,
+      f: "Aucun compte, aucune inscription, nulle part.", u: "/" },
+    { q: "Combien de recettes de soutien (banque alimentaire) ?", a: ["42", "88", "169", "333"], c: 2,
+      f: "169 recettes construites avec 15 ingrédients de banque alimentaire.", u: "/en-cuisine/panier/" },
+    { q: "Combien d'ingrédients de base pour ces recettes ?", a: ["8", "12", "15", "21"], c: 2,
+      f: "15 ingrédients : pâtes, riz, tomates en conserve, légumineuses, thon, beurre d'arachide, avoine, farine, lait, œufs, pommes de terre, oignons, maïs, sauce tomate, huile végétale.", u: "/en-cuisine/panier/" },
+    { q: "Le kit Testament remplace-t-il un notaire ?", a: ["Oui, complètement", "Non, ce n'est pas un avis juridique", "Seulement au Québec", "Seulement hors Québec"], c: 1,
+      f: "Il aide à préparer un testament olographe, mais ne remplace pas un notaire.", u: "/sans-honte" },
+    { q: "Combien de recettes utilisent du lait ?", a: ["17", "45", "67", "92"], c: 2,
+      f: "67 recettes de soutien à partir du lait.", u: "/en-cuisine/panier/lait/" },
+    { q: "Combien de recettes utilisent des œufs ?", a: ["38", "61", "74", "99"], c: 1,
+      f: "61 recettes de soutien à partir des œufs.", u: "/en-cuisine/panier/oeufs/" },
+    { q: "Qui gère le site et répond aux visiteurs ?", a: ["Léa", "Marc", "Sir H. Gepeto", "Le Caribou"], c: 2,
+      f: "Sir H. Gepeto, le gérant du site, répond aux questions des visiteurs.", u: "/" },
+    { q: "Où est créé HP Outils ?", a: ["Montréal", "Terrebonne, Lanaudière", "Québec", "Gatineau"], c: 1,
+      f: "HP crée à Terrebonne, dans Lanaudière, au Québec.", u: "/" },
+    { q: "Combien coûte l'accès aux 16 savoirs des Passeurs ?", a: ["1 $/mois", "3 $/mois (28 $/an)", "5 $/mois", "10 $/mois"], c: 1,
+      f: "3 $ par mois, ou 28 $ pour l'année. Inscription par courriel.", u: "/les-passeurs" },
+    { q: "Combien de tomes « À toi l'histoire » sont payants ?", a: ["5", "8", "11", "16"], c: 2,
+      f: "11 tomes payants, 5 $ à 8 $, plus La Chasse-Galerie gratuite.", u: "/lire" },
+    { q: "Combien coûte le bundle de 3 tomes ?", a: ["8 $", "10 $", "12 $", "15 $"], c: 2,
+      f: "3 tomes au choix pour 12 $. Lien web personnel par courriel, sans compte.", u: "/lire" },
+    { q: "Quel est le prix d'un atelier de groupe ?", a: ["50 $ à 100 $", "150 $ à 290 $", "300 $ à 500 $", "Gratuit"], c: 1,
+      f: "150 $ à 290 $ selon l'atelier, aucune taxe ajoutée. Terrebonne et Lanaudière.", u: "/ateliers" },
+    { q: "Quels sont les deux personnages du balado Futur simple ?", a: ["HP et Gepeto", "Léa et Marc", "Rose et Simon", "Anne et Pierre"], c: 1,
+      f: "Léa et Marc regardent l'IA en face : entrepreneuriat, PME et futur.", u: "/balado" },
+    { q: "Les bons cadeaux, sont-ils encore en vente ?", a: ["Oui, à 5 $ et 10 $", "Non, mais les codes émis restent valides", "Oui, seulement les 50 $", "Non, tout a expiré"], c: 1,
+      f: "Plus en vente, mais les codes déjà émis restent utilisables jusqu'à épuisement.", u: "/" },
+    // ——— Le double (12 nov. 2026) : 20 questions ajoutées, faits vérifiés sur le canon HP (fiche 3 nov. 2026) ———
+    { q: "Combien d'outils y a-t-il dans la Boîte à outils ?", a: ["6", "7", "8", "9"], c: 2,
+      f: "8 outils : L'héritage vivant, On tranche!, Le décodeur de paperasse, Le vrai prix au 100 g, Le Démêleur, Démarches, Le Coffre à codes et Le Relanceur.", u: "/boite/" },
+    { q: "Lequel de ces outils fait partie de la Boîte à outils ?", a: ["Le Démêleur", "Le reste du mois", "Le Passeur de savoir", "Un petit pas à la fois"], c: 0,
+      f: "Le Démêleur est l'un des 8 outils de la Boîte. Les autres sont des outils rapides ou des entrées distinctes.", u: "/boite/" },
+    { q: "Combien y a-t-il d'outils rapides ?", a: ["2", "3", "4", "5"], c: 2,
+      f: "4 outils rapides : Le reste du mois, Ça vaut-tu la peine ?, Le relais et Maintenant.", u: "/outils" },
+    { q: "Lequel de ces outils est un outil rapide ?", a: ["On tranche!", "Maintenant", "Le Coffre à codes", "Démarches — la prochaine étape"], c: 1,
+      f: "Maintenant est l'un des 4 outils rapides. Les autres font partie de la Boîte à outils.", u: "/outils" },
+    { q: "Combien d'entrées affiche la page des outils ?", a: ["6", "7", "9", "12"], c: 2,
+      f: "9 entrées, plus « Votre cuisine familiale, à vous » annoncée pour bientôt.", u: "/outils" },
+    { q: "Quel livre PDF coûte 15 $ ?", a: ["La faim justifie les moyens", "Horizon Québec", "Enjeux de l'humanité à l'ère de l'IA", "Les enfants cuisinent pour faire plaisir"], c: 2,
+      f: "Enjeux de l'humanité à l'ère de l'IA coûte 15 $. Les trois autres coûtent 10 $ chacun.", u: "/prix" },
+    { q: "Combien coûte le mini-cahier « Un petit pas à la fois » ?", a: ["5 $", "10 $", "15 $", "20 $"], c: 1,
+      f: "10 $, aucune taxe ajoutée.", u: "/prix" },
+    { q: "Combien de titres compte la collection des kits Sans Honte ?", a: ["8", "10", "15", "20"], c: 2,
+      f: "15 titres, à 5 $ chacun, ou 10 au choix pour 40 $.", u: "/sans-honte" },
+    { q: "Combien coûte un grand tome « À toi l'histoire » ?", a: ["5 $", "8 $", "10 $", "12 $"], c: 1,
+      f: "Les grands tomes coûtent 8 $, les standards 5 $.", u: "/lire" },
+    { q: "Combien coûte le tome « La Chasse-Galerie » ?", a: ["5 $", "8 $", "12 $", "Il est gratuit"], c: 3,
+      f: "La Chasse-Galerie est gratuite, en plus des 11 tomes payants.", u: "/lire" },
+    { q: "Combien coûte un jeu à votre image « Express » ?", a: ["5 $", "29 $", "199 $", "399 $"], c: 1,
+      f: "Express : 29 $. Événement 199 $, Saisonnier 299 $, Permanent 399 $.", u: "/prix" },
+    { q: "Après la première année gratuite, combien coûte l'hébergement d'un jeu à votre image ?", a: ["5 $/an", "29 $/an", "99 $/an", "199 $/an"], c: 1,
+      f: "Hébergement gratuit la première année, puis 29 $ par an.", u: "/prix" },
+    { q: "Sous quel délai la direction humaine répond-elle ?", a: ["Sous 24 heures", "Sous 3 jours ouvrables", "Sous une semaine", "Sous un mois"], c: 1,
+      f: "La direction humaine répond sous 3 jours ouvrables, du lundi au vendredi.", u: "/" },
+    { q: "Dans les jeux, Sir H. Gepeto te tutoie ou te vouvoie ?", a: ["Il tutoie", "Il vouvoie", "Il alterne", "Il ne s'adresse à personne"], c: 0,
+      f: "TU dans les jeux, VOUS partout ailleurs sur le site.", u: "/" },
+    { q: "Combien de modes a Sir H. Gepeto ?", a: ["1", "2", "3", "5"], c: 2,
+      f: "3 modes : vendeur, ami et grognon.", u: "/" },
+    { q: "Comment s'appelle la chatte de Sir H. Gepeto ?", a: ["Pixel", "Mimine", "Gribouille", "Luna"], c: 0,
+      f: "Pixel, sa chatte de 2 ans, rescapée de l'extérieur.", u: "/" },
+    { q: "Combien de cases compte le jeu caché serpents et échelles ?", a: ["32", "48", "64", "100"], c: 2,
+      f: "64 cases. On y entre en disant « HGPTO joue avec moi ».", u: "/jeux/" },
+    { q: "Combien de blagues connaît Sir H. Gepeto ?", a: ["61", "84", "103", "120"], c: 2,
+      f: "103 blagues. (61, c'était l'ancien compte, au 24 octobre.)", u: "/" },
+    { q: "Combien d'outils de la Boîte gardent leurs données quand on ferme le navigateur ?", a: ["Aucun", "3", "5", "8"], c: 1,
+      f: "3 outils gardent leurs données sur l'appareil : Démarches, Le Coffre à codes et Le Relanceur. Les 5 autres ne gardent qu'en mémoire.", u: "/boite/" },
+    { q: "Le Panier Solidaire est-il un jeu ?", a: ["Oui, c'est un jeu gratuit", "Non, c'est une section En cuisine, pour bientôt", "Oui, c'est le jeu caché", "Non, c'est un atelier"], c: 1,
+      f: "Non : Le Panier Solidaire est une section En cuisine, annoncée pour bientôt. Ce n'est pas un jeu.", u: "/en-cuisine/index.html" }
+  ];
+
+  const KEY = "hp:gepeto-quiz:best";
+  const NB = 12;
+  let sonActif = true;
+  let ctxAudio = null;
+  // Petit « ding » doux sur bonne réponse : sinus 523 → 784 Hz, volume 0,05.
+  function ding() {
+    if (!sonActif) return;
+    try {
+      ctxAudio = ctxAudio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctxAudio.createOscillator(), g = ctxAudio.createGain();
+      o.type = "sine"; o.frequency.value = 523; g.gain.value = 0.05;
+      o.connect(g); g.connect(ctxAudio.destination);
+      o.start();
+      o.frequency.exponentialRampToValueAtTime(784, ctxAudio.currentTime + 0.12);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctxAudio.currentTime + 0.25);
+      o.stop(ctxAudio.currentTime + 0.3);
+    } catch (e) { /* audio indisponible : le jeu reste silencieux */ }
+  }
+  // Fanfare douce de record : trois notes sinus 523 → 659 → 784 Hz, volume 0,06.
+  function fanfare() {
+    if (!sonActif) return;
+    try {
+      ctxAudio = ctxAudio || new (window.AudioContext || window.webkitAudioContext)();
+      [523, 659, 784].forEach((freq, k) => {
+        const o = ctxAudio.createOscillator(), g = ctxAudio.createGain();
+        const t = ctxAudio.currentTime + k * 0.14;
+        o.type = "sine"; o.frequency.value = freq; g.gain.value = 0.06;
+        o.connect(g); g.connect(ctxAudio.destination);
+        o.start(t);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+        o.stop(t + 0.25);
+      });
+    } catch (e) { /* audio indisponible : le jeu reste silencieux */ }
+  }
+  // Confettis doux aux couleurs HP pour fêter un nouveau record (cachés en mouvement réduit).
+  const COULEURS_CONFETTIS = ["#2f6b4f", "#d9a441", "#b5451b", "#3f7fa3", "#e8e0cf"];
+  function confettis() {
+    const boite = document.createElement("div");
+    boite.className = "confettis";
+    boite.setAttribute("aria-hidden", "true");
+    for (let k = 0; k < 24; k++) {
+      const c = document.createElement("i");
+      c.className = "confetti";
+      c.style.left = `${(k * 41) % 100}%`;
+      c.style.background = COULEURS_CONFETTIS[k % COULEURS_CONFETTIS.length];
+      c.style.animationDelay = `${(k % 8) * 0.15}s`;
+      boite.appendChild(c);
+    }
+    document.body.appendChild(boite);
+    setTimeout(() => boite.remove(), 4500);
+  }
+  let state = null;
+  const card = document.getElementById("card");
+  const prog = document.getElementById("prog");
+  const qnum = document.getElementById("qnum");
+  const best = () => { try { return Number(localStorage.getItem(KEY) || 0); } catch (e) { return 0; } };
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function start() {
+    state = { questions: shuffle(BANQUE).slice(0, NB), i: 0, bonnes: 0, serie: 0, meilleureSerie: 0, bonus: 0 };
+    prog.style.width = "0%";
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    if (state.i >= state.questions.length) return finish();
+    const q = state.questions[state.i];
+    const choix = shuffle(q.a.map((texte, idx) => ({ texte, correct: idx === q.c })));
+    state.courant = { q, choix };
+    qnum.textContent = `${state.i + 1} / ${state.questions.length}`;
+    prog.style.width = `${(state.i / state.questions.length) * 100}%`;
+
+    card.classList.add("fade");
+    setTimeout(() => {
+      card.innerHTML = `
+        <div class="jour">Question ${state.i + 1} sur ${state.questions.length}${state.serie >= 2 ? ` · 🔥 Série de ${state.serie}` : ""}</div>
+        <h2>${q.q}</h2>
+        <div class="choix" id="choix">
+          ${choix.map((c, i) => `<button data-i="${i}">${c.texte}</button>`).join("")}
+        </div>`;
+      card.classList.remove("fade");
+      card.querySelectorAll("button[data-i]").forEach(b =>
+        b.addEventListener("click", () => repondre(+b.dataset.i)));
+    }, 120);
+  }
+
+  function repondre(i) {
+    const { q, choix } = state.courant;
+    const bon = choix[i].correct;
+    // Arcade : série de bonnes réponses d'affilée. Le score de base reste 1 point
+    // par bonne réponse ; le bonus (série − 1 dès la 2e bonne d'affilée) est une
+    // couche séparée, affichée comme telle, jamais ajoutée au score de base.
+    let gainBonus = 0;
+    if (bon) {
+      state.bonnes++; ding();
+      state.serie++;
+      if (state.serie > state.meilleureSerie) state.meilleureSerie = state.serie;
+      if (state.serie >= 2) { gainBonus = state.serie - 1; state.bonus += gainBonus; }
+    } else { state.serie = 0; }
+
+    card.querySelectorAll("button[data-i]").forEach((b, idx) => {
+      b.disabled = true;
+      if (choix[idx].correct) b.classList.add("bon");
+      else if (idx === i) b.classList.add("mauvais");
+    });
+
+    const lien = URL + q.u;
+    card.insertAdjacentHTML("beforeend", `
+      ${gainBonus > 0 ? `<div class="popup-serie" role="status">🔥 +${gainBonus} bonus · Série ×${state.serie}</div>` : ""}
+      <div class="bulle-gepeto"><div class="gepeto-mini" aria-hidden="true"><img src="data:image/png;base64,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" alt=""></div><p>${bon ? "Bonne réponse." : "Pas tout à fait."} ${q.f}</p></div>
+      <a class="lien" href="${lien}" target="_blank" rel="noopener">Aller voir : ${q.u}</a>
+      <div class="choix"><button id="next">Continuer →</button></div>`);
+    // Panel quiz (nov. 2026) : la popup de série reste affichée jusqu'à « Continuer »
+    // (avant, elle disparaissait après 1,5 s : un lecteur lent ne voyait jamais son bonus).
+    document.getElementById("next").addEventListener("click", () => {
+      state.i++;
+      renderQuestion();
+    });
+    // Panel quiz (nov. 2026) : le focus passe sur « Continuer » après la réponse,
+    // pour avancer au clavier (Entrée/Espace) sans Tabuler depuis un bouton désactivé.
+    document.getElementById("next").focus({ preventScroll: true });
+  }
+
+  // ——— Niveaux de progression (12 nov. 2026) : rangs selon le score sur 12, ton HP, encourageants ———
+  const RANGS = [
+    { min: 12, titre: "Grand Ami de Gepeto", texte: "Parfait ! Tu connais le site comme ta poche, et Gepeto te tire son chapeau." },
+    { min: 10, titre: "Explorateur Émérite", texte: "Magnifique parcours ! Encore quelques recoins à découvrir, et le site n'aura plus de secret pour toi." },
+    { min: 8, titre: "Connaisseur du Site", texte: "Très belle visite ! Tu connais déjà bien les lieux." },
+    { min: 6, titre: "Promeneur Curieux", texte: "Belle promenade ! Chaque bonne réponse est un pas de plus sur le site." },
+    { min: 3, titre: "Visiteur en Herbe", texte: "Bon début ! Le site est plein de belles découvertes : prends ton temps pour l'explorer." },
+    { min: 0, titre: "Nouveau Compagnon", texte: "Bienvenue ! Chaque question t'a montré un coin du site : la visite ne fait que commencer." }
+  ];
+  function rang(n) { return RANGS.find(r => n >= r.min) || RANGS[RANGS.length - 1]; }
+
+  function feedback(n) {
+    const p = n / NB;
+    if (p === 1) return "Parfait. Tu connais le site comme Sir H. Gepeto.";
+    if (p >= 0.75) return "Très bon. Tu en sais plus que la plupart des visiteurs.";
+    if (p >= 0.5) return "Pas mal. Quelques sections à explorer encore.";
+    return "Bonne découverte. Les pages du site t'attendent.";
+  }
+
+  function finish() {
+    prog.style.width = "100%";
+    qnum.textContent = `${NB} / ${NB}`;
+    const isBest = state.bonnes > best();
+    if (isBest) { try { localStorage.setItem(KEY, String(state.bonnes)); } catch (e) {} }
+    // Panel quiz (nov. 2026) : une partie parfaite est fêtée même si elle égale
+    // le record (12/12, record déjà 12) — fanfare + confettis, sans toucher au record.
+    const parfait = state.bonnes === NB;
+    if (isBest || parfait) { fanfare(); confettis(); }
+    const r = rang(state.bonnes);
+    card.innerHTML = `
+      <div class="jour">Quiz terminé</div>
+      <h2>${isBest ? "Nouveau record !" : parfait ? "Parfait !" : "Bien joué"}</h2>
+      <p><span class="badge">🏅 ${r.titre}</span></p>
+      <div class="bulle-gepeto"><div class="gepeto-mini" aria-hidden="true"><img src="data:image/png;base64,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" alt=""></div><div><p class="texte">${r.texte}</p>
+      <p class="texte">${feedback(state.bonnes)}</p></div></div>
+      <div class="resume">
+        <div><span>Bonnes réponses</span>${state.bonnes} / ${NB}</div>
+        <div><span>Record</span>${best()} / ${NB}</div>
+        <div><span>Ton rang</span>${r.titre}</div>
+        <div><span>Meilleure série</span>${state.meilleureSerie} bonne${state.meilleureSerie > 1 ? "s" : ""} d'affilée</div>
+        <div><span>Bonus arcade</span>+${state.bonus} (série — hors score de base)</div>
+      </div>
+      <p class="note">Pour découvrir les autres pages :</p>
+      <div class="choix">
+        <a class="lien" style="display:block;margin:0;padding:12px 14px;border:2px solid var(--soft);border-radius:12px;text-decoration:none;color:var(--ink);background:#fff;font-weight:600" href="${URL}/jeux/" target="_blank" rel="noopener">🎮 Les jeux gratuits</a>
+        <a class="lien" style="display:block;margin:0;padding:12px 14px;border:2px solid var(--soft);border-radius:12px;text-decoration:none;color:var(--ink);background:#fff;font-weight:600" href="${URL}/en-cuisine/index.html" target="_blank" rel="noopener">🍳 En cuisine</a>
+        <a class="lien" style="display:block;margin:0;padding:12px 14px;border:2px solid var(--soft);border-radius:12px;text-decoration:none;color:var(--ink);background:#fff;font-weight:600" href="${URL}/outils" target="_blank" rel="noopener">🧰 Les outils web</a>
+        <a class="lien" style="display:block;margin:0;padding:12px 14px;border:2px solid var(--soft);border-radius:12px;text-decoration:none;color:var(--ink);background:#fff;font-weight:600" href="${URL}/sans-honte" target="_blank" rel="noopener">📘 Les kits Sans Honte</a>
+      </div>
+      <button class="restart" id="again">Rejouer</button>`;
+    document.getElementById("again").addEventListener("click", start);
+  }
+
+  function renderStart() {
+    card.innerHTML = `
+      <div class="jour">12 questions · découvre le site</div>
+      <img class="gepeto" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAADAFBMVEXY06/h3NSvqJutrZipp6GtqJ7hv7DZ2talkGzh2ci/fz+wb0mlh1+tnH+qqtS8w8TFuJfEq6Df07vf0brSwJ/t38IAAADqupTtwJpSRTquh29oWEzTpoZwZFlIOS/kq4e1k3rNmHdXTEK3mYP///51a2Pzx6SKem22p43NtJXDnYOQhHR2dG5bU0rEimitdlj8/Pt/f3/YoX2Oi4WTlJCJaFOqVVU4LCOpfGQ0Jhw8MimRc1rXxqt4hYfn2cuqqqr/AAADAgLPu6b//wB/fz+qqlVVVVVlSziSZ06Xa1WytbRkTkCHeWzVyK78/Pny49N7PT1aZmmSalOTeGmdl4+qa0qmfWSnhGyuqqXk1Ljk1Lfu6+lLOy6SZ1GXeGWOioTUx6z/f3//qqr//39/AABuamWZcluLeXCWkYu3fXq8gFyqhm6mhmyhm5KvmYi/v3/Ow7nMxLHQ09TgoX7h0rbz2srx5M3///8tHRJTOjNuWUl/fwCYa1KPa2eXc1uXdVuZclibeGOLg3OYpaejdVqlhG6piHGupJW8urbBspXFtpjMvaPUybXOy8jhnnrm17rl1rnn28Tn59D35sny48n//7E2Li47OzRVAABALBxMMx1PNiBURjtURTZHR0daU0poRi5xVTh4VTx3VT14VVVtaGJ9dW10foF///+FXUeEW0SGZFCPa2Kad2GQd2iUjHqaiXGRjYqUlIaWlpCkfWiifWmkemKqh3Skg260nX+1k2ympnmipZmxqJWqopSuqaatqaHBg17Hu6/IvanKvqnVxafWxabGxsbOysDOysPkvaLm2Lzm3czs3cLu4MXp6en/+NkOCgARDwwAAP8XFxIWFhYA//81HBM/LB4vLyc1LiUyMig6Ny9AMB9FPzlaOixGQz1KQzpWT0pVVQBTXGF1TjRnRjBmTEx6WD9qXEBsXlNtaF9qYl12b15zbGxvb2dva2Z3d3J5d3SWUS6RXT6UVVWIXEiRbVuNbWCOgXCRgnCNjY2Li4WXjoeckH+ekHSNxmerAAABAHRSTlMS1KsMcewUJa+TBGUzdAb/dP9Auf9IAP7+/v7+/v7+/v7+/f4E/v79/P3+/f79/v3/Av78/f4D/vv+/f74//0EAf/7AQQDA/5NlPr/0ZMq/QT/rRHS/9TW+9X8/9tvRc8UAgMCAtiVMVkK/naml8sEMUz//28SbVT/Ec8CyxBvrMN2yf/XUpenjKbPsa///1KQjRE3rgMNCwP/iIa70Q6GFg0o/wd5o/8CUv8tKZi1DrOoEjMkUK0ZMQ00Cyxzyy1P/3GMwWrbFCtP/6RoulQZKUh2AWD/AbXIINc4i/9Yq1OU2wP/J4MKrTekOF3OIUCOMZ4WMQxjHP87ZBIqb4SrX8YlNAAADXdJREFUeNq1mgV4G0cWgJ2Uj3FWu7PMq90VS5YFju2AE1OYkwabpKEmaZIyMzNd8crtXZm5vTIfMzMz85tZrShyI6fpfIlkydL75/GbXXeg93h1tP3JnmQuN2PGpEmTZszI5Y7Zy4BkbnJP81uTcz17CZCcpJOnG268469Lp9G1dOoNR5G3VuT2AmDyCnj4zPFr5s3Lc7KiRKNRReG4/Ly710z9NPxmUvLdAXJU+ol5OcoHK0qWpmmyInPxE5YCI5fcc0ByNdIfOiGvhLJD+XKwQJFTp3022MUeASYhdPCJXDTcd/gcjVbE0xUniD0CQIwcOiuvRHdZGrFQjcAVl9IPjxUAlp16LCcTaVqjcK2ZwM2aMXYNkkhfwzGMw8ta0wLJgfwQkJ//8M1jBiTR/bOUCFkNBCI7dHFNgbUoOVbAMWj2sbzJRCIMIcgNhoGIdRyGodoFgA3HrRgjYHXPY8fyRDhdIKi2eCd8O0IgPCUchyaOCdCTu30Wb1blwD8SofAfNl4RXFtRjpt/8xgBObRGMasbjTC1H+uFhz+DEhvewQkdreRP5SJMK5mBYPoWVSxYkjy0Su9pH9Cz4pFT6/ZMjcRUtWAqguvZEncwWtE+IIem1RzQYCImpIX6hUrx82YnJ7YLSKK1+frN1/ZbB2zSgFFOQpPbBeTQLCbS7NaKRCaU3ghgJFChXRMl0U+40BpVIZEmm1QBlbck4oVcewDiAWLnSCUO6/bZqFMDgFGOH81GzQAdnRrGTKA80zJgm9/g70KHtgXIoTuUCFO/SQkymBYeuiSmEqdNTuLvOnRlOwB9ylcfjpjUqjyf4kNF+ADC1HulASDx+dmjlIt6wJXkYRbnmJEgUSWeb8yB5mitOIvWi4eSyTY0mHDd5TdeLQq8yVc8GGy9WjurZqo5PwSchg7bDaBnn+9ec+2SJUuuYbs6XQ6bYVngU6lAcCqwU52bawCFO/2R1jaqAqagH7CsyKoqK4pip9CJTcdsTKfazxHTbKqBMIvNf3BikobhKIAe9Ktnz/C7KIJlOwudRUs2W4hmGNPkLa6pMZDednrLSK33wRe+ScUTACuqIis6zbXa5IuMyeGr+h3TgfZjmrWeACpMASMlH/zLqIBvF1hWxb4qqiAcOGJBMOuFMxEn25XVwISs7WLyVEzVA7j5s9Hke+ZNbSwaNcAtYHsREOSbQMBEDZ6v6mAqEV7sEnEX6EY/KXaxbvjrSvffuBqdxrUG6OhisEon+V7AEQHgi1gIrQSG6YP3CyJ1EXUUfE6I0qx2whlm42kbRwFMQd8XnzYKrNjZRYKoIBIVVHiVpVYyZV4UsEisRzRjMX0kn8Yk1vj6KWk0E33jD68SgZiDaZTDYgF0AWsVMNXAwRi4xP8qyK6IBxVgN/18pD0AQuPVwhBHypACR4ybujpFuleawAJLeGT3RH4gnlqpk3sNAE49YBqZylslmr5JvP4IGeJCUUgx4ESSE2KWlrKriFuI/0kuspUH+vI7PLFhFZDPc0vR+1oCVqNvHaKPaClGifGgghRhsl0FtksmGjCB4wOzFDrpqr5BikXFRvE4F1s//5et80BHv/03GpFT0tw8p2lWlpOYfL9YhP1FFBN3VnZeAMPhYh62ikXgs8CxzBAQj6UkieG+fl3P6P1AkxS5e3Fiv5meJ8QlJSjXEsN30eAC4dk8FwP9oJIrRXC7CM5nKjaKx6QUr1hLjkKjAZJJ/XSJOy+R+LBfNn6cduNKLCjNEIj9INzKcwpZsXiMh1iQeJCO+ZtIjVUAoKSAnP3a39CM5GgaTEInScr0RCLteb2diYQbj0nV0g99IKZUWzCnAIFhil1iUMIJIJVSYjHue0TQxFEBGySlO5Eol9Xerwxsy4CVmOrwxcRSDK/EOA4MZzIAA4CZPTKoFlGiQEqJK9mfbzjxwMfrIrVZA4bvSyQymZm9vb1GOS3DQBICYHtxzsKCIOAsKBCjWzexEqloAID1MQ6qC0TBo7UhpqNhZNE38wyXSAx4Gb/Tz3gDYJZUCIhzH52+zfC8mcaCNP57vmavCiAlKfFY/MguSBBh6B/VxtME0FKmohEnlNNpLzOdk+KRymTHaYsTiVNm3lboVROJ28p9xXh9TwYAD4DnYlkCULFVnfSaAFzKjCg26FAupwcWy3xMMUNAKUHARm9v13nbyt7i7nidCqQfQFTF1oMKUIWF4sYPhGeSesBEpB+dMkmD7Zu+uLu7BJaOh2cDUwHfJDJlD5zT65W9RIKvAyhW1pJoEYviQ0527328dRSBBktoH5ZiQcCDY82wKUtgOeIctbdXzZTLiYRcN2NwAiYACLEY/qL+yv6odlxozOS3aeJLwbdSoIBkMpVUoDZa7GVOKZchyM5LdHN1x7R+jIugwHMxheeNdQ2XRxoB/yqQBiORSYgowMdhPCEJRXJNyUOGbPO8ctmbOQDypToFREHNSvAVMjzhL99+xai16CgRM5URjohdDy6WAgBUCyVP3DCQyZwyLtGXrx/CsqygCmRKpoxbGjpO03StDvLBYEUGOyluUoAUnBag1nB8qbu723S4+v0zPLQhFYPeKUhynnu1YfhqBqgcU53QY9x0M5BPp18JKhMpFVBOpYZpiWMFjPtjdLRU8gc3XttpAvh+tpY9c18LAFJ4dm3M3uoCF2N87fvjUMe5zVuajjrNAKu/OoqCi7uphQ4/XKokrRJTSE+pX9CXRAs0uBr96c9Tpz6Kmg/9zSbKsHIIUOJ0+4dXlAgQUPMVvgEBHnBdjD+Vq17IegfAFWwaZ6tHybnK+eeDeJB5fqo2YjNNCmBfsDQATJiRzLW4AtlYKu5X095g5bSkcHdmY6R/5ePxuFQnuJ4BBmI9ywPAT9GPdnvCgVLxQ8P2iyR5ZTL9DGZBdnawvx9zUBjMSMNVFnqSYyxREDTPwuzRn0PtAA4RMgaGcIPc9AQP06X6dGBlszykRaTRPqTBCLaABZEbt8vZo9VU8XvftXyLkUXXzqTTrhUgsIEhTlQ269TP81Ig3zDAQJgdN6LvHjAF/U61DGEw2i8syGQsN+2BXOxahmWlPWxZeFA26+UXwT6eZ9m+z3pHtFagEZBEB0AzIlLtNKZDtC+yAkjPWBk77S5wDdaKVKTDsIRZwxBc2IeP2YyutwH4EjhBdeFbxGtWNgu21bJkoE4L2LNcd4HliW5FvsSxvmcYhptxsaqq40aRv8u1il+rGL4lCKxlQteBU5ipZTGZG8nM7tkZQ4wG4jErGKCclQa1VFY4Ak1oB5BEz6isB/IF1oZTeCwep4XN4aNROV7MFoQF4FCGiod9CEba1Vw41ansJvBfW9cqkG50km8KrBwh5z6ei8+dOzdOxmZQB4xueywXzUJfJ7tIw2QjqD7M8QM6atNE6D4fC54rqKR3KjSBq6UoookQUlD6yfQF8SNoaWz5EEKi676BLmsLoKO306pPihcmgDgUTyrbCUITot4SKgu7RsZSffhkoei4m8iVjnY0mIDONEQLwoMlMot3EuPASBs0SAe2boTyMWQJjIk+FgXbtn/Rtomm6H8sGMYcC4ONTCwOYpzN5isVwmJD8cAxMuBd0IDFtu041snuCy1zbReAjpZDID173BAQNNYnQlRcOS1XjE8W9BiXBff6rG8TgGvLrvZ8CyvtemE2qe/Lek+iISNIZR+cjjlSIfisavjgW5ANAF8VQDqcNKl8x5VtW7u3xZXBjlb3PlhhHbrVMqilYdeegTWTp5UHXlkZwceQ6aCbD6c2mcrvIwDnrLY0ACttZtMv3zPeI6Y2SDkwBFEYHAQHwI/Y1SBQhcplGai6ml36iFM6gShyRnuACfpOwdgXPZm2sOdCKaUECEdwrGukBVp7gnO4il3HtkvnDju2SwDj2wNAUlrsslc+9FTasNY9czfUaoNGjWAZaWvA0wR61CfXXCyNt53S8PISdYHtLOzYNY46Wt1Au/x/Al4wZ2SZfSsCZ8/J0LCBvXtzNu0HxdkPDvuqsJ9j9y1yhl98yyaaOKU2AWQ4Psf33PvOPHPtlBF3aCRN2qft2enMCFqWEWgLLbCaaztPzd5ne2nRIrtI9l8qfVxf1d5NIv2Yz9usCH6AmHU3j6SXnWzMsb1zMwehAzIGFLcu7LO201fauvOiCy8slZyi7NhnL3zppY+1yLTWt7lWISB0GmRQWLcVPYDWztnqjn95i66f4cH2C1ZJ6ys9/+IF6M3uRdO77SI4oO/1i5cvH8ONOh2NnGux3vAB4eufPUA3N4QLBeGflwxfeMEOeLWjY59LuzVqny2tprp3utW4EulvDQt42RaIvMr3dHg+msVPXxR+5omF0w8queAKp++TaKLexlTRaCWE3hgSvP/Q9NdDyn93ghh9/47Hruy4ZOeiPtmVeefsrZegVWO/3TtxAhSNi35z/S7NsJJMl3Y7Lojn7dIFaLSGvLs74i0ud0+6jKiz/c2zDpSJeBr9Fx922Z7e0weztzDsZPRBzZVlUuQcc9HCcTtGazZj+8ONOqz+xNmO8wnHeWF4+6WvL9+xl/4ypKFlnFNyzjpnu75X//Skoa8OD+9PjaXro42M7w5AM2XlyvdOAzThsGSbn9xzDdpc/wdgCLHnJxmEEAAAAABJRU5ErkJggg==" alt="Portrait de Sir H. Gepeto">
+      <h2>Sir H. Gepeto te pose des questions</h2>
+      <p class="texte">Le gérant du site veut savoir si tu connais HP Outils. 12 questions tirées au sort sur 40, sans compte, sans jugement. Après chaque réponse, un lien vers la page pour aller voir.</p>
+      <p class="texte">À gagner selon ton score : Nouveau Compagnon, Visiteur en Herbe, Promeneur Curieux, Connaisseur du Site, Explorateur Émérite, Grand Ami de Gepeto.</p>
+      <div class="choix"><button id="go">Commencer</button></div>`;
+    document.getElementById("go").addEventListener("click", start);
+  }
+
+  document.getElementById("son").addEventListener("click", (e) => {
+    sonActif = !sonActif;
+    e.currentTarget.textContent = sonActif ? "🔊 Son" : "🔇 Muet";
+    e.currentTarget.setAttribute("aria-pressed", String(sonActif));
+  });
+
+  renderStart();
+})();
+</script>
+</body>
+</html>
