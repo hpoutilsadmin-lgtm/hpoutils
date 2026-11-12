@@ -594,6 +594,12 @@
     }, "Question : poser une question sur la page"));
     var btnGepeto = boutonCommande("gepeto", "Gepeto", "face", function () {
       document.dispatchEvent(new CustomEvent("hp:gepeto-ouvrir", {}));
+      /* P4-B : le Pont ne monte le moteur qu'une fois par page
+         (HgptoPont `monte` : le 2e tap ne redispatch pas
+         `hp:gepeto-pret`) ; si le moteur est déjà prêt, on dévoile
+         l'hôte tout de suite, sans attendre un signal qui ne
+         reviendra pas. */
+      if (moteurPret) { devoilerGepeto(); }
       basculerPanneau("gepeto", boutonsCommandes.gepeto);
     }, "Gepeto : ouvrir Sir H. Gepeto");
     rangee.appendChild(btnGepeto);
@@ -631,6 +637,50 @@
     var hoteGepeto = el("div", { "id": "compagnon-gepeto-hote", "class": "compagnon-gepeto-hote" });
     sectionGepeto.appendChild(hoteGepeto);
     barre.appendChild(sectionGepeto);
+
+    /* P4-B (lot correctif panneau Gepeto, 12 nov. 2026) : l'hôte
+       ci-dessus ne devient visible que quand le moteur signale
+       `hp:gepeto-pret` (fin de `initHgpto`, hgpto-engine.ts).
+       Avant ce lot, rien ne retirait jamais `hidden` : le moteur
+       tournait invisible. UN SEUL site retire `hidden` sur
+       `sectionGepeto` : `devoilerGepeto()` ci-dessous.
+       Modèle repris de la v3 (compagnon.js) : `pret` dévoile,
+       `ferme` remasque l'hôte et ferme le panneau pilote,
+       `réduire` remasque l'hôte et réduit la barre comme son
+       bouton « Réduire ». Écarts au modèle, documentés :
+       (1) la v3 ne fait que fermer sur `réduire` ; ici on appelle
+       aussi `reduireBarre()`, parce que la barre réduite ne cache
+       que `.bh-contenu` (CSS L66) et pas `.bh-gepeto` — sans le
+       remasquage, le moteur resterait visible au-dessus de la
+       barre réduite ;
+       (2) la v3 pose un drapeau de fermeture de session
+       (`gepetoFermeSession`) et redispatch `hp:gepeto-rouvrir`
+       au tap suivant ; ici le tap redispatch toujours
+       `hp:gepeto-ouvrir` et le Pont ne monte qu'une fois, donc
+       aucun drapeau n'est nécessaire.
+       Aucun événement nouveau dispatché côté barre. */
+    var moteurPret = false;
+    function devoilerGepeto() {
+      moteurPret = true;
+      sectionGepeto.removeAttribute("hidden");
+    }
+    function masquerGepeto() {
+      sectionGepeto.setAttribute("hidden", "");
+    }
+    document.addEventListener("hp:gepeto-pret", devoilerGepeto);
+    document.addEventListener("hp:gepeto-ferme", function () {
+      masquerGepeto();
+      if (panneauOuvert === "gepeto") { fermerPanneau(); }
+    });
+    document.addEventListener("hp:gepeto-reduire", function () {
+      masquerGepeto();
+      reduireBarre();
+    });
+    /* Moteur déjà monté par une autre voie avant la barre (ex.
+       bundle autonome chargé au chargement de la page) : le
+       signal `hp:gepeto-pret` est déjà passé, on dévoile tout de
+       suite — même garde que `assurerMoteur` dans la v3. */
+    if (document.querySelector(".hgpto-host")) { devoilerGepeto(); }
 
     /* Liseré 22 px + rappel, quand la barre est réduite. */
     var lisere = el("div", { "class": "bh-lisere" });

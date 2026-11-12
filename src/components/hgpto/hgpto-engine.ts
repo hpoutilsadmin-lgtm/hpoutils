@@ -5847,19 +5847,37 @@ export function initHgpto() {
         }
       } catch(e){}
 
-      /* Lot indispensable : bonjour, 1 fois par session, à l'arrivée —
-         jamais à chaque page (drapeau session). En automne l'après-midi,
-         la variante d'automne ; sinon, le bonjour simple. */
+      /* Lot correctif panneau Gepeto (12 nov. 2026, B1) : bonjour, 1 fois
+         par session, à l'arrivée — jamais à chaque page. En automne
+         l'après-midi, la variante d'automne ; sinon, le bonjour simple.
+         Correctif : le drapeau 'hgpto-bonjour' n'est posé qu'APRÈS le
+         bonjour réellement dit (avant, il était posé avant le minuteur
+         et la garde à +1 500 ms sortait sans réessai : bonjour perdu
+         pour toute la session). Si la garde est vraie, on réessaie
+         toutes les 5 s, 12 réessais au plus (≈ 1 min après l'arrivée),
+         et on retente aussi à chaque ouverture du panneau
+         ('hp:gepeto-ouvrir') tant que le bonjour n'a pas été dit.
+         Un seul minuteur à la fois, pas de boucle infinie. */
       (function(){
-        try { if (sessionStorage.getItem('hgpto-bonjour') === '1') return; sessionStorage.setItem('hgpto-bonjour', '1'); } catch(e){}
         var bj = new Date();
         var automne = bj.getMonth() >= 8 && bj.getMonth() <= 10;
         var apresMidi = bj.getHours() >= 12 && bj.getHours() < 18;
         var ligne = (automne && apresMidi) ? INDISP_BONJOUR_AUTOMNE : INDISP_BONJOUR;
-        setTimeout(function(){
-          if (paused || isHidden || docHidden || qaOpen || gameOn || tourOn || state === 'sleep' || isBusy()) return;
+        var essais = 0, minuteur = null;
+        function direBonjour(){
+          try { if (sessionStorage.getItem('hgpto-bonjour') === '1') return; } catch(e){}
+          if (paused || isHidden || docHidden || qaOpen || gameOn || tourOn || state === 'sleep' || isBusy()){
+            if (essais < 12 && !minuteur){
+              essais++;
+              minuteur = setTimeout(function(){ minuteur = null; direBonjour(); }, 5000);
+            }
+            return;
+          }
+          try { sessionStorage.setItem('hgpto-bonjour', '1'); } catch(e){}
           showBubble(esc(ligne), 6000, 'talk');
-        }, 1500);
+        }
+        minuteur = setTimeout(function(){ minuteur = null; direBonjour(); }, 1500);
+        document.addEventListener('hp:gepeto-ouvrir', function(){ if (!minuteur) direBonjour(); });
       })();
 
       /* ---------- Commandes de la barre unique v3 (lot 5 nov. 2026) ----------
@@ -5885,6 +5903,19 @@ export function initHgpto() {
         if (reading.on){ try { if (TTS) TTS.resume(); } catch(err){} document.dispatchEvent(new CustomEvent('hp:lecture-etat', { detail: { etat: 'lecture' } })); }
       });
       document.addEventListener('hp:gepeto-rouvrir', function(){ if (hgptoClosed) restoreFromClosed(); });
+      /* Lot correctif panneau Gepeto (12 nov. 2026, B2) : le panneau
+         Questions ne reste plus bloqué ouvert. La barre ferme le
+         panneau de son côté ('hp:gepeto-ferme' / 'hp:gepeto-reduire') ;
+         le moteur libère alors qaOpen en appelant closeQA() — sinon
+         chaque scène restait gardée par qaOpen pour toute la session.
+         Le moteur émet lui-même ces deux événements (boutons Fermer /
+         Réduire en zone intégrée) : l'écouteur referme alors QA aussi,
+         ce qui corrige du même coup la fermeture propre du moteur
+         (qaPanel caché sans qaOpen libéré). closeQA() n'émet rien :
+         aucune boucle possible. Les réponses dans #qa ferment toujours
+         par dismissQA()/closeQA() comme avant. */
+      document.addEventListener('hp:gepeto-ferme', function(){ if (qaOpen) closeQA(); });
+      document.addEventListener('hp:gepeto-reduire', function(){ if (qaOpen) closeQA(); });
       document.dispatchEvent(new CustomEvent('hp:gepeto-pret'));
 
 }
