@@ -367,6 +367,14 @@
       li.appendChild(b);
       liste.appendChild(li);
     }
+    /* Q-DB-1 = A (12 nov. 2026) : vrais liens vers les pages du site.
+       Chaque route est vérifiée dans src/routes/. Un vrai lien <a>
+       navigue comme les liens du site (pas de rechargement forcé). */
+    function lien(label, href) {
+      var li = el("li");
+      li.appendChild(el("a", { href: href }, label));
+      liste.appendChild(li);
+    }
     item("Copier le lien de la page", function () {
       var lien = window.location.href;
       function ok() { dire("Lien copié."); }
@@ -386,8 +394,15 @@
     item("Ajouter aux favoris", null, true);
     item("Télécharger (aucun fichier sur cette page)", null, true);
     item("Signaler un problème", null, true);
-    item("Consulter l'aide", null, true);
-    item("Contacter HP", null, true);
+    lien("Consulter l'aide", "/faq");
+    lien("Contacter HP", "/contact");
+    lien("Balado", "/balado");
+    lien("À toi l'histoire", "/univers");
+    lien("Ateliers", "/ateliers");
+    lien("Prix", "/prix");
+    lien("Jeux à votre image", "/jeux-a-votre-image");
+    lien("À propos", "/a-propos");
+    lien("En cuisine", "/en-cuisine");
     item("Réseaux sociaux", null, true);
     zonePanneau.appendChild(liste);
     zonePanneau.appendChild(el("p", { "class": "bh-note" },

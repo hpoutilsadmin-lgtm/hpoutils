@@ -12,7 +12,6 @@ import {
 
 import appCss from "../styles.css?url";
 import hpCss from "../styles/hp.css?url";
-import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { HgptoPont } from "@/components/hgpto/HgptoPont";
 import { HamsterWheel } from "@/components/hamster/HamsterWheel";
@@ -104,7 +103,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
            barre-haut.js (§2.2) : aucun attribut ici. Correctif
            11 nov. 2026 : le script se ré-exécute à chaque navigation
            interne — sa garde d'idempotence (barre-haut.js) empêche
-           qu'une barre de plus soit montée. */
+           qu'une barre de plus soit montée.
+           Lot correctif double barre, 12 nov. 2026 : l'en-tête
+           SiteHeader (logo HP + Menu) est retiré de RootComponent —
+           il doublait cette barre sur toutes les pages (doigt d'HP,
+           12 nov. 09 h 12 : 2 barres en ligne). La barre-haut est
+           désormais la seule navigation en haut. */
         src: "/barre-haut/barre-haut.js",
         defer: true,
         "data-barre-haut": "1",
@@ -166,7 +170,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="hp-app">
-        <SiteHeader />
+        {/* Lot correctif double barre, 12 nov. 2026 : SiteHeader retiré —
+            la barre-haut (script en tête) est la seule barre. Voir
+            PREPARATION-LOT-DOUBLE-BARRE-12nov-2026.md (Q-DB-1 : les
+            liens secondaires ; Q-DB-3 : suppression du fichier). */}
         <main>
           <Outlet />
         </main>

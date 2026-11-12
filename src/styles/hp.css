@@ -32,27 +32,12 @@ body{
 }
 body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .hp-app a{color:inherit;text-decoration:underline;text-underline-offset:2px}
-.hp-app .site-nav a,.hp-app a.logo,.hp-app a.action-btn,.hp-app a.hero-btn,.hp-app a.outline-btn,.hp-app a.small-btn,.hp-app .pillar-card .pillar-cta{text-decoration:none}
+.hp-app a.action-btn,.hp-app a.hero-btn,.hp-app a.outline-btn,.hp-app a.small-btn,.hp-app .pillar-card .pillar-cta{text-decoration:none}
 .hp-app img{max-width:100%;display:block}
 .hp-app .container{width:min(var(--max),calc(100% - 32px));margin:0 auto}
 
-.site-header{
-  position:sticky;top:0;z-index:50;
-  background:rgba(7,17,27,.96);
-  border-bottom:1px solid rgba(216,149,50,.36);
-  color:white;backdrop-filter:blur(10px);
-}
-.header-inner{min-height:78px;display:flex;align-items:center;gap:22px}
-.logo{display:flex;align-items:center;gap:10px;min-width:118px}
-.logo img{height:58px;width:auto;display:block}
-.logo img.logo-gepeto{width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none}
 .footer-logo{height:72px;width:auto;display:block;margin-bottom:14px}
 .footer-logo-mark{height:56px;width:auto;display:block;margin:0 auto 10px}
-.nav-toggle{display:none;margin-left:auto;border:1px solid var(--line);background:transparent;color:var(--gold2);border-radius:10px;padding:10px 14px;min-height:48px;font-weight:900;cursor:pointer}
-.site-nav{display:flex;align-items:center;gap:14px;margin-left:auto;font-size:13px;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
-.site-nav a{color:rgba(255,255,255,.9);padding:27px 0 22px;border-bottom:2px solid transparent;white-space:nowrap;min-height:48px;display:inline-flex;align-items:center}
-.site-nav a:hover,.site-nav a.active{color:var(--gold2);border-bottom-color:var(--gold)}
-.contact-top{border:1px solid var(--gold);color:var(--gold2)!important;border-radius:8px;padding:12px 22px!important;margin-left:10px;border-bottom-color:var(--gold)!important}
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
@@ -224,11 +209,6 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .contact-tile span{display:block;margin-bottom:12px;font-size:34px;color:var(--green)}
 
 @media(max-width:1060px){
-  .nav-toggle{display:inline-flex}
-  .site-nav{display:none;position:absolute;top:78px;left:16px;right:16px;flex-direction:column;align-items:stretch;gap:0;padding:12px;background:var(--night);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
-  .site-nav.open{display:flex}
-  .site-nav a{padding:13px 12px;border-radius:8px}
-  .contact-top{margin-left:0}
   .triad,.start-grid,.offer-grid,.cards,.footer-grid,.live-grid,.hero-split .container,.icon-strip,.process-grid,.audience-grid,.contact-tiles,.faq-item{grid-template-columns:1fr}
   .triad-inner{grid-template-columns:130px 1fr}
   .live-card{grid-template-columns:58px 1fr}
@@ -237,8 +217,6 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 }
 @media(max-width:640px){
   .hp-app .container{width:min(100% - 24px,var(--max))}
-  .header-inner{min-height:72px}
-  .logo{min-width:72px}.logo img{height:44px}
   .hero{min-height:auto}
   .hero-content{padding:34px 0 300px;max-width:100%}
   .hero h1{font-size:clamp(48px,17vw,78px)}
