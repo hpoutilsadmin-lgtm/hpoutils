@@ -27,6 +27,10 @@ const MAIN_LINK_STYLE = { color: "#f0c16d" } as const;
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const loc = useLocation();
+  /* N0 (lot normes, 11 nov. 2026) : tuque en décembre seulement — même
+     règle que la barre-haut (barre-haut.js:54) et le moteur (Hgpto.tsx:41).
+     Hors décembre, la face normale ; en décembre, la face avec tuque. */
+  const TUQUE_NOEL = new Date().getMonth() === 11;
   useEffect(() => setOpen(false), [loc.pathname]);
   /* Q-C1 (correctif 11 nov. 2026) : la face de l'en-tête ouvre Sir H.
      Gepeto — même geste que le bouton Gepeto de la barre : on déclenche
@@ -62,7 +66,7 @@ export function SiteHeader() {
               onClick={ouvrirGepeto}
               style={{ background: "none", border: 0, padding: 0, cursor: "pointer", flex: "none", lineHeight: 0 }}
             >
-              <img src="/hgpto/gepeto/tete-144-tuque-noel.png" alt="" className="logo-gepeto" width="48" height="48" style={{ borderRadius: "50%", objectFit: "cover", flex: "none" }} />
+              <img src={TUQUE_NOEL ? "/hgpto/gepeto/tete-144-tuque-noel.png" : "/hgpto/gepeto/tete-144.png"} alt="" className="logo-gepeto" width="48" height="48" style={{ borderRadius: "50%", objectFit: "cover", flex: "none" }} />
             </button>
           )}
         </span>
