@@ -139,6 +139,7 @@
     document.documentElement.setAttribute("data-bh-page", optPage);
     barre = existante; /* mesurerReserve() lit `barre` : l'assigner d'abord */
     mesurerReserve();
+    majCompteurPanier(); /* lot boutons panier : relecture défensive à chaque navigation */
     return;
   }
 
@@ -168,19 +169,65 @@
     lanterne: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v3l-3 3v9a2 2 0 002 2h6a2 2 0 002-2V9l-3-3V3"/><path d="M12 10v4"/><path d="M9 21h6"/></svg>',
     question: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 .3c0 1.7-2.5 2-2.5 3.7"/><path d="M12 17h.01"/></svg>',
     confort: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
-    plus: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>'
+    plus: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+    panier: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16l-1.5 9a2 2 0 01-2 1.7h-9A2 2 0 015.5 18L4 9z"/><path d="M8 9l4-5 4 5"/><path d="M9.5 12.5v3.5M14.5 12.5v3.5"/></svg>'
   };
 
   var barre, panneau, zonePanneau, panneauOuvert = null;
   var boutonsCommandes = {};
   var boutonsSections = {};
   var btnLire = null, lectureEnCours = false;
+  var pastillePanier = null; /* lot boutons panier : pastille du nombre */
 
   /* ---------- Réserve : le contenu ne passe jamais sous la barre ---------- */
   function mesurerReserve() {
     if (!barre) { return; }
     var h = barre.getBoundingClientRect().height;
     document.documentElement.style.setProperty("--bh-hauteur", Math.ceil(h) + "px");
+  }
+
+  /* ---------- Compteur du panier (lot boutons panier, 11 nov. 2026) ----------
+     Lecture défensive de localStorage, mêmes règles que loadCart()
+     (panier.ts) : JSON.parse en try/catch, tableau attendu, on compte
+     les entrées dont priceId est une chaîne (la quantité vaut toujours
+     1 par PDF : le nombre d'entrées = le nombre d'articles). Stockage
+     indisponible ou panier corrompu → 0, pastille cachée, bouton intact.
+     Le bouton est résolu depuis le DOM en repli : lors d'une
+     ré-exécution du script (garde d'idempotence, navigation interne),
+     la barre existe déjà et les références du premier montage ne sont
+     plus dans la portée — on relit alors la pastille existante. */
+  var CLE_PANIER = "hp-panier-v1";
+  function lireNombrePanier() {
+    try {
+      var brut = window.localStorage.getItem(CLE_PANIER);
+      if (!brut) { return 0; }
+      var parsed = JSON.parse(brut);
+      if (!Array.isArray(parsed)) { return 0; }
+      var n = 0;
+      parsed.forEach(function (e) {
+        if (e && typeof e.priceId === "string") { n += 1; }
+      });
+      return n;
+    } catch (err) { return 0; }
+  }
+  function majCompteurPanier() {
+    /* Résolution depuis le DOM seulement : lors d'une ré-exécution
+       du script (garde d'idempotence), cette fonction est appelée
+       avant l'assignation des variables du module — un accès à
+       `boutonsCommandes.panier` lèverait alors une TypeError. */
+    var bouton = document.querySelector('#bh-barre [data-commande="panier"]');
+    var pastille = pastillePanier || document.querySelector("#bh-barre .bh-panier-nombre");
+    if (!bouton || !pastille) { return; }
+    var n = lireNombrePanier();
+    if (n > 0) {
+      pastille.textContent = String(n);
+      pastille.hidden = false;
+      bouton.setAttribute("aria-label", "Panier : " + n + (n > 1 ? " articles" : " article"));
+    } else {
+      pastille.textContent = "";
+      pastille.hidden = true;
+      bouton.setAttribute("aria-label", "Panier : voir votre panier");
+    }
   }
 
   /* ---------- Panneaux ---------- */
@@ -561,6 +608,15 @@
     rangee.appendChild(boutonCommande("plus", "Plus", "plus", function () {
       basculerPanneau("plus", boutonsCommandes.plus);
     }, "Plus : fonctions secondaires"));
+    /* Lot boutons panier : 11e commande, toujours visible et cliquable,
+       vide ou non. La pastille porte le nombre ; cachée quand vide. */
+    var btnPanier = boutonCommande("panier", "Panier", "panier", function () {
+      window.location.href = "/panier";
+    }, "Panier : voir votre panier");
+    pastillePanier = el("span", { "class": "bh-panier-nombre", "aria-hidden": "true" });
+    pastillePanier.hidden = true;
+    btnPanier.appendChild(pastillePanier);
+    rangee.appendChild(btnPanier);
     contenu.appendChild(rangee);
 
     barre.appendChild(contenu);
@@ -609,6 +665,18 @@
     /* La mesure change quand la police ou la mise en page se stabilise. */
     setTimeout(mesurerReserve, 300);
     setTimeout(mesurerReserve, 1200);
+
+    /* Compteur du panier (lot boutons panier) : lecture initiale, puis
+       réabonnement. Les écouteurs vivent sur document/window : ils
+       survivent aux navigations internes, la garde d'idempotence ne
+       reconstruisant pas la barre — pas de doublon, construire() ne
+       tourne qu'une fois par chargement de page. */
+    majCompteurPanier();
+    on(document, "hp:panier-change", majCompteurPanier);
+    on(window, "storage", majCompteurPanier);
+    on(document, "visibilitychange", function () { if (!document.hidden) { majCompteurPanier(); } });
+    on(window, "pageshow", majCompteurPanier);
+    on(window, "focus", majCompteurPanier);
   }
 
   if (document.readyState === "loading") {

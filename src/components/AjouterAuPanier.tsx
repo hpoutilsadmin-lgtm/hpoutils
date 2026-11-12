@@ -34,6 +34,7 @@ export function AjouterAuPanier({ priceId }: { priceId: string }) {
         const { cart, error } = addToCart(loadCart(), priceId);
         if (error) return;
         saveCart(cart);
+        document.dispatchEvent(new CustomEvent("hp:panier-change"));
         setDansPanier(true);
       }}
     >

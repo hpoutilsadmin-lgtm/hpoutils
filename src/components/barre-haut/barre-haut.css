@@ -184,6 +184,7 @@ html.bh-actif {
   padding: 0 12px 10px;
 }
 .bh-cmd {
+  position: relative; /* lot boutons panier : ancrage de la pastille */
   flex: 1 1 0;
   min-width: 0;
   min-height: var(--bh-bouton-min);
@@ -236,6 +237,28 @@ html.bh-actif {
   border: 1px solid var(--bh-or);
   background: var(--bh-creme);
   object-fit: cover;
+}
+
+/* Pastille du nombre d'articles (lot boutons panier) : dorée sur fond
+   sombre, en haut à droite du bouton Panier. Cachée quand le panier
+   est vide (attribut hidden). Ne réduit pas la zone de tap. */
+.bh-cmd .bh-panier-nombre {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: var(--bh-or);
+  color: var(--bh-encre);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+.bh-cmd .bh-panier-nombre[hidden] {
+  display: none;
 }
 
 /* ---------- Panneaux : sections du conteneur, jamais de recouvrement ----------
@@ -366,6 +389,12 @@ html.bh-actif {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 6px;
+  }
+  /* Lot boutons panier : la 11e commande occupe toute la 3e rangée,
+     pleine largeur — un bouton Panier très visible, très facile
+     au doigt. Inerte en mode défilement (flex : grid-column sans effet). */
+  .bh-cmd[data-commande="panier"] {
+    grid-column: 1 / -1;
   }
   .bh-cmd span {
     font-size: 11px;

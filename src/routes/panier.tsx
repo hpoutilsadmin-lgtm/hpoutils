@@ -89,6 +89,7 @@ function Page() {
   const changer = (next: Cart) => {
     setCart(next);
     saveCart(next);
+    document.dispatchEvent(new CustomEvent("hp:panier-change"));
     if (next.length > 0) setPayeCadeau(null);
   };
 
@@ -228,6 +229,11 @@ function Page() {
       <PaymentTestModeBanner />
       <section className="editorial-hero">
         <div className="container">
+          <div className="lead-actions">
+            <Link to="/prix" className="btn-ghost">
+              ← Retour aux achats
+            </Link>
+          </div>
           <span className="editorial-kicker">Panier d'achat</span>
           <h1>
             Votre <em>panier</em>.
