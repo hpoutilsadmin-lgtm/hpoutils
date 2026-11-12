@@ -35,11 +35,14 @@ function Page() {
             personne de votre choix. La facture reste à votre nom.
           </p>
           <p>
+            Un code, c'est comme de l'argent : ne le partagez pas.
+          </p>
+          <p>
             Une question ? Écrivez à la direction humaine, un humain vous
             répond sous 3 jours ouvrables.
           </p>
           <p>
-            <Link to="/panier">Aller au panier →</Link>
+            <Link to="/panier">Vous avez déjà un code ? Saisissez-le au panier →</Link>
           </p>
         </div>
       </section>

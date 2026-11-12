@@ -26,7 +26,7 @@ export function NewsletterSignup({ source = "homepage" }: { source?: string }) {
   }
 
   if (status === "done") {
-    return <p className="newsletter-success" role="status">Merci — ton inscription est enregistrée.</p>;
+    return <p className="newsletter-success" role="status">Merci — votre inscription est enregistrée.</p>;
   }
 
   return (
@@ -40,7 +40,7 @@ export function NewsletterSignup({ source = "homepage" }: { source?: string }) {
           autoComplete="email"
           maxLength={254}
           required
-          placeholder="ton@courriel.com"
+          placeholder="votre@courriel.com"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           aria-describedby={`${id}-consent ${id}-error`}
@@ -56,7 +56,7 @@ export function NewsletterSignup({ source = "homepage" }: { source?: string }) {
       <p className="newsletter-consent">Désinscription en un clic. <a href="/confidentialite">Confidentialité</a></p>
       {status === "error" && (
         <p id={`${id}-error`} className="newsletter-error" role="alert">
-          L'inscription n'a pas fonctionné. Réessaie dans un moment.
+          L'inscription n'a pas fonctionné. Réessayez dans un moment.
         </p>
       )}
     </form>

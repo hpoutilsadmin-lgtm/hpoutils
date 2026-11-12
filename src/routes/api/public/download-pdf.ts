@@ -31,19 +31,75 @@ export const Route = createFileRoute("/api/public/download-pdf")({
         // remboursée, pour ce jeton. Le courriel du jeton peut être le
         // payeur ou le destinataire d'un cadeau : on cherche les deux,
         // sans jamais accepter un token sans commande payée.
+        //
+        // Lot sécurité 12 nov. 2026 — jeton lié à sa commande : quand le
+        // jeton porte une session Stripe (`s`), on exige une ligne
+        // `orders` payée pour CETTE session (et pour ce produit, ou pour
+        // le bundle dont ce kit fait partie), dont le payeur ou le
+        // destinataire est le courriel du jeton. Un remboursement coupe
+        // donc ce jeton-là, même si une autre commande payée du même
+        // produit existe pour ce courriel. L'identifiant de session ne
+        // se croise pas entre environnements (cs_test_ / cs_live_ /
+        // gift-), aucun filtre d'environnement n'est nécessaire ici.
         // Escape LIKE metacharacters to prevent wildcard matching via user input.
         const escapedEmail = payload.email.replace(/([\\%_])/g, "\\$1");
-        const { data: paidOrder } = await admin
-          .from("orders")
-          .select("id,status")
-          .ilike("customer_email", escapedEmail)
-          .eq("price_id", payload.priceId)
-          .eq("status", "paid")
-          .limit(1)
-          .maybeSingle();
-        const { data: paidGiftOrder, error: paidGiftError } = paidOrder
-          ? { data: null, error: null }
-          : await admin
+        const tokenEmailLower = payload.email.toLowerCase();
+        let sessionBound = false;
+        if (payload.sessionId) {
+          const { data: sessionOrders } = await admin
+            .from("orders")
+            .select("id,status,price_id,customer_email,gift_recipient_email,kit_slugs")
+            .eq("stripe_session_id", payload.sessionId)
+            .eq("status", "paid");
+          for (const row of sessionOrders ?? []) {
+            const r = row as {
+              price_id: string;
+              customer_email: string | null;
+              gift_recipient_email: string | null;
+              kit_slugs: string | null;
+            };
+            const emailMatches =
+              (typeof r.customer_email === "string" && r.customer_email.toLowerCase() === tokenEmailLower) ||
+              (typeof r.gift_recipient_email === "string" && r.gift_recipient_email.toLowerCase() === tokenEmailLower);
+            if (!emailMatches) continue;
+            if (r.price_id === payload.priceId) {
+              sessionBound = true;
+              break;
+            }
+            if (r.price_id === COLLECTION_PRICE_ID && product.slug) {
+              const slugs = typeof r.kit_slugs === "string" ? r.kit_slugs.split(",").filter(Boolean) : [];
+              if (slugs.includes(product.slug)) {
+                sessionBound = true;
+                break;
+              }
+            }
+          }
+          if (!sessionBound) {
+            return new Response("Lien invalide ou révoqué", { status: 410 });
+          }
+        }
+        // Régime transitoire (jetons sans session) : jetons émis avant le
+        // lot sécurité (7 jours maximum) et jetons des achats 100 % bon
+        // (environment « gift », sans session Stripe). Comportement
+        // inchangé : n'importe quelle commande payée pour (courriel,
+        // produit) suffit. Après la republication + 7 jours, ce régime
+        // pourra être restreint aux commandes environment = « gift »
+        // (nettoyage séparé, noté dans le rapport du lot).
+        let paidOrder: { id: string } | null = null;
+        let paidGiftOrder: { id: string } | null = null;
+        let bundleOrder: { id: string } | null = null;
+        if (!sessionBound) {
+          const found = await admin
+            .from("orders")
+            .select("id,status")
+            .ilike("customer_email", escapedEmail)
+            .eq("price_id", payload.priceId)
+            .eq("status", "paid")
+            .limit(1)
+            .maybeSingle();
+          paidOrder = found.data;
+          if (!paidOrder) {
+            const giftFound = await admin
               .from("orders")
               .select("id,status")
               .ilike("gift_recipient_email", escapedEmail)
@@ -51,40 +107,42 @@ export const Route = createFileRoute("/api/public/download-pdf")({
               .eq("status", "paid")
               .limit(1)
               .maybeSingle();
-        // Diagnostic H-P2 : si la colonne gift_recipient_email manque
-        // (migration non appliquée), la requête échoue et le destinataire
-        // d'un cadeau tombe en 410 — journalisé, jamais silencieux.
-        if (paidGiftError) console.error("download gift lookup failed", paidGiftError.message);
-        // Bundle : une commande bundle payée vaut pour chaque kit de sa
-        // liste kit_slugs, même si aucun achat seul du kit n'existe.
-        // Refus strict sinon : kit hors liste, kit_slugs absent, ou
-        // commande remboursée = 410 comme avant, jamais de passe-droit.
-        let bundleOrder = null;
-        if (!paidOrder && !paidGiftOrder) {
-          const { data: bundlePaid } = await admin
-            .from("orders")
-            .select("id,status,kit_slugs")
-            .ilike("customer_email", escapedEmail)
-            .eq("price_id", COLLECTION_PRICE_ID)
-            .eq("status", "paid")
-            .limit(1)
-            .maybeSingle();
-          const { data: bundleGift, error: bundleGiftError } = bundlePaid
-            ? { data: null, error: null }
-            : await admin
-                .from("orders")
-                .select("id,status,kit_slugs")
-                .ilike("gift_recipient_email", escapedEmail)
-                .eq("price_id", COLLECTION_PRICE_ID)
-                .eq("status", "paid")
-                .limit(1)
-                .maybeSingle();
-          if (bundleGiftError) console.error("download bundle gift lookup failed", bundleGiftError.message);
-          const bundle = bundlePaid ?? bundleGift;
-          const slugs = typeof bundle?.kit_slugs === "string" ? bundle.kit_slugs.split(",").filter(Boolean) : [];
-          if (bundle && product.slug && slugs.includes(product.slug)) bundleOrder = bundle;
+            paidGiftOrder = giftFound.data;
+            // Diagnostic H-P2 : si la colonne gift_recipient_email manque
+            // (migration non appliquée), la requête échoue et le destinataire
+            // d'un cadeau tombe en 410 — journalisé, jamais silencieux.
+            if (giftFound.error) console.error("download gift lookup failed", giftFound.error.message);
+          }
+          // Bundle : une commande bundle payée vaut pour chaque kit de sa
+          // liste kit_slugs, même si aucun achat seul du kit n'existe.
+          // Refus strict sinon : kit hors liste, kit_slugs absent, ou
+          // commande remboursée = 410 comme avant, jamais de passe-droit.
+          if (!paidOrder && !paidGiftOrder) {
+            const { data: bundlePaid } = await admin
+              .from("orders")
+              .select("id,status,kit_slugs")
+              .ilike("customer_email", escapedEmail)
+              .eq("price_id", COLLECTION_PRICE_ID)
+              .eq("status", "paid")
+              .limit(1)
+              .maybeSingle();
+            const { data: bundleGift, error: bundleGiftError } = bundlePaid
+              ? { data: null, error: null }
+              : await admin
+                  .from("orders")
+                  .select("id,status,kit_slugs")
+                  .ilike("gift_recipient_email", escapedEmail)
+                  .eq("price_id", COLLECTION_PRICE_ID)
+                  .eq("status", "paid")
+                  .limit(1)
+                  .maybeSingle();
+            if (bundleGiftError) console.error("download bundle gift lookup failed", bundleGiftError.message);
+            const bundle = bundlePaid ?? bundleGift;
+            const slugs = typeof bundle?.kit_slugs === "string" ? bundle.kit_slugs.split(",").filter(Boolean) : [];
+            if (bundle && product.slug && slugs.includes(product.slug)) bundleOrder = bundle;
+          }
         }
-        if (!paidOrder && !paidGiftOrder && !bundleOrder) {
+        if (!sessionBound && !paidOrder && !paidGiftOrder && !bundleOrder) {
           return new Response("Lien invalide ou révoqué", { status: 410 });
         }
 

@@ -1,7 +1,12 @@
 import crypto from "crypto";
 
 // HMAC-signed token for /api/public/download-pdf.
-// Payload is small JSON: { p: priceId, e: email, x: expiresAtMs }.
+// Payload is small JSON: { p: priceId, e: email, x: expiresAtMs }
+// plus, for tokens issued since the security lot of 12 Nov 2026,
+// { s: stripe_session_id } — the token is then bound to ONE paid order
+// (see download-pdf.ts). Tokens without `s` (issued before the lot, or
+// for 100 %-gift purchases, which have no Stripe session) keep the
+// previous behaviour: any paid order for (email, priceId) suffices.
 
 const DOWNLOAD_TTL_MS = 1000 * 60 * 60 * 24 * 7; // 7 jours
 
@@ -31,14 +36,32 @@ function b64urlDecode(str: string): Buffer {
   return Buffer.from(str.replace(/-/g, "+").replace(/_/g, "/") + pad, "base64");
 }
 
-export type DownloadPayload = { priceId: string; email: string; exp: number };
+export type DownloadPayload = {
+  priceId: string;
+  email: string;
+  exp: number;
+  // Session Stripe d'origine, si le jeton en porte une (nouveaux jetons
+  // seulement). null pour les jetons émis avant le lot sécurité, ou pour
+  // les achats 100 % bon (pas de session Stripe).
+  sessionId: string | null;
+};
 
-export function signDownloadToken(input: { priceId: string; email: string; ttlMs?: number }): string {
-  const payload = {
+export function signDownloadToken(input: {
+  priceId: string;
+  email: string;
+  ttlMs?: number;
+  // Session Stripe payée à laquelle lier ce jeton (optionnel). Quand elle
+  // est fournie, le téléchargement exige une commande paid pour CETTE
+  // session — un remboursement ne laisse plus le jeton vivant via une
+  // autre commande du même produit.
+  sessionId?: string | null;
+}): string {
+  const payload: { p: string; e: string; x: number; s?: string } = {
     p: input.priceId,
     e: input.email,
     x: Date.now() + (input.ttlMs ?? DOWNLOAD_TTL_MS),
   };
+  if (input.sessionId) payload.s = input.sessionId;
   const body = b64urlEncode(Buffer.from(JSON.stringify(payload), "utf8"));
   const sig = b64urlEncode(
     crypto.createHmac("sha256", getSigningSecret()).update(body).digest(),
@@ -72,7 +95,11 @@ export function verifyDownloadToken(token: string): DownloadPayload | null {
       return null;
     }
     if (json.x < Date.now()) return null;
-    return { priceId: json.p, email: json.e, exp: json.x };
+    // `s` est optionnel : les jetons émis avant le lot sécurité (et ceux
+    // des achats 100 % bon) n'en portent pas. Un `s` présent mais non
+    // textuel invalide le jeton.
+    if (json.s !== undefined && typeof json.s !== "string") return null;
+    return { priceId: json.p, email: json.e, exp: json.x, sessionId: typeof json.s === "string" ? json.s : null };
   } catch {
     return null;
   }

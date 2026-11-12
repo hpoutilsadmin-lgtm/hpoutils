@@ -177,16 +177,19 @@ export async function deliverStripeSession(session: any, env: StripeEnv) {
       // en file. Sans jeton frais, on ne peut pas renvoyer les liens
       // d'origine (bruts non retrouvables depuis leur empreinte) : une
       // livraison antérieure incomplète ne doit pas devenir « livrée »
-      // par défaut — elle lève, le webhook répond 400, Stripe rejoue,
-      // et l'acheteur garde la récupération par courriel (/lire,
-      // /recuperer-achat) qui forge de nouveaux jetons.
+      // par défaut. On ne lève PAS pour autant : les jetons existent
+      // déjà, donc chaque rejeu retrouverait les mêmes jetons existants
+      // et lèverait de nouveau — boucle 400 sans issue. On retourne
+      // « non livré » sans marquer : le webhook répond 200, Stripe ne
+      // rejoue plus, et l'acheteur récupère ses liens par courriel
+      // (/lire, /recuperer-achat), qui forge de nouveaux jetons.
       // Fusion 3B+3J : le journal d'erreur de 3J est gardé avant le
-      // lever de 3B (visibilité + non-marquage) ; le bloc d'envoi
+      // retour de 3B (visibilité + non-marquage) ; le bloc d'envoi
       // « fire-and-forget » de 3J est abandonné, l'envoi ci-dessous
       // (chemin 3B, vérifié) l'englobe — sinon double courriel.
       if (fresh.length === 0) {
         console.error("tome session with pre-existing tokens only; no email can be resent from this run", session.id);
-        throw new Error("Tome delivery: no fresh tokens to email");
+        return { delivered: false, email: payer, giftEmail: isGift ? deliveryEmail : null, itemCount: 0 };
       }
       const queued = await enqueueTransactionalEmail({
         templateName: "tome-delivery",
@@ -215,7 +218,7 @@ export async function deliverStripeSession(session: any, env: StripeEnv) {
   const single = rows[0];
   let emailItems: Array<{ title: string; downloadUrl: string }> = [];
   const buildUrl = (priceId: string) =>
-    `/api/public/download-pdf?token=${encodeURIComponent(signDownloadToken({ priceId, email: deliveryEmail }))}`;
+    `/api/public/download-pdf?token=${encodeURIComponent(signDownloadToken({ priceId, email: deliveryEmail, sessionId: session.id }))}`;
   if (single?.priceId === COLLECTION_PRICE_ID && kitSlugs.length > 0) {
     const kits = resolveKitSelection(kitSlugs);
     if (!kits) {
@@ -283,9 +286,15 @@ export async function deliverStripeSession(session: any, env: StripeEnv) {
       },
     });
     if (!queued) throw new Error("Purchase delivery email enqueue failed");
-  } else if (deliveryEmail && emailItems.length === 0) {
-    console.error("delivery with no email item; order still marked delivered by existing flow", session.id);
+    await markDelivered(db, session.id, toDeliver);
+    return { delivered: true, email: payer, giftEmail: isGift ? deliveryEmail : null, itemCount: emailItems.length };
   }
-  await markDelivered(db, session.id, toDeliver);
-  return { delivered: true, email: payer, giftEmail: isGift ? deliveryEmail : null, itemCount: emailItems.length };
+  // Rien n'a été envoyé (pas de courriel de livraison, ou aucun article
+  // livrable — produit inconnu du catalogue, ou payeur sans courriel) :
+  // on ne marque RIEN comme livré. Avant ce lot, markDelivered était
+  // appelé quand même et la commande passait en « livrée » sans qu'aucun
+  // lien soit parti. La commande reste « paid », récupérable par
+  // courriel. Ne pas lever : un rejeu Stripe ne changerait rien.
+  console.error("delivery with no email item; order NOT marked delivered", session.id);
+  return { delivered: false, email: payer, giftEmail: isGift ? deliveryEmail : null, itemCount: 0 };
 }

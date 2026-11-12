@@ -19,8 +19,12 @@ import {
   readerUrl,
 } from "@/lib/tomes-tokens.server";
 
-function buildDownloadUrl(priceId: string, email: string): string {
-  const token = signDownloadToken({ priceId, email });
+function buildDownloadUrl(priceId: string, email: string, sessionId?: string | null): string {
+  // Lot sécurité 12 nov. 2026 : le jeton est lié à sa commande quand la
+  // session est connue (voir download-token.server.ts). Sans session
+  // (vieille ligne sans stripe_session_id), le jeton retombe sur le
+  // régime transitoire de download-pdf.ts.
+  const token = signDownloadToken({ priceId, email, sessionId: sessionId ?? null });
   return `/api/public/download-pdf?token=${encodeURIComponent(token)}`;
 }
 
@@ -196,7 +200,7 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     const escapedEmail = data.email.replace(/([\\%_])/g, "\\$1");
     const { data: orders, error } = await admin
       .from("orders")
-      .select("id, price_id, pdf_path, created_at, status")
+      .select("id, price_id, pdf_path, created_at, status, stripe_session_id")
       .ilike("customer_email", escapedEmail)
       .eq("status", "paid")
       // Les commandes 100 % bon ont environment "gift" (payCartWithGift,
@@ -218,7 +222,7 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     const seenIds = new Set((orders ?? []).map((o: { id: string }) => o.id));
     const { data: giftOrders, error: giftErr } = await admin
       .from("orders")
-      .select("id, price_id, pdf_path, created_at, status")
+      .select("id, price_id, pdf_path, created_at, status, stripe_session_id")
       .ilike("gift_recipient_email", escapedEmail)
       .eq("status", "paid")
       // Même règle que la recherche payeur ci-dessus : les commandes
@@ -280,7 +284,7 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
           items.push({
             orderId: o.id as string,
             title: kp.title,
-            downloadUrl: buildDownloadUrl(kp.priceId, data.email),
+            downloadUrl: buildDownloadUrl(kp.priceId, data.email, (o as { stripe_session_id?: string | null }).stripe_session_id),
             purchasedAt: o.created_at as string,
           });
         }
@@ -288,7 +292,7 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
         items.push({
           orderId: o.id as string,
           title: product.title,
-          downloadUrl: buildDownloadUrl(o.price_id, data.email),
+          downloadUrl: buildDownloadUrl(o.price_id, data.email, (o as { stripe_session_id?: string | null }).stripe_session_id),
           purchasedAt: o.created_at as string,
         });
       }

@@ -12,6 +12,7 @@
 // dépôt, vérifie le solde, réserve, puis débite — dans cet ordre.
 
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import crypto from "crypto";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { GiftDatabase } from "@/lib/gift-database";
@@ -28,7 +29,6 @@ import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
 import {
   GIFT_DENOMINATIONS,
   getGiftDenomination,
-  generateGiftCode,
   normalizeGiftCode,
   availableCents,
   applyCredit,
@@ -64,11 +64,6 @@ function getAdmin() {
     _admin = createClient<GiftDatabase>(url, key);
   }
   return _admin;
-}
-
-function randomCode(): string {
-  // crypto serveur Node, même motif que download-token.server.ts.
-  return generateGiftCode((n: number) => new Uint8Array(crypto.randomBytes(n)));
 }
 
 async function resolveGiftPriceId(stripe: StripeClient, lookupKey: string): Promise<string | null> {
@@ -154,80 +149,15 @@ export const createGiftCheckoutSession = createServerFn({ method: "POST" })
     }
   });
 
-// --- Livraison du bon après paiement (page /cadeaux/merci) ------------------
-// Idempotente par session Stripe : un rechargement de la page de merci
-// relit le code existant, sans régénérer ni renvoyer de courriel.
-
-export const fulfillGiftPurchase = createServerFn({ method: "POST" })
-  .inputValidator((data: { sessionId: string }) => {
-    if (!/^cs_[a-zA-Z0-9_]+$/.test(data.sessionId)) throw new Error("Invalid sessionId");
-    return data;
-  })
-  .handler(async ({ data }) => {
-    const env: StripeEnv = data.sessionId.startsWith("cs_test_") ? "sandbox" : "live";
-    const stripe = createStripeClient(env);
-    const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
-      expand: ["line_items", "line_items.data.price"],
-    });
-    if (session.payment_status !== "paid") return { status: "pending" as const };
-    if (session.metadata?.gift !== "1") return { status: "not-gift" as const };
-    const admin = getAdmin();
-    const { data: existing } = await admin
-      .from("gift_cards")
-      .select("code,initial_cents")
-      .eq("stripe_session_id", session.id)
-      .maybeSingle();
-    if (existing) {
-      return {
-        status: "paid" as const,
-        code: (existing as { code: string }).code,
-        amountCents: (existing as { initial_cents: number }).initial_cents,
-        email: session.customer_details?.email ?? null,
-      };
-    }
-    if (GIFT_SALES_DISABLED) {
-      return { status: "disabled" as const };
-    }
-    const lookupKey = session.metadata?.giftLookupKey ?? null;
-    const denomination = lookupKey ? getGiftDenomination(lookupKey) : null;
-    const linePrice = session.line_items?.data?.[0]?.price;
-    const fallbackKey =
-      (linePrice?.lookup_key as string | null) ??
-      (linePrice?.metadata?.lovable_external_id as string | undefined) ??
-      null;
-    const amountCents =
-      denomination?.amountCents ??
-      (fallbackKey ? getGiftDenomination(fallbackKey)?.amountCents : undefined) ??
-      (typeof session.amount_total === "number" ? session.amount_total : 0);
-    if (amountCents <= 0) throw new Error("Montant du bon introuvable");
-    const email =
-      session.customer_details?.email || (session.customer_email as string | null) || "";
-    const code = randomCode();
-    const { error } = await admin.from("gift_cards").insert({
-      code,
-      initial_cents: amountCents,
-      balance_cents: amountCents,
-      reserved_cents: 0,
-      buyer_email: email || null,
-      stripe_session_id: session.id,
-      status: "active",
-    });
-    if (error) throw new Error("Création du bon impossible");
-    if (email) {
-      await enqueueTransactionalEmail({
-        templateName: "gift-delivery",
-        recipientEmail: email,
-        idempotencyKey: `gift-delivery-${session.id}`,
-        templateData: {
-          title: "Votre bon cadeau HP Outils",
-          code,
-          amountLabel: `${amountCents / 100} $ CAD`,
-          siteOrigin: getTrustedSiteOrigin(),
-        },
-      });
-    }
-    return { status: "paid" as const, code, amountCents, email: email || null };
-  });
+// --- Livraison du bon après paiement : SUPPRIMÉE (lot sécurité 12 nov. 2026)
+// fulfillGiftPurchase a été retirée : c'était une fonction serveur
+// exportée, appelable depuis le navigateur avec un simple session_id,
+// qui renvoyait le code cadeau déjà émis en clair (avec le montant et le
+// courriel de l'acheteur) AVANT même le test GIFT_SALES_DISABLED. La page
+// /cadeaux/merci n'utilise plus que getCheckoutStatus (lecture seule), et
+// la vente est fermée : aucun nouveau code ne peut être créé, et aucun
+// code existant ne peut plus être relu par session_id. Les codes déjà
+// émis restent échangeables au panier (checkGiftBalance, payCartWithGift).
 
 // --- Consultation du solde (saisie du code au panier) -----------------------
 // Ne renvoie que le solde utilisable, jamais le courriel de l'acheteur.
@@ -241,6 +171,42 @@ export const checkGiftBalance = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     try {
       const admin = getAdmin();
+      // Lot sécurité 12 nov. 2026 — frein à la devinette : 5 essais par
+      // code et par heure, 20 par IP et par heure, même motif que
+      // l'infolettre (newsletter.functions.ts) et la récupération
+      // (payments.functions.ts). Réponse identique à un code invalide :
+      // aucun oracle. Si la table gift_code_attempts manque (migration
+      // 20261112 non appliquée), on journalise et on continue — la
+      // limite est un frein, la vérification du solde reste la porte.
+      try {
+        const codeHash = crypto.createHash("sha256").update(data.code).digest("hex");
+        const ip =
+          getRequestHeader("cf-connecting-ip") ??
+          getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ??
+          "";
+        const ipHash = ip ? crypto.createHash("sha256").update(ip).digest("hex") : null;
+        const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+        const [{ count: codeCount }, ipResult] = await Promise.all([
+          admin
+            .from("gift_code_attempts")
+            .select("id", { count: "exact", head: true })
+            .eq("code_hash", codeHash)
+            .gte("created_at", oneHourAgo),
+          ipHash
+            ? admin
+                .from("gift_code_attempts")
+                .select("id", { count: "exact", head: true })
+                .eq("ip_hash", ipHash)
+                .gte("created_at", oneHourAgo)
+            : Promise.resolve({ count: 0 }),
+        ]);
+        if ((codeCount ?? 0) >= 5 || (ipResult.count ?? 0) >= 20) {
+          return { valid: false as const };
+        }
+        await admin.from("gift_code_attempts").insert({ code_hash: codeHash, ip_hash: ipHash });
+      } catch (limitError) {
+        console.warn("gift code attempt limit unavailable, continuing", limitError);
+      }
       const row = await readGiftRow(admin, data.code);
       if (!row || row.status !== "active") return { valid: false as const };
       const available = availableCents(toBalance(row), Date.now());
@@ -282,13 +248,18 @@ export const payCartWithGift = createServerFn({ method: "POST" })
       throw new Error("Le solde a changé entre-temps, recommence");
     }
     const origin = getTrustedSiteOrigin();
+    // Lot sécurité 12 nov. 2026 : UN seul identifiant de session pour
+    // tout le panier (avant, Date.now() changeait à chaque article), et
+    // les jetons de téléchargement sont liés à cette session — comme les
+    // achats Stripe, ils exigent une commande paid pour CETTE session.
+    const giftSessionId = `gift-${data.code}-${Date.now()}`;
     const items: Array<{ title: string; downloadUrl: string }> = [];
     for (const key of data.priceIds) {
       const product = getProduct(key);
       const cartProduct = getCartProduct(key);
       if (!product || !cartProduct) continue;
       await admin.from("orders").insert({
-        stripe_session_id: `gift-${data.code}-${Date.now()}`,
+        stripe_session_id: giftSessionId,
         customer_email: data.email,
         product_id: product.priceId,
         price_id: key,
@@ -300,7 +271,7 @@ export const payCartWithGift = createServerFn({ method: "POST" })
       });
       items.push({
         title: product.title,
-        downloadUrl: `/api/public/download-pdf?token=${signDownloadToken({ priceId: key, email: data.email })}`,
+        downloadUrl: `/api/public/download-pdf?token=${signDownloadToken({ priceId: key, email: data.email, sessionId: giftSessionId })}`,
       });
     }
     if (items.length > 0) {
@@ -318,9 +289,10 @@ export const payCartWithGift = createServerFn({ method: "POST" })
 // Le serveur réserve le crédit, crée un coupon Stripe à usage unique
 // (amount_off = crédit, CAD) appliqué à la session, puis attache la session
 // à la réservation. Le débit réel a lieu au paiement confirmé, via
-// settleGiftReservation (appelée depuis la branche panier de fulfillPdfOrder,
-// voir PATCH-payments.md). Si la création de session échoue, la réservation
-// est libérée immédiatement.
+// settleGiftReservation (appelée depuis deliver-order.server.ts, le
+// webhook Stripe vérifié, quand une commande payée avec bon partiel
+// arrive). Si la création de session échoue, la réservation est libérée
+// immédiatement.
 
 export const createCartCheckoutWithGift = createServerFn({ method: "POST" })
   .inputValidator((data: { items: Array<{ priceId: string }>; code: string; environment: StripeEnv; giftTo?: string }) => {
@@ -427,7 +399,7 @@ export const createCartCheckoutWithGift = createServerFn({ method: "POST" })
     }
   });
 
-// --- Débit après paiement Stripe confirmé (appelé par fulfillPdfOrder) ------
+// --- Débit après paiement Stripe confirmé (appelé par deliver-order.server.ts, le webhook vérifié) ------
 // Idempotent : si la réservation est déjà à zéro, rien n'est débité deux fois.
 
 export async function settleGiftReservation(

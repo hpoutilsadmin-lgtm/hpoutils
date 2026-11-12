@@ -379,7 +379,7 @@ function Page() {
               </div>
 
               <div style={{ marginTop: 16, maxWidth: 640 }}>
-                <p style={{ fontWeight: 700, marginBottom: 8 }}>Code cadeau</p>
+                <p style={{ fontWeight: 700, marginBottom: 8 }}>Code déjà émis (programme fermé)</p>
                 <p style={{ marginTop: 0 }}>Les bons ne sont plus en vente ; un code déjà émis reste utilisable ici. Pour offrir, voir « C'est pour offrir » ci-dessus.</p>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
                   <input
