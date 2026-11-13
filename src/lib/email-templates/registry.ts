@@ -22,6 +22,9 @@ import { template as purchaseDelivery } from './purchase-delivery'
 import { template as tomeDelivery } from './tome-delivery'
 import { template as giftDelivery } from './gift-delivery'
 import { template as passeursBienvenue } from './passeurs-bienvenue'
+// Double confirmation infolettre (§3.2 — lot sécurité 2, appliqué
+// 12 nov. 2026, décision HP Q-S2-2 : OUI).
+import { template as newsletterConfirmation } from './newsletter-confirmation'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'purchase-recovery': purchaseRecovery,
@@ -29,4 +32,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'tome-delivery': tomeDelivery,
   'gift-delivery': giftDelivery,
   'passeurs-bienvenue': passeursBienvenue,
+  'newsletter-confirmation': newsletterConfirmation,
 }

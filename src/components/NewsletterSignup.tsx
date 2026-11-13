@@ -1,13 +1,11 @@
 import { useId, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { subscribeToHpNews } from "@/utils/newsletter.functions";
 
 export function NewsletterSignup({ source = "homepage" }: { source?: string }) {
   const id = useId();
   const subscribe = useServerFn(subscribeToHpNews);
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
@@ -19,14 +17,13 @@ export function NewsletterSignup({ source = "homepage" }: { source?: string }) {
       await subscribe({ data: { email, consent, source } });
       setStatus("done");
       setEmail("");
-      navigate({ to: "/merci" });
     } catch {
       setStatus("error");
     }
   }
 
   if (status === "done") {
-    return <p className="newsletter-success" role="status">Merci — votre inscription est enregistrée.</p>;
+    return <p className="newsletter-success" role="status">Merci — vérifiez votre boîte courriel pour confirmer votre inscription.</p>;
   }
 
   return (
