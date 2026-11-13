@@ -159,6 +159,55 @@ export const createGiftCheckoutSession = createServerFn({ method: "POST" })
 // code existant ne peut plus être relu par session_id. Les codes déjà
 // émis restent échangeables au panier (checkGiftBalance, payCartWithGift).
 
+// --- Frein à la devinette de codes (lot sécurité 12 nov. 2026, étendu
+// lot sécurité 2 le même jour) -------------------------------------------
+// 5 essais par code et par heure, 20 par IP et par heure, même motif que
+// l'infolettre (newsletter.functions.ts) et la récupération
+// (payments.functions.ts) : hachage SHA-256 du code et de l'IP, table
+// `gift_code_attempts`, réponse neutre (aucun oracle). Si la table manque
+// (migration 20261112 non appliquée), on journalise et on laisse passer —
+// la limite est un frein, la vérification du solde / la dépense reste la
+// porte. La tentative est enregistrée AVANT le test de solde, comme avant.
+// Vrai pour les trois chemins qui touchent un code : consultation du solde,
+// dépense au panier, et réservation pour Stripe (sinon la devinette
+// passait directement par la dépense, sans aucune limite).
+async function checkGiftAttemptLimit(
+  admin: SupabaseClient<GiftDatabase>,
+  code: string,
+): Promise<boolean> {
+  try {
+    const codeHash = crypto.createHash("sha256").update(code).digest("hex");
+    const ip =
+      getRequestHeader("cf-connecting-ip") ??
+      getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ??
+      "";
+    const ipHash = ip ? crypto.createHash("sha256").update(ip).digest("hex") : null;
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const [{ count: codeCount }, ipResult] = await Promise.all([
+      admin
+        .from("gift_code_attempts")
+        .select("id", { count: "exact", head: true })
+        .eq("code_hash", codeHash)
+        .gte("created_at", oneHourAgo),
+      ipHash
+        ? admin
+            .from("gift_code_attempts")
+            .select("id", { count: "exact", head: true })
+            .eq("ip_hash", ipHash)
+            .gte("created_at", oneHourAgo)
+        : Promise.resolve({ count: 0 }),
+    ]);
+    if ((codeCount ?? 0) >= 5 || (ipResult.count ?? 0) >= 20) {
+      return false;
+    }
+    await admin.from("gift_code_attempts").insert({ code_hash: codeHash, ip_hash: ipHash });
+    return true;
+  } catch (limitError) {
+    console.warn("gift code attempt limit unavailable, continuing", limitError);
+    return true;
+  }
+}
+
 // --- Consultation du solde (saisie du code au panier) -----------------------
 // Ne renvoie que le solde utilisable, jamais le courriel de l'acheteur.
 
@@ -171,41 +220,9 @@ export const checkGiftBalance = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     try {
       const admin = getAdmin();
-      // Lot sécurité 12 nov. 2026 — frein à la devinette : 5 essais par
-      // code et par heure, 20 par IP et par heure, même motif que
-      // l'infolettre (newsletter.functions.ts) et la récupération
-      // (payments.functions.ts). Réponse identique à un code invalide :
-      // aucun oracle. Si la table gift_code_attempts manque (migration
-      // 20261112 non appliquée), on journalise et on continue — la
-      // limite est un frein, la vérification du solde reste la porte.
-      try {
-        const codeHash = crypto.createHash("sha256").update(data.code).digest("hex");
-        const ip =
-          getRequestHeader("cf-connecting-ip") ??
-          getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ??
-          "";
-        const ipHash = ip ? crypto.createHash("sha256").update(ip).digest("hex") : null;
-        const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-        const [{ count: codeCount }, ipResult] = await Promise.all([
-          admin
-            .from("gift_code_attempts")
-            .select("id", { count: "exact", head: true })
-            .eq("code_hash", codeHash)
-            .gte("created_at", oneHourAgo),
-          ipHash
-            ? admin
-                .from("gift_code_attempts")
-                .select("id", { count: "exact", head: true })
-                .eq("ip_hash", ipHash)
-                .gte("created_at", oneHourAgo)
-            : Promise.resolve({ count: 0 }),
-        ]);
-        if ((codeCount ?? 0) >= 5 || (ipResult.count ?? 0) >= 20) {
-          return { valid: false as const };
-        }
-        await admin.from("gift_code_attempts").insert({ code_hash: codeHash, ip_hash: ipHash });
-      } catch (limitError) {
-        console.warn("gift code attempt limit unavailable, continuing", limitError);
+      // Réponse identique à un code invalide : aucun oracle.
+      if (!(await checkGiftAttemptLimit(admin, data.code))) {
+        return { valid: false as const };
       }
       const row = await readGiftRow(admin, data.code);
       if (!row || row.status !== "active") return { valid: false as const };
@@ -231,6 +248,12 @@ export const payCartWithGift = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     const admin = getAdmin();
+    // Lot sécurité 2 (12 nov. 2026) : le frein s'applique aussi à la
+    // dépense — sinon la devinette passait directement par ici, sans
+    // aucune limite. Même message que le code invalide : aucun oracle.
+    if (!(await checkGiftAttemptLimit(admin, data.code))) {
+      throw new Error("Code invalide ou révoqué");
+    }
     const row = await readGiftRow(admin, data.code);
     if (!row || row.status !== "active") throw new Error("Code invalide ou révoqué");
     const totalCents = cartTotalCents(data.priceIds);
@@ -317,6 +340,11 @@ export const createCartCheckoutWithGift = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     const admin = getAdmin();
+    // Lot sécurité 2 (12 nov. 2026) : le frein s'applique aussi à la
+    // réservation pour Stripe — même message que le code invalide.
+    if (!(await checkGiftAttemptLimit(admin, data.code))) {
+      return { error: "Code invalide ou révoqué" };
+    }
     const row = await readGiftRow(admin, data.code);
     if (!row || row.status !== "active") return { error: "Code invalide ou révoqué" };
     const totalCents = cartTotalCents(data.priceIds);
