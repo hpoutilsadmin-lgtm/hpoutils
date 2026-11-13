@@ -130,6 +130,23 @@ function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
       <head>
+        {/* Correctif CLS mobile 13 nov. 2026 : la barre-haut est
+            montée tard par un script defer — sans réserve, son
+            padding-top décale toute la page de sa hauteur (CLS
+            mobile 0,2784 mesuré sur le live, 0,3601 attendu à la
+            tête). Ce tout petit script synchrone pose la classe
+            bh-reserve avant la première peinture ; la CSS
+            (barre-haut.css) réserve alors la hauteur exacte de
+            la barre dépliée, par point de rupture. Il ne la pose
+            pas sur les pages STOP (/le-garde, /personne-seule),
+            où aucune barre ne monte : aucune réserve, aucun vide.
+            Quand barre-haut.js monte la barre, il retire la
+            classe dans la même tâche — aucun mouvement. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var p=(window.location.pathname||"").toLowerCase();if(p==="/le-garde"||p==="/personne-seule")return;document.documentElement.classList.add("bh-reserve");}catch(e){}})();`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>

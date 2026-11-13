@@ -35,6 +35,40 @@
   --bh-lisere: 22px;
 }
 
+/* ---------- Réserve CLS : l'espace de la barre est réservé dès la
+   première peinture, avant que barre-haut.js ne monte la barre.
+   Correctif CLS mobile 13 nov. 2026 : sans cette réserve, le
+   padding-top appliqué tard par le JS (règle html.bh-actif
+   ci-dessous) décale toute la page de la hauteur de la barre —
+   CLS mobile mesuré 0,2784 (235 px / 844) sur le live, 0,3601
+   attendu à la tête (304 px / 844, rangée Panier ajoutée le
+   11 nov.). La réserve reprend les hauteurs mesurées de la
+   barre dépliée, par point de rupture (mesures locales,
+   barre-haut.js + CSS de la tête : 304 px ≤ 560, 194 px de 561
+   à 900, 68 px ≥ 901 ; identiques accueil / autres pages, face
+   cachée ou non). La classe bh-reserve est posée par un tout
+   petit script synchrone en tête (__root.tsx), qui ne la pose
+   pas sur les pages STOP (/le-garde, /personne-seule : aucune
+   barre, aucune réserve). Quand le JS monte la barre, la règle
+   html.bh-actif ci-dessous (plus tard dans ce fichier, même
+   spécificité) reprend la main avec la hauteur mesurée —
+   écart nul si la réserve est exacte. L'encoche (safe-area)
+   est ajoutée des deux côtés : la barre la porte aussi dans
+   son propre padding-top. */
+html.bh-reserve body {
+  padding-top: calc(304px + env(safe-area-inset-top, 0px));
+}
+@media (min-width: 561px) and (max-width: 900px) {
+  html.bh-reserve body {
+    padding-top: calc(194px + env(safe-area-inset-top, 0px));
+  }
+}
+@media (min-width: 901px) {
+  html.bh-reserve body {
+    padding-top: calc(68px + env(safe-area-inset-top, 0px));
+  }
+}
+
 /* ---------- Réserve : le contenu ne passe jamais sous la barre ----------
    La hauteur est posée par barre-haut.js (variable --bh-hauteur),
    mesurée sur la barre réelle : dépliée, panneau ouvert, réduite. */

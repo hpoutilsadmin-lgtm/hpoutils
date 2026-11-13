@@ -708,6 +708,12 @@
     racine.insertBefore(barre, racine.firstChild);
 
     document.documentElement.classList.add("bh-actif");
+    /* Correctif CLS mobile 13 nov. 2026 : la réserve CSS
+       (html.bh-reserve, posée par le script synchrone en tête)
+       n'a plus lieu d'être — la règle html.bh-actif reprend la
+       main avec la hauteur mesurée, dans la même tâche : aucun
+       mouvement, la réserve valait exactement la hauteur mesurée. */
+    document.documentElement.classList.remove("bh-reserve");
     document.documentElement.setAttribute("data-bh-page", optPage);
 
     /* Arrivée réduite (A2) : option non imposée — défaut dépliée,
