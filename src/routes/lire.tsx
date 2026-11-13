@@ -180,7 +180,7 @@ function Page() {
                     required
                     value={freeEmail}
                     onChange={(e) => setFreeEmail(e.target.value)}
-                    placeholder="ton@courriel.com"
+                    placeholder="votre@courriel.com"
                     style={{ display: "block", margin: "8px 0", padding: "10px", width: "100%", maxWidth: 360 }}
                   />
                 </label>
@@ -294,7 +294,7 @@ function Page() {
                   required
                   value={recoverEmail}
                   onChange={(e) => setRecoverEmail(e.target.value)}
-                  placeholder="ton@courriel.com"
+                  placeholder="votre@courriel.com"
                   style={{ display: "block", margin: "8px 0", padding: "10px", width: "100%", maxWidth: 360 }}
                 />
               </label>
