@@ -116,7 +116,7 @@ const tabBarStyle: React.CSSProperties = {
   gap: 14,
   justifyContent: "center",
   flexWrap: "wrap",
-  margin: "30px 0 10px",
+  margin: "18px 0 10px",
 };
 
 const tabButton = (active: boolean): React.CSSProperties => ({
@@ -144,7 +144,10 @@ function Page() {
             Des outils simples pour la vraie vie : une boîte pleine d'outils web gratuits,
             et les kits PDF Sans Honte pour mettre des mots et avancer.
           </p>
-          <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — HP</p>
+          {/* Lot Outils plus visibles, 13 nov. 2026 : la citation ci-dessous
+              était la copie mot pour mot de celle du héros de l'accueil —
+              retirée ici pour remonter les cartes (gain mesuré 81 px à
+              1920 px, cartes entières visibles après republication). */}
           <div style={tabBarStyle} role="tablist" aria-label="Choisir : outils web ou kits papier">
             <button
               type="button"
@@ -200,6 +203,25 @@ function Page() {
               </p>
               <a href="/cuisine-familiale">Voir la fiche (Bientôt) →</a>
             </article>
+            {/* Lot Outils plus visibles, 13 nov. 2026 : les kits PDF
+                vivaient derrière le 2e onglet seulement — les 5 nouveautés
+                sont nommées ici, sur l'onglet web, avec leurs liens exacts
+                (mêmes titres et slugs que l'onglet papier, 5 $ CAD chacun,
+                aucune taxe ajoutée). */}
+            <section aria-label="Nouveautés — kits PDF" style={{ borderTop: "1px solid rgba(128,105,67,.22)", marginTop: 26, paddingTop: 22 }}>
+              <h3 style={{ fontFamily: "Georgia,serif", fontSize: 20, color: "#1d1410", margin: "0 0 8px" }}>Nouveautés — kits PDF à 5 $</h3>
+              <p style={{ margin: "0 0 10px", color: "#4f4039", fontSize: "14.5px", lineHeight: 1.5 }}>
+                Les kits PDF vivent sur l'autre onglet — mais les 5 nouveautés sont ici, 5 $ CAD chacun, aucune taxe ajoutée :
+              </p>
+              <ul style={{ margin: "0 0 10px", paddingLeft: 20, lineHeight: 1.9, fontSize: "14.5px" }}>
+                <li><Link to="/pdf/$slug" params={{ slug: "sans-honte-testament" }}>Testament Sans Honte — L'olographe, pas à pas</Link></li>
+                <li><Link to="/pdf/$slug" params={{ slug: "sans-honte-papiers-parents" }}>Papiers de mes parents Sans Honte</Link></li>
+                <li><Link to="/pdf/$slug" params={{ slug: "sans-honte-chalet" }}>Chalet Sans Honte — Les règles qui sauvent les Noëls</Link></li>
+                <li><Link to="/pdf/$slug" params={{ slug: "sans-honte-annee-quebecoise" }}>L'année québécoise Sans Honte</Link></li>
+                <li><Link to="/pdf/$slug" params={{ slug: "sans-honte-heritage-numerique" }}>Héritage numérique Sans Honte</Link></li>
+              </ul>
+              <Link to="/sans-honte">Voir les 15 kits Sans Honte →</Link>
+            </section>
             <p style={{ textAlign: "center", color: "#5a4a3f", fontSize: ".95rem", marginTop: 26 }}>
               Fait avec HP Outils — des outils pour la vraie vie.
             </p>

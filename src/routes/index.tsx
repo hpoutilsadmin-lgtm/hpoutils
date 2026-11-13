@@ -98,11 +98,11 @@ function Index() {
           <span className="editorial-kicker">HP — créé au Québec</span>
           <h1>Des outils concrets pour la <em>vraie vie</em>.</h1>
           <p className="lead">
-            Régler une démarche, tenir votre budget, cuisiner un repas avec ce que vous avez, jouer sans compte : des outils gratuits, des kits à petit prix et des ateliers, créés à Terrebonne, au Québec.
+            Le reste du mois pour tenir votre budget, La Boîte à outils pour régler une démarche, En cuisine pour cuisiner avec ce que vous avez, jouer sans compte : des outils gratuits, des kits à petit prix et des ateliers, créés à Terrebonne, au Québec.
           </p>
           {/* Nuit 4A : les appels d'abord, les citations ensuite — textes inchangés, ordre seul. */}
           <div className="lead-actions">
-            <Link to="/outils" className="btn-primary">Régler un problème</Link>
+            <Link to="/outils" className="btn-primary">Voir les 10 outils gratuits</Link>
             <Link to="/jeux" className="btn-primary">Jouer 57 jeux gratuits</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>

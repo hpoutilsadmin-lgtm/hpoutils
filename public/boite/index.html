@@ -68,6 +68,13 @@ button{font-family:inherit}
 :focus-visible{outline:3px solid var(--t2); outline-offset:2px; border-radius:6px}
 
 .page{max-width:880px; margin:0 auto; padding:20px 18px 90px}
+/* Lot Outils plus visibles, 13 nov. 2026 : la page était orpheline
+   (aucun retour vers le site). Barre de retour en haut de page,
+   masquée à l'impression comme le reste de la navigation
+   (.no-print). Liens 48 px, comme le lien canonique du pied. */
+.retour-site{display:flex;gap:6px 22px;flex-wrap:wrap;align-items:center;padding:2px 2px 0;font-size:.98rem}
+.retour-site a{display:inline-flex;min-height:48px;align-items:center;color:var(--t1);font-weight:700;text-decoration:none}
+.retour-site a:hover{text-decoration:underline}
 
 .intro{max-width:44rem}
 .intro .kicker{
@@ -764,6 +771,11 @@ ul.cf-plain li{margin:.3em 0}
 </head>
 <body>
 <div class="page">
+
+  <nav class="retour-site no-print" aria-label="Retour au site">
+    <a href="/outils">← Tous les outils</a>
+    <a href="/">Accueil HP Outils</a>
+  </nav>
 
   <header class="intro"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto" style="width:48px;height:48px;border-radius:50%;flex:none">
     <p class="kicker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 0 0 6-6L14 13l-3-3 3.7-3.7z"/></svg> Des outils pour la vraie vie</p>
@@ -1929,7 +1941,7 @@ ul.cf-plain li{margin:.3em 0}
 
   <section aria-label="Découvrez aussi" style="border-top:1px solid rgba(58,42,32,.18);padding:22px 4px 4px;margin-top:8px">
     <h2 style="margin:0 0 8px;font-size:1.25rem">Découvrez aussi</h2>
-    <p style="margin:0;line-height:1.7">Le reste d'HP Outils, gratuit lui aussi : <a href="/en-cuisine/">En cuisine — 666 recettes gratuites</a> · <a href="/jeux">46 + 1 caché jeux gratuits, sans inscription</a> · <a href="/livres-pdf">les livres et kits PDF</a>.</p>
+    <p style="margin:0;line-height:1.7">Le reste d'HP Outils, gratuit lui aussi : <a href="/outils">Tous les outils gratuits</a> · <a href="/en-cuisine/">En cuisine — 666 recettes gratuites</a> · <a href="/jeux">57 + 1 caché jeux gratuits, sans inscription</a> · <a href="/livres-pdf">les livres et kits PDF</a>.</p>
   </section>
 
   <footer class="page-foot">

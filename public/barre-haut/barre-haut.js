@@ -408,6 +408,21 @@
     lien("Jeux à votre image", "/jeux-a-votre-image");
     lien("À propos", "/a-propos");
     lien("En cuisine", "/en-cuisine");
+    /* Lot Outils plus visibles, 13 nov. 2026 : les noms des outils
+       principaux dans l'en-tête, sans nouveau mécanisme — le panneau
+       « Plus » existe déjà, ses liens font déjà 48 px
+       (barre-haut.css : --bh-bouton-min). Cibles vérifiées dans le
+       dépôt : /boite/ (public/boite/index.html),
+       /outils-web/le-reste-du-mois.html,
+       /passeur-de-savoir/ (public/passeur-de-savoir/index.html),
+       /la-garde (src/routes/la-garde.tsx). Le bouton de section
+       « Outils » garde sa navigation directe vers /outils (un tap) :
+       aucun sous-menu ajouté, la hauteur de la barre ne change pas,
+       la réserve CLS n'est pas touchée. */
+    lien("La Boîte à outils", "/boite/");
+    lien("Le reste du mois", "/outils-web/le-reste-du-mois.html");
+    lien("Le Passeur de savoir", "/passeur-de-savoir/");
+    lien("La garde", "/la-garde");
     item("Réseaux sociaux", null, true);
     zonePanneau.appendChild(liste);
     zonePanneau.appendChild(el("p", { "class": "bh-note" },

@@ -36,6 +36,19 @@ export function SiteFooter() {
             <Link preload="viewport" to="/jeux">Jeux gratuits</Link><br />
             <Link preload="viewport" to="/outils">Outils</Link><br />
             <a href="/boite/">La Boîte à outils</a><br />
+            {/* Lot Outils plus visibles, 13 nov. 2026 : les 7 outils web
+                gratuits nommés nulle part ailleurs que sur /outils, plus
+                En cuisine, absente du pied — tous nommés ici, avec leurs
+                liens vérifiés dans le dépôt. Le Passeur de savoir est déjà
+                sous « Apprendre », il n'est pas doublé. */}
+            <a href="/en-cuisine/">En cuisine — Recettes HP</a><br />
+            <a href="/outils-web/le-reste-du-mois.html">Le reste du mois</a><br />
+            <a href="/outils-web/ca-vaut-tu-la-peine.html">Ça vaut-tu la peine ?</a><br />
+            <a href="/outils-web/le-relais.html">Le relais</a><br />
+            <a href="/outils-web/maintenant.html">Maintenant</a><br />
+            <Link preload="viewport" to="/outils/un-petit-pas-a-la-fois">Un petit pas à la fois</Link><br />
+            <a href="/outils-web/contrat-humain-ia.html">Le Contrat humain-IA</a><br />
+            <Link preload="viewport" to="/la-garde">La garde</Link><br />
             <Link preload="viewport" to="/univers">À toi l'histoire</Link><br />
             <Link preload="viewport" to="/balado">Balado Futur simple</Link><br />
             <Link preload="viewport" to="/a-propos">À propos</Link>
