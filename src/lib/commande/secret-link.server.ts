@@ -34,6 +34,16 @@ export function isCommandeKeyValid(key: string | null | undefined): boolean {
   return timingSafeEqual(key, secret);
 }
 
+// Garde partagé des fonctions serveur (correctif F-H1-002) : chaque
+// handler l'appelle en première ligne, avant toute lecture/écriture.
+// Message générique : il ne dit pas si la clé était absente, fausse
+// ou si le secret est non configuré.
+export function requireCommandeKey(key: string | null | undefined): void {
+  if (!isCommandeKeyValid(key)) {
+    throw new Error("Accès refusé.");
+  }
+}
+
 export function commandeKeyFromUrl(url: string): string | null {
   try {
     return new URL(url).searchParams.get("key");

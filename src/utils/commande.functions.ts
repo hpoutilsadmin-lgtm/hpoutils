@@ -17,6 +17,10 @@
 // - Toutes les lectures passent par ces fonctions, appelées depuis la
 //   console derrière le lien secret. Aucune lecture directe de la base
 //   depuis le navigateur (RLS refuse tout accès client de toute façon).
+// - Chaque fonction exige la clé du lien secret en entrée (correctif
+//   F-H1-002) : le garde requireCommandeKey est appelé en première
+//   ligne de chaque handler, avant toute lecture/écriture. Un appel
+//   direct sans clé, ou avec une mauvaise clé, est refusé.
 // - Seules les tables au préfixe hp_ sont lues et écrites ici. Les
 //   tables hotel_* (mode spectateur) ne sont jamais touchées au lot 1.
 
@@ -35,6 +39,7 @@ import {
   type SensitiveAction,
 } from "@/lib/commande/types";
 import { assertCanPerform } from "@/lib/commande/permissions";
+import { requireCommandeKey } from "@/lib/commande/secret-link.server";
 import {
   deriveAgentState,
   isMissionTransitionAllowed,
@@ -59,11 +64,13 @@ const agentRoleSchema = z.enum(["director", "archivist", "technician", "quality"
 const uuidSchema = z.string().uuid();
 
 const createMissionSchema = z.object({
+  key: z.string(),
   title: z.string().trim().min(1).max(300),
   instruction: z.string().trim().min(1).max(5000),
 });
 
 const splitMissionSchema = z.object({
+  key: z.string(),
   mission_id: uuidSchema,
   sub_missions: z
     .array(
@@ -78,16 +85,19 @@ const splitMissionSchema = z.object({
 });
 
 const changeMissionStateSchema = z.object({
+  key: z.string(),
   mission_id: uuidSchema,
   to: z.enum(["created", "running", "awaiting_approval", "blocked", "completed", "stopped"]),
 });
 
 const startExecutionSchema = z.object({
+  key: z.string(),
   sub_mission_id: uuidSchema,
   activity: z.enum(["recherche", "production", "collaboration", "verification"]),
 });
 
 const endExecutionSchema = z.object({
+  key: z.string(),
   execution_id: uuidSchema,
   ok: z.boolean(),
   error: z.string().trim().max(1000).optional(),
@@ -100,6 +110,7 @@ const proofSchema = z.object({
 });
 
 const recordResultSchema = z.object({
+  key: z.string(),
   sub_mission_id: uuidSchema,
   agent_role: agentRoleSchema,
   summary: z.string().trim().min(1).max(1000),
@@ -108,18 +119,20 @@ const recordResultSchema = z.object({
 });
 
 const requestApprovalSchema = z.object({
+  key: z.string(),
   mission_id: uuidSchema,
   action: z.enum(["email", "purchase", "refund", "publish", "deploy", "delete", "payment"]),
   reason: z.string().trim().min(1).max(1000),
 });
 
 const recordApprovalSchema = z.object({
+  key: z.string(),
   approval_id: uuidSchema,
   decision: z.enum(["approved", "refused"]),
   note: z.string().trim().max(1000).optional(),
 });
 
-const missionIdSchema = z.object({ mission_id: uuidSchema });
+const missionIdSchema = z.object({ key: z.string(), mission_id: uuidSchema });
 
 // ---------------------------------------------------------------------------
 // Utilitaires internes (serveur seulement)
@@ -161,6 +174,7 @@ async function getMissionStatus(
 export const createMission = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => createMissionSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ mission_id: string }>> => {
+    requireCommandeKey(data.key);
     const { data: mission, error } = await db
       .from("hp_missions")
       .insert({
@@ -185,6 +199,7 @@ export const createMission = createServerFn({ method: "POST" })
 export const splitMission = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => splitMissionSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ sub_mission_ids: string[] }>> => {
+    requireCommandeKey(data.key);
     assertCanPerform("director", "split_mission");
     const current = await getMissionStatus(data.mission_id);
     if (!current.ok) return current;
@@ -229,6 +244,7 @@ export const splitMission = createServerFn({ method: "POST" })
 export const changeMissionState = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => changeMissionStateSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ status: string }>> => {
+    requireCommandeKey(data.key);
     const current = await getMissionStatus(data.mission_id);
     if (!current.ok) return current;
     if (!isMissionTransitionAllowed(current.data.status, data.to)) {
@@ -260,6 +276,7 @@ export const changeMissionState = createServerFn({ method: "POST" })
 export const startExecution = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => startExecutionSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ execution_id: string }>> => {
+    requireCommandeKey(data.key);
     const { data: sub, error: subError } = await db
       .from("hp_sub_missions")
       .select("id, mission_id, agent_role, status")
@@ -304,6 +321,7 @@ export const startExecution = createServerFn({ method: "POST" })
 export const endExecution = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => endExecutionSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ closed: true }>> => {
+    requireCommandeKey(data.key);
     const { data: exec, error } = await db
       .from("hp_executions")
       .select("id, sub_mission_id, status")
@@ -337,6 +355,7 @@ export const endExecution = createServerFn({ method: "POST" })
 export const recordResult = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => recordResultSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ result_id: string }>> => {
+    requireCommandeKey(data.key);
     assertCanPerform(data.agent_role, "record_result");
     const { data: sub, error: subError } = await db
       .from("hp_sub_missions")
@@ -409,6 +428,7 @@ export const recordResult = createServerFn({ method: "POST" })
 export const requestApproval = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => requestApprovalSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ approval_id: string }>> => {
+    requireCommandeKey(data.key);
     const current = await getMissionStatus(data.mission_id);
     if (!current.ok) return current;
     if (!isMissionTransitionAllowed(current.data.status, "awaiting_approval")) {
@@ -443,6 +463,7 @@ export const requestApproval = createServerFn({ method: "POST" })
 export const recordApproval = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => recordApprovalSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ status: string }>> => {
+    requireCommandeKey(data.key);
     // Seul HP décide : cette fonction n'est appelée que depuis la
     // console, derrière le lien secret. Aucun rôle d'agent ne peut
     // l'appeler (voir permissions.ts : decide_approval n'existe pas
@@ -499,6 +520,7 @@ export const recordApproval = createServerFn({ method: "POST" })
 export const stopMission = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => missionIdSchema.parse(data))
   .handler(async ({ data }): Promise<DbResult<{ stopped: true }>> => {
+    requireCommandeKey(data.key);
     assertCanPerform("director", "stop_mission");
     const current = await getMissionStatus(data.mission_id);
     if (!current.ok) return current;
@@ -527,8 +549,10 @@ export const stopMission = createServerFn({ method: "POST" })
 // client service_role ; le RLS refuse tout accès direct du navigateur.
 // ---------------------------------------------------------------------------
 
-export const listMissions = createServerFn({ method: "GET" }).handler(
-  async (): Promise<DbResult<Mission[]>> => {
+export const listMissions = createServerFn({ method: "GET" })
+  .inputValidator((data: unknown) => z.object({ key: z.string() }).parse(data))
+  .handler(async ({ data: input }): Promise<DbResult<Mission[]>> => {
+    requireCommandeKey(input.key);
     const { data, error } = await db
       .from("hp_missions")
       .select("*")
@@ -536,11 +560,12 @@ export const listMissions = createServerFn({ method: "GET" }).handler(
       .limit(50);
     if (error) return { ok: false, error: "Les missions n'ont pas pu être lues." };
     return { ok: true, data: (data ?? []) as Mission[] };
-  },
-);
+  });
 
-export const listPendingApprovals = createServerFn({ method: "GET" }).handler(
-  async (): Promise<DbResult<Approval[]>> => {
+export const listPendingApprovals = createServerFn({ method: "GET" })
+  .inputValidator((data: unknown) => z.object({ key: z.string() }).parse(data))
+  .handler(async ({ data: input }): Promise<DbResult<Approval[]>> => {
+    requireCommandeKey(input.key);
     const { data, error } = await db
       .from("hp_approvals")
       .select("*")
@@ -548,19 +573,20 @@ export const listPendingApprovals = createServerFn({ method: "GET" }).handler(
       .order("created_at", { ascending: true });
     if (error) return { ok: false, error: "Les approbations n'ont pas pu être lues." };
     return { ok: true, data: (data ?? []) as Approval[] };
-  },
-);
+  });
 
 export const listActivity = createServerFn({ method: "GET" })
   .inputValidator((data: unknown) =>
     z
       .object({
+        key: z.string(),
         mission_id: uuidSchema.optional(),
         limit: z.number().int().min(1).max(100).default(50),
       })
       .parse(data),
   )
   .handler(async ({ data }) => {
+    requireCommandeKey(data.key);
     let query = db
       .from("hp_activity_log")
       .select("*")
@@ -574,8 +600,10 @@ export const listActivity = createServerFn({ method: "GET" })
 
 // États réels des 4 agents, dérivés des exécutions enregistrées.
 // C'est la seule source des états affichés dans la console.
-export const listAgentStates = createServerFn({ method: "GET" }).handler(
-  async (): Promise<DbResult<{ role: AgentRole; state: AgentState }[]>> => {
+export const listAgentStates = createServerFn({ method: "GET" })
+  .inputValidator((data: unknown) => z.object({ key: z.string() }).parse(data))
+  .handler(async ({ data: input }): Promise<DbResult<{ role: AgentRole; state: AgentState }[]>> => {
+    requireCommandeKey(input.key);
     const { data: executions, error: execError } = await db
       .from("hp_executions")
       .select("agent_role, activity, status, started_at, ended_at")
@@ -616,13 +644,13 @@ export const listAgentStates = createServerFn({ method: "GET" }).handler(
       };
     });
     return { ok: true, data: states };
-  },
-);
+  });
 
 // Détail d'une mission : sous-missions, résultats, preuves, approbations.
 export const getMissionDetail = createServerFn({ method: "GET" })
   .inputValidator((data: unknown) => missionIdSchema.parse(data))
   .handler(async ({ data }) => {
+    requireCommandeKey(data.key);
     const { data: mission, error } = await db
       .from("hp_missions")
       .select("*")

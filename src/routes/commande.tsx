@@ -38,12 +38,12 @@ export const Route = createFileRoute("/commande")({
     // location.search est typé {} dans le contexte de loader de cette
     // version de TanStack Router, d'où la lecture par searchStr.
     const key = new URLSearchParams(location.searchStr).get("key");
-    if (!isCommandeKeyValid(key)) throw notFound();
+    if (!key || !isCommandeKeyValid(key)) throw notFound();
     const [missions, approvals, agentStates, activity] = await Promise.all([
-      listMissions(),
-      listPendingApprovals(),
-      listAgentStates(),
-      listActivity({ data: { limit: 50 } }),
+      listMissions({ data: { key } }),
+      listPendingApprovals({ data: { key } }),
+      listAgentStates({ data: { key } }),
+      listActivity({ data: { key, limit: 50 } }),
     ]);
     if (!missions.ok || !approvals.ok || !agentStates.ok || !activity.ok) {
       throw new Error("La console n'a pas pu charger ses données.");
