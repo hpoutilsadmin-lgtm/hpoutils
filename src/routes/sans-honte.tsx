@@ -101,7 +101,7 @@ const KITS = [
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="kicker">Collection</span>
           <h1>Sans <em>Honte</em>.</h1>

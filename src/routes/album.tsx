@@ -13,7 +13,7 @@ export const Route = createFileRoute("/album")({
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Album HP</span>
           <h1>Humain <em>imparfait</em>.</h1>

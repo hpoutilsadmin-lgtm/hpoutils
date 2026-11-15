@@ -30,7 +30,7 @@ const POSTS = [
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Le média HP</span>
           <h1><em>Réflexions</em>.</h1>

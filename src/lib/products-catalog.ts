@@ -250,7 +250,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "15 $ CAD, aucune taxe ajoutée",
     blurb:
       "Voir clair sur ce qui se joue, sans paniquer ni minimiser. Téléchargement immédiat après paiement.",
-    cover: "/images/cover-enjeux.jpg",
+    cover: "/images/cover-enjeux.webp",
     formatLabel: "Version PDF",
     shortDescription:
       "Une ressource PDF pour voir clair sur ce qui se joue dans le monde, sans paniquer ni minimiser.",
@@ -273,7 +273,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
     blurb:
       "Mieux manger avec peu, ça s'apprend. Téléchargement immédiat après paiement.",
-    cover: "/images/cover-faim.jpg",
+    cover: "/images/cover-faim.webp",
     formatLabel: "Version PDF",
     shortDescription:
       "Un guide pratique pour mieux manger avec peu, sans se compliquer la vie.",
@@ -292,7 +292,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
     blurb:
       "Une nouvelle HP sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble. Téléchargement immédiat après paiement.",
-    cover: "/images/cover-horizon-quebec.jpg",
+    cover: "/images/cover-horizon-quebec.webp",
     formatLabel: "Version PDF",
     shortDescription:
       "Une nouvelle humaine et actuelle sur ce qui reste quand le monde change : les lieux qu'on aime, les conversations qui nous tiennent et cette envie fragile de continuer à exister ensemble.",
@@ -322,7 +322,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "10 $ CAD, aucune taxe ajoutée",
     blurb:
       "Un projet doux pour transmettre le plaisir, pas la performance. Téléchargement immédiat après paiement.",
-    cover: "/images/cover-enfants.jpg",
+    cover: "/images/cover-enfants.webp",
     formatLabel: "Version PDF",
     shortDescription:
       "Une ressource PDF pour cuisiner avec les enfants et transmettre le plaisir, pas la performance.",
@@ -523,7 +523,7 @@ export const PRODUCTS: Record<string, DigitalProduct> = {
     priceLabel: "40 $ CAD, aucune taxe ajoutée",
     blurb:
       "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisissez 10 kits parmi les 15, 10 liens de téléchargement, un par kit choisi, par courriel.",
-    cover: "/images/sans-honte/collection-cover.png",
+    cover: "/images/sans-honte/collection-cover.webp",
     formatLabel: "Collection PDF",
     shortDescription:
       "Le bundle regroupe 10 kits Sans Honte au choix, parmi les 15 de la collection, en format PDF.",

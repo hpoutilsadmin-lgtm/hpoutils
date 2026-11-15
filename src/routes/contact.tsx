@@ -13,7 +13,7 @@ export const Route = createFileRoute("/contact")({
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Contact</span>
           <h1>Une réponse simple, humaine et <em>concrète</em>.</h1>

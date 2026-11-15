@@ -16,7 +16,7 @@ export const Route = createFileRoute("/a-propos")({
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container a-propos-hero-grid">
           <div>
             <p className="page-kicker">À propos</p>

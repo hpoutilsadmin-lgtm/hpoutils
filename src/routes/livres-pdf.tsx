@@ -21,10 +21,10 @@ const ITEMS: Array<{
   slug: string;
   price: string;
 }> = [
-  { cover: "/images/cover-enjeux.jpg", title: "Enjeux de l'humanité à l'ère de l'IA", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "PDF", slug: "enjeux-humanite", price: "15 $" },
-  { cover: "/images/cover-faim.jpg", title: "La faim justifie les moyens", desc: "Mieux manger avec peu : repères simples, recettes accessibles et réflexes anti-gaspillage.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
-  { cover: "/images/cover-horizon-quebec.jpg", title: "Horizon Québec", desc: "Une nouvelle québécoise sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble quand le monde change trop vite.", tag: "PDF", slug: "horizon-quebec", price: "10 $" },
-  { cover: "/images/cover-enfants.jpg", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "10 $" },
+  { cover: "/images/cover-enjeux.webp", title: "Enjeux de l'humanité à l'ère de l'IA", desc: "Voir clair sur ce qui se joue, sans paniquer ni minimiser.", tag: "PDF", slug: "enjeux-humanite", price: "15 $" },
+  { cover: "/images/cover-faim.webp", title: "La faim justifie les moyens", desc: "Mieux manger avec peu : repères simples, recettes accessibles et réflexes anti-gaspillage.", tag: "PDF", slug: "faim-justifie-les-moyens", price: "10 $" },
+  { cover: "/images/cover-horizon-quebec.webp", title: "Horizon Québec", desc: "Une nouvelle québécoise sur l'amitié, la langue, le Québec et ce qu'on essaie encore de tenir ensemble quand le monde change trop vite.", tag: "PDF", slug: "horizon-quebec", price: "10 $" },
+  { cover: "/images/cover-enfants.webp", title: "Les enfants cuisinent pour faire plaisir", desc: "Un projet doux pour transmettre le plaisir, pas la performance.", tag: "PDF", slug: "enfants-cuisinent", price: "10 $" },
   { cover: "/images/cover-hyper-potentiel.jpg", title: "Un petit pas à la fois — le mini cahier", desc: "20 pages d'exercices à imprimer : ikigaï, respiration, méditation, mouvement, buts. Des pratiques simples, à essayer une à la fois.", tag: "PDF", slug: "mini-cahier-hyper-potentiel", price: "10 $" },
   { cover: "/images/sans-honte/kit-01.jpg", title: "Kit Sans Honte — Papiers", desc: "24 fiches pour trier, classer et reprendre le contrôle de ses papiers — courrier, factures, démarches — sans tout régler en une seule journée.", tag: "Kit PDF", slug: "sans-honte-papiers", price: "5 $" },
   { cover: "/images/sans-honte/kit-02.jpg", title: "Kit Sans Honte — Me Reconnaître", desc: "Se retrouver quand on s'est perdu·e de vue : reconnaître sa façon de fonctionner et adapter sa journée à son énergie, sans se comparer.", tag: "Kit PDF", slug: "sans-honte-me-reconnaitre", price: "5 $" },
@@ -41,7 +41,7 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/kit-13.jpg", title: "Kit Sans Honte — Chalet — Les règles qui sauvent les Noëls", desc: "Les règles d'un chalet partagé, écrites quand tout va bien : qui paie quoi, qui décide, le calendrier, les invités, les réparations et la clause de sortie.", tag: "Kit PDF", slug: "sans-honte-chalet", price: "5 $" },
   { cover: "/images/sans-honte/kit-14.jpg", title: "Kit Sans Honte — L'année québécoise", desc: "L'année québécoise mois par mois : impôts, REER, pneus, rentrée et Fêtes — plus les rendez-vous annuels qu'on oublie toujours, de la SAAQ aux assurances.", tag: "Kit PDF", slug: "sans-honte-annee-quebecoise", price: "5 $" },
   { cover: "/images/sans-honte/kit-15.jpg", title: "Kit Sans Honte — Héritage numérique", desc: "Préparer la transmission de sa vie en ligne : l'inventaire des comptes, le coffre à mots de passe, les photos, les abonnements et la personne de confiance.", tag: "Kit PDF", slug: "sans-honte-heritage-numerique", price: "5 $" },
-  { cover: "/images/sans-honte/collection-cover.png", title: "Collection Sans Honte — Choisissez 10 kits parmi 15", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisissez 10 kits parmi les 15.", tag: "Collection PDF", slug: "sans-honte-collection", price: "40 $" },
+  { cover: "/images/sans-honte/collection-cover.webp", title: "Collection Sans Honte — Choisissez 10 kits parmi 15", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisissez 10 kits parmi les 15.", tag: "Collection PDF", slug: "sans-honte-collection", price: "40 $" },
 ];
 
 function discoverLabel(tag: Kind): string {
@@ -53,7 +53,7 @@ function discoverLabel(tag: Kind): string {
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Bibliothèque HP</span>
           <h1>Livres, PDF &amp; <em>réflexions</em>.</h1>

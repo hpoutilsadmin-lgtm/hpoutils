@@ -13,7 +13,7 @@ export const Route = createFileRoute("/comprendre")({
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Comprendre</span>
           <h1>Les enjeux de <em>l’humanité</em>.</h1>

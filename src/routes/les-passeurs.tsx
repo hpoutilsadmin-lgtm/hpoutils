@@ -13,7 +13,7 @@ export const Route = createFileRoute("/les-passeurs")({
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Les Passeurs</span>
           <h1>Trois dollars par mois. <em>Vingt-huit dollars pour l'année.</em> C'est tout.</h1>

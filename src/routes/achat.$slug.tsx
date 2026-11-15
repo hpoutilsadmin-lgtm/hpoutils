@@ -173,7 +173,7 @@ function Page() {
       <PaymentTestModeBanner />
       <section
         className="editorial-hero hero-banner-image"
-        style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}
+        style={{ backgroundImage: "url(/images/hero-banner.webp)" }}
       >
         <div className="container">
           <span className="editorial-kicker">Finaliser l'achat — {formatLabel}</span>

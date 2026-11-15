@@ -142,7 +142,7 @@ function Page() {
   return (
     <>
       <PaymentTestModeBanner />
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">À toi l'histoire</span>
           <h1>Des livres-jeux qui se lisent par lien web personnel.</h1>

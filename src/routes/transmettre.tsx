@@ -13,7 +13,7 @@ export const Route = createFileRoute("/transmettre")({
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Transmettre</span>
           <h1>Transmettre l’essentiel aux <em>générations</em>.</h1>

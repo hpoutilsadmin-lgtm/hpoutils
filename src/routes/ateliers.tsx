@@ -49,7 +49,7 @@ const FETES = [
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Ateliers HP</span>
           <h1>Des ateliers pour mettre les outils en <em>mouvement</em>.</h1>

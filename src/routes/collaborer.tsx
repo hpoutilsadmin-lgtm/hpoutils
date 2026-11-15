@@ -13,7 +13,7 @@ export const Route = createFileRoute("/collaborer")({
 function Page() {
   return (
     <>
-      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.jpg)" }}>
+      <section className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">Ateliers et collaborations</span>
           <h1>Adapter les outils HP à votre <em>milieu</em>.</h1>
