@@ -31,7 +31,7 @@ function Page() {
       <section className="three-pillars" id="formulaire-contact">
         <div className="container" style={{ maxWidth: 760 }}>
           <h2 style={{ fontFamily: "Georgia,serif", fontSize: "clamp(28px,3.6vw,40px)", margin: "0 0 28px", color: "#2a1a12" }}>Écrivez à la direction humaine</h2>
-          <p className="strip-intro">Une question, une commande, un atelier ou un projet ? Remplissez le formulaire — chaque message reçoit une réponse de la direction humaine, sous 3 jours ouvrables.</p>
+          <p className="strip-intro">Une question, une commande, un atelier ou un projet ? Remplissez le formulaire — chaque message reçoit une réponse de la direction humaine, sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h.</p>
           <iframe
             src="https://tally.so/embed/dbbYbr?alignLeft=1&hideTitle=1&transparentBackground=1"
             width="100%"

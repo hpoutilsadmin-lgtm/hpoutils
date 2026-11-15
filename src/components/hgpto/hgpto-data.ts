@@ -395,7 +395,7 @@ export const SURPRISE_BIG_LINES = [
         "Événement rarissime : Pixel m'a fait un câlin SANS graffigner. Une journée à marquer d'un boulon blanc.",
         "Grande annonce presque jamais entendue : je viens de battre mon record de la sieste la plus courte. Quatre secondes. Je suis une machine."
       ];
-export const FALLBACK = "Là, je ne sais pas — mais je le note pour la direction ! Écrivez à hpoutils.admin@gmail.com — la direction humaine vous répondra sous 3 jours ouvrables, lundi à vendredi.";
+export const FALLBACK = "Là, je ne sais pas — mais je le note pour la direction ! Écrivez à hpoutils.admin@gmail.com — la direction humaine vous répondra sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h.";
 export const KB = [
         { q:"Explique-moi cette page", s:"CETTE PAGE", fn:"expliquer" },
         { q:"Trouve un outil", s:"PAR ICI", fn:"outil" },
@@ -865,7 +865,7 @@ export const BUMP_END = "Bon. L'encadré a gagné ce round-là. On avance !";
          exclu : route sensible, dignité d'abord. `mots` : sous-chaînes
          normalisées (sans accents) qui déclenchent l'explication quand
          le visiteur tape une question sur la suggestion. */
-export const PAGE_SUGGESTION_FALLBACK = "Pour son histoire, je ne l'ai pas dans mes notes — écris à la direction humaine, la direction humaine te répondra sous 3 jours ouvrables.";
+export const PAGE_SUGGESTION_FALLBACK = "Pour son histoire, je ne l'ai pas dans mes notes — écris à la direction humaine, la direction humaine te répondra sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h.";
 export const PAGE_SUGGESTIONS = {
         '/': { id:'sugg-banque', titre:"LA BANQUE, le jeu de la banque alimentaire",
           accroche:"Gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant.",

@@ -84,7 +84,7 @@ function Page() {
           <a href="mailto:hpoutils.admin@gmail.com">
             hpoutils.admin@gmail.com
           </a>{" "}
-          : la direction humaine vous répond sous 3 jours ouvrables.
+          : la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h.
         </p>
         {FAQ_ENTRIES.map((e) => (
           <article key={e.question} style={{ marginTop: 30 }}>

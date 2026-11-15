@@ -838,7 +838,7 @@
   function rendreAide() {
     zonePanneau.innerHTML = "";
     zonePanneau.appendChild(entetePanneau("Aide", true));
-    zonePanneau.appendChild(el("p", { "class": "compagnon-note" }, "La direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi."));
+    zonePanneau.appendChild(el("p", { "class": "compagnon-note" }, "La direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h."));
     var g = el("div", { "class": "compagnon-groupe" });
     g.appendChild(boutonCommande("Écrire à la direction humaine", "Écrire à la direction humaine par courriel", function () { window.location.href = MAIL_DIRECTION; }));
     g.appendChild(boutonCommande("Poser une question à Sir H. Gepeto", "Poser une question à Sir H. Gepeto", function () { ouvrirQuestion(); }));

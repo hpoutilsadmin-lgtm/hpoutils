@@ -83,7 +83,7 @@ export function SiteFooter() {
             <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a><br />
             <a href="/ateliers#formulaire-atelier">Formulaire atelier</a><br />
             <Link preload="viewport" to="/contact">Contact</Link><br />
-            Une réponse de la direction humaine, pas d'un robot — sous 3 jours ouvrables.
+            Une réponse de la direction humaine, pas d'un robot — sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h.
           </p>
         </div>
         <div style={{ textAlign: "center" }}>
