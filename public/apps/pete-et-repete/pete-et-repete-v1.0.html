@@ -284,11 +284,16 @@
 .hp-entete img{width:48px;height:48px;border-radius:50%;flex:none}
 .hp-entete .hp-entete-titre{font-weight:700;font-size:1.15rem}
 .hp-entete h1{flex:1;min-width:0}
+      /* ——— Mise en page standard HP (11 nov. 2026) : Retour, cibles 48 px ——— */
+      .barre-hp{width:100%;max-width:560px;display:flex;justify-content:space-between;gap:8px}
+      .btn-retour{background:#fffdf7;border:2px solid rgba(47,107,79,.3);border-radius:12px;min-height:48px;padding:12px 16px;font-family:inherit;font-size:.9rem;font-weight:600;color:#2f6b4f;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+      .btn-retour:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
     </style>
   </head>
   <body>
 <header class="hp-entete"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto"><span class="hp-entete-titre">Pète et Répète</span></header>
     <div class="app">
+      <div class="barre-hp"><button class="btn-retour" type="button" onclick="if(history.length>1){history.back()}else{location.href='/jeux'}">← Retour</button></div>
       <!-- HUD -->
       <div class="hud">
         <div class="chip me"><span class="lbl">Toi</span><span class="val" id="hudDist">0 m</span></div>

@@ -1966,6 +1966,7 @@
   function exitScreen() {
     screen = 'hub';
     ui.innerHTML = '';
+    addChromeButtons(); // F02 : recréer Retour + Son au retour au hub (ui vient d'être vidé)
     var gf2 = document.querySelector('.gepeto-face'); if (gf2) gf2.classList.remove('cache');
     // Trait de dessin en cours : le commettre avant de quitter (sinon perdu).
     if (dessin.currentStroke) {
@@ -2017,6 +2018,8 @@
     ctx.globalAlpha = 1;
     requestAnimationFrame(loop);
   }
+  // F02 : boutons Retour + Son au chargement du hub (enterScreen() seul les créait)
+  addChromeButtons();
   requestAnimationFrame(loop);
 })();
 </script>

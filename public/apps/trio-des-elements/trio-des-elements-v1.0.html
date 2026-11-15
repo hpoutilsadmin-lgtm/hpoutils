@@ -180,12 +180,12 @@
 
       /* ---------- Légende ---------- */
       .legend{
-        display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+        display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; /* F04 : minmax(0,1fr) — sinon le contenu minimal élargit la grille au-delà de 360 px */
         margin-top:12px;
       }
       .legend .item{
         background:var(--panel); border:1px solid var(--line); border-radius:10px;
-        padding:7px 9px; display:flex; align-items:center; gap:8px; box-shadow:var(--shadow);
+        padding:7px 9px; display:flex; align-items:center; gap:8px; box-shadow:var(--shadow); min-width:0;
       }
       .legend .chip{
         width:30px; height:30px; flex:none; border-radius:8px; color:#fff;
