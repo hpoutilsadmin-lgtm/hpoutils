@@ -369,11 +369,11 @@ export function initHgpto() {
       applyDrag();
 
       /* ---------- Personnage repliable et agrandissable (24 oct. 2026) ----
-         Décision d'Hugo : déplaçable + RÉTRACTABLE À LA MAIN + AGRANDISSABLE
+         Décision de la direction : déplaçable + RÉTRACTABLE À LA MAIN + AGRANDISSABLE
          par l'utilisateur. Rétractable = le visiteur replie le personnage
          en pastille « HGPTO » (le dock rouvre aussi) ; JAMAIS automatique
          (ni au scroll, ni au bout d'un délai) — l'auto reste exclu.
-         DÉROGATION 25 oct. 2026 (option B, choix explicite d'Hugo) : sur
+         DÉROGATION 25 oct. 2026 (option B, choix explicite de la direction) : sur
          petit écran SEULEMENT (≤ 560 px), HGPTO démarre replié en pastille
          quand la session n'a encore aucun choix enregistré ; un tap sur
          la pastille le rouvre, et ce choix est gardé pour la session.
