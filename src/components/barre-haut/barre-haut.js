@@ -40,6 +40,10 @@
    Aucune dépendance externe, aucun service payant. La lecture
    vocale utilise speechSynthesis du navigateur, voix française
    si disponible.
+
+   Q-PG-3 (12 nov. 2026, GO HP) : le panneau pilote Gepeto est
+   retiré — le vrai moteur (Q-PG-1) est le seul Gepeto. La Loupe
+   reste, en attente de Q-PG-4 (index réel 113 entrées).
    ================================================================ */
 (function () {
   var PAGES_STOP = ["/le-garde", "/personne-seule"];
@@ -51,7 +55,7 @@
     : "/hgpto/gepeto/tete-144.png";
   /* Les 5 sections réelles du site (slogan HP : « Jeux, cuisine,
      outils, ateliers, livres. »). La Loupe du pilote cherche
-     dans ces 5 entrées ; l'index réel de la v3 en compte 110. */
+     dans ces 5 entrées ; l'index réel de la v3 en compte 113. */
   var ENTREES_RECHERCHE = [
     { titre: "Jeux", desc: "Jeux HP — amusement, en un tap." },
     { titre: "Outils", desc: "Outils web et papier — dignité, en un tap." },
@@ -70,32 +74,15 @@
     "en cuisine": "/en-cuisine",
     ateliers: "/ateliers"
   };
-  /* Les 5 questions rapides de Sir H. Gepeto (hgpto-data.ts, lot v3). */
-  var RAPIDES = [
-    "Explique-moi cette page",
-    "Trouve un outil",
-    "Résume-moi ceci",
-    "Comment ça marche ?",
-    "Aide-moi à choisir"
-  ];
-  /* Les 8 scènes de Sir H. Gepeto (lot v3). */
-  /* P1-1 : le moteur écoute les CLÉS (cuisine, lecture, graffiti,
-     skate, lutteur, mime, 2heures, barbouillage). L'affichage garde
-     les libellés, le dispatch envoie la clé. */
-  var SCENES = [
-    { cle: "cuisine", label: "En cuisine" },
-    { cle: "lecture", label: "En lecture" },
-    { cle: "graffiti", label: "Graffiti" },
-    { cle: "skate", label: "En skate" },
-    { cle: "lutteur", label: "Lutteur" },
-    { cle: "mime", label: "Mime" },
-    { cle: "2heures", label: "Scène des 2 heures" },
-    { cle: "barbouillage", label: "Barbouillage" }
-  ];
-  /* Bulle d'accueil — texte de la capture d'HP du 6 nov. 21 h 25,
-     un seul mot changé : « en bas » devient « en haut », puisque
-     la barre a déménagé. Voir SPEC.md. */
-  var BULLE_ACCUEIL = "Bienvenue chez HP Outils. Je suis Sir H. Gepeto, le gérant du site. La barre en haut vous mène partout : jeux, outils, livres. Bonne visite !";
+  /* Q-PG-3 (12 nov. 2026, GO HP) : les 5 questions rapides et les
+     8 scènes du pilote sont retirées. Les mêmes 5 questions vivent
+     dans le vrai moteur (hgpto-data.ts L400-406, avec leurs
+     réponses) et les 8 scènes sont jouées par le moteur (écouteur
+     hp:gepeto-scene). Les boutons de scènes de la barre
+     réintroduisaient ce qu'HP a fait retirer le 5 nov.
+     (lot db216681) — ils ne reviennent pas. */
+  /* Q-PG-3 : la bulle d'accueil statique du pilote est retirée.
+     Le seul bonjour est désormais celui du vrai moteur (B1). */
 
   var script = document.currentScript;
   var optPage = (script && script.getAttribute("data-page")) || pageDepuisChemin();
@@ -251,7 +238,7 @@
     else if (nom === "lanterne") { construireLanterne(); }
     else if (nom === "confort") { construireConfort(); }
     else if (nom === "plus") { construirePlus(); }
-    else if (nom === "gepeto") { construireGepeto(); }
+    else if (nom === "message") { construireMessage(); }
     var fermer = el("button", { "class": "bh-fermer-panneau", "type": "button" }, "Fermer le panneau");
     on(fermer, "click", fermerPanneau);
     zonePanneau.appendChild(fermer);
@@ -283,7 +270,7 @@
     on(champ, "input", function () { afficher(champ.value); });
     afficher("");
     zonePanneau.appendChild(el("p", { "class": "bh-note" },
-      "Pilote : la recherche porte sur les 5 sections. L'index réel de la barre v3 compte 110 entrées — il sera branché à l'intégration, pas inventé ici."));
+      "Pilote : la recherche porte sur les 5 sections. L'index réel de la barre v3 compte 113 entrées — il sera branché à l'intégration, pas inventé ici."));
   }
 
   function construireLanterne() {
@@ -427,37 +414,14 @@
     zonePanneau.appendChild(remettre);
   }
 
-  function construireGepeto() {
-    zonePanneau.appendChild(el("h2", null, "Sir H. Gepeto — le gérant du site"));
-    var bulle = el("div", { "class": "bh-bulle" });
-    bulle.appendChild(el("p", null, BULLE_ACCUEIL));
-    zonePanneau.appendChild(bulle);
-    zonePanneau.appendChild(el("p", null, "Questions rapides :"));
-    var rang = el("div", { "class": "bh-rang" });
-    RAPIDES.forEach(function (q) {
-      var b = el("button", { type: "button" }, q);
-      on(b, "click", function () {
-        document.dispatchEvent(new CustomEvent("hp:gepeto-question", { detail: { question: q } }));
-        bulle.querySelector("p").textContent =
-          "« " + q + " » — en production, Sir H. Gepeto répond ici avec les vraies informations du site. Le pilote montre l'interface, elle n'invente pas de réponse.";
-      });
-      rang.appendChild(b);
-    });
-    zonePanneau.appendChild(rang);
-    zonePanneau.appendChild(el("p", null, "Scènes :"));
-    var scenes = el("div", { "class": "bh-rang" });
-    SCENES.forEach(function (s) {
-      var b = el("button", { type: "button" }, s.label);
-      on(b, "click", function () {
-        document.dispatchEvent(new CustomEvent("hp:gepeto-scene", { detail: { scene: s.cle } }));
-        bulle.querySelector("p").textContent =
-          "Scène « " + s.label + " » — en production, le moteur Gepeto joue la scène ici. Le pilote montre le bouton, il ne joue pas la scène.";
-      });
-      scenes.appendChild(b);
-    });
-    zonePanneau.appendChild(scenes);
-    zonePanneau.appendChild(el("p", { "class": "bh-note" },
-      "Sir H. Gepeto ne dit jamais d'erreur : s'il ne sait pas, il renvoie honnêtement vers la direction humaine. Le moteur ne charge qu'au tap sur « Gepeto »."));
+  /* ---------- Message (Q-PG-3) : la surface des messages de la barre ----------
+     Remplace la bulle du pilote (dire() écrivait dans .bh-bulle).
+     Un panneau comme les autres : titre + note de statut + bouton
+     « Fermer le panneau » (ajouté par construirePanneau). */
+  var messageCourant = "";
+  function construireMessage() {
+    zonePanneau.appendChild(el("h2", null, "Message"));
+    zonePanneau.appendChild(el("p", { "class": "bh-note", role: "status" }, messageCourant));
   }
 
   /* ---------- Lecture vocale (voix du navigateur, rien de payant) ---------- */
@@ -503,11 +467,14 @@
     var texte = (principal.innerText || principal.textContent || "").replace(/\s+/g, " ").trim();
     return texte.slice(0, 2000);
   }
+  /* Q-PG-3 : dire() n'écrit plus dans la bulle pilote (retirée).
+     Le message s'affiche dans le panneau « Message » ; s'il est
+     déjà ouvert, on le reconstruit sur place (basculerPanneau
+     fermerait le panneau au lieu de le mettre à jour). */
   function dire(message) {
-    if (panneauOuvert !== "gepeto") { basculerPanneau("gepeto", boutonsCommandes.gepeto); }
-    var bulle = $(".bh-bulle p", zonePanneau);
-    if (bulle) { bulle.textContent = message; return; }
-    zonePanneau.appendChild(el("p", { "class": "bh-note", role: "status" }, message));
+    messageCourant = message;
+    if (panneauOuvert === "message") { construirePanneau("message"); return; }
+    basculerPanneau("message", null);
   }
 
   /* ---------- Sections : Jeux, Outils, Livres ---------- */
@@ -618,19 +585,17 @@
     rangee.appendChild(boutonCommande("lanterne", "Lanterne", "lanterne", function () {
       basculerPanneau("lanterne", boutonsCommandes.lanterne);
     }, "Lanterne : mode lecture confortable"));
-    rangee.appendChild(boutonCommande("question", "Question", "question", function () {
-      basculerPanneau("gepeto", boutonsCommandes.gepeto);
-      document.dispatchEvent(new CustomEvent("hp:gepeto-question", { detail: { question: "" } }));
-    }, "Question : poser une question sur la page"));
+    rangee.appendChild(boutonCommande("question", "Question", "question", poserQuestion,
+      "Question : poser une question sur la page"));
     var btnGepeto = boutonCommande("gepeto", "Gepeto", "face", function () {
       document.dispatchEvent(new CustomEvent("hp:gepeto-ouvrir", {}));
       /* P4-B : le Pont ne monte le moteur qu'une fois par page
          (HgptoPont `monte` : le 2e tap ne redispatch pas
          `hp:gepeto-pret`) ; si le moteur est déjà prêt, on dévoile
          l'hôte tout de suite, sans attendre un signal qui ne
-         reviendra pas. */
+         reviendra pas. Q-PG-3 : plus de panneau pilote à ouvrir —
+         le panneau Gepeto, c'est l'hôte du moteur. */
       if (moteurPret) { devoilerGepeto(); }
-      basculerPanneau("gepeto", boutonsCommandes.gepeto);
     }, "Gepeto : ouvrir Sir H. Gepeto");
     rangee.appendChild(btnGepeto);
     rangee.appendChild(boutonCommande("confort", "Confort", "confort", function () {
@@ -698,9 +663,11 @@
       sectionGepeto.setAttribute("hidden", "");
     }
     document.addEventListener("hp:gepeto-pret", devoilerGepeto);
+    /* Q-PG-3 : plus de panneau pilote « gepeto » à fermer — le
+       remasquage suffit. Le moteur libère qaOpen de son côté
+       (écouteur hp:gepeto-ferme, hgpto-engine.ts L5917). */
     document.addEventListener("hp:gepeto-ferme", function () {
       masquerGepeto();
-      if (panneauOuvert === "gepeto") { fermerPanneau(); }
     });
     document.addEventListener("hp:gepeto-reduire", function () {
       masquerGepeto();
@@ -711,6 +678,30 @@
        signal `hp:gepeto-pret` est déjà passé, on dévoile tout de
        suite — même garde que `assurerMoteur` dans la v3. */
     if (document.querySelector(".hgpto-host")) { devoilerGepeto(); }
+
+    /* ---------- Question (Q-PG-3) : ouvrir la QA du vrai moteur ----------
+       Modèle v3 (compagnon.js ouvrirQuestion) : s'assurer d'abord que
+       le moteur est monté, puis dispatcher la question. Sans ça, le
+       dispatch part dans le vide si le moteur n'est pas monté — c'est
+       le pilote qui masquait l'échec en ouvrant son propre panneau.
+       Le moteur enregistre l'écouteur hp:gepeto-question AVANT de
+       dispatcher hp:gepeto-pret (hgpto-engine.ts L5897 puis L5919) :
+       le dispatch différé après `pret` touche un écouteur enregistré.
+       openQA() est réappelable sans dommage. */
+    var questionEnAttente = false;
+    function poserQuestion() {
+      document.dispatchEvent(new CustomEvent("hp:gepeto-ouvrir", {}));
+      if (moteurPret) {
+        document.dispatchEvent(new CustomEvent("hp:gepeto-question", { detail: { question: "" } }));
+      } else if (!questionEnAttente) {
+        questionEnAttente = true;
+        document.addEventListener("hp:gepeto-pret", function questionApresPret() {
+          document.removeEventListener("hp:gepeto-pret", questionApresPret);
+          questionEnAttente = false;
+          document.dispatchEvent(new CustomEvent("hp:gepeto-question", { detail: { question: "" } }));
+        });
+      }
+    }
 
     /* Liseré 22 px + rappel, quand la barre est réduite. */
     var lisere = el("div", { "class": "bh-lisere" });

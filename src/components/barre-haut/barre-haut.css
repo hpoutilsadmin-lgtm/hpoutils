@@ -391,16 +391,7 @@ html.bh-actif {
   background: var(--bh-or);
   color: var(--bh-encre);
 }
-.bh-bulle {
-  border: 1px solid var(--bh-or);
-  border-radius: 12px;
-  background: var(--bh-encre);
-  padding: 12px;
-  margin: 0 0 10px;
-}
-.bh-bulle p {
-  margin: 0;
-}
+/* Q-PG-3 (12 nov. 2026) : .bh-bulle retiré avec le panneau pilote. */
 .bh-fermer-panneau {
   min-height: var(--bh-bouton-min);
   padding: 8px 16px;
