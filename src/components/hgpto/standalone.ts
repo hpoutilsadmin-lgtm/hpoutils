@@ -81,6 +81,31 @@ function bootHgptoStandalone(): void {
       img.onerror = () => { /* repli : l'ancien PNG reste */ };
     }
   }
+  // Lot J-1 (16 nov. 2026) : sur /boite, Sir H. Gepeto démarre
+  // replié en pastille — le panneau (robot, bulle, dock) ne couvre
+  // plus la fiche à l'arrivée. On pré-pose le choix de session
+  // « hgpto-reduit » (mécanisme existant du moteur, dérogation
+  // 25 oct. 2026 pour les petits écrans) quand aucun choix n'est
+  // encore enregistré ; un choix explicite du visiteur est respecté,
+  // et un tap sur la pastille rouvre toujours. Hors /boite, rien ne
+  // change (ni les pages React, ni la barre — hoteBarre présent).
+  {
+    const chemin = window.location.pathname || "";
+    const estBoite = chemin === "/boite" || chemin === "/boite/index.html";
+    let choixReduit: string | null = null;
+    try {
+      choixReduit = sessionStorage.getItem("hgpto-reduit");
+    } catch {
+      /* stockage indisponible : on ne pré-pose rien */
+    }
+    if (estBoite && choixReduit === null && !hoteBarre) {
+      try {
+        sessionStorage.setItem("hgpto-reduit", "1");
+      } catch {
+        /* stockage indisponible : le moteur démarre déplié */
+      }
+    }
+  }
   initHgpto();
   // Lot Gepeto planches modes : figure selon le mode puis le contexte.
   // Miroir de Hgpto.tsx : mode explicite d'abord (vendeur, grognon),

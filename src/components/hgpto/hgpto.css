@@ -51,6 +51,13 @@
       }
       .hgpto-host.hgpto-reduit #bot-pastille{display:block}
       .hgpto-host.hgpto-reduit .bot,.hgpto-host.hgpto-reduit .cat{display:none}
+      /* Lot J-1 (16 nov. 2026) : en repli, le dock ne couvre plus le
+         contenu. Règle limitée aux montages autonomes directs
+         (body > .hgpto-host, ex. /boite) : les montages React vivent
+         dans #root et ceux de la barre dans #compagnon-gepeto-hote —
+         ni l'un ni l'autre n'est un enfant direct de body. La pastille
+         reste le seul élément visible ; un tap dessus rouvre tout. */
+      body > .hgpto-host.hgpto-reduit .bot-controls{display:none}
       .bot{
         position:absolute;bottom:8px;left:0;width:132px;height:127px;
         pointer-events:auto;cursor:grab;-webkit-tap-highlight-color:transparent;
