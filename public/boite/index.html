@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="fr">
 <head>
+<!-- HP-VERSION lot-m-mineurs-16nov-2026 base-8197cdfe 2026-11-16 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
@@ -71,7 +72,8 @@ button{font-family:inherit}
 /* Lot Outils plus visibles, 13 nov. 2026 : la page était orpheline
    (aucun retour vers le site). Barre de retour en haut de page,
    masquée à l'impression comme le reste de la navigation
-   (.no-print). Liens 48 px, comme le lien canonique du pied. */
+   (.no-print). Liens 48 px, comme le lien canonique du pied.
+   Lot J-2, 16 nov. 2026 : ajout du lien Panier (-> /panier). */
 .retour-site{display:flex;gap:6px 22px;flex-wrap:wrap;align-items:center;padding:2px 2px 0;font-size:.98rem}
 .retour-site a{display:inline-flex;min-height:48px;align-items:center;color:var(--t1);font-weight:700;text-decoration:none}
 .retour-site a:hover{text-decoration:underline}
@@ -206,7 +208,7 @@ button{font-family:inherit}
 .btn.plain:hover{border-color:var(--acc)}
 .btn.line{background:transparent; color:var(--ink); border-color:var(--line)}
 .btn.line:hover{border-color:var(--acc)}
-.btn.small{min-height:44px; padding:8px 18px; font-size:.95rem; border-radius:12px}
+.btn.small{min-height:48px; padding:8px 18px; font-size:.95rem; border-radius:12px} /* Lot M-5, 16 nov. 2026 : 44 -> 48 px (standard tactile HP ; corrige « Importer ») */
 .btn.block{width:100%}
 .btn.linklike{background:none; border:none; color:var(--ink-soft); min-height:44px; padding:8px 10px; font-size:.95rem; font-weight:400; text-decoration:underline; text-underline-offset:3px}
 .btn.linklike:hover{color:var(--ink)}
@@ -775,6 +777,7 @@ ul.cf-plain li{margin:.3em 0}
   <nav class="retour-site no-print" aria-label="Retour au site">
     <a href="/outils">← Tous les outils</a>
     <a href="/">Accueil HP Outils</a>
+    <a href="/panier">Panier</a>
   </nav>
 
   <header class="intro"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto" style="width:48px;height:48px;border-radius:50%;flex:none">
