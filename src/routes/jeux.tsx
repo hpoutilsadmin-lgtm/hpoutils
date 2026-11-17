@@ -119,12 +119,18 @@ const hrefJeu = (g: GameEntry) => `/apps/${g.slug ?? slugDepuisFichier(g.file)}`
 
 const GENRES = ["Tous", ...Array.from(new Set(GAMES.map((g) => g.tag.split(" · ")[0])))];
 
+/* Lot J-3 confort 16 nov. 2026 : boutons ≥ 48 px, textes ≥ 13 px (seuil 12,5 px). */
 const FILTER_BTN_STYLE: CSSProperties = {
   font: "inherit",
   fontSize: 13,
   fontWeight: 800,
   letterSpacing: ".02em",
-  padding: "7px 14px",
+  padding: "10px 16px",
+  minHeight: 48,
+  boxSizing: "border-box",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
   borderRadius: 999,
   border: "1.5px solid rgba(247,243,234,.5)",
   background: "transparent",
@@ -147,7 +153,7 @@ const CHIP_STYLE: CSSProperties = {
   border: "1px solid rgba(216,149,50,.38)",
   background: "rgba(216,149,50,.10)",
   color: "#f0c16d",
-  fontSize: 12,
+  fontSize: 13, /* J-3 : 12 → 13 px */
   fontWeight: 900,
   letterSpacing: ".1em",
   textTransform: "uppercase",
@@ -157,7 +163,7 @@ const TAG_ON_TILE_STYLE: CSSProperties = {
   position: "absolute",
   left: 12,
   bottom: 10,
-  fontSize: 10.5,
+  fontSize: 13, /* J-3 : 10,5 → 13 px */
   fontWeight: 900,
   letterSpacing: ".1em",
   textTransform: "uppercase",
@@ -169,7 +175,7 @@ const TAG_ON_TILE_STYLE: CSSProperties = {
 };
 
 const TAG_ON_PAPER_STYLE: CSSProperties = {
-  fontSize: 11,
+  fontSize: 13, /* J-3 : 11 → 13 px */
   fontWeight: 900,
   letterSpacing: ".1em",
   textTransform: "uppercase",
@@ -211,7 +217,9 @@ const COEUR_BTN_STYLE: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   gap: 6,
-  padding: "6px 12px",
+  padding: "6px 14px",
+  minHeight: 48, /* J-3 : 30 → 48 px */
+  boxSizing: "border-box",
   borderRadius: 999,
   border: "1.5px solid rgba(179,54,43,.45)",
   background: "rgba(179,54,43,.06)",
@@ -345,7 +353,7 @@ function PastilleTampon({ cle, grand }: { cle: CleTesteur; grand?: boolean }) {
         borderRadius: 6,
         background: t.fond,
         color: t.couleur,
-        fontSize: grand ? 13 : 11.5,
+        fontSize: 13, /* J-3 : 11,5 → 13 px (petite pastille comme grande) */
         fontWeight: 800,
         letterSpacing: ".03em",
         lineHeight: 1.15,
@@ -785,7 +793,7 @@ function JeuxPage() {
                 >
                   <a
                     href={hrefJeu(g)}
-                    style={{ color: "#f7f3ea", fontWeight: 700, fontSize: 15.5, textDecoration: "underline", textUnderlineOffset: 3 }}
+                    style={{ color: "#f7f3ea", fontWeight: 700, fontSize: 15.5, textDecoration: "underline", textUnderlineOffset: 3, display: "inline-flex", alignItems: "center", minHeight: 48 /* J-3 : 23 → 48 px */ }}
                   >
                     {g.title}
                   </a>

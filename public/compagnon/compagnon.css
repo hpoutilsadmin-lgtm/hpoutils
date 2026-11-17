@@ -154,7 +154,7 @@ html.compagnon-actif.compagnon-bas-libere { scroll-padding-bottom: calc(68px + e
   color: #f6eddd;
   border: 1px solid transparent;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 13px; /* J-3 : 12 → 13 px */
   line-height: 1.15;
   cursor: pointer;
   transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
@@ -416,9 +416,9 @@ html.compagnon-clavier input:focus-visible { outline: 3px solid #d89532; outline
 @media (max-width: 560px) {
   .compagnon-barre { width: calc(100vw - 12px); border-radius: 16px; }
   .compagnon-rangee { gap: 2px; padding: 8px 6px 10px; }
-  .compagnon-cmd { font-size: 11.5px; }
+  .compagnon-cmd { font-size: 13px; } /* J-3 : 11,5 → 13 px (téléphone) */
   .compagnon-titre { font-size: 15px; }
-  .compagnon-slogan { font-size: 12px; }
+  .compagnon-slogan { font-size: 13px; } /* J-3 : 12 → 13 px (téléphone) */
   .compagnon-panneau, .compagnon-gepeto { max-height: calc(100dvh - 190px); }
 }
 

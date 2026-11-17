@@ -72,7 +72,7 @@ function Page() {
                         <td>{r.cat}</td><td>{r.offre}</td><td>{r.prix}</td>
                         <td>
                           {r.href ? (
-                            <a href={r.href}>{r.label}</a>
+                            <a href={r.href} style={{ display: "inline-flex", alignItems: "center", minHeight: 48 /* J-3 : 23 → 48 px */ }}>{r.label}</a>
                           ) : (
                             <span>Pas encore en vente</span>
                           )}
