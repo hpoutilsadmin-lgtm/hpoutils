@@ -20,6 +20,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<!-- Barre-haut + Pont Gepeto — lot /outils v3, 16 nov. 2026 (montage accueil live : link + bh-reserve + script defer) -->
+<link rel="stylesheet" href="/barre-haut/barre-haut.css">
+<script>(function(){try{var p=(window.location.pathname||"").toLowerCase();if(p==="/le-garde"||p==="/personne-seule")return;document.documentElement.classList.add("bh-reserve");}catch(e){}})();</script>
+<script src="/barre-haut/barre-haut.js" defer data-barre-haut="1" data-page="outil"></script>
+<!-- Pont Gepeto statique — lot /outils v3, 16 nov. 2026 : la barre-haut ne charge pas le moteur Sir H. Gepeto, elle dispatch « hp:gepeto-ouvrir » et attend « hp:gepeto-pret ». Ce pont injecte /hgpto/hgpto.js + /hgpto/hgpto.css une seule fois, au premier tap Gepeto ou Question ; le moteur signale « hp:gepeto-pret » tout seul au chargement, et la barre dévoile alors l'hôte (ou rejoue la question en attente). Aucun chargement à l'arrivée : pas de bulle de bonjour sans tap, panneau fermé au chargement. -->
+<script>
+(function(){var enCours=false;function charger(){if(enCours||document.querySelector(".hgpto-host")||document.querySelector('script[src="/hgpto/hgpto.js"]')){return;}enCours=true;try{window.sessionStorage.removeItem("hgpto-closed");}catch(e){}if(!document.querySelector('link[href="/hgpto/hgpto.css"]')){var css=document.createElement("link");css.rel="stylesheet";css.href="/hgpto/hgpto.css";document.head.appendChild(css);}var js=document.createElement("script");js.src="/hgpto/hgpto.js";js.defer=true;js.onerror=function(){enCours=false;};document.body.appendChild(js);}document.addEventListener("hp:gepeto-ouvrir",charger);})();
+</script>
 <style>
 :root{
   color-scheme: light dark;
@@ -69,14 +77,6 @@ button{font-family:inherit}
 :focus-visible{outline:3px solid var(--t2); outline-offset:2px; border-radius:6px}
 
 .page{max-width:880px; margin:0 auto; padding:20px 18px 90px}
-/* Lot Outils plus visibles, 13 nov. 2026 : la page était orpheline
-   (aucun retour vers le site). Barre de retour en haut de page,
-   masquée à l'impression comme le reste de la navigation
-   (.no-print). Liens 48 px, comme le lien canonique du pied.
-   Lot J-2, 16 nov. 2026 : ajout du lien Panier (-> /panier). */
-.retour-site{display:flex;gap:6px 22px;flex-wrap:wrap;align-items:center;padding:2px 2px 0;font-size:.98rem}
-.retour-site a{display:inline-flex;min-height:48px;align-items:center;color:var(--t1);font-weight:700;text-decoration:none}
-.retour-site a:hover{text-decoration:underline}
 
 .intro{max-width:44rem}
 .intro .kicker{
@@ -90,7 +90,7 @@ button{font-family:inherit}
 .intro .lede-intro strong{color:var(--ink); font-weight:700}
 
 .tabs{
-  position:sticky; top:0; z-index:30;
+  position:sticky; top:var(--bh-hauteur,69px); z-index:30;
   display:grid; grid-template-columns:repeat(8,minmax(0,1fr)); gap:6px; padding:10px 8px; margin:0 -18px 26px;
   background:color-mix(in srgb, var(--paper) 88%, transparent);
   -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
@@ -774,11 +774,6 @@ ul.cf-plain li{margin:.3em 0}
 <body>
 <div class="page">
 
-  <nav class="retour-site no-print" aria-label="Retour au site">
-    <a href="/outils">← Tous les outils</a>
-    <a href="/">Accueil HP Outils</a>
-    <a href="/panier">Panier</a>
-  </nav>
 
   <header class="intro"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto" style="width:48px;height:48px;border-radius:50%;flex:none">
     <p class="kicker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 0 0 6-6L14 13l-3-3 3.7-3.7z"/></svg> Des outils pour la vraie vie</p>
@@ -836,7 +831,7 @@ ul.cf-plain li{margin:.3em 0}
       <span class="tool-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="m3 8 9 6 9-6"/></svg> Outil 1</span>
       <h2>L’héritage vivant</h2>
       <p class="lede">Les histoires de famille meurent avec les gens — sauf si on les enregistre à temps. Créez des <strong>capsules temporelles</strong> : un message, un vocal, une question de vie… verrouillés jusqu’au bon moment, à ouvrir avec un code que vous choisissez.</p>
-    <div class="fiche-clarte" style="border-left:6px solid var(--t1);background:var(--card);color:var(--ink);border:1px solid var(--line);border-left-width:6px;border-radius:10px;padding:16px 20px;margin:12px 0 18px;text-align:left;box-shadow:var(--shadow)"><p style="font-weight:700;margin:0 0 8px;color:var(--t1);font-family:var(--serif);font-size:1.15rem">Fiche claire — L'héritage vivant</p><ul style="margin:0;padding-left:20px;line-height:1.6"><li><strong>Ça sert à quoi :</strong> Laisser des capsules temporelles — message texte et/ou vocal, question de vie — verrouillées jusqu'au moment que vous choisissez, avec un code d'ouverture.</li><li><strong>Ça règle quoi :</strong> Dire ce qui compte, à temps, sans laisser le désordre derrière vous.</li><li><strong>Vous pouvez l'utiliser pour :</strong> Un message pour plus tard, une question de vie à transmettre, un souvenir à ouvrir au bon moment.</li><li><strong>Quels emplois ça aide :</strong> Familles, proches aidants, toute personne qui veut transmettre quelque chose d'important.</li><li><strong>Application pratique :</strong> Le soir, une capsule à la fois, puis vous rangez. Sans export, rien n'est sauvegardé à la fermeture — exportez avant de fermer.</li><li><strong>À part :</strong> Pour le testament lui-même : le kit « Testament olographe » (5 $, Sans Honte) est un autre produit, payant. L'outil ne remplace pas un notaire. Outil d'information seulement, pas un avis juridique.</li></ul></div>
+    <div class="fiche-clarte" style="border-left:6px solid var(--t1);background:var(--card);color:var(--ink);border:1px solid var(--line);border-left-width:6px;border-radius:10px;padding:16px 20px;margin:12px 0 18px;text-align:left;box-shadow:var(--shadow)"><p style="font-weight:700;margin:0 0 8px;color:var(--t1);font-family:var(--serif);font-size:1.15rem">Fiche claire — L'héritage vivant</p><ul style="margin:0;padding-left:20px;line-height:1.6"><li><strong>Ça sert à quoi :</strong> Laisser des capsules temporelles — message texte et/ou vocal, question de vie — verrouillées jusqu'au moment que vous choisissez, avec un code d'ouverture.</li><li><strong>Ça règle quoi :</strong> Dire ce qui compte, à temps, sans laisser le désordre derrière vous.</li><li><strong>Vous pouvez l'utiliser pour :</strong> Un message pour plus tard, une question de vie à transmettre, un souvenir à ouvrir au bon moment.</li><li><strong>Quels emplois ça aide :</strong> Familles, proches aidants, toute personne qui veut transmettre quelque chose d'important.</li><li><strong>Application pratique :</strong> Le soir, une capsule à la fois, puis vous rangez. Sans export, rien n'est sauvegardé à la fermeture — exportez avant de fermer.</li><li><strong>À part :</strong> Pour le testament lui-même : le kit « Testament olographe » (5 $ CAD, Sans Honte) est un autre produit, payant. L'outil ne remplace pas un notaire. Outil d'information seulement, pas un avis juridique.</li></ul></div>
     </div>
 
     <div class="note" style="margin-top:0">
@@ -5473,9 +5468,5 @@ rl$("rl-date").value = rlISO(new Date());
 rlRendre();
 })();
 </script>
-<!-- ===== HGPTO (autonome, même intégration que /en-cuisine) ===== -->
-<link rel="stylesheet" href="/hgpto/hgpto.css">
-<script src="/hgpto/hgpto.js" defer></script>
-<!-- ===== /HGPTO (autonome) ===== -->
 </body>
 </html>

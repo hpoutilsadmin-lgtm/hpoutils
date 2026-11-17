@@ -420,10 +420,10 @@ function Page() {
 
       <section aria-label="Prix et parcours d'achat" style={{ border: "1px solid #e3d5bd", borderRadius: 12, padding: 16, margin: "16px 0" }}>
         <h2>Combien ça coûte&nbsp;?</h2>
-        <p style={{ fontSize: "1.4rem", fontWeight: 700 }}>Prix prévu : 5&nbsp;$, aucune taxe ajoutée</p>
+        <p style={{ fontSize: "1.4rem", fontWeight: 700 }}>Prix prévu : 5&nbsp;$ CAD, aucune taxe ajoutée</p>
         <p>
           La création est gratuite à essayer ici. La version à garder — votre histoire créée
-          + son lien, remis automatiquement après paiement — sera offerte à 5&nbsp;$.
+          + son lien, remis automatiquement après paiement — sera offerte à 5&nbsp;$ CAD.
         </p>
         <button type="button" onClick={() => setParcoursOuvert(!parcoursOuvert)} style={{ fontSize: "1.05rem", padding: "14px 20px", borderRadius: 10, border: "1px solid #2b2118", background: "#fffdf7", color: "#2b2118", cursor: "pointer", width: "100%", margin: "8px 0" }}>
           Voir le parcours d&rsquo;achat

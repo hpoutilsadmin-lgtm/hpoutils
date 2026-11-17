@@ -4,11 +4,74 @@ import { Fragment } from "react";
 import { AjouterAuPanier } from "@/components/AjouterAuPanier";
 
 export const Route = createFileRoute("/prix")({
-  head: () => createSeoHead({
-    title: "Prix HP — kits, livres, ateliers, sans taxe ajoutée",
-    description: "Tous les prix HP au même endroit : kits Sans Honte 5 $, lot de 10 kits 40 $, livres PDF 10 à 15 $, mini-cahier 10 $, tomes 5 à 8 $, ateliers 150 $ à 290 $. Petit fournisseur : aucune taxe ajoutée.",
-    path: "/prix",
-  }),
+  head: () => {
+    // ItemList des 15 lignes de prix : Offer pour un prix unique exact,
+    // AggregateOffer pour une fourchette exacte (tomes 5-8 $, ateliers
+    // 150-290 $, jeux 19-399 $), rien pour les « Bientôt » et pour
+    // l'abonnement mensuel/annuel (pas de prix unique à déclarer).
+    const items = ROWS.map((r, i) => {
+      const firstNumber = r.prix.match(/(\d+(?:[.,]\d+)?)/);
+      const item: Record<string, unknown> = {
+        "@type":
+          r.cat === "Atelier" || r.cat === "Jeu sur mesure" || r.cat === "Passeurs"
+            ? "Service"
+            : "Product",
+        name: r.offre,
+        url: `https://www.hp-outils.com${r.href ?? "/prix"}`,
+      };
+      if (r.cat === "PDF" || r.cat === "Sans Honte") {
+        item.offers = {
+          "@type": "Offer",
+          price: Number(firstNumber?.[1].replace(",", ".") ?? 0).toFixed(2),
+          priceCurrency: "CAD",
+          availability: "https://schema.org/InStock",
+        };
+      } else if (r.cat === "À toi l’histoire") {
+        item.offers = {
+          "@type": "AggregateOffer",
+          lowPrice: "5.00",
+          highPrice: "8.00",
+          priceCurrency: "CAD",
+          availability: "https://schema.org/InStock",
+        };
+      } else if (r.cat === "Atelier") {
+        item.offers = {
+          "@type": "AggregateOffer",
+          lowPrice: "150.00",
+          highPrice: "290.00",
+          priceCurrency: "CAD",
+          availability: "https://schema.org/InStock",
+        };
+      } else if (r.cat === "Jeu sur mesure") {
+        item.offers = {
+          "@type": "AggregateOffer",
+          lowPrice: "19.00",
+          highPrice: "399.00",
+          priceCurrency: "CAD",
+          availability: "https://schema.org/InStock",
+        };
+      }
+      return { "@type": "ListItem", position: i + 1, item };
+    });
+    return {
+      ...createSeoHead({
+        title: "Prix HP — kits, livres, ateliers, sans taxe ajoutée",
+        description: "Tous les prix HP au même endroit : kits Sans Honte 5 $ CAD, lot de 10 kits 40 $ CAD, livres PDF 10 $ CAD à 15 $ CAD, mini-cahier 10 $ CAD, tomes 5 $ CAD à 8 $ CAD, ateliers 150 $ CAD à 290 $ CAD. Petit fournisseur : aucune taxe ajoutée.",
+        path: "/prix",
+      }),
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Prix HP",
+            itemListElement: items,
+          }),
+        },
+      ],
+    };
+  },
   component: Page,
 });
 
@@ -22,13 +85,13 @@ const ROWS: Row[] = [
   { cat: "PDF", offre: "Un petit pas à la fois — le mini cahier (PDF)", prix: "10 $ CAD, aucune taxe ajoutée", href: "/achat/mini-cahier-hyper-potentiel", label: "Acheter le PDF", panier: "hp_hyper_potentiel_cahier_pdf_10" },
   { cat: "Sans Honte", offre: "Kits Sans Honte — 15 titres au choix, un par un (Frigo, Papiers, Fraude, Tenir Debout, Seconde Main, Entraide…)", prix: "5 $ CAD le kit, aucune taxe ajoutée", href: "/sans-honte", label: "Voir les 15 kits" },
   { cat: "Sans Honte", offre: "Bundle Sans Honte — Choisissez 10 kits parmi 15", prix: "40 $ CAD (économie de 10 $ : 50 $ séparément), aucune taxe ajoutée", href: "/achat/sans-honte-collection", label: "Acheter la collection PDF" },
-  { cat: "À toi l’histoire", offre: "Tomes « À toi l’histoire » — 11 tomes payants, Tome I à XI, plus La Chasse-Galerie gratuite, standards 5 $, grands 8 $, bundle 3 tomes 12 $", prix: "Gratuit, 5 $ ou 8 $ selon le tome ; bundle 12 $, aucune taxe ajoutée", href: "/lire", label: "Voir les tomes" },
+  { cat: "À toi l’histoire", offre: "Tomes « À toi l’histoire » — 11 tomes payants, Tome I à XI, plus La Chasse-Galerie gratuite, standards 5 $ CAD, grands 8 $ CAD, bundle 3 tomes 12 $ CAD", prix: "Gratuit, 5 $ CAD ou 8 $ CAD selon le tome ; bundle 12 $ CAD, aucune taxe ajoutée", href: "/lire", label: "Voir les tomes" },
   { cat: "Crée ton histoire", offre: "Crée TON histoire — créateur d’histoire personnalisée (ce n’est pas la série « À toi l’histoire ») : un prénom, 4 thèmes parmi 8, 2 à 4 fins — Bientôt, vente pas encore ouverte", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/cree-ton-histoire-a-toi", label: "Voir la fiche (Bientôt)" },
   { cat: "Cuisine", offre: "« Votre cuisine familiale, à vous » — l’outil cuisine de la famille : vos recettes, portions recalculées, liste d’épicerie combinée — Bientôt, vente pas encore ouverte", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/cuisine-familiale", label: "Voir la fiche (Bientôt)" },
-  { cat: "Passeurs", offre: "Passeurs de savoirs — inscription par courriel ouverte, aucun prélèvement sans confirmation", prix: "3 $/mois · 28 $/an, aucune taxe ajoutée", href: "/les-passeurs", label: "Voir les Passeurs" },
+  { cat: "Passeurs", offre: "Passeurs de savoirs — inscription par courriel ouverte, aucun prélèvement sans confirmation", prix: "3 $ CAD/mois · 28 $ CAD/an, aucune taxe ajoutée", href: "/les-passeurs", label: "Voir les Passeurs" },
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "150 $ à 290 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Jeu", offre: "Ton jeu à toi, en 30 secondes — jeu de course personnalisé (prénom + thème), aperçu gratuit jouable (Bientôt — prix prévu, aucun achat possible pour l'instant)", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/ton-jeu-a-toi", label: "Essayer l'aperçu gratuit" },
-  { cat: "Jeu sur mesure", offre: "Jeux à votre image — un jeu aux couleurs de votre commerce (Express 19 $, Événement 199 $, Saisonnier 299 $, Permanent 399 $, hébergement gratuit l’année 1 puis 29 $/an, aucune taxe ajoutée — paiement seulement après votre oui explicite, voir la page de l’offre. Express 19 $ jusqu'au 31 décembre 2026.)", prix: "19 $ à 399 $ CAD selon le niveau, aucune taxe ajoutée", href: "/jeux-a-votre-image", label: "Voir l’offre" },
+  { cat: "Jeu sur mesure", offre: "Jeux à votre image — un jeu aux couleurs de votre commerce (Express 19 $ CAD, Événement 199 $ CAD, Saisonnier 299 $ CAD, Permanent 399 $ CAD, hébergement gratuit l’année 1 puis 29 $ CAD/an, aucune taxe ajoutée — paiement seulement après votre oui explicite, voir la page de l’offre. Express 19 $ jusqu'au 31 décembre 2026.)", prix: "19 $ à 399 $ CAD selon le niveau, aucune taxe ajoutée", href: "/jeux-a-votre-image", label: "Voir l’offre" },
   { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 4 outils rapides, gratuits, sans compte : Le reste du mois, Ça vaut-tu la peine ?, Le relais, Maintenant", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
 ];
 
@@ -91,7 +154,7 @@ function Page() {
             </table>
           </div>
           <p style={{ maxWidth: 760, lineHeight: 1.65, marginTop: 16 }}>
-            Bundle Sans Honte — Choisissez 10 kits parmi 15, 40 $, aucune taxe ajoutée. Vous choisissez vos 10 kits, vous payez, vous recevez 10 liens de téléchargement, un par kit choisi, par courriel — chaque kit se télécharge séparément, comme les kits seuls à 5 $. Vous recevez : les 10 kits choisis, en PDF, à télécharger sur votre appareil. Durée : vos liens restent récupérables par « Récupérer un achat », avec votre courriel. Si ça ne marche pas : écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. Si vous changez d'idée après paiement : les produits numériques ne sont pas remboursables, sauf en cas de panne technique — écrivez-nous, on regarde votre cas un par un.
+            Bundle Sans Honte — Choisissez 10 kits parmi 15, 40 $ CAD, aucune taxe ajoutée. Vous choisissez vos 10 kits, vous payez, vous recevez 10 liens de téléchargement, un par kit choisi, par courriel — chaque kit se télécharge séparément, comme les kits seuls à 5 $ CAD. Vous recevez : les 10 kits choisis, en PDF, à télécharger sur votre appareil. Durée : vos liens restent récupérables par « Récupérer un achat », avec votre courriel. Si ça ne marche pas : écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. Si vous changez d'idée après paiement : les produits numériques ne sont pas remboursables, sauf en cas de panne technique — écrivez-nous, on regarde votre cas un par un.
           </p>
         </div>
       </section>

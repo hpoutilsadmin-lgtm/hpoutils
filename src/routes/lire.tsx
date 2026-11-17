@@ -18,12 +18,46 @@ import {
 } from "@/utils/tomes.functions";
 
 export const Route = createFileRoute("/lire")({
-  head: () => createSeoHead({
-    title: "Lire — À toi l'histoire | HP Outils",
-    description:
-      "Les tomes « À toi l'histoire » : 11 livres-jeux interactifs, de 5 $ à 8 $, reçus par lien web personnel après l'achat — plus le tome gratuit La Chasse-Galerie. Aucune taxe ajoutée.",
-    path: "/lire",
-  }),
+  head: () => {
+    // ItemList des 12 tomes + bundle : tous des Book, prix repris du
+    // catalogue (tomes-catalog.ts) — 6 à 8 $, 5 à 5 $, 1 gratuit (0 $),
+    // bundle 3 tomes 12 $.
+    const items = [...PAYANT_TOMES, FREE_TOME, BUNDLE].map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Book",
+        name: t.title,
+        description: t.description,
+        url: "https://www.hp-outils.com/lire",
+        offers: {
+          "@type": "Offer",
+          price: t.price.toFixed(2),
+          priceCurrency: "CAD",
+          availability: "https://schema.org/InStock",
+        },
+      },
+    }));
+    return {
+      ...createSeoHead({
+        title: "Lire — À toi l'histoire | HP Outils",
+        description:
+          "Les tomes « À toi l'histoire » : 11 livres-jeux interactifs, de 5 $ CAD à 8 $ CAD, reçus par lien web personnel après l'achat — plus le tome gratuit La Chasse-Galerie. Aucune taxe ajoutée.",
+        path: "/lire",
+      }),
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Tomes « À toi l'histoire »",
+            itemListElement: items,
+          }),
+        },
+      ],
+    };
+  },
   component: Page,
 });
 

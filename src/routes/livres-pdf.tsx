@@ -3,11 +3,44 @@ import { PdfCover } from "@/components/PdfCover";
 import { createSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/livres-pdf")({
-  head: () => createSeoHead({
-    title: "Livres et kits PDF du Québec dès 5 $ | HP Outils",
-    description: "21 PDF à télécharger : les 15 kits Sans Honte à 5 $, des livres de cuisine, d'organisation et de réflexion de 10 à 15 $. Aucune taxe ajoutée, téléchargement immédiat.",
-    path: "/livres-pdf",
-  }),
+  head: () => {
+    // ItemList des 21 PDF : Book pour les livres, Product pour les kits
+    // et la collection. Prix repris du tableau de la page, un par un.
+    const items = ITEMS.map((b, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": b.tag === "PDF" ? "Book" : "Product",
+        name: `${b.title} (PDF)`,
+        description: b.desc,
+        url: `https://www.hp-outils.com/pdf/${b.slug}`,
+        offers: {
+          "@type": "Offer",
+          price: Number(b.price.replace(/[^\d.,]/g, "").replace(",", ".")).toFixed(2),
+          priceCurrency: "CAD",
+          availability: "https://schema.org/InStock",
+        },
+      },
+    }));
+    return {
+      ...createSeoHead({
+        title: "Livres et kits PDF du Québec dès 5 $ CAD | HP Outils",
+        description: "21 PDF à télécharger : les 15 kits Sans Honte à 5 $ CAD, des livres de cuisine, d'organisation et de réflexion de 10 $ CAD à 15 $ CAD. Aucune taxe ajoutée, téléchargement immédiat.",
+        path: "/livres-pdf",
+      }),
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Livres et kits PDF HP",
+            itemListElement: items,
+          }),
+        },
+      ],
+    };
+  },
   component: Page,
 });
 

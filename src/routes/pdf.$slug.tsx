@@ -24,6 +24,10 @@ export const Route = createFileRoute("/pdf/$slug")({
     const priceMatch = product.priceLabel.match(/(\d+(?:[.,]\d+)?)/);
     if (!priceMatch) return seo;
     const price = Number(priceMatch[1].replace(",", ".")).toFixed(2);
+    // Les livres sont des Book, le reste (kits, bundle) des Product.
+    // Le catalogue distingue déjà les deux par formatLabel (« Version PDF »
+    // = livre) — même critère que getKitProducts() dans products-catalog.ts.
+    const isBook = product.formatLabel === "Version PDF";
     return {
       ...seo,
       scripts: [
@@ -31,7 +35,7 @@ export const Route = createFileRoute("/pdf/$slug")({
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Product",
+            "@type": isBook ? "Book" : "Product",
             name: `${product.title} (PDF)`,
             description: product.shortDescription ?? product.blurb,
             brand: { "@id": "https://www.hp-outils.com/#organisation" },

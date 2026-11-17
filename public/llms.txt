@@ -89,7 +89,7 @@ Les bons cadeaux ne sont plus en vente chez HP Outils. Les codes déjà émis re
 Un code personnel déjà émis : la personne le saisit au panier, le montant s'applique
 à son achat, en une fois ou par tranches, jusqu'à épuisement du solde.
 5 $, 10 $, 20 $, 50 $ ou 100 $ CAD, aucune taxe ajoutée. Un bon ne s'échange pas
-contre de l'argent.
+contre de l'argent, sauf le solde de 5 $ ou moins, remboursable à la demande.
 
 ## Les ateliers — Terrebonne et Lanaudière (page /ateliers)
 
@@ -125,13 +125,14 @@ De nouveaux épisodes sont en préparation, sans engagement de calendrier.
 
 ## Questions fréquentes (réponses officielles)
 
-- C'est gratuit ? Les jeux, les recettes et les outils web sont 100 % gratuits. Les kits coûtent 5 $, les livres de 10 $ à 15 $, les ateliers 150 $ à 290 $.
+- C'est gratuit ? Les jeux, les recettes et les outils web sont 100 % gratuits. Les kits coûtent 5 $ CAD, les livres de 10 $ CAD à 15 $ CAD, les ateliers 150 $ CAD à 290 $ CAD.
 - Les prix incluent-ils les taxes ? HP est petit fournisseur : aucune taxe n'est ajoutée — le prix affiché est le prix payé.
 - Faut-il un compte ? Non. Aucun compte, aucune inscription pour les jeux, les recettes et les outils.
 - Où vont mes données ? Nulle part : dans les outils web, tout reste sur l'appareil de l'utilisateur.
 - Qui est derrière HP Outils ? HP, créateur à Terrebonne (Lanaudière, Québec).
 - Le kit Testament remplace-t-il un notaire ? Non : il aide à préparer un testament olographe ; ce n'est pas un avis juridique.
-- Comment recevoir un kit ou un livre après l'achat ? Par téléchargement immédiat (PDF imprimable).
+- Comment recevoir un kit ou un livre après l'achat ? Par téléchargement immédiat (PDF imprimable). Lien de téléchargement personnel, valide 7 jours ; passé ce délai, la page « Récupérer un achat » (https://www.hp-outils.com/recuperer-achat) redonne accès.
+- Conditions de vente (remboursement, livraison du fichier, support) : https://www.hp-outils.com/conditions-de-vente
 
 ## Pour les organismes communautaires
 

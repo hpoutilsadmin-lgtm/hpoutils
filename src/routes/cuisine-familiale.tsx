@@ -36,7 +36,7 @@ export const Route = createFileRoute("/cuisine-familiale")({
     createSeoHead({
       title: "Votre cuisine familiale, à vous | HP Outils",
       description:
-        "Vos recettes, vos habitudes, vos mots : portions recalculées, liste d'épicerie combinée, recherche sans accents, partage par lien sans compte. Prix prévu 5 $, aucune taxe ajoutée. Vente pas encore ouverte.",
+        "Vos recettes, vos habitudes, vos mots : portions recalculées, liste d'épicerie combinée, recherche sans accents, partage par lien sans compte. Prix prévu 5 $ CAD, aucune taxe ajoutée. Vente pas encore ouverte.",
       path: "/cuisine-familiale",
     }),
   component: Page,
@@ -54,7 +54,7 @@ const PROPOSED_LOOKUP_KEY = "cuisine_familiale_5";
 // Mélanie, clé ci-dessus créée et confirmée, TEST 0 $ vérifié, go d'HP
 // nommant le produit.
 const DELIVERY_FLOW_FUTURE = Object.freeze({
-  etape1: "Paiement hébergé Stripe (5 $, aucune taxe ajoutée)",
+  etape1: "Paiement hébergé Stripe (5 $ CAD, aucune taxe ajoutée)",
   etape2: "Retour automatique sur /checkout/return",
   etape3: "Remise automatique de l'outil autonome et de son lien, sans envoi manuel",
   portes: ["Prix confirmé par Mélanie", "Clé créée et confirmée", "TEST 0 $ vérifié", "Go d'HP nommant le produit"],
@@ -446,9 +446,9 @@ function Page() {
         {/* CADRE COMMERCE HONNÊTE — aucun bouton d'achat, aucun paiement */}
         <section style={{ ...cardStyle, background: "#fff7e6", border: "3px solid #c98a1b" }} aria-label="Prix et achat">
           <h2 style={{ marginTop: 0 }}>Le prix, dit simplement</h2>
-          <p style={{ fontSize: "2rem", fontWeight: 800, margin: "4px 0" }}>5&nbsp;$</p>
+          <p style={{ fontSize: "2rem", fontWeight: 800, margin: "4px 0" }}>5&nbsp;$ CAD</p>
           <p>
-            Prix prévu : <strong>5&nbsp;$, aucune taxe ajoutée.</strong> Vous pouvez découvrir l&rsquo;outil ici,
+            Prix prévu : <strong>5&nbsp;$ CAD, aucune taxe ajoutée.</strong> Vous pouvez découvrir l&rsquo;outil ici,
             sans compte et sans pression. Vous décidez ensuite, tranquillement.
           </p>
           <p role="status" style={{ fontWeight: 700, background: "#fdecea", border: "2px solid #b3261e", borderRadius: 12, padding: 14 }}>
@@ -464,7 +464,7 @@ function Page() {
                   <strong>Vous choisissez.</strong> Vous regardez l&rsquo;outil et vous vérifiez qu&rsquo;il vous convient.
                 </li>
                 <li>
-                  <strong>Vous vérifiez le prix.</strong> Le prix prévu est de 5&nbsp;$, aucune taxe ajoutée.
+                  <strong>Vous vérifiez le prix.</strong> Le prix prévu est de 5&nbsp;$ CAD, aucune taxe ajoutée.
                 </li>
                 <li>
                   <strong>Vous passez au paiement.</strong> C&rsquo;est ici que le parcours s&rsquo;arrête, pour l&rsquo;instant.
@@ -943,7 +943,7 @@ function Page() {
           <p style={mutedStyle}>
             Point ouvert, dit franchement : l&rsquo;hébergement de vos recettes (dans votre appareil, dans un compte,
             ou par lien) reste à trancher avant que l&rsquo;automatisation complète soit prouvée. Le prix prévu reste
-            de 5&nbsp;$, aucune taxe ajoutée, tant que ce point n&rsquo;est pas tranché.
+            de 5&nbsp;$ CAD, aucune taxe ajoutée, tant que ce point n&rsquo;est pas tranché.
           </p>
         </section>
 

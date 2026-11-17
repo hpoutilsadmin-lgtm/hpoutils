@@ -740,7 +740,7 @@ function JeuxPage() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Ton jeu à toi, en 30 secondes</h3>
-              <p>Un jeu de course personnalisé : votre prénom, un thème au choix, 30 secondes au doigt. L'aperçu gratuit est jouable dès maintenant — prix prévu : 5 $, aucune taxe ajoutée. Aucun achat possible pour l'instant.</p>
+              <p>Un jeu de course personnalisé : votre prénom, un thème au choix, 30 secondes au doigt. L'aperçu gratuit est jouable dès maintenant — prix prévu : 5 $ CAD, aucune taxe ajoutée. Aucun achat possible pour l'instant.</p>
               <a className="pillar-cta" href="/ton-jeu-a-toi">Essayer l'aperçu gratuit →</a>
             </article>
           </div>
@@ -754,7 +754,7 @@ function JeuxPage() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Votre commerce, votre jeu</h3>
-              <p>Un petit jeu aux couleurs de votre commerce, que vos clients jouent, partagent et retiennent. De 19 $ à 399 $, hébergement gratuit la première année, puis 29 $ par année, par jeu hébergé, aucune taxe ajoutée. Service sur mesure — ce n&apos;est pas un jeu gratuit de la liste ci-dessus, et il ne change pas le compteur des jeux gratuits.</p>
+              <p>Un petit jeu aux couleurs de votre commerce, que vos clients jouent, partagent et retiennent. De 19 $ CAD à 399 $ CAD, hébergement gratuit la première année, puis 29 $ CAD par année, par jeu hébergé, aucune taxe ajoutée. Service sur mesure — ce n&apos;est pas un jeu gratuit de la liste ci-dessus, et il ne change pas le compteur des jeux gratuits.</p>
               <Link to="/jeux-a-votre-image" className="pillar-cta">Voir l&apos;offre →</Link>
             </article>
           </div>

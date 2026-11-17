@@ -64,7 +64,15 @@ export const Route = createFileRoute("/sans-honte")({
           mainEntity: FAQ.map((f) => ({
             "@type": "Question",
             name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
+            acceptedAnswer: {
+              "@type": "Answer",
+              // La 6e réponse est du JSX affiché (lien) : le JSON-LD
+              // exige une chaîne — on reprend son texte visible, mot pour mot.
+              text:
+                typeof f.a === "string"
+                  ? f.a
+                  : "Le courriel n'arrive pas, ou votre lien est expiré ? La page Récupérer un achat vous redonne accès à ce que vous avez acheté — ou écrivez-nous.",
+            },
           })),
         }),
       },

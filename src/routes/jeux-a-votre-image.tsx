@@ -20,7 +20,7 @@ export const Route = createFileRoute("/jeux-a-votre-image")({
     createSeoHead({
       title: "Jeu personnalisé pour commerce, créé par HP Outils",
       description:
-        "Un petit jeu simple, aux couleurs et au nom de votre commerce, que vos clients jouent, partagent et retiennent. De 19 $ à 399 $, hébergement gratuit la première année. Voyez l'aperçu gratuit en 30 secondes.",
+        "Un petit jeu simple, aux couleurs et au nom de votre commerce, que vos clients jouent, partagent et retiennent. De 19 $ CAD à 399 $ CAD, hébergement gratuit la première année. Voyez l'aperçu gratuit en 30 secondes.",
       path: "/jeux-a-votre-image",
     }),
   component: Page,
@@ -91,12 +91,12 @@ function Page() {
       </p>
       <p style={P}>
         Les prix :{" "}
-        <a href="#express" style={CHIP}>Express 19 $</a>
-        <a href="#evenement" style={CHIP}>Événement 199 $</a>
-        <a href="#saisonnier" style={CHIP}>Saisonnier 299 $</a>
-        <a href="#permanent" style={CHIP}>Permanent 399 $</a>
+        <a href="#express" style={CHIP}>Express 19 $ CAD</a>
+        <a href="#evenement" style={CHIP}>Événement 199 $ CAD</a>
+        <a href="#saisonnier" style={CHIP}>Saisonnier 299 $ CAD</a>
+        <a href="#permanent" style={CHIP}>Permanent 399 $ CAD</a>
       </p>
-      <p style={P}>Express 19 $ jusqu&apos;au 31 décembre 2026.</p>
+      <p style={P}>Express 19 $ CAD jusqu&apos;au 31 décembre 2026.</p>
 
       <section aria-label="Quatre jeux qui marchent déjà" style={BLOC}>
         <h2 style={H2}>Quatre jeux qui marchent déjà. On change juste les couleurs.</h2>
@@ -157,22 +157,22 @@ function Page() {
           </thead>
           <tbody>
             <tr id="express">
-              <td style={TD}><strong>Express 19 $ « Pour tester »</strong></td>
+              <td style={TD}><strong>Express 19 $ CAD « Pour tester »</strong></td>
               <td style={TD}>7 jours.</td>
               <td style={TD}>Course seulement, un seul nom au choix (commerce, événement ou particulier), aucune option. Sans le délai de 14 jours, non crédité.</td>
             </tr>
             <tr id="evenement">
-              <td style={TD}><strong>Événement 199 $ « Pour un moment »</strong></td>
+              <td style={TD}><strong>Événement 199 $ CAD « Pour un moment »</strong></td>
               <td style={TD}>30 jours.</td>
               <td style={TD}>4 moteurs au choix, habillage complet (couleurs, nom au choix, slogan — leur phrase —, date) + 1 ronde de corrections. Écran de victoire avec récompense + kit de partage. Sous 14 jours.</td>
             </tr>
             <tr id="saisonnier">
-              <td style={TD}><strong>Saisonnier 299 $ « Pour chaque année »</strong></td>
+              <td style={TD}><strong>Saisonnier 299 $ CAD « Pour chaque année »</strong></td>
               <td style={TD}>90 jours, puis re-habillage chaque saison.</td>
               <td style={TD}>Tout Événement + re-habillage chaque saison, sur simple courriel + compteurs de parties par saison, à partir de l&apos;ouverture du lien + code QR par endroit (comptoir, sac, facture, vitrine).</td>
             </tr>
             <tr id="permanent">
-              <td style={TD}><strong>Permanent 399 $ « Pour toujours »</strong></td>
+              <td style={TD}><strong>Permanent 399 $ CAD « Pour toujours »</strong></td>
               <td style={TD}>Pour toujours.</td>
               <td style={TD}>Tout Événement + jeu du quotidien + compteurs, à partir de l&apos;ouverture du lien, + résumé mensuel + vitrine « Ils ont joué » (avec l&apos;accord du client) + bouton « Votre commerce aussi ? » qui recrute le suivant + code QR par endroit (comptoir, sac, facture, vitrine).</td>
             </tr>
@@ -192,14 +192,14 @@ function Page() {
         </p>
         <p style={P}>
           Hébergement, pour tous les jeux sur mesure : gratuit l&apos;année 1,
-          puis 29 $ par année, par jeu hébergé (couvre l&apos;entretien et les
+          puis 29 $ CAD par année, par jeu hébergé (couvre l&apos;entretien et les
           frais d&apos;IA mensuels). L&apos;hébergement gratuit à vie n&apos;est
           jamais promis.
         </p>
         <p style={P}>
-          Chaque prix se paie une seule fois : Express 19 $, Événement 199 $,
-          Saisonnier 299 $, Permanent 399 $. L&apos;hébergement s&apos;ajoute
-          ensuite (gratuit l&apos;année 1, puis 29 $ par année, par jeu
+          Chaque prix se paie une seule fois : Express 19 $ CAD, Événement 199 $ CAD,
+          Saisonnier 299 $ CAD, Permanent 399 $ CAD. L&apos;hébergement s&apos;ajoute
+          ensuite (gratuit l&apos;année 1, puis 29 $ CAD par année, par jeu
           hébergé). Fin de vie, paliers à durée finie seulement (Express, Événement, Saisonnier — le Permanent est exclu) : à la fin de votre durée, le jeu disparaît : c&apos;est simplement la fin, l&apos;espace est libéré et le jeu est effacé. Aucune garde promise, aucun fichier promis comme garde après la fin.
         </p>
         <p style={P}>
@@ -328,7 +328,7 @@ function Page() {
         <h2 style={H2}>Conditions, en bref.</h2>
         <p style={P}>
           Le jeu est à vous ; l&apos;hébergement est gratuit
-          l&apos;année 1, puis 29 $ par année et par jeu ; aucune taxe ajoutée ;
+          l&apos;année 1, puis 29 $ CAD par année et par jeu ; aucune taxe ajoutée ;
           vous garantissez avoir le droit d&apos;utiliser les éléments de marque
           que vous fournissez ; HP choisit ses clients (commerces et organismes
           alignés avec ses valeurs : dignité, honnêteté, vraie vie).

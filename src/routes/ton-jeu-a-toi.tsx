@@ -476,7 +476,7 @@ function Page() {
             sans compte et sans achat.
           </p>
           <p className="lead">
-            Prix prévu : 5 $, aucune taxe ajoutée. Aucun achat possible pour
+            Prix prévu : 5 $ CAD, aucune taxe ajoutée. Aucun achat possible pour
             l'instant.
           </p>
         </div>
