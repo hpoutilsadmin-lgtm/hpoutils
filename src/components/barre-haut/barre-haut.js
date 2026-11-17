@@ -44,6 +44,11 @@
    Q-PG-3 (12 nov. 2026, GO HP) : le panneau pilote Gepeto est
    retiré — le vrai moteur (Q-PG-1) est le seul Gepeto. La Loupe
    reste, en attente de Q-PG-4 (index réel 113 entrées).
+
+   M-3 (lot M, 16 nov. 2026) : sur téléphone (≤ 560 px), la rangée
+   ne montre que Plus et Panier ; les 9 autres commandes sont
+   repliées dans le panneau « Plus » (construirePlus), rejouées
+   par un tap sur leur bouton de rangée. Aucune fonction retirée.
    ================================================================ */
 (function () {
   var PAGES_STOP = ["/le-garde", "/personne-seule"];
@@ -340,6 +345,34 @@
   function construirePlus() {
     zonePanneau.appendChild(el("h2", null, "Plus — fonctions secondaires"));
     var liste = el("ul", { "class": "bh-liste" });
+    /* M-3 (lot M, 16 nov. 2026) : sur téléphone (≤ 560 px), la rangée
+       de la barre ne montre que Plus et Panier — les 9 autres
+       commandes vivent ici, en tête du panneau. Chaque bouton
+       rejoue le tap du bouton de rangée correspondant
+       (boutonsCommandes[nom].click()) : même geste, même effet —
+       la Loupe ouvre sa recherche, Gepeto et Question dispatchent
+       vers le vrai moteur (Q-PG-3 intact), Lire, Lanterne et
+       Confort ouvrent leurs panneaux. Panier n'est pas listé ici :
+       il est déjà direct dans la rangée. Le test est fait à chaque
+       ouverture du panneau (matchMedia) : une rotation qui franchit
+       560 px est prise en compte à la prochaine ouverture. */
+    if (window.matchMedia && window.matchMedia("(max-width: 560px)").matches) {
+      var commandesRepliees = [
+        ["accueil", "Accueil"], ["retour", "Retour"], ["suivant", "Suivant"],
+        ["recherche", "Loupe"], ["lire", "Lire"], ["lanterne", "Lanterne"],
+        ["question", "Question"], ["gepeto", "Gepeto"], ["confort", "Confort"]
+      ];
+      commandesRepliees.forEach(function (c) {
+        var nom = c[0], label = c[1];
+        var li = el("li");
+        var b = el("button", { type: "button" }, label + " — commande de la barre");
+        on(b, "click", function () {
+          if (boutonsCommandes[nom]) { boutonsCommandes[nom].click(); }
+        });
+        li.appendChild(b);
+        liste.appendChild(li);
+      });
+    }
     function item(label, fn, maquette) {
       var li = el("li");
       var b = el("button", { type: "button" }, label);

@@ -51,7 +51,12 @@
    barre dépliée, par point de rupture (mesures locales,
    barre-haut.js + CSS de la tête : 304 px ≤ 560, 194 px de 561
    à 900, 68 px ≥ 901 ; identiques accueil / autres pages, face
-   cachée ou non). La classe bh-reserve est posée par un tout
+   cachée ou non). Lot M, 16 nov. 2026 : M-3 replie 9 commandes
+   sous « Plus » à ≤ 560 px (304 -> 191 px) et M-2 passe les
+   labels à 12,5 px (+0,38 px de hauteur de ligne, plafond
+   195 px de 561 à 900 et 69 px ≥ 901 — le JS pose --bh-hauteur
+   au plafond, la réserve reprend le plafond pour un écart nul).
+   La classe bh-reserve est posée par un tout
    petit script synchrone en tête (__root.tsx), qui ne la pose
    pas sur les pages STOP (/le-garde, /personne-seule : aucune
    barre, aucune réserve). Quand le JS monte la barre, la règle
@@ -61,16 +66,16 @@
    est ajoutée des deux côtés : la barre la porte aussi dans
    son propre padding-top. */
 html.bh-reserve body {
-  padding-top: calc(304px + env(safe-area-inset-top, 0px));
+  padding-top: calc(191px + env(safe-area-inset-top, 0px));
 }
 @media (min-width: 561px) and (max-width: 900px) {
   html.bh-reserve body {
-    padding-top: calc(194px + env(safe-area-inset-top, 0px));
+    padding-top: calc(195px + env(safe-area-inset-top, 0px));
   }
 }
 @media (min-width: 901px) {
   html.bh-reserve body {
-    padding-top: calc(68px + env(safe-area-inset-top, 0px));
+    padding-top: calc(69px + env(safe-area-inset-top, 0px));
   }
 }
 
@@ -246,7 +251,7 @@ html.bh-actif {
   flex: 0 0 auto;
 }
 .bh-cmd span {
-  font-size: 12px;
+  font-size: 13px; /* J-3 : 12 → 13 px */
   line-height: 1.15;
   text-align: center;
   overflow-wrap: break-word;
@@ -291,7 +296,8 @@ html.bh-actif {
   border-radius: 10px;
   background: var(--bh-or);
   color: var(--bh-encre);
-  font-size: 12px;
+  /* M-2 (lot M, 16 nov. 2026) : 12 px -> 12,5 px, seuil confort HP. */
+  font-size: 12.5px;
   font-weight: 700;
   line-height: 20px;
   text-align: center;
@@ -372,7 +378,7 @@ html.bh-actif {
 }
 .bh-liste .bh-maquette {
   float: right;
-  font-size: 12px;
+  font-size: 13px; /* J-3 : 12 → 13 px */
   color: var(--bh-or-clair);
 }
 .bh-rang {
@@ -409,25 +415,35 @@ html.bh-actif {
 }
 
 /* ---------- Téléphone 360–390 px : 1 colonne ----------
-   En-tête, sections, puis les 10 commandes en grille 5 × 2.
-   Tout est visible, rien n'est caché dans « Plus ». */
+   En-tête, sections, puis UNE rangée : Plus + Panier.
+   M-3 (lot M, 16 nov. 2026) : la barre faisait 304 px à 360 px
+   (38 % du premier écran, 3 rangées de commandes dont Panier
+   pleine largeur). Les 9 autres commandes (Accueil, Retour,
+   Suivant, Loupe, Lire, Lanterne, Question, Gepeto, Confort)
+   sont repliées dans le panneau « Plus » (barre-haut.js,
+   construirePlus : elles y sont rejouées par un tap sur leur
+   bouton de rangée, aucune fonction retirée, la Loupe reste).
+   Seuls Plus et Panier restent dans la rangée : le panier garde
+   son accès direct en un tap (portes et tunnels, 11 nov. 2026),
+   Plus donne les 9 autres en un tap de plus. La grille 5 × 2
+   (décision HP 7 nov. 2026) est remplacée sur téléphone
+   seulement ; tablette et ordinateur ne changent pas. */
 @media (max-width: 560px) {
   .bh-titre {
     font-size: 17px;
   }
   .bh-commandes {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
     gap: 6px;
   }
-  /* Lot boutons panier : la 11e commande occupe toute la 3e rangée,
-     pleine largeur — un bouton Panier très visible, très facile
-     au doigt. Inerte en mode défilement (flex : grid-column sans effet). */
-  .bh-cmd[data-commande="panier"] {
-    grid-column: 1 / -1;
+  /* M-3 : seules Plus et Panier restent visibles dans la rangée.
+     Sauf disposition défilement explicite (data-disposition),
+     qui garde sa rangée défilante à 11 commandes. */
+  .bh-barre:not(.bh-defilement) .bh-commandes .bh-cmd:not([data-commande="plus"]):not([data-commande="panier"]) {
+    display: none;
   }
   .bh-cmd span {
-    font-size: 11px;
+    font-size: 13px; /* J-3 : 11 → 13 px (téléphone) */
   }
   /* Disposition de rechange (option B, non retenue : HP, 7 nov.
      2026 — grille 5 × 2 par défaut) : une seule rangée défilante
@@ -456,7 +472,7 @@ html.bh-actif {
     padding: 0 16px 10px;
   }
   .bh-cmd span {
-    font-size: 12px;
+    font-size: 13px; /* J-3 : 12 → 13 px (tablette) */
   }
 }
 
