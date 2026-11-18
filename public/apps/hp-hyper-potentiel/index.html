@@ -94,88 +94,88 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 <h1>Un petit pas à la fois</h1>
 <p class="slogan">Comme un petit dinosaure qui fait la grande traversée.</p>
 <p class="fait">Des pratiques appuyées par la recherche. Zéro miracle.</p>
-<p class="petite">Trois petits outils gratuits, à utiliser tout de suite — aucune inscription, tout reste sur ton appareil.</p>
+<p class="petite">Trois petits outils gratuits, à utiliser tout de suite — aucune inscription, tout reste sur votre appareil.</p>
 </header>
 <main id="accueil">
 <div class="choix">
-<button class="btn-vert" id="go-respire" type="button"><span class="t">🫁 Module 1 — Respire avec moi</span><span class="d">Trois respirations guidées, animées, de 45 secondes à 5 minutes.</span></button>
-<button class="btn-vert" id="go-ikigai" type="button"><span class="t">🧭 Module 2 — Ta carte ikigaï</span><span class="d">Quatre questions courtes pour voir clair dans ce qui te fait avancer.</span></button>
-<button class="btn-vert" id="go-woop" type="button"><span class="t">🎯 Module 3 — Ton plan WOOP</span><span class="d">Un souhait, un obstacle, un plan « si… alors… » — et 7 jours pour t'y mettre.</span></button>
+<button class="btn-vert" id="go-respire" type="button"><span class="t">🫁 Module 1 — Respirez avec moi</span><span class="d">Trois respirations guidées, animées, de 45 secondes à 5 minutes.</span></button>
+<button class="btn-vert" id="go-ikigai" type="button"><span class="t">🧭 Module 2 — Votre carte ikigaï</span><span class="d">Quatre questions courtes pour voir clair dans ce qui vous fait avancer.</span></button>
+<button class="btn-vert" id="go-woop" type="button"><span class="t">🎯 Module 3 — Votre plan WOOP</span><span class="d">Un souhait, un obstacle, un plan « si… alors… » — et 7 jours pour vous y mettre.</span></button>
 </div>
 </main>
 <!-- MODULE 1 : RESPIRATION -->
-<section class="module cache" id="mod-respire" aria-label="Respire avec moi">
+<section class="module cache" id="mod-respire" aria-label="Respirez avec moi">
 <button class="retour" type="button" data-retour>← Retour à l'accueil</button>
-<h2>Respire avec moi</h2>
-<p>Choisis une pratique, suis le cercle, c'est tout. Tu peux arrêter en tout temps, d'un seul toucher.</p>
-<p>Fais ça doucement, sans jamais forcer. Si tu sens un étourdissement, des picotements, une oppression, le cœur qui s'emballe ou l'angoisse qui monte : arrête, respire normalement, assis. Ne pratique jamais en conduisant, dans le bain ou la douche. Si tu as une condition respiratoire ou cardiaque, si tu es enceinte, ou si la respiration déclenche habituellement de la panique chez toi, demande d'abord l'avis de ton médecin ou de ton professionnel de la santé.</p>
+<h2>Respirez avec moi</h2>
+<p>Choisissez une pratique, suivez le cercle, c'est tout. Vous pouvez arrêter en tout temps, d'un seul toucher.</p>
+<p>Faites ça doucement, sans jamais forcer. Si vous sentez un étourdissement, des picotements, une oppression, le cœur qui s'emballe ou l'angoisse qui monte : arrêtez, respirez normalement, assis. Ne pratiquez jamais en conduisant, dans le bain ou la douche. Si vous avez une condition respiratoire ou cardiaque, si vous êtes enceinte, ou si la respiration déclenche habituellement de la panique chez vous, demandez d'abord l'avis de votre médecin ou de votre professionnel de la santé.</p>
 <div class="modes" id="modes">
 <button class="btn-doux" type="button" data-mode="soupir"><span class="t">Soupir physiologique</span><span class="d">Deux petites inspirations par le nez, longue expiration par la bouche. 5 cycles, environ 45 secondes.</span></button>
 <button class="btn-doux" type="button" data-mode="coherence"><span class="t">Cohérence 5 minutes</span><span class="d">6 respirations par minute : 5 secondes j'inspire, 5 secondes j'expire. Compte à rebours de 5 minutes.</span></button>
-<button class="btn-doux" type="button" data-mode="carree"><span class="t">Respiration carrée</span><span class="d">J'inspire 4, je retiens 4, j'expire 4, je retiens 4. Quatre cycles, environ 1 minute. Les temps de rétention peuvent être inconfortables pour certaines personnes : si c'est ton cas, choisis le soupir ou la cohérence, sans insister.</span></button>
+<button class="btn-doux" type="button" data-mode="carree"><span class="t">Respiration carrée</span><span class="d">J'inspire 4, je retiens 4, j'expire 4, je retiens 4. Quatre cycles, environ 1 minute. Les temps de rétention peuvent être inconfortables pour certaines personnes : si c'est votre cas, choisissez le soupir ou la cohérence, sans insister.</span></button>
 </div>
 <div class="cache" id="seance">
 <div class="cercle-zone">
 <div class="cercle" id="cercle">Prêt ?</div>
-<p class="phase" id="phase" aria-live="polite" aria-atomic="true">Choisis le bouton Commencer.</p>
+<p class="phase" id="phase" aria-live="polite" aria-atomic="true">Choisissez le bouton Commencer.</p>
 <p class="compteur" id="compteur"></p>
 </div>
 <button class="btn-vert" id="btn-start" type="button">Commencer</button>
 <button class="btn-stop cache" id="btn-stop" type="button">■ Arrêter</button>
 <button class="btn-mini" id="btn-changer" type="button" style="margin-top:10px;width:100%">Choisir une autre pratique</button>
-<p class="ok cache" id="respire-fini">Séance terminée — ou arrêtée, ce qui est tout aussi correct. Prends un instant pour remarquer comment tu te sens, sans jugement : plus calme, pareil ou moins bien sont toutes des réponses possibles. Si tu te sens moins bien, respire normalement et reprends une activité familière ; si la détresse persiste, voir les ressources en bas de page.</p>
+<p class="ok cache" id="respire-fini">Séance terminée — ou arrêtée, ce qui est tout aussi correct. Prenez un instant pour remarquer comment vous vous sentez, sans jugement : plus calme, pareil ou moins bien sont toutes des réponses possibles. Si vous vous sentez moins bien, respirez normalement et reprenez une activité familière ; si la détresse persiste, voir les ressources en bas de page.</p>
 </div>
 <div class="micro">💡 Le fait : dans l’étude de Stanford (Balban et al., 2023), 5 minutes de soupirs répétés chaque jour pendant un mois ont amélioré l’humeur positive plus que 5 minutes de méditation par jour. Ici, la séance "soupir" dure environ 45 secondes : c’est une façon de découvrir le geste, pas la dose étudiée. Respirer lentement (6 respirations par minute) amplifie dans le moment les variations du rythme cardiaque liées à la respiration. Aucune de ces pratiques n’est un traitement contre l’anxiété.</div>
 </section>
 
 <!-- MODULE 2 : IKIGAÏ -->
-<section class="module cache" id="mod-ikigai" aria-label="Ta carte ikigaï">
+<section class="module cache" id="mod-ikigai" aria-label="Votre carte ikigaï">
 <button class="retour" type="button" data-retour>← Retour à l'accueil</button>
-<h2>Ta carte ikigaï</h2>
-<p>Quatre questions courtes, sans bonnes ni mauvaises réponses. Écris ce qui te vient — deux ou trois idées par question, c'est parfait. Tout est sauvegardé automatiquement sur ton appareil. Écris seulement ce que tu es à l'aise de laisser sur cet appareil.</p>
+<h2>Votre carte ikigaï</h2>
+<p>Quatre questions courtes, sans bonnes ni mauvaises réponses. Écrivez ce qui vous vient — deux ou trois idées par question, c'est parfait. Tout est sauvegardé automatiquement sur votre appareil. Écrivez seulement ce que vous êtes à l'aise de laisser sur cet appareil.</p>
 <p class="petite ok cache" id="ik-save-ok" role="status">✓ Sauvegardé sur cet appareil</p>
-<p class="save-err cache" id="ik-save-err" role="alert">⚠ La sauvegarde ne fonctionne pas sur ce navigateur. Tes réponses restent visibles tant que cette page est ouverte — copie-les ou fais une capture d’écran avant de fermer.</p>
-<div class="micro">🌏 Soyons honnêtes : au Japon, l’ikigaï, c’est ce qui donne le goût de se lever le matin — souvent un petit plaisir, une personne, un projet. Le diagramme en 4 questions ci-dessous n’est pas une tradition japonaise : c’est un outil de réflexion créé en Occident (Zuzunaga, 2011 ; popularisé sous ce nom par Marc Winn, 2014). Ton ikigaï n’a pas besoin d’être un métier ni d’être payé.</div>
+<p class="save-err cache" id="ik-save-err" role="alert">⚠ La sauvegarde ne fonctionne pas sur ce navigateur. Vos réponses restent visibles tant que cette page est ouverte — copiez-les ou faites une capture d’écran avant de fermer.</p>
+<div class="micro">🌏 Soyons honnêtes : au Japon, l’ikigaï, c’est ce qui donne le goût de se lever le matin — souvent un petit plaisir, une personne, un projet. Le diagramme en 4 questions ci-dessous n’est pas une tradition japonaise : c’est un outil de réflexion créé en Occident (Zuzunaga, 2011 ; popularisé sous ce nom par Marc Winn, 2014). Votre ikigaï n’a pas besoin d’être un métier ni d’être payé.</div>
 <div id="ikigai-etapes">
 <div class="ik-etape" data-etape="0">
-<p class="progres">Question 1 sur 4 — Ce que tu aimes</p>
-<h3 tabindex="-1">Qu'est-ce qui te fait plaisir, pour vrai ?</h3>
+<p class="progres">Question 1 sur 4 — Ce que vous aimez</p>
+<h3 tabindex="-1">Qu'est-ce qui vous fait plaisir, pour vrai ?</h3>
 <label for="ik-aime-1">J'aime… (idée 1)</label><input type="text" id="ik-aime-1" data-ik="aime" placeholder="Ex. : cuisiner pour du monde">
 <label for="ik-aime-2">J'aime aussi… (idée 2)</label><input type="text" id="ik-aime-2" data-ik="aime" placeholder="Ex. : être dehors">
 <label for="ik-aime-3">Et encore… (idée 3, si ça vient)</label><input type="text" id="ik-aime-3" data-ik="aime" placeholder="Ex. : la musique">
 </div>
 <div class="ik-etape cache" data-etape="1">
-<p class="progres">Question 2 sur 4 — Ce pour quoi tu es doué</p>
-<h3 tabindex="-1">Qu'est-ce que les autres te demandent souvent ?</h3>
+<p class="progres">Question 2 sur 4 — Ce pour quoi vous êtes doué</p>
+<h3 tabindex="-1">Qu'est-ce que les autres vous demandent souvent ?</h3>
 <label for="ik-doue-1">On me dit que je suis bon pour…</label><input type="text" id="ik-doue-1" data-ik="doue" placeholder="Ex. : écouter les gens">
 <label for="ik-doue-2">Je sais bien faire…</label><input type="text" id="ik-doue-2" data-ik="doue" placeholder="Ex. : réparer des affaires">
 <label for="ik-doue-3">Autre force (si ça vient)</label><input type="text" id="ik-doue-3" data-ik="doue" placeholder="Ex. : expliquer simplement">
 </div>
 <div class="ik-etape cache" data-etape="2">
-<p class="progres">Question 3 sur 4 — Ce dont le monde autour de toi a besoin</p>
-<h3 tabindex="-1">Autour de toi — famille, rue, quartier — qu'est-ce qui manque ?</h3>
+<p class="progres">Question 3 sur 4 — Ce dont le monde autour de vous a besoin</p>
+<h3 tabindex="-1">Autour de vous — famille, rue, quartier — qu'est-ce qui manque ?</h3>
 <label for="ik-besoin-1">Les gens autour de moi ont besoin de…</label><input type="text" id="ik-besoin-1" data-ik="besoin" placeholder="Ex. : des repas pas chers">
 <label for="ik-besoin-2">Ça aiderait si quelqu'un…</label><input type="text" id="ik-besoin-2" data-ik="besoin" placeholder="Ex. : gardait les enfants une heure">
 <label for="ik-besoin-3">Autre besoin (si ça vient)</label><input type="text" id="ik-besoin-3" data-ik="besoin" placeholder="Ex. : de l'aide avec les papiers">
 </div>
 <div class="ik-etape cache" data-etape="3">
-<p class="progres">Question 4 sur 4 — Ce pour quoi on peut te payer</p>
-<h3 tabindex="-1">Pour quoi est-ce que quelqu'un pourrait te payer, même un petit montant ?</h3>
+<p class="progres">Question 4 sur 4 — Ce pour quoi on peut vous payer</p>
+<h3 tabindex="-1">Pour quoi est-ce que quelqu'un pourrait vous payer, même un petit montant ?</h3>
 <label for="ik-paye-1">On pourrait me payer pour…</label><input type="text" id="ik-paye-1" data-ik="paye" placeholder="Ex. : préparer des repas à emporter">
 <label for="ik-paye-2">Ou encore pour…</label><input type="text" id="ik-paye-2" data-ik="paye" placeholder="Ex. : donner un coup de main pour déménager">
 <label for="ik-paye-3">Autre idée (si ça vient)</label><input type="text" id="ik-paye-3" data-ik="paye" placeholder="Ex. : vendre ce que je fabrique">
-<p class="petite">Cette zone est optionnelle pour trouver ton ikigaï : elle sert à explorer, pas à décider ton métier aujourd’hui. Si rien ne te vient, laisse vide — c’est une information, pas un échec. La laisser vide ne diminue en rien les trois autres.</p>
+<p class="petite">Cette zone est optionnelle pour trouver votre ikigaï : elle sert à explorer, pas à décider votre métier aujourd’hui. Si rien ne vous vient, laissez vide — c’est une information, pas un échec. La laisser vide ne diminue en rien les trois autres.</p>
 </div>
 <div class="navrangee">
 <button class="btn-mini cache" id="ik-retour" type="button">← Retour</button>
 <button class="btn-vert" id="ik-suivant" type="button" style="flex:1">Continuer →</button>
 </div>
-<p class="petite cache" id="ik-vide">Rien écrit ici — c’est OK, tu peux continuer ou revenir plus tard.</p>
+<p class="petite cache" id="ik-vide">Rien écrit ici — c’est OK, vous pouvez continuer ou revenir plus tard.</p>
 </div>
 <div class="cache" id="ikigai-carte">
-<p class="petite cache" id="ik-deja">Tu as déjà une carte ici — remplie plus tôt sur cet appareil.</p>
-<p class="progres">Ta carte</p>
-<h3 tabindex="-1">Voici ta carte ikigaï</h3>
+<p class="petite cache" id="ik-deja">Vous avez déjà une carte ici — remplie plus tôt sur cet appareil.</p>
+<p class="progres">Votre carte</p>
+<h3 tabindex="-1">Voici votre carte ikigaï</h3>
 <div class="carte-ikigai">
 <div class="zone"><b>💗 J'aime</b><ul id="z-aime"></ul></div>
 <div class="zone"><b>💪 Je suis doué pour</b><ul id="z-doue"></ul></div>
@@ -183,14 +183,14 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 <div class="zone"><b>💲 On peut me payer pour</b><ul id="z-paye"></ul></div>
 <div class="centre"><span id="z-centre">Mon HP, c'est…</span></div>
 </div>
-<label for="ik-phrase">Complète ta phrase : « Mon HP, c'est… »</label>
+<label for="ik-phrase">Complétez votre phrase : « Mon HP, c'est… »</label>
 <input type="text" id="ik-phrase" placeholder="Ex. : mon jardin, le samedi, avec ma voisine">
-<p class="petite">Regarde où tes réponses se rejoignent — c’est souvent là que ça vaut la peine d’essayer quelque chose. Mais ne force rien : si une seule réponse te fait vraiment sourire, même non payée, même toute petite, écris-la quand même. Tu pourras changer ta phrase dans six mois : c’est normal, c’est vivant.</p>
+<p class="petite">Regardez où vos réponses se rejoignent — c’est souvent là que ça vaut la peine d’essayer quelque chose. Mais ne forcez rien : si une seule réponse vous fait vraiment sourire, même non payée, même toute petite, écrivez-la quand même. Vous pourrez changer votre phrase dans six mois : c’est normal, c’est vivant.</p>
 <button class="btn-mini" id="ik-copier" type="button" style="width:100%;margin-top:10px">Copier ma phrase "Mon HP, c’est…"</button>
-<p class="petite ok cache" id="ik-copie-ok" role="status">✓ Phrase copiée — colle-la où tu veux la partager.</p>
-<p class="petite">Avant de décider quoi que ce soit, essaie. Choisis une micro-expérience de 30 à 60 minutes liée à ta carte cette semaine — parler à quelqu’un, observer, essayer une tâche. Tu peux en faire ton souhait WOOP de 7 jours.</p>
+<p class="petite ok cache" id="ik-copie-ok" role="status">✓ Phrase copiée — collez-la où vous voulez la partager.</p>
+<p class="petite">Avant de décider quoi que ce soit, essayez. Choisissez une micro-expérience de 30 à 60 minutes liée à votre carte cette semaine — parler à quelqu’un, observer, essayer une tâche. Vous pouvez en faire votre souhait WOOP de 7 jours.</p>
 <button class="btn-mini" id="ik-vers-woop" type="button" style="width:100%">Faire mon plan WOOP →</button>
-<p class="petite">Pour t’orienter gratuitement au Québec : le conseiller ou la conseillère d’orientation de ton école, Academos, JeunesExplo, ton Carrefour jeunesse-emploi, les SARCA, Services Québec et le site REPÈRES.</p>
+<p class="petite">Pour vous orienter gratuitement au Québec : le conseiller ou la conseillère d’orientation de votre école, Academos, JeunesExplo, votre Carrefour jeunesse-emploi, les SARCA, Services Québec et le site REPÈRES.</p>
 <div class="navrangee">
 <button class="btn-mini" id="ik-modifier" type="button">← Modifier mes réponses</button>
 <button class="btn-mini" id="ik-reset" type="button">Effacer et recommencer</button>
@@ -198,53 +198,53 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 </div>
 </section>
 <!-- MODULE 3 : WOOP -->
-<section class="module cache" id="mod-woop" aria-label="Ton plan WOOP">
+<section class="module cache" id="mod-woop" aria-label="Votre plan WOOP">
 <button class="retour" type="button" data-retour>← Retour à l'accueil</button>
-<h2>Ton plan WOOP</h2>
-<p>WOOP, c'est une méthode en 4 étapes courtes pour transformer un souhait en action. Prends un souhait réaliste pour les 7 prochains jours.</p>
+<h2>Votre plan WOOP</h2>
+<p>WOOP, c'est une méthode en 4 étapes courtes pour transformer un souhait en action. Prenez un souhait réaliste pour les 7 prochains jours.</p>
 <div class="micro">💡 Le fait : dans une méta-analyse de 94 tests (Gollwitzer et Sheeran, 2006), ajouter un plan "si… alors…" à un but a amélioré son atteinte, avec un effet moyen à grand (d = 0,65). WOOP ajoute à ce plan l’étape de l’obstacle intérieur, tirée des travaux de Gabriele Oettingen.</div>
 <p class="petite ok cache" id="w-save-ok" role="status">✓ Sauvegardé sur cet appareil</p>
-<p class="save-err cache" id="w-save-err" role="alert">⚠ La sauvegarde ne fonctionne pas sur ce navigateur. Tes réponses restent visibles tant que cette page est ouverte — copie-les ou fais une capture d’écran avant de fermer.</p>
+<p class="save-err cache" id="w-save-err" role="alert">⚠ La sauvegarde ne fonctionne pas sur ce navigateur. Vos réponses restent visibles tant que cette page est ouverte — copiez-les ou faites une capture d’écran avant de fermer.</p>
 <div id="woop-etapes">
 <div class="w-etape" data-wetape="0">
 <p class="progres">Étape 1 sur 4 — Souhait</p>
-<h3 tabindex="-1">Qu'est-ce que tu souhaites accomplir ?</h3>
+<h3 tabindex="-1">Qu'est-ce que vous souhaitez accomplir ?</h3>
 <label for="w-souhait">Mon souhait</label>
 <textarea id="w-souhait" placeholder="Ex. : marcher 15 minutes chaque matin"></textarea>
 </div>
 <div class="w-etape cache" data-wetape="1">
 <p class="progres">Étape 2 sur 4 — Résultat</p>
-<h3 tabindex="-1">Si ça se réalise, qu'est-ce que ça change pour toi ?</h3>
+<h3 tabindex="-1">Si ça se réalise, qu'est-ce que ça change pour vous ?</h3>
 <label for="w-resultat">Le plus beau résultat</label>
 <textarea id="w-resultat" placeholder="Ex. : je vais commencer mes journées avec plus d'énergie"></textarea>
-<p class="petite">Prends une seconde pour l'imaginer pour vrai. Ça compte.</p>
+<p class="petite">Prenez une seconde pour l'imaginer pour vrai. Ça compte.</p>
 </div>
 <div class="w-etape cache" data-wetape="2">
 <p class="progres">Étape 3 sur 4 — Obstacle intérieur</p>
-<h3 tabindex="-1">En toi, qu'est-ce qui risque de te bloquer ?</h3>
+<h3 tabindex="-1">En vous, qu'est-ce qui risque de vous bloquer ?</h3>
 <label for="w-obstacle">Mon obstacle intérieur</label>
 <textarea id="w-obstacle" placeholder="Ex. : le matin, j’ai envie de rester au lit"></textarea>
-<p class="petite">Écris seulement ce que tu es à l’aise de laisser sur cet appareil. Ton obstacle s’écrit pour toi seulement — rien à partager.</p>
+<p class="petite">Écrivez seulement ce que vous êtes à l’aise de laisser sur cet appareil. Votre obstacle s’écrit pour vous seulement — rien à partager.</p>
 <p class="petite">Pas de jugement — tout le monde en a un. Le nommer, c'est déjà la moitié du plan.</p>
 </div>
 <div class="w-etape cache" data-wetape="3">
 <p class="progres">Étape 4 sur 4 — Plan</p>
-<h3 tabindex="-1">Ton plan « si… alors… »</h3>
+<h3 tabindex="-1">Votre plan « si… alors… »</h3>
 <label for="w-si">Si… (quand l'obstacle arrive)</label>
 <input type="text" id="w-si" placeholder="Ex. : si j'ai envie de rester au lit">
-<label for="w-alors">Alors je… (ton action, petite et concrète)</label>
+<label for="w-alors">Alors je… (votre action, petite et concrète)</label>
 <input type="text" id="w-alors" placeholder="Ex. : alors je mets mes souliers tout de suite">
 </div>
 <div class="navrangee">
 <button class="btn-mini cache" id="w-retour" type="button">← Retour</button>
 <button class="btn-vert" id="w-suivant" type="button" style="flex:1">Continuer →</button>
 </div>
-<p class="petite cache" id="w-vide">Rien écrit ici — c’est OK, tu peux continuer ou revenir plus tard.</p>
+<p class="petite cache" id="w-vide">Rien écrit ici — c’est OK, vous pouvez continuer ou revenir plus tard.</p>
 </div>
 <div class="cache" id="woop-carte">
-<p class="petite cache" id="w-deja">Tu as déjà un plan ici — rempli plus tôt sur cet appareil.</p>
-<p class="progres">Ta carte plan</p>
-<h3 tabindex="-1">Relis-la chaque matin — ça prend 20 secondes.</h3>
+<p class="petite cache" id="w-deja">Vous avez déjà un plan ici — rempli plus tôt sur cet appareil.</p>
+<p class="progres">Votre carte plan</p>
+<h3 tabindex="-1">Relisez-la chaque matin — ça prend 20 secondes.</h3>
 <div class="carte-plan">
 <p><span class="lbl">🎯 Mon souhait</span><br><span id="c-souhait">(pas encore rempli)</span></p>
 <p><span class="lbl">🌟 Le résultat</span><br><span id="c-resultat">(pas encore rempli)</span></p>
@@ -255,10 +255,10 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 <button class="btn-vert" id="w-engage" type="button">🤝 Je m'y mets pendant 7 jours</button>
 </div>
 <div class="cache" id="w-jours-zone">
-<h3 tabindex="-1">Mes 7 jours — coche chaque jour où tu as fait ton plan, même un peu.</h3>
+<h3 tabindex="-1">Mes 7 jours — cochez chaque jour où vous avez fait votre plan, même un peu.</h3>
 <div class="jours" id="w-jours"></div>
-<p class="petite">Un jour manqué n’efface rien. Tu coches le prochain jour où tu le fais, même un peu — pas besoin de recommencer à zéro.</p>
-<p class="ok cache" id="w-bravo">🎉 Sept jours cochés — beau travail. Tu peux te fixer un nouveau souhait quand tu veux.</p>
+<p class="petite">Un jour manqué n’efface rien. Vous cochez le prochain jour où vous le faites, même un peu — pas besoin de recommencer à zéro.</p>
+<p class="ok cache" id="w-bravo">🎉 Sept jours cochés — beau travail. Vous pouvez vous fixer un nouveau souhait quand vous voulez.</p>
 </div>
 <div class="navrangee">
 <button class="btn-mini" id="w-modifier" type="button">← Modifier mon plan</button>
@@ -268,19 +268,19 @@ button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
 </section>
 <div class="encadre">
 <h2>📘 Le mini cahier complet</h2>
-<p>Un petit pas à la fois, le mini cahier : 20 pages d’exercices à imprimer — <strong><a href="/pdf/mini-cahier-hyper-potentiel" style="color:inherit">10 $ sur hp-outils.com</a></strong>. Ce que l’outil gratuit ne contient pas : la méditation guidée de 2 minutes, l’auto-hypnose désenchantée avec ses prudences, la reprise d’activité sur 4 semaines, le menu de 12 micro-expériences pour trouver tes passions, le suivi de 30 jours et le tableau de bord à réimprimer. L’écran te guide ; le papier te fait écrire — et durer. L’outil ici reste gratuit pour toujours.</p>
+<p>Un petit pas à la fois, le mini cahier : 20 pages d’exercices à imprimer — <strong><a href="/pdf/mini-cahier-hyper-potentiel" style="color:inherit">10 $ sur hp-outils.com</a></strong>. Ce que l’outil gratuit ne contient pas : la méditation guidée de 2 minutes, l’auto-hypnose désenchantée avec ses prudences, la reprise d’activité sur 4 semaines, le menu de 12 micro-expériences pour trouver vos passions, le suivi de 30 jours et le tableau de bord à réimprimer. L’écran vous guide ; le papier vous fait écrire — et durer. L’outil ici reste gratuit pour toujours.</p>
 </div>
 <footer>
-<div class="prive" id="vie-privee">Tes réponses restent sur ton appareil. Ce que tu écris ici est sauvegardé automatiquement dans ton navigateur, sur cet appareil seulement. HP Outils ne reçoit rien, ne voit rien et ne te suit pas. Attention : toute personne qui ouvre cet outil sur le même appareil et le même navigateur verra tes réponses, et elles restent là jusqu’à ce que tu les effaces — avec les boutons "Effacer et recommencer" ou "Tout effacer" ci-dessous. Sur un appareil partagé, efface-les quand tu as fini.</div>
+<div class="prive" id="vie-privee">Vos réponses restent sur votre appareil. Ce que vous écrivez ici est sauvegardé automatiquement dans votre navigateur, sur cet appareil seulement. HP Outils ne reçoit rien, ne voit rien et ne vous suit pas. Attention : toute personne qui ouvre cet outil sur le même appareil et le même navigateur verra vos réponses, et elles restent là jusqu’à ce que vous les effaciez — avec les boutons "Effacer et recommencer" ou "Tout effacer" ci-dessous. Sur un appareil partagé, effacez-les quand vous avez fini.</div>
 <button class="disc" id="disc-btn" type="button">Ce n’est pas un avis médical</button>
-<div id="disc-texte">Cet outil propose des pratiques de bien-être général, sans promesse de résultat. Il ne remplace pas l’avis d’un médecin, d’un psychologue ou d’un autre professionnel de la santé. Si tu vis de la détresse : 811, option 2 (Info-Social, Québec) ; en crise, appelle ou texte le 988 (Canada, 24/7) ou le 1 866 APPELLE (1 866 277-3553) ; en danger immédiat, 911.</div>
+<div id="disc-texte">Cet outil propose des pratiques de bien-être général, sans promesse de résultat. Il ne remplace pas l’avis d’un médecin, d’un psychologue ou d’un autre professionnel de la santé. Si vous vivez de la détresse : 811, option 2 (Info-Social, Québec) ; en crise, appelez ou textez le 988 (Canada, 24/7) ou le 1 866 APPELLE (1 866 277-3553) ; en danger immédiat, 911.</div>
 <p style="margin-top:14px"><button class="btn-mini" id="tout-effacer" type="button">Tout effacer</button></p>
 <div class="cache" id="tout-effacer-confirm">
-<p>Effacer toutes tes réponses de cet appareil ? Ça ne se récupère pas.</p>
+<p>Effacer toutes vos réponses de cet appareil ? Ça ne se récupère pas.</p>
 <div class="navrangee"><button class="btn-mini" id="tout-effacer-oui" type="button">Oui, tout effacer</button><button class="btn-mini" id="tout-effacer-non" type="button">Retour</button></div>
 </div>
 <p class="ligne">HP Outils — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
-<p class="petite">Aucun compte. Aucune donnée saisie n'est envoyée. Tes réponses restent sur ton appareil.</p>
+<p class="petite">Aucun compte. Aucune donnée saisie n'est envoyée. Vos réponses restent sur votre appareil.</p>
 <p class="qr-pied"><img src="/images/qr-hp-outils.png" alt="Code QR — https://www.hp-outils.com/" width="96" height="96" style="background:#fff;padding:6px;border-radius:8px" /></p>
 <p class="lien-canon">👉 <a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">https://www.hp-outils.com/</a></p>
 </footer>
@@ -292,7 +292,7 @@ function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s))}
 function sauver(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
 var saveTimers={};
 function indiquerSauvegarde(prefixe,okEtat){var okEl=document.getElementById(prefixe+"-save-ok"),errEl=document.getElementById(prefixe+"-save-err");if(!okEl||!errEl)return;if(saveTimers[prefixe])clearTimeout(saveTimers[prefixe]);saveTimers[prefixe]=setTimeout(function(){okEl.classList.toggle("cache",!okEtat);errEl.classList.toggle("cache",!!okEtat)},800)}
-function armerEffacement(btn,action){if(btn.dataset.arme==="1"){btn.dataset.arme="";btn.classList.remove("btn-arme");if(btn._armTimer)clearTimeout(btn._armTimer);var t=btn.dataset.texteOriginal;btn.textContent=t;action()}else{if(!btn.dataset.texteOriginal)btn.dataset.texteOriginal=btn.textContent;btn.dataset.arme="1";btn.classList.add("btn-arme");btn.textContent="Tu es sûr ? Tape encore pour tout effacer";btn._armTimer=setTimeout(function(){btn.dataset.arme="";btn.classList.remove("btn-arme");btn.textContent=btn.dataset.texteOriginal},4000)}}
+function armerEffacement(btn,action){if(btn.dataset.arme==="1"){btn.dataset.arme="";btn.classList.remove("btn-arme");if(btn._armTimer)clearTimeout(btn._armTimer);var t=btn.dataset.texteOriginal;btn.textContent=t;action()}else{if(!btn.dataset.texteOriginal)btn.dataset.texteOriginal=btn.textContent;btn.dataset.arme="1";btn.classList.add("btn-arme");btn.textContent="Vous êtes sûr ? Tapez encore pour tout effacer";btn._armTimer=setTimeout(function(){btn.dataset.arme="";btn.classList.remove("btn-arme");btn.textContent=btn.dataset.texteOriginal},4000)}}
 function lire(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
 /* Navigation */
 var modules={respire:$("#mod-respire"),ikigai:$("#mod-ikigai"),woop:$("#mod-woop")};
@@ -313,10 +313,10 @@ function mouvementReduit(){try{return window.matchMedia("(prefers-reduced-motion
 function phase(texte,echelle,dureeMs){phaseEl.textContent=texte;cercle.textContent=texte;if(!mouvementReduit()){cercle.style.transitionDuration=(dureeMs/1000)+"s";cercle.style.transform="scale("+echelle+")"}}
 function majCompteur(t){compteurEl.textContent=t}
 function fmt(s){var m=Math.floor(s/60),ss=s%60;return m+":"+(ss<10?"0":"")+ss}
-$$("#modes [data-mode]").forEach(function(b){b.addEventListener("click",function(){respMode=b.getAttribute("data-mode");$("#seance").classList.remove("cache");$("#modes").classList.add("cache");$("#respire-fini").classList.add("cache");phaseEl.textContent="Quand tu es prêt, touche Commencer.";cercle.textContent="Prêt ?";cercle.style.transform="scale(.55)";majCompteur(respMode==="coherence"?"Durée : 5:00":respMode==="soupir"?"5 cycles":"4 cycles");$("#seance").scrollIntoView({block:"start"})})});
+$$("#modes [data-mode]").forEach(function(b){b.addEventListener("click",function(){respMode=b.getAttribute("data-mode");$("#seance").classList.remove("cache");$("#modes").classList.add("cache");$("#respire-fini").classList.add("cache");phaseEl.textContent="Quand vous êtes prêt, touchez Commencer.";cercle.textContent="Prêt ?";cercle.style.transform="scale(.55)";majCompteur(respMode==="coherence"?"Durée : 5:00":respMode==="soupir"?"5 cycles":"4 cycles");$("#seance").scrollIntoView({block:"start"})})});
 function arreterRespiration(){respEnCours=false;respToken++;if(timerInt){clearInterval(timerInt);timerInt=null}$("#btn-stop").classList.add("cache");$("#btn-start").classList.remove("cache");cercle.style.transform="scale(.55)"}
 function finSeance(){$("#btn-stop").classList.add("cache");$("#btn-start").classList.remove("cache");$("#respire-fini").classList.remove("cache");phaseEl.textContent="Séance terminée.";cercle.textContent="✓";cercle.style.transform="scale(.55)";respEnCours=false}
-$("#btn-stop").addEventListener("click",function(){arreterRespiration();phaseEl.textContent="Séance arrêtée. Tu peux recommencer quand tu veux.";cercle.textContent="Prêt ?"});
+$("#btn-stop").addEventListener("click",function(){arreterRespiration();phaseEl.textContent="Séance arrêtée. Vous pouvez recommencer quand vous voulez.";cercle.textContent="Prêt ?"});
 $("#btn-changer").addEventListener("click",function(){arreterRespiration();$("#seance").classList.add("cache");$("#modes").classList.remove("cache");$("#respire-fini").classList.add("cache")});
 $("#btn-start").addEventListener("click",async function(){
  if(!respMode||respEnCours)return;respEnCours=true;respToken++;var token=respToken;
@@ -352,7 +352,7 @@ var ikEtaitRempli=!!(ikData.phrase||Object.keys(ikData.reponses||{}).some(functi
 function ikSauver(){var r={};$$("[data-ik]").forEach(function(i){var g=i.getAttribute("data-ik");if(!r[g])r[g]=[];r[g].push(i.value)});ikData.reponses=r;ikData.phrase=$("#ik-phrase").value;var ok=sauver("hp_ikigai",ikData);indiquerSauvegarde("ik",ok);return ok}
 function ikRestaurer(){$$("[data-ik]").forEach(function(i){var g=i.getAttribute("data-ik");var idx=Array.prototype.indexOf.call(document.querySelectorAll('[data-ik="'+g+'"]'),i);var vals=(ikData.reponses||{})[g]||[];if(vals[idx])i.value=vals[idx]});if(ikData.phrase)$("#ik-phrase").value=ikData.phrase}
 function ikMontrer(n,focus){ikEtape=n;ikEtapes.forEach(function(e,i){e.classList.toggle("cache",i!==n)});$("#ik-retour").classList.toggle("cache",n===0);$("#ik-suivant").textContent=n===3?"Voir ma carte →":"Continuer →";if(focus){$("#mod-ikigai").scrollIntoView({block:"start"});var h=ikEtapes[n].querySelector("h3");if(h)h.focus({preventScroll:true})}}
-function ikCarte(){ikSauver();["aime","doue","besoin","paye"].forEach(function(g){var ul=$("#z-"+g);ul.innerHTML="";var vals=(ikData.reponses[g]||[]).filter(function(v){return v.trim()!==""});if(!vals.length){var li=document.createElement("li");li.textContent="(pas encore rempli)";ul.appendChild(li)}vals.forEach(function(v){var li=document.createElement("li");li.textContent=v;ul.appendChild(li)})});$("#z-centre").textContent=ikData.phrase?("Mon HP, c'est "+ikData.phrase):"Mon HP, c'est… (complète ta phrase ci-dessous)";$("#ikigai-etapes").classList.add("cache");$("#ikigai-carte").classList.remove("cache");var deja=$("#ik-deja");if(deja)deja.classList.toggle("cache",!ikEtaitRempli);if(!$("#mod-ikigai").classList.contains("cache")){$("#ikigai-carte").scrollIntoView({block:"start"});var hc=$("#ikigai-carte").querySelector("h3");if(hc)hc.focus({preventScroll:true})}}
+function ikCarte(){ikSauver();["aime","doue","besoin","paye"].forEach(function(g){var ul=$("#z-"+g);ul.innerHTML="";var vals=(ikData.reponses[g]||[]).filter(function(v){return v.trim()!==""});if(!vals.length){var li=document.createElement("li");li.textContent="(pas encore rempli)";ul.appendChild(li)}vals.forEach(function(v){var li=document.createElement("li");li.textContent=v;ul.appendChild(li)})});$("#z-centre").textContent=ikData.phrase?("Mon HP, c'est "+ikData.phrase):"Mon HP, c'est… (complétez votre phrase ci-dessous)";$("#ikigai-etapes").classList.add("cache");$("#ikigai-carte").classList.remove("cache");var deja=$("#ik-deja");if(deja)deja.classList.toggle("cache",!ikEtaitRempli);if(!$("#mod-ikigai").classList.contains("cache")){$("#ikigai-carte").scrollIntoView({block:"start"});var hc=$("#ikigai-carte").querySelector("h3");if(hc)hc.focus({preventScroll:true})}}
 $$("[data-ik]").forEach(function(i){i.addEventListener("input",ikSauver)});
 $("#ik-phrase").addEventListener("input",function(){ikSauver();if(ikData.phrase)$("#z-centre").textContent="Mon HP, c'est "+ikData.phrase});
 function ikEtapeVide(){var champs=ikEtapes[ikEtape].querySelectorAll("input,textarea");for(var i=0;i<champs.length;i++){if(champs[i].value.trim()!=="")return false}return true}

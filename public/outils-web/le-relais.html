@@ -134,7 +134,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
     <input type="text" id="in-qui" placeholder="ex. Sophie" maxlength="40" autocomplete="off">
     <label for="in-quoi">Quoi&nbsp;?</label>
     <input type="text" id="in-quoi" placeholder="ex. Médicament donné — dîner, ½ portion" maxlength="140" autocomplete="off">
-    <p class="message">L'heure se note toute seule, au moment où tu appuies.</p>
+    <p class="message">L'heure se note toute seule, au moment où vous appuyez.</p>
     <button id="btn-ajouter" class="vert">✏️ Noter au carnet</button>
     <p class="message" id="msg-ajout"></p>
   </section>
@@ -282,7 +282,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
     var liste = $("liste");
     $("compte").textContent = entrees.length ? "(" + entrees.length + ")" : "";
     if (!entrees.length){
-      liste.innerHTML = '<p class="vide">Le carnet est vide. La première note, c\'est la plus importante — vas-y.</p>';
+      liste.innerHTML = '<p class="vide">Le carnet est vide. La première note, c\'est la plus importante — allez-y.</p>';
       return;
     }
     var tri = entrees.slice().sort(function(a,b){ return b.ts - a.ts; });
@@ -354,7 +354,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
   $("btn-transmettre").addEventListener("click", function(){
     var msg = $("msg-transmettre");
     if (!entrees.length){
-      msg.textContent = "Le carnet est encore vide — note quelque chose d'abord.";
+      msg.textContent = "Le carnet est encore vide — notez quelque chose d'abord.";
       return;
     }
     var texte = texteRelais();
@@ -364,7 +364,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
       }).catch(function(){});
     } else if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(texte).then(function(){
-        msg.textContent = "Copié ! Colle-le dans Messenger ou par SMS.";
+        msg.textContent = "Copié ! Collez-le dans Messenger ou par SMS.";
       }).catch(function(){ msg.textContent = texte; });
     } else {
       msg.textContent = texte;
@@ -386,7 +386,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
   $("btn-exporter").addEventListener("click", function(){
     var msg = $("msg-transmettre");
     if (!entrees.length){
-      msg.textContent = "Le carnet est encore vide — note quelque chose d'abord.";
+      msg.textContent = "Le carnet est encore vide — notez quelque chose d'abord.";
       return;
     }
     var blob = new Blob([texteRelais()], { type: "text/plain;charset=utf-8" });
@@ -410,8 +410,8 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
     var p = hpProvince();
     $("prov-nom").textContent = p.info.nom;
     $("ligne-ressource-locale").innerHTML = (p.code === "QC")
-      ? "Au Québec : ton <strong>CLSC</strong> — note son numéro ci-dessous."
-      : "Dans ta province (" + p.info.nom + ") : centre de santé ou ligne d'aide locale — note-la ci-dessous.";
+      ? "Au Québec : votre <strong>CLSC</strong> — notez son numéro ci-dessous."
+      : "Dans votre province (" + p.info.nom + ") : centre de santé ou ligne d'aide locale — notez-la ci-dessous.";
   }
   try {
     var contactSauve = localStorage.getItem(CLE_CONTACT) || "";

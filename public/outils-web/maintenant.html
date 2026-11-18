@@ -165,7 +165,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
 
   <section class="carte" aria-label="Partager">
     <h2 style="font-size:1.2rem;margin-top:0">Quelqu'un vit la même journée&nbsp;?</h2>
-    <p style="color:var(--brun);margin-top:0">Envoie-lui l'outil — pas tes notes, juste l'outil. Tes mots restent à toi.</p>
+    <p style="color:var(--brun);margin-top:0">Envoyez-lui l'outil — pas vos notes, juste l'outil. Vos mots restent à vous.</p>
     <button id="btn-partager" class="principal">📤 Partager «&nbsp;Maintenant&nbsp;»</button>
     <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter mes notes (.txt)</button>
     <p class="message" id="msg-partage"></p>
@@ -175,11 +175,11 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     <h2>Questions fréquentes</h2>
     <details>
       <summary>C'est quoi, «&nbsp;Maintenant&nbsp;»&nbsp;?</summary>
-      <p>Un mini tableau de bord de la vraie vie&nbsp;: en 30 secondes, tu notes où tu en es — argent, repas, maison, demain, et toi. Pas de listes de tâches, pas d'objectifs, pas de notifications. Juste <strong>ce qui compte maintenant</strong>.</p>
+      <p>Un mini tableau de bord de la vraie vie&nbsp;: en 30 secondes, vous notez où vous en êtes — argent, repas, maison, demain, et vous. Pas de listes de tâches, pas d'objectifs, pas de notifications. Juste <strong>ce qui compte maintenant</strong>.</p>
     </details>
     <details>
       <summary>C'est une app de productivité&nbsp;?</summary>
-      <p>Non, et c'est le principe. «&nbsp;Maintenant&nbsp;» ne t'organise pas la vie&nbsp;: il te montre où tu en es pour que tu décides, toi, de la suite.</p>
+      <p>Non, et c'est le principe. «&nbsp;Maintenant&nbsp;» ne vous organise pas la vie&nbsp;: il vous montre où vous en êtes pour que vous décidiez, vous, de la suite.</p>
     </details>
     <details>
       <summary>C'est gratuit&nbsp;?</summary>
@@ -280,7 +280,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
       }).catch(function(){});
     } else if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(texte).then(function(){
-        msg.textContent = "Copié ! Colle-le où tu veux.";
+        msg.textContent = "Copié ! Collez-le où vous voulez.";
       }).catch(function(){ msg.textContent = texte; });
     } else {
       msg.textContent = texte;

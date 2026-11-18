@@ -115,7 +115,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
   <section class="hero">
     <h1>Ça vaut-tu la peine&nbsp;?</h1>
     <p class="sous-titre">Le prix, c'est une chose. Le <strong>vrai coût</strong>, c'en est une autre.<br>
-    L'outil montre les chiffres. La décision, c'est toi qui la prends.</p>
+    L'outil montre les chiffres. La décision, c'est vous qui la prenez.</p>
   </section>
   <div class="ornement" aria-hidden="true"><span></span><b>◆</b><span></span></div>
   <p style="text-align:center;color:var(--brun);font-size:.92rem;margin:0 0 4px">📍 <span id="prov-nom">Québec</span> · <a href="index.html" style="color:var(--brun)">changer de province</a></p>
@@ -129,10 +129,10 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
       <input type="checkbox" id="in-taxes" style="width:22px;height:22px;flex:none;accent-color:#c85f16">
       <label for="in-taxes" style="margin:0;font-weight:600">Prix + taxes <span class="note" id="note-taxes"></span></label>
     </div>
-    <label for="in-fois">Combien de fois tu vas l'utiliser&nbsp;?</label>
+    <label for="in-fois">Combien de fois allez-vous l'utiliser&nbsp;?</label>
     <input type="number" id="in-fois" inputmode="numeric" min="1" step="1" placeholder="ex. 20">
-    <p class="note" style="margin:6px 0 0">Sois honnête avec toi-même&nbsp;: un manteau, c'est 20 hivers&nbsp;? des souliers de course, c'est 100 sorties&nbsp;?</p>
-    <label for="in-salaire">Ton salaire horaire ($) <span class="note" id="note-salaire">— par défaut, le salaire minimum de ta province</span></label>
+    <p class="note" style="margin:6px 0 0">Soyez honnête avec vous-même&nbsp;: un manteau, c'est 20 hivers&nbsp;? des souliers de course, c'est 100 sorties&nbsp;?</p>
+    <label for="in-salaire">Votre salaire horaire ($) <span class="note" id="note-salaire">— par défaut, le salaire minimum de votre province</span></label>
     <input type="number" id="in-salaire" inputmode="decimal" min="0" step="0.01">
     <label for="in-recurrence">C'est une dépense qui revient&nbsp;?</label>
     <select id="in-recurrence">
@@ -143,6 +143,16 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     </select>
   </section>
 
+  <section class="carte resultat" aria-label="Résultat" id="bloc-resultat-vide">
+    <div class="etiquette">Résultat</div>
+    <div class="grand">— $</div>
+    <div class="etiquette" style="margin-top:4px">par utilisation</div>
+    <div style="text-align:left;margin-top:10px">
+      <div class="ligne-resultat"><span>Prix toutes taxes incluses</span><span class="val">—</span></div>
+      <div class="ligne-resultat"><span>Équivalent en travail</span><span class="val">—</span></div>
+      <div class="ligne-resultat"><span>Sur un an, si ça revient</span><span class="val">—</span></div>
+    </div>
+  </section>
   <section class="carte resultat" aria-label="Résultat" id="bloc-resultat" style="display:none">
     <div class="etiquette" id="etiquette-nom">Résultat</div>
     <div class="grand" id="aff-cout-fois">—</div>
@@ -156,7 +166,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
   </section>
 
   <section class="carte" aria-label="Partager" id="bloc-partage" style="display:none">
-    <h2 style="font-size:1.2rem;margin-top:0">Montre les chiffres à quelqu'un</h2>
+    <h2 style="font-size:1.2rem;margin-top:0">Montrez les chiffres à quelqu'un</h2>
     <p style="color:var(--brun);margin-top:0">Parfois, voir le calcul écrit noir sur blanc, ça aide à trancher.</p>
     <button id="btn-partager" class="principal">📤 Partager</button>
     <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter le calcul (.txt)</button>
@@ -175,11 +185,11 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     </details>
     <details>
       <summary>Le «&nbsp;Prix + taxes&nbsp;», ça calcule quoi&nbsp;?</summary>
-      <p>Au Québec, le prix affiché n'est jamais le prix payé&nbsp;: l'interrupteur ajoute les taxes de vente de ta province (14,975&nbsp;% au Québec — TPS + TVQ) avant de calculer. Ailleurs au Canada, c'est le taux de ta province qui s'applique. Une estimation, pas un avis fiscal.</p>
+      <p>Au Québec, le prix affiché n'est jamais le prix payé&nbsp;: l'interrupteur ajoute les taxes de vente de votre province (14,975&nbsp;% au Québec — TPS + TVQ) avant de calculer. Ailleurs au Canada, c'est le taux de votre province qui s'applique. Une estimation, pas un avis fiscal.</p>
     </details>
     <details>
       <summary>D'où vient le salaire horaire par défaut&nbsp;?</summary>
-      <p>C'est le taux général du <strong>salaire minimum de ta province</strong> (au Québec&nbsp;: 16,60&nbsp;$/h depuis le 1<sup>er</sup> mai 2026). Tu peux le changer pour ton vrai salaire — et ta province se règle sur la page d'accueil des outils.</p>
+      <p>C'est le taux général du <strong>salaire minimum de votre province</strong> (au Québec&nbsp;: 16,60&nbsp;$/h depuis le 1<sup>er</sup> mai 2026). Vous pouvez le changer pour votre vrai salaire — et votre province se règle sur la page d'accueil des outils.</p>
     </details>
     <details>
       <summary>Où vont mes données&nbsp;?</summary>
@@ -325,12 +335,12 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     }
 
     var msgs = [
-      "Voilà les chiffres. À toi de voir ce que ça vaut, pour vrai.",
+      "Voilà les chiffres. À vous de voir ce que ça vaut, pour vrai.",
       "Pas de bonne ou de mauvaise réponse ici — juste des chiffres clairs.",
-      "Si ça te fait sourire en regardant le résultat, c'est probablement que oui."
+      "Si ça vous fait sourire en regardant le résultat, c'est probablement que oui."
     ];
     var m = msgs[Math.floor(Math.random()*msgs.length)];
-    if (rec > 0) m = "Sur un an, ça commence à compter. Mais c'est toi qui décides.";
+    if (rec > 0) m = "Sur un an, ça commence à compter. Mais c'est vous qui décidez.";
     $("msg-zero-morale").textContent = m;
   }
 
@@ -365,7 +375,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
       }).catch(function(){});
     } else if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(texte).then(function(){
-        msg.textContent = "Copié ! Colle-le où tu veux.";
+        msg.textContent = "Copié ! Collez-le où vous voulez.";
       }).catch(function(){ msg.textContent = texte; });
     } else {
       msg.textContent = texte;

@@ -1109,7 +1109,7 @@ ul.cf-plain li{margin:.3em 0}
           <div class="why" id="d-why-wrap">
             <p class="why-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg> Pourquoi celle-là&nbsp;?</p>
             <ul class="why-list" id="d-why"></ul>
-            <p class="note" style="margin-bottom:0"><strong>Transparence&nbsp;:</strong> les vetos éliminent d’office, les <span aria-hidden="true">👍</span> comptent, et à égalité le hasard tranche équitablement. Les votes individuels restent secrets — seuls les totaux sont affichés.</p>
+            <p class="note" style="margin-bottom:0"><strong>Transparence&nbsp;:</strong> les vetos éliminent d’office, les pouces comptent, et à égalité le hasard tranche équitablement. Les votes individuels restent secrets — seuls les totaux sont affichés.</p>
           </div>
           <div class="row" style="margin-top:20px; gap:10px; flex-wrap:wrap">
             <button class="btn primary" id="d-share">
@@ -1178,7 +1178,7 @@ ul.cf-plain li{margin:.3em 0}
     <div class="wiz-screen" id="p-s2">
       <div class="card" id="p-progress-card">
         <h3>Lecture du texte</h3>
-        <p class="hint" id="p-status">Préparation…</p>
+        <p class="hint" id="p-status">Chargement du lecteur de texte…</p>
         <div class="progress-wrap">
           <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="p-barwrap"><div class="bar" id="p-bar"></div></div>
           <div class="pct" id="p-pct">0&nbsp;%</div>
@@ -1211,7 +1211,7 @@ ul.cf-plain li{margin:.3em 0}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 21h20z"/><path d="M12 10v5m0 3v.5"/></svg>
         <p><strong>Je lis et j’explique, je ne conseille pas</strong> — vérifiez toujours avec l’expéditeur ou un professionnel. Ceci n’est pas un avis juridique.</p>
       </div>
-      <div class="fiche" id="p-fiche" aria-live="polite"></div>
+      <div class="fiche" id="p-fiche" aria-live="polite"><p><strong>Type probable du document :</strong> —</p><p><strong>Ce qu'on vous demande, en langage clair :</strong> —</p><p><strong>Dates trouvées :</strong> —</p><p><strong>Montants vus :</strong> —</p><p><strong>Qui contacter :</strong> —</p><p><strong>Si vous ne faites rien :</strong> —</p><p><strong>Les 3 règles d'or de la paperasse :</strong> —</p></div>
       <div class="row" style="gap:10px; flex-wrap:wrap">
         <button class="btn line" id="p-download">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
@@ -1299,6 +1299,13 @@ ul.cf-plain li{margin:.3em 0}
       <p class="err" id="c-unit-error" hidden style="color:var(--danger);font-weight:700">Comparez deux poids (g/kg) ou deux volumes (ml/L), pas un mélange des deux.</p>
     </div>
 
+    <div class="compare-result" id="c-result-vide" aria-live="polite">
+      <p class="v-kicker">Verdict au prix unitaire</p>
+      <p>Produit A : — $ / 100 g</p>
+      <p>Produit B : — $ / 100 g</p>
+      <p>Le moins cher : —</p>
+      <p>Économie réelle : — $ par 100 g</p>
+    </div>
     <div class="compare-result" id="c-result" hidden aria-live="polite">
       <p class="v-kicker">Verdict au prix unitaire</p>
       <h3 class="winner-line" id="c-winner"></h3>
@@ -1348,6 +1355,12 @@ ul.cf-plain li{margin:.3em 0}
         </div>
       </div>
       <div class="row end"><button class="btn primary" id="m-build">Préparer mon script</button></div>
+    <div class="note" id="m-result-vide" aria-live="polite">
+      <p><strong>Votre fil d’appel</strong></p>
+      <p><strong>Avant de composer :</strong> —</p>
+      <p><strong>Questions à poser :</strong> —</p>
+      <p><strong>Avant de raccrocher :</strong> notez le nom de la personne, la date et la prochaine étape.</p>
+    </div>
     </div>
 
     <div class="script-sheet" id="m-result" hidden aria-live="polite">
@@ -1390,6 +1403,7 @@ ul.cf-plain li{margin:.3em 0}
 
     <!-- LIST VIEW -->
     <div class="wiz-screen on" id="x-view-list">
+      <p>Trois démarches proposées : <strong>Perte d'emploi</strong> — Demander des prestations d'assurance-emploi ; <strong>Revenu insuffisant</strong> — Demander une aide financière de dernier recours (Québec) ; <strong>Logement</strong> — Demander un logement à loyer modique ou un supplément au loyer. Choisissez une démarche pour voir la prochaine étape, dans l'ordre.</p>
       <div class="dem-list" id="x-list"></div>
     </div>
 
@@ -1537,6 +1551,7 @@ ul.cf-plain li{margin:.3em 0}
 
     </div>
 
+    <p>Touchez « Nouveau » ou « Nouvelle » pour un autre code, « Copier » pour le prendre, « Garder dans le coffre » pour le ranger.</p>
     <div id="cf-panelCoffre" role="tabpanel" aria-labelledby="cf-tabCoffre" class="cf-hidden">
 
 
@@ -1666,7 +1681,7 @@ ul.cf-plain li{margin:.3em 0}
           <article class="card cf-hidden" id="cf-etape2Zone">
             <div class="cf-card-head">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
-              <h3>Étape 2 : votre roue de secours</h3>
+              <h3>Étape 2 : notez votre code maître sur votre fiche papier</h3>
             </div>
             <p>Votre coffre est créé et vous retenez votre code maître. Maintenant, préparez votre <strong>fiche papier de secours</strong> : si un jour vous oubliez votre code maître, c’est elle qui vous sauve. Ça prend une minute — et juste après la création, on ne vous redemandera pas votre code maître pour l’afficher.</p>
             <div class="cf-btn-row">
@@ -1932,6 +1947,7 @@ ul.cf-plain li{margin:.3em 0}
       </form>
     </div>
 
+    <p>Pour relancer quelqu’un, touchez « Relancer » sur sa carte, choisissez le ton — Doux, Ferme ou Urgent — puis « Copier le message ».</p>
     <div class="rl-list" id="rl-list"></div>
     <div class="note" id="rl-empty" hidden></div>
 

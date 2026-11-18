@@ -53,7 +53,7 @@ function Page() {
             un résultat, un obstacle, un plan — avec un engagement doux de
             7 jours). Tout se fait sur votre appareil : aucune donnée ne sort d'ici.
             C'est le compagnon gratuit du mini cahier du même nom — l'écran vous
-            guide ; le papier te fait écrire, et durer.
+            guide ; le papier vous fait écrire, et durer.
           </p>
         </header>
 

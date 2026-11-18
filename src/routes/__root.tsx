@@ -197,7 +197,8 @@ function RootComponent() {
         <SiteFooter />
       </div>
       <HgptoPont />
-      {loc.pathname !== "/" && <HamsterWheel />}
+      {/* 18 nov. 2026 (audit outils) : Détectôt masqué aussi sur les pages sensibles (bien-être, garde) — le flottant n'y appartient pas. */}
+      {!["/", "/outils/un-petit-pas-a-la-fois", "/la-garde", "/le-garde", "/survie-72h", "/personne-seule"].includes(loc.pathname) && <HamsterWheel />}
     </QueryClientProvider>
   );
 }
