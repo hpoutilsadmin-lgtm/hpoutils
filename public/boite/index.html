@@ -17,6 +17,10 @@
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14110C" />
 <link rel="manifest" href="assets/manifest.webmanifest" />
 <title>La Boîte à outils | HP Outils</title>
+<meta property="og:title" content="La Boîte à outils | HP Outils" />
+<meta property="og:description" content="Huit outils simples pour la vraie vie : transmettre, décider, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand, avec le message de relance prêt à copier." />
+<meta property="og:image" content="https://www.hp-outils.com/images/og-boite.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
@@ -1292,7 +1296,7 @@ ul.cf-plain li{margin:.3em 0}
         <button class="btn line" id="c-read-photos">Lire les étiquettes</button>
         <button class="btn primary" id="c-calc">Comparer les vrais prix</button>
       </div>
-      <p class="err" id="c-unit-error" hidden style="color:var(--danger);font-weight:700">Compare deux poids (g/kg) ou deux volumes (ml/L), pas un mélange des deux.</p>
+      <p class="err" id="c-unit-error" hidden style="color:var(--danger);font-weight:700">Comparez deux poids (g/kg) ou deux volumes (ml/L), pas un mélange des deux.</p>
     </div>
 
     <div class="compare-result" id="c-result" hidden aria-live="polite">
@@ -1832,7 +1836,7 @@ ul.cf-plain li{margin:.3em 0}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
               <h3>Importer ce fichier de coffre ?</h3>
             </div>
-            <p class="cf-soft">Le fichier a passé les vérifications de format. <strong>Rien n'a été remplacé pour l'instant.</strong> Entre le code maître du coffre contenu dans ce fichier : un déchiffrement d'essai doit réussir avant tout remplacement.</p>
+            <p class="cf-soft">Le fichier a passé les vérifications de format. <strong>Rien n'a été remplacé pour l'instant.</strong> Entrez le code maître du coffre contenu dans ce fichier : un déchiffrement d'essai doit réussir avant tout remplacement.</p>
             <div class="cf-notice cf-regle-or">
               <h4>La règle d'or anti-fraude</h4>
               <p>HP ne vous demandera <strong>JAMAIS</strong> votre code maître, votre fichier de coffre, ni une photo de votre fiche. Ni par courriel, ni par téléphone, ni par texto. Cet outil n’est connecté à rien : si un message dit que votre coffre est compromis, il est faux. Si quelqu’un vous a envoyé ce fichier en vous demandant de l’importer, c’est une fraude — annulez.</p>
@@ -1939,7 +1943,7 @@ ul.cf-plain li{margin:.3em 0}
 
   <section aria-label="Découvrez aussi" style="border-top:1px solid rgba(58,42,32,.18);padding:22px 4px 4px;margin-top:8px">
     <h2 style="margin:0 0 8px;font-size:1.25rem">Découvrez aussi</h2>
-    <p style="margin:0;line-height:1.7">Le reste d'HP Outils, gratuit lui aussi : <a href="/outils">Tous les outils gratuits</a> · <a href="/en-cuisine/">En cuisine — 666 recettes gratuites</a> · <a href="/jeux">57 + 1 caché jeux gratuits, sans inscription</a> · <a href="/livres-pdf">les livres et kits PDF</a>.</p>
+    <p style="margin:0;line-height:1.7">Le reste d'HP Outils, gratuit lui aussi : <a href="/outils">Tous les outils gratuits</a> · <a href="/en-cuisine/">En cuisine — 666 recettes gratuites</a> · <a href="/jeux">56 + 1 caché jeux gratuits, sans inscription</a> · <a href="/livres-pdf">les livres et kits PDF</a>.</p>
   </section>
 
   <footer class="page-foot">
@@ -2359,7 +2363,7 @@ function hModalAskCode(errMsg){
     '<button class="modal-x" id="h-modal-x" aria-label="Fermer">×</button></div>' +
     '<p class="hint" style="margin-top:0">Capsule <strong>pour '+esc(c.recipient)+'</strong>. ' +
     (isDate ? ('Elle s’ouvre à partir du <strong>'+esc(fmtDateFR(c.unlockDate))+'</strong>.') : ('Jalon : <strong>'+esc(c.milestone)+'</strong>.')) +
-    ' Entre le <strong>code de déblocage</strong> pour continuer.</p>' +
+    ' Entrez le <strong>code de déblocage</strong> pour continuer.</p>' +
     '<div class="code-row"><input type="text" id="h-code-input" autocomplete="off" placeholder="Le code…" aria-label="Code de déblocage" />' +
     '<button class="btn primary" id="h-code-ok">Ouvrir</button></div>' +
     (errMsg ? '<p class="err" style="display:block;color:var(--danger);font-weight:700;margin-top:8px">'+esc(errMsg)+'</p>' : '');
@@ -3097,7 +3101,7 @@ function pUrgency(text, dates){
     var d0 = new Date(future[0].iso+"T00:00:00");
     var days = Math.round((d0 - new Date())/86400000);
     if (days<=10) return { level:"warn", label:"À faire", reason:"La date la plus proche est dans "+days+" jour(s) — mettez-le en haut de votre liste." };
-    return { level:"warn", label:"À faire", reason:"Une date à ne pas manquer approche ("+fmtDateFR(future[0].iso)+") — planifie-la." };
+    return { level:"warn", label:"À faire", reason:"Une date à ne pas manquer approche ("+fmtDateFR(future[0].iso)+") — planifiez-la." };
   }
   var aFaire = P_TO_KW.some(function(k){ return n.indexOf(norm(k))>-1; });
   if (aFaire) return { level:"warn", label:"À faire", reason:"Le ton de la lettre suggère une action attendue." };
@@ -3395,7 +3399,7 @@ $("c-read-photos").addEventListener("click",function(){
       var lines=found.map(function(x){var d=x.data;return "Étiquette "+x.k.toUpperCase()+" : "+(d.price?cMoney(d.price):"prix non trouvé")+", "+(d.size?(String(d.size).replace(".",",")+" "+d.unit):"format non trouvé");});
       status.innerHTML="<strong>Chiffres proposés — vérifiez-les :</strong><br>"+lines.map(esc).join("<br>");
     });
-  }).catch(function(){status.innerHTML="<strong>La lecture automatique n’a pas pu démarrer.</strong> Entre simplement le prix et le format à la main.";});
+  }).catch(function(){status.innerHTML="<strong>La lecture automatique n’a pas pu démarrer.</strong> Entrez simplement le prix et le format à la main.";});
 });
 function cCalculate(){
   var a=cInfo("a"),b=cInfo("b"), badA=!isFinite(a.price)||!isFinite(a.size),badB=!isFinite(b.price)||!isFinite(b.size);
@@ -3539,7 +3543,7 @@ var X_DEM = [
       "La <strong>décision et le montant relèvent du ministère</strong>. Cet outil ne peut ni les prévoir ni les promettre."
     ],
     confirm:[
-      { state:"clock", text:"<strong>Les délais de traitement</strong> : aucun délai n’est promis par la source. Ne compte pas sur une date précise." },
+      { state:"clock", text:"<strong>Les délais de traitement</strong> : aucun délai n’est promis par la source. Ne comptez pas sur une date précise." },
       { state:"unknown", text:"<strong>Le Programme de solidarité sociale</strong> (contraintes sévères à l’emploi) : c’est un programme distinct, <strong>hors de cette version</strong> — ses conditions n’ont pas été vérifiées ici." }
     ]
   },
@@ -4385,7 +4389,7 @@ xRenderList();
       var restant = Math.ceil((delaiJusqua - Date.now()) / 1000);
       var btn = cf$("btnOuvrir"), zone = cf$("delaiOuverture");
       if (restant > 0){
-        btn.disabled = true; btn.textContent = "Patiente " + restant + " s…";
+        btn.disabled = true; btn.textContent = "Patientez " + restant + " s…";
         zone.textContent = "Délai après des échecs : encore " + restant + " seconde" + (restant > 1 ? "s" : "") + " avant le prochain essai. Le compteur survit au rechargement de la page.";
         zone.classList.remove("cf-hidden");
       } else {
@@ -4932,12 +4936,12 @@ xRenderList();
       err.classList.add("cf-hidden");
       if (Date.now() < delaiJusqua){
         var restant = Math.ceil((delaiJusqua - Date.now()) / 1000);
-        err.textContent = "Trop d'essais ratés — le compteur est le même qu'à l'ouverture. Patiente encore " + restant + " seconde" + (restant > 1 ? "s" : "") + " avant de réessayer.";
+        err.textContent = "Trop d'essais ratés — le compteur est le même qu'à l'ouverture. Patientez encore " + restant + " seconde" + (restant > 1 ? "s" : "") + " avant de réessayer.";
         err.classList.remove("cf-hidden");
         return;
       }
       var code = cf$("importMaitre").value;
-      if (!code){ err.textContent = "Entre le code maître du coffre contenu dans ce fichier."; err.classList.remove("cf-hidden"); return; }
+      if (!code){ err.textContent = "Entrez le code maître du coffre contenu dans ce fichier."; err.classList.remove("cf-hidden"); return; }
       var btn = cf$("btnImportEssayer"); btn.disabled = true; btn.textContent = "Déchiffrement d'essai…";
       function echecImportCode(){
         err.textContent = "Ce code maître ne déchiffre pas ce fichier. Rien n'a été remplacé — et l'essai compte dans le même compteur d'échecs que l'ouverture (délai progressif).";
@@ -4972,7 +4976,7 @@ xRenderList();
         // Empreinte de reconnaissance du coffre du fichier, à comparer avant de remplacer.
         try {
           var motsImp = await motsReconnaissance(cles.hmac, selImp);
-          cf$("importEmpreinte").textContent = "Empreinte du coffre contenu dans ce fichier : " + motsImp.join(" · ") + ". Deux coffres différents n'ont jamais la même empreinte — compare avant de remplacer.";
+          cf$("importEmpreinte").textContent = "Empreinte du coffre contenu dans ce fichier : " + motsImp.join(" · ") + ". Deux coffres différents n'ont jamais la même empreinte — comparez avant de remplacer.";
           if (etat.cleHmac && etat.blob){
             var motsAct = await motsReconnaissance(etat.cleHmac, b64decoder(etat.blob.kdf.salt));
             var zoneAct = cf$("importEmpreinteActuelle");

@@ -9,7 +9,17 @@
    marcher. Les anciens fichiers restent joignables en direct.
 
    Source des fichiers courants : les tuiles de src/routes/jeux.tsx
-   (vérifié le 23 oct. 2026 contre public/apps/). */
+   (vérifié le 23 oct. 2026 contre public/apps/).
+
+   Exception (lot corrections audit, 18 nov. 2026) : « Un petit pas à
+   la fois » n'est plus un jeu — sa tuile est retirée de /jeux et son
+   URL officielle est /outils/un-petit-pas-a-la-fois. La clé
+   « hp-hyper-potentiel » est conservée ici avec cette URL comme
+   valeur : la route /apps/$slug la redirige donc en 301 vers l'outil
+   officiel, au lieu du fichier. Le fichier de l'outil lui-même
+   (/apps/hp-hyper-potentiel/index.html) reste en ligne et joignable
+   en direct : c'est lui que le bouton « Lancer l'outil » de la page
+   officielle ouvre, et que le service worker met en cache. */
 
 export const GAME_FILES: Record<string, string> = {
   "releve": "/apps/releve/releve-chapitre-1-v1.0.html",
@@ -58,7 +68,9 @@ export const GAME_FILES: Record<string, string> = {
   "mini-jeux": "/apps/mini-jeux/mini-jeux-hp.html",
   "air-bete": "/apps/air-bete/air-bete.html",
   "mineur-hp": "/apps/mineur-hp/mineur-hp-v0.1.html",
-  "hp-hyper-potentiel": "/apps/hp-hyper-potentiel/index.html",
+  /* Plus un jeu : adresse stable redirigée (301) vers l'outil
+     officiel — voir l'en-tête de ce fichier. */
+  "hp-hyper-potentiel": "/outils/un-petit-pas-a-la-fois",
   "panne-72h": "/apps/panne-72h/panne-72h-v1.0.html",
   "boite-a-lunch": "/apps/boite-a-lunch/boite-a-lunch-v1.0.html",
   "traversier": "/apps/traversier/traversier-v1.0.html",

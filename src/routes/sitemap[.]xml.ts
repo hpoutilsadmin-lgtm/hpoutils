@@ -37,7 +37,7 @@ const STATIC_PATHS = [
   "/les-passeurs",
   "/lire/",
   "/outils/bons-reflexes",
-  "/outils/hp-hyper-potentiel",
+  "/outils/un-petit-pas-a-la-fois",
   "/boite/",
   "/passeur-de-savoir/",
   "/outils-web/index.html",
@@ -48,15 +48,19 @@ const STATIC_PATHS = [
   "/outils-web/contrat-humain-ia.html",
 ];
 
-// Les jeux publics (44) + 1 caché : les adresses stables /apps/<slug>
+// Les jeux publics (54) + 1 caché : les adresses stables /apps/<slug>
 // sont générées depuis src/lib/jeux-adresses.ts (source unique —
 // c'est ce fichier qui définit ce qu'on partage et ce qui va dans
 // le sitemap). Le jeu caché n'est pas dans GAME_FILES, donc il
 // n'apparaît pas dans le sitemap. Redirection 301 vers le fichier
 // courant (voir src/routes/apps.$slug.tsx).
-const GAME_PATHS = Object.keys(GAME_FILES).map((slug) =>
-  adresseStableJeu(slug),
-);
+// « hp-hyper-potentiel » est exclu ici : ce n'est plus un jeu, son
+// adresse stable redirige (301) vers /outils/un-petit-pas-a-la-fois
+// (listé dans STATIC_PATHS ci-dessus) — on ne met pas une URL de
+// redirection dans le sitemap.
+const GAME_PATHS = Object.keys(GAME_FILES)
+  .filter((slug) => slug !== "hp-hyper-potentiel")
+  .map((slug) => adresseStableJeu(slug));
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {

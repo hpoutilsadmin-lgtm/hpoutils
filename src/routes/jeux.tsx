@@ -8,9 +8,10 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 57 jeux en ligne | HP Outils",
-      description: "Des jeux gratuits créés au Québec — 57 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
+      title: "Jeux gratuits en français du Québec — 56 jeux en ligne | HP Outils",
+      description: "Des jeux gratuits créés au Québec — 56 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
       path: "/jeux",
+      imagePath: "/images/og-jeux.jpg",
     }),
     scripts: [
       {
@@ -46,7 +47,6 @@ const GAMES: { title: string; file: string; copy: string; tag: string; faits?: s
   { title: "Mini-jeux HP", file: "/apps/mini-jeux/mini-jeux-hp.html", copy: "Trois mini-jeux gratuits réunis, jouables hors ligne : Hiverman, le bonhomme de neige qui ramasse les points en évitant les fantômes ; Flocon, pour dessiner ton flocon ; Mini point, pour dessiner au doigt. Aucun son, aucun réseau — fond noir pour économiser la pile.", tag: "Mini-jeux · 3 jeux en un", faits: "3 mini-jeux · jouables hors ligne", mono: "MJ", art: 7, image: "/apps/mini-jeux/entete.jpg", alt: "Labyrinthe façon Pac-Man en cours, pastilles et blocs bleus", imageRatio: "16:9" },
   { title: "Air bête", file: "/apps/air-bete/air-bete.html", copy: "Jeu d'humour gratuit : lis les intentions, démêle les malentendus — 30 situations, solo ou en gang de 2 à 8, et un vote pour le plus drôle de la soirée.", tag: "Humour · Malentendus et intentions", faits: "30 situations · Solo ou 2 à 8 joueurs", mono: "AB", art: 0, image: "/apps/air-bete/entete.jpg", alt: "Manche 1 sur 5, situation « Ton père raconte pour la 18e fois la même anecdote », défi, question et 3 réponses" },
   { title: "Mineur d'HP", file: "/apps/mineur-hp/mineur-hp-v0.1.html", copy: "Jeu de stratégie gratuit : creuse ta mine — 3 galeries, 4 minéraux aux faits vérifiés, des outils à débloquer. Les boulons d'or sont une monnaie de jeu, jamais du vrai argent.", tag: "Stratégie · Creuser et collectionner", faits: "3 galeries · 4 minéraux · Prototype v0.1", mono: "MH", art: 0, image: "/apps/mineur-hp/entete.jpg", alt: "Grille de mine 6 sur 6, 2 minéraux révélés, Pixel le chat dans un passage, objectif « Minerais trouvés : 2 / 4 »" },
-  { title: "Un petit pas à la fois", file: "/apps/hp-hyper-potentiel/index.html", copy: "Trois petits outils gratuits : respiration guidée, carte ikigaï, plan WOOP de 7 jours — pour avancer doucement, sans compte.", tag: "Détente · Respiration et petits pas", faits: "3 modules · 7 jours", mono: "PP", art: 0, image: "/apps/hp-hyper-potentiel/entete.jpg", alt: "Accueil : les 3 modules Respire, ikigaï et WOOP" },
   { title: "Panne de courant — 72 h", file: "/apps/panne-72h/panne-72h-v1.0.html", copy: "Jeu de gestion gratuit : une panne de 72 heures, 22 moments pour tenir — eau, nourriture, chaleur, moral et entraide, sans jamais paniquer.", tag: "Gestion · 72 heures sans courant", faits: "22 moments · 6 paliers", mono: "P72", art: 0, image: "/apps/panne-72h/entete.jpg", alt: "Moment 1 sur 22 « La panne tombe », 3 choix, 5 ressources à 70, palier 1 sur 6" },
   { title: "Boîte à lunch", file: "/apps/boite-a-lunch/boite-a-lunch-v1.0.html", copy: "Jeu de gestion gratuit : 10 jours de lunchs à préparer avec 50 $ — bons aliments, allergies à surveiller, et un budget qui tient jusqu'à vendredi.", tag: "Gestion · 10 jours de lunchs", faits: "10 jours · budget 50 $", mono: "BL", art: 0, image: "/apps/boite-a-lunch/entete.jpg", alt: "Semaine 1, lundi, jour 1 sur 10 : beurre d'arachide, riz cuit et pomme, 3 pastilles vertes, budget 50,00 $" },
   { title: "Traversier", file: "/apps/traversier/traversier-v1.0.html", copy: "Jeu d'arcade gratuit : pilote ton traversier d'une rive à l'autre — livre les caisses, relève les défis, et attention aux courants.", tag: "Arcade · Défis et livraisons", faits: "Défis · 9 livraisons", mono: "TR", art: 0, image: "/apps/traversier/entete.jpg", alt: "Le traversier en pleine traversée avec trois caisses à bord" },
@@ -506,7 +506,7 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (57), Quiz (3), etc.
+     conformes à la liste exacte approuvée — Tous (56), Quiz (3), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
@@ -530,12 +530,12 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur option B (Mini-jeux HP = 3 jeux) : 57 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
+            {/* Compteur option B (Mini-jeux HP = 3 jeux) : 56 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
             <span style={CHIP_STYLE}>{JEUX_JOUABLES} + 1 caché</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>57 jeux à jouer, plus 1 caché quelque part. La tuile Mini-jeux HP en cache 3 à elle seule.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>56 jeux à jouer, plus 1 caché quelque part. La tuile Mini-jeux HP en cache 3 à elle seule.</p>
         </div>
       </section>
 
@@ -727,7 +727,7 @@ function JeuxPage() {
               <h3>Le Panier Solidaire</h3>
               <span style={{ ...CHIP_STYLE, alignSelf: "flex-start" }}>Jouable</span>
               <p>Aussi dans En cuisine — découvre le jeu là où on cuisine.</p>
-              <a className="pillar-cta" href="/en-cuisine/index.html#panier-solidaire">Jouer dans En cuisine →</a>
+              <a className="pillar-cta" href="/en-cuisine/#panier-solidaire">Jouer dans En cuisine →</a>
             </article>
           </div>
         </div>

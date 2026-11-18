@@ -11,7 +11,9 @@
    même liseré 22 px, même contrat d'événements (hp:gepeto-*).
    Différences décidées par HP le 6 nov. 21 h 33 :
    - la barre est EN HAUT (la v3 était en bas) ;
-   - Jeux, Outils, Livres sont des boutons directs, jamais dans « Plus » ;
+   - Jeux, Outils, Livres, En cuisine, Ateliers, À propos sont des
+     boutons directs, jamais dans « Plus » (lot corrections audit,
+     18 nov. 2026, point 19 : menu du haut réduit à 6 entrées) ;
    - elle REMPLACE le menu (un seul élément de navigation).
 
    Options lues depuis l'élément <script> qui charge ce fichier :
@@ -58,26 +60,28 @@
   var CHEMIN_FACE_DEFAUT = new Date().getMonth() === 11
     ? "/hgpto/gepeto/tete-144-tuque-noel.png"
     : "/hgpto/gepeto/tete-144.png";
-  /* Les 5 sections réelles du site (slogan HP : « Jeux, cuisine,
-     outils, ateliers, livres. »). La Loupe du pilote cherche
-     dans ces 5 entrées ; l'index réel de la v3 en compte 113. */
+  /* Les 6 sections du menu du haut (lot corrections audit, 18 nov.
+     2026, point 19). La Loupe du pilote cherche dans ces 6 entrées ;
+     l'index réel de la v3 en compte 113. */
   var ENTREES_RECHERCHE = [
     { titre: "Jeux", desc: "Jeux HP — amusement, en un tap." },
     { titre: "Outils", desc: "Outils web et papier — dignité, en un tap." },
     { titre: "Livres", desc: "Livres et tomes — lecture, en un tap." },
     { titre: "En cuisine", desc: "En cuisine — manger, en un tap." },
-    { titre: "Ateliers", desc: "Ateliers — avec des gens, en un tap." }
+    { titre: "Ateliers", desc: "Ateliers — avec des gens, en un tap." },
+    { titre: "À propos", desc: "À propos — HP, en un tap." }
   ];
   /* Routes réelles des sections (confirmées dans src/routes/ du
      dépôt — jeux.tsx, outils.tsx, lire.tsx, en-cuisine.tsx,
-     ateliers.tsx — jamais devinées). Les 3 sections de la barre
-     + les 2 entrées de recherche qui n'ont pas de bouton de section. */
+     ateliers.tsx, a-propos.tsx — jamais devinées). Les 6 sections
+     de la barre ont toutes un bouton direct. */
   var ROUTES_SECTIONS = {
     jeux: "/jeux",
     outils: "/outils",
     livres: "/livres-pdf",          // P1-4 : /lire = « À toi l'histoire », pas les livres
     "en cuisine": "/en-cuisine",
-    ateliers: "/ateliers"
+    ateliers: "/ateliers",
+    "à propos": "/a-propos"
   };
   /* Q-PG-3 (12 nov. 2026, GO HP) : les 5 questions rapides et les
      8 scènes du pilote sont retirées. Les mêmes 5 questions vivent
@@ -387,14 +391,6 @@
       li.appendChild(b);
       liste.appendChild(li);
     }
-    /* Q-DB-1 = A (12 nov. 2026) : vrais liens vers les pages du site.
-       Chaque route est vérifiée dans src/routes/. Un vrai lien <a>
-       navigue comme les liens du site (pas de rechargement forcé). */
-    function lien(label, href) {
-      var li = el("li");
-      li.appendChild(el("a", { href: href }, label));
-      liste.appendChild(li);
-    }
     item("Copier le lien de la page", function () {
       var lien = window.location.href;
       function ok() { dire("Lien copié."); }
@@ -414,30 +410,18 @@
     item("Ajouter aux favoris", null, true);
     item("Télécharger (aucun fichier sur cette page)", null, true);
     item("Signaler un problème", null, true);
-    lien("Consulter l'aide", "/faq");
-    lien("Contacter HP", "/contact");
-    lien("Balado", "/balado");
-    lien("À toi l'histoire", "/univers");
-    lien("Ateliers", "/ateliers");
-    lien("Prix", "/prix");
-    lien("Jeux à votre image", "/jeux-a-votre-image");
-    lien("À propos", "/a-propos");
-    lien("En cuisine", "/en-cuisine");
-    /* Lot Outils plus visibles, 13 nov. 2026 : les noms des outils
-       principaux dans l'en-tête, sans nouveau mécanisme — le panneau
-       « Plus » existe déjà, ses liens font déjà 48 px
-       (barre-haut.css : --bh-bouton-min). Cibles vérifiées dans le
-       dépôt : /boite/ (public/boite/index.html),
-       /outils-web/le-reste-du-mois.html,
-       /passeur-de-savoir/ (public/passeur-de-savoir/index.html),
-       /la-garde (src/routes/la-garde.tsx). Le bouton de section
-       « Outils » garde sa navigation directe vers /outils (un tap) :
-       aucun sous-menu ajouté, la hauteur de la barre ne change pas,
-       la réserve CLS n'est pas touchée. */
-    lien("La Boîte à outils", "/boite/");
-    lien("Le reste du mois", "/outils-web/le-reste-du-mois.html");
-    lien("Le Passeur de savoir", "/passeur-de-savoir/");
-    lien("La garde", "/la-garde");
+    /* Lot corrections audit, 18 nov. 2026, point 19 : le menu du haut
+       est réduit à 6 entrées (Jeux, Outils, Livres, En cuisine,
+       Ateliers, À propos — boutons directs, plus haut). Les liens
+       de sections qui vivaient ici (Q-DB-1, 12 nov. 2026 : aide,
+       contact, Balado, À toi l'histoire, Ateliers, Prix, Jeux à
+       votre image, À propos, En cuisine, Boîte à outils, Reste du
+       mois, Passeur de savoir, La garde) sont désormais dans le
+       pied de page (SiteFooter.tsx) — tous vérifiés présents là,
+       sauf /jeux-a-votre-image ajouté au pied par ce même lot.
+       Le panneau « Plus » ne garde que les fonctions secondaires
+       (copier, haut de page, imprimer, partager…) : aucune
+       navigation de section ne reste ici. */
     item("Réseaux sociaux", null, true);
     zonePanneau.appendChild(liste);
     zonePanneau.appendChild(el("p", { "class": "bh-note" },
@@ -513,7 +497,7 @@
   /* ---------- Sections : Jeux, Outils, Livres ---------- */
   function choisirSection(nom) {
     var cle = (nom || "").toLowerCase();
-    ["jeux", "outils", "livres"].forEach(function (s) {
+    ["jeux", "outils", "livres", "en cuisine", "ateliers", "à propos"].forEach(function (s) {
       if (boutonsSections[s]) {
         if (s === cle) { boutonsSections[s].setAttribute("aria-current", "page"); }
         else { boutonsSections[s].removeAttribute("aria-current"); }
@@ -590,9 +574,11 @@
     tete.appendChild(btnReduire);
     contenu.appendChild(tete);
 
-    /* Sections : Jeux, Outils, Livres — en un tap. */
+    /* Sections : Jeux, Outils, Livres, En cuisine, Ateliers,
+       À propos — en un tap (lot corrections audit, 18 nov. 2026,
+       point 19 : menu du haut réduit à ces 6 entrées). */
     var sections = el("nav", { "class": "bh-sections", "aria-label": "Sections du site" });
-    ["Jeux", "Outils", "Livres"].forEach(function (nom) {
+    ["Jeux", "Outils", "Livres", "En cuisine", "Ateliers", "À propos"].forEach(function (nom) {
       var b = el("button", { "class": "bh-section", type: "button" }, nom);
       on(b, "click", function () { choisirSection(nom); });
       boutonsSections[nom.toLowerCase()] = b;

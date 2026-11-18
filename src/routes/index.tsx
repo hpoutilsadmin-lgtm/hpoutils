@@ -46,10 +46,11 @@ const ORGANISATION_JSON_LD = {
 export const Route = createFileRoute("/")({
   head: () => ({
     ...createSeoHead({
-      title: "HP Outils — jeux, kits et outils pour la vraie vie",
+      title: "HP Outils — Jeux, outils et kits PDF du Québec",
       description:
         "Jeux gratuits, 666 recettes, outils web sans compte et kits PDF à 5 $ CAD — créés à Terrebonne pour les familles et les petits budgets. Aucune taxe ajoutée.",
       path: "/",
+      imagePath: "/images/og-accueil.jpg",
     }),
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(ORGANISATION_JSON_LD) },
@@ -90,7 +91,7 @@ function Index() {
     <>
       {/* Bannière Noël 1 « Idée cadeau » (lot Décor de Noël, 10 nov. 2026) : accueil seulement, en flux. */}
       <div className="banniere-noel" aria-label="Idée cadeau">
-        <p><strong>Idée cadeau</strong> — Des outils concrets pour la vraie vie : kits Sans Honte 5 $, livres 10 $, tomes dès 5 $.</p>
+        <p><strong>Idée cadeau</strong> — Des outils concrets pour la vraie vie : kits Sans Honte 5 $, livres dès 10 $, tomes dès 5 $.</p>
         <Link to="/sans-honte" className="banniere-noel-cta">Voir les idées cadeaux</Link>
       </div>
       <section id="sec-accueil" className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner-noel.webp)" }}>
@@ -102,8 +103,8 @@ function Index() {
           </p>
           {/* Nuit 4A : les appels d'abord, les citations ensuite — textes inchangés, ordre seul. */}
           <div className="lead-actions">
-            <Link to="/outils" className="btn-primary">Voir les 10 outils gratuits</Link>
-            <Link to="/jeux" className="btn-primary">Jouer 57 jeux gratuits</Link>
+            <Link to="/outils" className="btn-primary">Voir les 17 outils gratuits</Link>
+            <Link to="/jeux" className="btn-primary">Jouer 56 jeux gratuits</Link>
             <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
           </div>
           <p style={{ margin: "28px 0", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
@@ -128,7 +129,7 @@ function Index() {
           gardent leur entrée directe, hors des deux portes. */}
       {/* Bannière Noël 2 « Amusez-vous gratuitement » (lot Décor de Noël, 10 nov. 2026) : accueil seulement, en flux. */}
       <div className="banniere-noel" aria-label="Amusez-vous gratuitement">
-        <p><strong>Amusez-vous gratuitement</strong> — 57 jeux gratuits, sans compte, et 666 recettes à essayer.</p>
+        <p><strong>Amusez-vous gratuitement</strong> — 56 jeux gratuits, sans compte, et 666 recettes à essayer.</p>
         <Link to="/jeux" className="banniere-noel-cta">Jouer gratuitement</Link>
       </div>
       <section id="sec-portes" className="three-pillars" aria-label="Deux portes d'entrée">
@@ -164,11 +165,11 @@ function Index() {
             <article className="pillar-card">
               <h3>En cuisine</h3>
               <p>666 recettes pour cuisiner avec ce qu'on a sous la main : cherchez par ingrédients, convertissez les températures du four et trouvez quoi faire avec les restes.</p>
-              <a className="pillar-cta" href="/en-cuisine/index.html">Ouvrir En cuisine →</a>
+              <a className="pillar-cta" href="/en-cuisine/">Ouvrir En cuisine →</a>
             </article>
             <article className="pillar-card">
               <h3>Jeux</h3>
-              <p>57 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
+              <p>56 + 1 caché jeux gratuits, jouables dans votre navigateur</p>
               <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
             </article>
             <article className="pillar-card">

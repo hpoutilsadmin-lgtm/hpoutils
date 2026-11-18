@@ -15,7 +15,7 @@ export const Route = createFileRoute("/outils")({
   },
   head: () => ({
     meta: [
-      { title: "Outils HP — Outils numériques, PDF et cahier" },
+      { title: "HP Outils — Outils numériques, PDF et cahier" },
       { name: "robots", content: "noindex" },
     ],
   }),

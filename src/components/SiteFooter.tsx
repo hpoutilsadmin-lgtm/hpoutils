@@ -66,6 +66,12 @@ export function SiteFooter() {
             <Link preload="viewport" to="/ateliers">Ateliers</Link><br />
             <Link preload="viewport" to="/prix">Prix</Link><br />
                         <Link preload="viewport" to="/apercu">Jeux à votre image — démo gratuite</Link><br />
+            {/* Lot corrections audit, 18 nov. 2026, point 19 : le lien
+                /jeux-a-votre-image vivait dans le panneau « Plus » de
+                la barre-haut ; il rejoint ici le pied de page, à côté
+                de la démo /apercu — le menu du haut ne garde que
+                6 entrées. */}
+            <Link preload="viewport" to="/jeux-a-votre-image">Jeux à votre image</Link><br />
             <Link preload="viewport" to="/recuperer-achat">Récupérer un achat</Link><br />
             <Link preload="viewport" to="/cadeaux">Utiliser un code cadeau</Link>
           </p>
