@@ -140,6 +140,27 @@ export type Database = {
         }
         Relationships: []
       }
+      gift_code_attempts: {
+        Row: {
+          code_hash: string
+          created_at: string
+          id: string
+          ip_hash: string | null
+        }
+        Insert: {
+          code_hash: string
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+        }
+        Update: {
+          code_hash?: string
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+        }
+        Relationships: []
+      }
       newsletter_signup_attempts: {
         Row: {
           created_at: string
@@ -163,30 +184,42 @@ export type Database = {
       }
       newsletter_signups: {
         Row: {
+          confirmation_expires_at: string | null
+          confirmation_token_hash: string | null
+          confirmed_at: string | null
           consent_text: string
           consented_at: string
           created_at: string
           email: string
           id: string
           source: string
+          status: string
           updated_at: string
         }
         Insert: {
+          confirmation_expires_at?: string | null
+          confirmation_token_hash?: string | null
+          confirmed_at?: string | null
           consent_text: string
           consented_at?: string
           created_at?: string
           email: string
           id?: string
           source?: string
+          status?: string
           updated_at?: string
         }
         Update: {
+          confirmation_expires_at?: string | null
+          confirmation_token_hash?: string | null
+          confirmed_at?: string | null
           consent_text?: string
           consented_at?: string
           created_at?: string
           email?: string
           id?: string
           source?: string
+          status?: string
           updated_at?: string
         }
         Relationships: []
