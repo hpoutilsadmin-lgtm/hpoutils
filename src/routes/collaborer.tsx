@@ -50,6 +50,12 @@ function Page() {
               <p>Survie alimentaire, marché du travail et smoothie — adaptés à votre groupe.</p>
               <a className="pillar-cta" href="/ateliers#organismes-ecoles">Découvrir les ateliers et la fiche organismes &amp; écoles →</a>
             </article>
+            <article className="pillar-card">
+              <span className="pillar-num">04</span>
+              <h3>Pour les écoles et les bibliothèques</h3>
+              <p>Les jeux HP sont gratuits, sans compte et sans inscription — vos élèves et vos usagers jouent dans leur navigateur. Les ateliers sont sans jargon, en français du Québec.</p>
+              <a className="pillar-cta" href="/ateliers#ecoles-bibliotheques">Pour les écoles et les bibliothèques →</a>
+            </article>
           </div>
         </div>
       </section>

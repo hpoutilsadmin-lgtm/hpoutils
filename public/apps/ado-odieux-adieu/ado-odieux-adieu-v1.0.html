@@ -135,8 +135,18 @@
 <meta name="twitter:description" content="Fais des mauvais coups sans te faire pogner… et assume la vraie sentence. Jeu gratuit." />
 <meta name="twitter:image" content="https://www.hp-outils.com/images/share-hp.jpg" />
 <link rel="canonical" href="https://www.hp-outils.com/apps/ado-odieux-adieu" />
+  <!-- Mode streamer (?streamer=1) — lot 5 corrections, 18 nov. 2026 : gros boutons + nom du joueur en gros. -->
+  <style>
+    .streamer-name{display:none}
+    body.streamer .streamer-name{display:flex;gap:12px;align-items:center;max-width:430px;margin:0 auto 12px;padding:14px 16px;border:3px solid var(--ink);border-radius:8px;background:var(--card)}
+    body.streamer .streamer-name label{font-size:1.5rem;font-weight:900;white-space:nowrap}
+    body.streamer .streamer-name input{flex:1;min-width:0;min-height:64px;font-size:1.6rem;font-weight:800;padding:10px 14px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink);font-family:inherit}
+    body.streamer button{min-height:64px;font-size:1.05rem}
+    body.streamer .avatar-btn{width:160px}
+  </style>
 </head>
   <body>
+<div class="streamer-name" id="streamer-name"><label for="streamer-player">Nom du joueur</label><input id="streamer-player" type="text" placeholder="Nom du joueur" autocomplete="off" /></div>
 <header class="hp-entete"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto"><span class="hp-entete-titre">Ado odieux, adieu</span></header>
     <div id="app">
 
@@ -1244,6 +1254,10 @@
     showBest();
     show('screen-start');
 </script>
+  <!-- Mode streamer (?streamer=1) — lot 5 corrections, 18 nov. 2026 : gros boutons + nom du joueur en gros. -->
+  <script>
+  (function () { try { if (new URLSearchParams(window.location.search).get("streamer") === "1") document.body.classList.add("streamer"); } catch (e) { /* sans gravité */ } })();
+  </script>
   <!-- ===== Barre de jeu HP — NE PAS ÉDITER À LA MAIN =====
      Retour / Pause / Partager. Source : src/components/barre-jeu/barre-jeu.js
      (régénérer le module : bun run build:barre) -->

@@ -98,20 +98,28 @@ function Index() {
         <div className="container">
           <span className="editorial-kicker">HP — créé au Québec</span>
           <h1>Des outils concrets pour la <em>vraie vie</em>.</h1>
+          {/* Lot 5 corrections (texte 2b) : les 3 portes en langage client,
+              juste sous le titre, rien d'autre avant — pleine largeur sur
+              mobile (1 colonne à 360 px), côte à côte sur ordinateur
+              (grille auto-fit). Le paragraphe de présentation suit. */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14, margin: "0 0 28px" }}>
+            <a href="/en-cuisine/panier/" className="btn-primary" style={{ width: "100%", boxSizing: "border-box", textAlign: "center", lineHeight: 1.4 }}>J'AI FAIM / J'AI REÇU UN PANIER</a>
+            <Link to="/jeux" className="btn-primary" style={{ width: "100%", boxSizing: "border-box", textAlign: "center", lineHeight: 1.4 }}>JE VEUX JOUER</Link>
+            <Link to="/sans-honte" className="btn-primary" style={{ width: "100%", boxSizing: "border-box", textAlign: "center", lineHeight: 1.4 }}>J'AI UN PAPIER À RÉGLER</Link>
+          </div>
           <p className="lead">
             Le reste du mois pour tenir votre budget, La Boîte à outils pour régler une démarche, En cuisine pour cuisiner avec ce que vous avez, jouer sans compte : des outils gratuits, des kits à petit prix et des ateliers, créés à Terrebonne, au Québec.
           </p>
-          {/* Nuit 4A : les appels d'abord, les citations ensuite — textes inchangés, ordre seul. */}
-          <div className="lead-actions">
-            <Link to="/outils" className="btn-primary">Voir les 17 outils gratuits</Link>
-            <Link to="/jeux" className="btn-primary">Jouer 56 jeux gratuits</Link>
-            <Link to="/sans-honte" className="btn-ghost">Découvrir les kits Sans Honte</Link>
-          </div>
           <p style={{ margin: "28px 0", maxWidth: 700, fontFamily: "Georgia,serif", fontSize: 17, lineHeight: 1.55, color: "#f3d9a4", borderLeft: "3px solid rgba(216,149,50,.7)", paddingLeft: 14 }}>
             Direction humaine, accélérée par l'IA. On le dit toujours.
           </p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, margin: "0 0 28px", maxWidth: 700 }}>
             « J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des outils pour la vraie vie. » — HP
+          </p>
+          {/* Lot 5 corrections (texte 5b.2) : Gepeto présenté comme un
+              personnage qui guide — jamais « IA » pour Gepeto. */}
+          <p style={{ fontSize: 15, lineHeight: 1.55, margin: "0 0 28px", maxWidth: 700, color: "rgba(255,255,255,.86)" }}>
+            Sir H. Gepeto, le gérant du site, un personnage qui vous guide.
           </p>
         </div>
       </section>

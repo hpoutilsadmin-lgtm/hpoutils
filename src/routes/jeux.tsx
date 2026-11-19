@@ -40,12 +40,12 @@ const STORIES = [
 
 /* Tuile : slug explicite quand le fichier ne vit pas dans son propre
    répertoire (éditions des Fêtes) — sinon le slug est le répertoire. */
-const GAMES: { title: string; file: string; copy: string; tag: string; faits?: string; mono: string; art: number; slug?: string; image?: string; alt?: string; imageRatio?: string }[] = [
-  { title: "Cherche & Trouve — La vraie vie", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html", copy: "Jeu d'observation gratuit : un cherche-et-trouve dans des scènes de la vraie vie.", tag: "Observation · Cherche-et-trouve", faits: "3 manches · 15 défis · sprint de 3 minutes", mono: "CT", art: 6, image: "/apps/cherche-trouve-la-vraie-vie/entete.jpg", alt: "Carte défi « Quelque chose qui semble cassé mais fonctionne », minuteur 25 secondes, bouton BINGO" },
-  { title: "Cherche et Trouve — Édition des Fêtes", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-fetes-v1.0.html", copy: "Jeu d'observation des Fêtes : trouve un chocolat chaud, une décoration, compte 5 lumières dehors — et attention, l'étincelle bloque des touches en rigolant.", tag: "Observation · Cherche-et-trouve", faits: "4 manches · 20 défis · sprint de 3 minutes", mono: "B7", art: 6, slug: "cherche-trouve-fetes", image: "/apps/cherche-trouve-fetes/entete.jpg", alt: "Carte « La personne qui rit le plus facilement », compte à rebours 23 secondes, bouton BINGO, manche 1 sur 4" },
+const GAMES: { title: string; file: string; copy: string; tag: string; faits?: string; mono: string; art: number; slug?: string; image?: string; alt?: string; imageRatio?: string; age?: string; joueurs?: string; duree?: string; catAge?: string[]; catJoueurs?: string[]; catDuree?: string[] }[] = [
+  { title: "Cherche & Trouve — La vraie vie", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html", copy: "Jeu d'observation gratuit : un cherche-et-trouve dans des scènes de la vraie vie.", tag: "Observation · Cherche-et-trouve", faits: "3 manches · 15 défis · sprint de 3 minutes", duree: "Sprint de 3 minutes", catDuree: ["5 min"], mono: "CT", art: 6, image: "/apps/cherche-trouve-la-vraie-vie/entete.jpg", alt: "Carte défi « Quelque chose qui semble cassé mais fonctionne », minuteur 25 secondes, bouton BINGO" },
+  { title: "Cherche et Trouve — Édition des Fêtes", file: "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-fetes-v1.0.html", copy: "Jeu d'observation des Fêtes : trouve un chocolat chaud, une décoration, compte 5 lumières dehors — et attention, l'étincelle bloque des touches en rigolant.", tag: "Observation · Cherche-et-trouve", faits: "4 manches · 20 défis · sprint de 3 minutes", duree: "Sprint de 3 minutes", catDuree: ["5 min"], mono: "B7", art: 6, slug: "cherche-trouve-fetes", image: "/apps/cherche-trouve-fetes/entete.jpg", alt: "Carte « La personne qui rit le plus facilement », compte à rebours 23 secondes, bouton BINGO, manche 1 sur 4" },
   { title: "Les hommes préhistoriques du Québec", file: "/apps/hommes-prehistoriques/hommes-prehistoriques-v1.0.html", copy: "Jeu fantaisiste 2.5D gratuit : cours avec Silex dans un Québec imaginaire, avec des dinosaures inventés pour le jeu. Saute par-dessus les roches et les troncs, ramasse des silex et découvre 8 dinosaures imaginaires. Grimpe sur les paliers, attrape les boosts et crée ton parcours !", tag: "Aventure · 8 dinosaures imaginaires", faits: "8 dinos imaginaires · paliers et boosts · crée ton parcours", mono: "HP", art: 0, image: "/apps/hommes-prehistoriques/entete.jpg", alt: "Personnage préhistorique et stégosaure, plantes à baies, pointage 17, album 0 sur 8, niveau 1" },
   { title: "Mini-jeux HP", file: "/apps/mini-jeux/mini-jeux-hp.html", copy: "Trois mini-jeux gratuits réunis, jouables hors ligne : Hiverman, le bonhomme de neige qui ramasse les points en évitant les fantômes ; Flocon, pour dessiner ton flocon ; Mini point, pour dessiner au doigt. Aucun son, aucun réseau — fond noir pour économiser la pile.", tag: "Mini-jeux · 3 jeux en un", faits: "3 mini-jeux · jouables hors ligne", mono: "MJ", art: 7, image: "/apps/mini-jeux/entete.jpg", alt: "Labyrinthe façon Pac-Man en cours, pastilles et blocs bleus", imageRatio: "16:9" },
-  { title: "Air bête", file: "/apps/air-bete/air-bete.html", copy: "Jeu d'humour gratuit : lis les intentions, démêle les malentendus — 30 situations, solo ou en gang de 2 à 8, et un vote pour le plus drôle de la soirée.", tag: "Humour · Malentendus et intentions", faits: "30 situations · Solo ou 2 à 8 joueurs", mono: "AB", art: 0, image: "/apps/air-bete/entete.jpg", alt: "Manche 1 sur 5, situation « Ton père raconte pour la 18e fois la même anecdote », défi, question et 3 réponses" },
+  { title: "Air bête", file: "/apps/air-bete/air-bete.html", copy: "Jeu d'humour gratuit : lis les intentions, démêle les malentendus — 30 situations, solo ou en gang de 2 à 8, et un vote pour le plus drôle de la soirée.", tag: "Humour · Malentendus et intentions", faits: "30 situations · Solo ou 2 à 8 joueurs", joueurs: "Solo ou 2 à 8 joueurs", catJoueurs: ["Seul", "À 2", "En groupe"], mono: "AB", art: 0, image: "/apps/air-bete/entete.jpg", alt: "Manche 1 sur 5, situation « Ton père raconte pour la 18e fois la même anecdote », défi, question et 3 réponses" },
   { title: "Mineur d'HP", file: "/apps/mineur-hp/mineur-hp-v0.1.html", copy: "Jeu de stratégie gratuit : creuse ta mine — 3 galeries, 4 minéraux aux faits vérifiés, des outils à débloquer. Les boulons d'or sont une monnaie de jeu, jamais du vrai argent.", tag: "Stratégie · Creuser et collectionner", faits: "3 galeries · 4 minéraux · Prototype v0.1", mono: "MH", art: 0, image: "/apps/mineur-hp/entete.jpg", alt: "Grille de mine 6 sur 6, 2 minéraux révélés, Pixel le chat dans un passage, objectif « Minerais trouvés : 2 / 4 »" },
   { title: "Panne de courant — 72 h", file: "/apps/panne-72h/panne-72h-v1.0.html", copy: "Jeu de gestion gratuit : une panne de 72 heures, 22 moments pour tenir — eau, nourriture, chaleur, moral et entraide, sans jamais paniquer.", tag: "Gestion · 72 heures sans courant", faits: "22 moments · 6 paliers", mono: "P72", art: 0, image: "/apps/panne-72h/entete.jpg", alt: "Moment 1 sur 22 « La panne tombe », 3 choix, 5 ressources à 70, palier 1 sur 6" },
   { title: "Boîte à lunch", file: "/apps/boite-a-lunch/boite-a-lunch-v1.0.html", copy: "Jeu de gestion gratuit : 10 jours de lunchs à préparer avec 50 $ — bons aliments, allergies à surveiller, et un budget qui tient jusqu'à vendredi.", tag: "Gestion · 10 jours de lunchs", faits: "10 jours · budget 50 $", mono: "BL", art: 0, image: "/apps/boite-a-lunch/entete.jpg", alt: "Semaine 1, lundi, jour 1 sur 10 : beurre d'arachide, riz cuit et pomme, 3 pastilles vertes, budget 50,00 $" },
@@ -56,42 +56,42 @@ const GAMES: { title: string; file: string; copy: string; tag: string; faits?: s
   { title: "Pêche blanche — carnet", file: "/apps/peche-blanche-carnet/peche-blanche-carnet-v1.0.html", copy: "Jeu d'observation gratuit : descends jusqu'au plus profond du Saint-Laurent et remplis ton carnet — 20 espèces du Québec à reconnaître.", tag: "Observation · 20 espèces du Saint-Laurent", faits: "20 espèces · fiches vérifiées", mono: "PC", art: 0, image: "/apps/peche-blanche-carnet/entete.jpg", alt: "Poisson rose à l'hameçon, anneau orange « à portée », zones de profondeur, bouton « Ferrer ! »" },
   { title: "Les aventures du moteur", file: "/apps/aventures-moteur/aventures-moteur-v1.0.html", copy: "Jeu d'histoires gratuit : suis le moteur dans sa maison — 7 portes, 16 histoires, des câlins, un atelier et des aventures à chaque porte.", tag: "Aventure · 16 histoires", faits: "16 histoires · 7 portes", mono: "AM", art: 0, image: "/apps/aventures-moteur/entete.jpg", alt: "Hub « Bienvenue ! », vraie face de Gepeto en médaillon, 7 portes, carte de voyage « Chapitre 1 — 0 sur 16 histoires »" },
   { title: "RELÈVE — Chapitre 1 : Surchauffe", file: "/apps/releve/releve-chapitre-1-v1.0.html", copy: "Jeu d'enquête 3D gratuit à Percé : avec Grizz, ourson policier de Faune-Secours, et NID à la radio, trouve la cause d'une surchauffe qui menace la faune. En français et en anglais.", tag: "Aventure · Enquête 3D à Percé", faits: "Histoire d'enquête · FR/EN", mono: "R1", art: 0, image: "/apps/releve/entete.jpg", alt: "Scène 3D nocturne : personnage sur un quai au-dessus d'eau inondée, village, mini-carte, objectif « Trouve les 3 indices »", imageRatio: "16:9" },
-  { title: "LA BANQUE — le jeu de la banque alimentaire", file: "/apps/la-banque/la-banque-v1.1.html", copy: "Jeu de gestion gratuit : gère une banque alimentaire pendant une saison de 8 semaines — dons, tri, cuisine et service aux familles, qui reviennent semaine après semaine. Ton score : les familles nourries.", tag: "Gestion · Banque alimentaire", faits: "Partie longue : une saison de 8 semaines", mono: "LB", art: 1, image: "/apps/la-banque/entete.jpg", alt: "Semaine 1 sur 8, onglets Dons, Tri et Cuisine, tri de denrées" },
+  { title: "LA BANQUE — le jeu de la banque alimentaire", file: "/apps/la-banque/la-banque-v1.1.html", copy: "Jeu de gestion gratuit : gère une banque alimentaire pendant une saison de 8 semaines — dons, tri, cuisine et service aux familles, qui reviennent semaine après semaine. Ton score : les familles nourries.", tag: "Gestion · Banque alimentaire", faits: "Partie longue : une saison de 8 semaines", duree: "Partie longue", mono: "LB", art: 1, image: "/apps/la-banque/entete.jpg", alt: "Semaine 1 sur 8, onglets Dons, Tri et Cuisine, tri de denrées" },
   { title: "Les bons réflexes d'HP", file: "/apps/bons-reflexes/index.html", copy: "Jeu éducatif gratuit sur les bons réflexes du quotidien, par âge et par activité : cuisine, maison, entraide, émotions et sécurité.", tag: "Éducatif · Réflexes du quotidien", faits: "Par âge et par activité", mono: "BR", art: 2, image: "/apps/bons-reflexes/entete.jpg", alt: "Quiz cuisine 6 à 8 ans, question des cheveux longs, 3 réponses, progression 0 sur 12" },
   { title: "Mystères du Nord — enquêtes de déduction", file: "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html", copy: "Jeu d'enquête et de déduction gratuit : sept enquêtes dans le Nord — explore les lieux, interroge les suspects et démasque le coupable.", tag: "Enquête · Déduction", faits: "7 enquêtes · pour les jeunes détectives aussi", mono: "MN", art: 7, image: "/apps/mysteres-du-nord/entete.jpg", alt: "Enquête « Le chat perdu » : 4 lieux à visiter, tableau d'enquête" },
   { title: "Fait fructifier 100 $ en 30 jours", file: "/apps/100-en-30-jours/100-en-30-jours-v1.2.html", copy: "Jeu de gestion et d'investissement 100 % fictif et gratuit : 100 $ de départ, 30 jours pour fructifier.", tag: "Gestion · Investissement fictif", faits: "100 $ fictifs · 30 jours pour fructifier", mono: "100", art: 3, image: "/apps/100-en-30-jours/entete.jpg", alt: "Marché d'occasion jour 4 sur 30, valeur nette 100,00 $, cartes Vélo usagé, Meuble vintage et Tuque tricotée" },
   { title: "Caribou Run — course sans fin québécoise", file: "/apps/caribou-run/caribou-run-v1.1.html", copy: "Jeu d'arcade gratuit, course sans fin québécoise : saute les bancs de neige et échappe à la déneigeuse !", tag: "Arcade · Course sans fin", faits: "Endless runner : la partie dure tant que tu tiens", mono: "CR", art: 0, image: "/apps/caribou-run/entete.jpg", alt: "Caribou courant dans la neige, sapins, soleil et flocons", imageRatio: "16:9" },
   { title: "Caribou Run — Édition des Fêtes", file: "/apps/caribou-run/caribou-run-fetes-v1.0.html", copy: "Course sans fin des Fêtes : le caribou au nez rouge ramasse les cadeaux, évite les loups et échappe à la déneigeuse illuminée — l'étincelle chevauche sur son dos.", tag: "Arcade · Course sans fin", faits: "Cadeaux à ramasser (+25 pts) · loups à éviter · déneigeuse illuminée", mono: "B6", art: 0, slug: "caribou-run-fetes", image: "/apps/caribou-run-fetes/entete.jpg", alt: "Caribou au nez rouge dans la neige, sapins décorés d'étoiles et de boules", imageRatio: "16:9" },
   { title: "Devine l'humeur — devine les émotions", file: "/apps/devine-l-humeur/devine-l-humeur-v1.1.html", copy: "Jeu des émotions gratuit : devine l'émotion cachée derrière chaque situation.", tag: "Émotions · Devine les émotions", faits: "10 manches · 13 humeurs · 52 visages", mono: "DH", art: 4, image: "/apps/devine-l-humeur/entete.jpg", alt: "Visage effrayé, carte « Raté… c'était la peur », bouton Continuer" },
-  { title: "La Spirale ASMR", file: "/apps/la-spirale-asmr/la-spirale-asmr-v1.1.html", copy: "Jeu de détente gratuit : un tourbillon de sable hypnotique à personnaliser — couleurs, effets et sons doux, avec respiration guidée.", tag: "Détente · ASMR et respiration", faits: "Solo · respiration guidée de 1 à 10 minutes", mono: "SA", art: 0, image: "/apps/la-spirale-asmr/entete.jpg", alt: "Spirale lumineuse en rotation sur fond noir, panneaux Couleurs, Effets, Sons doux et Ambiance" },
-  { title: "Poutine Panic — sers des poutines à toute vitesse", file: "/apps/poutine-panic/poutine-panic-v1.1.html", copy: "Jeu d'arcade gratuit : sers des poutines à toute vitesse avant la fin du service, en parties de 2 minutes.", tag: "Arcade · Service rapide", faits: "Parties de 2 minutes", mono: "PP", art: 2, image: "/apps/poutine-panic/entete.jpg", alt: "Service de poutines : 3 commandes clients, assiette vide, barre d'ingrédients" },
-  { title: "Retromania — devine les prix d'époque", file: "/apps/retromania/retromania-v1.1.html", copy: "Jeu quiz gratuit et nostalgique : devine le prix d'époque d'objets d'hier à aujourd'hui — le plus proche sans dépasser gagne !", tag: "Quiz · Prix d'époque", faits: "10 manches · 322 objets · 20 secondes par objet", mono: "RM", art: 6, image: "/apps/retromania/entete.jpg", alt: "Quiz des prix d'époque : le téléviseur 21 pouces, en 1956 au Canada, pavé numérique, mise 1,94 $" },
+  { title: "La Spirale ASMR", file: "/apps/la-spirale-asmr/la-spirale-asmr-v1.1.html", copy: "Jeu de détente gratuit : un tourbillon de sable hypnotique à personnaliser — couleurs, effets et sons doux, avec respiration guidée.", tag: "Détente · ASMR et respiration", faits: "Solo · respiration guidée de 1 à 10 minutes", joueurs: "Solo", catJoueurs: ["Seul"], duree: "1 à 10 minutes", catDuree: ["5 min"], mono: "SA", art: 0, image: "/apps/la-spirale-asmr/entete.jpg", alt: "Spirale lumineuse en rotation sur fond noir, panneaux Couleurs, Effets, Sons doux et Ambiance" },
+  { title: "Poutine Panic — sers des poutines à toute vitesse", file: "/apps/poutine-panic/poutine-panic-v1.1.html", copy: "Jeu d'arcade gratuit : sers des poutines à toute vitesse avant la fin du service, en parties de 2 minutes.", tag: "Arcade · Service rapide", faits: "Parties de 2 minutes", duree: "Parties de 2 minutes", catDuree: ["5 min"], mono: "PP", art: 2, image: "/apps/poutine-panic/entete.jpg", alt: "Service de poutines : 3 commandes clients, assiette vide, barre d'ingrédients" },
+  { title: "Retromania — devine les prix d'époque", file: "/apps/retromania/retromania-v1.1.html", copy: "Jeu quiz gratuit et nostalgique : devine le prix d'époque d'objets d'hier à aujourd'hui — le plus proche sans dépasser gagne !", tag: "Quiz · Prix d'époque", faits: "10 manches · 322 objets · 20 secondes par objet", duree: "20 secondes par objet", mono: "RM", art: 6, image: "/apps/retromania/entete.jpg", alt: "Quiz des prix d'époque : le téléviseur 21 pouces, en 1956 au Canada, pavé numérique, mise 1,94 $" },
   { title: "Sirop Clicker — sirop d'érable", file: "/apps/sirop-clicker/sirop-clicker-v1.1.html", copy: "Jeu de clics gratuit et relaxant : clique pour produire du sirop d'érable au Temps des sucres, avec sauvegarde automatique.", tag: "Clics · Sirop d'érable", faits: "Sauvegarde automatique sur l'appareil", mono: "SC", art: 3, image: "/apps/sirop-clicker/entete.jpg", alt: "Érable roux enneigé, compteurs de gouttes, boutique du Temps des sucres" },
   { title: "Mots de Chez Nous — mots cachés d'ici", file: "/apps/mots-de-chez-nous/mots-de-chez-nous-v1.0.html", copy: "Jeu de mots cachés gratuit : 665 mots d'ici à retrouver, définitions incluses, grilles de 6 à 10 mots.", tag: "Mots cachés · Mots d'ici", faits: "665 mots · grilles de 6 à 10 mots", mono: "MC", art: 5, image: "/apps/mots-de-chez-nous/entete.jpg", alt: "Mots cachés : grille 8 sur 8, liste LÉVIS, MAGANÉ, BROUE, CÈDRE, FORÊT, FLÛTE, chrono 0:03" },
   { title: "Mémoire des Cantons — jeu de mémoire du Québec", file: "/apps/memoire-des-cantons/memoire-des-cantons-v1.0.html", copy: "Jeu de mémoire gratuit aux icônes du Québec : retourne les cartes et retrouve les paires d'ici.", tag: "Mémoire · Icônes du Québec", mono: "MÉ", art: 1, image: "/apps/memoire-des-cantons/entete.jpg", alt: "Grille mémoire 3 sur 4, cartes Bernache et Tuque retournées, compteurs Coups, Temps et Paires" },
   { title: "Tir de Boules de Neige — 50 niveaux", file: "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html", copy: "Jeu d'adresse gratuit : 50 niveaux de tir à la boule de neige, sauvegarde incluse.", tag: "Adresse · Tir et 50 niveaux", faits: "50 niveaux · sauvegarde incluse", mono: "TB", art: 0, image: "/apps/tir-de-boules-de-neige/entete.jpg", alt: "Scène d'hiver : bonhomme de neige, cible sur une branche, boules de neige" },
-  { title: "Hockey 2 contre 2 — Sir H. Gepeto & Pixel", file: "/apps/hockey-hgpto/hockey-hgpto-v1.0.html", copy: "Jeu de sport gratuit : une partie de hockey 2 contre 2 de 2 minutes — toi et ton gardien contre Sir H. Gepeto et Pixel, la chatte gardienne. Attention à ses moments de distraction…", tag: "Sport · Hockey 2 contre 2", mono: "H2", art: 7, image: "/apps/hockey-hgpto/entete.jpg", alt: "Patinoire vue de dessus, Sir H. Gepeto et Pixel en joueurs, palet, bouton TIR", imageRatio: "16:9" },
+  { title: "Hockey 2 contre 2 — Sir H. Gepeto & Pixel", file: "/apps/hockey-hgpto/hockey-hgpto-v1.0.html", copy: "Jeu de sport gratuit : une partie de hockey 2 contre 2 de 2 minutes — toi et ton gardien contre Sir H. Gepeto et Pixel, la chatte gardienne. Attention à ses moments de distraction…", tag: "Sport · Hockey 2 contre 2", joueurs: "2 contre 2", duree: "2 minutes", catDuree: ["5 min"], mono: "H2", art: 7, image: "/apps/hockey-hgpto/entete.jpg", alt: "Patinoire vue de dessus, Sir H. Gepeto et Pixel en joueurs, palet, bouton TIR", imageRatio: "16:9" },
   { title: "Ado odieux, adieu", file: "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html", copy: "Jeu d'humour et de choix gratuit : fais des mauvais coups sans te faire pogner… et assume la vraie sentence.", tag: "Humour · Mauvais coups", mono: "AO", art: 5, image: "/apps/ado-odieux-adieu/entete.jpg", alt: "Parc vu de dessus avec personnages, arbres, bancs et chemin beige" },
   { title: "Couleuvre du Québec — jeu du serpent", file: "/apps/couleuvre-du-quebec/couleuvre-du-quebec-v1.0.html", copy: "Jeu d'arcade gratuit, le serpent d'ici : souris, bestioles dorées, mouettes et vidanges.", tag: "Arcade · Serpent du Québec", mono: "CQ", art: 1, image: "/apps/couleuvre-du-quebec/entete.jpg", alt: "Serpent vert à 4 segments sur damier, sacs à ramasser" },
   { title: "Fusion Sirop — fusion à la cabane à sucre", file: "/apps/fusion-sirop/fusion-sirop-v1.0.html", copy: "Jeu de réflexion et de fusion gratuit, à la cabane à sucre : de la sève au pain de sucre.", tag: "Réflexion · Fusion à la cabane à sucre", mono: "FS", art: 3, image: "/apps/fusion-sirop/entete.jpg", alt: "Grille 2048 de tuiles sirop, panneau « Le vrai procédé, étape par étape »" },
   { title: "Trio des Éléments — match-3 du tableau périodique", file: "/apps/trio-des-elements/trio-des-elements-v1.0.html", copy: "Jeu match-3 gratuit et scientifique : aligne silicium, diamant, or et cuivre, du tableau périodique.", tag: "Match-3 · Tableau périodique", mono: "T3", art: 4, image: "/apps/trio-des-elements/entete.jpg", alt: "Grille match-3 du tableau périodique : silicium, calcium, fer, carbone, or et cuivre" },
   { title: "Bernache Express — migration à un seul bouton", file: "/apps/bernache-express/bernache-express-v1.0.html", copy: "Jeu d'arcade gratuit à un seul bouton : la grande migration de la bernache vers le Sud.", tag: "Arcade · Migration à un bouton", faits: "Un seul bouton", mono: "BE", art: 0, image: "/apps/bernache-express/entete.jpg", alt: "Bernache en vol, ciel bleu, nuages, soleil, « En vol vers le sud »", imageRatio: "16:9" },
-  { title: "Le Bonhomme Pendu — mots à deviner", file: "/apps/le-bonhomme-pendu/le-bonhomme-pendu-v1.0.html", copy: "Jeu de mots gratuit à deviner : 673 mots, dont 100 québécois d'ici, définitions incluses, solo ou à 2 joueurs.", tag: "Mots · Mots à deviner", faits: "Solo ou 2 joueurs · 673 mots", mono: "BP", art: 6, image: "/apps/le-bonhomme-pendu/entete.jpg", alt: "Pendu en partie : cases « _ A _ _ E », clavier A à Z, scène « VIDANGES », erreurs 1 sur 10" },
+  { title: "Le Bonhomme Pendu — mots à deviner", file: "/apps/le-bonhomme-pendu/le-bonhomme-pendu-v1.0.html", copy: "Jeu de mots gratuit à deviner : 673 mots, dont 100 québécois d'ici, définitions incluses, solo ou à 2 joueurs.", tag: "Mots · Mots à deviner", faits: "Solo ou 2 joueurs · 673 mots", joueurs: "Solo ou 2 joueurs", catJoueurs: ["Seul", "À 2"], mono: "BP", art: 6, image: "/apps/le-bonhomme-pendu/entete.jpg", alt: "Pendu en partie : cases « _ A _ _ E », clavier A à Z, scène « VIDANGES », erreurs 1 sur 10" },
   { title: "Montgolfière — grimpe entre les orages", file: "/apps/montgolfiere/montgolfiere-v1.0.html", copy: "Jeu d'adresse gratuit : grimpe toujours plus haut en montgolfière, entre les orages et les éclairs.", tag: "Adresse · Montgolfière et orages", mono: "MG", art: 2, image: "/apps/montgolfiere/entete.jpg", alt: "Montgolfière rayée rouge et verte en vol, ciel bleu nuageux, altitude 24 m" },
-  { title: "Pop Ballons — 60 secondes de combos", file: "/apps/pop-ballons/pop-ballons-v1.0.html", copy: "Jeu de rapidité gratuit : 60 secondes, des combos, et une frénésie finale.", tag: "Rapidité · Ballons et combos", faits: "Parties de 60 secondes", mono: "PB", art: 5, image: "/apps/pop-ballons/entete.jpg", alt: "Ballons colorés qui montent, ballon « 45 », ballons noirs à croix rouge" },
-  { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "Jeu quiz et de déduction gratuit : 330 manches pour démasquer le mensonge — historique, inusité, cocasse.", tag: "Quiz · Vérités et mensonge", faits: "Pour les curieux de 7 à 107 ans · Histoire 110 · Insolite 110 · Cocasse 110 · Total 330", mono: "2V", art: 7, image: "/apps/2-verites-1-mensonge/entete.jpg", alt: "Quiz : 3 affirmations sur Agnes Macphail, numéro 2 marquée mensonge, « Bravo, c'était bien le mensonge ! », score 1" },
-  { title: "Chat'attaque — tower defense de chats", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Jeu de stratégie gratuit, tower defense avec des chats : 9 chats-tours défendent 50 croquettes, 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local.", tag: "Stratégie · Tower defense de chats", faits: "Solo ou 2 joueurs local · 12 cartes · 3 difficultés", mono: "CA", art: 2, image: "/apps/chat-attaque/entete.jpg", alt: "Tower defense : chemin sinueux, chats ennemis, gamelle « MIAM », « Tempête : Gros matou »", imageRatio: "16:9" },
-  { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Jeu de stratégie et de science-fiction gratuit : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde — douze vagues, une tempête qui peut tout changer.", tag: "Stratégie · Tower defense futuriste", faits: "Solo · 12 vagues", mono: "87", art: 7, image: "/apps/nord-2087/entete.jpg", alt: "Ligne de Glace : grille bleu nuit, trajectoire pointillée orange vers une cible rouge" },
-  { title: "Chevalier du fleuve — stratégie et histoire vraie", file: "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", copy: "Jeu de stratégie en temps réel gratuit : refais la campagne vraie de Pierre Le Moyne d'Iberville — bâtis, lève ton armée, prends les forts de la baie James, défends Québec, coule la flotte à bord du Pélican. Et sur les berges, la légende des nains albinos des terriers et leur Forge des Rois Gybbys…", tag: "Stratégie · Temps réel · Histoire vraie", faits: "12 ans et plus · Campagne 1686-1699 + mode libre · Gratuit en entier — pierres précieuses gagnées en jouant", mono: "CF", art: 7, image: "/apps/chevalier-du-fleuve/entete.jpg", alt: "Carte stratégique verte, littoral, postes et unités, barre de ressources, panneau « Ordres », objectifs" },
-  { title: "IGLOO — La guerre des igloos", file: "/apps/igloo/igloo-v1.0.html", copy: "Jeu de stratégie en arène gratuit : bataille de boules de neige — déploie tes cartes, défends ton igloo et fais tomber celui d'en face. Chaque bataille tire une loi du quartier au hasard !", tag: "Stratégie · Bataille de boules de neige", faits: "Campagne de 10 batailles · parties d'environ 3 minutes", mono: "IG", art: 7, image: "/apps/igloo/entete.jpg", alt: "Arène verticale « IGLOO ENNEMI » et « TON IGLOO », bonhomme de neige au centre" },
-  { title: "Que vois-tu ? — jeu de perception", file: "/apps/que-vois-tu/que-vois-tu-v2.0.html", copy: "Jeu de perception gratuit, pour toute la famille : dis ce que tu vois en premier dans chaque image — il n'y a pas de mauvaise réponse.", tag: "Perception · Ce que tu vois d'abord", faits: "42 défis · 3 terrains : Jeunesse, Ado, Adulte", mono: "QV", art: 4, image: "/apps/que-vois-tu/entete.jpg", alt: "Prairie ensoleillée, 3 fleurs, papillon orange caché, consigne « Un papillon se cache dans le pré… »" },
+  { title: "Pop Ballons — 60 secondes de combos", file: "/apps/pop-ballons/pop-ballons-v1.0.html", copy: "Jeu de rapidité gratuit : 60 secondes, des combos, et une frénésie finale.", tag: "Rapidité · Ballons et combos", faits: "Parties de 60 secondes", duree: "Parties de 60 secondes", catDuree: ["5 min"], mono: "PB", art: 5, image: "/apps/pop-ballons/entete.jpg", alt: "Ballons colorés qui montent, ballon « 45 », ballons noirs à croix rouge" },
+  { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "Jeu quiz et de déduction gratuit : 330 manches pour démasquer le mensonge — historique, inusité, cocasse.", tag: "Quiz · Vérités et mensonge", faits: "Pour les curieux de 7 à 107 ans · Histoire 110 · Insolite 110 · Cocasse 110 · Total 330", age: "7 à 107 ans", catAge: ["6-8 ans", "9-12 ans", "Ados", "Adultes"], mono: "2V", art: 7, image: "/apps/2-verites-1-mensonge/entete.jpg", alt: "Quiz : 3 affirmations sur Agnes Macphail, numéro 2 marquée mensonge, « Bravo, c'était bien le mensonge ! », score 1" },
+  { title: "Chat'attaque — tower defense de chats", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Jeu de stratégie gratuit, tower defense avec des chats : 9 chats-tours défendent 50 croquettes, 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local.", tag: "Stratégie · Tower defense de chats", faits: "Solo ou 2 joueurs local · 12 cartes · 3 difficultés", joueurs: "Solo ou 2 joueurs local", catJoueurs: ["Seul", "À 2"], mono: "CA", art: 2, image: "/apps/chat-attaque/entete.jpg", alt: "Tower defense : chemin sinueux, chats ennemis, gamelle « MIAM », « Tempête : Gros matou »", imageRatio: "16:9" },
+  { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Jeu de stratégie et de science-fiction gratuit : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde — douze vagues, une tempête qui peut tout changer.", tag: "Stratégie · Tower defense futuriste", faits: "Solo · 12 vagues", joueurs: "Solo", catJoueurs: ["Seul"], mono: "87", art: 7, image: "/apps/nord-2087/entete.jpg", alt: "Ligne de Glace : grille bleu nuit, trajectoire pointillée orange vers une cible rouge" },
+  { title: "Chevalier du fleuve — stratégie et histoire vraie", file: "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", copy: "Jeu de stratégie en temps réel gratuit : refais la campagne vraie de Pierre Le Moyne d'Iberville — bâtis, lève ton armée, prends les forts de la baie James, défends Québec, coule la flotte à bord du Pélican. Et sur les berges, la légende des nains albinos des terriers et leur Forge des Rois Gybbys…", tag: "Stratégie · Temps réel · Histoire vraie", faits: "12 ans et plus · Campagne 1686-1699 + mode libre · Gratuit en entier — pierres précieuses gagnées en jouant", age: "12 ans et plus", catAge: ["Ados", "Adultes"], mono: "CF", art: 7, image: "/apps/chevalier-du-fleuve/entete.jpg", alt: "Carte stratégique verte, littoral, postes et unités, barre de ressources, panneau « Ordres », objectifs" },
+  { title: "IGLOO — La guerre des igloos", file: "/apps/igloo/igloo-v1.0.html", copy: "Jeu de stratégie en arène gratuit : bataille de boules de neige — déploie tes cartes, défends ton igloo et fais tomber celui d'en face. Chaque bataille tire une loi du quartier au hasard !", tag: "Stratégie · Bataille de boules de neige", faits: "Campagne de 10 batailles · parties d'environ 3 minutes", duree: "Parties d'environ 3 minutes", catDuree: ["5 min"], mono: "IG", art: 7, image: "/apps/igloo/entete.jpg", alt: "Arène verticale « IGLOO ENNEMI » et « TON IGLOO », bonhomme de neige au centre" },
+  { title: "Que vois-tu ? — jeu de perception", file: "/apps/que-vois-tu/que-vois-tu-v2.0.html", copy: "Jeu de perception gratuit, pour toute la famille : dis ce que tu vois en premier dans chaque image — il n'y a pas de mauvaise réponse.", tag: "Perception · Ce que tu vois d'abord", faits: "42 défis · 3 terrains : Jeunesse, Ado, Adulte", age: "Jeunesse, Ado, Adulte", catAge: ["Ados", "Adultes"], mono: "QV", art: 4, image: "/apps/que-vois-tu/entete.jpg", alt: "Prairie ensoleillée, 3 fleurs, papillon orange caché, consigne « Un papillon se cache dans le pré… »" },
   { title: "Tapinoue — aventure jeunesse", file: "/apps/tapinoue/tapinoue-v2.0.html", copy: "Jeu d'aventure jeunesse gratuit : les aventures de Tapinoue et de sa famille, en 4 tableaux qui se débloquent un à un — la rencontre, le terrier, le potager de M. Grincheux… et le renard qui rôde.", tag: "Aventure · Jeunesse en 4 tableaux", faits: "4 tableaux · progression sauvegardée", mono: "TP", art: 1, image: "/apps/tapinoue/entete.jpg", alt: "Lapin blanc dans son terrier à nettoyer, toiles d'araignée, épluchures, seau, consigne « 1. Un terrier propre », barre 0 %" },
   { title: "Ton chum frotte son char plus que toi !", file: "/apps/ton-chum-frotte-son-char/ton-chum-frotte-son-char-v2.0.html", copy: "Jeu ASMR gratuit : le vrai job d'esthétique automobile, du bout des doigts — choisis ton véhicule et frotte, roues, lavage, argile, cire, jusqu'à ce qu'il brille. Mets le son !", tag: "ASMR · Esthétique automobile", faits: "4 véhicules · 8 étapes du métier", mono: "TC", art: 2, image: "/apps/ton-chum-frotte-son-char/entete.jpg", alt: "Les 4 roues du char à frotter : avant gauche, avant droite" },
   { title: "Conception de molécules 3D", file: "/apps/conception-de-molecules-3d/conception-de-molecules-3d-v2.0.html", copy: "Jeu de sciences 3D gratuit : un labo pour explorer l'ADN et fabriquer des remèdes, avec des missions sur de vraies molécules (aspirine, caféine, insuline…), en 4 niveaux.", tag: "Sciences · Molécules et ADN", faits: "4 niveaux · d'enfant à très avancé", mono: "M3", art: 3, image: "/apps/conception-de-molecules-3d/entete.jpg", alt: "Labo « Crée ton remède générique », grilles d'atomes C, O, H et N, microbe du rhume, défi 1 sur 3" },
   { title: "L'hydroélectricité, comment ça marche", file: "/apps/hydro-electricite/hydro-electricite-v1.1.html", copy: "Jeu éducatif gratuit : visite guidée d'une centrale hydroélectrique québécoise en suivant une goutte d'eau — barrage, turbine, alternateur… jusqu'à ta maison.", tag: "Éducatif · Centrale hydroélectrique", faits: "7 stations · pensée pour partir de zéro", mono: "HY", art: 0, image: "/apps/hydro-electricite/entete.jpg", alt: "Dialogue de Nadia, schéma barrage, réservoir et rivière, consigne « ouvre les vannes », curseur de débit" },
   { title: "Anxiété, le jeu", file: "/apps/anxiete-le-jeu/anxiete-le-jeu-v1.1.html", copy: "Jeu de sensibilisation gratuit : une semaine dans la peau d'Alex, qui vit avec un trouble anxieux — météo intérieure, pensées qui envahissent et outils réels pour traverser. Ce jeu ne pose pas de diagnostic.", tag: "Sensibilisation · Santé mentale", faits: "5 journées · ressources 811 et 988 incluses", mono: "AX", art: 5, image: "/apps/anxiete-le-jeu/entete.jpg", alt: "Jour 1 « Se préparer et déjeuner », préparer la table 1 sur 5, bulles de pensées anxieuses, énergie 90 %" },
   { title: "Votre IA parle-t-elle québécois?", file: "/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html", copy: "Jeu gratuit : donne 20 expressions québécoises à ton assistant, colle sa réponse, et la page la note dans ton navigateur. Modes complet, express et duel, carte de résultat à copier, rien n'est envoyé.", tag: "Québécois · IA et expressions", faits: "20 expressions · 3 modes · carte de résultat", mono: "IA", art: 0, image: "/apps/votre-ia-parle-t-elle-quebecois/entete.jpg", alt: "Liste des 20 expressions québécoises, bouton « Copier la question »" },
-  { title: "La Slalomeuse de nids-de-poule", file: "/apps/slalomeuse/index.html", copy: "Jeu d'arcade gratuit, slalom québécois : glisse entre les nids-de-poule, 3 roues, parties d'environ 1 minute.", tag: "Arcade · Slalom québécois", faits: "Parties d'environ 1 minute · 3 roues", mono: "SL", art: 0, image: "/apps/slalomeuse/entete.jpg", alt: "Route à 3 voies, cône orange, nid-de-poule, petite voiture jaune, score 31, mètres 31" },
+  { title: "La Slalomeuse de nids-de-poule", file: "/apps/slalomeuse/index.html", copy: "Jeu d'arcade gratuit, slalom québécois : glisse entre les nids-de-poule, 3 roues, parties d'environ 1 minute.", tag: "Arcade · Slalom québécois", faits: "Parties d'environ 1 minute · 3 roues", duree: "Parties d'environ 1 minute", catDuree: ["5 min"], mono: "SL", art: 0, image: "/apps/slalomeuse/entete.jpg", alt: "Route à 3 voies, cône orange, nid-de-poule, petite voiture jaune, score 31, mètres 31" },
   { title: "Sur l'herbe — La colonie", file: "/apps/sur-lherbe/sur-lherbe-v1.0.html", copy: "Jeu de stratégie gratuit : mène ta colonie sous l'herbe — Fourmis, Abeilles ou Araignées, 3 tableaux de 6 à 8 vagues, boutique en ambre gagnée en jeu.", tag: "Stratégie · Colonie sous l'herbe", faits: "3 factions · 3 tableaux · 6 à 8 vagues", mono: "SH", art: 0, image: "/apps/sur-lherbe/entete.jpg", alt: "Pelouse avec fourmis rouges, marguerites, feuilles et fourmilière, HUD vague 0 sur 6" },
   { title: "Pète et Répète", file: "/apps/pete-et-repete/pete-et-repete-v1.0.html", copy: "Jeu de course gratuit : tape les mots, lettre par lettre, pour faire péter ton bateau et battre Répète jusqu'à la bouée des 300 m. 3 mots parfaits d'affilée = SUPER PET !", tag: "Course · Mots à taper", faits: "300 m · mots français · clavier ou tactile", mono: "PR", art: 0, image: "/apps/pete-et-repete/entete.jpg", alt: "Course de canots sur le lac, mot à taper « THÉ », clavier de lettres" },
   { title: "Bataille d'aura — Sir H. Gepeto", file: "/apps/bataille-aura-magic/bataille-aura-magic-v1.0.html", copy: "Duel de magie gratuit : Sir H. Gepeto, en armure et marionnette à fils, défend sa scène contre 14 duellistes. Touche pour un petit sort, maintiens pour charger, relâche à MAX pour le gros sort !", tag: "Duel · 14 actes", faits: "14 actes · 3 auras · charge à MAX", mono: "MA", art: 0, image: "/apps/bataille-aura-magic/entete.jpg", alt: "Théâtre : Sir H. Gepeto, 100 PV, contre Pierrot le Mime, 60 PV, boutons Feu, Eau et Nature" },
@@ -118,6 +118,180 @@ type GameEntry = (typeof GAMES)[number];
 const hrefJeu = (g: GameEntry) => `/apps/${g.slug ?? slugDepuisFichier(g.file)}`;
 
 const GENRES = ["Tous", ...Array.from(new Set(GAMES.map((g) => g.tag.split(" · ")[0])))];
+
+const FILTRES_AGE = ["Tous", "3-5 ans", "6-8 ans", "9-12 ans", "Ados", "Adultes"];
+const FILTRES_JOUEURS = ["Tous", "Seul", "À 2", "En groupe"];
+const FILTRES_DUREE = ["Tous", "5 min", "15 min", "30 min +"];
+
+/* ── Lot « 5 corrections prioritaires », 18 nov. 2026 (textes 2a, 4a) ──
+   Vedettes : les 5 jeux sont retrouvés dans GAMES (même adresse, même
+   image) ; seul le texte de présentation est celui du lot, mot pour mot.
+   Métadonnées âge / joueurs / durée : champs `age`, `joueurs`, `duree`
+   sur les tuiles — fragments repris mot pour mot des mentions déjà
+   écrites sur les tuiles ; `catAge`, `catJoueurs`, `catDuree` = les
+   paliers de filtre que la mention recouvre, sans rien deviner :
+   - une plage recouvre chaque palier qu'elle chevauche (« 7 à 107 ans »
+     → 6-8 ans, 9-12 ans, Ados, Adultes ; « 12 ans et plus » → Ados,
+     Adultes) ;
+   - une durée en minutes tient dans le premier palier qu'elle atteint
+     (« 1 à 10 minutes » → 5 min) ;
+   - « Jeunesse, Ado, Adulte » ne donne que les paliers nommés mot pour
+     mot (Ados, Adultes) — « Jeunesse » n'est deviné vers aucun âge ;
+   - « 2 contre 2 » (Hockey), « Partie longue » (LA BANQUE) et
+     « 20 secondes par objet » (Retromania) s'affichent tels quels mais
+     ne donnent aucun palier : le nombre de joueurs humains et la durée
+     de partie ne s'en déduisent pas.
+   Un jeu sans mention n'a aucun de ces champs : sa tuile affiche « — »
+   (liste dans workspace/lot-5-corrections-construction-18nov-2026/
+   jeux-sans-metadonnees.md, à compléter par HP). */
+const VEDETTES: { titre: string; texte: string; jeu: GameEntry }[] = [
+  {
+    titre: "Chevalier du fleuve",
+    texte: "Refais la campagne vraie de Pierre Le Moyne d'Iberville. 12 ans et plus. Gratuit en entier.",
+    jeu: GAMES.find((g) => g.title === "Chevalier du fleuve — stratégie et histoire vraie")!,
+  },
+  {
+    titre: "IGLOO",
+    texte: "Bataille de boules de neige en arène. Campagne de 10 batailles, parties d'environ 3 minutes.",
+    jeu: GAMES.find((g) => g.title === "IGLOO — La guerre des igloos")!,
+  },
+  {
+    titre: "NORD 2087",
+    texte: "Dessine ton labyrinthe et défends le Cœur du réseau. Solo, 12 vagues.",
+    jeu: GAMES.find((g) => g.title === "NORD 2087 — La Ligne de Glace")!,
+  },
+  {
+    titre: "Caribou Run",
+    texte: "Course dans le Nord, gratuite.",
+    jeu: GAMES.find((g) => g.title === "Caribou Run — course sans fin québécoise")!,
+  },
+  {
+    titre: "Mots de chez nous",
+    texte: "Mots cachés d'ici, définitions incluses.",
+    jeu: GAMES.find((g) => g.title === "Mots de Chez Nous — mots cachés d'ici")!,
+  },
+];
+
+/* Partage (texte 4a) — mécanisme de src/components/barre-jeu/barre-jeu.js :
+   la barre-jeu lit le score DANS le DOM du jeu ouvert (sélecteurs `score`
+   de CONFIGS) ; depuis une tuile de /jeux, aucun score n'est lisible — le
+   bouton de tuile ne peut donc pas promettre un score. Libellé honnête,
+   comme la barre-jeu (L669-673) : « Partager ce jeu » partout sur /jeux,
+   avec le même texte et le même repli (navigator.share, sinon copie du
+   lien). Le bouton « Partager mon score », lui, existe déjà dans chaque
+   jeu à score lisible, via la barre-jeu. La liste ci-dessous recense ces
+   17 jeux (CONFIGS avec `score` non nul, par chemin de fichier) : elle
+   sert au rapport du lot et à un branchement futur (meilleur score local
+   persistant), pas à un libellé — aucun score n'est inventé ici. */
+const FICHIERS_SCORE_LISIBLE = new Set([
+  "/apps/bons-reflexes/index.html",
+  "/apps/mysteres-du-nord/myst-res-du-nord-v1.2.html",
+  "/apps/100-en-30-jours/100-en-30-jours-v1.2.html",
+  "/apps/caribou-run/caribou-run-v1.1.html",
+  "/apps/devine-l-humeur/devine-l-humeur-v1.1.html",
+  "/apps/poutine-panic/poutine-panic-v1.1.html",
+  "/apps/retromania/retromania-v1.1.html",
+  "/apps/mots-de-chez-nous/mots-de-chez-nous-v1.0.html",
+  "/apps/tir-de-boules-de-neige/tir-de-boules-de-neige-v2.0.html",
+  "/apps/ado-odieux-adieu/ado-odieux-adieu-v1.0.html",
+  "/apps/couleuvre-du-quebec/couleuvre-du-quebec-v1.0.html",
+  "/apps/fusion-sirop/fusion-sirop-v1.0.html",
+  "/apps/trio-des-elements/trio-des-elements-v1.0.html",
+  "/apps/le-bonhomme-pendu/le-bonhomme-pendu-v1.0.html",
+  "/apps/pop-ballons/pop-ballons-v1.0.html",
+  "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html",
+  "/apps/nord-2087/nord-2087-v1.1.html",
+]);
+const scoreLisibleDansLeJeu = (g: GameEntry) =>
+  FICHIERS_SCORE_LISIBLE.has(g.file);
+
+/* Mode streamer (texte 4a) : lien visible sur les tuiles de ces deux jeux
+   seulement, vers la même URL de jeu + ?streamer=1. Le mode lui-même est
+   implémenté dans les fichiers des jeux (autre travailleur). */
+const STREAMER_SLUGS = new Set(["chat-attaque", "ado-odieux-adieu"]);
+
+const SHARE_BTN_STYLE: CSSProperties = {
+  font: "inherit",
+  fontSize: 13,
+  fontWeight: 800,
+  padding: "10px 16px",
+  minHeight: 48,
+  boxSizing: "border-box",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: 999,
+  border: "1.5px solid rgba(79,64,57,.45)",
+  background: "transparent",
+  color: "#4f4039",
+  cursor: "pointer",
+};
+
+const STREAMER_LINK_STYLE: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  minHeight: 48,
+  boxSizing: "border-box",
+  padding: "10px 4px",
+  fontSize: 13,
+  fontWeight: 900,
+  letterSpacing: ".04em",
+  textTransform: "uppercase",
+  color: "#be5c23",
+  textDecoration: "underline",
+  textUnderlineOffset: 3,
+};
+
+function LigneMeta({ jeu }: { jeu: GameEntry }) {
+  return (
+    <p style={{ fontSize: 13, lineHeight: 1.55, margin: 0, flex: "none" }}>
+      Âge : {jeu.age ?? "—"} · Joueurs : {jeu.joueurs ?? "—"} · Durée :{" "}
+      {jeu.duree ?? "—"}
+    </p>
+  );
+}
+
+function BoutonPartager({ jeu }: { jeu: GameEntry }) {
+  const [copie, setCopie] = useState(false);
+  const partager = async () => {
+    const url = "https://www.hp-outils.com" + hrefJeu(jeu);
+    const texte =
+      "Je joue à " + jeu.title + " sur HP Outils. T'es pas game de l'essayer ?";
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: jeu.title + " — HP Outils",
+          text: texte,
+          url,
+        });
+      } catch {
+        /* Annulation du visiteur : rien à faire. */
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(texte + " " + url);
+      setCopie(true);
+      window.setTimeout(() => setCopie(false), 2000);
+    } catch {
+      /* Presse-papiers indisponible : le lien « Jouer » reste là. */
+    }
+  };
+  return (
+    <button
+      type="button"
+      onClick={() => void partager()}
+      title={
+        scoreLisibleDansLeJeu(jeu)
+          ? "Partage ce jeu. Ton meilleur score, lui, se partage depuis le jeu, avec le bouton « Partager mon score » de la barre de jeu."
+          : "Partage ce jeu avec un ami."
+      }
+      style={SHARE_BTN_STYLE}
+    >
+      {copie ? "Lien copié !" : "Partager ce jeu"}
+    </button>
+  );
+}
 
 /* Lot J-3 confort 16 nov. 2026 : boutons ≥ 48 px, textes ≥ 13 px (seuil 12,5 px). */
 const FILTER_BTN_STYLE: CSSProperties = {
@@ -404,6 +578,13 @@ function JeuxPage() {
   /* Lot /jeux façon Friv : recherche dans les titres + descriptions.
      Normalisation sans accents pour que « reflexes » trouve « réflexes ». */
   const [recherche, setRecherche] = useState("");
+  /* Lot 5 corrections (texte 2a) : filtres Âge / Joueurs / Durée — ils ne
+     retiennent que les jeux dont la mention de tuile recouvre le palier
+     (champs catAge / catJoueurs / catDuree) ; un jeu sans mention ne
+     correspond à aucun palier précis, seulement à « Tous ». */
+  const [filtreAge, setFiltreAge] = useState("Tous");
+  const [filtreJoueurs, setFiltreJoueurs] = useState("Tous");
+  const [filtreDuree, setFiltreDuree] = useState("Tous");
   const normaliser = (s: string) =>
     s
       .toLowerCase()
@@ -489,11 +670,21 @@ function JeuxPage() {
     };
   };
 
+  const correspondAge = (g: GameEntry) =>
+    filtreAge === "Tous" || (g.catAge ?? []).includes(filtreAge);
+  const correspondJoueurs = (g: GameEntry) =>
+    filtreJoueurs === "Tous" || (g.catJoueurs ?? []).includes(filtreJoueurs);
+  const correspondDuree = (g: GameEntry) =>
+    filtreDuree === "Tous" || (g.catDuree ?? []).includes(filtreDuree);
   const baseVisible = (
     genre === "Tous"
       ? GAMES
       : GAMES.filter((g) => g.tag.split(" · ")[0] === genre)
-  ).filter(correspondRecherche);
+  )
+    .filter(correspondRecherche)
+    .filter(correspondAge)
+    .filter(correspondJoueurs)
+    .filter(correspondDuree);
   /* Ordre fixe (lot /jeux façon Friv) : l'ordre du tableau GAMES, sans tri
      par popularité — la carte vedette reste affichée au-dessus de la grille,
      même quand un filtre ou une recherche est actif. */
@@ -501,8 +692,16 @@ function JeuxPage() {
   const vedetteVisible =
     (genre === "Tous" ||
       featured.tag.split(" · ")[0] === genre) &&
-    correspondRecherche(featured);
-  const filtreActif = genre !== "Tous" || rechercheNorm !== "";
+    correspondRecherche(featured) &&
+    correspondAge(featured) &&
+    correspondJoueurs(featured) &&
+    correspondDuree(featured);
+  const filtreActif =
+    genre !== "Tous" ||
+    rechercheNorm !== "" ||
+    filtreAge !== "Tous" ||
+    filtreJoueurs !== "Tous" ||
+    filtreDuree !== "Tous";
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
@@ -566,6 +765,58 @@ function JeuxPage() {
         </div>
       </section>
 
+      {/* Lot 5 corrections (texte 2a) : « Nos jeux vedettes » — les 5 jeux
+          sont retrouvés dans GAMES (même adresse, même image) ; le texte
+          est celui du lot, mot pour mot. La vedette « 2 vérités,
+          1 mensonge » reste dans la grille ci-dessous, où elle est. */}
+      <section className="three-pillars" aria-label="Nos jeux vedettes">
+        <div className="container">
+          <span className="editorial-kicker">À jouer maintenant</span>
+          <h2 className="section-title">Nos jeux vedettes</h2>
+          <p style={{ textAlign: "center", maxWidth: 620, margin: "-6px auto 34px", color: "rgba(247,243,234,.78)", fontSize: 16, lineHeight: 1.55 }}>
+            Nos meilleurs jeux, trouvables en 1 clic — gratuits, sans compte.
+          </p>
+          <div className="pillar-grid">
+            {VEDETTES.map(({ titre, texte, jeu }) => (
+              <article className="pillar-card" key={titre} style={{ padding: 0, overflow: "hidden", gap: 0 }}>
+                <a href={hrefJeu(jeu)} aria-label={"Jouer à " + titre} style={{ display: "block", textDecoration: "none" }}>
+                  {jeu.image ? (
+                    <div style={{ position: "relative" }}>
+                      <img src={jeu.image} alt={jeu.alt ?? ("Image du jeu " + jeu.title + " en action")} loading="lazy" width={960} height={jeu.imageRatio === "16:9" ? 540 : 720} style={{ display: "block", width: "100%", height: "auto", aspectRatio: jeu.imageRatio === "16:9" ? "16 / 9" : "4 / 3", objectFit: "cover", borderBottom: "3px solid rgba(0,229,255,.45)" }} />
+                      <span style={TAG_ON_TILE_STYLE}>{jeu.tag}</span>
+                    </div>
+                  ) : (
+                    <div style={{ ...tileBackground(jeu), minHeight: 148, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 7, position: "relative", padding: "16px 14px 30px" }}>
+                      <span aria-hidden="true" style={{ fontFamily: "Georgia, serif", fontSize: 52, lineHeight: 1, color: "#f6eddd", textShadow: "0 8px 22px rgba(0,0,0,.42)" }}>
+                        {jeu.mono}
+                      </span>
+                      <span style={{ fontSize: 14.5, fontWeight: 800, lineHeight: 1.25, color: "#f6eddd", textAlign: "center", textShadow: "0 2px 8px rgba(0,0,0,.5)" }}>
+                        {jeu.title}
+                      </span>
+                      <span style={TAG_ON_TILE_STYLE}>{jeu.tag}</span>
+                    </div>
+                  )}
+                </a>
+                <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                  <h3 style={{ fontSize: 23 }}>{titre}</h3>
+                  <p>{texte}</p>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginTop: "auto" }}>
+                    <a className="btn-primary" href={hrefJeu(jeu)} aria-label={"Jouer à " + titre} style={{ fontSize: 14, padding: "9px 18px" }}>▶ JOUER</a>
+                    <BoutonCoeur {...etatCoeur(jeu)} />
+                  </div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                    <BoutonPartager jeu={jeu} />
+                    {STREAMER_SLUGS.has(jeu.slug ?? slugDepuisFichier(jeu.file)) ? (
+                      <a href={hrefJeu(jeu) + "?streamer=1"} style={STREAMER_LINK_STYLE}>Mode streamer</a>
+                    ) : null}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="three-pillars" id="tous-les-jeux">
         <div className="container">
           <span className="editorial-kicker">Gratuits, sans inscription</span>
@@ -593,6 +844,51 @@ function JeuxPage() {
                 style={genre === g ? FILTER_BTN_ACTIVE_STYLE : FILTER_BTN_STYLE}
               >
                 {g} ({compterGenre(g)})
+              </button>
+            ))}
+          </div>
+          {/* Lot 5 corrections (texte 2a) : filtres Âge / Joueurs / Durée,
+              au-dessus de la grille, sans rechargement — ils filtrent la
+              grille avec la recherche et le genre. */}
+          <div role="group" aria-label="Filtrer les jeux par âge" style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", alignItems: "center", maxWidth: 900, margin: "0 auto 12px" }}>
+            <span style={{ fontSize: 13, fontWeight: 900, color: "#f7f3ea" }}>Âge :</span>
+            {FILTRES_AGE.map((a) => (
+              <button
+                key={a}
+                type="button"
+                aria-pressed={filtreAge === a}
+                onClick={() => setFiltreAge(a)}
+                style={filtreAge === a ? FILTER_BTN_ACTIVE_STYLE : FILTER_BTN_STYLE}
+              >
+                {a}
+              </button>
+            ))}
+          </div>
+          <div role="group" aria-label="Filtrer les jeux par nombre de joueurs" style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", alignItems: "center", maxWidth: 900, margin: "0 auto 12px" }}>
+            <span style={{ fontSize: 13, fontWeight: 900, color: "#f7f3ea" }}>Joueurs :</span>
+            {FILTRES_JOUEURS.map((j) => (
+              <button
+                key={j}
+                type="button"
+                aria-pressed={filtreJoueurs === j}
+                onClick={() => setFiltreJoueurs(j)}
+                style={filtreJoueurs === j ? FILTER_BTN_ACTIVE_STYLE : FILTER_BTN_STYLE}
+              >
+                {j}
+              </button>
+            ))}
+          </div>
+          <div role="group" aria-label="Filtrer les jeux par durée de partie" style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", alignItems: "center", maxWidth: 900, margin: "0 auto 30px" }}>
+            <span style={{ fontSize: 13, fontWeight: 900, color: "#f7f3ea" }}>Durée :</span>
+            {FILTRES_DUREE.map((d) => (
+              <button
+                key={d}
+                type="button"
+                aria-pressed={filtreDuree === d}
+                onClick={() => setFiltreDuree(d)}
+                style={filtreDuree === d ? FILTER_BTN_ACTIVE_STYLE : FILTER_BTN_STYLE}
+              >
+                {d}
               </button>
             ))}
           </div>
@@ -644,10 +940,12 @@ function JeuxPage() {
                 <span style={TAG_ON_PAPER_STYLE}>{featured.tag}</span>
                 <p>{featured.copy}</p>
                 {"faits" in featured && featured.faits ? <p className="workshop-meta">{featured.faits}</p> : null}
+                <LigneMeta jeu={featured} />
                 <RangeeTampons slug={featured.slug ?? slugDepuisFichier(featured.file)} />
                 <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
                   <a className="btn-primary" href={hrefJeu(featured)}>Jouer maintenant</a>
                   <BoutonCoeur {...etatCoeur(featured)} />
+                  <BoutonPartager jeu={featured} />
                 </div>
               </div>
             </article>
@@ -677,12 +975,19 @@ function JeuxPage() {
                   <h3 style={{ fontSize: 23 }}>{game.title}</h3>
                   <p>{game.copy}</p>
                   {"faits" in game && game.faits ? <p className="workshop-meta">{game.faits}</p> : null}
+                  <LigneMeta jeu={game} />
                   <RangeeTampons slug={game.slug ?? slugDepuisFichier(game.file)} />
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginTop: "auto" }}>
                     {/* Lot /jeux façon Friv : bouton « Jouer » net par tuile —
                         un geste = le jeu se lance (même lien qu'avant). */}
                     <a className="btn-primary" href={hrefJeu(game)} aria-label={"Jouer à " + game.title} style={{ fontSize: 14, padding: "9px 18px" }}>▶ JOUER</a>
                     <BoutonCoeur {...etatCoeur(game)} />
+                  </div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                    <BoutonPartager jeu={game} />
+                    {STREAMER_SLUGS.has(game.slug ?? slugDepuisFichier(game.file)) ? (
+                      <a href={hrefJeu(game) + "?streamer=1"} style={STREAMER_LINK_STYLE}>Mode streamer</a>
+                    ) : null}
                   </div>
                 </div>
               </article>
@@ -696,7 +1001,7 @@ function JeuxPage() {
               Aucun jeu trouvé pour cette recherche.{" "}
               <button
                 type="button"
-                onClick={() => { setGenre("Tous"); setRecherche(""); }}
+                onClick={() => { setGenre("Tous"); setRecherche(""); setFiltreAge("Tous"); setFiltreJoueurs("Tous"); setFiltreDuree("Tous"); }}
                 style={{ ...FILTER_BTN_STYLE, marginLeft: 6 }}
               >
                 Effacer les filtres
@@ -708,7 +1013,7 @@ function JeuxPage() {
               {nombreResultats} jeu{nombreResultats > 1 ? "x" : ""} trouvé{nombreResultats > 1 ? "s" : ""}.{" "}
               <button
                 type="button"
-                onClick={() => { setGenre("Tous"); setRecherche(""); }}
+                onClick={() => { setGenre("Tous"); setRecherche(""); setFiltreAge("Tous"); setFiltreJoueurs("Tous"); setFiltreDuree("Tous"); }}
                 style={{ ...FILTER_BTN_STYLE, marginLeft: 6 }}
               >
                 Effacer les filtres

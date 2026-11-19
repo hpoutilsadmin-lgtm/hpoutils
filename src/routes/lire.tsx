@@ -61,6 +61,17 @@ export const Route = createFileRoute("/lire")({
   component: Page,
 });
 
+// Âge recommandé — lot 5 corrections, 18 nov. 2026 : seul un âge chiffré
+// déjà dans les données du tome (« 16 ans et plus ») est affiché ; sinon
+// « — », sans rien deviner. Les mentions de public (« Public adulte »,
+// « Rayon jeunesse », « Public averti ») ne sont pas des âges.
+// Nombre de pages : aucune donnée de pages dans le catalogue — « — »
+// partout tant que HP ne fournit pas les nombres (voir rapport du lot).
+function ageRecommande(tome: { public?: string }): string {
+  const m = tome.public?.match(/(\d+\s*ans et plus)/);
+  return m ? m[1] : "—";
+}
+
 function Page() {
   const checkout = useServerFn(createTomeCheckoutSession);
   const freeLink = useServerFn(requestFreeTomeLink);
@@ -185,6 +196,7 @@ function Page() {
             Après l'achat, vous recevez votre lien web personnel par courriel — pas de
             PDF, pas de compte. Aucune taxe ajoutée.
           </p>
+          <p style={{ maxWidth: 700, fontWeight: 700 }}>HP est petit fournisseur : aucune taxe ajoutée, prix affiché = prix payé.</p>
           <div className="lead-actions">
             <Link to="/univers" className="btn-ghost">L'univers des histoires →</Link>
           </div>
@@ -203,6 +215,7 @@ function Page() {
           <article className="pillar-card">
             <h3>{FREE_TOME.title}</h3>
             <p>{FREE_TOME.hook}</p>
+            <p>Pages : — · Âge recommandé : —</p>
             {freeSent ? (
               <p>Vérifiez votre boîte courriel : votre lien gratuit est en route.</p>
             ) : (
@@ -223,6 +236,12 @@ function Page() {
                 </button>
               </form>
             )}
+            <div style={{ border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
+              <p style={{ fontWeight: 700, margin: "0 0 8px" }}>Lire un extrait (2 pages)</p>
+              <button className="btn-primary" type="button" disabled>
+                Extrait à venir
+              </button>
+            </div>
           </article>
 
           <div style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px", marginBottom: 16 }}>
@@ -265,6 +284,9 @@ function Page() {
                   {tome.paragraphes} paragraphes · {tome.fins} fins
                   {tome.public ? ` · ${tome.public}` : ""}
                 </p>
+                <p>
+                  Pages : — · Âge recommandé : {ageRecommande(tome)}
+                </p>
                 <p><strong>{priceLabel(tome)}</strong> · aucune taxe ajoutée</p>
                 <button
                   className="btn-primary"
@@ -273,6 +295,12 @@ function Page() {
                 >
                   {busy === `tome-${tome.slug}` ? "Redirection…" : `Acheter — ${priceLabel(tome)}`}
                 </button>
+                <div style={{ border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
+                  <p style={{ fontWeight: 700, margin: "0 0 8px" }}>Lire un extrait (2 pages)</p>
+                  <button className="btn-primary" type="button" disabled>
+                    Extrait à venir
+                  </button>
+                </div>
               </article>
             ))}
           </div>

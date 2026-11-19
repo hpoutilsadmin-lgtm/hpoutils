@@ -330,7 +330,7 @@ function Page() {
           Le jeu est à vous ; l&apos;hébergement est gratuit
           l&apos;année 1, puis 29 $ CAD par année et par jeu ; aucune taxe ajoutée ;
           vous garantissez avoir le droit d&apos;utiliser les éléments de marque
-          que vous fournissez ; HP choisit ses clients (commerces et organismes
+          que vous fournissez ; HP choisit ses clients (commerces et organismes et entreprises
           alignés avec ses valeurs : dignité, honnêteté, vraie vie).
           Remboursements : voyez les Conditions de vente.
         </p>
@@ -343,7 +343,7 @@ function Page() {
         </p>
         <p style={P}>
           Seul le nombre de parties est compté, anonymement, à partir de l&apos;ouverture du lien, pour les compteurs (Saisonnier, Permanent) : aucun compte, aucune donnée personnelle. Pas de jeux d&apos;argent, et HP choisit
-          ses clients : commerces et organismes alignés avec ses valeurs —
+          ses clients : commerces et organismes et entreprises alignés avec ses valeurs —
           dignité, honnêteté, vraie vie. Tout est 100 % original, jamais copié.
         </p>
         <p style={P}>

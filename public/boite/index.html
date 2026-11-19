@@ -793,6 +793,40 @@ ul.cf-plain li{margin:.3em 0}
     </details>
   </header>
 
+  <!-- Section « Les plus utilisés pour le budget » — lot 5 corrections, 18 nov. 2026.
+       Les 8 outils ci-dessous ne changent pas. Carte 1 : outil déjà dans La Boîte
+       (Le vrai prix au 100 g, onglet 4). Cartes 2-3 : pages /outils-web existantes.
+       Carte 4 : lien vers la section Convertisseur d'En cuisine (ancre #convertisseur
+       dans public/en-cuisine/index.html, L397 — la section est dans l'onglet
+       « Sécurité » de cette page, masqué par défaut : le lien arrive sur la page,
+       l'onglet s'ouvre depuis En cuisine même). -->
+  <section aria-label="Les plus utilisés pour le budget" style="margin:0 0 22px">
+    <h2 style="font-family:var(--serif);font-size:1.5rem;margin:0 0 4px">Les plus utilisés pour le budget</h2>
+    <p style="color:var(--ink-soft);font-size:1rem;line-height:1.55;margin:0 0 14px">Quatre outils pour le budget, trouvables en un clic.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+      <article style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px">
+        <h3 style="font-family:var(--serif);font-size:1.2rem;margin:0">Le vrai prix au 100 g</h3>
+        <p style="margin:0;line-height:1.55;font-size:1rem">Le gros format n'est pas toujours le moins cher.</p>
+        <a class="btn primary" href="#comparateur" onclick="document.getElementById('tab-comparateur').click();return false;" style="margin-top:auto">Ouvrir l'outil</a>
+      </article>
+      <article style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px">
+        <h3 style="font-family:var(--serif);font-size:1.2rem;margin:0">Le reste du mois</h3>
+        <p style="margin:0;line-height:1.55;font-size:1rem">Ce qu'il vous reste, en clair, jusqu'à la fin du mois.</p>
+        <a class="btn primary" href="/outils-web/le-reste-du-mois.html" style="margin-top:auto">Ouvrir l'outil</a>
+      </article>
+      <article style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px">
+        <h3 style="font-family:var(--serif);font-size:1.2rem;margin:0">Ça vaut-tu la peine ?</h3>
+        <p style="margin:0;line-height:1.55;font-size:1rem">Un achat vaut-il son prix ? La réponse en 2 minutes.</p>
+        <a class="btn primary" href="/outils-web/ca-vaut-tu-la-peine.html" style="margin-top:auto">Ouvrir l'outil</a>
+      </article>
+      <article style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px">
+        <h3 style="font-family:var(--serif);font-size:1.2rem;margin:0">Convertisseur de températures de four</h3>
+        <p style="margin:0;line-height:1.55;font-size:1rem">180 °C = 356 °F : convertissez les températures du four, les tasses et les grammes.</p>
+        <a class="btn primary" href="/en-cuisine/#convertisseur" style="margin-top:auto">Ouvrir l'outil</a>
+      </article>
+    </div>
+  </section>
+
   <nav class="tabs" role="tablist" aria-label="Les huit outils">
     <button class="tab" role="tab" id="tab-heritage" aria-controls="panel-heritage" aria-selected="true" data-t="1">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="m3 8 9 6 9-6"/><path d="M12 13.5c-1.8-1.6-4-2-4-4.2 0-1.2 1-2.3 2.1-2.3.8 0 1.5.5 1.9 1.1.4-.6 1.1-1.1 1.9-1.1 1.1 0 2.1 1.1 2.1 2.3 0 2.2-2.2 2.6-4 4.2z"/></svg>

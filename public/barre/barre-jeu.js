@@ -87,6 +87,11 @@
                                rien n'avance tout seul) : PAS de bouton.
      score : liste de sélecteurs DOM essayés dans l'ordre (premier
              visible avec un nombre gagne) ; null = texte sans chiffre.
+     scoreRe : expression régulière (chaîne, un groupe de capture)
+             appliquée au texte de l'élément de score quand le premier
+             nombre du texte n'est PAS le score (ex. Chevalier :
+             « X postes conquis. Score : Y ») ; sans correspondance,
+             l'élément est ignoré — jamais de nombre approximatif.
      pos : 'bottom' (défaut) ou 'top' si le bas de l'écran est le jeu. */
   var CONFIGS = {
     "/apps/releve/releve-chapitre-1-v1.0.html": {
@@ -233,6 +238,10 @@
        la pause, reprise nette) avant de brancher le bouton. */
     "/apps/igloo/igloo-v1.0.html": {
       nom: "IGLOO — La guerre des igloos", score: null,
+      /* Lot 5 corrections, 18 nov. 2026 : vérifié — aucun score affiché
+         (victoire/défaite + « +N pièces » de récompense, minuteur,
+         énergie : ce n'est pas un score). On garde « Partager ce jeu »,
+         sans score inventé. */
       pause: { type: "gate" },
       lien: { href: "/pdf/sans-honte-72-heures", texte: "Le kit Sans Honte — 72 Heures : être prêt quand ça coupe (5 $)" }
     },
@@ -261,7 +270,14 @@
        le gel « gate » fige la simulation (prouvé au playtest :
        positions et minuteurs identiques pendant la pause). */
     "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html": {
-      nom: "Chevalier du fleuve", score: null,
+      nom: "Chevalier du fleuve",
+      /* Lot 5 corrections, 18 nov. 2026 : le score n'existe qu'en mode
+         libre, sur l'écran de fin (#cineTx : « … postes conquis.
+         Score : N ») — le premier nombre du texte est le nombre de
+         postes, pas le score : scoreRe extrait le nombre après
+         « Score : ». En mode histoire, aucun score n'est affiché
+         (texte de fin historique) : le partage part sans chiffre. */
+      score: ["#cineTx"], scoreRe: "Score\\s*:\\s*(\\d+)",
       pause: { type: "gate" }
     }
   };
@@ -361,6 +377,12 @@
       var e = document.querySelector(cfg.score[i]);
       if (!e || !visible(e)) continue;
       var t = (e.textContent || "").replace(/\s+/g, " ").trim();
+      if (cfg.scoreRe) {
+        var rm = t.match(new RegExp(cfg.scoreRe));
+        if (rm && rm[1] && /\d/.test(rm[1]))
+          return rm[1].replace(/[\s.,]+$/, "").trim();
+        continue;
+      }
       var m = t.match(/\d[\d\s.,]*/);
       if (m) {
         var n = m[0].replace(/[\s.,]+$/, "").trim();

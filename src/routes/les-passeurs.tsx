@@ -18,6 +18,9 @@ function Page() {
           <span className="editorial-kicker">Les Passeurs</span>
           <h1>Trois dollars par mois. <em>Vingt-huit dollars pour l'année.</em> C'est tout.</h1>
           <p className="lead">
+            Les Passeurs, c'est quoi ? C'est un abonnement pour soutenir HP Outils. Pour 3 $ par mois, vous aidez à garder les jeux, les recettes et les outils gratuits pour tout le monde. Vous recevez les 16 savoirs du Passeur de savoir.
+          </p>
+          <p className="lead">
             HP Outils fabrique des jeux, des livres et des outils pour la vraie vie — pensés pour les familles, les petits budgets et celles et ceux qui veulent apprendre. Beaucoup sont gratuits, et on veut que ça reste comme ça.
           </p>
           <div className="lead-actions">
