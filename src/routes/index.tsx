@@ -308,9 +308,6 @@ function Index() {
       {/* PAROLE DE VISITEUSE — juste au-dessus de la zone de vie d'HGPTO */}
       <ParoleVisiteur />
 
-      {/* Vérification Impact (affiliation Lovable) — temporaire, à retirer après la vérification (19 nov. 2026). */}
-      <p style={{ fontSize: 12, color: "#8a7a5f", textAlign: "center", margin: "0 0 24px" }}>Impact-Site-Verification: 05ee6f3d-f687-48fd-a711-a45752f64e67</p>
-
     </>
   );
 }
