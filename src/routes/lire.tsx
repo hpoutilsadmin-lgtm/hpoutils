@@ -208,6 +208,12 @@ function Page() {
           <p style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
             Les liens d'accès sont envoyés par courriel après le paiement.
           </p>
+          {/* S-113 : les 12 boutons « Extrait à venir » morts sont retirés —
+              une seule ligne honnête, en haut de page. */}
+          <p style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
+            Extraits de 2 pages à venir — laissez votre courriel à{" "}
+            <a href="mailto:hpoutils.admin@gmail.com">la direction</a> pour être averti.
+          </p>
           {paiementAnnule && <p role="status">Paiement annulé, aucun débit.</p>}
           {error && <p role="alert" style={{ color: "#8a1f1f" }}>{error}</p>}
 
@@ -215,7 +221,6 @@ function Page() {
           <article className="pillar-card">
             <h3>{FREE_TOME.title}</h3>
             <p>{FREE_TOME.hook}</p>
-            <p>Pages : — · Âge recommandé : —</p>
             {freeSent ? (
               <p>Vérifiez votre boîte courriel : votre lien gratuit est en route.</p>
             ) : (
@@ -236,12 +241,6 @@ function Page() {
                 </button>
               </form>
             )}
-            <div style={{ border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
-              <p style={{ fontWeight: 700, margin: "0 0 8px" }}>Lire un extrait (2 pages)</p>
-              <button className="btn-primary" type="button" disabled>
-                Extrait à venir
-              </button>
-            </div>
           </article>
 
           <div style={{ background: "#fff7e6", border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px", marginBottom: 16 }}>
@@ -254,10 +253,11 @@ function Page() {
               />
               C'est pour offrir
             </label>
+            {/* S-117 : une case + une phrase ; les règles ne s'affichent
+                que quand on coche (aide contextuelle, texte inchangé). */}
             <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65 }}>
-        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. En cas de remboursement, le lien est coupé. Si vous entrez votre propre courriel, le lien vous est envoyé à vous.
-        {/* Fusion tête+3K : formulation promesse de la tête gardée + phrase propre courriel de 3K (même résolution que /achat). */}
-      </p>
+              Cochez, entrez son courriel : c'est elle ou lui qui reçoit le lien.
+            </p>
             {giftChecked && (
               <label style={{ fontSize: 14, fontWeight: 600 }}>
                 Courriel de la personne qui recevra le cadeau
@@ -270,6 +270,12 @@ function Page() {
                   style={{ display: "block", margin: "8px 0 0", padding: "10px", width: "100%", maxWidth: 360 }}
                 />
               </label>
+            )}
+            {giftChecked && (
+              <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.65 }}>
+        C'est pour offrir ? Cochez « C'est pour offrir » et entrez le courriel de la personne de votre choix. Vous payez comme d'habitude, et c'est elle qui reçoit le lien de livraison par courriel. La facture reste à votre nom. Aucun code, aucun solde, aucune expiration. Si le lien ne fonctionne pas, écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. En cas de remboursement, le lien est coupé. Si vous entrez votre propre courriel, le lien vous est envoyé à vous.
+        {/* Fusion tête+3K : formulation promesse de la tête gardée + phrase propre courriel de 3K (même résolution que /achat). */}
+      </p>
             )}
           </div>
 
@@ -284,9 +290,9 @@ function Page() {
                   {tome.paragraphes} paragraphes · {tome.fins} fins
                   {tome.public ? ` · ${tome.public}` : ""}
                 </p>
-                <p>
-                  Pages : — · Âge recommandé : {ageRecommande(tome)}
-                </p>
+                {ageRecommande(tome) !== "—" && (
+                  <p>Âge recommandé : {ageRecommande(tome)}</p>
+                )}
                 <p><strong>{priceLabel(tome)}</strong> · aucune taxe ajoutée</p>
                 <button
                   className="btn-primary"
@@ -295,12 +301,6 @@ function Page() {
                 >
                   {busy === `tome-${tome.slug}` ? "Redirection…" : `Acheter — ${priceLabel(tome)}`}
                 </button>
-                <div style={{ border: "1px solid #e5d9c3", borderRadius: 8, padding: "12px 16px" }}>
-                  <p style={{ fontWeight: 700, margin: "0 0 8px" }}>Lire un extrait (2 pages)</p>
-                  <button className="btn-primary" type="button" disabled>
-                    Extrait à venir
-                  </button>
-                </div>
               </article>
             ))}
           </div>

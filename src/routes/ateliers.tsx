@@ -59,18 +59,18 @@ type Fiche = {
 };
 
 const ATELIERS: Fiche[] = [
-  { title: "L'IA sans jargon — régulière", price: "220 $ CAD · forfait groupe", duree: "90 min (1 h 30)", max: MAX_PARTICIPANTS, desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie.", inclus: "Repartez avec un cas d'usage concret. Aucune taxe ajoutée." },
+  { title: "L'IA sans jargon — régulière", price: "220 $ CAD · forfait groupe", duree: "1 h 30", max: MAX_PARTICIPANTS, desc: "Comprendre l'IA avec des mots simples et repartir avec des usages concrets pour la vraie vie.", inclus: "Repartez avec un cas d'usage concret. Aucune taxe ajoutée." },
   { title: "Cuisine pratique", price: "260 $ CAD · forfait groupe", duree: "3 h", max: MAX_PARTICIPANTS, desc: "Cuisiner ensemble, essayer, apprendre et développer des réflexes utiles au quotidien.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
   { title: "Atelier jeunesse", price: "150 $ CAD · forfait groupe", duree: "3 h", max: MAX_PARTICIPANTS, desc: "Une activité participative adaptée aux jeunes pour apprendre en faisant.", inclus: "Aucune taxe ajoutée." },
   { title: "Manger mieux avec moins", price: "260 $ CAD · forfait groupe", duree: "3 h", max: MAX_PARTICIPANTS, desc: "Des repères concrets pour planifier, conserver et cuisiner avec les ressources disponibles.", inclus: "Inclut les fiches recette et astuces. Aucune taxe ajoutée." },
-  { title: "Les enfants cuisinent", price: "190 $ CAD · forfait groupe", duree: "90 min", max: MAX_PARTICIPANTS, desc: "Cuisiner ensemble, apprendre et gagner en autonomie.", inclus: "Aucune taxe ajoutée." },
-  { title: "Hygiène & salubrité", price: "150 $ CAD · forfait groupe", duree: "60 à 90 min", max: MAX_PARTICIPANTS, desc: "Sensibilisation aux bons gestes du quotidien.", inclus: "Aucune taxe ajoutée." },
+  { title: "Les enfants cuisinent", price: "190 $ CAD · forfait groupe", duree: "1 h 30", max: MAX_PARTICIPANTS, desc: "Cuisiner ensemble, apprendre et gagner en autonomie.", inclus: "Aucune taxe ajoutée." },
+  { title: "Hygiène & salubrité", price: "150 $ CAD · forfait groupe", duree: "1 h à 1 h 30", max: MAX_PARTICIPANTS, desc: "Sensibilisation aux bons gestes du quotidien.", inclus: "Aucune taxe ajoutée." },
 ];
 
 const FETES: Fiche[] = [
   { title: "Pain maison à domicile", price: "290 $ CAD · forfait groupe", duree: "3 h", max: MAX_PAIN_MAISON, desc: "Vous pétrissez, cuisez et repartez avec VOTRE pain des Fêtes. Soit environ 36 $ à 48 $ par personne.", inclus: "Aucune taxe ajoutée." },
   { title: "L'IA sans jargon — Édition des Fêtes", price: "220 $ CAD · forfait groupe", duree: "2 h", max: MAX_PARTICIPANTS, desc: "Repartez avec un cas d'usage concret, sans langage technique.", inclus: "Aucune taxe ajoutée." },
-  { title: "La faim justifie les moyens", price: "220 $ CAD · cachet", duree: "60 min + 15 min questions", max: MAX_PARTICIPANTS, desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant. Aucun local cuisine requis pour cette conférence.", inclus: "Aucune taxe ajoutée." },
+  { title: "La faim justifie les moyens", price: "220 $ CAD · cachet", duree: "1 h + 15 min de questions (1 h 15 au total)", max: MAX_PARTICIPANTS, desc: "Une conférence sur pourquoi on gaspille, qui est touché et quoi faire concrètement maintenant. Aucun local cuisine requis pour cette conférence.", inclus: "Aucune taxe ajoutée." },
 ];
 
 const ficheLignesStyle: React.CSSProperties = {
@@ -154,9 +154,24 @@ function Page() {
           </p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait des ateliers pour la vraie vie. »</p>
           <div className="lead-actions">
-            <a className="btn-primary" href="#formulaire-atelier">Demander un devis / Réserver un atelier</a>
+            <a className="btn-primary" href="#formulaire-atelier">Demander une date</a>
             <a className="btn-ghost" href="#sec-ateliers">Voir les ateliers</a>
           </div>
+        </div>
+      </section>
+
+      <section className="three-pillars" id="formulaire-atelier">
+        <div className="container" style={{ maxWidth: 760 }}>
+          <span className="editorial-kicker">Formulaire devis</span>
+          <h2 className="section-title">Demander une date</h2>
+          <p style={{ fontSize: 16.5, lineHeight: 1.65 }}>
+            Remplissez ce formulaire : il ouvre votre demande dans votre courriel, prête à envoyer — c'est vous qui l'envoyez, rien n'est transmis avant. La direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h.
+          </p>
+          <FormulaireAtelier />
+          <p style={{ fontSize: 15, lineHeight: 1.6, color: "#5a4a3f", marginTop: 16 }}>
+            Vous préférez écrire directement ?{" "}
+            <a href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a>
+          </p>
         </div>
       </section>
 
@@ -175,6 +190,7 @@ function Page() {
               </article>
             ))}
           </div>
+          <p style={{ textAlign: "center", marginTop: 8 }}>Pain maison — voir <a href="#edition-des-fetes">Édition des Fêtes</a>.</p>
           <div className="lead-actions" style={{ marginTop: 32, justifyContent: "center" }}>
             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a>
           </div>
@@ -226,21 +242,6 @@ function Page() {
           <div className="lead-actions">
             <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Animation%20en%20biblioth%C3%A8que%20%E2%80%94%20demande&body=Bonjour%2C%0A%0AJe%20souhaite%20demander%20une%20animation%20en%20biblioth%C3%A8que%20(ou%20un%20atelier%20en%20classe).%0A%0ANom%20%3A%20%0AOrganisme%20%2F%20%C3%89cole%20%2F%20Biblioth%C3%A8que%20%3A%20%0ADate%20souhait%C3%A9e%20%3A%20%0A%0AMerci.">Demander une animation en bibliothèque</a>
           </div>
-        </div>
-      </section>
-
-      <section className="three-pillars" id="formulaire-atelier">
-        <div className="container" style={{ maxWidth: 760 }}>
-          <span className="editorial-kicker">Formulaire devis</span>
-          <h2 className="section-title">Demander un devis / <em>Réserver un atelier</em></h2>
-          <p style={{ fontSize: 16.5, lineHeight: 1.65 }}>
-            Remplissez ce formulaire : il ouvre votre demande dans votre courriel, prête à envoyer — c'est vous qui l'envoyez, rien n'est transmis avant. La direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h.
-          </p>
-          <FormulaireAtelier />
-          <p style={{ fontSize: 15, lineHeight: 1.6, color: "#5a4a3f", marginTop: 16 }}>
-            Vous préférez écrire directement ?{" "}
-            <a href="mailto:hpoutils.admin@gmail.com?subject=Demande%20d%27atelier%20HP">hpoutils.admin@gmail.com</a>
-          </p>
         </div>
       </section>
 

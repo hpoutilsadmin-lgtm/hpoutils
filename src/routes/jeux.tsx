@@ -82,8 +82,8 @@ const GAMES: { title: string; file: string; copy: string; tag: string; faits?: s
   { title: "2 vérités, 1 mensonge", file: "/apps/2-verites-1-mensonge/2-verites-1-mensonge-v2.0.html", copy: "Jeu quiz et de déduction gratuit : 330 manches pour démasquer le mensonge — historique, inusité, cocasse.", tag: "Quiz · Vérités et mensonge", faits: "Pour les curieux de 7 à 107 ans · Histoire 110 · Insolite 110 · Cocasse 110 · Total 330", age: "7 à 107 ans", catAge: ["6-8 ans", "9-12 ans", "Ados", "Adultes"], mono: "2V", art: 7, image: "/apps/2-verites-1-mensonge/entete.jpg", alt: "Quiz : 3 affirmations sur Agnes Macphail, numéro 2 marquée mensonge, « Bravo, c'était bien le mensonge ! », score 1" },
   { title: "Chat'attaque — tower defense de chats", file: "/apps/chat-attaque/chat-attaque-v1.2.html", copy: "Jeu de stratégie gratuit, tower defense avec des chats : 9 chats-tours défendent 50 croquettes, 12 cartes labyrinthe, 3 difficultés, solo et multijoueur local.", tag: "Stratégie · Tower defense de chats", faits: "Solo ou 2 joueurs local · 12 cartes · 3 difficultés", joueurs: "Solo ou 2 joueurs local", catJoueurs: ["Seul", "À 2"], mono: "CA", art: 2, image: "/apps/chat-attaque/entete.jpg", alt: "Tower defense : chemin sinueux, chats ennemis, gamelle « MIAM », « Tempête : Gros matou »", imageRatio: "16:9" },
   { title: "NORD 2087 — La Ligne de Glace", file: "/apps/nord-2087/nord-2087-v1.1.html", copy: "Jeu de stratégie et de science-fiction gratuit : en 2087, dessine ton labyrinthe et défends le Cœur du réseau contre la Horde — douze vagues, une tempête qui peut tout changer.", tag: "Stratégie · Tower defense futuriste", faits: "Solo · 12 vagues", joueurs: "Solo", catJoueurs: ["Seul"], mono: "87", art: 7, image: "/apps/nord-2087/entete.jpg", alt: "Ligne de Glace : grille bleu nuit, trajectoire pointillée orange vers une cible rouge" },
-  { title: "Chevalier du fleuve — stratégie et histoire vraie", file: "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", copy: "Jeu de stratégie en temps réel gratuit : refais la campagne vraie de Pierre Le Moyne d'Iberville — bâtis, lève ton armée, prends les forts de la baie James, défends Québec, coule la flotte à bord du Pélican. Et sur les berges, la légende des nains albinos des terriers et leur Forge des Rois Gybbys…", tag: "Stratégie · Temps réel · Histoire vraie", faits: "12 ans et plus · Campagne 1686-1699 + mode libre · Gratuit en entier — pierres précieuses gagnées en jouant", age: "12 ans et plus", catAge: ["Ados", "Adultes"], mono: "CF", art: 7, image: "/apps/chevalier-du-fleuve/entete.jpg", alt: "Carte stratégique verte, littoral, postes et unités, barre de ressources, panneau « Ordres », objectifs" },
-  { title: "IGLOO — La guerre des igloos", file: "/apps/igloo/igloo-v1.0.html", copy: "Jeu de stratégie en arène gratuit : bataille de boules de neige — déploie tes cartes, défends ton igloo et fais tomber celui d'en face. Chaque bataille tire une loi du quartier au hasard !", tag: "Stratégie · Bataille de boules de neige", faits: "Campagne de 10 batailles · parties d'environ 3 minutes", duree: "Parties d'environ 3 minutes", catDuree: ["5 min"], mono: "IG", art: 7, image: "/apps/igloo/entete.jpg", alt: "Arène verticale « IGLOO ENNEMI » et « TON IGLOO », bonhomme de neige au centre" },
+  { title: "Chevalier du fleuve — stratégie et histoire vraie", file: "/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html", copy: "Refais la campagne vraie d'Iberville : bâtis, lève ton armée, prends les forts, défends Québec.", tag: "Stratégie · Temps réel · Histoire vraie", faits: "12 ans et plus · Campagne : une histoire à finir · Libre : jouez sans fin, score à partager · Gratuit en entier — pierres précieuses gagnées en jouant", age: "12 ans et plus", catAge: ["Ados", "Adultes"], mono: "CF", art: 7, image: "/apps/chevalier-du-fleuve/entete.jpg", alt: "Carte stratégique verte, littoral, postes et unités, barre de ressources, panneau « Ordres », objectifs" },
+  { title: "IGLOO — La guerre des igloos", file: "/apps/igloo/igloo-v1.0.html", copy: "Jeu de stratégie en arène gratuit : bataille de boules de neige — déploie tes cartes, défends ton igloo et fais tomber celui d'en face. Chaque bataille tire une règle surprise au hasard !", tag: "Stratégie · Bataille de boules de neige", faits: "10 batailles de ~3 min, une à la fois — reprenez où vous étiez", duree: "Parties d'environ 3 minutes", catDuree: ["5 min"], mono: "IG", art: 7, image: "/apps/igloo/entete.jpg", alt: "Arène verticale « IGLOO ENNEMI » et « TON IGLOO », bonhomme de neige au centre" },
   { title: "Que vois-tu ? — jeu de perception", file: "/apps/que-vois-tu/que-vois-tu-v2.0.html", copy: "Jeu de perception gratuit, pour toute la famille : dis ce que tu vois en premier dans chaque image — il n'y a pas de mauvaise réponse.", tag: "Perception · Ce que tu vois d'abord", faits: "42 défis · 3 terrains : Jeunesse, Ado, Adulte", age: "Jeunesse, Ado, Adulte", catAge: ["Ados", "Adultes"], mono: "QV", art: 4, image: "/apps/que-vois-tu/entete.jpg", alt: "Prairie ensoleillée, 3 fleurs, papillon orange caché, consigne « Un papillon se cache dans le pré… »" },
   { title: "Tapinoue — aventure jeunesse", file: "/apps/tapinoue/tapinoue-v2.0.html", copy: "Jeu d'aventure jeunesse gratuit : les aventures de Tapinoue et de sa famille, en 4 tableaux qui se débloquent un à un — la rencontre, le terrier, le potager de M. Grincheux… et le renard qui rôde.", tag: "Aventure · Jeunesse en 4 tableaux", faits: "4 tableaux · progression sauvegardée", mono: "TP", art: 1, image: "/apps/tapinoue/entete.jpg", alt: "Lapin blanc dans son terrier à nettoyer, toiles d'araignée, épluchures, seau, consigne « 1. Un terrier propre », barre 0 %" },
   { title: "Ton chum frotte son char plus que toi !", file: "/apps/ton-chum-frotte-son-char/ton-chum-frotte-son-char-v2.0.html", copy: "Jeu ASMR gratuit : le vrai job d'esthétique automobile, du bout des doigts — choisis ton véhicule et frotte, roues, lavage, argile, cire, jusqu'à ce qu'il brille. Mets le son !", tag: "ASMR · Esthétique automobile", faits: "4 véhicules · 8 étapes du métier", mono: "TC", art: 2, image: "/apps/ton-chum-frotte-son-char/entete.jpg", alt: "Les 4 roues du char à frotter : avant gauche, avant droite" },
@@ -119,9 +119,12 @@ const hrefJeu = (g: GameEntry) => `/apps/${g.slug ?? slugDepuisFichier(g.file)}`
 
 const GENRES = ["Tous", ...Array.from(new Set(GAMES.map((g) => g.tag.split(" · ")[0])))];
 
-const FILTRES_AGE = ["Tous", "3-5 ans", "6-8 ans", "9-12 ans", "Ados", "Adultes"];
+/* S-97 : paliers vides retirés — aucun jeu ne porte « 3-5 ans »,
+   « 15 min » ni « 30 min + » (catAge/catDuree vérifiés) ; à remettre
+   dès que HP fournit les métadonnées. */
+const FILTRES_AGE = ["Tous", "6-8 ans", "9-12 ans", "Ados", "Adultes"];
 const FILTRES_JOUEURS = ["Tous", "Seul", "À 2", "En groupe"];
-const FILTRES_DUREE = ["Tous", "5 min", "15 min", "30 min +"];
+const FILTRES_DUREE = ["Tous", "5 min"];
 
 /* ── Lot « 5 corrections prioritaires », 18 nov. 2026 (textes 2a, 4a) ──
    Vedettes : les 5 jeux sont retrouvés dans GAMES (même adresse, même
@@ -705,11 +708,11 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (56), Quiz (3), etc.
+     conformes à la liste exacte approuvée — Tous (56 + 1 caché), Quiz (3), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
-      ? JEUX_JOUABLES
+      ? `${JEUX_JOUABLES} + 1 caché`
       : GAMES.filter((x) => x.tag.split(" · ")[0] === g).length;
   return (
     <div className="page-jeux-arcade">

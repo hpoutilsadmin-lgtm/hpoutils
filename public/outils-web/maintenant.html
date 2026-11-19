@@ -105,6 +105,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
 .bloc .tete{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
 .bloc .icone{font-size:1.6rem;}
 .bloc h2{font-size:1.12rem; margin:0;}
+.bloc label{margin-top:6px;}
 .humeurs{display:flex; gap:8px; margin:8px 0;}
 .humeurs button{flex:1; padding:10px 4px; font-size:.92rem; border-radius:10px;
   border:1.5px solid var(--bord); background:#fff; color:var(--brun); font-weight:600; cursor:pointer;}
@@ -135,33 +136,52 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
 
   <section class="bloc" aria-label="Argent">
     <div class="tete"><span class="icone">💰</span><h2>Argent</h2></div>
+    <label for="f-argent">Combien vous reste-t-il aujourd'hui ?</label>
     <textarea id="f-argent" placeholder="ex. 42 $ disponibles" maxlength="200"></textarea>
   </section>
 
   <section class="bloc" aria-label="Repas">
     <div class="tete"><span class="icone">🍽️</span><h2>Repas</h2></div>
+    <label for="f-repas">C'est quoi, le prochain repas ?</label>
     <textarea id="f-repas" placeholder="ex. Souper prévu — restes de hier" maxlength="200"></textarea>
   </section>
 
   <section class="bloc" aria-label="Maison">
     <div class="tete"><span class="icone">🏠</span><h2>Maison</h2></div>
+    <label for="f-maison">Qu'est-ce qui ne peut pas attendre à la maison ?</label>
     <textarea id="f-maison" placeholder="ex. 2 choses à faire : lavage, poubelles" maxlength="200"></textarea>
   </section>
 
   <section class="bloc" aria-label="Demain">
     <div class="tete"><span class="icone">📅</span><h2>Demain</h2></div>
+    <label for="f-demain">C'est quoi, la première chose de demain ?</label>
     <textarea id="f-demain" placeholder="ex. Rendez-vous 10 h" maxlength="200"></textarea>
   </section>
 
   <section class="bloc" aria-label="Moi">
     <div class="tete"><span class="icone">🧠</span><h2>Moi</h2></div>
+    <p style="font-weight:600;margin:8px 0 0">Moi, en ce moment :</p>
     <div class="humeurs" role="group" aria-label="Mon état">
       <button data-humeur="en-forme">💪 En forme</button>
       <button data-humeur="correct">🙂 Correct</button>
       <button data-humeur="fatigue">😮‍💨 Fatigué</button>
     </div>
+    <label for="f-moi">Comment vous sentez-vous, là ?</label>
     <textarea id="f-moi" placeholder="ex. Je suis fatigué → je fais seulement l'essentiel" maxlength="200"></textarea>
   </section>
+
+  <section class="bloc" aria-label="Une seule chose à faire" id="bloc-seule-chose" style="display:none">
+    <div class="tete"><span class="icone">👉</span><h2>Une seule chose à faire maintenant</h2></div>
+    <p style="margin:6px 0 0">Si une seule chose compte aujourd'hui, c'est peut-être celle-ci :</p>
+    <p style="font-weight:700;margin:8px 0 0" id="seule-chose-texte"></p>
+    <p class="note" style="margin:4px 0 0">Facultatif — le tableau de bord ci-dessus reste l'essentiel. À vous de choisir.</p>
+    <button id="btn-seule-chose" class="discret" style="margin-top:10px">✓ C'est ça, je le fais</button>
+    <p class="message" id="msg-seule-chose"></p>
+  </section>
+
+  <div style="text-align:center;margin-top:16px">
+    <button id="btn-reset" class="discret" style="max-width:280px">↺ Tout effacer</button>
+  </div>
 
   <section class="carte" aria-label="Partager">
     <h2 style="font-size:1.2rem;margin-top:0">Quelqu'un vit la même journée&nbsp;?</h2>
@@ -191,10 +211,6 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     </details>
   </section>
 
-  <div style="text-align:center;margin-top:16px">
-    <button id="btn-reset" class="discret" style="max-width:280px">↺ Tout effacer</button>
-  </div>
-
 </main>
 <footer class="site">
   <p class="signature">🧰 HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
@@ -220,6 +236,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     d.date = new Date().toISOString().slice(0, 10);
     try { localStorage.setItem(CLE, JSON.stringify(d)); } catch(e){}
     majDateNote();
+    majSeuleChose();
   }
   function fmtDateNote(iso){
     try {
@@ -239,8 +256,30 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
       : "Sans date — noté avant cette mise à jour.";
   }
 
+  /* Une seule chose à faire, facultative : la première note, Demain d'abord,
+     puis Maison, Repas, Argent, Moi. Le tableau de bord reste l'essentiel. */
+  var ORDRE_SEULE_CHOSE = [["f-demain","Demain"],["f-maison","Maison"],["f-repas","Repas"],["f-argent","Argent"],["f-moi","Moi"]];
+  function majSeuleChose(){
+    var bloc = $("bloc-seule-chose");
+    if (!bloc) return;
+    var choix = null;
+    for (var i=0; i<ORDRE_SEULE_CHOSE.length; i++){
+      var v = (donnees[ORDRE_SEULE_CHOSE[i][0]] || "").trim();
+      if (v){ choix = { domaine: ORDRE_SEULE_CHOSE[i][1], texte: v }; break; }
+    }
+    if (!choix){ bloc.style.display = "none"; return; }
+    bloc.style.display = "";
+    var el = $("seule-chose-texte");
+    var nouveau = choix.domaine + " : « " + choix.texte + " »";
+    if (el.textContent !== nouveau){
+      el.textContent = nouveau;
+      $("msg-seule-chose").textContent = "";
+    }
+  }
+
   var donnees = lire();
   majDateNote();
+  majSeuleChose();
 
   $("date-jour").textContent = new Date().toLocaleDateString("fr-CA", {
     weekday:"long", day:"numeric", month:"long"
@@ -270,6 +309,10 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     })(boutons[i]);
   }
   majHumeurs();
+
+  $("btn-seule-chose").addEventListener("click", function(){
+    $("msg-seule-chose").textContent = "C'est noté — bon courage. 💛";
+  });
 
   $("btn-partager").addEventListener("click", function(){
     var texte = "« Maintenant » : où est-ce que j'en suis, en 30 secondes — argent, repas, maison, demain, moi. Pas une app de productivité. Gratuit, sans compte, fait au Québec. — HP, des outils pour la vraie vie.";
@@ -313,7 +356,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
       donnees = {};
       try { localStorage.removeItem(CLE); } catch(e){}
       CHAMPS.forEach(function(id){ $(id).value = ""; });
-      majHumeurs(); majDateNote();
+      majHumeurs(); majDateNote(); majSeuleChose();
     }
   });
 })();

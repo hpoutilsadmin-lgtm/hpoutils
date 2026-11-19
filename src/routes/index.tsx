@@ -89,11 +89,6 @@ function categoryTile(c1: string, c2: string): CSSProperties {
 function Index() {
   return (
     <>
-      {/* Bannière Noël 1 « Idée cadeau » (lot Décor de Noël, 10 nov. 2026) : accueil seulement, en flux. */}
-      <div className="banniere-noel" aria-label="Idée cadeau">
-        <p><strong>Idée cadeau</strong> — Des outils concrets pour la vraie vie : kits Sans Honte 5 $, livres dès 10 $, tomes dès 5 $.</p>
-        <Link to="/sans-honte" className="banniere-noel-cta">Voir les idées cadeaux</Link>
-      </div>
       <section id="sec-accueil" className="editorial-hero hero-banner-image" style={{ backgroundImage: "url(/images/hero-banner-noel.webp)" }}>
         <div className="container">
           <span className="editorial-kicker">HP — créé au Québec</span>
@@ -135,15 +130,10 @@ function Index() {
           gratuits et kits PDF payants, à part — sinon elle reproduirait
           la confusion « Voir les outils » signalée au Jour 3. Les Jeux
           gardent leur entrée directe, hors des deux portes. */}
-      {/* Bannière Noël 2 « Amusez-vous gratuitement » (lot Décor de Noël, 10 nov. 2026) : accueil seulement, en flux. */}
-      <div className="banniere-noel" aria-label="Amusez-vous gratuitement">
-        <p><strong>Amusez-vous gratuitement</strong> — 56 jeux gratuits, sans compte, et 666 recettes à essayer.</p>
-        <Link to="/jeux" className="banniere-noel-cta">Jouer gratuitement</Link>
-      </div>
       <section id="sec-portes" className="three-pillars" aria-label="Deux portes d'entrée">
         <div className="container">
           <span className="editorial-kicker">Commencez ici</span>
-          <h2 className="section-title">Deux portes pour commencer</h2>
+          <h2 className="section-title">Deux autres portes</h2>
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Un outil pour moi</h3>
@@ -158,6 +148,17 @@ function Index() {
           </div>
         </div>
       </section>
+
+      {/* Bannière Noël 1 « Idée cadeau » (lot Décor de Noël, 10 nov. 2026) : accueil seulement, en flux. */}
+      <div className="banniere-noel" aria-label="Idée cadeau">
+        <p><strong>Idée cadeau</strong> — Des outils concrets pour la vraie vie : kits Sans Honte 5 $, livres dès 10 $, tomes dès 5 $.</p>
+        <Link to="/sans-honte" className="banniere-noel-cta">Voir les idées cadeaux</Link>
+      </div>
+      {/* Bannière Noël 2 « Amusez-vous gratuitement » (lot Décor de Noël, 10 nov. 2026) : accueil seulement, en flux. */}
+      <div className="banniere-noel" aria-label="Amusez-vous gratuitement">
+        <p><strong>Amusez-vous gratuitement</strong> — 56 jeux gratuits + 1 caché, sans compte, et 666 recettes à essayer.</p>
+        <Link to="/jeux" className="banniere-noel-cta">Jouer gratuitement</Link>
+      </div>
 
       {/* TU CHERCHES QUOI? */}
       <section id="sec-arbre" className="three-pillars">

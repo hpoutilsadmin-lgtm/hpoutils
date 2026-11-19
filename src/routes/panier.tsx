@@ -14,6 +14,7 @@ import {
   loadCart,
   saveCart,
   resolveCart,
+  addToCart,
   removeFromCart,
   setQuantity,
   clearCart,
@@ -259,8 +260,35 @@ function Page() {
                   ? payeCadeau.resteCents > 0
                     ? `Solde restant sur votre bon : ${afficherSolde(payeCadeau.resteCents)}. Les liens de téléchargement sont envoyés par courriel.`
                     : "Les liens de téléchargement sont envoyés par courriel."
-                  : "Les livres et les kits s'ajoutent depuis le tableau des prix et depuis chaque fiche, avec le bouton « Ajouter au panier »."}
+                  : "Les livres et les kits s'ajoutent depuis chaque fiche, avec le bouton « Ajouter au panier » — ou ci-dessous, en un tap."}
               </p>
+              {/* S-124 : 3 exemples cliquables sur le panier vide —
+                  priceId vérifiés à la tête dans src/lib/panier.ts
+                  (CART_PRODUCTS : les 3 sont vendables aujourd'hui). */}
+              {!payeCadeau && (
+                <div style={{ marginTop: 16 }}>
+                  <p style={{ marginBottom: 8 }}>Par exemple :</p>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {[
+                      { priceId: "faim_justifie_pdf_10", label: "La faim (10 $)" },
+                      { priceId: "sans_honte_frigo_pdf_5", label: "Kit Frigo (5 $)" },
+                      { priceId: "enjeux_humanite_pdf_15", label: "Enjeux de l'humanité (15 $)" },
+                    ].map((ex) => (
+                      <button
+                        key={ex.priceId}
+                        type="button"
+                        className="btn-ghost"
+                        onClick={() => {
+                          const r = addToCart(cart, ex.priceId);
+                          if (!r.error) changer(r.cart);
+                        }}
+                      >
+                        Ajouter {ex.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="lead-actions">
                 <Link to="/prix" className="btn-primary">
                   Voir les prix →
@@ -333,6 +361,23 @@ function Page() {
                 seul. Le total affiché ici est indicatif : c'est Stripe qui
                 débite, au prix de chaque produit.
               </p>
+              {/* S-127 : payer d'abord — « Offrir » et « Code cadeau » après. */}
+              <div className="lead-actions">
+                {!soldeCouvreTout && (
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    disabled={paiement === "envoi" || (offrirCoche && !offrirConfirme)}
+                    onClick={payer}
+                  >
+                    {paiement === "envoi"
+                      ? "On prépare votre paiement…"
+                      : resteApresBon !== null
+                        ? `Payer le reste (${formatCad(resteApresBon)})`
+                        : `Payer ${formatCad(total)}`}
+                  </button>
+                )}
+              </div>
               <div style={{ marginTop: 16, maxWidth: 640, border: "1px solid #e0d8cf", borderRadius: 4, padding: "16px", background: "#faf6f1" }}>
                 <p style={{ fontWeight: 700, marginBottom: 8 }}>C'est pour offrir ?</p>
                 <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -428,32 +473,8 @@ function Page() {
                 )}
               </div>
 
-              <div className="lead-actions">
-                {!soldeCouvreTout && (
-                  <button
-                    type="button"
-                    className="btn-primary"
-                    disabled={paiement === "envoi" || (offrirCoche && !offrirConfirme)}
-                    onClick={payer}
-                  >
-                    {paiement === "envoi"
-                      ? "On prépare votre paiement…"
-                      : resteApresBon !== null
-                        ? `Payer le reste (${formatCad(resteApresBon)})`
-                        : `Payer ${formatCad(total)}`}
-                  </button>
-                )}
-                <button
-                  type="button"
-                  className="btn-ghost"
-                  onClick={() => changer(clearCart())}
-                >
-                  Vider le panier
-                </button>
-              </div>
-
               {paiement === "indisponible" && (
-                <div style={{ marginTop: 24, maxWidth: 640 }}>
+                <div role="alert" style={{ marginTop: 24, maxWidth: 640 }}>
                   <h3>Le paiement groupé est indisponible pour le moment.</h3>
                   <p>
                     Impossible de démarrer le paiement groupé pour le moment.
@@ -471,6 +492,16 @@ function Page() {
                   </ul>
                 </div>
               )}
+              {/* S-127 : « Vider le panier » éloigné du paiement, tout en bas. */}
+              <p style={{ marginTop: 24 }}>
+                <button
+                  type="button"
+                  className="btn-ghost"
+                  onClick={() => changer(clearCart())}
+                >
+                  Vider le panier
+                </button>
+              </p>
             </div>
           )}
         </div>
@@ -481,8 +512,7 @@ function Page() {
           <span className="editorial-kicker">Bon à savoir</span>
           <h2>Ce qui n'entre <em>pas</em> dans ce panier</h2>
           <p className="strip-intro">
-            Le bundle « Choisissez 10 kits parmi 15 » garde son propre parcours
-            de sélection : il ne passe pas par ce panier. Le reste, c'est
+            Le bundle se choisit et se paie sur sa propre page — il ne passe pas par ce panier. Le reste, c'est
             l'honnêteté ordinaire d'HP : chaque produit dit pourquoi il ne passe pas par ce panier.
           </p>
           <ul>

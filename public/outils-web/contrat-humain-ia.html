@@ -62,153 +62,154 @@
 <div class="page">
   <p class="no-print" style="margin:0 0 12px;"><a href="https://www.hp-outils.com/outils" style="color:#0f1f2b;">← Outils</a></p>
   <header class="marque hp-entete"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto">HP OUTILS</header>
-  <div class="devise" data-k="devise"></div>
+  <div class="devise" data-k="devise">Des outils pour la vraie vie.</div>
 
   <div class="langue no-print">
-    <span data-k="langue_label"></span>
+    <span data-k="langue_label">Langue :</span>
     <button type="button" class="actif" id="lang-fr" aria-pressed="true">Français</button>
     <button type="button" class="secondaire" id="lang-en" aria-pressed="false">English</button>
   </div>
 
   <h1>Le Contrat humain-IA</h1>
-  <p class="soustitre" data-k="soustitre"></p>
+  <p class="soustitre" data-k="soustitre">Une feuille d’une page, en 2 minutes, qui fixe vos règles avec votre assistant IA. Gratuit, sans compte.</p>
+  <noscript><p><strong>Ce contrat se remplit en 5 étapes — activez JavaScript pour le remplir.</strong></p></noscript>
 
   <div class="honnête">
-    <p><strong data-k="honnête1"></strong></p>
-    <p><strong data-k="honnête2"></strong></p>
-    <p data-k="honnête3"></p>
-    <p data-k="note_ia"></p>
+    <p><strong data-k="honnête1">Tout se passe dans votre navigateur. Ce que vous écrivez n’est envoyé nulle part. Rien n’est suivi, rien n’est enregistré.</strong></p>
+    <p><strong data-k="honnête2">Ceci n’est pas un contrat juridique. C’est un accord personnel entre vous et votre assistant.</strong></p>
+    <p data-k="honnête3">Une consigne ne garantit pas l’obéissance. C’est pourquoi ce contrat inclut un bilan à revoir dans 3 mois.</p>
+    <p data-k="note_ia">Note franche : la version anglaise est traduite par l’intelligence artificielle, on s’excuse des erreurs.</p>
   </div>
 
   <div id="assistant" class="no-print">
-    <p class="indicateur" id="indicateur"></p>
+    <p class="indicateur" id="indicateur">Étape 1 sur 5 — Votre profil</p>
 
     <div class="etape visible" id="etape-1">
-      <h2 data-k="etape1_titre"></h2>
-      <p data-k="etape1_texte"></p>
+      <h2 data-k="etape1_titre">1. Votre profil</h2>
+      <p data-k="etape1_texte">Choisissez le profil qui vous ressemble le plus. Chaque profil ajuste vraiment les clauses. Ce n’est pas le même texte pour tout le monde.</p>
       <div class="cartes">
-        <label class="carte"><input type="radio" name="profil" value="parent" checked> <strong data-k="profil_parent_nom"></strong> — <span data-k="profil_parent_desc"></span></label>
-        <label class="carte"><input type="radio" name="profil" value="aine"> <strong data-k="profil_aine_nom"></strong> — <span data-k="profil_aine_desc"></span></label>
-        <label class="carte"><input type="radio" name="profil" value="etudiant"> <strong data-k="profil_etudiant_nom"></strong> — <span data-k="profil_etudiant_desc"></span></label>
-        <label class="carte"><input type="radio" name="profil" value="autonome"> <strong data-k="profil_autonome_nom"></strong> — <span data-k="profil_autonome_desc"></span></label>
-        <label class="carte"><input type="radio" name="profil" value="pme"> <strong data-k="profil_pme_nom"></strong> — <span data-k="profil_pme_desc"></span></label>
-        <label class="carte"><input type="radio" name="profil" value="aidant"> <strong data-k="profil_aidant_nom"></strong> — <span data-k="profil_aidant_desc"></span></label>
+        <label class="carte"><input type="radio" name="profil" value="parent" checked> <strong data-k="profil_parent_nom">Parent</strong> — <span data-k="profil_parent_desc">protéger les enfants, expliquer simplement.</span></label>
+        <label class="carte"><input type="radio" name="profil" value="aine"> <strong data-k="profil_aine_nom">Aîné</strong> — <span data-k="profil_aine_desc">aller lentement, mots simples, jamais pressé.</span></label>
+        <label class="carte"><input type="radio" name="profil" value="etudiant"> <strong data-k="profil_etudiant_nom">Étudiant</strong> — <span data-k="profil_etudiant_desc">comprendre, citer ses sources.</span></label>
+        <label class="carte"><input type="radio" name="profil" value="autonome"> <strong data-k="profil_autonome_nom">Travailleur autonome</strong> — <span data-k="profil_autonome_desc">protéger les clients, séparer travail et vie personnelle.</span></label>
+        <label class="carte"><input type="radio" name="profil" value="pme"> <strong data-k="profil_pme_nom">PME</strong> — <span data-k="profil_pme_desc">protéger les données de l’entreprise et de l’équipe.</span></label>
+        <label class="carte"><input type="radio" name="profil" value="aidant"> <strong data-k="profil_aidant_nom">Proche aidant</strong> — <span data-k="profil_aidant_desc">protéger la santé de la personne aidée, vérifier deux fois.</span></label>
       </div>
     </div>
 
     <div class="etape" id="etape-2">
-      <h2 data-k="etape2_titre"></h2>
-      <p data-k="etape2_texte"></p>
+      <h2 data-k="etape2_titre">2. Ce que vous permettez</h2>
+      <p data-k="etape2_texte">Que peut faire votre assistant, et jusqu’où ?</p>
       <div class="cartes">
-        <label class="carte"><input type="radio" name="permission" value="lecture" checked> <strong data-k="perm_lecture_nom"></strong> — <span data-k="perm_lecture_desc"></span></label>
-        <label class="carte"><input type="radio" name="permission" value="brouillons"> <strong data-k="perm_brouillons_nom"></strong> — <span data-k="perm_brouillons_desc"></span></label>
-        <label class="carte"><input type="radio" name="permission" value="actions"> <strong data-k="perm_actions_nom"></strong> — <span data-k="perm_actions_desc"></span></label>
+        <label class="carte"><input type="radio" name="permission" value="lecture" checked> <strong data-k="perm_lecture_nom">Lecture seule</strong> — <span data-k="perm_lecture_desc">il lit ce que vous lui montrez, sans rien modifier.</span></label>
+        <label class="carte"><input type="radio" name="permission" value="brouillons"> <strong data-k="perm_brouillons_nom">Brouillons</strong> — <span data-k="perm_brouillons_desc">il prépare, mais n’envoie jamais sans votre confirmation.</span></label>
+        <label class="carte"><input type="radio" name="permission" value="actions"> <strong data-k="perm_actions_nom">Actions avec confirmation</strong> — <span data-k="perm_actions_desc">il agit, mais seulement avec votre confirmation à chaque fois.</span></label>
       </div>
     </div>
 
     <div class="etape" id="etape-3">
-      <h2 data-k="etape3_titre"></h2>
-      <p data-k="etape3_texte"></p>
+      <h2 data-k="etape3_titre">3. L’argent</h2>
+      <p data-k="etape3_texte">Par défaut, aucun achat sans vous. Vous pouvez ajuster les plafonds selon vos moyens.</p>
       <div class="champ">
-        <label><input type="checkbox" id="sans-achat" checked> <span data-k="sans_achat"></span></label>
-        <label><span data-k="plafond_achat"></span> <input type="number" id="plafond-achat" value="50" min="0"></label>
-        <label><span data-k="plafond_mois"></span> <input type="number" id="plafond-mois" value="200" min="0"></label>
-        <p data-k="plafond_note"></p>
+        <label><input type="checkbox" id="sans-achat" checked> <span data-k="sans_achat">Aucun achat, envoi ni suppression sans ma confirmation.</span></label>
+        <label><span data-k="plafond_achat">Plafond par achat (en $) :</span> <input type="number" id="plafond-achat" value="50" min="0"></label>
+        <label><span data-k="plafond_mois">Plafond par mois (en $) :</span> <input type="number" id="plafond-mois" value="200" min="0"></label>
+        <p data-k="plafond_note">Au-dessus du plafond, votre confirmation est toujours obligatoire.</p>
       </div>
     </div>
 
     <div class="etape" id="etape-4">
-      <h2 data-k="etape4_titre"></h2>
-      <p data-k="etape4_texte"></p>
+      <h2 data-k="etape4_titre">4. Les données</h2>
+      <p data-k="etape4_texte">Ce que votre assistant ne reçoit jamais. Tout est coché par défaut. Décochez seulement ce que vous acceptez vraiment de partager.</p>
       <div class="champ">
-        <label><input type="checkbox" class="donnee" value="nas" checked> <span data-k="donnee_nas"></span></label>
-        <label><input type="checkbox" class="donnee" value="sante" checked> <span data-k="donnee_sante"></span></label>
-        <label><input type="checkbox" class="donnee" value="codes" checked> <span data-k="donnee_codes"></span></label>
-        <label><input type="checkbox" class="donnee" value="photos" checked> <span data-k="donnee_photos"></span></label>
-        <label><span data-k="donnee_autre_label"></span> <input type="text" id="donnee-autre"></label>
+        <label><input type="checkbox" class="donnee" value="nas" checked> <span data-k="donnee_nas">Votre numéro d’assurance sociale (NAS)</span></label>
+        <label><input type="checkbox" class="donnee" value="sante" checked> <span data-k="donnee_sante">Vos informations de santé</span></label>
+        <label><input type="checkbox" class="donnee" value="codes" checked> <span data-k="donnee_codes">Vos codes et mots de passe</span></label>
+        <label><input type="checkbox" class="donnee" value="photos" checked> <span data-k="donnee_photos">Les photos de vos enfants</span></label>
+        <label><span data-k="donnee_autre_label">Autre chose à ne jamais partager :</span> <input type="text" id="donnee-autre"></label>
       </div>
     </div>
 
     <div class="etape" id="etape-5">
-      <h2 data-k="etape5_titre"></h2>
-      <p data-k="etape5_texte"></p>
+      <h2 data-k="etape5_titre">5. Le ton</h2>
+      <p data-k="etape5_texte">Comment votre assistant doit vous parler. Vos réponses seront dans la langue choisie en haut de page.</p>
       <div class="cartes">
-        <label class="carte"><input type="radio" name="ton" value="franc" checked> <strong data-k="ton_franc_nom"></strong> — <span data-k="ton_franc_desc"></span></label>
-        <label class="carte"><input type="radio" name="ton" value="doux"> <strong data-k="ton_doux_nom"></strong> — <span data-k="ton_doux_desc"></span></label>
-        <label class="carte"><input type="radio" name="longueur" value="courte" checked> <strong data-k="longueur_courte_nom"></strong> — <span data-k="longueur_courte_desc"></span></label>
-        <label class="carte"><input type="radio" name="longueur" value="detaillee"> <strong data-k="longueur_detaillee_nom"></strong> — <span data-k="longueur_detaillee_desc"></span></label>
+        <label class="carte"><input type="radio" name="ton" value="franc" checked> <strong data-k="ton_franc_nom">Franc</strong> — <span data-k="ton_franc_desc">il vous dit ce qui cloche, même si ça contredit.</span></label>
+        <label class="carte"><input type="radio" name="ton" value="doux"> <strong data-k="ton_doux_nom">Doux</strong> — <span data-k="ton_doux_desc">il vous parle avec douceur, sans vous brusquer.</span></label>
+        <label class="carte"><input type="radio" name="longueur" value="courte" checked> <strong data-k="longueur_courte_nom">Réponses courtes</strong> — <span data-k="longueur_courte_desc">il va droit au but.</span></label>
+        <label class="carte"><input type="radio" name="longueur" value="detaillee"> <strong data-k="longueur_detaillee_nom">Réponses détaillées</strong> — <span data-k="longueur_detaillee_desc">il explique en détail.</span></label>
       </div>
     </div>
 
     <p>
-      <button type="button" class="secondaire" id="precedent" data-k="btn_precedent"></button>
-      <button type="button" id="suivant" data-k="btn_suivant"></button>
-      <button type="button" id="generer" data-k="btn_generer"></button>
+      <button type="button" class="secondaire" id="precedent" data-k="btn_precedent">Précédent</button>
+      <button type="button" id="suivant" data-k="btn_suivant">Suivant</button>
+      <button type="button" id="generer" data-k="btn_generer">Générer ma feuille à signer</button>
     </p>
   </div>
 
   <div id="resultat" style="display:none">
-    <h2 data-k="resultat_titre"></h2>
-    <p class="no-print" data-k="resultat_intro"></p>
+    <h2 data-k="resultat_titre">Votre contrat</h2>
+    <p class="no-print" data-k="resultat_intro">Voici votre feuille. Imprimez-la et signez-la. Collez le texte dans les réglages de votre assistant.</p>
 
     <div class="feuille" id="feuille">
-      <h3 data-k="feuille_titre"></h3>
-      <p><span data-k="feuille_profil"></span> <strong id="feuille-profil"></strong> — <span data-k="feuille_date"></span> <strong id="feuille-date"></strong> — <span data-k="feuille_revision"></span> <strong id="feuille-revision"></strong></p>
+      <h3 data-k="feuille_titre">Mon contrat avec mon IA</h3>
+      <p><span data-k="feuille_profil">Profil :</span> <strong id="feuille-profil"></strong> — <span data-k="feuille_date">Date :</span> <strong id="feuille-date"></strong> — <span data-k="feuille_revision">À revoir le :</span> <strong id="feuille-revision"></strong></p>
       <ol id="feuille-clauses"></ol>
       <div class="signature">
-        <p><span data-k="feuille_signe"></span> ______________________________ &nbsp; <span data-k="feuille_date2"></span> ______________</p>
-        <p data-k="feuille_mention"></p>
+        <p><span data-k="feuille_signe">Signé :</span> ______________________________ &nbsp; <span data-k="feuille_date2">Date :</span> ______________</p>
+        <p data-k="feuille_mention">Ceci n’est pas un contrat juridique. C’est un accord personnel entre vous et votre assistant.</p>
       </div>
     </div>
-    <p class="no-print"><button type="button" id="imprimer" data-k="btn_imprimer"></button>
-    <button type="button" class="secondaire" id="telecharger-ics" data-k="btn_ics"></button>
-    <button type="button" class="secondaire" id="recommencer" data-k="btn_recommencer"></button></p>
-    <p class="no-print" data-k="ics_note"></p>
+    <p class="no-print"><button type="button" id="imprimer" data-k="btn_imprimer">Imprimer ma feuille</button>
+    <button type="button" class="secondaire" id="telecharger-ics" data-k="btn_ics">Télécharger le rappel du bilan (3 mois)</button>
+    <button type="button" class="secondaire" id="recommencer" data-k="btn_recommencer">Recommencer</button></p>
+    <p class="no-print" data-k="ics_note">Le rappel sonne à la date de révision, sur votre appareil.</p>
     <p class="no-print"><span id="ics-ok"></span></p>
 
-    <h2 data-k="coller_titre"></h2>
-    <p data-k="coller_texte"></p>
-    <h3 data-k="court_titre"></h3>
+    <h2 data-k="coller_titre">Texte à coller dans les réglages</h2>
+    <p data-k="coller_texte">Le texte s’adresse à votre IA. Il la vouvoie, comme vos propres consignes. La version courte va droit au but. La version longue reprend toutes vos clauses.</p>
+    <h3 data-k="court_titre">Version courte</h3>
     <div class="boite" id="texte-court"></div>
-    <p class="no-print"><button type="button" id="copier-court" data-k="btn_copier_court"></button><span id="copie-court-ok"></span></p>
-    <h3 data-k="long_titre"></h3>
+    <p class="no-print"><button type="button" id="copier-court" data-k="btn_copier_court">Copier le texte court</button><span id="copie-court-ok"></span></p>
+    <h3 data-k="long_titre">Version longue</h3>
     <div class="boite" id="texte-long"></div>
-    <p class="no-print"><button type="button" id="copier-long" data-k="btn_copier_long"></button><span id="copie-long-ok"></span></p>
+    <p class="no-print"><button type="button" id="copier-long" data-k="btn_copier_long">Copier le texte long</button><span id="copie-long-ok"></span></p>
 
-    <h2 data-k="plateformes_titre"></h2>
-    <p data-k="plateformes_texte"></p>
+    <h2 data-k="plateformes_titre">Où le coller, pour chaque plateforme</h2>
+    <p data-k="plateformes_texte">Les chemins des réglages changent souvent. Chaque plateforme porte sa date de revalidation. Vérifiez le chemin sur la plateforme avant de coller.</p>
     <div class="plateforme">
-      <p><strong>ChatGPT</strong> — <span data-k="plateforme_revalider"></span> <span data-k="plateforme_ligne"></span></p>
+      <p><strong>ChatGPT</strong> — <span data-k="plateforme_revalider">🕐 à revalider — 29 oct. 2026.</span> <span data-k="plateforme_ligne">Vérifiez le chemin sur la plateforme. Collez le texte dans la zone d’instructions personnalisées.</span></p>
     </div>
     <div class="plateforme">
-      <p><strong>Claude</strong> — <span data-k="plateforme_revalider"></span> <span data-k="plateforme_ligne"></span></p>
+      <p><strong>Claude</strong> — <span data-k="plateforme_revalider">🕐 à revalider — 29 oct. 2026.</span> <span data-k="plateforme_ligne">Vérifiez le chemin sur la plateforme. Collez le texte dans la zone d’instructions personnalisées.</span></p>
     </div>
     <div class="plateforme">
-      <p><strong>Gemini</strong> — <span data-k="plateforme_revalider"></span> <span data-k="plateforme_ligne"></span></p>
+      <p><strong>Gemini</strong> — <span data-k="plateforme_revalider">🕐 à revalider — 29 oct. 2026.</span> <span data-k="plateforme_ligne">Vérifiez le chemin sur la plateforme. Collez le texte dans la zone d’instructions personnalisées.</span></p>
     </div>
     <div class="plateforme">
-      <p><strong>Muse</strong> — <span data-k="plateforme_revalider"></span> <span data-k="plateforme_ligne"></span></p>
+      <p><strong>Muse</strong> — <span data-k="plateforme_revalider">🕐 à revalider — 29 oct. 2026.</span> <span data-k="plateforme_ligne">Vérifiez le chemin sur la plateforme. Collez le texte dans la zone d’instructions personnalisées.</span></p>
     </div>
 
-    <h2 data-k="antifraude_titre"></h2>
-    <p data-k="antifraude_texte"></p>
+    <h2 data-k="antifraude_titre">Aide-mémoire anti-fraude</h2>
+    <p data-k="antifraude_texte">Si un message dit que votre IA vous a écrit, arrêtez. Si elle demande vos codes, arrêtez. Si elle dit avoir acheté pour vous, arrêtez. Aucune IA légitime ne demande vos mots de passe par message. Vérifiez autrement. Appelez la personne. Ouvrez le site vous-même. N’envoyez rien tant que vous n’êtes pas sûr.</p>
 
-    <h2 data-k="bilan_titre"></h2>
-    <p data-k="bilan_texte"></p>
+    <h2 data-k="bilan_titre">Bilan dans 3 mois — 6 questions</h2>
+    <p data-k="bilan_texte">Revoyez votre contrat avec ces questions. Mettez ensuite votre feuille à jour.</p>
     <ol>
-      <li data-k="bilan_q1"></li>
-      <li data-k="bilan_q2"></li>
-      <li data-k="bilan_q3"></li>
-      <li data-k="bilan_q4"></li>
-      <li data-k="bilan_q5"></li>
-      <li data-k="bilan_q6"></li>
+      <li data-k="bilan_q1">M’a-t-elle donné raison trop vite ?</li>
+      <li data-k="bilan_q2">A-t-elle inventé une source ?</li>
+      <li data-k="bilan_q3">Ai-je donné une information que je regrette ?</li>
+      <li data-k="bilan_q4">Un achat ou un envoi s’est-il fait sans moi ?</li>
+      <li data-k="bilan_q5">Mes réglages ont-ils changé sans que je le sache ?</li>
+      <li data-k="bilan_q6">Qu’est-ce que j’ai appris ?</li>
     </ol>
-    <p data-k="bilan_fin"></p>
+    <p data-k="bilan_fin">Une consigne ne garantit pas l’obéissance. Ce bilan existe pour revérifier les règles. Les règles doivent être revérifiées, pas seulement écrites.</p>
   </div>
 
   <div class="pied">
-    <p data-k="pied1"></p>
-    <p data-k="pied2"></p>
+    <p data-k="pied1">Un outil de HP Outils. Gratuit, sans compte.</p>
+    <p data-k="pied2">Rien n’est envoyé ni stocké. Tout se passe dans la page ouverte.</p>
   </div>
 </div>
 <script>
@@ -271,7 +272,7 @@ var T = {
     longueur_detaillee_desc: "il explique en détail.",
     btn_precedent: "Précédent",
     btn_suivant: "Suivant",
-    btn_generer: "Générer mon contrat",
+    btn_generer: "Générer ma feuille à signer",
     resultat_titre: "Votre contrat",
     resultat_intro: "Voici votre feuille. Imprimez-la et signez-la. Collez le texte dans les réglages de votre assistant.",
     feuille_titre: "Mon contrat avec mon IA",
@@ -388,7 +389,7 @@ var T = {
     longueur_detaillee_desc: "it explains in detail.",
     btn_precedent: "Back",
     btn_suivant: "Next",
-    btn_generer: "Generate my contract",
+    btn_generer: "Generate my sheet to sign",
     resultat_titre: "Your contract",
     resultat_intro: "Here is your sheet. Print it and sign it. Paste the text into your assistant’s settings.",
     feuille_titre: "My contract with my AI",

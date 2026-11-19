@@ -77,10 +77,12 @@ const ITEMS: Array<{
   { cover: "/images/sans-honte/collection-cover.webp", title: "Collection Sans Honte — Choisissez 10 kits parmi 15", desc: "Papiers, Frigo, Tenir Debout, Seconde Main, Entraide… choisissez 10 kits parmi les 15.", tag: "Collection PDF", slug: "sans-honte-collection", price: "40 $" },
 ];
 
-function discoverLabel(tag: Kind): string {
-  if (tag === "Kit PDF") return "Voir le produit";
-  if (tag === "Collection PDF") return "Voir le produit";
-  return "Voir le produit";
+function discoverLabel(item: { tag: Kind; desc: string }): string {
+  if (item.tag === "PDF") return "Voir le sommaire";
+  if (item.tag === "Collection PDF") return "Voir les 15 kits";
+  const fiches = item.desc.match(/(\d+) fiches/);
+  if (fiches) return `Voir les ${fiches[1]} fiches`;
+  return "Voir le kit";
 }
 
 function Page() {
@@ -94,6 +96,7 @@ function Page() {
              Des PDF, kits et livres concrets à télécharger pour la cuisine,
              l'organisation, la famille et les situations de la vraie vie.
           </p>
+          <p>Les histoires à choix (tomes) sont sur <Link to="/lire">/lire</Link> — ici, les livres et kits à télécharger.</p>
           <p style={{ maxWidth: 700, fontWeight: 700 }}>HP est petit fournisseur : aucune taxe ajoutée, prix affiché = prix payé.</p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai aussi fait des livres pour la vraie vie. » — HP</p>
         </div>
@@ -109,7 +112,7 @@ function Page() {
                 <h3 title={b.title}>{b.title}</h3>
                 <p>{b.desc}</p>
                 <Link className="lib-link" to="/pdf/$slug" params={{ slug: b.slug }}>
-                  {discoverLabel(b.tag)} →
+                  {discoverLabel(b)} →
                 </Link>
               </article>
             );})}

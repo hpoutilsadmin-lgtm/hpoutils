@@ -102,6 +102,8 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
   border-top:1px solid var(--bord); font-size:1.02rem;}
 .ligne-resultat .val{font-weight:800; text-align:right;}
 .note{font-size:.85rem; color:var(--brun);}
+.ligne-taxes{display:flex; align-items:center; gap:12px; margin:12px 0 0; min-height:48px;
+  padding:8px 10px; border:1.5px solid var(--bord); border-radius:10px; background:#fff; cursor:pointer;}
 </style>
 </head>
 <body>
@@ -118,17 +120,17 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     L'outil montre les chiffres. La décision, c'est vous qui la prenez.</p>
   </section>
   <div class="ornement" aria-hidden="true"><span></span><b>◆</b><span></span></div>
-  <p style="text-align:center;color:var(--brun);font-size:.92rem;margin:0 0 4px">📍 <span id="prov-nom">Québec</span> · <a href="index.html" style="color:var(--brun)">changer de province</a></p>
+  <p style="text-align:center;color:var(--brun);font-size:.92rem;margin:0 0 4px">📍 Province : <select id="sel-province" aria-label="Choisir votre province" style="width:auto;display:inline-block;min-height:44px;padding:6px 10px;font-size:.95rem"></select></p>
 
   <section class="carte" aria-label="Votre achat">
     <label for="in-nom">C'est quoi, cet achat&nbsp;? <span class="note">(optionnel — pour le partage)</span></label>
     <input type="text" id="in-nom" placeholder="ex. manteau d'hiver" maxlength="60">
     <label for="in-prix">Le prix ($)</label>
     <input type="number" id="in-prix" inputmode="decimal" min="0" step="0.01" placeholder="ex. 120">
-    <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
-      <input type="checkbox" id="in-taxes" style="width:22px;height:22px;flex:none;accent-color:#c85f16">
-      <label for="in-taxes" style="margin:0;font-weight:600">Prix + taxes <span class="note" id="note-taxes"></span></label>
-    </div>
+    <label class="ligne-taxes">
+      <input type="checkbox" id="in-taxes" style="width:24px;height:24px;flex:none;accent-color:#c85f16">
+      <span style="font-weight:600">Prix + taxes <span class="note" id="note-taxes"></span></span>
+    </label>
     <label for="in-fois">Combien de fois allez-vous l'utiliser&nbsp;?</label>
     <input type="number" id="in-fois" inputmode="numeric" min="1" step="1" placeholder="ex. 20">
     <p class="note" style="margin:6px 0 0">Soyez honnête avec vous-même&nbsp;: un manteau, c'est 20 hivers&nbsp;? des souliers de course, c'est 100 sorties&nbsp;?</p>
@@ -140,6 +142,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
       <option value="52">Oui, à peu près chaque semaine</option>
       <option value="12">Oui, à peu près chaque mois</option>
       <option value="365">Oui, à peu près chaque jour</option>
+      <option value="1">Oui, à peu près chaque année</option>
     </select>
   </section>
 
@@ -189,7 +192,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     </details>
     <details>
       <summary>D'où vient le salaire horaire par défaut&nbsp;?</summary>
-      <p>C'est le taux général du <strong>salaire minimum de votre province</strong> (au Québec&nbsp;: 16,60&nbsp;$/h depuis le 1<sup>er</sup> mai 2026). Vous pouvez le changer pour votre vrai salaire — et votre province se règle sur la page d'accueil des outils.</p>
+      <p>C'est le taux général du <strong>salaire minimum de votre province</strong> (au Québec&nbsp;: 16,60&nbsp;$/h depuis le 1<sup>er</sup> mai 2026). Vous pouvez le changer pour votre vrai salaire — et votre province se change juste en haut de la page, sans quitter l'outil.</p>
     </details>
     <details>
       <summary>Où vont mes données&nbsp;?</summary>
@@ -281,7 +284,15 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
 
   function majProvince(){
     var p = hpProvince();
-    $("prov-nom").textContent = p.info.nom;
+    var sel = $("sel-province");
+    if (sel && !sel.options.length){
+      Object.keys(HP_PROVINCES).forEach(function(code){
+        var o = document.createElement("option");
+        o.value = code; o.textContent = HP_PROVINCES[code].nom;
+        sel.appendChild(o);
+      });
+    }
+    if (sel) sel.value = p.code;
     $("note-taxes").textContent = "(+" + hpPct(p.info.taxe) + " — " + p.info.taxeNom + ")";
     $("note-salaire").textContent = "— par défaut : salaire minimum " + p.info.nom + " (" + hpSalaire(p.info.salaire) + ", depuis le " + p.info.salaireDepuis + ")";
   }
@@ -303,10 +314,12 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     var avecTaxes = $("in-taxes").checked;
 
     if (!(prixBase > 0) || !(fois >= 1)){
+      $("bloc-resultat-vide").style.display = "";
       $("bloc-resultat").style.display = "none";
       $("bloc-partage").style.display = "none";
       return;
     }
+    $("bloc-resultat-vide").style.display = "none";
     $("bloc-resultat").style.display = "";
     $("bloc-partage").style.display = "";
     sauverCalcul();
@@ -346,6 +359,19 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
 
   ["in-prix","in-fois","in-salaire","in-recurrence","in-nom","in-taxes"].forEach(function(id){
     $(id).addEventListener(id === "in-taxes" ? "change" : "input", calculer);
+  });
+
+  /* Province modifiable ici, sans quitter l'outil (même clé que l'accueil des outils). */
+  $("sel-province").addEventListener("change", function(){
+    var ancienSalaire = hpProvince().info.salaire;
+    var code = this.value;
+    if (!HP_PROVINCES[code]) return;
+    try { localStorage.setItem(HP_CLE_PROVINCE, code); } catch(e){}
+    majProvince();
+    if (parseFloat($("in-salaire").value) === ancienSalaire){
+      $("in-salaire").value = HP_PROVINCES[code].salaire.toFixed(2);
+    }
+    calculer();
   });
 
   function textePartage(){

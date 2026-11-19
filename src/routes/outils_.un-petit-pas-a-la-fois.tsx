@@ -72,15 +72,12 @@ function Page() {
               boxShadow: "0 8px 20px rgba(176,74,47,.25)",
             }}
           >
-            Lancer l'outil →
+            Ouvrir les 3 modules →
           </a>
         </div>
 
         <p style={{ marginTop: 24, fontSize: 12, color: "rgba(58,42,32,.6)", lineHeight: 1.6, textAlign: "center" }}>
-          © HP 2026. Tous droits réservés. Outil éducatif informatif. Ne remplace
-          pas un avis médical, psychologique, juridique, sexologique ou
-          professionnel. En situation de danger immédiat, contactez les services
-          d'urgence de votre région.
+          Outil éducatif informatif — ne remplace pas un avis professionnel. En danger immédiat : services d'urgence de votre région.
         </p>
       </div>
     </section>

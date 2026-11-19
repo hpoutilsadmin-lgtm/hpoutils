@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import { Fragment } from "react";
-import { AjouterAuPanier } from "@/components/AjouterAuPanier";
+// S-104 : « Ajouter au panier » retiré du tableau tant que le paiement
+// groupé est indisponible — l'achat séparé (« Acheter le PDF ») fonctionne.
+// Le champ `panier` des ROWS est gardé pour remettre le bouton quand le
+// tunnel sera réparé et testé à 0 $.
 
 export const Route = createFileRoute("/prix")({
   head: () => {
@@ -91,7 +94,7 @@ const ROWS: Row[] = [
   { cat: "Passeurs", offre: "Passeurs de savoirs — inscription par courriel ouverte, aucun prélèvement sans confirmation", prix: "3 $ CAD/mois · 28 $ CAD/an, aucune taxe ajoutée", href: "/les-passeurs", label: "Voir les Passeurs" },
   { cat: "Atelier", offre: "Ateliers — forfaits groupe", prix: "150 $ à 290 $ CAD selon l’atelier, aucune taxe ajoutée", href: "/ateliers", label: "Voir les ateliers" },
   { cat: "Jeu", offre: "Ton jeu à toi, en 30 secondes — jeu de course personnalisé (prénom + thème), aperçu gratuit jouable (Bientôt — prix prévu, aucun achat possible pour l'instant)", prix: "Prix prévu : 5 $ CAD, aucune taxe ajoutée", href: "/ton-jeu-a-toi", label: "Essayer l'aperçu gratuit" },
-  { cat: "Jeu sur mesure", offre: "Jeux à votre image — un jeu aux couleurs de votre commerce (Express 19 $ CAD, Événement 199 $ CAD, Saisonnier 299 $ CAD, Permanent 399 $ CAD, hébergement gratuit l’année 1 puis 29 $ CAD/an, aucune taxe ajoutée — paiement seulement après votre oui explicite, voir la page de l’offre. Express 19 $ jusqu'au 31 décembre 2026.)", prix: "19 $ à 399 $ CAD selon le niveau, aucune taxe ajoutée", href: "/jeux-a-votre-image", label: "Voir l’offre" },
+  { cat: "Jeu sur mesure", offre: "Jeux à votre image — un jeu aux couleurs de votre commerce (Express 19 $ CAD, Événement 199 $ CAD, Saisonnier 299 $ CAD, Permanent 399 $ CAD, hébergement gratuit l’année 1 puis 29 $ CAD/an, aucune taxe ajoutée — paiement seulement après votre oui explicite, voir la page de l’offre.)", prix: "19 $ à 399 $ CAD selon le niveau, aucune taxe ajoutée", href: "/jeux-a-votre-image", label: "Voir l’offre" },
   { cat: "Outils", offre: "Outils web HP — la Boîte à outils (8 outils), En cuisine, le Passeur de savoir et 4 outils rapides, gratuits, sans compte : Le reste du mois, Ça vaut-tu la peine ?, Le relais, Maintenant", prix: "Gratuit", href: "/outils", label: "Voir les outils" },
 ];
 
@@ -102,6 +105,10 @@ const BLOCS = [
   { titre: "Jeux", lignes: ROWS.slice(12, 14) },
   { titre: "Outils gratuits", lignes: ROWS.slice(14) },
 ];
+
+// S-103 : les 3 offres « Bientôt » sortent du tableau des prix —
+// elles ne sont ni achetables ni gratuites aujourd'hui.
+const BIENTOT = ROWS.filter((r) => r.offre.includes("Bientôt"));
 
 function Page() {
   return (
@@ -118,7 +125,7 @@ function Page() {
       </section>
       <section className="three-pillars">
         <div className="container">
-          <p style={{ fontSize: 16, marginBottom: 12 }}>Acheter = vous payez sur la page suivante. Voir = vous regardez d'abord, sans payer. Ajouter au panier = vous regroupez avant de payer.</p>
+          <p style={{ fontSize: 16, marginBottom: 12 }}>Acheter = vous payez sur la page suivante. Voir = vous regardez d'abord, sans payer.</p>
       <div className="table-wrap">
             <table>
               <thead>
@@ -130,7 +137,7 @@ function Page() {
                     <tr>
                       <td colSpan={4}><strong>{b.titre}</strong></td>
                     </tr>
-                    {b.lignes.map((r) => (
+                    {b.lignes.filter((r) => !r.offre.includes("Bientôt")).map((r) => (
                       <tr key={`${r.cat}-${r.offre}`}>
                         <td>{r.cat}</td><td>{r.offre}</td><td>{r.prix}</td>
                         <td>
@@ -139,12 +146,6 @@ function Page() {
                           ) : (
                             <span>Pas encore en vente</span>
                           )}
-                          {r.panier ? (
-                            <>
-                              {" "}
-                              <AjouterAuPanier priceId={r.panier} />
-                            </>
-                          ) : null}
                         </td>
                       </tr>
                     ))}
@@ -153,8 +154,24 @@ function Page() {
               </tbody>
             </table>
           </div>
+          {/* S-105 : date limite du prix Express, hors de la cellule. */}
           <p style={{ maxWidth: 760, lineHeight: 1.65, marginTop: 16 }}>
-            Bundle Sans Honte — Choisissez 10 kits parmi 15, 40 $ CAD, aucune taxe ajoutée. Vous choisissez vos 10 kits, vous payez, vous recevez 10 liens de téléchargement, un par kit choisi, par courriel — chaque kit se télécharge séparément, comme les kits seuls à 5 $ CAD. Vous recevez : les 10 kits choisis, en PDF, à télécharger sur votre appareil. Durée : vos liens restent récupérables par « Récupérer un achat », avec votre courriel. Si ça ne marche pas : écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. Si vous changez d'idée après paiement : les produits numériques ne sont pas remboursables, sauf en cas de panne technique — écrivez-nous, on regarde votre cas un par un.
+            Express 19 $ — jusqu'au 31 décembre 2026, puis 29 $.
+          </p>
+          {/* S-103 : offres futures, sous un titre honnête, hors du tableau. */}
+          <h2 style={{ marginTop: 24 }}>Bientôt — pas encore en vente</h2>
+          <ul>
+            {BIENTOT.map((r) => (
+              <li key={r.offre} style={{ marginBottom: 8 }}>
+                <strong>{r.offre}</strong> — {r.prix}
+                {r.href ? (
+                  <> — <a href={r.href} style={{ display: "inline-flex", alignItems: "center", minHeight: 48 }}>{r.label?.replace(" (Bientôt)", "")}</a></>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+          <p style={{ maxWidth: 760, lineHeight: 1.65, marginTop: 16 }}>
+            Bundle Sans Honte — Choisissez 10 kits parmi 15, 40 $ CAD, aucune taxe ajoutée. Vous choisissez vos 10 kits, vous payez, vous recevez 10 liens de téléchargement, un par kit choisi, par courriel — chaque kit se télécharge séparément, comme les kits seuls à 5 $ CAD. Le bundle se choisit et se paie sur sa propre page — il ne passe pas par ce panier. Vous recevez : les 10 kits choisis, en PDF, à télécharger sur votre appareil. Durée : vos liens restent récupérables par « Récupérer un achat », avec votre courriel. Si ça ne marche pas : écrivez à la direction humaine, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi. Si vous changez d'idée après paiement : les produits numériques ne sont pas remboursables, sauf en cas de panne technique — écrivez-nous, on regarde votre cas un par un.
           </p>
         </div>
       </section>
@@ -164,7 +181,7 @@ function Page() {
           <h2>Et le <em>gratuit</em> ?</h2>
           <p className="strip-intro">
             Avant de payer quoi que ce soit, le gratuit d'HP vaut le détour :{" "}
-            <a href="/jeux">57 + 1 caché jeux gratuits, sans inscription</a>, et{" "}
+            <a href="/jeux">56 + 1 caché jeux gratuits, sans inscription</a>, et{" "}
             <a href="/balado">Futur simple, le balado sur l'IA</a> — de nouveaux épisodes quand ils sont prêts, gratuit lui aussi.
           </p>
         </div>

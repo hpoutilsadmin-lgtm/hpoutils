@@ -4,9 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Le relais — le cahier de transmission des proches aidants | HP, outils pour la vraie vie</title>
-<meta name="description" content="Le relais : un cahier de transmission simple pour les proches aidants — qui a fait quoi, quand. Notez, transmettez par Messenger ou SMS. Gratuit, sans compte, fait au Québec.">
-<meta property="og:title" content="Le relais — le cahier de transmission des proches aidants">
+<title>Le relais — le carnet de transmission des proches aidants | HP, outils pour la vraie vie</title>
+<meta name="description" content="Le relais : un carnet de transmission simple pour les proches aidants — qui a fait quoi, quand. Notez, transmettez par Messenger ou SMS. Gratuit, sans compte, fait au Québec.">
+<meta property="og:title" content="Le relais — le carnet de transmission des proches aidants">
 <meta property="og:description" content="Qui a fait quoi, quand. Un carnet simple à transmettre à la famille, par Messenger ou SMS. Gratuit, sans compte, fait au Québec.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_CA">
@@ -20,7 +20,7 @@
   "operatingSystem": "Web",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
   "inLanguage": "fr-CA",
-  "description": "Cahier de transmission pour proches aidants : noter qui a fait quoi et quand, puis transmettre le relais à la famille en un texte copié. L'application transmet l'information, elle ne prend aucune décision médicale.",
+  "description": "Carnet de transmission pour proches aidants : noter qui a fait quoi et quand, puis transmettre le relais à la famille en un texte copié. L'application transmet l'information, elle ne prend aucune décision médicale.",
   "author": { "@type": "Organization", "name": "HP — des outils pour la vraie vie", "url": "https://www.hp-outils.com" }
 }
 </script>
@@ -106,6 +106,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
 .entree .quoi{margin-top:2px;}
 .entree .actions{margin-top:6px; text-align:right;}
 .vide{color:var(--brun); font-style:italic; text-align:center; padding:18px 0;}
+.cache{display:none;}
 .securite{background:#fff8e8; border:1px solid #e8d9a8; border-radius:10px;
   padding:13px 15px; margin:16px 0; font-size:.95rem;}
 .securite strong{color:var(--brique);}
@@ -148,6 +149,9 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
       <p class="message" id="msg-suppr" style="margin:0 0 6px"></p>
       <button id="btn-annuler-suppr" class="discret petit" type="button">↩ Annuler la suppression</button>
     </div>
+    <div style="text-align:center;margin-top:16px">
+      <button id="btn-reset" class="discret" style="max-width:280px">↺ Vider le carnet</button>
+    </div>
   </section>
 
   <section class="carte" aria-label="Numéros utiles">
@@ -157,7 +161,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
       <li>Au Manitoba et au Nunavut : <strong>Health Links–Info Santé</strong> au <strong>1-888-315-9257</strong> (204 788-8200 à Winnipeg)</li>
       <li id="ligne-ressource-locale"></li>
     </ul>
-    <label for="in-contact-local">Votre ressource locale <span class="note">(CLSC, pharmacie, voisin…)</span></label>
+    <label for="in-contact-local">Votre ressource locale — affichée ici, sur votre appareil, avec les numéros utiles <span class="note">(le numéro à appeler en premier : CLSC, pharmacie, voisin…)</span></label>
     <input type="text" id="in-contact-local" maxlength="80" placeholder="ex. CLSC du quartier — 514 555-0132" autocomplete="off">
     <p class="message" id="msg-contact"></p>
   </section>
@@ -179,7 +183,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
     <h2>Questions fréquentes</h2>
     <details>
       <summary>C'est quoi, «&nbsp;Le relais&nbsp;»&nbsp;?</summary>
-      <p>Un cahier de transmission numérique pour les proches aidants&nbsp;: <strong>qui</strong> a fait <strong>quoi</strong>, <strong>quand</strong>. Chaque entrée est horodatée, et le bouton «&nbsp;Transmettre&nbsp;» génère un texte prêt à envoyer à la famille.</p>
+      <p>Un carnet de transmission numérique pour les proches aidants&nbsp;: <strong>qui</strong> a fait <strong>quoi</strong>, <strong>quand</strong>. Chaque entrée est horodatée, et le bouton «&nbsp;Transmettre&nbsp;» génère un texte prêt à envoyer à la famille.</p>
     </details>
     <details>
       <summary>Est-ce que ça me dit quand donner un médicament&nbsp;?</summary>
@@ -194,10 +198,6 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
       <p>Elles restent sur votre appareil, dans votre navigateur. Pas de compte, pas de serveur. Quand vous transmettez, c'est vous qui choisissez à qui envoyer le texte.</p>
     </details>
   </section>
-
-  <div style="text-align:center;margin-top:16px">
-    <button id="btn-reset" class="discret" style="max-width:280px">↺ Vider le carnet</button>
-  </div>
 
 </main>
 <footer class="site">
@@ -400,7 +400,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
   });
 
   $("btn-reset").addEventListener("click", function(){
-    if (entrees.length && confirm("Vider tout le carnet ?")){
+    if (entrees.length && confirm("Vraiment tout effacer ?")){
       entrees = []; ecrire(entrees); afficher();
     }
   });

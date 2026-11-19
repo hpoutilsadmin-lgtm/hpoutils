@@ -162,6 +162,7 @@ function Page() {
                <p><strong>Économie de 10 $ :</strong> achetés un par un, 10 kits coûteraient 50 $ — le bundle est à 40 $.</p>
                <p>Les 15 titres parmi lesquels vous choisissez vos 10 : {KITS.map((k) => k.title).join(" · ")}.</p>
                <p>Vous cochez vos 10 kits sur la page d'achat, avant le paiement.</p>
+               <p>Le bundle se choisit et se paie sur sa propre page — il ne passe pas par ce panier.</p>
             </div>
             <Link className="action-btn" to="/pdf/$slug" params={{ slug: "sans-honte-collection" }}>Découvrir la collection PDF</Link>
           </div>

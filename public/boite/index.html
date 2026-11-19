@@ -869,12 +869,11 @@ ul.cf-plain li{margin:.3em 0}
       <span class="tool-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="m3 8 9 6 9-6"/></svg> Outil 1</span>
       <h2>L’héritage vivant</h2>
       <p class="lede">Les histoires de famille meurent avec les gens — sauf si on les enregistre à temps. Créez des <strong>capsules temporelles</strong> : un message, un vocal, une question de vie… verrouillés jusqu’au bon moment, à ouvrir avec un code que vous choisissez.</p>
-    <div class="fiche-clarte" style="border-left:6px solid var(--t1);background:var(--card);color:var(--ink);border:1px solid var(--line);border-left-width:6px;border-radius:10px;padding:16px 20px;margin:12px 0 18px;text-align:left;box-shadow:var(--shadow)"><p style="font-weight:700;margin:0 0 8px;color:var(--t1);font-family:var(--serif);font-size:1.15rem">Fiche claire — L'héritage vivant</p><ul style="margin:0;padding-left:20px;line-height:1.6"><li><strong>Ça sert à quoi :</strong> Laisser des capsules temporelles — message texte et/ou vocal, question de vie — verrouillées jusqu'au moment que vous choisissez, avec un code d'ouverture.</li><li><strong>Ça règle quoi :</strong> Dire ce qui compte, à temps, sans laisser le désordre derrière vous.</li><li><strong>Vous pouvez l'utiliser pour :</strong> Un message pour plus tard, une question de vie à transmettre, un souvenir à ouvrir au bon moment.</li><li><strong>Quels emplois ça aide :</strong> Familles, proches aidants, toute personne qui veut transmettre quelque chose d'important.</li><li><strong>Application pratique :</strong> Le soir, une capsule à la fois, puis vous rangez. Sans export, rien n'est sauvegardé à la fermeture — exportez avant de fermer.</li><li><strong>À part :</strong> Pour le testament lui-même : le kit « Testament olographe » (5 $ CAD, Sans Honte) est un autre produit, payant. L'outil ne remplace pas un notaire. Outil d'information seulement, pas un avis juridique.</li></ul></div>
+    <div class="fiche-clarte" style="border-left:6px solid var(--t1);background:var(--card);color:var(--ink);border:1px solid var(--line);border-left-width:6px;border-radius:10px;padding:16px 20px;margin:12px 0 18px;text-align:left;box-shadow:var(--shadow)"><p style="font-weight:700;margin:0 0 8px;color:var(--t1);font-family:var(--serif);font-size:1.15rem">Fiche claire — L'héritage vivant</p><ul style="margin:0;padding-left:20px;line-height:1.6"><li><strong>Ça sert à quoi :</strong> Laisser des capsules temporelles — message texte et/ou vocal, question de vie — verrouillées jusqu'au moment que vous choisissez, avec un code d'ouverture.</li><li><strong>Ça règle quoi :</strong> Dire ce qui compte, à temps, sans laisser le désordre derrière vous.</li><li><strong>Vous pouvez l'utiliser pour :</strong> Un message pour plus tard, une question de vie à transmettre, un souvenir à ouvrir au bon moment.</li><li><strong>Quels emplois ça aide :</strong> Familles, proches aidants, toute personne qui veut transmettre quelque chose d'important.</li><li><strong>Application pratique :</strong> Le soir, une capsule à la fois, puis vous rangez.</li><li><strong>À part :</strong> Pour le testament lui-même : le kit « Testament olographe » (5 $ CAD, Sans Honte) est un autre produit, payant. L'outil ne remplace pas un notaire. Outil d'information seulement, pas un avis juridique.</li></ul></div>
     </div>
 
     <div class="note" style="margin-top:0">
       <strong>Votre vie privée, en toute honnêteté :</strong> aucun compte, rien n’est envoyé ailleurs — tout se passe dans ce navigateur.
-      En contrepartie, <strong>rien n’est sauvegardé quand vous fermez cette page</strong> : pensez à <strong>exporter</strong> vos capsules pour les garder vraiment.
     </div>
 
     <!-- LIST VIEW -->
@@ -891,6 +890,8 @@ ul.cf-plain li{margin:.3em 0}
           </button>
           <button class="btn line small" id="h-export-all" hidden>Tout exporter</button>
         </div>
+        <p class="hint" style="margin:2px 0 0">Sans export, tout est perdu à la fermeture de la page.</p>
+        <p class="hint" style="margin:2px 0 0">Exemple : un message pour les 18 ans de votre fille, un conseil pour le mariage d'un ami, le récit d'un souvenir que vous ne voulez pas perdre…</p>
         <input type="file" id="h-import-file" accept="application/json,.json" hidden aria-label="Importer un fichier de capsules JSON" />
       </div>
 
@@ -898,7 +899,7 @@ ul.cf-plain li{margin:.3em 0}
         <div style="text-align:center; padding:10px 0">
           <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="var(--acc)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-bottom:8px"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="m3 8 9 6 9-6"/><circle cx="12" cy="17" r="2.2" fill="var(--acc)" stroke="none"/></svg>
           <h3 style="margin-bottom:8px">Aucune capsule pour l’instant</h3>
-          <p class="hint" style="max-width:30rem; margin:0 auto">Créez votre première capsule : un message pour les 18 ans de votre fille, un conseil pour le mariage d’un ami, le récit d’un souvenir que vous ne voulez pas perdre…</p>
+          <p class="hint" style="max-width:30rem; margin:0 auto">Créez votre première capsule.</p>
         </div>
       </div>
 
@@ -977,10 +978,12 @@ ul.cf-plain li{margin:.3em 0}
               <div id="h-rec-done" hidden>
                 <audio id="h-rec-audio" controls></audio>
                 <p class="rec-meta" id="h-rec-meta"></p>
+                <button class="btn linklike" id="h-rec-replay">Réécouter mon vocal</button>
                 <button class="btn linklike" id="h-rec-remove">Supprimer l’enregistrement</button>
               </div>
               <p class="rec-meta" id="h-rec-nok" hidden>Votre appareil ou navigateur ne permet pas l’enregistrement audio ici. Le texte suffira très bien.</p>
             </div>
+            <p class="hint" style="margin-top:6px">Maximum : 3 minutes.</p>
           </div>
           <p class="err" id="h-answer-err" hidden style="color:var(--danger); font-weight:700">Donnez votre réponse en texte ou en voix (ou les deux).</p>
           <div class="row between">
@@ -998,6 +1001,7 @@ ul.cf-plain li{margin:.3em 0}
           <p class="hint">Choisissez <strong>quand</strong> la capsule pourra s’ouvrir, et <strong>un code</strong> que seul le bon moment (et la bonne personne) connaîtra.</p>
           <div class="field" id="h-f-cond">
             <span class="lbl" id="h-cond-lbl">Elle s’ouvrira…</span>
+            <p class="hint" style="margin:6px 0 8px">Date précise : verrouillée jusqu'à cette date. Jalon de vie : c'est la personne qui confirme que le moment est arrivé — rien ne le vérifie.</p>
             <div class="chips" role="group" aria-labelledby="h-cond-lbl">
               <button class="chip" id="h-cond-date" aria-pressed="true">À une date précise</button>
               <button class="chip" id="h-cond-jalon" aria-pressed="false">À un jalon de vie</button>
@@ -1017,7 +1021,6 @@ ul.cf-plain li{margin:.3em 0}
               <input type="text" id="h-jalon-custom" maxlength="120" placeholder="ex. : quand elle aura son premier appartement" />
             </div>
             <p class="err" id="h-jalon-err">Choisissez ou décrivez le jalon de vie.</p>
-            <p class="hint" style="margin-top:8px">Un jalon n’est pas une date : personne ne peut vérifier automatiquement quand il arrive. La personne qui débloquera la capsule devra confirmer, en toute honnêteté, que le moment est bien arrivé.</p>
           </div>
           <div class="field" id="h-f-code">
             <label class="lbl" for="h-code">Le code de déblocage</label>
@@ -1103,6 +1106,7 @@ ul.cf-plain li{margin:.3em 0}
           <div class="gate">
             <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg></div>
             <h3 id="d-gate-title">À vous&nbsp;!</h3>
+            <p class="hint" id="d-gate-count" style="margin:0 0 8px"></p>
             <p>Prenez le téléphone. Personne ne regarde&nbsp;: votre vote reste <strong>secret jusqu’au verdict</strong>.</p>
             <button class="btn primary" id="d-gate-go">C’est moi, je vote
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -1140,8 +1144,10 @@ ul.cf-plain li{margin:.3em 0}
           <p class="v-kicker">Le verdict est tombé</p>
           <h3 id="d-winner"></h3>
           <p class="v-sub" id="d-winner-sub"></p>
+          <p class="hint" id="d-tie-list" hidden style="margin:6px 0 0"></p>
           <div class="why" id="d-why-wrap">
             <p class="why-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg> Pourquoi celle-là&nbsp;?</p>
+            <p class="hint" style="margin:10px 0 4px"><strong>Totaux (votes secrets cachés)</strong></p>
             <ul class="why-list" id="d-why"></ul>
             <p class="note" style="margin-bottom:0"><strong>Transparence&nbsp;:</strong> les vetos éliminent d’office, les pouces comptent, et à égalité le hasard tranche équitablement. Les votes individuels restent secrets — seuls les totaux sont affichés.</p>
           </div>
@@ -1152,7 +1158,7 @@ ul.cf-plain li{margin:.3em 0}
             </button>
             <button class="btn plain" id="d-reroll">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5"/></svg>
-              Re-tirer parmi les meilleures
+              Voir un autre ex æquo
             </button>
             <button class="btn plain" id="d-restart">Nouveau groupe</button>
           </div>
@@ -1203,7 +1209,7 @@ ul.cf-plain li{margin:.3em 0}
           </button>
         </div>
         <div class="row" style="justify-content:center; margin-top:6px">
-          <button class="btn linklike" id="p-paste-first">Pas de photo&nbsp;? Coller le texte à la main</button>
+          <button class="btn linklike" id="p-paste-first">Pas de photo&nbsp;? Collez le texte de la lettre ici — l'analyse sera la même.</button>
         </div>
       </div>
     </div>
@@ -1212,10 +1218,10 @@ ul.cf-plain li{margin:.3em 0}
     <div class="wiz-screen" id="p-s2">
       <div class="card" id="p-progress-card">
         <h3>Lecture du texte</h3>
-        <p class="hint" id="p-status">Chargement du lecteur de texte…</p>
+        <p class="hint" id="p-status">En attente d'une photo — le lecteur se chargera quand vous choisirez une photo.</p>
         <div class="progress-wrap">
           <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="p-barwrap"><div class="bar" id="p-bar"></div></div>
-          <div class="pct" id="p-pct">0&nbsp;%</div>
+          <div class="pct" id="p-pct">—</div>
         </div>
         <p class="hint" style="margin-top:14px">Première utilisation&nbsp;? Le lecteur de texte se télécharge (quelques secondes) — ensuite tout reste ici, sur votre appareil.</p>
         <div class="row" style="margin-top:8px">
@@ -1249,41 +1255,12 @@ ul.cf-plain li{margin:.3em 0}
       <div class="row" style="gap:10px; flex-wrap:wrap">
         <button class="btn line" id="p-download">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-          Télécharger la fiche
+          Télécharger la fiche (.html)
         </button>
         <button class="btn primary" id="p-restart">Analyser un autre courrier</button>
       </div>
     </div>
 
-    <div class="card" id="qr-card">
-      <h3>Le QR du frigo</h3>
-      <p class="hint">La paperasse se traite dans la cuisine&nbsp;: imprimez ce QR, scotchez-le sur le frigo, et le bon outil s’ouvre <strong>dès qu’on le scanne</strong> — sans chercher l’onglet, sans se tromper.</p>
-      <div class="field">
-        <label class="lbl" for="qr-url">Le lien public de la Boîte à outils</label>
-        <input type="text" id="qr-url" placeholder="Collez ici le lien public (https://…)" inputmode="url" autocomplete="off" spellcheck="false" />
-        <p class="hint" style="margin-top:6px">C’est l’adresse que vous partagez quand vous envoyez cette page à quelqu’un. Elle sert seulement ici, sur votre appareil, pour dessiner le QR — rien n’est envoyé ailleurs.</p>
-      </div>
-      <div class="field">
-        <span class="lbl" id="qr-tool-lbl">L’outil que le QR ouvre</span>
-        <div class="chips" role="group" aria-labelledby="qr-tool-lbl" id="qr-tools">
-          <button class="chip" data-qr="paperasse" aria-pressed="true">Le décodeur de paperasse</button>
-          <button class="chip" data-qr="decideur" aria-pressed="false">On tranche&nbsp;!</button>
-          <button class="chip" data-qr="heritage" aria-pressed="false">L’héritage vivant</button>
-          <button class="chip" data-qr="comparateur" aria-pressed="false">Le vrai prix au 100&nbsp;g</button>
-          <button class="chip" data-qr="demeleur" aria-pressed="false">Le Démêleur</button>
-          <button class="chip" data-qr="demarches" aria-pressed="false">Démarches</button>
-          <button class="chip" data-qr="coffre" aria-pressed="false">Le Coffre à codes</button>
-          <button class="chip" data-qr="relanceur" aria-pressed="false">Le Relanceur</button>
-        </div>
-      </div>
-      <div id="qr-empty" class="note"><strong>Collez le lien public ci-dessus</strong>&nbsp;: le QR se dessinera tout seul.</div>
-      <div id="qr-result" hidden>
-        <div id="qr-box" role="img" aria-label="QR code vers l’outil"></div>
-        <p class="kw-hint" id="qr-link-label"></p>
-        <div class="note" id="qr-lib-note" hidden><strong>Le dessinateur de QR n’a pas pu se charger</strong> (connexion internet coupée&nbsp;?). Collez l’adresse affichée juste au-dessus dans le générateur de QR de votre choix — elle mène directement au bon outil.</div>
-        <p class="print-hint">Pour l’imprimer&nbsp;: menu d’impression de votre navigateur — seul le QR sortira, bien centré.</p>
-      </div>
-    </div>
   </section>
 
   <!-- ============================================================ TOOL 4 -->
@@ -1326,8 +1303,8 @@ ul.cf-plain li{margin:.3em 0}
         </div>
       </div>
       <div id="c-ocr-status" class="note" hidden aria-live="polite"></div>
-      <div class="row between">
-        <button class="btn line" id="c-read-photos">Lire les étiquettes</button>
+      <p class="hint" style="margin:10px 0 0">1. Photo (facultatif) → 2. Vérifiez les chiffres lus → 3. Comparer.</p>
+      <div class="row end">
         <button class="btn primary" id="c-calc">Comparer les vrais prix</button>
       </div>
       <p class="err" id="c-unit-error" hidden style="color:var(--danger);font-weight:700">Comparez deux poids (g/kg) ou deux volumes (ml/L), pas un mélange des deux.</p>
@@ -1338,7 +1315,8 @@ ul.cf-plain li{margin:.3em 0}
       <p>Produit A : — $ / 100 g</p>
       <p>Produit B : — $ / 100 g</p>
       <p>Le moins cher : —</p>
-      <p>Économie réelle : — $ par 100 g</p>
+      <p>Écart : — $ par 100 g</p>
+      <p>Sur cet achat : vous économisez — $ en prenant —</p>
     </div>
     <div class="compare-result" id="c-result" hidden aria-live="polite">
       <p class="v-kicker">Verdict au prix unitaire</p>
@@ -1377,7 +1355,7 @@ ul.cf-plain li{margin:.3em 0}
       <div class="field" id="m-about-field"><label class="lbl" for="m-about">Qu’est-ce que vous devez régler ou demander&nbsp;?</label><textarea id="m-about" maxlength="800" placeholder="ex. : Je ne comprends pas le montant sur mon avis et je veux savoir avant quand je dois répondre."></textarea><p class="err">Expliquez en une ou deux phrases pourquoi vous appelez.</p></div>
       <div class="field"><label class="lbl" for="m-goal">Qu’aimeriez-vous obtenir à la fin de l’appel&nbsp;? <span class="opt">(facultatif)</span></label><input id="m-goal" type="text" maxlength="220" placeholder="ex. : Une explication claire et une entente de paiement" /></div>
       <div class="two-col">
-        <div class="field"><label class="lbl" for="m-name">Votre prénom <span class="opt">(facultatif)</span></label><input id="m-name" type="text" maxlength="60" placeholder="ex. : HP" /></div>
+        <div class="field"><label class="lbl" for="m-name">Votre prénom <span class="opt">(facultatif)</span></label><input id="m-name" type="text" maxlength="60" placeholder="ex. : HP" /><p class="hint" style="margin-top:6px">Pour que le script commence par « Bonjour, je m'appelle… »</p></div>
         <div class="field"><label class="lbl" for="m-ref">Numéro ou référence <span class="opt">(facultatif)</span></label><input id="m-ref" type="text" maxlength="100" placeholder="ex. : numéro de dossier" /></div>
       </div>
       <div class="field">
@@ -1389,12 +1367,6 @@ ul.cf-plain li{margin:.3em 0}
         </div>
       </div>
       <div class="row end"><button class="btn primary" id="m-build">Préparer mon script</button></div>
-    <div class="note" id="m-result-vide" aria-live="polite">
-      <p><strong>Votre fil d’appel</strong></p>
-      <p><strong>Avant de composer :</strong> —</p>
-      <p><strong>Questions à poser :</strong> —</p>
-      <p><strong>Avant de raccrocher :</strong> notez le nom de la personne, la date et la prochaine étape.</p>
-    </div>
     </div>
 
     <div class="script-sheet" id="m-result" hidden aria-live="polite">
@@ -1402,8 +1374,9 @@ ul.cf-plain li{margin:.3em 0}
       <div class="script-body">
         <div class="call-prep"><strong>Avant de composer</strong><ul id="m-prep"></ul></div>
         <ol class="call-steps" id="m-steps-list"></ol>
+        <div class="call-questions" style="margin-top:18px"><strong>Questions à poser</strong><ol id="m-questions-list" style="margin:8px 0 0;padding-left:22px;line-height:1.7"></ol></div>
         <div class="note" style="margin-top:18px"><strong>Avant de raccrocher :</strong> répétez ce que vous avez compris, notez le nom de la personne, la date et la prochaine étape. Si quelque chose reste flou, demandez&nbsp;: «&nbsp;Pouvez-vous me l’expliquer autrement, s’il vous plaît&nbsp;?&nbsp;»</div>
-        <div class="row"><button class="btn primary" id="m-copy">Copier le script</button><button class="btn plain" id="m-edit">Modifier mes réponses</button></div>
+        <div class="row"><button class="btn primary" id="m-copy">Copier le script</button><button class="btn line" id="m-print">Imprimer le script</button><button class="btn plain" id="m-edit">Modifier mes réponses</button></div>
         <p class="copy-status" id="m-copy-status" aria-live="polite"></p>
       </div>
     </div>
@@ -1433,13 +1406,16 @@ ul.cf-plain li{margin:.3em 0}
       </div>
     </div>
 
-    <div class="note"><strong>Vos coches restent ici :</strong> les listes de l’outil Démarches sont gardées <strong>sur cet appareil seulement</strong> (dans ce navigateur), pour reprendre votre démarche où vous l’aviez laissée. Rien n’est envoyé ailleurs, aucun compte. Le bouton « Tout effacer » en bas de chaque démarche les supprime.</div>
 
     <!-- LIST VIEW -->
     <div class="wiz-screen on" id="x-view-list">
-      <p>Trois démarches proposées : <strong>Perte d'emploi</strong> — Demander des prestations d'assurance-emploi ; <strong>Revenu insuffisant</strong> — Demander une aide financière de dernier recours (Québec) ; <strong>Logement</strong> — Demander un logement à loyer modique ou un supplément au loyer. Choisissez une démarche pour voir la prochaine étape, dans l'ordre.</p>
+      <p>Pour l'instant : 3 démarches. D'autres suivront.</p>
+      <p>Votre démarche n'est pas dans la liste ? <a href="mailto:hpoutils.admin@gmail.com">Écrire à la direction humaine</a></p>
+      <p>Trois démarches proposées : <strong>Perte d'emploi</strong> — Demander des prestations d'assurance-emploi ; <strong>Revenu insuffisant</strong> — Demander une aide financière de dernier recours (Québec) ; <strong>Logement trop cher</strong> — Demander un logement à loyer modique ou un supplément au loyer. Choisissez une démarche pour voir la prochaine étape, dans l'ordre.</p>
       <div class="dem-list" id="x-list"></div>
     </div>
+
+    <div class="note">Vos coches restent sur cet appareil seulement — bouton « Tout effacer » en bas de chaque démarche.</div>
 
     <!-- DETAIL VIEW -->
     <div class="wiz-screen" id="x-view-detail">
@@ -1664,7 +1640,7 @@ ul.cf-plain li{margin:.3em 0}
               </div>
               <div class="cf-btn-row">
                 <button type="submit" class="btn primary">C'est bien lui — ouvrir mon coffre</button>
-                <button type="button" class="btn line" id="cf-btnRevoirCode">Je ne m'en souviens plus — le revoir</button>
+                <button type="button" class="btn line" id="cf-btnRevoirCode">Revoir le code que je viens de créer</button>
               </div>
             </form>
           </article>
@@ -1680,12 +1656,8 @@ ul.cf-plain li{margin:.3em 0}
             <p class="cf-soft" id="cf-msgVerrouille">Entrez votre code maître pour voir vos codes. Sans lui, le contenu du coffre reste illisible — c'est fait exprès.</p>
             <div class="cf-repere-box cf-hidden" id="cf-repereAffiche">
               <p style="margin:0">Votre repère personnel : <span class="cf-repere-mots" id="cf-repereTexte"></span></p>
-              <p class="cf-small" style="margin:.4em 0 0">Avant de taper votre code maître, cherchez votre repère. Pas de repère = pas votre coffre = vous ne tapez rien.</p>
             </div>
-            <div class="cf-notice cf-regle-or">
-              <h4>La règle d'or anti-fraude</h4>
-              <p>HP ne vous demandera <strong>JAMAIS</strong> votre code maître, votre fichier de coffre, ni une photo de votre fiche. Ni par courriel, ni par téléphone, ni par texto. Cet outil n’est connecté à rien : si un message dit que votre coffre est compromis, il est faux.</p>
-            </div>
+            <p class="cf-small">Rappel : HP ne vous demandera jamais votre code maître.</p>
             <form id="cf-formOuvrir" novalidate>
               <div class="field">
                 <label for="cf-codeMaitre">Code maître</label>
@@ -1729,7 +1701,7 @@ ul.cf-plain li{margin:.3em 0}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21z"/></svg>
               <h3>Créez votre repère personnel</h3>
             </div>
-            <p class="cf-soft">Votre coffre n’a pas encore de repère. Quelques mots rien qu’à vous, affichés en clair sur l’écran verrouillé : ils vous permettent de reconnaître <strong>votre</strong> coffre avant de taper votre code maître. Pas de repère = pas votre coffre = vous ne tapez rien. Ce n’est pas un secret — choisissez des mots qui vous parlent, pas un mot de passe.</p>
+            <p class="cf-soft">Votre coffre n’a pas encore de repère. Quelques mots rien qu’à vous, affichés en clair sur l’écran verrouillé.</p>
             <div class="field">
               <label for="cf-repereNouveau">Votre repère</label>
               <input type="text" id="cf-repereNouveau" autocomplete="off" placeholder="Ex. le chalet de matante Rose" />
@@ -1789,10 +1761,7 @@ ul.cf-plain li{margin:.3em 0}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>
               <h3 id="cf-titreSauvegarde">Sauvegarde</h3>
             </div>
-            <div class="cf-notice cf-regle-or">
-              <h4>La règle d'or anti-fraude</h4>
-              <p>HP ne vous demandera <strong>JAMAIS</strong> votre code maître, votre fichier de coffre, ni une photo de votre fiche. Ni par courriel, ni par téléphone, ni par texto. Cet outil n’est connecté à rien : si un message dit que votre coffre est compromis, il est faux.</p>
-            </div>
+            <p class="cf-small">Rappel : HP ne vous demandera jamais votre code maître.</p>
             <h4>Fiche papier de secours</h4>
             <p class="cf-soft">Une feuille à imprimer avec tous vos codes, à ranger en lieu sûr (pas près de l’ordinateur). C’est votre roue de secours si vous oubliez votre code maître.</p>
             <div class="cf-btn-row">
@@ -1866,10 +1835,7 @@ ul.cf-plain li{margin:.3em 0}
               <h3>Vous avez déjà un fichier de coffre ?</h3>
             </div>
             <p class="cf-soft">Si vous avez exporté votre coffre depuis un autre appareil, importez le fichier ici. Il restera chiffré : votre code maître sera demandé pour l’ouvrir.</p>
-            <div class="cf-notice cf-regle-or">
-              <h4>La règle d'or anti-fraude</h4>
-              <p>HP ne vous demandera <strong>JAMAIS</strong> votre code maître, votre fichier de coffre, ni une photo de votre fiche. Ni par courriel, ni par téléphone, ni par texto. Cet outil n’est connecté à rien : si un message dit que votre coffre est compromis, il est faux. Un fichier de coffre reçu par texto ou par courriel d’un inconnu n’est pas votre coffre — ne l’importez pas.</p>
-            </div>
+            <p class="cf-small">Rappel : HP ne vous demandera jamais votre code maître. Un fichier de coffre reçu par texto ou par courriel d’un inconnu n’est pas votre coffre — ne l’importez pas.</p>
             <div class="cf-btn-row">
               <button type="button" class="btn line block" id="cf-btnImport2">Importer un fichier de coffre</button>
             </div>
@@ -1886,10 +1852,7 @@ ul.cf-plain li{margin:.3em 0}
               <h3>Importer ce fichier de coffre ?</h3>
             </div>
             <p class="cf-soft">Le fichier a passé les vérifications de format. <strong>Rien n'a été remplacé pour l'instant.</strong> Entrez le code maître du coffre contenu dans ce fichier : un déchiffrement d'essai doit réussir avant tout remplacement.</p>
-            <div class="cf-notice cf-regle-or">
-              <h4>La règle d'or anti-fraude</h4>
-              <p>HP ne vous demandera <strong>JAMAIS</strong> votre code maître, votre fichier de coffre, ni une photo de votre fiche. Ni par courriel, ni par téléphone, ni par texto. Cet outil n’est connecté à rien : si un message dit que votre coffre est compromis, il est faux. Si quelqu’un vous a envoyé ce fichier en vous demandant de l’importer, c’est une fraude — annulez.</p>
-            </div>
+            <p class="cf-small">Rappel : HP ne vous demandera jamais votre code maître. Si quelqu’un vous a envoyé ce fichier en vous demandant de l’importer, c’est une fraude — annulez.</p>
             <div id="cf-importEtapeCode">
               <div class="field">
                 <label for="cf-importMaitre">Code maître du coffre à importer</label>
@@ -1933,8 +1896,11 @@ ul.cf-plain li{margin:.3em 0}
     </div>
 
     <div class="note">
-      <p style="margin-top:0"><strong>L’honnête vérité :</strong> vos codes sont chiffrés avec les outils de sécurité de votre navigateur (AES-GCM 256, clé dérivée par PBKDF2-SHA-256 à 600 000 itérations, chiffrement lié au contexte de l’outil) et ne sont jamais envoyés à un serveur. Aucun outil n’est « impossible à casser » — et celui-ci ne le promet pas.</p>
+      <p style="margin-top:0"><strong>L’honnête vérité :</strong> vos codes sont chiffrés sur votre appareil, avec un code maître long comme seule clé.</p>
+      <details><summary>Comment c'est chiffré ?</summary>
+      <p>Vos codes sont chiffrés avec les outils de sécurité de votre navigateur (AES-GCM 256, clé dérivée par PBKDF2-SHA-256 à 600 000 itérations, chiffrement lié au contexte de l’outil) et ne sont jamais envoyés à un serveur. Aucun outil n’est « impossible à casser » — et celui-ci ne le promet pas.</p>
       <p><strong>Ce qui décide vraiment, c’est votre code maître</strong> (chiffres = estimations, pas des garanties) : le calcul à 600 000 itérations ralentit chaque essai, mais un attaquant qui a copié votre fichier peut tout de même tenter de l’ordre de 10 000 codes par seconde, hors-ligne. Un code de 8 caractères formant un mot connu est essayé en premier : il peut tomber en quelques minutes ou quelques jours. Une phrase longue de plusieurs mots choisis au hasard (60 bits d’entropie et plus) demanderait en moyenne des millions d’années au même rythme. Gardez aussi votre appareil en sécurité, et votre fiche papier en lieu sûr.</p>
+      </details>
       <p style="margin-bottom:0">Le coffre se verrouille tout seul quand vous quittez cet outil, et après 5 minutes sans activité.</p>
     </div>
   </section>
@@ -1948,9 +1914,11 @@ ul.cf-plain li{margin:.3em 0}
     <div class="fiche-clarte" style="border-left:6px solid var(--t8);background:var(--card);color:var(--ink);border:1px solid var(--line);border-left-width:6px;border-radius:10px;padding:16px 20px;margin:12px 0 18px;text-align:left;box-shadow:var(--shadow)"><p style="font-weight:700;margin:0 0 8px;color:var(--t8);font-family:var(--serif);font-size:1.15rem">Fiche claire — Le Relanceur</p><ul style="margin:0;padding-left:20px;line-height:1.6"><li><strong>Ça sert à quoi :</strong> Suivre les promesses — qui doit quoi, pour quand.</li><li><strong>Ça règle quoi :</strong> Les promesses oubliées, les suivis qui tombent.</li><li><strong>Vous pouvez l'utiliser pour :</strong> Un fournisseur qui doit rappeler, un collègue qui doit livrer, un dossier en attente.</li><li><strong>Quels emplois ça aide :</strong> Gestionnaires de petites équipes, travailleurs autonomes, responsables de projets, familles qui gèrent plusieurs dossiers.</li><li><strong>Application pratique :</strong> La page reste ouverte toute la journée, vous cochez au fur et à mesure que ça se règle. Message prêt à copier, aucun envoi automatique, liste dans ce navigateur.</li></ul></div>
     </div>
 
+    <p class="hint">1. Notez qui doit quoi — 2. Touchez Relancer pour le message.</p>
+
     <div class="rl-volets" role="tablist" aria-label="On me doit, ou je dois">
-      <button type="button" class="rl-volet" id="rl-v-doit" role="tab" aria-selected="true">On me doit <span class="rl-count" id="rl-count-doit">0</span></button>
-      <button type="button" class="rl-volet" id="rl-v-je" role="tab" aria-selected="false">Je dois <span class="rl-count" id="rl-count-je">0</span></button>
+      <button type="button" class="rl-volet" id="rl-v-doit" role="tab" aria-selected="true">On me doit — <span class="rl-count" id="rl-count-doit">0</span> promesse(s)</button>
+      <button type="button" class="rl-volet" id="rl-v-je" role="tab" aria-selected="false">Je dois — <span class="rl-count" id="rl-count-je">0</span> promesse(s)</button>
     </div>
 
     <div class="card">
@@ -1964,11 +1932,16 @@ ul.cf-plain li{margin:.3em 0}
           <div class="field">
             <label class="lbl" for="rl-date">Échéance</label>
             <input type="date" id="rl-date" />
+            <p class="hint" style="margin-top:6px">ex. 25 nov. — en retard = après l'échéance : la carte passe au rouge.</p>
           </div>
         </div>
         <div class="field">
           <label class="lbl" for="rl-quoi">Quoi&nbsp;?</label>
           <input type="text" id="rl-quoi" placeholder="Ex. le devis promis, me rappeler, mon échelle prêtée, le remboursement de 40&nbsp;$…" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label class="lbl" for="rl-montant">Montant ($) <span class="opt">(facultatif)</span></label>
+          <input type="text" id="rl-montant" inputmode="decimal" placeholder="ex. : 40" autocomplete="off" />
         </div>
         <div class="field">
           <label class="lbl" for="rl-note">Note <span class="opt">(facultatif)</span></label>
@@ -1989,6 +1962,38 @@ ul.cf-plain li{margin:.3em 0}
       <p style="margin:0"><strong>Tout reste sur cet appareil&nbsp;:</strong> vos promesses sont gardées dans ce navigateur seulement, sans compte et sans aucun envoi ailleurs. En contrepartie, si vous changez d’appareil ou effacez les données du navigateur, la liste part avec — c’est le prix du 100&nbsp;% local.</p>
     </div>
   </section>
+  <section aria-label="Le QR du frigo (pour toute La Boîte)">
+    <div class="card" id="qr-card">
+      <h3>Le QR du frigo (pour toute La Boîte)</h3>
+      <p class="hint">La paperasse se traite dans la cuisine&nbsp;: imprimez ce QR, scotchez-le sur le frigo, et le bon outil s’ouvre <strong>dès qu’on le scanne</strong> — sans chercher l’onglet, sans se tromper.</p>
+      <div class="field">
+        <label class="lbl" for="qr-url">Le lien public de la Boîte à outils</label>
+        <input type="text" id="qr-url" placeholder="Collez ici le lien public (https://…)" inputmode="url" autocomplete="off" spellcheck="false" />
+        <p class="hint" style="margin-top:6px">C’est l’adresse que vous partagez quand vous envoyez cette page à quelqu’un. Elle sert seulement ici, sur votre appareil, pour dessiner le QR — rien n’est envoyé ailleurs.</p>
+      </div>
+      <div class="field">
+        <span class="lbl" id="qr-tool-lbl">L’outil que le QR ouvre</span>
+        <div class="chips" role="group" aria-labelledby="qr-tool-lbl" id="qr-tools">
+          <button class="chip" data-qr="paperasse" aria-pressed="true">Le décodeur de paperasse</button>
+          <button class="chip" data-qr="decideur" aria-pressed="false">On tranche&nbsp;!</button>
+          <button class="chip" data-qr="heritage" aria-pressed="false">L’héritage vivant</button>
+          <button class="chip" data-qr="comparateur" aria-pressed="false">Le vrai prix au 100&nbsp;g</button>
+          <button class="chip" data-qr="demeleur" aria-pressed="false">Le Démêleur</button>
+          <button class="chip" data-qr="demarches" aria-pressed="false">Démarches</button>
+          <button class="chip" data-qr="coffre" aria-pressed="false">Le Coffre à codes</button>
+          <button class="chip" data-qr="relanceur" aria-pressed="false">Le Relanceur</button>
+        </div>
+      </div>
+      <div id="qr-empty" class="note"><strong>Collez le lien public ci-dessus</strong>&nbsp;: le QR se dessinera tout seul.</div>
+      <div id="qr-result" hidden>
+        <div id="qr-box" role="img" aria-label="QR code vers l’outil"></div>
+        <p class="kw-hint" id="qr-link-label"></p>
+        <div class="note" id="qr-lib-note" hidden><strong>Le dessinateur de QR n’a pas pu se charger</strong> (connexion internet coupée&nbsp;?). Collez l’adresse affichée juste au-dessus dans le générateur de QR de votre choix — elle mène directement au bon outil.</div>
+        <p class="print-hint">Pour l’imprimer&nbsp;: menu d’impression de votre navigateur — seul le QR sortira, bien centré.</p>
+      </div>
+    </div>
+  </section>
+
   </main>
 
   <section aria-label="Découvrez aussi" style="border-top:1px solid rgba(58,42,32,.18);padding:22px 4px 4px;margin-top:8px">
@@ -2307,6 +2312,7 @@ function hWireRecorder(){
   });
   $("h-rec-stop").addEventListener("click", function(){ if (rec && rec.state!=="inactive") rec.stop(); });
   $("h-rec-remove").addEventListener("click", function(){ H.audio = null; hRecResetUI(); });
+  $("h-rec-replay").addEventListener("click", function(){ var a=$("h-rec-audio"); if (a) a.play(); });
 }
 
 /* --- cards --- */
@@ -2710,6 +2716,7 @@ $("d-to3").addEventListener("click", function(){
 function dShowGate(){
   showScreen(["d-gate","d-vote"], "d-gate");
   $("d-gate-title").innerHTML = "À vous, "+esc(D.names[D.voter])+" !";
+  $("d-gate-count").textContent = "Vote de "+D.names[D.voter]+" — "+(D.voter+1)+" sur "+D.names.length;
   $("d-gate-go").innerHTML = "C’est moi, je vote " +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 }
@@ -2725,7 +2732,7 @@ var VOTE_DEF = [
 ];
 function dRenderVotes(){
   $("d-vote-title").textContent = D.names[D.voter]+", à vous de voter";
-  $("d-vote-count").textContent = "Personne "+(D.voter+1)+" sur "+D.names.length;
+  $("d-vote-count").textContent = "Vote de "+D.names[D.voter]+" — "+(D.voter+1)+" sur "+D.names.length;
   var ul = $("d-votes"); ul.innerHTML = "";
   D.options.forEach(function(opt, oi){
     var li = document.createElement("li");
@@ -2834,12 +2841,17 @@ function dRenderVerdict(tally){
   });
   /* re-tirer button state */
   var best = dBestSet(tally);
+  var tie = $("d-tie-list");
+  if (best.set.length>1){
+    tie.hidden = false;
+    tie.textContent = "À égalité : " + best.set.map(function(x){ return x.t.name; }).join(", ") + ".";
+  } else { tie.hidden = true; }
   var more = !best.vetoAll && best.set.some(function(x){ return D.rerolled.indexOf(x.i)===-1 && x.i!==D.winner; });
   if (best.vetoAll) more = false;
-  $("d-reroll").disabled = !more;
+  $("d-reroll").hidden = !more;
   $("d-reroll").innerHTML =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5"/></svg>' +
-    (more ? "Re-tirer parmi les meilleures ("+best.set.length+" ex æquo)" : "Re-tirer");
+    "Voir un autre ex æquo ("+best.set.length+" ex æquo)";
 }
 $("d-reroll").addEventListener("click", function(){
   if (D.winner!==null) D.rerolled.push(D.winner);
@@ -3418,6 +3430,7 @@ function cMoney(n){ return n.toLocaleString("fr-CA",{minimumFractionDigits:2,max
     C.files[which]=f;
     if(C.urls[which])URL.revokeObjectURL(C.urls[which]);
     C.urls[which]=URL.createObjectURL(f); $("c-img-"+which).src=C.urls[which]; $("c-preview-"+which).classList.add("on");
+    cLireEtiquettes();
   });
 });
 function cExtract(text,which){
@@ -3430,9 +3443,10 @@ function cExtract(text,which){
   if(price)$("c-price-"+which).value=String(price).replace(".",",");
   if(size)$("c-size-"+which).value=String(size).replace(".",",");
   if(unit)$("c-unit-"+which).value=unit.toLowerCase(); /* la valeur de l’option est « l », pas « L » */
+  if(price||size){$("c-price-"+which).style.background="#fff3c4";$("c-size-"+which).style.background="#fff3c4";}
   return {price:price,size:size,unit:unit};
 }
-$("c-read-photos").addEventListener("click",function(){
+function cLireEtiquettes(){
   var chosen=["a","b"].filter(function(k){return C.files[k];}), status=$("c-ocr-status");
   status.hidden=false;
   if(!chosen.length){status.innerHTML="<strong>Ajoutez au moins une photo.</strong> Vous pouvez aussi entrer les chiffres à la main.";return;}
@@ -3450,7 +3464,7 @@ $("c-read-photos").addEventListener("click",function(){
       status.innerHTML="<strong>Chiffres proposés — vérifiez-les :</strong><br>"+lines.map(esc).join("<br>");
     });
   }).catch(function(){status.innerHTML="<strong>La lecture automatique n’a pas pu démarrer.</strong> Entrez simplement le prix et le format à la main.";});
-});
+}
 function cCalculate(){
   var a=cInfo("a"),b=cInfo("b"), badA=!isFinite(a.price)||!isFinite(a.size),badB=!isFinite(b.price)||!isFinite(b.size);
   setInvalid("c-price-field-a",!isFinite(a.price));setInvalid("c-size-field-a",!isFinite(a.size));
@@ -3464,7 +3478,8 @@ function cCalculate(){
   $("c-rate-a").innerHTML="<span>"+esc(a.name)+"</span><strong>"+esc(cMoney(a.rate))+"</strong><span>par "+basis+"</span>";
   $("c-rate-b").innerHTML="<span>"+esc(b.name)+"</span><strong>"+esc(cMoney(b.rate))+"</strong><span>par "+basis+"</span>";
   var saving=winner?diff:0;
-  $("c-saving").innerHTML=winner?("<strong>Économie réelle :</strong> "+esc(cMoney(saving))+" par "+basis+" par rapport à l’autre format."):"<strong>Verdict :</strong> aucun des deux formats n’est réellement plus économique.";
+  var achat=winner?diff*(winner.base/100):0;
+  $("c-saving").innerHTML=winner?("<strong>Écart :</strong> "+esc(cMoney(saving))+" par "+basis+". Sur cet achat : vous économisez "+esc(cMoney(achat))+" en prenant "+esc(winner.name)+"."):"<strong>Verdict :</strong> aucun des deux formats n’est réellement plus économique.";
   C.copyText="Le vrai prix au 100 g\n"+a.name+" : "+cMoney(a.rate)+" / "+basis+"\n"+b.name+" : "+cMoney(b.rate)+" / "+basis+"\nVerdict : "+$("c-winner").textContent;
   $("c-result").hidden=false; $("c-result").scrollIntoView({behavior:"smooth",block:"start"});
 }
@@ -3476,7 +3491,7 @@ function copyPlain(text,done){
 function copyFallback(text,done){var ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}document.body.removeChild(ta);}
 $("c-copy").addEventListener("click",function(){copyPlain(C.copyText,function(){$("c-copy-status").textContent="Verdict copié.";});});
 $("c-reset").addEventListener("click",function(){
-  ["a","b"].forEach(function(k){$("c-name-"+k).value="";$("c-price-"+k).value="";$("c-size-"+k).value="";$("c-unit-"+k).value="g";$("c-photo-"+k).value="";$("c-preview-"+k).classList.remove("on");C.files[k]=null;if(C.urls[k])URL.revokeObjectURL(C.urls[k]);C.urls[k]=null;});
+  ["a","b"].forEach(function(k){$("c-name-"+k).value="";$("c-price-"+k).value="";$("c-price-"+k).style.background="";$("c-size-"+k).value="";$("c-size-"+k).style.background="";$("c-unit-"+k).value="g";$("c-photo-"+k).value="";$("c-preview-"+k).classList.remove("on");C.files[k]=null;if(C.urls[k])URL.revokeObjectURL(C.urls[k]);C.urls[k]=null;});
   $("c-result").hidden=true;$("c-ocr-status").hidden=true;$("c-copy-status").textContent="";
 });
 
@@ -3499,19 +3514,21 @@ function mBuild(){
   var ask=goal?("À la fin de cet appel, j’aimerais "+goal.replace(/[.!?]+$/g,"").toLowerCase()+"."):"J’aimerais comprendre ce que je dois faire ensuite.";
   if(M.tone==="ferme")ask=goal?("Je souhaite régler ceci aujourd’hui : "+goal.replace(/[.!?]+$/g,"").toLowerCase()+"."):"Je souhaite obtenir une réponse claire et une prochaine étape aujourd’hui.";
   var steps=[hello];if(ref)steps.push("Ma référence est : "+ref+".");steps.push(ask);
-  var qs=mContext(to,about);if(M.tone==="court")qs=qs.slice(0,2);qs.forEach(function(q){steps.push(q);});
+  var qs=mContext(to,about);if(M.tone==="court")qs=qs.slice(0,2);
   if(M.tone!=="court")steps.push("Pour être certain d’avoir bien compris : pouvez-vous me résumer la prochaine étape et la date à retenir?");
   var prep=["Avoir devant vous les lettres, courriels ou dates utiles.","Garder un crayon pour noter le nom de la personne et les prochaines étapes."];
   if(ref)prep.unshift("Garder votre référence à portée de main : "+ref+".");
   $("m-title").textContent="Appeler "+to;
   $("m-prep").innerHTML=prep.map(function(x){return "<li>"+esc(x)+"</li>";}).join("");
   $("m-steps-list").innerHTML=steps.map(function(x){return "<li><div><q>"+esc(x)+"</q></div></li>";}).join("");
-  M.copyText="Le Démêleur — Appeler "+to+"\n\nAvant l’appel :\n- "+prep.join("\n- ")+"\n\nScript :\n"+steps.map(function(x,i){return (i+1)+". "+x;}).join("\n")+"\n\nAvant de raccrocher : noter le nom, la date et la prochaine étape.";
+  $("m-questions-list").innerHTML=qs.map(function(q){return "<li><label><input type=\"checkbox\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:6px\" /> "+esc(q)+"</label></li>";}).join("");
+  M.copyText="Le Démêleur — Appeler "+to+"\n\nAvant l’appel :\n- "+prep.join("\n- ")+"\n\nScript :\n"+steps.map(function(x,i){return (i+1)+". "+x;}).join("\n")+"\n\nQuestions à poser :\n"+qs.map(function(q,i){return (i+1)+". "+q;}).join("\n")+"\n\nAvant de raccrocher : noter le nom, la date et la prochaine étape.";
   $("m-form-card").hidden=true;$("m-result").hidden=false;$("m-result").scrollIntoView({behavior:"smooth",block:"start"});
 }
 $("m-build").addEventListener("click",mBuild);
 $("m-edit").addEventListener("click",function(){$("m-result").hidden=true;$("m-form-card").hidden=false;$("m-copy-status").textContent="";$("m-form-card").scrollIntoView({behavior:"smooth",block:"start"});});
 $("m-copy").addEventListener("click",function(){copyPlain(M.copyText,function(){$("m-copy-status").textContent="Script copié — vous pouvez le garder dans vos notes.";});});
+$("m-print").addEventListener("click",function(){window.print();});
 
 /* ============================== TOOL 6 — Démarches ==============================
    Parcours fixes, texte = dossier de preuves uniquement (vérifié le 2026-10-20).
@@ -3599,7 +3616,7 @@ var X_DEM = [
   },
   {
     id:"logement",
-    titre:"Logement",
+    titre:"Logement trop cher",
     sous:"Demander un logement à loyer modique ou un supplément au loyer",
     org:"l’office d’habitation de votre territoire",
     intro:"Votre logement coûte trop cher, ou vous n’en trouvez pas. Deux portes existent au Québec : le logement à loyer modique (HLM) et le supplément au loyer. Voici comment cogner, selon Québec.ca et le guide officiel de la SHQ.",
@@ -3794,8 +3811,9 @@ xRenderList();
       result = $("qr-result"), label = $("qr-link-label"),
       libNote = $("qr-lib-note"), printDiv = $("qr-print");
   if (!input) return;
+  if (!input.value.trim()){ input.value = location.href.split("#")[0].split("?")[0]; }
   var slug = "paperasse";
-  var TITLES = { paperasse:"Le décodeur de paperasse", decideur:"On tranche !", heritage:"L’héritage vivant", comparateur:"Le vrai prix au 100 g", demeleur:"Le Démêleur", demarches:"Démarches — la prochaine étape", coffre:"Le Coffre à codes" };
+  var TITLES = { paperasse:"Le décodeur de paperasse", decideur:"On tranche !", heritage:"L’héritage vivant", comparateur:"Le vrai prix au 100 g", demeleur:"Le Démêleur", demarches:"Démarches — la prochaine étape", coffre:"Le Coffre à codes", relanceur:"Le Relanceur" };
   var libPromise = null;
 
   function ensureLib(){
@@ -3879,6 +3897,7 @@ xRenderList();
       draw();
     });
   });
+  if (input.value.trim()) draw();
 })();
 </script>
 <script>
@@ -4314,7 +4333,7 @@ xRenderList();
       ev.preventDefault();
       var err = cf$("erreurRappel");
       if (cf$("rappelMaitre").value !== codeNouveauMemoire){
-        err.textContent = "Ce n'est pas tout à fait ça. Réessayez tranquillement — ou touchez « le revoir » pour le relire. Aucune punition.";
+        err.textContent = "Ce n'est pas tout à fait ça. Réessayez tranquillement — ou touchez « Revoir le code que je viens de créer » pour le relire. Aucune punition.";
         err.classList.remove("cf-hidden");
         return;
       }
@@ -4824,7 +4843,7 @@ xRenderList();
       }
       feuille.appendChild(table);
       var or = document.createElement("p"); or.style.marginTop = "16px";
-      or.innerHTML = "<strong>La règle d'or :</strong> HP ne vous demandera JAMAIS votre code maître, votre fichier de coffre, ni une photo de cette fiche. Ni par courriel, ni par téléphone, ni par texto. Cet outil n'est connecté à rien : si un message dit que votre coffre est compromis, il est faux.";
+      or.innerHTML = "<strong>Rappel :</strong> HP ne vous demandera jamais votre code maître.";
       feuille.appendChild(or);
       var pied = document.createElement("p"); pied.style.marginTop = "10px";
       pied.textContent = "Cette fiche montre vos codes en clair : gardez-la comme de l’argent. Si vous la perdez, changez vos codes les plus importants. Si vos codes changent, réimprimez une nouvelle fiche et détruisez l’ancienne.";
@@ -5256,6 +5275,7 @@ function rlMessage(item, ton, vous){
   // a choisi « Tu » dans le panneau du message.
   vous = vous !== false;
   var date = rlDateLongue(item.date);
+  var quoi = quoi + ((item.montant && quoi.indexOf(item.montant) === -1) ? " (" + item.montant + " $)" : "");
   var diff = rlDiff(item);
   var retard = "", retardJe = "";
   if (diff < 0){
@@ -5267,24 +5287,24 @@ function rlMessage(item, ton, vous){
   }
   if (item.sens === "doit"){
     if (ton === "doux") return vous
-      ? "Bonjour " + item.nom + ", j’espère que vous allez bien ! Petit rappel en douceur : " + item.quoi + " — c’était prévu pour le " + date + ". Quand vous aurez un moment, ce serait vraiment apprécié. Merci !"
-      : "Bonjour " + item.nom + ", j’espère que tu vas bien ! Petit rappel en douceur : " + item.quoi + " — c’était prévu pour le " + date + ". Quand tu auras un moment, ce serait vraiment apprécié. Merci !";
+      ? "Bonjour " + item.nom + ", j’espère que vous allez bien ! Petit rappel en douceur : " + quoi + " — c’était prévu pour le " + date + ". Quand vous aurez un moment, ce serait vraiment apprécié. Merci !"
+      : "Bonjour " + item.nom + ", j’espère que tu vas bien ! Petit rappel en douceur : " + quoi + " — c’était prévu pour le " + date + ". Quand tu auras un moment, ce serait vraiment apprécié. Merci !";
     if (ton === "ferme") return vous
-      ? "Bonjour " + item.nom + ", je vous relance au sujet de ceci : " + item.quoi + ". L’échéance était le " + date + retard + ". J’aimerais qu’on règle ça sans tarder — dites-moi quand ce sera fait. Merci."
-      : "Bonjour " + item.nom + ", je te relance au sujet de ceci : " + item.quoi + ". L’échéance était le " + date + retard + ". J’aimerais qu’on règle ça sans tarder — dis-moi quand ce sera fait. Merci.";
+      ? "Bonjour " + item.nom + ", je vous relance au sujet de ceci : " + quoi + ". L’échéance était le " + date + retard + ". J’aimerais qu’on règle ça sans tarder — dites-moi quand ce sera fait. Merci."
+      : "Bonjour " + item.nom + ", je te relance au sujet de ceci : " + quoi + ". L’échéance était le " + date + retard + ". J’aimerais qu’on règle ça sans tarder — dis-moi quand ce sera fait. Merci.";
     return vous
-      ? "Bonjour " + item.nom + ", c’est urgent : " + item.quoi + " devait être réglé pour le " + date + retard + ". J’ai besoin que ce soit fait aujourd’hui. Répondez-moi tout de suite pour me dire comment vous vous y prenez."
-      : "Bonjour " + item.nom + ", c’est urgent : " + item.quoi + " devait être réglé pour le " + date + retard + ". J’ai besoin que ce soit fait aujourd’hui. Réponds-moi tout de suite pour me dire comment tu t’y prends.";
+      ? "Bonjour " + item.nom + ", c’est urgent : " + quoi + " devait être réglé pour le " + date + retard + ". J’ai besoin que ce soit fait aujourd’hui. Répondez-moi tout de suite pour me dire comment vous vous y prenez."
+      : "Bonjour " + item.nom + ", c’est urgent : " + quoi + " devait être réglé pour le " + date + retard + ". J’ai besoin que ce soit fait aujourd’hui. Réponds-moi tout de suite pour me dire comment tu t’y prends.";
   }
   if (ton === "doux") return vous
-    ? "Bonjour " + item.nom + ", un petit mot pour vous dire que je ne vous ai pas oublié : " + item.quoi + " — prévu pour le " + date + ". Je m’en occupe très bientôt. Merci de votre patience !"
-    : "Bonjour " + item.nom + ", un petit mot pour te dire que je ne t’ai pas oublié : " + item.quoi + " — prévu pour le " + date + ". Je m’en occupe très bientôt. Merci de ta patience !";
+    ? "Bonjour " + item.nom + ", un petit mot pour vous dire que je ne vous ai pas oublié : " + quoi + " — prévu pour le " + date + ". Je m’en occupe très bientôt. Merci de votre patience !"
+    : "Bonjour " + item.nom + ", un petit mot pour te dire que je ne t’ai pas oublié : " + quoi + " — prévu pour le " + date + ". Je m’en occupe très bientôt. Merci de ta patience !";
   if (ton === "ferme") return vous
-    ? "Bonjour " + item.nom + ", je vous confirme que je m’occupe de ceci : " + item.quoi + ". Échéance : le " + date + retardJe + ". Je vous tiens au courant dès que c’est fait."
-    : "Bonjour " + item.nom + ", je te confirme que je m’occupe de ceci : " + item.quoi + ". Échéance : le " + date + retardJe + ". Je te tiens au courant dès que c’est fait.";
+    ? "Bonjour " + item.nom + ", je vous confirme que je m’occupe de ceci : " + quoi + ". Échéance : le " + date + retardJe + ". Je vous tiens au courant dès que c’est fait."
+    : "Bonjour " + item.nom + ", je te confirme que je m’occupe de ceci : " + quoi + ". Échéance : le " + date + retardJe + ". Je te tiens au courant dès que c’est fait.";
   return vous
-    ? "Bonjour " + item.nom + ", je vous dois ceci : " + item.quoi + ". L’échéance : le " + date + retardJe + ". Je m’en occupe aujourd’hui même et je vous confirme dès que c’est réglé. Merci de votre compréhension."
-    : "Bonjour " + item.nom + ", je te dois ceci : " + item.quoi + ". L’échéance : le " + date + retardJe + ". Je m’en occupe aujourd’hui même et je te confirme dès que c’est réglé. Merci de ta compréhension.";
+    ? "Bonjour " + item.nom + ", je vous dois ceci : " + quoi + ". L’échéance : le " + date + retardJe + ". Je m’en occupe aujourd’hui même et je vous confirme dès que c’est réglé. Merci de votre compréhension."
+    : "Bonjour " + item.nom + ", je te dois ceci : " + quoi + ". L’échéance : le " + date + retardJe + ". Je m’en occupe aujourd’hui même et je te confirme dès que c’est réglé. Merci de ta compréhension.";
 }
 function rlCopier(txt, statusEl){
   function ok(){ if (statusEl) statusEl.textContent = "Message copié ! Collez-le dans votre courriel, votre texto ou votre application de messagerie."; }
@@ -5452,7 +5472,7 @@ function rlRendre(){
     }
     carte.appendChild(top);
 
-    var quoi = document.createElement("p"); quoi.className = "rl-quoi"; quoi.textContent = item.quoi;
+    var quoi = document.createElement("p"); quoi.className = "rl-quoi"; quoi.textContent = item.quoi + ((item.montant && item.quoi.indexOf(item.montant) === -1) ? " — " + item.montant + " $" : "");
     carte.appendChild(quoi);
     var quand = document.createElement("p"); quand.className = "rl-when";
     quand.textContent = "Échéance : " + rlDateLongue(item.date) + " — " + rlHumain(diff);
@@ -5503,15 +5523,17 @@ rl$("rl-form").addEventListener("submit", function(ev){
   var quoi = rl$("rl-quoi").value.trim();
   var date = rl$("rl-date").value;
   var note = rl$("rl-note").value.trim();
+  var montant = rl$("rl-montant").value.trim().replace(",", ".");
   var err = rl$("rl-form-err");
   function ko(msg){ err.textContent = msg; err.hidden = false; }
   err.hidden = true;
   if (!nom) return ko("Écrivez le nom de la personne — c’est avec lui que le message commence.");
   if (!quoi) return ko("Écrivez ce qui est dû : un devis, un rappel, un objet prêté, un remboursement…");
   if (!date || !rlParseDate(date)) return ko("Choisissez une date d’échéance, même approximative : c’est elle qui fait passer la carte au rouge au bon moment.");
-  rl.items.push({ id: rlId(), sens: rl.volet, nom: nom, quoi: quoi, date: date, note: note });
+  if (montant && !/^\d+(\.\d{1,2})?$/.test(montant)) return ko("Le montant s’écrit en chiffres (ex. 40).");
+  rl.items.push({ id: rlId(), sens: rl.volet, nom: nom, quoi: quoi, date: date, note: note, montant: montant || null });
   rlSauver(); rlRendre();
-  rl$("rl-nom").value = ""; rl$("rl-quoi").value = ""; rl$("rl-note").value = "";
+  rl$("rl-nom").value = ""; rl$("rl-quoi").value = ""; rl$("rl-montant").value = ""; rl$("rl-note").value = "";
   rl$("rl-date").value = rlISO(new Date());
   rl$("rl-nom").focus();
 });

@@ -73,7 +73,7 @@ h2{font-family:var(--font-titres); color:var(--encre);}
   padding:20px; margin:16px 0; box-shadow:var(--ombre);}
 .etiquette{font-size:.8rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--brun); margin-bottom:6px;}
 label{display:block; font-weight:600; margin:14px 0 5px; color:var(--encre);}
-input[type="number"],input[type="text"],select,textarea{width:100%; font-size:1.12rem; padding:12px 14px;
+input[type="number"],input[type="text"],input[type="date"],select,textarea{width:100%; font-size:1.12rem; padding:12px 14px;
   border:1.5px solid var(--bord); border-radius:10px; background:#fff; color:var(--encre); font-family:var(--font-texte);}
 input:focus,select:focus,textarea:focus{outline:none; border-color:var(--dore);}
 :focus-visible{outline:3px solid var(--dore); outline-offset:2px;}
@@ -84,6 +84,7 @@ button.principal{background:linear-gradient(135deg,#c88320,#e6a844); color:#fff;
   box-shadow:0 3px 10px rgba(7,17,27,.20);}
 button.discret{background:none; border:1px solid var(--bord); font-weight:600; font-size:.95rem; color:var(--brun);}
 .message{min-height:1.4em; color:var(--brun); font-style:italic; margin-top:10px;}
+.ech-suppr{background:none; border:none; color:var(--brique); font-weight:700; cursor:pointer; padding:0 6px; width:auto; font-size:1rem;}
 .faq{margin-top:26px;}
 .faq h2{font-size:1.35rem; margin:0 0 4px;}
 .faq details{background:var(--carte); border:1px solid var(--dore); border-radius:12px;
@@ -131,13 +132,9 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
   <p style="text-align:center;color:var(--brun);font-size:.92rem;margin:0 0 4px">📍 <span id="prov-nom">Québec</span> · <a href="index.html" style="color:var(--brun)">changer de province</a></p>
 
   <section class="carte" aria-label="Vos chiffres du mois">
-    <div class="etiquette">Revenus disponibles</div>
-    <div class="montant" id="aff-revenus">—</div>
     <label for="in-revenus">Mes revenus ce mois-ci ($)</label>
     <input type="number" id="in-revenus" inputmode="decimal" min="0" step="0.01" placeholder="ex. 2400">
 
-    <div class="etiquette" style="margin-top:14px">Dépenses qui restent</div>
-    <div class="montant" id="aff-depenses">—</div>
     <label for="in-depenses">Ce qu'il me reste à payer ce mois-ci ($)</label>
     <input type="number" id="in-depenses" inputmode="decimal" min="0" step="0.01" placeholder="ex. 1650">
     <p class="message" id="msg-init">Entrez vos deux chiffres, et je fais le reste. Promis, ça prend 30&nbsp;secondes.</p>
@@ -154,6 +151,12 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
   <section class="carte" aria-label="Échéances à venir">
     <h2 style="font-size:1.2rem;margin-top:0">📅 Échéances à venir <span id="prov-echeances" style="font-weight:400;font-size:.95rem;color:var(--brun)"></span></h2>
     <ul id="liste-echeances" style="margin:8px 0;padding-left:20px"></ul>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <input type="text" id="in-ech-quoi" placeholder="Quoi ? ex. taxes municipales" aria-label="Nom de l'échéance" style="flex:2;min-width:160px">
+      <input type="date" id="in-ech-quoi-date" aria-label="Date de l'échéance" style="flex:1;min-width:150px">
+      <button id="btn-ech-ajout" class="discret" style="width:auto;padding:10px 14px">Ajouter une échéance</button>
+    </div>
+    <p class="message" id="msg-ech"></p>
     <p class="note" id="note-echeances" style="margin-bottom:0">💡 Au Québec, beaucoup sont payés aux deux semaines : entrez votre total du mois (2 paies, parfois 3).</p>
   </section>
 
@@ -180,7 +183,7 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
     <h2 style="font-size:1.2rem;margin-top:0">Combien puis-je dépenser aujourd'hui&nbsp;?</h2>
     <label for="in-reste-jour">Il me reste ($) <span style="font-weight:400;color:var(--brun)">— par défaut, votre reste du mois</span></label>
     <input type="number" id="in-reste-jour" inputmode="decimal" min="0" step="0.01">
-    <label for="in-jours">Jours restants</label>
+    <label for="in-jours">Jours restants <span id="lbl-jours-fin" style="font-weight:400;color:var(--brun)"></span></label>
     <input type="number" id="in-jours" inputmode="numeric" min="1" step="1">
     <label for="in-simu">Si je dépense aujourd'hui ($) <span style="font-weight:400;color:var(--brun)">— pour voir l'effet</span></label>
     <input type="number" id="in-simu" inputmode="decimal" min="0" step="0.01" placeholder="ex. 50">
@@ -276,6 +279,18 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
     if (d < ajd) d = new Date(ajd.getFullYear()+1, m, j);
     return d;
   }
+  /* ── Échéances personnelles : ajoutées par le visiteur, gardées sur l'appareil ── */
+  var CLE_ECH = "hp-reste-echeances-v1";
+  function lireEcheances(){
+    try { var d = JSON.parse(localStorage.getItem(CLE_ECH) || "[]"); return Array.isArray(d) ? d : []; }
+    catch(e){ return []; }
+  }
+  function ecrireEcheances(liste){
+    try { localStorage.setItem(CLE_ECH, JSON.stringify(liste)); } catch(e){}
+  }
+  function echEsc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
   function afficherEcheances(){
     var p = hpProvince();
     $("prov-nom").textContent = p.info.nom;
@@ -292,6 +307,11 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
       }
     });
     $("liste-echeances").innerHTML = html;
+    lireEcheances().forEach(function(e, i){
+      var d = new Date(e.iso + "T00:00:00");
+      var quand = isNaN(d.getTime()) ? echEsc(e.iso) : d.toLocaleDateString("fr-CA", {day:"numeric", month:"long"});
+      $("liste-echeances").innerHTML += "<li><strong>" + quand + "</strong> — " + echEsc(e.t) + " <button type=\"button\" class=\"ech-suppr\" data-ech=\"" + i + "\" aria-label=\"Supprimer cette échéance\">×</button></li>";
+    });
     $("note-echeances").textContent = (p.code === "QC")
       ? "💡 Au Québec, beaucoup sont payés aux deux semaines : entrez votre total du mois (2 paies, parfois 3)."
       : "💡 Chaque province a ses dates : ajoutez celles qui comptent pour vous dans vos dépenses du mois.";
@@ -336,8 +356,6 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
     var jours = joursRestants();
     var parJour = reste / jours;
 
-    $("aff-revenus").textContent = donnees.revenus ? fmt(donnees.revenus) : "—";
-    $("aff-depenses").textContent = donnees.depenses ? fmt(donnees.depenses) : "—";
     $("aff-reste").textContent = (donnees.revenus || donnees.depenses) ? fmt(reste) : "—";
     $("aff-reste").classList.toggle("reste-negatif", reste < 0);
 
@@ -349,6 +367,8 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
       elJour.textContent = "—"; elJour.classList.remove("negatif");
     }
     $("aff-jusquau").textContent = finDeMoisTexte() + " → " + jours + " jour" + (jours > 1 ? "s" : "");
+    var finTxt = finDeMoisTexte();
+    $("lbl-jours-fin").textContent = "— " + finTxt.charAt(0).toLowerCase() + finTxt.slice(1);
 
     var msg = "";
     if (!donnees.revenus && !donnees.depenses){
@@ -528,6 +548,26 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
   if (donnees.revenus) $("in-revenus").value = donnees.revenus;
   if (donnees.depenses) $("in-depenses").value = donnees.depenses;
   if (donnees.revenus || donnees.depenses) $("msg-init").textContent = "Vous revoilà. Vos chiffres sont toujours là.";
+  $("btn-ech-ajout").addEventListener("click", function(){
+    var quoi = $("in-ech-quoi").value.trim();
+    var quand = $("in-ech-quoi-date").value;
+    var msg = $("msg-ech");
+    if (!quoi || !quand){ msg.textContent = "Écrivez ce que c'est et choisissez une date."; return; }
+    var liste = lireEcheances();
+    liste.push({ t: quoi, iso: quand });
+    ecrireEcheances(liste);
+    $("in-ech-quoi").value = ""; $("in-ech-quoi-date").value = "";
+    msg.textContent = "Échéance ajoutée — elle restera sur cet appareil.";
+    afficherEcheances();
+  });
+  $("liste-echeances").addEventListener("click", function(ev){
+    var b = ev.target.closest ? ev.target.closest("[data-ech]") : null;
+    if (!b) return;
+    var liste = lireEcheances();
+    liste.splice(parseInt(b.getAttribute("data-ech"), 10), 1);
+    ecrireEcheances(liste);
+    afficherEcheances();
+  });
   afficherEcheances();
   recalculer();
 })();
