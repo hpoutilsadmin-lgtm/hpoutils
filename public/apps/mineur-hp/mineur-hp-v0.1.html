@@ -63,7 +63,7 @@
   <p class="sub">Prototype v0.1 — la boucle de base, sans boutique, sans achat</p>
 
   <section class="honest" id="honest">
-    <b>Minute ! J't'en pause.</b> Ici, on creuse pour le fun. Les <b>boulons d'or</b> sont une monnaie de jeu — <b>pas du vrai bitcoin, pas du vrai argent</b>, et ça ne le deviendra jamais. <b>Ta mine reste dans ton téléphone</b> : rien ne quitte ton appareil, aucun compte. — Sir H. Gepeto, contremaître
+    Ici, on creuse pour le fun. Les <b>boulons d'or</b> sont une monnaie de jeu — <b>pas du vrai bitcoin, pas du vrai argent</b>, et ça ne le deviendra jamais. <b>Ta mine reste dans ton téléphone</b> : rien ne quitte ton appareil, aucun compte. — Sir H. Gepeto, contremaître
   </section>
 
   <section class="bubble" id="bubble" role="button" tabindex="0" aria-label="Message de Sir H. Gepeto, toucher pour effacer">
@@ -122,7 +122,7 @@ const TOOLS = {
 const IDLE_LINES = [
   "On avance ! Mais on respire aussi.",
   "Suis les étincelles ✨ : elles racontent où la roche cache quelque chose.",
-  "Minute ! J't'en pause. Une bonne mine, ça se creuse sans se presser.",
+  "Une bonne mine, ça se creuse sans se presser.",
   "Pixel dort quelque part, ici. On la laisse tranquille, elle nous le rend bien."
 ];
 const SAVE_KEY = "mineur-hp-v01";
@@ -169,7 +169,7 @@ function newGame(){
   S = freshState();
   S.grid = genGrid(GALLERIES[0]);
   save(); renderAll();
-  say("Minute ! J't'en pause. Ici, on creuse pour le fun. Les boulons d'or, c'est de la monnaie de jeu — pas du vrai bitcoin, pas du vrai argent. Ta mine reste dans ton téléphone : rien ne quitte ton appareil, aucun compte. Choisis ton outil, suis les étincelles, et on avance !");
+  say("Ici, on creuse pour le fun. Les boulons d'or, c'est de la monnaie de jeu — pas du vrai bitcoin, pas du vrai argent. Ta mine reste dans ton téléphone : rien ne quitte ton appareil, aucun compte. Choisis ton outil, suis les étincelles, et on avance !");
 }
 
 /* ================= Sauvegarde locale (appareil seulement) ================= */

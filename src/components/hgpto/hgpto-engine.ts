@@ -115,8 +115,8 @@ export function initHgpto() {
                         GÉNÉREUX (il aide et donne d'abord), ESPIÈGLE-RÉSILIENT
                         (il rit de lui-même et se relève). Son défaut attachant,
                         le seul, signature : gaffeur-maladroit. Voix constante :
-                        deux mots fétiches officiels — « On avance ! » et
-                        « Minute ! J't'en pause. » — salutations en emojis,
+                        un mot fétiche officiel — « On avance ! »,
+                        salutations en emojis,
                         tournures québécoises stables d'une bulle à l'autre.
                         Moments signature : saluer (main levée + charabia),
                         célébrer (sa petite célébration de victoire, notamment
@@ -1614,8 +1614,7 @@ export function initHgpto() {
           }, 3000);
         } else {
           /* Mot d'HP 5 nov. 2026 : la sieste automatique ne s'annonce
-             plus avec « Minute… j't'en pause » — il s'endort en silence.
-             La phrase ne se dit qu'à la vraie Pause (setLifePause). */
+             plus — il s'endort en silence. */
           hideBubble();
           setState('sleep'); setExpr('sleep');
         }
@@ -1739,10 +1738,8 @@ export function initHgpto() {
           (function(el){ setTimeout(function(){ el.remove(); }, 1050); })(s);
         }
       }
-      /* « Minute ! J't'en pause. » : code mort retiré le 5 nov. 2026
-         (mot d'HP : la phrase ne se dit plus n'importe quand) — la
-         fonction n'était plus appelée nulle part ; la phrase ne vit
-         plus qu'à la vraie Pause (setLifePause). */
+      /* Code mort retiré le 5 nov. 2026 (mot d'HP) — la fonction
+         n'était plus appelée nulle part. */
       var BUSY_VIGNETTES = ['read','cook','cookfail','tinker','mime','wrestler','fix','dust','sweep','janitor'];
       /* Micro-célébration (pack taquin du document, 23 oct. 2026) :
          quand le visiteur TROUVE ce qu'il cherchait — un lien de
@@ -2541,7 +2538,7 @@ export function initHgpto() {
           if (typeof endBataille === 'function' && batailleOn) endBataille('stop');
           if (typeof bataillePanel !== 'undefined' && bataillePanel) bataillePanel.hidden = true;
           if (state !== 'sleep'){ setState('idle'); setExpr('happy'); }
-          showBubble("Minute ! J't'en pause. Touche Pause pour repartir.", 8000, 'none', { now:true });
+          showBubble("Pause. Touche Pause pour repartir.", 8000, 'none', { now:true });
         } else {
           lastInteract = Date.now();
           if (state !== 'sleep'){ setState(reduced ? 'idle' : 'walk'); setExpr('happy'); }
@@ -3693,7 +3690,7 @@ export function initHgpto() {
         heliumTimer = setTimeout(endHelium, 12000);
         showBubble(esc(src === 'touch'
           ? "Oups ! J'ai respiré trop près de ma balloune… écoute ma voix !"
-          : "Minute ! J't'en pause… je viens de prendre une bouffée d'hélium de ma balloune !"), 5200, 'talk');
+          : "Je viens de prendre une bouffée d'hélium de ma balloune !"), 5200, 'talk');
         logDay("fait mon gag d'hélium (voix d'écureuil, deux phrases max)");
       }
       var heliumFlyTimer = null, heliumBackTimer = null;
