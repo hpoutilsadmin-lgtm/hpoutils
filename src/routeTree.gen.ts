@@ -24,6 +24,7 @@ import { Route as ComprendreRouteImport } from './routes/comprendre'
 import { Route as ConditionsRouteImport } from './routes/conditions'
 import { Route as ConditionsDeVenteRouteImport } from './routes/conditions-de-vente'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
+import { Route as ConfirmerInfolettreRouteImport } from './routes/confirmer-infolettre'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CreeTonHistoireAToiRouteImport } from './routes/cree-ton-histoire-a-toi'
 import { Route as CuisineFamilialeRouteImport } from './routes/cuisine-familiale'
@@ -68,6 +69,7 @@ import { Route as PasseursMerciRouteImport } from './routes/passeurs.merci'
 import { Route as PdfSlugRouteImport } from './routes/pdf.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
 import { Route as ApiPublicGameHeartsRouteImport } from './routes/api/public/game-hearts'
+import { Route as ApiPublicNewsletterConfirmRouteImport } from './routes/api/public/newsletter-confirm'
 import { Route as EnCuisinePanierGrappeRouteImport } from './routes/en-cuisine.panier.$grappe'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as PasseursAnnulerJetonRouteImport } from './routes/passeurs.annuler.$jeton'
@@ -149,6 +151,11 @@ const ConditionsDeVenteRoute = ConditionsDeVenteRouteImport.update({
 const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
   id: '/confidentialite',
   path: '/confidentialite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfirmerInfolettreRoute = ConfirmerInfolettreRouteImport.update({
+  id: '/confirmer-infolettre',
+  path: '/confirmer-infolettre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -371,6 +378,12 @@ const ApiPublicGameHeartsRoute = ApiPublicGameHeartsRouteImport.update({
   path: '/api/public/game-hearts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicNewsletterConfirmRoute =
+  ApiPublicNewsletterConfirmRouteImport.update({
+    id: '/api/public/newsletter-confirm',
+    path: '/api/public/newsletter-confirm',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EnCuisinePanierGrappeRoute = EnCuisinePanierGrappeRouteImport.update({
   id: '/$grappe',
   path: '/$grappe',
@@ -427,6 +440,7 @@ export interface FileRoutesByFullPath {
   '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
+  '/confirmer-infolettre': typeof ConfirmerInfolettreRoute
   '/contact': typeof ContactRoute
   '/cree-ton-histoire-a-toi': typeof CreeTonHistoireAToiRoute
   '/cuisine-familiale': typeof CuisineFamilialeRoute
@@ -471,6 +485,7 @@ export interface FileRoutesByFullPath {
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
+  '/api/public/newsletter-confirm': typeof ApiPublicNewsletterConfirmRoute
   '/en-cuisine/panier/$grappe': typeof EnCuisinePanierGrappeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/passeurs/annuler/$jeton': typeof PasseursAnnulerJetonRoute
@@ -495,6 +510,7 @@ export interface FileRoutesByTo {
   '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
+  '/confirmer-infolettre': typeof ConfirmerInfolettreRoute
   '/contact': typeof ContactRoute
   '/cree-ton-histoire-a-toi': typeof CreeTonHistoireAToiRoute
   '/cuisine-familiale': typeof CuisineFamilialeRoute
@@ -539,6 +555,7 @@ export interface FileRoutesByTo {
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
+  '/api/public/newsletter-confirm': typeof ApiPublicNewsletterConfirmRoute
   '/en-cuisine/panier/$grappe': typeof EnCuisinePanierGrappeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/passeurs/annuler/$jeton': typeof PasseursAnnulerJetonRoute
@@ -564,6 +581,7 @@ export interface FileRoutesById {
   '/conditions': typeof ConditionsRoute
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
+  '/confirmer-infolettre': typeof ConfirmerInfolettreRoute
   '/contact': typeof ContactRoute
   '/cree-ton-histoire-a-toi': typeof CreeTonHistoireAToiRoute
   '/cuisine-familiale': typeof CuisineFamilialeRoute
@@ -608,6 +626,7 @@ export interface FileRoutesById {
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
   '/api/public/game-hearts': typeof ApiPublicGameHeartsRoute
+  '/api/public/newsletter-confirm': typeof ApiPublicNewsletterConfirmRoute
   '/en-cuisine/panier/$grappe': typeof EnCuisinePanierGrappeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/passeurs/annuler/$jeton': typeof PasseursAnnulerJetonRoute
@@ -634,6 +653,7 @@ export interface FileRouteTypes {
     | '/conditions'
     | '/conditions-de-vente'
     | '/confidentialite'
+    | '/confirmer-infolettre'
     | '/contact'
     | '/cree-ton-histoire-a-toi'
     | '/cuisine-familiale'
@@ -678,6 +698,7 @@ export interface FileRouteTypes {
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/game-hearts'
+    | '/api/public/newsletter-confirm'
     | '/en-cuisine/panier/$grappe'
     | '/lovable/email/suppression'
     | '/passeurs/annuler/$jeton'
@@ -702,6 +723,7 @@ export interface FileRouteTypes {
     | '/conditions'
     | '/conditions-de-vente'
     | '/confidentialite'
+    | '/confirmer-infolettre'
     | '/contact'
     | '/cree-ton-histoire-a-toi'
     | '/cuisine-familiale'
@@ -746,6 +768,7 @@ export interface FileRouteTypes {
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/game-hearts'
+    | '/api/public/newsletter-confirm'
     | '/en-cuisine/panier/$grappe'
     | '/lovable/email/suppression'
     | '/passeurs/annuler/$jeton'
@@ -770,6 +793,7 @@ export interface FileRouteTypes {
     | '/conditions'
     | '/conditions-de-vente'
     | '/confidentialite'
+    | '/confirmer-infolettre'
     | '/contact'
     | '/cree-ton-histoire-a-toi'
     | '/cuisine-familiale'
@@ -814,6 +838,7 @@ export interface FileRouteTypes {
     | '/pdf/$slug'
     | '/api/public/download-pdf'
     | '/api/public/game-hearts'
+    | '/api/public/newsletter-confirm'
     | '/en-cuisine/panier/$grappe'
     | '/lovable/email/suppression'
     | '/passeurs/annuler/$jeton'
@@ -839,6 +864,7 @@ export interface RootRouteChildren {
   ConditionsRoute: typeof ConditionsRoute
   ConditionsDeVenteRoute: typeof ConditionsDeVenteRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
+  ConfirmerInfolettreRoute: typeof ConfirmerInfolettreRoute
   ContactRoute: typeof ContactRoute
   CreeTonHistoireAToiRoute: typeof CreeTonHistoireAToiRoute
   CuisineFamilialeRoute: typeof CuisineFamilialeRoute
@@ -882,6 +908,7 @@ export interface RootRouteChildren {
   PdfSlugRoute: typeof PdfSlugRoute
   ApiPublicDownloadPdfRoute: typeof ApiPublicDownloadPdfRoute
   ApiPublicGameHeartsRoute: typeof ApiPublicGameHeartsRoute
+  ApiPublicNewsletterConfirmRoute: typeof ApiPublicNewsletterConfirmRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   PasseursAnnulerJetonRoute: typeof PasseursAnnulerJetonRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -995,6 +1022,13 @@ declare module '@tanstack/react-router' {
       path: '/confidentialite'
       fullPath: '/confidentialite'
       preLoaderRoute: typeof ConfidentialiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confirmer-infolettre': {
+      id: '/confirmer-infolettre'
+      path: '/confirmer-infolettre'
+      fullPath: '/confirmer-infolettre'
+      preLoaderRoute: typeof ConfirmerInfolettreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -1305,6 +1339,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicGameHeartsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/newsletter-confirm': {
+      id: '/api/public/newsletter-confirm'
+      path: '/api/public/newsletter-confirm'
+      fullPath: '/api/public/newsletter-confirm'
+      preLoaderRoute: typeof ApiPublicNewsletterConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en-cuisine/panier/$grappe': {
       id: '/en-cuisine/panier/$grappe'
       path: '/$grappe'
@@ -1397,6 +1438,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConditionsRoute: ConditionsRoute,
   ConditionsDeVenteRoute: ConditionsDeVenteRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
+  ConfirmerInfolettreRoute: ConfirmerInfolettreRoute,
   ContactRoute: ContactRoute,
   CreeTonHistoireAToiRoute: CreeTonHistoireAToiRoute,
   CuisineFamilialeRoute: CuisineFamilialeRoute,
@@ -1440,6 +1482,7 @@ const rootRouteChildren: RootRouteChildren = {
   PdfSlugRoute: PdfSlugRoute,
   ApiPublicDownloadPdfRoute: ApiPublicDownloadPdfRoute,
   ApiPublicGameHeartsRoute: ApiPublicGameHeartsRoute,
+  ApiPublicNewsletterConfirmRoute: ApiPublicNewsletterConfirmRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   PasseursAnnulerJetonRoute: PasseursAnnulerJetonRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
