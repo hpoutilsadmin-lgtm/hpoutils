@@ -51,6 +51,11 @@ export const Route = createFileRoute("/panier")({
  * Stripe avec le crédit en coupon. Le serveur recalcule tout.
  */
 function Page() {
+  // Fermeture temporaire de la boutique (19 nov. 2026) — livraison
+  // bloquée (variables Supabase absentes du runtime live). À retirer
+  // après la migration Supabase. Les boutons de paiement sont désactivés :
+  // aucun paiement ne peut être encaissé pendant la fermeture.
+  const BOUTIQUE_FERMEE = true;
   const [cart, setCart] = useState<Cart>([]);
   const [pret, setPret] = useState(false);
   const [paiement, setPaiement] = useState<"idle" | "envoi" | "indisponible">("idle");
@@ -228,6 +233,24 @@ function Page() {
   return (
     <>
       <PaymentTestModeBanner />
+      {BOUTIQUE_FERMEE && (
+        <p
+          role="status"
+          style={{
+            background: "#f6e8c8",
+            border: "1px solid #d9a860",
+            borderRadius: 8,
+            padding: "12px 16px",
+            margin: "16px auto",
+            maxWidth: 760,
+            textAlign: "center",
+            fontSize: 15,
+          }}
+        >
+          <strong>Boutique fermée pour maintenance.</strong> Les paiements
+          sont suspendus pour le moment — merci de votre compréhension.
+        </p>
+      )}
       <section className="editorial-hero">
         <div className="container">
           <div className="lead-actions">
@@ -367,12 +390,14 @@ function Page() {
                   <button
                     type="button"
                     className="btn-primary"
-                    disabled={paiement === "envoi" || (offrirCoche && !offrirConfirme)}
+                    disabled={BOUTIQUE_FERMEE || paiement === "envoi" || (offrirCoche && !offrirConfirme)}
                     onClick={payer}
                   >
-                    {paiement === "envoi"
-                      ? "On prépare votre paiement…"
-                      : resteApresBon !== null
+                    {BOUTIQUE_FERMEE
+                      ? "Paiement suspendu pour le moment"
+                      : paiement === "envoi"
+                        ? "On prépare votre paiement…"
+                        : resteApresBon !== null
                         ? `Payer le reste (${formatCad(resteApresBon)})`
                         : `Payer ${formatCad(total)}`}
                   </button>
@@ -463,10 +488,10 @@ function Page() {
                       <button
                         type="button"
                         className="btn-primary"
-                        disabled={paiement === "envoi" || courrielCadeau.trim() === ""}
+                        disabled={BOUTIQUE_FERMEE || paiement === "envoi" || courrielCadeau.trim() === ""}
                         onClick={payerAvecBon}
                       >
-                        {paiement === "envoi" ? "On prépare votre paiement…" : "Payer avec votre bon cadeau"}
+                        {BOUTIQUE_FERMEE ? "Paiement suspendu pour le moment" : paiement === "envoi" ? "On prépare votre paiement…" : "Payer avec votre bon cadeau"}
                       </button>
                     </div>
                   </div>
