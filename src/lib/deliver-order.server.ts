@@ -7,7 +7,7 @@
 // - clé courriel par article : delivery-<session>-<priceId,...>
 // - panier, bundle, seul, tome et Offrir traités par le webhook seul.
 // Toute erreur base LÈVE : le webhook répond 400 et Stripe rejoue.
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import { type StripeEnv } from "@/lib/stripe.server";
 import {
   getProduct,
@@ -24,16 +24,9 @@ import {
   resolveTomeSlugsForSession,
 } from "@/lib/tomes-tokens.server";
 
-let _admin: any = null;
-function admin() {
-  if (!_admin) {
-    _admin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-  }
-  return _admin;
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// admin a été retirée au recâblage Supabase externe (20 nov. 2026).
 
 function origin(): string {
   const raw = process.env.SITE_URL?.trim();
@@ -93,7 +86,7 @@ async function markDelivered(db: any, sessionId: string, rows: Array<{ priceId: 
 // delivered = false si déjà livré (delivery_sent_at posé) : on ne
 // renvoie RIEN, on ne recrée RIEN.
 export async function deliverStripeSession(session: any, env: StripeEnv) {
-  const db = admin();
+  const db = supabaseExternalAdmin;
   const payer =
     session.customer_details?.email || session.customer_email || "";
   const { deliveryEmail, isGift } = giftOf(session, payer);

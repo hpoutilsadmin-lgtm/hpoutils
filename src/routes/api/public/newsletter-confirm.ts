@@ -10,8 +10,8 @@ export const Route = createFileRoute("/api/public/newsletter-confirm")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        const supabaseUrl = process.env.HP_SUPABASE_URL;
+        const supabaseServiceKey = process.env.HP_SUPABASE_SERVICE_ROLE_KEY;
 
         if (!supabaseUrl || !supabaseServiceKey) {
           return Response.json({ error: "Server configuration error" }, { status: 500 });

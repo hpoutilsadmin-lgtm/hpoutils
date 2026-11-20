@@ -8,7 +8,7 @@
 
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import {
   type StripeEnv,
   createStripeClient,
@@ -16,16 +16,9 @@ import {
 } from "@/lib/stripe.server";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
 
-let _tomeAdmin: any = null;
-function getTomeAdmin() {
-  if (!_tomeAdmin) {
-    _tomeAdmin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-  }
-  return _tomeAdmin;
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// getTomeAdmin a été retirée au recâblage Supabase externe (20 nov. 2026).
 
 // Limite de débit : 5 tentatives / heure par courriel ou par IP, même
 // motif que recoverOrdersByEmail (table recovery_attempts, déjà en base).
@@ -37,7 +30,7 @@ function getTomeAdmin() {
 // panne de la table.
 async function tomeRateLimitExceeded(email: string): Promise<boolean> {
   try {
-    const admin = getTomeAdmin();
+    const admin = supabaseExternalAdmin;
     const ip =
       getRequestHeader("cf-connecting-ip") ||
       getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ||

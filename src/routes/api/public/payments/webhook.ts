@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import { type StripeEnv, verifyWebhook, createStripeClient } from "@/lib/stripe.server";
 import { deliverStripeSession } from "@/lib/deliver-order.server";
 import {
@@ -11,16 +11,9 @@ import {
   revokeTomeTokensForSessions,
 } from "@/lib/tomes-tokens.server";
 
-let _supabase: any = null;
-function getSupabase() {
-  if (!_supabase) {
-    _supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-  }
-  return _supabase;
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// getSupabase a été retirée au recâblage Supabase externe (20 nov. 2026).
 
 async function handleCheckoutCompleted(rawSession: any, env: StripeEnv) {
   // Sécurité phase 2 : le webhook vérifié est la SEULE source de
@@ -105,7 +98,7 @@ async function handleChargeRefunded(charge: any, env: StripeEnv) {
     amount_refunded: charge.amount_refunded,
     partial: charge.amount_refunded < charge.amount,
   });
-  const { error: refundUpdateError } = await getSupabase()
+  const { error: refundUpdateError } = await supabaseExternalAdmin
     .from("orders")
     .update({
       status: "refunded",

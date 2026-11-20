@@ -11,7 +11,7 @@
 // manuelle par courriel jusqu'au go d'activation.
 
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import {
   type StripeEnv,
   createStripeClient,
@@ -34,16 +34,9 @@ export function getPasseursSiteOrigin(): string {
   return FALLBACK_SITE_ORIGIN;
 }
 
-let _admin: any = null;
-function getAdmin() {
-  if (!_admin) {
-    _admin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-  }
-  return _admin;
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// getAdmin a été retirée au recâblage Supabase externe (20 nov. 2026).
 
 // lookup_key Stripe LIVE (vérifiés le 29 oct. 2026) :
 // 3,00 $/mois récurrent, 28,00 $/an récurrent. Aucune taxe ajoutée
@@ -119,7 +112,7 @@ export const getPasseursSubscriptionByJeton = createServerFn({ method: "POST" })
     return { jeton };
   })
   .handler(async ({ data }) => {
-    const db = getAdmin();
+    const db = supabaseExternalAdmin;
     const { data: row, error } = await db
       .from("passeurs_abonnements")
       .select("formule, date_fin_periode, statut")
@@ -154,7 +147,7 @@ export const cancelPasseursSubscription = createServerFn({ method: "POST" })
     return { jeton, environment: data.environment };
   })
   .handler(async ({ data }) => {
-    const db = getAdmin();
+    const db = supabaseExternalAdmin;
 
     // 1) Retrouver l'abonnement par son jeton. Réponse neutre si inconnu.
     const { data: row, error } = await db

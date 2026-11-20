@@ -58,8 +58,8 @@ function getTrustedSiteOrigin(): string {
 let _admin: SupabaseClient<GiftDatabase> | null = null;
 function getAdmin() {
   if (!_admin) {
-    const url = process.env.SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const url = process.env.HP_SUPABASE_URL;
+    const key = process.env.HP_SUPABASE_SERVICE_ROLE_KEY;
     if (!url || !key) throw new Error("Base des bons cadeaux indisponible");
     _admin = createClient<GiftDatabase>(url, key);
   }

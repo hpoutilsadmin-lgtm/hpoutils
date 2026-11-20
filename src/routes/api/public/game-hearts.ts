@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createClient } from "@supabase/supabase-js";
+import { type SupabaseClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import { GAME_FILES } from "@/lib/jeux-adresses";
 
 /* Cœurs des jeux — compteur public ANONYME « cœurs reçus » (vague 1).
@@ -17,15 +18,15 @@ const SLUGS = new Set(Object.keys(GAME_FILES));
 const MAX_PAR_FENETRE = 30;
 const FENETRE_MS = 10 * 60 * 1000;
 
-function admin() {
-  return createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// admin a été retirée au recâblage Supabase externe (20 nov. 2026).
+// La clé anon N'EST PAS utilisée ici : voir RAPPORT-LOT-RECABLAGE.md
+// § game-hearts (le passage à l'anon exigerait une politique RLS
+// autorisant l'insert anonyme, non confirmée dans le projet externe).
 
 async function compteurs(
-  supabase: ReturnType<typeof admin>,
+  supabase: SupabaseClient,
 ): Promise<Record<string, number> | null> {
   const { data, error } = await supabase
     .from("game_heart_events")
@@ -45,7 +46,7 @@ export const Route = createFileRoute("/api/public/game-hearts")({
     handlers: {
       GET: async () => {
         try {
-          const coeurs = await compteurs(admin());
+          const coeurs = await compteurs(supabaseExternalAdmin);
           if (!coeurs) return Response.json({ actif: false, coeurs: {} });
           return Response.json({ actif: true, coeurs });
         } catch {
@@ -64,7 +65,7 @@ export const Route = createFileRoute("/api/public/game-hearts")({
           return Response.json({ erreur: "jeu inconnu" }, { status: 400 });
         }
         try {
-          const supabase = admin();
+          const supabase = supabaseExternalAdmin;
           const depuis = new Date(Date.now() - FENETRE_MS).toISOString();
           const { count, error: errCount } = await supabase
             .from("game_heart_events")

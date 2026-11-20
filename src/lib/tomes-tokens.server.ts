@@ -15,7 +15,7 @@
 // révocables (remboursement) via revoked_at, et récupérables par courriel
 // (fonction recoverTomeLinks).
 
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import { getTomeBySlug, type Tome } from "@/lib/tomes-catalog";
 // Logique pure (testée en machine) : génération, empreinte, résolution de
 // session, aiguillage webhook. Ré-exportée pour les appelants.
@@ -42,16 +42,9 @@ export interface TomeTokenRow {
   revoked_at: string | null;
 }
 
-let _supabase: any = null;
-function getSupabase() {
-  if (!_supabase) {
-    _supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-  }
-  return _supabase;
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// getSupabase a été retirée au recâblage Supabase externe (20 nov. 2026).
 
 /**
  * Crée les jetons d'une session, une seule fois. Renvoie les jetons BRUTS
@@ -67,7 +60,7 @@ export async function createTomeTokensForSession(args: {
   slugs: string[];
   environment: string;
 }): Promise<Array<{ tome: Tome; token: string | null }>> {
-  const supabase = getSupabase();
+  const supabase = supabaseExternalAdmin;
   const { data: existing } = await supabase
     .from("tome_tokens")
     .select("tome_slug")
@@ -107,7 +100,7 @@ export async function getTomeAccessByToken(
   token: string,
 ): Promise<{ tome: Tome } | null> {
   if (typeof token !== "string" || !/^[a-f0-9]{64}$/.test(token)) return null;
-  const supabase = getSupabase();
+  const supabase = supabaseExternalAdmin;
   const { data } = await supabase
     .from("tome_tokens")
     .select("tome_slug, revoked_at")
@@ -132,7 +125,7 @@ export async function getTomeAccessByToken(
 export async function mintRecoveryTomeTokens(
   email: string,
 ): Promise<Array<{ tome: Tome; token: string }>> {
-  const supabase = getSupabase();
+  const supabase = supabaseExternalAdmin;
   const normalized = email.toLowerCase();
   const { data } = await supabase
     .from("tome_tokens")
@@ -186,7 +179,7 @@ export async function mintRecoveryTomeTokens(
 export async function createFreeTomeToken(
   email: string,
 ): Promise<{ tome: Tome; token: string }> {
-  const supabase = getSupabase();
+  const supabase = supabaseExternalAdmin;
   const tome = getTomeBySlug("chasse_galerie")!;
   const token = generateTomeToken();
   const { error } = await supabase.from("tome_tokens").insert({
@@ -223,7 +216,7 @@ export async function revokeTomeTokensForSessions(
   environment?: string,
 ): Promise<number> {
   if (sessionIds.length === 0) return 0;
-  const supabase = getSupabase();
+  const supabase = supabaseExternalAdmin;
   let query = supabase
     .from("tome_tokens")
     .update({ revoked_at: new Date().toISOString() })
@@ -250,7 +243,7 @@ export async function revokeTomeTokensForPaymentIntent(
   paymentIntentId: string,
   environment: string,
 ): Promise<number> {
-  const supabase = getSupabase();
+  const supabase = supabaseExternalAdmin;
   const { data: orders } = await supabase
     .from("orders")
     .select("stripe_session_id")

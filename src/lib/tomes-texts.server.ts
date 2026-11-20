@@ -8,8 +8,8 @@
 //   le bucket Supabase Storage PRIVÉ `tomes-prives`, du MÊME projet
 //   Supabase que la table `tome_tokens` : aucun nouveau compte, aucune
 //   nouvelle clé — le serveur lit avec le client service-role déjà
-//   configuré (`supabaseAdmin`, `SUPABASE_URL` +
-//   `SUPABASE_SERVICE_ROLE_KEY`, serveur seulement).
+//   configuré (`supabaseExternalAdmin`, `HP_SUPABASE_URL` +
+//   `HP_SUPABASE_SERVICE_ROLE_KEY`, serveur seulement).
 // - Le bucket est PRIVÉ : aucune URL publique ne sert les fichiers. Le
 //   code ne construit JAMAIS d'URL publique ni de lien signé (pas de
 //   `getPublicUrl`, pas de `createSignedUrl`) : le serveur télécharge
@@ -42,7 +42,7 @@
 // que `tome_tokens`, 12 objets nommés comme ci-dessous. Sans ce bucket,
 // la fonction renvoie null (refus propre, pas de fuite).
 
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import { getTomeAccessByToken } from "@/lib/tomes-tokens.server";
 import type { Tome } from "@/lib/tomes-catalog";
 
@@ -96,7 +96,7 @@ export async function getTomeTextByToken(
   // ÉTAPE 3 — téléchargement serveur seulement, depuis le bucket privé.
   // Aucune URL n'est construite ni renvoyée : seul le contenu part,
   // par la fonction serveur, vers le lecteur à iframe isolée.
-  const { data, error } = await supabaseAdmin.storage
+  const { data, error } = await supabaseExternalAdmin.storage
     .from(TOMES_BUCKET)
     .download(objectKey);
   if (error || !data) return null;

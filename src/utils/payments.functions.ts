@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "@/lib/stripe.server";
 import {
   getProduct,
@@ -49,16 +49,9 @@ export function getTrustedSiteOrigin(): string {
   return FALLBACK_SITE_ORIGIN;
 }
 
-let _admin: any = null;
-function getAdmin() {
-  if (!_admin) {
-    _admin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-  }
-  return _admin;
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// getAdmin a été retirée au recâblage Supabase externe (20 nov. 2026).
 
 // « Offrir » (lot 28 oct. 2026) : même règle que pour les tomes —
 // courriel destinataire facultatif, validé ici, jamais de débit sans
@@ -167,7 +160,7 @@ export const recoverOrdersByEmail = createServerFn({ method: "POST" })
     return { email, environment: data.environment };
   })
   .handler(async ({ data }) => {
-    const admin = getAdmin();
+    const admin = supabaseExternalAdmin;
 
     // Rate-limit: 5 attempts/hour per email or per IP.
     const ip =

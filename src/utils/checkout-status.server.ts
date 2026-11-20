@@ -4,18 +4,11 @@
 // et un nombre de lignes, sans titre ni lien. Le détail (titres, liens)
 // arrive PAR COURRIEL, jamais dans la page.
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 
-let _admin: any = null;
-function getAdmin() {
-  if (!_admin) {
-    _admin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-  }
-  return _admin;
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// getAdmin a été retirée au recâblage Supabase externe (20 nov. 2026).
 
 export const getCheckoutStatus = createServerFn({ method: "GET" })
   .inputValidator((data: { sessionId: string }) => {
@@ -24,7 +17,7 @@ export const getCheckoutStatus = createServerFn({ method: "GET" })
   })
   .handler(async ({ data }) => {
     if (!data.sessionId) return { status: "missing" as const, itemCount: 0 };
-    const { data: orders, error } = await getAdmin()
+    const { data: orders, error } = await supabaseExternalAdmin
       .from("orders")
       .select("id, status, delivery_sent_at")
       .eq("stripe_session_id", data.sessionId);

@@ -26,7 +26,7 @@
 
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { CommandeDatabase } from "@/lib/commande-database";
 import {
@@ -53,7 +53,7 @@ import {
 // (src/integrations/supabase/types.ts, jamais édités à la main) ne les
 // incluent pas. À retirer quand la migration sera appliquée et les
 // types régénérés : db.from(...) suffira alors.
-const db = supabaseAdmin as unknown as SupabaseClient<CommandeDatabase>;
+const db = supabaseExternalAdmin as unknown as SupabaseClient<CommandeDatabase>;
 
 // ---------------------------------------------------------------------------
 // Schémas d'entrée (zod)

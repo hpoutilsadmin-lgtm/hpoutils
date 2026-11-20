@@ -40,7 +40,7 @@ function getTrustedSiteOrigin(): string {
 export const subscribeToHpNews = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => signupSchema.parse(data))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseExternalAdmin } = await import("@/integrations/supabase/external.server");
     const ip =
       getRequestHeader("cf-connecting-ip") ??
       getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ??
@@ -50,13 +50,13 @@ export const subscribeToHpNews = createServerFn({ method: "POST" })
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
 
     const [{ count: emailCount }, ipResult] = await Promise.all([
-      supabaseAdmin
+      supabaseExternalAdmin
         .from("newsletter_signup_attempts")
         .select("id", { count: "exact", head: true })
         .eq("email_hash", emailHash)
         .gte("created_at", oneHourAgo),
       ipHash
-        ? supabaseAdmin
+        ? supabaseExternalAdmin
             .from("newsletter_signup_attempts")
             .select("id", { count: "exact", head: true })
             .eq("ip_hash", ipHash)
@@ -68,12 +68,12 @@ export const subscribeToHpNews = createServerFn({ method: "POST" })
       return { ok: true as const };
     }
 
-    await supabaseAdmin.from("newsletter_signup_attempts").insert({
+    await supabaseExternalAdmin.from("newsletter_signup_attempts").insert({
       email_hash: emailHash,
       ip_hash: ipHash,
     });
 
-    const { data: suppressed } = await supabaseAdmin
+    const { data: suppressed } = await supabaseExternalAdmin
       .from("suppressed_emails")
       .select("id")
       .eq("email", data.email)
@@ -86,7 +86,7 @@ export const subscribeToHpNews = createServerFn({ method: "POST" })
       // révéler. Si l'inscription est en attente de confirmation, on
       // régénère le jeton et on renvoie le courriel (sans toucher à
       // consented_at).
-      const { data: existingSignup } = await supabaseAdmin
+      const { data: existingSignup } = await supabaseExternalAdmin
         .from("newsletter_signups")
         .select("id, status")
         .eq("email", data.email)
@@ -105,7 +105,7 @@ export const subscribeToHpNews = createServerFn({ method: "POST" })
       const tokenHash = hash(token);
       const expiresAt = new Date(Date.now() + CONFIRMATION_TTL_MS).toISOString();
       if (existingSignup) {
-        const { error } = await supabaseAdmin
+        const { error } = await supabaseExternalAdmin
           .from("newsletter_signups")
           .update({
             confirmation_token_hash: tokenHash,
@@ -116,7 +116,7 @@ export const subscribeToHpNews = createServerFn({ method: "POST" })
           .eq("status", "pending");
         if (error) throw new Error("Impossible d'enregistrer l'inscription");
       } else {
-        const { error } = await supabaseAdmin.from("newsletter_signups").insert(
+        const { error } = await supabaseExternalAdmin.from("newsletter_signups").insert(
           {
             email: data.email,
             source: data.source,

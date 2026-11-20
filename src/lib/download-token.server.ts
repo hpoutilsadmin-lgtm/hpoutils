@@ -11,7 +11,7 @@ import crypto from "crypto";
 const DOWNLOAD_TTL_MS = 1000 * 60 * 60 * 24 * 7; // 7 jours
 
 // Dedicated HMAC secret for download links. Kept separate from
-// SUPABASE_SERVICE_ROLE_KEY so that rotating one does not invalidate
+// HP_SUPABASE_SERVICE_ROLE_KEY so that rotating one does not invalidate
 // the other, and so that a leak of one credential does not allow the
 // attacker to forge download links for any (priceId, email) pair.
 function getSigningSecret(): string {
@@ -25,7 +25,7 @@ function getSigningSecret(): string {
 // links remain valid until their natural 7-day expiry. New tokens are
 // always signed with DOWNLOAD_LINK_SECRET.
 function getLegacySecret(): string | null {
-  return process.env.SUPABASE_SERVICE_ROLE_KEY ?? null;
+  return process.env.HP_SUPABASE_SERVICE_ROLE_KEY ?? null;
 }
 
 function b64urlEncode(buf: Buffer): string {

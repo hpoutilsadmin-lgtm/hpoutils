@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { getProduct, COLLECTION_PRICE_ID } from "@/lib/products-catalog";
 import { verifyDownloadToken } from "@/lib/download-token.server";
@@ -22,10 +22,10 @@ export const Route = createFileRoute("/api/public/download-pdf")({
           return new Response("Produit introuvable", { status: 404 });
         }
 
-        const admin = createClient(
-          process.env.SUPABASE_URL!,
-          process.env.SUPABASE_SERVICE_ROLE_KEY!,
-        );
+        // Accès base par le client service_role externe partagé (module
+        // external.server.ts, secrets HP_SUPABASE_*) — recâblage
+        // Supabase externe, 20 nov. 2026.
+        const admin = supabaseExternalAdmin;
 
         // Sécurité : le téléchargement exige une commande payée, non
         // remboursée, pour ce jeton. Le courriel du jeton peut être le

@@ -6,20 +6,13 @@
 // courriel de preuve, ni table email_send_log.
 
 import { randomBytes } from "node:crypto";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
 
-let _admin: any = null;
-function admin() {
-  if (!_admin) {
-    _admin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-  }
-  return _admin;
-}
+// Accès base par le client service_role externe partagé (module
+// external.server.ts, secrets HP_SUPABASE_*) — la fabrique locale
+// admin a été retirée au recâblage Supabase externe (20 nov. 2026).
 
 function origin(): string {
   const raw = process.env.SITE_URL?.trim();
@@ -46,7 +39,7 @@ export function isPasseursSession(session: any): boolean {
 }
 
 export async function fulfillPasseursSubscription(session: any, env: StripeEnv) {
-  const db = admin();
+  const db = supabaseExternalAdmin;
   const stripe = createStripeClient(env);
 
   const formule = session.metadata.passeurs_formule as "mensuel" | "annuel";

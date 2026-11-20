@@ -33,8 +33,8 @@ export async function enqueueTransactionalEmail(params: {
   idempotencyKey: string
   templateData?: Record<string, any>
 }): Promise<boolean> {
-  const supabaseUrl = process.env.SUPABASE_URL!
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  const supabaseUrl = process.env.HP_SUPABASE_URL!
+  const serviceKey = process.env.HP_SUPABASE_SERVICE_ROLE_KEY!
   if (!supabaseUrl || !serviceKey) {
     console.error('enqueueTransactionalEmail: missing env')
     return false
