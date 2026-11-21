@@ -51,10 +51,10 @@ export const Route = createFileRoute("/panier")({
  * Stripe avec le crédit en coupon. Le serveur recalcule tout.
  */
 function Page() {
-  // Réouverture TEMPORAIRE (21 nov. 2026, go d'HP) pour le TEST 0 $ avec le
-  // coupon TEST-FAIM-100 — la migration Supabase est faite, la livraison
-  // n'est plus bloquée. À REMETTRE À true juste après le test.
-  const BOUTIQUE_FERMEE = false;
+  // Boutique REFERMÉE (21 nov. 2026, go d'HP) après le TEST 0 $ réussi —
+  // le tunnel paiement + livraison est prouvé. Réouverture officielle
+  // = décision séparée d'HP (lot séparé + go).
+  const BOUTIQUE_FERMEE = true;
   const [cart, setCart] = useState<Cart>([]);
   const [pret, setPret] = useState(false);
   const [paiement, setPaiement] = useState<"idle" | "envoi" | "indisponible">("idle");
