@@ -708,11 +708,11 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (56 + 1 caché), Quiz (3), etc.
+     conformes à la liste exacte approuvée — Tous (56), Quiz (3), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
-      ? `${JEUX_JOUABLES} + 1 caché`
+      ? `${JEUX_JOUABLES} jeux`
       : GAMES.filter((x) => x.tag.split(" · ")[0] === g).length;
   return (
     <div className="page-jeux-arcade">
@@ -732,12 +732,12 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur option B (Mini-jeux HP = 3 jeux) : 56 jeux + 1 caché, non nommé — le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
-            <span style={CHIP_STYLE}>{JEUX_JOUABLES} + 1 caché</span>
+            {/* Compteur (Mini-jeux HP = 3 jeux) : 56 jeux, sans +1 — décision HP 22 nov. 2026 (M1-D6) ; le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
+            <span style={CHIP_STYLE}>{JEUX_JOUABLES} jeux</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>56 jeux à jouer, plus 1 caché quelque part. La tuile Mini-jeux HP en cache 3 à elle seule.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>56 jeux à jouer. La tuile Mini-jeux HP en cache 3 à elle seule.</p>
         </div>
       </section>
 

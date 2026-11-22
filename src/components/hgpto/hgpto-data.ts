@@ -117,7 +117,7 @@ export const JOKES = [
          gratuit d'abord, jamais pendant les moments d'enfant. */
 export const GAME_PITCHES = [
 { t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — montre ça à quelqu'un, et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 57 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"57 + 1 CACHÉ" }
+        { t:"Envie de jouer en famille ? Il y a 56 jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"56 JEUX" }
       ];
 export const BOOK_PITCHES = [
         { t:"Ce livre-là me donne le goût de te parler des nôtres : « Horizon Québec » (10 $) et « La faim justifie les moyens » (10 $) sont au catalogue, en PDF.", u:"https://www.hp-outils.com/livres-pdf", l:"Voir les livres", s:"LIVRES" },
@@ -132,7 +132,7 @@ export const ATELIER_PITCHES = [
       ];
 export const PITCHES = [
 { t:"Une saison de LA BANQUE ? C'est gratuit, 8 semaines — et ça fait réfléchir en s'amusant !", u:"https://www.hp-outils.com/jeux", l:"Jouer à LA BANQUE", s:"GRATUIT !" },
-        { t:"Envie de jouer en famille ? Il y a 57 + 1 caché jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"57 + 1 CACHÉ" },
+        { t:"Envie de jouer en famille ? Il y a 56 jeux gratuits, sans inscription, qui vous attendent.", u:"https://www.hp-outils.com/jeux", l:"Voir les jeux", s:"56 JEUX" },
         { t:"Les kits Sans Honte sont à 5 $ — un petit pas, un grand répit. Il y en a 15, sans jugement.", u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" },
         { t:"Le bundle Sans Honte « Choisis 10 parmi 15 » est à 40 $ : de quoi équiper votre quotidien d'un coup.", u:"https://www.hp-outils.com/sans-honte", l:"Voir le bundle", s:"40 $" },
         { t:"Vous avez des ingrédients qui traînent ? Tapez-les dans Recettes HP : 666 recettes gratuites à découvrir.", u:"https://www.hp-outils.com/en-cuisine/", l:"Essayer Recettes HP", s:"666 RECETTES" },
@@ -305,7 +305,7 @@ export const FLASH_INFOS = [
   "Nos livres : La faim 10 $, Horizon 10 $, Enjeux IA 15 $, le livre « Enfants cuisinent » 10 $.",
   "Les Passeurs de savoirs : l'accès aux 16 savoirs, 3 $ par mois, 28 $ par an — inscription par courriel. Pour l'instant, l'inscription se fait par courriel.",
   "Nos ateliers : de 150 $ à 290 $ selon la formule, en vrai monde, avec du monde.",
-  "57 + 1 caché jeux gratuits, sans inscription.",
+  "56 jeux gratuits, sans inscription.",
   "« Futur simple », épisode 1 officiel, 26 octobre 2026, environ 7 minutes : « La première fois qu'on essaie cela. »",
   "Un jeu à l'image de votre commerce : de 19 $ à 399 $, hébergement gratuit la première année.",
   "Astuce : un fond de casserole qui attache ? Eau chaude et bicarbonate, on laisse tremper, on frotte doux.",
@@ -337,7 +337,7 @@ export const SITE_FACTS = {
           kits:   { nom:"Kits Sans Honte", prix:"5 $ le kit, bundle 40 $", url:"https://www.hp-outils.com/sans-honte" },
           livres: { nom:"Livres PDF", prix:"10 $ à 15 $", url:"https://www.hp-outils.com/livres-pdf" },
           recettes:{ nom:"Recettes HP", prix:"Gratuit — 666 recettes", url:"https://www.hp-outils.com/en-cuisine/" },
-          jeux:   { nom:"Jeux", prix:"Gratuit — 57 + 1 caché", url:"https://www.hp-outils.com/jeux" },
+          jeux:   { nom:"Jeux", prix:"Gratuit — 56 jeux", url:"https://www.hp-outils.com/jeux" },
           ateliers:{ nom:"Ateliers", prix:"150 $ à 290 $", url:"https://www.hp-outils.com/ateliers" },
           passeurs:{ nom:"Les Passeurs", prix:"3 $ / mois, 28 $ / an — accès aux 16 savoirs (inscription par courriel)", url:"https://www.hp-outils.com/les-passeurs" },
           balado: { nom:"Balado Futur simple", prix:"Gratuit, nouveaux épisodes quand ils sont prêts", url:"https://www.hp-outils.com/balado" },
@@ -436,8 +436,8 @@ export const KB = [
         { q:"Un jeu gratuit à me conseiller ?", s:"GRATUIT !",
           a:"Essaie LA BANQUE, le jeu de la banque alimentaire : gratuit, une saison de 8 semaines, et ça fait réfléchir en s'amusant. Si tu préfères les histoires, RELÈVE vient de commencer !",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
-        { q:"Vous avez quels jeux ?", s:"57 + 1 CACHÉ",
-          a:"57 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Cherche & Trouve, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue, Sur l'herbe, Pète et Répète, Les hommes préhistoriques du Québec, Bataille d'aura — Sir H. Gepeto, Mini-jeux HP… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus)",
+        { q:"Vous avez quels jeux ?", s:"56 JEUX",
+          a:"56 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Cherche & Trouve, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue, Sur l'herbe, Pète et Répète, Les hommes préhistoriques du Québec, Bataille d'aura — Sir H. Gepeto, Mini-jeux HP… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus)",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"C'est quoi, IGLOO ?", s:"GRATUIT !",
           a:"IGLOO — La guerre des igloos : une bataille de boules de neige en arène ! Tu déploies tes cartes, tu défends ton igloo et tu fais tomber celui d'en face — et chaque bataille tire une loi du quartier au hasard. Campagne de 10 batailles, parties d'environ 3 minutes. Gratuit !",
@@ -542,8 +542,8 @@ export const KB = [
         { q:"Combien coûtent les Passeurs de savoirs ?", s:"3 $ / MOIS",
           a:"Les Passeurs, ce sont les gens qui soutiennent HP Outils en prenant l'accès aux 16 savoirs : 3 $ par mois, ou 28 $ pour l'année. L'abonnement, c'est l'accès aux feuilles Passeurs, au fur et à mesure de leur parution — les outils gratuits d'HP restent gratuits pour tout le monde. En toute honnêteté : l'inscription se fait par courriel, à la direction humaine. Aucun prélèvement automatique n'est pris sans votre confirmation préalable des détails par courriel. Le geste d'annulation est immédiat, effet à la fin de la période déjà payée, sans frais, sans relance. Pour annuler, utilisez le lien reçu dans le courriel de bienvenue. Si un problème survient, la direction humaine vous répond sous 3 jours ouvrables, lundi à vendredi, de 8 h à 16 h.",
           u:"https://www.hp-outils.com/les-passeurs", l:"Découvrir les Passeurs" },
-        { q:"Combien y a-t-il de jeux sur le site ?", s:"57 + 1 CACHÉ",
-          a:"57 + 1 caché jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Cherche & Trouve, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue, Sur l'herbe, Pète et Répète, Les hommes préhistoriques du Québec, Bataille d'aura — Sir H. Gepeto, Mini-jeux HP… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus)",
+        { q:"Combien y a-t-il de jeux sur le site ?", s:"56 JEUX",
+          a:"56 jeux gratuits, sans inscription : LA BANQUE, RELÈVE, Mystères du Nord, Poutine Panic, Chat'attaque, Cherche & Trouve, Montgolfière, Sirop Clicker, Retromania, Mémoire des Cantons, IGLOO, Chevalier du fleuve, Que vois-tu ?, Tapinoue, Sur l'herbe, Pète et Répète, Les hommes préhistoriques du Québec, Bataille d'aura — Sir H. Gepeto, Mini-jeux HP… arcade, enquête, détente — pour tous les goûts ! (dont un pour les 12 ans et plus)",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Comment chercher un jeu ?", s:"RECHERCHE",
           a:"Sur la page des jeux, tape un mot dans le champ « Chercher un jeu… » : la grille ne montre que les jeux dont le titre ou la description contient ce mot. Sans rien taper, tous les jeux s'affichent.",
@@ -623,7 +623,7 @@ export const KB = [
         { q:"C'est quoi, ton choix du moment ?", s:"MON CHOIX ♥", fn:"choix",
           a:"" },
         { q:"Montre-moi les jeux", s:"PAR ICI →", go:"sec-jeux",
-          a:"Les jeux sont là : 57 + 1 caché jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !",
+          a:"Les jeux sont là : 56 jeux gratuits, sans inscription. LA BANQUE et RELÈVE sont mes préférés pour commencer !",
           u:"https://www.hp-outils.com/jeux", l:"Voir les jeux" },
         { q:"Montre-moi les kits", s:"PAR ICI →", go:"sec-kits",
           a:"Les kits Sans Honte sont juste là : 5 $ le kit, 15 thèmes du quotidien, et le bundle à 40 $.",
@@ -816,7 +816,7 @@ export const BESOIN_SUGGESTIONS = [
           t:"Pour apprendre pour vrai, en gang, c'est ceux-là qui font ça : les 8 forfaits de groupe, de 150 $ à 290 $, à Terrebonne et dans les environs — dont « Cuisine pratique » (260 $) et « Manger mieux avec moins » (260 $). Et pour commencer sans payer, les 666 recettes gratuites sont là.",
           u:"https://www.hp-outils.com/ateliers", l:"Voir les ateliers", s:"ATELIERS" },
         { id:'budget', mots:['budget','fin de mois','pas cher','economiser'], dejaVu:'kits sans honte sont a 5',
-          t:"Budget serré ? Commence par le gratuit, pour vrai : 666 recettes et 57 + 1 caché jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
+          t:"Budget serré ? Commence par le gratuit, pour vrai : 666 recettes et 56 jeux, sans inscription. Et le jour où vous voudrez un coup de pouce pour vous organiser, les kits Sans Honte sont à 5 $ chacun — aucune taxe ajoutée.",
           u:"https://www.hp-outils.com/sans-honte", l:"Voir les kits", s:"5 $" }
       ];
       /* L'alternative honnête : après une réponse qui présente un produit
