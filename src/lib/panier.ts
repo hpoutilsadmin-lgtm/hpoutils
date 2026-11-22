@@ -61,7 +61,7 @@ export const CART_PRODUCTS: CartProduct[] = [
 /** Produits affichés mais NON ajoutables, avec la raison dite honnêtement. */
 export const NON_AJOUTABLES: Array<{ nom: string; raison: string }> = [
   { nom: "Bundle Sans Honte — Choisis 10 kits parmi 15 (40 $)", raison: "Exclu du panier v1 : il garde son propre parcours de sélection des 10 kits." },
-  { nom: "Tomes « À toi l'histoire » (5 $ / 8 $)", raison: "Vente dédiée, hors panier : voir /lire — vente suspendue pour le moment, boutique fermée pour maintenance." },
+  { nom: "Tomes « À toi l'histoire » (5 $ / 8 $)", raison: "Vente dédiée, hors panier : voir /lire — en vente, paiement en réel." },
 ];
 
 export function getCartProduct(priceId: string): CartProduct | null {
