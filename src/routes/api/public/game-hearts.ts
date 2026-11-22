@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { type SupabaseClient } from "@supabase/supabase-js";
 import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
+import type { ExternalDatabase } from "@/lib/external-database";
 import { GAME_FILES } from "@/lib/jeux-adresses";
 
 /* Cœurs des jeux — compteur public ANONYME « cœurs reçus » (vague 1).
@@ -26,7 +27,7 @@ const FENETRE_MS = 10 * 60 * 1000;
 // autorisant l'insert anonyme, non confirmée dans le projet externe).
 
 async function compteurs(
-  supabase: SupabaseClient,
+  supabase: SupabaseClient<ExternalDatabase>,
 ): Promise<Record<string, number> | null> {
   const { data, error } = await supabase
     .from("game_heart_events")

@@ -21,7 +21,7 @@
 // motif que client.server.ts) : une variable absente ne fait échouer que
 // le premier appel, jamais l'import du module ni le build.
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "./types";
+import type { ExternalDatabase } from "@/lib/external-database";
 
 function createExternalAdminClient() {
   const url = process.env.HP_SUPABASE_URL;
@@ -37,7 +37,7 @@ function createExternalAdminClient() {
     throw new Error(message);
   }
 
-  return createClient<Database>(url, key, {
+  return createClient<ExternalDatabase>(url, key, {
     auth: {
       storage: undefined,
       persistSession: false,
@@ -60,7 +60,7 @@ function createExternalAnonClient() {
     throw new Error(message);
   }
 
-  return createClient<Database>(url, key, {
+  return createClient<ExternalDatabase>(url, key, {
     auth: {
       storage: undefined,
       persistSession: false,
