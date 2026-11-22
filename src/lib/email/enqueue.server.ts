@@ -32,6 +32,11 @@ export async function enqueueTransactionalEmail(params: {
   recipientEmail: string
   idempotencyKey: string
   templateData?: Record<string, any>
+  // Métadonnées journalisées avec la ligne email_send_log (colonne JSONB
+  // metadata, migration email_infra) : sert de clé d'idempotence
+  // lisible pour les gardes anti-doublon (ex. alerte jeu sur mesure :
+  // stripe_session_id). Optionnel : aucun appelant existant n'en passe.
+  logMetadata?: Record<string, any>
 }): Promise<boolean> {
   const supabaseUrl = process.env.HP_SUPABASE_URL!
   const serviceKey = process.env.HP_SUPABASE_SERVICE_ROLE_KEY!
@@ -92,6 +97,7 @@ export async function enqueueTransactionalEmail(params: {
     template_name: params.templateName,
     recipient_email: recipient,
     status: 'pending',
+    metadata: params.logMetadata ?? null,
   })
 
   const { error: enqueueError } = await supabase.rpc('enqueue_email', {

@@ -83,6 +83,148 @@ async function markDelivered(db: any, sessionId: string, rows: Array<{ priceId: 
   }
 }
 
+// LOT-ALERTE-EXPRESS (22 nov. 2026) — alerte interne quand une commande
+// de jeu sur mesure est payée.
+//
+// Le sur-mesure n'a AUCUN courriel automatique au client : getProduct()
+// ne connaît pas ces prix (absents de products-catalog.ts), donc emailItems
+// reste vide et la commande reste « paid » avec delivery_sent_at NULL.
+// Sans cette alerte, rien ne signale à la direction qu'une livraison
+// manuelle attend (F5 du TEST 0 $ Express, 22 nov. 2026).
+//
+// Détection : lookup_key Stripe `jeu_sur_mesure_*` (convention de nommage
+// des produits, cf. FAQ : Express 19 $, Événement 199 $, Saisonnier
+// 299 $, Permanent 399 $) OU, pour l'Express, l'ID de prix Stripe vérifié
+// pendant le TEST 0 $ Express (cas où le prix n'aurait pas de lookup_key).
+// Les IDs de prix des 3 autres niveaux ne sont dans aucune source du
+// dépôt : l'alerte ne les couvrira que si Mel crée leurs prix avec un
+// lookup_key `jeu_sur_mesure_*` (à confirmer avec elle).
+const ALERT_RECIPIENT = "hpoutils.admin@gmail.com";
+const CUSTOM_GAME_PRICE_IDS: Record<string, string> = {
+  // Express 19 $, prix vérifié pendant le TEST 0 $ Express (22 nov. 2026).
+  price_1UaaRIFvicrYVGX9KqYw5uld: "Express",
+};
+
+function customGameLevelOf(priceId: string): string | null {
+  const known = CUSTOM_GAME_PRICE_IDS[priceId];
+  if (known) return known;
+  if (!priceId.startsWith("jeu_sur_mesure_")) return null;
+  const level = priceId.slice("jeu_sur_mesure_".length).split("_")[0];
+  switch (level) {
+    case "express":
+      return "Express";
+    case "evenement":
+      return "Événement";
+    case "saisonnier":
+      return "Saisonnier";
+    case "permanent":
+      return "Permanent";
+    default:
+      // Clé inconnue : affichée telle quelle, jamais inventée.
+      return priceId;
+  }
+}
+
+function formatCad(cents: number): string {
+  return `${(cents / 100).toFixed(2).replace(".", ",")} $ CAD`;
+}
+
+// Une seule alerte par session Stripe. Idempotence (obligatoire : le
+// webhook Stripe rejoue) : la file pgmq ne déduplique PAS (enqueue_email
+// = pgmq.send brut, migration email_infra) et l'idempotency_key n'est
+// que transmise au fournisseur d'envoi. La garde est donc une lecture
+// de email_send_log AVANT la mise en file — même patron que la
+// bienvenue Passeurs (passeurs.server.ts) : template + destinataire +
+// statut 'pending'/'sent', avec en plus le filtre session dans
+// metadata (la table n'a pas de colonne session). Un échec antérieur
+// ('failed', 'dlq', …) ne bloque PAS : le rejeu retente l'alerte.
+async function maybeSendCustomGameAlert(
+  db: any,
+  session: any,
+  toDeliver: Array<{ priceId: string; amount: number }>,
+  payer: string,
+) {
+  const customRows = toDeliver
+    .map((r) => ({ ...r, level: customGameLevelOf(r.priceId) }))
+    .filter((r) => r.level !== null);
+  if (customRows.length === 0) return;
+  // Un lien de paiement sur mesure = 1 article, quantité 1. Si jamais
+  // plusieurs lignes arrivaient, une seule alerte par session.
+  const first = customRows[0];
+  if (customRows.length > 1) {
+    console.warn("custom game alert: multiple custom rows in one session; alerting on the first only", {
+      sessionId: session.id,
+      priceIds: customRows.map((r) => r.priceId),
+    });
+  }
+  const { data: prior, error: priorError } = await db
+    .from("email_send_log")
+    .select("id, metadata, status")
+    .eq("template_name", "custom-game-alert")
+    .eq("recipient_email", ALERT_RECIPIENT)
+    .in("status", ["pending", "sent"]);
+  if (priorError) throw new Error("Database error");
+  const alreadyAlerted = (prior ?? []).some(
+    (row: any) => row?.metadata?.stripe_session_id === session.id,
+  );
+  if (alreadyAlerted) {
+    console.log("custom game alert already queued/sent for session; skipping", {
+      sessionId: session.id,
+    });
+    return;
+  }
+  // ID de commande : ligne orders venant d'être enregistrée par l'upsert.
+  const { data: orderRow, error: orderError } = await db
+    .from("orders")
+    .select("id")
+    .eq("stripe_session_id", session.id)
+    .eq("price_id", first.priceId)
+    .maybeSingle();
+  if (orderError) throw new Error("Database error");
+  const orderId = (orderRow as any)?.id ?? null;
+  if (!orderId) {
+    console.error("custom game alert: order row not found after upsert", {
+      sessionId: session.id,
+      priceId: first.priceId,
+    });
+    throw new Error("Database error");
+  }
+  const paidAt =
+    typeof session.created === "number"
+      ? new Date(session.created * 1000).toISOString()
+      : new Date().toISOString();
+  const queued = await enqueueTransactionalEmail({
+    templateName: "custom-game-alert",
+    recipientEmail: ALERT_RECIPIENT,
+    idempotencyKey: `custom-game-alert-${session.id}`,
+    logMetadata: {
+      stripe_session_id: session.id,
+      price_id: first.priceId,
+      order_id: orderId,
+    },
+    templateData: {
+      level: first.level,
+      amount: formatCad(first.amount),
+      buyerEmail: payer || "non fourni",
+      sessionId: session.id,
+      orderId,
+      paidAt,
+      siteOrigin: origin(),
+    },
+  });
+  // B-W2, même contrat que les livraisons : un échec de mise en file
+  // lève AVANT la suite — le webhook répond 400, Stripe rejoue, et la
+  // garde ci-dessus retente l'alerte (la tentative ratée est en
+  // 'failed', donc non bloquante). La commande, elle, est déjà
+  // enregistrée payée : rien n'est perdu.
+  if (!queued) throw new Error("Custom game alert email enqueue failed");
+  console.log("custom game alert queued", {
+    sessionId: session.id,
+    orderId,
+    level: first.level,
+  });
+}
+
 // delivered = false si déjà livré (delivery_sent_at posé) : on ne
 // renvoie RIEN, on ne recrée RIEN.
 export async function deliverStripeSession(session: any, env: StripeEnv) {
@@ -143,6 +285,12 @@ export async function deliverStripeSession(session: any, env: StripeEnv) {
   if (toDeliver.length === 0) {
     return { delivered: false, email: payer, giftEmail: isGift ? deliveryEmail : null, itemCount: 0 };
   }
+
+  // LOT-ALERTE-EXPRESS : la commande est enregistrée payée ; si elle
+  // contient un jeu sur mesure, alerter la direction (livraison
+  // manuelle à faire). Ne change rien au parcours client : aucun
+  // courriel à l'acheteur, emailItems inchangé ci-dessous.
+  await maybeSendCustomGameAlert(db, session, toDeliver, payer);
 
   // Tomes : jetons + courriel, puis sortie (pas de courriel PDF).
   // Pertes journalisées en erreur, jamais silencieuses : si la session
