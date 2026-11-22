@@ -103,7 +103,7 @@ function Page() {
           <div className="pillar-grid">
             <article className="pillar-card">
               <h3>Comment commander ?</h3>
-              <p>Commandez directement sur le site : choisissez votre produit, payez en ligne par carte via Stripe, et recevez votre lien de téléchargement ou de lecture par courriel. Pour une question avant d'acheter, écrivez à la direction humaine — réponse sous 3 jours ouvrables.</p>
+              <p>La boutique est fermée pour maintenance : aucun achat en ligne n'est possible pour le moment. Dès la réouverture, vous choisissez votre produit, payez en ligne par carte via Stripe, et recevez votre lien de téléchargement ou de lecture par courriel. Pour une question avant d'acheter, écrivez à la direction humaine — réponse sous 3 jours ouvrables.</p>
             </article>
             <article className="pillar-card">
               <h3>Quels moyens de paiement ?</h3>

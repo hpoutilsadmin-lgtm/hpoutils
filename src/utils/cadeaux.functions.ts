@@ -22,6 +22,7 @@ import {
   getStripeErrorMessage,
 } from "@/lib/stripe.server";
 import { validateCartItems } from "@/lib/panier-validation";
+import { BOUTIQUE_FERMEE } from "@/lib/boutique";
 import { getCartProduct } from "@/lib/panier";
 import { getProduct } from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
@@ -115,6 +116,13 @@ export const GIFT_SALES_DISABLED = true;
 
 export const createGiftCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((data: { lookupKey: string; environment: StripeEnv }) => {
+    // Boutique fermée pour maintenance (22 nov. 2026, LOT-FERMETURE) :
+    // aucune session de paiement ne peut être créée, même via une
+    // requête forgée directe. La vente de bons est déjà fermée par
+    // GIFT_SALES_DISABLED (décision HP 28 oct. 2026) ; cette garde est
+    // une seconde porte, au cas où ce verrou serait levé pendant la
+    // fermeture de la boutique.
+    if (BOUTIQUE_FERMEE) throw new Error("Boutique fermée pour maintenance");
     const denomination = getGiftDenomination(data.lookupKey);
     if (!denomination) throw new Error("Bon cadeau introuvable");
     if (data.environment !== "sandbox" && data.environment !== "live") {
@@ -240,6 +248,13 @@ export const checkGiftBalance = createServerFn({ method: "POST" })
 
 export const payCartWithGift = createServerFn({ method: "POST" })
   .inputValidator((data: { items: Array<{ priceId: string }>; code: string; email: string }) => {
+    // Boutique fermée pour maintenance (22 nov. 2026, LOT-FERMETURE) :
+    // aucun achat ne peut être conclu avec un bon, même via une requête
+    // forgée directe — cette fonction débite le solde et livre les PDF
+    // sans passer par Stripe. Le bouton du panier est déjà désactivé ;
+    // cette garde est le verrou serveur. Rouvrir = BOUTIQUE_FERMEE=false
+    // dans src/lib/boutique.ts (go d'HP nommant le lot de réouverture).
+    if (BOUTIQUE_FERMEE) throw new Error("Boutique fermée pour maintenance");
     const priceIds = validateCartItems(data.items.map((i) => i?.priceId));
     const normalized = normalizeGiftCode(data.code);
     if (!normalized) throw new Error("Code invalide");
@@ -319,6 +334,12 @@ export const payCartWithGift = createServerFn({ method: "POST" })
 
 export const createCartCheckoutWithGift = createServerFn({ method: "POST" })
   .inputValidator((data: { items: Array<{ priceId: string }>; code: string; environment: StripeEnv; giftTo?: string }) => {
+    // Boutique fermée pour maintenance (22 nov. 2026, LOT-FERMETURE) :
+    // aucune session de paiement ne peut être créée, même via une
+    // requête forgée directe sur la fonction serveur. Rouvrir =
+    // BOUTIQUE_FERMEE=false dans src/lib/boutique.ts (go d'HP nommant
+    // le lot de réouverture).
+    if (BOUTIQUE_FERMEE) throw new Error("Boutique fermée pour maintenance");
     const priceIds = validateCartItems(data.items.map((i) => i?.priceId));
     const normalized = normalizeGiftCode(data.code);
     if (!normalized) throw new Error("Code invalide");

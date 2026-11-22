@@ -1,5 +1,6 @@
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { BOUTIQUE_FERMEE } from "@/lib/boutique";
 import { createPdfCheckoutSession } from "@/utils/payments.functions";
 
 interface Props {
@@ -26,6 +27,30 @@ export function PdfCheckout({ priceId, kitSlugs, giftTo }: Props) {
     if (!result.clientSecret) throw new Error("Impossible de créer la session de paiement");
     return result.clientSecret;
   };
+
+  // Boutique fermée pour maintenance (MISSION 1 — E1) : on n'affiche
+  // pas le formulaire de paiement — même garde côté serveur dans
+  // createPdfCheckoutSession, pour les requêtes directes aussi.
+  if (BOUTIQUE_FERMEE) {
+    return (
+      <p
+        role="status"
+        style={{
+          background: "#f6e8c8",
+          border: "1px solid #d9a860",
+          borderRadius: 8,
+          padding: "12px 16px",
+          margin: "16px auto",
+          maxWidth: 760,
+          textAlign: "center",
+          fontSize: 15,
+        }}
+      >
+        <strong>Boutique fermée pour maintenance.</strong> Les paiements
+        sont suspendus pour le moment — merci de votre compréhension.
+      </p>
+    );
+  }
 
   return (
     <div id="checkout">

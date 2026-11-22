@@ -11,6 +11,7 @@
 // manuelle par courriel jusqu'au go d'activation.
 
 import { createServerFn } from "@tanstack/react-start";
+import { BOUTIQUE_FERMEE } from "@/lib/boutique";
 import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import {
   type StripeEnv,
@@ -53,6 +54,14 @@ export type PasseursFormule = keyof typeof PASSEURS_PRICES;
 // ---------------------------------------------------------------------------
 export const createPasseursCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((data: { formule: string; environment: StripeEnv }) => {
+    // Boutique fermée pour maintenance (22 nov. 2026, LOT-FERMETURE) :
+    // aucune session de paiement ne peut être créée, même via une
+    // requête forgée directe sur la fonction serveur. L'inscription
+    // Passeurs reste par courriel (décision HP M4-D2) ; cette garde ne
+    // touche que le checkout Stripe, non branché à ce jour. Rouvrir =
+    // BOUTIQUE_FERMEE=false dans src/lib/boutique.ts (go d'HP nommant
+    // le lot de réouverture).
+    if (BOUTIQUE_FERMEE) throw new Error("Boutique fermée pour maintenance");
     if (data.formule !== "mensuel" && data.formule !== "annuel") {
       throw new Error("Formule invalide");
     }

@@ -6,6 +6,7 @@ import {
 } from "@/lib/stripe.server";
 import { getTrustedSiteOrigin } from "@/utils/payments.functions";
 import { validateCartItems } from "@/lib/panier-validation";
+import { BOUTIQUE_FERMEE } from "@/lib/boutique";
 
 // Panier d'achat — session Stripe multi-produits, même motif que
 // createPdfCheckoutSession (fonctions serveur TanStack Start, déployées avec
@@ -38,6 +39,12 @@ export const createCartCheckoutSession = createServerFn({ method: "POST" })
       environment: StripeEnv;
       giftTo?: string;
     }) => {
+      // Boutique fermée pour maintenance (22 nov. 2026, LOT-FERMETURE) :
+      // aucune session de paiement ne peut être créée, même via une
+      // requête forgée directe sur la fonction serveur — le blocage du
+      // seul /panier ne suffit pas. Rouvrir = BOUTIQUE_FERMEE=false dans
+      // src/lib/boutique.ts (go d'HP nommant le lot de réouverture).
+      if (BOUTIQUE_FERMEE) throw new Error("Boutique fermée pour maintenance");
       if (!Array.isArray(data.items)) throw new Error("Panier invalide");
       // La quantité du client est ignorée : un PDF = un exemplaire.
       const priceIds = validateCartItems(data.items.map((i) => i?.priceId));

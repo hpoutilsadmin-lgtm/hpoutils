@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { BOUTIQUE_FERMEE, MESSAGE_BOUTIQUE_FERMEE } from "@/lib/boutique";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { createSeoHead } from "@/lib/seo";
 import { getStripeEnvironment } from "@/lib/stripe";
@@ -279,6 +280,24 @@ function Page() {
             )}
           </div>
 
+          {BOUTIQUE_FERMEE && (
+            <p
+              role="status"
+              style={{
+                background: "#f6e8c8",
+                border: "1px solid #d9a860",
+                borderRadius: 8,
+                padding: "12px 16px",
+                margin: "16px auto",
+                maxWidth: 760,
+                textAlign: "center",
+                fontSize: 15,
+              }}
+            >
+              {MESSAGE_BOUTIQUE_FERMEE}
+            </p>
+          )}
+
           <h2>Les 11 tomes payants</h2>
           <div className="pillar-grid">
             {PAYANT_TOMES.map((tome, i) => (
@@ -297,9 +316,9 @@ function Page() {
                 <button
                   className="btn-primary"
                   onClick={() => buyTome(tome.slug)}
-                  disabled={busy === `tome-${tome.slug}`}
+                  disabled={BOUTIQUE_FERMEE || busy === `tome-${tome.slug}`}
                 >
-                  {busy === `tome-${tome.slug}` ? "Redirection…" : `Acheter — ${priceLabel(tome)}`}
+                  {BOUTIQUE_FERMEE ? "Boutique fermée pour maintenance" : busy === `tome-${tome.slug}` ? "Redirection…" : `Acheter — ${priceLabel(tome)}`}
                 </button>
               </article>
             ))}
@@ -323,8 +342,8 @@ function Page() {
             ))}
           </div>
           <p>{bundleChoice.length} / {BUNDLE.count} tomes choisis</p>
-          <button className="btn-primary" onClick={buyBundle} disabled={busy === "bundle"}>
-            {busy === "bundle" ? "Redirection…" : "Acheter le bundle — 12 $ CAD"}
+          <button className="btn-primary" onClick={buyBundle} disabled={BOUTIQUE_FERMEE || busy === "bundle"}>
+            {BOUTIQUE_FERMEE ? "Boutique fermée pour maintenance" : busy === "bundle" ? "Redirection…" : "Acheter le bundle — 12 $ CAD"}
           </button>
 
           <h2>Autre chose — Crée TON histoire</h2>

@@ -147,6 +147,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
             __html: `(function(){try{var p=(window.location.pathname||"").toLowerCase();if(p==="/le-garde"||p==="/personne-seule")return;document.documentElement.classList.add("bh-reserve");}catch(e){}})();`,
           }}
         />
+        <link rel="icon" type="image/png" href="/favicon.png" />
         <HeadContent />
       </head>
       <body>

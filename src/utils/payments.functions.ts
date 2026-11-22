@@ -8,6 +8,7 @@ import {
   resolveKitSelection,
 } from "@/lib/products-catalog";
 import { signDownloadToken } from "@/lib/download-token.server";
+import { BOUTIQUE_FERMEE } from "@/lib/boutique";
 import { enqueueTransactionalEmail } from "@/lib/email/enqueue.server";
 // B-T2 : récupération tomes — même primitives que le formulaire /lire
 // (recoverTomeLinks, src/utils/tomes.functions.ts) : mintRecoveryTomeTokens
@@ -89,6 +90,13 @@ export const createPdfCheckoutSession = createServerFn({ method: "POST" })
     // correspondant existe) : aucune session ne peut être créée, même
     // via une requête forgée — jamais de paiement à l'ancien prix.
     if (product.purchaseHold) throw new Error("Achat suspendu pour ce produit");
+    // Boutique fermée pour maintenance (21 nov. 2026, MISSION 1 — E1) :
+    // aucune session de paiement ne peut être créée, même via une
+    // requête forgée directe sur la fonction serveur — le blocage du
+    // seul /panier ne suffit pas, les pages /achat et /pdf montent
+    // le même checkout. Rouvrir = BOUTIQUE_FERMEE=false dans
+    // src/lib/boutique.ts (go d'HP nommant le lot de réouverture).
+    if (BOUTIQUE_FERMEE) throw new Error("Boutique fermée pour maintenance");
     // Bundle : une sélection absente ne doit pas créer de session —
     // sans elle, la livraison retomberait sur le fichier de repli
     // (collection entière) au lieu des 10 kits choisis.

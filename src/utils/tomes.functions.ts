@@ -7,6 +7,7 @@
 // la page de retour le signale sans renvoyer de doublon.
 
 import { createServerFn } from "@tanstack/react-start";
+import { BOUTIQUE_FERMEE } from "@/lib/boutique";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { supabaseExternalAdmin } from "@/integrations/supabase/external.server";
 import {
@@ -141,6 +142,12 @@ function resolveGiftRecipient(session: any, payerEmail: string): { deliveryEmail
 export const createTomeCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator(
     (data: { kind: "tome"; slug: string; environment: StripeEnv; giftTo?: string } | { kind: "bundle"; tomes: string[]; environment: StripeEnv; giftTo?: string }) => {
+      // Boutique fermée pour maintenance (22 nov. 2026, LOT-FERMETURE) :
+      // aucune session de paiement ne peut être créée, même via une
+      // requête forgée directe sur la fonction serveur. Rouvrir =
+      // BOUTIQUE_FERMEE=false dans src/lib/boutique.ts (go d'HP nommant
+      // le lot de réouverture).
+      if (BOUTIQUE_FERMEE) throw new Error("Boutique fermée pour maintenance");
       if (data.environment !== "sandbox" && data.environment !== "live") {
         throw new Error("Environnement invalide");
       }

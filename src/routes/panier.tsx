@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { BOUTIQUE_FERMEE } from "@/lib/boutique";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { createSeoHead } from "@/lib/seo";
@@ -51,10 +52,9 @@ export const Route = createFileRoute("/panier")({
  * Stripe avec le crédit en coupon. Le serveur recalcule tout.
  */
 function Page() {
-  // Boutique REFERMÉE (21 nov. 2026, go d'HP) après le TEST 0 $ réussi —
-  // le tunnel paiement + livraison est prouvé. Réouverture officielle
-  // = décision séparée d'HP (lot séparé + go).
-  const BOUTIQUE_FERMEE = true;
+  // Boutique fermée — état unique partagé (src/lib/boutique.ts) :
+  // la garde serveur (payments.functions.ts) et le bandeau des pages
+  // produit lisent la même constante. Réouverture = un seul bascule.
   const [cart, setCart] = useState<Cart>([]);
   const [pret, setPret] = useState(false);
   const [paiement, setPaiement] = useState<"idle" | "envoi" | "indisponible">("idle");
