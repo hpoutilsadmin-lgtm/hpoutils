@@ -18,6 +18,7 @@ import { Route as BaladoRouteImport } from './routes/balado'
 import { Route as BoiteRouteImport } from './routes/boite'
 import { Route as BoutiqueChevalierRouteImport } from './routes/boutique-chevalier'
 import { Route as CadeauxRouteImport } from './routes/cadeaux'
+import { Route as CartesDeSouhaitsRouteImport } from './routes/cartes-de-souhaits'
 import { Route as CollaborerRouteImport } from './routes/collaborer'
 import { Route as CommandeRouteImport } from './routes/commande'
 import { Route as ComprendreRouteImport } from './routes/comprendre'
@@ -121,6 +122,11 @@ const BoutiqueChevalierRoute = BoutiqueChevalierRouteImport.update({
 const CadeauxRoute = CadeauxRouteImport.update({
   id: '/cadeaux',
   path: '/cadeaux',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartesDeSouhaitsRoute = CartesDeSouhaitsRouteImport.update({
+  id: '/cartes-de-souhaits',
+  path: '/cartes-de-souhaits',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CollaborerRoute = CollaborerRouteImport.update({
@@ -434,6 +440,7 @@ export interface FileRoutesByFullPath {
   '/boite': typeof BoiteRoute
   '/boutique-chevalier': typeof BoutiqueChevalierRoute
   '/cadeaux': typeof CadeauxRoute
+  '/cartes-de-souhaits': typeof CartesDeSouhaitsRoute
   '/collaborer': typeof CollaborerRoute
   '/commande': typeof CommandeRoute
   '/comprendre': typeof ComprendreRoute
@@ -504,6 +511,7 @@ export interface FileRoutesByTo {
   '/boite': typeof BoiteRoute
   '/boutique-chevalier': typeof BoutiqueChevalierRoute
   '/cadeaux': typeof CadeauxRoute
+  '/cartes-de-souhaits': typeof CartesDeSouhaitsRoute
   '/collaborer': typeof CollaborerRoute
   '/commande': typeof CommandeRoute
   '/comprendre': typeof ComprendreRoute
@@ -575,6 +583,7 @@ export interface FileRoutesById {
   '/boite': typeof BoiteRoute
   '/boutique-chevalier': typeof BoutiqueChevalierRoute
   '/cadeaux': typeof CadeauxRoute
+  '/cartes-de-souhaits': typeof CartesDeSouhaitsRoute
   '/collaborer': typeof CollaborerRoute
   '/commande': typeof CommandeRoute
   '/comprendre': typeof ComprendreRoute
@@ -647,6 +656,7 @@ export interface FileRouteTypes {
     | '/boite'
     | '/boutique-chevalier'
     | '/cadeaux'
+    | '/cartes-de-souhaits'
     | '/collaborer'
     | '/commande'
     | '/comprendre'
@@ -717,6 +727,7 @@ export interface FileRouteTypes {
     | '/boite'
     | '/boutique-chevalier'
     | '/cadeaux'
+    | '/cartes-de-souhaits'
     | '/collaborer'
     | '/commande'
     | '/comprendre'
@@ -787,6 +798,7 @@ export interface FileRouteTypes {
     | '/boite'
     | '/boutique-chevalier'
     | '/cadeaux'
+    | '/cartes-de-souhaits'
     | '/collaborer'
     | '/commande'
     | '/comprendre'
@@ -858,6 +870,7 @@ export interface RootRouteChildren {
   BoiteRoute: typeof BoiteRoute
   BoutiqueChevalierRoute: typeof BoutiqueChevalierRoute
   CadeauxRoute: typeof CadeauxRoute
+  CartesDeSouhaitsRoute: typeof CartesDeSouhaitsRoute
   CollaborerRoute: typeof CollaborerRoute
   CommandeRoute: typeof CommandeRoute
   ComprendreRoute: typeof ComprendreRoute
@@ -980,6 +993,13 @@ declare module '@tanstack/react-router' {
       path: '/cadeaux'
       fullPath: '/cadeaux'
       preLoaderRoute: typeof CadeauxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cartes-de-souhaits': {
+      id: '/cartes-de-souhaits'
+      path: '/cartes-de-souhaits'
+      fullPath: '/cartes-de-souhaits'
+      preLoaderRoute: typeof CartesDeSouhaitsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/collaborer': {
@@ -1432,6 +1452,7 @@ const rootRouteChildren: RootRouteChildren = {
   BoiteRoute: BoiteRoute,
   BoutiqueChevalierRoute: BoutiqueChevalierRoute,
   CadeauxRoute: CadeauxRoute,
+  CartesDeSouhaitsRoute: CartesDeSouhaitsRoute,
   CollaborerRoute: CollaborerRoute,
   CommandeRoute: CommandeRoute,
   ComprendreRoute: ComprendreRoute,

@@ -91,6 +91,17 @@ Un code personnel déjà émis : la personne le saisit au panier, le montant s'a
 5 $, 10 $, 20 $, 50 $ ou 100 $ CAD, aucune taxe ajoutée. Un bon ne s'échange pas
 contre de l'argent, sauf le solde de 5 $ ou moins, remboursable à la demande.
 
+## Les cartes de souhaits (page /cartes-de-souhaits)
+
+Vingt-deux cartes de souhaits originales, gratuites, sans compte : dix cartes
+classiques (fleur de lys, gâteau d'anniversaire, sapin de Noël, feuille d'érable,
+soleil levant, deux tasses, bonne année, ruban de fête, bonne journée, fleur qui
+pousse) et douze cartes cocasses (une phrase douce dehors, la chute comique
+dedans — on touche la carte pour l'ouvrir). La personne choisit une carte, écrit
+son message (400 caractères au maximum) et copie le lien de sa carte pour la
+partager. Ce ne sont pas des cartes-cadeaux : aucune valeur d'argent, juste un
+mot gentil. L'envoi par courriel n'est pas encore branché.
+
 ## Les ateliers — Terrebonne et Lanaudière (page /ateliers)
 
 Ateliers de groupe pour organismes, écoles et groupes, à Terrebonne et dans Lanaudière.

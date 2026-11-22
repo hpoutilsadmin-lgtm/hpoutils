@@ -1,0 +1,131 @@
+/* Cartes de souhaits v2 — CSS repris de la page autonome v2, préfixé
+   `.cartes-souhaits` (la coque du site fournit barre haute et pied).
+   v3 (22 nov. 2026) : les SVG sont remplacés par des WebP 800×800 —
+   règles svg → img, ajout .idee-croisee (sous l'aperçu).
+   Règles tombées avec la page autonome : `html`, `.barre-haut`,
+   `.badge-prepa`, `footer`, `.bouton-secondaire` (bouton Partager
+   supprimé — le partage, c'est le lien à copier, M11-3). */
+.cartes-souhaits {
+    --or:#D9A860; --brun:#8A5A2B; --or-fonce:#C9973F; --creme:#FAF3E4;
+    --bleu:#1E3A5F; --rouge:#C0392B; --encre:#2B2118; --blanc:#FFFDF7;
+  }
+.cartes-souhaits * {box-sizing:border-box}
+.cartes-souhaits {margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--creme);color:var(--encre);line-height:1.55;-webkit-tap-highlight-color:transparent}
+.cartes-souhaits a {color:var(--bleu)}
+  /* ---------- En-tête : un seul moment fort ---------- */
+.cartes-souhaits header.hero {background:linear-gradient(180deg,#F3E3C0,#FAF3E4);border-bottom:4px solid var(--or);text-align:center;padding:40px 16px 32px;color:var(--encre);min-height:0}
+.cartes-souhaits header.hero h1 {font-size:2.25rem;margin:0 0 8px;color:var(--brun)}
+.cartes-souhaits header.hero p {font-size:1.125rem;max-width:640px;margin:0 auto}
+.cartes-souhaits .lys {font-size:2.5rem;line-height:1;display:block;margin-bottom:8px}
+  /* ---------- Structure ---------- */
+.cartes-souhaits {max-width:1080px;margin:0 auto;padding:24px 16px 48px}
+.cartes-souhaits section {margin-bottom:40px}
+.cartes-souhaits h2 {font-size:1.5rem;color:var(--brun);border-bottom:2px solid var(--or);padding-bottom:6px}
+.cartes-souhaits h3 {font-size:1.25rem;color:var(--bleu)}
+.cartes-souhaits p, .cartes-souhaits li, .cartes-souhaits label, .cartes-souhaits button, .cartes-souhaits input, .cartes-souhaits textarea, .cartes-souhaits select {font-size:1rem}
+.cartes-souhaits .note {font-size:.9375rem}
+.cartes-souhaits .avertissement {background:#FDEDEC;border:2px solid var(--rouge);border-radius:10px;padding:16px;font-size:1rem}
+.cartes-souhaits .avertissement strong {color:var(--rouge)}
+  /* ---------- Galerie ---------- */
+.cartes-souhaits .galerie, .cartes-souhaits .galerie-cocasse {display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.cartes-souhaits .carte-choix {background:var(--blanc);border:3px solid #E3D3AC;border-radius:12px;padding:0;cursor:pointer;text-align:center;overflow:hidden;min-height:48px}
+.cartes-souhaits .carte-choix:focus {border-color:var(--or-fonce);outline:3px solid var(--or);outline-offset:2px}
+.cartes-souhaits .carte-choix[aria-pressed="true"] {border-color:var(--rouge);box-shadow:0 0 0 3px var(--or)}
+.cartes-souhaits .carte-choix img {display:block;width:100%;height:auto}
+.cartes-souhaits .carte-choix .nom {display:block;padding:10px 6px;font-size:1rem;font-weight:bold;color:var(--brun);overflow-wrap:break-word}
+.cartes-souhaits .carte-choix .occasion {display:block;padding:0 6px 10px;font-size:.875rem;color:#5A4632;overflow-wrap:break-word}
+  /* ---------- Galerie cocasse (2e série) : mêmes tuiles, un dedans qui se déplie ---------- */
+.cartes-souhaits .carte-cocasse {background:var(--blanc);border:3px solid #E3D3AC;border-radius:12px;padding:0;cursor:pointer;text-align:center;overflow:hidden;min-height:48px}
+.cartes-souhaits .carte-cocasse:focus {border-color:var(--or-fonce);outline:3px solid var(--or);outline-offset:2px}
+.cartes-souhaits .carte-cocasse[aria-pressed="true"] {border-color:var(--rouge);box-shadow:0 0 0 3px var(--or)}
+.cartes-souhaits .carte-cocasse[aria-expanded="true"] {border-color:var(--or-fonce)}
+.cartes-souhaits .carte-cocasse img {display:block;width:100%;height:auto}
+.cartes-souhaits .carte-cocasse .dehors {display:block;padding:10px 6px 4px;font-size:1rem;font-weight:bold;color:var(--brun);overflow-wrap:break-word}
+.cartes-souhaits .carte-cocasse .indice-ouvrir {display:block;padding:0 6px 10px;font-size:.875rem;color:#5A4632;overflow-wrap:break-word}
+  /* Dedans : déplié en douceur (250 ms ease-out), jamais de bascule 3D.
+     grid-template-rows minmax(0,0fr) → minmax(0,1fr) : la zone prend exactement
+     la hauteur du texte, à toute largeur, sans coupure ni chevauchement.
+     Le minmax(0, …) est obligatoire : un 0fr seul garde la hauteur d'une ligne. */
+.cartes-souhaits .carte-cocasse .dedans {display:grid;grid-template-rows:minmax(0,0fr);opacity:0;transition:grid-template-rows 250ms ease-out,opacity 200ms ease-out}
+.cartes-souhaits .carte-cocasse .dedans>* {overflow:hidden;min-height:0}
+.cartes-souhaits .carte-cocasse[aria-expanded="true"] .dedans {grid-template-rows:minmax(0,1fr);opacity:1}
+.cartes-souhaits .carte-cocasse .dedans-texte {display:block;padding:10px 8px;background:#F3E9D2;border-top:2px solid #E3D3AC;font-size:.9375rem;font-style:italic;text-align:left;overflow-wrap:break-word}
+  /* ---------- Composeur ---------- */
+.cartes-souhaits .composeur {display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.cartes-souhaits .panneau {background:var(--blanc);border:2px solid #E3D3AC;border-radius:12px;padding:20px}
+.cartes-souhaits label {display:block;font-weight:bold;margin:14px 0 6px;color:var(--brun)}
+.cartes-souhaits input[type="text"], .cartes-souhaits textarea {width:100%;padding:12px;border:2px solid var(--brun);border-radius:8px;font-family:inherit;font-size:1rem;background:#FFFDF7}
+.cartes-souhaits input[type="text"]:focus, .cartes-souhaits textarea:focus {outline:3px solid var(--or);outline-offset:1px}
+.cartes-souhaits textarea {min-height:140px;resize:vertical}
+.cartes-souhaits .compteur {font-size:.875rem;color:#5A4632;text-align:right}
+  /* ---------- Exemples ---------- */
+.cartes-souhaits .exemples {display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.cartes-souhaits .exemple {background:#F3E9D2;border:2px solid #E3D3AC;border-radius:10px;padding:12px 14px;text-align:left;cursor:pointer;min-height:48px;font-family:inherit}
+.cartes-souhaits .exemple:focus {border-color:var(--brun);outline:3px solid var(--or);outline-offset:1px}
+.cartes-souhaits .exemple .titre-ex {font-weight:bold;color:var(--bleu);display:block;font-size:1rem}
+.cartes-souhaits .exemple .texte-ex {display:block;font-style:italic;font-size:.9375rem;margin-top:4px}
+  /* ---------- Aperçu ---------- */
+.cartes-souhaits .apercu-carte {border:3px solid var(--brun);border-radius:12px;overflow:hidden;background:var(--blanc);box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.cartes-souhaits .apercu-carte img {display:block;width:100%;height:auto}
+.cartes-souhaits .apercu-message {padding:20px;text-align:center;font-size:1.125rem;font-style:italic;min-height:120px}
+.cartes-souhaits .apercu-message .pour {font-size:1rem;font-style:normal;font-weight:bold;color:var(--bleu)}
+.cartes-souhaits .apercu-message .de {font-size:1rem;font-style:normal;color:var(--brun);margin-top:12px;display:block}
+  /* ---------- Aperçu cocasse : geste pour ouvrir (bouton + dedans déplié) ---------- */
+  /* Le bouton est un <button> : min-height 48 px, :active scale(.97) et
+     touch-action viennent de la règle button,.bouton. État ouvert : la classe
+     .apercu-ouvert est mise sur .apercu-carte par le JS au tap sur le bouton. */
+.cartes-souhaits .apercu-ouvrir {width:100%;background:var(--creme);color:var(--brun)}
+.cartes-souhaits .apercu-ouvrir:focus {outline:3px solid var(--or);outline-offset:2px}
+.cartes-souhaits .apercu-dedans {display:grid;grid-template-rows:minmax(0,0fr);opacity:0;transition:grid-template-rows 250ms ease-out,opacity 200ms ease-out}
+.cartes-souhaits .apercu-dedans>* {overflow:hidden;min-height:0}
+.cartes-souhaits .apercu-carte.apercu-ouvert .apercu-dedans {grid-template-rows:minmax(0,1fr);opacity:1}
+.cartes-souhaits .apercu-dedans-texte {display:block;padding:16px 20px;background:#F3E9D2;border-top:2px solid #E3D3AC;text-align:center;font-size:1.125rem;font-style:italic;overflow-wrap:break-word}
+  /* ---------- Idée croisée : sous l'aperçu, seulement quand la carte en a une ---------- */
+.cartes-souhaits .idee-croisee {background:var(--blanc);border:2px solid #E3D3AC;border-radius:10px;padding:12px 14px;font-size:1rem;margin:16px 0 0}
+.cartes-souhaits .idee-croisee a {font-weight:bold}
+  /* ---------- Boutons ---------- */
+.cartes-souhaits .boutons {display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.cartes-souhaits button, .cartes-souhaits .bouton {min-height:48px;padding:12px 24px;font-size:1.0625rem;font-family:inherit;font-weight:bold;border-radius:10px;border:2px solid var(--brun);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;touch-action:manipulation;user-select:none;-webkit-user-select:none;transition:transform 120ms ease-out}
+  /* Correctif v2 — empilement vertical des tuiles et des exemples.
+     Cause : la règle button,.bouton ci-dessus impose display:inline-flex à TOUS les boutons,
+     donc .carte-choix, .carte-cocasse et .exemple (des <button>) rangeaient leurs enfants
+     côte à côte (image + nom + occasion, ou titre + texte cité), chacun écrasé à ~50 px à 360 px.
+     Flex colonne, placé après, reprend la main : image/titre au-dessus, texte en dessous.
+     justify-content:flex-start : sans lui, Firefox centre verticalement le contenu d'un
+     <button> étiré par la grille (tuile fermée voisine d'une tuile cocasse ouverte,
+     contenu flottant au milieu) ; align-items:stretch : les enfants gardent toute la
+     largeur de la tuile (fond du dedans, textes), sinon align-items:center de la règle
+     button les rétrécirait à la largeur de leur texte. */
+.cartes-souhaits .carte-choix {display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch}
+.cartes-souhaits .carte-cocasse {display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch}
+.cartes-souhaits .exemple {display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch}
+  /* Retour de pression au doigt (design-hp) : le bouton répond à :active, pas au clic. */
+.cartes-souhaits button:active, .cartes-souhaits .bouton:active {transform:scale(.97)}
+  @media (prefers-reduced-motion:reduce){
+.cartes-souhaits button:active, .cartes-souhaits .bouton:active {transform:none}
+  }
+.cartes-souhaits .bouton-principal {background:var(--rouge);color:#fff;border-color:var(--rouge)}
+.cartes-souhaits .bouton-principal:focus {outline:3px solid var(--or);outline-offset:2px}
+.cartes-souhaits .bouton-doux {background:var(--creme);color:var(--brun)}
+.cartes-souhaits .bouton-doux:focus {outline:3px solid var(--or);outline-offset:2px}
+  /* ---------- Survol : souris fine seulement (design-hp) ---------- */
+  @media (hover:hover) and (pointer:fine){
+.cartes-souhaits .carte-choix:hover {border-color:var(--or-fonce);outline:3px solid var(--or);outline-offset:2px}
+.cartes-souhaits .carte-cocasse:hover {border-color:var(--or-fonce);outline:3px solid var(--or);outline-offset:2px}
+.cartes-souhaits .exemple:hover {border-color:var(--brun);outline:3px solid var(--or);outline-offset:1px}
+.cartes-souhaits .bouton-principal:hover, .cartes-souhaits .bouton-doux:hover, .cartes-souhaits .apercu-ouvrir:hover {outline:3px solid var(--or);outline-offset:2px}
+  }
+  /* ---------- Tablette ---------- */
+  @media (max-width:900px){
+.cartes-souhaits .galerie, .cartes-souhaits .galerie-cocasse {grid-template-columns:repeat(3,1fr)}
+.cartes-souhaits .composeur {grid-template-columns:1fr}
+.cartes-souhaits .exemples {grid-template-columns:1fr}
+  }
+  /* ---------- Téléphone ---------- */
+  @media (max-width:600px){
+.cartes-souhaits header.hero h1 {font-size:1.75rem}
+.cartes-souhaits header.hero p {font-size:1.0625rem}
+.cartes-souhaits .galerie, .cartes-souhaits .galerie-cocasse {grid-template-columns:repeat(2,1fr)}
+.cartes-souhaits .boutons {flex-direction:column}
+.cartes-souhaits .boutons button, .cartes-souhaits .boutons .bouton {width:100%}
+  }
