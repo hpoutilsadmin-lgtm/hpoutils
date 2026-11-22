@@ -89,16 +89,11 @@ function Page() {
             }}
           >
             <p style={{ fontWeight: 700, marginBottom: 8, color: "#2a1a12" }}>
-              L'inscription est ouverte.
+              Les inscriptions sont suspendues pour le moment.
             </p>
             <p style={{ lineHeight: 1.7, color: "#3a2a20" }}>
-              Pour vous inscrire, <a href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">écrivez à la direction humaine</a> en précisant la formule (3 $ / mois ou 28 $ / an) — la direction humaine vous répond sous 3 jours
-              ouvrables avec les détails. Aucun paiement n'est demandé ici : la direction
-              vous confirme les détails avant tout prélèvement. Pour l'instant, l'inscription se fait par courriel. Et tout ce qui est gratuit sur HP Outils le reste.
+              La boutique est fermée pour maintenance : les inscriptions aux Passeurs sont suspendues le temps de la fermeture. La formule ne change pas — 3 $ / mois ou 28 $ / an — et une fois la boutique rouverte, l'inscription se fera toujours par courriel, en écrivant à la direction humaine. Aucun paiement n'est demandé ici. Et tout ce qui est gratuit sur HP Outils le reste.
             </p>
-            <div className="lead-actions" style={{ marginTop: 16 }}>
-              <a className="btn-primary" href="mailto:hpoutils.admin@gmail.com?subject=Inscription%20Les%20Passeurs">S'inscrire en écrivant à la direction</a>
-            </div>
           </div>
         </div>
       </section>

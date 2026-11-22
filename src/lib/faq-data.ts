@@ -47,7 +47,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
   {
     question: "C'est quoi, les Passeurs (abonnement) ?",
     reponse:
-      "Les Passeurs, c'est l'abonnement : l'accès aux 16 savoirs, 3 $ CAD par mois (ou 28 $ CAD pour l'année). L'inscription est ouverte : écrivez à la direction humaine pour vous inscrire, la direction humaine vous répond sous 3 jours ouvrables. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
+      "Les Passeurs, c'est l'abonnement : l'accès aux 16 savoirs, 3 $ CAD par mois (ou 28 $ CAD pour l'année). Les inscriptions sont suspendues pour le moment, boutique fermée pour maintenance ; une fois la boutique rouverte, écrivez à la direction humaine pour vous inscrire, la direction humaine vous répond sous 3 jours ouvrables. Aucune taxe ajoutée : HP Outils est un petit fournisseur.",
   },
   {
     question: "Par où commencer pour mes papiers de fin de vie ?",
