@@ -79,6 +79,7 @@ export const GAME_FILES: Record<string, string> = {
   "peche-blanche-arcade": "/apps/peche-blanche-arcade/peche-blanche-arcade-v1.0.html",
   "peche-blanche-carnet": "/apps/peche-blanche-carnet/peche-blanche-carnet-v1.0.html",
   "aventures-moteur": "/apps/aventures-moteur/aventures-moteur-v1.0.html",
+  "t1-le-saut-des-annees-1990": "/apps/t1-le-saut-des-annees-1990/t1-le-saut-des-annees-1990-niveau.html",
 };
 
 /** Adresse stable (partageable) d'un jeu, ex. « /apps/caribou-run ». */

@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
-      title: "Jeux gratuits en français du Québec — 56 jeux en ligne | HP Outils",
-      description: "Des jeux gratuits créés au Québec — 56 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
+      title: "Jeux gratuits en français du Québec — 57 jeux en ligne | HP Outils",
+      description: "Des jeux gratuits créés au Québec — 57 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
       path: "/jeux",
       imagePath: "/images/og-jeux.jpg",
     }),
@@ -95,6 +95,7 @@ const GAMES: { title: string; file: string; copy: string; tag: string; faits?: s
   { title: "Sur l'herbe — La colonie", file: "/apps/sur-lherbe/sur-lherbe-v1.0.html", copy: "Jeu de stratégie gratuit : mène ta colonie sous l'herbe — Fourmis, Abeilles ou Araignées, 3 tableaux de 6 à 8 vagues, boutique en ambre gagnée en jeu.", tag: "Stratégie · Colonie sous l'herbe", faits: "3 factions · 3 tableaux · 6 à 8 vagues", mono: "SH", art: 0, image: "/apps/sur-lherbe/entete.jpg", alt: "Pelouse avec fourmis rouges, marguerites, feuilles et fourmilière, HUD vague 0 sur 6" },
   { title: "Pète et Répète", file: "/apps/pete-et-repete/pete-et-repete-v1.0.html", copy: "Jeu de course gratuit : tape les mots, lettre par lettre, pour faire péter ton bateau et battre Répète jusqu'à la bouée des 300 m. 3 mots parfaits d'affilée = SUPER PET !", tag: "Course · Mots à taper", faits: "300 m · mots français · clavier ou tactile", mono: "PR", art: 0, image: "/apps/pete-et-repete/entete.jpg", alt: "Course de canots sur le lac, mot à taper « THÉ », clavier de lettres" },
   { title: "Bataille d'aura — Sir H. Gepeto", file: "/apps/bataille-aura-magic/bataille-aura-magic-v1.0.html", copy: "Duel de magie gratuit : Sir H. Gepeto, en armure et marionnette à fils, défend sa scène contre 14 duellistes. Touche pour un petit sort, maintiens pour charger, relâche à MAX pour le gros sort !", tag: "Duel · 14 actes", faits: "14 actes · 3 auras · charge à MAX", mono: "MA", art: 0, image: "/apps/bataille-aura-magic/entete.jpg", alt: "Théâtre : Sir H. Gepeto, 100 PV, contre Pierrot le Mime, 60 PV, boutons Feu, Eau et Nature" },
+  { title: "T1 — Le saut des années 1990", file: "/apps/t1-le-saut-des-annees-1990/t1-le-saut-des-annees-1990-niveau.html", copy: "Niveau plateforme complet en 1990 : courez avec Sir H. Gepeto, sautez les trous, éteignez les télés bougonnes et arrivez au drapeau. 79 fleurs de lys, 5 cassettes, un souvenir à rapporter.", tag: "Arcade · Plateforme", faits: "Niveau de 2 à 4 minutes · 3 cœurs · souvenir Bois d'aurore", mono: "T1", art: 3, slug: "t1-le-saut-des-annees-1990" },
 ];
 
 // Compteur option B : Mini-jeux HP compte pour 3 jeux (1 tuile, 3 jeux) — source unique du chiffre public.
@@ -732,12 +733,12 @@ function JeuxPage() {
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
-            {/* Compteur (Mini-jeux HP = 3 jeux) : 56 jeux, sans +1 — décision HP 22 nov. 2026 (M1-D6) ; le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
+            {/* Compteur (Mini-jeux HP = 3 jeux) : 57 jeux, sans +1 — décision HP 22 nov. 2026 (M1-D6) ; le Panier Solidaire reste visible (section cuisine) mais ne compte plus dans le chiffre */}
             <span style={CHIP_STYLE}>{JEUX_JOUABLES} jeux</span>
             <span style={CHIP_STYLE}>Sans inscription</span>
             <span style={CHIP_STYLE}>Jouables dans votre navigateur</span>
           </div>
-          <p style={{ fontSize: 14, marginTop: 10 }}>56 jeux à jouer. La tuile Mini-jeux HP en cache 3 à elle seule.</p>
+          <p style={{ fontSize: 14, marginTop: 10 }}>57 jeux à jouer. La tuile Mini-jeux HP en cache 3 à elle seule.</p>
         </div>
       </section>
 

@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAF3E4">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1E3A5F">
+<title>T1 — Le saut des années 1990 — niveau complet</title>
+<style>
+  /* Palette fermée HP : #D9A860, #8A5A2B, #C9973F, #FAF3E4, #1E3A5F, #C0392B.
+     Design-hp : animations < 300 ms ease-out, :active scale .97, boutons ≥ 48 px,
+     textes ≥ 12,5 px, 3 formats 360 / 768 / 1920. */
+  :root{
+    --or:#D9A860; --or-clair:#C9973F; --bois:#8A5A2B; --bois-fonce:#3A2415;
+    --creme:#FAF3E4; --bleu:#1E3A5F; --rouge:#C0392B;
+    --bleu-nuit:#07111B; --encre:#2B2118;
+    --ease-out:cubic-bezier(.23,1,.32,1);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;overscroll-behavior:none}
+  body{margin:0;background:var(--bleu-nuit);color:var(--creme);
+    font-family:Georgia,"Times New Roman",serif;font-size:18px;line-height:1.5}
+  header{padding:12px 16px calc(12px + env(safe-area-inset-top));background:#101C2B;border-bottom:2px solid var(--bois)}
+  h1{font-size:26px;margin:8px 0 4px}
+  h2{font-size:22px;margin:0 0 8px}
+  p{margin:8px 0}
+  button{min-height:48px;min-width:48px;padding:12px 18px;font-size:18px;
+    font-family:inherit;cursor:pointer;border-radius:12px;border:2px solid var(--or);
+    background:#2A1C0E;color:var(--creme);touch-action:manipulation;
+    user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+  button:active{transform:scale(.97);transition:transform 120ms var(--ease-out)}
+  button:focus-visible{outline:4px solid var(--or);outline-offset:3px}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  @media (hover: hover) and (pointer: fine){
+    button:hover{background:#4A2F16}
+  }
+  .retour{background:#12304A}
+  .son{background:var(--bleu)}
+  main{max-width:1100px;margin:0 auto;padding:12px 16px calc(40px + env(safe-area-inset-bottom))}
+  .parole-gepeto{background:#1D2F45;border:2px solid #2F6A9A;border-radius:14px;
+    padding:12px 16px;margin:12px 0}
+  .parole-gepeto b{color:var(--or)}
+  .etiquette{display:inline-block;background:var(--rouge);color:#fff;border-radius:8px;
+    padding:2px 10px;font-size:15px;margin-right:6px}
+  .etiquette.duree{background:var(--bois)}
+  .note{font-size:16px;color:#CBB27A}
+  .statut{font-size:16px}
+  /* --- HUD : cœurs, score, lys, temps (DOM, lisible sans le son) --- */
+  #hud{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;
+    background:#1D2F45;border:2px solid var(--bois);border-radius:12px;
+    padding:10px 14px;margin:12px 0;font-size:18px}
+  #hud .coeurs{color:#C0392B;letter-spacing:2px}
+  #hud .score{color:var(--or);font-weight:bold}
+  /* --- Le niveau : canvas 960×540 mis à l'échelle --- */
+  #cadre-niveau{position:relative;border:3px solid var(--bois);border-radius:16px;
+    overflow:hidden;margin:12px 0;background:#F6C9C9}
+  #jeu{display:block;width:100%;height:auto;touch-action:none}
+  /* Écrans titre / pause / fin : cartes en flux normal, jamais en surimpression
+     sur le canvas — sur téléphone étroit le cadre 16:9 est trop court et coupait
+     le bouton Jouer (constat d'HP au doigt, 20 nov. 21 h 02). Un seul moment fort à la fois. */
+  .ecran{display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;gap:12px;padding:16px;
+    background:#1D2F45;border:2px solid var(--bois);border-radius:14px;
+    color:var(--creme);margin:12px 0}
+  .ecran.cache{display:none}
+  .ecran h2{font-size:26px;margin:0}
+  .ecran p{font-size:18px;margin:0;max-width:520px}
+  .ecran .gros-score{font-size:30px;color:var(--or);font-weight:bold}
+  .ecran button{min-height:56px;font-size:20px;padding:12px 26px}
+  /* --- Commandes : 3 gros boutons --- */
+  #commandes{display:flex;gap:12px;margin:12px 0}
+  #commandes button{flex:1;min-height:64px;font-size:24px}
+  #btn-sauter{flex:2;background:#4A2F16;border-color:var(--or)}
+  #commandes button.maintenu{background:#6B4423}
+  .fin{border:3px solid var(--or);border-radius:14px;padding:16px;background:#1D2F45;margin:12px 0}
+  .fin.cache{display:none}
+  .fin.visible{transform:scale(.95);opacity:0;transition:transform 200ms var(--ease-out),opacity 200ms var(--ease-out)}
+  .fin.visible.ouverte{transform:scale(1);opacity:1}
+  .souvenir{background:var(--creme);color:var(--encre);border-radius:12px;padding:14px;margin:10px 0;
+    border:2px dashed #B99B5F;font-size:18px;line-height:1.7}
+  .souvenir b{color:#4A2F16}
+  /* --- Mode jeu : pendant la partie, on replie le décor pour que le
+     canvas + les commandes tiennent ensemble sur un téléphone
+     (constat d'HP au doigt, 20 nov. 21 h 17 : l'écran de jeu ne se
+     voyait pas entièrement). Le mode se retire à la fin de partie. --- */
+  body.en-jeu header p{display:none}
+  body.en-jeu header h1{font-size:20px;margin:4px 0}
+  body.en-jeu .parole-gepeto{display:none}
+  body.en-jeu #hud{padding:6px 10px;font-size:16px;margin:8px 0}
+  body.en-jeu .note{display:none}
+  body.en-jeu main{padding-top:8px}
+  @media (min-width:768px){
+    #commandes button{min-height:72px}
+  }
+  @media (min-width:1200px){
+    body{font-size:19px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+    .fin.visible{transform:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+<header>
+  <button class="retour" id="btn-retour" type="button">← Retour</button>
+  <button class="son" id="btn-son" type="button" aria-pressed="true" style="float:right">Son : oui</button>
+  <h1>T1 — Le saut des années 1990</h1>
+  <p>Le premier tableau du voyage, en vrai niveau : 1990, la plateforme 2D.
+  Cours, saute, ramasse les fleurs de lys et les cassettes, évite les télés bougonnes,
+  et arrive au drapeau.
+  <span class="etiquette">TU</span> Tu joues, tu sautes, tu ramasses.
+  <span class="etiquette duree">Niveau de 2 à 4 minutes</span></p>
+</header>
+
+<main>
+  <div class="ecran" id="ecran-titre">
+    <h2>Le saut des années 1990</h2>
+    <p>Un tableau complet : un début, une fin, des fleurs de lys à ramasser, des télés bougonnes à éviter, un drapeau à atteindre.</p>
+    <p>◀ ▶ pour courir, le gros bouton pour sauter. Au clavier : flèches et espace.</p>
+    <button id="btn-commencer" type="button">Jouer</button>
+  </div>
+  <div class="parole-gepeto" role="status" aria-live="polite">
+    <b>Sir H. Gepeto :</b>
+    <span id="parole">En 1990, on courait partout ! Traverse le niveau, ramasse les fleurs de lys, saute sur les télés bougonnes et arrive au drapeau. Trois cœurs, pas un de plus — et si tu tombes, tu recommences au dernier établi.</span>
+  </div>
+
+  <div id="hud" role="status" aria-live="polite">
+    <span class="coeurs" id="hud-coeurs" aria-label="Cœurs">♥♥♥</span>
+    <span class="score" id="hud-score">Score : 0</span>
+    <span id="hud-lys">Fleurs de lys : 0</span>
+    <span id="hud-cassettes">Cassettes : 0 / 5</span>
+    <span id="hud-temps">Temps : 0:00</span>
+  </div>
+
+  <section aria-label="Le niveau">
+    <div id="cadre-niveau">
+      <canvas id="jeu" width="960" height="540" aria-label="Niveau plateforme : cours, saute, ramasse, arrive au drapeau"></canvas>
+    </div>
+    <div class="ecran cache" id="ecran-pause">
+      <h2>Pause</h2>
+      <p>Tu reprends quand tu veux.</p>
+      <button id="btn-reprendre" type="button">Reprendre</button>
+    </div>
+    <div class="ecran cache" id="ecran-fin">
+      <h2 id="fin-titre">Bravo !</h2>
+      <p id="fin-texte"></p>
+      <p class="gros-score" id="fin-score"></p>
+      <p id="fin-meilleur"></p>
+      <button id="btn-rejouer" type="button">Rejouer</button>
+    </div>
+    <p class="statut" id="statut" role="status">Tu es au départ.</p>
+  </section>
+
+  <section aria-label="Commandes">
+    <div id="commandes">
+      <button id="btn-gauche" type="button" aria-label="Courir à gauche">◀</button>
+      <button id="btn-sauter" type="button">Sauter</button>
+      <button id="btn-droite" type="button" aria-label="Courir à droite">▶</button>
+    </div>
+    <p class="note">Maintiens ◀ ou ▶ pour courir. « Sauter » pour sauter par-dessus les trous et sur les télés. Tomber dans un trou ou toucher une télé fait perdre un cœur. Les établis sont tes points de reprise.</p>
+    <p><button id="btn-pause" type="button">Pause</button></p>
+  </section>
+
+  <section id="fin" class="fin cache" aria-label="Fin du tableau">
+    <h2 id="fin-titre-bas">Bravo ! Tu es arrivé au drapeau !</h2>
+    <p><b>Sir H. Gepeto :</b> « Tu es arrivé ! Avec tes fleurs de lys, tu repars avec un souvenir pour l'atelier. »</p>
+    <p id="fin-details" aria-live="polite"></p>
+    <div class="souvenir" id="fin-souvenir" aria-live="polite"></div>
+    <p class="note">Ton souvenir est gardé sur cet appareil (clé hp-pont). À l'atelier de l'an 3120, il débloquera une 4e matière à la station 2.</p>
+  </section>
+
+  <p class="note">Sauvegarde : meilleur score sur cet appareil seulement (clé hp-t1-niveau-meilleur), souvenir dans la clé hp-pont. Rien ne part ailleurs. Aucun actif copié d'une marque ou d'une œuvre : tout est dessiné dans le code.</p>
+</main>
+<script>
+"use strict";
+/* T1 — Le saut des années 1990, NIVEAU COMPLET.
+   Logique pure en haut (testable en Node), branchement navigateur en bas
+   (gardé par typeof document). Fiche du brief (décision HP 20 nov. 20 h 43) :
+   - un VRAI tableau façon plateforme classique au minimum : début, fin, on court, on saute,
+     on ramasse, on évite, on arrive au bout ; 2 à 4 minutes ;
+   - inspiration de GENRE seulement, jamais de copie : aucun actif, sprite,
+     musique ni nom d'une console ou d'un personnage connu. Collectibles originaux québécois 1990 :
+     fleurs de lys dorées (+100) et cassettes (+500). Ennemis originaux :
+     télés bougonnes (vieilles télés cathodiques grincheuses). Points de
+     reprise originaux : établis d'atelier. Dangers : trous (chute), flaques
+     de slush, télés. 3 cœurs, écran de score, rejouer en un tap, meilleur
+     score en local.
+   - héros : Gepeto de bois, dessiné en formes simples dans le code.
+   - TU dans le jeu. Rien de copié d'une marque ou d'une œuvre. */
+
+/* --- Constantes de physique (60 pas par seconde) --- */
+var GRAVITE = 0.55;
+var VITESSE_COURSE = 4.6;
+var ACCEL = 0.6;
+var FRICTION = 0.75;
+var VITESSE_SAUT = -13.5;
+var SAUT_COUPURE = -6;      /* relâcher Sauter tôt = saut plus court */
+var COYOTE = 6;             /* pas de grâce après le bord d'une plateforme */
+var TAMPON_SAUT = 6;        /* saut demandé un peu avant l'atterrissage */
+var LARGEUR_JOUEUR = 34;
+var HAUTEUR_JOUEUR = 48;
+var HAUTEUR_TUEUSE = 620;   /* sous cette ligne : chute dans le vide */
+var INVINCIBLE_PAS = 120;   /* 2 s d'invincibilité après un dégât */
+var COEURS_DEPART = 3;
+var BONUS_TEMPS_PLAFOND_S = 180; /* bonus temps : 10 pts par seconde sous 3 min */
+var POINTS_LYS = 100;
+var POINTS_CASSETTE = 500;
+var POINTS_TELE = 200;
+
+/* --- Le niveau : 13 200 px de large, 11 sections, 10 trous, 5 établis --- */
+var NIVEAU = {
+  largeur: 13200,
+  solY: 480,
+  sols: [ /* segments de sol : [x0, x1] (trous entre les segments) */
+    [0, 900], [1050, 2100], [2250, 3300], [3450, 4600], [4750, 5800], [5970, 6800],
+    [6950, 8000], [8150, 9200], [9350, 10400], [10550, 11600], [11750, 13200]
+  ],
+  plateformes: [ /* plateformes à sens unique : {x, y, l} — on atterrit dessus, on passe en dessous */
+    { x: 1150, y: 400, l: 140 }, { x: 1350, y: 330, l: 140 }, { x: 1600, y: 400, l: 140 },
+    { x: 1850, y: 330, l: 140 }, { x: 1400, y: 250, l: 120 },
+    { x: 2400, y: 400, l: 160 }, { x: 2700, y: 330, l: 160 }, { x: 3000, y: 400, l: 160 },
+    { x: 3600, y: 400, l: 140 }, { x: 3800, y: 320, l: 140 }, { x: 4000, y: 240, l: 140 },
+    { x: 4250, y: 320, l: 140 }, { x: 4450, y: 400, l: 140 },
+    { x: 4900, y: 400, l: 160 }, { x: 5200, y: 330, l: 160 }, { x: 5500, y: 400, l: 160 },
+    { x: 5850, y: 400, l: 100 },
+    { x: 7100, y: 400, l: 160 }, { x: 7400, y: 330, l: 160 }, { x: 7700, y: 400, l: 160 },
+    { x: 8300, y: 400, l: 140 }, { x: 8500, y: 320, l: 140 }, { x: 8700, y: 240, l: 140 },
+    { x: 8950, y: 320, l: 140 }, { x: 9100, y: 400, l: 140 },
+    { x: 9500, y: 400, l: 160 }, { x: 9800, y: 330, l: 160 }, { x: 10100, y: 400, l: 160 },
+    { x: 10700, y: 400, l: 140 }, { x: 10900, y: 320, l: 140 }, { x: 11100, y: 400, l: 140 },
+    { x: 11850, y: 400, l: 100 }
+  ],
+  lys: [ /* fleurs de lys dorées : {x, y} (y = centre) */
+    { x: 300, y: 440 }, { x: 400, y: 440 }, { x: 500, y: 440 },
+    { x: 920, y: 380 }, { x: 975, y: 340 }, { x: 1030, y: 380 },
+    { x: 1200, y: 360 }, { x: 1400, y: 290 }, { x: 1650, y: 360 }, { x: 1900, y: 290 },
+    { x: 2350, y: 440 }, { x: 2450, y: 440 },
+    { x: 2120, y: 380 }, { x: 2175, y: 340 }, { x: 2230, y: 380 },
+    { x: 2450, y: 360 }, { x: 2750, y: 290 }, { x: 3050, y: 360 },
+    { x: 3320, y: 380 }, { x: 3375, y: 340 }, { x: 3430, y: 380 },
+    { x: 3650, y: 360 }, { x: 3850, y: 280 }, { x: 4050, y: 200 }, { x: 4300, y: 280 }, { x: 4500, y: 360 },
+    { x: 4800, y: 440 }, { x: 4900, y: 440 },
+    { x: 4620, y: 380 }, { x: 4675, y: 340 }, { x: 4730, y: 380 },
+    { x: 4950, y: 360 }, { x: 5250, y: 290 }, { x: 5550, y: 360 },
+    { x: 5830, y: 380 }, { x: 5890, y: 330 }, { x: 5950, y: 380 },
+    { x: 6200, y: 440 }, { x: 6300, y: 440 }, { x: 6400, y: 440 },
+    { x: 6820, y: 380 }, { x: 6875, y: 340 }, { x: 6930, y: 380 },
+    { x: 7150, y: 360 }, { x: 7450, y: 290 }, { x: 7750, y: 360 },
+    { x: 7900, y: 440 },
+    { x: 8020, y: 380 }, { x: 8075, y: 340 }, { x: 8130, y: 380 },
+    { x: 8350, y: 360 }, { x: 8550, y: 280 }, { x: 8750, y: 200 }, { x: 9000, y: 280 }, { x: 9150, y: 360 },
+    { x: 9220, y: 380 }, { x: 9275, y: 340 }, { x: 9330, y: 380 },
+    { x: 9550, y: 360 }, { x: 9850, y: 290 }, { x: 10150, y: 360 },
+    { x: 10200, y: 440 }, { x: 10300, y: 440 },
+    { x: 10420, y: 380 }, { x: 10475, y: 340 }, { x: 10530, y: 380 },
+    { x: 10750, y: 360 }, { x: 10950, y: 280 }, { x: 11150, y: 360 },
+    { x: 11400, y: 440 }, { x: 11500, y: 440 },
+    { x: 11620, y: 380 }, { x: 11675, y: 340 }, { x: 11730, y: 380 },
+    { x: 12000, y: 440 }, { x: 12200, y: 440 }, { x: 12400, y: 440 }, { x: 12600, y: 440 }, { x: 12800, y: 440 }
+  ],
+  cassettes: [ /* cassettes bonus : {x, y} */
+    { x: 1460, y: 210 }, { x: 4060, y: 200 }, { x: 5560, y: 340 },
+    { x: 8760, y: 200 }, { x: 10960, y: 280 }
+  ],
+  teles: [ /* télés bougonnes : {x, y (sol), min, max, vitesse, dir} */
+    { x: 1200, min: 1150, max: 1500, vitesse: 1.0, dir: 1 },
+    { x: 2500, min: 2400, max: 2900, vitesse: 1.3, dir: 1 },
+    { x: 3600, min: 3550, max: 4000, vitesse: 1.2, dir: -1 },
+    { x: 5000, min: 4900, max: 5400, vitesse: 1.5, dir: 1 },
+    { x: 6100, min: 6050, max: 6500, vitesse: 1.4, dir: -1 },
+    { x: 7200, min: 7100, max: 7700, vitesse: 1.6, dir: 1 },
+    { x: 8400, min: 8300, max: 8900, vitesse: 1.3, dir: -1 },
+    { x: 9600, min: 9500, max: 10100, vitesse: 1.5, dir: 1 },
+    { x: 10800, min: 10700, max: 11300, vitesse: 1.6, dir: -1 },
+    { x: 12200, min: 12100, max: 12800, vitesse: 1.4, dir: 1 }
+  ],
+  slush: [ /* flaques de slush : {x, l} (sur le sol) */
+    { x: 1700, l: 80 }, { x: 4400, l: 80 }, { x: 5300, l: 80 },
+    { x: 7850, l: 80 }, { x: 9900, l: 80 }
+  ],
+  etablis: [ /* points de reprise : {x} */
+    { x: 1100 }, { x: 2350 }, { x: 4800 }, { x: 7000 }, { x: 9400 }
+  ],
+  drapeauX: 13000,
+  panneaux: [ /* panneaux de conseils : {x, texte} */
+    { x: 150, texte: "Cours avec les flèches !" },
+    { x: 450, texte: "Saute avec le gros bouton !" },
+    { x: 950, texte: "Un trou ? Saute !" },
+    { x: 1150, texte: "Établi : point de reprise" },
+    { x: 3600, texte: "Les télés bougent : saute-leur dessus !" },
+    { x: 5900, texte: "Le grand saut final !" },
+    { x: 7000, texte: "Deuxième moitié : tiens bon !" },
+    { x: 12500, texte: "Le drapeau est là !" }
+  ],
+  depart: { x: 60, y: 480 }
+};
+var NOMBRE_LYS = NIVEAU.lys.length;           /* 79 */
+var NOMBRE_CASSETTES = NIVEAU.cassettes.length; /* 5 */
+var SOUVENIR_T1 = { id: "bois-aurore", nom: "Bois d'aurore", tableau: "T1" };
+
+function creerPartie() {
+  return {
+    x: NIVEAU.depart.x, y: NIVEAU.depart.y - HAUTEUR_JOUEUR,
+    vx: 0, vy: 0, auSol: true, direction: 1,
+    coyote: 0, tamponSaut: 0,
+    coeurs: COEURS_DEPART, score: 0,
+    lysPris: [], cassettesPrises: [], telesVaincues: [],
+    etablisActifs: [], dernierEtabli: 0,
+    invincible: 0, morts: 0, termine: false, gagne: false,
+    raisonFin: "", pas: 0, secondes: 0,
+    secousse: 0, squash: 0,
+    /* État des télés : copié ici, jamais dans NIVEAU (une nouvelle partie
+       repart avec les télés à leur point de départ). */
+    telesEtat: NIVEAU.teles.map(function (tv) {
+      return { x: tv.x, min: tv.min, max: tv.max, vitesse: tv.vitesse, dir: tv.dir };
+    })
+  };
+}
+function surSol(x, yBas) {
+  if (yBas < NIVEAU.solY) return false;
+  for (var i = 0; i < NIVEAU.sols.length; i++) {
+    if (x >= NIVEAU.sols[i][0] && x <= NIVEAU.sols[i][1]) return true;
+  }
+  return false;
+}
+function dessusPlateforme(x, yBasAvant, yBasApres) {
+  /* plateforme à sens unique : on l'attrape seulement en descendant dessus */
+  for (var i = 0; i < NIVEAU.plateformes.length; i++) {
+    var p = NIVEAU.plateformes[i];
+    if (x >= p.x - 6 && x <= p.x + p.l + 6 &&
+        yBasAvant <= p.y + 1 && yBasApres >= p.y) return p;
+  }
+  return null;
+}
+function lysPres(partie, index) { return partie.lysPris.indexOf(index) !== -1; }
+function cassettePrese(partie, index) { return partie.cassettesPrises.indexOf(index) !== -1; }
+function teleVaincue(partie, index) { return partie.telesVaincues.indexOf(index) !== -1; }
+function etabliActif(partie, index) { return partie.etablisActifs.indexOf(index) !== -1; }
+
+/* --- Un pas de jeu (1/60 s). Entrées : {gauche, droite, saut, sautRelache}. --- */
+function pas(partie, entree) {
+  if (partie.termine) return { ok: false, raison: "termine" };
+  partie.pas += 1;
+  if (partie.pas % 60 === 0) partie.secondes += 1;
+  if (partie.invincible > 0) partie.invincible -= 1;
+  if (partie.secousse > 0) partie.secousse -= 1;
+  if (partie.squash > 0) partie.squash -= 1;
+
+  /* Course : accélération, friction, vitesse plafonnée. */
+  if (entree.gauche && !entree.droite) {
+    partie.vx -= ACCEL; partie.direction = -1;
+    if (partie.vx < -VITESSE_COURSE) partie.vx = -VITESSE_COURSE;
+  } else if (entree.droite && !entree.gauche) {
+    partie.vx += ACCEL; partie.direction = 1;
+    if (partie.vx > VITESSE_COURSE) partie.vx = VITESSE_COURSE;
+  } else if (partie.auSol) {
+    partie.vx *= FRICTION;
+    if (Math.abs(partie.vx) < 0.15) partie.vx = 0;
+  }
+  /* Saut : tampon + coyote, hauteur variable. */
+  if (entree.saut) partie.tamponSaut = TAMPON_SAUT;
+  else if (partie.tamponSaut > 0) partie.tamponSaut -= 1;
+  if (partie.auSol) partie.coyote = COYOTE;
+  else if (partie.coyote > 0) partie.coyote -= 1;
+  if (partie.tamponSaut > 0 && partie.coyote > 0) {
+    partie.vy = VITESSE_SAUT;
+    partie.auSol = false; partie.coyote = 0; partie.tamponSaut = 0;
+    partie.squash = 8;
+  }
+  if (entree.sautRelache && partie.vy < SAUT_COUPURE) partie.vy = SAUT_COUPURE;
+
+  /* Gravité + déplacement. */
+  partie.vy += GRAVITE;
+  if (partie.vy > 16) partie.vy = 16;
+  var yBasAvant = partie.y + HAUTEUR_JOUEUR;
+  partie.x += partie.vx;
+  partie.y += partie.vy;
+  if (partie.x < 0) { partie.x = 0; partie.vx = 0; }
+  if (partie.x > NIVEAU.largeur - LARGEUR_JOUEUR) { partie.x = NIVEAU.largeur - LARGEUR_JOUEUR; partie.vx = 0; }
+
+  /* Télés : patrouille, puis collision — AVANT l'atterrissage, sinon un
+     joueur qui tombe sur une télé atterrirait d'abord au sol et prendrait
+     un dégât au lieu de l'écraser. Dessus = victoire, côté = dégât. */
+  for (var t = 0; t < partie.telesEtat.length; t++) {
+    if (teleVaincue(partie, t)) continue;
+    var tv = partie.telesEtat[t];
+    tv.x += tv.vitesse * tv.dir;
+    if (tv.x <= tv.min) { tv.x = tv.min; tv.dir = 1; }
+    if (tv.x >= tv.max) { tv.x = tv.max; tv.dir = -1; }
+    var chevauche = partie.x < tv.x + 44 && partie.x + LARGEUR_JOUEUR > tv.x &&
+      partie.y < NIVEAU.solY && partie.y + HAUTEUR_JOUEUR > NIVEAU.solY - 40;
+    if (chevauche) {
+      var ecrase = partie.vy > 0 && (partie.y + HAUTEUR_JOUEUR) - (NIVEAU.solY - 40) < 20;
+      if (ecrase) {
+        partie.telesVaincues.push(t);
+        partie.score += POINTS_TELE;
+        partie.vy = -9; /* rebond après l'écrasement */
+        partie.auSol = false;
+      } else if (partie.invincible === 0) {
+        subirDegat(partie, "tele");
+      }
+    }
+  }
+  if (partie.termine) return { ok: true, evenement: "perdu" };
+
+  /* Atterrissage : sol puis plateformes (sens unique). */
+  var yBasApres = partie.y + HAUTEUR_JOUEUR;
+  var centreX = partie.x + LARGEUR_JOUEUR / 2;
+  partie.auSol = false;
+  if (partie.vy >= 0 && yBasApres >= NIVEAU.solY && surSol(centreX, yBasApres)) {
+    if (partie.vy > 9) partie.squash = 7; /* atterrissage ferme : petit écrasement */
+    partie.y = NIVEAU.solY - HAUTEUR_JOUEUR;
+    partie.vy = 0; partie.auSol = true;
+  } else if (partie.vy >= 0) {
+    var plat = dessusPlateforme(centreX, yBasAvant, yBasApres);
+    if (plat) {
+      partie.y = plat.y - HAUTEUR_JOUEUR;
+      partie.vy = 0; partie.auSol = true;
+    }
+  }
+
+  /* Slush : toucher = un cœur, avec recul. */
+  if (partie.invincible === 0 && partie.auSol) {
+    for (var s = 0; s < NIVEAU.slush.length; s++) {
+      var fl = NIVEAU.slush[s];
+      if (centreX >= fl.x && centreX <= fl.x + fl.l &&
+          partie.y + HAUTEUR_JOUEUR >= NIVEAU.solY - 2) {
+        subirDegat(partie, "slush");
+        break;
+      }
+    }
+  }
+  if (partie.termine) return { ok: true, evenement: "perdu" };
+
+  /* Fleurs de lys et cassettes : ramassage par contact. */
+  for (var l = 0; l < NIVEAU.lys.length; l++) {
+    if (lysPres(partie, l)) continue;
+    var ly = NIVEAU.lys[l];
+    if (Math.abs(centreX - ly.x) < 30 && Math.abs((partie.y + HAUTEUR_JOUEUR / 2) - ly.y) < 40) {
+      partie.lysPris.push(l);
+      partie.score += POINTS_LYS;
+    }
+  }
+  for (var c = 0; c < NIVEAU.cassettes.length; c++) {
+    if (cassettePrese(partie, c)) continue;
+    var ca = NIVEAU.cassettes[c];
+    if (Math.abs(centreX - ca.x) < 32 && Math.abs((partie.y + HAUTEUR_JOUEUR / 2) - ca.y) < 42) {
+      partie.cassettesPrises.push(c);
+      partie.score += POINTS_CASSETTE;
+    }
+  }
+
+  /* Établis : activation = point de reprise. */
+  for (var e = 0; e < NIVEAU.etablis.length; e++) {
+    if (etabliActif(partie, e)) continue;
+    if (Math.abs(centreX - NIVEAU.etablis[e].x) < 46 && partie.auSol) {
+      partie.etablisActifs.push(e);
+      partie.dernierEtabli = e;
+    }
+  }
+
+  /* Chute dans un trou : un cœur, retour au dernier établi (ou au départ). */
+  if (partie.y > HAUTEUR_TUEUSE) {
+    partie.morts += 1;
+    partie.coeurs -= 1;
+    if (partie.coeurs <= 0) { finirPartie(partie, false, "tombe"); return { ok: true, evenement: "perdu" }; }
+    reapparaitre(partie);
+    return { ok: true, evenement: "tombe" };
+  }
+
+  /* Drapeau : arrivée = victoire. */
+  if (centreX >= NIVEAU.drapeauX && partie.auSol) {
+    finirPartie(partie, true, "drapeau");
+    return { ok: true, evenement: "gagne" };
+  }
+  return { ok: true };
+}
+function subirDegat(partie, cause) {
+  partie.coeurs -= 1;
+  partie.invincible = INVINCIBLE_PAS;
+  partie.secousse = 12;
+  partie.vy = -8; /* recul vers le haut */
+  partie.vx = -partie.direction * 3;
+  partie.auSol = false;
+  if (partie.coeurs <= 0) finirPartie(partie, false, cause);
+}
+function reapparaitre(partie) {
+  var point = partie.dernierEtabli >= 0 && partie.etablisActifs.length > 0
+    ? NIVEAU.etablis[partie.dernierEtabli].x
+    : NIVEAU.depart.x;
+  partie.x = point;
+  partie.y = NIVEAU.solY - HAUTEUR_JOUEUR;
+  partie.vx = 0; partie.vy = 0; partie.auSol = true;
+  partie.invincible = INVINCIBLE_PAS;
+}
+function finirPartie(partie, gagne, raison) {
+  partie.termine = true;
+  partie.gagne = gagne;
+  partie.raisonFin = raison;
+  if (gagne) {
+    var bonus = Math.max(0, BONUS_TEMPS_PLAFOND_S - partie.secondes) * 10;
+    partie.score += bonus;
+    partie.bonusTemps = bonus;
+  } else {
+    partie.bonusTemps = 0;
+  }
+}
+function scoreFinal(partie) { return partie.score; }
+function resumePartie(partie) {
+  return {
+    lys: partie.lysPris.length, cassettes: partie.cassettesPrises.length,
+    teles: partie.telesVaincues.length, coeurs: partie.coeurs,
+    secondes: partie.secondes, score: partie.score,
+    gagne: partie.gagne, morts: partie.morts
+  };
+}
+
+/* --- Sauvegarde : meilleur score + souvenir, jamais d'effacement --- */
+var CLE_MEILLEUR = "hp-t1-niveau-meilleur";
+var CLE_PONT = "hp-pont";
+function horodatage() {
+  try { return new Date().toISOString(); } catch (e) { return "sans-date"; }
+}
+function lireMeilleur(stockage) {
+  try {
+    var brut = stockage.getItem(CLE_MEILLEUR);
+    if (!brut) return null;
+    var lu = JSON.parse(brut);
+    return (lu && typeof lu.score === "number") ? lu : null;
+  } catch (e) { return null; }
+}
+function ecrireMeilleur(stockage, partie) {
+  try {
+    var ancien = lireMeilleur(stockage);
+    var score = scoreFinal(partie);
+    if (ancien && ancien.score >= score) return { nouveau: false, meilleur: ancien };
+    var fiche = { score: score, lys: partie.lysPris.length,
+      cassettes: partie.cassettesPrises.length, secondes: partie.secondes,
+      date: horodatage() };
+    stockage.setItem(CLE_MEILLEUR, JSON.stringify(fiche));
+    return { nouveau: true, meilleur: fiche };
+  } catch (e) { return { nouveau: false, meilleur: null }; }
+}
+function fusionnerSouvenir(etat, souvenir) {
+  var base = (etat && typeof etat === "object") ? etat : {};
+  var souvenirs = [];
+  var k;
+  if (base.souvenirsF3) { for (var i = 0; i < base.souvenirsF3.length; i++) souvenirs.push(base.souvenirsF3[i]); }
+  var deja = false;
+  for (var j = 0; j < souvenirs.length; j++) { if (souvenirs[j].id === souvenir.id) deja = true; }
+  if (!deja) souvenirs.push({ id: souvenir.id, nom: souvenir.nom, tableau: souvenir.tableau, date: horodatage() });
+  var sortie = {};
+  for (k in base) sortie[k] = base[k];
+  sortie.souvenirsF3 = souvenirs;
+  return sortie;
+}
+function lireEtatPont(stockage) {
+  try {
+    var brut = stockage.getItem(CLE_PONT);
+    if (!brut) return {};
+    return JSON.parse(brut) || {};
+  } catch (e) { return {}; }
+}
+function ecrireEtatPont(stockage, etat) {
+  try { stockage.setItem(CLE_PONT, JSON.stringify(etat)); return true; }
+  catch (e) { return false; }
+}
+function dureeTexte(secondes) {
+  var m = Math.floor(secondes / 60);
+  var s = secondes - m * 60;
+  return m + ":" + (s < 10 ? "0" : "") + s;
+}
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { NIVEAU: NIVEAU, creerPartie: creerPartie, pas: pas,
+    scoreFinal: scoreFinal, resumePartie: resumePartie,
+    lireMeilleur: lireMeilleur, ecrireMeilleur: ecrireMeilleur,
+    fusionnerSouvenir: fusionnerSouvenir, lireEtatPont: lireEtatPont,
+    ecrireEtatPont: ecrireEtatPont, dureeTexte: dureeTexte,
+    SOUVENIR_T1: SOUVENIR_T1, NOMBRE_LYS: NOMBRE_LYS,
+    NOMBRE_CASSETTES: NOMBRE_CASSETTES, POINTS_LYS: POINTS_LYS,
+    POINTS_CASSETTE: POINTS_CASSETTE, POINTS_TELE: POINTS_TELE };
+}
+
+/* --- Navigateur : branchement DOM, canvas, sons WebAudio, commandes --- */
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", function () {
+    var partie = creerPartie();
+    var enCours = false, enPause = false;
+    var mouvementReduit = false;
+    try {
+      mouvementReduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch (e) { mouvementReduit = false; }
+
+    var canvas = document.getElementById("jeu");
+    var ctx = canvas.getContext("2d");
+    var cadre = document.getElementById("cadre-niveau");
+    var elParole = document.getElementById("parole");
+    var elStatut = document.getElementById("statut");
+    var elCoeurs = document.getElementById("hud-coeurs");
+    var elScore = document.getElementById("hud-score");
+    var elLys = document.getElementById("hud-lys");
+    var elCassettes = document.getElementById("hud-cassettes");
+    var elTemps = document.getElementById("hud-temps");
+    var ecranTitre = document.getElementById("ecran-titre");
+    var ecranPause = document.getElementById("ecran-pause");
+    var ecranFin = document.getElementById("ecran-fin");
+    var finTitre = document.getElementById("fin-titre");
+    var finTexte = document.getElementById("fin-texte");
+    var finScore = document.getElementById("fin-score");
+    var finMeilleur = document.getElementById("fin-meilleur");
+    var sectionFin = document.getElementById("fin");
+
+    var entree = { gauche: false, droite: false, saut: false, sautRelache: false };
+    var particules = [];
+    var camX = 0;
+    var camY = 0; /* caméra verticale (correctif Gepeto invisible, 21 nov.) */
+    var dernierTemps = 0, accumulateur = 0;
+    var sonActif = true, ctxAudio = null;
+
+    function dire(texte) { elParole.textContent = texte; }
+    function statut(texte) { elStatut.textContent = texte; }
+
+    /* --- Sons WebAudio originaux, créés au premier geste --- */
+    function audio() {
+      if (!sonActif) return null;
+      try {
+        if (!ctxAudio) ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctxAudio.state === "suspended") ctxAudio.resume();
+        return ctxAudio;
+      } catch (e) { return null; }
+    }
+    function note(freq, duree, type, volume, delai) {
+      var ac = audio(); if (!ac) return;
+      try {
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.type = type || "sine";
+        o.frequency.setValueAtTime(freq, ac.currentTime + (delai || 0));
+        g.gain.setValueAtTime(volume || 0.12, ac.currentTime + (delai || 0));
+        g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + (delai || 0) + duree);
+        o.connect(g); g.connect(ac.destination);
+        o.start(ac.currentTime + (delai || 0));
+        o.stop(ac.currentTime + (delai || 0) + duree);
+      } catch (e) { /* son jamais bloquant */ }
+    }
+    function sonSaut() {
+      var ac = audio(); if (!ac) return;
+      try {
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.type = "triangle";
+        o.frequency.setValueAtTime(300, ac.currentTime);
+        o.frequency.exponentialRampToValueAtTime(640, ac.currentTime + 0.15);
+        g.gain.setValueAtTime(0.12, ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.16);
+        o.connect(g); g.connect(ac.destination);
+        o.start(); o.stop(ac.currentTime + 0.16);
+      } catch (e) { /* son jamais bloquant */ }
+    }
+    function sonLys() { note(880, 0.12, "sine", 0.12, 0); note(1318, 0.2, "sine", 0.1, 0.08); }
+    function sonCassette() { note(523, 0.12, "square", 0.06, 0); note(784, 0.12, "square", 0.06, 0.1); note(1046, 0.22, "square", 0.06, 0.2); }
+    function sonTele() { note(180, 0.18, "sawtooth", 0.1, 0); note(90, 0.25, "sawtooth", 0.1, 0.1); }
+    function sonDegat() {
+      var ac = audio(); if (!ac) return;
+      try {
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.type = "sine";
+        o.frequency.setValueAtTime(220, ac.currentTime);
+        o.frequency.exponentialRampToValueAtTime(130, ac.currentTime + 0.25);
+        g.gain.setValueAtTime(0.1, ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.26);
+        o.connect(g); g.connect(ac.destination);
+        o.start(); o.stop(ac.currentTime + 0.26);
+      } catch (e) { /* son jamais bloquant */ }
+    }
+    function sonEtabli() { note(659, 0.15, "sine", 0.12, 0); note(988, 0.25, "sine", 0.12, 0.12); }
+    function sonVictoire() { note(523, 0.2, "sine", 0.12, 0); note(659, 0.2, "sine", 0.12, 0.18); note(784, 0.2, "sine", 0.12, 0.36); note(1046, 0.45, "sine", 0.12, 0.54); }
+    function sonDefaite() { note(392, 0.25, "sine", 0.1, 0); note(311, 0.25, "sine", 0.1, 0.22); note(233, 0.5, "sine", 0.1, 0.44); }
+
+    document.getElementById("btn-son").addEventListener("click", function () {
+      sonActif = !sonActif;
+      this.textContent = sonActif ? "Son : oui" : "Son : non";
+      this.setAttribute("aria-pressed", sonActif ? "true" : "false");
+    });
+    document.getElementById("btn-retour").addEventListener("click", function () {
+      if (window.history.length > 1) { window.history.back(); }
+      else { window.location.href = "/jeux"; }
+    });
+
+    /* --- Dessin : tout est dessiné dans le code, aucune image externe --- */
+    function largeurVue() {
+      var w = cadre.clientWidth || 960;
+      if (w < 500) return 640;
+      if (w < 800) return 800;
+      return 960;
+    }
+    function arrondir(x, y, l, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + l, y, x + l, y + h, r);
+      ctx.arcTo(x + l, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + l, y, r);
+      ctx.closePath();
+    }
+    function dessinerLys(x, y, taille) {
+      /* fleur de lys stylisée : pétale central + deux latéraux + bandeau */
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.fillStyle = "#C9973F";
+      ctx.beginPath(); ctx.ellipse(0, -taille * 0.35, taille * 0.22, taille * 0.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(-taille * 0.42, -taille * 0.1, taille * 0.2, taille * 0.38, -0.6, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(taille * 0.42, -taille * 0.1, taille * 0.2, taille * 0.38, 0.6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillRect(-taille * 0.5, taille * 0.08, taille, taille * 0.18);
+      ctx.beginPath(); ctx.moveTo(0, taille * 0.26); ctx.lineTo(-taille * 0.18, taille * 0.55); ctx.lineTo(taille * 0.18, taille * 0.55); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
+    function dessinerCassette(x, y) {
+      ctx.save(); ctx.translate(x, y);
+      ctx.fillStyle = "#1E3A5F"; arrondir(-20, -13, 40, 26, 5); ctx.fill();
+      ctx.fillStyle = "#FAF3E4"; ctx.fillRect(-16, -9, 32, 7);
+      ctx.fillStyle = "#D9A860";
+      ctx.beginPath(); ctx.arc(-8, 4, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(8, 4, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#1E3A5F";
+      ctx.beginPath(); ctx.arc(-8, 4, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(8, 4, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+    function dessinerTele(tv, t) {
+      var x = tv.x, yHaut = NIVEAU.solY - 40;
+      ctx.save(); ctx.translate(x + 22, yHaut);
+      ctx.fillStyle = "#3A2415";
+      ctx.fillRect(-4, 38, 6, 6); ctx.fillRect(40, 38, 6, 6);
+      ctx.fillStyle = "#2B2118"; arrondir(-2, -2, 48, 42, 6); ctx.fill();
+      ctx.fillStyle = "#8FB8D8"; arrondir(4, 4, 30, 26, 3); ctx.fill();
+      /* visage bougon : sourcils en accent, bouche en accent circonflexe */
+      ctx.strokeStyle = "#1E3A5F"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(9, 12); ctx.lineTo(16, 15); ctx.moveTo(29, 12); ctx.lineTo(22, 15); ctx.stroke();
+      ctx.beginPath(); ctx.arc(19, 26, 5, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
+      ctx.strokeStyle = "#C9973F"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, -2); ctx.lineTo(-7, -14); ctx.moveTo(44, -2); ctx.lineTo(51, -14); ctx.stroke();
+      ctx.fillStyle = "#C0392B";
+      ctx.beginPath(); ctx.arc(-7, -15, 2.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(51, -15, 2.5, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+    function dessinerEtabli(ex, actif) {
+      var yHaut = NIVEAU.solY;
+      ctx.save(); ctx.translate(ex, yHaut);
+      ctx.fillStyle = "#3A2415";
+      ctx.fillRect(-24, -26, 6, 26); ctx.fillRect(18, -26, 6, 26);
+      ctx.fillStyle = actif ? "#C9973F" : "#8A5A2B";
+      arrondir(-30, -34, 60, 10, 3); ctx.fill();
+      ctx.fillStyle = "#D9A860";
+      ctx.fillRect(-14, -44, 4, 10); ctx.fillRect(10, -44, 4, 10);
+      ctx.fillStyle = actif ? "#C0392B" : "#6B4423";
+      ctx.beginPath(); ctx.arc(0, -44, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+    function dessinerGepeto(px, py, dir, course, squash) {
+      /* Gepeto de bois : tête ronde, yeux bleus, gros sourcils, chandail
+         beige à fleurs de lys, pantalon gris, bras de bois. */
+      ctx.save();
+      ctx.translate(px + LARGEUR_JOUEUR / 2, py + HAUTEUR_JOUEUR);
+      var ecrasement = squash > 0 ? (squash > 4 ? 0.88 : 1.08) : 1;
+      ctx.scale(dir >= 0 ? 1 : -1, 1);
+      /* Dessin visuel agrandi x1,4 autour des pieds : la hitbox ne change
+         pas (LARGEUR_JOUEUR / HAUTEUR_JOUEUR intacts), seul le dessin
+         grandit — sinon, sur téléphone, Gepeto ne fait qu'une vingtaine
+         de pixels et se perd dans le décor (21 nov.). */
+      ctx.scale(1.4, 1.4);
+      ctx.scale(1 / Math.sqrt(ecrasement), ecrasement);
+      var jambe = course ? Math.sin(partie.pas * 0.45) * 6 : 0;
+      var bras = course ? Math.sin(partie.pas * 0.45) * 5 : 0;
+      /* jambes (pantalon gris) + contour sombre */
+      ctx.fillStyle = "#6E6E6E";
+      ctx.fillRect(-10, -16, 8, 16 + Math.max(0, jambe));
+      ctx.fillRect(2, -16, 8, 16 + Math.max(0, -jambe));
+      ctx.strokeStyle = "#3A2415"; ctx.lineWidth = 1.6;
+      ctx.strokeRect(-10, -16, 8, 16 + Math.max(0, jambe));
+      ctx.strokeRect(2, -16, 8, 16 + Math.max(0, -jambe));
+      /* bras de bois */
+      ctx.fillStyle = "#8A5A2B";
+      ctx.save(); ctx.translate(-11, -34); ctx.rotate(bras * 0.03); ctx.fillRect(-3, 0, 6, 16); ctx.restore();
+      ctx.save(); ctx.translate(11, -34); ctx.rotate(-bras * 0.03); ctx.fillRect(-3, 0, 6, 16); ctx.restore();
+      /* chandail beige + contour sombre (lisible sur tout fond) */
+      ctx.fillStyle = "#E8D9B0";
+      arrondir(-13, -38, 26, 24, 8); ctx.fill();
+      ctx.strokeStyle = "#3A2415"; ctx.lineWidth = 2;
+      ctx.closePath(); ctx.stroke();
+      /* fleurs de lys dorées du chandail */
+      ctx.fillStyle = "#C9973F";
+      ctx.beginPath(); ctx.arc(-4, -28, 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(4, -28, 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(0, -20, 2.2, 0, Math.PI * 2); ctx.fill();
+      /* tête ronde en bois clair, grain gravé + contour sombre */
+      ctx.fillStyle = "#D9A860";
+      ctx.beginPath(); ctx.arc(0, -48, 13, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#3A2415"; ctx.lineWidth = 2; ctx.stroke();
+      ctx.strokeStyle = "#B98A4A"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(0, -48, 9, Math.PI * 0.15, Math.PI * 0.5); ctx.stroke();
+      ctx.beginPath(); ctx.arc(0, -48, 6, Math.PI * 1.1, Math.PI * 1.5); ctx.stroke();
+      /* yeux bleus, gros sourcils noirs ébouriffés */
+      ctx.fillStyle = "#2F6FB2";
+      ctx.beginPath(); ctx.arc(-5, -50, 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(5, -50, 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#1A1A1A"; ctx.lineWidth = 2.4; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(-8, -55); ctx.lineTo(-2, -56); ctx.moveTo(2, -56); ctx.lineTo(8, -55); ctx.stroke();
+      /* barbe de 4 jours + sourire */
+      ctx.strokeStyle = "#8A8A8A"; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.arc(0, -44, 6, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
+      ctx.strokeStyle = "#3A2415"; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(0, -44, 3, Math.PI * 0.2, Math.PI * 0.8); ctx.stroke();
+      ctx.restore();
+    }
+    function dessinerDecor(cam, vueL) {
+      /* Ciel d'aube : rose, or, bois. Soleil, maisons et clochers en arrière-plan. */
+      var ciel = ctx.createLinearGradient(0, 0, 0, 540);
+      ciel.addColorStop(0, "#F6C9C9"); ciel.addColorStop(0.48, "#F2D8A0"); ciel.addColorStop(1, "#8A5A2B");
+      ctx.fillStyle = ciel; ctx.fillRect(0, 0, 960, 540);
+      ctx.fillStyle = "#FFE9A8";
+      ctx.beginPath(); ctx.arc(820 - cam * 0.05, 90, 42, 0, Math.PI * 2); ctx.fill();
+      /* maisons lointaines (parallaxe 0.3) */
+      ctx.fillStyle = "rgba(138,90,43,0.55)";
+      for (var i = 0; i < 14; i++) {
+        var mx = ((i * 520 - cam * 0.3) % 1400 + 1400) % 1400 - 200;
+        ctx.fillRect(mx, 330, 120, 150);
+        ctx.beginPath(); ctx.moveTo(mx - 8, 330); ctx.lineTo(mx + 60, 280); ctx.lineTo(mx + 128, 330); ctx.closePath(); ctx.fill();
+      }
+      /* clocher */
+      var cx = ((2600 - cam * 0.3) % 1400 + 1400) % 1400 - 200;
+      ctx.fillRect(cx, 230, 34, 250);
+      ctx.beginPath(); ctx.moveTo(cx - 6, 230); ctx.lineTo(cx + 17, 180); ctx.lineTo(cx + 40, 230); ctx.closePath(); ctx.fill();
+      /* sapins proches (parallaxe 0.6) — bleu nuit HP, pas de vert hors palette */
+      ctx.fillStyle = "rgba(30,58,95,0.7)";
+      for (var j = 0; j < 10; j++) {
+        var sx = ((j * 700 + 300 - cam * 0.6) % 1200 + 1200) % 1200 - 150;
+        ctx.beginPath(); ctx.moveTo(sx, 420); ctx.lineTo(sx + 26, 340); ctx.lineTo(sx + 52, 420); ctx.closePath(); ctx.fill();
+        ctx.fillRect(sx + 20, 420, 12, 30);
+      }
+    }
+    function dessinerSol(cam) {
+      for (var i = 0; i < NIVEAU.sols.length; i++) {
+        var s = NIVEAU.sols[i];
+        ctx.fillStyle = "#6B4423";
+        ctx.fillRect(s[0], NIVEAU.solY, s[1] - s[0], 60);
+        ctx.fillStyle = "#8A5A2B";
+        ctx.fillRect(s[0], NIVEAU.solY, s[1] - s[0], 10);
+        ctx.strokeStyle = "#3A2415"; ctx.lineWidth = 2;
+        for (var x = s[0] + 40; x < s[1]; x += 80) {
+          ctx.beginPath(); ctx.moveTo(x, NIVEAU.solY + 10); ctx.lineTo(x, NIVEAU.solY + 60); ctx.stroke();
+        }
+        ctx.fillStyle = "#3A2415";
+        ctx.beginPath(); ctx.ellipse(s[0] + 8, NIVEAU.solY + 30, 6, 22, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(s[1] - 8, NIVEAU.solY + 30, 6, 22, 0, 0, Math.PI * 2); ctx.fill();
+      }
+      for (var p = 0; p < NIVEAU.plateformes.length; p++) {
+        var pl = NIVEAU.plateformes[p];
+        ctx.fillStyle = "#3A2415";
+        ctx.fillRect(pl.x + 8, pl.y + 12, 6, NIVEAU.solY - pl.y - 12);
+        ctx.fillRect(pl.x + pl.l - 14, pl.y + 12, 6, NIVEAU.solY - pl.y - 12);
+        ctx.fillStyle = "#C9973F";
+        arrondir(pl.x, pl.y, pl.l, 12, 4); ctx.fill();
+        ctx.fillStyle = "#8A5A2B";
+        ctx.fillRect(pl.x, pl.y + 8, pl.l, 4);
+      }
+    }
+    function dessinerNiveau() {
+      var vueL = largeurVue();
+      var echelle = 960 / vueL;
+      var hautVisible = 540 / echelle; /* hauteur de monde visible */
+      var cible = partie.x + LARGEUR_JOUEUR / 2 - vueL * 0.35;
+      if (cible < 0) cible = 0;
+      if (cible > NIVEAU.largeur - vueL) cible = NIVEAU.largeur - vueL;
+      camX += (cible - camX) * 0.12;
+      /* Caméra verticale (correctif 21 nov.) : sans elle, le zoom x1,5
+         (téléphone) et x1,2 (tablette) coupait le sol (solY 480) hors du
+         canvas 540 — Gepeto n'apparaissait qu'en saut (constat d'HP au
+         doigt). La caméra suit le joueur, bornée pour garder le sol
+         visible au repos. À l'ordinateur (echelle 1), camY reste à 0 :
+         rendu inchangé. Physique intacte : seule la vue bouge. */
+      var camYMax = Math.max(0, (NIVEAU.solY + 60) - hautVisible);
+      var cibleY = partie.y + HAUTEUR_JOUEUR / 2 - hautVisible * 0.65;
+      if (cibleY < 0) cibleY = 0;
+      if (cibleY > camYMax) cibleY = camYMax;
+      camY += (cibleY - camY) * 0.12;
+      var secX = 0, secY = 0;
+      if (partie.secousse > 0 && !mouvementReduit) {
+        secX = (Math.random() - 0.5) * 8;
+        secY = (Math.random() - 0.5) * 6;
+      }
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      dessinerDecor(camX, vueL);
+      ctx.setTransform(echelle, 0, 0, echelle, (-camX + secX) * echelle, (-camY + secY) * echelle);
+      dessinerSol(camX);
+      /* flaques de slush */
+      for (var s = 0; s < NIVEAU.slush.length; s++) {
+        var fl = NIVEAU.slush[s];
+        ctx.fillStyle = "#BFD9E8";
+        ctx.beginPath(); ctx.ellipse(fl.x + fl.l / 2, NIVEAU.solY - 2, fl.l / 2, 7, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#FFFFFF";
+        ctx.beginPath(); ctx.arc(fl.x + 18, NIVEAU.solY - 4, 3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(fl.x + fl.l - 20, NIVEAU.solY - 3, 2, 0, Math.PI * 2); ctx.fill();
+      }
+      /* établis */
+      for (var e = 0; e < NIVEAU.etablis.length; e++) {
+        dessinerEtabli(NIVEAU.etablis[e].x, etabliActif(partie, e));
+      }
+      /* panneaux */
+      ctx.fillStyle = "#2B2118";
+      ctx.font = "16px Georgia, serif";
+      ctx.textAlign = "center";
+      for (var pn = 0; pn < NIVEAU.panneaux.length; pn++) {
+        var pan = NIVEAU.panneaux[pn];
+        ctx.fillStyle = "#8A5A2B";
+        arrondir(pan.x - 90, 396, 180, 26, 6); ctx.fill();
+        ctx.fillStyle = "#FAF3E4";
+        ctx.fillText(pan.texte, pan.x, 414);
+      }
+      /* fleurs de lys (petit balancement) */
+      for (var l = 0; l < NIVEAU.lys.length; l++) {
+        if (lysPres(partie, l)) continue;
+        var ly = NIVEAU.lys[l];
+        var bob = mouvementReduit ? 0 : Math.sin((partie.pas + l * 7) * 0.08) * 3;
+        dessinerLys(ly.x, ly.y + bob, 13);
+      }
+      /* cassettes */
+      for (var c = 0; c < NIVEAU.cassettes.length; c++) {
+        if (cassettePrese(partie, c)) continue;
+        var ca = NIVEAU.cassettes[c];
+        var bobC = mouvementReduit ? 0 : Math.sin((partie.pas + c * 11) * 0.08) * 3;
+        dessinerCassette(ca.x, ca.y + bobC);
+      }
+      /* télés */
+      for (var t = 0; t < partie.telesEtat.length; t++) {
+        if (teleVaincue(partie, t)) continue;
+        dessinerTele(partie.telesEtat[t], t);
+      }
+      /* drapeau d'arrivée */
+      var vague = mouvementReduit ? 0 : Math.sin(partie.pas * 0.12) * 4;
+      ctx.strokeStyle = "#3A2415"; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(NIVEAU.drapeauX, NIVEAU.solY); ctx.lineTo(NIVEAU.drapeauX, NIVEAU.solY - 120); ctx.stroke();
+      ctx.fillStyle = "#C0392B";
+      ctx.beginPath();
+      ctx.moveTo(NIVEAU.drapeauX, NIVEAU.solY - 120);
+      ctx.quadraticCurveTo(NIVEAU.drapeauX + 34, NIVEAU.solY - 116 + vague, NIVEAU.drapeauX + 62, NIVEAU.solY - 108 + vague);
+      ctx.lineTo(NIVEAU.drapeauX, NIVEAU.solY - 92);
+      ctx.closePath(); ctx.fill();
+      dessinerLys(NIVEAU.drapeauX + 26, NIVEAU.solY - 106 + vague, 7);
+      /* Gepeto (clignote quand invincible) */
+      var course = Math.abs(partie.vx) > 0.6 && partie.auSol;
+      if (!(partie.invincible > 0 && Math.floor(partie.pas / 4) % 2 === 0)) {
+        dessinerGepeto(partie.x, partie.y, partie.direction, course, partie.squash);
+      }
+      /* particules (copeaux d'or) */
+      if (!mouvementReduit) {
+        for (var pi = 0; pi < particules.length; pi++) {
+          var pt = particules[pi];
+          ctx.fillStyle = pt.couleur;
+          ctx.fillRect(pt.x, pt.y, 4, 4);
+        }
+      }
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    function ajouterParticules(x, y, couleur, n) {
+      if (mouvementReduit) return;
+      for (var i = 0; i < n; i++) {
+        if (particules.length > 60) return;
+        particules.push({ x: x, y: y,
+          vx: (Math.random() - 0.5) * 4, vy: -Math.random() * 3 - 1,
+          vie: 24, couleur: couleur });
+      }
+    }
+    function majParticules() {
+      for (var i = particules.length - 1; i >= 0; i--) {
+        var pt = particules[i];
+        pt.x += pt.vx; pt.y += pt.vy; pt.vy += 0.2; pt.vie -= 1;
+        if (pt.vie <= 0) particules.splice(i, 1);
+      }
+    }
+
+    /* --- HUD --- */
+    var dernierHud = "";
+    function majHud() {
+      var coeurs = "";
+      for (var i = 0; i < COEURS_DEPART; i++) coeurs += (i < partie.coeurs ? "♥" : "♡");
+      var texte = coeurs + "|" + partie.score + "|" + partie.lysPris.length + "|" +
+        partie.cassettesPrises.length + "|" + dureeTexte(partie.secondes);
+      if (texte === dernierHud) return;
+      dernierHud = texte;
+      elCoeurs.textContent = coeurs;
+      elScore.textContent = "Score : " + partie.score;
+      elLys.textContent = "Fleurs de lys : " + partie.lysPris.length + " / " + NOMBRE_LYS;
+      elCassettes.textContent = "Cassettes : " + partie.cassettesPrises.length + " / " + NOMBRE_CASSETTES;
+      elTemps.textContent = "Temps : " + dureeTexte(partie.secondes);
+    }
+
+    /* --- Fin de partie : écran de score + sauvegarde --- */
+    var finTraitee = false;
+    function traiterFin() {
+      if (finTraitee || !partie.termine) return;
+      finTraitee = true;
+      var res = resumePartie(partie);
+      var sauvegarde = { nouveau: false, meilleur: null };
+      try { sauvegarde = ecrireMeilleur(window.localStorage, partie); } catch (e) { /* jamais bloquant */ }
+      if (partie.gagne) {
+        sonVictoire();
+        finTitre.textContent = "Bravo ! Tu es arrivé au drapeau !";
+        finTexte.textContent = "Tu as ramassé " + res.lys + (res.lys > 1 ? " fleurs de lys sur " : " fleur de lys sur ") + NOMBRE_LYS +
+          ", " + res.cassettes + (res.cassettes > 1 ? " cassettes sur " : " cassette sur ") + NOMBRE_CASSETTES +
+          ", vaincu " + res.teles + (res.teles > 1 ? " télés bougonnes, en " : " télé bougonne, en ") + dureeTexte(res.secondes) +
+          (res.morts > 0 ? " (" + res.morts + (res.morts > 1 ? " chutes" : " chute") + ")." : ".");
+        finScore.textContent = "Score : " + res.score + " (dont bonus temps " + (partie.bonusTemps || 0) + ")";
+        finMeilleur.textContent = sauvegarde.meilleur
+          ? (sauvegarde.nouveau ? "Nouveau meilleur score sur cet appareil !" : "Meilleur score : " + sauvegarde.meilleur.score)
+          : "Meilleur score non gardé sur cet appareil.";
+        try {
+          var etat = lireEtatPont(window.localStorage);
+          etat = fusionnerSouvenir(etat, SOUVENIR_T1);
+          ecrireEtatPont(window.localStorage, etat);
+        } catch (e) { /* sauvegarde jamais bloquante */ }
+        document.getElementById("fin-details").textContent =
+          "Tu as ramassé " + res.lys + (res.lys > 1 ? " fleurs de lys sur " : " fleur de lys sur ") + NOMBRE_LYS + ", en " +
+          dureeTexte(res.secondes) + ". Score : " + res.score + ".";
+        document.getElementById("fin-souvenir").innerHTML =
+          "<b>Souvenir rapporté — " + SOUVENIR_T1.nom + "</b><br>" +
+          "Une matière du futur, couleur d'aurore. Elle débloquera une 4e matière à la station 2 de l'atelier de l'an 3120.";
+        sectionFin.classList.remove("cache");
+        sectionFin.classList.add("visible");
+        requestAnimationFrame(function () { sectionFin.classList.add("ouverte"); });
+        dire("Tu es arrivé ! Bravo, le drapeau est à toi — et tu repars avec le Bois d'aurore !");
+      } else {
+        sonDefaite();
+        finTitre.textContent = "Oh ! Plus de cœurs…";
+        finTexte.textContent = "Tu as ramassé " + res.lys + (res.lys > 1 ? " fleurs de lys et tenu " : " fleur de lys et tenu ") +
+          dureeTexte(res.secondes) + ". On réessaie — les télés bougonnes n'auront pas le dernier mot !";
+        finScore.textContent = "Score : " + res.score;
+        finMeilleur.textContent = sauvegarde.meilleur ? "Meilleur score : " + sauvegarde.meilleur.score : "";
+        dire("Plus de cœurs… On réessaie, tu connais le chemin maintenant !");
+      }
+      document.body.classList.remove("en-jeu");
+      ecranFin.classList.remove("cache");
+      /* La carte de fin est sous le canvas : on l'amène dans le viewport,
+         sinon le joueur doit défiler pour voir son score et Rejouer
+         (même famille de défaut que le bouton Jouer coupé, 20 nov.). */
+      ecranFin.scrollIntoView();
+      statut(partie.gagne ? "Tu es arrivé au drapeau !" : "Partie terminée — on réessaie ?");
+    }
+
+    /* --- Boucle de jeu (pas fixes 1/60 s) --- */
+    function boucle(temps) {
+      requestAnimationFrame(boucle);
+      if (!enCours || enPause) { dessinerNiveau(); return; }
+      if (!dernierTemps) dernierTemps = temps;
+      var delta = temps - dernierTemps;
+      dernierTemps = temps;
+      if (delta > 250) delta = 250;
+      accumulateur += delta;
+      var avantLys = partie.lysPris.length;
+      var avantCassettes = partie.cassettesPrises.length;
+      var avantTeles = partie.telesVaincues.length;
+      var avantEtablis = partie.etablisActifs.length;
+      var avantCoeurs = partie.coeurs;
+      var avantMorts = partie.morts;
+      var pasFaits = 0;
+      while (accumulateur >= 1000 / 60 && pasFaits < 4) {
+        var r = pas(partie, entree);
+        entree.sautRelache = false;
+        accumulateur -= 1000 / 60;
+        pasFaits += 1;
+        if (partie.termine) break;
+      }
+      /* Sons et messages sur les événements du pas. */
+      if (partie.lysPris.length > avantLys) {
+        sonLys();
+        var ly = NIVEAU.lys[partie.lysPris[partie.lysPris.length - 1]];
+        ajouterParticules(ly.x, ly.y, "#C9973F", 8);
+      }
+      if (partie.cassettesPrises.length > avantCassettes) {
+        sonCassette();
+        dire("Une cassette ! Ça, c'est un vrai trésor des années 1990 !");
+      }
+      if (partie.telesVaincues.length > avantTeles) {
+        sonTele();
+        ajouterParticules(partie.x + 17, partie.y + 20, "#8A5A2B", 10);
+        dire("Bien joué ! La télé bougonne est éteinte !");
+      }
+      if (partie.etablisActifs.length > avantEtablis) {
+        sonEtabli();
+        dire("Établi atteint ! Si tu tombes, tu recommences ici.");
+        statut("Point de reprise atteint — établi " + partie.etablisActifs.length + " sur " + NIVEAU.etablis.length + ".");
+      }
+      if (partie.coeurs < avantCoeurs) {
+        sonDegat();
+        dire("Aïe ! Encore " + partie.coeurs + (partie.coeurs > 1 ? " cœurs." : " cœur."));
+      }
+      if (partie.morts > avantMorts) {
+        statut("Tu es tombé… retour au dernier établi.");
+      }
+      if (partie.x > NIVEAU.drapeauX - 500 && !partie.termine) {
+        statut("Le drapeau est tout près !");
+      }
+      majParticules();
+      majHud();
+      dessinerNiveau();
+      traiterFin();
+    }
+
+    /* --- Commandes tactiles + clavier --- */
+    function lierBouton(id, cle) {
+      var b = document.getElementById(id);
+      var jeton = 0;
+      function activer(e) {
+        if (e) e.preventDefault();
+        jeton += 1;
+        entree[cle] = true;
+        b.classList.add("maintenu");
+        if (cle === "saut") { entree.sautRelache = false; }
+      }
+      function desactiver(e) {
+        if (e) e.preventDefault();
+        if (cle === "saut") {
+          /* Un tap très bref (quelques ms) peut tomber entre deux pas de jeu
+             et se perdre : on garde Sauter vrai 100 ms pour que le prochain
+             pas le voie. Le jeton évite qu'un nouveau tap soit effacé. */
+          var monJeton = jeton;
+          setTimeout(function () {
+            if (monJeton !== jeton) return;
+            entree.saut = false;
+            b.classList.remove("maintenu");
+            entree.sautRelache = true;
+          }, 100);
+        } else {
+          entree[cle] = false;
+          b.classList.remove("maintenu");
+        }
+      }
+      b.addEventListener("pointerdown", activer);
+      b.addEventListener("pointerup", desactiver);
+      b.addEventListener("pointerleave", desactiver);
+      b.addEventListener("pointercancel", desactiver);
+      b.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+    }
+    lierBouton("btn-gauche", "gauche");
+    lierBouton("btn-droite", "droite");
+    lierBouton("btn-sauter", "saut");
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); entree.gauche = true; }
+      else if (e.key === "ArrowRight") { e.preventDefault(); entree.droite = true; }
+      else if (e.key === " " || e.key === "ArrowUp") {
+        e.preventDefault();
+        if (!entree.saut) { entree.saut = true; entree.sautRelache = false; }
+      }
+      else if (e.key === "p" || e.key === "P") { basculerPause(); }
+    });
+    document.addEventListener("keyup", function (e) {
+      if (e.key === "ArrowLeft") entree.gauche = false;
+      else if (e.key === "ArrowRight") entree.droite = false;
+      else if (e.key === " " || e.key === "ArrowUp") { entree.saut = false; entree.sautRelache = true; }
+    });
+    function basculerPause() {
+      if (!enCours || partie.termine) return;
+      enPause = !enPause;
+      ecranPause.classList.toggle("cache", !enPause);
+      document.getElementById("btn-pause").textContent = enPause ? "Reprendre" : "Pause";
+    }
+    document.getElementById("btn-pause").addEventListener("click", basculerPause);
+    document.getElementById("btn-reprendre").addEventListener("click", basculerPause);
+
+    /* --- Démarrer / rejouer --- */
+    function demarrer() {
+      partie = creerPartie();
+      particules = [];
+      camX = 0;
+      camY = 0;
+      finTraitee = false;
+      dernierHud = "";
+      accumulateur = 0; dernierTemps = 0;
+      ecranTitre.classList.add("cache");
+      ecranFin.classList.add("cache");
+      ecranPause.classList.add("cache");
+      sectionFin.classList.add("cache");
+      sectionFin.classList.remove("visible", "ouverte");
+      enCours = true; enPause = false;
+      document.body.classList.add("en-jeu");
+      document.getElementById("btn-pause").textContent = "Pause";
+      audio();
+      majHud();
+      statut("Tu es au départ. Cours vers la droite !");
+      dire("C'est parti ! Le drapeau est tout au bout, à droite.");
+    }
+    document.getElementById("btn-commencer").addEventListener("click", demarrer);
+    document.getElementById("btn-rejouer").addEventListener("click", demarrer);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden && enCours && !partie.termine && !enPause) basculerPause();
+    });
+
+    /* Premier rendu (écran titre) + boucle. */
+    majHud();
+    dessinerNiveau();
+    requestAnimationFrame(boucle);
+
+    /* Exposé pour les tests machine (Playwright) : état lisible, pas d'écriture. */
+    window.__T1 = {
+      partie: function () { return partie; },
+      resume: function () { return resumePartie(partie); },
+      demarrer: demarrer,
+      NIVEAU: NIVEAU
+    };
+  });
+}
+</script>
+</body>
+</html>

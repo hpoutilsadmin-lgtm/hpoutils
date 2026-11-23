@@ -156,7 +156,7 @@ function Index() {
       </div>
       {/* Bannière Noël 2 « Amusez-vous gratuitement » (lot Décor de Noël, 10 nov. 2026) : accueil seulement, en flux. */}
       <div className="banniere-noel" aria-label="Amusez-vous gratuitement">
-        <p><strong>Amusez-vous gratuitement</strong> — 56 jeux gratuits, sans compte, et 666 recettes à essayer.</p>
+        <p><strong>Amusez-vous gratuitement</strong> — 57 jeux gratuits, sans compte, et 666 recettes à essayer.</p>
         <Link to="/jeux" className="banniere-noel-cta">Jouer gratuitement</Link>
       </div>
 
@@ -178,7 +178,7 @@ function Index() {
             </article>
             <article className="pillar-card">
               <h3>Jeux</h3>
-              <p>56 jeux gratuits, jouables dans votre navigateur</p>
+              <p>57 jeux gratuits, jouables dans votre navigateur</p>
               <Link className="pillar-cta" to="/jeux">Voir les jeux →</Link>
             </article>
             <article className="pillar-card">
