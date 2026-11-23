@@ -18,6 +18,15 @@
     <itunes:category text="Technology" />
     <atom:link href="https://www.hp-outils.com/audio-balado/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Futur simple, épisode 3 officiel</title>
+      <description>Dans ce troisième épisode, Léa, Marc et Maya parlent de l'IA et du transfert de richesse : qui gagne, qui perd, et ce qu'il y a entre les deux. HP passe en vraie voix — une blague, une question à Maya sur son chat, et un appel surprise qui envoie Marc courir pour son char remorqué. Extrait : Yoshua Bengio, « L'IA pourrait se retourner contre nous », Hors des ondes avec Patrice Roy, Radio-Canada, septembre 2026 (voix modifiée, appel anonyme). Chanson de clôture : « Lettre à l'inconnue », de HP. Voix IA : Léa, Marc et Maya. Fabriqué avec l'intelligence artificielle • Direction humaine.</description>
+      <pubDate>Mon, 23 Nov 2026 00:00:00 -0500</pubDate>
+      <enclosure url="https://www.hp-outils.com/audio-balado/episode-3.mp3" length="13049646" type="audio/mpeg" />
+      <guid isPermaLink="true">https://www.hp-outils.com/audio-balado/episode-3.mp3</guid>
+      <itunes:duration>544</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
+    <item>
       <title>Futur simple, épisode 1 officiel</title>
       <description>Premier épisode officiel de Futur simple — la première fois qu'on essaie cela. Léa et Marc regardent ce que l'IA change pour vrai, dans la vraie vie : l'aide aux petites entreprises d'ici, un robot qui prépare les rendez-vous médicaux, des dettes médicales effacées sans formulaire, et un appel d'auditrice qui parle des jeux HP. Le bon comme le mauvais, sans jargon : l'outil prépare, l'humain décide. Voix IA : Léa et Marc. Publié le 26 octobre 2026.</description>
       <pubDate>Mon, 26 Oct 2026 00:00:00 -0400</pubDate>
@@ -27,9 +36,9 @@
       <itunes:explicit>no</itunes:explicit>
     </item>
     <item>
-      <title>Épisode 2 — Futur simple</title>
-      <description>Fraudes vocales et deepfakes : comment se protéger à l'ère de l'IA. Publié le 19 octobre 2026. Le rendez-vous officiel du lundi démarre le 26 octobre 2026.</description>
-      <pubDate>Mon, 19 Oct 2026 00:00:00 -0400</pubDate>
+      <title>Futur simple, épisode 2 officiel</title>
+      <description>Dans ce deuxième épisode, Léa, Marc et Maya parlent de l'intelligence artificielle au quotidien, débattent avec un prof de philosophie et partagent de bonnes nouvelles. Le prof est un personnage joué, pas un vrai auditeur. Les applaudissements entendus sont un effet de studio, pas un public. Fabriqué avec l'intelligence artificielle • Direction humaine.</description>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 -0400</pubDate>
       <enclosure url="https://www.hp-outils.com/audio-balado/episode-2.mp3" length="10315694" type="audio/mpeg" />
       <guid isPermaLink="true">https://www.hp-outils.com/audio-balado/episode-2.mp3</guid>
       <itunes:duration>430</itunes:duration>

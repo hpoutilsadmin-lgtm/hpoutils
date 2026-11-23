@@ -34,6 +34,17 @@ export const Route = createFileRoute("/balado")({
 // le titre, le libellé, la date, la durée, la description et l'URL audio. Le plus récent en premier.
 const EPISODES = [
   {
+    n: "03 officiel",
+    label: "L’IA et le transfert de richesse.",
+    title: "Futur simple, épisode 3 officiel",
+    date: "23 novembre 2026",
+    duration: "9 min 04 s",
+    description:
+      "Dans ce troisième épisode, Léa, Marc et Maya parlent de l'IA et du transfert de richesse : qui gagne, qui perd, et ce qu'il y a entre les deux. HP passe en vraie voix — une blague, une question à Maya sur son chat, et un appel surprise qui envoie Marc courir pour son char remorqué. Extrait : Yoshua Bengio, « L'IA pourrait se retourner contre nous », Hors des ondes avec Patrice Roy, Radio-Canada, septembre 2026 (voix modifiée, appel anonyme). Chanson de clôture : « Lettre à l'inconnue », de HP. Voix IA : Léa, Marc et Maya. Fabriqué avec l'intelligence artificielle • Direction humaine.",
+    audio:
+      "/audio-balado/episode-3.mp3",
+  },
+  {
     n: "02 officiel",
     label: "L’IA au quotidien.",
     title: "Futur simple, épisode 2 officiel",
@@ -98,7 +109,7 @@ function Page() {
             Léa et Marc regardent l'intelligence artificielle en face : l'entrepreneuriat,
             les PME et le futur à venir — <strong>le bon comme le mauvais</strong>. De nouveaux épisodes, annoncés ici dès leur parution, quand ils sont prêts. Direct, concret, sans jargon. Comme tout ce qu'on fait ici.
           </p>
-          <p style={{ maxWidth: 700, fontWeight: 700 }}>Nouvel épisode en préparation — automne 2026. Léa et Marc regardent l'IA en face.</p>
+          <p style={{ maxWidth: 700, fontWeight: 700 }}>Nouvel épisode — 23 novembre 2026 : L'IA et le transfert de richesse.</p>
           <p style={{ maxWidth: 700 }}>Les voix de Léa et Marc sont des voix d'intelligence artificielle, pas des voix humaines.</p>
           <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.55, marginTop: 14, maxWidth: 700 }}>« J'ai jamais su qui j'étais ni ce que j'aimais. Alors je fais un peu de tout — et j'en ai fait un balado IA à direction humaine, qui parle de vraie vie. »</p>
           <div className="lead-actions">
