@@ -97,8 +97,8 @@ const CARTES: Carte[] = [
 ];
 
 const COCASSES: Cocasse[] = [
-  { id:"cocasse-1", dehors:"Je pensais à toi dernièrement…", dedans:"aux toilettes !",
-    image:"/images/cartes-de-souhaits/cocasse-01-toilettes.webp", alt:"Petite porte de bois avec un cœur gravé et un rouleau de papier" },
+  { id:"cocasse-1", dehors:"Je pensais à toi dernièrement…", dedans:"…en attendant que le café passe.",
+    image:"/images/cartes-de-souhaits/cocasse-01-cafe.webp", alt:"Tasse de café fumante sur l'établi en bois, lumière du matin" },
   { id:"cocasse-2", dehors:"Tu me manques…", dedans:"comme mon chargeur quand mon téléphone est à 2 %.",
     image:"/images/cartes-de-souhaits/cocasse-02-chargeur.webp", alt:"Téléphone branché à son chargeur, batterie presque vide",
     idee:{ texte:"À envoyer avec une partie de Caribou Run, pour recharger les batteries.", lien:"/jeux", lienTexte:"Voir les jeux" } },
