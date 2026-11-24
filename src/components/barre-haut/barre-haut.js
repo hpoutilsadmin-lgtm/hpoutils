@@ -584,7 +584,7 @@
       "width": "48", "height": "48", "fetchpriority": "high"
     });
     tete.appendChild(face);
-    var titre = el("p", { "class": "bh-titre", html: "<strong>HP</strong> À portée de main" });
+    var titre = el("p", { "class": "bh-titre", html: "<strong>HP</strong> C+" });
     tete.appendChild(titre);
     var btnReduire = el("button", {
       "class": "bh-reduire", type: "button",
