@@ -66,6 +66,7 @@ import { Route as LireMerciRouteImport } from './routes/lire_.merci'
 import { Route as OutilsBonsReflexesRouteImport } from './routes/outils_.bons-reflexes'
 import { Route as OutilsHpHyperPotentielRouteImport } from './routes/outils_.hp-hyper-potentiel'
 import { Route as OutilsUnPetitPasALaFoisRouteImport } from './routes/outils_.un-petit-pas-a-la-fois'
+import { Route as OutilsVerifieAvantDePayerRouteImport } from './routes/outils_.verifie-avant-de-payer'
 import { Route as PasseursMerciRouteImport } from './routes/passeurs.merci'
 import { Route as PdfSlugRouteImport } from './routes/pdf.$slug'
 import { Route as ApiPublicDownloadPdfRouteImport } from './routes/api/public/download-pdf'
@@ -364,6 +365,12 @@ const OutilsUnPetitPasALaFoisRoute = OutilsUnPetitPasALaFoisRouteImport.update({
   path: '/outils/un-petit-pas-a-la-fois',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OutilsVerifieAvantDePayerRoute =
+  OutilsVerifieAvantDePayerRouteImport.update({
+    id: '/outils_/verifie-avant-de-payer',
+    path: '/outils/verifie-avant-de-payer',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const PasseursMerciRoute = PasseursMerciRouteImport.update({
   id: '/passeurs/merci',
   path: '/passeurs/merci',
@@ -488,6 +495,7 @@ export interface FileRoutesByFullPath {
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/outils/hp-hyper-potentiel': typeof OutilsHpHyperPotentielRoute
   '/outils/un-petit-pas-a-la-fois': typeof OutilsUnPetitPasALaFoisRoute
+  '/outils/verifie-avant-de-payer': typeof OutilsVerifieAvantDePayerRoute
   '/passeurs/merci': typeof PasseursMerciRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
@@ -559,6 +567,7 @@ export interface FileRoutesByTo {
   '/outils/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/outils/hp-hyper-potentiel': typeof OutilsHpHyperPotentielRoute
   '/outils/un-petit-pas-a-la-fois': typeof OutilsUnPetitPasALaFoisRoute
+  '/outils/verifie-avant-de-payer': typeof OutilsVerifieAvantDePayerRoute
   '/passeurs/merci': typeof PasseursMerciRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
@@ -631,6 +640,7 @@ export interface FileRoutesById {
   '/outils_/bons-reflexes': typeof OutilsBonsReflexesRoute
   '/outils_/hp-hyper-potentiel': typeof OutilsHpHyperPotentielRoute
   '/outils_/un-petit-pas-a-la-fois': typeof OutilsUnPetitPasALaFoisRoute
+  '/outils_/verifie-avant-de-payer': typeof OutilsVerifieAvantDePayerRoute
   '/passeurs/merci': typeof PasseursMerciRoute
   '/pdf/$slug': typeof PdfSlugRoute
   '/api/public/download-pdf': typeof ApiPublicDownloadPdfRoute
@@ -704,6 +714,7 @@ export interface FileRouteTypes {
     | '/outils/bons-reflexes'
     | '/outils/hp-hyper-potentiel'
     | '/outils/un-petit-pas-a-la-fois'
+    | '/outils/verifie-avant-de-payer'
     | '/passeurs/merci'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
@@ -775,6 +786,7 @@ export interface FileRouteTypes {
     | '/outils/bons-reflexes'
     | '/outils/hp-hyper-potentiel'
     | '/outils/un-petit-pas-a-la-fois'
+    | '/outils/verifie-avant-de-payer'
     | '/passeurs/merci'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
@@ -846,6 +858,7 @@ export interface FileRouteTypes {
     | '/outils_/bons-reflexes'
     | '/outils_/hp-hyper-potentiel'
     | '/outils_/un-petit-pas-a-la-fois'
+    | '/outils_/verifie-avant-de-payer'
     | '/passeurs/merci'
     | '/pdf/$slug'
     | '/api/public/download-pdf'
@@ -917,6 +930,7 @@ export interface RootRouteChildren {
   OutilsBonsReflexesRoute: typeof OutilsBonsReflexesRoute
   OutilsHpHyperPotentielRoute: typeof OutilsHpHyperPotentielRoute
   OutilsUnPetitPasALaFoisRoute: typeof OutilsUnPetitPasALaFoisRoute
+  OutilsVerifieAvantDePayerRoute: typeof OutilsVerifieAvantDePayerRoute
   PasseursMerciRoute: typeof PasseursMerciRoute
   PdfSlugRoute: typeof PdfSlugRoute
   ApiPublicDownloadPdfRoute: typeof ApiPublicDownloadPdfRoute
@@ -1331,6 +1345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OutilsUnPetitPasALaFoisRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/outils_/verifie-avant-de-payer': {
+      id: '/outils_/verifie-avant-de-payer'
+      path: '/outils/verifie-avant-de-payer'
+      fullPath: '/outils/verifie-avant-de-payer'
+      preLoaderRoute: typeof OutilsVerifieAvantDePayerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/passeurs/merci': {
       id: '/passeurs/merci'
       path: '/passeurs/merci'
@@ -1499,6 +1520,7 @@ const rootRouteChildren: RootRouteChildren = {
   OutilsBonsReflexesRoute: OutilsBonsReflexesRoute,
   OutilsHpHyperPotentielRoute: OutilsHpHyperPotentielRoute,
   OutilsUnPetitPasALaFoisRoute: OutilsUnPetitPasALaFoisRoute,
+  OutilsVerifieAvantDePayerRoute: OutilsVerifieAvantDePayerRoute,
   PasseursMerciRoute: PasseursMerciRoute,
   PdfSlugRoute: PdfSlugRoute,
   ApiPublicDownloadPdfRoute: ApiPublicDownloadPdfRoute,

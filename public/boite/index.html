@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
 <link rel="canonical" href="https://www.hp-outils.com/boite/" />
-<meta name="description" content="Huit outils simples pour la vraie vie : transmettre, décider, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand, avec le message de relance prêt à copier." />
+<meta name="description" content="Neuf outils simples pour la vraie vie : transmettre, décider, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité, suivre les promesses — qui doit quoi, pour quand, avec le message de relance prêt à copier — et vérifier une demande de paiement avant de payer." />
 <link rel="icon" type="image/png" href="assets/apple-touch-icon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <meta name="mobile-web-app-capable" content="yes" />
@@ -18,7 +18,7 @@
 <link rel="manifest" href="assets/manifest.webmanifest" />
 <title>La Boîte à outils | HP Outils</title>
 <meta property="og:title" content="La Boîte à outils | HP Outils" />
-<meta property="og:description" content="Huit outils simples pour la vraie vie : transmettre, décider, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité et suivre les promesses — qui doit quoi, pour quand, avec le message de relance prêt à copier." />
+<meta property="og:description" content="Neuf outils simples pour la vraie vie : transmettre, décider, comprendre la paperasse, comparer les prix, préparer un appel difficile, savoir quelle démarche faire, garder ses codes en sécurité, suivre les promesses — qui doit quoi, pour quand, avec le message de relance prêt à copier — et vérifier une demande de paiement avant de payer." />
 <meta property="og:image" content="https://www.hp-outils.com/images/og-boite.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -44,6 +44,7 @@
   --t6:#7A3E63; --t6-soft:#F1E0EA; --t6-on:#FFFFFF;
   --t7:#3D4A6B; --t7-soft:#DEE3EF; --t7-on:#FFFFFF;
   --t8:#5F7030; --t8-soft:#E7EAD3; --t8-on:#FFFFFF;
+  --t9:#8C2F39; --t9-soft:#F6E0DE; --t9-on:#FFFFFF;
   --ok:#2E7D4F; --danger:#A83A2C; --danger-soft:#F7E0D9;
   --shadow:0 1px 2px rgba(60,48,24,.08), 0 6px 24px rgba(60,48,24,.07);
   --serif:"DM Serif Display", Georgia, "Times New Roman", serif;
@@ -60,6 +61,7 @@
     --t6:#D79BC2; --t6-soft:#33222E; --t6-on:#2A1020;
     --t7:#A8B8DC; --t7-soft:#232B3D; --t7-on:#0E1420;
     --t8:#B9C97E; --t8-soft:#262B16; --t8-on:#131603;
+    --t9:#E08A7A; --t9-soft:#38221B; --t9-on:#2A0F08;
     --danger:#E8826F; --danger-soft:#3A221D;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.35);
   }
@@ -95,7 +97,7 @@ button{font-family:inherit}
 
 .tabs{
   position:sticky; top:var(--bh-hauteur,69px); z-index:30;
-  display:grid; grid-template-columns:repeat(8,minmax(0,1fr)); gap:6px; padding:10px 8px; margin:0 -18px 26px;
+  display:grid; grid-template-columns:repeat(9,minmax(0,1fr)); gap:6px; padding:10px 8px; margin:0 -18px 26px;
   background:var(--paper);
   -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
@@ -119,6 +121,7 @@ button{font-family:inherit}
 .tab[data-t="6"][aria-selected="true"]{background:var(--t6-soft); border-color:var(--t6); color:var(--ink)}
 .tab[data-t="7"][aria-selected="true"]{background:var(--t7-soft); border-color:var(--t7); color:var(--ink)}
 .tab[data-t="8"][aria-selected="true"]{background:var(--t8-soft); border-color:var(--t8); color:var(--ink)}
+.tab[data-t="9"][aria-selected="true"]{background:var(--t9-soft); border-color:var(--t9); color:var(--ink)}
 .tab .tab-label{white-space:normal; overflow:visible; text-overflow:clip; min-width:0; text-align:center; line-height:1.18}
 @media (min-width:621px){
   /* Bureau : à 6 onglets, les libellés longs passent sur deux lignes plutôt
@@ -128,7 +131,7 @@ button{font-family:inherit}
   .tab .tab-label{white-space:normal; overflow:visible; text-overflow:clip; min-width:0; text-align:center; line-height:1.18}
 }
 @media (max-width:620px){
-  .tabs{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
   .tab{gap:5px; min-height:54px; font-size:.74rem; padding:8px 5px}
   .tab svg{width:19px; height:19px}
 }
@@ -154,6 +157,7 @@ button{font-family:inherit}
 .panel.accent-6{--acc:var(--t6); --acc-soft:var(--t6-soft); --acc-on:var(--t6-on)}
 .panel.accent-7{--acc:var(--t7); --acc-soft:var(--t7-soft); --acc-on:var(--t7-on)}
 .panel.accent-8{--acc:var(--t8); --acc-soft:var(--t8-soft); --acc-on:var(--t8-on)}
+.panel.accent-9{--acc:var(--t9); --acc-soft:var(--t9-soft); --acc-on:var(--t9-on)}
 .panel-head .tool-badge{
   display:inline-flex; align-items:center; gap:8px;
   background:var(--acc); color:var(--acc-on);
@@ -783,13 +787,13 @@ ul.cf-plain li{margin:.3em 0}
   <header class="intro"><img src="/hgpto/gepeto/tete-144.png" width="48" height="48" alt="Sir H. Gepeto" style="width:48px;height:48px;border-radius:50%;flex:none">
     <p class="kicker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 0 0 6-6L14 13l-3-3 3.7-3.7z"/></svg> Des outils pour la vraie vie</p>
     <h1>La Boîte à outils</h1>
-    <p class="subtitle">Huit soucis de moins, huit outils simples.</p>
-    <p class="lede-intro">Transmettre un message, trancher un choix, comprendre la paperasse, <strong>repérer le vrai meilleur prix</strong>, <strong>préparer un appel difficile</strong> ou <strong>savoir quelle démarche faire, étape par étape</strong>, <strong>garder vos codes en sécurité</strong> ou <strong>suivre les promesses — qui doit quoi, pour quand — et relancer sans y penser deux fois</strong>. Tout marche ici même, sur ordi comme sur cellulaire — rien à installer, rien à créer.</p>
+    <p class="subtitle">Neuf soucis de moins, neuf outils simples.</p>
+    <p class="lede-intro">Transmettre un message, trancher un choix, comprendre la paperasse, <strong>repérer le vrai meilleur prix</strong>, <strong>préparer un appel difficile</strong> ou <strong>savoir quelle démarche faire, étape par étape</strong>, <strong>garder vos codes en sécurité</strong>, <strong>suivre les promesses — qui doit quoi, pour quand — et relancer sans y penser deux fois</strong> ou <strong>vérifier une demande de paiement avant de payer</strong>. Tout marche ici même, sur ordi comme sur cellulaire — rien à installer, rien à créer.</p>
     <details class="tip">
       <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/></svg> À portée de main : icône d’écran d’accueil et liens directs</summary>
       <div class="tip-body">
         <p><strong>Icône plein écran</strong> — sur iPhone&nbsp;: ouvrez cette page dans Safari, touchez <em>Partager</em>, puis <em>Sur l’écran d’accueil</em>&nbsp;: La Boîte à outils gagne son icône et s’ouvre en quasi-app, sans App Store. Sur Android&nbsp;: menu ⋮ → <em>Ajouter à l’écran d’accueil</em>.</p>
-        <p><strong>Un lien par outil</strong> — ajoutez à la fin de l’adresse de la page&nbsp;: <code>#heritage</code>, <code>#decideur</code>, <code>#paperasse</code>, <code>#comparateur</code>, <code>#demeleur</code>, <code>#demarches</code>, <code>#coffre</code> ou <code>#relanceur</code>. Le bon outil s’ouvre directement.</p>
+        <p><strong>Un lien par outil</strong> — ajoutez à la fin de l’adresse de la page&nbsp;: <code>#heritage</code>, <code>#decideur</code>, <code>#paperasse</code>, <code>#comparateur</code>, <code>#demeleur</code>, <code>#demarches</code>, <code>#coffre</code>, <code>#relanceur</code> ou <code>#verifie-avant-de-payer</code>. Le bon outil s’ouvre directement.</p>
       </div>
     </details>
   </header>
@@ -828,7 +832,7 @@ ul.cf-plain li{margin:.3em 0}
     </div>
   </section>
 
-  <nav class="tabs" role="tablist" aria-label="Les huit outils">
+  <nav class="tabs" role="tablist" aria-label="Les neuf outils">
     <button class="tab" role="tab" id="tab-heritage" aria-controls="panel-heritage" aria-selected="true" data-t="1">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="m3 8 9 6 9-6"/><path d="M12 13.5c-1.8-1.6-4-2-4-4.2 0-1.2 1-2.3 2.1-2.3.8 0 1.5.5 1.9 1.1.4-.6 1.1-1.1 1.9-1.1 1.1 0 2.1 1.1 2.1 2.3 0 2.2-2.2 2.6-4 4.2z"/></svg>
       <span class="tab-label">Héritage vivant</span>
@@ -860,6 +864,10 @@ ul.cf-plain li{margin:.3em 0}
     <button class="tab" role="tab" id="tab-relanceur" aria-controls="panel-relanceur" aria-selected="false" data-t="8" tabindex="-1">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/><path d="M18.5 2.5a4.5 4.5 0 0 1 2 4"/></svg>
       <span class="tab-label">Le Relanceur</span>
+    </button>
+    <button class="tab" role="tab" id="tab-verifie" aria-controls="panel-verifie" aria-selected="false" data-t="9" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5.5v5.6c0 5 3.4 8.6 8 10.4 4.6-1.8 8-5.4 8-10.4V5.5L12 2z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>
+      <span class="tab-label">Vérifie avant de payer</span>
     </button>
   </nav>
 
@@ -1971,6 +1979,33 @@ ul.cf-plain li{margin:.3em 0}
       <p style="margin:0"><strong>Tout reste sur cet appareil&nbsp;:</strong> vos promesses sont gardées dans ce navigateur seulement, sans compte et sans aucun envoi ailleurs. En contrepartie, si vous changez d’appareil ou effacez les données du navigateur, la liste part avec — c’est le prix du 100&nbsp;% local.</p>
     </div>
   </section>
+  <!-- ============================================================ TOOL 9 — Vérifie avant de payer (lot anti-faux-président, 24 nov. 2026) -->
+  <section class="panel accent-9" id="panel-verifie" role="tabpanel" aria-labelledby="tab-verifie">
+    <div class="panel-head">
+      <span class="tool-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5.5v5.6c0 5 3.4 8.6 8 10.4 4.6-1.8 8-5.4 8-10.4V5.5L12 2z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg> Outil 9</span>
+      <h2>Vérifie avant de payer</h2>
+      <p class="lede">Une demande de paiement urgente qui se fait passer pour un ordre du patron — mais qui n'en est pas un. Cochez ce qui décrit la demande, suivez la règle d'or <strong>STOP — VÉRIFIE — CONFIRME</strong>, et convenez d'un <strong>mot de code</strong> en famille ou au travail.</p>
+    <div class="fiche-clarte" style="border-left:6px solid var(--t9);background:var(--card);color:var(--ink);border:1px solid var(--line);border-left-width:6px;border-radius:10px;padding:16px 20px;margin:12px 0 18px;text-align:left;box-shadow:var(--shadow)"><p style="font-weight:700;margin:0 0 8px;color:var(--t9);font-family:var(--serif);font-size:1.15rem">Fiche claire — Vérifie avant de payer</p><ul style="margin:0;padding-left:20px;line-height:1.6"><li><strong>Ça sert à quoi :</strong> Vérifier une demande de paiement avant de payer, quand elle ressemble à un ordre urgent d'un dirigeant ou d'un proche.</li><li><strong>Ça règle quoi :</strong> Les virements envoyés sous pression à un faux président, un faux proche ou une fausse voix.</li><li><strong>Vous pouvez l'utiliser pour :</strong> Une demande urgente par courriel, un appel qui presse, un nouveau compte bancaire, une demande qui contourne la procédure.</li><li><strong>Quels emplois ça aide :</strong> Petites entreprises, travailleurs autonomes, familles qui gèrent de l'argent ensemble.</li><li><strong>Application pratique :</strong> On coche les signaux, on lit le verdict, on rappelle au numéro déjà connu et on fait valider par une deuxième personne — avant de payer.</li><li><strong>À part :</strong> L'outil ne confirme jamais une fraude : il signale des ressemblances, la vérification humaine tranche. Pour les autres fraudes, le kit Fraude Sans Honte (5 $) est un compagnon, pas un doublon.</li></ul></div>
+    </div>
+
+    <div class="card">
+      <h3>La règle d'or, en trois gestes</h3>
+      <ol style="margin:0;padding-left:1.4em;display:grid;gap:8px;line-height:1.55">
+        <li><strong>STOP</strong> — On ne paie pas sous pression. L'urgence fait partie du piège.</li>
+        <li><strong>VÉRIFIE</strong> — On rappelle au numéro déjà connu — jamais à celui du message.</li>
+        <li><strong>CONFIRME</strong> — Mot de code convenu en personne, et deuxième personne au-dessus du seuil fixé ensemble.</li>
+      </ol>
+      <p style="margin:14px 0 0"><strong>Règle écrite :</strong> « Aucun dirigeant ne demandera jamais un paiement en contournant la procédure. »</p>
+      <div class="row" style="margin-top:20px">
+        <a class="btn primary" href="/outils/verifie-avant-de-payer" style="margin-top:auto">Ouvrir l'outil</a>
+      </div>
+    </div>
+
+    <div class="note">
+      <p style="margin:0"><strong>En toute honnêteté :</strong> l'outil ne peut pas confirmer une fraude — « Nous ne pouvons pas confirmer une fraude ». Il signale des ressemblances avec un stratagème connu, et c'est votre vérification humaine qui tranche. Aucun compte, rien n'est envoyé ailleurs, rien n'est enregistré. Sources : <a href="https://spvm.qc.ca/fr/Fiches/Details/Fraude-visant-des-entreprises">SPVM</a>, <a href="https://grc.ca/fr/police-federale/cybercriminalite/nouvelles-sur-cybercriminalite/fraude-du-president">GRC</a>, <a href="https://lautorite.qc.ca/grand-public/salle-de-presse/mises-en-garde/fiche-mises-en-garde/mise-en-garde-contre-un-stratageme-de-fraude-du-president">AMF</a>. Centre antifraude du Canada : <a href="tel:+18884958501">1-888-495-8501</a>.</p>
+      <p style="margin:8px 0 0;font-size:.85rem;color:var(--ink-soft)">Chiffres vérifiés le 24 novembre 2026 — sources : Centre antifraude du Canada, Sûreté du Québec, AMF, SPVM, Centre canadien pour la cybersécurité.</p>
+    </div>
+  </section>
   <section aria-label="Le QR du frigo (pour toute La Boîte)">
     <div class="card" id="qr-card">
       <h3>Le QR du frigo (pour toute La Boîte)</h3>
@@ -1991,6 +2026,7 @@ ul.cf-plain li{margin:.3em 0}
           <button class="chip" data-qr="demarches" aria-pressed="false">Démarches</button>
           <button class="chip" data-qr="coffre" aria-pressed="false">Le Coffre à codes</button>
           <button class="chip" data-qr="relanceur" aria-pressed="false">Le Relanceur</button>
+          <button class="chip" data-qr="verifie-avant-de-payer" aria-pressed="false">Vérifie avant de payer</button>
         </div>
       </div>
       <div id="qr-empty" class="note"><strong>Collez le lien public ci-dessus</strong>&nbsp;: le QR se dessinera tout seul.</div>
@@ -2012,7 +2048,7 @@ ul.cf-plain li{margin:.3em 0}
 
   <footer class="page-foot">
     <p><strong>Vos données&nbsp;?</strong> Tout se passe dans votre navigateur : aucun compte, rien n’est envoyé ailleurs. Dans <strong>Démarches</strong>, vos coches sont gardées <strong>sur cet appareil seulement</strong> pour que vous puissiez reprendre où vous étiez. Dans le <strong>Coffre à codes</strong>, vos codes sont gardés <strong>chiffrés, sur cet appareil seulement</strong>, protégés par votre code maître. Dans <strong>Le Relanceur</strong>, vos promesses sont gardées <strong>sur cet appareil seulement</strong>, pour que vous les retrouviez à votre prochaine visite. Le reste n’est pas conservé, et vous pouvez tout effacer en un toucher. Pour lire votre photo, la librairie de lecture de texte se télécharge depuis ce site&nbsp;; la photo elle-même ne sort jamais de votre appareil.</p>
-    <p>Huit petits outils, une seule page, en français du Québec. Fonctionne sur ordi comme sur téléphone.</p>
+    <p>Neuf petits outils, une seule page, en français du Québec. Fonctionne sur ordi comme sur téléphone.</p>
     <p>HP — Des outils pour la vraie vie. Comprendre. Agir. Transmettre.</p>
     <p class="qr-pied"><img src="/images/qr-hp-outils.png" alt="Code QR — https://www.hp-outils.com/" width="96" height="96" style="background:#fff;padding:6px;border-radius:8px" /></p>
     <p class="lien-canon">👉 <a href="https://www.hp-outils.com/" style="display:inline-flex;min-height:48px;align-items:center">https://www.hp-outils.com/</a></p>
@@ -2114,7 +2150,7 @@ function keySVG(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentC
 /* ============================== Tabs ============================== */
 (function initTabs(){
   var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
-  var panels = { "tab-heritage":"panel-heritage", "tab-decideur":"panel-decideur", "tab-paperasse":"panel-paperasse", "tab-comparateur":"panel-comparateur", "tab-demeleur":"panel-demeleur", "tab-demarches":"panel-demarches", "tab-coffre":"panel-coffre", "tab-relanceur":"panel-relanceur" };
+  var panels = { "tab-heritage":"panel-heritage", "tab-decideur":"panel-decideur", "tab-paperasse":"panel-paperasse", "tab-comparateur":"panel-comparateur", "tab-demeleur":"panel-demeleur", "tab-demarches":"panel-demarches", "tab-coffre":"panel-coffre", "tab-relanceur":"panel-relanceur", "tab-verifie":"panel-verifie" };
   function select(tab, focus){
     tabs.forEach(function(t){
       var on = t===tab;
@@ -2125,7 +2161,7 @@ function keySVG(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentC
     });
     try { if (tab.id !== "tab-coffre" && window.__cfLock) window.__cfLock(); } catch(e){}
     if (focus) tab.focus();
-    var map = { "tab-heritage":"heritage", "tab-decideur":"decideur", "tab-paperasse":"paperasse", "tab-comparateur":"comparateur", "tab-demeleur":"demeleur", "tab-demarches":"demarches", "tab-coffre":"coffre", "tab-relanceur":"relanceur" };
+    var map = { "tab-heritage":"heritage", "tab-decideur":"decideur", "tab-paperasse":"paperasse", "tab-comparateur":"comparateur", "tab-demeleur":"demeleur", "tab-demarches":"demarches", "tab-coffre":"coffre", "tab-relanceur":"relanceur", "tab-verifie":"verifie-avant-de-payer" };
     try { history.replaceState(null,"","#"+map[tab.id]); } catch(e){}
     window.scrollTo({ top:0, behavior:"smooth" });
   }
@@ -2162,7 +2198,8 @@ function keySVG(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentC
       "demeleur":"tab-demeleur","le-demeleur":"tab-demeleur","appel":"tab-demeleur","appels":"tab-demeleur",
       "demarches":"tab-demarches","demarche":"tab-demarches","prochaineetape":"tab-demarches","la-prochaine-etape":"tab-demarches","prochaine-etape":"tab-demarches","etapes":"tab-demarches",
       "coffre":"tab-coffre","coffreacodes":"tab-coffre","coffre-a-codes":"tab-coffre","coffre-a-code":"tab-coffre","codes":"tab-coffre",
-      "relanceur":"tab-relanceur","le-relanceur":"tab-relanceur","promesses":"tab-relanceur","relances":"tab-relanceur"
+      "relanceur":"tab-relanceur","le-relanceur":"tab-relanceur","promesses":"tab-relanceur","relances":"tab-relanceur",
+      "verifieavantdepayer":"tab-verifie","verifie-avant-de-payer":"tab-verifie","verifie":"tab-verifie","fauxpresident":"tab-verifie","antifauxpresident":"tab-verifie","anti-faux-president":"tab-verifie"
     };
     if (ali[raw]) {
       select($(ali[raw]), false);
@@ -3838,7 +3875,7 @@ xRenderList();
   if (!input) return;
   if (!input.value.trim()){ input.value = location.href.split("#")[0].split("?")[0]; }
   var slug = "paperasse";
-  var TITLES = { paperasse:"Le décodeur de paperasse", decideur:"On tranche !", heritage:"L’héritage vivant", comparateur:"Le vrai prix au 100 g", demeleur:"Le Démêleur", demarches:"Démarches — la prochaine étape", coffre:"Le Coffre à codes", relanceur:"Le Relanceur" };
+  var TITLES = { paperasse:"Le décodeur de paperasse", decideur:"On tranche !", heritage:"L’héritage vivant", comparateur:"Le vrai prix au 100 g", demeleur:"Le Démêleur", demarches:"Démarches — la prochaine étape", coffre:"Le Coffre à codes", relanceur:"Le Relanceur", "verifie-avant-de-payer":"Vérifie avant de payer" };
   var libPromise = null;
 
   function ensureLib(){
