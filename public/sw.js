@@ -2,16 +2,25 @@
 /* Pack hors ligne HP Outils — service worker.
    Garde la Boite a outils, les outils autonomes, En cuisine, le Passeur
    et 6 jeux legers sur l'appareil pour qu'ils fonctionnent sans internet.
-   Cache-first, version a changer (hp-hors-ligne-4 -> hp-hors-ligne-5)
-   pour mettre le pack a jour. Portee : tout le site (/).
+   Cache-first, version hp-hors-ligne-5 (lot Boite 24 nov. 2026 :
+   /boite/ corrigee + 8 images d'outils ajoutees au pack). Portee : tout le site (/).
    Seuls les fichiers de la liste PACK sont mis en cache ; le reste
    passe par le reseau, et une navigation sans reseau tombe sur
    /hors-ligne.html. Aucune donnee saisie ne quitte l'appareil. */
-var V = 'hp-hors-ligne-4';
+var V = 'hp-hors-ligne-5';
 var PACK = [
   '/manifest.webmanifest',
   '/hors-ligne.html',
   '/boite/index.html',
+  /* Lot Boite 24 nov. 2026 : images reelles des 8 outils. */
+  '/images/outils/outil-1-heritage.webp',
+  '/images/outils/outil-2-decideur.webp',
+  '/images/outils/outil-3-paperasse.webp',
+  '/images/outils/outil-4-comparateur.webp',
+  '/images/outils/outil-5-demeleur.webp',
+  '/images/outils/outil-6-demarches.webp',
+  '/images/outils/outil-7-coffre.webp',
+  '/images/outils/outil-8-relanceur.webp',
   '/boite/assets/manifest.webmanifest',
   '/boite/assets/icon-512.png',
   '/boite/assets/apple-touch-icon.png',
