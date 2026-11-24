@@ -9,7 +9,7 @@ export const Route = createFileRoute("/jeux")({
   head: () => ({
     ...createSeoHead({
       title: "Jeux gratuits en français du Québec — 57 jeux en ligne | HP Outils",
-      description: "Des jeux gratuits créés au Québec — 57 jeux : enquêtes, stratégie, arcade, mots cachés, mémoire, gestion et histoires interactives. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
+      description: "Des jeux gratuits créés au Québec — 57 jeux gratuits : enquêtes, stratégie, arcade, mots cachés, mémoire et gestion. Sans compte, sans téléchargement — vous jouez dans votre navigateur.",
       path: "/jeux",
       imagePath: "/images/og-jeux.jpg",
     }),
@@ -99,7 +99,8 @@ const GAMES: { title: string; file: string; copy: string; tag: string; faits?: s
 ];
 
 // Compteur option B : Mini-jeux HP compte pour 3 jeux (1 tuile, 3 jeux) — source unique du chiffre public.
-const JEUX_JOUABLES = GAMES.length + 2;
+const MINI_JEUX_HP_COMPTE = 3;
+const JEUX_JOUABLES = GAMES.length + (MINI_JEUX_HP_COMPTE - 1);
 
 const PALETTES: [string, string][] = [
   ["#08243a", "#0f3e62"],
@@ -709,12 +710,14 @@ function JeuxPage() {
   const nombreResultats =
     visibleGames.length + (vedetteVisible ? 1 : 0);
   /* Comptes des filtres (lot /jeux façon Friv) : calculés sur GAMES, donc
-     conformes à la liste exacte approuvée — Tous (56), Quiz (3), etc.
+     conformes à la liste exacte approuvée — Tous (57), Mini-jeux (3), Quiz (3), etc.
      La carte vedette compte dans son genre quand elle correspond. */
   const compterGenre = (g: string) =>
     g === "Tous"
       ? `${JEUX_JOUABLES} jeux`
-      : GAMES.filter((x) => x.tag.split(" · ")[0] === g).length;
+      : g === "Mini-jeux"
+        ? MINI_JEUX_HP_COMPTE
+        : GAMES.filter((x) => x.tag.split(" · ")[0] === g).length;
   return (
     <div className="page-jeux-arcade">
       <section id="sec-jeux" className="editorial-hero hero-banner-image jeux-hero">
