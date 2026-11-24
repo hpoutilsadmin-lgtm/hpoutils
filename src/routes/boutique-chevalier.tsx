@@ -36,7 +36,7 @@ function Page() {
           </p>
           <div className="lead-actions">
             <a
-              href="/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html"
+              href="/apps/chevalier-du-fleuve/chevalier-du-fleuve-v2.0.html"
               className="btn-ghost"
             >
               Jouer à Chevalier du fleuve →

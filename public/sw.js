@@ -2,12 +2,12 @@
 /* Pack hors ligne HP Outils — service worker.
    Garde la Boite a outils, les outils autonomes, En cuisine, le Passeur
    et 6 jeux legers sur l'appareil pour qu'ils fonctionnent sans internet.
-   Cache-first, version hp-hors-ligne-5 (lot Boite 24 nov. 2026 :
-   /boite/ corrigee + 8 images d'outils ajoutees au pack). Portee : tout le site (/).
+   Cache-first, version hp-hors-ligne-6 (lot Chevalier V2 24 nov. 2026 :
+   Chevalier du fleuve v2.0 remplace la v1.4 dans le pack). Portee : tout le site (/).
    Seuls les fichiers de la liste PACK sont mis en cache ; le reste
    passe par le reseau, et une navigation sans reseau tombe sur
    /hors-ligne.html. Aucune donnee saisie ne quitte l'appareil. */
-var V = 'hp-hors-ligne-5';
+var V = 'hp-hors-ligne-6';
 var PACK = [
   '/manifest.webmanifest',
   '/hors-ligne.html',
@@ -88,7 +88,7 @@ var PACK = [
   '/apps/slalomeuse/index.html',
   '/apps/slalomeuse/game.js',
   '/apps/votre-ia-parle-t-elle-quebecois/votre-ia-parle-t-elle-quebecois-v1.html',
-  '/apps/chevalier-du-fleuve/chevalier-du-fleuve-v1.4.html',
+  '/apps/chevalier-du-fleuve/chevalier-du-fleuve-v2.0.html',
   '/barre/barre-jeu.js',
   '/apps/sur-lherbe/sur-lherbe-v1.0.html',
   /* Lot /jeux + 5 jeux (11 nov. 2026) : les 11 nouveaux jeux
