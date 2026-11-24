@@ -391,6 +391,14 @@
       li.appendChild(b);
       liste.appendChild(li);
     }
+    /* 24 nov. 2026 (go HP) : lien externe — même gabarit que item(),
+       en ancre <a> (nouvel onglet, ne quitte pas le site). */
+    function lien(label, href) {
+      var li = el("li");
+      var a = el("a", { href: href, target: "_blank", rel: "noopener" }, label);
+      li.appendChild(a);
+      liste.appendChild(li);
+    }
     item("Copier le lien de la page", function () {
       var lien = window.location.href;
       function ok() { dire("Lien copié."); }
@@ -422,7 +430,19 @@
        Le panneau « Plus » ne garde que les fonctions secondaires
        (copier, haut de page, imprimer, partager…) : aucune
        navigation de section ne reste ici. */
-    item("Réseaux sociaux", null, true);
+    /* 24 nov. 2026 (go HP) : « Cartes de souhaits » ajoutée dans le
+       panneau Plus (la page /cartes-de-souhaits est en ligne depuis
+       le 22 nov. 2026 — l'encadré accueil et le bouton « Cartes » du
+       menu restent dans le LOT-CARTES-FETES, non déposé) ; « Réseaux
+       sociaux » branché — l'item pilote désactivé est remplacé par
+       les 4 comptes réels, vérifiés en direct le 24 nov. 2026
+       (Instagram @hpoutils, Facebook HP-Des outils pour la vraie
+       vie., TikTok @hp2zl, YouTube @hp-2zl). */
+    item("Cartes de souhaits", function () { window.location.href = "/cartes-de-souhaits"; });
+    lien("Instagram — @hpoutils", "https://www.instagram.com/hpoutils/");
+    lien("Facebook — HP-Des outils pour la vraie vie.", "https://www.facebook.com/1186804767843963");
+    lien("TikTok — @hp2zl", "https://www.tiktok.com/@hp2zl");
+    lien("YouTube — @hp-2zl", "https://www.youtube.com/@hp-2zl");
     zonePanneau.appendChild(liste);
     zonePanneau.appendChild(el("p", { "class": "bh-note" },
       "Règle du cahier : une fonction non disponible est désactivée, jamais présentée comme fonctionnelle. Les fonctions marquées « pilote » seront branchées à l'intégration, une par une."));
