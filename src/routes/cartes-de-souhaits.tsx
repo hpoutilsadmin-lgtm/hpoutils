@@ -206,7 +206,7 @@ function Page() {
     const lien = lienCarte();
     try {
       await navigator.clipboard.writeText(lien);
-      setAvis("Lien copié — collez-le où vous voulez : la personne verra votre carte et votre message.");
+      setAvis("Lien copié — collez-le où vous voulez.");
     } catch {
       /* Repli vieux navigateurs : copie par sélection manuelle. */
       const zone = document.createElement("textarea");
@@ -215,7 +215,7 @@ function Page() {
       zone.select();
       try {
         document.execCommand("copy");
-        setAvis("Lien copié — collez-le où vous voulez : la personne verra votre carte et votre message.");
+        setAvis("Lien copié — collez-le où vous voulez.");
       } catch {
         setAvis("La copie automatique n'a pas fonctionné — voici le lien à copier : " + lien);
       }
@@ -256,7 +256,6 @@ function Page() {
 
       <section aria-labelledby="titre-choisir">
         <h2 id="titre-choisir">1. Choisissez votre carte</h2>
-        <p>Dix cartes originales, dessinées pour HP Outils. Touchez une carte pour la choisir.</p>
         <div className="galerie" role="group" aria-label="Galerie des cartes">
           {CARTES.map((c) => (
             <button
@@ -276,7 +275,7 @@ function Page() {
 
       <section aria-labelledby="titre-cocasse">
         <h2 id="titre-cocasse">2. Ou une carte cocasse&nbsp;?</h2>
-        <p>Douze cartes cocasses : une phrase douce dehors, la chute comique dedans. Touchez une carte pour l'ouvrir et la choisir.</p>
+        <p>Une phrase douce dehors, la chute comique dedans.</p>
         <div className="galerie-cocasse" role="group" aria-label="Galerie des cartes cocasses">
           {COCASSES.map((c) => (
             <button
@@ -302,7 +301,7 @@ function Page() {
           <div className="panneau">
             <label htmlFor="destinataire">Pour qui est cette carte&nbsp;?</label>
             <input type="text" id="destinataire" maxLength={60} placeholder="Ex. : Marie, mon ami Jean…" value={pour} onChange={(e) => setPour(e.target.value)} />
-            <label htmlFor="message">Votre message <span className="note">(parlez-lui directement, comme dans une vraie carte)</span></label>
+            <label htmlFor="message">Votre message</label>
             <textarea ref={champMessage} id="message" maxLength={400} placeholder="Écrivez votre petit mot ici…" value={message} onChange={(e) => setMessage(e.target.value)} />
             <p className="compteur"><span>{message.length}</span> / 400 caractères</p>
             <label htmlFor="expediteur">De la part de</label>
@@ -337,30 +336,27 @@ function Page() {
                 </>
               ) : null}
             </div>
+            <div className="boutons">
+              <button type="button" className="bouton-principal" onClick={copierLien}>Copier le lien de ma carte</button>
+              <button type="button" className="bouton-doux" onClick={recommencer}>Recommencer</button>
+            </div>
+            {/* Idée croisée APRÈS les boutons (LOT-CARTES-EPURATION, 24 nov. 2026) :
+                rien entre l'aperçu et les gestes — la suggestion ne coupe plus le chemin. */}
             {carteChoisie.idee ? (
               <p className="idee-croisee">
                 {carteChoisie.idee.texte} <Link to={carteChoisie.idee.lien}>{carteChoisie.idee.lienTexte}</Link>
               </p>
             ) : null}
-            <div className="boutons">
-              <button type="button" className="bouton-principal" onClick={copierLien}>Copier le lien de ma carte</button>
-              <button type="button" className="bouton-doux" onClick={recommencer}>Recommencer</button>
-            </div>
             <p className="note" role="status">{avis}</p>
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="titre-comment">
-        <h2 id="titre-comment">Comment ça marche&nbsp;?</h2>
-        <ol>
-          <li><strong>Vous choisissez</strong> une carte : dix modèles classiques ou douze cartes cocasses ci-dessus.</li>
-          <li><strong>Vous écrivez</strong> votre message, ou vous partez d'un exemple proposé.</li>
-          <li><strong>Vous regardez l'aperçu</strong> : c'est exactement ce que la personne recevra.</li>
-          <li><strong>Vous copiez le lien de votre carte</strong> et vous l'envoyez vous-même à la personne — par courriel, par message, comme vous voulez.</li>
-        </ol>
-        <p className="note">Toutes les cartes sont des créations originales de HP Outils : aucun visuel copié, aucune marque, aucun texte emprunté. Ce ne sont pas des cartes-cadeaux : aucune valeur d'argent, juste un mot gentil.</p>
-      </section>
+      {/* Note d'origine en pied de page (LOT-CARTES-EPURATION, 24 nov. 2026) :
+          les 4 étapes répétaient les titres numérotés 1-2-3 et le bouton Copier ;
+          la note, elle, reste — c'est la seule phrase de cette section qui
+          apporte quelque chose (originalité, pas une carte-cadeau). */}
+      <p className="note">Toutes les cartes sont des créations originales de HP Outils : aucun visuel copié, aucune marque, aucun texte emprunté. Ce ne sont pas des cartes-cadeaux : aucune valeur d'argent, juste un mot gentil.</p>
     </main>
   );
 }
