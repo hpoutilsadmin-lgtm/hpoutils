@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import "./cartes-de-souhaits.css";
@@ -22,10 +22,21 @@ import "./cartes-de-souhaits.css";
    lot-cartes-fetes-23nov-2026/TEXTES-FETES-VERBATIM.md) ; arrivée par
    lien partagé : on défile jusqu'à l'aperçu et la cocasse arrive
    ouverte ; choisir une cocasse dans la galerie l'ouvre aussi dans
-   l'aperçu ; le lien de la carte est affiché sous le bouton ; retour
+   l'aperçu ; le lien de la carte se copie par le bouton sous l'aperçu
+   (adresse masquée, jamais affichée brute — correctif 26 nov. 2026) ; retour
    à l'accueil répété en bas de page. Vidéo en-tête : Gepeto ouvre une
    boîte (10 s, muette, boucle, affiche fixe si mouvement réduit —
-   personnage approuvé par HP 24 nov. 07 h 47, base v4 figée). */
+   personnage approuvé par HP 24 nov. 07 h 47, base v4 figée).
+   LOT-CARTES-EN-TETE (26 nov. 2026, décision HP 25 nov. 08 h 21 « Les
+   deux : légère maintenant, vidéo ensuite ») : en-tête ANIMÉE, légère —
+   portrait peint de Gepeto (public/hgpto/tete-pastille.png, vraie tête
+   peinte, jamais l'illustration plate), entrée avec 8 étincelles (kit
+   HP), hochement doux ±1,5° en boucle, rire au tap sur le portrait
+   (gepeto-rire.mp3, 0,9 s, sur le geste seulement, jamais automatique).
+   Mouvement réduit respecté : portrait statique, 0 étincelle, 0
+   hochement. La vidéo Fêtes reste en place sous le titre, intacte.
+   Partage = lien à copier seulement : AUCUN envoi par courriel, aucun
+   champ courriel, aucune donnée personnelle recueillie. */
 export const Route = createFileRoute("/cartes-de-souhaits")({
   validateSearch: (search: Record<string, unknown>): {
     carte?: string;
@@ -246,6 +257,41 @@ function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /* LOT-CARTES-EN-TETE (26 nov. 2026) : entrée de l'en-tête — une rafale
+     de 8 étincelles (kit HP, même motif que les rafales du kit) autour
+     du portrait de Gepeto, au montage seulement, jamais en boucle.
+     Mouvement réduit : pas de rafale (le portrait apparaît statique). */
+  const [entreeHero, setEntreeHero] = useState(false);
+
+  const mouvementReduit = () =>
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Petit rire de Gepeto, sur le geste seulement (jamais automatique) :
+     si le fichier est absent, pas de son — le portrait fonctionne quand
+     même, aucune erreur affichée. */
+  const jouerRire = () => {
+    try {
+      const audio = new Audio("/hgpto/gepeto-rire.mp3");
+      audio.volume = 0.9;
+      void audio.play().catch(() => {});
+    } catch {
+      /* Pas de son, pas de drame. */
+    }
+  };
+
+  /* Rafale d'entrée de l'en-tête (une seule fois, 1,1 s). Le CSS fait
+     l'entrée du portrait (scale 0.95 → 1, 250 ms ease-out) et le
+     hochement en boucle. */
+  useEffect(() => {
+    if (mouvementReduit()) return;
+    setEntreeHero(true);
+    const t = window.setTimeout(() => setEntreeHero(false), 1100);
+    return () => window.clearTimeout(t);
+    // Une seule fois, à l'arrivée.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const estCocasse = choix.kind !== "classique";
   const carteChoisie =
     choix.kind === "classique"
@@ -357,9 +403,41 @@ function Page() {
         <Link to="/">← Retour à l'accueil</Link>
       </p>
       <header className="hero">
-        <span className="lys" aria-hidden="true">⚜</span>
+        {/* LOT-CARTES-EN-TETE (26 nov. 2026) : le portrait peint de Gepeto
+            remplace le médaillon fleur de lys. Le portrait est un bouton
+            (84 px, ≥ 48 px) : au tap, le rire de Gepeto (0,9 s, sur le
+            geste seulement, jamais automatique). Entrée avec étincelles
+            (kit HP, 8 points) + hochement doux en boucle (CSS) ;
+            mouvement réduit : portrait statique, 0 étincelle. La figure
+            vidéo Fêtes sous le titre reste en place, intacte. */}
+        <span className="gepeto-entree">
+          {entreeHero ? (
+            <span className="pluie-etincelles" aria-hidden="true">
+              {Array.from({ length: 8 }, (_, i) => (
+                <span
+                  key={i}
+                  className="etincelle"
+                  style={
+                    {
+                      "--angle": `${i * 45}deg`,
+                      "--distance": `${48 + (i % 2) * 14}px`,
+                    } as CSSProperties
+                  }
+                />
+              ))}
+            </span>
+          ) : null}
+          <button
+            type="button"
+            className="gepeto-portrait"
+            aria-label="Écouter le rire de Sir H. Gepeto"
+            onClick={jouerRire}
+          >
+            <img className="gepeto-tete" src="/hgpto/tete-pastille.png" alt="" width="224" height="224" />
+          </button>
+        </span>
         <h1>Cartes de souhaits</h1>
-        <p>Choisissez une carte, écrivez votre message, et offrez un petit mot qui fait du bien. Comme dans les années 90 — mais en un clic.</p>
+        <p>Choisissez une carte, écrivez votre message, et offrez un petit mot qui fait du bien : voyez l'aperçu, copiez le lien de votre carte et partagez-le vous-même.</p>
         {/* LOT-CARTES-FETES — vidéo en-tête : Sir H. Gepeto ouvre une boîte
             (10 s, personnage approuvé par HP 24 nov. 07 h 47, base v4 figée
             — jamais régénéré). Lecture automatique muette en boucle ;
@@ -500,12 +578,16 @@ function Page() {
               </p>
             ) : null}
             <p className="note" role="status">{avis}</p>
-            {/* Le lien affiché en clair (adjoints 1 et 2) : si la copie
-                automatique échoue sur un vieux téléphone, la personne
-                peut toujours le copier à la main. Collez-le dans un
-                courriel, un texto ou Messenger : la personne verra
-                votre carte. */}
-            <p className="lien-visible">Votre lien : <code>{lienCarte()}</code></p>
+            {/* Plus d'URL brute affichée (correctif 26 nov. 2026) : l'adresse
+                encodée (%C3%A9, %27, +) se coupait en plein mot et ne se
+                lisait pas. Le lien reste derrière le bouton Copier, qui
+                copie toujours l'adresse complète et valide ; la
+                confirmation « Lien copié » s'affiche juste au-dessus.
+                Collez-le dans un courriel, un texto ou Messenger : la
+                personne verra votre carte. Si la copie automatique
+                échoue, le message d'avis affiche l'adresse à copier à
+                la main — c'est le seul endroit où elle apparaît. */}
+            <p className="lien-visible">Votre lien est prêt : touchez «&nbsp;Copier le lien de ma carte&nbsp;», puis collez-le où vous voulez.</p>
           </div>
         </div>
       </section>

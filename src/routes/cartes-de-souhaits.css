@@ -16,7 +16,40 @@
 .cartes-souhaits header.hero {background:linear-gradient(180deg,#F3E3C0,#FAF3E4);border-bottom:4px solid var(--or);text-align:center;padding:40px 16px 32px;color:var(--encre);min-height:0}
 .cartes-souhaits header.hero h1 {font-size:2.25rem;margin:0 0 8px;color:var(--brun)}
 .cartes-souhaits header.hero p {font-size:1.125rem;max-width:640px;margin:0 auto}
-.cartes-souhaits .lys {font-size:2.5rem;line-height:1;display:block;margin-bottom:8px}
+  /* ---------- En-tête animée légère (LOT-CARTES-EN-TETE, 26 nov. 2026,
+     décision HP « légère maintenant, vidéo ensuite ») : le médaillon
+     fleur de lys est remplacé par le portrait peint de Gepeto
+     (tete-pastille.png, vraie tête peinte), animé léger — entrée 250 ms
+     ease-out depuis scale(0.95) avec 8 étincelles (kit HP), hochement
+     doux ±1,5° en boucle, rire au tap. Design-hp : on n'anime que
+     transform et opacity, jamais ease-in, jamais d'entrée depuis
+     scale(0), :active scale(0.97) via la règle button:active du lot,
+     mouvement réduit = portrait statique, survol derrière (hover:hover)
+     et (pointer:fine) seulement. La vidéo Fêtes (figure .hero-video)
+     garde ses propres règles, intactes. */
+  /* Le portrait : médaillon rond au portrait peint de Gepeto, bordure
+     brune, ombre portée + ombre intérieure — la vraie tête peinte
+     ressort, comme un sceau sur la planche. L'entrée (250 ms ease-out,
+     depuis scale(0.95) + opacity 0, jamais scale(0)) vit sur
+     l'enveloppe .gepeto-entree ; le hochement doux en boucle vit sur
+     l'image. Les étincelles d'entrée réutilisent .pluie-etincelles /
+     .etincelle (kit HP, 8 points, 900 ms ease-out, une seule fois). */
+.cartes-souhaits .gepeto-entree {position:relative;display:inline-block;margin:0 auto 16px;animation:gepeto-entree 250ms ease-out both}
+@keyframes gepeto-entree {from {transform:scale(.95);opacity:0} to {transform:scale(1);opacity:1}}
+.cartes-souhaits .gepeto-entree .pluie-etincelles {z-index:1}
+.cartes-souhaits .gepeto-portrait {display:block;width:84px;height:84px;padding:0;border-radius:50%;overflow:hidden;border:3px solid var(--brun);background:radial-gradient(circle at 35% 30%,#F6D365 0%,#D9A860 55%,#C9973F 100%);box-shadow:0 4px 12px rgba(43,33,24,.35),inset 0 2px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(138,90,43,.45);cursor:pointer}
+.cartes-souhaits .gepeto-portrait:focus {outline:3px solid var(--or);outline-offset:2px}
+.cartes-souhaits .gepeto-tete {display:block;width:100%;height:100%;object-fit:cover;animation:gepeto-hochement 5s ease-in-out infinite;transform-origin:50% 60%}
+@keyframes gepeto-hochement {0%,100% {transform:rotate(0deg) translateY(0)} 25% {transform:rotate(1.5deg) translateY(1px)} 75% {transform:rotate(-1.5deg) translateY(0)}}
+  /* Poudre d'étincelles d'entrée : 8 points dorés, lancés depuis le
+     centre du portrait le long d'un angle fixe (--angle) et d'une
+     distance fixe (--distance), 900 ms ease-out, puis disparus. Le JS
+     ne rend les étincelles qu'une fois, au montage — jamais en boucle,
+     jamais sans geste. Mouvement réduit : le JS ne lance pas de rafale,
+     et l'animation est coupée ici aussi. */
+.cartes-souhaits .pluie-etincelles {position:absolute;inset:0;pointer-events:none;overflow:visible}
+.cartes-souhaits .etincelle {--angle:0deg;--distance:80px;position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:radial-gradient(circle,#F6D365 0%,#D9A860 55%,rgba(217,168,96,0) 100%);animation:etincelle-vol 900ms ease-out forwards}
+@keyframes etincelle-vol {from {transform:rotate(var(--angle)) translateX(0) scale(1);opacity:1} to {transform:rotate(var(--angle)) translateX(var(--distance)) scale(.2);opacity:0}}
   /* ---------- Vidéo en-tête (LOT-CARTES-FETES) : Gepeto ouvre une boîte.
      Un seul moment fort ; la vidéo ne déborde jamais (100 % de la
      colonne, max 960 px) ; affiche fixe sous mouvement réduit (rendu
@@ -47,7 +80,6 @@
   /* Lien de la carte affiché en clair sous le bouton (adjoints 1 et 2) :
      plan B si la copie automatique échoue — il se copie à la main. */
 .cartes-souhaits .lien-visible {font-size:.9375rem;background:var(--blanc);border:2px solid #E3D3AC;border-radius:10px;padding:12px 14px;margin:16px 0 0;overflow-wrap:anywhere}
-.cartes-souhaits .lien-visible code {overflow-wrap:anywhere;word-break:break-all}
 .cartes-souhaits .carte-choix {background:var(--blanc);border:3px solid #E3D3AC;border-radius:12px;padding:0;cursor:pointer;text-align:center;overflow:hidden;min-height:48px}
 .cartes-souhaits .carte-choix:focus {border-color:var(--or-fonce);outline:3px solid var(--or);outline-offset:2px}
 .cartes-souhaits .carte-choix[aria-pressed="true"] {border-color:var(--rouge);box-shadow:0 0 0 3px var(--or)}
@@ -123,6 +155,12 @@
 .cartes-souhaits button:active, .cartes-souhaits .bouton:active {transform:scale(.97)}
   @media (prefers-reduced-motion:reduce){
 .cartes-souhaits button:active, .cartes-souhaits .bouton:active {transform:none}
+  /* LOT-CARTES-EN-TETE : mouvement réduit = portrait statique — pas
+     d'entrée animée, pas de hochement, pas d'étincelle. On garde les
+     transitions d'opacité et de couleur utiles (design-hp). */
+.cartes-souhaits .gepeto-entree {animation:none}
+.cartes-souhaits .gepeto-tete {animation:none}
+.cartes-souhaits .etincelle {animation:none;display:none}
   }
 .cartes-souhaits .bouton-principal {background:var(--rouge);color:#fff;border-color:var(--rouge)}
 .cartes-souhaits .bouton-principal:focus {outline:3px solid var(--or);outline-offset:2px}
@@ -134,6 +172,7 @@
 .cartes-souhaits .carte-cocasse:hover {border-color:var(--or-fonce);outline:3px solid var(--or);outline-offset:2px}
 .cartes-souhaits .exemple:hover {border-color:var(--brun);outline:3px solid var(--or);outline-offset:1px}
 .cartes-souhaits .bouton-principal:hover, .cartes-souhaits .bouton-doux:hover, .cartes-souhaits .apercu-ouvrir:hover {outline:3px solid var(--or);outline-offset:2px}
+.cartes-souhaits .gepeto-portrait:hover {outline:3px solid var(--or);outline-offset:2px}
   }
   /* ---------- Tablette ---------- */
   @media (max-width:900px){
@@ -143,6 +182,8 @@
   }
   /* ---------- Téléphone ---------- */
   @media (max-width:600px){
+.cartes-souhaits .gepeto-portrait {width:72px;height:72px}
+.cartes-souhaits .gepeto-entree {margin-bottom:12px}
 .cartes-souhaits header.hero h1 {font-size:1.75rem}
 .cartes-souhaits header.hero p {font-size:1.0625rem}
 .cartes-souhaits .galerie, .cartes-souhaits .galerie-cocasse {grid-template-columns:repeat(2,1fr)}
