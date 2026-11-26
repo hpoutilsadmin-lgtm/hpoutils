@@ -406,6 +406,25 @@ body, .hp-app{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",
 .banniere-noel p strong{color:#8a6d1f}
 .banniere-noel-cta{display:inline-flex;align-items:center;min-height:48px;padding:10px 20px;border-radius:999px;background:#d89532;color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}
 .banniere-noel-cta:hover{background:#b97f24}
+/* LOT-CARTES-FETES (23 nov. 2026) : encadré Cartes de souhaits sur
+   l'accueil — cadre rouge et vert (mot d'HP : la palette fermée cède
+   ici devant son mot direct), couronne lumineuse, « Carte à souhait :
+   gratuit ». Un seul moment fort, dans le hero, visible sans défiler.
+   La couronne pulse doucement (mouvement réduit respecté). */
+.encadre-cartes-fetes{display:flex;align-items:center;gap:16px;max-width:700px;margin:0 0 28px;padding:14px 18px;background:#FAF3E4;border:4px solid #C0392B;outline:3px solid #1E7A34;outline-offset:-1px;border-radius:14px;color:#2B2118;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.encadre-cartes-fetes:hover,.encadre-cartes-fetes:focus-visible{box-shadow:0 0 0 3px #D9A860,0 4px 16px rgba(0,0,0,.25)}
+.encadre-cartes-couronne{flex:0 0 auto;width:72px;height:72px;border-radius:50%;animation:encadre-cartes-lueur 2.4s ease-in-out infinite}
+@keyframes encadre-cartes-lueur{0%,100%{filter:drop-shadow(0 0 2px rgba(217,168,96,.6))}50%{filter:drop-shadow(0 0 10px rgba(217,168,96,1))}}
+@media (prefers-reduced-motion:reduce){.encadre-cartes-couronne{animation:none}}
+.encadre-cartes-texte{display:flex;flex-direction:column;gap:2px}
+.encadre-cartes-texte strong{font-family:Georgia,serif;font-size:20px;line-height:1.3;color:#C0392B}
+.encadre-cartes-texte span{font-size:15px;line-height:1.45;color:#2B2118}
+@media (max-width:600px){
+  .encadre-cartes-fetes{gap:12px;padding:12px 14px}
+  .encadre-cartes-couronne{width:56px;height:56px}
+  .encadre-cartes-texte strong{font-size:18px}
+  .encadre-cartes-texte span{font-size:14px}
+}
 @media (max-width:860px){
   .banniere-noel{padding:12px 16px}
   .banniere-noel p{font-size:15px}

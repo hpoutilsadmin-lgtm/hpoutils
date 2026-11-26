@@ -1,21 +1,31 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createSeoHead } from "@/lib/seo";
 import "./cartes-de-souhaits.css";
 
-/* /cartes-de-souhaits — LOT-CARTES v3 (22 nov. 2026).
-   Images finales : 22 WebP 800×800 dans public/images/cartes-de-souhaits/
-   (10 classiques + 12 cocasses), rendues en <img> à chargement différé.
-   Les SVG v2 codés ont été supprimés de la route (rejetés par HP) :
-   plus aucune chaîne svg, plus d'injection de HTML brut.
+/* /cartes-de-souhaits — LOT-CARTES v3 (22 nov. 2026) + LOT-CARTES-FETES (23 nov. 2026).
+   Images finales : 34 WebP 800×800 dans public/images/cartes-de-souhaits/
+   (10 classiques + 12 cocasses + 12 cocasses des Fêtes), rendues en <img>
+   à chargement différé. Les SVG v2 codés ont été supprimés de la route
+   (rejetés par HP) : plus aucune chaîne svg, plus d'injection de HTML brut.
    Idées croisées (lot-cartes-22nov-2026/idees-croisees-cartes.md) : sous
    l'aperçu de la carte choisie, quand la carte en a une — libellé exact,
    lien vers la vraie page HP, aucun prix. Aucune idée pour : Bonne année,
-   Toilettes, Carnet, Douche, Frigo 2 h, Lundi nuage.
+   Toilettes, Carnet, Douche, Frigo 2 h, Lundi nuage, Cheminée, Renne,
+   Culottes, Sapin-aiguilles, Carottes, Bas, Gui.
    Comportements gardés : tap pour ouvrir une cocasse, une seule ouverte
    à la fois ; partage = lien à copier (?carte=&pour=&message=&de=) ;
    AUCUN envoi — aucun lien courriel, aucun appel réseau. Les 12 exemples sont repris VERBATIM.
-   Aucun prix, aucun paiement, aucune adresse courriel demandée. */
+   Aucun prix, aucun paiement, aucune adresse courriel demandée.
+   LOT-CARTES-FETES : 12 cocasses des Fêtes (Mère Noël, Père Noël, renne
+   au nez rouge — textes validés par HP mot pour mot, voir
+   lot-cartes-fetes-23nov-2026/TEXTES-FETES-VERBATIM.md) ; arrivée par
+   lien partagé : on défile jusqu'à l'aperçu et la cocasse arrive
+   ouverte ; choisir une cocasse dans la galerie l'ouvre aussi dans
+   l'aperçu ; le lien de la carte est affiché sous le bouton ; retour
+   à l'accueil répété en bas de page. Vidéo en-tête : Gepeto ouvre une
+   boîte (10 s, muette, boucle, affiche fixe si mouvement réduit —
+   personnage approuvé par HP 24 nov. 07 h 47, base v4 figée). */
 export const Route = createFileRoute("/cartes-de-souhaits")({
   validateSearch: (search: Record<string, unknown>): {
     carte?: string;
@@ -130,6 +140,43 @@ const COCASSES: Cocasse[] = [
     idee:{ texte:"À offrir avec un atelier, pour monter sur scène.", lien:"/ateliers", lienTexte:"Voir les ateliers" } },
 ];
 
+/* LOT-CARTES-FETES (23 nov. 2026) : 12 cocasses des Fêtes — Mère Noël,
+   Père Noël, renne au nez rouge et toute la bande. Textes 100 % originaux,
+   TU comme les 12 cocasses existantes, validés par HP mot pour mot
+   (TEXTES-FETES-VERBATIM.md). Images : gravure bois brun doré sur crème,
+   800×800, WebP < 200 Ko, comme les 22 existantes. */
+const COCASSES_FETES: Cocasse[] = [
+  { id:"fetes-1", dehors:"Je te souhaite un Noël aussi doux que les biscuits de Mère Noël…", dedans:"mais ne le dis pas à Mère Noël : elle m'a pogné la main dans le pot. J'ai mangé ton biscuit.",
+    image:"/images/cartes-de-souhaits/fetes-01-biscuits-mere-noel.webp", alt:"Pot à biscuits de Mère Noël sur l'établi, une main pognée dedans",
+    idee:{ texte:"À offrir avec une recette de biscuits, à cuisiner ensemble.", lien:"/en-cuisine", lienTexte:"Voir les recettes" } },
+  { id:"fetes-2", dehors:"Tu es le plus beau cadeau sous mon sapin…", dedans:"après le Père Noël, qui est resté pogné dans ma cheminée. On le sort à la Saint-Sylvestre.",
+    image:"/images/cartes-de-souhaits/fetes-02-pere-noel-cheminee.webp", alt:"Père Noël pogné dans une cheminée de brique, jambes en l'air dans la neige" },
+  { id:"fetes-3", dehors:"Tu illumines mes Fêtes…", dedans:"comme le nez du renne. Sauf que lui, il rougit juste quand il me voit en pyjama.",
+    image:"/images/cartes-de-souhaits/fetes-03-renne-nez-rouge.webp", alt:"Renne au nez rouge lumineux dans la forêt enneigée la nuit" },
+  { id:"fetes-4", dehors:"Joyeux Noël ! Je t'ai préparé une belle surprise…", dedans:"je t'ai pogné les culottes à l'air devant le sapin. Joyeux Noël pareil !",
+    image:"/images/cartes-de-souhaits/fetes-04-culottes-sapin.webp", alt:"Personne en pyjama surprise devant le sapin décoré, vue de dos" },
+  { id:"fetes-5", dehors:"J'ai demandé au Père Noël de t'apporter quelque chose de beau…", dedans:"le lutin m'a dit que t'étais sur la liste des tannants. Ça tombe bien, moi aussi.",
+    image:"/images/cartes-de-souhaits/fetes-05-liste-tannants.webp", alt:"Petit lutin de Noël tenant une longue liste de tannants",
+    idee:{ texte:"À envoyer avec une partie de jeu, pour rire ensemble.", lien:"/jeux", lienTexte:"Voir les jeux" } },
+  { id:"fetes-6", dehors:"Tu es la plus belle chose de mon réveillon…", dedans:"après la dinde. Non, attends… avant la dinde. Bon, on partage.",
+    image:"/images/cartes-de-souhaits/fetes-06-dinde-reveillon.webp", alt:"Dinde dorée du réveillon sur la table de bois, chandelles allumées",
+    idee:{ texte:"À offrir avec une recette du réveillon.", lien:"/en-cuisine", lienTexte:"Voir les recettes" } },
+  { id:"fetes-7", dehors:"Notre amour est comme un sapin…", dedans:"il perd ses aiguilles partout dans le salon, pis on l'aime pareil.",
+    image:"/images/cartes-de-souhaits/fetes-07-sapin-aiguilles.webp", alt:"Sapin de Noël qui perd ses aiguilles partout dans le salon" },
+  { id:"fetes-8", dehors:"Je t'aime comme la bûche de Noël…", dedans:"je te mange un petit bout chaque fois que personne ne regarde.",
+    image:"/images/cartes-de-souhaits/fetes-08-buche-noel.webp", alt:"Bûche de Noël au chocolat avec un petit bout mangé, sur une planche de bois",
+    idee:{ texte:"À offrir avec la recette de la bûche.", lien:"/en-cuisine", lienTexte:"Voir les recettes" } },
+  { id:"fetes-9", dehors:"Je t'ai gardé le plus beau cadeau…", dedans:"le renne a mangé les carottes, le Père Noël a bu le lait, pis il reste juste moi.",
+    image:"/images/cartes-de-souhaits/fetes-09-carottes-renne.webp", alt:"Renne qui mange des carottes près de la cheminée, verre de lait vide" },
+  { id:"fetes-10", dehors:"Monte dans le traîneau, on part pour Noël…", dedans:"Mère Noël conduit, le Père Noël ronfle, pis le renne connaît le chemin par cœur.",
+    image:"/images/cartes-de-souhaits/fetes-10-mere-noel-traineau.webp", alt:"Mère Noël qui conduit le traîneau dans la nuit, Père Noël endormi à côté",
+    idee:{ texte:"À envoyer avec une partie de jeu, pour le voyage.", lien:"/jeux", lienTexte:"Voir les jeux" } },
+  { id:"fetes-11", dehors:"J'ai mis ton cadeau dans ton bas de Noël…", dedans:"il a passé dans le trou du talon. Il est rendu sous le divan.",
+    image:"/images/cartes-de-souhaits/fetes-11-bas-noel.webp", alt:"Bas de Noël troué au talon près de la cheminée, petit cadeau sous le divan" },
+  { id:"fetes-12", dehors:"À minuit, je t'embrasse sous le gui…", dedans:"sauf que le gui, c'est le sapin, pis minuit, c'est rendu 2 h du matin.",
+    image:"/images/cartes-de-souhaits/fetes-12-gui-minuit.webp", alt:"Branche de gui au-dessus du sapin la nuit, horloge qui indique 2 h du matin" },
+];
+
 const EXEMPLES: Exemple[] = [
   { titre:"Pensée du jour", texte:"Je voulais te dire que je pense à toi aujourd'hui. Bonne journée." },
   { titre:"Pensée du jour", texte:"Tu m'as traversé l'esprit ce matin, alors je t'envoie ce petit mot : je pense à toi, et je te souhaite une belle journée." },
@@ -150,16 +197,22 @@ const ORIGINE = "https://www.hp-outils.com";
 
 function Page() {
   const recherche = Route.useSearch();
-  const choixInitial = ((): { kind: "classique" | "cocasse"; id: string } => {
+  const choixInitial = ((): { kind: "classique" | "cocasse" | "fetes"; id: string } => {
     if (typeof recherche.carte === "string") {
       if (CARTES.some((c) => c.id === recherche.carte)) return { kind: "classique", id: recherche.carte };
       if (COCASSES.some((c) => c.id === recherche.carte)) return { kind: "cocasse", id: recherche.carte };
+      if (COCASSES_FETES.some((c) => c.id === recherche.carte)) return { kind: "fetes", id: recherche.carte };
     }
     return { kind: "classique", id: CARTES[0].id };
   })();
   const [choix, setChoix] = useState(choixInitial);
-  const [cocasseOuverteId, setCocasseOuverteId] = useState<string | null>(null);
-  const [apercuOuvert, setApercuOuvert] = useState(false);
+  /* Arrivée par lien partagé (?carte= cocasse ou Fêtes) : la carte arrive
+     déjà ouverte dans sa galerie ET dans l'aperçu (adjoints 2 et 3, P1/P2) —
+     la personne qui reçoit la carte voit sa chute sans chercher. */
+  const [cocasseOuverteId, setCocasseOuverteId] = useState<string | null>(choixInitial.kind === "cocasse" ? choixInitial.id : null);
+  const [cocasseFetesOuverteId, setCocasseFetesOuverteId] = useState<string | null>(choixInitial.kind === "fetes" ? choixInitial.id : null);
+  const [apercuOuvert, setApercuOuvert] = useState(choixInitial.kind !== "classique");
+  const apercuRef = useRef<HTMLDivElement | null>(null);
   const [pour, setPour] = useState(recherche.pour !== undefined ? recherche.pour.slice(0, 60) : "");
   const [message, setMessage] = useState(
     recherche.message !== undefined ? recherche.message.slice(0, 400) : MESSAGE_DEFAUT,
@@ -168,25 +221,77 @@ function Page() {
   const [avis, setAvis] = useState("");
   const champMessage = useRef<HTMLTextAreaElement | null>(null);
 
-  const estCocasse = choix.kind === "cocasse";
-  const carteChoisie = estCocasse
-    ? (COCASSES.find((c) => c.id === choix.id) ?? COCASSES[0])
-    : (CARTES.find((c) => c.id === choix.id) ?? CARTES[0]);
-  const dehorsChoisi = estCocasse
-    ? (COCASSES.find((c) => c.id === choix.id) ?? COCASSES[0]).dehors
-    : "";
-  const dedansChoisi = estCocasse
-    ? (COCASSES.find((c) => c.id === choix.id) ?? COCASSES[0]).dedans
-    : "";
+  /* Vidéo en-tête (LOT-CARTES-FETES) : affiche fixe si mouvement réduit.
+     État (pas de lecture directe au rendu) pour ne pas casser
+     l'hydratation : le serveur rend la vidéo, le client corrige après
+     montage. */
+  const [prefereMouvementReduit, setPrefereMouvementReduit] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefereMouvementReduit(mq.matches);
+    const maj = (e: MediaQueryListEvent) => setPrefereMouvementReduit(e.matches);
+    mq.addEventListener("change", maj);
+    return () => mq.removeEventListener("change", maj);
+  }, []);
+
+  /* Arrivée par lien partagé : on amène la personne directement à son
+     aperçu (adjoints 2 et 3, P1/P2) — pas au haut de la page, devant
+     deux galeries à défiler. Mouvement réduit respecté. */
+  useEffect(() => {
+    if (choixInitial.kind !== "classique") {
+      const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      apercuRef.current?.scrollIntoView({ behavior: reduit ? "auto" : "smooth", block: "start" });
+    }
+    // Une seule fois, à l'arrivée : le choix initial ne change pas.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const estCocasse = choix.kind !== "classique";
+  const carteChoisie =
+    choix.kind === "classique"
+      ? (CARTES.find((c) => c.id === choix.id) ?? CARTES[0])
+      : choix.kind === "cocasse"
+        ? (COCASSES.find((c) => c.id === choix.id) ?? COCASSES[0])
+        : (COCASSES_FETES.find((c) => c.id === choix.id) ?? COCASSES_FETES[0]);
+  const cocasseChoisie = estCocasse
+    ? (choix.kind === "cocasse"
+        ? (COCASSES.find((c) => c.id === choix.id) ?? COCASSES[0])
+        : (COCASSES_FETES.find((c) => c.id === choix.id) ?? COCASSES_FETES[0]))
+    : null;
+  const dehorsChoisi = cocasseChoisie ? cocasseChoisie.dehors : "";
+  const dedansChoisi = cocasseChoisie ? cocasseChoisie.dedans : "";
+  /* Nom rappelé dans l'aperçu (adjoint 3, P3) : on ne se souvient plus
+     toujours de la carte choisie après avoir parcouru les galeries. */
+  const nomAffiche =
+    choix.kind === "classique"
+      ? (CARTES.find((c) => c.id === choix.id) ?? CARTES[0]).nom
+      : choix.kind === "cocasse"
+        ? "Carte cocasse"
+        : "Carte cocasse des Fêtes";
 
   const choisirClassique = (c: Carte) => {
     setChoix({ kind: "classique", id: c.id });
     setApercuOuvert(false);
   };
+  /* Ouvrir une cocasse dans la galerie l'ouvre aussi dans l'aperçu
+     (adjoints 1 et 2) : plus besoin de rouvrir la même chute deux fois. */
   const choisirCocasse = (c: Cocasse) => {
+    const enTrainDOuvrir = cocasseOuverteId !== c.id;
     setChoix({ kind: "cocasse", id: c.id });
-    setApercuOuvert(false);
-    setCocasseOuverteId((prev) => (prev === c.id ? null : c.id));
+    setCocasseOuverteId(enTrainDOuvrir ? c.id : null);
+    /* Une seule cocasse ouverte à la fois, toutes galeries confondues
+       (correctif test lot, 23 nov. 23 h) : ouvrir ici referme les Fêtes. */
+    setCocasseFetesOuverteId(null);
+    if (enTrainDOuvrir) setApercuOuvert(true);
+  };
+  const choisirFetes = (c: Cocasse) => {
+    const enTrainDOuvrir = cocasseFetesOuverteId !== c.id;
+    setChoix({ kind: "fetes", id: c.id });
+    setCocasseFetesOuverteId(enTrainDOuvrir ? c.id : null);
+    /* Une seule cocasse ouverte à la fois, toutes galeries confondues
+       (correctif test lot, 23 nov. 23 h) : ouvrir ici referme les classiques. */
+    setCocasseOuverteId(null);
+    if (enTrainDOuvrir) setApercuOuvert(true);
   };
 
   const lienCarte = () => {
@@ -223,11 +328,18 @@ function Page() {
     }
   };
 
+  /* Un vrai recommencement repart de zéro (adjoint 3, P4) : les champs
+     se vident ET la sélection revient à la première carte, cocasses
+     refermées. */
   const recommencer = () => {
     setPour("");
     setMessage("");
     setDe("");
     setAvis("");
+    setChoix({ kind: "classique", id: CARTES[0].id });
+    setCocasseOuverteId(null);
+    setCocasseFetesOuverteId(null);
+    setApercuOuvert(false);
   };
 
   const choisirExemple = (texte: string) => {
@@ -248,6 +360,17 @@ function Page() {
         <span className="lys" aria-hidden="true">⚜</span>
         <h1>Cartes de souhaits</h1>
         <p>Choisissez une carte, écrivez votre message, et offrez un petit mot qui fait du bien. Comme dans les années 90 — mais en un clic.</p>
+        {/* LOT-CARTES-FETES — vidéo en-tête : Sir H. Gepeto ouvre une boîte
+            (10 s, personnage approuvé par HP 24 nov. 07 h 47, base v4 figée
+            — jamais régénéré). Lecture automatique muette en boucle ;
+            affiche fixe si mouvement réduit. */}
+        <figure className="hero-video">
+          {prefereMouvementReduit ? (
+            <img className="hero-video-poster" src="/videos/gepeto-ouvre-boite-poster.webp" alt="Sir H. Gepeto ouvre une boîte dans son atelier" />
+          ) : (
+            <video className="hero-video-lecteur" src="/videos/gepeto-ouvre-boite.mp4" poster="/videos/gepeto-ouvre-boite-poster.webp" autoPlay muted loop playsInline preload="metadata" aria-label="Sir H. Gepeto ouvre une boîte dans son atelier" />
+          )}
+        </figure>
       </header>
 
       <div className="avertissement" role="note">
@@ -271,6 +394,7 @@ function Page() {
             </button>
           ))}
         </div>
+        <p className="ancre-composeur"><a href="#titre-ecrire">→ Écrire mon message</a></p>
       </section>
 
       <section aria-labelledby="titre-cocasse">
@@ -293,10 +417,37 @@ function Page() {
             </button>
           ))}
         </div>
+        <p className="ancre-composeur"><a href="#titre-ecrire">→ Écrire mon message</a></p>
+      </section>
+
+      {/* LOT-CARTES-FETES : 12 cocasses des Fêtes — Mère Noël, Père Noël,
+          renne au nez rouge et toute la bande. Même geste que la section 2 :
+          une seule ouverte à la fois, la chute dedans. */}
+      <section aria-labelledby="titre-fetes">
+        <h2 id="titre-fetes">3. Ou une cocasse des Fêtes&nbsp;?</h2>
+        <p>Douze cocasses des Fêtes : une phrase douce dehors, la chute comique dedans. Touchez une carte pour l'ouvrir et la choisir.</p>
+        <div className="galerie-cocasse" role="group" aria-label="Galerie des cartes cocasses des Fêtes">
+          {COCASSES_FETES.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              className="carte-cocasse"
+              aria-pressed={choix.kind === "fetes" && choix.id === c.id ? "true" : "false"}
+              aria-expanded={cocasseFetesOuverteId === c.id ? "true" : "false"}
+              onClick={() => choisirFetes(c)}
+            >
+              <img src={c.image} alt={c.alt} loading="lazy" width="800" height="800" />
+              <span className="dehors">{c.dehors}</span>
+              <span className="indice-ouvrir">Touchez pour ouvrir</span>
+              <span className="dedans"><span className="dedans-texte">{c.dedans}</span></span>
+            </button>
+          ))}
+        </div>
+        <p className="ancre-composeur"><a href="#titre-ecrire">→ Écrire mon message</a></p>
       </section>
 
       <section aria-labelledby="titre-ecrire">
-        <h2 id="titre-ecrire">3. Écrivez votre message</h2>
+        <h2 id="titre-ecrire">4. Écrivez votre message</h2>
         <div className="composeur">
           <div className="panneau">
             <label htmlFor="destinataire">Pour qui est cette carte&nbsp;?</label>
@@ -319,7 +470,8 @@ function Page() {
 
           <div>
             <h3>Aperçu de votre carte</h3>
-            <div className={apercuOuvert ? "apercu-carte apercu-ouvert" : "apercu-carte"} aria-live="polite">
+            <p className="nom-carte-apercu">Carte : {nomAffiche}</p>
+            <div ref={apercuRef} className={"apercu-carte" + (apercuOuvert ? " apercu-ouvert" : "")} aria-live="polite">
               <img src={carteChoisie.image} alt={carteChoisie.alt} loading="lazy" width="800" height="800" />
               <div className="apercu-message">
                 {estCocasse ? <p><strong>{dehorsChoisi}</strong></p> : null}
@@ -348,6 +500,12 @@ function Page() {
               </p>
             ) : null}
             <p className="note" role="status">{avis}</p>
+            {/* Le lien affiché en clair (adjoints 1 et 2) : si la copie
+                automatique échoue sur un vieux téléphone, la personne
+                peut toujours le copier à la main. Collez-le dans un
+                courriel, un texto ou Messenger : la personne verra
+                votre carte. */}
+            <p className="lien-visible">Votre lien : <code>{lienCarte()}</code></p>
           </div>
         </div>
       </section>
@@ -357,6 +515,9 @@ function Page() {
           la note, elle, reste — c'est la seule phrase de cette section qui
           apporte quelque chose (originalité, pas une carte-cadeau). */}
       <p className="note">Toutes les cartes sont des créations originales de HP Outils : aucun visuel copié, aucune marque, aucun texte emprunté. Ce ne sont pas des cartes-cadeaux : aucune valeur d'argent, juste un mot gentil.</p>
+      <p>
+        <Link to="/">← Retour à l'accueil</Link>
+      </p>
     </main>
   );
 }

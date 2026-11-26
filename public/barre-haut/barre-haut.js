@@ -48,7 +48,7 @@
    si disponible.
 
    Le panneau Gepeto de la barre est retiré — le vrai moteur est
-   le seul Gepeto. La Loupe cherche dans les 6 sections du menu.
+   le seul Gepeto. La Loupe cherche dans les 7 sections du menu.
 
    Sur téléphone (≤ 560 px), la rangée
    ne montre que Plus et Panier ; les 9 autres commandes sont
@@ -63,24 +63,27 @@
   var CHEMIN_FACE_DEFAUT = new Date().getMonth() === 11
     ? "/hgpto/gepeto/tete-144-tuque-noel.png"
     : "/hgpto/gepeto/tete-144.png";
-  /* Les 6 sections du menu du haut. La Loupe cherche dans ces
-     6 entrées. */
+  /* Les 7 sections du menu du haut (+ « Cartes », LOT-CARTES-FETES,
+     23 nov. 2026, mot d'HP : la page des cartes n'avait aucune entrée
+     depuis le site). La Loupe cherche dans ces 7 entrées. */
   var ENTREES_RECHERCHE = [
     { titre: "Jeux", desc: "Jeux HP — amusement, en un tap." },
     { titre: "Outils", desc: "Outils web et papier — dignité, en un tap." },
     { titre: "Livres", desc: "Livres et tomes — lecture, en un tap." },
+    { titre: "Cartes", desc: "Cartes de souhaits — un petit mot qui fait du bien, en un tap." },
     { titre: "En cuisine", desc: "En cuisine — manger, en un tap." },
     { titre: "Ateliers", desc: "Ateliers — avec des gens, en un tap." },
     { titre: "À propos", desc: "À propos — HP, en un tap." }
   ];
   /* Routes réelles des sections (confirmées dans src/routes/ du
      dépôt — jeux.tsx, outils.tsx, lire.tsx, en-cuisine.tsx,
-     ateliers.tsx, a-propos.tsx — jamais devinées). Les 6 sections
+     ateliers.tsx, a-propos.tsx — jamais devinées). Les 7 sections
      de la barre ont toutes un bouton direct. */
   var ROUTES_SECTIONS = {
     jeux: "/jeux",
     outils: "/outils",
     livres: "/livres-pdf",          // P1-4 : /lire = « À toi l'histoire », pas les livres
+    cartes: "/cartes-de-souhaits",  // LOT-CARTES-FETES, 23 nov. 2026
     "en cuisine": "/en-cuisine",
     ateliers: "/ateliers",
     "à propos": "/a-propos"
@@ -548,7 +551,7 @@
   /* ---------- Sections : Jeux, Outils, Livres ---------- */
   function choisirSection(nom) {
     var cle = (nom || "").toLowerCase();
-    ["jeux", "outils", "livres", "en cuisine", "ateliers", "à propos"].forEach(function (s) {
+    ["jeux", "outils", "livres", "cartes", "en cuisine", "ateliers", "à propos"].forEach(function (s) {
       if (boutonsSections[s]) {
         if (s === cle) { boutonsSections[s].setAttribute("aria-current", "page"); }
         else { boutonsSections[s].removeAttribute("aria-current"); }
@@ -625,10 +628,11 @@
     tete.appendChild(btnReduire);
     contenu.appendChild(tete);
 
-    /* Sections : Jeux, Outils, Livres, En cuisine, Ateliers,
-       À propos — en un tap (menu du haut réduit à ces 6 entrées). */
+    /* Sections : Jeux, Outils, Livres, Cartes, En cuisine, Ateliers,
+       À propos — en un tap (menu du haut réduit à ces 6 entrées ; + « Cartes »,
+       LOT-CARTES-FETES, 23 nov. 2026, mot d'HP). */
     var sections = el("nav", { "class": "bh-sections", "aria-label": "Sections du site" });
-    ["Jeux", "Outils", "Livres", "En cuisine", "Ateliers", "À propos"].forEach(function (nom) {
+    ["Jeux", "Outils", "Livres", "Cartes", "En cuisine", "Ateliers", "À propos"].forEach(function (nom) {
       var b = el("button", { "class": "bh-section", type: "button" }, nom);
       on(b, "click", function () { choisirSection(nom); });
       boutonsSections[nom.toLowerCase()] = b;

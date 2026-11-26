@@ -93,6 +93,25 @@ function Index() {
         <div className="container">
           <span className="editorial-kicker">HP — créé au Québec</span>
           <h1>Des outils concrets pour la <em>vraie vie</em>.</h1>
+          {/* LOT-CARTES-FETES (23 nov. 2026, mot d'HP) : encadré Cartes de
+              souhaits — cadre rouge et vert, petite couronne de Noël
+              lumineuse, « Carte à souhait : gratuit ». Placé dans le hero,
+              JUSTE SOUS LE TITRE, avant les 3 portes : mesuré invisible
+              sans défiler à 360 px sous les portes (haut à 807 px pour un
+              viewport de 800 px, test lot 23 nov. 23 h). La consigne de
+              la mission — visible sans défiler — prime ici sur la règle
+              Lot 5 « rien d'autre avant les portes » ; les 3 portes
+              gardent leur ordre et leur contenu, juste après l'encadré.
+              La page des cartes n'avait aucune entrée depuis le site
+              (3 adjoints, PAS VALIDÉE, 23 nov. 2026). Tout l'encadré
+              est un lien. */}
+          <Link to="/cartes-de-souhaits" className="encadre-cartes-fetes" aria-label="Cartes de souhaits gratuites — voir les cartes">
+            <img src="/images/couronne-noel.webp" alt="" aria-hidden="true" width="72" height="72" className="encadre-cartes-couronne" />
+            <span className="encadre-cartes-texte">
+              <strong>Carte à souhait : gratuit</strong>
+              <span>34 cartes, dont 12 cocasses des Fêtes — choisissez, écrivez, copiez le lien.</span>
+            </span>
+          </Link>
           {/* Lot 5 corrections (texte 2b) : les 3 portes en langage client,
               juste sous le titre, rien d'autre avant — pleine largeur sur
               mobile (1 colonne à 360 px), côte à côte sur ordinateur

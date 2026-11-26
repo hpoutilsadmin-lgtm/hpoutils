@@ -50,6 +50,13 @@
    12,5 px (+0,38 px de hauteur de ligne, plafond
    195 px de 561 à 900 et 69 px ≥ 901 — le JS pose --bh-hauteur
    au plafond, la réserve reprend le plafond pour un écart nul).
+   LOT-CARTES-FETES, 23 nov. 2026 : « Cartes » ajouté comme 7e section —
+   la barre grandit d'une rangée à ≤ 560 px (291 px mesurés à 360/480/
+   560 px ; la base à 6 boutons mesurait déjà 235 px à 360 px, soit 44 px
+   au-dessus de la réserve 191 px) et passe à 203 px de 561 à 900 px
+   (203 px à 561/768, 181 px à 900) ; ≥ 901 px : 67 px mesurés
+   (901/1280/1920). Réserve recalée sur ces plafonds : 291 / 203 / 67.
+   Mesures locales Playwright, panneau fermé, accueil = cartes.
    La classe bh-reserve est posée par un tout
    petit script synchrone en tête (__root.tsx), qui ne la pose
    pas sur les pages STOP (/le-garde, /personne-seule : aucune
@@ -60,16 +67,16 @@
    est ajoutée des deux côtés : la barre la porte aussi dans
    son propre padding-top. */
 html.bh-reserve body {
-  padding-top: calc(191px + env(safe-area-inset-top, 0px));
+  padding-top: calc(291px + env(safe-area-inset-top, 0px));
 }
 @media (min-width: 561px) and (max-width: 900px) {
   html.bh-reserve body {
-    padding-top: calc(195px + env(safe-area-inset-top, 0px));
+    padding-top: calc(203px + env(safe-area-inset-top, 0px));
   }
 }
 @media (min-width: 901px) {
   html.bh-reserve body {
-    padding-top: calc(69px + env(safe-area-inset-top, 0px));
+    padding-top: calc(67px + env(safe-area-inset-top, 0px));
   }
 }
 

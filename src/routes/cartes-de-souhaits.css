@@ -17,6 +17,12 @@
 .cartes-souhaits header.hero h1 {font-size:2.25rem;margin:0 0 8px;color:var(--brun)}
 .cartes-souhaits header.hero p {font-size:1.125rem;max-width:640px;margin:0 auto}
 .cartes-souhaits .lys {font-size:2.5rem;line-height:1;display:block;margin-bottom:8px}
+  /* ---------- Vidéo en-tête (LOT-CARTES-FETES) : Gepeto ouvre une boîte.
+     Un seul moment fort ; la vidéo ne déborde jamais (100 % de la
+     colonne, max 960 px) ; affiche fixe sous mouvement réduit (rendu
+     React, pas CSS — voir le composant). */
+.cartes-souhaits .hero-video {margin:24px auto 0;max-width:960px}
+.cartes-souhaits .hero-video video, .cartes-souhaits .hero-video img {display:block;width:100%;height:auto;border-radius:12px;border:3px solid var(--or)}
   /* ---------- Structure ---------- */
 .cartes-souhaits {max-width:1080px;margin:0 auto;padding:24px 16px 48px}
 .cartes-souhaits section {margin-bottom:40px}
@@ -28,6 +34,20 @@
 .cartes-souhaits .avertissement strong {color:var(--rouge)}
   /* ---------- Galerie ---------- */
 .cartes-souhaits .galerie, .cartes-souhaits .galerie-cocasse {display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+  /* LOT-CARTES-FETES : pendant le chargement différé, la tuile ne montre
+     pas son texte alt en gros caractères (adjoint 2) — fond crème et
+     texte discret, comme une carte qui arrive. */
+.cartes-souhaits .carte-choix img, .cartes-souhaits .carte-cocasse img {background:#F3E9D2;font-size:.875rem;color:#5A4632}
+  /* Ancres vers le composeur (adjoints 1, 2, 3) : la page fait ~10 000 px
+     au téléphone, on ne fait pas défiler les galeries pour rien. */
+.cartes-souhaits .ancre-composeur {margin:16px 0 0;text-align:right}
+.cartes-souhaits .ancre-composeur a {font-weight:bold}
+  /* Nom de la carte rappelé dans l'aperçu (adjoint 3, P3). */
+.cartes-souhaits .nom-carte-apercu {font-size:1rem;font-weight:bold;color:var(--brun);margin:0 0 12px;text-align:center}
+  /* Lien de la carte affiché en clair sous le bouton (adjoints 1 et 2) :
+     plan B si la copie automatique échoue — il se copie à la main. */
+.cartes-souhaits .lien-visible {font-size:.9375rem;background:var(--blanc);border:2px solid #E3D3AC;border-radius:10px;padding:12px 14px;margin:16px 0 0;overflow-wrap:anywhere}
+.cartes-souhaits .lien-visible code {overflow-wrap:anywhere;word-break:break-all}
 .cartes-souhaits .carte-choix {background:var(--blanc);border:3px solid #E3D3AC;border-radius:12px;padding:0;cursor:pointer;text-align:center;overflow:hidden;min-height:48px}
 .cartes-souhaits .carte-choix:focus {border-color:var(--or-fonce);outline:3px solid var(--or);outline-offset:2px}
 .cartes-souhaits .carte-choix[aria-pressed="true"] {border-color:var(--rouge);box-shadow:0 0 0 3px var(--or)}
