@@ -1,9 +1,8 @@
 "use strict";
 /* ================================================================
-   BARRE UNIQUE EN HAUT — HP À portée de main
-   Pilote — produit 9, nuit du 6 au 7 nov. 2026.
-   Déposé sur GitHub seulement (7 nov. 2026), pas branché aux pages
-   live, pas en production. Décisions HP du 7 nov. 2026 : fond #07111B,
+   BARRE UNIQUE EN HAUT — HP C+
+   En production depuis le 11 nov. 2026 (produit 9, nuit du 6 au
+   7 nov. 2026). Décisions HP du 7 nov. 2026 : fond #07111B,
    grille 5 × 2, arrivée dépliée, panneaux en glissement.
 
    Succède à la barre unique v3 (lot 5 nov. 2026, commit 3712a96) :
@@ -12,8 +11,8 @@
    Différences décidées par HP le 6 nov. 21 h 33 :
    - la barre est EN HAUT (la v3 était en bas) ;
    - Jeux, Outils, Livres, En cuisine, Ateliers, À propos sont des
-     boutons directs, jamais dans « Plus » (lot corrections audit,
-     18 nov. 2026, point 19 : menu du haut réduit à 6 entrées) ;
+     boutons directs, jamais dans « Plus » (menu du haut réduit
+     à 6 entrées) ;
    - elle REMPLACE le menu (un seul élément de navigation).
 
    Options lues depuis l'élément <script> qui charge ce fichier :
@@ -43,11 +42,10 @@
    vocale utilise speechSynthesis du navigateur, voix française
    si disponible.
 
-   Q-PG-3 (12 nov. 2026, GO HP) : le panneau pilote Gepeto est
-   retiré — le vrai moteur (Q-PG-1) est le seul Gepeto. La Loupe
-   reste, en attente de Q-PG-4 (index réel 113 entrées).
+   Le panneau Gepeto de la barre est retiré — le vrai moteur est
+   le seul Gepeto. La Loupe cherche dans les 6 sections du menu.
 
-   M-3 (lot M, 16 nov. 2026) : sur téléphone (≤ 560 px), la rangée
+   Sur téléphone (≤ 560 px), la rangée
    ne montre que Plus et Panier ; les 9 autres commandes sont
    repliées dans le panneau « Plus » (construirePlus), rejouées
    par un tap sur leur bouton de rangée. Aucune fonction retirée.
@@ -60,9 +58,8 @@
   var CHEMIN_FACE_DEFAUT = new Date().getMonth() === 11
     ? "/hgpto/gepeto/tete-144-tuque-noel.png"
     : "/hgpto/gepeto/tete-144.png";
-  /* Les 6 sections du menu du haut (lot corrections audit, 18 nov.
-     2026, point 19). La Loupe du pilote cherche dans ces 6 entrées ;
-     l'index réel de la v3 en compte 113. */
+  /* Les 6 sections du menu du haut. La Loupe cherche dans ces
+     6 entrées. */
   var ENTREES_RECHERCHE = [
     { titre: "Jeux", desc: "Jeux HP — amusement, en un tap." },
     { titre: "Outils", desc: "Outils web et papier — dignité, en un tap." },
@@ -83,21 +80,18 @@
     ateliers: "/ateliers",
     "à propos": "/a-propos"
   };
-  /* Q-PG-3 (12 nov. 2026, GO HP) : les 5 questions rapides et les
-     8 scènes du pilote sont retirées. Les mêmes 5 questions vivent
-     dans le vrai moteur (hgpto-data.ts L400-406, avec leurs
-     réponses) et les 8 scènes sont jouées par le moteur (écouteur
-     hp:gepeto-scene). Les boutons de scènes de la barre
-     réintroduisaient ce qu'HP a fait retirer le 5 nov.
-     (lot db216681) — ils ne reviennent pas. */
-  /* Q-PG-3 : la bulle d'accueil statique du pilote est retirée.
-     Le seul bonjour est désormais celui du vrai moteur (B1). */
+  /* Les 5 questions rapides et les 8 scènes vivent dans le vrai
+     moteur (hgpto-data.ts, avec leurs réponses) et les 8 scènes
+     sont jouées par le moteur (écouteur hp:gepeto-scene). Les
+     boutons de scènes de la barre réintroduisaient ce qu'HP a
+     fait retirer le 5 nov. — ils ne reviennent pas. */
+  /* La bulle d'accueil statique est retirée. Le seul bonjour
+     est désormais celui du vrai moteur (B1). */
 
   var script = document.currentScript;
   var optPage = (script && script.getAttribute("data-page")) || pageDepuisChemin();
   /* P1 (§2.2) : __root.tsx ne connaît pas la page au moment du head().
-     Quand l'attribut est absent, on dérive du chemin. La page pilote
-     garde son attribut explicite (prioritaire). */
+     Quand l'attribut est absent, on dérive du chemin. */
   function pageDepuisChemin() {
     var p = (window.location.pathname || "").toLowerCase();
     if (p === "/" || p === "/index.html") return "accueil";
@@ -266,7 +260,7 @@
         return !f || e.titre.toLowerCase().indexOf(f) !== -1 || e.desc.toLowerCase().indexOf(f) !== -1;
       });
       if (trouves.length === 0) {
-        liste.appendChild(el("li", null, "Rien trouvé dans ce pilote."));
+        liste.appendChild(el("li", null, "Aucun résultat."));
       }
       trouves.forEach(function (e) {
         var li = el("li");
@@ -279,7 +273,7 @@
     on(champ, "input", function () { afficher(champ.value); });
     afficher("");
     zonePanneau.appendChild(el("p", { "class": "bh-note" },
-      "Pilote : la recherche porte sur les 5 sections. L'index réel de la barre v3 compte 113 entrées — il sera branché à l'intégration, pas inventé ici."));
+      "La recherche porte sur les sections du site."));
   }
 
   function construireLanterne() {
@@ -343,19 +337,19 @@
     });
     zonePanneau.appendChild(reset);
     zonePanneau.appendChild(el("p", { "class": "bh-note" },
-      "Les réglages sont conservés pendant la navigation (clé barre-haut-confort-v1). Ils ne modifient jamais définitivement la présentation du site."));
+      "Vos réglages sont conservés pendant votre visite. Ils ne modifient jamais définitivement la présentation du site."));
   }
 
   function construirePlus() {
     zonePanneau.appendChild(el("h2", null, "Plus — fonctions secondaires"));
     var liste = el("ul", { "class": "bh-liste" });
-    /* M-3 (lot M, 16 nov. 2026) : sur téléphone (≤ 560 px), la rangée
+    /* Sur téléphone (≤ 560 px), la rangée
        de la barre ne montre que Plus et Panier — les 9 autres
        commandes vivent ici, en tête du panneau. Chaque bouton
        rejoue le tap du bouton de rangée correspondant
        (boutonsCommandes[nom].click()) : même geste, même effet —
        la Loupe ouvre sa recherche, Gepeto et Question dispatchent
-       vers le vrai moteur (Q-PG-3 intact), Lire, Lanterne et
+       vers le vrai moteur, Lire, Lanterne et
        Confort ouvrent leurs panneaux. Panier n'est pas listé ici :
        il est déjà direct dans la rangée. Le test est fait à chaque
        ouverture du panneau (matchMedia) : une rotation qui franchit
@@ -381,7 +375,7 @@
       var li = el("li");
       var b = el("button", { type: "button" }, label);
       if (maquette) {
-        var tag = el("span", { "class": "bh-maquette" }, "pilote — non branché");
+        var tag = el("span", { "class": "bh-maquette" }, "Bientôt");
         b.appendChild(tag);
         b.disabled = true;
         b.setAttribute("aria-disabled", "true");
@@ -418,23 +412,22 @@
     item("Ajouter aux favoris", null, true);
     item("Télécharger (aucun fichier sur cette page)", null, true);
     item("Signaler un problème", null, true);
-    /* Lot corrections audit, 18 nov. 2026, point 19 : le menu du haut
-       est réduit à 6 entrées (Jeux, Outils, Livres, En cuisine,
+    /* Le menu du haut est réduit à 6 entrées (Jeux, Outils, Livres,
+       En cuisine,
        Ateliers, À propos — boutons directs, plus haut). Les liens
-       de sections qui vivaient ici (Q-DB-1, 12 nov. 2026 : aide,
+       de sections qui vivaient ici (aide,
        contact, Balado, À toi l'histoire, Ateliers, Prix, Jeux à
        votre image, À propos, En cuisine, Boîte à outils, Reste du
        mois, Passeur de savoir, La garde) sont désormais dans le
        pied de page (SiteFooter.tsx) — tous vérifiés présents là,
-       sauf /jeux-a-votre-image ajouté au pied par ce même lot.
+       sauf /jeux-a-votre-image, ajouté au pied en même temps.
        Le panneau « Plus » ne garde que les fonctions secondaires
        (copier, haut de page, imprimer, partager…) : aucune
        navigation de section ne reste ici. */
     /* 24 nov. 2026 (go HP) : « Cartes de souhaits » ajoutée dans le
        panneau Plus (la page /cartes-de-souhaits est en ligne depuis
-       le 22 nov. 2026 — l'encadré accueil et le bouton « Cartes » du
-       menu restent dans le LOT-CARTES-FETES, non déposé) ; « Réseaux
-       sociaux » branché — l'item pilote désactivé est remplacé par
+       le 22 nov. 2026) ; « Réseaux sociaux » branché — l'item
+       désactivé est remplacé par
        les 4 comptes réels, vérifiés en direct le 24 nov. 2026
        (Instagram @hpoutils, Facebook HP-Des outils pour la vraie
        vie., TikTok @hp2zl, YouTube @hp-2zl). */
@@ -444,15 +437,13 @@
     lien("TikTok — @hp2zl", "https://www.tiktok.com/@hp2zl");
     lien("YouTube — @hp-2zl", "https://www.youtube.com/@hp-2zl");
     zonePanneau.appendChild(liste);
-    zonePanneau.appendChild(el("p", { "class": "bh-note" },
-      "Règle du cahier : une fonction non disponible est désactivée, jamais présentée comme fonctionnelle. Les fonctions marquées « pilote » seront branchées à l'intégration, une par une."));
     var remettre = el("button", { "class": "bh-fermer-panneau", "type": "button" }, "Remettre la barre en haut");
     on(remettre, "click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); fermerPanneau(); });
     zonePanneau.appendChild(remettre);
   }
 
-  /* ---------- Message (Q-PG-3) : la surface des messages de la barre ----------
-     Remplace la bulle du pilote (dire() écrivait dans .bh-bulle).
+  /* ---------- Message : la surface des messages de la barre ----------
+     Remplace la bulle d'accueil retirée (dire() écrivait dans .bh-bulle).
      Un panneau comme les autres : titre + note de statut + bouton
      « Fermer le panneau » (ajouté par construirePanneau). */
   var messageCourant = "";
@@ -504,7 +495,7 @@
     var texte = (principal.innerText || principal.textContent || "").replace(/\s+/g, " ").trim();
     return texte.slice(0, 2000);
   }
-  /* Q-PG-3 : dire() n'écrit plus dans la bulle pilote (retirée).
+  /* dire() n'écrit plus dans la bulle (retirée).
      Le message s'affiche dans le panneau « Message » ; s'il est
      déjà ouvert, on le reconstruit sur place (basculerPanneau
      fermerait le panneau au lieu de le mettre à jour). */
@@ -523,7 +514,7 @@
         else { boutonsSections[s].removeAttribute("aria-current"); }
       }
     });
-    /* Pilote : les sections mènent aux vraies pages du site
+    /* Les sections mènent aux vraies pages du site
        (voir ROUTES_SECTIONS plus haut). */
     if (document.body && document.body.setAttribute) {
       document.body.setAttribute("data-bh-section", cle);
@@ -595,8 +586,7 @@
     contenu.appendChild(tete);
 
     /* Sections : Jeux, Outils, Livres, En cuisine, Ateliers,
-       À propos — en un tap (lot corrections audit, 18 nov. 2026,
-       point 19 : menu du haut réduit à ces 6 entrées). */
+       À propos — en un tap (menu du haut réduit à ces 6 entrées). */
     var sections = el("nav", { "class": "bh-sections", "aria-label": "Sections du site" });
     ["Jeux", "Outils", "Livres", "En cuisine", "Ateliers", "À propos"].forEach(function (nom) {
       var b = el("button", { "class": "bh-section", type: "button" }, nom);
@@ -632,7 +622,7 @@
          (HgptoPont `monte` : le 2e tap ne redispatch pas
          `hp:gepeto-pret`) ; si le moteur est déjà prêt, on dévoile
          l'hôte tout de suite, sans attendre un signal qui ne
-         reviendra pas. Q-PG-3 : plus de panneau pilote à ouvrir —
+         reviendra pas. Plus de panneau Gepeto à ouvrir —
          le panneau Gepeto, c'est l'hôte du moteur. */
       if (moteurPret) { devoilerGepeto(); }
     }, "Gepeto : ouvrir Sir H. Gepeto");
@@ -679,7 +669,7 @@
        tournait invisible. UN SEUL site retire `hidden` sur
        `sectionGepeto` : `devoilerGepeto()` ci-dessous.
        Modèle repris de la v3 (compagnon.js) : `pret` dévoile,
-       `ferme` remasque l'hôte et ferme le panneau pilote,
+       `ferme` remasque l'hôte et ferme le panneau,
        `réduire` remasque l'hôte et réduit la barre comme son
        bouton « Réduire ». Écarts au modèle, documentés :
        (1) la v3 ne fait que fermer sur `réduire` ; ici on appelle
@@ -702,7 +692,7 @@
       sectionGepeto.setAttribute("hidden", "");
     }
     document.addEventListener("hp:gepeto-pret", devoilerGepeto);
-    /* Q-PG-3 : plus de panneau pilote « gepeto » à fermer — le
+    /* Plus de panneau « gepeto » à fermer — le
        remasquage suffit. Le moteur libère qaOpen de son côté
        (écouteur hp:gepeto-ferme, hgpto-engine.ts L5917). */
     document.addEventListener("hp:gepeto-ferme", function () {
@@ -718,11 +708,11 @@
        suite — même garde que `assurerMoteur` dans la v3. */
     if (document.querySelector(".hgpto-host")) { devoilerGepeto(); }
 
-    /* ---------- Question (Q-PG-3) : ouvrir la QA du vrai moteur ----------
+    /* ---------- Question : ouvrir la QA du vrai moteur ----------
        Modèle v3 (compagnon.js ouvrirQuestion) : s'assurer d'abord que
        le moteur est monté, puis dispatcher la question. Sans ça, le
        dispatch part dans le vide si le moteur n'est pas monté — c'est
-       le pilote qui masquait l'échec en ouvrant son propre panneau.
+       l'ancien panneau qui masquait l'échec en s'ouvrant à la place.
        Le moteur enregistre l'écouteur hp:gepeto-question AVANT de
        dispatcher hp:gepeto-pret (hgpto-engine.ts L5897 puis L5919) :
        le dispatch différé après `pret` touche un écouteur enregistré.

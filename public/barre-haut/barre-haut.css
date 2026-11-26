@@ -4,10 +4,9 @@
    Régénérer : bun run build:barre-haut
    ============================================================ */
 /* ================================================================
-   BARRE UNIQUE EN HAUT — HP À portée de main
-   Pilote — produit 9, nuit du 6 au 7 nov. 2026.
-   Déposé sur GitHub seulement (7 nov. 2026), pas branché aux pages
-   live, pas en production. Décisions HP du 7 nov. 2026 : fond #07111B,
+   BARRE UNIQUE EN HAUT — HP C+
+   En production depuis le 11 nov. 2026 (produit 9, nuit du 6 au
+   7 nov. 2026). Décisions HP du 7 nov. 2026 : fond #07111B,
    grille 5 × 2, arrivée dépliée, panneaux en glissement.
 
    Remplace le menu. Une seule navigation, en haut, toujours visible.
@@ -23,7 +22,7 @@
    dorés #d89532 / #f0c16d. La v3 utilisait #1d252c pour le fond
    de la barre ; la présente barre applique #07111B, couleur
    confirmée de la Bible de marque — tranchée par HP le 7 nov.
-   2026 (SPEC.md, point ouvert nº 1, fermé).
+   2026.
    Boutons ≥ 48 px (standard confort 3 formats, 28 oct. 2026).
    Aucune dépendance externe, aucun service payant.
    ================================================================ */
@@ -51,9 +50,9 @@
    barre dépliée, par point de rupture (mesures locales,
    barre-haut.js + CSS de la tête : 304 px ≤ 560, 194 px de 561
    à 900, 68 px ≥ 901 ; identiques accueil / autres pages, face
-   cachée ou non). Lot M, 16 nov. 2026 : M-3 replie 9 commandes
-   sous « Plus » à ≤ 560 px (304 -> 191 px) et M-2 passe les
-   labels à 12,5 px (+0,38 px de hauteur de ligne, plafond
+   cachée ou non). Le repli téléphone replie 9 commandes
+   sous « Plus » à ≤ 560 px (304 -> 191 px) et les labels passent à
+   12,5 px (+0,38 px de hauteur de ligne, plafond
    195 px de 561 à 900 et 69 px ≥ 901 — le JS pose --bh-hauteur
    au plafond, la réserve reprend le plafond pour un écart nul).
    La classe bh-reserve est posée par un tout
@@ -168,7 +167,7 @@ html.bh-actif {
   color: var(--bh-or-clair);
 }
 .bh-slogan {
-  display: none; /* la ligne de précision sous le slogan : point ouvert nº 3 de la v3, à confirmer au pilote */
+  display: none; /* la ligne de précision sous le slogan est masquée */
   margin: 0;
   font-size: 13px;
   color: var(--bh-or-clair);
@@ -193,8 +192,8 @@ html.bh-actif {
 }
 
 /* ---------- Sections : Jeux, Outils, Livres, En cuisine, Ateliers,
-   À propos — en un tap, jamais dans Plus (lot corrections audit,
-   18 nov. 2026, point 19 : menu du haut réduit à 6 entrées). */
+   À propos — en un tap, jamais dans Plus (menu du haut réduit
+   à 6 entrées). */
 .bh-sections {
   display: flex;
   gap: 8px;
@@ -298,7 +297,7 @@ html.bh-actif {
   border-radius: 10px;
   background: var(--bh-or);
   color: var(--bh-encre);
-  /* M-2 (lot M, 16 nov. 2026) : 12 px -> 12,5 px, seuil confort HP. */
+  /* 12 px -> 12,5 px, seuil confort HP. */
   font-size: 12.5px;
   font-weight: 700;
   line-height: 20px;
@@ -404,7 +403,7 @@ html.bh-actif {
   background: var(--bh-or);
   color: var(--bh-encre);
 }
-/* Q-PG-3 (12 nov. 2026) : .bh-bulle retiré avec le panneau pilote. */
+/* .bh-bulle retiré avec le panneau Gepeto. */
 .bh-fermer-panneau {
   min-height: var(--bh-bouton-min);
   padding: 8px 16px;
@@ -418,7 +417,7 @@ html.bh-actif {
 
 /* ---------- Téléphone 360–390 px : 1 colonne ----------
    En-tête, sections, puis UNE rangée : Plus + Panier.
-   M-3 (lot M, 16 nov. 2026) : la barre faisait 304 px à 360 px
+   Avant le repli téléphone, la barre faisait 304 px à 360 px
    (38 % du premier écran, 3 rangées de commandes dont Panier
    pleine largeur). Les 9 autres commandes (Accueil, Retour,
    Suivant, Loupe, Lire, Lanterne, Question, Gepeto, Confort)
@@ -434,7 +433,7 @@ html.bh-actif {
   .bh-titre {
     font-size: 17px;
   }
-  /* Correctif vérification G (lot corrections audit, 18 nov. 2026) :
+  /* Correctif vérification G :
      à 6 sections, la rangée ne tient plus sur téléphone (360–480 px) :
      « Ateliers » et « À propos » sortaient de l'écran, hors d'atteinte
      (pas de défilement). On passe en 2 rangées de 3 — même principe
@@ -449,7 +448,7 @@ html.bh-actif {
     display: flex;
     gap: 6px;
   }
-  /* M-3 : seules Plus et Panier restent visibles dans la rangée.
+  /* Seules Plus et Panier restent visibles dans la rangée.
      Sauf disposition défilement explicite (data-disposition),
      qui garde sa rangée défilante à 11 commandes. */
   .bh-barre:not(.bh-defilement) .bh-commandes .bh-cmd:not([data-commande="plus"]):not([data-commande="panier"]) {
@@ -514,7 +513,7 @@ html.bh-actif {
   }
   .bh-section {
     flex: 0 0 auto;
-    /* Lot corrections audit, 18 nov. 2026, point 19 : 6 sections
+    /* 6 sections
        au lieu de 3 sur la même rangée — marges latérales réduites
        (20 → 12 px) pour garder les 11 commandes à l'aise. */
     padding: 10px 12px;

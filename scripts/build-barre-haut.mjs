@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /* ============================================================
    BARRE UNIQUE EN HAUT HP — génération du module AUTONOME
-   pour la page pilote (public/outils-web/barre-haut-pilote.html),
-   même patron que la barre de jeu et que le Compagnon.
+   pour les pages du site (React via __root.tsx, pages statiques
+   via <script>), même patron que la barre de jeu et que le Compagnon.
 
    Sources uniques :
      src/components/barre-haut/barre-haut.js
@@ -18,7 +18,7 @@
        bun run build:barre-haut
    puis déposer les sorties régénérées avec le reste du lot.
 
-   La page pilote charge, avant </body> :
+   Les pages statiques chargent, dans le head :
        <link rel="stylesheet" href="/barre-haut/barre-haut.css">
        <script src="/barre-haut/barre-haut.js" defer></script>
    ============================================================ */

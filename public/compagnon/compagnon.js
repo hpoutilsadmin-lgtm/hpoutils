@@ -846,7 +846,6 @@
     var g = el("div", { "class": "compagnon-groupe" });
     g.appendChild(boutonCommande("Écrire à la direction humaine", "Écrire à la direction humaine par courriel", function () { window.location.href = MAIL_DIRECTION; }));
     g.appendChild(boutonCommande("Poser une question à Sir H. Gepeto", "Poser une question à Sir H. Gepeto", function () { ouvrirQuestion(); }));
-    g.appendChild(boutonCommande("Plan du site (à venir)", "Le plan du site n'existe pas encore", function () { /* T5 : /plan-du-site, lot B13-reste */ }));
     zonePanneau.appendChild(g);
   }
 

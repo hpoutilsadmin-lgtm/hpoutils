@@ -47,7 +47,7 @@
 body{margin:0; background:var(--creme); color:var(--encre);
   font-family:var(--font-texte); line-height:1.6; font-size:17px;}
 /* ── Header : bandeau nuit ── */
-header.site{position:sticky; top:0; z-index:60; background:var(--nuit);
+header.site{position:sticky; top:var(--bh-hauteur,69px); z-index:60; background:var(--nuit);
   box-shadow:0 2px 14px rgba(0,0,0,.28);}
 header.site .barre{max-width:680px; margin:0 auto; padding:11px 18px;
   display:flex; align-items:center; justify-content:space-between; gap:12px;}
@@ -113,7 +113,14 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
 .date-jour{text-align:center; color:var(--brun); margin-bottom:4px; font-size:1.02rem;}
 .date-note{text-align:center; color:var(--brun); margin:-2px 0 4px; font-size:.92rem; font-style:italic;}
 </style>
-<link rel="stylesheet" href="/compagnon/compagnon.css">
+<!-- Barre-haut + Pont Gepeto — migration LOT-TRACES-TRAVAIL, 25 nov. 2026 (montage lot /outils v3, 16 nov. 2026 : link + bh-reserve + script defer) -->
+<link rel="stylesheet" href="/barre-haut/barre-haut.css">
+<script>(function(){try{var p=(window.location.pathname||"").toLowerCase();if(p==="/le-garde"||p==="/personne-seule")return;document.documentElement.classList.add("bh-reserve");}catch(e){}})();</script>
+<script src="/barre-haut/barre-haut.js" defer data-barre-haut="1"></script>
+<!-- Pont Gepeto statique — lot /outils v3, 16 nov. 2026 : la barre-haut ne charge pas le moteur Sir H. Gepeto, elle dispatch « hp:gepeto-ouvrir » et attend « hp:gepeto-pret ». Ce pont injecte /hgpto/hgpto.js + /hgpto/hgpto.css une seule fois, au premier tap Gepeto ou Question ; le moteur signale « hp:gepeto-pret » tout seul au chargement, et la barre dévoile alors l'hôte (ou rejoue la question en attente). Aucun chargement à l'arrivée : pas de bulle de bonjour sans tap, panneau fermé au chargement. -->
+<script>
+(function(){var enCours=false;function charger(){if(enCours||document.querySelector(".hgpto-host")||document.querySelector('script[src="/hgpto/hgpto.js"]')){return;}enCours=true;try{window.sessionStorage.removeItem("hgpto-closed");}catch(e){}if(!document.querySelector('link[href="/hgpto/hgpto.css"]')){var css=document.createElement("link");css.rel="stylesheet";css.href="/hgpto/hgpto.css";document.head.appendChild(css);}var js=document.createElement("script");js.src="/hgpto/hgpto.js";js.defer=true;js.onerror=function(){enCours=false;};document.body.appendChild(js);}document.addEventListener("hp:gepeto-ouvrir",charger);})();
+</script>
 </head>
 <body>
 <header class="site">
@@ -361,6 +368,5 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
   });
 })();
 </script>
-<script src="/compagnon/compagnon.js" defer></script>
 </body>
 </html>
