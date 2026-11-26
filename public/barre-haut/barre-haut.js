@@ -414,9 +414,44 @@
     } else {
       item("Partager la page", null, true);
     }
-    item("Ajouter aux favoris", null, true);
+    /* LOT 1 nº 19 (25 nov. 2026) : « Ajouter aux favoris » branché
+       sur les favoris /jeux — même clé localStorage
+       (« hp-jeux-favoris », liste de slugs) et même forme de données
+       que jeux.tsx. Sur une page de jeu (/apps/<slug>/…), ajoute ce
+       jeu ; ailleurs, mène à la section « ♥ Vos favoris » de /jeux.
+       La pastille « Bientôt » disparaît avec la maquette. Le cœur
+       public, lui, reste celui de la barre-jeu dans les jeux. */
+    item("Ajouter aux favoris", function () {
+      var partiesChemin = window.location.pathname.split("/");
+      var slugPage = partiesChemin[1] === "apps" ? (partiesChemin[2] || "") : "";
+      if (slugPage && slugPage !== "hp-hyper-potentiel") {
+        var favs = [];
+        try {
+          var lus = JSON.parse(window.localStorage.getItem("hp-jeux-favoris") || "[]");
+          if (Array.isArray(lus)) favs = lus;
+        } catch (e) { favs = []; }
+        if (favs.indexOf(slugPage) >= 0) {
+          dire("Ce jeu est déjà dans vos favoris.");
+        } else {
+          favs.push(slugPage);
+          try { window.localStorage.setItem("hp-jeux-favoris", JSON.stringify(favs)); } catch (e) {}
+          dire("Ajouté à vos favoris — retrouvez-le sur la page Jeux.");
+        }
+      } else {
+        window.location.href = "/jeux#favoris";
+      }
+    });
     item("Télécharger (aucun fichier sur cette page)", null, true);
-    item("Signaler un problème", null, true);
+    /* LOT 1 nº 20 (25 nov. 2026) : « Signaler un problème » branché —
+       courriel pré-rempli vers la direction, même format que le
+       Compagnon (sujet « Problème sur la page : … », corps avec la
+       page et « Problème : »). La pastille « Bientôt » disparaît
+       avec la maquette. */
+    item("Signaler un problème", function () {
+      var sujet = encodeURIComponent("Problème sur la page : " + (document.title || window.location.href));
+      var corps = encodeURIComponent("Bonjour,\n\nPage : " + window.location.href + "\n\nProblème :\n");
+      window.location.href = "mailto:hpoutils.admin@gmail.com?subject=" + sujet + "&body=" + corps;
+    });
     /* Le menu du haut est réduit à 6 entrées (Jeux, Outils, Livres,
        En cuisine,
        Ateliers, À propos — boutons directs, plus haut). Les liens

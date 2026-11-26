@@ -128,6 +128,25 @@ const FILTRES_AGE = ["Tous", "6-8 ans", "9-12 ans", "Ados", "Adultes"];
 const FILTRES_JOUEURS = ["Tous", "Seul", "À 2", "En groupe"];
 const FILTRES_DUREE = ["Tous", "5 min"];
 
+/* LOT 1 nº 36 (25 nov. 2026) : tirage « Jeu au hasard » parmi les
+   44 tuiles jouables — les 10 jeux défectueux de la passe plaisir
+   (23 nov. 2026) + T1 (non vérifié, audité 18 nov. seulement)
+   sont exclus, par fichier (jamais par titre). */
+const JEUX_EXCLUS_TIRAGE = new Set([
+    "/apps/cherche-trouve-la-vraie-vie/cherche-trouve-la-vraie-vie-v1.1.html",
+    "/apps/mineur-hp/mineur-hp-v0.1.html",
+    "/apps/peche-blanche-arcade/peche-blanche-arcade-v1.0.html",
+    "/apps/caribou-run/caribou-run-fetes-v1.0.html",
+    "/apps/couleuvre-du-quebec/couleuvre-du-quebec-v1.0.html",
+    "/apps/hockey-hgpto/hockey-hgpto-v1.0.html",
+    "/apps/bernache-express/bernache-express-v1.0.html",
+    "/apps/montgolfiere/montgolfiere-v1.0.html",
+    "/apps/hydro-electricite/hydro-electricite-v1.1.html",
+    "/apps/pete-et-repete/pete-et-repete-v1.0.html",
+    "/apps/t1-le-saut-des-annees-1990/t1-le-saut-des-annees-1990-niveau.html",
+]);
+const JEUX_JOUABLES_TIRAGE = GAMES.filter((g) => !JEUX_EXCLUS_TIRAGE.has(g.file));
+
 /* ── Lot « 5 corrections prioritaires », 18 nov. 2026 (textes 2a, 4a) ──
    Vedettes : les 5 jeux sont retrouvés dans GAMES (même adresse, même
    image) ; seul le texte de présentation est celui du lot, mot pour mot.
@@ -675,6 +694,16 @@ function JeuxPage() {
     };
   };
 
+  /* LOT 1 nº 36 : un jeu au hasard parmi les 44 tuiles jouables,
+     ouvert aussitôt. */
+  const jouerAuHasard = () => {
+    const choix =
+      JEUX_JOUABLES_TIRAGE[
+        Math.floor(Math.random() * JEUX_JOUABLES_TIRAGE.length)
+      ];
+    if (choix) window.location.href = hrefJeu(choix);
+  };
+
   const correspondAge = (g: GameEntry) =>
     filtreAge === "Tous" || (g.catAge ?? []).includes(filtreAge);
   const correspondJoueurs = (g: GameEntry) =>
@@ -733,6 +762,7 @@ function JeuxPage() {
           <div className="lead-actions">
             <a className="btn-primary" href="/apps/bons-reflexes">Jouer aux Bons réflexes d'HP</a>
             <a className="btn-ghost" href="#tous-les-jeux">Voir tous les jeux</a>
+            <button type="button" className="btn-ghost" onClick={jouerAuHasard}>🎲 Jeu au hasard</button>
             <ShareButton text="Des jeux gratuits, sans inscription, à jouer dans ton navigateur — HP Outils. T'es pas game de l'essayer ?" />
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 26 }}>
@@ -900,7 +930,7 @@ function JeuxPage() {
             ))}
           </div>
           {favoris.length > 0 ? (
-            <div aria-label="Vos favoris" style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center", maxWidth: 900, margin: "0 auto 26px" }}>
+            <div id="favoris" aria-label="Vos favoris" style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center", maxWidth: 900, margin: "0 auto 26px" }}>
               <span style={{ fontSize: 13, fontWeight: 800, color: "#ff8a7a" }}>♥ Vos favoris :</span>
               {favoris.map((slug) => {
                 const g = GAMES.find((x) => (x.slug ?? slugDepuisFichier(x.file)) === slug);

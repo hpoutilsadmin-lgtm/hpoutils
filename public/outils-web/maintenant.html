@@ -194,6 +194,7 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
     <h2 style="font-size:1.2rem;margin-top:0">Quelqu'un vit la même journée&nbsp;?</h2>
     <p style="color:var(--brun);margin-top:0">Envoyez-lui l'outil — pas vos notes, juste l'outil. Vos mots restent à vous.</p>
     <button id="btn-partager" class="principal">📤 Partager «&nbsp;Maintenant&nbsp;»</button>
+    <button id="btn-copier" class="principal" style="margin-top:10px">📋 Copier</button>
     <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter mes notes (.txt)</button>
     <p class="message" id="msg-partage"></p>
   </section>
@@ -329,6 +330,21 @@ footer.site .note-pied{font-size:.85rem; margin:6px 0 0; color:rgba(246,237,221,
         msg.textContent = "Partagé. 💛";
       }).catch(function(){});
     } else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(function(){
+        msg.textContent = "Copié ! Collez-le où vous voulez.";
+      }).catch(function(){ msg.textContent = texte; });
+    } else {
+      msg.textContent = texte;
+    }
+  });
+
+  /* LOT 1 nº 23 (25 nov. 2026) : bouton « Copier » explicite —
+     même texte et même message de confirmation que le repli du
+     bouton Partager ci-dessus, sans passer par le partage. */
+  $("btn-copier").addEventListener("click", function(){
+    var texte = "« Maintenant » : où est-ce que j'en suis, en 30 secondes — argent, repas, maison, demain, moi. Pas une app de productivité. Gratuit, sans compte, fait au Québec. — HP, des outils pour la vraie vie.";
+    var msg = $("msg-partage");
+    if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(texte).then(function(){
         msg.textContent = "Copié ! Collez-le où vous voulez.";
       }).catch(function(){ msg.textContent = texte; });

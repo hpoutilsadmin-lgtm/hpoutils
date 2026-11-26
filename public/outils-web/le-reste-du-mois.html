@@ -198,6 +198,7 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
     <h2 style="font-size:1.2rem;margin-top:0">Ça peut aider quelqu'un d'autre</h2>
     <p style="color:var(--brun);margin-top:0">Un ami qui étire son budget&nbsp;? Envoyez-lui votre chiffre — ou juste l'outil.</p>
     <button id="btn-partager" class="principal">📤 Partager</button>
+    <button id="btn-copier" class="principal" style="margin-top:10px">📋 Copier</button>
     <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter mon chiffre (.txt)</button>
     <p class="message" id="msg-partage"></p>
   </section>
@@ -509,6 +510,23 @@ button.coup-dur{background:var(--brique); border-color:var(--brique); color:#fff
         msg.textContent = "Partagé. Merci de faire passer le mot. 💛";
       }).catch(function(){});
     } else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(function(){
+        msg.textContent = "Copié ! Collez-le où vous voulez.";
+      }).catch(function(){
+        msg.textContent = texte;
+      });
+    } else {
+      msg.textContent = texte;
+    }
+  });
+
+  /* LOT 1 nº 23 (25 nov. 2026) : bouton « Copier » explicite —
+     même texte et même message de confirmation que le repli du
+     bouton Partager ci-dessus, sans passer par le partage. */
+  $("btn-copier").addEventListener("click", function(){
+    var texte = textePartage();
+    var msg = $("msg-partage");
+    if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(texte).then(function(){
         msg.textContent = "Copié ! Collez-le où vous voulez.";
       }).catch(function(){

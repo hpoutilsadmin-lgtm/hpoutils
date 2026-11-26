@@ -170,6 +170,7 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
     <h2 style="font-size:1.2rem;margin-top:0">Passer le relais</h2>
     <p style="color:var(--brun);margin-top:0">Un texte prêt à coller dans Messenger ou par SMS — pour que tout le monde sache où on en est.</p>
     <button id="btn-transmettre" class="principal">📤 Transmettre le relais</button>
+    <button id="btn-copier" class="principal" style="margin-top:10px">📋 Copier</button>
     <button id="btn-exporter" class="discret" style="margin-top:10px">⬇ Exporter le carnet (.txt)</button>
     <p class="message" id="msg-transmettre"></p>
   </section>
@@ -363,6 +364,25 @@ button.petit{width:auto; padding:6px 12px; font-size:.85rem;}
         msg.textContent = "Relais transmis. 💛";
       }).catch(function(){});
     } else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texte).then(function(){
+        msg.textContent = "Copié ! Collez-le dans Messenger ou par SMS.";
+      }).catch(function(){ msg.textContent = texte; });
+    } else {
+      msg.textContent = texte;
+    }
+  });
+
+  /* LOT 1 nº 23 (25 nov. 2026) : bouton « Copier » explicite —
+     même texte et même message de confirmation que le repli du
+     bouton Partager ci-dessus, sans passer par le partage. */
+  $("btn-copier").addEventListener("click", function(){
+    var msg = $("msg-transmettre");
+    if (!entrees.length){
+      msg.textContent = "Le carnet est encore vide — notez quelque chose d'abord.";
+      return;
+    }
+    var texte = texteRelais();
+    if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(texte).then(function(){
         msg.textContent = "Copié ! Collez-le dans Messenger ou par SMS.";
       }).catch(function(){ msg.textContent = texte; });

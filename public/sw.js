@@ -1,7 +1,7 @@
 'use strict';
 /* Pack hors ligne HP Outils — service worker.
    Garde la Boite a outils, les outils autonomes, En cuisine, le Passeur
-   et 6 jeux legers sur l'appareil pour qu'ils fonctionnent sans internet.
+   et 16 applis sur l'appareil pour qu'elles fonctionnent sans internet.
    Cache-first, version hp-hors-ligne-6 (lot Chevalier V2 24 nov. 2026 :
    Chevalier du fleuve v2.0 remplace la v1.4 dans le pack). Portee : tout le site (/).
    Seuls les fichiers de la liste PACK sont mis en cache ; le reste

@@ -97,10 +97,18 @@ function Index() {
               juste sous le titre, rien d'autre avant — pleine largeur sur
               mobile (1 colonne à 360 px), côte à côte sur ordinateur
               (grille auto-fit). Le paragraphe de présentation suit. */}
+          {/* LOT 1 nº 5 (25 nov. 2026) : le libellé nomme les 3 portes
+              ci-dessous — aucun chemin ajouté, aucune porte créée. */}
+          <p style={{ fontSize: 18, fontWeight: 700, margin: "0 0 12px" }}>Je ne sais pas par où commencer</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14, margin: "0 0 28px" }}>
             <a href="/en-cuisine/panier/" className="btn-primary" style={{ width: "100%", boxSizing: "border-box", textAlign: "center", lineHeight: 1.4 }}>J'AI FAIM / J'AI REÇU UN PANIER</a>
             <Link to="/jeux" className="btn-primary" style={{ width: "100%", boxSizing: "border-box", textAlign: "center", lineHeight: 1.4 }}>JE VEUX JOUER</Link>
-            <Link to="/sans-honte" className="btn-primary" style={{ width: "100%", boxSizing: "border-box", textAlign: "center", lineHeight: 1.4 }}>J'AI UN PAPIER À RÉGLER</Link>
+            {/* LOT 1 nº 5 — ancre <a> et non <Link> : /boite/ est une route-redirect
+                (boite.tsx -> /boite/index.html, page statique) ; un <Link>
+                navigue côté client vers /boite/index.html, sans route, et
+                affiche la 404 du site (vérifié au banc, 25 nov. 2026).
+                L'ancre charge le document, comme « Ouvrir la Boîte » L175. */}
+            <a href="/boite/" className="btn-primary" style={{ width: "100%", boxSizing: "border-box", textAlign: "center", lineHeight: 1.4 }}>J'AI UN PAPIER À RÉGLER</a>
           </div>
           <p className="lead">
             Le reste du mois pour tenir votre budget, La Boîte à outils pour régler une démarche, En cuisine pour cuisiner avec ce que vous avez, jouer sans compte : des outils gratuits, des kits à petit prix et des ateliers, créés à Terrebonne, au Québec.
