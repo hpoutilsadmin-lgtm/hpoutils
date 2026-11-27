@@ -54,6 +54,21 @@
    ne montre que Plus et Panier ; les 9 autres commandes sont
    repliées dans le panneau « Plus » (construirePlus), rejouées
    par un tap sur leur bouton de rangée. Aucune fonction retirée.
+
+   LOT-RETOUR-ACCUEIL-CELL (24 nov. 2026) : sur téléphone, aucun
+   repère Accueil n'était visible dans la barre elle-même — le seul
+   chemin passait par le panneau Plus. La face 48 px + le titre
+   « HP C+ » deviennent donc un lien vers
+   https://www.hp-outils.com/ (même geste que le bouton accueil
+   existant) : retour à l'accueil visible en un tap, sans ouvrir
+   Plus ni défiler. La face reste cachée sur la page « accueil »
+   (règle 6 nov. 07 h 08) — on y est déjà, pas besoin de lien.
+   Dans le panneau Plus, « Accueil » reste en tête des commandes
+   repliées (1re rangée), libellé clarifié : « Accueil — retourner
+   à la page d'accueil ».
+   Rebase 26 nov. 2026 (tête 7386de4) : le titre est « HP C+ »
+   depuis le lot HP C+ (24 nov.) — commentaire mis à jour, l'ancien
+   « HP À portée de main » ne s'applique plus au titre.
    ================================================================ */
 (function () {
   var PAGES_STOP = ["/le-garde", "/personne-seule"];
@@ -371,7 +386,16 @@
       commandesRepliees.forEach(function (c) {
         var nom = c[0], label = c[1];
         var li = el("li");
-        var b = el("button", { type: "button" }, label + " — commande de la barre");
+        /* LOT-RETOUR-ACCUEIL-CELL (24 nov. 2026) : « Accueil » est
+           bien la 1re rangée du panneau (en tête de
+           commandesRepliees, avant « Copier le lien ») — le libellé
+           confus « Accueil — commande de la barre » devient
+           « Accueil — retourner à la page d'accueil » ; les 8
+           autres gardent le suffixe « commande de la barre ». */
+        var texte = nom === "accueil"
+          ? "Accueil — retourner à la page d'accueil"
+          : label + " — commande de la barre";
+        var b = el("button", { type: "button" }, texte);
         on(b, "click", function () {
           if (boutonsCommandes[nom]) { boutonsCommandes[nom].click(); }
         });
@@ -610,16 +634,26 @@
 
     var contenu = el("div", { "class": "bh-contenu" });
 
-    /* En-tête : face 48 px (sauf accueil) + titre + Réduire. */
+    /* En-tête : face 48 px (sauf accueil) + titre + Réduire.
+       LOT-RETOUR-ACCUEIL-CELL (24 nov. 2026) : face + titre = un
+       seul lien vers l'accueil — retour visible en un tap sur le
+       cell, sans ouvrir Plus. Sur la page « accueil », la face est
+       cachée par le CSS (règle 6 nov. 07 h 08, gardée) et le titre
+       reste un lien vers la page où l'on est déjà. */
     var tete = el("div", { "class": "bh-tete" });
+    var lienAccueil = el("a", {
+      "class": "bh-accueil", href: "https://www.hp-outils.com/",
+      "aria-label": "Accueil : retourner à la page d'accueil"
+    });
     var face = el("img", {
       "class": "bh-face", src: cheminFace,
       alt: "Sir H. Gepeto, le gérant du site",
       "width": "48", "height": "48", "fetchpriority": "high"
     });
-    tete.appendChild(face);
+    lienAccueil.appendChild(face);
     var titre = el("p", { "class": "bh-titre", html: "<strong>HP</strong> C+" });
-    tete.appendChild(titre);
+    lienAccueil.appendChild(titre);
+    tete.appendChild(lienAccueil);
     var btnReduire = el("button", {
       "class": "bh-reduire", type: "button",
       "aria-label": "Réduire la barre"
